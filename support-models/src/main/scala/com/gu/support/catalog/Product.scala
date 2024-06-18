@@ -42,15 +42,47 @@ sealed trait Product {
       .distinct
 }
 
-case object SupporterPlus extends Product {
+case object TierThree extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
   ) =
     ProductRatePlan(
       id,
       billingPeriod,
-      NoFulfilmentOptions,
+      fulfilmentOptions,
+      NoProductOptions,
+      s"Tier Three ${billingPeriod.getClass.getSimpleName}",
+    )
+
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
+    Map(
+      PROD -> List(
+        productRatePlan("8a1299788ff2ec100190025fccc32bb1", Monthly, Domestic),
+        productRatePlan("8a1288a38ff2af980190025b32591ccc", Annual, Domestic),
+        productRatePlan("8a128ab18ff2af9301900255d77979ac", Monthly, RestOfWorld),
+        productRatePlan("8a1299788ff2ec100190024d1e3b1a09", Annual, RestOfWorld),
+      ),
+      CODE -> List(
+        productRatePlan("8ad097b48ff26452019001cebac92376", Monthly, Domestic),
+        productRatePlan("8ad081dd8ff24a9a019001d95e4e3574", Annual, Domestic),
+        productRatePlan("8ad081dd8ff24a9a019001df2ce83657", Monthly, RestOfWorld),
+        productRatePlan("8ad097b48ff26452019001e65bbf2ca8", Annual, RestOfWorld),
+      ),
+    )
+}
+
+case object SupporterPlus extends Product {
+  private def productRatePlan(
+      id: String,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
+  ) =
+    ProductRatePlan(
+      id,
+      billingPeriod,
+      fulfilmentOptions,
       NoProductOptions,
       s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
     )

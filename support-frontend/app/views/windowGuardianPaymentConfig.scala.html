@@ -1,9 +1,9 @@
-@import com.gu.i18n.Country
 @import admin.settings.AllSettings
 @import views.html.helper.CSRF
 
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
+@import com.gu.identity.model.User
 @(
   geoData: GeoData,
   paymentMethodConfigs: PaymentMethodConfigs,
@@ -13,6 +13,7 @@
   v2recaptchaConfigPublicKey: String,
   guestAccountCreationToken: Option[String],
   productCatalog: JsonObject,
+  user: Option[User],
   settings: AllSettings
 )(implicit request: RequestHeader)
 
@@ -87,4 +88,17 @@
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
 
   window.guardian.productCatalog = @Html(outputJson(productCatalog))
+
+  @user.map { user =>
+    window.guardian.user = {
+      id: "@user.id",
+      email: "@user.primaryEmailAddress",
+      @user.privateFields.firstName.map { firstName =>
+        firstName: "@firstName",
+      }
+      @user.privateFields.secondName.map { secondName =>
+        lastName: "@secondName",
+      }
+    };
+  }
 </script>

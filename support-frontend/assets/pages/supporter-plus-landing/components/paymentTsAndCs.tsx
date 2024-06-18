@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source/foundations';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -20,6 +20,8 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
+import type { FinePrintTheme } from './finePrint';
+import { FinePrint } from './finePrint';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -35,6 +37,7 @@ const container = css`
 `;
 
 interface PaymentTsAndCsProps {
+	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
@@ -109,6 +112,7 @@ function TsAndCsFooterLinks({
 }
 
 export function PaymentTsAndCs({
+	mobileTheme = 'dark',
 	contributionType,
 	countryGroupId,
 	currency,
@@ -177,10 +181,12 @@ export function PaymentTsAndCs({
 	if (contributionType === 'ONE_OFF') {
 		return (
 			<div css={container}>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
+				<FinePrint mobileTheme={mobileTheme}>
+					<TsAndCsFooterLinks
+						countryGroupId={countryGroupId}
+						amountIsAboveThreshold={amountIsAboveThreshold}
+					/>
+				</FinePrint>
 			</div>
 		);
 	}
@@ -205,13 +211,15 @@ export function PaymentTsAndCs({
 
 	return (
 		<div css={container}>
-			{amountIsAboveThreshold
-				? copyAboveThreshold(
-						contributionType,
-						productNameAboveThreshold,
-						promotion,
-				  )
-				: copyBelowThreshold(contributionType)}
+			<FinePrint mobileTheme={mobileTheme}>
+				{amountIsAboveThreshold
+					? copyAboveThreshold(
+							contributionType,
+							productNameAboveThreshold,
+							promotion,
+					  )
+					: copyBelowThreshold(contributionType)}
+			</FinePrint>
 		</div>
 	);
 }

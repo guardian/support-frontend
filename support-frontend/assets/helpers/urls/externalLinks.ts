@@ -32,6 +32,8 @@ const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-wi
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian';
+const androidFeastAppUrl =
+	'https://play.google.com/store/apps/details?id=uk.co.guardian.feast';
 const androidDailyUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian.editions';
 const myAccountUrl = `${profileUrl}/account/edit`;
@@ -118,6 +120,10 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId): string {
 	);
 }
 
+function getFeastUrl(countryGroupId: CountryGroupId): string {
+	return getAppleStoreUrl('guardian-feast/id6468674686', countryGroupId);
+}
+
 const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 	const encodedReturn = encodeURIComponent(returnUrl ?? window.location.href);
 	return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
@@ -133,7 +139,9 @@ export {
 	getPatronsLink,
 	getDigitalCheckout,
 	getIosAppUrl,
+	getFeastUrl,
 	androidAppUrl,
+	androidFeastAppUrl,
 	androidDailyUrl,
 	getDailyEditionUrl,
 	getSignoutUrl,

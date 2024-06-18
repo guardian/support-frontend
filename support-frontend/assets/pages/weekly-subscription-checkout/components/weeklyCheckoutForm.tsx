@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Radio,
 	RadioGroup,
 	Select,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -516,7 +516,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					) : null}
 					<GeneralErrorMessage
-						errorReason={props.submissionError}
+						errorReason={props.submissionError ?? undefined}
 						errorHeading={submissionErrorHeading}
 					/>
 					{inThreeTier ? (

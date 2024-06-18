@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { FocusStyleManager } from '@guardian/source-foundations';
+import { FocusStyleManager } from '@guardian/source/foundations';
 import { Provider } from 'react-redux';
 import Footer from 'components/footerCompliant/Footer';
 import Page from 'components/page/page';

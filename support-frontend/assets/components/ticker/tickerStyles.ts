@@ -5,7 +5,7 @@ import {
 	space,
 	textSans,
 	visuallyHidden,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const tickerProgressBar = css`
 	position: relative;

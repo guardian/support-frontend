@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source-foundations';
+import { palette } from '@guardian/source/foundations';
 import {
 	currencies,
 	type IsoCurrency,
@@ -40,7 +40,7 @@ function Template(args: ThreeTierCardsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<ThreeTierCards {...args} />;
+			<ThreeTierCards {...args} />
 		</div>
 	);
 }

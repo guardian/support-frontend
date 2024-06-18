@@ -45,7 +45,7 @@ export class AcquisitionEventsApi extends GuStack {
       ),
       evaluationPeriods: 1,
       threshold: 1,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
       actionsEnabled: this.stage === "PROD",
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({

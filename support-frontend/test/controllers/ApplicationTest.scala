@@ -4,6 +4,7 @@ import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFrom
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
 import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
+import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
@@ -11,12 +12,12 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.zuora.api.ReaderType
 import config.{RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
-import org.mockito.ArgumentMatchers.{any, anyBoolean, anyList}
+import org.mockito.ArgumentMatchers.{any, anyBoolean}
 import org.mockito.Mockito.when
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar._
-import play.api.libs.ws.WSClient
+import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import services._
@@ -72,7 +73,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
-        mock[WSClient],
+        mock[AuthAction[AnyContent]],
         priceSummaryServiceProvider,
         mock[CachedProductCatalogServiceProvider],
         "support.thegulocal.com",

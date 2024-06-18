@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, neutral, space, titlepiece } from '@guardian/source-foundations';
+import { from, neutral, space, titlepiece } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,

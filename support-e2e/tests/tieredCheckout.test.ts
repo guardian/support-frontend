@@ -7,6 +7,10 @@ import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
+import {
+	checkAbandonedBasketCookieExists,
+	checkAbandonedBasketCookieRemoved,
+} from './utils/cookies';
 
 interface TestDetails {
 	tier: 1 | 2 | 3;
@@ -19,14 +23,7 @@ const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', tier: 1, frequency: 'Monthly' },
 	{ paymentType: 'Credit/Debit card', tier: 2, frequency: 'Annual' },
 	{ paymentType: 'Direct debit', tier: 2, frequency: 'Monthly' },
-	/**
-	 * PayPal is currently throwing a "to many login attempts" error, so we're
-	 * going to inactivate this test until we have a solution for it to avoid
-	 * alert numbness.
-	 *
-	 * TODO - re-enable this test when PayPal is fixed
-	 */
-	// { paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
+	{ paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
 	{
 		paymentType: 'Credit/Debit card',
 		tier: 1,
@@ -48,17 +45,22 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
+			const ctaCopy = testDetails.country === 'US' ? 'Subscribe' : 'Support';
+
 			await setupPage(
 				page,
 				context,
 				baseURL,
-				`/${testDetails.country?.toLowerCase() || 'uk'}/contribute`,
+				`/${
+					testDetails.country?.toLowerCase() || 'uk'
+				}/contribute#ab-abandonedBasket=variant`, // remove once AB test is over
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await page
-				.getByRole('link', { name: 'Subscribe' })
+				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
+			await checkAbandonedBasketCookieExists(context);
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			if (testDetails.country === 'US') {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
@@ -98,14 +100,18 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				const frequencyLabel =
 					testDetails.frequency === 'Annual' ? 'year' : 'month';
 				var paymentButtonRegex = new RegExp(
-					'(Pay|Support us with) (£|\\$)([0-9]+) per (' + frequencyLabel + ')',
+					'(Pay|Support us with) (£|\\$)([0-9]+|([0-9]+.[0-9]+)) per (' +
+						frequencyLabel +
+						')',
 				);
 				await page.getByText(paymentButtonRegex).click();
 			}
-			await expect(page).toHaveURL(
-				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
-				{ timeout: 600000 },
-			);
+			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({
+				timeout: 600000,
+			});
+			await checkAbandonedBasketCookieRemoved(context);
 		});
 	});
 });
@@ -145,6 +151,8 @@ test.describe('Supporter Plus promoCodes', () => {
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
+			const ctaCopy = 'Support';
+
 			await setupPage(
 				page,
 				context,
@@ -161,7 +169,7 @@ test.describe('Supporter Plus promoCodes', () => {
 				card.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
-				.getByRole('link', { name: 'Subscribe' })
+				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
 
@@ -177,11 +185,12 @@ test.describe('Supporter Plus promoCodes', () => {
 
 			// Thank you
 			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({ timeout: 600000 });
+
+			await expect(
 				page.getByText(testDetails.expectedThankYouText).first(),
 			).toBeVisible({ timeout: 600000 });
-			await expect(page).toHaveURL(
-				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
-			);
 		});
 	});
 });

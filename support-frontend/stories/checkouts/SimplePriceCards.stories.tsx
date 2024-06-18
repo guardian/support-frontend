@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { textSans } from '@guardian/source-foundations';
-import { Column, Columns } from '@guardian/source-react-components';
+import { textSans } from '@guardian/source/foundations';
+import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { SimplePriceCardsProps } from 'components/priceCards/simplePriceCards';
 import { SimplePriceCards } from 'components/priceCards/simplePriceCards';

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source-foundations';
-import { Column, Columns } from '@guardian/source-react-components';
+import { from, palette, space } from '@guardian/source/foundations';
+import { Column, Columns } from '@guardian/source/react-components';
 import React from 'react';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import type { PaymentFrequencyButtonsProps } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';

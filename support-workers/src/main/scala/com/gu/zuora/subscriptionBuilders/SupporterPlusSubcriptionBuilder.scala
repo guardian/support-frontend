@@ -12,6 +12,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Support
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
+import com.gu.support.catalog.NoFulfilmentOptions
 
 class SupporterPlusSubcriptionBuilder(
     config: ZuoraSupporterPlusConfig,
@@ -66,7 +67,6 @@ class SupporterPlusSubcriptionBuilder(
     ).map { subscriptionData =>
       subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }
-
   }
 
   private def getBaseProductPrice(productRatePlanId: ProductRatePlanId, currency: Currency) =

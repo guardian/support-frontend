@@ -5,21 +5,21 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	type IsoCurrency,
+import { currencies } from 'helpers/internationalisation/currency';
+import type {
+	Currency,
+	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -45,6 +45,8 @@ export type ThreeTierCardProps = {
 	link: string;
 	productDescription: ProductDescription;
 	price: number;
+	ctaCopy: string;
+	lozengeText?: string;
 	promotion?: Promotion;
 };
 
@@ -115,12 +117,17 @@ const btnStyleOverrides = css`
 	margin-bottom: ${space[6]}px;
 `;
 
-const checkmarkList = css`
+const checkmarkBenefitList = css`
 	width: 100%;
 	text-align: left;
 	${from.desktop} {
 		width: 90%;
 	}
+`;
+
+const checkmarkOfferList = css`
+	width: 100%;
+	text-align: left;
 `;
 
 const benefitsPrefixCss = css`
@@ -132,13 +139,9 @@ const benefitsPrefixCss = css`
 	}
 `;
 
-const offerLimitedTimeCss = css`
-	color: #606060;
-`;
-
 const benefitsPrefixPlus = css`
 	${textSans.small()};
-	color: ${palette.neutral[7]};
+	color: #545454; // neutral[38] unavailable
 	display: flex;
 	align-items: center;
 	margin: ${space[3]}px 0;
@@ -199,6 +202,7 @@ export function ThreeTierCard({
 	productDescription,
 	price,
 	promotion,
+	ctaCopy,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
@@ -213,7 +217,10 @@ export function ThreeTierCard({
 		>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
 			{isRecommended && !isUserSelected && (
-				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
+				<ThreeTierLozenge
+					subdue={isRecommendedSubdued}
+					title={promotion?.landingPage?.roundel ?? 'Recommended'}
+				/>
 			)}
 			<h2 css={titleCss}>{label}</h2>
 			<p css={priceCss(!!promotion)}>
@@ -253,7 +260,7 @@ export function ThreeTierCard({
 					}}
 					data-qm-trackable={quantumMetricButtonRef}
 				>
-					Subscribe
+					{ctaCopy}
 				</LinkButton>
 			</ThemeProvider>
 
@@ -283,7 +290,7 @@ export function ThreeTierCard({
 					</span>
 				</div>
 			)}
-			{(benefitsSummary || offersSummary) && (
+			{(benefitsSummary ?? offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
@@ -296,13 +303,11 @@ export function ThreeTierCard({
 				})}
 				style={'compact'}
 				iconColor={palette.brand[500]}
-				cssOverrides={checkmarkList}
+				cssOverrides={checkmarkBenefitList}
 			/>
 			{offers && offers.length > 0 && (
 				<>
-					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
-						limited-time offer
-					</span>
+					<span css={benefitsPrefixPlus}>new benefit</span>
 					<CheckList
 						checkListData={offers.map((offer) => {
 							return {
@@ -311,9 +316,9 @@ export function ThreeTierCard({
 								toolTip: offer.tooltip,
 							};
 						})}
-						style={'compact'}
+						style={'hidden'}
 						iconColor={palette.brand[500]}
-						cssOverrides={checkmarkList}
+						cssOverrides={checkmarkOfferList}
 					/>
 				</>
 			)}

@@ -40,7 +40,7 @@ Resources:
         RerunTests:
           Type: Schedule
           Properties:
-            Schedule: 'rate(1 hour)'
+            Schedule: 'rate(6 hours)'
             Description: run the tests regularly so we know if they're broken
       EventInvokeConfig:
         MaximumRetryAttempts: 0
@@ -96,7 +96,7 @@ Resources:
     Condition: ProdOnlyResource
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
@@ -132,7 +132,7 @@ Resources:
     Condition: ProdOnlyResource
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
@@ -155,7 +155,7 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600 # 1 hour
             Unit: Count
         - Id: m2
           ReturnData: false
@@ -167,10 +167,10 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600 # 1 hour
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 9
-      DatapointsToAlarm: 9
+      EvaluationPeriods: 7
+      DatapointsToAlarm: 7
       TreatMissingData: breaching

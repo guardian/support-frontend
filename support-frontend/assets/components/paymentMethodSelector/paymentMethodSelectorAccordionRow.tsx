@@ -7,8 +7,8 @@ import {
 	palette,
 	space,
 	transitions,
-} from '@guardian/source-foundations';
-import { textInputThemeDefault } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { textInputThemeDefault } from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
 import { RadioWithImage } from './radioWithImage';
 

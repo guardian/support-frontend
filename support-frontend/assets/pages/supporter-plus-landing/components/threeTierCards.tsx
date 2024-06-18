@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { between, from, space } from '@guardian/source-foundations';
+import { between, from, space } from '@guardian/source/foundations';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -17,6 +17,7 @@ export type ThreeTierCardsProps = {
 		productDescription: ProductDescription;
 		price: number;
 		promotion?: Promotion;
+		ctaCopy: string;
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -90,6 +91,7 @@ export function ThreeTierCards({
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
 						linkCtaClickHandler={linkCtaClickHandler}
+						ctaCopy={cardContent.ctaCopy}
 					/>
 				);
 			})}

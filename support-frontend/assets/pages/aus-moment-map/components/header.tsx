@@ -2,7 +2,7 @@ import { ThemeProvider } from '@emotion/react';
 import {
 	buttonThemeBrand,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { contributeUrl } from '../utils';
 
 function GuardianLogoSvg(): JSX.Element {

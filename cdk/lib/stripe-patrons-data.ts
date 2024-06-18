@@ -1,6 +1,7 @@
 import { GuApiGatewayWithLambdaByPath, GuScheduledLambda } from "@guardian/cdk";
 import type {
-  GuLambdaErrorPercentageMonitoringProps, NoMonitoring,
+  GuLambdaErrorPercentageMonitoringProps,
+  NoMonitoring,
 } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
@@ -9,12 +10,14 @@ import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import type { CfnFunction} from "aws-cdk-lib/aws-lambda";
+import type { CfnFunction } from "aws-cdk-lib/aws-lambda";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 
 // enable Snapstart for faster lambda starts
 function enableSnapstart(lambda: GuLambdaFunction): void {
-  (lambda.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
+  (lambda.node.defaultChild as CfnFunction).snapStart = {
+    applyOn: "PublishedVersions",
+  };
 }
 
 function dynamoPolicy(stage: string) {
@@ -27,9 +30,7 @@ function dynamoPolicy(stage: string) {
       "dynamodb:Query",
       "dynamodb:DescribeTable",
     ],
-    resources: [
-      `arn:aws:dynamodb:*:*:table/SupporterProductData-${stage}`,
-    ],
+    resources: [`arn:aws:dynamodb:*:*:table/SupporterProductData-${stage}`],
   });
 }
 
@@ -43,7 +44,12 @@ function parameterStorePolicy(scope: GuStack, appName: string) {
 }
 
 class StripePatronsDataLambda extends GuScheduledLambda {
-  constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
+  constructor(
+    scope: GuStack,
+    id: string,
+    appName: string,
+    buildNumber: string
+  ) {
     super(scope, id, {
       app: appName,
       fileName: `${appName}-${buildNumber}.jar`,
@@ -86,13 +92,17 @@ class StripePatronsDataLambda extends GuScheduledLambda {
 }
 
 class PatronSignUpLambda extends GuLambdaFunction {
-  constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
+  constructor(
+    scope: GuStack,
+    id: string,
+    appName: string,
+    buildNumber: string
+  ) {
     super(scope, `${appName}-sign-up`, {
       app: appName,
       fileName: `${appName}-${buildNumber}.jar`,
       functionName: `${appName}-sign-up-${scope.stage}`,
-      handler:
-        "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
+      handler: "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
       runtime: Runtime.JAVA_21,
       memorySize: 1536,
       timeout: Duration.minutes(15),
@@ -107,7 +117,12 @@ class PatronSignUpLambda extends GuLambdaFunction {
 }
 
 class PatronCancelledLambda extends GuLambdaFunction {
-  constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
+  constructor(
+    scope: GuStack,
+    id: string,
+    appName: string,
+    buildNumber: string
+  ) {
     super(scope, `${appName}-cancelled`, {
       app: appName,
       fileName: `${appName}-${buildNumber}.jar`,
@@ -140,8 +155,18 @@ export class StripePatronsData extends GuStack {
 
     new StripePatronsDataLambda(this, id, appName, props.buildNumber);
 
-    const patronCancelledLambda = new PatronCancelledLambda(this, id, appName, props.buildNumber);
-    const patronSignUpLambda = new PatronSignUpLambda(this, id, appName, props.buildNumber);
+    const patronCancelledLambda = new PatronCancelledLambda(
+      this,
+      id,
+      appName,
+      props.buildNumber
+    );
+    const patronSignUpLambda = new PatronSignUpLambda(
+      this,
+      id,
+      appName,
+      props.buildNumber
+    );
 
     // Wire up the API
     new GuApiGatewayWithLambdaByPath(this, {

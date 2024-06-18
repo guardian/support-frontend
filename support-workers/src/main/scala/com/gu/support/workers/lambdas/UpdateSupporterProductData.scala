@@ -14,6 +14,7 @@ import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailGuardianWeeklyState,
   SendThankYouEmailPaperState,
   SendThankYouEmailSupporterPlusState,
+  SendThankYouEmailTierThreeState,
 }
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -104,6 +105,22 @@ object UpdateSupporterProductData {
                 productRatePlanId = productRatePlan.id,
                 productRatePlanName = s"support-workers added ${product.describe}",
                 None, // We don't send the amount for S+, because it may be discounted
+              ),
+            ),
+          )
+          .toRight(s"Unable to create SupporterRatePlanItem from state $state")
+
+      case SendThankYouEmailTierThreeState(user, product, _, _, _, _, subscriptionNumber, _) =>
+        catalogService
+          .getProductRatePlan(TierThree, product.billingPeriod, product.fulfilmentOptions, NoProductOptions)
+          .map(productRatePlan =>
+            Some(
+              supporterRatePlanItem(
+                subscriptionName = subscriptionNumber,
+                identityId = user.id,
+                productRatePlanId = productRatePlan.id,
+                productRatePlanName = s"support-workers added ${product.describe}",
+                None,
               ),
             ),
           )

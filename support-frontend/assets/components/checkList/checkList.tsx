@@ -1,7 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source-foundations';
-import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
+import { from, palette, space, textSans } from '@guardian/source/foundations';
+import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
 
 const checkListIconCss = (style: CheckListStyle) => css`
@@ -21,8 +21,6 @@ const iconContainerCss = css`
 `;
 
 const checkListTextCss = css`
-	display: inline-block;
-
 	& p {
 		line-height: 1.35;
 	}
@@ -35,7 +33,6 @@ const checkListTextItemCss = css`
 		${from.desktop} {
 			display: inline;
 			margin-left: 1px;
-			vertical-align: middle;
 		}
 	}
 	strong {
@@ -68,7 +65,7 @@ export type CheckListData = {
 	strong?: boolean;
 };
 
-type CheckListStyle = 'standard' | 'compact';
+type CheckListStyle = 'standard' | 'compact' | 'hidden';
 
 export type CheckListProps = {
 	checkListData: CheckListData[];
@@ -107,17 +104,19 @@ export function CheckList({
 		<table css={[tableCss(style), cssOverrides]}>
 			{checkListData.map((item) => (
 				<tr>
-					<td
-						css={[
-							checkListIconCss(style),
-							checkListIconColor(iconColor),
-							item.maybeGreyedOut,
-						]}
-					>
-						<div css={style === 'standard' ? iconContainerCss : css``}>
-							<ChecklistItemIcon checked={item.isChecked} style={style} />
-						</div>
-					</td>
+					{style !== 'hidden' && (
+						<td
+							css={[
+								checkListIconCss(style),
+								checkListIconColor(iconColor),
+								item.maybeGreyedOut,
+							]}
+						>
+							<div css={style === 'standard' ? iconContainerCss : css``}>
+								<ChecklistItemIcon checked={item.isChecked} style={style} />
+							</div>
+						</td>
+					)}
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
 							<span css={checkListTextItemCss}>

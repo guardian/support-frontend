@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source-foundations';
-import { Link } from '@guardian/source-react-components';
+import { headline, space } from '@guardian/source/foundations';
+import { Link } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import type { FinePrintTheme } from './finePrint';
@@ -44,8 +44,9 @@ export function PatronsMessage({
 			</h2>
 			{isUSA ? (
 				<p>
-					To learn more about other ways to support the Guardian, including
-					checks and tax-exempt options, please visit our{' '}
+					If you are interested in contributing through a donor-advised fund,
+					foundation or retirement account, or by mailing a check, please visit
+					our{' '}
 					<Link
 						css={linkStyles}
 						priority="secondary"
@@ -53,7 +54,7 @@ export function PatronsMessage({
 					>
 						help page
 					</Link>{' '}
-					on this topic.
+					to learn how.
 				</p>
 			) : (
 				<p>

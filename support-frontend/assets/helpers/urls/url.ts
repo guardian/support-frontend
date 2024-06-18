@@ -75,10 +75,6 @@ function getBaseDomain(): Domain {
 	return DOMAINS.PROD;
 }
 
-function getAbsoluteURL(path = ''): string {
-	return `${getOrigin()}${path}`;
-}
-
 function isProd(): boolean {
 	return getBaseDomain() === 'theguardian.com';
 }
@@ -95,7 +91,6 @@ export {
 	getOrigin,
 	getBaseDomain,
 	addQueryParamsToURL,
-	getAbsoluteURL,
 	isProd,
 	isCodeOrProd,
 };

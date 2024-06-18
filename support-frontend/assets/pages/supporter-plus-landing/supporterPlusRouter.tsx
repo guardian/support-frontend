@@ -1,13 +1,7 @@
 // ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import {
-	BrowserRouter,
-	Navigate,
-	Route,
-	Routes,
-	useLocation,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -16,6 +10,7 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
+import { NavigateWithPageView } from 'helpers/tracking/NavigateWithPageView';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
@@ -38,19 +33,14 @@ const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const urlParams = new URLSearchParams(window.location.search);
-const promoCode = urlParams.get('promoCode');
-const thankYouRouteParams = promoCode
-	? `?${new URLSearchParams({ promoCode }).toString()}`
-	: '';
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
 
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 
-function ScrollToTop() {
+function ScrollToTop(): null {
 	const { pathname } = useLocation();
 
 	useEffect(() => {
@@ -76,11 +66,11 @@ function ThreeTierRedirectOneOffToCheckout({
 	const oneOff = urlSelectedContributionType === 'ONE_OFF';
 
 	return oneOff ? (
-		<Navigate
-			to={`/${countryId}/contribute/checkout${`${
+		<NavigateWithPageView
+			destination={`/${countryId}/contribute/checkout${`${
 				urlParamsString ? `?${urlParamsString}` : ''
 			}${window.location.hash}`}`}
-			replace
+			participations={commonState.abParticipations}
 		/>
 	) : (
 		<>{children}</>

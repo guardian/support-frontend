@@ -14,8 +14,8 @@
   title: String,
   id: String,
   mainElement: ReactDiv,
-  js: Either[RefPath, StyleContent],
-  css: Either[RefPath, StyleContent],
+  js: RefPath,
+  css: Option[RefPath],
   description: Option[String],
   paymentMethodConfigs: PaymentMethodConfigs,
   paymentApiUrl: String,
@@ -68,5 +68,7 @@
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
     productCatalog = productCatalog,
+    // We explicitly set None as we have this set above
+    user = None
   )
 }

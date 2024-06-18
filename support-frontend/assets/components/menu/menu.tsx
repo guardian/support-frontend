@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { visuallyHidden } from '@guardian/source-foundations';
+import { visuallyHidden } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
 import moduleStyles from './menu.module.scss';

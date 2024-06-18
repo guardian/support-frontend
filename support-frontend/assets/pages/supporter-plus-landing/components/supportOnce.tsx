@@ -6,8 +6,8 @@ import {
 	palette,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
-import { Button } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Button } from '@guardian/source/react-components';
 
 const container = css`
 	text-align: center;

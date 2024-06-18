@@ -6,25 +6,26 @@ import {
 	palette,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Container } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { OfferBook } from 'components/offer/offer';
+import { OfferBook, OfferFeast } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -237,7 +238,35 @@ const isCardUserSelected = (
 	);
 };
 
-const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
+const productCatalogDescInclFeast: typeof productCatalogDescExclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including unlimited access to the Guardian Feast App.`,
+			},
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferFeast></OfferFeast>,
+			},
+		],
+		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
+	},
+};
+
+const productCatalogDescInclBookOffers: typeof productCatalogDescExclOffers = {
 	...productCatalogDescExclOffers,
 	SupporterPlusWithGuardianWeekly: {
 		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
@@ -301,6 +330,10 @@ function getPlanCost(
 	};
 }
 
+const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
+	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
+};
+
 export function ThreeTierLanding(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
@@ -343,11 +376,14 @@ export function ThreeTierLanding(): JSX.Element {
 	);
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
-	const showOffer =
+	const showFeast = abParticipations.feast === 'variant';
+	const showBookOffer =
 		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
-	const productCatalogDescription = showOffer
-		? productCatalogDescInclOffers
+	const productCatalogDescription = showFeast
+		? productCatalogDescInclFeast
+		: showBookOffer
+		? productCatalogDescInclBookOffers
 		: productCatalogDescExclOffers;
 
 	useEffect(() => {
@@ -407,7 +443,10 @@ export function ThreeTierLanding(): JSX.Element {
 				currencyId,
 			);
 
-			if (useGenericCheckout) {
+			/**
+			 * Only Testing CardTier1 wth checkout
+			 */
+			if (useGenericCheckout && cardTier === 1) {
 				/**
 				 * Generic Checkout is not defined in supporterPlusRouter
 				 */
@@ -463,13 +502,14 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier1UrlParams = new URLSearchParams({
 		'selected-amount': recurringAmount.toString(),
 		'selected-contribution-type': selectedContributionType,
+		product: 'Contribution',
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
 	const tier1GenericCheckoutUrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: selectedContributionRatePlan,
-		amount: recurringAmount.toString(),
+		price: recurringAmount.toString(),
 	});
 	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
 
@@ -479,6 +519,7 @@ export function ThreeTierLanding(): JSX.Element {
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -491,6 +532,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier2UrlParams = new URLSearchParams({
 		'selected-amount': tier2Pricing.toString(),
 		'selected-contribution-type': selectedContributionType,
+		product: 'SupporterPlus',
 	});
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
@@ -507,6 +549,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier2Pricing,
 			promotion?.discount?.amount,
 		),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/**
@@ -530,7 +573,7 @@ export function ThreeTierLanding(): JSX.Element {
 		supporterPlusWithGuardianWeekly.ratePlans[
 			supporterPlusWithGuardianWeeklyRatePlan
 		].pricing[currencyId];
-	const tier3Card = {
+	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		price: tier3Pricing,
@@ -541,7 +584,51 @@ export function ThreeTierLanding(): JSX.Element {
 			tier3Pricing,
 			promotion?.discount?.amount,
 		),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
+
+	/**
+	 * tierThree is from the product catalog API
+	 * tier3 is hardcoded for now
+	 */
+	const tierThreeRatePlans =
+		countryGroupId === International
+			? {
+					MONTHLY: 'RestOfWorldMonthly',
+					ANNUAL: 'RestOfWorldAnnual',
+			  }
+			: {
+					MONTHLY: 'DomesticMonthly',
+					ANNUAL: 'DomesticAnnual',
+			  };
+	const tierThreeRatePlan = tierThreeRatePlans[contributionType];
+	const tierThreePricing =
+		productCatalog.TierThree.ratePlans[tierThreeRatePlan].pricing[currencyId];
+	const tierThreeUrlParams = new URLSearchParams({
+		product: 'TierThree',
+		ratePlan: tierThreeRatePlan,
+	});
+	const tierThreeGenericCheckoutLink = `checkout?${tierThreeUrlParams.toString()}`;
+	const tierThreeCardFromApi = {
+		productDescription: productCatalogDescription.TierThree,
+		price: tierThreePricing,
+		link: tierThreeGenericCheckoutLink,
+		// TODO: we'll need to update this once TierThree promotions are supported
+		promotion: undefined,
+		isRecommended: false,
+		isUserSelected: isCardUserSelected(
+			tierThreePricing,
+			// TODO: we'll need to update this once TierThree promotions are supported
+			undefined,
+		),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
+	};
+
+	const useTierThreeOnLandingPage =
+		abParticipations.tierThreeFromApi === 'variant';
+	const tier3Card = useTierThreeOnLandingPage
+		? tierThreeCardFromApi
+		: tier3CardHarcoded;
 
 	return (
 		<PageScaffold
@@ -608,12 +695,13 @@ export function ThreeTierLanding(): JSX.Element {
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
-							To learn more about other ways to support the Guardian, including
-							checks and tax-exempt options, please visit our{' '}
+							If you are interested in contributing through a donor-advised
+							fund, foundation or retirement account, or by mailing a check,
+							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-							on this topic.
+							to learn how.
 						</p>
 					</div>
 				)}
@@ -637,6 +725,12 @@ export function ThreeTierLanding(): JSX.Element {
 								contributionType,
 								promotion,
 							),
+							starts: promotion?.starts
+								? new Date(promotion.starts)
+								: undefined,
+							expires: promotion?.expires
+								? new Date(promotion.expires)
+								: undefined,
 						},
 						{
 							title: tier3Card.productDescription.label,
@@ -649,7 +743,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{showOffer && (
+				{showBookOffer && (
 					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
 						offerCostMonthly={

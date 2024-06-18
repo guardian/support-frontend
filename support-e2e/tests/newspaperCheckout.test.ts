@@ -22,17 +22,10 @@ const testsDetails: TestDetails[] = [
 		frequency: 'Every day',
 		paymentType: 'Direct debit',
 	},
-	/**
-	 * PayPal is currently throwing a "to many login attempts" error, so we're
-	 * going to inactivate this test until we have a solution for it to avoid
-	 * alert numbness.
-	 *
-	 * TODO - re-enable this test when PayPal is fixed
-	 */
-	// {
-	// 	frequency: 'Every day',
-	// 	paymentType: 'Paypal',
-	// },
+	{
+		frequency: 'Every day',
+		paymentType: 'Paypal',
+	},
 	{
 		frequency: 'Weekend',
 		paymentType: 'Credit/Debit card',

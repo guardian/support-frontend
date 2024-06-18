@@ -243,6 +243,10 @@ class CreateSubscriptionController(
     )
   }
 
+  // When the user completes the checkout, remove the incomplete checkout cookie
+  private val discardIncompleteCheckoutCookie =
+    DiscardingCookie(name = "GU_CO_INCOMPLETE", domain = Some(guardianDomain.value))
+
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
@@ -271,7 +275,11 @@ class CreateSubscriptionController(
         { statusResponse =>
           logDetailedMessage("create succeeded")
           cookies(product, userEmail)
-            .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
+            .map(cookies =>
+              Accepted(statusResponse.asJson)
+                .withCookies(cookies: _*)
+                .discardingCookies(discardIncompleteCheckoutCookie),
+            )
         },
       )
       .flatten
@@ -318,7 +326,7 @@ class CreateSubscriptionController(
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     // Setting the user attributes cookies used by frontend. See:
-    // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
+    // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
     val standardCookies = List(
       "gu_user_features_expiry" -> DateTime.now.plusDays(1).getMillis.toString,
       "gu_hide_support_messaging" -> true.toString,
@@ -332,7 +340,13 @@ class CreateSubscriptionController(
       case _: SupporterPlus =>
         List(
           "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one when the CMP cookie list has been updated
+          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
+          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
+        )
+      case _: TierThree =>
+        List(
+          "gu_digital_subscriber" -> true.toString,
+          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
           "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
         )
       case _: DigitalPack =>

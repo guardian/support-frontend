@@ -1,10 +1,11 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CacheControl, CustomActionBuilders}
 import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
+import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
@@ -22,6 +23,7 @@ import services.pricing.PriceSummaryServiceProvider
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
+import wiring.GoogleAuth
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +53,7 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    wsClient: WSClient,
+    authAction: AuthAction[AnyContent],
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
@@ -153,8 +155,8 @@ class Application(
       views.html.main(
         "Support the Guardian | Down for essential maintenance",
         views.EmptyDiv("down-for-maintenance-page"),
-        Left(RefPath("downForMaintenancePage.js")),
-        Left(RefPath("downForMaintenancePage.css")),
+        RefPath("downForMaintenancePage.js"),
+        Some(RefPath("downForMaintenancePage.css")),
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
   }
@@ -171,11 +173,6 @@ class Application(
       campaignCode: Option[String],
       guestAccountCreationToken: Option[String],
   )(implicit request: RequestHeader, settings: AllSettings) = {
-
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
-    val css = elementForStage(RefPath("supporterPlusLandingPage.css"))
-
-    val js = elementForStage(RefPath("supporterPlusLandingPage.js"))
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -203,8 +200,8 @@ class Application(
       title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
-      js = js,
-      css = css,
+      js = RefPath("supporterPlusLandingPage.js"),
+      css = Some(RefPath("supporterPlusLandingPage.css")),
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -240,8 +237,8 @@ class Application(
       views.html.main(
         title = "Guardian Supporters Map",
         mainElement = EmptyDiv("aus-moment-map"),
-        mainJsBundle = Left(RefPath("ausMomentMap.js")),
-        mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+        mainJsBundle = RefPath("ausMomentMap.js"),
+        mainStyleBundle = Some(RefPath("ausMomentMap.css")),
         description = stringsConfig.contributionsLandingDescription,
         canonicalLink = Some("https://support.theguardian.com/aus-map"),
         shareImageUrl = Some(
@@ -276,7 +273,7 @@ class Application(
     }
   }
 
-  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
     val geoData = request.geoData
@@ -287,7 +284,7 @@ class Application(
     val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     Ok(
-      views.html.checkout(
+      views.html.router(
         geoData = geoData,
         paymentMethodConfigs = PaymentMethodConfigs(
           oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -306,28 +303,13 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
+        user = request.user,
       ),
     ).withSettingsSurrogateKey
   }
-}
 
-object CSSElementForStage extends SafeLogging {
-
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
-      cssPath: RefPath,
-  ): Either[RefPath, StyleContent] = {
-    if (stage == Stages.DEV) {
-      Left(cssPath)
-    } else {
-      getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        logger.error(
-          scrub"Inline CSS failed to load for $cssPath",
-        ) // in future add email perf alert instead (cloudwatch alarm perhaps)
-        Left(cssPath)
-      } { inlineCss =>
-        Right(inlineCss)
-      }
-    }
+  def eventsRouter(countryGroupId: String, eventId: Option[String]) = authAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(views.html.eventsRouter()).withHeaders(CacheControl.noCache)
   }
-
 }

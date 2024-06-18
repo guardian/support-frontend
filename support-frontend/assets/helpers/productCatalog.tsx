@@ -6,17 +6,24 @@ export const productCatalog = window.guardian.productCatalog;
 export type ProductDescription = {
 	label: string;
 	benefits: Array<{ copy: string; tooltip?: string }>;
+	missingBenefits?: Array<{ copy: string; tooltip?: string }>;
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
 	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
+	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
-		{ billingPeriod: 'Annual' | 'Monthly' | 'Quarterly' }
+		{
+			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+		}
 	>;
-	deliverableTo?: Record<string, string>;
 };
 
 export const productCatalogDescription: Record<string, ProductDescription> = {
+	/**
+	 * We need `SupporterPlusWithGuardianWeekly` for the the landing page while we migrate
+	 * away from the hacked TierThree product to the actual TierThree product below.
+	 */
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -29,6 +36,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 			},
 		],
+		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			MonthlyWithGuardianWeekly: {
 				billingPeriod: 'Monthly',
@@ -43,8 +51,37 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Annual',
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
+
+	TierThree: {
+		label: 'Digital + print',
+		benefitsSummary: [
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
+		],
+		benefits: [
+			{
+				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+			},
+		],
+		deliverableTo: gwDeliverableCountries,
+		ratePlans: {
+			DomesticMonthly: {
+				billingPeriod: 'Monthly',
+			},
+			DomesticAnnual: {
+				billingPeriod: 'Annual',
+			},
+			RestOfWorldMonthly: {
+				billingPeriod: 'Monthly',
+			},
+			RestOfWorldAnnual: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+
 	DigitalSubscription: {
 		label: 'The Guardian Digital Edition',
 		benefits: [
@@ -75,6 +112,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	NationalDelivery: {
 		label: 'National Delivery',
 		benefits: [],
+		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',
@@ -86,7 +124,6 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Monthly',
 			},
 		},
-		deliverableTo: newspaperCountries,
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -116,6 +153,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
 		benefits: [],
+		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -136,11 +174,11 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Monthly',
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
 		benefits: [],
+		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -161,7 +199,6 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Monthly',
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
@@ -191,6 +228,17 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
 		],
+		missingBenefits: [
+			{
+				copy: 'Unlimited access to the Guardian app',
+				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+			},
+			{ copy: 'Ad-free reading on all your devices' },
+			{
+				copy: 'Far fewer asks for support',
+				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
+			},
+		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -203,6 +251,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	HomeDelivery: {
 		label: 'Home Delivery',
 		benefits: [],
+		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
 				billingPeriod: 'Monthly',
@@ -220,7 +269,6 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Monthly',
 			},
 		},
-		deliverableTo: newspaperCountries,
 	},
 };
 

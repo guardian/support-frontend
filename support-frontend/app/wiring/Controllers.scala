@@ -20,7 +20,6 @@ trait Controllers {
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
   lazy val faviconController = new controllers.Favicon(actionBuilders, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
-  lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage) _
 
   lazy val applicationController = new Application(
     actionBuilders,
@@ -37,7 +36,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
-    implicitWs,
+    authAction,
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,

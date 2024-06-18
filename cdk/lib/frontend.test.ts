@@ -8,8 +8,9 @@ describe("The Frontend stack", () => {
     const stack = new Frontend(app, "Frontend-PROD", {
       stack: "support",
       stage: "PROD",
-      membershipSubPromotionsTables:
-        ["arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD"],
+      membershipSubPromotionsTables: [
+        "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+      ],
       domainName: "support.theguardian.com.origin.membership.guardianapis.com",
       scaling: {
         minimumInstances: 3,

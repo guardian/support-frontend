@@ -4,9 +4,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import type { AmountsTest, AmountsVariant } from '../contributions';
 
-function isRecord(
-	item: Record<string, unknown> | unknown,
-): item is Record<string, unknown> {
+function isRecord(item: unknown): item is Record<string, unknown> {
 	return item != null && !Array.isArray(item) && typeof item === 'object';
 }
 

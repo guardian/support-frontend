@@ -36,6 +36,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
+      case state: TierThreeState =>
+        zuoraTierThreeHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
@@ -133,6 +139,15 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       subscribeItemBuilder,
     ),
     state.user,
+  )
+  lazy val zuoraTierThreeHandler = new ZuoraTierThreeHandler(
+    zuoraSubscriptionCreator,
+    new TierThreeSubscriptionBuilder(
+      services.promotionService,
+      touchPointEnvironment,
+      dateGenerator,
+      subscribeItemBuilder,
+    ),
   )
   lazy val zuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,

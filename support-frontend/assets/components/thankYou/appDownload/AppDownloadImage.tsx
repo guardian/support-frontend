@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { between, from, space } from '@guardian/source-foundations';
+import { between, from, space } from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
 
 const mobileImg = css`

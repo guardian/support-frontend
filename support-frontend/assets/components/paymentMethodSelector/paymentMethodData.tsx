@@ -1,4 +1,4 @@
-import { SvgDirectDebitWide } from '@guardian/source-react-components';
+import { SvgDirectDebitWide } from '@guardian/source/react-components';
 import { AmazonPayFormContainer } from 'components/amazonPayForm/amazonPayFormContainer';
 import type { DirectDebitFormProps } from 'components/directDebit/directDebitForm/directDebitForm';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';

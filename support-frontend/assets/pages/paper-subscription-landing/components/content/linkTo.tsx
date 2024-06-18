@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { body, from, neutral, space } from '@guardian/source-foundations';
-import { Link } from '@guardian/source-react-components';
+import { body, from, neutral, space } from '@guardian/source/foundations';
+import { Link } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';

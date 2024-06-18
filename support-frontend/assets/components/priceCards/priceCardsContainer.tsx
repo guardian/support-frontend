@@ -15,6 +15,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { updateAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -72,6 +73,7 @@ export function PriceCardsContainer({
 				amount: newAmount,
 			}),
 		);
+		updateAbandonedBasketCookie(newAmount);
 	}
 
 	function onOtherAmountChange(newAmount: string) {
@@ -87,6 +89,7 @@ export function PriceCardsContainer({
 				amount: newAmount,
 			}),
 		);
+		updateAbandonedBasketCookie(newAmount);
 	}
 
 	return renderPriceCards({

@@ -33,19 +33,19 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
       )
 
     val paper = service.getPrices(Paper, List(discountPromoCode))
-    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 64.99
-    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(45.49)
-    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).price shouldBe 62.99
-    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(44.09)
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).price shouldBe 73.99
+    paper(UK)(HomeDelivery)(Sixday)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(51.79)
+    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).price shouldBe 66.99
+    paper(UK)(Collection)(EverydayPlus)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(46.89)
 
     val digitalPack = service.getPrices(DigitalPack, List(discountPromoCode))
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 11.99
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 14.99
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).promotions.head.discountedPrice shouldBe Some(
-      8.39,
+      10.49,
     )
-    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 119
+    digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 149
     digitalPack(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).promotions.head.discountedPrice shouldBe Some(
-      110.07,
+      137.82,
     )
   }
 
@@ -62,7 +62,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 99
 
     val weeklyGifts = service.getPrices(GuardianWeekly, Nil, Gift)
-    weeklyGifts(US)(Domestic)(NoProductOptions)(Annual)(USD).price shouldBe 330
+    weeklyGifts(US)(Domestic)(NoProductOptions)(Annual)(USD).price shouldBe 360
 
     val paperGifts = service.getPrices(Paper, Nil, Gift)
     paperGifts(UK).size shouldBe 0 // There is no gift product for Paper
@@ -82,26 +82,26 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     // Quarterly should have the discount promotion only
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
 
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 41.25
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).price shouldBe 45
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions
       .find(_.promoCode == discountPromoCode)
       .value
-      .discountedPrice shouldBe Some(28.87)
+      .discountedPrice shouldBe Some(31.50)
 
     // Annual should have the discount promotion and the annual 10% discount applied,
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions.size shouldBe 2
 
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 165
+    guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).price shouldBe 180
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
       .find(_.promoCode == discountPromoCode)
       .value
-      .discountedPrice shouldBe Some(152.62)
+      .discountedPrice shouldBe Some(166.50)
     guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
       .find(_.promoCode == tenAnnual)
       .value
-      .discountedPrice shouldBe Some(148.50)
+      .discountedPrice shouldBe Some(162.00)
 
     // SixWeekly should have the 6 for 6 promotion and the discount
     guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
@@ -172,7 +172,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
         CatalogServiceSpec.serviceWithFixtures,
       )
     val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
-    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(30)
+    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(25)
     succeed
   }
 

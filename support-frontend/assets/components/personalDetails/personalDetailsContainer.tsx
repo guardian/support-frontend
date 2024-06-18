@@ -1,4 +1,4 @@
-import { TextInput } from '@guardian/source-react-components';
+import { TextInput } from '@guardian/source/react-components';
 import Signout from 'components/signout/signout';
 import {
 	setBillingPostcode,
@@ -82,7 +82,9 @@ export function PersonalDetailsContainer({
 			<StateSelect
 				countryId={countryId}
 				state={state}
-				onStateChange={onBillingStateChange}
+				onStateChange={(event) => {
+					onBillingStateChange(event.currentTarget.value);
+				}}
 				error={errorObject?.state?.[0]}
 			/>
 		),

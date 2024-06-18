@@ -101,6 +101,8 @@ object AcquisitionProduct {
 
   case object SupporterPlus extends AcquisitionProduct("SUPPORTER_PLUS")
 
+  case object TierThree extends AcquisitionProduct("TIER_THREE")
+
   case object DigitalSubscription extends AcquisitionProduct("DIGITAL_SUBSCRIPTION")
 
   case object Paper extends AcquisitionProduct("PRINT_SUBSCRIPTION")

@@ -16,11 +16,7 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import type { Country } from 'helpers/internationalisation/countries';
-import type {
-	CaState,
-	IsoCountry,
-	UsState,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -68,6 +64,12 @@ type SupporterPlus = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
+export type TierThree = {
+	productType: 'TierThree';
+	currency: string;
+	billingPeriod: BillingPeriod;
+	fulfilmentOptions: FulfilmentOptions;
+};
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
@@ -93,7 +95,8 @@ export type SubscriptionProductFields =
 	| SupporterPlus
 	| DigitalSubscription
 	| PaperSubscription
-	| GuardianWeeklySubscription;
+	| GuardianWeeklySubscription
+	| TierThree;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	baid: string;
@@ -135,7 +138,7 @@ export type RegularPaymentFields =
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
-	state?: UsState | CaState | null;
+	state?: UsState | null;
 	lineOne?: Option<string>;
 	lineTwo?: Option<string>;
 	postCode?: Option<string>;

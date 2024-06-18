@@ -1,4 +1,4 @@
-import { AccordionRow } from '@guardian/source-react-components';
+import { AccordionRow } from '@guardian/source/react-components';
 import { useEffect, useRef, useState } from 'react';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 

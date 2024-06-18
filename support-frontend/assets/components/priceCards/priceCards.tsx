@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { from, space, until } from '@guardian/source-foundations';
-import { ChoiceCardGroup } from '@guardian/source-react-components';
+import { from, space, until } from '@guardian/source/foundations';
+import { ChoiceCardGroup } from '@guardian/source/react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';

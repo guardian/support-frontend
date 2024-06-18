@@ -6,8 +6,8 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source/react-components';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';

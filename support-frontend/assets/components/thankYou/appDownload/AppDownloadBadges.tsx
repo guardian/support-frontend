@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	OPHAN_COMPONENT_ID_APP_STORE_BADGE,
@@ -8,7 +8,9 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	androidAppUrl,
+	androidFeastAppUrl,
 	getDailyEditionUrl,
+	getFeastUrl,
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
 
@@ -48,14 +50,18 @@ const editionsPlayStoreUrl =
 
 function AppDownloadBadges({
 	countryGroupId,
+	isFeast,
 }: {
 	countryGroupId: CountryGroupId;
+	isFeast?: boolean;
 }): JSX.Element {
 	return (
 		<div css={container}>
 			{/* App Store */}
 			<a
-				href={getIosAppUrl(countryGroupId)}
+				href={
+					isFeast ? getFeastUrl(countryGroupId) : getIosAppUrl(countryGroupId)
+				}
 				target="blank"
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
 				css={appStoreLink}
@@ -193,7 +199,7 @@ function AppDownloadBadges({
 
 			{/* Google Play */}
 			<a
-				href={androidAppUrl}
+				href={isFeast ? androidFeastAppUrl : androidAppUrl}
 				target="blank"
 				onClick={() =>
 					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)

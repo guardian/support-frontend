@@ -1,11 +1,18 @@
 import { css } from '@emotion/react';
-import { from, palette, textSans } from '@guardian/source-foundations';
+import { from, palette, textSans } from '@guardian/source/foundations';
+import {
+	getDateWithOrdinal,
+	getLongMonth,
+	getNumericYear,
+} from 'helpers/utilities/dateFormatting';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 
 export interface TsAndCsProps {
 	title: string;
 	planCost: TierPlanCosts;
+	starts?: Date;
+	expires?: Date;
 }
 
 interface ThreeTierTsAndCsProps {
@@ -68,6 +75,17 @@ export function ThreeTierTsAndCs({
 								{discountSummaryCopy(currency, tcContent.planCost)} afterwards
 								unless you cancel. Offer only available to new subscribers who
 								do not have an existing subscription with the Guardian.
+								{tcContent.starts &&
+									tcContent.expires &&
+									` Offer starts on the ${getDateWithOrdinal(
+										tcContent.starts,
+									)} ${getLongMonth(
+										tcContent.starts,
+									)} and ends on the ${getDateWithOrdinal(
+										tcContent.expires,
+									)} ${getLongMonth(tcContent.expires)} ${getNumericYear(
+										tcContent.expires,
+									)}.`}
 							</p>
 						</div>
 					);

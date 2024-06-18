@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source-foundations';
-import { Column, Columns } from '@guardian/source-react-components';
+import { brand } from '@guardian/source/foundations';
+import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';

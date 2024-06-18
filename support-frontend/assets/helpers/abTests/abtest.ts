@@ -395,10 +395,12 @@ function getAmountsTestVariant(
 	): AmountsVariant => {
 		if (isLive && variants.length > 1) {
 			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-			return variants[assignmentIndex]!;
+
+			return variants[assignmentIndex];
 		}
 		// For regional AmountsTests, if the test is not live then we use the control
-		return variants[0]!;
+
+		return variants[0];
 	};
 
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
@@ -467,7 +469,7 @@ function userInBreakpoint(audience: Audience): boolean {
 
 	const { minWidth, maxWidth } = audience.breakpoint;
 
-	if (!(minWidth || maxWidth)) {
+	if (!(minWidth ?? maxWidth)) {
 		return true;
 	}
 

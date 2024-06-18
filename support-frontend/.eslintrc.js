@@ -1,9 +1,5 @@
 module.exports = {
-	extends: [
-		'plugin:@guardian/source-foundations/recommended',
-		'plugin:@guardian/source-react-components/recommended',
-		'plugin:storybook/recommended',
-	],
+	extends: ['@guardian/eslint-config', 'plugin:storybook/recommended'],
 	overrides: [
 		{
 			files: ['*.ts', '*.tsx'],

@@ -1,5 +1,5 @@
-import { Column, Columns, LinkButton } from '@guardian/source-react-components';
-import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
+import { Column, Columns, LinkButton } from '@guardian/source/react-components';
+import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useMemo } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -53,9 +53,9 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		countryId,
 		countryGroupId,
 		csrf,
-		email,
 		false,
 		amountIsAboveThreshold,
+		email,
 		campaignSettings?.campaignCode,
 	);
 

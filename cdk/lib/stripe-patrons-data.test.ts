@@ -8,7 +8,7 @@ describe("The Stripe patrons data stack", () => {
     const stack = new StripePatronsData(app, "StripePatronsData-PROD", {
       stack: "support",
       stage: "PROD",
-      buildNumber: 'DEV',
+      buildNumber: "DEV",
     });
 
     const template = Template.fromStack(stack);

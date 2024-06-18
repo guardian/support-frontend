@@ -49,6 +49,8 @@ export type Promotion = {
 	discount?: DiscountBenefit;
 	introductoryPrice?: IntroductoryPriceBenefit;
 	landingPage?: PromotionCopy;
+	starts?: string;
+	expires?: string;
 };
 const promoQueryParam = 'promoCode';
 

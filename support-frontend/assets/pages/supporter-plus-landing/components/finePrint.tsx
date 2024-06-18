@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, textSans, until } from '@guardian/source-foundations';
+import { neutral, textSans, until } from '@guardian/source/foundations';
 
 const textStyles = (theme: FinePrintTheme, size: FinePrintSize) => css`
 	${textSans[size]({ lineHeight: 'regular' })};

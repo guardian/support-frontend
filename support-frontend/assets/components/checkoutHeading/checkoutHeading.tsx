@@ -5,8 +5,8 @@ import {
 	neutral,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Column, Columns, Hide } from '@guardian/source/react-components';
 import { Container } from 'components/layout/container';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 

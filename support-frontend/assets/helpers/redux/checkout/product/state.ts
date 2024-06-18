@@ -37,7 +37,7 @@ type ProductErrors = {
 // Probably best to handle everything as strings
 export type AmountChange = {
 	contributionType: ContributionType;
-	amount: string | 'other';
+	amount: string; // this is normally a number stringified || 'other';
 };
 
 export type ProductState = {
