@@ -127,13 +127,13 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       app: appName,
       alarmName: `The ${props.stage} ${appName} lambda has failed`,
       alarmDescription:
-        `There is one or more event in the ${deadLetterQueueName} dead letter queue. ` +
+        `There is one or more event in the ${deadLetterQueueName} dead letter queue (DLQ). ` +
         "Check the logs for the error and use the details to confirm that the event was not written " +
-        "to the fact_acquisition_event table in BigQuery. If the event is not in the table then use the dead letter " +
-        "queue redrive feature to replay the failed event. If the redrive functionality is not used " +
+        "to the fact_acquisition_event table in BigQuery. If the event is not in the table then use the DLQ " +
+        "redrive feature to replay the failed event. If the redrive functionality is not used " +
         "then purge the queue instead or the alarm will remain in an alarm state.\n" +
         `Main queue: https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2F${queueName}\n` +
-        `Dead letter queue: https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2F${deadLetterQueueName}\n` +
+        `DLQ: https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2F${deadLetterQueueName}\n` +
         `Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252F${functionName}`,
       metric: deadLetterQueue.metricApproximateNumberOfMessagesVisible(),
       threshold: 1,
