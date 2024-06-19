@@ -148,9 +148,6 @@ export const tests: Tests = {
 	july2024PriceRise: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
