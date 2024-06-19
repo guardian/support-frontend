@@ -563,6 +563,10 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeekly'
 			: 'MonthlyWithGuardianWeekly';
+	const supporterPlusWithGuardianWeeklyInternationalRatePlan =
+		contributionType === 'ANNUAL'
+			? 'AnnualWithGuardianWeeklyInt'
+			: 'MonthlyWithGuardianWeeklyInt';
 
 	const isJuly2024PriceRise = abParticipations.july2024PriceRise === 'variant';
 	const tier3Promotion = isJuly2024PriceRise
@@ -572,13 +576,24 @@ export function ThreeTierLanding(): JSX.Element {
 		: contributionType === 'ANNUAL'
 		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
 		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
-	const tier3Pricing = isJuly2024PriceRise
+	const tier3PricingNotInternational = isJuly2024PriceRise
 		? supporterPlusWithGuardianWeeklyV2.ratePlans[
 				supporterPlusWithGuardianWeeklyRatePlan
 		  ].pricing[currencyId]
 		: supporterPlusWithGuardianWeekly.ratePlans[
 				supporterPlusWithGuardianWeeklyRatePlan
 		  ].pricing[currencyId];
+	const tier3PricingInternational = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD']
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD'];
+	const tier3Pricing =
+		countryGroupId === 'International'
+			? tier3PricingInternational
+			: tier3PricingNotInternational;
 
 	const tier3UrlParams = new URLSearchParams({
 		promoCode: tier3Promotion.promoCode,
