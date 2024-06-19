@@ -722,12 +722,13 @@ export function ThreeTierLanding(): JSX.Element {
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
-							To learn more about other ways to support the Guardian, including
-							checks and tax-exempt options, please visit our{' '}
+							If you are interested in contributing through a donor-advised
+							fund, foundation or retirement account, or by mailing a check,
+							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-							on this topic.
+							to learn how.
 						</p>
 					</div>
 				)}
