@@ -560,19 +560,31 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType === 'ANNUAL'
 			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
 			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
-	const supporterPlusWithGuardianWeeklyRatePlan =
+	const supporterPlusWithGuardianWeeklyDomesticRatePlan =
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeekly'
 			: 'MonthlyWithGuardianWeekly';
+
+	const supporterPlusWithGuardianWeeklyInternationalRatePlan =
+		contributionType === 'ANNUAL'
+			? 'AnnualWithGuardianWeeklyInt'
+			: 'MonthlyWithGuardianWeeklyInt';
+
+	const tier3Pricing =
+		countryGroupId === 'International'
+			? supporterPlusWithGuardianWeekly.ratePlans[
+					supporterPlusWithGuardianWeeklyInternationalRatePlan
+			  ].pricing['USD']
+			: supporterPlusWithGuardianWeekly.ratePlans[
+					supporterPlusWithGuardianWeeklyDomesticRatePlan
+			  ].pricing[currencyId];
+
 	const tier3UrlParams = new URLSearchParams({
 		promoCode: tier3Promotion.promoCode,
 		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
-	const tier3Pricing =
-		supporterPlusWithGuardianWeekly.ratePlans[
-			supporterPlusWithGuardianWeeklyRatePlan
-		].pricing[currencyId];
+
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
