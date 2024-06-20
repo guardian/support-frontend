@@ -64,6 +64,7 @@ case class CreateSupportWorkersRequest(
       * of places in the code base
       */
     threeTierCreateSupporterPlusSubscription: Option[Boolean] = None,
+    threeTierCreateSupporterPlusSubscriptionV2: Option[Boolean] = None,
 )
 
 object SupportWorkersClient {
