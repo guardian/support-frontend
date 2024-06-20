@@ -42,7 +42,10 @@ import {
 	productCatalogDescription as productCatalogDescExclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyAnnualPromosV2,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
+	supporterPlusWithGuardianWeeklyV2,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -556,35 +559,47 @@ export function ThreeTierLanding(): JSX.Element {
 	 * Tier 3: SupporterPlus with Guardian Weekly
 	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
 	 */
-	const tier3Promotion =
-		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
-	const supporterPlusWithGuardianWeeklyDomesticRatePlan =
+	const supporterPlusWithGuardianWeeklyRatePlan =
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeekly'
 			: 'MonthlyWithGuardianWeekly';
-
 	const supporterPlusWithGuardianWeeklyInternationalRatePlan =
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeeklyInt'
 			: 'MonthlyWithGuardianWeeklyInt';
 
+	const isJuly2024PriceRise = abParticipations.july2024PriceRise === 'variant';
+	const tier3Promotion = isJuly2024PriceRise
+		? contributionType === 'ANNUAL'
+			? supporterPlusWithGuardianWeeklyAnnualPromosV2[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromosV2[countryGroupId]
+		: contributionType === 'ANNUAL'
+		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
+	const tier3PricingDomestic = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId]
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId];
+	const tier3PricingInternational = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD']
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD'];
 	const tier3Pricing =
 		countryGroupId === 'International'
-			? supporterPlusWithGuardianWeekly.ratePlans[
-					supporterPlusWithGuardianWeeklyInternationalRatePlan
-			  ].pricing['USD']
-			: supporterPlusWithGuardianWeekly.ratePlans[
-					supporterPlusWithGuardianWeeklyDomesticRatePlan
-			  ].pricing[currencyId];
+			? tier3PricingInternational
+			: tier3PricingDomestic;
 
 	const tier3UrlParams = new URLSearchParams({
 		promoCode: tier3Promotion.promoCode,
 		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
-
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
