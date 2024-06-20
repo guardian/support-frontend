@@ -76,19 +76,19 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
-import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
+import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import * as cookie from 'helpers/storage/cookie';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { getUser, isTestUser as isTestUserFunc } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -99,18 +99,7 @@ import { formatMachineDate } from '../../helpers/utilities/dateConversions';
 import { getWeeklyDays } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
-/** App config - this is config that should persist throughout the app */
-validateWindowGuardian(window.guardian);
-
-const csrf = window.guardian.csrf.token;
-
-const user = getUser();
-const isSignedIn = user.isSignedIn;
-const isTestUser = isTestUserFunc();
-
 const countryId: IsoCountry = CountryHelper.detect();
-
-const productCatalog = window.guardian.productCatalog;
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
@@ -301,10 +290,18 @@ function ChangeButton({ geoId }: ChangeButtonProps) {
 
 type Props = {
 	geoId: GeoId;
+	appConfig: AppConfig;
 };
-function CheckoutComponent({ geoId }: Props) {
+function CheckoutComponent({ geoId, appConfig }: Props) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
+
+	const csrf = appConfig.csrf.token;
+	const user = appConfig.user;
+	const isSignedIn = !!user?.email;
+	const isTestUser = !!cookie.get('_test_username');
+
+	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
@@ -430,7 +427,7 @@ function CheckoutComponent({ geoId }: Props) {
 		const { selectedAmountsVariant } = getAmountsTestVariant(
 			countryId,
 			countryGroupId,
-			window.guardian.settings,
+			appConfig.settings,
 		);
 		if (query.price < 1) {
 			isInvalidAmount = true;
@@ -525,11 +522,11 @@ function CheckoutComponent({ geoId }: Props) {
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(user.firstName ?? '');
+	const [firstName, setFirstName] = useState(user?.firstName ?? '');
 	const [firstNameError, setFirstNameError] = useState<string>();
-	const [lastName, setLastName] = useState(user.lastName ?? '');
+	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [lastNameError, setLastNameError] = useState<string>();
-	const [email, setEmail] = useState(user.email ?? '');
+	const [email, setEmail] = useState(user?.email ?? '');
 	const [emailError, setEmailError] = useState<string>();
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -1539,8 +1536,9 @@ function CheckoutComponent({ geoId }: Props) {
 	);
 }
 
-export function Checkout({ geoId }: Props) {
+export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
+	const isTestUser = !!cookie.get('_test_username');
 	const stripePublicKey = getStripeKey(
 		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
 		'REGULAR',
@@ -1551,7 +1549,7 @@ export function Checkout({ geoId }: Props) {
 
 	return (
 		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
-			<CheckoutComponent geoId={geoId} />
+			<CheckoutComponent geoId={geoId} appConfig={appConfig} />
 		</StripeElements>
 	);
 }
