@@ -82,3 +82,7 @@ export function updateAbandonedBasketCookie(amount: string) {
 		);
 	}
 }
+
+export function deleteAbandonedBasketCookie() {
+  cookie.remove(ABANDONED_BASKET_COOKIE_NAME);
+}

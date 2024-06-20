@@ -11,6 +11,7 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
+import { deleteAbandonedBasketCookie } from "../../helpers/storage/abandonedBasketCookies";
 import { DefaultPaymentButton } from './defaultPaymentButton';
 
 const contributionTypeToPaymentInterval: Partial<
@@ -104,7 +105,10 @@ export function DefaultPaymentButtonContainer({
 		<DefaultPaymentButton
 			id={testId}
 			buttonText={buttonText}
-			onClick={onClick}
+			onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+				deleteAbandonedBasketCookie();
+				onClick(event);
+			}}
 		/>
 	);
 }
