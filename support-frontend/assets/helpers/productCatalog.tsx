@@ -499,7 +499,7 @@ export const supporterPlusWithGuardianWeeklyV2 = {
 		AnnualWithGuardianWeekly: {
 			id: '',
 			pricing: {
-				USD: 510,
+				USD: 490,
 				NZD: 800,
 				EUR: 438,
 				GBP: 300,
@@ -574,7 +574,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		promoCode: '3TIER_WEEKLY_US_ANNUAL_V2',
 		discountedPrice: 385,
 		discount: {
-			amount: 24.51,
+			amount: 21.429,
 			durationMonths: 12,
 		},
 	},
