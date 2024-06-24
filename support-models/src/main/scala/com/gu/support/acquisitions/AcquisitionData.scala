@@ -64,6 +64,7 @@ case class AcquisitionData(
     referrerAcquisitionData: ReferrerAcquisitionData,
     supportAbTests: Set[AbTest],
     threeTierCreateSupporterPlusSubscription: Option[Boolean] = None,
+    threeTierCreateSupporterPlusSubscriptionV2: Option[Boolean] = None,
 )
 
 object AcquisitionData {
