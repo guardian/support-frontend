@@ -169,6 +169,7 @@ class SupportWorkersClient(
             referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
             supportAbTests = request.body.supportAbTests,
             threeTierCreateSupporterPlusSubscription = request.body.threeTierCreateSupporterPlusSubscription,
+            threeTierCreateSupporterPlusSubscriptionV2 = request.body.threeTierCreateSupporterPlusSubscriptionV2,
           ),
         ),
         promoCode = request.body.promoCode,
