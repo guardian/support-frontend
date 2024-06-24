@@ -595,11 +595,21 @@ export function ThreeTierLanding(): JSX.Element {
 			? tier3PricingInternational
 			: tier3PricingDomestic;
 
-	const tier3UrlParams = new URLSearchParams({
-		promoCode: tier3Promotion.promoCode,
-		threeTierCreateSupporterPlusSubscription: 'true',
-		period: paymentFrequencyMap[contributionType],
-	});
+	let tier3UrlParams: URLSearchParams;
+	if (isJuly2024PriceRise) {
+		tier3UrlParams = new URLSearchParams({
+			promoCode: tier3Promotion.promoCode,
+			threeTierCreateSupporterPlusSubscriptionV2: 'true',
+			period: paymentFrequencyMap[contributionType],
+		});
+	} else {
+		tier3UrlParams = new URLSearchParams({
+			promoCode: tier3Promotion.promoCode,
+			threeTierCreateSupporterPlusSubscription: 'true',
+			period: paymentFrequencyMap[contributionType],
+		});
+	}
+
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
