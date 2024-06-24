@@ -69,7 +69,7 @@ const PaymentConfigSchema = object({
 		}),
 	),
 	/**
-	 * productPrices, stragely, is valid as an empty object.
+	 * productPrices, strangely, is valid as an empty object.
 	 * We should be trying to avoid using this anywho, and use productCatalog instead.
 	 */
 	productPrices: optional(object({})),
