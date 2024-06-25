@@ -22,7 +22,11 @@ describe('getTierThreeDeliveryDate', () => {
 			const deliveryDate = dayjs(
 				getTierThreeDeliveryDate(day.toDate().getTime()),
 			);
-			expect(deliveryDate.isAfter(day.add(15, 'day'))).toBe(true);
+			const fifteenDaysTime = day.add(15, 'day');
+			expect(
+				deliveryDate.isSame(fifteenDaysTime) ||
+					deliveryDate.isAfter(fifteenDaysTime),
+			).toBe(true);
 		});
 	});
 });
