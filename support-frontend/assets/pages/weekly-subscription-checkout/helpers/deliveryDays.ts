@@ -49,9 +49,13 @@ function getTierThreeDeliveryDate(today?: number) {
 		15,
 	);
 	const weeklyDays = getWeeklyDays(today);
-	return weeklyDays.find(
+	const result = weeklyDays.find(
 		(date) => date.getTime() >= firstValidDeliveryDate.getTime(),
 	);
+	if (result === undefined) {
+		throw new Error('We couldn\t find a valid three tier delivery date');
+	}
+	return result;
 }
 
 export { getWeeklyDays, addDays, getTierThreeDeliveryDate };
