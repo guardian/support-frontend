@@ -568,7 +568,21 @@ export function ThreeTierLanding(): JSX.Element {
 			? 'AnnualWithGuardianWeeklyInt'
 			: 'MonthlyWithGuardianWeeklyInt';
 
-	const isJuly2024PriceRise = abParticipations.july2024PriceRise === 'variant';
+	const isJuly2024PriceRise =
+		/**
+		 * We do this as sending the old amount (£10) down the pipes will cause
+		 * `support-workers` to fail as it calculates the contribution amount from the amount sent minus the catalog price
+		 * e.g. state.amount - catalogPrice i.e. 10-12 and failes if the price is less than 0
+		 *
+		 * @see: https://github.com/guardian/support-frontend/blob/main/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
+		 *
+		 * This should avoid a race condition of us deploying the price rise before frontend is deployed.
+		 *
+		 * This should only exist as long as the Tier three hack is in place.
+		 */
+		productCatalog.SupporterPlus.ratePlans.Monthly.pricing.GBP === 12 ||
+		abParticipations.july2024PriceRise === 'variant';
+
 	const tier3Promotion = isJuly2024PriceRise
 		? contributionType === 'ANNUAL'
 			? supporterPlusWithGuardianWeeklyAnnualPromosV2[countryGroupId]
