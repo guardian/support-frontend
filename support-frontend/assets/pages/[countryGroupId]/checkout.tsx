@@ -96,7 +96,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { formatMachineDate } from '../../helpers/utilities/dateConversions';
-import { getWeeklyDays } from '../weekly-subscription-checkout/helpers/deliveryDays';
+import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
@@ -702,7 +702,7 @@ function CheckoutComponent({ geoId }: Props) {
 			);
 			const firstDeliveryDate =
 				productId === 'TierThree'
-					? formatMachineDate(getWeeklyDays()[0])
+					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
 
 			const createSupportWorkersRequest: RegularPaymentRequest = {
