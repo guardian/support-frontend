@@ -90,8 +90,10 @@ GET  /subscribe                                                    controllers.S
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
 # Checkout
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.router(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout                             controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you                            controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout/:product/:ratePlan          controllers.Application.checkoutRedirect(countryGroupId: String, product: String, ratePlan: String, price: Option[String] = None)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout/:product/:ratePlan/:price   controllers.Application.checkoutRedirectWithPrice(countryGroupId: String, product: String, ratePlan: String, price: String)
 
 # Events
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events              controllers.Application.eventsRouter(countryGroupId: String, eventId: Option[String] = None)

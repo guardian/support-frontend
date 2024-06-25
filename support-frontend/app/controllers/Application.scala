@@ -308,6 +308,34 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
+  def checkoutRedirectWithPrice(
+      countryGroupId: String,
+      product: String,
+      ratePlan: String,
+      price: String,
+  ): Action[AnyContent] = checkoutRedirect(countryGroupId, product, ratePlan, Some(price))
+
+  def checkoutRedirect(
+      countryGroupId: String,
+      product: String,
+      ratePlan: String,
+      price: Option[String],
+  ): Action[AnyContent] = CachedAction() {
+    val queryStringMap = price.map(price =>
+      Map(
+        "product" -> Seq(product),
+        "ratePlan" -> Seq(ratePlan),
+        "price" -> Seq(price),
+      ),
+    ) getOrElse Map(product -> Seq(product), ratePlan -> Seq(ratePlan))
+
+    RedirectWithEncodedQueryString(
+      s"/${countryGroupId}/checkout",
+      queryStringMap,
+      status = FOUND,
+    )
+  }
+
   def eventsRouter(countryGroupId: String, eventId: Option[String]) = authAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.eventsRouter()).withHeaders(CacheControl.noCache)
