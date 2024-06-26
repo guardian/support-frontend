@@ -11,38 +11,32 @@ import { afterEachTasks } from './utils/afterEachTest';
 const testDetails = [
 	{
 		product: 'Contribution',
+		price: 9,
 		ratePlan: 'Monthly',
 		paymentType: 'Direct debit',
-		price: 9,
-		country: 'UK',
-		glyph: '£',
+		internationalisationId: 'uk',
 		paymentFrequency: 'month',
 	},
 	{
 		product: 'Contribution',
+		price: 90,
 		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
-		price: 90,
-		country: 'US',
-		glyph: '$',
+		internationalisationId: 'us',
 		paymentFrequency: 'year',
 	},
 	{
 		product: 'SupporterPlus',
 		ratePlan: 'Monthly',
 		paymentType: 'PayPal',
-		price: 17,
-		country: 'AU',
-		glyph: '$',
+		internationalisationId: 'au',
 		paymentFrequency: 'month',
 	},
 	{
 		product: 'SupporterPlus',
 		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
-		price: 95,
-		country: 'EU',
-		glyph: '€',
+		internationalisationId: 'eu',
 		paymentFrequency: 'year',
 	},
 ] as const;
@@ -51,38 +45,35 @@ afterEachTasks(test);
 
 test.describe('Generic Checkout', () => {
 	testDetails.forEach((testDetails) => {
-		test(`${testDetails.product} ${testDetails.ratePlan} with ${
-			testDetails.paymentType
-		} - ${testDetails.country ?? 'UK'} / ${testDetails.glyph}${
-			testDetails.price
-		}`, async ({ context, baseURL }) => {
+		const { internationalisationId, product, ratePlan, paymentType } =
+			testDetails;
+
+		test(`${product} ${ratePlan} with ${paymentType} in ${internationalisationId}`, async ({
+			context,
+			baseURL,
+		}) => {
+			const url =
+				'price' in testDetails
+					? `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}&price=${testDetails.price.toString()}`
+					: `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}`;
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
-			await setupPage(
-				page,
-				context,
-				baseURL,
-				`/${testDetails.country?.toLowerCase() || 'uk'}/checkout?product=${
-					testDetails.product
-				}&ratePlan=${
-					testDetails.ratePlan
-				}&price=${testDetails.price.toString()}`,
-			);
+			await setupPage(page, context, baseURL, url);
 
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
-			if (testDetails.country === 'US') {
+			if (internationalisationId === 'us') {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
 				await page.getByLabel('ZIP code').fill('90210');
 			}
-			if (testDetails.country === 'AU') {
+			if (internationalisationId === 'au') {
 				await page
 					.getByLabel('State')
 					.selectOption({ label: 'New South Wales' });
 			}
-			await page.getByRole('radio', { name: testDetails.paymentType }).check();
-			switch (testDetails.paymentType) {
+			await page.getByRole('radio', { name: paymentType }).check();
+			switch (paymentType) {
 				case 'Direct debit':
 					await fillInDirectDebitDetails(page, 'contribution');
 					await checkRecaptcha(page);
@@ -108,13 +99,13 @@ test.describe('Generic Checkout', () => {
 			}
 
 			if (
-				testDetails.paymentType === 'Credit/Debit card' ||
-				testDetails.paymentType === 'Direct debit'
+				paymentType === 'Credit/Debit card' ||
+				paymentType === 'Direct debit'
 			) {
 				await checkRecaptcha(page);
 				await page
 					.getByRole('button', {
-						name: `Pay ${testDetails.glyph}${testDetails.price} per ${testDetails.paymentFrequency}`,
+						name: `Pay`,
 					})
 					.click();
 			}
