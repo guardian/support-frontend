@@ -19,6 +19,13 @@ export type ProductDescription = {
 	>;
 };
 
+/**
+ * TODO: make this stricter.
+ * Currently we have this so that other places can use it,
+ * but when we make it more constrained, we should pick up any type errors.
+ */
+export type ProductId = string;
+
 export const productCatalogDescription: Record<string, ProductDescription> = {
 	/**
 	 * We need `SupporterPlusWithGuardianWeekly` for the the landing page while we migrate
