@@ -44,7 +44,7 @@ class CachedProductCatalogService(system: ActorSystem, productCatalogService: Pr
   }
   def get(): JsonObject = json.get()
 
-  system.scheduler.scheduleWithFixedDelay(0.minutes, 10.minutes) { () =>
+  system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minutes) { () =>
     {
       update()
     }
