@@ -183,8 +183,8 @@ const discountSummaryCopy = (
 		paymentFrequency === 'ANNUAL' ? durationMonths / 12 : durationMonths;
 
 	return `${formattedPromotionPrice}/${period} for ${
-		period === 'year' ? ' the first ' : ''
-	} ${duration > 1 ? duration : ''} ${period}${
+		period === 'year' ? 'the first' : ''
+	}${duration > 1 ? duration : ''} ${period}${
 		duration > 1 ? 's' : ''
 	}, then ${formattedPrice}/${period}${'*'.repeat(promoCount)}`;
 };

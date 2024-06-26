@@ -42,7 +42,10 @@ import {
 	productCatalogDescription as productCatalogDescExclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyAnnualPromosV2,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
+	supporterPlusWithGuardianWeeklyV2,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -556,23 +559,71 @@ export function ThreeTierLanding(): JSX.Element {
 	 * Tier 3: SupporterPlus with Guardian Weekly
 	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
 	 */
-	const tier3Promotion =
-		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 	const supporterPlusWithGuardianWeeklyRatePlan =
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeekly'
 			: 'MonthlyWithGuardianWeekly';
-	const tier3UrlParams = new URLSearchParams({
-		promoCode: tier3Promotion.promoCode,
-		threeTierCreateSupporterPlusSubscription: 'true',
-		period: paymentFrequencyMap[contributionType],
-	});
+	const supporterPlusWithGuardianWeeklyInternationalRatePlan =
+		contributionType === 'ANNUAL'
+			? 'AnnualWithGuardianWeeklyInt'
+			: 'MonthlyWithGuardianWeeklyInt';
+
+	const isJuly2024PriceRise =
+		/**
+		 * We do this as sending the old amount (£10) down the pipes will cause
+		 * `support-workers` to fail as it calculates the contribution amount from the amount sent minus the catalog price
+		 * e.g. state.amount - catalogPrice i.e. 10-12 and failes if the price is less than 0
+		 *
+		 * @see: https://github.com/guardian/support-frontend/blob/main/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
+		 *
+		 * This should avoid a race condition of us deploying the price rise before frontend is deployed.
+		 *
+		 * This should only exist as long as the Tier three hack is in place.
+		 */
+		productCatalog.SupporterPlus.ratePlans.Monthly.pricing.GBP === 12 ||
+		abParticipations.july2024PriceRise === 'variant';
+
+	const tier3Promotion = isJuly2024PriceRise
+		? contributionType === 'ANNUAL'
+			? supporterPlusWithGuardianWeeklyAnnualPromosV2[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromosV2[countryGroupId]
+		: contributionType === 'ANNUAL'
+		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
+	const tier3PricingDomestic = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId]
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId];
+	const tier3PricingInternational = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD']
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyInternationalRatePlan
+		  ].pricing['USD'];
 	const tier3Pricing =
-		supporterPlusWithGuardianWeekly.ratePlans[
-			supporterPlusWithGuardianWeeklyRatePlan
-		].pricing[currencyId];
+		countryGroupId === 'International'
+			? tier3PricingInternational
+			: tier3PricingDomestic;
+
+	let tier3UrlParams: URLSearchParams;
+	if (isJuly2024PriceRise) {
+		tier3UrlParams = new URLSearchParams({
+			promoCode: tier3Promotion.promoCode,
+			threeTierCreateSupporterPlusSubscriptionV2: 'true',
+			period: paymentFrequencyMap[contributionType],
+		});
+	} else {
+		tier3UrlParams = new URLSearchParams({
+			promoCode: tier3Promotion.promoCode,
+			threeTierCreateSupporterPlusSubscription: 'true',
+			period: paymentFrequencyMap[contributionType],
+		});
+	}
+
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,

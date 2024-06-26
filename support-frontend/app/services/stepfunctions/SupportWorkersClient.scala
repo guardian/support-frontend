@@ -64,6 +64,7 @@ case class CreateSupportWorkersRequest(
       * of places in the code base
       */
     threeTierCreateSupporterPlusSubscription: Option[Boolean] = None,
+    threeTierCreateSupporterPlusSubscriptionV2: Option[Boolean] = None,
 )
 
 object SupportWorkersClient {
@@ -168,6 +169,7 @@ class SupportWorkersClient(
             referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
             supportAbTests = request.body.supportAbTests,
             threeTierCreateSupporterPlusSubscription = request.body.threeTierCreateSupporterPlusSubscription,
+            threeTierCreateSupporterPlusSubscriptionV2 = request.body.threeTierCreateSupporterPlusSubscriptionV2,
           ),
         ),
         promoCode = request.body.promoCode,

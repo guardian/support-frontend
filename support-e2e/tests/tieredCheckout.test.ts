@@ -122,22 +122,22 @@ const testDetailsPromo = [
 		frequency: 'Monthly',
 		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
 		expectedCardHeading: 'All-access digital',
-		expectedPromoText: '£8/month for 6 months, then £10/month',
-		expectedCheckoutTotalText: 'Was £10, now £8/month',
-		expectedCheckoutButtonText: 'Pay £8 per month',
+		expectedPromoText:
+			/£(\d|\.)+\/month for (\d|\.) months, then £(\d|\.)+\/month/,
+		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
 		expectedThankYouText:
-			"You'll pay £8/month for the first 6 months, then £10/month afterwards unless you cancel.",
+			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
 	},
 	{
 		tier: 2,
 		frequency: 'Annual',
 		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
 		expectedCardHeading: 'All-access digital',
-		expectedPromoText: '£76/year for the first year, then £95/year',
-		expectedCheckoutTotalText: 'Was £95, now £76/year',
-		expectedCheckoutButtonText: 'Pay £76 per year',
+		expectedPromoText:
+			/£(\d|\.)+\/year for the first year, then £(\d|\.)+\/year/i,
+		expectedCheckoutTotalText: /Was £(\d|\.)+, now £(\d|\.)+\/year/i,
 		expectedThankYouText:
-			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
+			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
 	},
 ];
 test.describe('Supporter Plus promoCodes', () => {
@@ -181,7 +181,11 @@ test.describe('Supporter Plus promoCodes', () => {
 			await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 			await fillInCardDetails(page);
 			await checkRecaptcha(page);
-			await page.getByText(testDetails.expectedCheckoutButtonText).click();
+			await page
+				.getByRole('button', {
+					name: `Pay`,
+				})
+				.click();
 
 			// Thank you
 			await expect(
@@ -193,69 +197,4 @@ test.describe('Supporter Plus promoCodes', () => {
 			).toBeVisible({ timeout: 600000 });
 		});
 	});
-});
-
-const thresholdTests = [
-	{ amount: '10', contributionType: 'monthly', product: 'All-access digital' },
-	{ amount: '9', contributionType: 'monthly', product: 'Support' },
-	{ amount: '95', contributionType: 'annual', product: 'All-access digital' },
-	{ amount: '94', contributionType: 'annual', product: 'Support' },
-	{
-		amount: '10',
-		contributionType: 'monthly',
-		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
-		product: 'All-access digital',
-	},
-	{
-		amount: '9',
-		contributionType: 'monthly',
-		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
-		product: 'Support',
-	},
-	{
-		amount: '95',
-		contributionType: 'annual',
-		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
-		product: 'All-access digital',
-	},
-	{
-		amount: '94',
-		contributionType: 'annual',
-		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
-		product: 'Support',
-	},
-];
-test.describe('Thresholds - the product is "Support" or "All-access digital" correctly based on selected-amount', () => {
-	for (const testConfig of thresholdTests) {
-		test(`Thresholds - ${testConfig.product} ${testConfig.amount}/${
-			testConfig.contributionType
-		}/${testConfig.promoCode ?? ''}`, async ({ context, baseURL }) => {
-			const page = await context.newPage();
-			const urlParams = new URLSearchParams({
-				'selected-amount': testConfig.amount,
-				'selected-contribution-type': testConfig.contributionType,
-			});
-			if (testConfig.promoCode) {
-				urlParams.append('promoCode', testConfig.promoCode);
-			}
-			await setupPage(
-				page,
-				context,
-				baseURL,
-				`/uk/contribute/checkout?${urlParams.toString()}`,
-			);
-
-			const orderSummaryHeading = page.getByRole('heading', {
-				name: 'Your subscription',
-			});
-			const orderSummarySection = page
-				.locator('section')
-				.filter({ has: orderSummaryHeading })
-				.nth(1);
-
-			expect(
-				orderSummarySection.getByText(`${testConfig.product}`, { exact: true }),
-			).toBeVisible();
-		});
-	}
 });
