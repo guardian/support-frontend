@@ -3,7 +3,6 @@ import {
 	getNextDeliveryDay,
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -35,9 +34,28 @@ const getWeeklyDays = (today?: number): Date[] => {
 	return nonChrismassy.splice(weeksToAdd);
 };
 
-function getDisplayDays(): string[] {
-	const today = new Date().getTime();
-	return getWeeklyDays(today).map((day) => formatUserDate(day));
+function addDays(date: Date, days: number) {
+	const result = new Date(date);
+	result.setDate(result.getDate() + days);
+	return result;
 }
 
-export { getWeeklyDays, getDisplayDays };
+function getTierThreeDeliveryDate(today?: number) {
+	// For the Tier Three (t3) product we want users to be able to cancel within 14 days without being charged.
+	// To do this we need the first delivery date of the Guardian Weekly part of the subscription, which is the date
+	// on which the first payment will be taken, to be at least 14 (actually 15 to be safe) days from today.
+	const firstValidDeliveryDate = addDays(
+		new Date(today ?? new Date().getTime()),
+		15,
+	);
+	const weeklyDays = getWeeklyDays(today);
+	const result = weeklyDays.find(
+		(date) => date.getTime() >= firstValidDeliveryDate.getTime(),
+	);
+	if (result === undefined) {
+		throw new Error('We couldn\t find a valid three tier delivery date');
+	}
+	return result;
+}
+
+export { getWeeklyDays, addDays, getTierThreeDeliveryDate };

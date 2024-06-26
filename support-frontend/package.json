@@ -165,6 +165,7 @@
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "cssnano": "^6.0.1",
+    "dayjs": "^1.11.11",
     "eslint": "^8.51.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-nibble": "^8.1.0",
