@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
+import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -18,7 +18,7 @@ import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
-validateWindowGuardian(window.guardian);
+parseAppConfig(window.guardian);
 
 if (!isDetailsSupported) {
 	polyfillDetails();

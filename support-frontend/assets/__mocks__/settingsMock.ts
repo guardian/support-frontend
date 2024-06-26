@@ -1,6 +1,6 @@
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 
-export const mockSettings: Settings = {
+export const mockSettings = {
 	switches: {
 		oneOffPaymentMethods: {
 			stripe: 'On',
@@ -329,6 +329,6 @@ export const mockSettings: Settings = {
 	},
 	metricUrl:
 		'https://metric-push-api-code.support.guardianapis.com/metric-push-api',
-};
+} as AppConfig['settings'];
 
 window.guardian = { ...window.guardian, settings: mockSettings };
