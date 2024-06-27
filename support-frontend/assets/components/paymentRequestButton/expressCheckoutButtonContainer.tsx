@@ -15,7 +15,7 @@ type PaymentRequestButtonContainerProps = {
 // Migrate to the Express Checkout Element
 // https://docs.stripe.com/elements/express-checkout-element/migration?client=react
 
-export function paymentExpressCheckoutContainer({
+export function ExpressCheckoutButtonContainer({
 	CustomButton,
 }: PaymentRequestButtonContainerProps): JSX.Element | null {
 	console.log(CustomButton);

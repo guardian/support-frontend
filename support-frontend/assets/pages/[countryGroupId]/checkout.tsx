@@ -40,7 +40,7 @@ import { getTermsConditions } from 'components/orderSummary/contributionsOrderSu
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
-import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
+import { ExpressCheckoutButtonContainer } from 'components/paymentRequestButton/expressCheckoutButtonContainer';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -848,7 +848,10 @@ function CheckoutComponent({ geoId }: Props) {
 								<BoxContents>
 									{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 									<ContributionsStripeStandalone>
-										<PaymentRequestButtonContainer
+										{/* <PaymentRequestButtonContainer
+											CustomButton={SavedCardButton}
+										/> */}
+										<ExpressCheckoutButtonContainer
 											CustomButton={SavedCardButton}
 										/>
 									</ContributionsStripeStandalone>
