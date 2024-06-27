@@ -11,6 +11,7 @@ import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankY
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
+	OPHAN_COMPONENT_ID_FEAST,
 	OPHAN_COMPONENT_ID_SIGN_IN,
 	OPHAN_COMPONENT_ID_SIGN_UP,
 	OPHAN_COMPONENT_ID_SOCIAL,
@@ -126,6 +127,7 @@ export const getThankYouModuleData = (
 			ctasSecond: (
 				<AppDownloadBadges countryGroupId={countryGroupId} isFeast={true} />
 			),
+			trackComponentLoadId: OPHAN_COMPONENT_ID_FEAST,
 		},
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
