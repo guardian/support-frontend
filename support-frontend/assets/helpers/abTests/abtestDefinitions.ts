@@ -59,7 +59,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: true,
+		referrerControlled: true, // paramURL needs ab-test name
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -80,7 +80,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: true,
+		referrerControlled: true, // paramURL needs ab-test name
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -119,7 +119,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: false,
+		referrerControlled: false, // ab-test name not required in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -140,7 +140,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
+		referrerControlled: false, /// ab-test name not required in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -158,7 +158,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: true, // ab-test name not needed to be in paramURL
+		referrerControlled: false, // ab-test name not required in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -176,7 +176,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
+		referrerControlled: false, // ab-test name not required in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
@@ -197,7 +197,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
+		referrerControlled: false, // ab-test name not required in paramURL
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
