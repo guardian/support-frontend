@@ -157,9 +157,9 @@ export function ThankYou({ geoId }: Props) {
 		isSupporterPlus,
 	);
 	const maybeThankYouModule = (
-		condtion: boolean,
+		condition: boolean,
 		moduleType: ThankYouModuleType,
-	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'),
