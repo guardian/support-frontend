@@ -23,7 +23,6 @@ export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
 	'contribution-thankyou-read-more-sign-in';
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP =
 	'contribution-thankyou-read-more-sign-up';
-export const OPHAN_COMPONENT_ID_FEAST = 'introducing-the-feast-app';
 
 //////////////////////////////////////////
 //Supporter Plus v2 checkout component IDs
