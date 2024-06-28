@@ -16,7 +16,6 @@ import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -228,14 +227,12 @@ export function SupporterPlusThankYou({
 	);
 
 	const maybeThankYouModule = (
-		condtion: boolean,
+		condition: boolean,
 		moduleType: ThankYouModuleType,
-	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
-	const showFeast =
-		!!abParticipations.feast &&
-		useContributionsSelector(isSupporterPlusFromState);
-
+	// abParticipation, upon refresh, defaults to active abtTests only
+	const showFeast = !!abParticipations.feast && isSupporterPlus;
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
@@ -243,7 +240,7 @@ export function SupporterPlusThankYou({
 			'signIn',
 		),
 		...maybeThankYouModule(isSupporterPlus && !showFeast, 'appDownload'),
-		...maybeThankYouModule(isSupporterPlus && showFeast, 'appsDownload'),
+		...maybeThankYouModule(showFeast, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
@@ -257,9 +254,7 @@ export function SupporterPlusThankYou({
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
-	const showOffer =
-		!!abParticipations.usFreeBookOffer &&
-		useContributionsSelector(isSupporterPlusFromState);
+	const showOffer = !!abParticipations.usFreeBookOffer && isSupporterPlus;
 
 	return (
 		<PageScaffold
