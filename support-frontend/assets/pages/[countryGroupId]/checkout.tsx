@@ -80,7 +80,10 @@ import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import {
+	productCatalog,
+	productCatalogDescription,
+} from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
@@ -111,8 +114,6 @@ const isSignedIn = user.isSignedIn;
 const isTestUser = isTestUserFunc();
 
 const countryId: IsoCountry = CountryHelper.detect();
-
-const productCatalog = window.guardian.productCatalog;
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
