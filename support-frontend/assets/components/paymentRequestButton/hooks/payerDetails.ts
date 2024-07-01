@@ -1,7 +1,4 @@
-import type {
-	PaymentMethod,
-	PaymentRequestPaymentMethodEvent,
-} from '@stripe/stripe-js';
+import type { PaymentRequestPaymentMethodEvent } from '@stripe/stripe-js';
 import { Country } from 'helpers/internationalisation';
 import {
 	setBillingCountry,
@@ -46,33 +43,13 @@ function setPayerEmail(
 	}
 }
 
-function dispatchPaymentMethodCountryAndState(
-	dispatch: ContributionsDispatch,
-	billingDetails: PaymentMethod.BillingDetails,
-): void {
-	const { country, state } = billingDetails.address ?? {};
-
-	const validatedCountry = Country.findIsoCountry(country ?? undefined);
-
-	if (validatedCountry) {
-		const validatedState = Country.stateProvinceFromString(
-			validatedCountry,
-			state ?? undefined,
-		);
-
-		dispatch(setBillingCountry(validatedCountry));
-		dispatch(setBillingState(validatedState ?? ''));
-	}
-}
-
 export function addPayerDetailsToRedux(
 	dispatch: ContributionsDispatch,
 	paymentMethodEvent: PaymentRequestPaymentMethodEvent,
 ): void {
-	const { paymentMethod, payerName, payerEmail } = paymentMethodEvent;
+	const { payerName, payerEmail } = paymentMethodEvent;
 	payerName && setPayerName(dispatch, payerName);
 	setPayerEmail(dispatch, payerEmail);
-	dispatchPaymentMethodCountryAndState(dispatch, paymentMethod.billing_details);
 }
 
 export function resetPayerDetails(dispatch: ContributionsDispatch): void {
