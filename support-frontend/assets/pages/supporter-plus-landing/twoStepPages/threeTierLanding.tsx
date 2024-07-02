@@ -609,6 +609,17 @@ export function ThreeTierLanding(): JSX.Element {
 			? tier3PricingInternational
 			: tier3PricingDomestic;
 
+	const tier3RatePlan =
+		countryGroupId === 'International'
+			? contributionType === 'ANNUAL'
+				? 'RestOfWorldAnnual'
+				: 'RestOfWorkMonthly'
+			: contributionType === 'ANNUAL'
+			? 'DomesticAnnual'
+			: 'DomesticMonthly';
+	const tier3PricingNew =
+		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
+
 	let tier3UrlParams: URLSearchParams;
 	if (isJuly2024PriceRise) {
 		tier3UrlParams = new URLSearchParams({
@@ -627,7 +638,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
-		price: tier3Pricing,
+		price: tier3PricingNew,
 		link: `/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
 		promotion: tier3Promotion,
 		isRecommended: false,
