@@ -1,6 +1,6 @@
+@import com.gu.identity.testing.usernames.TestUsernames.TestUser
 @(
-    key: String,
-    email: String
+    testUser: TestUser,
 )
 
 <!DOCTYPE html>
@@ -13,22 +13,12 @@
     <body>
         <h1>Test User generator.</h1>
         <p>This page makes it possible to test without using real payment details.</p>
-        <p>A cookie has been set with the name <em>_test_username</em> and the value <em>@key</em></p>
+        <p>A cookie has been set with the name <em>_test_username</em> and the value <em>@{testUser.token}</em></p>
         <p>
           This is all you need to be recognised as a test user on support.theguardian.com for the next 48 hours, however if you want to be recognised as a test user in
-          other systems, follow the instructions below.
+          other systems, populate the email address with @{testUser.email}.
         </p>
-        <div>When registering please populate the following fields with your new test user key.<br/>
-            All other fields can be populated as you wish.
-            <h2>All recurring product purchases</h2>
-            <ul>
-                <li>Email: @{email}</li>
-            </ul>
-            <h2>Single contributions</h2>
-            <ul>
-                <li><strong>Email (if you do not want to receive emails):</strong> @{key}@@thegulocal.com</li>
-                <li>If you DO want to receive emails: @{email}</li>
-            </ul>
+        <div>
             <h2>Redemption of gift subscriptions</h2>
             <p>You do not have to use any details, just make sure you are logged out, have visited this page before hand and the red flash is visible.</p>
             <p>Alternatively, register an identity account as per a recurring product purchase, and make sure you are logged in.</p>
