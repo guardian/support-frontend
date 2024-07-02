@@ -40,12 +40,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
-	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyAnnualPromosV2,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
-	supporterPlusWithGuardianWeeklyV2,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -557,16 +555,8 @@ export function ThreeTierLanding(): JSX.Element {
 
 	/**
 	 * Tier 3: SupporterPlus with Guardian Weekly
-	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
+	 * This products promotions are hard-coded for now
 	 */
-	const supporterPlusWithGuardianWeeklyRatePlan =
-		contributionType === 'ANNUAL'
-			? 'AnnualWithGuardianWeekly'
-			: 'MonthlyWithGuardianWeekly';
-	const supporterPlusWithGuardianWeeklyInternationalRatePlan =
-		contributionType === 'ANNUAL'
-			? 'AnnualWithGuardianWeeklyInt'
-			: 'MonthlyWithGuardianWeeklyInt';
 
 	const isJuly2024PriceRise =
 		/**
@@ -590,24 +580,16 @@ export function ThreeTierLanding(): JSX.Element {
 		: contributionType === 'ANNUAL'
 		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
 		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
-	const tier3PricingDomestic = isJuly2024PriceRise
-		? supporterPlusWithGuardianWeeklyV2.ratePlans[
-				supporterPlusWithGuardianWeeklyRatePlan
-		  ].pricing[currencyId]
-		: supporterPlusWithGuardianWeekly.ratePlans[
-				supporterPlusWithGuardianWeeklyRatePlan
-		  ].pricing[currencyId];
-	const tier3PricingInternational = isJuly2024PriceRise
-		? supporterPlusWithGuardianWeeklyV2.ratePlans[
-				supporterPlusWithGuardianWeeklyInternationalRatePlan
-		  ].pricing['USD']
-		: supporterPlusWithGuardianWeekly.ratePlans[
-				supporterPlusWithGuardianWeeklyInternationalRatePlan
-		  ].pricing['USD'];
-	const tier3Pricing =
+	const tier3RatePlan =
 		countryGroupId === 'International'
-			? tier3PricingInternational
-			: tier3PricingDomestic;
+			? contributionType === 'ANNUAL'
+				? 'RestOfWorldAnnual'
+				: 'RestOfWorldMonthly'
+			: contributionType === 'ANNUAL'
+			? 'DomesticAnnual'
+			: 'DomesticMonthly';
+	const tier3Pricing =
+		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
 	let tier3UrlParams: URLSearchParams;
 	if (isJuly2024PriceRise) {
