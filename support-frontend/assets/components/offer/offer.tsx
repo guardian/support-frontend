@@ -63,7 +63,7 @@ export function OfferFeast(): JSX.Element {
 						children={
 							<p>
 								{
-									'Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.'
+									'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.'
 								}
 							</p>
 						}

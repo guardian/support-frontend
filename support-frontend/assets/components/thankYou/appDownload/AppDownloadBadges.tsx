@@ -8,9 +8,8 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	androidAppUrl,
-	androidFeastAppUrl,
+	feastAppUrl,
 	getDailyEditionUrl,
-	getFeastUrl,
 	getIosAppUrl,
 } from 'helpers/urls/externalLinks';
 
@@ -59,9 +58,7 @@ function AppDownloadBadges({
 		<div css={container}>
 			{/* App Store */}
 			<a
-				href={
-					isFeast ? getFeastUrl(countryGroupId) : getIosAppUrl(countryGroupId)
-				}
+				href={isFeast ? feastAppUrl : getIosAppUrl(countryGroupId)}
 				target="blank"
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
 				css={appStoreLink}
@@ -199,7 +196,7 @@ function AppDownloadBadges({
 
 			{/* Google Play */}
 			<a
-				href={isFeast ? androidFeastAppUrl : androidAppUrl}
+				href={isFeast ? feastAppUrl : androidAppUrl}
 				target="blank"
 				onClick={() =>
 					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)

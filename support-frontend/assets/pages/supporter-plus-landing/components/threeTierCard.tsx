@@ -307,7 +307,7 @@ export function ThreeTierCard({
 			/>
 			{offers && offers.length > 0 && (
 				<>
-					<span css={benefitsPrefixPlus}>new benefit</span>
+					<span css={benefitsPrefixPlus}>new</span>
 					<CheckList
 						checkListData={offers.map((offer) => {
 							return {
