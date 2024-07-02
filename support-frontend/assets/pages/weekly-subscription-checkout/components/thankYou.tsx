@@ -24,7 +24,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsV2 } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -212,8 +212,8 @@ function ThankYouContent({
 		</SansParagraph>,
 	];
 
-	const benefitsTier3and2 = tierCards.tier3.benefits.list.concat(
-		tierCards.tier2.benefits.list,
+	const benefitsTier3and2 = tierCardsV2.tier3.benefits.list.concat(
+		tierCardsV2.tier2.benefits.list,
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${

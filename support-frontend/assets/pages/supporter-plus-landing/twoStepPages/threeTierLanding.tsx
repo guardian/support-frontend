@@ -40,9 +40,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
-	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyAnnualPromosV2,
-	supporterPlusWithGuardianWeeklyMonthlyPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -558,28 +556,22 @@ export function ThreeTierLanding(): JSX.Element {
 	 * This products promotions are hard-coded for now
 	 */
 
-	const isJuly2024PriceRise =
-		/**
-		 * We do this as sending the old amount (£10) down the pipes will cause
-		 * `support-workers` to fail as it calculates the contribution amount from the amount sent minus the catalog price
-		 * e.g. state.amount - catalogPrice i.e. 10-12 and failes if the price is less than 0
-		 *
-		 * @see: https://github.com/guardian/support-frontend/blob/main/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
-		 *
-		 * This should avoid a race condition of us deploying the price rise before frontend is deployed.
-		 *
-		 * This should only exist as long as the Tier three hack is in place.
-		 */
-		productCatalog.SupporterPlus.ratePlans.Monthly.pricing.GBP === 12 ||
-		abParticipations.july2024PriceRise === 'variant';
-
-	const tier3Promotion = isJuly2024PriceRise
-		? contributionType === 'ANNUAL'
+	/**
+	 * We do this as sending the old amount (£10) down the pipes will cause
+	 * `support-workers` to fail as it calculates the contribution amount from the amount sent minus the catalog price
+	 * e.g. state.amount - catalogPrice i.e. 10-12 and failes if the price is less than 0
+	 *
+	 * @see: https://github.com/guardian/support-frontend/blob/main/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
+	 *
+	 * This should avoid a race condition of us deploying the price rise before frontend is deployed.
+	 *
+	 * This should only exist as long as the Tier three hack is in place.
+	 */
+	const tier3Promotion =
+		contributionType === 'ANNUAL'
 			? supporterPlusWithGuardianWeeklyAnnualPromosV2[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromosV2[countryGroupId]
-		: contributionType === 'ANNUAL'
-		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
+			: supporterPlusWithGuardianWeeklyMonthlyPromosV2[countryGroupId];
+
 	const tier3RatePlan =
 		countryGroupId === 'International'
 			? contributionType === 'ANNUAL'
@@ -591,20 +583,11 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
-	let tier3UrlParams: URLSearchParams;
-	if (isJuly2024PriceRise) {
-		tier3UrlParams = new URLSearchParams({
-			promoCode: tier3Promotion.promoCode,
-			threeTierCreateSupporterPlusSubscriptionV2: 'true',
-			period: paymentFrequencyMap[contributionType],
-		});
-	} else {
-		tier3UrlParams = new URLSearchParams({
-			promoCode: tier3Promotion.promoCode,
-			threeTierCreateSupporterPlusSubscription: 'true',
-			period: paymentFrequencyMap[contributionType],
-		});
-	}
+	const tier3UrlParams = new URLSearchParams({
+		promoCode: tier3Promotion.promoCode,
+		threeTierCreateSupporterPlusSubscriptionV2: 'true',
+		period: paymentFrequencyMap[contributionType],
+	});
 
 	const tier3CardHarcoded = {
 		productDescription:

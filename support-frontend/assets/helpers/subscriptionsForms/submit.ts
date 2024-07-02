@@ -64,10 +64,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import {
-	tierCards,
-	tierCardsV2,
-} from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsV2 } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -188,7 +185,6 @@ function buildRegularPaymentRequest(
 	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
 	addresses: Addresses,
-	inThreeTier: boolean,
 	inThreeTierV2: boolean,
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
@@ -232,7 +228,6 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: inThreeTier,
 		threeTierCreateSupporterPlusSubscriptionV2: inThreeTierV2,
 	};
 }
@@ -250,10 +245,6 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
-	const inThreeTier = threeTierCheckoutEnabled(
-		state.common.abParticipations,
-		state.common.amounts,
-	);
 	const inThreeTierV2 = threeTierCheckoutEnabled(
 		state.common.abParticipations,
 		state.common.amounts,
@@ -276,7 +267,6 @@ function onPaymentAuthorised(
 		state,
 		paymentAuthorisation,
 		addresses,
-		inThreeTier,
 		inThreeTierV2,
 		productPrice.promotions,
 		currency,
@@ -305,21 +295,18 @@ function onPaymentAuthorised(
 				productType,
 			);
 
-			if (inThreeTier || inThreeTierV2) {
-				const tierCardsSelection = inThreeTierV2 ? tierCardsV2 : tierCards;
+			if (inThreeTierV2) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;
 				const contributionType = billingPeriod.toUpperCase() as
 					| keyof RegularContributionTypeMap<null>;
 
 				const digitalPlusPrintDiscount =
-					tierCardsSelection.tier3.plans[tierBillingPeriodName].charges[
-						countryGroupId
-					].discount;
+					tierCardsV2.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.discount;
 				const digitalPlusPrintPrice =
-					tierCardsSelection.tier3.plans[tierBillingPeriodName].charges[
-						countryGroupId
-					].price;
+					tierCardsV2.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.price;
 				const digitalPlusPrintPriceDiscounted =
 					digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
 				const digitalPriceDiscounted =
