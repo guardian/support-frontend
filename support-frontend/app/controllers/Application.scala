@@ -10,7 +10,7 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogging
-import com.gu.support.catalog.SupporterPlus
+import com.gu.support.catalog.{SupporterPlus, TierThree}
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -192,7 +192,7 @@ class Application(
         .toList
 
     val productPrices =
-      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
