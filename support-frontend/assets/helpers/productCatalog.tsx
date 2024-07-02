@@ -1,8 +1,8 @@
 import { newspaperCountries } from './internationalisation/country';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
+export { type ProductCatalog } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 export const productCatalog = window.guardian.productCatalog;
-
 export type ProductDescription = {
 	label: string;
 	benefits: Array<{ copy: string; tooltip?: string }>;

@@ -20,14 +20,14 @@
     "test-watch": "NODE_ENV=test echo 'Running JS tests in watch mode' && jest --watch",
     "jest-update-snapshot": "echo 'Updating JS tests' && jest -u",
     "paparazzi": "paparazzi && open ./paparazzi",
-    "prepare": "cd .. && husky install ./support-frontend/.husky",
     "prettier:check": "prettier --check ./assets",
     "prettier:fix": "prettier --write ./assets",
     "storybook": "storybook dev -p 9001 --no-open",
     "build-storybook": "storybook build -o storybook-static",
     "cache-ssr": "node scripts/ssrScript.js",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+    "prepare": "husky"
   },
   "browserslist": [
     "extends @guardian/browserslist-config"
@@ -90,6 +90,7 @@
     "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/source": "1.0.1",
     "@guardian/source-development-kitchen": "1.0.0",
+    "@guardian/support-service-lambdas": "https://github.com/guardian/support-service-lambdas#export-product-catalog",
     "@guardian/tsconfig": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.4",
     "@sentry/browser": "^7.72.0",
@@ -175,7 +176,7 @@
     "fast-sass-loader": "^2.0.1",
     "file-loader": "^6.2.0",
     "glob": "^10.3.12",
-    "husky": "^7.0.1",
+    "husky": "^9.0.11",
     "jest": "^24.9.0",
     "jest-environment-jsdom-fifteen": "^1.0.2",
     "json-sass-vars": "^3.1.0",
