@@ -21,7 +21,7 @@ class TestUsersManagement(
   private val cookieDomain = guardianDomain
 
   def createTestUser: Action[AnyContent] = authAction { request =>
-    val testUser = testUsers.testUsers.generateEmail(request.user.email)
+    val testUser = testUsers.testUsers.generateEmail(Some(request.user.email))
     Ok(testUsersView(testUser))
       .withHeaders(CacheControl.noCache)
       .withCookies(Cookie("_test_username", testUser.token, httpOnly = false, domain = Some(cookieDomain.value)))
