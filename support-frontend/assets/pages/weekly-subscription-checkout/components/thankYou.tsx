@@ -165,7 +165,6 @@ function ThankYouContent({
 }: PropTypes) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const inThreeTier =
-		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true' ||
 		urlParams.get('threeTierCreateSupporterPlusSubscriptionV2') === 'true';
 
 	const whatHappensNextItems = orderIsGift
