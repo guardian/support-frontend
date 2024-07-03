@@ -60,7 +60,7 @@ Default.args = {
 	isUserSelected: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
-	price: 10,
+	price: 12,
 	productDescription: productCatalogDescription.SupporterPlus,
 };
 
@@ -72,7 +72,7 @@ Promotion.args = {
 	isUserSelected: false,
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
-	price: 36.5,
+	price: 38.5,
 	productDescription: productCatalogDescription.SupporterPlusWithGuardianWeekly,
 	promotion: supporterPlusWithGuardianWeeklyMonthlyPromosV2.EURCountries,
 };
@@ -85,7 +85,7 @@ Offer.args = {
 	isUserSelected: true,
 	currencyId: 'USD',
 	paymentFrequency: 'MONTHLY',
-	price: 13,
+	price: 15,
 	productDescription: {
 		...productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		offersSummary: [
