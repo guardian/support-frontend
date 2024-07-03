@@ -7,6 +7,9 @@
 @import io.circe.JsonObject
 
 @import com.gu.identity.model.User
+@import com.gu.support.encoding.CustomCodecs._
+@import services.pricing.ProductPrices
+@import views.ViewHelpers.outputJson
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -16,6 +19,7 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
+  productPrices: ProductPrices,
   productCatalog: JsonObject,
   user: Option[User]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
@@ -34,6 +38,10 @@
   shareUrl = None,
   noindex = true,
 ){
+  <script type="text/javascript">
+    window.guardian = window.guardian || {};
+    window.guardian.productPrices = @Html(outputJson(productPrices))
+  </script>
   @windowGuardianPaymentConfig(
     geoData = geoData,
     paymentMethodConfigs = paymentMethodConfigs,

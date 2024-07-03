@@ -282,6 +282,11 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     Ok(
       views.html.router(
@@ -303,6 +308,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
+        productPrices = productPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey
