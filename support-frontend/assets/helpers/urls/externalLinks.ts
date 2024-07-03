@@ -32,7 +32,7 @@ const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-wi
 const defaultIntCmp = 'gdnwb_copts_bundles_landing_default';
 const androidAppUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian';
-const feastAppUrl = `https://guardian-feast.go.link?adj_t=1dufrlhf&adj_fallback=https%3A%2F%2Fwww.theguardian.com%2Fhelp%2Finsideguardian%2F2024%2Fapr%2F17%2Fintroducing-the-feast-app&adj_redirect_macos=https%3A%2F%2Fwww.theguardian.com%2Fhelp%2Finsideguardian%2F2024%2Fapr%2F17%2Fintroducing-the-feast-app`;
+const feastAppUrl = 'https://guardian-feast.go.link?adj_t=1dufrlhf';
 const androidDailyUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian.editions';
 const myAccountUrl = `${profileUrl}/account/edit`;
