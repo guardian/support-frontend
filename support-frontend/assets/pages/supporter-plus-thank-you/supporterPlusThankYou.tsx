@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { between, from, space, sport } from '@guardian/source/foundations';
+import {
+	between,
+	from,
+	neutral,
+	space,
+	sport,
+} from '@guardian/source/foundations';
 import { Column, Columns, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo } from 'preact/hooks';
@@ -32,6 +38,7 @@ import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
 export const checkoutContainer = css`
+	background-color: ${neutral[100]};
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
