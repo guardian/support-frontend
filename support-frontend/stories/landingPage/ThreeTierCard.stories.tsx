@@ -6,7 +6,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import {
 	productCatalogDescription,
-	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
@@ -74,7 +74,7 @@ Promotion.args = {
 	paymentFrequency: 'MONTHLY',
 	price: 38.5,
 	productDescription: productCatalogDescription.SupporterPlusWithGuardianWeekly,
-	promotion: supporterPlusWithGuardianWeeklyMonthlyPromosV2.EURCountries,
+	promotion: supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries,
 };
 
 export const Offer = Template.bind({});

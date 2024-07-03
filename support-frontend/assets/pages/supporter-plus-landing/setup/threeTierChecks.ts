@@ -5,7 +5,7 @@ import { isContributionsOnlyCountry } from 'helpers/contributions';
 export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
 	amountsVariant: SelectedAmountsVariant,
-	isTierThreeV2?: boolean,
+	isTierThree?: boolean,
 ): boolean => {
 	const isPaperCheckout = window.location.pathname.startsWith(
 		'/subscribe/paper/checkout',
@@ -32,7 +32,7 @@ export const threeTierCheckoutEnabled = (
 		const urlParams = new URLSearchParams(window.location.search);
 		return (
 			urlParams.get(
-				`threeTierCreateSupporterPlusSubscription${isTierThreeV2 ? 'V2' : ''}`,
+				`threeTierCreateSupporterPlusSubscription${isTierThree ? 'V2' : ''}`,
 			) === 'true'
 		);
 	}

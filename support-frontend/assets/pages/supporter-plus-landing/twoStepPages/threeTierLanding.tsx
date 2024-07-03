@@ -40,8 +40,8 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
-	supporterPlusWithGuardianWeeklyAnnualPromosV2,
-	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
+	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -569,8 +569,8 @@ export function ThreeTierLanding(): JSX.Element {
 	 */
 	const tier3Promotion =
 		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromosV2[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromosV2[countryGroupId];
+			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
 	const tier3RatePlan =
 		countryGroupId === 'International'

@@ -83,7 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { tierCardsV2 } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
@@ -230,10 +230,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
 	const standardDigitalPlusPrintPrice =
-		tierCardsV2.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
 			.price;
 	const digitalPlusPrintPotentialDiscount =
-		tierCardsV2.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
 			.discount;
 	const discountedDigitalPlusPrintPrice =
 		digitalPlusPrintPotentialDiscount?.price ?? standardDigitalPlusPrintPrice;

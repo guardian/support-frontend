@@ -279,7 +279,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	},
 };
 
-export const supporterPlusWithGuardianWeeklyV2 = {
+export const supporterPlusWithGuardianWeekly = {
 	ratePlans: {
 		MonthlyWithGuardianWeekly: {
 			id: '',
@@ -338,7 +338,7 @@ export const supporterPlusWithGuardianWeeklyV2 = {
 	},
 } as const;
 
-export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
+export const supporterPlusWithGuardianWeeklyAnnualPromos = {
 	GBPCountries: {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
@@ -411,7 +411,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 	},
 };
 
-export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
+export const supporterPlusWithGuardianWeeklyMonthlyPromos = {
 	GBPCountries: {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',

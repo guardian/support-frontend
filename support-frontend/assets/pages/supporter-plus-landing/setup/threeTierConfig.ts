@@ -4,9 +4,9 @@ import type {
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-	supporterPlusWithGuardianWeeklyAnnualPromosV2,
-	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
-	supporterPlusWithGuardianWeeklyV2,
+	supporterPlusWithGuardianWeekly,
+	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 
 export interface TierBenefits {
@@ -144,7 +144,7 @@ const tier2: TierCard = {
 	},
 };
 
-const tier3V2: TierCard = {
+const tier3: TierCard = {
 	title: 'Digital + print',
 	benefits: {
 		description: [
@@ -164,19 +164,19 @@ const tier3V2: TierCard = {
 			charges: {
 				GBPCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.GBP,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.GBP,
 					promoCode: '3TIER_WEEKLY_UK_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.GBPCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.GBPCountries
+							supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.GBPCountries
+								supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -184,19 +184,19 @@ const tier3V2: TierCard = {
 				},
 				EURCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.EUR,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.EUR,
 					promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.EURCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.EURCountries
+							supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.EURCountries
+								supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -204,19 +204,19 @@ const tier3V2: TierCard = {
 				},
 				International: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
+						supporterPlusWithGuardianWeekly.ratePlans
 							.MonthlyWithGuardianWeeklyInt.pricing.USD,
 					promoCode: '3TIER_WEEKLY_INT_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.International
+							supporterPlusWithGuardianWeeklyMonthlyPromos.International
 								.discount.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.International
+							supporterPlusWithGuardianWeeklyMonthlyPromos.International
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.International
+								supporterPlusWithGuardianWeeklyMonthlyPromos.International
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -224,19 +224,19 @@ const tier3V2: TierCard = {
 				},
 				UnitedStates: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.USD,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.USD,
 					promoCode: '3TIER_WEEKLY_US_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.UnitedStates
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.UnitedStates
+							supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.UnitedStates
+								supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -244,19 +244,19 @@ const tier3V2: TierCard = {
 				},
 				Canada: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.CAD,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.CAD,
 					promoCode: '3TIER_WEEKLY_CA_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.Canada.discount
+							supporterPlusWithGuardianWeeklyMonthlyPromos.Canada.discount
 								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.Canada
+							supporterPlusWithGuardianWeeklyMonthlyPromos.Canada
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.Canada.discount
+								supporterPlusWithGuardianWeeklyMonthlyPromos.Canada.discount
 									.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -264,19 +264,19 @@ const tier3V2: TierCard = {
 				},
 				NZDCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.NZD,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.NZD,
 					promoCode: '3TIER_WEEKLY_NZ_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.NZDCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.NZDCountries
+							supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.NZDCountries
+								supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -284,19 +284,19 @@ const tier3V2: TierCard = {
 				},
 				AUDCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
-							.MonthlyWithGuardianWeekly.pricing.AUD,
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.AUD,
 					promoCode: '3TIER_WEEKLY_AU_MONTHLY_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.AUDCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyMonthlyPromosV2.AUDCountries
+							supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyMonthlyPromosV2.AUDCountries
+								supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries
 									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
@@ -309,19 +309,19 @@ const tier3V2: TierCard = {
 			charges: {
 				GBPCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.GBP,
 					promoCode: '3TIER_WEEKLY_UK_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.GBPCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.GBPCountries
+							supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.GBPCountries
+								supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -329,19 +329,19 @@ const tier3V2: TierCard = {
 				},
 				EURCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.EUR,
 					promoCode: '3TIER_WEEKLY_EU_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.EURCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.EURCountries
+							supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.EURCountries
+								supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -349,19 +349,19 @@ const tier3V2: TierCard = {
 				},
 				International: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans
+						supporterPlusWithGuardianWeekly.ratePlans
 							.AnnualWithGuardianWeeklyInt.pricing.USD,
 					promoCode: '3TIER_WEEKLY_INT_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.International
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.International.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.International
+							supporterPlusWithGuardianWeeklyAnnualPromos.International
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.International
+								supporterPlusWithGuardianWeeklyAnnualPromos.International
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -369,19 +369,19 @@ const tier3V2: TierCard = {
 				},
 				UnitedStates: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.USD,
 					promoCode: '3TIER_WEEKLY_US_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.UnitedStates
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.UnitedStates
+							supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.UnitedStates
+								supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -389,19 +389,19 @@ const tier3V2: TierCard = {
 				},
 				Canada: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.CAD,
 					promoCode: '3TIER_WEEKLY_CA_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.Canada.discount
+							supporterPlusWithGuardianWeeklyAnnualPromos.Canada.discount
 								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.Canada
+							supporterPlusWithGuardianWeeklyAnnualPromos.Canada
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.Canada.discount
+								supporterPlusWithGuardianWeeklyAnnualPromos.Canada.discount
 									.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -409,19 +409,19 @@ const tier3V2: TierCard = {
 				},
 				NZDCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.NZD,
 					promoCode: '3TIER_WEEKLY_NZ_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.NZDCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.NZDCountries
+							supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.NZDCountries
+								supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -429,19 +429,19 @@ const tier3V2: TierCard = {
 				},
 				AUDCountries: {
 					price:
-						supporterPlusWithGuardianWeeklyV2.ratePlans.AnnualWithGuardianWeekly
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
 							.pricing.AUD,
 					promoCode: '3TIER_WEEKLY_AU_ANNUAL_V2',
 					discount: {
 						percentage:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.AUDCountries
-								.discount.amount,
+							supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries.discount
+								.amount,
 						price:
-							supporterPlusWithGuardianWeeklyAnnualPromosV2.AUDCountries
+							supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries
 								.discountedPrice,
 						duration: {
 							value:
-								supporterPlusWithGuardianWeeklyAnnualPromosV2.AUDCountries
+								supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries
 									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
@@ -452,8 +452,8 @@ const tier3V2: TierCard = {
 	},
 };
 
-export const tierCardsV2: TierCards = {
+export const tierCards: TierCards = {
 	tier1,
 	tier2,
-	tier3: tier3V2,
+	tier3,
 };

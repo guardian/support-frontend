@@ -64,7 +64,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import { tierCardsV2 } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -302,10 +302,10 @@ function onPaymentAuthorised(
 					| keyof RegularContributionTypeMap<null>;
 
 				const digitalPlusPrintDiscount =
-					tierCardsV2.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 						.discount;
 				const digitalPlusPrintPrice =
-					tierCardsV2.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 						.price;
 				const digitalPlusPrintPriceDiscounted =
 					digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
