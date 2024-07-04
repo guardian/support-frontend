@@ -20,7 +20,7 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.pricing.PriceSummaryServiceProvider
+import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
@@ -38,6 +38,10 @@ case class PaymentMethodConfigs(
     defaultAmazonPayConfig: AmazonPayConfig,
     testAmazonPayConfig: AmazonPayConfig,
 )
+
+// This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
+// product prices to the contributions template would exceed that limit.
+case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -192,7 +196,9 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices =
+    val supporterPlusProductPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val tierThreeProductPrices =
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
@@ -224,7 +230,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      productPrices = productPrices,
+      productPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
