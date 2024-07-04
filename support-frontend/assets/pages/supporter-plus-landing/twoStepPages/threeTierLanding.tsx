@@ -39,9 +39,6 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
-	productCatalogDescInclFeast,
-	supporterPlusWithGuardianWeeklyAnnualPromos,
-	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -310,11 +307,22 @@ export function ThreeTierLanding(): JSX.Element {
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
-	const promotion = useContributionsSelector((state) =>
+	// TODO : productPrices appears to ignore S+ promotions
+	//        supporterPlusProductPrices appear to contain threeTier promotions
+	//        Currently, we do-not wish to display S+ promotions on Tier2 (this my change in future)
+	const promotionTier2 = useContributionsSelector((state) =>
 		getPromotion(
 			state.page.checkoutForm.product.productPrices,
 			countryId,
 			billingPeriod,
+		),
+	);
+	const promotionTier3 = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.tierThreeProductPrices,
+			countryId,
+			billingPeriod,
+			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 		),
 	);
 
@@ -473,8 +481,8 @@ export function ThreeTierLanding(): JSX.Element {
 		'selected-contribution-type': selectedContributionType,
 		product: 'SupporterPlus',
 	});
-	if (promotion) {
-		tier2UrlParams.set('promoCode', promotion.promoCode);
+	if (promotionTier2) {
+		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
 
 	const tier2Card = {
@@ -482,11 +490,11 @@ export function ThreeTierLanding(): JSX.Element {
 		price: tier2Pricing,
 		link: `contribute/checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
-		promotion,
+		promotion: promotionTier2,
 		isRecommended: true,
 		isUserSelected: isCardUserSelected(
 			tier2Pricing,
-			promotion?.discount?.amount,
+			promotionTier2?.discount?.amount,
 		),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
@@ -507,10 +515,6 @@ export function ThreeTierLanding(): JSX.Element {
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const tier3Promotion =
-		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
 	const tier3RatePlan =
 		countryGroupId === 'International'
@@ -524,21 +528,23 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
 	const tier3UrlParams = new URLSearchParams({
-		promoCode: tier3Promotion.promoCode,
-		threeTierCreateSupporterPlusSubscription: 'true',
+		threeTierCreateSupporterPlusSubscriptionV2: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
+	if (promotionTier3) {
+		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
+	}
 
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		price: tier3Pricing,
 		link: `/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
-		promotion: tier3Promotion,
+		promotion: promotionTier3,
 		isRecommended: false,
 		isUserSelected: isCardUserSelected(
 			tier3Pricing,
-			promotion?.discount?.amount,
+			promotionTier3?.discount?.amount,
 		),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
@@ -569,13 +575,11 @@ export function ThreeTierLanding(): JSX.Element {
 		productDescription: productCatalogDescription.TierThree,
 		price: tierThreePricing,
 		link: tierThreeGenericCheckoutLink,
-		// TODO: we'll need to update this once TierThree promotions are supported
-		promotion: undefined,
+		promotion: promotionTier3,
 		isRecommended: false,
 		isUserSelected: isCardUserSelected(
 			tierThreePricing,
-			// TODO: we'll need to update this once TierThree promotions are supported
-			undefined,
+			promotionTier3?.discount?.amount,
 		),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
@@ -679,13 +683,13 @@ export function ThreeTierLanding(): JSX.Element {
 							planCost: getPlanCost(
 								tier2Card.price,
 								contributionType,
-								promotion,
+								promotionTier2,
 							),
-							starts: promotion?.starts
-								? new Date(promotion.starts)
+							starts: promotionTier2?.starts
+								? new Date(promotionTier2.starts)
 								: undefined,
-							expires: promotion?.expires
-								? new Date(promotion.expires)
+							expires: promotionTier2?.expires
+								? new Date(promotionTier2.expires)
 								: undefined,
 						},
 						{
@@ -693,7 +697,7 @@ export function ThreeTierLanding(): JSX.Element {
 							planCost: getPlanCost(
 								tier3Card.price,
 								contributionType,
-								tier3Promotion,
+								promotionTier3,
 							),
 						},
 					]}
