@@ -1,5 +1,5 @@
 # This step ID is generated and should match in ./supporterPlusProduct.yaml
-- Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}{{key}}
+Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}
   And:
   - Variable: $.state.product.currency
     StringEquals: {{currency}}
