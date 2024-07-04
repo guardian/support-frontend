@@ -228,7 +228,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscriptionV2: inThreeTier,
+		threeTierCreateSupporterPlusSubscription: inThreeTier,
 	};
 }
 
