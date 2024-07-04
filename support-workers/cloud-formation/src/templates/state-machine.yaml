@@ -146,20 +146,20 @@ States:
       {{> supporterPlusProductChoice currency="AUD" billingPeriod="Annual" promoCode="3TIER_WEEKLY_AU_ANNUAL" }}
 
   # These steps are called from the `supporterPlusProductChoice` choices above
-  {{> supporterPlusProduct currency="GBP" amount=10 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_UK_MONTHLY" }}
-  {{> supporterPlusProduct currency="EUR" amount=10 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_EU_MONTHLY" }}
-  {{> supporterPlusProduct currency="USD" amount=13 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_INT_MONTHLY" fulfilmentOptions="RestOfWorld" }}
-  {{> supporterPlusProduct currency="USD" amount=13 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_US_MONTHLY" fulfilmentOptions="Domestic" }}
-  {{> supporterPlusProduct currency="CAD" amount=13 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_CA_MONTHLY" }}
-  {{> supporterPlusProduct currency="NZD" amount=17 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_NZ_MONTHLY" }}
-  {{> supporterPlusProduct currency="AUD" amount=17 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_AU_MONTHLY" }}
-  {{> supporterPlusProduct currency="GBP" amount=95 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_UK_ANNUAL" }}
-  {{> supporterPlusProduct currency="EUR" amount=95 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_EU_ANNUAL" }}
-  {{> supporterPlusProduct currency="USD" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_INT_ANNUAL" fulfilmentOptions="RestOfWorld" }}
-  {{> supporterPlusProduct currency="USD" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_US_ANNUAL" fulfilmentOptions="Domestic" }}
-  {{> supporterPlusProduct currency="CAD" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_CA_ANNUAL" }}
-  {{> supporterPlusProduct currency="NZD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_NZ_ANNUAL" }}
-  {{> supporterPlusProduct currency="AUD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_AU_ANNUAL" }}
+  {{> supporterPlusProduct currency="GBP" amount=12 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_UK_MONTHLY" }}
+  {{> supporterPlusProduct currency="EUR" amount=12 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_EU_MONTHLY" }}
+  {{> supporterPlusProduct currency="USD" amount=15 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_INT_MONTHLY" fulfilmentOptions="RestOfWorld" }}
+  {{> supporterPlusProduct currency="USD" amount=15 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_US_MONTHLY" fulfilmentOptions="Domestic" }}
+  {{> supporterPlusProduct currency="CAD" amount=15 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_CA_MONTHLY" }}
+  {{> supporterPlusProduct currency="NZD" amount=20 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_NZ_MONTHLY" }}
+  {{> supporterPlusProduct currency="AUD" amount=20 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_AU_MONTHLY" }}
+  {{> supporterPlusProduct currency="GBP" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_UK_ANNUAL" }}
+  {{> supporterPlusProduct currency="EUR" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_EU_ANNUAL" }}
+  {{> supporterPlusProduct currency="USD" amount=150 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_INT_ANNUAL" fulfilmentOptions="RestOfWorld" }}
+  {{> supporterPlusProduct currency="USD" amount=150 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_US_ANNUAL" fulfilmentOptions="Domestic" }}
+  {{> supporterPlusProduct currency="CAD" amount=150 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_CA_ANNUAL" }}
+  {{> supporterPlusProduct currency="NZD" amount=200 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_NZ_ANNUAL" }}
+  {{> supporterPlusProduct currency="AUD" amount=200 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_AU_ANNUAL" }}
 
   ThreeTierPreparePaymentMethodForReuse:
     Type: Task
