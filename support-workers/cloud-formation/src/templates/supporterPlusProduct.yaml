@@ -7,7 +7,7 @@ ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}:
     billingPeriod: {{billingPeriod}}
     productType: SupporterPlus
   ResultPath: $.state.product
-Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}PromoCode
+  Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}PromoCode
 
 ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}PromoCode:
   Type: Pass
