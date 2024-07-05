@@ -760,7 +760,7 @@ function CheckoutComponent({ geoId }: Props) {
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
-				window.location.href = `/${geoId}/thank-you`;
+				window.location.href = `/${geoId}/thank-you?product=${productId}&ratePlan=${query.ratePlan}&promoCode=${promoCode}`;
 			} else {
 				// TODO - error handling
 				console.error(
