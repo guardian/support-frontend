@@ -83,6 +83,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import {
 	getOphanIds,
@@ -113,6 +114,7 @@ const isTestUser = isTestUserFunc();
 const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
+const productPrices = window.guardian.productPrices;
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
@@ -311,7 +313,10 @@ function CheckoutComponent({ geoId }: Props) {
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
 	const ratePlan = product?.ratePlans[query.ratePlan];
-	const price = query.price ?? ratePlan?.pricing[currencyKey];
+	const priceOriginal = query.price ?? ratePlan?.pricing[currencyKey];
+
+	const fulFilmentOption =
+		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
 		? productCatalogDescription[productId]
@@ -326,7 +331,7 @@ function CheckoutComponent({ geoId }: Props) {
 			productDescription &&
 			ratePlan &&
 			ratePlanDescription &&
-			price
+			priceOriginal
 		)
 	) {
 		return (
@@ -335,6 +340,16 @@ function CheckoutComponent({ geoId }: Props) {
 			</div>
 		);
 	}
+
+	const promotion = getPromotion(
+		productPrices,
+		countryId,
+		ratePlanDescription.billingPeriod,
+		fulFilmentOption,
+	);
+	const price = promotion?.discountedPrice
+		? promotion.discountedPrice
+		: priceOriginal;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -797,7 +812,8 @@ function CheckoutComponent({ geoId }: Props) {
 											? 'month'
 											: 'quarter'
 									}
-									amount={price}
+									amount={priceOriginal}
+									promotion={promotion}
 									currency={currency}
 									checkListData={[
 										...productDescription.benefits.map((benefit) => ({
@@ -1520,7 +1536,7 @@ function CheckoutComponent({ geoId }: Props) {
 											productDescription.label === 'All-access digital'
 										}
 										productNameAboveThreshold={productDescription.label}
-										promotion={undefined} // TO DO : future support promotions
+										promotion={promotion}
 									/>
 								</BoxContents>
 							</Box>
