@@ -715,12 +715,12 @@ function CheckoutComponent({ geoId }: Props) {
 		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add debugInfo
-			 * - add firstDeliveryDate
 			 */
 			const firstDeliveryDate =
 				productId === 'TierThree'
 					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
+			const promoCode = promotion?.promoCode;
 
 			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
@@ -728,6 +728,7 @@ function CheckoutComponent({ geoId }: Props) {
 				deliveryAddress,
 				firstDeliveryDate,
 				paymentFields,
+				promoCode,
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,
