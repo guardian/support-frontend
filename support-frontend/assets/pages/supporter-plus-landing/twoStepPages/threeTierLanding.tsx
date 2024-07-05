@@ -570,6 +570,10 @@ export function ThreeTierLanding(): JSX.Element {
 		product: 'TierThree',
 		ratePlan: tierThreeRatePlan,
 	});
+	if (promotionTier3) {
+		tierThreeUrlParams.set('promoCode', promotionTier3.promoCode);
+	}
+
 	const tierThreeGenericCheckoutLink = `checkout?${tierThreeUrlParams.toString()}`;
 	const tierThreeCardFromApi = {
 		productDescription: productCatalogDescription.TierThree,
