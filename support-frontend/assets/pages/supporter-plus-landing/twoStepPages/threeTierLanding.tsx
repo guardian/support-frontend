@@ -39,6 +39,8 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
+	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -325,6 +327,10 @@ export function ThreeTierLanding(): JSX.Element {
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 		),
 	);
+	const promotionTier3Hardcoded =
+		contributionType === 'ANNUAL'
+			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 	const showFeast = abParticipations.feast === 'variant';
@@ -515,6 +521,8 @@ export function ThreeTierLanding(): JSX.Element {
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
+	const tier3UseGenericCheckout =
+		abParticipations.tierThreeFromApi === 'variant';
 
 	const tier3RatePlan =
 		countryGroupId === 'International'
@@ -527,19 +535,36 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
-	const tier3UrlParams = new URLSearchParams({
+	const tier3UrlParamsHardcoded = new URLSearchParams({
 		threeTierCreateSupporterPlusSubscriptionV2: 'true',
 		period: paymentFrequencyMap[contributionType],
+		promoCode: promotionTier3Hardcoded.promoCode,
 	});
-	if (promotionTier3) {
-		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
-	}
-
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		price: tier3Pricing,
-		link: `/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
+		link: `/subscribe/weekly/checkout?${tier3UrlParamsHardcoded.toString()}`,
+		promotion: promotionTier3Hardcoded,
+		isRecommended: false,
+		isUserSelected: isCardUserSelected(
+			tier3Pricing,
+			promotionTier3Hardcoded.discount.amount,
+		),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
+	};
+
+	const tier3UrlParams = new URLSearchParams({
+		product: 'TierThree',
+		ratePlan: tier3RatePlan,
+	});
+	if (promotionTier3) {
+		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
+	}
+	const tier3CardFromApi = {
+		productDescription: productCatalogDescription.TierThree,
+		price: tier3Pricing,
+		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: promotionTier3,
 		isRecommended: false,
 		isUserSelected: isCardUserSelected(
@@ -549,49 +574,8 @@ export function ThreeTierLanding(): JSX.Element {
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
-	/**
-	 * tierThree is from the product catalog API
-	 * tier3 is hardcoded for now
-	 */
-	const tierThreeRatePlans =
-		countryGroupId === International
-			? {
-					MONTHLY: 'RestOfWorldMonthly',
-					ANNUAL: 'RestOfWorldAnnual',
-			  }
-			: {
-					MONTHLY: 'DomesticMonthly',
-					ANNUAL: 'DomesticAnnual',
-			  };
-	const tierThreeRatePlan = tierThreeRatePlans[contributionType];
-	const tierThreePricing =
-		productCatalog.TierThree.ratePlans[tierThreeRatePlan].pricing[currencyId];
-	const tierThreeUrlParams = new URLSearchParams({
-		product: 'TierThree',
-		ratePlan: tierThreeRatePlan,
-	});
-	if (promotionTier3) {
-		tierThreeUrlParams.set('promoCode', promotionTier3.promoCode);
-	}
-
-	const tierThreeGenericCheckoutLink = `checkout?${tierThreeUrlParams.toString()}`;
-	const tierThreeCardFromApi = {
-		productDescription: productCatalogDescription.TierThree,
-		price: tierThreePricing,
-		link: tierThreeGenericCheckoutLink,
-		promotion: promotionTier3,
-		isRecommended: false,
-		isUserSelected: isCardUserSelected(
-			tierThreePricing,
-			promotionTier3?.discount?.amount,
-		),
-		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
-	};
-
-	const useTierThreeOnLandingPage =
-		abParticipations.tierThreeFromApi === 'variant';
-	const tier3Card = useTierThreeOnLandingPage
-		? tierThreeCardFromApi
+	const tier3Card = tier3UseGenericCheckout
+		? tier3CardFromApi
 		: tier3CardHarcoded;
 
 	return (
