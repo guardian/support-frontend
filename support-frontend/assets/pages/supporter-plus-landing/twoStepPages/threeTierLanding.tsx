@@ -309,12 +309,9 @@ export function ThreeTierLanding(): JSX.Element {
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
-	// TODO : productPrices appears to ignore S+ promotions
-	//        supporterPlusProductPrices appear to contain threeTier promotions
-	//        Currently, we do-not wish to display S+ promotions on Tier2 (this my change in future)
 	const promotionTier2 = useContributionsSelector((state) =>
 		getPromotion(
-			state.page.checkoutForm.product.productPrices,
+			state.page.checkoutForm.product.supporterPlusProductPrices,
 			countryId,
 			billingPeriod,
 		),
