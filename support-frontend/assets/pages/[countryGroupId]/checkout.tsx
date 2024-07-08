@@ -628,7 +628,7 @@ function CheckoutComponent({ geoId }: Props) {
 				lineOne: formData.get('delivery-lineOne') as string,
 				lineTwo: formData.get('delivery-lineTwo') as string,
 				city: formData.get('delivery-city') as string,
-				state: formData.get('delivery-state') as string,
+				state: formData.get('delivery-stateProvince') as string,
 				postCode: formData.get('delivery-postcode') as string,
 				country: formData.get('delivery-country') as IsoCountry,
 			};
@@ -641,14 +641,14 @@ function CheckoutComponent({ geoId }: Props) {
 						lineOne: formData.get('billing-lineOne') as string,
 						lineTwo: formData.get('billing-lineTwo') as string,
 						city: formData.get('billing-city') as string,
-						state: formData.get('billing-state') as string,
+						state: formData.get('billing-stateProvince') as string,
 						postCode: formData.get('billing-postcode') as string,
 						country: formData.get('billing-country') as IsoCountry,
 				  }
 				: deliveryAddress;
 		} else {
 			billingAddress = {
-				state: formData.get('billing-state') as string,
+				state: formData.get('billing-stateProvince') as string,
 				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
@@ -991,8 +991,9 @@ function CheckoutComponent({ geoId }: Props) {
 												/>
 											</div>
 										</>
-
-										{showStateSelect && (
+										{/*For deliverable products we take the state and
+                    zip code with the delivery address*/}
+										{showStateSelect && !productDescription.deliverableTo && (
 											<StateSelect
 												countryId={countryId}
 												state={billingState}
