@@ -1,4 +1,4 @@
-import { OfferBook, OfferFeast } from 'components/offer/offer';
+import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
@@ -307,35 +307,6 @@ export const productCatalogDescInclFeast: typeof productCatalogDescription = {
 		ratePlans: productCatalogDescription.SupporterPlus.ratePlans,
 	},
 };
-
-export const productCatalogDescInclBookOffers: typeof productCatalogDescription =
-	{
-		...productCatalogDescription,
-		SupporterPlusWithGuardianWeekly: {
-			label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
-			benefitsSummary: ['The rewards from All-access digital'],
-			offersSummary: [
-				{
-					strong: true,
-					copy: `including a free book as our gift to${'\u00A0'}you**`,
-				},
-			],
-			benefits:
-				productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
-			ratePlans:
-				productCatalogDescription.SupporterPlusWithGuardianWeekly.ratePlans,
-		},
-		SupporterPlus: {
-			label: productCatalogDescription.SupporterPlus.label,
-			benefits: productCatalogDescription.SupporterPlus.benefits,
-			offers: [
-				{
-					copy: <OfferBook></OfferBook>,
-				},
-			],
-			ratePlans: productCatalogDescription.SupporterPlus.ratePlans,
-		},
-	};
 
 export const supporterPlusWithGuardianWeekly = {
 	ratePlans: {
