@@ -21,6 +21,7 @@ export default function AppImageGuardianNews() {
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
 			aria-labelledby="svgGuardianNewsApp"
+			fill="none"
 		>
 			<path
 				d="m0 10.059c0-5.5228 4.4772-10 10-10h54.648c5.5229 0 10 4.4772 10 10v54.648c0 5.5229-4.4771 10-10 10h-54.648c-5.5228 0-10-4.4771-10-10v-54.648z"
