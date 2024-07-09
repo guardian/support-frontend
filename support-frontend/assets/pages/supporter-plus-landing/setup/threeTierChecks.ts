@@ -29,9 +29,7 @@ export const threeTierCheckoutEnabled = (
 
 	if (isWeeklyCheckout) {
 		const urlParams = new URLSearchParams(window.location.search);
-		return (
-			urlParams.get('threeTierCreateSupporterPlusSubscriptionV2') === 'true'
-		);
+		return urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 	}
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;

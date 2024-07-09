@@ -525,7 +525,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const tier3UrlParams = new URLSearchParams({
 		promoCode: tier3Promotion.promoCode,
-		threeTierCreateSupporterPlusSubscriptionV2: 'true',
+		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
 
