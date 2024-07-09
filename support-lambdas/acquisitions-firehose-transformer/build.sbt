@@ -7,7 +7,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "3.11.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "org.scanamo" %% "scanamo" % "1.0.0-M26",
+  "org.scanamo" %% "scanamo" % "1.0.4",
 )
 
 assemblyJarName := s"${name.value}.jar"
