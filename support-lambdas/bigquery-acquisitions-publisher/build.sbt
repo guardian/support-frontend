@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
   "com.amazonaws" % "aws-lambda-java-events" % "3.11.1",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-classic" % "1.5.6",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
