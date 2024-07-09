@@ -203,7 +203,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	const urlParams = new URLSearchParams(window.location.search);
 
 	const inTierThree =
-		urlParams.get('threeTierCreateSupporterPlusSubscriptionV2') === 'true';
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
