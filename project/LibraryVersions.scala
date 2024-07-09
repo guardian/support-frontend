@@ -1,5 +1,5 @@
 object LibraryVersions {
-  val circeVersion = "0.14.6"
+  val circeVersion = "0.14.9"
 
   @deprecated("use awsClientVersion2")
   val awsClientVersion = "1.12.703"
