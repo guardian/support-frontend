@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
   "com.beachape" %% "enumeratum" % "1.7.4",
-  "com.beachape" %% "enumeratum-circe" % "1.7.3",
+  "com.beachape" %% "enumeratum-circe" % "1.7.4",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
