@@ -83,10 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import {
-	tierCards,
-	tierCardsV2,
-} from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
@@ -205,11 +202,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 	const urlParams = new URLSearchParams(window.location.search);
 
-	const inTierThreeV2 =
-		urlParams.get('threeTierCreateSupporterPlusSubscriptionV2') === 'true';
 	const inTierThree =
-		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true' ||
-		inTierThreeV2;
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
@@ -235,15 +229,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
-	const tierCardsSelection = inTierThreeV2 ? tierCardsV2 : tierCards;
 	const standardDigitalPlusPrintPrice =
-		tierCardsSelection.tier3.plans[tierBillingPeriodName].charges[
-			props.countryGroupId
-		].price;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.price;
 	const digitalPlusPrintPotentialDiscount =
-		tierCardsSelection.tier3.plans[tierBillingPeriodName].charges[
-			props.countryGroupId
-		].discount;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.discount;
 	const discountedDigitalPlusPrintPrice =
 		digitalPlusPrintPotentialDiscount?.price ?? standardDigitalPlusPrintPrice;
 

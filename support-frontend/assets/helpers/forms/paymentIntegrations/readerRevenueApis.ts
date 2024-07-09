@@ -175,7 +175,6 @@ export type RegularPaymentRequest = {
 	recaptchaToken?: string;
 	debugInfo: string;
 	threeTierCreateSupporterPlusSubscription?: boolean;
-	threeTierCreateSupporterPlusSubscriptionV2?: boolean;
 };
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;

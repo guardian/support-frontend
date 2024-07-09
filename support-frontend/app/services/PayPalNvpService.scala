@@ -26,7 +26,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     val msg = s"NVPResponse: $response"
 
     retrieveNVPParam(response, "ACK") match {
-      case Some("Success") => logger.info("Successful PayPal NVP request")
+      case Some("Success") => logger.info(s"Successful PayPal NVP request, $msg")
       case Some("SuccessWithWarning") => logger.warn(s"Response (with warning) from PayPal was: $msg")
       case Some("Failure") => logger.error(scrub"Failure response from PayPal was: $msg")
       case Some("FailureWithWarning") => logger.error(scrub"Response from PayPal was: $msg")
