@@ -1,3 +1,4 @@
+import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
@@ -18,6 +19,13 @@ export type ProductDescription = {
 		}
 	>;
 };
+
+/**
+ * TODO: make this stricter.
+ * Currently we have this so that other places can use it,
+ * but when we make it more constrained, we should pick up any type errors.
+ */
+export type ProductId = string;
 
 export const productCatalogDescription: Record<string, ProductDescription> = {
 	/**
@@ -272,213 +280,35 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	},
 };
 
-/** These `ratePlans` will eventually becomes part of the SupportPlus product in Zuora */
+export const productCatalogDescInclFeast: typeof productCatalogDescription = {
+	...productCatalogDescription,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including unlimited access to the Guardian Feast App.`,
+			},
+		],
+		benefits:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescription.SupporterPlus.label,
+		benefits: productCatalogDescription.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferFeast></OfferFeast>,
+			},
+		],
+		ratePlans: productCatalogDescription.SupporterPlus.ratePlans,
+	},
+};
+
 export const supporterPlusWithGuardianWeekly = {
-	ratePlans: {
-		MonthlyWithGuardianWeekly: {
-			id: '',
-			pricing: {
-				USD: 43,
-				NZD: 67,
-				EUR: 36.5,
-				GBP: 25,
-				CAD: 46,
-				AUD: 57,
-			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
-			},
-		},
-		AnnualWithGuardianWeekly: {
-			id: '',
-			pricing: {
-				USD: 480,
-				NZD: 760,
-				EUR: 413,
-				GBP: 275,
-				CAD: 516,
-				AUD: 640,
-			},
-			charges: {
-				Contribution: {
-					id: '',
-				},
-			},
-		},
-		MonthlyWithGuardianWeeklyInt: {
-			id: '',
-			pricing: {
-				USD: 46,
-			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
-			},
-		},
-		AnnualWithGuardianWeeklyInt: {
-			id: '',
-			pricing: {
-				USD: 516,
-			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
-			},
-		},
-	},
-} as const;
-
-export const supporterPlusWithGuardianWeeklyAnnualPromos = {
-	GBPCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_UK_ANNUAL',
-		discountedPrice: 173,
-		discount: {
-			amount: 37.09,
-			durationMonths: 12,
-		},
-	},
-	EURCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_EU_ANNUAL',
-		discountedPrice: 302,
-		discount: {
-			amount: 26.88,
-			durationMonths: 12,
-		},
-	},
-	International: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_INT_ANNUAL',
-		discountedPrice: 367,
-		discount: {
-			amount: 28.88,
-			durationMonths: 12,
-		},
-	},
-	UnitedStates: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_US_ANNUAL',
-		discountedPrice: 378,
-		discount: {
-			amount: 21.25,
-			durationMonths: 12,
-		},
-	},
-	Canada: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_CA_ANNUAL',
-		discountedPrice: 378,
-		discount: {
-			amount: 26.74,
-			durationMonths: 12,
-		},
-	},
-	NZDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_NZ_ANNUAL',
-		discountedPrice: 551,
-		discount: {
-			amount: 27.5,
-			durationMonths: 12,
-		},
-	},
-	AUDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_AU_ANNUAL',
-		discountedPrice: 486,
-		discount: {
-			amount: 24.06,
-			durationMonths: 12,
-		},
-	},
-};
-
-export const supporterPlusWithGuardianWeeklyMonthlyPromos = {
-	GBPCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_UK_MONTHLY',
-		discountedPrice: 16,
-		discount: {
-			amount: 36,
-			durationMonths: 12,
-		},
-	},
-	EURCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_EU_MONTHLY',
-		discountedPrice: 28,
-		discount: {
-			amount: 23.29,
-			durationMonths: 12,
-		},
-	},
-	International: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_INT_MONTHLY',
-		discountedPrice: 34,
-		discount: {
-			amount: 26.09,
-			durationMonths: 12,
-		},
-	},
-	UnitedStates: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_US_MONTHLY',
-		discountedPrice: 35,
-		discount: {
-			amount: 18.6,
-			durationMonths: 12,
-		},
-	},
-	Canada: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_CA_MONTHLY',
-		discountedPrice: 35,
-		discount: {
-			amount: 23.91,
-			durationMonths: 12,
-		},
-	},
-	NZDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_NZ_MONTHLY',
-		discountedPrice: 51,
-		discount: {
-			amount: 23.88,
-			durationMonths: 12,
-		},
-	},
-	AUDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_AU_MONTHLY',
-		discountedPrice: 45,
-		discount: {
-			amount: 21.05,
-			durationMonths: 12,
-		},
-	},
-};
-
-export const supporterPlusWithGuardianWeeklyV2 = {
 	ratePlans: {
 		MonthlyWithGuardianWeekly: {
 			id: '',
@@ -537,7 +367,7 @@ export const supporterPlusWithGuardianWeeklyV2 = {
 	},
 } as const;
 
-export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
+export const supporterPlusWithGuardianWeeklyAnnualPromos = {
 	GBPCountries: {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
@@ -610,7 +440,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 	},
 };
 
-export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
+export const supporterPlusWithGuardianWeeklyMonthlyPromos = {
 	GBPCountries: {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',

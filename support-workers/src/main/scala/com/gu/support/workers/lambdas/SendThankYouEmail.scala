@@ -78,14 +78,14 @@ class EmailBuilder(
       touchpointEnvironment,
       created = DateTime.now(),
     )
-    val threeTierEmailFields = new ThreeTierEmailFields(paperFieldsGenerator, touchpointEnvironment)
+    val tierThreeEmailFields = new TierThreeEmailFields(paperFieldsGenerator, touchpointEnvironment)
 
     state match {
       case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))
       case supporterPlus: SendThankYouEmailSupporterPlusState =>
         supporterPlusEmailFields.build(supporterPlus).map(List(_))
-      case threeTier: SendThankYouEmailTierThreeState =>
-        threeTierEmailFields.build(threeTier).map(List(_))
+      case tierThree: SendThankYouEmailTierThreeState =>
+        tierThreeEmailFields.build(tierThree).map(List(_))
       case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
       case paper: SendThankYouEmailPaperState =>
         getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _)).map(List(_))
