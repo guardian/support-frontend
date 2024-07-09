@@ -15,7 +15,6 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import { init as abTestInit } from 'helpers/abTests/abtest';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
@@ -137,10 +136,6 @@ export function ThankYou({ geoId }: Props) {
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showOffer =
-		!!abParticipations.usFreeBookOffer && order.product === 'SupporterPlus';
-
 	const isOneOff = order.product === 'Contribution';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = order.product === 'SupporterPlus';
@@ -205,7 +200,6 @@ export function ThankYou({ geoId }: Props) {
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
-							showOffer={showOffer}
 							// TODO - generic checkout support promotions
 							promotion={undefined}
 							// TODO - get this from the /identity/get-user-type endpoint

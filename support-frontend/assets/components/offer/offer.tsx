@@ -27,32 +27,6 @@ const feastStyle = css`
 	margin-right: ${space[4]}px;
 `;
 
-export function OfferBook(): JSX.Element {
-	return (
-		<p>
-			<span style={{ fontWeight: 'bold' }}>
-				A free book as our gift to you
-				<sup style={{ fontWeight: 'lighter', fontSize: '14px' }}>**</sup>{' '}
-			</span>
-			Choose from a selection curated by Guardian staff{' '}
-			<span css={tooltipOfferStyle}>
-				<Tooltip
-					children={
-						<p>
-							{
-								'Books are redeemed with a unique code from Tertulia, an online co-op bookstore loved by avid readers and writers. Instructions to redeem your free book offer will be sent to your email within 24 hours.'
-							}
-						</p>
-					}
-					xAxisOffset={108}
-					yAxisOffset={12}
-					placement="bottom"
-				></Tooltip>
-			</span>
-		</p>
-	);
-}
-
 export function OfferFeast(): JSX.Element {
 	return (
 		<div css={containerStyle}>
@@ -63,7 +37,7 @@ export function OfferFeast(): JSX.Element {
 						children={
 							<p>
 								{
-									'Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.'
+									'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.'
 								}
 							</p>
 						}
