@@ -4,28 +4,20 @@ import { Country } from 'helpers/internationalisation';
 import { isoCountries } from 'helpers/internationalisation/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { isPostCodeValid } from './validationFunctions';
 
-export const addressFieldsSchema = z
-	.object({
-		country: z.enum(isoCountries),
-		state: z
-			.string()
-			.min(1, 'Please enter a state, province or territory')
-			.max(
-				40,
-				'Please enter a state, province or territory no longer than 40 characters',
-			),
-		postCode: z
-			.string()
-			.max(
-				20,
-				'Please enter a postal or zip code no longer than 20 characters.',
-			),
-	})
-	.refine(({ country, postCode }) => isPostCodeValid(country, postCode), {
-		message: 'Please enter a valid postal or zip code',
-	});
+export const addressFieldsSchema = z.object({
+	country: z.enum(isoCountries),
+	state: z
+		.string()
+		.min(1, 'Please enter a state, province or territory')
+		.max(
+			40,
+			'Please enter a state, province or territory no longer than 40 characters',
+		),
+	postCode: z
+		.string()
+		.max(20, 'Please enter a postal or zip code no longer than 20 characters.'),
+});
 
 type AddressFieldsValidatedState = z.infer<typeof addressFieldsSchema>;
 
