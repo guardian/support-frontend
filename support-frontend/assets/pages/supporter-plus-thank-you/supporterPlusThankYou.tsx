@@ -261,8 +261,6 @@ export function SupporterPlusThankYou({
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
-	const showOffer = !!abParticipations.usFreeBookOffer && isSupporterPlus;
-
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -285,7 +283,6 @@ export function SupporterPlusThankYou({
 							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
-							showOffer={showOffer}
 							promotion={promotion}
 						/>
 					</div>

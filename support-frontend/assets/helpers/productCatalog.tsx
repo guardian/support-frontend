@@ -1,3 +1,4 @@
+import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
@@ -276,6 +277,34 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Monthly',
 			},
 		},
+	},
+};
+
+export const productCatalogDescInclFeast: typeof productCatalogDescription = {
+	...productCatalogDescription,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including unlimited access to the Guardian Feast App.`,
+			},
+		],
+		benefits:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescription.SupporterPlus.label,
+		benefits: productCatalogDescription.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferFeast></OfferFeast>,
+			},
+		],
+		ratePlans: productCatalogDescription.SupporterPlus.ratePlans,
 	},
 };
 
