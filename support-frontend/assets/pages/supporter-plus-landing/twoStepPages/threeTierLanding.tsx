@@ -18,7 +18,6 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { OfferBook, OfferFeast } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type {
@@ -40,6 +39,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
+	productCatalogDescInclFeast,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
@@ -62,7 +62,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { OfferTsAndCs, ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -237,62 +237,6 @@ const isCardUserSelected = (
 	);
 };
 
-const productCatalogDescInclFeast: typeof productCatalogDescExclOffers = {
-	...productCatalogDescExclOffers,
-	SupporterPlusWithGuardianWeekly: {
-		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
-		benefitsSummary: ['The rewards from All-access digital'],
-		offersSummary: [
-			{
-				strong: true,
-				copy: `including unlimited access to the Guardian Feast App.`,
-			},
-		],
-		benefits:
-			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
-		ratePlans:
-			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
-	},
-	SupporterPlus: {
-		label: productCatalogDescExclOffers.SupporterPlus.label,
-		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
-		offers: [
-			{
-				copy: <OfferFeast></OfferFeast>,
-			},
-		],
-		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
-	},
-};
-
-const productCatalogDescInclBookOffers: typeof productCatalogDescExclOffers = {
-	...productCatalogDescExclOffers,
-	SupporterPlusWithGuardianWeekly: {
-		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
-		benefitsSummary: ['The rewards from All-access digital'],
-		offersSummary: [
-			{
-				strong: true,
-				copy: `including a free book as our gift to${'\u00A0'}you**`,
-			},
-		],
-		benefits:
-			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
-		ratePlans:
-			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
-	},
-	SupporterPlus: {
-		label: productCatalogDescExclOffers.SupporterPlus.label,
-		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
-		offers: [
-			{
-				copy: <OfferBook></OfferBook>,
-			},
-		],
-		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
-	},
-};
-
 /**
  * @deprecated - we should be useing ProductCatalog data types.
  * TODO - remove this once TsAndCs work of ☝️ types
@@ -376,13 +320,9 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 	const showFeast = abParticipations.feast === 'variant';
-	const showBookOffer =
-		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
 	const productCatalogDescription = showFeast
 		? productCatalogDescInclFeast
-		: showBookOffer
-		? productCatalogDescInclBookOffers
 		: productCatalogDescExclOffers;
 
 	useEffect(() => {
@@ -759,29 +699,6 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{showBookOffer && (
-					<OfferTsAndCs
-						currency={currencies[currencyId].glyph}
-						offerCostMonthly={
-							getPlanCost(
-								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
-									currencyId
-								],
-								'MONTHLY',
-								promotion,
-							).price
-						}
-						offerCostAnnual={
-							getPlanCost(
-								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
-									currencyId
-								],
-								'ANNUAL',
-								promotion,
-							).price
-						}
-					></OfferTsAndCs>
-				)}
 			</Container>
 		</PageScaffold>
 	);
