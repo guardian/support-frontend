@@ -1022,9 +1022,11 @@ function CheckoutComponent({ geoId }: Props) {
 														if (validityState.valid) {
 															setBillingPostcodeError(undefined);
 														} else {
-															setBillingPostcodeError(
-																'Please enter a valid zip code.',
-															);
+															if (!validityState.valueMissing) {
+																setBillingPostcodeError(
+																	'Please enter a valid zip code.',
+																);
+															}
 														}
 													}}
 												/>
