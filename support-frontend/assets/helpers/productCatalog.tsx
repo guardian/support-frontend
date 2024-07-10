@@ -246,6 +246,9 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Far fewer asks for support',
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
+			{
+				copy: 'Unlimited access to the Guardian Feast App',
+			},
 		],
 		ratePlans: {
 			Monthly: {
