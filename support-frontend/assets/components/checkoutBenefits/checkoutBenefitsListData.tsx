@@ -71,8 +71,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			isChecked: higherTier,
 			text: (
 				<p>
-					<span css={boldText}>Feast. </span> Unlimited access to the Guardian
-					Feast App
+					<span css={boldText}>The Guardian Feast App. </span> Unlimited access
+					to the ultimate recipe app
 				</p>
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
