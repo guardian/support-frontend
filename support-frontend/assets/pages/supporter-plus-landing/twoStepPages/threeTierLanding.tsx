@@ -39,6 +39,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
+	productCatalogDescInclFeast,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
