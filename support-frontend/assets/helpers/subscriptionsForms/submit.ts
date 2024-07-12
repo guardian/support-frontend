@@ -293,6 +293,7 @@ function onPaymentAuthorised(
 				billingPeriod,
 				productType,
 			);
+
 			if (inThreeTier) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;

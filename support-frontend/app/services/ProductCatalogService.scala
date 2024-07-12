@@ -2,6 +2,8 @@ package services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.{CODE, DEV}
 import io.circe.{Decoder, Json, JsonObject}
 import io.circe.generic.semiauto.deriveDecoder
 import org.apache.pekko.actor.ActorSystem
@@ -42,7 +44,7 @@ class CachedProductCatalogService(system: ActorSystem, productCatalogService: Pr
   }
   def get(): JsonObject = json.get()
 
-  system.scheduler.scheduleWithFixedDelay(0.minutes, 10.minutes) { () =>
+  system.scheduler.scheduleWithFixedDelay(0.minutes, 1.minutes) { () =>
     {
       update()
     }
@@ -53,6 +55,8 @@ class CachedProductCatalogServiceProvider(
     codeCachedProductCatalogService: CachedProductCatalogService,
     prodCachedProductCatalogService: CachedProductCatalogService,
 ) {
-  def forUser(isTestUser: Boolean) =
-    if (isTestUser) codeCachedProductCatalogService else prodCachedProductCatalogService
+  def fromStage(stage: Stage, isTestUser: Boolean) =
+    if (stage == DEV || stage == CODE || isTestUser)
+      codeCachedProductCatalogService
+    else prodCachedProductCatalogService
 }

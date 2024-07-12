@@ -67,6 +67,16 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
+		{
+			isChecked: higherTier,
+			text: (
+				<p>
+					<span css={boldText}>The Guardian Feast App. </span> Unlimited access
+					to the ultimate recipe app
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+		},
 	];
 
 	return [

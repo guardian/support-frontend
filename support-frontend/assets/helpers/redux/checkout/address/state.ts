@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { isEmpty, isValidZipCode } from 'helpers/forms/formValidation';
 import { Country } from 'helpers/internationalisation';
 import { isoCountries } from 'helpers/internationalisation/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { isPostCodeValid } from './validationFunctions';
 
 export const addressFieldsSchema = z
 	.object({
@@ -18,15 +18,19 @@ export const addressFieldsSchema = z
 			),
 		postCode: z
 			.string()
-			.min(1, 'Please enter a postal or zip code')
 			.max(
 				20,
 				'Please enter a postal or zip code no longer than 20 characters.',
 			),
 	})
-	.refine(({ country, postCode }) => isPostCodeValid(country, postCode), {
-		message: 'Please enter a valid postal or zip code',
-	});
+	.refine(
+		({ country, postCode }) =>
+			isEmpty(postCode) || (country === 'US' && isValidZipCode(postCode)),
+		{
+			message: 'Please enter a valid postal or zip code',
+			path: ['postCode'],
+		},
+	);
 
 type AddressFieldsValidatedState = z.infer<typeof addressFieldsSchema>;
 

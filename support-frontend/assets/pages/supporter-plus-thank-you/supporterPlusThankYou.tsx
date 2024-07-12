@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { between, from, space, sport } from '@guardian/source/foundations';
+import {
+	between,
+	from,
+	neutral,
+	space,
+	sport,
+} from '@guardian/source/foundations';
 import { Column, Columns, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo } from 'preact/hooks';
@@ -16,7 +22,6 @@ import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -33,6 +38,7 @@ import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
 export const checkoutContainer = css`
+	background-color: ${neutral[100]};
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
@@ -228,14 +234,12 @@ export function SupporterPlusThankYou({
 	);
 
 	const maybeThankYouModule = (
-		condtion: boolean,
+		condition: boolean,
 		moduleType: ThankYouModuleType,
-	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
-	const showFeast =
-		!!abParticipations.feast &&
-		useContributionsSelector(isSupporterPlusFromState);
-
+	// abParticipation, upon refresh, defaults to active abtTests only
+	const showFeast = !!abParticipations.feast && isSupporterPlus;
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
@@ -243,7 +247,7 @@ export function SupporterPlusThankYou({
 			'signIn',
 		),
 		...maybeThankYouModule(isSupporterPlus && !showFeast, 'appDownload'),
-		...maybeThankYouModule(isSupporterPlus && showFeast, 'appsDownload'),
+		...maybeThankYouModule(showFeast, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
@@ -256,10 +260,6 @@ export function SupporterPlusThankYou({
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
-
-	const showOffer =
-		!!abParticipations.usFreeBookOffer &&
-		useContributionsSelector(isSupporterPlusFromState);
 
 	return (
 		<PageScaffold
@@ -283,7 +283,6 @@ export function SupporterPlusThankYou({
 							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
-							showOffer={showOffer}
 							promotion={promotion}
 						/>
 					</div>

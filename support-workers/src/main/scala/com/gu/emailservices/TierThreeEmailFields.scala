@@ -6,7 +6,7 @@ import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailTie
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ThreeTierEmailFields(
+class TierThreeEmailFields(
     paperFieldsGenerator: PaperFieldsGenerator,
     touchPointEnvironment: TouchPointEnvironment,
 ) {
@@ -31,7 +31,7 @@ class ThreeTierEmailFields(
         EmailFields(
           fields,
           state.user,
-          "three-tier",
+          "tier-three",
         ),
       )
   }

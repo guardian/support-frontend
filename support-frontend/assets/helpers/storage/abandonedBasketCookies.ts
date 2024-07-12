@@ -9,8 +9,8 @@ import {
 	string,
 	union,
 } from 'valibot';
+import type { ProductId } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
-import type { ProductCheckout } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 
 const COOKIE_EXPIRY_DAYS = 3;
@@ -26,7 +26,7 @@ const abandonedBasketSchema = object({
 type AbandonedBasket = InferInput<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
-	product: ProductCheckout,
+	product: ProductId,
 	amount: number,
 	billingPeriod: string,
 	region: string,
@@ -38,8 +38,14 @@ export function useAbandonedBasketCookie(
 		billingPeriod: billingPeriod.toUpperCase(),
 		region,
 	};
+
+	// support-dotcom-components can only return a user to the checkout for these products
+	// don't drop the cookie if they came from a different checkout
+	const isSupportedProduct =
+		product === 'Contribution' || product === 'SupporterPlus';
+
 	useEffect(() => {
-		if (inAbandonedBasketVariant) {
+		if (inAbandonedBasketVariant && isSupportedProduct) {
 			cookie.set(
 				ABANDONED_BASKET_COOKIE_NAME,
 				JSON.stringify(abandonedBasket),

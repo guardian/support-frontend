@@ -194,7 +194,7 @@ class Application(
     val productPrices =
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
 
-    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
     views.html.contributions(
       title = "Support the Guardian",
@@ -281,7 +281,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
-    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
     Ok(
       views.html.router(

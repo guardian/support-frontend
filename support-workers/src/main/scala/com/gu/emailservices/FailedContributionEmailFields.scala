@@ -8,6 +8,9 @@ object FailedEmailFields {
   def supporterPlus(email: String, identityUserId: IdentityUserId): EmailFields =
     failedEmailFields("supporter-plus-failed", email, identityUserId)
 
+  def tierThree(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("tier-three-failed", email, identityUserId)
+
   def digitalPack(email: String, identityUserId: IdentityUserId): EmailFields =
     failedEmailFields("digipack-failed", email, identityUserId)
 

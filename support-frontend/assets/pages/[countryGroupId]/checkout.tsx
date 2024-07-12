@@ -79,9 +79,11 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	getOphanIds,
@@ -96,7 +98,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { formatMachineDate } from '../../helpers/utilities/dateConversions';
-import { getWeeklyDays } from '../weekly-subscription-checkout/helpers/deliveryDays';
+import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 const countryId: IsoCountry = CountryHelper.detect();
@@ -581,6 +583,9 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
 
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const supportAbTests = getSupportAbTests(abParticipations);
+
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -699,12 +704,9 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			 * - add debugInfo
 			 * - add firstDeliveryDate
 			 */
-			const supportAbTests = getSupportAbTests(
-				abTestInit({ countryId, countryGroupId }),
-			);
 			const firstDeliveryDate =
 				productId === 'TierThree'
-					? formatMachineDate(getWeeklyDays()[0])
+					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
 
 			const createSupportWorkersRequest: RegularPaymentRequest = {
@@ -756,6 +758,16 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			setIsProcessingPayment(false);
 		}
 	};
+
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
+
+	useAbandonedBasketCookie(
+		productId,
+		price,
+		ratePlanDescription.billingPeriod,
+		supportInternationalisationId,
+		abParticipations.abandonedBasket === 'variant',
+	);
 
 	return (
 		<PageScaffold
@@ -1012,11 +1024,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 														if (validityState.valid) {
 															setBillingPostcodeError(undefined);
 														} else {
-															if (validityState.valueMissing) {
-																setBillingPostcodeError(
-																	'Please enter a zip code.',
-																);
-															} else {
+															if (!validityState.valueMissing) {
 																setBillingPostcodeError(
 																	'Please enter a valid zip code.',
 																);

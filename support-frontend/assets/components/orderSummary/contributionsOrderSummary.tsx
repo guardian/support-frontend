@@ -215,7 +215,7 @@ export function ContributionsOrderSummary({
 							<span css={originalPriceStrikeThrough}>
 								<span css={visuallyHiddenCss}>Was </span>
 								{formattedAmount}
-								<span css={visuallyHiddenCss}>, now </span>
+								<span css={visuallyHiddenCss}>, now</span>
 							</span>{' '}
 							{paymentFrequency
 								? `${formattedPromotionAmount}/${paymentFrequency}`

@@ -3,6 +3,11 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	supporterPlusWithGuardianWeekly,
+	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
+} from 'helpers/productCatalog';
 
 export interface TierBenefits {
 	description?: Array<string | { copy: string; strong: boolean }>;
@@ -158,69 +163,143 @@ const tier3: TierCard = {
 			label: 'Monthly',
 			charges: {
 				GBPCountries: {
-					price: 25,
-					promoCode: '3TIER_WEEKLY_UK_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.GBP,
+					promoCode: '3TIER_WEEKLY_UK_MONTHLY_V2',
 					discount: {
-						percentage: 36,
-						price: 16,
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries
+								.discountedPrice,
 						duration: {
-							value: 12,
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.GBPCountries
+									.discount.durationMonths,
 							period: 'MONTHLY',
 						},
 					},
 				},
 				EURCountries: {
-					price: 36.5,
-					promoCode: '3TIER_WEEKLY_EU_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.EUR,
+					promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
 					discount: {
-						percentage: 23.29,
-						price: 28,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries
+									.discount.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 				International: {
-					price: 46,
-					promoCode: '3TIER_WEEKLY_INT_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans
+							.MonthlyWithGuardianWeeklyInt.pricing.USD,
+					promoCode: '3TIER_WEEKLY_INT_MONTHLY_V2',
 					discount: {
-						percentage: 26.09,
-						price: 34,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.International
+								.discount.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.International
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.International
+									.discount.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 				UnitedStates: {
-					price: 43,
-					promoCode: '3TIER_WEEKLY_US_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.USD,
+					promoCode: '3TIER_WEEKLY_US_MONTHLY_V2',
 					discount: {
-						percentage: 18.6,
-						price: 35,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.UnitedStates
+									.discount.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 				Canada: {
-					price: 46,
-					promoCode: '3TIER_WEEKLY_CA_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.CAD,
+					promoCode: '3TIER_WEEKLY_CA_MONTHLY_V2',
 					discount: {
-						percentage: 23.91,
-						price: 35,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.Canada.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.Canada
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.Canada.discount
+									.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 				NZDCountries: {
-					price: 67,
-					promoCode: '3TIER_WEEKLY_NZ_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.NZD,
+					promoCode: '3TIER_WEEKLY_NZ_MONTHLY_V2',
 					discount: {
-						percentage: 23.88,
-						price: 51,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.NZDCountries
+									.discount.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 				AUDCountries: {
-					price: 57,
-					promoCode: '3TIER_WEEKLY_AU_MONTHLY',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.MonthlyWithGuardianWeekly
+							.pricing.AUD,
+					promoCode: '3TIER_WEEKLY_AU_MONTHLY_V2',
 					discount: {
-						percentage: 21.05,
-						price: 45,
-						duration: { value: 12, period: 'MONTHLY' },
+						percentage:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyMonthlyPromos.AUDCountries
+									.discount.durationMonths,
+							period: 'MONTHLY',
+						},
 					},
 				},
 			},
@@ -229,69 +308,143 @@ const tier3: TierCard = {
 			label: 'Annual',
 			charges: {
 				GBPCountries: {
-					price: 275,
-					promoCode: '3TIER_WEEKLY_UK_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.GBP,
+					promoCode: '3TIER_WEEKLY_UK_ANNUAL_V2',
 					discount: {
-						percentage: 37.09,
-						price: 173,
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries
+								.discountedPrice,
 						duration: {
-							value: 1,
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.GBPCountries
+									.discount.durationMonths / 12,
 							period: 'ANNUAL',
 						},
 					},
 				},
 				EURCountries: {
-					price: 413,
-					promoCode: '3TIER_WEEKLY_EU_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.EUR,
+					promoCode: '3TIER_WEEKLY_EU_ANNUAL_V2',
 					discount: {
-						percentage: 26.88,
-						price: 302,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.EURCountries
+									.discount.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 				International: {
-					price: 516,
-					promoCode: '3TIER_WEEKLY_INT_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans
+							.AnnualWithGuardianWeeklyInt.pricing.USD,
+					promoCode: '3TIER_WEEKLY_INT_ANNUAL_V2',
 					discount: {
-						percentage: 28.88,
-						price: 367,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.International.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.International
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.International
+									.discount.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 				UnitedStates: {
-					price: 480,
-					promoCode: '3TIER_WEEKLY_US_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.USD,
+					promoCode: '3TIER_WEEKLY_US_ANNUAL_V2',
 					discount: {
-						percentage: 21.25,
-						price: 378,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.UnitedStates
+									.discount.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 				Canada: {
-					price: 516,
-					promoCode: '3TIER_WEEKLY_CA_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.CAD,
+					promoCode: '3TIER_WEEKLY_CA_ANNUAL_V2',
 					discount: {
-						percentage: 26.74,
-						price: 378,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.Canada.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.Canada
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.Canada.discount
+									.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 				NZDCountries: {
-					price: 760,
-					promoCode: '3TIER_WEEKLY_NZ_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.NZD,
+					promoCode: '3TIER_WEEKLY_NZ_ANNUAL_V2',
 					discount: {
-						percentage: 27.5,
-						price: 551,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.NZDCountries
+									.discount.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 				AUDCountries: {
-					price: 640,
-					promoCode: '3TIER_WEEKLY_AU_ANNUAL',
+					price:
+						supporterPlusWithGuardianWeekly.ratePlans.AnnualWithGuardianWeekly
+							.pricing.AUD,
+					promoCode: '3TIER_WEEKLY_AU_ANNUAL_V2',
 					discount: {
-						percentage: 24.06,
-						price: 486,
-						duration: { value: 1, period: 'ANNUAL' },
+						percentage:
+							supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries.discount
+								.amount,
+						price:
+							supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries
+								.discountedPrice,
+						duration: {
+							value:
+								supporterPlusWithGuardianWeeklyAnnualPromos.AUDCountries
+									.discount.durationMonths / 12,
+							period: 'ANNUAL',
+						},
 					},
 				},
 			},

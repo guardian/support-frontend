@@ -100,6 +100,7 @@ object SendThankYouEmailManualTest {
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
     SendSupporterPlusEmail.main(args)
+    SendTierThreeEmail.main(args)
     SendDigitalPackEmail.main(args)
     SendDigitalPackGiftPurchaseEmails.main(args)
     SendDigitalPackGiftRedemptionEmail.main(args)
@@ -164,6 +165,43 @@ object SendSupporterPlusEmail extends App {
       Some("SUPPORTER_PLUS_PROMO"),
       acno,
       subno,
+    ),
+  )
+  sendSingle(ef)
+
+}
+
+object SendTierThreeEmail extends App {
+
+  val paymentSchedule = PaymentSchedule(
+    List(
+      Payment(new LocalDate(2024, 1, 8), 10),
+      Payment(new LocalDate(2024, 2, 8), 10),
+      Payment(new LocalDate(2024, 3, 8), 20),
+      Payment(new LocalDate(2024, 4, 8), 20),
+      Payment(new LocalDate(2024, 5, 8), 20),
+      Payment(new LocalDate(2024, 6, 8), 20),
+    ),
+  )
+
+  val ef = new TierThreeEmailFields(
+    new PaperFieldsGenerator(promotionService, getMandate),
+    CODE,
+  ).build(
+    SendThankYouEmailTierThreeState(
+      user = officeUser,
+      product = TierThree(GBP, Quarterly, Domestic),
+      paymentMethod = directDebitPaymentMethod,
+      paymentSchedule = PaymentSchedule(
+        List(
+          Payment(new LocalDate(2019, 3, 25), 37.50),
+          Payment(new LocalDate(2019, 6, 25), 37.50),
+        ),
+      ),
+      promoCode = None,
+      accountNumber = acno,
+      subscriptionNumber = subno,
+      firstDeliveryDate = new LocalDate(2019, 3, 26),
     ),
   )
   sendSingle(ef)
