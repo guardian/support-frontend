@@ -315,7 +315,7 @@ function CheckoutComponent({ geoId }: Props) {
 	const ratePlan = product?.ratePlans[query.ratePlan];
 	const priceOriginal = query.price ?? ratePlan?.pricing[currencyKey];
 
-	const fulFilmentOption =
+	const fulfilmentOption =
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
@@ -345,7 +345,7 @@ function CheckoutComponent({ geoId }: Props) {
 		productPrices,
 		countryId,
 		ratePlanDescription.billingPeriod,
-		fulFilmentOption,
+		fulfilmentOption,
 	);
 	const price = promotion?.discountedPrice
 		? promotion.discountedPrice
