@@ -9,15 +9,6 @@ import {
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 
-export interface TierBenefits {
-	description?: Array<string | { copy: string; strong: boolean }>;
-	list: Array<{
-		copy: string | JSX.Element;
-		tooltip?: string;
-		strong?: boolean;
-	}>;
-}
-
 export interface TierPlanCosts {
 	price: number;
 	promoCode?: string;
@@ -42,7 +33,6 @@ export interface TierPlans {
 interface TierCard {
 	title: string;
 	isRecommended?: true;
-	benefits: TierBenefits;
 	plans: TierPlans;
 }
 
@@ -54,13 +44,6 @@ interface TierCards {
 
 const tier1: TierCard = {
 	title: 'Support',
-	benefits: {
-		list: [
-			{
-				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-			},
-		],
-	},
 	plans: {
 		monthly: {
 			label: 'Monthly',
@@ -96,22 +79,6 @@ const tier1: TierCard = {
 const tier2: TierCard = {
 	title: 'All-access digital',
 	isRecommended: true,
-	benefits: {
-		list: [
-			{
-				copy: 'Unlimited access to the Guardian app',
-				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
-			},
-			{ copy: 'Ad-free reading on all your devices' },
-			{
-				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-			},
-			{
-				copy: 'Far fewer asks for support',
-				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
-			},
-		],
-	},
 	plans: {
 		monthly: {
 			label: 'Monthly',
@@ -146,18 +113,6 @@ const tier2: TierCard = {
 
 const tier3: TierCard = {
 	title: 'Digital + print',
-	benefits: {
-		description: [
-			'The rewards from ',
-			{ strong: true, copy: 'All-access digital' },
-		],
-		list: [
-			{
-				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-			},
-		],
-	},
 	plans: {
 		monthly: {
 			label: 'Monthly',

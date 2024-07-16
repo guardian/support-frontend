@@ -14,6 +14,7 @@ import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscripti
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
@@ -24,7 +25,6 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -211,9 +211,10 @@ function ThankYouContent({
 		</SansParagraph>,
 	];
 
-	const benefitsTier3and2 = tierCards.tier3.benefits.list.concat(
-		tierCards.tier2.benefits.list,
-	);
+	const benefitsTier3and2 =
+		productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits.concat(
+			productCatalogDescription.SupporterPlus.benefits,
+		);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
 		!inThreeTier ? '!' : ''
