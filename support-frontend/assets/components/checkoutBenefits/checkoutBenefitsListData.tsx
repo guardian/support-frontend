@@ -2,6 +2,7 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const greyedOut = css`
 	color: ${palette.neutral[60]};
@@ -24,6 +25,7 @@ export type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;
+	specificToRegions?: CountryGroupId[];
 };
 
 export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
@@ -36,7 +38,7 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
-	const higherTierItems = [
+	const higherTierItems: CheckListData[] = [
 		{
 			isChecked: higherTier,
 			text: (
@@ -76,6 +78,16 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				</p>
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
+		},
+		{
+			isChecked: higherTier,
+			text: (
+				<p>
+					<span css={boldText}>Exclusive access</span> to partner offers
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+			specificToRegions: ['AUDCountries'],
 		},
 	];
 
