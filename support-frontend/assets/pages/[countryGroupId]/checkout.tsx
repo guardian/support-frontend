@@ -644,7 +644,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 				: deliveryAddress;
 		} else {
 			billingAddress = {
-				state: formData.get('billing-stateProvince') as string,
+				state: formData.get('billing-state') as string,
 				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
@@ -1014,38 +1014,42 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											/>
 										)}
 
-										{countryId === 'US' && (
-											<div>
-												<TextInput
-													id="zipCode"
-													label="ZIP code"
-													name="billing-postcode"
-													onChange={(event) => {
-														setBillingPostcode(event.target.value);
-													}}
-													onBlur={(event) => {
-														event.target.checkValidity();
-													}}
-													maxLength={20}
-													value={billingPostcode}
-													pattern={doesNotContainEmojiPattern}
-													error={billingPostcodeError}
-													onInvalid={(event) => {
-														preventDefaultValidityMessage(event.currentTarget);
-														const validityState = event.currentTarget.validity;
-														if (validityState.valid) {
-															setBillingPostcodeError(undefined);
-														} else {
-															if (!validityState.valueMissing) {
-																setBillingPostcodeError(
-																	'Please enter a valid zip code.',
-																);
+										{countryId === 'US' &&
+											!productDescription.deliverableTo && (
+												<div>
+													<TextInput
+														id="zipCode"
+														label="ZIP code"
+														name="billing-postcode"
+														onChange={(event) => {
+															setBillingPostcode(event.target.value);
+														}}
+														onBlur={(event) => {
+															event.target.checkValidity();
+														}}
+														maxLength={20}
+														value={billingPostcode}
+														pattern={doesNotContainEmojiPattern}
+														error={billingPostcodeError}
+														onInvalid={(event) => {
+															preventDefaultValidityMessage(
+																event.currentTarget,
+															);
+															const validityState =
+																event.currentTarget.validity;
+															if (validityState.valid) {
+																setBillingPostcodeError(undefined);
+															} else {
+																if (!validityState.valueMissing) {
+																	setBillingPostcodeError(
+																		'Please enter a valid zip code.',
+																	);
+																}
 															}
-														}
-													}}
-												/>
-											</div>
-										)}
+														}}
+													/>
+												</div>
+											)}
 									</fieldset>
 
 									<CheckoutDivider spacing="loose" />
