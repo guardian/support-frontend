@@ -1,6 +1,7 @@
 package controllers
 
-import actions.{CacheControl, CustomActionBuilders}
+import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
+import actions.{AsyncAuthenticatedBuilder, CacheControl, CustomActionBuilders}
 import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
@@ -10,7 +11,7 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogging
-import com.gu.support.catalog.SupporterPlus
+import com.gu.support.catalog.{Product, SupporterPlus, TierThree}
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -19,7 +20,7 @@ import models.GeoData
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.pricing.PriceSummaryServiceProvider
+import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
@@ -37,6 +38,10 @@ case class PaymentMethodConfigs(
     defaultAmazonPayConfig: AmazonPayConfig,
     testAmazonPayConfig: AmazonPayConfig,
 )
+
+// This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
+// product prices to the contributions template would exceed that limit.
+case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -191,8 +196,10 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices =
+    val supporterPlusProductPrices =
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val tierThreeProductPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
@@ -223,7 +230,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      productPrices = productPrices,
+      productPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
@@ -274,14 +281,28 @@ class Application(
   }
 
   def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    request.queryString
+      .getOrElse("product", Nil)
+      .headOption
+      .flatMap(productString => Product.fromString(productString))
+      .map(routeForProduct(_))
+      .getOrElse(BadRequest("No product name provided"))
+  }
 
+  def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(product, queryPromos)
 
     Ok(
       views.html.router(
@@ -303,6 +324,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
+        productPrices = productPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey

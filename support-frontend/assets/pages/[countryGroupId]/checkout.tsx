@@ -83,6 +83,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -301,19 +302,17 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-	/**
-	 * TODO: We should probaly send this down from the server as
-	 * this cookie is not always an accurate indicator as to
-	 * whether an account is still valid
-	 */
 	const isTestUser = !!cookie.get('_test_username');
-
+	const productPrices = window.guardian.productPrices;
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
 	const ratePlan = product?.ratePlans[query.ratePlan];
-	const price = query.price ?? ratePlan?.pricing[currencyKey];
+	const priceOriginal = query.price ?? ratePlan?.pricing[currencyKey];
+
+	const fulfilmentOption =
+		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
 		? productCatalogDescription[productId]
@@ -328,7 +327,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			productDescription &&
 			ratePlan &&
 			ratePlanDescription &&
-			price
+			priceOriginal
 		)
 	) {
 		return (
@@ -337,6 +336,16 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			</div>
 		);
 	}
+
+	const promotion = getPromotion(
+		productPrices,
+		countryId,
+		ratePlanDescription.billingPeriod,
+		fulfilmentOption,
+	);
+	const price = promotion?.discountedPrice
+		? promotion.discountedPrice
+		: priceOriginal;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -615,7 +624,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 				lineOne: formData.get('delivery-lineOne') as string,
 				lineTwo: formData.get('delivery-lineTwo') as string,
 				city: formData.get('delivery-city') as string,
-				state: formData.get('delivery-state') as string,
+				state: formData.get('delivery-stateProvince') as string,
 				postCode: formData.get('delivery-postcode') as string,
 				country: formData.get('delivery-country') as IsoCountry,
 			};
@@ -628,14 +637,14 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						lineOne: formData.get('billing-lineOne') as string,
 						lineTwo: formData.get('billing-lineTwo') as string,
 						city: formData.get('billing-city') as string,
-						state: formData.get('billing-state') as string,
+						state: formData.get('billing-stateProvince') as string,
 						postCode: formData.get('billing-postcode') as string,
 						country: formData.get('billing-country') as IsoCountry,
 				  }
 				: deliveryAddress;
 		} else {
 			billingAddress = {
-				state: formData.get('billing-state') as string,
+				state: formData.get('billing-stateProvince') as string,
 				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
@@ -702,12 +711,12 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add debugInfo
-			 * - add firstDeliveryDate
 			 */
 			const firstDeliveryDate =
 				productId === 'TierThree'
 					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
+			const promoCode = promotion?.promoCode;
 
 			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
@@ -715,6 +724,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 				deliveryAddress,
 				firstDeliveryDate,
 				paymentFields,
+				promoCode,
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,
@@ -746,7 +756,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
-				window.location.href = `/${geoId}/thank-you`;
+				window.location.href = `/${geoId}/thank-you?product=${productId}&ratePlan=${query.ratePlan}&promoCode=${promoCode}`;
 			} else {
 				// TODO - error handling
 				console.error(
@@ -799,7 +809,8 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											? 'month'
 											: 'quarter'
 									}
-									amount={price}
+									amount={priceOriginal}
+									promotion={promotion}
 									currency={currency}
 									checkListData={[
 										...productDescription.benefits.map((benefit) => ({
@@ -976,8 +987,9 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 												/>
 											</div>
 										</>
-
-										{showStateSelect && (
+										{/*For deliverable products we take the state and
+                    zip code with the delivery address*/}
+										{showStateSelect && !productDescription.deliverableTo && (
 											<StateSelect
 												countryId={countryId}
 												state={billingState}
@@ -1522,7 +1534,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											productDescription.label === 'All-access digital'
 										}
 										productNameAboveThreshold={productDescription.label}
-										promotion={undefined} // TO DO : future support promotions
+										promotion={promotion}
 									/>
 								</BoxContents>
 							</Box>
