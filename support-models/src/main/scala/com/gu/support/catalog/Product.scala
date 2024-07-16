@@ -389,7 +389,7 @@ case object GuardianWeekly extends Product {
 }
 
 object Product {
-  lazy val allProducts: List[Product] = List(DigitalPack, Contribution, GuardianWeekly, Paper, SupporterPlus, TierThree)
+  lazy val allProducts: List[Product] = List(DigitalPack, Contribution, GuardianWeekly, Paper)
 
   def fromString(code: String): Option[Product] = allProducts.find(_.getClass.getSimpleName == s"$code$$")
 

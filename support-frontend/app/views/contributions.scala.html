@@ -7,9 +7,9 @@
 @import controllers.PaymentMethodConfigs
 @import com.gu.support.encoding.CustomCodecs._
 @import services.pricing.ProductPrices
-@import controllers.LandingPageProductPrices
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
+
 @(
   title: String,
   id: String,
@@ -28,7 +28,7 @@
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
   serversideTests: Map[String, Participation] = Map(),
-  productPrices: LandingPageProductPrices,
+  productPrices: ProductPrices,
   productCatalog: JsonObject,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -55,8 +55,7 @@
       };
     }
 
-    window.guardian.supporterPlusProductPrices = @Html(outputJson(productPrices.supporterPlusProductPrices))
-    window.guardian.tierThreeProductPrices = @Html(outputJson(productPrices.tierThreeProductPrices))
+    window.guardian.productPrices = @Html(outputJson(productPrices))
   </script>
 
   @windowGuardianPaymentConfig(

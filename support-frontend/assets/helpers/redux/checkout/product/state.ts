@@ -46,8 +46,6 @@ export type ProductState = {
 	fulfilmentOption: FulfilmentOptions;
 	billingPeriod: BillingPeriod;
 	productPrices: ProductPrices;
-	supporterPlusProductPrices: ProductPrices;
-	tierThreeProductPrices: ProductPrices;
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
 	selectedAmountsBeforeAmendment: SelectedAmounts;
@@ -66,8 +64,6 @@ export const initialProductState: ProductState = {
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',
 	productPrices: getGlobal('productPrices') ?? {},
-	supporterPlusProductPrices: getGlobal('supporterPlusProductPrices') ?? {},
-	tierThreeProductPrices: getGlobal('tierThreeProductPrices') ?? {},
 	selectedAmounts: {
 		ONE_OFF: 0,
 		MONTHLY: 0,
