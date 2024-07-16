@@ -80,7 +80,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import { productCatalogDescriptionAdditionalMissing } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
@@ -316,8 +316,9 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const price = query.price ?? ratePlan?.pricing[currencyKey];
 
 	const productDescription = productId
-		? productCatalogDescription[productId]
+		? productCatalogDescriptionAdditionalMissing[productId]
 		: undefined;
+	console.log('TEST productDescription->', productDescription);
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
 	if (
@@ -806,6 +807,12 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											isChecked: true,
 											text: benefit.copy,
 										})),
+										...(productDescription.benefitsAdditional ?? []).map(
+											(benefit) => ({
+												isChecked: true,
+												text: benefit.copy,
+											}),
+										),
 										...(productDescription.benefitsMissing ?? []).map(
 											(benefit) => ({
 												isChecked: false,
