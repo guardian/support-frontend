@@ -302,11 +302,6 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-	/**
-	 * TODO: We should probaly send this down from the server as
-	 * this cookie is not always an accurate indicator as to
-	 * whether an account is still valid
-	 */
 	const isTestUser = !!cookie.get('_test_username');
 	const productPrices = window.guardian.productPrices;
 	const productCatalog = appConfig.productCatalog;
