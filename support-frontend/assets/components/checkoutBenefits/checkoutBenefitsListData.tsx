@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { filterBenefitByRegion } from 'helpers/productCatalog';
 
 const greyedOut = css`
 	color: ${palette.neutral[60]};
@@ -18,7 +19,7 @@ const boldText = css`
 
 type TierUnlocks = {
 	higherTier: boolean;
-	showUnchecked?: boolean;
+	countryGroupId: CountryGroupId;
 };
 
 export type CheckListData = {
@@ -35,7 +36,10 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
+export const checkListData = ({
+	higherTier,
+	countryGroupId,
+}: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
 	const higherTierItems: CheckListData[] = [
@@ -101,6 +105,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				</p>
 			),
 		},
-		...higherTierItems,
+		...higherTierItems.filter((checkListItem) =>
+			filterBenefitByRegion(checkListItem, countryGroupId),
+		),
 	];
 };

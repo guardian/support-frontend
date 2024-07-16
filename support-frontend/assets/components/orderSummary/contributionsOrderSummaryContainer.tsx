@@ -3,7 +3,6 @@ import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { supporterPlusLegal } from 'helpers/legalCopy';
-import { filterBenefitByRegion } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -83,9 +82,8 @@ export function ContributionsOrderSummaryContainer({
 			? []
 			: checkListData({
 					higherTier: isSupporterPlus,
-			  }).filter((checkListItem) =>
-					filterBenefitByRegion(checkListItem, countryGroupId),
-			  );
+					countryGroupId,
+			  });
 
 	function onCheckListToggle(isOpen: boolean) {
 		trackComponentClick(
