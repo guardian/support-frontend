@@ -530,7 +530,7 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
 	const tier3UrlParamsHardcoded = new URLSearchParams({
-		threeTierCreateSupporterPlusSubscriptionV2: 'true',
+		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 		promoCode: promotionTier3Hardcoded.promoCode,
 	});
