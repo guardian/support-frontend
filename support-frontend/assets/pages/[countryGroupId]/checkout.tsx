@@ -806,7 +806,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											isChecked: true,
 											text: benefit.copy,
 										})),
-										...(productDescription.missingBenefits ?? []).map(
+										...(productDescription.benefitsMissing ?? []).map(
 											(benefit) => ({
 												isChecked: false,
 												text: benefit.copy,
