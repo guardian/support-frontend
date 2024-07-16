@@ -65,7 +65,6 @@ const PaymentConfigSchema = object({
 			email: optional(string()),
 			firstName: optional(string()),
 			lastName: optional(string()),
-			isSignedIn: boolean(),
 		}),
 	),
 	/**
