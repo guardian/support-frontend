@@ -38,7 +38,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescription as productCatalogDescExclOffers,
 	productCatalogDescInclFeast,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
@@ -331,11 +330,8 @@ export function ThreeTierLanding(): JSX.Element {
 			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
-	const showFeast = abParticipations.feast === 'variant';
 
-	const productCatalogDescription = showFeast
-		? productCatalogDescInclFeast
-		: productCatalogDescExclOffers;
+	const productCatalogDescription = productCatalogDescInclFeast;
 
 	useEffect(() => {
 		dispatch(resetValidation());

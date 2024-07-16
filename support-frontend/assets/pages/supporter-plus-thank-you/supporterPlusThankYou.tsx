@@ -113,9 +113,7 @@ export function SupporterPlusThankYou({
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { abParticipations, amounts } = useContributionsSelector(
-		(state) => state.common,
-	);
+	const { amounts } = useContributionsSelector((state) => state.common);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -238,16 +236,13 @@ export function SupporterPlusThankYou({
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
-	// abParticipation, upon refresh, defaults to active abtTests only
-	const showFeast = !!abParticipations.feast && isSupporterPlus;
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(isSupporterPlus && !showFeast, 'appDownload'),
-		...maybeThankYouModule(showFeast, 'appsDownload'),
+		...maybeThankYouModule(isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',

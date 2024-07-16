@@ -15,7 +15,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: the-guardian-cuu
+      ORG: guardian-portfolio-and-platform
       SKIP_NODE: true
       EXCLUDE: stripe-patrons-data,support-config,support-frontend,support-internationalisation,support-lambdas,support-models,support-modules,support-payment-api,support-services,support-workers,supporter-product-data
     secrets:
@@ -25,7 +25,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: the-guardian-cuu
+      ORG: guardian-portfolio-and-platform
       SKIP_SBT: true
       EXCLUDE: build.sbt
     secrets:
