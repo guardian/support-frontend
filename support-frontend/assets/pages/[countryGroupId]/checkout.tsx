@@ -20,12 +20,14 @@ import {
 	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
+	Divider,
 	ErrorSummary,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
+	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
@@ -857,6 +859,34 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
+									<ExpressCheckoutElement
+										onConfirm={() => {}}
+										options={{
+											paymentMethods: {
+												applePay: 'always',
+												googlePay: 'always',
+												link: 'never',
+											},
+										}}
+									/>
+									<Divider
+										displayText="or"
+										size="full"
+										cssOverrides={css`
+											::before {
+												margin-left: 0;
+											}
+
+											::after {
+												margin-right: 0;
+											}
+
+											margin: 0;
+											margin-top: 14px;
+											margin-bottom: 14px;
+											width: 100%;
+										`}
+									/>
 									<fieldset css={fieldset}>
 										<legend css={legend}>1. Your details</legend>
 										<div>
@@ -1565,6 +1595,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		isTestUser,
 	);
 
+	console.info(stripePublicKey);
 	return (
 		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
 			<CheckoutComponent geoId={geoId} appConfig={appConfig} />

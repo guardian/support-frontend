@@ -1,4 +1,5 @@
 import { Elements } from '@stripe/react-stripe-js';
+import type { StripeElementsOptions } from '@stripe/stripe-js';
 import { useStripeAccount } from 'helpers/forms/stripe';
 
 type StripeElementsProps = {
@@ -14,8 +15,12 @@ export function StripeElements({
 
 	// `options` must be set even if it's empty, otherwise we get 'Unsupported prop change on Elements' warnings
 	// in the console
-	const elementsOptions = {};
-
+	const elementsOptions = {
+		mode: 'payment',
+		amount: 100,
+		currency: 'gbp',
+	} as StripeElementsOptions;
+	console.log('elem:', elementsOptions);
 	return (
 		<Elements stripe={stripeSdk} options={elementsOptions}>
 			{children}
