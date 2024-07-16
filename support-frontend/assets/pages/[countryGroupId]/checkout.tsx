@@ -317,7 +317,6 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const productDescription = productId
 		? productCatalogDescriptionAdditionalMissing[productId]
 		: undefined;
-	console.log('TEST productDescription->', productDescription);
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
 	if (
@@ -853,7 +852,8 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											: productFields.billingPeriod === 'Annual'
 											? 'ANNUAL'
 											: 'ONE_OFF',
-										query.product === 'SupporterPlus',
+										productFields.productType,
+										promotion,
 									)}
 									headerButton={<ChangeButton geoId={geoId} />}
 								/>

@@ -6,20 +6,23 @@ import {
 	fromCountryGroupId,
 } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getLowerBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { simpleFormatAmount } from './forms/checkouts';
 
-export const supporterPlusLegal = (
+export const productLegal = (
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 	divider: string,
 	promotion?: Promotion,
+	product?: string,
 ) => {
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
-	const amount = getLowerBenefitThreshold(
+	const amount = getLowerProductBenefitThreshold(
 		contributionType,
 		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		product,
 	);
 	const amountFormatted = simpleFormatAmount(currency, amount);
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';

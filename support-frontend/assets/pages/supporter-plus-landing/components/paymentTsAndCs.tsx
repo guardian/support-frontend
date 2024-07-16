@@ -12,7 +12,7 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
-import { supporterPlusLegal } from 'helpers/legalCopy';
+import { productLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
@@ -145,13 +145,8 @@ export function PaymentTsAndCs({
 			<>
 				<div>
 					If you pay at least{' '}
-					{supporterPlusLegal(
-						countryGroupId,
-						contributionType,
-						' per ',
-						promotion,
-					)}
-					, you will receive the {productNameAboveThreshold} benefits on a
+					{productLegal(countryGroupId, contributionType, ' per ', promotion)},
+					you will receive the {productNameAboveThreshold} benefits on a
 					subscription basis. If you increase your payments per{' '}
 					{frequencySingular(contributionType)}, these additional amounts will
 					be separate {frequencyPlural(contributionType)} voluntary financial

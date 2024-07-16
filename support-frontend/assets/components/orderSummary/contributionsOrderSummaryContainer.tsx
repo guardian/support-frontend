@@ -2,7 +2,7 @@ import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListD
 import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { supporterPlusLegal } from 'helpers/legalCopy';
+import { productLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -18,36 +18,44 @@ type ContributionsOrderSummaryContainerProps = {
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	isSupporterPlus: boolean,
+	product: string,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
 		return;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
+	const isSupporterPlus = product === 'SupporterPlus';
+	const isTier3 = product === 'TierThree';
 
-	if (isSupporterPlus) {
+	if (isSupporterPlus || isTier3) {
 		return (
 			<>
 				{promotion && (
 					<p>
 						You’ll pay{' '}
-						{supporterPlusLegal(
+						{productLegal(
 							countryGroupId,
 							contributionType,
 							'/',
 							promotion,
+							product,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
 						subscribers who do not have an existing subscription with the
 						Guardian.
 					</p>
 				)}
-				<p>Auto renews every {period} until you cancel.</p>
-				<p>
-					Cancel or change your support anytime. If you cancel within the first
-					14 days, you will receive a full refund.
-				</p>
+				{isSupporterPlus && (
+					<>
+						<p>Auto renews every {period} until you cancel.</p>
+						<p>
+							Cancel or change your support anytime. If you cancel within the
+							first 14 days, you will receive a full refund.
+						</p>
+					</>
+				)}
+				{isTier3 && <p>Auto renews every {period}. Cancel anytime.</p>}
 			</>
 		);
 	}
@@ -121,7 +129,7 @@ export function ContributionsOrderSummaryContainer({
 		tsAndCs: getTermsConditions(
 			countryGroupId,
 			contributionType,
-			isSupporterPlus,
+			isSupporterPlus ? 'SupporterPlus' : 'Other',
 			promotion,
 		),
 	});
