@@ -230,7 +230,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      productPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      landingPageProductPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
