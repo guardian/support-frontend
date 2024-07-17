@@ -111,8 +111,10 @@ object AcquisitionProduct {
 
   case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
 
+  case object FeastApp extends AcquisitionProduct("FEAST_APP")
+
   def fromString(code: String): Option[AcquisitionProduct] = {
-    List(Contribution, RecurringContribution, SupporterPlus, DigitalSubscription, Paper, GuardianWeekly, AppPremiumTier)
+    List(Contribution, RecurringContribution, SupporterPlus, DigitalSubscription, Paper, GuardianWeekly, AppPremiumTier, FeastApp)
       .find(
         _.value == code,
       )
