@@ -1,6 +1,6 @@
 @import admin.settings.AllSettings
 @import admin.ServersideAbTest.Participation
-@import assets.{AssetsResolver, RefPath, StyleContent}
+@import assets.{AssetsResolver, RefPath}
 @import com.gu.identity.model.{User => IdUser}
 @import views.ReactDiv
 @import models.GeoData
@@ -28,7 +28,7 @@
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
   serversideTests: Map[String, Participation] = Map(),
-  productPrices: LandingPageProductPrices,
+  landingPageProductPrices: LandingPageProductPrices,
   productCatalog: JsonObject,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -55,8 +55,16 @@
       };
     }
 
-    window.guardian.supporterPlusProductPrices = @Html(outputJson(productPrices.supporterPlusProductPrices))
-    window.guardian.tierThreeProductPrices = @Html(outputJson(productPrices.tierThreeProductPrices))
+    /** Both the landing page (`/uk/contribution`) and contributions checkout (`/uk/contribution/checkout`) are rendered from this template.
+     *
+     * We use `supporterPlusProductPrices` and `tierThreeProductPrices` on the landing page as it renders both products with their promotions.
+     *
+     * We use `productPrices` in the checkout as the value is coupled across the codebase via redux state used across multiple checkouts i.e. Guardian Weekly, Paper, Contribution etc
+     * so we need to retain that name.
+     */
+    window.guardian.productPrices = @Html(outputJson(landingPageProductPrices.supporterPlusProductPrices))
+    window.guardian.supporterPlusProductPrices = @Html(outputJson(landingPageProductPrices.supporterPlusProductPrices))
+    window.guardian.tierThreeProductPrices = @Html(outputJson(landingPageProductPrices.tierThreeProductPrices))
   </script>
 
   @windowGuardianPaymentConfig(
