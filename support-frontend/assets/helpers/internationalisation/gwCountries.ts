@@ -1,8 +1,9 @@
 import type { IsoCountry } from './country';
 
-const billableCountries: Partial<Record<IsoCountry, string>> = {
+const gwCountries: Partial<Record<IsoCountry, string>> = {
 	GB: 'United Kingdom',
 	US: 'United States',
+	AF: 'Afghanistan',
 	AU: 'Australia',
 	NZ: 'New Zealand',
 	CK: 'Cook Islands',
@@ -225,4 +226,4 @@ const billableCountries: Partial<Record<IsoCountry, string>> = {
 	JE: 'Jersey',
 	SH: 'Saint Helena',
 };
-export { billableCountries };
+export { gwCountries };
