@@ -5,7 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath}
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
@@ -15,6 +15,7 @@ import services._
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
+
 import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionFormController(
@@ -27,6 +28,8 @@ class DigitalSubscriptionFormController(
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax {
@@ -60,6 +63,8 @@ class DigitalSubscriptionFormController(
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct
+    val isTestUser = testUsers.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
     subscriptionCheckout(
       title,
@@ -77,6 +82,8 @@ class DigitalSubscriptionFormController(
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
       orderIsAGift,
+      None,
+      productCatalog,
     )
   }
 }

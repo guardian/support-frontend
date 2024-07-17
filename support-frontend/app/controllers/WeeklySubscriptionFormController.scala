@@ -5,14 +5,14 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
 import play.api.mvc._
 import play.twirl.api.Html
-import services.TestUserService
+import services.{CachedProductCatalogServiceProvider, TestUserService}
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
@@ -29,6 +29,8 @@ class WeeklySubscriptionFormController(
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax {
@@ -57,6 +59,9 @@ class WeeklySubscriptionFormController(
     val readerType = if (orderIsAGift) Gift else Direct
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = testMode).v2PublicKey
 
+    val isTestUser = testUsers.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
     subscriptionCheckout(
       title,
       id,
@@ -73,6 +78,8 @@ class WeeklySubscriptionFormController(
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
       orderIsAGift,
+      None,
+      productCatalog,
     )
   }
 
