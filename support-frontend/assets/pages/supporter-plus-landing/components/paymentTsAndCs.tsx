@@ -15,6 +15,7 @@ import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { ProductsThresholdDefined } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -139,14 +140,21 @@ export function PaymentTsAndCs({
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
 		productNameAboveThreshold: string,
+		product: ProductsThresholdDefined,
 		promotion?: Promotion,
 	) => {
 		return (
 			<>
 				<div>
 					If you pay at least{' '}
-					{productLegal(countryGroupId, contributionType, ' per ', promotion)},
-					you will receive the {productNameAboveThreshold} benefits on a
+					{productLegal(
+						countryGroupId,
+						contributionType,
+						' per ',
+						product,
+						promotion,
+					)}
+					, you will receive the {productNameAboveThreshold} benefits on a
 					subscription basis. If you increase your payments per{' '}
 					{frequencySingular(contributionType)}, these additional amounts will
 					be separate {frequencyPlural(contributionType)} voluntary financial
@@ -211,6 +219,7 @@ export function PaymentTsAndCs({
 					? copyAboveThreshold(
 							contributionType,
 							productNameAboveThreshold,
+							'SupporterPlus',
 							promotion,
 					  )
 					: copyBelowThreshold(contributionType)}

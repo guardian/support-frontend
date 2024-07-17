@@ -7,6 +7,10 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import type {
+	ProductsThresholdDefined,
+	ProductsThresholdNotDefined,
+} from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
@@ -18,7 +22,7 @@ type ContributionsOrderSummaryContainerProps = {
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	product: string,
+	product: ProductsThresholdDefined | ProductsThresholdNotDefined,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
@@ -38,8 +42,8 @@ export function getTermsConditions(
 							countryGroupId,
 							contributionType,
 							'/',
-							promotion,
 							product,
+							promotion,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
 						subscribers who do not have an existing subscription with the
@@ -100,13 +104,17 @@ export function ContributionsOrderSummaryContainer({
 
 	let description;
 	let heading;
+	let product: ProductsThresholdDefined | ProductsThresholdNotDefined;
 	if (contributionType === 'ONE_OFF') {
 		heading = 'Your support';
 		description = 'One-time support';
+		product = 'Contribution';
 	} else if (isSupporterPlus) {
 		description = 'All-access digital';
+		product = 'SupporterPlus';
 	} else {
 		description = 'Support';
+		product = 'Contribution';
 	}
 
 	const paymentFrequency =
@@ -129,7 +137,7 @@ export function ContributionsOrderSummaryContainer({
 		tsAndCs: getTermsConditions(
 			countryGroupId,
 			contributionType,
-			isSupporterPlus ? 'SupporterPlus' : 'Other',
+			product,
 			promotion,
 		),
 	});

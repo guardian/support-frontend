@@ -6,6 +6,7 @@ import {
 	fromCountryGroupId,
 } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { ProductsThresholdDefined } from 'helpers/supporterPlus/benefitsThreshold';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { simpleFormatAmount } from './forms/checkouts';
 
@@ -13,8 +14,8 @@ export const productLegal = (
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 	divider: string,
+	product: ProductsThresholdDefined,
 	promotion?: Promotion,
-	product?: string,
 ) => {
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];

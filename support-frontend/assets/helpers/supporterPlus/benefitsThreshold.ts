@@ -9,6 +9,13 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
+export type ProductsThresholdDefined = 'SupporterPlus' | 'TierThree';
+export type ProductsThresholdNotDefined =
+	| 'DigitalPack'
+	| 'Paper'
+	| 'GuardianWeekly'
+	| 'Contribution';
+
 export type ThresholdAmounts = Record<RegularContributionType, number>;
 
 export function getLowerBenefitsThreshold(
@@ -37,7 +44,7 @@ export function getLowerProductBenefitThreshold(
 	contributionType: ContributionType,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroup,
-	product = 'SupporterPlus',
+	product: ProductsThresholdDefined,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'
