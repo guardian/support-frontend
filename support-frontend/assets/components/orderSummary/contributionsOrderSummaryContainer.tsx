@@ -19,6 +19,19 @@ type ContributionsOrderSummaryContainerProps = {
 	promotion?: Promotion;
 };
 
+export function getTermsStartDateTier3(startDateTier3: string) {
+	return (
+		<>
+			<li>Your digital benefits will start today.</li>
+			<li>
+				Your Guardian Weekly subscription will start on {startDateTier3}. Please
+				allow 1 to 7 days after your start date for your magazine to arrive,
+				depending on national post services.
+			</li>
+		</>
+	);
+}
+
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,

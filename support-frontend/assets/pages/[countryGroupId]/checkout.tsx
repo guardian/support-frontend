@@ -36,7 +36,10 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { getTermsConditions } from 'components/orderSummary/contributionsOrderSummaryContainer';
+import {
+	getTermsConditions,
+	getTermsStartDateTier3,
+} from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
@@ -98,7 +101,10 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { formatMachineDate } from '../../helpers/utilities/dateConversions';
+import {
+	formatMachineDate,
+	formatUserDate,
+} from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
@@ -845,6 +851,13 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 										);
 									}}
 									enableCheckList={true}
+									tsAndCsTier3={
+										productId === 'TierThree'
+											? getTermsStartDateTier3(
+													formatUserDate(getTierThreeDeliveryDate()),
+											  )
+											: null
+									}
 									tsAndCs={getTermsConditions(
 										countryGroupId,
 										productFields.billingPeriod === 'Monthly'
