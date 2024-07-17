@@ -5,6 +5,7 @@ import admin.settings._
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import services.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions.PromoCode
@@ -14,6 +15,7 @@ import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
 import config.{RecaptchaConfig, RecaptchaConfigProvider}
 import fixtures.TestCSRFComponents
+import io.circe.JsonObject
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.matchers.must.Matchers
@@ -22,7 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, status, stubControllerComponents, _}
-import services.TestUserService
+import services.{CachedProductCatalogService, CachedProductCatalogServiceProvider, TestUserService}
 
 import scala.concurrent.Future
 
@@ -127,6 +129,11 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       )
       val priceSummaryServiceProvider = mock[PriceSummaryServiceProvider]
       val priceSummaryService = mock[PriceSummaryService]
+      val productCatalog = mock[CachedProductCatalogServiceProvider]
+      val cachedProductCatalogService = mock[CachedProductCatalogService]
+
+      when(cachedProductCatalogService.get()).thenReturn(JsonObject())
+      when(productCatalog.fromStage(PROD, false)).thenReturn(cachedProductCatalogService)
       when(priceSummaryService.getPrices(any[com.gu.support.catalog.Product], any[List[PromoCode]], any[ReaderType]))
         .thenReturn(prices)
       when(priceSummaryServiceProvider.forUser(any[Boolean])).thenReturn(priceSummaryService)
@@ -141,6 +148,8 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         components = stubControllerComponents(),
         settingsProvider = settingsProvider,
         recaptchaConfigProvider,
+        productCatalog,
+        PROD,
       )
     }
 

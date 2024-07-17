@@ -4,7 +4,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions._
@@ -30,6 +30,9 @@ class DigitalSubscriptionController(
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    stage: Stage,
+    testUserService: TestUserService,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
@@ -74,6 +77,10 @@ class DigitalSubscriptionController(
           divId = s"digital-subscription-landing-$countryCode",
           file = "digital-subscription-landing.html",
         )
+
+        val isTestUser = testUserService.isTestUser(request)
+        val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
         Ok(
           views.html.subscriptionCheckout(
             title,
@@ -91,6 +98,8 @@ class DigitalSubscriptionController(
             payPalConfigProvider.get(true),
             v2recaptchaConfigPublicKey,
             orderIsAGift,
+            None,
+            productCatalog,
           ),
         )
       }
