@@ -1,13 +1,20 @@
 import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
+import type { CountryGroupId } from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
 export const productCatalog = window.guardian.productCatalog;
 
+type ProductBenefit = {
+	copy: string;
+	tooltip?: string;
+	specificToRegions?: CountryGroupId[];
+};
+
 export type ProductDescription = {
 	label: string;
-	benefits: Array<{ copy: string; tooltip?: string }>;
-	missingBenefits?: Array<{ copy: string; tooltip?: string }>;
+	benefits: ProductBenefit[];
+	missingBenefits?: ProductBenefit[];
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
 	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
@@ -19,6 +26,19 @@ export type ProductDescription = {
 		}
 	>;
 };
+
+export function filterBenefitByRegion(
+	benefit: {
+		specificToRegions?: CountryGroupId[];
+	},
+	countryGroupId: CountryGroupId,
+) {
+	if (benefit.specificToRegions !== undefined) {
+		return benefit.specificToRegions.includes(countryGroupId);
+	}
+
+	return true;
+}
 
 /**
  * TODO: make this stricter.
@@ -148,6 +168,12 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Far fewer asks for support',
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
+			{
+				copy: 'Exclusive access to partner offers',
+				tooltip:
+					'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+				specificToRegions: ['AUDCountries'],
+			},
 		],
 		ratePlans: {
 			Monthly: {
@@ -248,6 +274,12 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 			},
 			{
 				copy: 'Unlimited access to the Guardian Feast App',
+			},
+			{
+				copy: 'Exclusive access to partner offers',
+				tooltip:
+					'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+				specificToRegions: ['AUDCountries'],
 			},
 		],
 		ratePlans: {

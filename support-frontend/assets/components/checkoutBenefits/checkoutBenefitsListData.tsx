@@ -2,6 +2,8 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { filterBenefitByRegion } from 'helpers/productCatalog';
 
 const greyedOut = css`
 	color: ${palette.neutral[60]};
@@ -17,13 +19,14 @@ const boldText = css`
 
 type TierUnlocks = {
 	higherTier: boolean;
-	showUnchecked?: boolean;
+	countryGroupId: CountryGroupId;
 };
 
 export type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;
+	specificToRegions?: CountryGroupId[];
 };
 
 export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
@@ -33,10 +36,13 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
+export const checkListData = ({
+	higherTier,
+	countryGroupId,
+}: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
-	const higherTierItems = [
+	const higherTierItems: CheckListData[] = [
 		{
 			isChecked: higherTier,
 			text: (
@@ -77,6 +83,16 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
+		{
+			isChecked: higherTier,
+			text: (
+				<p>
+					<span css={boldText}>Exclusive access</span> to partner offers
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+			specificToRegions: ['AUDCountries'],
+		},
 	];
 
 	return [
@@ -89,6 +105,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				</p>
 			),
 		},
-		...higherTierItems,
+		...higherTierItems.filter((checkListItem) =>
+			filterBenefitByRegion(checkListItem, countryGroupId),
+		),
 	];
 };

@@ -16,12 +16,16 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalog';
+import {
+	filterBenefitByRegion,
+	type ProductDescription,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { ThreeTierLozenge } from './threeTierLozenge';
@@ -33,6 +37,7 @@ export type ThreeTierCardProps = {
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
 	currencyId: IsoCurrency;
+	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
 	linkCtaClickHandler: (
 		event: React.MouseEvent<HTMLAnchorElement>,
@@ -196,6 +201,7 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	currencyId,
+	countryGroupId,
 	paymentFrequency,
 	linkCtaClickHandler,
 	link,
@@ -294,13 +300,15 @@ export function ThreeTierCard({
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
-				checkListData={benefits.map((benefit) => {
-					return {
-						text: benefit.copy,
-						isChecked: true,
-						toolTip: benefit.tooltip,
-					};
-				})}
+				checkListData={benefits
+					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+					.map((benefit) => {
+						return {
+							text: benefit.copy,
+							isChecked: true,
+							toolTip: benefit.tooltip,
+						};
+					})}
 				style={'compact'}
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkBenefitList}

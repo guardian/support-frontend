@@ -82,6 +82,7 @@ export function ContributionsOrderSummaryContainer({
 			? []
 			: checkListData({
 					higherTier: isSupporterPlus,
+					countryGroupId,
 			  });
 
 	function onCheckListToggle(isOpen: boolean) {

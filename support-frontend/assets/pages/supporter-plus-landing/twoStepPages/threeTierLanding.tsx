@@ -619,6 +619,7 @@ export function ThreeTierLanding(): JSX.Element {
 					<ThreeTierCards
 						cardsContent={[tier1Card, tier2Card, tier3Card]}
 						currencyId={currencyId}
+						countryGroupId={countryGroupId}
 						paymentFrequency={contributionType}
 						linkCtaClickHandler={handleLinkCtaClick}
 					/>

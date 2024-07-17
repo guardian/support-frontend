@@ -45,7 +45,10 @@ export const AllBenefitsUnlocked = Template.bind({});
 
 AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	checkListData: checkListData({ higherTier: true }),
+	checkListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
 	buttonCopy: null,
 };
 
@@ -53,6 +56,9 @@ export const LowerTierUnlocked = Template.bind({});
 
 LowerTierUnlocked.args = {
 	title: "For £5 per month, you'll unlock",
-	checkListData: checkListData({ higherTier: false }),
+	checkListData: checkListData({
+		higherTier: false,
+		countryGroupId: 'GBPCountries',
+	}),
 	buttonCopy: 'Switch to £12 per month to unlock all extras',
 };

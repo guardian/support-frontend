@@ -4,6 +4,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -20,6 +21,7 @@ export type ThreeTierCardsProps = {
 		ctaCopy: string;
 	}>;
 	currencyId: IsoCurrency;
+	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
 	linkCtaClickHandler: (
 		event: React.MouseEvent<HTMLAnchorElement>,
@@ -63,6 +65,7 @@ const cardIndexToTier = (index: number): 1 | 2 | 3 => {
 export function ThreeTierCards({
 	cardsContent,
 	currencyId,
+	countryGroupId,
 	paymentFrequency,
 	linkCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
@@ -89,6 +92,7 @@ export function ThreeTierCards({
 						{...cardContent}
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currencyId={currencyId}
+						countryGroupId={countryGroupId}
 						paymentFrequency={paymentFrequency}
 						linkCtaClickHandler={linkCtaClickHandler}
 						ctaCopy={cardContent.ctaCopy}

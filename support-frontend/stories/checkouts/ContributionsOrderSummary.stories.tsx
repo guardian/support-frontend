@@ -52,7 +52,10 @@ Default.args = {
 		isSuffixGlyph: false,
 		isPaddedGlyph: false,
 	},
-	checkListData: checkListData({ higherTier: true }),
+	checkListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
