@@ -168,12 +168,12 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Far fewer asks for support',
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
-			{
-				copy: 'Exclusive access to partner offers',
-				tooltip:
-					'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-				specificToRegions: ['AUDCountries'],
-			},
+			// {
+			// 	copy: 'Exclusive access to partner offers',
+			// 	tooltip:
+			// 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+			// 	specificToRegions: ['AUDCountries'],
+			// },
 		],
 		ratePlans: {
 			Monthly: {
@@ -275,12 +275,12 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 			{
 				copy: 'Unlimited access to the Guardian Feast App',
 			},
-			{
-				copy: 'Exclusive access to partner offers',
-				tooltip:
-					'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-				specificToRegions: ['AUDCountries'],
-			},
+			// {
+			// 	copy: 'Exclusive access to partner offers',
+			// 	tooltip:
+			// 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+			// 	specificToRegions: ['AUDCountries'],
+			// },
 		],
 		ratePlans: {
 			Monthly: {
