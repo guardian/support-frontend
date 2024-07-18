@@ -263,6 +263,26 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
 		],
+		benefitsMissing: [
+			{
+				copy: 'Unlimited access to the Guardian app',
+				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+			},
+			{ copy: 'Ad-free reading on all your devices' },
+			{
+				copy: 'Far fewer asks for support',
+				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
+			},
+			{
+				copy: 'Unlimited access to the Guardian Feast App',
+			},
+			// {
+			// 	copy: 'Exclusive access to partner offers',
+			// 	tooltip:
+			// 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+			// 	specificToRegions: ['AUDCountries'],
+			// },
+		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -296,7 +316,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	},
 };
 
-export const productCatalogDescriptionAdditionalMissing: typeof productCatalogDescription =
+export const productCatalogDescriptionAdditional: typeof productCatalogDescription =
 	{
 		...productCatalogDescription,
 		TierThree: {
@@ -307,20 +327,13 @@ export const productCatalogDescriptionAdditionalMissing: typeof productCatalogDe
 			deliverableTo: productCatalogDescription.TierThree.deliverableTo,
 			ratePlans: productCatalogDescription.TierThree.ratePlans,
 		},
-		Contribution: {
-			label: productCatalogDescription.Contribution.label,
-			benefits: productCatalogDescription.Contribution.benefits,
-			benefitsMissing: productCatalogDescription.SupporterPlus.benefits,
-			ratePlans: productCatalogDescription.Contribution.ratePlans,
-		},
 	};
 
 export const productCatalogDescInclFeast: typeof productCatalogDescription = {
-	...productCatalogDescriptionAdditionalMissing,
+	...productCatalogDescriptionAdditional,
 	SupporterPlusWithGuardianWeekly: {
 		label:
-			productCatalogDescriptionAdditionalMissing.SupporterPlusWithGuardianWeekly
-				.label,
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly.label,
 		benefitsSummary: ['The rewards from All-access digital'],
 		offersSummary: [
 			{
@@ -329,22 +342,21 @@ export const productCatalogDescInclFeast: typeof productCatalogDescription = {
 			},
 		],
 		benefits:
-			productCatalogDescriptionAdditionalMissing.SupporterPlusWithGuardianWeekly
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly
 				.benefits,
 		ratePlans:
-			productCatalogDescriptionAdditionalMissing.SupporterPlusWithGuardianWeekly
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly
 				.ratePlans,
 	},
 	SupporterPlus: {
-		label: productCatalogDescriptionAdditionalMissing.SupporterPlus.label,
-		benefits: productCatalogDescriptionAdditionalMissing.SupporterPlus.benefits,
+		label: productCatalogDescriptionAdditional.SupporterPlus.label,
+		benefits: productCatalogDescriptionAdditional.SupporterPlus.benefits,
 		offers: [
 			{
 				copy: <OfferFeast></OfferFeast>,
 			},
 		],
-		ratePlans:
-			productCatalogDescriptionAdditionalMissing.SupporterPlus.ratePlans,
+		ratePlans: productCatalogDescriptionAdditional.SupporterPlus.ratePlans,
 	},
 };
 

@@ -85,7 +85,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByRegion,
-	productCatalogDescriptionAdditionalMissing,
+	productCatalogDescriptionAdditional,
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -324,7 +324,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
-		? productCatalogDescriptionAdditionalMissing[productId]
+		? productCatalogDescriptionAdditional[productId]
 		: undefined;
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
