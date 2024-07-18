@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper}
+import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus}
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.PriceSummaryServiceProvider
@@ -14,7 +14,7 @@ import play.twirl.api.Html
 import services.TestUserService
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
-import admin.ServersideAbTest.{Participation}
+import admin.ServersideAbTest.Participation
 
 class Promotions(
     promotionServiceProvider: PromotionServiceProvider,
@@ -39,7 +39,7 @@ class Promotions(
         case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
         case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect(false).url
         case Paper => routes.PaperSubscriptionController.paper().url
-        case Contribution => routes.Application.contributeGeoRedirect("").url
+        case _ => routes.Application.contributeGeoRedirect("").url
       }
       val queryString = {
         if (promoCode == "WINTERSAMPLER") {
