@@ -36,7 +36,10 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { getTermsConditions } from 'components/orderSummary/contributionsOrderSummaryContainer';
+import {
+	getTermsConditions,
+	getTermsStartDateTier3,
+} from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
@@ -82,7 +85,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByRegion,
-	productCatalogDescription,
+	productCatalogDescriptionAdditional,
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -101,7 +104,10 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { formatMachineDate } from '../../helpers/utilities/dateConversions';
+import {
+	formatMachineDate,
+	formatUserDate,
+} from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
@@ -318,7 +324,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
-		? productCatalogDescription[productId]
+		? productCatalogDescriptionAdditional[productId]
 		: undefined;
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
@@ -824,7 +830,15 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 												isChecked: true,
 												text: benefit.copy,
 											})),
-										...(productDescription.missingBenefits ?? [])
+										...(productDescription.benefitsAdditional ?? [])
+											.filter((benefit) =>
+												filterBenefitByRegion(benefit, countryGroupId),
+											)
+											.map((benefit) => ({
+												isChecked: true,
+												text: benefit.copy,
+											})),
+										...(productDescription.benefitsMissing ?? [])
 											.filter((benefit) =>
 												filterBenefitByRegion(benefit, countryGroupId),
 											)
@@ -848,6 +862,13 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 										);
 									}}
 									enableCheckList={true}
+									tsAndCsTier3={
+										productId === 'TierThree'
+											? getTermsStartDateTier3(
+													formatUserDate(getTierThreeDeliveryDate()),
+											  )
+											: null
+									}
 									tsAndCs={getTermsConditions(
 										countryGroupId,
 										productFields.billingPeriod === 'Monthly'
@@ -855,7 +876,8 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 											: productFields.billingPeriod === 'Annual'
 											? 'ANNUAL'
 											: 'ONE_OFF',
-										query.product === 'SupporterPlus',
+										productFields.productType,
+										promotion,
 									)}
 									headerButton={<ChangeButton geoId={geoId} />}
 								/>
@@ -1544,7 +1566,8 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 										currency={currencyKey}
 										amount={price}
 										amountIsAboveThreshold={
-											productDescription.label === 'All-access digital'
+											productDescription.label === 'All-access digital' ||
+											productDescription.label === 'Digital + print'
 										}
 										productNameAboveThreshold={productDescription.label}
 										promotion={promotion}

@@ -2,7 +2,9 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import type { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ProductId } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -30,6 +32,28 @@ export function getLowerBenefitThreshold(
 	return productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
 		currencyId
 	];
+}
+
+export function getLowerProductBenefitThreshold(
+	contributionType: ContributionType,
+	currencyId: IsoCurrency,
+	countryGroupId: CountryGroup,
+	product: ProductId,
+): number {
+	const ratePlanTier3 =
+		countryGroupId === 'International'
+			? contributionType === 'ANNUAL'
+				? 'RestOfWorldAnnual'
+				: 'RestOfWorldMonthly'
+			: contributionType === 'ANNUAL'
+			? 'DomesticAnnual'
+			: 'DomesticMonthly';
+	const ratePlanSupporterPlus =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+
+	return productCatalog[product].ratePlans[
+		product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
+	].pricing[currencyId];
 }
 
 export function getLowerBenefitsThresholds(

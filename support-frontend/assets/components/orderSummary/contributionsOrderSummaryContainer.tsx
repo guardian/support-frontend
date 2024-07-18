@@ -2,7 +2,8 @@ import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListD
 import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { supporterPlusLegal } from 'helpers/legalCopy';
+import { productLegal } from 'helpers/legalCopy';
+import type { ProductId } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -15,27 +16,43 @@ type ContributionsOrderSummaryContainerProps = {
 	promotion?: Promotion;
 };
 
+export function getTermsStartDateTier3(startDateTier3: string) {
+	return (
+		<>
+			<li>Your digital benefits will start today.</li>
+			<li>
+				Your Guardian Weekly subscription will start on {startDateTier3}. Please
+				allow 1 to 7 days after your start date for your magazine to arrive,
+				depending on national post services.
+			</li>
+		</>
+	);
+}
+
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	isSupporterPlus: boolean,
+	productId: ProductId,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
 		return;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
+	const isSupporterPlus = productId === 'SupporterPlus';
+	const isTier3 = productId === 'TierThree';
 
-	if (isSupporterPlus) {
+	if (isSupporterPlus || isTier3) {
 		return (
 			<>
 				{promotion && (
 					<p>
 						You’ll pay{' '}
-						{supporterPlusLegal(
+						{productLegal(
 							countryGroupId,
 							contributionType,
 							'/',
+							productId,
 							promotion,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
@@ -43,11 +60,16 @@ export function getTermsConditions(
 						Guardian.
 					</p>
 				)}
-				<p>Auto renews every {period} until you cancel.</p>
-				<p>
-					Cancel or change your support anytime. If you cancel within the first
-					14 days, you will receive a full refund.
-				</p>
+				{isSupporterPlus && (
+					<>
+						<p>Auto renews every {period} until you cancel.</p>
+						<p>
+							Cancel or change your support anytime. If you cancel within the
+							first 14 days, you will receive a full refund.
+						</p>
+					</>
+				)}
+				{isTier3 && <p>Auto renews every {period}. Cancel anytime.</p>}
 			</>
 		);
 	}
@@ -93,13 +115,17 @@ export function ContributionsOrderSummaryContainer({
 
 	let description;
 	let heading;
+	let product: ProductId;
 	if (contributionType === 'ONE_OFF') {
 		heading = 'Your support';
 		description = 'One-time support';
+		product = 'Contribution';
 	} else if (isSupporterPlus) {
 		description = 'All-access digital';
+		product = 'SupporterPlus';
 	} else {
 		description = 'Support';
+		product = 'Contribution';
 	}
 
 	const paymentFrequency =
@@ -122,7 +148,7 @@ export function ContributionsOrderSummaryContainer({
 		tsAndCs: getTermsConditions(
 			countryGroupId,
 			contributionType,
-			isSupporterPlus,
+			product,
 			promotion,
 		),
 	});

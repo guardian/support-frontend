@@ -14,7 +14,8 @@ type ProductBenefit = {
 export type ProductDescription = {
 	label: string;
 	benefits: ProductBenefit[];
-	missingBenefits?: ProductBenefit[];
+	benefitsAdditional?: ProductBenefit[];
+	benefitsMissing?: ProductBenefit[];
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
 	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
@@ -262,7 +263,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
 		],
-		missingBenefits: [
+		benefitsMissing: [
 			{
 				copy: 'Unlimited access to the Guardian app',
 				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
@@ -315,10 +316,24 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 	},
 };
 
+export const productCatalogDescriptionAdditional: typeof productCatalogDescription =
+	{
+		...productCatalogDescription,
+		TierThree: {
+			label: productCatalogDescription.TierThree.label,
+			benefitsSummary: productCatalogDescription.TierThree.benefitsSummary,
+			benefits: productCatalogDescription.TierThree.benefits,
+			benefitsAdditional: productCatalogDescription.SupporterPlus.benefits,
+			deliverableTo: productCatalogDescription.TierThree.deliverableTo,
+			ratePlans: productCatalogDescription.TierThree.ratePlans,
+		},
+	};
+
 export const productCatalogDescInclFeast: typeof productCatalogDescription = {
-	...productCatalogDescription,
+	...productCatalogDescriptionAdditional,
 	SupporterPlusWithGuardianWeekly: {
-		label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
+		label:
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly.label,
 		benefitsSummary: ['The rewards from All-access digital'],
 		offersSummary: [
 			{
@@ -327,19 +342,21 @@ export const productCatalogDescInclFeast: typeof productCatalogDescription = {
 			},
 		],
 		benefits:
-			productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly
+				.benefits,
 		ratePlans:
-			productCatalogDescription.SupporterPlusWithGuardianWeekly.ratePlans,
+			productCatalogDescriptionAdditional.SupporterPlusWithGuardianWeekly
+				.ratePlans,
 	},
 	SupporterPlus: {
-		label: productCatalogDescription.SupporterPlus.label,
-		benefits: productCatalogDescription.SupporterPlus.benefits,
+		label: productCatalogDescriptionAdditional.SupporterPlus.label,
+		benefits: productCatalogDescriptionAdditional.SupporterPlus.benefits,
 		offers: [
 			{
 				copy: <OfferFeast></OfferFeast>,
 			},
 		],
-		ratePlans: productCatalogDescription.SupporterPlus.ratePlans,
+		ratePlans: productCatalogDescriptionAdditional.SupporterPlus.ratePlans,
 	},
 };
 
