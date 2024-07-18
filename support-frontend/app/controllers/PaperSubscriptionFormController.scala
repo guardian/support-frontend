@@ -5,12 +5,12 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
-import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
 import config.RecaptchaConfigProvider
 import play.api.mvc._
 import play.twirl.api.Html
-import services.TestUserService
+import services.{CachedProductCatalogServiceProvider, TestUserService}
 import utils.PaperValidation
 import views.EmptyDiv
 import views.html.helper.CSRF
@@ -28,6 +28,8 @@ class PaperSubscriptionFormController(
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax {
@@ -55,6 +57,8 @@ class PaperSubscriptionFormController(
     val testMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = testMode).v2PublicKey
+    val isTestUser = testUsers.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
     subscriptionCheckout(
       title,
@@ -73,6 +77,7 @@ class PaperSubscriptionFormController(
       v2recaptchaConfigPublicKey,
       orderIsAGift = false,
       Some(PaperValidation.M25_POSTCODE_PREFIXES),
+      productCatalog,
     )
   }
 

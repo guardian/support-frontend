@@ -87,6 +87,9 @@ trait Controllers {
     controllerComponents,
     allSettingsProvider,
     appConfig.recaptchaConfigProvider,
+    cachedProductCatalogServiceProvider,
+    appConfig.stage,
+    testUsers,
     appConfig.supportUrl,
   )
 
@@ -122,6 +125,8 @@ trait Controllers {
     controllerComponents,
     allSettingsProvider,
     appConfig.recaptchaConfigProvider,
+    cachedProductCatalogServiceProvider,
+    appConfig.stage,
   )
 
   lazy val paperFormController = new PaperSubscriptionFormController(
@@ -134,6 +139,8 @@ trait Controllers {
     controllerComponents,
     allSettingsProvider,
     appConfig.recaptchaConfigProvider,
+    cachedProductCatalogServiceProvider,
+    appConfig.stage,
   )
 
   lazy val weeklyFormController = new WeeklySubscriptionFormController(
@@ -146,6 +153,8 @@ trait Controllers {
     controllerComponents,
     allSettingsProvider,
     appConfig.recaptchaConfigProvider,
+    cachedProductCatalogServiceProvider,
+    appConfig.stage,
   )
 
   lazy val createSubscriptionController = new CreateSubscriptionController(

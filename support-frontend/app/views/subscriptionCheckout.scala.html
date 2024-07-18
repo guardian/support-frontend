@@ -2,19 +2,15 @@
 @import assets.AssetsResolver
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config._
-@import helper.CSRF
 @import services.pricing.ProductPrices
 @import views.ViewHelpers._
-@import io.circe.syntax._
 @import com.gu.support.encoding.CustomCodecs._
-@import com.gu.support.catalog.Paper
 
 @import assets.RefPath
-@import views.EmptyDiv
 @import views.ReactDiv
-@import assets.StyleContent
 @import com.gu.support.promotions.PromotionCopy
 
+@import io.circe.JsonObject
 @(
   title: String,
   mainElement: ReactDiv,
@@ -32,6 +28,7 @@
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
+  productCatalog: JsonObject,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Some(RefPath(css)), csrf = csrf) {
@@ -89,6 +86,8 @@
       window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
 
       window.guardian.isTestUser = @testMode
+
+      window.guardian.productCatalog = @Html(outputJson(productCatalog))
 
     </script>
 

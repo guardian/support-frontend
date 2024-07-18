@@ -83,7 +83,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { productCatalogDescriptionAdditionalMissing } from 'helpers/productCatalog';
+import {
+	filterBenefitByRegion,
+	productCatalogDescription,
+  productCatalogDescriptionAdditionalMissing,
+} from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -819,18 +823,19 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 									promotion={promotion}
 									currency={currency}
 									checkListData={[
-										...productDescription.benefits.map((benefit) => ({
-											isChecked: true,
-											text: benefit.copy,
-										})),
-										...(productDescription.benefitsAdditional ?? []).map(
-											(benefit) => ({
+										...productDescription.benefits
+											.filter((benefit) =>
+												filterBenefitByRegion(benefit, countryGroupId),
+											)
+											.map((benefit) => ({
 												isChecked: true,
 												text: benefit.copy,
-											}),
-										),
-										...(productDescription.benefitsMissing ?? []).map(
-											(benefit) => ({
+											})),
+										...(productDescription.benefitsMissing ?? [])
+											.filter((benefit) =>
+												filterBenefitByRegion(benefit, countryGroupId),
+											)
+											.map((benefit) => ({
 												isChecked: false,
 												text: benefit.copy,
 												maybeGreyedOut: css`
@@ -840,8 +845,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 														fill: ${palette.neutral[60]};
 													}
 												`,
-											}),
-										),
+											})),
 									]}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(

@@ -41,12 +41,18 @@ Template.args = {} as CheckListProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	checkListData: checkListData({ higherTier: true }),
+	checkListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
 };
 
 export const Compact = Template.bind({});
 
 Compact.args = {
-	checkListData: checkListData({ higherTier: true }),
+	checkListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
 	style: 'compact',
 };

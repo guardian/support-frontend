@@ -52,7 +52,7 @@ export function CheckoutBenefitsListContainer({
 		return null;
 	}
 
-	const { currencyId } = useContributionsSelector(
+	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -100,6 +100,7 @@ export function CheckoutBenefitsListContainer({
 		),
 		checkListData: checkListData({
 			higherTier,
+			countryGroupId,
 		}),
 		buttonCopy: getbuttonCopy(
 			higherTier,
