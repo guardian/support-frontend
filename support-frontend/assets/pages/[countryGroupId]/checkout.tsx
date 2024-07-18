@@ -85,8 +85,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByRegion,
-	productCatalogDescription,
-  productCatalogDescriptionAdditionalMissing,
+	productCatalogDescriptionAdditionalMissing,
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -824,6 +823,14 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 									currency={currency}
 									checkListData={[
 										...productDescription.benefits
+											.filter((benefit) =>
+												filterBenefitByRegion(benefit, countryGroupId),
+											)
+											.map((benefit) => ({
+												isChecked: true,
+												text: benefit.copy,
+											})),
+										...(productDescription.benefitsAdditional ?? [])
 											.filter((benefit) =>
 												filterBenefitByRegion(benefit, countryGroupId),
 											)
