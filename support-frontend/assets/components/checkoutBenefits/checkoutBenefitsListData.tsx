@@ -83,16 +83,16 @@ export const checkListData = ({
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
-		{
-			isChecked: higherTier,
-			text: (
-				<p>
-					<span css={boldText}>Exclusive access</span> to partner offers
-				</p>
-			),
-			maybeGreyedOut: maybeGreyedOutHigherTier,
-			specificToRegions: ['AUDCountries'],
-		},
+		// {
+		// 	isChecked: higherTier,
+		// 	text: (
+		// 		<p>
+		// 			<span css={boldText}>Exclusive access</span> to partner offers
+		// 		</p>
+		// 	),
+		// 	maybeGreyedOut: maybeGreyedOutHigherTier,
+		// 	specificToRegions: ['AUDCountries'],
+		// },
 	];
 
 	return [
