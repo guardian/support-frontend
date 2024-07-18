@@ -4,17 +4,11 @@ import type {
 } from 'helpers/contributions';
 import type { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ProductId } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
-
-export type ProductsThresholdDefined = 'SupporterPlus' | 'TierThree';
-export type ProductsThresholdNotDefined =
-	| 'DigitalPack'
-	| 'Paper'
-	| 'GuardianWeekly'
-	| 'Contribution';
 
 export type ThresholdAmounts = Record<RegularContributionType, number>;
 
@@ -44,7 +38,7 @@ export function getLowerProductBenefitThreshold(
 	contributionType: ContributionType,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroup,
-	product: ProductsThresholdDefined,
+	product: ProductId,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'

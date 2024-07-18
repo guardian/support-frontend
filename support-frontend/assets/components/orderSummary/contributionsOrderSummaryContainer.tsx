@@ -3,14 +3,11 @@ import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productLegal } from 'helpers/legalCopy';
+import type { ProductId } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import type {
-	ProductsThresholdDefined,
-	ProductsThresholdNotDefined,
-} from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
@@ -35,15 +32,15 @@ export function getTermsStartDateTier3(startDateTier3: string) {
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	product: ProductsThresholdDefined | ProductsThresholdNotDefined,
+	productId: ProductId,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
 		return;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
-	const isSupporterPlus = product === 'SupporterPlus';
-	const isTier3 = product === 'TierThree';
+	const isSupporterPlus = productId === 'SupporterPlus';
+	const isTier3 = productId === 'TierThree';
 
 	if (isSupporterPlus || isTier3) {
 		return (
@@ -55,7 +52,7 @@ export function getTermsConditions(
 							countryGroupId,
 							contributionType,
 							'/',
-							product,
+							productId,
 							promotion,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
@@ -118,7 +115,7 @@ export function ContributionsOrderSummaryContainer({
 
 	let description;
 	let heading;
-	let product: ProductsThresholdDefined | ProductsThresholdNotDefined;
+	let product: ProductId;
 	if (contributionType === 'ONE_OFF') {
 		heading = 'Your support';
 		description = 'One-time support';

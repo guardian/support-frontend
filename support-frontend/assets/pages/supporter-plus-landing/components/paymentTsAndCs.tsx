@@ -14,9 +14,9 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
+import type { ProductId } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { ProductsThresholdDefined } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -149,7 +149,7 @@ export function PaymentTsAndCs({
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
 		productNameAboveThreshold: string,
-		product: ProductsThresholdDefined,
+		product: ProductId,
 		promotion?: Promotion,
 	) => {
 		return (
