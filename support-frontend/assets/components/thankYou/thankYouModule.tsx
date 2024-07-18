@@ -116,7 +116,9 @@ const bodyApps = css`
 	margin-top: ${space[6]}px;
 `;
 const bodyAppsTop = css`
-	border-bottom: 1px solid ${neutral[86]};
+	${from.tablet} {
+		border-bottom: 1px solid ${neutral[86]};
+	}
 `;
 
 const bodyStyle = css`
