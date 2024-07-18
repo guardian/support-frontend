@@ -1566,7 +1566,8 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 										currency={currencyKey}
 										amount={price}
 										amountIsAboveThreshold={
-											productDescription.label === 'All-access digital'
+											productDescription.label === 'All-access digital' ||
+											productDescription.label === 'Digital + print'
 										}
 										productNameAboveThreshold={productDescription.label}
 										promotion={promotion}

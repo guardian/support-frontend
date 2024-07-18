@@ -172,9 +172,7 @@ export function SupporterPlusCheckout({
 						currency={currencyId}
 						amount={amount}
 						amountIsAboveThreshold={isSupporterPlus}
-						productNameAboveThreshold={
-							inThreeTier ? 'All-access digital' : 'Supporter Plus'
-						}
+						productNameAboveThreshold={'All-access digital'}
 						promotion={promotion}
 					/>
 				</BoxContents>

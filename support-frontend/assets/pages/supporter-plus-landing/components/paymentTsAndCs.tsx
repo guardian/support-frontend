@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source/foundations';
+import ThreeTierTerms from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -122,6 +123,14 @@ export function PaymentTsAndCs({
 	productNameAboveThreshold,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
+	const inSupporterPlus =
+		productNameAboveThreshold === 'All-access digital' &&
+		amountIsAboveThreshold;
+	const inTier3 =
+		productNameAboveThreshold === 'Digital + print' && amountIsAboveThreshold;
+	const inSupport =
+		productNameAboveThreshold === 'Support' || !(inSupporterPlus || inTier3);
+
 	const amountCopy = isNaN(amount)
 		? null
 		: ` of ${formatAmount(
@@ -215,14 +224,19 @@ export function PaymentTsAndCs({
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
-				{amountIsAboveThreshold
-					? copyAboveThreshold(
-							contributionType,
-							productNameAboveThreshold,
-							'SupporterPlus',
-							promotion,
-					  )
-					: copyBelowThreshold(contributionType)}
+				{inTier3 && (
+					<ThreeTierTerms
+						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
+					/>
+				)}
+				{inSupporterPlus &&
+					copyAboveThreshold(
+						contributionType,
+						productNameAboveThreshold,
+						'SupporterPlus',
+						promotion,
+					)}
+				{inSupport && copyBelowThreshold(contributionType)}
 			</FinePrint>
 		</div>
 	);
