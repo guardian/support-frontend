@@ -39,11 +39,11 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { billableCountries } from 'helpers/internationalisation/billableCountries';
 import {
 	currencies,
 	currencyFromCountryCode,
 } from 'helpers/internationalisation/currency';
+import { gwCountries } from 'helpers/internationalisation/gwCountries';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -368,7 +368,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressMatchesDelivery ? (
 						<FormSection title="Your billing address">
-							<BillingAddress countries={billableCountries} />
+							<BillingAddress countries={gwCountries} />
 						</FormSection>
 					) : null}
 					{!inTierThree && (
