@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import { useState } from 'react';
+import { CheckList, type CheckListData } from 'components/checkList/checkList';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -29,6 +31,8 @@ import {
 	AppNewsDownloadBodyCopy,
 	appNewsDownloadHeader,
 	appsDownloadHeader,
+	BenefitsBodyCopy,
+	benefitsHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -64,6 +68,11 @@ const headingCss = css`
 	font-weight: 700;
 `;
 
+const checklistCss = css`
+	margin-top: ${space[4]}px;
+	font-family: 'GuardianTextEgyptian';
+`;
+
 const defaultSupportReminder = {
 	selectedChoiceIndex: 0,
 	hasBeenCompleted: false,
@@ -79,6 +88,7 @@ export const getThankYouModuleData = (
 	amountIsAboveThreshold: boolean,
 	email?: string,
 	campaignCode?: string,
+	checklistData?: CheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
@@ -167,6 +177,22 @@ export const getThankYouModuleData = (
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
+		},
+		benefits: {
+			icon: getThankYouModuleIcon('benefits'),
+			header: benefitsHeader,
+			bodyCopy: (
+				<>
+					<BenefitsBodyCopy />
+					{checklistData && (
+						<CheckList
+							checkListData={checklistData}
+							cssOverrides={checklistCss}
+						/>
+					)}
+				</>
+			),
+			ctas: null,
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),

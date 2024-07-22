@@ -49,3 +49,11 @@ export function AppFeastDownloadBodyCopy(): JSX.Element {
 		</span>
 	);
 }
+
+export const benefitsHeader = 'What is included in your subscription?';
+
+export function BenefitsBodyCopy(): JSX.Element {
+	return (
+		<span css={downloadCopy}>Your Digital + print subscription includes:</span>
+	);
+}

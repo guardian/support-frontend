@@ -16,6 +16,10 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import CountryHelper from 'helpers/internationalisation/classes/country';
+import {
+	filterBenefitByRegion,
+	productCatalogDescriptionAdditional,
+} from 'helpers/productCatalog';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -105,12 +109,18 @@ export function ThankYou({ geoId }: Props) {
 	 * We should remove it for something more generic.
 	 */
 	const isContributionProduct =
-		order.product === 'Contribution' || order.product === 'SupporterPlus';
+		order.product === 'Contribution' ||
+		order.product === 'SupporterPlus' ||
+		order.product === 'TierThree';
 	const contributionType =
 		isContributionProduct &&
-		(order.ratePlan === 'Monthly'
+		(order.ratePlan === 'Monthly' ||
+		order.ratePlan === 'RestOfWorldMonthly' ||
+		order.ratePlan === 'DomesticMonthly'
 			? 'MONTHLY'
-			: order.ratePlan === 'Annual'
+			: order.ratePlan === 'Annual' ||
+			  order.ratePlan === 'RestOfWorldAnnual' ||
+			  order.ratePlan === 'DomesticAnnual'
 			? 'ANNUAL'
 			: order.product === 'Contribution'
 			? 'ONE_OFF'
@@ -139,10 +149,27 @@ export function ThankYou({ geoId }: Props) {
 	const isOneOff = order.product === 'Contribution';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = order.product === 'SupporterPlus';
+	const isTier3 = order.product === 'TierThree';
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = isSignedIn && !isNewAccount;
+
+	const productDescription = productCatalogDescriptionAdditional[order.product];
+	const benefitsChecklist = [
+		...productDescription.benefits
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			})),
+		...(productDescription.benefitsAdditional ?? [])
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			})),
+	];
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -150,6 +177,9 @@ export function ThankYou({ geoId }: Props) {
 		csrf,
 		isOneOff,
 		isSupporterPlus,
+		undefined,
+		undefined,
+		benefitsChecklist,
 	);
 	const maybeThankYouModule = (
 		condtion: boolean,
@@ -163,6 +193,10 @@ export function ThankYou({ geoId }: Props) {
 			'signIn',
 		),
 		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && isTier3,
+			'benefits',
+		),
+		...maybeThankYouModule(
 			contributionType !== 'ONE_OFF' && isSupporterPlus,
 			'appDownload',
 		),
@@ -172,7 +206,7 @@ export function ThankYou({ geoId }: Props) {
 		),
 		...maybeThankYouModule(emailExists, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
-		'socialShare',
+		...maybeThankYouModule(!isTier3, 'socialShare'),
 	];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
