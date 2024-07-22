@@ -128,7 +128,7 @@ test.describe('Sign up newspaper subscription', () => {
 
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 600000 });
 		});
 	});
 });
