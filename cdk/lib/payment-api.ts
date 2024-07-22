@@ -197,7 +197,7 @@ export class PaymentApi extends GuStack {
     new ApplicationListenerRule(this, 'AllowKnownMethods', {
       listener: playApp.listener,
       priority: 1,
-      conditions: [ListenerCondition.httpRequestMethods(['GET', 'POST', 'PUT', 'DELETE', 'HEAD'])],
+      conditions: [ListenerCondition.httpRequestMethods(['GET', 'POST', 'OPTIONS', 'DELETE', 'HEAD'])],
       targetGroups: [playApp.targetGroup],
     });
     // Default rule to block requests which don't match the above rule

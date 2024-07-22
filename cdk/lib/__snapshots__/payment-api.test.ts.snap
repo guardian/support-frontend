@@ -144,7 +144,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
               "Values": [
                 "GET",
                 "POST",
-                "PUT",
+                "OPTIONS",
                 "DELETE",
                 "HEAD",
               ],
