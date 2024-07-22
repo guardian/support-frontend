@@ -17,6 +17,7 @@ import {
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface PaymentApiProps extends GuStackProps {
   domainName: string;
@@ -190,6 +191,25 @@ export class PaymentApi extends GuStack {
           }),
         ],
       },
+    });
+
+    // Rule to only allow known http methods
+    new ApplicationListenerRule(this, 'AllowKnownMethods', {
+      listener: playApp.listener,
+      priority: 1,
+      conditions: [ListenerCondition.httpRequestMethods(['GET', 'POST', 'PUT', 'DELETE', 'HEAD'])],
+      targetGroups: [playApp.targetGroup],
+    });
+    // Default rule to block requests which don't match the above rule
+    new ApplicationListenerRule(this, 'BlockUnknownMethods', {
+      listener: playApp.listener,
+      priority: 2,
+      conditions: [ListenerCondition.pathPatterns(['*'])],  // anything
+      action: ListenerAction.fixedResponse(400, {
+        contentType: 'application/json',
+        messageBody:
+          'Unsupported http method',
+      }),
     });
 
     // ---- Alarms ---- //
