@@ -12,7 +12,7 @@ jobs:
   test:
     if: ${{ github.event.label.name == 'Seen-on-PROD' }}
     name: Playwright
-    timeout-minutes: 30
+    timeout-minutes: 30 
     runs-on: ubuntu-latest
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -48,3 +48,18 @@ jobs:
           failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
           browserStackSearch="https://automate.browserstack.com/dashboard/v2/search?query=playwright-build-${{ steps.vars.outputs.sha_short }}&type=builds"
           curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright post deployment tests for support frontend have failed! <users/all> \n \nIf you don'\''t know what this means, please reply and ask to pair with someone who does! \n \n👉 Visit first to check failing tests: <'"$failedWorkflowRun"'|Workflow run> \n🤖 Visit next to see related sessions: <'"$browserStackSearch"'|Browser stack test results> \n👾 Possible related PR: https://github.com/guardian/support-frontend/pull/${{ github.event.number }} \n \n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
+  report:
+      if: ${{ failure() }}
+      needs: test
+      name: Playwright report
+      runs-on: ubuntu-latest
+      env:
+        GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}  
+      steps:
+        - name: Report
+          run: |
+            echo "E2E tests have timed out or failed outside of the Browserstack context - alerting"
+            failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
+            browserStackSearch="https://automate.browserstack.com/dashboard/v2/search?query=playwright-build-${{ steps.vars.outputs.sha_short }}&type=builds"
+            curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 E2E GitHub action has timed out or failed outside the Browserstack context. \n\n This might not mean the site is broken, but probably means something is wrong. <'"$browserStackSearch"'|Check Browserstack> or <'"$failedWorkflowRun"'|the failed Workflow run> for more info."}'
+          
