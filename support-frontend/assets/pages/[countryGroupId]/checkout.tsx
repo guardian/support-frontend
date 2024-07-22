@@ -11,9 +11,11 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
+	Checkbox,
 	Column,
 	Columns,
 	Container,
+	Label,
 	Radio,
 	RadioGroup,
 	TextInput,
@@ -1099,9 +1101,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
-												<legend css={legend}>
-													Where should we deliver to?
-												</legend>
+												<legend css={legend}>2. Delivery address</legend>
 												<AddressFields
 													scope={'delivery'}
 													lineOne={deliveryLineOne}
@@ -1154,49 +1154,31 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 												/>
 											</fieldset>
 
-											<CheckoutDivider spacing="loose" />
-
-											<RadioGroup
-												label="Is the billing address the same as the delivery address?"
-												hideLabel
-												id="billingAddressMatchesDelivery"
-												name="billingAddressMatchesDelivery"
-												orientation="vertical"
-												error={undefined}
+											<fieldset
+												css={css`
+													margin-bottom: ${space[6]}px;
+												`}
 											>
-												<h2 css={legend}>
-													Is the billing address the same as the delivery
-													address?
-												</h2>
-
-												<Radio
-													id="qa-billing-address-same"
-													value="yes"
-													label="Yes"
-													name="billingAddressMatchesDelivery"
+												<Label
+													text="Billing address"
+													htmlFor="billingAddressMatchesDelivery"
+												/>
+												<Checkbox
 													checked={billingAddressMatchesDelivery}
+													value="yes"
 													onChange={() => {
-														setBillingAddressMatchesDelivery(true);
+														setBillingAddressMatchesDelivery(
+															!billingAddressMatchesDelivery,
+														);
 													}}
-												/>
-
-												<Radio
-													id="qa-billing-address-different"
-													label="No"
-													value="no"
+													id="billingAddressMatchesDelivery"
 													name="billingAddressMatchesDelivery"
-													checked={!billingAddressMatchesDelivery}
-													onChange={() => {
-														setBillingAddressMatchesDelivery(false);
-													}}
+													label="Billing address same as delivery address"
 												/>
-											</RadioGroup>
-
-											<CheckoutDivider spacing="loose" />
+											</fieldset>
 
 											{!billingAddressMatchesDelivery && (
 												<fieldset>
-													<legend css={legend}>Your billing address</legend>
 													<AddressFields
 														scope={'billing'}
 														lineOne={billingLineOne}
@@ -1247,14 +1229,17 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 															);
 														}}
 													/>
-													<CheckoutDivider spacing="loose" />
 												</fieldset>
 											)}
+
+											<CheckoutDivider spacing="loose" />
 										</>
 									)}
+
 									<fieldset css={fieldset}>
 										<legend css={legend}>
-											2. Payment method
+											{productDescription.deliverableTo ? '3' : '2'}. Payment
+											method
 											<SecureTransactionIndicator
 												hideText={true}
 												cssOverrides={css``}
