@@ -704,7 +704,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			};
 		}
 
-		if (paymentMethod === 'DirectDebit') {
+		if (paymentMethod === 'DirectDebit' && recaptchaToken !== undefined) {
 			paymentFields = {
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
