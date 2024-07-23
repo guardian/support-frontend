@@ -201,8 +201,8 @@ export function ThankYou({ geoId }: Props) {
 			'subscriptionStart',
 		),
 		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && isSupporterPlus,
-			'appDownload',
+			contributionType !== 'ONE_OFF' && (isSupporterPlus || isTier3),
+			'appsDownload',
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && emailExists,
