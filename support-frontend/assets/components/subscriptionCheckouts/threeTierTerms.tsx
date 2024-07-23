@@ -30,7 +30,7 @@ export default function ThreeTierTerms(props: {
 	paymentMethod?: PaymentMethod;
 }): JSX.Element {
 	const threeTierTermsLink =
-		'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
+		'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
 	const paymentFrequencyName =
 		props.paymentFrequency === 'year' ? 'annual' : 'monthly';
 	return (
@@ -57,11 +57,10 @@ export default function ThreeTierTerms(props: {
 							'https://profile.theguardian.com/signin',
 						)}{' '}
 						or see our Digital + print {termsLink('Terms', threeTierTermsLink)}.
-						[URL needed here!]
 					</p>
 					<p>
 						By proceeding, you are agreeing to the Digital + print{' '}
-						{termsLink('Terms', threeTierTermsLink)}. [URL needed here!]
+						{termsLink('Terms', threeTierTermsLink)}.
 					</p>
 					<p>
 						To find out what personal data we collect and how we use it, please
