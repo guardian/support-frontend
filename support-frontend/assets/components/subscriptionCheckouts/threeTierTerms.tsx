@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { textSans } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
@@ -27,6 +28,7 @@ const termsLink = (linkText: string, url: string) => (
 
 export default function ThreeTierTerms(props: {
 	paymentFrequency: 'month' | 'year';
+	manageLink: EmotionJSX.Element;
 	paymentMethod?: PaymentMethod;
 }): JSX.Element {
 	const threeTierTermsLink =
@@ -52,11 +54,8 @@ export default function ThreeTierTerms(props: {
 						first payment from you. Cancellation of your subscription after 14
 						days will take effect at the end of your current{' '}
 						{paymentFrequencyName} payment period. To cancel go to&nbsp;
-						{termsLink(
-							'Manage My Account',
-							'https://profile.theguardian.com/signin',
-						)}{' '}
-						or see our Digital + print {termsLink('Terms', threeTierTermsLink)}.
+						{props.manageLink} or see our Digital + print{' '}
+						{termsLink('Terms', threeTierTermsLink)}.
 					</p>
 					<p>
 						By proceeding, you are agreeing to the Digital + print{' '}

@@ -49,7 +49,7 @@ interface PaymentTsAndCsProps {
 	promotion?: Promotion;
 }
 
-const manageMyAccount = (
+export const manageMyAccount = (
 	<a
 		href={manageSubsUrl}
 		onClick={sendTrackingEventsOnClick({
@@ -227,6 +227,7 @@ export function PaymentTsAndCs({
 				{inTier3 && (
 					<ThreeTierTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
+						manageLink={manageMyAccount}
 					/>
 				)}
 				{inSupporterPlus &&
