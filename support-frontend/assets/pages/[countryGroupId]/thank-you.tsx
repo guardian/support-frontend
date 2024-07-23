@@ -179,6 +179,7 @@ export function ThankYou({ geoId }: Props) {
 		isSupporterPlus,
 		undefined,
 		undefined,
+		isTier3,
 		benefitsChecklist,
 	);
 	const maybeThankYouModule = (

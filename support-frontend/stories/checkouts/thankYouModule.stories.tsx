@@ -210,6 +210,17 @@ Feedback.decorators = [
 	},
 ];
 
+export const SignUpTier3 = Template.bind({});
+
+SignUpTier3.args = {
+	moduleType: 'signUp',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signUp'),
+	header: signUpHeader,
+	bodyCopy: <SignUpBodyCopy isTier3={true} />,
+	ctas: null,
+};
+
 export const SignUp = Template.bind({});
 
 SignUp.args = {

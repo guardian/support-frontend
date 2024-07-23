@@ -95,6 +95,7 @@ export const getThankYouModuleData = (
 	amountIsAboveThreshold: boolean,
 	email?: string,
 	campaignCode?: string,
+	isTier3?: boolean,
 	checklistData?: CheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
@@ -232,7 +233,7 @@ export const getThankYouModuleData = (
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: <SignUpBodyCopy />,
+			bodyCopy: <SignUpBodyCopy isTier3={isTier3} />,
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},
