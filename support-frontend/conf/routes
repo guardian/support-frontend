@@ -181,10 +181,6 @@ GET /p/:promoCode                                                 controllers.Pr
 # ----- Prices API ----- #
 GET /prices                                                       controllers.PricesController.getPrices()
 
-# ----- Verification ----- #
-
-GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
-
 # ----- Assets ----- #
 # See application.conf for cache time config
 
