@@ -86,6 +86,7 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
+import { manageMyAccount } from '../../supporter-plus-landing/components/paymentTsAndCs';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -538,6 +539,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					{inTierThree ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}
+							manageLink={manageMyAccount}
 							paymentFrequency={tierBillingPeriod}
 						/>
 					) : (
