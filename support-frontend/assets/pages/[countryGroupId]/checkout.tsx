@@ -22,15 +22,19 @@ import {
 	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
+	Divider,
 	ErrorSummary,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
+	Elements,
+	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -50,7 +54,7 @@ import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
-import { StripeElements } from 'components/stripe/stripeElements';
+// import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -901,6 +905,78 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
+									{/* Currently we're testing Stripe ExpressCheckoutElement with Contributions */}
+									{productId === 'Contribution' && (
+										<>
+											<ExpressCheckoutElement
+												onClick={({ resolve }) => {
+													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+													const options = {
+														emailRequired: true,
+														phoneNumberRequired: true,
+													};
+													resolve(options);
+												}}
+												onConfirm={async (event) => {
+													if (!(stripe && elements)) {
+														console.error('Stripe not loaded');
+														return;
+													}
+
+													const { error: submitError } =
+														await elements.submit();
+
+													if (submitError) {
+														setErrorMessage(submitError.message);
+														return;
+													}
+
+													const res = await fetch(
+														'/stripe/create-setup-intent/recaptcha',
+														{
+															method: 'POST',
+															headers: {
+																'Content-Type': 'application/json',
+															},
+															body: JSON.stringify({
+																isTestUser,
+																stripePublicKey,
+															}),
+														},
+													);
+													const { client_secret: clientSecret } =
+														await res.json();
+
+													console.info(clientSecret);
+												}}
+												options={{
+													paymentMethods: {
+														applePay: 'always',
+														googlePay: 'always',
+														link: 'never',
+													},
+												}}
+											/>
+											<Divider
+												displayText="or"
+												size="full"
+												cssOverrides={css`
+													::before {
+														margin-left: 0;
+													}
+
+													::after {
+														margin-right: 0;
+													}
+
+													margin: 0;
+													margin-top: 14px;
+													margin-bottom: 14px;
+													width: 100%;
+												`}
+											/>
+										</>
+									)}
 									<fieldset css={fieldset}>
 										<legend css={legend}>1. Your details</legend>
 										<div>
@@ -1597,10 +1673,36 @@ export function Checkout({ geoId, appConfig }: Props) {
 		currencyKey,
 		isTestUser,
 	);
+	const stripePromise = loadStripe('pk_test_Qm3CGRdrV4WfGYCpm0sftR0f');
 
+	/**
+	 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
+	 * which then needs this configuration.
+	 */
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const price = urlSearchParams.get('price');
+	const priceInt = price ? parseInt(price, 10) : undefined;
+
+	let elementsOptions;
+	if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+		elementsOptions = {
+			mode: 'payment',
+			/**
+			 * Stripe amounts are in the "smallest currency unit"
+			 * @see https://docs.stripe.com/api/charges/object
+			 * @see https://docs.stripe.com/currencies#zero-decimal
+			 */
+			amount: priceInt * 100,
+			currency: 'gbp',
+		} as const;
+	} else {
+		elementsOptions = {};
+	}
+
+	console.info(stripePromise, stripePublicKey);
 	return (
-		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
+		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent geoId={geoId} appConfig={appConfig} />
-		</StripeElements>
+		</Elements>
 	);
 }
