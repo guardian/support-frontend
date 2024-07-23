@@ -18,6 +18,11 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import {
+	formatMachineDate,
+	formatUserDate,
+} from 'helpers/utilities/dateConversions';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -33,6 +38,8 @@ import {
 	appsDownloadHeader,
 	BenefitsBodyCopy,
 	benefitsHeader,
+	SubscriptionStartBodyCopy,
+	subscriptionStartHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -100,6 +107,15 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
+
+	const days = getWeeklyDays();
+	const publicationStartDays = days.filter((day) => {
+		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+		const date = formatMachineDate(day);
+		return !invalidPublicationDates.some((dateSuffix) =>
+			date.endsWith(dateSuffix),
+		);
+	});
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -190,6 +206,18 @@ export const getThankYouModuleData = (
 							cssOverrides={checklistCss}
 						/>
 					)}
+				</>
+			),
+			ctas: null,
+		},
+		subscriptionStart: {
+			icon: getThankYouModuleIcon('subscriptionStart'),
+			header: subscriptionStartHeader,
+			bodyCopy: (
+				<>
+					<SubscriptionStartBodyCopy
+						startDateGW={formatUserDate(publicationStartDays[0])}
+					/>
 				</>
 			),
 			ctas: null,

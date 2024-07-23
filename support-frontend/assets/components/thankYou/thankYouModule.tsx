@@ -220,7 +220,8 @@ export type ThankYouModuleType =
 	| 'signUp'
 	| 'socialShare'
 	| 'supportReminder'
-	| 'benefits';
+	| 'benefits'
+	| 'subscriptionStart';
 
 export interface ThankYouModuleProps {
 	icon: JSX.Element;

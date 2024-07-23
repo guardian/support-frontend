@@ -197,6 +197,10 @@ export function ThankYou({ geoId }: Props) {
 			'benefits',
 		),
 		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && isTier3,
+			'subscriptionStart',
+		),
+		...maybeThankYouModule(
 			contributionType !== 'ONE_OFF' && isSupporterPlus,
 			'appDownload',
 		),
