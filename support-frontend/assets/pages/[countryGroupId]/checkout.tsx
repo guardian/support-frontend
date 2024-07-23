@@ -34,6 +34,7 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -79,7 +80,7 @@ import {
 	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
-	type PaymentMethod,
+	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -117,6 +118,12 @@ import {
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
+/**
+ * We have not added StripeExpressCheckoutElement to the old PaymentMethod
+ * as it is heavily coupled through the code base and would require adding
+ * a lot of extra unused code to those coupled areas.
+ */
+type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
 
 /** Page styles - styles used specifically for the checkout page */
@@ -520,6 +527,18 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
+	const [
+		stripeExpressCheckoutPaymentType,
+		setStripeExpressCheckoutPaymentType,
+	] = useState<ExpressPaymentType>();
+	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
+		useState(false);
+	useEffect(() => {
+		if (stripeExpressCheckoutSuccessful) {
+			formRef.current?.requestSubmit();
+		}
+	}, [stripeExpressCheckoutSuccessful]);
+
 	/**
 	 * flag that disables the submission of the form until the stripeClientSecret is
 	 * fetched from the Stripe API with using the reCaptcha token
@@ -674,7 +693,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			cardElement &&
 			stripeClientSecret
 		) {
-			// TODO - ONE_OFF support - we'l need to implement the ONE_OFF stripe payment.
+			// TODO - ONE_OFF support - we'll need to implement the ONE_OFF stripe payment.
 			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
@@ -700,6 +719,30 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						.payment_method as string,
 				};
 			}
+		}
+
+		if (
+			paymentMethod === 'StripeExpressCheckoutElement' &&
+			stripe &&
+			elements
+		) {
+			const { paymentMethod } = await stripe.createPaymentMethod({
+				elements,
+			});
+			if (!paymentMethod) {
+				return;
+			}
+
+			const stripePaymentType: StripePaymentMethod =
+				stripeExpressCheckoutPaymentType === 'apple_pay'
+					? 'StripeApplePay'
+					: 'StripePaymentRequestButton';
+
+			paymentFields = {
+				paymentMethod: paymentMethod.id,
+				stripePaymentType,
+				stripePublicKey,
+			};
 		}
 
 		if (paymentMethod === 'PayPal') {
@@ -913,7 +956,6 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
 													const options = {
 														emailRequired: true,
-														phoneNumberRequired: true,
 													};
 													resolve(options);
 												}}
@@ -931,23 +973,34 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 														return;
 													}
 
-													const res = await fetch(
-														'/stripe/create-setup-intent/recaptcha',
-														{
-															method: 'POST',
-															headers: {
-																'Content-Type': 'application/json',
-															},
-															body: JSON.stringify({
-																isTestUser,
-																stripePublicKey,
-															}),
-														},
+													setPaymentMethod('StripeExpressCheckoutElement');
+													setStripeExpressCheckoutPaymentType(
+														event.expressPaymentType,
 													);
-													const { client_secret: clientSecret } =
-														await res.json();
 
-													console.info(clientSecret);
+													const name = event.billingDetails?.name ?? '';
+
+													/**
+													 * splits by the last space, and uses the head as firstName
+													 * and tail as lastName
+													 */
+													const firstName = name
+														.substring(0, name.lastIndexOf(' ') + 1)
+														.trim();
+													const lastName = name
+														.substring(name.lastIndexOf(' ') + 1, name.length)
+														.trim();
+													setFirstName(firstName);
+													setLastName(lastName);
+
+													event.billingDetails?.email &&
+														setEmail(event.billingDetails.email);
+
+													/**
+													 * There is a useEffect that listens to this and submits the form
+													 * when true
+													 */
+													setStripeExpressCheckoutSuccessful(true);
 												}}
 												options={{
 													paymentMethods: {
@@ -1673,7 +1726,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		currencyKey,
 		isTestUser,
 	);
-	const stripePromise = loadStripe('pk_test_Qm3CGRdrV4WfGYCpm0sftR0f');
+	const stripePromise = loadStripe(stripePublicKey);
 
 	/**
 	 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
@@ -1694,12 +1747,12 @@ export function Checkout({ geoId, appConfig }: Props) {
 			 */
 			amount: priceInt * 100,
 			currency: 'gbp',
+			paymentMethodCreation: 'manual',
 		} as const;
 	} else {
 		elementsOptions = {};
 	}
 
-	console.info(stripePromise, stripePublicKey);
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent geoId={geoId} appConfig={appConfig} />

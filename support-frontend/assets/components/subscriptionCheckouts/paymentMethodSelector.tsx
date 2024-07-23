@@ -136,6 +136,11 @@ const paymentMethodData = {
 		label: 'Credit/Debit card',
 		icon: <SvgCreditCard />,
 	},
+	StripeExpressCheckoutElement: {
+		id: 'qa-credit-card',
+		label: 'Credit/Debit card',
+		icon: <SvgCreditCard />,
+	},
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
