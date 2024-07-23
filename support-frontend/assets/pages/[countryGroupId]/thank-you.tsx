@@ -234,7 +234,8 @@ export function ThankYou({ geoId }: Props) {
 							name={order.firstName}
 							amount={order.price}
 							contributionType={contributionType}
-							amountIsAboveThreshold={order.product === 'SupporterPlus'}
+							amountIsAboveThreshold={isSupporterPlus}
+							isTier3={isTier3}
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}

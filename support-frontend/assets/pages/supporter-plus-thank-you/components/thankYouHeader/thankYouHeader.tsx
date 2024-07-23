@@ -35,6 +35,7 @@ type ThankYouHeaderProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	amountIsAboveThreshold: boolean;
+	isTier3: boolean;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	promotion?: Promotion;
@@ -53,12 +54,14 @@ function ThankYouHeader({
 	userTypeFromIdentityResponse,
 	showOffer,
 	promotion,
+	isTier3,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
 			<Heading
 				name={name}
 				isOneOffPayPal={isOneOffPayPal}
+				isTier3={isTier3}
 				amount={amount}
 				promotion={promotion}
 				currency={currency}
@@ -70,6 +73,7 @@ function ThankYouHeader({
 				<Subheading
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
+					isTier3={isTier3}
 					isSignedIn={isSignedIn}
 					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 				/>

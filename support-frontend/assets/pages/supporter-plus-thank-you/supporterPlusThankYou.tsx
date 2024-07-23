@@ -276,6 +276,7 @@ export function SupporterPlusThankYou({
 							amount={amount}
 							currency={currencyId}
 							amountIsAboveThreshold={isSupporterPlus}
+							isTier3={false}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 							promotion={promotion}
