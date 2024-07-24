@@ -83,8 +83,8 @@ class AppComponents(context: Context)
     directDebitController,
     promotionsController,
     pricesController,
-    faviconController,
     assetController,
+    faviconController,
   )
 
   SentryLogging.init(appConfig)

@@ -181,6 +181,11 @@ GET /p/:promoCode                                                 controllers.Pr
 # ----- Prices API ----- #
 GET /prices                                                       controllers.PricesController.getPrices()
 
+# ----- Verification ----- #
+# This has to be here to work in PROD
+# Not 100% sure why as it works locally via the /*path route
+GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
+
 # ----- Assets ----- #
 # See application.conf for cache time config
 
