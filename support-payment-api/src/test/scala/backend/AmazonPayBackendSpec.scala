@@ -132,6 +132,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
                 SwitchDetails(On),
                 SwitchDetails(On),
                 SwitchDetails(On),
+                SwitchDetails(On),
               ),
             ),
           ),
@@ -186,6 +187,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
                 Some(
                   OneOffPaymentMethodsSwitches(
                     OneOffPaymentMethodsSwitchesTypes(
+                      SwitchDetails(On),
                       SwitchDetails(On),
                       SwitchDetails(On),
                       SwitchDetails(On),

@@ -145,6 +145,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
                 SwitchDetails(On),
                 SwitchDetails(On),
                 SwitchDetails(On),
+                SwitchDetails(On),
               ),
             ),
           ),
@@ -160,6 +161,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
           Some(
             OneOffPaymentMethodsSwitches(
               OneOffPaymentMethodsSwitchesTypes(
+                SwitchDetails(Off),
                 SwitchDetails(Off),
                 SwitchDetails(Off),
                 SwitchDetails(Off),
