@@ -193,7 +193,7 @@ export function ThankYou({ geoId }: Props) {
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && emailExists,
 			'signIn',
-		), // Registered, Not SignedIn -> To Fix
+		), // Registered, Not SignedIn -> Sign In to Account
 		...maybeThankYouModule(
 			contributionType !== 'ONE_OFF' && isTier3,
 			'benefits',

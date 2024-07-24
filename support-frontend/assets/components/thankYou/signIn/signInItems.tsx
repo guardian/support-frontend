@@ -49,13 +49,18 @@ const hideBeforeTablet = css`
 type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
+	isTier3?: boolean;
 };
 
 type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-export const signInHeader = 'Continue to your account';
+export const signInHeader = (isTier3?: boolean) => {
+	return isTier3
+		? 'Sign in to access your benefits'
+		: 'Continue to your account';
+};
 
 export function SignInBodyCopy({
 	isTier3,
@@ -74,6 +79,12 @@ export function SignInBodyCopy({
 	const advantagesList = [
 		'Show you far fewer requests for financial support',
 		'Offer you a simple way to manage your support payments and newsletter subscriptions',
+	];
+	const upperCopyTier3 = `When you sign in, we can recognise you as a valued subscriber. This helps us to:`;
+	const advantagesListTier3 = [
+		'Unlock all your subscription benefits.',
+		'Give you easy access to manage your subscription online.',
+		'Show you far fewer requests for financial support',
 	];
 
 	return (
@@ -120,12 +131,11 @@ export function SignInBodyCopy({
 			{isTier3 && (
 				<>
 					<p>
-						<span>{upperCopy}</span>
+						<span>{upperCopyTier3}</span>
 					</p>
 					<div>
 						<div css={expandableContainer}>
-							<BulletPointedList items={advantagesList} />
-
+							<BulletPointedList items={advantagesListTier3} />
 							<p>{lowerCopy}</p>
 						</div>
 					</div>
@@ -135,7 +145,11 @@ export function SignInBodyCopy({
 	);
 }
 
-export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
+export function SignInCTA({
+	email,
+	csrf,
+	isTier3,
+}: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
 	function fetchSignInLink(payload: { email: string }) {
@@ -182,7 +196,7 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 			iconSide="right"
 			nudgeIcon
 		>
-			Continue
+			{isTier3 ? 'Sign in' : 'Continue'}
 		</LinkButton>
 	);
 }

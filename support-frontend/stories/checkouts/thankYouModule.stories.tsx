@@ -243,9 +243,9 @@ SignInTier3.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader,
+	header: signInHeader(true),
 	bodyCopy: <SignInBodyCopy isTier3={true} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTier3={true} />,
 };
 
 export const SignIn = Template.bind({});
@@ -254,7 +254,7 @@ SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader,
+	header: signInHeader(),
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
 };
