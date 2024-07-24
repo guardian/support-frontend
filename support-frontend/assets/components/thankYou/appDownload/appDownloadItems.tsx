@@ -60,7 +60,7 @@ export function AppFeastDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const benefitsHeader = 'What is included in your subscription?';
+export const benefitsHeader = 'What’s included?';
 
 export function BenefitsBodyCopy(): JSX.Element {
 	return (
@@ -87,18 +87,18 @@ export function SubscriptionStartBodyCopy({
 					</span>
 				</p>
 				<p>
-					Your magazine will be delivered to your door. Please allow one to
-					seven days after publication date for your magazine to arrive,
-					depending on postal services.
+					Please allow one to seven days after the publication date for your
+					copy to be delivered to your door, depending on postal services.
 				</p>
 			</div>
 			<div>
 				<p>
-					<span css={boldText}>Your digital benefits will start today.</span>
+					<span css={boldText}>Your digital benefits start today.</span>
 				</p>
 				<p>
-					Please ensure you are signed in on all your devices to enjoy unlimited
-					app access and ad-free reading.
+					Please ensure you are signed in on all your devices to enjoy all your
+					benefits, including unlimited app access and uninterrupted ad-free
+					reading.
 				</p>
 			</div>
 		</span>

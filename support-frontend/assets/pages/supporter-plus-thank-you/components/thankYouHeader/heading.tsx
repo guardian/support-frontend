@@ -202,7 +202,8 @@ function Heading({
 					amount={amount}
 					productName={'Digital + print.'}
 				/>{' '}
-				Your valued support powers our journalism.
+				Your {maybeNameAndTrailingSpace === '' ? 'valued ' : 'vital '}
+				support powers our journalism.
 			</h1>
 		);
 	}

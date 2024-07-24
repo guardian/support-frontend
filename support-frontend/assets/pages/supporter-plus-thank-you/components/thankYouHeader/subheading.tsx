@@ -22,7 +22,7 @@ function MarketingCopy({
 			{contributionType === 'ONE_OFF'
 				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
 				: isTier3
-				? 'You can opt out anytime via '
+				? 'You can adjust your email preferences and opt out anytime via '
 				: 'Adjust your email preferences at any time via '}
 			<a href="https://manage.theguardian.com">your account</a>.
 		</span>
@@ -52,7 +52,7 @@ const getSubHeadingCopy = (
 						Guardian journalism.${' '}`}</span>
 		);
 		const tier3HeadingCopy = (
-			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including how to make the most of your subscription.${' '}`}</span>
+			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
 		);
 		return {
 			isSignedIn: isTier3 ? (

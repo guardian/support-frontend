@@ -27,6 +27,10 @@ export function SignUpBodyCopy({
 		'Easily manage your subscription online.',
 		'See far fewer requests for financial support.',
 	];
+	const lowerCopy =
+		'Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.';
+	const lowerCopyTier3 =
+		'Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.';
 	return (
 		<>
 			<p>{isTier3 ? upperCopyTier3 : upperCopy}</p>
@@ -37,10 +41,7 @@ export function SignUpBodyCopy({
 				/>
 			</div>
 
-			<p>
-				Make sure you sign in on each of the devices you use to read our
-				journalism – either today or next time you use them.
-			</p>
+			<p>{isTier3 ? lowerCopyTier3 : lowerCopy}</p>
 		</>
 	);
 }
