@@ -57,7 +57,11 @@ type CreateSignInUrlResponse = {
 
 export const signInHeader = 'Continue to your account';
 
-export function SignInBodyCopy(): JSX.Element {
+export function SignInBodyCopy({
+	isTier3,
+}: {
+	isTier3?: boolean;
+}): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
 	const onReadMoreClick = () => {
@@ -65,55 +69,68 @@ export function SignInBodyCopy(): JSX.Element {
 		setIsExpanded(true);
 	};
 
+	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
+	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
+	const advantagesList = [
+		'Show you far fewer requests for financial support',
+		'Offer you a simple way to manage your support payments and newsletter subscriptions',
+	];
+
 	return (
 		<>
-			<p>
-				<span css={hideAfterTablet}>
-					This means we can recognise you as a supporter and remove unnecessary
-					messages asking for financial support.{' '}
-					{!isExpanded && (
-						<ButtonLink
-							css={bodyText}
-							priority="secondary"
-							onClick={onReadMoreClick}
-						>
-							Read more
-						</ButtonLink>
-					)}
-				</span>
-
-				<span css={hideBeforeTablet}>
-					By signing in, you help us to recognise you as a valued supporter when
-					you visit our website or app. This means we can:
-				</span>
-			</p>
-			<div css={hideAfterTablet}>
-				<ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
-					<div css={expandableContainer}>
-						<p>You will be able to easily manage your account in one place.</p>
-
-						<p>
-							Make sure you sign in on each of the devices you use to read our
-							journalism – either today or next time you use them.
-						</p>
-					</div>
-				</ExpandableContainer>
-			</div>
-			<div css={hideBeforeTablet}>
-				<div css={expandableContainer}>
-					<BulletPointedList
-						items={[
-							'Show you far fewer requests for financial support',
-							'Offer you a simple way to manage your support payments and newsletter subscriptions',
-						]}
-					/>
-
+			{!isTier3 && (
+				<>
 					<p>
-						Make sure you sign in on each of the devices you use to read our
-						journalism – either today or next time you use them.
+						<span css={hideAfterTablet}>
+							This means we can recognise you as a supporter and remove
+							unnecessary messages asking for financial support.{' '}
+							{!isExpanded && (
+								<ButtonLink
+									css={bodyText}
+									priority="secondary"
+									onClick={onReadMoreClick}
+								>
+									Read more
+								</ButtonLink>
+							)}
+						</span>
+
+						<span css={hideBeforeTablet}>{upperCopy}</span>
 					</p>
-				</div>
-			</div>
+					<div css={hideAfterTablet}>
+						<ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
+							<div css={expandableContainer}>
+								<p>
+									You will be able to easily manage your account in one place.
+								</p>
+
+								<p>{lowerCopy}</p>
+							</div>
+						</ExpandableContainer>
+					</div>
+					<div css={hideBeforeTablet}>
+						<div css={expandableContainer}>
+							<BulletPointedList items={advantagesList} />
+
+							<p>{lowerCopy}</p>
+						</div>
+					</div>
+				</>
+			)}
+			{isTier3 && (
+				<>
+					<p>
+						<span>{upperCopy}</span>
+					</p>
+					<div>
+						<div css={expandableContainer}>
+							<BulletPointedList items={advantagesList} />
+
+							<p>{lowerCopy}</p>
+						</div>
+					</div>
+				</>
+			)}
 		</>
 	);
 }

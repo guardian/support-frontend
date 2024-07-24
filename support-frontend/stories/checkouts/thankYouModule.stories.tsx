@@ -232,6 +232,17 @@ SignUp.args = {
 	ctas: null,
 };
 
+export const SignInTier3 = Template.bind({});
+
+SignInTier3.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signInHeader,
+	bodyCopy: <SignInBodyCopy isTier3={true} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+};
+
 export const SignIn = Template.bind({});
 
 SignIn.args = {
