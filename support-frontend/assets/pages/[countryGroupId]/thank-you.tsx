@@ -42,10 +42,10 @@ export const checkoutContainer = css`
 
 export const headerContainer = css`
 	${from.desktop} {
-		width: 60%;
+		width: 83%;
 	}
 	${from.leftCol} {
-		width: calc(50% - ${space[3]}px);
+		width: calc(75% - ${space[3]}px);
 	}
 `;
 
@@ -153,7 +153,7 @@ export function ThankYou({ geoId }: Props) {
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const emailExists = isSignedIn && !isNewAccount;
+	const emailExists = !isNewAccount && isSignedIn;
 
 	const productDescription = productCatalogDescriptionAdditional[order.product];
 	const benefitsChecklist = [
@@ -190,7 +190,7 @@ export function ThankYou({ geoId }: Props) {
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
-		...maybeThankYouModule(isSignedIn && isTier3, 'signedIn'), // Continue to your account
+		...maybeThankYouModule(isTier3 && isSignedIn, 'signedIn'), // Continue to your account
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
