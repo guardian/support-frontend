@@ -5,7 +5,9 @@ export const checkRecaptcha = async (page: Page) => {
 		await page
 			.frameLocator('[title="reCAPTCHA"]')
 			.locator('#recaptcha-anchor-label'),
-	).toBeVisible();
+	).toBeVisible({
+		timeout: 10000,
+	});
 
 	const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
 	const recaptchaCheckbox = recaptchaIframe.locator(
