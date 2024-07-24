@@ -25,6 +25,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Stripe - Payment Request Button",
           |        "state" : "On"
           |      },
+          |      "stripeExpressCheckout" : {
+          |        "description" : "Stripe - Payment Request Button",
+          |        "state" : "On"
+          |      },
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
@@ -47,6 +51,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "state" : "On"
           |      },
           |      "stripePaymentRequestButton" : {
+          |        "description" : "Stripe - Payment Request Button",
+          |        "state" : "On"
+          |      },
+          |      "stripeExpressCheckout" : {
           |        "description" : "Stripe - Payment Request Button",
           |        "state" : "On"
           |      },

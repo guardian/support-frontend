@@ -316,8 +316,13 @@ function ChangeButton({ geoId }: ChangeButtonProps) {
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	useStripeExpressCheckout: boolean;
 };
-function CheckoutComponent({ geoId, appConfig }: Props) {
+function CheckoutComponent({
+	geoId,
+	appConfig,
+	useStripeExpressCheckout,
+}: Props) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
 
@@ -948,8 +953,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
-									{/* Currently we're testing Stripe ExpressCheckoutElement with Contributions */}
-									{productId === 'Contribution' && (
+									{useStripeExpressCheckout && (
 										<>
 											<ExpressCheckoutElement
 												onClick={({ resolve }) => {
@@ -1713,6 +1717,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
+
 	/**
 	 * TODO: We should probaly send this down from the server as
 	 * this cookie is not always an accurate indicator as to
@@ -1728,34 +1733,43 @@ export function Checkout({ geoId, appConfig }: Props) {
 	);
 	const stripePromise = loadStripe(stripePublicKey);
 
-	/**
-	 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
-	 * which then needs this configuration.
-	 */
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	const price = urlSearchParams.get('price');
-	const priceInt = price ? parseInt(price, 10) : undefined;
+	const stripeExpressCheckoutSwitch =
+		window.guardian.settings.switches.recurringPaymentMethods
+			.stripeExpressCheckout;
 
-	let elementsOptions;
-	if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
-		elementsOptions = {
-			mode: 'payment',
-			/**
-			 * Stripe amounts are in the "smallest currency unit"
-			 * @see https://docs.stripe.com/api/charges/object
-			 * @see https://docs.stripe.com/currencies#zero-decimal
-			 */
-			amount: priceInt * 100,
-			currency: 'gbp',
-			paymentMethodCreation: 'manual',
-		} as const;
-	} else {
-		elementsOptions = {};
+	let elementsOptions = {};
+	let useStripeExpressCheckout = false;
+	if (stripeExpressCheckoutSwitch) {
+		/**
+		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
+		 * which then needs this configuration.
+		 */
+		const urlSearchParams = new URLSearchParams(window.location.search);
+		const price = urlSearchParams.get('price');
+		const priceInt = price ? parseInt(price, 10) : undefined;
+		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+			elementsOptions = {
+				mode: 'payment',
+				/**
+				 * Stripe amounts are in the "smallest currency unit"
+				 * @see https://docs.stripe.com/api/charges/object
+				 * @see https://docs.stripe.com/currencies#zero-decimal
+				 */
+				amount: priceInt * 100,
+				currency: 'gbp',
+				paymentMethodCreation: 'manual',
+			} as const;
+			useStripeExpressCheckout = true;
+		}
 	}
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutComponent geoId={geoId} appConfig={appConfig} />
+			<CheckoutComponent
+				geoId={geoId}
+				appConfig={appConfig}
+				useStripeExpressCheckout={useStripeExpressCheckout}
+			/>
 		</Elements>
 	);
 }
