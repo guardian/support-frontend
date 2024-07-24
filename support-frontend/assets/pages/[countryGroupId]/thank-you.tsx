@@ -188,28 +188,13 @@ export function ThankYou({ geoId }: Props) {
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'), // Not Registered, Not SignedIn
-		...maybeThankYouModule(isSignedIn && isTier3, 'signedIn'), // SignedIn, Tier3 -> Continue to Account
-		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && emailExists,
-			'signIn',
-		), // Registered, Not SignedIn -> Sign In to Account
-		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && isTier3,
-			'benefits',
-		),
-		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && isTier3,
-			'subscriptionStart',
-		),
-		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && (isSupporterPlus || isTier3),
-			'appsDownload',
-		),
-		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && emailExists,
-			'supportReminder',
-		),
+		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
+		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
+		...maybeThankYouModule(isSignedIn && isTier3, 'signedIn'), // Continue to your account
+		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(isTier3, 'subscriptionStart'),
+		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
 		...maybeThankYouModule(emailExists, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3, 'socialShare'),
