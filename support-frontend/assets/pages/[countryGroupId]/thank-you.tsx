@@ -188,11 +188,12 @@ export function ThankYou({ geoId }: Props) {
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'),
+		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'), // Not Registered, Not SignedIn
+		...maybeThankYouModule(isSignedIn && isTier3, 'signedIn'), // SignedIn, Tier3 -> Continue to Account
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && emailExists,
 			'signIn',
-		),
+		), // Registered, Not SignedIn -> To Fix
 		...maybeThankYouModule(
 			contributionType !== 'ONE_OFF' && isTier3,
 			'benefits',

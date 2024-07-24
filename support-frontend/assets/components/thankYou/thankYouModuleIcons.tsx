@@ -12,6 +12,7 @@ export const getThankYouModuleIcon = (
 			return <AusMapIcon />;
 		case 'feedback':
 			return <FeedbackIcon />;
+		case 'signedIn':
 		case 'signIn':
 		case 'signUp':
 			return <PersonWithTickIcon />;
