@@ -16,14 +16,13 @@ import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import type { ProductId } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
+import { ManageMyAccountLink } from './manageMyAccountLink';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -48,19 +47,6 @@ interface PaymentTsAndCsProps {
 	productNameAboveThreshold: string;
 	promotion?: Promotion;
 }
-
-export const manageMyAccount = (
-	<a
-		href={manageSubsUrl}
-		onClick={sendTrackingEventsOnClick({
-			id: 'checkout_my_account',
-			product: 'PremiumTier',
-			componentType: 'ACQUISITIONS_BUTTON',
-		})}
-	>
-		Manage My Account
-	</a>
-);
 
 const termsSupporterPlus = (linkText: string) => (
 	<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
@@ -180,7 +166,7 @@ export function PaymentTsAndCs({
 					(which will also cancel any contribution) or cancellation of your
 					contribution made after 14 days will take effect at the end of your
 					current {frequencyPlural(contributionType)} payment period. To cancel,
-					go to {manageMyAccount} or see our {termsSupporterPlus('Terms')}.
+					go to {ManageMyAccountLink} or see our {termsSupporterPlus('Terms')}.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
@@ -227,7 +213,6 @@ export function PaymentTsAndCs({
 				{inTier3 && (
 					<ThreeTierTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
-						manageLink={manageMyAccount}
 					/>
 				)}
 				{inSupporterPlus &&

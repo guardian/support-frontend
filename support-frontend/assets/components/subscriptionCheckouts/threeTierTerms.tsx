@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import { textSans } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import { privacyLink } from 'helpers/legal';
+import { ManageMyAccountLink } from '../../pages/supporter-plus-landing/components/manageMyAccountLink';
 
 const threeTierTerms = css`
 	${textSans.xxsmall()};
@@ -28,7 +28,6 @@ const termsLink = (linkText: string, url: string) => (
 
 export default function ThreeTierTerms(props: {
 	paymentFrequency: 'month' | 'year';
-	manageLink: EmotionJSX.Element;
 	paymentMethod?: PaymentMethod;
 }): JSX.Element {
 	const threeTierTermsLink =
@@ -54,7 +53,7 @@ export default function ThreeTierTerms(props: {
 						first payment from you. Cancellation of your subscription after 14
 						days will take effect at the end of your current{' '}
 						{paymentFrequencyName} payment period. To cancel go to&nbsp;
-						{props.manageLink} or see our Digital + print{' '}
+						{ManageMyAccountLink} or see our Digital + print{' '}
 						{termsLink('Terms', threeTierTermsLink)}.
 					</p>
 					<p>

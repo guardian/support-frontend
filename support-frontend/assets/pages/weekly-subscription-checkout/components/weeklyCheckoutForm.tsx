@@ -15,8 +15,8 @@ import Form, {
 	FormSection,
 	FormSectionHiddenUntilSelected,
 } from 'components/checkoutForm/checkoutForm';
-import { useCsrCustomerData } from 'components/csr/csrMode';
 import type { CsrCustomerData } from 'components/csr/csrMode';
+import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
@@ -86,7 +86,6 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
-import { manageMyAccount } from '../../supporter-plus-landing/components/paymentTsAndCs';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -539,7 +538,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					{inTierThree ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}
-							manageLink={manageMyAccount}
 							paymentFrequency={tierBillingPeriod}
 						/>
 					) : (
