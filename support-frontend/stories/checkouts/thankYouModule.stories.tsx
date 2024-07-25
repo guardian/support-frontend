@@ -279,7 +279,7 @@ SignedInTier3.args = {
 	icon: getThankYouModuleIcon('signIn'),
 	header: signedInHeader,
 	bodyCopy: <SignedInBodyCopy />,
-	ctas: <SignedInCTA email={''} csrf={{ token: undefined }} />,
+	ctas: <SignedInCTA />,
 };
 
 export const AusMap = Template.bind({});

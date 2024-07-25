@@ -4,12 +4,7 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source/react-components';
-import { useEffect, useState } from 'react';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { routes } from 'helpers/urls/routes';
-import { isCodeOrProd } from 'helpers/urls/url';
-import { catchPromiseHandler } from 'helpers/utilities/promise';
 
 const expandableContainer = css`
 	margin-top: ${space[4]}px;
@@ -19,15 +14,6 @@ const expandableContainer = css`
 		margin-top: ${space[4]}px;
 	}
 `;
-
-type SignedInBodyCopyProps = {
-	email?: string;
-	csrf: CsrfState;
-};
-
-type CreateSignInUrlResponse = {
-	signInLink: string;
-};
 
 export const signedInHeader = 'Continue to your account';
 
@@ -55,45 +41,10 @@ export function SignedInBodyCopy(): JSX.Element {
 	);
 }
 
-export function SignedInCTA({
-	email,
-	csrf,
-}: SignedInBodyCopyProps): JSX.Element {
-	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
-
-	function fetchSignInLink(payload: { email: string }) {
-		if (!isCodeOrProd()) {
-			return;
-		}
-
-		fetch(routes.createSignInUrl, {
-			method: 'post',
-			headers: {
-				'Csrf-Token': csrf.token ?? '',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(payload),
-		})
-			.then((response) => response.json())
-			.then((data) =>
-				setSignInUrl((data as CreateSignInUrlResponse).signInLink),
-			)
-			.catch(catchPromiseHandler('Error fetching sign in link'));
-	}
-
-	useEffect(() => {
-		if (email) {
-			const payload = {
-				email,
-			};
-
-			fetchSignInLink(payload);
-		}
-	}, []);
-
+export function SignedInCTA(): JSX.Element {
 	return (
 		<LinkButton
-			href={signInUrl}
+			href={'https://theguardian.com'}
 			target="_blank"
 			rel="noopener noreferrer"
 			priority="primary"

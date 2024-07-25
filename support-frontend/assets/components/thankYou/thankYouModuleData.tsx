@@ -241,7 +241,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('signedIn'),
 			header: signedInHeader,
 			bodyCopy: <SignedInBodyCopy />,
-			ctas: <SignedInCTA email={email} csrf={csrf} />,
+			ctas: <SignedInCTA />,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
