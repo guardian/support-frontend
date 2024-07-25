@@ -45,11 +45,14 @@ import {
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
+import { ExpressCheckoutButtonContainer } from 'components/paymentRequestButton/expressCheckoutButtonContainer';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
+import { ContributionsStripeStandalone } from 'components/stripe/contributionsStripe';
 import { StripeElements } from 'components/stripe/stripeElements';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
@@ -901,6 +904,15 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
+									{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
+									<ContributionsStripeStandalone>
+										{/* <PaymentRequestButtonContainer
+											CustomButton={SavedCardButton}
+										/> */}
+										<ExpressCheckoutButtonContainer
+											CustomButton={SavedCardButton}
+										/>
+									</ContributionsStripeStandalone>
 									<fieldset css={fieldset}>
 										<legend css={legend}>1. Your details</legend>
 										<div>
