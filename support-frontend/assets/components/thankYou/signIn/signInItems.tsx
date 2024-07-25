@@ -75,20 +75,8 @@ export function SignInBodyCopy({
 	};
 
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
+	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
-	const lowerCopyTier3 =
-		'Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.';
-
-	const advantagesList = [
-		'Show you far fewer requests for financial support',
-		'Offer you a simple way to manage your support payments and newsletter subscriptions',
-	];
-	const upperCopyTier3 = `When you sign in, we can recognise you as a valued subscriber. This helps us to:`;
-	const advantagesListTier3 = [
-		'Unlock all your subscription benefits.',
-		'Give you easy access to manage your subscription online.',
-		'Show you far fewer requests for financial support',
-	];
 
 	return (
 		<>
@@ -124,7 +112,12 @@ export function SignInBodyCopy({
 					</div>
 					<div css={hideBeforeTablet}>
 						<div css={expandableContainer}>
-							<BulletPointedList items={advantagesList} />
+							<BulletPointedList
+								items={[
+									'Show you far fewer requests for financial support',
+									'Offer you a simple way to manage your support payments and newsletter subscriptions',
+								]}
+							/>
 
 							<p>{lowerCopy}</p>
 						</div>
@@ -136,12 +129,6 @@ export function SignInBodyCopy({
 					<p>
 						<span>{upperCopyTier3}</span>
 					</p>
-					<div>
-						<div css={expandableContainer}>
-							<BulletPointedList items={advantagesListTier3} />
-							<p>{lowerCopyTier3}</p>
-						</div>
-					</div>
 				</>
 			)}
 		</>
