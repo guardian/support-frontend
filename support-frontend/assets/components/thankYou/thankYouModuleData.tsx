@@ -36,10 +36,6 @@ import {
 	AppNewsDownloadBodyCopy,
 	appNewsDownloadHeader,
 	appsDownloadHeader,
-	BenefitsBodyCopy,
-	benefitsHeader,
-	SubscriptionStartBodyCopy,
-	subscriptionStartHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -59,6 +55,12 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from './socialShare/SocialShareItems';
+import {
+	BenefitsBodyCopy,
+	benefitsHeader,
+	SubscriptionStartBodyCopy,
+	subscriptionStartHeader,
+} from './subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
 	SupportReminderCTAandPrivacy,
