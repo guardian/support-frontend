@@ -25,6 +25,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Stripe - Payment Request Button",
           |        "state" : "On"
           |      },
+          |      "stripeExpressCheckout" : {
+          |        "description" : "Stripe - Payment Request Button",
+          |        "state" : "On"
+          |      },
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
@@ -47,6 +51,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "state" : "On"
           |      },
           |      "stripePaymentRequestButton" : {
+          |        "description" : "Stripe - Payment Request Button",
+          |        "state" : "On"
+          |      },
+          |      "stripeExpressCheckout" : {
           |        "description" : "Stripe - Payment Request Button",
           |        "state" : "On"
           |      },
@@ -158,8 +166,8 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
-          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, Off),
+          oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On, On),
+          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off, Off),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
           subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
           featureSwitches = FeatureSwitches(On, On, Off),

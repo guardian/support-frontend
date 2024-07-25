@@ -64,6 +64,7 @@ const OrderSchema = object({
 	ratePlan: string(),
 	paymentMethod: picklist([
 		'Stripe',
+		'StripeExpressCheckoutElement',
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
@@ -128,11 +129,15 @@ export function ThankYou({ geoId }: Props) {
 
 	if (contributionType) {
 		// track conversion with GTM
+		const paymentMethod =
+			order.paymentMethod === 'StripeExpressCheckoutElement'
+				? 'Stripe'
+				: order.paymentMethod;
 		successfulContributionConversion(
 			order.price,
 			contributionType,
 			currencyKey,
-			order.paymentMethod,
+			paymentMethod,
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(

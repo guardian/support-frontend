@@ -125,6 +125,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
                 SwitchDetails(On),
                 SwitchDetails(On),
                 SwitchDetails(On),
+                SwitchDetails(On),
               ),
             ),
           ),
@@ -200,6 +201,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
                 Some(
                   OneOffPaymentMethodsSwitches(
                     OneOffPaymentMethodsSwitchesTypes(
+                      SwitchDetails(On),
                       SwitchDetails(On),
                       SwitchDetails(On),
                       SwitchDetails(On),
