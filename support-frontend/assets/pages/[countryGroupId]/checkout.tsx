@@ -538,6 +538,8 @@ function CheckoutComponent({
 	] = useState<ExpressPaymentType>();
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
+	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
+		useState(false);
 	useEffect(() => {
 		if (stripeExpressCheckoutSuccessful) {
 			formRef.current?.requestSubmit();
@@ -955,103 +957,105 @@ function CheckoutComponent({
 								<BoxContents>
 									{useStripeExpressCheckout && (
 										<>
-											<div
-												/**
-												 * This is the height of the `ExpressCheckoutElement` to avoid `CLS`
-												 * The element itself animates in, but it's not very smooth
-												 */
-												css={css`
-													height: 44px;
-												`}
-											>
-												<ExpressCheckoutElement
-													onClick={({ resolve }) => {
-														/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-														const options = {
-															emailRequired: true,
-														};
-														resolve(options);
-													}}
-													onConfirm={async (event) => {
-														if (!(stripe && elements)) {
-															console.error('Stripe not loaded');
-															return;
-														}
-
-														const { error: submitError } =
-															await elements.submit();
-
-														if (submitError) {
-															setErrorMessage(submitError.message);
-															return;
-														}
-
-														setPaymentMethod('StripeExpressCheckoutElement');
-														setStripeExpressCheckoutPaymentType(
-															event.expressPaymentType,
-														);
-
-														const name = event.billingDetails?.name ?? '';
-
-														/**
-														 * splits by the last space, and uses the head as firstName
-														 * and tail as lastName
-														 */
-														const firstName = name
-															.substring(0, name.lastIndexOf(' ') + 1)
-															.trim();
-														const lastName = name
-															.substring(name.lastIndexOf(' ') + 1, name.length)
-															.trim();
-														setFirstName(firstName);
-														setLastName(lastName);
-
-														event.billingDetails?.email &&
-															setEmail(event.billingDetails.email);
-
-														/**
-														 * There is a useEffect that listens to this and submits the form
-														 * when true
-														 */
-														setStripeExpressCheckoutSuccessful(true);
-													}}
-													options={{
-														paymentMethods: {
-															applePay: 'always',
-															googlePay: 'always',
-															link: 'never',
-														},
-													}}
-												/>
-											</div>
-											<Divider
-												displayText="or"
-												size="full"
-												cssOverrides={css`
-													::before {
-														margin-left: 0;
+											<ExpressCheckoutElement
+												onReady={({ availablePaymentMethods }) => {
+													console.info(availablePaymentMethods);
+													if (
+														!!availablePaymentMethods?.applePay ||
+														!!availablePaymentMethods?.googlePay
+													) {
+														setStripeExpressCheckoutReady(true);
+													}
+												}}
+												onClick={({ resolve }) => {
+													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+													const options = {
+														emailRequired: true,
+													};
+													resolve(options);
+												}}
+												onConfirm={async (event) => {
+													if (!(stripe && elements)) {
+														console.error('Stripe not loaded');
+														return;
 													}
 
-													::after {
-														margin-right: 0;
+													const { error: submitError } =
+														await elements.submit();
+
+													if (submitError) {
+														setErrorMessage(submitError.message);
+														return;
 													}
 
-													margin: 0;
-													margin-top: 14px;
-													margin-bottom: 14px;
-													width: 100%;
+													setPaymentMethod('StripeExpressCheckoutElement');
+													setStripeExpressCheckoutPaymentType(
+														event.expressPaymentType,
+													);
 
-													@keyframes fadeIn {
-														0% {
-															opacity: 0;
-														}
-														100% {
-															opacity: 1;
-														}
-													}
-													animation: fadeIn 1s;
-												`}
+													const name = event.billingDetails?.name ?? '';
+
+													/**
+													 * splits by the last space, and uses the head as firstName
+													 * and tail as lastName
+													 */
+													const firstName = name
+														.substring(0, name.lastIndexOf(' ') + 1)
+														.trim();
+													const lastName = name
+														.substring(name.lastIndexOf(' ') + 1, name.length)
+														.trim();
+													setFirstName(firstName);
+													setLastName(lastName);
+
+													event.billingDetails?.email &&
+														setEmail(event.billingDetails.email);
+
+													/**
+													 * There is a useEffect that listens to this and submits the form
+													 * when true
+													 */
+													setStripeExpressCheckoutSuccessful(true);
+												}}
+												options={{
+													paymentMethods: {
+														applePay: 'auto',
+														googlePay: 'auto',
+														link: 'never',
+													},
+												}}
 											/>
+
+											{stripeExpressCheckoutReady && (
+												<Divider
+													displayText="or"
+													size="full"
+													cssOverrides={css`
+														::before {
+															margin-left: 0;
+														}
+
+														::after {
+															margin-right: 0;
+														}
+
+														margin: 0;
+														margin-top: 14px;
+														margin-bottom: 14px;
+														width: 100%;
+
+														@keyframes fadeIn {
+															0% {
+																opacity: 0;
+															}
+															100% {
+																opacity: 1;
+															}
+														}
+														animation: fadeIn 1s;
+													`}
+												/>
+											)}
 										</>
 									)}
 									<fieldset css={fieldset}>
