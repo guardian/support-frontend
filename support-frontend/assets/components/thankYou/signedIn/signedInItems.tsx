@@ -14,6 +14,7 @@ import { catchPromiseHandler } from 'helpers/utilities/promise';
 const expandableContainer = css`
 	margin-top: ${space[4]}px;
 
+	// selectors apply to first two nested classes
 	& > * + * {
 		margin-top: ${space[4]}px;
 	}
