@@ -1764,7 +1764,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 
 	const stripeExpressCheckoutSwitch =
 		window.guardian.settings.switches.recurringPaymentMethods
-			.stripeExpressCheckout;
+			.stripeExpressCheckout === 'On';
 
 	let elementsOptions = {};
 	let useStripeExpressCheckout = false;
