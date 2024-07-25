@@ -1,5 +1,7 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import { useState } from 'react';
+import { CheckList, type CheckListData } from 'components/checkList/checkList';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -16,6 +18,11 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import {
+	formatMachineDate,
+	formatUserDate,
+} from 'helpers/utilities/dateConversions';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -36,6 +43,11 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
+import {
+	SignedInBodyCopy,
+	SignedInCTA,
+	signedInHeader,
+} from './signedIn/signedInItems';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -43,6 +55,12 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from './socialShare/SocialShareItems';
+import {
+	BenefitsBodyCopy,
+	benefitsHeader,
+	SubscriptionStartBodyCopy,
+	subscriptionStartHeader,
+} from './subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
 	SupportReminderCTAandPrivacy,
@@ -64,6 +82,11 @@ const headingCss = css`
 	font-weight: 700;
 `;
 
+const checklistCss = css`
+	margin-top: ${space[4]}px;
+	font-family: 'GuardianTextEgyptian';
+`;
+
 const defaultSupportReminder = {
 	selectedChoiceIndex: 0,
 	hasBeenCompleted: false,
@@ -79,6 +102,8 @@ export const getThankYouModuleData = (
 	amountIsAboveThreshold: boolean,
 	email?: string,
 	campaignCode?: string,
+	isTier3?: boolean,
+	checklistData?: CheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
@@ -90,6 +115,15 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
+
+	const days = getWeeklyDays();
+	const publicationStartDays = days.filter((day) => {
+		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+		const date = formatMachineDate(day);
+		return !invalidPublicationDates.some((dateSuffix) =>
+			date.endsWith(dateSuffix),
+		);
+	});
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -168,17 +202,51 @@ export const getThankYouModuleData = (
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
+		benefits: {
+			icon: getThankYouModuleIcon('benefits'),
+			header: benefitsHeader,
+			bodyCopy: (
+				<>
+					<BenefitsBodyCopy />
+					{checklistData && (
+						<CheckList
+							checkListData={checklistData}
+							cssOverrides={checklistCss}
+						/>
+					)}
+				</>
+			),
+			ctas: null,
+		},
+		subscriptionStart: {
+			icon: getThankYouModuleIcon('subscriptionStart'),
+			header: subscriptionStartHeader,
+			bodyCopy: (
+				<>
+					<SubscriptionStartBodyCopy
+						startDateGW={formatUserDate(publicationStartDays[0])}
+					/>
+				</>
+			),
+			ctas: null,
+		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader,
-			bodyCopy: <SignInBodyCopy />,
-			ctas: <SignInCTA email={email} csrf={csrf} />,
+			header: signInHeader(isTier3),
+			bodyCopy: <SignInBodyCopy isTier3={isTier3} />,
+			ctas: <SignInCTA email={email} csrf={csrf} isTier3={isTier3} />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
+		},
+		signedIn: {
+			icon: getThankYouModuleIcon('signedIn'),
+			header: signedInHeader,
+			bodyCopy: <SignedInBodyCopy />,
+			ctas: <SignedInCTA />,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: <SignUpBodyCopy />,
+			bodyCopy: <SignUpBodyCopy isTier3={isTier3} />,
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},

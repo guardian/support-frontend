@@ -25,6 +25,11 @@ import {
 	getFeedbackHeader,
 } from 'components/thankYou/feedback/FeedbackItems';
 import {
+	SignedInBodyCopy,
+	SignedInCTA,
+	signedInHeader,
+} from 'components/thankYou/signedIn/signedInItems';
+import {
 	SignInBodyCopy,
 	SignInCTA,
 	signInHeader,
@@ -210,6 +215,17 @@ Feedback.decorators = [
 	},
 ];
 
+export const SignUpTier3 = Template.bind({});
+
+SignUpTier3.args = {
+	moduleType: 'signUp',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signUp'),
+	header: signUpHeader,
+	bodyCopy: <SignUpBodyCopy isTier3={true} />,
+	ctas: null,
+};
+
 export const SignUp = Template.bind({});
 
 SignUp.args = {
@@ -221,13 +237,24 @@ SignUp.args = {
 	ctas: null,
 };
 
+export const SignInTier3 = Template.bind({});
+
+SignInTier3.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signInHeader(true),
+	bodyCopy: <SignInBodyCopy isTier3={true} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTier3={true} />,
+};
+
 export const SignIn = Template.bind({});
 
 SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader,
+	header: signInHeader(),
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
 };
@@ -243,6 +270,17 @@ SignIn.decorators = [
 		);
 	},
 ];
+
+export const SignedInTier3 = Template.bind({});
+
+SignedInTier3.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signedInHeader,
+	bodyCopy: <SignedInBodyCopy />,
+	ctas: <SignedInCTA />,
+};
 
 export const AusMap = Template.bind({});
 

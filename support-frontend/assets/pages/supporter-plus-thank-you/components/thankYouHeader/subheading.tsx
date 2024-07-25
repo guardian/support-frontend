@@ -5,19 +5,24 @@ import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/person
 interface SubheadingProps {
 	contributionType: ContributionType;
 	amountIsAboveThreshold: boolean;
+	isTier3: boolean;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 }
 
 function MarketingCopy({
 	contributionType,
+	isTier3,
 }: {
 	contributionType: ContributionType;
+	isTier3: boolean;
 }) {
 	return (
 		<span>
 			{contributionType === 'ONE_OFF'
 				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+				: isTier3
+				? 'You can adjust your email preferences and opt out anytime via '
 				: 'Adjust your email preferences at any time via '}
 			<a href="https://manage.theguardian.com">your account</a>.
 		</span>
@@ -27,47 +32,40 @@ function MarketingCopy({
 const getSubHeadingCopy = (
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
+	isTier3: boolean,
 	isSignedIn: boolean,
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
-		return {
-			isSignedIn: amountIsAboveThreshold ? (
-				<>
-					<span
-						css={css`
-							font-weight: bold;
-						`}
-					>
-						You have unlocked your exclusive supporter extras – we hope you
-						enjoy them.
-					</span>{' '}
-					<span>
-						Look out for your exclusive newsletter from our supporter editor.
+		const signedInAboveThreshold = (
+			<span
+				css={css`
+					font-weight: bold;
+				`}
+			>
+				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
+			</span>
+		);
+		const signedInBelowThreshold = (
+			<span>{`Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
-						Guardian journalism.{' '}
-					</span>
+						Guardian journalism.${' '}`}</span>
+		);
+		const tier3HeadingCopy = (
+			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
+		);
+		return {
+			isSignedIn: isTier3 ? (
+				<>{tier3HeadingCopy}</>
+			) : amountIsAboveThreshold ? (
+				<>
+					{signedInAboveThreshold}
+					{signedInBelowThreshold}
 				</>
 			) : (
-				<span>
-					Look out for your exclusive newsletter from our supporter editor.
-					We’ll also be in touch with other great ways to get closer to Guardian
-					journalism.{' '}
-				</span>
+				<>{signedInBelowThreshold}</>
 			),
-			notSignedIn: amountIsAboveThreshold ? (
-				<span>
-					Look out for your exclusive newsletter from our supporter editor.
-					We’ll also be in touch with other great ways to get closer to Guardian
-					journalism.{' '}
-				</span>
-			) : (
-				<span>
-					Look out for your exclusive newsletter from our supporter editor.
-					We’ll also be in touch with other great ways to get closer to Guardian
-					journalism.{' '}
-				</span>
-			),
+			notSignedIn: <>{isTier3 ? tier3HeadingCopy : signedInBelowThreshold}</>,
 		};
 	};
 
@@ -84,12 +82,14 @@ const getSubHeadingCopy = (
 function Subheading({
 	contributionType,
 	amountIsAboveThreshold,
+	isTier3,
 	isSignedIn,
 	userTypeFromIdentityResponse,
 }: SubheadingProps): JSX.Element {
 	const subheadingCopy = getSubHeadingCopy(
 		amountIsAboveThreshold,
 		contributionType,
+		isTier3,
 		isSignedIn,
 		userTypeFromIdentityResponse,
 	);
@@ -97,8 +97,9 @@ function Subheading({
 	return (
 		<>
 			{subheadingCopy}
-			<MarketingCopy contributionType={contributionType} />
+			<MarketingCopy contributionType={contributionType} isTier3={isTier3} />
 			{userTypeFromIdentityResponse !== 'current' &&
+				!isTier3 &&
 				contributionType !== 'ONE_OFF' && (
 					<span
 						css={css`
