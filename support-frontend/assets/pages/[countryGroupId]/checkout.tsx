@@ -733,23 +733,25 @@ function CheckoutComponent({
 			stripe &&
 			elements
 		) {
-			const { paymentMethod } = await stripe.createPaymentMethod({
+			const { paymentMethod, error } = await stripe.createPaymentMethod({
 				elements,
 			});
-			if (!paymentMethod) {
-				return;
+
+			if (error) {
+				setErrorMessage('There was an issue with wallet.');
+				setErrorContext(appropriateErrorMessage(error.decline_code ?? ''));
+			} else {
+				const stripePaymentType: StripePaymentMethod =
+					stripeExpressCheckoutPaymentType === 'apple_pay'
+						? 'StripeApplePay'
+						: 'StripePaymentRequestButton';
+
+				paymentFields = {
+					paymentMethod: paymentMethod.id,
+					stripePaymentType,
+					stripePublicKey,
+				};
 			}
-
-			const stripePaymentType: StripePaymentMethod =
-				stripeExpressCheckoutPaymentType === 'apple_pay'
-					? 'StripeApplePay'
-					: 'StripePaymentRequestButton';
-
-			paymentFields = {
-				paymentMethod: paymentMethod.id,
-				stripePaymentType,
-				stripePublicKey,
-			};
 		}
 
 		if (paymentMethod === 'PayPal') {
