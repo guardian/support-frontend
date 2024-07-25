@@ -961,7 +961,10 @@ function CheckoutComponent({
 										<>
 											<ExpressCheckoutElement
 												onReady={({ availablePaymentMethods }) => {
-													console.info(availablePaymentMethods);
+													/**
+													 * This is use to show UI needed besides this Element
+													 * i.e. The "or" divider
+													 */
 													if (
 														!!availablePaymentMethods?.applePay ||
 														!!availablePaymentMethods?.googlePay
