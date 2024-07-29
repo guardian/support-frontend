@@ -11,24 +11,31 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
+	Checkbox,
 	Column,
 	Columns,
 	Container,
+	Label,
 	Radio,
 	RadioGroup,
 	TextInput,
 	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
+	Divider,
 	ErrorSummary,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
+	Elements,
+	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import type { ExpressPaymentType } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -48,7 +55,6 @@ import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
-import { StripeElements } from 'components/stripe/stripeElements';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -73,7 +79,7 @@ import {
 	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
-	type PaymentMethod,
+	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -111,6 +117,12 @@ import {
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
+/**
+ * We have not added StripeExpressCheckoutElement to the old PaymentMethod
+ * as it is heavily coupled through the code base and would require adding
+ * a lot of extra unused code to those coupled areas.
+ */
+type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
 
 /** Page styles - styles used specifically for the checkout page */
@@ -303,8 +315,14 @@ function ChangeButton({ geoId }: ChangeButtonProps) {
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	useStripeExpressCheckout?: boolean;
 };
-function CheckoutComponent({ geoId, appConfig }: Props) {
+
+function CheckoutComponent({
+	geoId,
+	appConfig,
+	useStripeExpressCheckout = false,
+}: Props) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
 
@@ -514,6 +532,20 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
+	const [
+		stripeExpressCheckoutPaymentType,
+		setStripeExpressCheckoutPaymentType,
+	] = useState<ExpressPaymentType>();
+	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
+		useState(false);
+	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
+		useState(false);
+	useEffect(() => {
+		if (stripeExpressCheckoutSuccessful) {
+			formRef.current?.requestSubmit();
+		}
+	}, [stripeExpressCheckoutSuccessful]);
+
 	/**
 	 * flag that disables the submission of the form until the stripeClientSecret is
 	 * fetched from the Stripe API with using the reCaptcha token
@@ -668,7 +700,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			cardElement &&
 			stripeClientSecret
 		) {
-			// TODO - ONE_OFF support - we'l need to implement the ONE_OFF stripe payment.
+			// TODO - ONE_OFF support - we'll need to implement the ONE_OFF stripe payment.
 			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
@@ -696,6 +728,32 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			}
 		}
 
+		if (
+			paymentMethod === 'StripeExpressCheckoutElement' &&
+			stripe &&
+			elements
+		) {
+			const { paymentMethod, error } = await stripe.createPaymentMethod({
+				elements,
+			});
+
+			if (error) {
+				setErrorMessage('There was an issue with wallet.');
+				setErrorContext(appropriateErrorMessage(error.decline_code ?? ''));
+			} else {
+				const stripePaymentType: StripePaymentMethod =
+					stripeExpressCheckoutPaymentType === 'apple_pay'
+						? 'StripeApplePay'
+						: 'StripePaymentRequestButton';
+
+				paymentFields = {
+					paymentMethod: paymentMethod.id,
+					stripePaymentType,
+					stripePublicKey,
+				};
+			}
+		}
+
 		if (paymentMethod === 'PayPal') {
 			paymentFields = {
 				recaptchaToken: '',
@@ -704,7 +762,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 			};
 		}
 
-		if (paymentMethod === 'DirectDebit') {
+		if (paymentMethod === 'DirectDebit' && recaptchaToken !== undefined) {
 			paymentFields = {
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
@@ -899,6 +957,112 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
+									{useStripeExpressCheckout && (
+										<>
+											<ExpressCheckoutElement
+												onReady={({ availablePaymentMethods }) => {
+													/**
+													 * This is use to show UI needed besides this Element
+													 * i.e. The "or" divider
+													 */
+													if (
+														!!availablePaymentMethods?.applePay ||
+														!!availablePaymentMethods?.googlePay
+													) {
+														setStripeExpressCheckoutReady(true);
+													}
+												}}
+												onClick={({ resolve }) => {
+													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+													const options = {
+														emailRequired: true,
+													};
+													resolve(options);
+												}}
+												onConfirm={async (event) => {
+													if (!(stripe && elements)) {
+														console.error('Stripe not loaded');
+														return;
+													}
+
+													const { error: submitError } =
+														await elements.submit();
+
+													if (submitError) {
+														setErrorMessage(submitError.message);
+														return;
+													}
+
+													setPaymentMethod('StripeExpressCheckoutElement');
+													setStripeExpressCheckoutPaymentType(
+														event.expressPaymentType,
+													);
+
+													const name = event.billingDetails?.name ?? '';
+
+													/**
+													 * splits by the last space, and uses the head as firstName
+													 * and tail as lastName
+													 */
+													const firstName = name
+														.substring(0, name.lastIndexOf(' ') + 1)
+														.trim();
+													const lastName = name
+														.substring(name.lastIndexOf(' ') + 1, name.length)
+														.trim();
+													setFirstName(firstName);
+													setLastName(lastName);
+
+													event.billingDetails?.email &&
+														setEmail(event.billingDetails.email);
+
+													/**
+													 * There is a useEffect that listens to this and submits the form
+													 * when true
+													 */
+													setStripeExpressCheckoutSuccessful(true);
+												}}
+												options={{
+													paymentMethods: {
+														applePay: 'auto',
+														googlePay: 'auto',
+														link: 'never',
+													},
+												}}
+											/>
+
+											{stripeExpressCheckoutReady && (
+												<Divider
+													displayText="or"
+													size="full"
+													cssOverrides={css`
+														::before {
+															margin-left: 0;
+														}
+
+														::after {
+															margin-right: 0;
+														}
+
+														margin: 0;
+														margin-top: 14px;
+														margin-bottom: 14px;
+														width: 100%;
+
+														@keyframes fadeIn {
+															0% {
+																opacity: 0;
+															}
+															100% {
+																opacity: 1;
+															}
+														}
+														animation: fadeIn 1s;
+													`}
+												/>
+											)}
+										</>
+									)}
 									<fieldset css={fieldset}>
 										<legend css={legend}>1. Your details</legend>
 										<div>
@@ -1099,9 +1263,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
-												<legend css={legend}>
-													Where should we deliver to?
-												</legend>
+												<legend css={legend}>2. Delivery address</legend>
 												<AddressFields
 													scope={'delivery'}
 													lineOne={deliveryLineOne}
@@ -1154,49 +1316,31 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 												/>
 											</fieldset>
 
-											<CheckoutDivider spacing="loose" />
-
-											<RadioGroup
-												label="Is the billing address the same as the delivery address?"
-												hideLabel
-												id="billingAddressMatchesDelivery"
-												name="billingAddressMatchesDelivery"
-												orientation="vertical"
-												error={undefined}
+											<fieldset
+												css={css`
+													margin-bottom: ${space[6]}px;
+												`}
 											>
-												<h2 css={legend}>
-													Is the billing address the same as the delivery
-													address?
-												</h2>
-
-												<Radio
-													id="qa-billing-address-same"
-													value="yes"
-													label="Yes"
-													name="billingAddressMatchesDelivery"
+												<Label
+													text="Billing address"
+													htmlFor="billingAddressMatchesDelivery"
+												/>
+												<Checkbox
 													checked={billingAddressMatchesDelivery}
+													value="yes"
 													onChange={() => {
-														setBillingAddressMatchesDelivery(true);
+														setBillingAddressMatchesDelivery(
+															!billingAddressMatchesDelivery,
+														);
 													}}
-												/>
-
-												<Radio
-													id="qa-billing-address-different"
-													label="No"
-													value="no"
+													id="billingAddressMatchesDelivery"
 													name="billingAddressMatchesDelivery"
-													checked={!billingAddressMatchesDelivery}
-													onChange={() => {
-														setBillingAddressMatchesDelivery(false);
-													}}
+													label="Billing address same as delivery address"
 												/>
-											</RadioGroup>
-
-											<CheckoutDivider spacing="loose" />
+											</fieldset>
 
 											{!billingAddressMatchesDelivery && (
 												<fieldset>
-													<legend css={legend}>Your billing address</legend>
 													<AddressFields
 														scope={'billing'}
 														lineOne={billingLineOne}
@@ -1247,14 +1391,17 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 															);
 														}}
 													/>
-													<CheckoutDivider spacing="loose" />
 												</fieldset>
 											)}
+
+											<CheckoutDivider spacing="loose" />
 										</>
 									)}
+
 									<fieldset css={fieldset}>
 										<legend css={legend}>
-											2. Payment method
+											{productDescription.deliverableTo ? '3' : '2'}. Payment
+											method
 											<SecureTransactionIndicator
 												hideText={true}
 												cssOverrides={css``}
@@ -1599,6 +1746,7 @@ function CheckoutComponent({ geoId, appConfig }: Props) {
 
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
+
 	/**
 	 * TODO: We should probaly send this down from the server as
 	 * this cookie is not always an accurate indicator as to
@@ -1612,10 +1760,45 @@ export function Checkout({ geoId, appConfig }: Props) {
 		currencyKey,
 		isTestUser,
 	);
+	const stripePromise = loadStripe(stripePublicKey);
+
+	const stripeExpressCheckoutSwitch =
+		window.guardian.settings.switches.recurringPaymentMethods
+			.stripeExpressCheckout === 'On';
+
+	let elementsOptions = {};
+	let useStripeExpressCheckout = false;
+	if (stripeExpressCheckoutSwitch) {
+		/**
+		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
+		 * which then needs this configuration.
+		 */
+		const urlSearchParams = new URLSearchParams(window.location.search);
+		const price = urlSearchParams.get('price');
+		const priceInt = price ? parseInt(price, 10) : undefined;
+		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+			elementsOptions = {
+				mode: 'payment',
+				/**
+				 * Stripe amounts are in the "smallest currency unit"
+				 * @see https://docs.stripe.com/api/charges/object
+				 * @see https://docs.stripe.com/currencies#zero-decimal
+				 */
+				amount: priceInt * 100,
+				currency: 'gbp',
+				paymentMethodCreation: 'manual',
+			} as const;
+			useStripeExpressCheckout = true;
+		}
+	}
 
 	return (
-		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
-			<CheckoutComponent geoId={geoId} appConfig={appConfig} />
-		</StripeElements>
+		<Elements stripe={stripePromise} options={elementsOptions}>
+			<CheckoutComponent
+				geoId={geoId}
+				appConfig={appConfig}
+				useStripeExpressCheckout={useStripeExpressCheckout}
+			/>
+		</Elements>
 	);
 }
