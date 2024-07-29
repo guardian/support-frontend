@@ -733,25 +733,61 @@ function CheckoutComponent({
 			stripe &&
 			elements
 		) {
-			const { paymentMethod, error } = await stripe.createPaymentMethod({
-				elements,
-			});
+			/** 1. Get a clientSecret from our server from the stripePublicKey */
+			const { client_secret: stripeClientSecret } = await fetch(
+				'/stripe/create-setup-intent/prb',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						stripePublicKey,
+					}),
+				},
+			).then(
+				(response) => response.json() as Promise<{ client_secret: string }>,
+			);
 
-			if (error) {
+			/** 2. Get the Stripe paymentMethod from the Stripe elements */
+			const { paymentMethod: stripePaymentMethod, error: paymentMethodError } =
+				await stripe.createPaymentMethod({
+					elements,
+				});
+
+			if (paymentMethodError) {
 				setErrorMessage('There was an issue with wallet.');
-				setErrorContext(appropriateErrorMessage(error.decline_code ?? ''));
-			} else {
-				const stripePaymentType: StripePaymentMethod =
-					stripeExpressCheckoutPaymentType === 'apple_pay'
-						? 'StripeApplePay'
-						: 'StripePaymentRequestButton';
-
-				paymentFields = {
-					paymentMethod: paymentMethod.id,
-					stripePaymentType,
-					stripePublicKey,
-				};
+				setErrorContext(
+					appropriateErrorMessage(paymentMethodError.decline_code ?? ''),
+				);
+				return;
 			}
+
+			/** 2. Get the setupIntent from the paymentMethod */
+			const { setupIntent, error: cardSetupError } =
+				await stripe.confirmCardSetup(stripeClientSecret, {
+					payment_method: stripePaymentMethod.id,
+				});
+
+			if (cardSetupError) {
+				setErrorMessage('There was an issue with wallet.');
+				setErrorContext(
+					appropriateErrorMessage(cardSetupError.decline_code ?? ''),
+				);
+				return;
+			}
+
+			const stripePaymentType: StripePaymentMethod =
+				stripeExpressCheckoutPaymentType === 'apple_pay'
+					? 'StripeApplePay'
+					: 'StripePaymentRequestButton';
+
+			/** 2. Pass the setupIntent through to the paymentFields sent to our /create endpoint */
+			paymentFields = {
+				paymentMethod: setupIntent.payment_method as string,
+				stripePaymentType,
+				stripePublicKey,
+			};
 		}
 
 		if (paymentMethod === 'PayPal') {
@@ -993,11 +1029,6 @@ function CheckoutComponent({
 														return;
 													}
 
-													setPaymentMethod('StripeExpressCheckoutElement');
-													setStripeExpressCheckoutPaymentType(
-														event.expressPaymentType,
-													);
-
 													const name = event.billingDetails?.name ?? '';
 
 													/**
@@ -1016,6 +1047,10 @@ function CheckoutComponent({
 													event.billingDetails?.email &&
 														setEmail(event.billingDetails.email);
 
+													setPaymentMethod('StripeExpressCheckoutElement');
+													setStripeExpressCheckoutPaymentType(
+														event.expressPaymentType,
+													);
 													/**
 													 * There is a useEffect that listens to this and submits the form
 													 * when true
@@ -1024,8 +1059,8 @@ function CheckoutComponent({
 												}}
 												options={{
 													paymentMethods: {
-														applePay: 'auto',
-														googlePay: 'auto',
+														applePay: 'always',
+														googlePay: 'always',
 														link: 'never',
 													},
 												}}
