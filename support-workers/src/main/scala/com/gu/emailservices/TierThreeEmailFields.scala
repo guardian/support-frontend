@@ -11,8 +11,22 @@ class TierThreeEmailFields(
     touchPointEnvironment: TouchPointEnvironment,
 ) {
   def build(state: SendThankYouEmailTierThreeState)(implicit ec: ExecutionContext): Future[EmailFields] = {
+    val firstPaymentDate =
+      SubscriptionEmailFieldHelpers.formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date)
+
+    val promotion = paperFieldsGenerator.getAppliedPromotion(
+      state.promoCode,
+      state.user.billingAddress.country,
+      ProductTypeRatePlans.tierThreeRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
+    )
+
+    val subscription_details = SubscriptionEmailFieldHelpers
+      .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion)
+
     val additionalFields = List(
       ("billing_period", state.product.billingPeriod.toString.toLowerCase),
+      ("first payment date", firstPaymentDate),
+      ("subscription_details", subscription_details),
     )
 
     paperFieldsGenerator
