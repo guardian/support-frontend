@@ -763,7 +763,7 @@ function CheckoutComponent({
 				return;
 			}
 
-			/** 2. Get the setupIntent from the paymentMethod */
+			/** 3. Get the setupIntent from the paymentMethod */
 			const { setupIntent, error: cardSetupError } =
 				await stripe.confirmCardSetup(stripeClientSecret, {
 					payment_method: stripePaymentMethod.id,
@@ -782,7 +782,7 @@ function CheckoutComponent({
 					? 'StripeApplePay'
 					: 'StripePaymentRequestButton';
 
-			/** 2. Pass the setupIntent through to the paymentFields sent to our /create endpoint */
+			/** 4. Pass the setupIntent through to the paymentFields sent to our /create endpoint */
 			paymentFields = {
 				paymentMethod: setupIntent.payment_method as string,
 				stripePaymentType,
