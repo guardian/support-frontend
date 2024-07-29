@@ -11,7 +11,10 @@ class TierThreeEmailFields(
     touchPointEnvironment: TouchPointEnvironment,
 ) {
   def build(state: SendThankYouEmailTierThreeState)(implicit ec: ExecutionContext): Future[EmailFields] = {
-    // TODO: don't really know what we need here yet
+    val additionalFields = List(
+      ("billing_period", state.product.billingPeriod.toString.toLowerCase),
+    )
+
     paperFieldsGenerator
       .fieldsFor(
         state.paymentMethod,
@@ -29,7 +32,7 @@ class TierThreeEmailFields(
       )
       .map(fields =>
         EmailFields(
-          fields,
+          fields ++ additionalFields,
           state.user,
           "tier-three",
         ),
