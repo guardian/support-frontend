@@ -11,6 +11,8 @@ class TierThreeEmailFields(
     touchPointEnvironment: TouchPointEnvironment,
 ) {
   def build(state: SendThankYouEmailTierThreeState)(implicit ec: ExecutionContext): Future[EmailFields] = {
+
+    /** These fields are added to align with S+ fields as T3 is a combo of S+ and GW */
     val firstPaymentDate =
       SubscriptionEmailFieldHelpers.formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date)
 
