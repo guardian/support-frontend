@@ -1012,6 +1012,7 @@ function CheckoutComponent({
 													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
 													const options = {
 														emailRequired: true,
+														shippingAddressRequired: true,
 													};
 													resolve(options);
 												}}
