@@ -1059,8 +1059,8 @@ function CheckoutComponent({
 												}}
 												options={{
 													paymentMethods: {
-														applePay: 'always',
-														googlePay: 'always',
+														applePay: 'auto',
+														googlePay: 'auto',
 														link: 'never',
 													},
 												}}
