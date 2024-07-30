@@ -9,8 +9,6 @@ import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -199,14 +197,6 @@ export type SepaAuthorisation = {
 	country?: Country;
 	streetName?: string;
 };
-export type ExistingCardAuthorisation = {
-	paymentMethod: typeof ExistingCard;
-	billingAccountId: string;
-};
-export type ExistingDirectDebitAuthorisation = {
-	paymentMethod: typeof ExistingDirectDebit;
-	billingAccountId: string;
-};
 export type AmazonPayAuthorisation = {
 	paymentMethod: typeof AmazonPay;
 	orderReferenceId?: string;
@@ -222,8 +212,6 @@ export type PaymentAuthorisation =
 	| PayPalAuthorisation
 	| DirectDebitAuthorisation
 	| SepaAuthorisation
-	| ExistingCardAuthorisation
-	| ExistingDirectDebitAuthorisation
 	| AmazonPayAuthorisation;
 
 type Status = 'failure' | 'pending' | 'success';
@@ -296,12 +284,6 @@ function regularPaymentFieldsFromAuthorisation(
 					iban: authorisation.iban.replace(/ /g, ''),
 				};
 			}
-
-		case ExistingCard:
-		case ExistingDirectDebit:
-			return {
-				billingAccountId: authorisation.billingAccountId,
-			};
 
 		case AmazonPay:
 			if (authorisation.amazonPayBillingAgreementId) {

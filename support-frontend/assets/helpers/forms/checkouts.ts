@@ -16,8 +16,6 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -44,8 +42,6 @@ export type PaymentMethodSwitch =
 	| 'sepa'
 	| 'payPal'
 	| 'stripe'
-	| 'existingCard'
-	| 'existingDirectDebit'
 	| 'amazonPay';
 
 // ----- Functions ----- //
@@ -61,12 +57,6 @@ function toPaymentMethodSwitchNaming(
 
 		case DirectDebit:
 			return 'directDebit';
-
-		case ExistingCard:
-			return 'existingCard';
-
-		case ExistingDirectDebit:
-			return 'existingDirectDebit';
 
 		case AmazonPay:
 			return 'amazonPay';
@@ -148,12 +138,7 @@ function getPaymentMethods(
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
-	const nonRegionSpecificPaymentMethods: PaymentMethod[] = [
-		ExistingCard,
-		ExistingDirectDebit,
-		Stripe,
-		PayPal,
-	];
+	const nonRegionSpecificPaymentMethods: PaymentMethod[] = [Stripe, PayPal];
 
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
@@ -195,14 +180,7 @@ function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	const pm: string | null | undefined = storage.getSession(
 		'selectedPaymentMethod',
 	);
-	const paymentMethodNames = [
-		'DirectDebit',
-		'Stripe',
-		'PayPal',
-		'ExistingCard',
-		'ExistingDirectDebit',
-		'AmazonPay',
-	];
+	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal', 'AmazonPay'];
 
 	if (pm && paymentMethodNames.includes(pm)) {
 		return pm as PaymentMethod;

@@ -17,8 +17,6 @@ export const mockSettings = {
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 			directDebit: 'Off',
-			existingCard: 'On',
-			existingDirectDebit: 'On',
 			amazonPay: 'Off',
 			sepa: 'On',
 		},

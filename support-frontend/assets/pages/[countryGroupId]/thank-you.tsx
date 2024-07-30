@@ -68,8 +68,6 @@ const OrderSchema = object({
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
-		'ExistingCard',
-		'ExistingDirectDebit',
 		'AmazonPay',
 		'None',
 	]),

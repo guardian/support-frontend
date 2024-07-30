@@ -63,16 +63,6 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		icon: <SvgAmazonPayLogoDs />,
 		accordionBody: () => <AmazonPayFormContainer />,
 	},
-	ExistingCard: {
-		id: 'qa-existing-card',
-		label: 'Credit/Debit card',
-		icon: <SvgCreditCardWithTheme />,
-	},
-	ExistingDirectDebit: {
-		id: 'qa-existing-direct-debit',
-		label: 'Direct Debit',
-		icon: <SvgDirectDebitWide size="xsmall" />,
-	},
 	None: {
 		id: 'qa-none',
 		label: 'Other Payment Method',

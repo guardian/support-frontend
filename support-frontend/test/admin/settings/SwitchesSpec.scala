@@ -70,14 +70,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Direct Debit",
           |        "state" : "On"
           |      },
-          |      "existingCard" : {
-          |        "description" : "Existing card",
-          |        "state" : "On"
-          |      },
-          |      "existingDirectDebit" : {
-          |        "description" : "Existing Direct Debit",
-          |        "state" : "On"
-          |      },
           |      "sepa" : {
           |        "description" : "SEPA",
           |        "state" : "Off"

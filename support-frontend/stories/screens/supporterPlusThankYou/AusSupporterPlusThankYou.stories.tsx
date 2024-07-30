@@ -7,8 +7,6 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -38,15 +36,7 @@ export default {
 	title: 'Screens/Supporter Plus Thank You Page/Australia',
 	argTypes: {
 		paymentMethod: {
-			options: [
-				Stripe,
-				PayPal,
-				DirectDebit,
-				Sepa,
-				ExistingCard,
-				ExistingDirectDebit,
-				AmazonPay,
-			],
+			options: [Stripe, PayPal, DirectDebit, Sepa, AmazonPay],
 			control: { type: 'radio' },
 			if: { arg: 'paymentMethod', exists: true },
 		},

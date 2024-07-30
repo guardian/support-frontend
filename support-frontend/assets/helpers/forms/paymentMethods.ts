@@ -4,8 +4,6 @@ const Stripe = 'Stripe';
 const PayPal = 'PayPal';
 const DirectDebit = 'DirectDebit';
 const Sepa = 'Sepa';
-const ExistingCard = 'ExistingCard';
-const ExistingDirectDebit = 'ExistingDirectDebit';
 const AmazonPay = 'AmazonPay';
 const None = 'None';
 
@@ -14,8 +12,6 @@ export type PaymentMethodMap<T> = {
 	PayPal: T;
 	DirectDebit: T;
 	Sepa: T;
-	ExistingCard: T;
-	ExistingDirectDebit: T;
 	None: T;
 	AmazonPay: T;
 };
@@ -25,8 +21,6 @@ export type PaymentMethod =
 	| typeof PayPal
 	| typeof DirectDebit
 	| typeof Sepa
-	| typeof ExistingCard
-	| typeof ExistingDirectDebit
 	| typeof AmazonPay
 	| typeof None;
 
@@ -40,16 +34,7 @@ export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 	Stripe,
 ];
 
-const paymentMethods = [
-	Stripe,
-	PayPal,
-	DirectDebit,
-	Sepa,
-	ExistingCard,
-	ExistingDirectDebit,
-	AmazonPay,
-	None,
-];
+const paymentMethods = [Stripe, PayPal, DirectDebit, Sepa, AmazonPay, None];
 
 export const isPaymentMethod = (
 	paymentMethod: unknown,
@@ -59,12 +44,4 @@ export const isPaymentMethod = (
 	);
 };
 
-export {
-	Stripe,
-	PayPal,
-	DirectDebit,
-	Sepa,
-	ExistingCard,
-	ExistingDirectDebit,
-	AmazonPay,
-};
+export { Stripe, PayPal, DirectDebit, Sepa, AmazonPay };
