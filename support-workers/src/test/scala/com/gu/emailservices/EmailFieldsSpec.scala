@@ -156,7 +156,8 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
 class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
 
   it should "generate the right json for SupporterPlus" in {
-    val created = DateTime.now()
+    val today = new LocalDate(2019, 1, 14)
+    val created = new DateTime(2019, 1, 14, 0, 0)
     val expected = parse(s"""
                            |{
                            |  "To" : {
@@ -169,7 +170,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
                            |        "Mandate ID" : "65HK26E",
                            |        "sort code" : "20-20-20",
                            |        "payment method" : "Direct Debit",
-                           |        "first payment date" : "Thursday, 8 August 2024",
+                           |        "first payment date" : "Thursday, 24 January 2019",
                            |        "subscription_details" : "£10.00 for the first month, then £12.00 every month",
                            |        "zuorasubscriberid" : "A-S00045678",
                            |        "last_name" : "Mouse",
@@ -185,7 +186,6 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
                            |  "IdentityUserId" : "1234"
                            |}""".stripMargin)
 
-    val today = new LocalDate(2019, 1, 14)
     val state = SendThankYouEmailSupporterPlusState(
       User(
         "1234",
