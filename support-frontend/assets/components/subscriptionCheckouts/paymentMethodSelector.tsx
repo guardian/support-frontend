@@ -6,7 +6,6 @@ import {
 	SvgDirectDebit,
 	SvgPayPal,
 } from '@guardian/source/react-components';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import Rows from 'components/base/rows';
@@ -20,7 +19,6 @@ type PropTypes = {
 	paymentMethod: Option<PaymentMethod>;
 	setPaymentMethod: (method: PaymentMethod) => void;
 	validationError: string | undefined;
-	fullExistingPaymentMethods?: RecentlySignedInExistingPaymentMethod[];
 };
 
 type RadioWithImagePropTypes = {

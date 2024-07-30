@@ -120,9 +120,6 @@ type RegularSepaPaymentFields = {
 type GiftRedemption = {
 	redemptionCode: string;
 };
-type RegularExistingPaymentFields = {
-	billingAccountId: string;
-};
 type RegularAmazonPayPaymentFields = {
 	amazonPayBillingAgreementId: string;
 };
@@ -131,7 +128,6 @@ export type RegularPaymentFields =
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| RegularExistingPaymentFields
 	| GiftRedemption
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
@@ -296,10 +292,6 @@ function regularPaymentFieldsFromAuthorisation(
 			throw new Error(
 				'Cant create a regular Amazon Pay authorisation for one off',
 			);
-
-		// TODO: what is a sane way to handle such cases?
-		default:
-			throw new Error('If Flow works, this cannot happen');
 	}
 }
 
