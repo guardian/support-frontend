@@ -317,6 +317,64 @@ type Props = {
 	appConfig: AppConfig;
 	useStripeExpressCheckout?: boolean;
 };
+export function Checkout({ geoId, appConfig }: Props) {
+	const { currencyKey } = getGeoIdConfig(geoId);
+
+	/**
+	 * TODO: We should probaly send this down from the server as
+	 * this cookie is not always an accurate indicator as to
+	 * whether an account is still valid
+	 */
+	const isTestUser = !!cookie.get('_test_username');
+	const stripePublicKey = getStripeKey(
+		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
+		'REGULAR',
+		countryId,
+		currencyKey,
+		isTestUser,
+	);
+	const stripePromise = loadStripe(stripePublicKey);
+
+	const stripeExpressCheckoutSwitch =
+		window.guardian.settings.switches.recurringPaymentMethods
+			.stripeExpressCheckout === 'On';
+
+	let elementsOptions = {};
+	let useStripeExpressCheckout = false;
+	if (stripeExpressCheckoutSwitch) {
+		/**
+		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
+		 * which then needs this configuration.
+		 */
+		const urlSearchParams = new URLSearchParams(window.location.search);
+		const price = urlSearchParams.get('price');
+		const priceInt = price ? parseInt(price, 10) : undefined;
+		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+			elementsOptions = {
+				mode: 'payment',
+				/**
+				 * Stripe amounts are in the "smallest currency unit"
+				 * @see https://docs.stripe.com/api/charges/object
+				 * @see https://docs.stripe.com/currencies#zero-decimal
+				 */
+				amount: priceInt * 100,
+				currency: 'gbp',
+				paymentMethodCreation: 'manual',
+			} as const;
+			useStripeExpressCheckout = true;
+		}
+	}
+
+	return (
+		<Elements stripe={stripePromise} options={elementsOptions}>
+			<CheckoutComponent
+				geoId={geoId}
+				appConfig={appConfig}
+				useStripeExpressCheckout={useStripeExpressCheckout}
+			/>
+		</Elements>
+	);
+}
 
 function CheckoutComponent({
 	geoId,
@@ -1776,64 +1834,5 @@ function CheckoutComponent({
 				</LoadingOverlay>
 			)}
 		</PageScaffold>
-	);
-}
-
-export function Checkout({ geoId, appConfig }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
-
-	/**
-	 * TODO: We should probaly send this down from the server as
-	 * this cookie is not always an accurate indicator as to
-	 * whether an account is still valid
-	 */
-	const isTestUser = !!cookie.get('_test_username');
-	const stripePublicKey = getStripeKey(
-		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
-		'REGULAR',
-		countryId,
-		currencyKey,
-		isTestUser,
-	);
-	const stripePromise = loadStripe(stripePublicKey);
-
-	const stripeExpressCheckoutSwitch =
-		window.guardian.settings.switches.recurringPaymentMethods
-			.stripeExpressCheckout === 'On';
-
-	let elementsOptions = {};
-	let useStripeExpressCheckout = false;
-	if (stripeExpressCheckoutSwitch) {
-		/**
-		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
-		 * which then needs this configuration.
-		 */
-		const urlSearchParams = new URLSearchParams(window.location.search);
-		const price = urlSearchParams.get('price');
-		const priceInt = price ? parseInt(price, 10) : undefined;
-		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
-			elementsOptions = {
-				mode: 'payment',
-				/**
-				 * Stripe amounts are in the "smallest currency unit"
-				 * @see https://docs.stripe.com/api/charges/object
-				 * @see https://docs.stripe.com/currencies#zero-decimal
-				 */
-				amount: priceInt * 100,
-				currency: 'gbp',
-				paymentMethodCreation: 'manual',
-			} as const;
-			useStripeExpressCheckout = true;
-		}
-	}
-
-	return (
-		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutComponent
-				geoId={geoId}
-				appConfig={appConfig}
-				useStripeExpressCheckout={useStripeExpressCheckout}
-			/>
-		</Elements>
 	);
 }
