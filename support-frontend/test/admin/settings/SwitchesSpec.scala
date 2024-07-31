@@ -159,7 +159,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
       decode[Switches](json) mustBe (Right(
         Switches(
           oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On, On),
-          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off, Off),
+          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, Off, Off),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
           subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
           featureSwitches = FeatureSwitches(On, On, Off),
