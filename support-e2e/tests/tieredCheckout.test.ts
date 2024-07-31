@@ -11,132 +11,166 @@ import {
 	setTestUserRequiredDetails,
 } from './utils/testUserDetails';
 
-interface TestFields {
-	email: string;
-	firstName: string;
-	lastName: string;
-	state?: string;
+interface TestAddress {
 	postCode?: string;
+	state?: string;
 	firstLine?: string;
 	city?: string;
 }
 
+interface TestFields {
+	email: string;
+	firstName: string;
+	lastName: string;
+	addresses?: TestAddress[]; // 1st Delivery, 2nd Billing
+}
+
 export interface TestDetails {
 	tier: 1 | 2 | 3;
-	frequency: 'Monthly' | 'Annual';
+	ratePlan: 'Monthly' | 'Annual';
 	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	fields: TestFields;
-	country?: 'US' | 'AU';
-	deliveryBillingAddressDiffer?: boolean;
+	internationalisationId?: 'US' | 'AU';
 }
 
 const testsDetails: TestDetails[] = [
 	{
 		tier: 1,
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		paymentType: 'Direct debit',
 		fields: { email: email(), firstName: firstName(), lastName: lastName() },
 	},
 	{
 		tier: 1,
-		frequency: 'Annual',
+		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '92010',
-			state: 'New York',
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+				},
+			],
 		},
-		country: 'US',
+		internationalisationId: 'US',
 	},
 	{
 		tier: 1,
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		paymentType: 'PayPal',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '2000',
-			state: 'New South Wales',
+			addresses: [
+				{
+					state: 'New South Wales',
+				},
+			],
 		},
-		country: 'AU',
+		internationalisationId: 'AU',
 	},
 	{
 		tier: 2,
-		frequency: 'Annual',
+		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '92010',
-			state: 'New York',
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+				},
+			],
 		},
-		country: 'US',
+		internationalisationId: 'US',
 	},
 	{
 		tier: 2,
 		paymentType: 'Direct debit',
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		fields: { email: email(), firstName: firstName(), lastName: lastName() },
 	},
 	{
 		tier: 2,
 		paymentType: 'PayPal',
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '2000',
-			state: 'New South Wales',
+			addresses: [
+				{
+					state: 'New South Wales',
+				},
+			],
 		},
-		country: 'AU',
+		internationalisationId: 'AU',
 	},
 	{
 		tier: 3,
 		paymentType: 'Credit/Debit card',
-		frequency: 'Annual',
+		ratePlan: 'Annual',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '2000',
-			state: 'New South Wales',
-			firstLine: '1 George Street',
-			city: 'Sydney',
+			addresses: [
+				{
+					postCode: '2010',
+					state: 'New South Wales',
+					firstLine: '19 Foster Street',
+					city: 'Sydney',
+				},
+			],
 		},
-		country: 'AU',
+		internationalisationId: 'AU',
 	},
 	{
 		tier: 3,
 		paymentType: 'Direct debit',
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: 'N1 9GU',
-			firstLine: '90 Yorke Way',
-			city: 'London',
+			addresses: [
+				{
+					postCode: 'M1 1PW',
+					firstLine: '3 Cross Street',
+					city: 'Manchester',
+				},
+				{
+					postCode: 'N1 9GU',
+					firstLine: '90 York Way',
+					city: 'London',
+				},
+			],
 		},
 	},
 	{
 		tier: 3,
 		paymentType: 'PayPal',
-		frequency: 'Monthly',
+		ratePlan: 'Monthly',
 		fields: {
 			email: email(),
 			firstName: firstName(),
 			lastName: lastName(),
-			postCode: '90210',
-			state: 'New York',
-			firstLine: '1 Fifth Avenue',
-			city: 'New York',
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+					firstLine: '61 Broadway',
+					city: 'New York',
+				},
+			],
 		},
-		country: 'US',
+		internationalisationId: 'US',
 	},
 ];
 
@@ -146,24 +180,25 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 	testsDetails.forEach((testDetails) => {
 		test(`Tier-${
 			testDetails.tier
-		} ${testDetails.frequency} with ${testDetails.paymentType} - ${
-			testDetails.country ?? 'UK'
+		} ${testDetails.ratePlan} with ${testDetails.paymentType} - ${
+			testDetails.internationalisationId ?? 'UK'
 		}`, async ({ context, baseURL }) => {
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
-			const ctaCopy = testDetails.country === 'US' ? 'Subscribe' : 'Support';
+			const ctaCopy =
+				testDetails.internationalisationId === 'US' ? 'Subscribe' : 'Support';
 
 			await setupPage(
 				page,
 				context,
 				baseURL,
 				`/${
-					testDetails.country?.toLowerCase() || 'uk'
+					testDetails.internationalisationId?.toLowerCase() || 'uk'
 				}/contribute#ab-tierThreeFromApi=variant`, // remove when tier3 generic checkout live
 			);
-			await page.getByRole('tab').getByText(testDetails.frequency).click();
+			await page.getByRole('tab').getByText(testDetails.ratePlan).click();
 			await page
 				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
@@ -201,7 +236,7 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 				await checkRecaptcha(page);
 				// Define the variable for the time period
 				const frequencyLabel =
-					testDetails.frequency === 'Annual' ? 'year' : 'month';
+					testDetails.ratePlan === 'Annual' ? 'year' : 'month';
 				var paymentButtonRegex = new RegExp(
 					'(Pay|Support us with) (£|\\$)([0-9]+|([0-9]+.[0-9]+)) per (' +
 						frequencyLabel +

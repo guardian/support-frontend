@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { email, firstName, lastName } from './utils/users';
-import { setTestUserDetails } from './utils/testUserDetails';
+import { setTestUserRequiredDetails } from './utils/testUserDetails';
 import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
@@ -62,7 +62,12 @@ test.describe('Generic Checkout', () => {
 			const testEmail = email();
 			await setupPage(page, context, baseURL, url);
 
-			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
+			await setTestUserRequiredDetails(
+				page,
+				testFirstName,
+				testLastName,
+				testEmail,
+			);
 			if (internationalisationId === 'us') {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
 				await page.getByLabel('ZIP code').fill('90210');

@@ -16,10 +16,6 @@ export const setTestUserDetails = async (
 	page: Page,
 	testDetails: TestDetails,
 ) => {
-	const addressPrefix = testDetails.deliveryBillingAddressDiffer
-		? 'billing'
-		: 'delivery';
-
 	await setTestUserRequiredDetails(
 		page,
 		testDetails.fields.firstName,
@@ -27,25 +23,52 @@ export const setTestUserDetails = async (
 		testDetails.fields.email,
 	);
 
-	if (testDetails.country === 'US' || testDetails.country === 'AU') {
+	if (testDetails.fields.addresses && testDetails.fields.addresses.length > 1) {
 		await page
-			.getByLabel('State')
-			.selectOption({ label: testDetails.fields.state });
-		if (testDetails.country === 'US') {
-			await page.getByLabel('ZIP code').fill(testDetails.fields.postCode ?? '');
-		}
+			.getByRole('checkbox', {
+				name: 'Billing address same as delivery address',
+			})
+			.uncheck();
 	}
 
-	if (testDetails.tier === 3) {
-		await page
-			.getByLabel(testDetails.country === 'US' ? 'ZIP code' : 'Postcode')
-			.last()
-			.fill(testDetails.fields.postCode ?? '');
+	if (testDetails.fields.addresses) {
+		let index = 0;
+		// To run in sequence using async/await, for required over forEach
+		for (const address of testDetails.fields.addresses) {
+			if (
+				testDetails.internationalisationId === 'US' ||
+				testDetails.internationalisationId === 'AU'
+			) {
+				await page
+					.getByLabel('State')
+					.nth(index)
+					.selectOption({ label: address.state });
+			}
 
-		await page
-			.getByLabel(`Address Line 1`)
-			.fill(testDetails.fields.firstLine ?? '');
+			if (address.postCode) {
+				await page
+					.getByLabel(
+						testDetails.internationalisationId === 'US'
+							? 'ZIP code'
+							: 'Postcode',
+					)
+					// Skip UK postCode lookup component
+					.nth(testDetails.internationalisationId ? index : index + 1)
+					.fill(address.postCode);
+			}
 
-		await page.getByLabel(`Town/City`).fill(testDetails.fields.city ?? '');
+			if (testDetails.tier === 3) {
+				await page
+					.getByLabel(`Address Line 1`)
+					.nth(index)
+					.fill(address.firstLine ?? '');
+
+				await page
+					.getByLabel(`Town/City`)
+					.nth(index)
+					.fill(address.city ?? '');
+			}
+			index++;
+		}
 	}
 };
