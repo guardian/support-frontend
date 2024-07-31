@@ -277,9 +277,11 @@ const testDetailsPromo = [
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
 	},
 ];
-test.describe('Supporter Plus promoCodes', () => {
+test.describe('SupporterPlus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-${testDetails.tier} with Credit/Debit card - UK`, async ({
+		test(`Tier-${
+			testDetails.tier
+		} incl PromoCode ${testDetails.frequency} with Credit/Debit card - UK`, async ({
 			context,
 			baseURL,
 		}) => {
