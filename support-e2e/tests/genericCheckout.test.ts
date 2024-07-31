@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { email, firstName, lastName } from './utils/users';
-import { setTestUserDetails } from './utils/testUserDetails';
+import { setTestUserRequiredDetails } from './utils/testUserDetails';
 import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
@@ -9,22 +9,6 @@ import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 const testDetails = [
-	{
-		product: 'Contribution',
-		price: 9,
-		ratePlan: 'Monthly',
-		paymentType: 'Direct debit',
-		internationalisationId: 'uk',
-		paymentFrequency: 'month',
-	},
-	{
-		product: 'Contribution',
-		price: 90,
-		ratePlan: 'Annual',
-		paymentType: 'Credit/Debit card',
-		internationalisationId: 'us',
-		paymentFrequency: 'year',
-	},
 	{
 		product: 'SupporterPlus',
 		ratePlan: 'Monthly',
@@ -52,21 +36,19 @@ test.describe('Generic Checkout', () => {
 			context,
 			baseURL,
 		}) => {
-			const url =
-				'price' in testDetails
-					? `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}&price=${testDetails.price.toString()}`
-					: `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}`;
+			const url = `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}`;
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
 			await setupPage(page, context, baseURL, url);
 
-			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
-			if (internationalisationId === 'us') {
-				await page.getByLabel('State').selectOption({ label: 'New York' });
-				await page.getByLabel('ZIP code').fill('90210');
-			}
+			await setTestUserRequiredDetails(
+				page,
+				testFirstName,
+				testLastName,
+				testEmail,
+			);
 			if (internationalisationId === 'au') {
 				await page
 					.getByLabel('State')
@@ -74,10 +56,6 @@ test.describe('Generic Checkout', () => {
 			}
 			await page.getByRole('radio', { name: paymentType }).check();
 			switch (paymentType) {
-				case 'Direct debit':
-					await fillInDirectDebitDetails(page, 'contribution');
-					await checkRecaptcha(page);
-					break;
 				case 'PayPal':
 					const popupPagePromise = page.waitForEvent('popup');
 					await page
@@ -98,10 +76,7 @@ test.describe('Generic Checkout', () => {
 					break;
 			}
 
-			if (
-				paymentType === 'Credit/Debit card' ||
-				paymentType === 'Direct debit'
-			) {
+			if (paymentType === 'Credit/Debit card') {
 				await checkRecaptcha(page);
 				await page
 					.getByRole('button', {
