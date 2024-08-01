@@ -1013,6 +1013,13 @@ function CheckoutComponent({
 													const options = {
 														emailRequired: true,
 														shippingAddressRequired: true,
+														shippingRates: [
+															{
+																id: 'gw',
+																amount: 0,
+																displayName: 'Delivery',
+															},
+														],
 													};
 													resolve(options);
 												}}
