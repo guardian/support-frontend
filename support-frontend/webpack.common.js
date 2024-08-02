@@ -123,6 +123,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 						// so we need our Babel to make it compatible with things like public class fields
 						/@guardian\/source/,
 						/@guardian\/source-development-kitchen/,
+						/@guardian\/support-service-lambdas/,
 					],
 				},
 				use: [
