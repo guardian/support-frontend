@@ -54,6 +54,7 @@ case class OneOffPaymentMethodsSwitchesTypes(
     stripe: SwitchDetails,
     stripeApplePay: SwitchDetails,
     stripePaymentRequestButton: SwitchDetails,
+    stripeExpressCheckout: SwitchDetails,
     payPal: SwitchDetails,
     amazonPay: SwitchDetails,
 )

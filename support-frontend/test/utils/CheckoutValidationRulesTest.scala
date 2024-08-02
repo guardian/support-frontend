@@ -40,7 +40,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, Off, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -57,7 +57,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, Off, On, On, On, Off, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -67,7 +67,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, Off),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -78,12 +78,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, Off, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Stripe  but the switch  in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Stripe but the switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
@@ -94,12 +94,12 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
-  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch  in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
@@ -110,7 +110,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, Off, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, Off, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -126,7 +126,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -136,7 +136,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(AmazonPayPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -146,7 +146,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(ExistingPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, Off, Off, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, Off, Off, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -156,7 +156,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, Off),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -171,7 +171,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
       paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(Off, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -193,7 +193,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, Off, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
@@ -205,7 +205,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -222,7 +222,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -232,7 +232,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -243,7 +243,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -259,7 +259,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -275,7 +275,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -291,7 +291,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -301,7 +301,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(AmazonPayPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -311,7 +311,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(ExistingPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -321,7 +321,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = SupporterPlus(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -336,7 +336,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       ),
       paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -358,7 +358,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         ),
       ),
       switches = TestData.buildSwitches(
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
         SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Valid
@@ -790,11 +790,11 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 object TestData {
   def buildSwitches(
       recurringPaymentMethodSwitches: RecurringPaymentMethodSwitches =
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On, On),
       subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches =
         SubscriptionsPaymentMethodSwitches(On, On, On),
   ): Switches = Switches(
-    OneOffPaymentMethodSwitches(On, On, On, On, On),
+    OneOffPaymentMethodSwitches(On, On, On, On, On, On),
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
     SubscriptionsSwitches(On, On, On),

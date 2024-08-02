@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { email, firstName, lastName } from './utils/users';
-import { setTestUserDetails } from './utils/testUserDetails';
 import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
@@ -8,64 +7,203 @@ import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 import {
-	checkAbandonedBasketCookieExists,
-	checkAbandonedBasketCookieRemoved,
-} from './utils/cookies';
+	setTestUserDetails,
+	setTestUserRequiredDetails,
+} from './utils/testUserDetails';
 
-interface TestDetails {
+interface TestAddress {
+	postCode?: string;
+	state?: string;
+	firstLine?: string;
+	city?: string;
+}
+
+interface TestFields {
+	email: string;
+	firstName: string;
+	lastName: string;
+	addresses?: TestAddress[]; // 1st Delivery, 2nd Billing
+}
+
+export interface TestDetails {
 	tier: 1 | 2 | 3;
-	frequency: 'Monthly' | 'Annual';
-	paymentType?: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
-	country?: 'US' | 'AU';
+	ratePlan: 'Monthly' | 'Annual';
+	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
+	fields: TestFields;
+	internationalisationId?: 'US' | 'AU';
 }
 
 const testsDetails: TestDetails[] = [
-	{ paymentType: 'Credit/Debit card', tier: 1, frequency: 'Monthly' },
-	{ paymentType: 'Credit/Debit card', tier: 2, frequency: 'Annual' },
-	{ paymentType: 'Direct debit', tier: 2, frequency: 'Monthly' },
-	{ paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
 	{
-		paymentType: 'Credit/Debit card',
 		tier: 1,
-		frequency: 'Monthly',
-		country: 'US',
+		ratePlan: 'Monthly',
+		paymentType: 'Direct debit',
+		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+	},
+	{
+		tier: 1,
+		ratePlan: 'Annual',
+		paymentType: 'Credit/Debit card',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+				},
+			],
+		},
+		internationalisationId: 'US',
+	},
+	{
+		tier: 1,
+		ratePlan: 'Monthly',
+		paymentType: 'PayPal',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					state: 'New South Wales',
+				},
+			],
+		},
+		internationalisationId: 'AU',
+	},
+	{
+		tier: 2,
+		ratePlan: 'Annual',
+		paymentType: 'Credit/Debit card',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+				},
+			],
+		},
+		internationalisationId: 'US',
+	},
+	{
+		tier: 2,
+		paymentType: 'Direct debit',
+		ratePlan: 'Monthly',
+		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+	},
+	{
+		tier: 2,
+		paymentType: 'PayPal',
+		ratePlan: 'Monthly',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					state: 'New South Wales',
+				},
+			],
+		},
+		internationalisationId: 'AU',
+	},
+	{
+		tier: 3,
+		paymentType: 'Credit/Debit card',
+		ratePlan: 'Annual',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					postCode: '2010',
+					state: 'New South Wales',
+					firstLine: '19 Foster Street',
+					city: 'Sydney',
+				},
+			],
+		},
+		internationalisationId: 'AU',
+	},
+	{
+		tier: 3,
+		paymentType: 'Direct debit',
+		ratePlan: 'Monthly',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					postCode: 'M1 1PW',
+					firstLine: '3 Cross Street',
+					city: 'Manchester',
+				},
+				{
+					postCode: 'N1 9GU',
+					firstLine: '90 York Way',
+					city: 'London',
+				},
+			],
+		},
+	},
+	{
+		tier: 3,
+		paymentType: 'PayPal',
+		ratePlan: 'Monthly',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
+				{
+					postCode: '10006',
+					state: 'New York',
+					firstLine: '61 Broadway',
+					city: 'New York',
+				},
+			],
+		},
+		internationalisationId: 'US',
 	},
 ];
 
 afterEachTasks(test);
 
-test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
+test.describe('Contribute/Subscribe Tiered Checkout', () => {
 	testsDetails.forEach((testDetails) => {
-		test(`${testDetails.frequency} Subscription/Contribution at Tier-${
+		test(`Tier-${
 			testDetails.tier
-		} with ${testDetails.paymentType} - ${
-			testDetails.country ?? 'UK'
+		} ${testDetails.ratePlan} with ${testDetails.paymentType} - ${
+			testDetails.internationalisationId ?? 'UK'
 		}`, async ({ context, baseURL }) => {
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
-			const ctaCopy = testDetails.country === 'US' ? 'Subscribe' : 'Support';
+			const ctaCopy =
+				testDetails.internationalisationId === 'US' ? 'Subscribe' : 'Support';
 
 			await setupPage(
 				page,
 				context,
 				baseURL,
 				`/${
-					testDetails.country?.toLowerCase() || 'uk'
-				}/contribute#ab-abandonedBasket=variant`, // remove once AB test is over
+					testDetails.internationalisationId?.toLowerCase() || 'uk'
+				}/contribute#ab-tierThreeFromApi=variant`, // remove when tier3 generic checkout live
 			);
-			await page.getByRole('tab').getByText(testDetails.frequency).click();
+			await page.getByRole('tab').getByText(testDetails.ratePlan).click();
 			await page
 				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
-			await checkAbandonedBasketCookieExists(context);
-			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
-			if (testDetails.country === 'US') {
-				await page.getByLabel('State').selectOption({ label: 'New York' });
-				await page.getByLabel('ZIP code').fill('90210');
-			}
+			await setTestUserDetails(page, testDetails);
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
 				case 'Direct debit':
@@ -98,7 +236,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				await checkRecaptcha(page);
 				// Define the variable for the time period
 				const frequencyLabel =
-					testDetails.frequency === 'Annual' ? 'year' : 'month';
+					testDetails.ratePlan === 'Annual' ? 'year' : 'month';
 				var paymentButtonRegex = new RegExp(
 					'(Pay|Support us with) (£|\\$)([0-9]+|([0-9]+.[0-9]+)) per (' +
 						frequencyLabel +
@@ -111,7 +249,6 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			).toBeVisible({
 				timeout: 600000,
 			});
-			await checkAbandonedBasketCookieRemoved(context);
 		});
 	});
 });
@@ -140,9 +277,11 @@ const testDetailsPromo = [
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
 	},
 ];
-test.describe('Supporter Plus promoCodes', () => {
+test.describe('SupporterPlus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-${testDetails.tier} with Credit/Debit card - UK`, async ({
+		test(`Tier-${
+			testDetails.tier
+		} incl PromoCode ${testDetails.frequency} with Credit/Debit card - UK`, async ({
 			context,
 			baseURL,
 		}) => {
@@ -177,7 +316,12 @@ test.describe('Supporter Plus promoCodes', () => {
 			await expect(
 				page.getByText(testDetails.expectedCheckoutTotalText).first(),
 			).toBeVisible();
-			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
+			await setTestUserRequiredDetails(
+				page,
+				testFirstName,
+				testLastName,
+				testEmail,
+			);
 			await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 			await fillInCardDetails(page);
 			await checkRecaptcha(page);

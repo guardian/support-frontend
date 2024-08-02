@@ -182,7 +182,8 @@ GET /p/:promoCode                                                 controllers.Pr
 GET /prices                                                       controllers.PricesController.getPrices()
 
 # ----- Verification ----- #
-
+# This has to be here to work in PROD
+# Not 100% sure why as it works locally via the /*path route
 GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
 
 # ----- Assets ----- #

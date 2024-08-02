@@ -42,6 +42,8 @@ case class OneOffPaymentMethodSwitches(
     stripe: SwitchState,
     stripeApplePay: SwitchState,
     stripePaymentRequestButton: SwitchState,
+    // @see https://docs.stripe.com/elements/express-checkout-element
+    stripeExpressCheckout: SwitchState,
     payPal: SwitchState,
     amazonPay: SwitchState,
 )
@@ -50,6 +52,8 @@ case class RecurringPaymentMethodSwitches(
     stripe: SwitchState,
     stripeApplePay: SwitchState,
     stripePaymentRequestButton: SwitchState,
+    // @see https://docs.stripe.com/elements/express-checkout-element
+    stripeExpressCheckout: SwitchState,
     payPal: SwitchState,
     directDebit: SwitchState,
     existingCard: SwitchState,

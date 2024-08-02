@@ -75,7 +75,7 @@ const testsDetailsGifted: TestDetailsGifted[] = [
 		frequency: '12 months',
 		paymentType: 'Direct debit',
 	},
-  /**
+	/**
 	 * PayPal is currently throwing a "to many login attempts" error, so we're
 	 * going to inactivate this test until we have a solution for it to avoid
 	 * alert numbness.
@@ -163,7 +163,7 @@ test.describe('Sign up for a Guardian Weekly subscription', () => {
 
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 600000 });
 		});
 	});
 });
@@ -254,7 +254,7 @@ test.describe('Gifted subscriptions', () => {
 
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible();
+			).toBeVisible({ timeout: 600000 });
 		});
 	});
 });

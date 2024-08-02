@@ -63,6 +63,7 @@ class AmazonPayBackendIntegrationSpec
                 SwitchDetails(On),
                 SwitchDetails(On),
                 SwitchDetails(On),
+                SwitchDetails(On),
               ),
             ),
           ),

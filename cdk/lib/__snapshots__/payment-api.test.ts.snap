@@ -127,6 +127,37 @@ exports[`The Payment API stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "AllowKnownMethods07D772B3": {
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "TargetGroupPaymentapiE63889C3",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": [
+          {
+            "Field": "http-request-method",
+            "HttpRequestMethodConfig": {
+              "Values": [
+                "GET",
+                "POST",
+                "OPTIONS",
+                "DELETE",
+                "HEAD",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": {
+          "Ref": "ListenerPaymentapi860EC20D",
+        },
+        "Priority": 1,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
     "AmazonPayPaymentErrorAECECF4D": {
       "Properties": {
         "ActionsEnabled": true,
@@ -250,6 +281,35 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
+    },
+    "BlockUnknownMethods281EDB58": {
+      "Properties": {
+        "Actions": [
+          {
+            "FixedResponseConfig": {
+              "ContentType": "application/json",
+              "MessageBody": "Unsupported http method",
+              "StatusCode": "400",
+            },
+            "Type": "fixed-response",
+          },
+        ],
+        "Conditions": [
+          {
+            "Field": "path-pattern",
+            "PathPatternConfig": {
+              "Values": [
+                "*",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": {
+          "Ref": "ListenerPaymentapi860EC20D",
+        },
+        "Priority": 2,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
     },
     "CertificatePaymentapi8AACB639": {
       "DeletionPolicy": "Retain",

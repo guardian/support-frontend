@@ -31,7 +31,7 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 			<>
 				<h1 css={headerTitleText}>
 					Thank you {name}for supporting us with{' '}
-					<YellowAmount amount={promotionPrice} currency={isoCurrency} />
+					<YellowHighlight amount={promotionPrice} currency={isoCurrency} />
 					{`/month`}
 					<sup css={supCss}>*</sup>
 				</h1>
@@ -63,7 +63,7 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 	return (
 		<h1 css={headerTitleText}>
 			Thank you {name}for supporting us with{' '}
-			<YellowAmount currency={isoCurrency} amount={amount} /> each month ❤️
+			<YellowHighlight currency={isoCurrency} amount={amount} /> each month ❤️
 		</h1>
 	);
 }
@@ -82,7 +82,7 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 			<>
 				<h1 css={headerTitleText}>
 					Thank you {name}for supporting us with{' '}
-					<YellowAmount amount={promotionPrice} currency={isoCurrency} />
+					<YellowHighlight amount={promotionPrice} currency={isoCurrency} />
 					{`/year`}
 					<sup css={supCss}>*</sup>
 				</h1>
@@ -119,7 +119,7 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 	return (
 		<h1 css={headerTitleText}>
 			Thank you {name}for supporting us with{' '}
-			<YellowAmount currency={isoCurrency} amount={amount} /> each year ❤️
+			<YellowHighlight currency={isoCurrency} amount={amount} /> each year ❤️
 		</h1>
 	);
 }
@@ -131,16 +131,19 @@ const yellowAmountText = css`
 type YellowAmountProps = {
 	amount: number;
 	currency: IsoCurrency;
+	productName?: string;
 };
-function YellowAmount({ amount, currency }: YellowAmountProps) {
+function YellowHighlight({ amount, currency, productName }: YellowAmountProps) {
 	return (
 		<span css={yellowAmountText}>
-			{formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount,
-				false,
-			)}
+			{!productName &&
+				formatAmount(
+					currencies[currency],
+					spokenCurrencies[currency],
+					amount,
+					false,
+				)}
+			{productName && productName}
 		</span>
 	);
 }
@@ -152,9 +155,18 @@ const headerTitleText = css`
 		font-size: 40px;
 	}
 `;
+const tier3HeaderTitleText = css`
+	${titlepiece.small()};
+	font-size: 24px;
+	${from.tablet} {
+		font-size: 28px;
+	}
+`;
+
 type HeadingProps = {
 	name: string | null;
 	isOneOffPayPal: boolean;
+	isTier3: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
@@ -163,6 +175,7 @@ type HeadingProps = {
 function Heading({
 	name,
 	isOneOffPayPal,
+	isTier3,
 	amount,
 	currency,
 	contributionType,
@@ -180,12 +193,26 @@ function Heading({
 		);
 	}
 
+	if (isTier3) {
+		return (
+			<h1 css={tier3HeaderTitleText}>
+				Thank you {maybeNameAndTrailingSpace}for subscribing to{' '}
+				<YellowHighlight
+					currency={currency}
+					amount={amount}
+					productName={'Digital + print.'}
+				/>{' '}
+				Your valued support powers our journalism.
+			</h1>
+		);
+	}
+
 	switch (contributionType) {
 		case 'ONE_OFF':
 			return (
 				<h1 css={headerTitleText}>
 					Thank you for supporting us today with{' '}
-					<YellowAmount currency={currency} amount={amount} /> ❤️
+					<YellowHighlight currency={currency} amount={amount} /> ❤️
 				</h1>
 			);
 

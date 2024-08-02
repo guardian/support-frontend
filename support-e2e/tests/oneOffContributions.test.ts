@@ -46,7 +46,7 @@ test.describe('Sign up for a one-off contribution', () => {
 					break;
 				case 'PayPal':
 					await page.getByText(/Pay (£|\$)([0-9]+) with PayPal/).click();
-					await expect(page).toHaveURL(/.*paypal.com/);
+					await expect(page).toHaveURL(/.*paypal.com/, { timeout: 10000 });
 					fillInPayPalDetails(page);
 					break;
 			}

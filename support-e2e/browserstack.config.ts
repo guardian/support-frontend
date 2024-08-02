@@ -7,7 +7,8 @@ interface BrowserDetails {
 	browser_version: string;
 	os: string;
 	os_version: string;
-	name: string;
+	'browserstack.debug': string;
+	'browserstack.networkLogs': string;
 }
 
 const clientPlaywrightVersion = execSync('npx playwright --version')
@@ -44,11 +45,13 @@ export const getCdpEndpoint = (browserDetails: BrowserDetails) => {
 		second: 'numeric',
 		timeZone: 'Europe/London',
 	}).format(new Date());
+
 	const caps = {
 		...browserStackProperties,
 		...browserDetails,
-		build: `playwright-build-${latestCommitID}-${niceDateStringNow}`,
-		name: `playwright E2E test - ${niceDateStringNow}`,
+		build: `support-frontend-e2e-build-${latestCommitID}-${niceDateStringNow}`,
+		name: `Support frontend E2E - ${niceDateStringNow}`,
+		project: 'Support frontend E2E',
 	};
 	const cdpUrl = `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(
 		JSON.stringify(caps),
