@@ -91,7 +91,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByRegion,
-	productCatalogDescriptionAdditional,
+	isProductKey,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -391,8 +392,8 @@ function CheckoutComponent({
 	const productPrices = window.guardian.productPrices;
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const productId = query.product in productCatalog ? query.product : undefined;
-	const product = productId ? productCatalog[query.product] : undefined;
+	const productId = isProductKey(query.product) ? query.product : undefined;
+	const product = productId ? productCatalog[productId] : undefined;
 	const ratePlan = product?.ratePlans[query.ratePlan];
 	const priceOriginal = query.price ?? ratePlan?.pricing[currencyKey];
 
@@ -400,7 +401,7 @@ function CheckoutComponent({
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
 
 	const productDescription = productId
-		? productCatalogDescriptionAdditional[productId]
+		? productCatalogDescription[productId]
 		: undefined;
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
@@ -494,8 +495,7 @@ function CheckoutComponent({
 		};
 	} else if (
 		productId === 'NationalDelivery' ||
-		productId === 'SubscriptionCard' ||
-		productId === 'HomeDelivery'
+		productId === 'SubscriptionCard'
 	) {
 		productFields = {
 			productType: 'Paper',

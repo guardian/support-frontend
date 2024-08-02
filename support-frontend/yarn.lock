@@ -1941,6 +1941,10 @@
   dependencies:
     mini-svg-data-uri "1.4.4"
 
+"@guardian/support-service-lambdas@guardian/support-service-lambdas#3a4a8d7c841b713b736115772a9aadd05995b66a":
+  version "1.0.0"
+  resolved "https://codeload.github.com/guardian/support-service-lambdas/tar.gz/3a4a8d7c841b713b736115772a9aadd05995b66a"
+
 "@guardian/tsconfig@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@guardian/tsconfig/-/tsconfig-0.2.0.tgz#b1dac8831d2ff7ac557229f350d4b2f8c9fc60b5"

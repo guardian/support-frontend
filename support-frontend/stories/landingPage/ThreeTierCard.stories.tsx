@@ -6,6 +6,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import {
 	productCatalogDescription,
+	supporterPlusWithGuardianWeeklyDescription,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
@@ -73,7 +74,7 @@ Promotion.args = {
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
 	price: 38.5,
-	productDescription: productCatalogDescription.SupporterPlusWithGuardianWeekly,
+	productDescription: supporterPlusWithGuardianWeeklyDescription,
 	promotion: supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries,
 };
 
@@ -87,7 +88,7 @@ Offer.args = {
 	paymentFrequency: 'MONTHLY',
 	price: 15,
 	productDescription: {
-		...productCatalogDescription.SupporterPlusWithGuardianWeekly,
+		...supporterPlusWithGuardianWeeklyDescription,
 		offersSummary: [
 			{ strong: true, copy: 'including a free book as our gift to you**' },
 		],
