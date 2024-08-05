@@ -92,6 +92,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByRegion,
 	isProductKey,
+	isRatePlanKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -342,12 +343,23 @@ export function Checkout({ geoId, appConfig }: Props) {
 
 	let elementsOptions = {};
 	let useStripeExpressCheckout = false;
+
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const productParam = urlSearchParams.get('product');
+	const ratePlanParam = urlSearchParams.get('ratePlan');
+
+	const productKey = isProductKey(productParam) ? productParam : undefined;
+	const ratePlanKey =
+		productKey && isRatePlanKey(ratePlanParam, productKey)
+			? ratePlanParam
+			: undefined;
+
 	if (stripeExpressCheckoutSwitch) {
 		/**
 		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
 		 * which then needs this configuration.
 		 */
-		const urlSearchParams = new URLSearchParams(window.location.search);
+
 		const price = urlSearchParams.get('price');
 		const priceInt = price ? parseInt(price, 10) : undefined;
 		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
