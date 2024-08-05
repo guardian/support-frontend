@@ -14,7 +14,10 @@ import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscripti
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import {
+	productCatalogDescription,
+	supporterPlusWithGuardianWeeklyDescription,
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
@@ -212,7 +215,7 @@ function ThankYouContent({
 	];
 
 	const benefitsTier3and2 =
-		productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits.concat(
+		supporterPlusWithGuardianWeeklyDescription.benefits.concat(
 			productCatalogDescription.SupporterPlus.benefits,
 		);
 

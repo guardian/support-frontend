@@ -38,8 +38,9 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescInclFeast,
+	productCatalogDescription,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyDescription,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -331,8 +332,6 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
-	const productCatalogDescription = productCatalogDescInclFeast;
-
 	useEffect(() => {
 		dispatch(resetValidation());
 		if (contributionTypeFromState === 'ONE_OFF') {
@@ -548,8 +547,7 @@ export function ThreeTierLanding(): JSX.Element {
 		promoCode: promotionTier3Hardcoded.promoCode,
 	});
 	const tier3CardHarcoded = {
-		productDescription:
-			productCatalogDescription.SupporterPlusWithGuardianWeekly,
+		productDescription: supporterPlusWithGuardianWeeklyDescription,
 		price: tier3Pricing,
 		link: `/subscribe/weekly/checkout?${tier3UrlParamsHardcoded.toString()}`,
 		promotion: promotionTier3Hardcoded,

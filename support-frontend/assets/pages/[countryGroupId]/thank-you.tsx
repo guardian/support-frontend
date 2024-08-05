@@ -18,7 +18,8 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import {
 	filterBenefitByRegion,
-	productCatalogDescriptionAdditional,
+	productCatalogDescription,
+	productKeys,
 } from 'helpers/productCatalog';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
@@ -60,7 +61,7 @@ export const buttonContainer = css`
 const OrderSchema = object({
 	firstName: string(),
 	price: number(),
-	product: string(),
+	product: picklist(productKeys),
 	ratePlan: string(),
 	paymentMethod: picklist([
 		'Stripe',
@@ -160,7 +161,7 @@ export function ThankYou({ geoId }: Props) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = !isNewAccount && isSignedIn;
 
-	const productDescription = productCatalogDescriptionAdditional[order.product];
+	const productDescription = productCatalogDescription[order.product];
 	const benefitsChecklist = [
 		...productDescription.benefits
 			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
