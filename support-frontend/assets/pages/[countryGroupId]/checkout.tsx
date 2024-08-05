@@ -1069,7 +1069,7 @@ function CheckoutComponent({
 													paymentMethods: {
 														applePay: 'auto',
 														googlePay: 'auto',
-														link: 'never',
+														link: 'auto',
 													},
 												}}
 											/>
