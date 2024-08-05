@@ -1070,6 +1070,8 @@ function CheckoutComponent({
 														applePay: 'auto',
 														googlePay: 'auto',
 														link: 'auto',
+														amazonPay: 'auto',
+														paypal: 'auto',
 													},
 												}}
 											/>
