@@ -49,21 +49,6 @@ function Template(args: Partial<PaymentMethodSelectorProps>): JSX.Element {
 				availablePaymentMethods={availablePaymentMethods}
 				paymentMethod={paymentMethod}
 				validationError={args.validationError}
-				existingPaymentMethodList={[
-					{
-						paymentType: 'Card',
-						billingAccountId: '12345',
-						subscriptions: [
-							{
-								billingAccountId: '12345',
-								isCancelled: false,
-								isActive: true,
-								name: 'Guardian Weekly',
-							},
-						],
-						card: '0123',
-					},
-				]}
 				onPaymentMethodEvent={(event, paymentMethod) => {
 					if (event === 'select') {
 						setPaymentMethod(paymentMethod);

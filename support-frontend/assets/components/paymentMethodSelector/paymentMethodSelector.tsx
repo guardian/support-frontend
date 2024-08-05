@@ -4,13 +4,6 @@ import { from, headline, space } from '@guardian/source/foundations';
 import { Accordion, RadioGroup } from '@guardian/source/react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import AnimatedDots from 'components/spinners/animatedDots';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import {
-	getExistingPaymentMethodLabel,
-	subscriptionsToExplainerList,
-	subscriptionToExplainerPart,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
@@ -63,14 +56,10 @@ export type PaymentMethodSelectorProps = {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
 	validationError: string | undefined;
-	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
-	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
 	onPaymentMethodEvent: (
 		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
-		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
 	overrideHeadingCopy?: string;
 };
@@ -79,17 +68,11 @@ export function PaymentMethodSelector({
 	availablePaymentMethods,
 	paymentMethod,
 	validationError,
-	existingPaymentMethod,
-	existingPaymentMethodList,
-	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onPaymentMethodEvent,
 	overrideHeadingCopy,
 }: PaymentMethodSelectorProps): JSX.Element {
-	if (
-		existingPaymentMethodList.length < 1 &&
-		availablePaymentMethods.length < 1
-	) {
+	if (availablePaymentMethods.length < 1) {
 		return (
 			<GeneralErrorMessage
 				classModifiers={['no-valid-payments']}
@@ -112,12 +95,6 @@ export function PaymentMethodSelector({
 				hideLabel
 				error={validationError}
 			>
-				{pendingExistingPaymentMethods && (
-					<div className="awaiting-existing-payment-options">
-						<AnimatedDots appearance="medium" />
-					</div>
-				)}
-
 				<Accordion
 					cssOverrides={css`
 						border-bottom: none;
@@ -125,64 +102,6 @@ export function PaymentMethodSelector({
 				>
 					{[
 						<>
-							{existingPaymentMethodList
-								.filter(
-									(
-										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-									) => !!preExistingPaymentMethod.billingAccountId,
-								)
-								.map(
-									(
-										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-									) => {
-										const existingPaymentMethodType =
-											preExistingPaymentMethod.paymentType;
-
-										const paymentType: PaymentMethod =
-											existingPaymentMethodType === 'Card'
-												? 'ExistingCard'
-												: 'ExistingDirectDebit';
-
-										return (
-											<AvailablePaymentMethodAccordionRow
-												addQuantumMetricBlockListAttribute={true}
-												id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
-												name="paymentMethod"
-												label={getExistingPaymentMethodLabel(
-													preExistingPaymentMethod,
-												)}
-												image={paymentMethodData[paymentType].icon}
-												checked={
-													paymentMethod === paymentType &&
-													existingPaymentMethod === preExistingPaymentMethod
-												}
-												supportingText={`Used for your ${subscriptionsToExplainerList(
-													preExistingPaymentMethod.subscriptions.map(
-														subscriptionToExplainerPart,
-													),
-												)}`}
-												onChange={() => {
-													onPaymentMethodEvent(
-														'select',
-														paymentType,
-														preExistingPaymentMethod,
-													);
-												}}
-												accordionBody={
-													paymentMethodData[paymentType].accordionBody
-												}
-												onRender={() => {
-													onPaymentMethodEvent(
-														'render',
-														paymentType,
-														preExistingPaymentMethod,
-													);
-												}}
-											/>
-										);
-									},
-								)}
-
 							{availablePaymentMethods.map((method) => (
 								<AvailablePaymentMethodAccordionRow
 									id={paymentMethodData[method].id}

@@ -56,8 +56,6 @@ case class RecurringPaymentMethodSwitches(
     stripeExpressCheckout: SwitchState,
     payPal: SwitchState,
     directDebit: SwitchState,
-    existingCard: SwitchState,
-    existingDirectDebit: SwitchState,
     amazonPay: SwitchState,
     sepa: SwitchState,
 )

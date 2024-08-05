@@ -23,10 +23,6 @@
         "description": "Stripe - Express Checkout",
         "state": "On"
       },
-      "existingCard": {
-        "description": "Existing card",
-        "state": "On"
-      },
       "stripeApplePay": {
         "description": "Stripe - Apple Pay",
         "state": "On"
@@ -37,10 +33,6 @@
       },
       "directDebit": {
         "description": "Direct Debit",
-        "state": "On"
-      },
-      "existingDirectDebit": {
-        "description": "Existing Direct Debit",
         "state": "On"
       },
       "sepa": {
