@@ -15,6 +15,7 @@ const checkoutContainer = css`
 export function Events() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const eventId = searchParams.get('eventId') ?? '4180362';
+	const chk = searchParams.get('chk') ?? '9fa2';
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -30,7 +31,7 @@ export function Events() {
 						<div className="tt-widget-fallback">
 							<p>
 								<a
-									href={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com`}
+									href={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/${chk}/?ref=support-theguardian-com`}
 									target="_blank"
 								>
 									Click here to buy tickets
@@ -39,7 +40,7 @@ export function Events() {
 						</div>
 						<script
 							src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-							data-url={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com`}
+							data-url={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/${chk}/?ref=support-theguardian-com`}
 							data-type="inline"
 							data-inline-minimal="true"
 							data-inline-show-logo="false"
