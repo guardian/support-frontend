@@ -15,7 +15,7 @@ const checkoutContainer = css`
 export function Events() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const eventId = searchParams.get('eventId') ?? '4180362';
-  const chk = searchParams.get('chk') ?? '9fa2';
+	const chk = searchParams.get('chk') ?? '9fa2';
 	return (
 		<PageScaffold
 			header={<Header />}
