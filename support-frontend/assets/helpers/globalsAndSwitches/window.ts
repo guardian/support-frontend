@@ -1,3 +1,4 @@
+import type { ProductCatalog } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { InferOutput } from 'valibot';
 import {
 	array,
@@ -221,9 +222,11 @@ const ProductCatalogSchema = object({
 	),
 });
 
-const AppConfigSchema = intersect([PaymentConfigSchema, ProductCatalogSchema]);
+const AppConfigSchema = intersect([PaymentConfigSchema]);
 
-export type AppConfig = InferOutput<typeof AppConfigSchema>;
+export type AppConfig = InferOutput<typeof AppConfigSchema> & {
+	productCatalog: ProductCatalog;
+};
 
 export const parseAppConfig = (obj: unknown) => {
 	const appConfig = safeParse(AppConfigSchema, obj);
