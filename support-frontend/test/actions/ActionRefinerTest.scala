@@ -24,7 +24,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
   val fakeRequest = FakeRequest("GET", path)
   val stage = Stages.DEV
   val featureSwitches =
-    FeatureSwitches(enableQuantumMetric = On, usStripeAccountForSingle = On, authenticateWithOkta = Off)
+    FeatureSwitches(enableQuantumMetric = Some(On), usStripeAccountForSingle = On, authenticateWithOkta = Off)
 
   trait Mocks {
     val asyncAuthenticationService = mock[AsyncAuthenticationService]

@@ -30,7 +30,7 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(On, On, On),
+    featureSwitches = FeatureSwitches(Some(On), On, On),
   )
 
   "GET /sitemap.xml" should {

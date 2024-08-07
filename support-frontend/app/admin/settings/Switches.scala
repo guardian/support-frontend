@@ -17,7 +17,7 @@ object SwitchState {
 }
 
 case class FeatureSwitches(
-    enableQuantumMetric: SwitchState,
+    enableQuantumMetric: Option[SwitchState],
     usStripeAccountForSingle: SwitchState,
     authenticateWithOkta: SwitchState,
 )

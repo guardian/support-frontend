@@ -41,7 +41,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
-    featureSwitches = FeatureSwitches(On, On, On),
+    featureSwitches = FeatureSwitches(Some(On), On, On),
   )
 
   "/healthcheck" should {
