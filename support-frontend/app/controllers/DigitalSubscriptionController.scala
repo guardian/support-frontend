@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
+import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
@@ -54,7 +54,7 @@ class DigitalSubscriptionController(
     MaybeAuthenticatedAction { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-      if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.isOn && orderIsAGift) {
+      if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.contains(On) && orderIsAGift) {
         Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
       } else {
         val title = if (orderIsAGift) {
