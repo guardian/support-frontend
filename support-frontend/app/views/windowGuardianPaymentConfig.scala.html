@@ -1,4 +1,4 @@
-@import admin.settings.AllSettings
+@import admin.settings.{AllSettings, On}
 @import views.html.helper.CSRF
 
 @import views.ViewHelpers.outputJson
@@ -47,7 +47,7 @@
   };
 
   window.guardian.stripeKeyUnitedStates = {
-    @if(settings.switches.featureSwitches.usStripeAccountForSingle.isOn) {
+    @if(settings.switches.featureSwitches.usStripeAccountForSingle.contains(On)) {
     ONE_OFF: {
       default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.unitedStatesAccount.rawPublicKey",
       test: "@paymentMethodConfigs.oneOffTestStripeConfig.unitedStatesAccount.rawPublicKey"
@@ -82,10 +82,10 @@
     window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
   }
 
-  window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+  window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.contains(On)
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
 
-  window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
+  window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On)
 
   window.guardian.productCatalog = @Html(outputJson(productCatalog))
 
