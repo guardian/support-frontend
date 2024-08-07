@@ -6,7 +6,6 @@ import type {
 } from 'helpers/contributions';
 import {
 	getAmountFromUrl,
-	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getPaymentMethodFromSession,
 	getValidContributionTypesFromUrlOrElse,
@@ -63,8 +62,7 @@ function getInitialContributionType(
 	countryGroupId: CountryGroupId,
 	contributionTypes: ContributionTypes,
 ): ContributionType {
-	const contributionType =
-		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
+	const contributionType = getContributionTypeFromUrl();
 
 	// make sure we don't select a contribution type which isn't on the page
 	if (

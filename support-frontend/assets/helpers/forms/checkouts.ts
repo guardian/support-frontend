@@ -107,10 +107,6 @@ function toHumanReadableContributionType(
 	}
 }
 
-function getContributionTypeFromSession(): ContributionType | null | undefined {
-	return toContributionType(storage.getSession('selectedContributionType'));
-}
-
 function getContributionTypeFromUrl(): ContributionType | null | undefined {
 	return toContributionType(getQueryParameter('selected-contribution-type'));
 }
@@ -346,7 +342,6 @@ export {
 	simpleFormatAmount,
 	formatAmount,
 	getValidContributionTypesFromUrlOrElse,
-	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getAmountFromUrl,
 	toHumanReadableContributionType,

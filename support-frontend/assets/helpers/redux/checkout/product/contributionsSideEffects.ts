@@ -67,20 +67,6 @@ export function addProductSideEffects(
 	});
 
 	startListening({
-		actionCreator: setProductType,
-		effect(action) {
-			/**
-			 * selectedContributionType is read from storage in 2 places:
-			 * 1) It is used to set the selected contribution type on return
-			 * visits to the Contributions Landing Page in the same session.
-			 * 2) It is used on the Contributions Thank You page to send data to Quantum
-			 * Metric, and to also set a cookie for one off contributions.
-			 */
-			storage.setSession('selectedContributionType', action.payload);
-		},
-	});
-
-	startListening({
 		actionCreator: setSelectedAmount,
 		effect(action, listenerApi) {
 			const { countryGroupId } =

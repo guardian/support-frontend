@@ -2,7 +2,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import {
 	getAmountFromUrl,
-	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getPaymentMethodFromSession,
 	getValidPaymentMethods,
@@ -61,8 +60,7 @@ function getInitialContributionType(
 	const { defaultContributionType, displayContributionType } =
 		state.common.amounts;
 
-	const contributionType =
-		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
+	const contributionType = getContributionTypeFromUrl();
 
 	// make sure we don't select a contribution type which isn't on the page
 	if (contributionType && displayContributionType.includes(contributionType)) {
