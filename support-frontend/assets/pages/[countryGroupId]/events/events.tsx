@@ -6,6 +6,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const darkBackgroundContainerMobile = css`
@@ -31,10 +32,30 @@ const shorterBoxMargin = css`
 	}
 `;
 
+const tscs = css`
+	color: #606060;
+	padding-bottom: ${space[2]}px;
+	font-family: GuardianTextSans;
+	font-size: 12px;
+	${until.tablet} {
+		color: ${palette.neutral[97]};
+	}
+	& a {
+		color: #606060;
+		${until.tablet} {
+			color: ${palette.neutral[97]};
+		}
+	}
+`;
+
 export function Events() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const eventId = searchParams.get('eventId') ?? '4180362';
 	const chk = searchParams.get('chk') ?? '9fa2';
+
+	const termsEvents = <a href={guardianLiveTermsLink}>Terms and Conditions</a>;
+	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
+
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -75,6 +96,16 @@ export function Events() {
 								</div>
 							</BoxContents>
 						</Box>
+						<div css={tscs}>
+							<p>
+								By proceeding, you agree to the Guardian Live events{' '}
+								{termsEvents}.
+							</p>
+							<p>
+								To find out what personal data we collect and how we use it,
+								please visit our {privacyPolicy}.
+							</p>
+						</div>
 					</Column>
 				</Columns>
 			</Container>

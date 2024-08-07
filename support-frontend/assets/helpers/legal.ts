@@ -53,6 +53,9 @@ const contributionsEmail: Record<CountryGroupId, string> = {
 	NZDCountries: defaultContributionEmail,
 	Canada: defaultContributionEmail,
 };
+const guardianLiveTermsLink =
+	'https://www.theguardian.com/info/2014/sep/09/guardian-live-events-terms-and-conditions';
+
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -61,4 +64,5 @@ export {
 	copyrightNotice,
 	contributionsEmail,
 	philanthropyContactEmail,
+	guardianLiveTermsLink,
 };
