@@ -25,6 +25,7 @@ const columns = css`
 `;
 
 const shorterBoxMargin = css`
+	border-radius: ${space[2]}px;
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
