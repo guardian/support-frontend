@@ -21,7 +21,10 @@ const columns = css`
 	position: relative;
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
-	padding-top: ${space[2]}px;
+	padding-top: ${space[10]}px;
+	${until.tablet} {
+		padding-top: ${space[3]}px;
+	}
 `;
 
 const shorterBoxMargin = css`
@@ -35,9 +38,8 @@ const shorterBoxMargin = css`
 
 const tscs = css`
 	color: #606060;
+	${textSans.xxsmall()};
 	padding-bottom: ${space[2]}px;
-	font-family: GuardianTextSans;
-	font-size: 12px;
 	${until.tablet} {
 		color: ${palette.neutral[97]};
 	}
