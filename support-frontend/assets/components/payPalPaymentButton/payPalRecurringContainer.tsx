@@ -3,10 +3,7 @@ import { useState } from 'react';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setUpPayPalPayment,
-	setUpPayPalPaymentDigitalEdition,
-} from 'helpers/redux/checkout/payment/payPal/thunks';
+import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -57,15 +54,7 @@ export function PayPalButtonRecurringContainer({
 
 	const onWindowOpen: OnPaypalWindowOpen = (resolve, reject) => {
 		dispatch(validateForm('PayPal'));
-		const { productType } = useContributionsSelector(
-			(state) => state.page.checkoutForm.product,
-		);
-		if (productType === 'DigitalPack') {
-			// Separated to ease removal when DigtalEdition checkout replaced by generic checkout
-			void dispatch(setUpPayPalPaymentDigitalEdition({ resolve, reject }));
-		} else {
-			void dispatch(setUpPayPalPayment({ resolve, reject }));
-		}
+		void dispatch(setUpPayPalPayment({ resolve, reject }));
 	};
 
 	const buttonProps = getPayPalButtonProps({
