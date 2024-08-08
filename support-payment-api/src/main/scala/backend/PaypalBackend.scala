@@ -52,9 +52,7 @@ class PaypalBackend(
    */
 
   private def paypalEnabled = {
-    switchService.allSwitches.map(switch =>
-      switch.oneOffPaymentMethods.exists(s => s.switches.payPal.exists(_.state.isOn)),
-    )
+    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.payPal.exists(_.state.isOn)))
   }
   def isValidEmail(email: String): Boolean =
     !email.contains(",")
