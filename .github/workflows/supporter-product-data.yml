@@ -10,9 +10,8 @@ on:
 jobs:
   supporter_product_data_build:
     if: >-
-      (github.actor != 'dependabot[bot]') &&
-        (github.repository_owner == 'guardian' ||
-          github.event_name == 'push')
+      (github.repository_owner == 'guardian' ||
+        github.event_name == 'push')
 
     # Required by actions-assume-aws-role
     permissions:
@@ -46,4 +45,3 @@ jobs:
           export LAST_TEAMCITY_BUILD=6000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project supporter-product-data" riffRaffUpload
-
