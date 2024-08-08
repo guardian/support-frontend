@@ -2,7 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import admin.settings.{AllSettings, AllSettingsProvider, Switches}
+import admin.settings.{AllSettings, AllSettingsProvider, On, Switches}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogging
@@ -105,9 +105,9 @@ class CreateSubscriptionController(
       request: CreateRequest,
   ): EitherT[Future, RequestValidationError, Unit] = {
     val recaptchaBackendEnabled =
-      settings.switches.recaptchaSwitches.enableRecaptchaBackend.isOn
+      settings.switches.recaptchaSwitches.enableRecaptchaBackend.contains(On)
     val recaptchaFrontendEnabled =
-      settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+      settings.switches.recaptchaSwitches.enableRecaptchaFrontend.contains(On)
     // We never validate on backend unless frontend validation is Enabled
     val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled
 

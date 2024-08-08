@@ -1,7 +1,7 @@
 package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
-import admin.settings.FeatureSwitches
+import admin.settings.{FeatureSwitches, On}
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.Stage
@@ -53,7 +53,7 @@ class CustomActionBuilders(
       oktaAuthBuilder: ActionBuilder[OptionalAuthRequest, AnyContent],
   ): ActionBuilder[OptionalAuthRequest, AnyContent] =
     PrivateAction andThen (
-      if (featureSwitches.authenticateWithOkta.isOn)
+      if (featureSwitches.authenticateWithOkta.contains(On))
         oktaAuthBuilder
       else
         new AsyncAuthenticatedBuilder(asyncAuthenticationService.tryAuthenticateUser, cc.parsers.defaultBodyParser)
