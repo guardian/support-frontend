@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source/foundations';
+import { neutral, space, textSans } from '@guardian/source/foundations';
 import ThreeTierTerms from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
@@ -37,6 +37,18 @@ const container = css`
 	}
 `;
 
+const containerSummaryTsCs = css`
+	margin-top: ${space[6]}px;
+	border-radius: ${space[2]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[3]}px;
+	${textSans.xsmall()};
+	color: ${neutral[7]};
+	& a {
+		color: ${neutral[7]};
+	}
+`;
+
 interface PaymentTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
@@ -53,6 +65,9 @@ const termsSupporterPlus = (linkText: string) => (
 		{linkText}
 	</a>
 );
+
+const frequencySingular = (contributionType: ContributionType) =>
+	contributionType === 'MONTHLY' ? 'month' : 'year';
 
 function TsAndCsRenewal({
 	contributionType,
@@ -125,9 +140,6 @@ export function PaymentTsAndCs({
 				amount,
 				false,
 		  )}`;
-
-	const frequencySingular = (contributionType: ContributionType) =>
-		contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -225,5 +237,93 @@ export function PaymentTsAndCs({
 				{inSupport && copyBelowThreshold(contributionType)}
 			</FinePrint>
 		</div>
+	);
+}
+
+export function SummaryTsAndCs({
+	contributionType,
+	countryGroupId,
+	currency,
+	amount,
+	amountIsAboveThreshold,
+	productNameAboveThreshold,
+}: PaymentTsAndCsProps): JSX.Element {
+	const inTier3 =
+		productNameAboveThreshold === 'Digital + print' && amountIsAboveThreshold;
+	const inTier2 =
+		productNameAboveThreshold === 'All-access digital' &&
+		amountIsAboveThreshold;
+	const inTier1 =
+		productNameAboveThreshold === 'Support' || !(inTier2 || inTier3);
+
+	const amountCopy = isNaN(amount)
+		? null
+		: ` of ${formatAmount(
+				currencies[currency],
+				spokenCurrencies[currency],
+				amount,
+				false,
+		  )}`;
+
+	const copyTier1 = (contributionType: ContributionType) => {
+		return (
+			<>
+				<div>
+					We will attempt to take payment{amountCopy},{' '}
+					<TsAndCsRenewal contributionType={contributionType} />, from now until
+					you cancel your payment. Payments may take up to 6 days to be recorded
+					in your bank account. You can change how much you give or cancel your
+					payment at any time.
+				</div>
+			</>
+		);
+	};
+
+	const copyTier2 = (
+		contributionType: ContributionType,
+		productName: string,
+	) => {
+		return (
+			<>
+				<div>
+					The {productName} subscription and any contribution will auto-renew
+					each {frequencySingular(contributionType)}. You will be charged the
+					subscription and contribution amounts using your chosen payment method
+					at each renewal, at the rate then in effect, unless you cancel.
+				</div>
+			</>
+		);
+	};
+
+	const copyTier3 = (
+		contributionType: ContributionType,
+		productName: string,
+	) => {
+		return (
+			<>
+				<div>
+					The {productName} subscriptions will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					subscription amount using your chosen payment method at each renewal,
+					at the rate then in effect, unless you cancel.
+				</div>
+			</>
+		);
+	};
+
+	return (
+		<>
+			{countryGroupId === 'UnitedStates' && (
+				<div css={containerSummaryTsCs}>
+					{inTier1 && copyTier1(contributionType)}
+					{inTier2 && copyTier2(contributionType, productNameAboveThreshold)}
+					{inTier3 &&
+						copyTier3(
+							contributionType,
+							`Guardian Weekly and ${productNameAboveThreshold}`,
+						)}
+				</div>
+			)}
+		</>
 	);
 }

@@ -112,7 +112,10 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import {
+	PaymentTsAndCs,
+	SummaryTsAndCs,
+} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -1652,6 +1655,24 @@ function CheckoutComponent({
 											})}
 										</RadioGroup>
 									</fieldset>
+									<SummaryTsAndCs
+										countryGroupId={countryGroupId}
+										contributionType={
+											productFields.billingPeriod === 'Monthly'
+												? 'MONTHLY'
+												: productFields.billingPeriod === 'Annual'
+												? 'ANNUAL'
+												: 'ONE_OFF'
+										}
+										currency={currencyKey}
+										amount={price}
+										amountIsAboveThreshold={
+											productDescription.label === 'All-access digital' ||
+											productDescription.label === 'Digital + print'
+										}
+										productNameAboveThreshold={productDescription.label}
+										promotion={promotion}
+									/>
 									<div
 										css={css`
 											margin-top: ${space[8]}px;
