@@ -20,6 +20,9 @@ class SwitchSerializationSpec extends AnyFlatSpec with Matchers {
       switch.recaptchaSwitches.map(recaptchaSwitch => recaptchaSwitch.switches.enableRecaptchaBackend.state mustBe On),
     )
     switches.map(switch =>
+      switch.oneOffPaymentMethods.map(oneOffPaymentSwitch => oneOffPaymentSwitch.switches.stripe mustBe None),
+    )
+    switches.map(switch =>
       switch.oneOffPaymentMethods.map(oneOffPaymentSwitch => oneOffPaymentSwitch.switches.payPal.state mustBe On),
     )
   }
