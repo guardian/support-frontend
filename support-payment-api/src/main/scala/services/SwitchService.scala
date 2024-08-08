@@ -46,21 +46,21 @@ case class FeatureSwitches(switches: FeatureSwitchesTypes)
 case class SwitchDetails(state: SwitchState)
 
 case class RecaptchaSwitchTypes(
-    enableRecaptchaBackend: SwitchDetails,
-    enableRecaptchaFrontend: SwitchDetails,
+    enableRecaptchaBackend: Option[SwitchDetails],
+    enableRecaptchaFrontend: Option[SwitchDetails],
 )
 
 case class OneOffPaymentMethodsSwitchesTypes(
-    stripe: SwitchDetails,
-    stripeApplePay: SwitchDetails,
-    stripePaymentRequestButton: SwitchDetails,
-    stripeExpressCheckout: SwitchDetails,
-    payPal: SwitchDetails,
-    amazonPay: SwitchDetails,
+    stripe: Option[SwitchDetails],
+    stripeApplePay: Option[SwitchDetails],
+    stripePaymentRequestButton: Option[SwitchDetails],
+    stripeExpressCheckout: Option[SwitchDetails],
+    payPal: Option[SwitchDetails],
+    amazonPay: Option[SwitchDetails],
 )
 
 case class FeatureSwitchesTypes(
-    enableSoftOptInsForSingle: SwitchDetails,
+    enableSoftOptInsForSingle: Option[SwitchDetails],
 )
 
 object Switches {
