@@ -390,7 +390,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				 * @see https://docs.stripe.com/currencies#zero-decimal
 				 */
 				amount: priceInt * 100,
-				currency: 'gbp',
+				currency: currencyKey.toLowerCase(),
 				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
