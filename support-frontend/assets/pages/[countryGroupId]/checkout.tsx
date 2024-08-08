@@ -1102,6 +1102,14 @@ function CheckoutComponent({
 													setFirstName(firstName);
 													setLastName(lastName);
 
+													event.billingDetails?.address.postal_code &&
+														setBillingPostcode(
+															event.billingDetails.address.postal_code,
+														);
+
+													event.billingDetails?.address.state &&
+														setBillingState(event.billingDetails.address.state);
+
 													event.billingDetails?.email &&
 														setEmail(event.billingDetails.email);
 
