@@ -372,13 +372,12 @@ export function Checkout({ geoId, appConfig }: Props) {
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
-		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
+		 * Currently we're only using the stripe ExpressCheckoutElement on Tier 1 & 2 purchases
 		 * which then needs this configuration.
 		 */
-		const urlSearchParams = new URLSearchParams(window.location.search);
-		const price = urlSearchParams.get('price');
-		const priceInt = price ? parseInt(price, 10) : undefined;
-		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+		const product = searchParams.get('product') ?? '';
+
+		if (product in ['Contribution', 'SupporterPlus']) {
 			elementsOptions = {
 				mode: 'payment',
 				/**
@@ -386,7 +385,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				 * @see https://docs.stripe.com/api/charges/object
 				 * @see https://docs.stripe.com/currencies#zero-decimal
 				 */
-				amount: priceInt * 100,
+				amount: price * 100,
 				currency: currencyKey.toLowerCase(),
 				paymentMethodCreation: 'manual',
 			} as const;
