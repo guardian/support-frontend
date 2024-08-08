@@ -136,20 +136,20 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(
       Future.successful(
         Switches(
-          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(Some(SwitchDetails(On)), Some(SwitchDetails(On))))),
           Some(
             OneOffPaymentMethodsSwitches(
               OneOffPaymentMethodsSwitchesTypes(
-                SwitchDetails(On),
-                SwitchDetails(On),
-                SwitchDetails(On),
-                SwitchDetails(On),
-                SwitchDetails(On),
-                SwitchDetails(On),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
               ),
             ),
           ),
-          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
+          Some(FeatureSwitches(FeatureSwitchesTypes(Some(SwitchDetails(On))))),
         ),
       ),
     )
@@ -157,20 +157,20 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(
       Future.successful(
         Switches(
-          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(Some(SwitchDetails(On)), Some(SwitchDetails(On))))),
           Some(
             OneOffPaymentMethodsSwitches(
               OneOffPaymentMethodsSwitchesTypes(
-                SwitchDetails(Off),
-                SwitchDetails(Off),
-                SwitchDetails(Off),
-                SwitchDetails(Off),
-                SwitchDetails(On),
-                SwitchDetails(On),
+                Some(SwitchDetails(Off)),
+                Some(SwitchDetails(Off)),
+                Some(SwitchDetails(Off)),
+                Some(SwitchDetails(Off)),
+                Some(SwitchDetails(On)),
+                Some(SwitchDetails(On)),
               ),
             ),
           ),
-          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
+          Some(FeatureSwitches(FeatureSwitchesTypes(Some(SwitchDetails(On))))),
         ),
       ),
     )

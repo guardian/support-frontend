@@ -8,6 +8,7 @@ import services.SwitchState.On
 import services.Switches
 
 import scala.io.Source
+import services.SwitchDetails
 
 class SwitchSerializationSpec extends AnyFlatSpec with Matchers {
 
@@ -17,13 +18,17 @@ class SwitchSerializationSpec extends AnyFlatSpec with Matchers {
     val switches: Either[circe.Error, Switches] = decode[Switches](loadSwitches)
     switches.isRight mustBe true
     switches.map(switch =>
-      switch.recaptchaSwitches.map(recaptchaSwitch => recaptchaSwitch.switches.enableRecaptchaBackend.state mustBe On),
+      switch.recaptchaSwitches.map(recaptchaSwitch =>
+        recaptchaSwitch.switches.enableRecaptchaBackend mustBe Some(SwitchDetails(On)),
+      ),
     )
     switches.map(switch =>
       switch.oneOffPaymentMethods.map(oneOffPaymentSwitch => oneOffPaymentSwitch.switches.stripe mustBe None),
     )
     switches.map(switch =>
-      switch.oneOffPaymentMethods.map(oneOffPaymentSwitch => oneOffPaymentSwitch.switches.payPal.state mustBe On),
+      switch.oneOffPaymentMethods.map(oneOffPaymentSwitch =>
+        oneOffPaymentSwitch.switches.payPal mustBe Some(SwitchDetails(On)),
+      ),
     )
   }
 
