@@ -349,7 +349,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * - `discountredAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
-	let amount: {
+	let payment: {
 		originalAmount: number;
 		discountedAmount?: number;
 		finalAmount: number;
@@ -370,7 +370,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 			return <div>Contribution not specified</div>;
 		}
 
-		amount = {
+		payment = {
 			originalAmount: contributionAmount,
 			finalAmount: contributionAmount,
 		};
@@ -416,13 +416,13 @@ export function Checkout({ geoId, appConfig }: Props) {
 
 		if (productKey === 'SupporterPlus') {
 			/** SupporterPlus can have an additional contribution bolted onto the base price */
-			amount = {
+			payment = {
 				originalAmount: productPrice,
 				discountedAmount: discountedPrice,
 				finalAmount: price + (contributionAmount ?? 0),
 			};
 		} else {
-			amount = {
+			payment = {
 				originalAmount: productPrice,
 				discountedAmount: discountedPrice,
 				finalAmount: price,
@@ -464,7 +464,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				 * @see https://docs.stripe.com/api/charges/object
 				 * @see https://docs.stripe.com/currencies#zero-decimal
 				 */
-				amount: amount.finalAmount * 100,
+				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
 				paymentMethodCreation: 'manual',
 			} as const;
@@ -480,9 +480,9 @@ export function Checkout({ geoId, appConfig }: Props) {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
-				originalAmount={amount.originalAmount}
-				finalAmount={amount.finalAmount}
-				discountedAmount={amount.discountedAmount}
+				originalAmount={payment.originalAmount}
+				finalAmount={payment.finalAmount}
+				discountedAmount={payment.discountedAmount}
 				useStripeExpressCheckout={useStripeExpressCheckout}
 			/>
 		</Elements>
