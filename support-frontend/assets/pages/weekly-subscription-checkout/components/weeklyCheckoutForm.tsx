@@ -34,7 +34,7 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Summary from 'components/subscriptionCheckouts/summary';
-import ThreeTierTerms from 'components/subscriptionCheckouts/threeTierTerms';
+import Tier3Terms from 'components/subscriptionCheckouts/threeTierTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -536,9 +536,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					)}
 
 					{inTierThree ? (
-						<ThreeTierTerms
+						<Tier3Terms
 							paymentMethod={props.paymentMethod}
 							paymentFrequency={tierBillingPeriod}
+							countryGroupId={props.countryGroupId}
 						/>
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />

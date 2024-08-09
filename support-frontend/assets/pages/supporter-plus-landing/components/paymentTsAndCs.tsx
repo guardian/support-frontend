@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
-import ThreeTierTerms from 'components/subscriptionCheckouts/threeTierTerms';
+import Tier3Terms, {
+	productNameUSTier3,
+} from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -12,7 +14,11 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import {
+	contributionsTermsLinks,
+	privacyLink,
+	supporterPlusTermsLink,
+} from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import type { ProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -60,10 +66,8 @@ interface PaymentTsAndCsProps {
 	promotion?: Promotion;
 }
 
-const termsSupporterPlus = (linkText: string) => (
-	<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
-		{linkText}
-	</a>
+export const termsSupporterPlus = (linkText: string) => (
+	<a href={supporterPlusTermsLink}>{linkText}</a>
 );
 
 const frequencySingular = (contributionType: ContributionType) =>
@@ -228,8 +232,9 @@ export function PaymentTsAndCs({
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
 				{inTier3 && (
-					<ThreeTierTerms
+					<Tier3Terms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
+						countryGroupId={countryGroupId}
 					/>
 				)}
 				{inSupporterPlus &&
@@ -322,11 +327,7 @@ export function SummaryTsAndCs({
 				<div css={containerSummaryTsCs}>
 					{inTier1 && copyTier1(contributionType)}
 					{inTier2 && copyTier2(contributionType, productNameAboveThreshold)}
-					{inTier3 &&
-						copyTier3(
-							contributionType,
-							`Guardian Weekly and ${productNameAboveThreshold}`,
-						)}
+					{inTier3 && copyTier3(contributionType, productNameUSTier3)}
 				</div>
 			)}
 		</>

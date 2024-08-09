@@ -55,7 +55,10 @@ const contributionsEmail: Record<CountryGroupId, string> = {
 };
 const guardianLiveTermsLink =
 	'https://www.theguardian.com/info/2014/sep/09/guardian-live-events-terms-and-conditions';
-
+const supporterPlusTermsLink =
+	'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
+const tier3TermsLink =
+	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -65,4 +68,6 @@ export {
 	contributionsEmail,
 	philanthropyContactEmail,
 	guardianLiveTermsLink,
+	supporterPlusTermsLink,
+	tier3TermsLink,
 };
