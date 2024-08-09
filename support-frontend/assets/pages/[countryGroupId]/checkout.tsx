@@ -98,6 +98,7 @@ import {
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
@@ -349,6 +350,33 @@ export function Checkout({ geoId, appConfig }: Props) {
 		return <div>Price not found</div>;
 	}
 
+	/** Get any promotions */
+	const productPrices = appConfig.productPrices;
+	let promotion;
+	if (productPrices) {
+		/**
+		 * This is some annoying transformation we need from
+		 * Product API => Contributions work we need to do
+		 */
+		const billingPeriod =
+			ratePlan.billingPeriod === 'Quarter'
+				? 'Quarterly'
+				: ratePlan.billingPeriod === 'Month'
+				? 'Monthly'
+				: 'Annual';
+
+		promotion = getPromotion(
+			productPrices,
+			countryId,
+			billingPeriod,
+			/**
+			 * TODO: This is going to have to be changed when we start supporting products
+			 * with fulfilmentOptions
+			 */
+			'NoFulfilmentOptions',
+		);
+	}
+
 	/**
 	 * TODO: We should probaly send this down from the server as
 	 * this cookie is not always an accurate indicator as to
@@ -401,6 +429,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				appConfig={appConfig}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
+				promotion={promotion}
 				price={price}
 				useStripeExpressCheckout={useStripeExpressCheckout}
 			/>
@@ -414,6 +443,7 @@ type CheckoutComponentProps = {
 	productKey: ProductKey;
 	ratePlanKey: string;
 	price: number;
+	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
 };
 function CheckoutComponent({
@@ -421,7 +451,8 @@ function CheckoutComponent({
 	appConfig,
 	productKey,
 	ratePlanKey,
-	price: priceOriginal,
+	price: originalPrice,
+	promotion,
 	useStripeExpressCheckout,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
@@ -431,26 +462,16 @@ function CheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 	const isTestUser = !!cookie.get('_test_username');
-	const productPrices = window.guardian.productPrices;
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	const fulfilmentOption =
-		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
-
 	const productDescription = productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
-	const promotion = getPromotion(
-		productPrices,
-		countryId,
-		ratePlanDescription.billingPeriod,
-		fulfilmentOption,
-	);
 	const price = promotion?.discountedPrice
 		? promotion.discountedPrice
-		: priceOriginal;
+		: originalPrice;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -549,18 +570,18 @@ function CheckoutComponent({
 			countryGroupId,
 			appConfig.settings,
 		);
-		if (priceOriginal < 1) {
+		if (originalPrice < 1) {
 			isInvalidAmount = true;
 		}
 		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-			if (priceOriginal >= supporterPlusRatePlanPrice) {
+			if (originalPrice >= supporterPlusRatePlanPrice) {
 				isInvalidAmount = true;
 			}
 		}
 	}
 
 	if (isInvalidAmount) {
-		return <div>Invalid Amount {priceOriginal}</div>;
+		return <div>Invalid Amount {originalPrice}</div>;
 	}
 
 	const validPaymentMethods = [
@@ -970,7 +991,7 @@ function CheckoutComponent({
 											? 'month'
 											: 'quarter'
 									}
-									amount={priceOriginal}
+									amount={originalPrice}
 									promotion={promotion}
 									currency={currency}
 									checkListData={[
