@@ -95,6 +95,7 @@ object CountryGroup {
       Country("GR", "Greece"),
       Country("HR", "Croatia"),
       Country("HU", "Hungary"),
+      Country("IC", "Canary Islands"),
       C.Ireland,
       Country("IT", "Italy"),
       Country("LI", "Liechtenstein"),
