@@ -201,16 +201,21 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const copyBelowThreshold = (contributionType: ContributionType) => {
+	const copyBelowThreshold = (
+		contributionType: ContributionType,
+		countryGroupId: CountryGroupId,
+	) => {
 		return (
 			<>
-				<div>
-					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
-				</div>
+				{countryGroupId !== 'UnitedStates' && (
+					<div>
+						We will attempt to take payment{amountCopy},{' '}
+						<TsAndCsRenewal contributionType={contributionType} />, from now
+						until you cancel your payment. Payments may take up to 6 days to be
+						recorded in your bank account. You can change how much you give or
+						cancel your payment at any time.
+					</div>
+				)}
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
 					amountIsAboveThreshold={amountIsAboveThreshold}
@@ -234,7 +239,7 @@ export function PaymentTsAndCs({
 						'SupporterPlus',
 						promotion,
 					)}
-				{inSupport && copyBelowThreshold(contributionType)}
+				{inSupport && copyBelowThreshold(contributionType, countryGroupId)}
 			</FinePrint>
 		</div>
 	);
