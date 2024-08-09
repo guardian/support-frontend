@@ -64,6 +64,27 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
+	usZipCodeMandatory: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: true,
+		seed: 7,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
 	supporterPlusOnly: {
 		variants: [
 			{

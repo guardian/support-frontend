@@ -17,6 +17,25 @@ export function getStateOrProvinceError(
 	return {};
 }
 
+function getZipCodeErrors(state: ContributionsState): ErrorCollection {
+	const { internationalisation } = state.common;
+	const { paymentMethod } = state.page.checkoutForm.payment;
+	const shouldShowZipCode = internationalisation.countryId === 'US';
+	const isApplePayGooglePay =
+		paymentMethod.name === 'Stripe' &&
+		(paymentMethod.stripePaymentMethod === 'StripeApplePay' ||
+			paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton');
+
+	if (shouldShowZipCode && !isApplePayGooglePay) {
+		const zipCode =
+			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
+		return {
+			zipCode,
+		};
+	}
+	return {};
+}
+
 export function getPersonalDetailsErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -27,16 +46,36 @@ export function getPersonalDetailsErrors(
 
 	const stateOrProvinceErrors = getStateOrProvinceError(state);
 
-	if (contributionType === 'ONE_OFF') {
+	const usZipCodeMandatory =
+		state.common.abParticipations.usZipCodeMandatory === 'variant';
+	if (usZipCodeMandatory) {
+		const zipCodeErrors = getZipCodeErrors(state);
+		if (contributionType === 'ONE_OFF') {
+			return {
+				email,
+				...stateOrProvinceErrors,
+				...zipCodeErrors,
+			};
+		}
 		return {
 			email,
+			firstName,
+			lastName,
+			...stateOrProvinceErrors,
+			...zipCodeErrors,
+		};
+	} else {
+		if (contributionType === 'ONE_OFF') {
+			return {
+				email,
+				...stateOrProvinceErrors,
+			};
+		}
+		return {
+			email,
+			firstName,
+			lastName,
 			...stateOrProvinceErrors,
 		};
 	}
-	return {
-		email,
-		firstName,
-		lastName,
-		...stateOrProvinceErrors,
-	};
 }
