@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
-import Tier3Terms, {
-	tierThreeUSProductName,
-} from 'components/subscriptionCheckouts/threeTierTerms';
+import Tier3Terms from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -23,6 +21,7 @@ import { productLegal } from 'helpers/legalCopy';
 import {
 	productCatalogDescription,
 	type ProductKey,
+	tierThreeUSProductName,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {

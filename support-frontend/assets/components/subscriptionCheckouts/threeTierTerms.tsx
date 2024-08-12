@@ -11,6 +11,7 @@ import {
 	supporterPlusTermsLink,
 	tier3TermsLink,
 } from 'helpers/legal';
+import { tierThreeUSProductName } from 'helpers/productCatalog';
 import { ManageMyAccountLink } from '../../pages/supporter-plus-landing/components/manageMyAccountLink';
 
 const tierThreeTerms = css`
@@ -25,7 +26,6 @@ const tierThreeTerms = css`
 		}
 	}
 `;
-export const tierThreeUSProductName = 'Guardian Weekly and All-Access Digital';
 
 const termsLink = (linkText: string, url: string) => (
 	<a target="_blank" rel="noopener noreferrer" href={url}>
