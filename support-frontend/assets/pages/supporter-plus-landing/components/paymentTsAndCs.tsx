@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
 import Tier3Terms, {
-	productNameUSTier3,
+	productNameUSTierThree,
 } from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
@@ -20,7 +20,10 @@ import {
 	supporterPlusTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
-import type { ProductKey } from 'helpers/productCatalog';
+import {
+	productCatalogDescription,
+	type ProductKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	getDateWithOrdinal,
@@ -62,7 +65,7 @@ interface PaymentTsAndCsProps {
 	currency: IsoCurrency;
 	amount: number;
 	amountIsAboveThreshold: boolean;
-	productNameAboveThreshold: string;
+	productKey: ProductKey;
 	promotion?: Promotion;
 }
 
@@ -125,16 +128,14 @@ export function PaymentTsAndCs({
 	currency,
 	amount,
 	amountIsAboveThreshold,
-	productNameAboveThreshold,
+	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const inSupporterPlus =
-		productNameAboveThreshold === 'All-access digital' &&
-		amountIsAboveThreshold;
-	const inTier3 =
-		productNameAboveThreshold === 'Digital + print' && amountIsAboveThreshold;
+		productKey === 'SupporterPlus' && amountIsAboveThreshold;
+	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
-		productNameAboveThreshold === 'Support' || !(inSupporterPlus || inTier3);
+		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
 
 	const amountCopy = isNaN(amount)
 		? null
@@ -150,10 +151,10 @@ export function PaymentTsAndCs({
 
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
-		productNameAboveThreshold: string,
 		product: ProductKey,
 		promotion?: Promotion,
 	) => {
+		const productLabel = productCatalogDescription[productKey].label;
 		return (
 			<>
 				<div>
@@ -165,24 +166,24 @@ export function PaymentTsAndCs({
 						product,
 						promotion,
 					)}
-					, you will receive the {productNameAboveThreshold} benefits on a
-					subscription basis. If you increase your payments per{' '}
+					, you will receive the {productLabel} benefits on a subscription
+					basis. If you increase your payments per{' '}
 					{frequencySingular(contributionType)}, these additional amounts will
 					be separate {frequencyPlural(contributionType)} voluntary financial
-					contributions to the Guardian. The {productNameAboveThreshold}{' '}
-					subscription and any contributions will auto-renew each{' '}
+					contributions to the Guardian. The {productLabel} subscription and any
+					contributions will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal unless you cancel. You can cancel your subscription or
 					change your contributions at any time before your next renewal date.
-					If you cancel within 14 days of taking out a{' '}
-					{productNameAboveThreshold} subscription, you’ll receive a full refund
-					(including of any contributions) and your subscription and any
-					contribution will stop immediately. Cancellation of your subscription
-					(which will also cancel any contribution) or cancellation of your
-					contribution made after 14 days will take effect at the end of your
-					current {frequencyPlural(contributionType)} payment period. To cancel,
-					go to {ManageMyAccountLink} or see our {termsSupporterPlus('Terms')}.
+					If you cancel within 14 days of taking out a {productLabel}{' '}
+					subscription, you’ll receive a full refund (including of any
+					contributions) and your subscription and any contribution will stop
+					immediately. Cancellation of your subscription (which will also cancel
+					any contribution) or cancellation of your contribution made after 14
+					days will take effect at the end of your current{' '}
+					{frequencyPlural(contributionType)} payment period. To cancel, go to{' '}
+					{ManageMyAccountLink} or see our {termsSupporterPlus('Terms')}.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
@@ -238,12 +239,7 @@ export function PaymentTsAndCs({
 					/>
 				)}
 				{inSupporterPlus &&
-					copyAboveThreshold(
-						contributionType,
-						productNameAboveThreshold,
-						'SupporterPlus',
-						promotion,
-					)}
+					copyAboveThreshold(contributionType, productKey, promotion)}
 				{inSupport && copyBelowThreshold(contributionType, countryGroupId)}
 			</FinePrint>
 		</div>
@@ -256,15 +252,11 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 	amountIsAboveThreshold,
-	productNameAboveThreshold,
+	productKey,
 }: PaymentTsAndCsProps): JSX.Element {
-	const inTier3 =
-		productNameAboveThreshold === 'Digital + print' && amountIsAboveThreshold;
-	const inTier2 =
-		productNameAboveThreshold === 'All-access digital' &&
-		amountIsAboveThreshold;
-	const inTier1 =
-		productNameAboveThreshold === 'Support' || !(inTier2 || inTier3);
+	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
+	const inTier2 = productKey === 'SupporterPlus' && amountIsAboveThreshold;
+	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
 
 	const amountCopy = isNaN(amount)
 		? null
@@ -291,12 +283,13 @@ export function SummaryTsAndCs({
 
 	const copyTier2 = (
 		contributionType: ContributionType,
-		productName: string,
+		productKey: ProductKey,
 	) => {
+		const productLabel = productCatalogDescription[productKey].label;
 		return (
 			<>
 				<div>
-					The {productName} subscription and any contribution will auto-renew
+					The {productLabel} subscription and any contribution will auto-renew
 					each {frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal, at the rate then in effect, unless you cancel.
@@ -307,12 +300,12 @@ export function SummaryTsAndCs({
 
 	const copyTier3 = (
 		contributionType: ContributionType,
-		productName: string,
+		productLabel: string,
 	) => {
 		return (
 			<>
 				<div>
-					The {productName} subscriptions will auto-renew each{' '}
+					The {productLabel} subscriptions will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
 					subscription amount using your chosen payment method at each renewal,
 					at the rate then in effect, unless you cancel.
@@ -326,8 +319,8 @@ export function SummaryTsAndCs({
 			{countryGroupId === 'UnitedStates' && (
 				<div css={containerSummaryTsCs}>
 					{inTier1 && copyTier1(contributionType)}
-					{inTier2 && copyTier2(contributionType, productNameAboveThreshold)}
-					{inTier3 && copyTier3(contributionType, productNameUSTier3)}
+					{inTier2 && copyTier2(contributionType, productKey)}
+					{inTier3 && copyTier3(contributionType, productNameUSTierThree)}
 				</div>
 			)}
 		</>

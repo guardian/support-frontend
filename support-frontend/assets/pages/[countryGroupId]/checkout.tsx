@@ -1670,7 +1670,7 @@ function CheckoutComponent({
 											productKey === 'SupporterPlus' ||
 											productKey === 'TierThree'
 										}
-										productNameAboveThreshold={productDescription.label}
+										productKey={productKey}
 										promotion={promotion}
 									/>
 									<div
@@ -1827,10 +1827,10 @@ function CheckoutComponent({
 										currency={currencyKey}
 										amount={price}
 										amountIsAboveThreshold={
-											productDescription.label === 'All-access digital' ||
-											productDescription.label === 'Digital + print'
+											productKey === 'SupporterPlus' ||
+											productKey === 'TierThree'
 										}
-										productNameAboveThreshold={productDescription.label}
+										productKey={productKey}
 										promotion={promotion}
 									/>
 								</BoxContents>
