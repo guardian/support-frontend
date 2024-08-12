@@ -1836,7 +1836,6 @@ function CheckoutComponent({
 								</BoxContents>
 							</Box>
 						</form>
-						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 						<PatronsMessage
 							countryGroupId={countryGroupId}
 							mobileTheme={'light'}
