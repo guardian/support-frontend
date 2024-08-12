@@ -137,14 +137,12 @@ export function PaymentTsAndCs({
 	const inSupport =
 		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
 
-	const amountCopy = isNaN(amount)
-		? null
-		: ` of ${formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount,
-				false,
-		  )}`;
+	const amountCopy = ` of ${formatAmount(
+		currencies[currency],
+		spokenCurrencies[currency],
+		amount,
+		false,
+	)}`;
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -258,14 +256,12 @@ export function SummaryTsAndCs({
 	const inTier2 = productKey === 'SupporterPlus' && amountIsAboveThreshold;
 	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
 
-	const amountCopy = isNaN(amount)
-		? null
-		: ` of ${formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount,
-				false,
-		  )}`;
+	const amountCopy = ` of ${formatAmount(
+		currencies[currency],
+		spokenCurrencies[currency],
+		amount,
+		false,
+	)}`;
 
 	const copyTier1 = (contributionType: ContributionType) => {
 		return (

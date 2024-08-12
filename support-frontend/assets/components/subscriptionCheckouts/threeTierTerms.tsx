@@ -13,7 +13,7 @@ import {
 } from 'helpers/legal';
 import { ManageMyAccountLink } from '../../pages/supporter-plus-landing/components/manageMyAccountLink';
 
-const termsTier3 = css`
+const tierThreeTerms = css`
 	${textSans.xxsmall()};
 	color: #606060;
 	p {
@@ -121,7 +121,7 @@ export default function Tier3Terms(props: {
 	return (
 		<>
 			<FormSection>
-				<div css={termsTier3}>
+				<div css={tierThreeTerms}>
 					{props.countryGroupId === 'UnitedStates'
 						? tier3USCopy()
 						: tier3Copy()}
