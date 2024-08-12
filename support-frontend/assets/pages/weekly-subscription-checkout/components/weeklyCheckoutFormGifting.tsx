@@ -22,6 +22,10 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import GridImage from 'components/gridImage/gridImage';
 import Heading from 'components/heading/heading';
 import {
+	DisclaimerOnSubscribeStyles,
+	StripeDisclaimer,
+} from 'components/stripe/stripeDisclaimer';
+import {
 	BillingAddress,
 	DeliveryAddress,
 } from 'components/subscriptionCheckouts/address/scopedAddressFields';
@@ -423,6 +427,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								props.setStripePublicKey(key)
 							}
 						/>
+						<p css={DisclaimerOnSubscribeStyles}>
+							<StripeDisclaimer />
+						</p>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected
 						id="directDebitForm"

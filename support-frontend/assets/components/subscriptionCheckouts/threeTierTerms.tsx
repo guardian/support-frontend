@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { textSans } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
+import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
@@ -63,6 +64,9 @@ export default function ThreeTierTerms(props: {
 					<p>
 						To find out what personal data we collect and how we use it, please
 						visit our {termsLink('Privacy Policy', privacyLink)}.
+					</p>
+					<p>
+						<StripeDisclaimer />
 					</p>
 				</div>
 			</FormSection>
