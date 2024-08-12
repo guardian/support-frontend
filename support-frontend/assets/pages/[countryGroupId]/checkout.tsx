@@ -1667,8 +1667,8 @@ function CheckoutComponent({
 										currency={currencyKey}
 										amount={price}
 										amountIsAboveThreshold={
-											productDescription.label === 'All-access digital' ||
-											productDescription.label === 'Digital + print'
+											productKey === 'SupporterPlus' ||
+											productKey === 'TierThree'
 										}
 										productNameAboveThreshold={productDescription.label}
 										promotion={promotion}
