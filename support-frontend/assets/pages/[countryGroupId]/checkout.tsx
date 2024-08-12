@@ -386,10 +386,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 			productPrices,
 			countryId,
 			billingPeriod,
-			/**
-			 * TODO: This is going to have to be changed when we start supporting products
-			 * with fulfilmentOptions
-			 */
 			fulfilmentOption,
 		);
 	}
