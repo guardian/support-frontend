@@ -33,7 +33,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
-import { PaymentTsAndCs } from '../components/paymentTsAndCs';
+import { PaymentTsAndCs, SummaryTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -154,6 +154,17 @@ export function SupporterPlusCheckout({
 								/>
 							)}
 						/>
+						{contributionType !== 'ONE_OFF' && (
+							<SummaryTsAndCs
+								countryGroupId={countryGroupId}
+								contributionType={contributionType}
+								currency={currencyId}
+								amount={amount}
+								amountIsAboveThreshold={isSupporterPlus}
+								productKey={product}
+								promotion={promotion}
+							/>
+						)}
 						<PaymentButtonController
 							cssOverrides={css`
 								margin-top: 30px;
@@ -172,7 +183,7 @@ export function SupporterPlusCheckout({
 						currency={currencyId}
 						amount={amount}
 						amountIsAboveThreshold={isSupporterPlus}
-						productKey={'SupporterPlus'}
+						productKey={product}
 						promotion={promotion}
 					/>
 				</BoxContents>
