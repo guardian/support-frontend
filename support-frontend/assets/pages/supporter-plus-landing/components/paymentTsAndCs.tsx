@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
 import Tier3Terms, {
-	productNameUSTierThree,
+	tierThreeUSProductName,
 } from 'components/subscriptionCheckouts/threeTierTerms';
 import type {
 	ContributionType,
@@ -316,7 +316,7 @@ export function SummaryTsAndCs({
 				<div css={containerSummaryTsCs}>
 					{inTier1 && copyTier1(contributionType)}
 					{inTier2 && copyTier2(contributionType, productKey)}
-					{inTier3 && copyTier3(contributionType, productNameUSTierThree)}
+					{inTier3 && copyTier3(contributionType, tierThreeUSProductName)}
 				</div>
 			)}
 		</>

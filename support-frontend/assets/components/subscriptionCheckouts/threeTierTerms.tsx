@@ -25,8 +25,7 @@ const tierThreeTerms = css`
 		}
 	}
 `;
-
-export const productNameUSTierThree = 'Guardian Weekly and All-Access Digital';
+export const tierThreeUSProductName = 'Guardian Weekly and All-Access Digital';
 
 const termsLink = (linkText: string, url: string) => (
 	<a target="_blank" rel="noopener noreferrer" href={url}>
@@ -43,7 +42,7 @@ export default function Tier3Terms(props: {
 		props.paymentFrequency === 'year' ? 'annual' : 'monthly';
 	const productName =
 		props.countryGroupId === 'UnitedStates'
-			? productNameUSTierThree
+			? tierThreeUSProductName
 			: 'Digital + Print';
 
 	const tier3Copy = () => {
