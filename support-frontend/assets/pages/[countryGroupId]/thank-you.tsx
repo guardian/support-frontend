@@ -9,7 +9,7 @@ import {
 } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { InferInput } from 'valibot';
-import { number, object, picklist, safeParse, string } from 'valibot';
+import { number, object, optional, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -60,7 +60,9 @@ export const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
-	price: number(),
+	originalAmount: number(),
+	discountedAmount: optional(number()),
+	finalAmount: number(),
 	product: picklist(productKeys),
 	ratePlan: string(),
 	paymentMethod: picklist([
@@ -133,14 +135,14 @@ export function ThankYou({ geoId }: Props) {
 				? 'Stripe'
 				: order.paymentMethod;
 		successfulContributionConversion(
-			order.price,
+			order.originalAmount,
 			contributionType,
 			currencyKey,
 			paymentMethod,
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
-			order.price,
+			order.originalAmount,
 			contributionType,
 			currencyKey,
 		);
@@ -223,7 +225,7 @@ export function ThankYou({ geoId }: Props) {
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
 							name={order.firstName}
-							amount={order.price}
+							amount={order.originalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
 							isTier3={isTier3}
