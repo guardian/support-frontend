@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
@@ -65,6 +66,7 @@ interface PaymentTsAndCsProps {
 	amountIsAboveThreshold: boolean;
 	productKey: ProductKey;
 	promotion?: Promotion;
+	cssOverrides?: SerializedStyles;
 }
 
 export const termsSupporterPlus = (linkText: string) => (
@@ -248,6 +250,7 @@ export function SummaryTsAndCs({
 	amount,
 	amountIsAboveThreshold,
 	productKey,
+	cssOverrides,
 }: PaymentTsAndCsProps): JSX.Element {
 	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
 	const inTier2 = productKey === 'SupporterPlus' && amountIsAboveThreshold;
@@ -310,7 +313,7 @@ export function SummaryTsAndCs({
 	return (
 		<>
 			{countryGroupId === 'UnitedStates' && (
-				<div css={containerSummaryTsCs}>
+				<div css={[containerSummaryTsCs, cssOverrides]}>
 					{inTier1 && copyTier1(contributionType)}
 					{inTier2 && copyTier2(contributionType, productKey)}
 					{inTier3 && copyTier3(contributionType, productKey)}

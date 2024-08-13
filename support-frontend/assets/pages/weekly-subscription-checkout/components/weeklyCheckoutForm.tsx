@@ -83,6 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
@@ -90,6 +91,12 @@ import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stri
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
+`;
+
+const summaryTerm = css`
+	margin: 0px 10px ${space[4]}px;
+	max-width: 23.75rem;
+	/* padding: 0.375rem 0.625rem 1.5rem; */
 `;
 
 // ----- Map State/Props ----- //
@@ -521,20 +528,34 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					{inTierThree ? (
-						<Total
-							price={
-								digitalPlusPrintPotentialDiscount?.price ??
-								standardDigitalPlusPrintPrice
-							}
-							currency={props.currencyId}
-						/>
+						<>
+							{props.countryGroupId === 'UnitedStates' && (
+								<SummaryTsAndCs
+									cssOverrides={summaryTerm}
+									countryGroupId={props.countryGroupId}
+									contributionType={
+										props.billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'
+									}
+									currency={props.currencyId}
+									amount={props.price.price}
+									amountIsAboveThreshold={true}
+									productKey={'TierThree'}
+								/>
+							)}
+							<Total
+								price={
+									digitalPlusPrintPotentialDiscount?.price ??
+									standardDigitalPlusPrintPrice
+								}
+								currency={props.currencyId}
+							/>
+						</>
 					) : (
 						<Total
 							price={props.discountedPrice.price}
 							currency={props.currencyId}
 						/>
 					)}
-
 					{inTierThree ? (
 						<TierThreeTerms
 							paymentMethod={props.paymentMethod}
