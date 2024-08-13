@@ -96,6 +96,7 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -306,7 +307,7 @@ type Props = {
 	appConfig: AppConfig;
 };
 export function Checkout({ geoId, appConfig }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const searchParams = new URLSearchParams(window.location.search);
 
 	/** Get and validate product */
@@ -365,15 +366,27 @@ export function Checkout({ geoId, appConfig }: Props) {
 				? 'Monthly'
 				: 'Annual';
 
+		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
+			switch (productKey) {
+				case 'SupporterPlus':
+				case 'Contribution':
+					return 'NoFulfilmentOptions';
+				case 'TierThree':
+					return countryGroupId === 'International'
+						? 'RestOfWorld'
+						: 'Domestic';
+				default:
+					// ToDo: define for every product here
+					return 'NoFulfilmentOptions';
+			}
+		};
+		const fulfilmentOption = getFulfilmentOptions(productKey);
+
 		promotion = getPromotion(
 			productPrices,
 			countryId,
 			billingPeriod,
-			/**
-			 * TODO: This is going to have to be changed when we start supporting products
-			 * with fulfilmentOptions
-			 */
-			'NoFulfilmentOptions',
+			fulfilmentOption,
 		);
 	}
 
