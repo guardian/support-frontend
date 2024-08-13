@@ -366,21 +366,21 @@ export function Checkout({ geoId, appConfig }: Props) {
 				? 'Monthly'
 				: 'Annual';
 
-		let fulfilmentOption: FulfilmentOptions;
-
-		switch (productKey) {
-			case 'SupporterPlus':
-			case 'Contribution':
-				fulfilmentOption = 'NoFulfilmentOptions';
-				break;
-			case 'TierThree':
-				fulfilmentOption =
-					countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
-				break;
-			default:
-				// ToDo: define for every product here
-				fulfilmentOption = 'NoFulfilmentOptions';
-		}
+		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
+			switch (productKey) {
+				case 'SupporterPlus':
+				case 'Contribution':
+					return 'NoFulfilmentOptions';
+				case 'TierThree':
+					return countryGroupId === 'International'
+						? 'RestOfWorld'
+						: 'Domestic';
+				default:
+					// ToDo: define for every product here
+					return 'NoFulfilmentOptions';
+			}
+		};
+		const fulfilmentOption = getFulfilmentOptions(productKey);
 
 		promotion = getPromotion(
 			productPrices,
