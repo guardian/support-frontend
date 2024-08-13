@@ -1,4 +1,4 @@
-@import admin.settings.AllSettings
+@import admin.settings.{AllSettings, On}
 @import assets.AssetsResolver
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config._
@@ -79,11 +79,11 @@
         test: "@testPayPalConfig.payPalEnvironment"
       };
 
-      window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
+      window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On)
 
       window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
 
-      window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+      window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.contains(On)
 
       window.guardian.isTestUser = @testMode
 

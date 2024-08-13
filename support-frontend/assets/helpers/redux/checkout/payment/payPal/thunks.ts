@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchJson } from 'helpers/async/fetch';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
@@ -31,18 +32,28 @@ export const setUpPayPalPayment = createAsyncThunk<
 		if (errorsPreventOpening) {
 			reject(new Error('form invalid'));
 		}
+		const isDigitalPack =
+			state.page.checkoutForm.product.productType === 'DigitalPack';
 
 		const { currencyId, countryId } = state.common.internationalisation;
 		const csrfToken = state.page.checkoutForm.csrf.token ?? '';
 		const contributionType = getContributionType(state);
 		const { productPrices } = state.page.checkoutForm.product;
-		const billingPeriod = billingPeriodFromContrib(contributionType);
+		const billingPeriod = isDigitalPack
+			? state.page.checkoutForm.product.billingPeriod
+			: billingPeriodFromContrib(contributionType);
 		const promotion = getPromotion(productPrices, countryId, billingPeriod);
-		const amount = getAmount(
-			state.page.checkoutForm.product.selectedAmounts,
-			state.page.checkoutForm.product.otherAmounts,
-			contributionType,
-		);
+		const amount = isDigitalPack
+			? getProductPrice(
+					state.page.checkoutForm.product.productPrices,
+					countryId,
+					billingPeriod === 'Annual' ? 'Annual' : 'Monthly',
+			  ).price
+			: getAmount(
+					state.page.checkoutForm.product.selectedAmounts,
+					state.page.checkoutForm.product.otherAmounts,
+					contributionType,
+			  );
 		const finalAmount = promotion?.discountedPrice ?? amount;
 
 		const requestBody = {

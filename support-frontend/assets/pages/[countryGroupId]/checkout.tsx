@@ -89,13 +89,17 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	isProductKey,
+	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
@@ -262,21 +266,6 @@ const processPayment = async (
 	});
 };
 
-/** QueryString - this is setup specifically for the checkout page */
-function isNumeric(str: string) {
-	return !isNaN(parseFloat(str));
-}
-const searchParams = new URLSearchParams(window.location.search);
-const searchParamsPrice = searchParams.get('price');
-const query = {
-	product: searchParams.get('product') ?? '',
-	ratePlan: searchParams.get('ratePlan') ?? '',
-	price:
-		searchParamsPrice && isNumeric(searchParamsPrice)
-			? parseFloat(searchParamsPrice)
-			: undefined,
-};
-
 /** Form Validation */
 /**
  * This uses a Unicode character class escape
@@ -316,10 +305,90 @@ function ChangeButton({ geoId }: ChangeButtonProps) {
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
-	useStripeExpressCheckout?: boolean;
 };
 export function Checkout({ geoId, appConfig }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const searchParams = new URLSearchParams(window.location.search);
+
+	/** Get and validate product */
+	const productParam = searchParams.get('product');
+	const productKey =
+		productParam && isProductKey(productParam) ? productParam : undefined;
+	const product = productKey && productCatalog[productKey];
+	if (!product) {
+		return <div>Product not found</div>;
+	}
+
+	/**
+	 * Get and validate ratePlan
+	 * TODO: This type should be more specific e.g. `ProductRatePlanKey<P>`.
+	 * Annoyingly the TypeScript for this is a little fiddly due to the
+	 * API being completely based on literals, so we've left it as `string`
+	 * although we do validate it is a valid ratePlan for this product
+	 */
+	const ratePlanParam = searchParams.get('ratePlan');
+	const ratePlanKey =
+		ratePlanParam && ratePlanParam in product.ratePlans
+			? ratePlanParam
+			: undefined;
+	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
+	if (!ratePlan) {
+		return <div>Rate plan not found</div>;
+	}
+
+	/** Get and validate price */
+	let price: number | undefined;
+	if (productKey === 'Contribution') {
+		const priceParam = searchParams.get('price');
+		price = priceParam ? parseInt(priceParam, 10) : undefined;
+	} else {
+		price =
+			currencyKey in ratePlan.pricing
+				? ratePlan.pricing[currencyKey]
+				: undefined;
+	}
+	if (!price) {
+		return <div>Price not found</div>;
+	}
+
+	/** Get any promotions */
+	const productPrices = appConfig.productPrices;
+	let promotion;
+	if (productPrices) {
+		/**
+		 * This is some annoying transformation we need from
+		 * Product API => Contributions work we need to do
+		 */
+		const billingPeriod =
+			ratePlan.billingPeriod === 'Quarter'
+				? 'Quarterly'
+				: ratePlan.billingPeriod === 'Month'
+				? 'Monthly'
+				: 'Annual';
+
+		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
+			switch (productKey) {
+				case 'SupporterPlus':
+				case 'Contribution':
+					return 'NoFulfilmentOptions';
+				case 'TierThree':
+					return countryGroupId === 'International'
+						? 'RestOfWorld'
+						: 'Domestic';
+				default:
+					// ToDo: define for every product here
+					return 'NoFulfilmentOptions';
+			}
+		};
+		const fulfilmentOption = getFulfilmentOptions(productKey);
+
+		promotion = getPromotion(
+			productPrices,
+			countryId,
+			billingPeriod,
+			fulfilmentOption,
+		);
+	}
 
 	/**
 	 * TODO: We should probaly send this down from the server as
@@ -359,7 +428,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				 * @see https://docs.stripe.com/currencies#zero-decimal
 				 */
 				amount: priceInt * 100,
-				currency: 'gbp',
+				currency: currencyKey.toLowerCase(),
 				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
@@ -371,17 +440,34 @@ export function Checkout({ geoId, appConfig }: Props) {
 			<CheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				promotion={promotion}
+				price={price}
 				useStripeExpressCheckout={useStripeExpressCheckout}
 			/>
 		</Elements>
 	);
 }
 
+type CheckoutComponentProps = {
+	geoId: GeoId;
+	appConfig: AppConfig;
+	productKey: ProductKey;
+	ratePlanKey: string;
+	price: number;
+	promotion?: Promotion;
+	useStripeExpressCheckout: boolean;
+};
 function CheckoutComponent({
 	geoId,
 	appConfig,
-	useStripeExpressCheckout = false,
-}: Props) {
+	productKey,
+	ratePlanKey,
+	price: originalPrice,
+	promotion,
+	useStripeExpressCheckout,
+}: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
 
@@ -389,49 +475,16 @@ function CheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 	const isTestUser = !!cookie.get('_test_username');
-	const productPrices = window.guardian.productPrices;
+
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const productId = isProductKey(query.product) ? query.product : undefined;
-	const product = productId ? productCatalog[productId] : undefined;
-	const ratePlan = product?.ratePlans[query.ratePlan];
-	const priceOriginal = query.price ?? ratePlan?.pricing[currencyKey];
 
-	const fulfilmentOption =
-		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic';
+	const productDescription = productCatalogDescription[productKey];
+	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
-	const productDescription = productId
-		? productCatalogDescription[productId]
-		: undefined;
-	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
-
-	if (
-		/** These are all the things we need to parse the page */
-		!(
-			productId &&
-			product &&
-			productDescription &&
-			ratePlan &&
-			ratePlanDescription &&
-			priceOriginal
-		)
-	) {
-		return (
-			<div>
-				Could not find product: {query.product} ratePlan: {query.ratePlan}
-			</div>
-		);
-	}
-
-	const promotion = getPromotion(
-		productPrices,
-		countryId,
-		ratePlanDescription.billingPeriod,
-		fulfilmentOption,
-	);
 	const price = promotion?.discountedPrice
 		? promotion.discountedPrice
-		: priceOriginal;
+		: originalPrice;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -442,76 +495,78 @@ function CheckoutComponent({
 	 * We might be able to defer this to the backend.
 	 */
 	let productFields: RegularPaymentRequest['product'];
+	switch (productKey) {
+		case 'TierThree':
+			productFields = {
+				productType: 'TierThree',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				fulfilmentOptions:
+					ratePlanKey === 'DomesticMonthly' || ratePlanKey === 'DomesticAnnual'
+						? 'Domestic'
+						: ratePlanKey === 'RestOfWorldMonthly' ||
+						  ratePlanKey === 'RestOfWorldAnnual'
+						? 'RestOfWorld'
+						: 'Domestic',
+			};
+			break;
 
-	if (productId === 'TierThree') {
-		productFields = {
-			productType: 'TierThree',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			fulfilmentOptions:
-				query.ratePlan === 'DomesticMonthly' ||
-				query.ratePlan === 'DomesticAnnual'
-					? 'Domestic'
-					: query.ratePlan === 'RestOfWorldMonthly' ||
-					  query.ratePlan === 'RestOfWorldAnnual'
-					? 'RestOfWorld'
-					: 'Domestic',
-		};
-	} else if (productId === 'Contribution') {
-		productFields = {
-			productType: 'Contribution',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: price,
-		};
-	} else if (productId === 'SupporterPlus') {
-		productFields = {
-			productType: 'SupporterPlus',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: price,
-		};
-	} else if (productId === 'GuardianWeeklyDomestic') {
-		productFields = {
-			productType: 'GuardianWeekly',
-			currency: currencyKey,
-			fulfilmentOptions: 'Domestic',
-			billingPeriod: ratePlanDescription.billingPeriod,
-		};
-	} else if (productId === 'GuardianWeeklyRestOfWorld') {
-		productFields = {
-			productType: 'GuardianWeekly',
-			fulfilmentOptions: 'RestOfWorld',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-		};
-	} else if (productId === 'DigitalSubscription') {
-		productFields = {
-			productType: 'DigitalPack',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			// TODO - this needs filling in properly, I am not sure where this value comes from
-			readerType: 'Direct',
-		};
-	} else if (
-		productId === 'NationalDelivery' ||
-		productId === 'SubscriptionCard'
-	) {
-		productFields = {
-			productType: 'Paper',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			// TODO - this needs filling in properly
-			fulfilmentOptions: NoFulfilmentOptions,
-			productOptions: NoProductOptions,
-		};
-	} else {
-		return (
-			<div>
-				Could not find productFields for: {query.product} ratePlan:{' '}
-				{query.ratePlan}
-			</div>
-		);
+		case 'Contribution':
+			productFields = {
+				productType: 'Contribution',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				amount: price,
+			};
+			break;
+
+		case 'SupporterPlus':
+			productFields = {
+				productType: 'SupporterPlus',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				amount: price,
+			};
+			break;
+
+		case 'GuardianWeeklyDomestic':
+			productFields = {
+				productType: 'GuardianWeekly',
+				currency: currencyKey,
+				fulfilmentOptions: 'Domestic',
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+			break;
+
+		case 'GuardianWeeklyRestOfWorld':
+			productFields = {
+				productType: 'GuardianWeekly',
+				fulfilmentOptions: 'RestOfWorld',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+			break;
+
+		case 'DigitalSubscription':
+			productFields = {
+				productType: 'DigitalPack',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				readerType: 'Direct',
+			};
+			break;
+
+		case 'NationalDelivery':
+		case 'SubscriptionCard':
+		case 'HomeDelivery':
+			productFields = {
+				productType: 'Paper',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				fulfilmentOptions: NoFulfilmentOptions,
+				productOptions: NoProductOptions,
+			};
+			break;
 	}
 
 	/**
@@ -519,48 +574,27 @@ function CheckoutComponent({
 	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
 	 */
 	let isInvalidAmount = false;
-	if (productId === 'Contribution' && query.price) {
+	if (productKey === 'Contribution') {
 		const supporterPlusRatePlanPrice =
-			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
-				currencyKey
-			];
+			productCatalog.SupporterPlus.ratePlans[ratePlanKey].pricing[currencyKey];
 
 		const { selectedAmountsVariant } = getAmountsTestVariant(
 			countryId,
 			countryGroupId,
 			appConfig.settings,
 		);
-		if (query.price < 1) {
+		if (originalPrice < 1) {
 			isInvalidAmount = true;
 		}
 		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-			if (query.price >= supporterPlusRatePlanPrice) {
+			if (originalPrice >= supporterPlusRatePlanPrice) {
 				isInvalidAmount = true;
 			}
 		}
 	}
 
-	/**
-	 * Is It a SupporterPlus? URL queryPrice supplied?
-	 *    If queryPrice below S+ ratePlanPrice, invalid amount
-	 */
-	if (productId === 'SupporterPlus' && query.price) {
-		const supporterPlusRatePlanPrice =
-			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
-				currencyKey
-			];
-
-		if (query.price < supporterPlusRatePlanPrice) {
-			isInvalidAmount = true;
-		}
-	}
 	if (isInvalidAmount) {
-		return (
-			<div>
-				Invalid Amount In Query String: {query.product} ratePlan:{' '}
-				{query.ratePlan} amount: {query.price}
-			</div>
-		);
+		return <div>Invalid Amount {originalPrice}</div>;
 	}
 
 	const validPaymentMethods = [
@@ -867,14 +901,17 @@ function CheckoutComponent({
 
 		/** Form: tracking data  */
 		const ophanIds = getOphanIds();
-		const referrerAcquisitionData = getReferrerAcquisitionData();
+		const referrerAcquisitionData = {
+			...getReferrerAcquisitionData(),
+			labels: ['generic-checkout'],
+		};
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add debugInfo
 			 */
 			const firstDeliveryDate =
-				productId === 'TierThree'
+				productKey === 'TierThree'
 					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
 			const promoCode = promotion?.promoCode;
@@ -912,12 +949,12 @@ function CheckoutComponent({
 				const order = {
 					firstName: personalData.firstName,
 					price: price,
-					product: productId,
-					ratePlan: query.ratePlan,
+					product: productKey,
+					ratePlan: ratePlanKey,
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
-				window.location.href = `/${geoId}/thank-you?product=${productId}&ratePlan=${query.ratePlan}&promoCode=${promoCode}`;
+				window.location.href = `/${geoId}/thank-you?product=${productKey}&ratePlan=${ratePlanKey}&promoCode=${promoCode}`;
 			} else {
 				// TODO - error handling
 				console.error(
@@ -933,7 +970,7 @@ function CheckoutComponent({
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 
 	useAbandonedBasketCookie(
-		productId,
+		productKey,
 		price,
 		ratePlanDescription.billingPeriod,
 		supportInternationalisationId,
@@ -970,7 +1007,7 @@ function CheckoutComponent({
 											? 'month'
 											: 'quarter'
 									}
-									amount={priceOriginal}
+									amount={originalPrice}
 									promotion={promotion}
 									currency={currency}
 									checkListData={[
@@ -1015,7 +1052,7 @@ function CheckoutComponent({
 									}}
 									enableCheckList={true}
 									tsAndCsTier3={
-										productId === 'TierThree'
+										productKey === 'TierThree'
 											? getTermsStartDateTier3(
 													formatUserDate(getTierThreeDeliveryDate()),
 											  )
@@ -1101,6 +1138,14 @@ function CheckoutComponent({
 														.trim();
 													setFirstName(firstName);
 													setLastName(lastName);
+
+													event.billingDetails?.address.postal_code &&
+														setBillingPostcode(
+															event.billingDetails.address.postal_code,
+														);
+
+													event.billingDetails?.address.state &&
+														setBillingState(event.billingDetails.address.state);
 
 													event.billingDetails?.email &&
 														setEmail(event.billingDetails.email);
