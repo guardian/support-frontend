@@ -12,7 +12,7 @@ export function SignUpBodyCopy({
 	const upperCopy =
 		'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
 	const upperCopyTier3 =
-		'After creating an account, please check your inbox for an email from us. Finishing this step will complete your account setup.';
+		'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup.';
 	const lowerCopy =
 		'Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.';
 	const lowerCopyTier3 =

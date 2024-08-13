@@ -10,10 +10,10 @@ import Subheading, { OfferHeading } from './subheading';
 
 export const header = css`
 	background: white;
-	padding-top: ${space[4]}px;
-	padding-bottom: ${space[5]}px;
-
+	padding: ${space[4]}px 10px ${space[5]}px;
 	${from.tablet} {
+		padding-left: 0px;
+		padding-right: 0px;
 		background: none;
 	}
 `;

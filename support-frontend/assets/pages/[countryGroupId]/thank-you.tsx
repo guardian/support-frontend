@@ -196,7 +196,6 @@ export function ThankYou({ geoId }: Props) {
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
-		...maybeThankYouModule(isTier3 && isSignedIn, 'signedIn'), // Continue to your account
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
