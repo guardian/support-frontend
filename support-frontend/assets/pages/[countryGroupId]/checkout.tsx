@@ -1764,7 +1764,7 @@ function CheckoutComponent({
 												: 'ONE_OFF'
 										}
 										currency={currencyKey}
-										amount={price}
+										amount={originalAmount}
 										amountIsAboveThreshold={
 											productKey === 'SupporterPlus' ||
 											productKey === 'TierThree'
