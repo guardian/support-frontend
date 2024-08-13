@@ -43,7 +43,7 @@ class AmazonPayBackend(
     with PaymentBackend {
 
   private def amazonPayEnabled =
-    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
+    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.amazonPay.exists(_.state.isOn)))
 
   def makePayment(
       amazonPayRequest: AmazonPayRequest,

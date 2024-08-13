@@ -71,10 +71,6 @@
       "payPal": {
         "description": "PayPal",
         "state": "On"
-      },
-      "stripe": {
-        "description": "Stripe - Credit/Debit card",
-        "state": "Off"
       }
     }
   },
