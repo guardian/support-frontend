@@ -234,7 +234,10 @@ function regularPaymentRequestFromAuthorisation(
 		},
 		...getPromoCode(state),
 		ophanIds: getOphanIds(),
-		referrerAcquisitionData: state.common.referrerAcquisitionData,
+		referrerAcquisitionData: {
+			...state.common.referrerAcquisitionData,
+			labels: ['contribution-checkout'],
+		},
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
 		debugInfo: actionHistory,
 	};
