@@ -43,11 +43,6 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import {
-	SignedInBodyCopy,
-	SignedInCTA,
-	signedInHeader,
-} from './signedIn/signedInItems';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -236,12 +231,6 @@ export const getThankYouModuleData = (
 			bodyCopy: <SignInBodyCopy isTier3={isTier3} />,
 			ctas: <SignInCTA email={email} csrf={csrf} isTier3={isTier3} />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
-		},
-		signedIn: {
-			icon: getThankYouModuleIcon('signedIn'),
-			header: signedInHeader,
-			bodyCopy: <SignedInBodyCopy />,
-			ctas: <SignedInCTA />,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),

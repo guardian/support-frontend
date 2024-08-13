@@ -217,7 +217,6 @@ export type ThankYouModuleType =
 	| 'ausMap'
 	| 'feedback'
 	| 'signIn'
-	| 'signedIn'
 	| 'signUp'
 	| 'socialShare'
 	| 'supportReminder'
