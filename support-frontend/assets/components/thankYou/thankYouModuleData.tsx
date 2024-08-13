@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
 import { useState } from 'react';
 import { CheckList, type CheckListData } from 'components/checkList/checkList';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -80,6 +80,10 @@ const headingCss = css`
 const checklistCss = css`
 	margin-top: ${space[4]}px;
 	font-family: 'GuardianTextEgyptian';
+	font-size: 15px;
+	${from.tablet} {
+		font-size: 17px;
+	}
 `;
 
 const defaultSupportReminder = {
