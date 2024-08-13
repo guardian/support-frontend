@@ -21,7 +21,6 @@ import { productLegal } from 'helpers/legalCopy';
 import {
 	productCatalogDescription,
 	type ProductKey,
-	tierThreeUSProductName,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
@@ -232,7 +231,6 @@ export function PaymentTsAndCs({
 				{inTier3 && (
 					<TierThreeTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
-						countryGroupId={countryGroupId}
 					/>
 				)}
 				{inSupporterPlus &&
@@ -280,12 +278,12 @@ export function SummaryTsAndCs({
 		contributionType: ContributionType,
 		productKey: ProductKey,
 	) => {
-		const productLabel = productCatalogDescription[productKey].label;
 		return (
 			<>
 				<div>
-					The {productLabel} subscription and any contribution will auto-renew
-					each {frequencySingular(contributionType)}. You will be charged the
+					The {productCatalogDescription[productKey].label} subscription and any
+					contribution will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal, at the rate then in effect, unless you cancel.
 				</div>
@@ -295,15 +293,15 @@ export function SummaryTsAndCs({
 
 	const copyTier3 = (
 		contributionType: ContributionType,
-		productLabel: string,
+		productKey: ProductKey,
 	) => {
 		return (
 			<>
 				<div>
-					The {productLabel} subscriptions will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription amount using your chosen payment method at each renewal,
-					at the rate then in effect, unless you cancel.
+					The {productCatalogDescription[productKey].label} subscriptions will
+					auto-renew each {frequencySingular(contributionType)}. You will be
+					charged the subscription amount using your chosen payment method at
+					each renewal, at the rate then in effect, unless you cancel.
 				</div>
 			</>
 		);
@@ -315,7 +313,7 @@ export function SummaryTsAndCs({
 				<div css={containerSummaryTsCs}>
 					{inTier1 && copyTier1(contributionType)}
 					{inTier2 && copyTier2(contributionType, productKey)}
-					{inTier3 && copyTier3(contributionType, tierThreeUSProductName)}
+					{inTier3 && copyTier3(contributionType, productKey)}
 				</div>
 			)}
 		</>

@@ -539,7 +539,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						<TierThreeTerms
 							paymentMethod={props.paymentMethod}
 							paymentFrequency={tierBillingPeriod}
-							countryGroupId={props.countryGroupId}
 						/>
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />

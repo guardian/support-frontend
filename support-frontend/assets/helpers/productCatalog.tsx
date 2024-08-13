@@ -553,5 +553,3 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromos = {
 		},
 	},
 };
-
-export const tierThreeUSProductName = 'Guardian Weekly and All-Access Digital';
