@@ -196,7 +196,7 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 				baseURL,
 				`/${
 					testDetails.internationalisationId?.toLowerCase() || 'uk'
-				}/contribute#ab-tierThreeFromApi=variant`, // remove when tier3 generic checkout live
+				}`,
 			);
 			await page.getByRole('tab').getByText(testDetails.ratePlan).click();
 			await page
