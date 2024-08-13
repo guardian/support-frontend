@@ -901,7 +901,10 @@ function CheckoutComponent({
 
 		/** Form: tracking data  */
 		const ophanIds = getOphanIds();
-		const referrerAcquisitionData = getReferrerAcquisitionData();
+		const referrerAcquisitionData = {
+			...getReferrerAcquisitionData(),
+			labels: ['generic-checkout'],
+		};
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
