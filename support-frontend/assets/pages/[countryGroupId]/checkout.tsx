@@ -1794,7 +1794,7 @@ function CheckoutComponent({
 
 												<PayPalButton
 													env={
-														isTestUser || !isProd() ? 'sandbox' : 'production'
+														isProd() && !isTestUser ? 'production': 'sandbox'
 													}
 													style={{
 														color: 'blue',
