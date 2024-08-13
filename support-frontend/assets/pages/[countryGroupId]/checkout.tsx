@@ -96,6 +96,7 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -309,7 +310,7 @@ type Props = {
 	appConfig: AppConfig;
 };
 export function Checkout({ geoId, appConfig }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const searchParams = new URLSearchParams(window.location.search);
 
 	/** Get and validate product */
@@ -338,25 +339,58 @@ export function Checkout({ geoId, appConfig }: Props) {
 		return <div>Rate plan not found</div>;
 	}
 
-	/** Get and validate price */
-	let price: number | undefined;
+	/**
+	 * Get and validate the amount
+	 *
+	 * For products the amount is based on
+	 * - the product price in the catalog
+	 * - any promotions applied
+	 * - any contributions made
+	 */
+
+	/**
+	 * - `originalAmount` the amount pre any discounts or contributions
+	 * - `discountredAmount` the amount with a discountApplied
+	 * - `finalAmount` is the amount a person will pay
+	 */
+	let payment: {
+		originalAmount: number;
+		discountedAmount?: number;
+		finalAmount: number;
+	};
+
+	const contributionParam = searchParams.get('contribution');
+	const contributionAmount = contributionParam
+		? parseInt(contributionParam, 10)
+		: undefined;
+
+	let promotion;
 	if (productKey === 'Contribution') {
-		const priceParam = searchParams.get('price');
-		price = priceParam ? parseInt(priceParam, 10) : undefined;
+		/**
+		 * Contributions are dynamic amounts, often selected from the `amounts` from RRCP
+		 * @see https://support.gutools.co.uk/amounts
+		 */
+		if (!contributionAmount) {
+			return <div>Contribution not specified</div>;
+		}
+
+		payment = {
+			originalAmount: contributionAmount,
+			finalAmount: contributionAmount,
+		};
 	} else {
-		price =
+		const productPrice =
 			currencyKey in ratePlan.pricing
 				? ratePlan.pricing[currencyKey]
 				: undefined;
-	}
-	if (!price) {
-		return <div>Price not found</div>;
-	}
 
-	/** Get any promotions */
-	const productPrices = appConfig.productPrices;
-	let promotion;
-	if (productPrices) {
+		if (!productPrice) {
+			return <div>Price not found in product catalog</div>;
+		}
+
+		/** Get any promotions */
+		const productPrices = appConfig.productPrices;
+
 		/**
 		 * This is some annoying transformation we need from
 		 * Product API => Contributions work we need to do
@@ -368,16 +402,48 @@ export function Checkout({ geoId, appConfig }: Props) {
 				? 'Monthly'
 				: 'Annual';
 
+		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
+			switch (productKey) {
+				case 'SupporterPlus':
+				case 'Contribution':
+					return 'NoFulfilmentOptions';
+				case 'TierThree':
+					return countryGroupId === 'International'
+						? 'RestOfWorld'
+						: 'Domestic';
+				default:
+					// ToDo: define for every product here
+					return 'NoFulfilmentOptions';
+			}
+		};
+		const fulfilmentOption = getFulfilmentOptions(productKey);
+
 		promotion = getPromotion(
 			productPrices,
 			countryId,
 			billingPeriod,
-			/**
-			 * TODO: This is going to have to be changed when we start supporting products
-			 * with fulfilmentOptions
-			 */
-			'NoFulfilmentOptions',
+			fulfilmentOption,
 		);
+		const discountedPrice = promotion?.discountedPrice
+			? promotion.discountedPrice
+			: undefined;
+
+		const price = discountedPrice ?? productPrice;
+
+		if (productKey === 'SupporterPlus') {
+			/** SupporterPlus can have an additional contribution bolted onto the base price */
+			payment = {
+				originalAmount: productPrice,
+				discountedAmount: discountedPrice,
+				finalAmount: price + (contributionAmount ?? 0),
+			};
+		} else {
+			payment = {
+				originalAmount: productPrice,
+				discountedAmount: discountedPrice,
+				finalAmount: price,
+			};
+		}
 	}
 
 	/**
@@ -406,10 +472,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
 		 * which then needs this configuration.
 		 */
-		const urlSearchParams = new URLSearchParams(window.location.search);
-		const price = urlSearchParams.get('price');
-		const priceInt = price ? parseInt(price, 10) : undefined;
-		if (urlSearchParams.get('product') === 'Contribution' && priceInt) {
+		if (productKey === 'Contribution' || productKey === 'SupporterPlus') {
 			elementsOptions = {
 				mode: 'payment',
 				/**
@@ -417,7 +480,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				 * @see https://docs.stripe.com/api/charges/object
 				 * @see https://docs.stripe.com/currencies#zero-decimal
 				 */
-				amount: priceInt * 100,
+				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
 				paymentMethodCreation: 'manual',
 			} as const;
@@ -433,7 +496,9 @@ export function Checkout({ geoId, appConfig }: Props) {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
-				price={price}
+				originalAmount={payment.originalAmount}
+				finalAmount={payment.finalAmount}
+				discountedAmount={payment.discountedAmount}
 				useStripeExpressCheckout={useStripeExpressCheckout}
 			/>
 		</Elements>
@@ -445,7 +510,9 @@ type CheckoutComponentProps = {
 	appConfig: AppConfig;
 	productKey: ProductKey;
 	ratePlanKey: string;
-	price: number;
+	originalAmount: number;
+	discountedAmount?: number;
+	finalAmount: number;
 	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
 };
@@ -454,7 +521,9 @@ function CheckoutComponent({
 	appConfig,
 	productKey,
 	ratePlanKey,
-	price: originalPrice,
+	originalAmount,
+	discountedAmount,
+	finalAmount,
 	promotion,
 	useStripeExpressCheckout,
 }: CheckoutComponentProps) {
@@ -471,10 +540,6 @@ function CheckoutComponent({
 
 	const productDescription = productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
-
-	const price = promotion?.discountedPrice
-		? promotion.discountedPrice
-		: originalPrice;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -506,7 +571,7 @@ function CheckoutComponent({
 				productType: 'Contribution',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: price,
+				amount: finalAmount,
 			};
 			break;
 
@@ -515,7 +580,7 @@ function CheckoutComponent({
 				productType: 'SupporterPlus',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: price,
+				amount: finalAmount,
 			};
 			break;
 
@@ -573,18 +638,18 @@ function CheckoutComponent({
 			countryGroupId,
 			appConfig.settings,
 		);
-		if (originalPrice < 1) {
+		if (originalAmount < 1) {
 			isInvalidAmount = true;
 		}
 		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-			if (originalPrice >= supporterPlusRatePlanPrice) {
+			if (originalAmount >= supporterPlusRatePlanPrice) {
 				isInvalidAmount = true;
 			}
 		}
 	}
 
 	if (isInvalidAmount) {
-		return <div>Invalid Amount {originalPrice}</div>;
+		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
 	const validPaymentMethods = [
@@ -891,7 +956,10 @@ function CheckoutComponent({
 
 		/** Form: tracking data  */
 		const ophanIds = getOphanIds();
-		const referrerAcquisitionData = getReferrerAcquisitionData();
+		const referrerAcquisitionData = {
+			...getReferrerAcquisitionData(),
+			labels: ['generic-checkout'],
+		};
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
@@ -935,7 +1003,9 @@ function CheckoutComponent({
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
-					price: price,
+					originalAmount,
+					discountedAmount,
+					finalAmount,
 					product: productKey,
 					ratePlan: ratePlanKey,
 					paymentMethod: paymentMethod,
@@ -958,7 +1028,7 @@ function CheckoutComponent({
 
 	useAbandonedBasketCookie(
 		productKey,
-		price,
+		originalAmount,
 		ratePlanDescription.billingPeriod,
 		supportInternationalisationId,
 		abParticipations.abandonedBasket === 'variant',
@@ -994,7 +1064,7 @@ function CheckoutComponent({
 											? 'month'
 											: 'quarter'
 									}
-									amount={originalPrice}
+									amount={originalAmount}
 									promotion={promotion}
 									currency={currency}
 									checkListData={[
@@ -1714,7 +1784,10 @@ function CheckoutComponent({
 												buttonText={
 													stripeClientSecretInProgress
 														? 'Validating reCAPTCHA...'
-														: `Pay ${simpleFormatAmount(currency, price)} per ${
+														: `Pay ${simpleFormatAmount(
+																currency,
+																finalAmount,
+														  )} per ${
 																ratePlanDescription.billingPeriod === 'Annual'
 																	? 'year'
 																	: ratePlanDescription.billingPeriod ===
@@ -1785,7 +1858,7 @@ function CheckoutComponent({
 													/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 													payment={(resolve, reject) => {
 														const requestBody = {
-															amount: price,
+															amount: finalAmount,
 															billingPeriod: ratePlanDescription.billingPeriod,
 															currency: currencyKey,
 															requireShippingAddress: false,
@@ -1854,7 +1927,7 @@ function CheckoutComponent({
 												: 'ONE_OFF'
 										}
 										currency={currencyKey}
-										amount={price}
+										amount={originalAmount}
 										amountIsAboveThreshold={
 											productKey === 'SupporterPlus' ||
 											productKey === 'TierThree'

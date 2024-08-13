@@ -35,7 +35,7 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import Summary from 'components/subscriptionCheckouts/summary';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { gwCountries } from 'helpers/internationalisation/gwCountries';
@@ -139,7 +139,7 @@ function mapDispatchToProps() {
 					trackSubmitAttempt(PayPal, GuardianWeekly, NoProductOptions);
 				}
 			},
-		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
 		setStripePublicKey,
 	};
 }

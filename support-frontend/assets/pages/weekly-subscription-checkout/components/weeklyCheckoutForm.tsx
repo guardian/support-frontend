@@ -37,7 +37,7 @@ import Summary from 'components/subscriptionCheckouts/summary';
 import Tier3Terms from 'components/subscriptionCheckouts/threeTierTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import {
 	currencies,
@@ -149,7 +149,7 @@ function mapDispatchToProps() {
 					trackSubmitAttempt(PayPal, GuardianWeekly, NoProductOptions);
 				}
 			},
-		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
 		setStripePublicKey,
