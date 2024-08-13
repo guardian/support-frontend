@@ -9,9 +9,8 @@ import {
 	privacyLink,
 	subscriptionsTermsLinks,
 	supporterPlusTermsLink,
-	tier3TermsLink,
+	tierThreeTermsLink,
 } from 'helpers/legal';
-import { tierThreeUSProductName } from 'helpers/productCatalog';
 import { ManageMyAccountLink } from '../../pages/supporter-plus-landing/components/manageMyAccountLink';
 
 const tierThreeTerms = css`
@@ -33,19 +32,16 @@ const termsLink = (linkText: string, url: string) => (
 	</a>
 );
 
-export default function Tier3Terms(props: {
+export default function TierThreeTerms(props: {
 	paymentFrequency: 'month' | 'year';
 	paymentMethod?: PaymentMethod;
 	countryGroupId?: CountryGroupId;
 }): JSX.Element {
 	const paymentFrequencyName =
 		props.paymentFrequency === 'year' ? 'annual' : 'monthly';
-	const productName =
-		props.countryGroupId === 'UnitedStates'
-			? tierThreeUSProductName
-			: 'Digital + Print';
+	const productName = 'Digital + print';
 
-	const tier3Copy = () => {
+	const tierThreeCopy = () => {
 		return (
 			<>
 				<p>
@@ -64,17 +60,17 @@ export default function Tier3Terms(props: {
 					take effect at the end of your current {paymentFrequencyName} payment
 					period. To cancel go to&nbsp;
 					{ManageMyAccountLink} or see our {productName}{' '}
-					{termsLink('Terms', tier3TermsLink)}.
+					{termsLink('Terms', tierThreeTermsLink)}.
 				</p>
 				<p>
 					By proceeding, you are agreeing to the {productName}{' '}
-					{termsLink('Terms', tier3TermsLink)}.
+					{termsLink('Terms', tierThreeTermsLink)}.
 				</p>
 			</>
 		);
 	};
 
-	const tier3USCopy = () => {
+	const tierThreeUSCopy = () => {
 		return (
 			<>
 				<p>
@@ -122,8 +118,8 @@ export default function Tier3Terms(props: {
 			<FormSection>
 				<div css={tierThreeTerms}>
 					{props.countryGroupId === 'UnitedStates'
-						? tier3USCopy()
-						: tier3Copy()}
+						? tierThreeUSCopy()
+						: tierThreeCopy()}
 
 					<p>
 						To find out what personal data we collect and how we use it, please

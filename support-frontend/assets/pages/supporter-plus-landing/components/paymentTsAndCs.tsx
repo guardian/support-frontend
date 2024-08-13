@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
-import Tier3Terms from 'components/subscriptionCheckouts/threeTierTerms';
+import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -230,7 +230,7 @@ export function PaymentTsAndCs({
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
 				{inTier3 && (
-					<Tier3Terms
+					<TierThreeTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
 						countryGroupId={countryGroupId}
 					/>
