@@ -108,9 +108,7 @@ export const tests: Tests = {
 	},
 	tierThreeFromApi: {
 		variants: [
-			{
-				id: 'control',
-			},
+			// Using this as a feature switch
 			{
 				id: 'variant',
 			},
