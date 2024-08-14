@@ -39,7 +39,7 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Text from 'components/text/text';
-import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import {
@@ -168,7 +168,7 @@ function mapDispatchToProps() {
 					);
 				}
 			},
-		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setupRecurringPayPalPayment: setupSubscriptionPayPalPayment,
 		signOut,
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
