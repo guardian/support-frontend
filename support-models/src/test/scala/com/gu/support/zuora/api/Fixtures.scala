@@ -120,7 +120,6 @@ object Fixtures {
     identityId__c = identityId,
     paymentGateway = Some(paymentGateway),
     createdRequestId__c = "createdreqid_hi",
-    invoiceTemplateId = "defaultInvoiceTemplateId",
   )
 
   def auAccount(
@@ -134,7 +133,6 @@ object Fixtures {
     identityId__c = identityId,
     paymentGateway = Some(paymentGateway),
     createdRequestId__c = "createdreqid_hi",
-    invoiceTemplateId = "auInvoiceTemplateId",
   )
 
   val deliveryInstructions = "Leave behind the dustbin"

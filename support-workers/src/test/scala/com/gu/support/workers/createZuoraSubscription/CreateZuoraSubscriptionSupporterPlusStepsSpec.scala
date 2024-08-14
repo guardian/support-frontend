@@ -142,7 +142,6 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
-          invoiceTemplateIds,
         ),
       ),
       user =

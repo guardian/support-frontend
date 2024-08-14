@@ -94,7 +94,6 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
-          invoiceTemplateIds,
         ),
       ),
       user =
