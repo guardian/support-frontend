@@ -13,7 +13,6 @@ const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
 
@@ -30,17 +29,16 @@ const columns = css`
 const shorterBoxMargin = css`
 	border-radius: ${space[2]}px;
 	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
+		margin-bottom: ${space[4]}px;
 	}
 `;
 
 const tscs = css`
 	color: #606060;
 	${textSans.xxsmall()};
-	padding-bottom: ${space[2]}px;
+	padding-bottom: ${space[14]}px;
 	${until.tablet} {
+		padding-bottom: ${space[2]}px;
 		color: ${palette.neutral[97]};
 	}
 	& a {
@@ -64,7 +62,12 @@ export function Events() {
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter copyOverride="&nbsp;" />
+					<ThankYouFooter
+						copyOverride="&nbsp;"
+						cssOverrides={css`
+							margin-bottom: ${space[3]}px;
+						`}
+					/>
 				</FooterWithContents>
 			}
 		>
