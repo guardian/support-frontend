@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
 
-export const signUpHeader = 'Create your Guardian account';
+export const signUpHeader = 'Complete your Guardian account';
 
 export function SignUpBodyCopy({
 	isTier3,
