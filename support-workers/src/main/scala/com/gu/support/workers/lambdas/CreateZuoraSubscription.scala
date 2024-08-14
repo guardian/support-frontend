@@ -95,7 +95,6 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.requestId,
     state.user,
     state.product.currency,
-    services.config.zuoraConfigProvider.get(isTestUser).invoiceTemplateIds,
   )
   lazy val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
     zuoraSubscriptionCreator,
