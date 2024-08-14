@@ -178,11 +178,12 @@ afterEachTasks(test);
 
 test.describe('Contribute/Subscribe Tiered Checkout', () => {
 	testsDetails.forEach((testDetails) => {
-		test(`Tier-${
-			testDetails.tier
-		} ${testDetails.ratePlan} with ${testDetails.paymentType} - ${
-			testDetails.internationalisationId ?? 'UK'
-		}`, async ({ context, baseURL }) => {
+		test(`Tier-${testDetails.tier} ${testDetails.ratePlan} with ${
+			testDetails.paymentType
+		} - ${testDetails.internationalisationId ?? 'UK'}`, async ({
+			context,
+			baseURL,
+		}) => {
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
@@ -190,14 +191,16 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 			const ctaCopy =
 				testDetails.internationalisationId === 'US' ? 'Subscribe' : 'Support';
 
+			// TODO : Temporary tier3 generic checkout forced within Playwright
 			await setupPage(
 				page,
 				context,
 				baseURL,
 				`/${
 					testDetails.internationalisationId?.toLowerCase() || 'uk'
-				}`,
+				}/contribute#ab-tierThreeFromApi=variant`,
 			);
+
 			await page.getByRole('tab').getByText(testDetails.ratePlan).click();
 			await page
 				.getByRole('link', { name: ctaCopy })
@@ -279,9 +282,7 @@ const testDetailsPromo = [
 ];
 test.describe('SupporterPlus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`Tier-${
-			testDetails.tier
-		} incl PromoCode ${testDetails.frequency} with Credit/Debit card - UK`, async ({
+		test(`Tier-${testDetails.tier} incl PromoCode ${testDetails.frequency} with Credit/Debit card - UK`, async ({
 			context,
 			baseURL,
 		}) => {
