@@ -7,7 +7,6 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.CODE
-import com.gu.support.config.ZuoraInvoiceTemplatesConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._

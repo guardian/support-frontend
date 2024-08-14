@@ -4,7 +4,6 @@ import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.AUD
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.ProductRatePlanId
-import com.gu.support.config.ZuoraInvoiceTemplatesConfig
 import com.gu.support.paperround.AgentId
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, PaymentMethod, SalesforceContactRecord, User}

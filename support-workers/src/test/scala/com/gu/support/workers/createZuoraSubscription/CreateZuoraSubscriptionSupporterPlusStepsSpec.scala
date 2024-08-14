@@ -3,7 +3,7 @@ package com.gu.support.workers.createZuoraSubscription
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{CatalogServiceSpec, ProductRatePlanId}
-import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraInvoiceTemplatesConfig, ZuoraSupporterPlusConfig}
+import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraSupporterPlusConfig}
 import com.gu.support.workers.integration.TestData.supporterPlusPromotionService
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState

@@ -2,7 +2,7 @@ package com.gu.support.workers.createZuoraSubscription
 
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers._
