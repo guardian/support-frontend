@@ -64,7 +64,7 @@ export function Events() {
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter />
+					<ThankYouFooter copyOverride="&nbsp;" />
 				</FooterWithContents>
 			}
 		>

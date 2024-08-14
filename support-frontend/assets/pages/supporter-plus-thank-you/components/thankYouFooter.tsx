@@ -11,11 +11,16 @@ const footer = css`
 	}
 `;
 
-function ThankYouFooter(): JSX.Element {
+type ThankyouFooterProp = {
+	copyOverride?: string;
+};
+
+function ThankYouFooter({ copyOverride }: ThankyouFooterProp): JSX.Element {
 	return (
 		<div css={footer}>
-			If you have any questions about supporting the Guardian, please contact
-			our customer service team.
+			{copyOverride
+				? copyOverride
+				: 'If you have any questions about supporting the Guardian, please contact our customer service team.'}
 		</div>
 	);
 }
