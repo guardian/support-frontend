@@ -330,8 +330,8 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
-  def eventsRouter(countryGroupId: String, eventId: Option[String]) = authAction { implicit request =>
+  def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(views.html.eventsRouter()).withHeaders(CacheControl.noCache)
+    Ok(views.html.eventsRouter()).withSettingsSurrogateKey
   }
 }

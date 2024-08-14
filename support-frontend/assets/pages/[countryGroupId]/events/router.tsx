@@ -19,7 +19,7 @@ trackAbTests(participations);
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
 		{
-			path: `/${geoId}/events`,
+			path: `/${geoId}/events/:eventId`,
 			element: <Events />,
 		},
 	]),
