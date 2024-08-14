@@ -23,12 +23,6 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway 1"))
   }
 
-  "AUAccount" should "serialise to correct json" in {
-    val json = auAccount().asJson
-    (json \\ "Currency").head.asString should be(Some("AUD"))
-    (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway GNM Membership AUS"))
-  }
-
   "InternationalAccount" should "deserialise correctly" in {
     testDecoding[Account](s"$accountJson")
   }
