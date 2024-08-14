@@ -192,10 +192,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
-  lazy val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),

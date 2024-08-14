@@ -24,11 +24,6 @@ import scala.concurrent.Future
 
 class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with Matchers {
 
-  val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
-
   val expectedRatePlanToCharges: Map[ProductRatePlanId, List[api.RatePlanCharge]] =
     Map[ProductRatePlanId, List[api.RatePlanCharge]](
       "" -> List(api.DiscountRatePlanCharge("", 80.0, Some(Months.months(3)))),

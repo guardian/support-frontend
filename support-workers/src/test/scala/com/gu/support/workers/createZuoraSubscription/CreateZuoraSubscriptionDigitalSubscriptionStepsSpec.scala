@@ -22,11 +22,6 @@ import scala.concurrent.Future
 
 class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
-  val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
-
   it should "create a Digital Pack standard (paid) subscription" in {
 
     val state = DigitalSubscriptionDirectPurchaseState(

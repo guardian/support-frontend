@@ -138,10 +138,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
-  lazy val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
 
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     UUID.randomUUID(),
