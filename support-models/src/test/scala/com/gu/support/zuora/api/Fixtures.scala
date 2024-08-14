@@ -49,7 +49,6 @@ object Fixtures {
            "status" : "Active",
            "crmId" : "001g000001gPV73AAG",
            "batch" : "Batch1",
-           "invoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e",
            "communicationProfileId" : null,
            "IdentityId__c" : "30000291",
            "sfContactId__c" : "003g000001UtN1qAAF",
