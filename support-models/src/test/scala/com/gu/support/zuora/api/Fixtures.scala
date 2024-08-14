@@ -234,7 +234,7 @@ object Fixtures {
         "PaymentTerm" : "Due Upon Receipt",
         "BcdSettingOption" : "AutoSet",
         "Batch" : "Batch1",
-        "InvoiceTemplateId" : "anInvoiceTemplateId"
+        "InvoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e"
       }
     """
   val subscriptionJson =
