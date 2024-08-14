@@ -109,6 +109,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { isProd } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -1809,7 +1810,9 @@ function CheckoutComponent({
 												/>
 
 												<PayPalButton
-													env={isTestUser ? 'sandbox' : 'production'}
+													env={
+														isProd() && !isTestUser ? 'production' : 'sandbox'
+													}
 													style={{
 														color: 'blue',
 														size: 'responsive',
