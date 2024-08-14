@@ -160,7 +160,6 @@ export function SupporterPlusCheckout({
 								contributionType={contributionType}
 								currency={currencyId}
 								amount={amount}
-								amountIsAboveThreshold={isSupporterPlus}
 								productKey={product}
 								promotion={promotion}
 							/>

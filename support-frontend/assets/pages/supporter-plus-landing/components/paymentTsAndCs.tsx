@@ -57,13 +57,16 @@ const containerSummaryTsCs = css`
 	}
 `;
 
-interface PaymentTsAndCsProps {
+interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
+	amountIsAboveThreshold: boolean;
+}
+
+interface SummaryTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
-	amountIsAboveThreshold: boolean;
 	productKey: ProductKey;
 	promotion?: Promotion;
 	cssOverrides?: SerializedStyles;
@@ -248,12 +251,11 @@ export function SummaryTsAndCs({
 	countryGroupId,
 	currency,
 	amount,
-	amountIsAboveThreshold,
 	productKey,
 	cssOverrides,
-}: PaymentTsAndCsProps): JSX.Element {
-	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
-	const inTier2 = productKey === 'SupporterPlus' && amountIsAboveThreshold;
+}: SummaryTsAndCsProps): JSX.Element {
+	const inTier3 = productKey === 'TierThree';
+	const inTier2 = productKey === 'SupporterPlus';
 	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
 
 	const amountCopy = ` of ${formatAmount(

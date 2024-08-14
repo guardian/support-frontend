@@ -538,7 +538,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									}
 									currency={props.currencyId}
 									amount={props.price.price}
-									amountIsAboveThreshold={true}
 									productKey={'TierThree'}
 								/>
 							)}
