@@ -1,7 +1,7 @@
 package controllers
 
 import actions.CustomActionBuilders
-import admin.settings.AllSettingsProvider
+import admin.settings.{AllSettingsProvider, On}
 import com.gu.aws.AwsCloudWatchMetricPut.client
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.support.config.Stage
@@ -47,9 +47,9 @@ class StripeController(
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] =
     PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
       val recaptchaBackendEnabled =
-        settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaBackend.isOn
+        settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaBackend.contains(On)
       val recaptchaFrontendEnabled =
-        settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+        settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaFrontend.contains(On)
 
       // We never validate on backend unless frontend validation is Enabled
       val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled

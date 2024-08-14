@@ -1,7 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import { getFallbackAmounts } from 'helpers/abTests/helpers';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
-import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country, CountryGroup } from 'helpers/internationalisation';
@@ -30,7 +29,6 @@ export type CommonState = {
 	settings: Settings;
 	amounts: SelectedAmountsVariant;
 	internationalisation: Internationalisation;
-	existingPaymentMethods?: ExistingPaymentMethod[];
 };
 
 export type CommonStateSetupData = {

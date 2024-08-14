@@ -17,55 +17,53 @@ object SwitchState {
 }
 
 case class FeatureSwitches(
-    enableQuantumMetric: SwitchState,
-    usStripeAccountForSingle: SwitchState,
-    authenticateWithOkta: SwitchState,
+    enableQuantumMetric: Option[SwitchState],
+    usStripeAccountForSingle: Option[SwitchState],
+    authenticateWithOkta: Option[SwitchState],
 )
 
 case class CampaignSwitches(
-    enableContributionsCampaign: SwitchState,
-    forceContributionsCampaign: SwitchState,
+    enableContributionsCampaign: Option[SwitchState],
+    forceContributionsCampaign: Option[SwitchState],
 )
 
 case class SubscriptionsSwitches(
-    enableDigitalSubGifting: SwitchState,
-    useDotcomContactPage: SwitchState,
-    checkoutPostcodeLookup: SwitchState,
+    enableDigitalSubGifting: Option[SwitchState],
+    useDotcomContactPage: Option[SwitchState],
+    checkoutPostcodeLookup: Option[SwitchState],
 )
 
 case class RecaptchaSwitches(
-    enableRecaptchaBackend: SwitchState,
-    enableRecaptchaFrontend: SwitchState,
+    enableRecaptchaBackend: Option[SwitchState],
+    enableRecaptchaFrontend: Option[SwitchState],
 )
 
 case class OneOffPaymentMethodSwitches(
-    stripe: SwitchState,
-    stripeApplePay: SwitchState,
-    stripePaymentRequestButton: SwitchState,
+    stripe: Option[SwitchState],
+    stripeApplePay: Option[SwitchState],
+    stripePaymentRequestButton: Option[SwitchState],
     // @see https://docs.stripe.com/elements/express-checkout-element
-    stripeExpressCheckout: SwitchState,
-    payPal: SwitchState,
-    amazonPay: SwitchState,
+    stripeExpressCheckout: Option[SwitchState],
+    payPal: Option[SwitchState],
+    amazonPay: Option[SwitchState],
 )
 
 case class RecurringPaymentMethodSwitches(
-    stripe: SwitchState,
-    stripeApplePay: SwitchState,
-    stripePaymentRequestButton: SwitchState,
+    stripe: Option[SwitchState],
+    stripeApplePay: Option[SwitchState],
+    stripePaymentRequestButton: Option[SwitchState],
     // @see https://docs.stripe.com/elements/express-checkout-element
-    stripeExpressCheckout: SwitchState,
-    payPal: SwitchState,
-    directDebit: SwitchState,
-    existingCard: SwitchState,
-    existingDirectDebit: SwitchState,
-    amazonPay: SwitchState,
-    sepa: SwitchState,
+    stripeExpressCheckout: Option[SwitchState],
+    payPal: Option[SwitchState],
+    directDebit: Option[SwitchState],
+    amazonPay: Option[SwitchState],
+    sepa: Option[SwitchState],
 )
 
 case class SubscriptionsPaymentMethodSwitches(
-    directDebit: SwitchState,
-    creditCard: SwitchState,
-    paypal: SwitchState,
+    directDebit: Option[SwitchState],
+    creditCard: Option[SwitchState],
+    paypal: Option[SwitchState],
 )
 
 case class Switches(

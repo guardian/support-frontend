@@ -70,14 +70,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Direct Debit",
           |        "state" : "On"
           |      },
-          |      "existingCard" : {
-          |        "description" : "Existing card",
-          |        "state" : "On"
-          |      },
-          |      "existingDirectDebit" : {
-          |        "description" : "Existing Direct Debit",
-          |        "state" : "On"
-          |      },
           |      "sepa" : {
           |        "description" : "SEPA",
           |        "state" : "Off"
@@ -121,10 +113,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |  "featureSwitches" : {
           |    "description" : "Feature switches",
           |    "switches" : {
-          |      "enableQuantumMetric" : {
-          |        "description" : "Enable quantum metric",
-          |        "state" : "On"
-          |      },
           |      "usStripeAccountForSingle" : {
           |        "description" : "US Stripe account for single contributions",
           |        "state" : "On"
@@ -166,13 +154,23 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On, On),
-          recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off, Off),
-          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
-          subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
-          featureSwitches = FeatureSwitches(On, On, Off),
-          campaignSwitches = CampaignSwitches(Off, Off),
-          recaptchaSwitches = RecaptchaSwitches(On, On),
+          oneOffPaymentMethods =
+            OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+          recurringPaymentMethods = RecurringPaymentMethodSwitches(
+            Some(On),
+            Some(On),
+            Some(On),
+            Some(On),
+            Some(On),
+            Some(On),
+            Some(Off),
+            Some(Off),
+          ),
+          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
+          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+          featureSwitches = FeatureSwitches(None, Some(On), Some(Off)),
+          campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
+          recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),
       ))
     }

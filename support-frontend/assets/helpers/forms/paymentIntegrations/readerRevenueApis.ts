@@ -9,8 +9,6 @@ import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	PayPal,
 	Sepa,
 	Stripe,
@@ -122,9 +120,6 @@ type RegularSepaPaymentFields = {
 type GiftRedemption = {
 	redemptionCode: string;
 };
-type RegularExistingPaymentFields = {
-	billingAccountId: string;
-};
 type RegularAmazonPayPaymentFields = {
 	amazonPayBillingAgreementId: string;
 };
@@ -133,7 +128,6 @@ export type RegularPaymentFields =
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| RegularExistingPaymentFields
 	| GiftRedemption
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
@@ -199,14 +193,6 @@ export type SepaAuthorisation = {
 	country?: Country;
 	streetName?: string;
 };
-export type ExistingCardAuthorisation = {
-	paymentMethod: typeof ExistingCard;
-	billingAccountId: string;
-};
-export type ExistingDirectDebitAuthorisation = {
-	paymentMethod: typeof ExistingDirectDebit;
-	billingAccountId: string;
-};
 export type AmazonPayAuthorisation = {
 	paymentMethod: typeof AmazonPay;
 	orderReferenceId?: string;
@@ -222,8 +208,6 @@ export type PaymentAuthorisation =
 	| PayPalAuthorisation
 	| DirectDebitAuthorisation
 	| SepaAuthorisation
-	| ExistingCardAuthorisation
-	| ExistingDirectDebitAuthorisation
 	| AmazonPayAuthorisation;
 
 type Status = 'failure' | 'pending' | 'success';
@@ -297,12 +281,6 @@ function regularPaymentFieldsFromAuthorisation(
 				};
 			}
 
-		case ExistingCard:
-		case ExistingDirectDebit:
-			return {
-				billingAccountId: authorisation.billingAccountId,
-			};
-
 		case AmazonPay:
 			if (authorisation.amazonPayBillingAgreementId) {
 				return {
@@ -314,10 +292,6 @@ function regularPaymentFieldsFromAuthorisation(
 			throw new Error(
 				'Cant create a regular Amazon Pay authorisation for one off',
 			);
-
-		// TODO: what is a sane way to handle such cases?
-		default:
-			throw new Error('If Flow works, this cannot happen');
 	}
 }
 

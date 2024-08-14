@@ -1,12 +1,6 @@
 // ----- Imports ----- //
 
-import {
-	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
-	PayPal,
-	Stripe,
-} from 'helpers/forms/paymentMethods';
+import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -31,13 +25,7 @@ describe('checkouts', () => {
 
 			expect(
 				getValidPaymentMethods(contributionType, countryId, countryGroupId),
-			).toEqual([
-				DirectDebit,
-				ExistingCard,
-				ExistingDirectDebit,
-				Stripe,
-				PayPal,
-			]);
+			).toEqual([DirectDebit, Stripe, PayPal]);
 		});
 
 		it("should return en empty array/'None' for Monthly Recurring UK when switches are all off", () => {

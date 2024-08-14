@@ -3,6 +3,7 @@ import { headline, space } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
+import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 
@@ -38,38 +39,27 @@ export function PatronsMessage({
 	const isUSA = countryGroupId === 'UnitedStates';
 
 	return (
-		<FinePrint mobileTheme={mobileTheme} size="xsmall">
-			<h2 css={headingStyles}>
-				{isUSA ? 'Support another way' : 'Guardian Patrons programme'}
-			</h2>
-			{isUSA ? (
-				<p>
-					If you are interested in contributing through a donor-advised fund,
-					foundation or retirement account, or by mailing a check, please visit
-					our{' '}
-					<Link
-						css={linkStyles}
-						priority="secondary"
-						href={getPatronsLink(intCMPParameter, countryGroupId)}
-					>
-						help page
-					</Link>{' '}
-					to learn how.
-				</p>
-			) : (
-				<p>
-					If you would like to support us at a higher level, from{' '}
-					{patronageAmountsWithGlyph[countryGroupId]} a month, you can join us
-					as a Guardian Patron.{' '}
-					<Link
-						css={linkStyles}
-						priority="secondary"
-						href={getPatronsLink(intCMPParameter, countryGroupId)}
-					>
-						Find out more today.
-					</Link>
-				</p>
+		<>
+			{!isUSA && (
+				<>
+					<CheckoutDivider spacing="loose" mobileTheme={'light'} />
+					<FinePrint mobileTheme={mobileTheme} size="xsmall">
+						<h2 css={headingStyles}>{'Guardian Patrons programme'}</h2>
+						<p>
+							If you would like to support us at a higher level, from{' '}
+							{patronageAmountsWithGlyph[countryGroupId]} a month, you can join
+							us as a Guardian Patron.{' '}
+							<Link
+								css={linkStyles}
+								priority="secondary"
+								href={getPatronsLink(intCMPParameter, countryGroupId)}
+							>
+								Find out more today.
+							</Link>
+						</p>
+					</FinePrint>
+				</>
 			)}
-		</FinePrint>
+		</>
 	);
 }

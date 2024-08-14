@@ -9,7 +9,7 @@ import {
 	string,
 	union,
 } from 'valibot';
-import type { ProductId } from 'helpers/productCatalog';
+import type { ProductKey } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import { logException } from 'helpers/utilities/logger';
 
@@ -26,7 +26,7 @@ const abandonedBasketSchema = object({
 type AbandonedBasket = InferInput<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
-	product: ProductId,
+	product: ProductKey,
 	amount: number,
 	billingPeriod: string,
 	region: string,

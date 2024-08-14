@@ -31,8 +31,6 @@ import {
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
@@ -236,7 +234,10 @@ function regularPaymentRequestFromAuthorisation(
 		},
 		...getPromoCode(state),
 		ophanIds: getOphanIds(),
-		referrerAcquisitionData: state.common.referrerAcquisitionData,
+		referrerAcquisitionData: {
+			...state.common.referrerAcquisitionData,
+			labels: ['contribution-checkout'],
+		},
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
 		debugInfo: actionHistory,
 	};
@@ -420,9 +421,6 @@ function recurringPaymentAuthorisationHandler(
 	)(dispatch, () => state);
 }
 
-// Bizarrely, adding a type to this object means the type-checking on the
-// paymentAuthorisationHandlers is no longer accurate.
-// (Flow thinks it's OK when it's missing required properties).
 const recurringPaymentAuthorisationHandlers = {
 	// These are all the same because there's a single endpoint in
 	// support-frontend which handles all requests to create a recurring payment
@@ -430,8 +428,6 @@ const recurringPaymentAuthorisationHandlers = {
 	Stripe: recurringPaymentAuthorisationHandler,
 	DirectDebit: recurringPaymentAuthorisationHandler,
 	Sepa: recurringPaymentAuthorisationHandler,
-	ExistingCard: recurringPaymentAuthorisationHandler,
-	ExistingDirectDebit: recurringPaymentAuthorisationHandler,
 	AmazonPay: recurringPaymentAuthorisationHandler,
 };
 const error: PaymentResult = {
@@ -498,14 +494,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		},
 		Sepa: () => {
 			logInvalidCombination('ONE_OFF', Sepa);
-			return Promise.resolve(error);
-		},
-		ExistingCard: () => {
-			logInvalidCombination('ONE_OFF', ExistingCard);
-			return Promise.resolve(error);
-		},
-		ExistingDirectDebit: () => {
-			logInvalidCombination('ONE_OFF', ExistingDirectDebit);
 			return Promise.resolve(error);
 		},
 		AmazonPay: (

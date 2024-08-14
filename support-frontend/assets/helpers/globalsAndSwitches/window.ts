@@ -4,6 +4,7 @@ import {
 	boolean,
 	intersect,
 	literal,
+	looseObject,
 	number,
 	object,
 	optional,
@@ -14,6 +15,7 @@ import {
 	union,
 } from 'valibot';
 import { isoCountries } from 'helpers/internationalisation/country';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 /**
  * This file is used to validate data that get's injected from
@@ -67,11 +69,6 @@ const PaymentConfigSchema = object({
 			lastName: optional(string()),
 		}),
 	),
-	/**
-	 * productPrices, strangely, is valid as an empty object.
-	 * We should be trying to avoid using this anywho, and use productCatalog instead.
-	 */
-	productPrices: optional(object({})),
 	serversideTests: optional(object({})),
 	settings: object({
 		/**
@@ -215,15 +212,34 @@ const ProductCatalogSchema = object({
 							id: string(),
 						}),
 					),
+					billingPeriod: optional(picklist(['Quarter', 'Month', 'Annual'])),
 				}),
 			),
 		}),
 	),
 });
 
-const AppConfigSchema = intersect([PaymentConfigSchema, ProductCatalogSchema]);
+/**
+ * We parse productPrices through as a looseObject (no validation)
+ * and then type it on the InferOutput using the existing types.
+ *
+ * This is partly because it is a model that needs refactoring now
+ * we're moving into a more product focussed world, but also because
+ * when creating the valibot schema we get this error
+ * `Type instantiation is excessively deep and possibly infinite.`
+ */
+const ProductPricesSchema = object({
+	productPrices: looseObject({}),
+});
+const AppConfigSchema = intersect([
+	PaymentConfigSchema,
+	ProductCatalogSchema,
+	ProductPricesSchema,
+]);
 
-export type AppConfig = InferOutput<typeof AppConfigSchema>;
+export type AppConfig = InferOutput<typeof AppConfigSchema> & {
+	productPrices: ProductPrices;
+};
 
 export const parseAppConfig = (obj: unknown) => {
 	const appConfig = safeParse(AppConfigSchema, obj);

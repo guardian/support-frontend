@@ -13,7 +13,8 @@
 		"noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
 		"paths": {
-			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"]
+			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
+			"@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
 		},
 
 		// These override @guardian/tsconfig as they have introduced a lot of errors.
@@ -22,6 +23,12 @@
 		"noImplicitReturns": false, // Found 16 errors in 14 files.
 		"noUncheckedIndexedAccess": false // 209 errors in 63 files.
 	},
-	"include": ["./assets", "./stories", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
+	"include": [
+		"./assets",
+		"./stories",
+		"./declaration.d.ts",
+		"./window.d.ts",
+		"./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src"
+	], // The files to type check,
 	"exclude": ["node_modules"] // The files to not type check
 }

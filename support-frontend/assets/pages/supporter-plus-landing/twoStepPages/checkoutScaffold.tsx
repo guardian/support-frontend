@@ -42,7 +42,6 @@ import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
-import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { PatronsMessage } from '../components/patronsMessage';
 
@@ -312,13 +311,10 @@ export function SupporterPlusCheckoutScaffold({
 						{children}
 
 						{!displayPatronsCheckout && (
-							<>
-								<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-								<PatronsMessage
-									countryGroupId={countryGroupId}
-									mobileTheme={'light'}
-								/>
-							</>
+							<PatronsMessage
+								countryGroupId={countryGroupId}
+								mobileTheme={'light'}
+							/>
 						)}
 						<GuardianTsAndCs
 							mobileTheme={'light'}

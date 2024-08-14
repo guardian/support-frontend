@@ -9,7 +9,7 @@ import {
 } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { InferInput } from 'valibot';
-import { number, object, picklist, safeParse, string } from 'valibot';
+import { number, object, optional, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -18,7 +18,8 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import {
 	filterBenefitByRegion,
-	productCatalogDescriptionAdditional,
+	productCatalogDescription,
+	productKeys,
 } from 'helpers/productCatalog';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
@@ -59,8 +60,10 @@ export const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
-	price: number(),
-	product: string(),
+	originalAmount: number(),
+	discountedAmount: optional(number()),
+	finalAmount: number(),
+	product: picklist(productKeys),
 	ratePlan: string(),
 	paymentMethod: picklist([
 		'Stripe',
@@ -68,8 +71,6 @@ const OrderSchema = object({
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
-		'ExistingCard',
-		'ExistingDirectDebit',
 		'AmazonPay',
 		'None',
 	]),
@@ -134,14 +135,14 @@ export function ThankYou({ geoId }: Props) {
 				? 'Stripe'
 				: order.paymentMethod;
 		successfulContributionConversion(
-			order.price,
+			order.originalAmount,
 			contributionType,
 			currencyKey,
 			paymentMethod,
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
-			order.price,
+			order.originalAmount,
 			contributionType,
 			currencyKey,
 		);
@@ -160,7 +161,7 @@ export function ThankYou({ geoId }: Props) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = !isNewAccount && isSignedIn;
 
-	const productDescription = productCatalogDescriptionAdditional[order.product];
+	const productDescription = productCatalogDescription[order.product];
 	const benefitsChecklist = [
 		...productDescription.benefits
 			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
@@ -195,7 +196,6 @@ export function ThankYou({ geoId }: Props) {
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
-		...maybeThankYouModule(isTier3 && isSignedIn, 'signedIn'), // Continue to your account
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
@@ -224,7 +224,7 @@ export function ThankYou({ geoId }: Props) {
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
 							name={order.firstName}
-							amount={order.price}
+							amount={order.originalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
 							isTier3={isTier3}

@@ -53,7 +53,9 @@ class StripeBackend(
     switchService.allSwitches
       .map(s =>
         s.recaptchaSwitches.exists(switch =>
-          switch.switches.enableRecaptchaFrontend.state.isOn && switch.switches.enableRecaptchaBackend.state.isOn,
+          switch.switches.enableRecaptchaFrontend.exists(_.state.isOn) && switch.switches.enableRecaptchaBackend.exists(
+            _.state.isOn,
+          ),
         ),
       )
 
@@ -66,16 +68,14 @@ class StripeBackend(
     }
 
   private def stripeCheckoutEnabled =
-    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.stripe.state.isOn))
+    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripe.exists(_.state.isOn)))
 
   private def stripeApplePayEnabled =
-    switchService.allSwitches.map(switch =>
-      switch.oneOffPaymentMethods.exists(s => s.switches.stripeApplePay.state.isOn),
-    )
+    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripeApplePay.exists(_.state.isOn)))
 
   private def stripePaymentRequestEnabled =
-    switchService.allSwitches.map(switch =>
-      switch.oneOffPaymentMethods.exists(s => s.switches.stripePaymentRequestButton.state.isOn),
+    switchService.allSwitches.map(
+      _.oneOffPaymentMethods.exists(_.switches.stripePaymentRequestButton.exists(_.state.isOn)),
     )
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.

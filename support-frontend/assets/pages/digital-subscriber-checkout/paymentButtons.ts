@@ -1,6 +1,4 @@
 import { AmazonPaymentButton } from 'components/amazonPayForm/amazonPaymentButton';
-import { ExistingCardPaymentButton } from 'components/existingMethodPaymentButton/existingCardPaymentButton';
-import { ExistingDirectDebitPaymentButton } from 'components/existingMethodPaymentButton/existingDirectDebitPaymentButton';
 import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
 import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { DigiSubPayPalPaymentButton } from 'components/payPalPaymentButton/digiSubPayPalPaymentButton';
@@ -17,8 +15,6 @@ type PaymentMethodButtons = Partial<
 const allPaymentMethodButtons: PaymentMethodButtons = {
 	AmazonPay: AmazonPaymentButton,
 	DirectDebit: DirectDebitPaymentButton,
-	ExistingCard: ExistingCardPaymentButton,
-	ExistingDirectDebit: ExistingDirectDebitPaymentButton,
 	PayPal: DigiSubPayPalPaymentButton,
 	Stripe: StripePaymentButton,
 };

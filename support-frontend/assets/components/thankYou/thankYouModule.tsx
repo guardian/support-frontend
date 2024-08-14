@@ -15,6 +15,8 @@ import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
 
 const container = css`
 	background: white;
+	padding-left: 10px;
+	padding-right: 10px;
 	padding-top: ${space[2]}px;
 	padding-bottom: ${space[5]}px;
 	border-bottom: 1px solid ${neutral[86]};
@@ -22,6 +24,7 @@ const container = css`
 	${from.tablet} {
 		max-width: 620px;
 		padding-left: ${space[4]}px;
+		padding-right: 0px;
 		border: 1px solid ${neutral[86]};
 	}
 `;
@@ -217,7 +220,6 @@ export type ThankYouModuleType =
 	| 'ausMap'
 	| 'feedback'
 	| 'signIn'
-	| 'signedIn'
 	| 'signUp'
 	| 'socialShare'
 	| 'supportReminder'

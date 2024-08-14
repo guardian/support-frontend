@@ -124,6 +124,13 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 	);
 }
 
+const tier3lineBreak = css`
+	display: none;
+	${from.tablet} {
+		display: inline-block;
+	}
+`;
+
 const yellowAmountText = css`
 	background-color: #ffe500;
 	padding: 0 5px;
@@ -201,7 +208,8 @@ function Heading({
 					currency={currency}
 					amount={amount}
 					productName={'Digital + print.'}
-				/>{' '}
+				/>
+				<br css={tier3lineBreak} />
 				Your valued support powers our journalism.
 			</h1>
 		);
