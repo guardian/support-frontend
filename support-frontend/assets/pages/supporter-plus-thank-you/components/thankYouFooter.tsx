@@ -1,4 +1,3 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, space, textSans } from '@guardian/source/foundations';
 
@@ -12,20 +11,11 @@ const footer = css`
 	}
 `;
 
-type ThankyouFooterProps = {
-	copyOverride?: string;
-	cssOverrides?: SerializedStyles;
-};
-
-function ThankYouFooter({
-	copyOverride,
-	cssOverrides,
-}: ThankyouFooterProps): JSX.Element {
+function ThankYouFooter(): JSX.Element {
 	return (
-		<div css={[footer, cssOverrides]}>
-			{copyOverride
-				? copyOverride
-				: 'If you have any questions about supporting the Guardian, please contact our customer service team.'}
+		<div css={footer}>
+			If you have any questions about supporting the Guardian, please contact
+			our customer service team.
 		</div>
 	);
 }

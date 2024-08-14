@@ -7,7 +7,6 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
@@ -49,6 +48,10 @@ const tscs = css`
 	}
 `;
 
+const footerWiden = css`
+	margin-top: ${space[8]}px;
+`;
+
 export function Events() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const eventId = searchParams.get('eventId') ?? '4180362';
@@ -62,12 +65,7 @@ export function Events() {
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter
-						copyOverride="&nbsp;"
-						cssOverrides={css`
-							margin-bottom: ${space[3]}px;
-						`}
-					/>
+					<span css={footerWiden}></span>
 				</FooterWithContents>
 			}
 		>
