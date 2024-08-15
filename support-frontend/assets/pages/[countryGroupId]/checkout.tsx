@@ -1378,8 +1378,7 @@ function CheckoutComponent({
 												/>
 											</div>
 										</>
-										{/*For deliverable products we take the state and
-                    zip code with the delivery address*/}
+										{/** For deliverable products we take the state and zip code with the delivery address */}
 										{showStateSelect && !productDescription.deliverableTo && (
 											<StateSelect
 												countryId={countryId}
@@ -1468,7 +1467,15 @@ function CheckoutComponent({
 													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={productDescription.deliverableTo}
+													countries={Object.fromEntries(
+														Object.entries(
+															productDescription.deliverableTo,
+														).filter(([code]) => {
+															return countryGroups[
+																countryGroupId
+															].countries.includes(code as IsoCountry);
+														}),
+													)}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -1545,7 +1552,15 @@ function CheckoutComponent({
 														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={productDescription.deliverableTo}
+														countries={Object.fromEntries(
+															Object.entries(
+																productDescription.deliverableTo,
+															).filter(([code]) => {
+																return countryGroups[
+																	countryGroupId
+																].countries.includes(code as IsoCountry);
+															}),
+														)}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
