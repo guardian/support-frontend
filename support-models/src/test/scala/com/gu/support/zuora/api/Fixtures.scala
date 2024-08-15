@@ -121,6 +121,19 @@ object Fixtures {
     createdRequestId__c = "createdreqid_hi",
   )
 
+  def auAccount(
+      currency: Currency = AUD,
+      paymentGateway: PaymentGateway = StripeGatewayAUD,
+  ): Account = Account(
+    name = salesforceAccountId,
+    currency = currency,
+    crmId = salesforceAccountId,
+    sfContactId__c = salesforceId,
+    identityId__c = identityId,
+    paymentGateway = Some(paymentGateway),
+    createdRequestId__c = "createdreqid_hi",
+  )
+
   val deliveryInstructions = "Leave behind the dustbin"
   val contactDetails =
     ContactDetails(
