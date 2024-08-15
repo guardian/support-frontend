@@ -109,12 +109,16 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { isProd } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import {
+	PaymentTsAndCs,
+	SummaryTsAndCs,
+} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -1751,6 +1755,20 @@ function CheckoutComponent({
 											})}
 										</RadioGroup>
 									</fieldset>
+									<SummaryTsAndCs
+										countryGroupId={countryGroupId}
+										contributionType={
+											productFields.billingPeriod === 'Monthly'
+												? 'MONTHLY'
+												: productFields.billingPeriod === 'Annual'
+												? 'ANNUAL'
+												: 'ONE_OFF'
+										}
+										currency={currencyKey}
+										amount={originalAmount}
+										productKey={productKey}
+										promotion={promotion}
+									/>
 									<div
 										css={css`
 											margin-top: ${space[8]}px;
@@ -1792,7 +1810,9 @@ function CheckoutComponent({
 												/>
 
 												<PayPalButton
-													env={isTestUser ? 'sandbox' : 'production'}
+													env={
+														isProd() && !isTestUser ? 'production' : 'sandbox'
+													}
 													style={{
 														color: 'blue',
 														size: 'responsive',
@@ -1908,16 +1928,15 @@ function CheckoutComponent({
 										currency={currencyKey}
 										amount={originalAmount}
 										amountIsAboveThreshold={
-											productDescription.label === 'All-access digital' ||
-											productDescription.label === 'Digital + print'
+											productKey === 'SupporterPlus' ||
+											productKey === 'TierThree'
 										}
-										productNameAboveThreshold={productDescription.label}
+										productKey={productKey}
 										promotion={promotion}
 									/>
 								</BoxContents>
 							</Box>
 						</form>
-						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 						<PatronsMessage
 							countryGroupId={countryGroupId}
 							mobileTheme={'light'}

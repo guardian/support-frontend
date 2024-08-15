@@ -25,11 +25,6 @@ import {
 	getFeedbackHeader,
 } from 'components/thankYou/feedback/FeedbackItems';
 import {
-	SignedInBodyCopy,
-	SignedInCTA,
-	signedInHeader,
-} from 'components/thankYou/signedIn/signedInItems';
-import {
 	SignInBodyCopy,
 	SignInCTA,
 	signInHeader,
@@ -270,17 +265,6 @@ SignIn.decorators = [
 		);
 	},
 ];
-
-export const SignedInTier3 = Template.bind({});
-
-SignedInTier3.args = {
-	moduleType: 'signIn',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signedInHeader,
-	bodyCopy: <SignedInBodyCopy />,
-	ctas: <SignedInCTA />,
-};
 
 export const AusMap = Template.bind({});
 
