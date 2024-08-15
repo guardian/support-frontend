@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { neutral, space, textSans } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -15,6 +15,8 @@ import {
 	usStates,
 } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type {
 	AddressFieldsState,
 	PostcodeFinderState,
@@ -28,6 +30,7 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
+	countryGroupId: CountryGroupId;
 	countries: Record<string, string>;
 	postcodeState: PostcodeFinderState;
 };
@@ -75,7 +78,11 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
-export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
+export function AddressFields({
+	scope,
+	countryGroupId,
+	...props
+}: PropTypes): JSX.Element {
 	return (
 		<div data-component={`${scope}AddressFields`}>
 			<Select
@@ -97,6 +104,43 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
 			</Select>
+			<div
+				css={css`
+					${textSans.xsmall({ fontWeight: 'light' })}
+					color: ${neutral[7]};
+					margin-top: -20px;
+					margin-bottom: 20px;
+					display: block;
+					position: relative;
+				`}
+			>
+				<span>Not in the {countryGroups[countryGroupId].name}?</span>
+				<select
+					css={css`
+						margin-left: 5px;
+					`}
+					onChange={(e) => {
+						const pathname = window.location.pathname;
+						const currentCountryGroup = pathname.split('/')[1];
+						const newPathname = pathname.replace(
+							currentCountryGroup,
+							e.currentTarget.value,
+						);
+						const location = `${newPathname}${window.location.search}`;
+						window.location.href = location;
+					}}
+				>
+					{Object.entries(countryGroups).map(([key, value]) => (
+						<option
+							key={key}
+							value={value.supportInternationalisationId}
+							selected={key === countryGroupId}
+						>
+							{value.name}
+						</option>
+					))}
+				</select>
+			</div>
 			{props.country === 'GB' ? (
 				<PostcodeFinder
 					postcode={props.postcodeState.postcode}

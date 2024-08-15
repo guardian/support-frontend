@@ -1461,6 +1461,7 @@ function CheckoutComponent({
 												<legend css={legend}>2. Delivery address</legend>
 												<AddressFields
 													scope={'delivery'}
+													countryGroupId={countryGroupId}
 													lineOne={deliveryLineOne}
 													lineTwo={deliveryLineTwo}
 													city={deliveryCity}
