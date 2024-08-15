@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source/foundations';
+import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import { privacyLink } from 'helpers/legal';
 
 const marginTop = css`
@@ -38,6 +39,9 @@ export function PaymentTsAndCs(): JSX.Element {
 				<p css={marginTop}>
 					To find out what personal data we collect and how we use it, please
 					visit our <a href={privacyLink}>Privacy Policy</a>.
+				</p>
+				<p css={marginTop}>
+					<StripeDisclaimer />
 				</p>
 			</div>
 		</div>

@@ -2,18 +2,19 @@ import { css } from '@emotion/react';
 import { palette, space, textSans, until } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import { useParams } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
+import * as cookie from 'helpers/storage/cookie';
+import { isProd } from 'helpers/urls/url';
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
 
@@ -30,17 +31,16 @@ const columns = css`
 const shorterBoxMargin = css`
 	border-radius: ${space[2]}px;
 	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
+		margin-bottom: ${space[4]}px;
 	}
 `;
 
 const tscs = css`
 	color: #606060;
 	${textSans.xxsmall()};
-	padding-bottom: ${space[2]}px;
+	padding-bottom: ${space[14]}px;
 	${until.tablet} {
+		padding-bottom: ${space[2]}px;
 		color: ${palette.neutral[97]};
 	}
 	& a {
@@ -51,11 +51,19 @@ const tscs = css`
 	}
 `;
 
-export function Events() {
-	const searchParams = new URLSearchParams(window.location.search);
-	const eventId = searchParams.get('eventId') ?? '4180362';
-	const chk = searchParams.get('chk') ?? '9fa2';
+const footerWiden = css`
+	margin-top: ${space[8]}px;
+`;
 
+export function Events() {
+	const isTestUser = !!cookie.get('_test_username');
+	const shouldUseCode = isTestUser || !isProd();
+	const ticketTailorUrl = shouldUseCode
+		? 'https://www.tickettailor.com/events/guardianlivecode'
+		: 'https://tickets.theguardian.live/events/guardianlive';
+
+	const params = useParams();
+	const eventId = params.eventId;
 	const termsEvents = <a href={guardianLiveTermsLink}>Terms and Conditions</a>;
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
@@ -64,7 +72,7 @@ export function Events() {
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter />
+					<span css={footerWiden}></span>
 				</FooterWithContents>
 			}
 		>
@@ -79,7 +87,7 @@ export function Events() {
 									<div className="tt-widget-fallback">
 										<p>
 											<a
-												href={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/${chk}/?ref=support-theguardian-com`}
+												href={`${ticketTailorUrl}/${eventId}/book`}
 												target="_blank"
 											>
 												Click here to buy tickets
@@ -88,7 +96,7 @@ export function Events() {
 									</div>
 									<script
 										src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-										data-url={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/${chk}/?ref=support-theguardian-com`}
+										data-url={`${ticketTailorUrl}/${eventId}/book`}
 										data-type="inline"
 										data-inline-minimal="true"
 										data-inline-show-logo="false"

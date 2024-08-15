@@ -94,7 +94,7 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
 
 # Events
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events              controllers.Application.eventsRouter(countryGroupId: String, eventId: Option[String] = None)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.Application.eventsRouter(countryGroupId: String, eventId: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
