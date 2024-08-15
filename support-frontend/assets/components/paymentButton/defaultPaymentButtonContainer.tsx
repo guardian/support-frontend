@@ -51,7 +51,7 @@ export function DefaultPaymentButtonContainer({
 	onClick,
 	createButtonText = getButtonText,
 }: DefaultPaymentContainerProps): JSX.Element {
-	const { currencyId } = useContributionsSelector(
+	const { currencyId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
@@ -64,9 +64,7 @@ export function DefaultPaymentButtonContainer({
 			  )
 			: getUserSelectedAmount(state),
 	);
-	const { countryId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
+
 	const promotion = isSupporterPlus
 		? useContributionsSelector((state) =>
 				getPromotion(
