@@ -392,7 +392,7 @@ export function ThreeTierLanding(): JSX.Element {
 			/**
 			 * Only Testing CardTier1 wth checkout
 			 */
-			if ((useGenericCheckout && cardTier === 1) || tier2UseGenericCheckout) {
+			if (useGenericCheckout) {
 				/**
 				 * Generic Checkout is not defined in supporterPlusRouter
 				 */
@@ -469,8 +469,6 @@ export function ThreeTierLanding(): JSX.Element {
 	};
 
 	/** Tier 2: SupporterPlus */
-	const tier2UseGenericCheckout = abParticipations.tierTwoFromApi === 'variant';
-
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	const tier2Pricing =
@@ -488,14 +486,14 @@ export function ThreeTierLanding(): JSX.Element {
 		'selected-contribution-type': selectedContributionType,
 		product: 'SupporterPlus',
 	});
-	const tier2UrlParams = tier2UseGenericCheckout
+	const tier2UrlParams = useGenericCheckout
 		? tier2GenericUrlParams
 		: tier2ContributeUrlParams;
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
 	const tier2Url = `${
-		tier2UseGenericCheckout ? '' : 'contribute/'
+		useGenericCheckout ? '' : 'contribute/'
 	}checkout?${tier2UrlParams.toString()}`;
 	const tier2Card = {
 		productDescription: productCatalogDescription.SupporterPlus,
