@@ -7,13 +7,11 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
 
@@ -30,17 +28,16 @@ const columns = css`
 const shorterBoxMargin = css`
 	border-radius: ${space[2]}px;
 	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
+		margin-bottom: ${space[4]}px;
 	}
 `;
 
 const tscs = css`
 	color: #606060;
 	${textSans.xxsmall()};
-	padding-bottom: ${space[2]}px;
+	padding-bottom: ${space[14]}px;
 	${until.tablet} {
+		padding-bottom: ${space[2]}px;
 		color: ${palette.neutral[97]};
 	}
 	& a {
@@ -49,6 +46,10 @@ const tscs = css`
 			color: ${palette.neutral[97]};
 		}
 	}
+`;
+
+const footerWiden = css`
+	margin-top: ${space[8]}px;
 `;
 
 export function Events() {
@@ -64,7 +65,7 @@ export function Events() {
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter />
+					<span css={footerWiden}></span>
 				</FooterWithContents>
 			}
 		>
