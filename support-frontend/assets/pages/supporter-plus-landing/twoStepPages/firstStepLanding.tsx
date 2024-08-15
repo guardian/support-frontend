@@ -27,7 +27,6 @@ import {
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
-import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
@@ -107,9 +106,6 @@ export function SupporterPlusInitialLandingPage({
 		(state) => state.common,
 	);
 
-	const displayLimitedPriceCards =
-		abParticipations.supporterPlusOnly === 'variant';
-
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 
 	const proceedToNextStep = useOtherAmountValidation(() => {
@@ -147,9 +143,7 @@ export function SupporterPlusInitialLandingPage({
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
 			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
-				{displayLimitedPriceCards ? (
-					<LimitedPriceCards />
-				) : displayPatronsCheckout ? (
+				{displayPatronsCheckout ? (
 					<PatronsPriceCards />
 				) : (
 					<AmountAndBenefits
