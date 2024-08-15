@@ -11,12 +11,13 @@ import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { NavigateWithPageView } from 'helpers/tracking/NavigateWithPageView';
+import { Index } from 'pages/[countryGroupId]';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
-import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
+import { ThreeTierLandingContainer } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
 
@@ -104,7 +105,7 @@ const router = () => {
 									 */
 									inThreeTier ? (
 										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
-											<ThreeTierLanding />
+											<ThreeTierLandingContainer />
 										</ThreeTierRedirectOneOffToCheckout>
 									) : (
 										<SupporterPlusInitialLandingPage
@@ -131,4 +132,10 @@ const router = () => {
 	);
 };
 
-renderPage(router());
+const split = Math.random() < 0.5;
+if (split) {
+	renderPage(router());
+} else {
+	const appConfig = parseAppConfig(window.guardian);
+	renderPage(<Index geoId="uk" appConfig={appConfig} />);
+}
