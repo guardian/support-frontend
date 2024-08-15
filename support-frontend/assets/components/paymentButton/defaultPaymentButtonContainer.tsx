@@ -64,7 +64,6 @@ export function DefaultPaymentButtonContainer({
 			  )
 			: getUserSelectedAmount(state),
 	);
-
 	const promotion = isSupporterPlus
 		? useContributionsSelector((state) =>
 				getPromotion(
