@@ -20,10 +20,13 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
+	SelectedAmountsVariant,
 } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -63,7 +66,6 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
-import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -277,38 +279,18 @@ const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
 	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
 };
 
-export function ThreeTierLanding(): JSX.Element {
-	const dispatch = useContributionsDispatch();
-	const navigate = useNavigate();
+export function ThreeTierLandingContainer(): JSX.Element {
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-
 	const { countryGroupId, currencyId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [
-			GBPCountries,
-			UnitedStates,
-			AUDCountries,
-			EURCountries,
-			NZDCountries,
-			Canada,
-			International,
-		],
-		selectedCountryGroup: countryGroupId,
-		subPath: '/contribute',
-	};
-
 	const contributionTypeFromState =
 		useContributionsSelector(getContributionType);
-	const contributionType =
-		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
-	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
-	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
-		tierPlanPeriod.slice(1)) as BillingPeriod;
+
+	const billingPeriod =
+		contributionTypeFromState === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	const promotionTier2 = useContributionsSelector((state) =>
 		getPromotion(
@@ -317,6 +299,7 @@ export function ThreeTierLanding(): JSX.Element {
 			billingPeriod,
 		),
 	);
+
 	const promotionTier3 = useContributionsSelector((state) =>
 		getPromotion(
 			state.page.checkoutForm.product.tierThreeProductPrices,
@@ -325,13 +308,8 @@ export function ThreeTierLanding(): JSX.Element {
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 		),
 	);
-	const promotionTier3Hardcoded =
-		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
-	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
-
+	const dispatch = useContributionsDispatch();
 	useEffect(() => {
 		dispatch(resetValidation());
 		if (contributionTypeFromState === 'ONE_OFF') {
@@ -351,6 +329,7 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
+	const navigate = useNavigate();
 	const handleLinkCtaClick = (
 		event: React.MouseEvent<HTMLAnchorElement>,
 		link: string,
@@ -358,6 +337,9 @@ export function ThreeTierLanding(): JSX.Element {
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
+		recurringAmount: number,
+		useGenericCheckout: boolean,
+		tier2UseGenericCheckout: boolean,
 	) => {
 		/** This is a workaround for now while we move tier 3 to a new SupporterPlus ratePlan */
 		if (cardTier === 3) {
@@ -429,6 +411,85 @@ export function ThreeTierLanding(): JSX.Element {
 		return `checkout?${urlParams.toString()}${window.location.hash}`;
 	};
 
+	const { amounts } = useContributionsSelector((state) => state.common);
+
+	return (
+		<ThreeTierLanding
+			abParticipations={abParticipations}
+			countryGroupId={countryGroupId}
+			currencyId={currencyId}
+			countryId={countryId}
+			contributionTypeFromState={contributionTypeFromState}
+			promotionTier2={promotionTier2}
+			promotionTier3={promotionTier3}
+			handlePaymentFrequencyBtnClick={handlePaymentFrequencyBtnClick}
+			handleLinkCtaClick={handleLinkCtaClick}
+			handleSupportOnceBtnClick={handleSupportOnceBtnClick}
+			amounts={amounts}
+		/>
+	);
+}
+
+type Props = {
+	abParticipations: Participations;
+	countryGroupId: CountryGroupId;
+	currencyId: IsoCurrency;
+	countryId: IsoCountry;
+	contributionTypeFromState: ContributionType;
+	promotionTier2?: Promotion;
+	promotionTier3?: Promotion;
+	handlePaymentFrequencyBtnClick: (buttonIndex: number) => void;
+	handleLinkCtaClick: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+		recurringAmount: number,
+		useGenericCheckout: boolean,
+		tier2UseGenericCheckout: boolean,
+	) => void;
+	handleSupportOnceBtnClick: () => void;
+	amounts: SelectedAmountsVariant;
+};
+export function ThreeTierLanding({
+	abParticipations,
+	countryGroupId,
+	currencyId,
+	// countryId,
+	contributionTypeFromState,
+	promotionTier2,
+	promotionTier3,
+	handlePaymentFrequencyBtnClick,
+	handleLinkCtaClick,
+	handleSupportOnceBtnClick,
+	amounts,
+}: Props): JSX.Element {
+	const countrySwitcherProps: CountryGroupSwitcherProps = {
+		countryGroupIds: [
+			GBPCountries,
+			UnitedStates,
+			AUDCountries,
+			EURCountries,
+			NZDCountries,
+			Canada,
+			International,
+		],
+		selectedCountryGroup: countryGroupId,
+		subPath: '/contribute',
+	};
+
+	const contributionType =
+		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+
+	const promotionTier3Hardcoded =
+		contributionType === 'ANNUAL'
+			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
+
+	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
+
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
@@ -438,7 +499,6 @@ export function ThreeTierLanding(): JSX.Element {
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
 	 */
-	const { amounts } = useContributionsSelector((state) => state.common);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
 	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
 	const recurringAmount =
@@ -632,7 +692,14 @@ export function ThreeTierLanding(): JSX.Element {
 						currencyId={currencyId}
 						countryGroupId={countryGroupId}
 						paymentFrequency={contributionType}
-						linkCtaClickHandler={handleLinkCtaClick}
+						linkCtaClickHandler={(...p) =>
+							handleLinkCtaClick(
+								...p,
+								recurringAmount,
+								useGenericCheckout,
+								tier2UseGenericCheckout,
+							)
+						}
 					/>
 				</div>
 			</Container>

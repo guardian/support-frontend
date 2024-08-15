@@ -1,5 +1,6 @@
 module.exports = {
 	common: {
+		'[countryGroupId]/index': 'pages/[countryGroupId]/index.tsx',
 		'[countryGroupId]/router': 'pages/[countryGroupId]/router.tsx',
 		'[countryGroupId]/events/router':
 			'pages/[countryGroupId]/events/router.tsx',
