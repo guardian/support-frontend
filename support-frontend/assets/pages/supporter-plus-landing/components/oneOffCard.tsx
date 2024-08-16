@@ -7,10 +7,14 @@ import {
   until,
   headline,
 } from '@guardian/source/foundations';
-import {ContributionsPriceCards} from "./contributionsPriceCards";
+import {
+  buttonThemeReaderRevenueBrand,
+  Button
+} from '@guardian/source/react-components';
 import {PriceCardsContainer} from "../../../components/priceCards/priceCardsContainer";
 import {PriceCards} from "../../../components/priceCards/priceCards";
 import {OtherAmount} from "../../../components/otherAmount/otherAmount";
+import {PaymentCards} from "./PaymentIcons";
 
 const sectionStyle = css`
   max-width: 600px;
@@ -22,16 +26,6 @@ const sectionStyle = css`
     padding-top: ${space[6]}px;
   }
 `;
-const titleAndButtonContainer = css`
-  display: flex;
-  text-align: center;
-	justify-content: space-between;
-	align-items: center;
-	margin: 6px 0 ${space[3]}px;
-	${from.desktop} {
-		margin-bottom: 0;
-	}
-`
 const titleStyle = css`
   margin: 0 0 ${space[3]}px;
   text-align: center;
@@ -48,7 +42,19 @@ const standFirst = css`
 	}
 `;
 
-function ContributionsPriceCards(): JSX.Element {
+const btnStyleOverrides = css`
+	width: 100%;
+	justify-content: center;
+	margin-bottom: ${space[6]}px;
+	margin-top: ${space[6]}px;
+`;
+
+const buttonContainer = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+function LandingPageContributionsPriceCards({currencyId}: { currencyId: string}): JSX.Element {
   return (
     <div
       css={css`
@@ -58,7 +64,7 @@ function ContributionsPriceCards(): JSX.Element {
       <h2 css={titleStyle}>
           Support just once
       </h2>
-      <p css={standFirst}>We welcome support of any size, any time, whether you choose to give $1 or much more.</p>
+      <p css={standFirst}>We welcome support of any size, any time, whether you choose to give {currencyId}1 or much more.</p>
       <PriceCardsContainer
         paymentFrequency={'ONE_OFF'}
         renderPriceCards={({
@@ -97,10 +103,26 @@ function ContributionsPriceCards(): JSX.Element {
   );
 }
 
-export function OneOffCard({}): JSX.Element {
+interface Props {
+  currencyId: string;
+  btnClickHandler: () => void;
+}
+
+export function OneOffCard({currencyId, btnClickHandler}: Props): JSX.Element {
   return (
     <section css={sectionStyle}>
-      <ContributionsPriceCards paymentFrequency="ONE_OFF" />
+      <LandingPageContributionsPriceCards currencyId={currencyId} />
+      <div css={buttonContainer}>
+        <ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+          <Button
+            cssOverrides={btnStyleOverrides}
+            onClick={btnClickHandler}
+          >
+            Continue to checkout
+          </Button>
+        </ThemeProvider>
+        <PaymentCards />
+      </div>
     </section>
   );
 }
