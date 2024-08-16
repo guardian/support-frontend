@@ -216,7 +216,6 @@ const links = [
 ];
 
 // The three tier checkout only supports monthly and annual contributions
-// const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
 const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
 	ONE_OFF: 'One-time',
@@ -304,9 +303,7 @@ export function ThreeTierLanding(): JSX.Element {
 		subPath: '/contribute',
 	};
 
-	const contributionTypeFromState =
-		useContributionsSelector(getContributionType);
-	const contributionType = contributionTypeFromState; // === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+	const contributionType = useContributionsSelector(getContributionType);
 	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
@@ -337,7 +334,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	useEffect(() => {
 		dispatch(resetValidation());
-		if (!enableSingle && contributionTypeFromState === 'ONE_OFF') {
+		if (!enableSingle && contributionType === 'ONE_OFF') {
 			dispatch(setProductType('MONTHLY'));
 			/*
 			 * Reset the product type to monthly if one_off not available
