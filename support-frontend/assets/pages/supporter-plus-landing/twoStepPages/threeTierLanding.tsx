@@ -335,10 +335,10 @@ export function ThreeTierLanding(): JSX.Element {
 	useEffect(() => {
 		dispatch(resetValidation());
 		if (!enableSingle && contributionType === 'ONE_OFF') {
-			dispatch(setProductType('MONTHLY'));
 			/*
 			 * Reset the product type to monthly if one_off not available
 			 */
+			dispatch(setProductType('MONTHLY'));
 		}
 		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
