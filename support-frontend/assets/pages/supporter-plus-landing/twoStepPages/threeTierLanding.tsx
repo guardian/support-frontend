@@ -632,7 +632,11 @@ export function ThreeTierLanding(): JSX.Element {
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
           { contributionType === 'ONE_OFF' &&
-            <OneOffCard />
+            <OneOffCard
+              currencyId={currencies[currencyId].glyph}
+              // linkCtaClickHandler={handleLinkCtaClick}
+              btnClickHandler={handleSupportOnceBtnClick}
+            />
           }
           {contributionType !== 'ONE_OFF' &&
             <ThreeTierCards
