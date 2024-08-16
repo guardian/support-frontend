@@ -7,7 +7,6 @@ type CampaignCopy = {
 };
 
 export type CampaignSettings = {
-	campaignCode: string;
 	campaignPath: string;
 	tickerId: string;
 	copy?: (goalReached: boolean) => CampaignCopy;
@@ -25,36 +24,7 @@ export type CampaignSettings = {
 	// If set, the form will be replaced with this if goal reached
 };
 
-export const activeCampaigns: Record<string, CampaignSettings> = {};
-
-function campaignEnabledForUser(campaignCode?: string): boolean {
-	if (campaignCode && isCampaignEnabled(campaignCode)) {
-		const matchingCampaign = activeCampaigns[campaignCode];
-		return window.location.pathname.endsWith(
-			`/${matchingCampaign.campaignPath}`,
-		);
-	}
-
-	return false;
-}
-
-export function getCampaignSettings(
-	campaignCode?: string,
-): CampaignSettings | null {
-	if (campaignCode && campaignEnabledForUser(campaignCode)) {
-		return activeCampaigns[campaignCode];
-	}
-
-	return null;
-}
-
-export function getCampaignCode(campaignCode?: string): string | null {
-	const campaignSettings = getCampaignSettings(campaignCode ?? '');
-
-	if (campaignSettings) {
-		return campaignSettings.campaignCode;
-	}
-
+export function getCampaignSettings(): CampaignSettings | null {
 	return null;
 }
 
