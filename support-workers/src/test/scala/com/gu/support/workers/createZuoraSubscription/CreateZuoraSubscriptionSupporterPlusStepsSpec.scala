@@ -3,7 +3,7 @@ package com.gu.support.workers.createZuoraSubscription
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{CatalogServiceSpec, ProductRatePlanId}
-import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraInvoiceTemplatesConfig, ZuoraSupporterPlusConfig}
+import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraSupporterPlusConfig}
 import com.gu.support.workers.integration.TestData.supporterPlusPromotionService
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
@@ -23,11 +23,6 @@ import java.util.UUID
 import scala.concurrent.Future
 
 class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with Matchers {
-
-  val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
 
   val expectedRatePlanToCharges: Map[ProductRatePlanId, List[api.RatePlanCharge]] =
     Map[ProductRatePlanId, List[api.RatePlanCharge]](
@@ -142,7 +137,6 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
-          invoiceTemplateIds,
         ),
       ),
       user =
