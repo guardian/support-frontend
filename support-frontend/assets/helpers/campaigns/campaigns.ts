@@ -7,6 +7,7 @@ type CampaignCopy = {
 };
 
 export type CampaignSettings = {
+	campaignCode: string;
 	campaignPath: string;
 	tickerId: string;
 	copy?: (goalReached: boolean) => CampaignCopy;
