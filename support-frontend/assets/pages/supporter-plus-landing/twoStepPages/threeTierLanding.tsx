@@ -60,11 +60,11 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
-import {OneOffCard} from "../components/oneOffCard";
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -219,7 +219,7 @@ const links = [
 // const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
 const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
-  ONE_OFF: 'One-time',
+	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
 	ANNUAL: 'Annual',
 };
@@ -306,8 +306,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const contributionTypeFromState =
 		useContributionsSelector(getContributionType);
-	const contributionType =
-		contributionTypeFromState;// === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+	const contributionType = contributionTypeFromState; // === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
 	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
@@ -338,18 +337,20 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(resetValidation());
 		// if (contributionTypeFromState === 'ONE_OFF') {
 		// 	dispatch(setProductType('MONTHLY'));
-			/*
-			 * Interaction on this page only works
-			 * with regular contributions (monthly | annual)
-			 * this resets the product type to monthly if
-			 * coming from the one off contribution checkout
-			 */
+		/*
+		 * Interaction on this page only works
+		 * with regular contributions (monthly | annual)
+		 * this resets the product type to monthly if
+		 * coming from the one off contribution checkout
+		 */
 		// }
 		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
 
-  const enableSingle = true;  // TODO - use campaign config
-  const paymentFrequencies: ContributionType[] = enableSingle ? ['ONE_OFF','MONTHLY', 'ANNUAL'] : ['MONTHLY', 'ANNUAL'];
+	const enableSingle = countryGroupId === UnitedStates; // TODO - use campaign config
+	const paymentFrequencies: ContributionType[] = enableSingle
+		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
+		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
@@ -631,22 +632,22 @@ export function ThreeTierLanding(): JSX.Element {
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-          { contributionType === 'ONE_OFF' &&
-            <OneOffCard
-              currencyId={currencies[currencyId].glyph}
-              // linkCtaClickHandler={handleLinkCtaClick}
-              btnClickHandler={handleSupportOnceBtnClick}
-            />
-          }
-          {contributionType !== 'ONE_OFF' &&
-            <ThreeTierCards
-              cardsContent={[tier1Card, tier2Card, tier3Card]}
-              currencyId={currencyId}
-              countryGroupId={countryGroupId}
-              paymentFrequency={contributionType}
-              linkCtaClickHandler={handleLinkCtaClick}
-            />
-          }
+					{contributionType === 'ONE_OFF' && (
+						<OneOffCard
+							currencyId={currencies[currencyId].glyph}
+							// linkCtaClickHandler={handleLinkCtaClick}
+							btnClickHandler={handleSupportOnceBtnClick}
+						/>
+					)}
+					{contributionType !== 'ONE_OFF' && (
+						<ThreeTierCards
+							cardsContent={[tier1Card, tier2Card, tier3Card]}
+							currencyId={currencyId}
+							countryGroupId={countryGroupId}
+							paymentFrequency={contributionType}
+							linkCtaClickHandler={handleLinkCtaClick}
+						/>
+					)}
 				</div>
 			</Container>
 			<Container
@@ -654,12 +655,12 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-        {contributionType !== 'ONE_OFF' &&
-          <SupportOnce
-            currency={currencies[currencyId].glyph}
-            btnClickHandler={handleSupportOnceBtnClick}
-          />
-        }
+				{contributionType !== 'ONE_OFF' && (
+					<SupportOnce
+						currency={currencies[currencyId].glyph}
+						btnClickHandler={handleSupportOnceBtnClick}
+					/>
+				)}
 				{countryGroupId === UnitedStates && (
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>
