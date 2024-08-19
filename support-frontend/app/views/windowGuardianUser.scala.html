@@ -1,0 +1,18 @@
+@import com.gu.identity.model.User
+@(
+  user: Option[User],
+)(implicit request: RequestHeader)
+<script type="text/javascript">
+  @user.map { user =>
+    window.guardian.user = {
+      id: "@user.id",
+      email: "@user.primaryEmailAddress",
+      @user.privateFields.firstName.map { firstName =>
+        firstName: "@firstName",
+      }
+      @user.privateFields.secondName.map { secondName =>
+        lastName: "@secondName",
+      }
+    };
+  }
+</script>

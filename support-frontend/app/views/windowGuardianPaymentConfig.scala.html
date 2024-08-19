@@ -89,16 +89,5 @@
 
   window.guardian.productCatalog = @Html(outputJson(productCatalog))
 
-  @user.map { user =>
-    window.guardian.user = {
-      id: "@user.id",
-      email: "@user.primaryEmailAddress",
-      @user.privateFields.firstName.map { firstName =>
-        firstName: "@firstName",
-      }
-      @user.privateFields.secondName.map { secondName =>
-        lastName: "@secondName",
-      }
-    };
-  }
+  @windowGuardianUser(user)
 </script>
