@@ -21,14 +21,12 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     val json = account().asJson
     (json \\ "Currency").head.asString should be(Some("GBP"))
     (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway 1"))
-    (json \\ "InvoiceTemplateId").head.asString should be(Some("defaultInvoiceTemplateId"))
   }
 
   "AUAccount" should "serialise to correct json" in {
     val json = auAccount().asJson
     (json \\ "Currency").head.asString should be(Some("AUD"))
     (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway GNM Membership AUS"))
-    (json \\ "InvoiceTemplateId").head.asString should be(Some("auInvoiceTemplateId"))
   }
 
   "InternationalAccount" should "deserialise correctly" in {

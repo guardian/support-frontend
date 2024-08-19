@@ -39,7 +39,6 @@ object Fixtures {
     identityId__c = identityId,
     paymentGateway = Some(paymentGateway),
     createdRequestId__c = "createdreqid_hi",
-    invoiceTemplateId = "2c92c0f849369b8801493bf7db7e450e",
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)

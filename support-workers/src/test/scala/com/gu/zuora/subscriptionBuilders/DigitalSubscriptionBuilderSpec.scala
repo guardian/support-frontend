@@ -7,7 +7,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.CODE
-import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
@@ -192,10 +192,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
-  lazy val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
-    auTemplateId = "auInvoiceTemplateId",
-    defaultTemplateId = "defaultInvoiceTemplateId",
-  )
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
@@ -206,7 +202,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
-      invoiceTemplateIds,
     ),
   )
 
@@ -219,7 +214,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
-      invoiceTemplateIds,
     ),
   )
 

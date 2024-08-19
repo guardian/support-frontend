@@ -26,5 +26,4 @@ case class Account(
     paymentTerm: String = "Due Upon Receipt",
     bcdSettingOption: String = "AutoSet",
     batch: String = "Batch1",
-    invoiceTemplateId: String,
 )
