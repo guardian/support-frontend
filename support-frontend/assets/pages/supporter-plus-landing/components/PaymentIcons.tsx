@@ -12,7 +12,7 @@ const paymentMethods = css`
 	}
 `;
 
-export function PaymentCards(): JSX.Element {
+export function PaymentCards() {
 	return (
 		<div css={paymentMethods}>
 			{/* Visa */}
