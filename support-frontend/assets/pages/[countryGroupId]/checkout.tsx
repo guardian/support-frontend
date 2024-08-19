@@ -284,6 +284,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const searchParams = new URLSearchParams(window.location.search);
 
+	/** 👇 a lot of this is copy/pasted into the thank you page */
 	/** Get and validate product */
 	const productParam = searchParams.get('product');
 	const productKey =
@@ -492,13 +493,13 @@ type CheckoutComponentProps = {
 	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
 };
+
 function CheckoutComponent({
 	geoId,
 	appConfig,
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	discountedAmount,
 	contributionAmount,
 	finalAmount,
 	promotion,
@@ -990,11 +991,6 @@ function CheckoutComponent({
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
-					originalAmount,
-					discountedAmount,
-					finalAmount,
-					product: productKey,
-					ratePlan: ratePlanKey,
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);

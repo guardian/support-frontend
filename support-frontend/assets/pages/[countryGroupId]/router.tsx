@@ -22,7 +22,7 @@ const router = createBrowserRouter(
 		},
 		{
 			path: `/${geoId}/thank-you`,
-			element: <ThankYou geoId={geoId} />,
+			element: <ThankYou geoId={geoId} appConfig={appConfig} />,
 		},
 	]),
 );
