@@ -357,6 +357,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	let payment: {
 		originalAmount: number;
 		discountedAmount?: number;
+		contributionAmount?: number;
 		finalAmount: number;
 	};
 
@@ -436,12 +437,14 @@ export function Checkout({ geoId, appConfig }: Props) {
 			payment = {
 				originalAmount: productPrice,
 				discountedAmount: discountedPrice,
+				contributionAmount,
 				finalAmount: price + (contributionAmount ?? 0),
 			};
 		} else {
 			payment = {
 				originalAmount: productPrice,
 				discountedAmount: discountedPrice,
+				contributionAmount,
 				finalAmount: price,
 			};
 		}
@@ -498,8 +501,9 @@ export function Checkout({ geoId, appConfig }: Props) {
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
 				originalAmount={payment.originalAmount}
-				finalAmount={payment.finalAmount}
 				discountedAmount={payment.discountedAmount}
+				contributionAmount={payment.contributionAmount}
+				finalAmount={payment.finalAmount}
 				useStripeExpressCheckout={useStripeExpressCheckout}
 			/>
 		</Elements>
@@ -513,6 +517,7 @@ type CheckoutComponentProps = {
 	ratePlanKey: string;
 	originalAmount: number;
 	discountedAmount?: number;
+	contributionAmount?: number;
 	finalAmount: number;
 	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
@@ -524,6 +529,7 @@ function CheckoutComponent({
 	ratePlanKey,
 	originalAmount,
 	discountedAmount,
+	contributionAmount,
 	finalAmount,
 	promotion,
 	useStripeExpressCheckout,
@@ -581,7 +587,17 @@ function CheckoutComponent({
 				productType: 'SupporterPlus',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: finalAmount,
+				/**
+				 * We shouldn't have to calculate these amounts here.
+				 *
+				 * TODO: remove the amount altogether and send only the contribution amount.
+				 * but they're a legacy of how the support-workers works i.e
+				 * - contribution = thisAmount - original
+				 * - if contribution < 0, fail
+				 * - apply any promo
+				 * @see https://github.com/guardian/support-frontend/blob/51b06f33a0f9f70628154e100374d5933708e38f/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
+				 */
+				amount: originalAmount + (contributionAmount ?? 0),
 			};
 			break;
 

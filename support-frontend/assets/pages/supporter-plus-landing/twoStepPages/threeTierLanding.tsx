@@ -481,7 +481,6 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier2GenericUrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: supporterPlusRatePlan,
-		price: tier2Pricing.toString(),
 	});
 	const tier2ContributeUrlParams = new URLSearchParams({
 		'selected-amount': tier2Pricing.toString(),

@@ -224,7 +224,7 @@ export function ThankYou({ geoId }: Props) {
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
 							name={order.firstName}
-							amount={order.originalAmount}
+							amount={order.finalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
 							isTier3={isTier3}
