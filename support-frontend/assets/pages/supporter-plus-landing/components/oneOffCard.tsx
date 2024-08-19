@@ -55,9 +55,9 @@ const buttonContainer = css`
 `;
 
 function LandingPageContributionsPriceCards({
-	currencyId,
+	currencyGlyph,
 }: {
-	currencyId: string;
+	currencyGlyph: string;
 }) {
 	return (
 		<div
@@ -68,7 +68,7 @@ function LandingPageContributionsPriceCards({
 			<h2 css={titleStyle}>Support just once</h2>
 			<p css={standFirst}>
 				We welcome support of any size, any time, whether you choose to give{' '}
-				{currencyId}1 or much more.
+				{currencyGlyph}1 or much more.
 			</p>
 			<PriceCardsContainer
 				paymentFrequency={'ONE_OFF'}
@@ -109,14 +109,14 @@ function LandingPageContributionsPriceCards({
 }
 
 interface Props {
-	currencyId: string;
+	currencyGlyph: string;
 	btnClickHandler: () => void;
 }
 
-export function OneOffCard({ currencyId, btnClickHandler }: Props) {
+export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
 	return (
 		<section css={sectionStyle}>
-			<LandingPageContributionsPriceCards currencyId={currencyId} />
+			<LandingPageContributionsPriceCards currencyGlyph={currencyGlyph} />
 			<div css={buttonContainer}>
 				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<Button cssOverrides={btnStyleOverrides} onClick={btnClickHandler}>
