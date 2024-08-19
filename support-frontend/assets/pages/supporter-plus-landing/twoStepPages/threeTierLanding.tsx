@@ -627,7 +627,7 @@ export function ThreeTierLanding(): JSX.Element {
 					/>
 					{contributionType === 'ONE_OFF' && (
 						<OneOffCard
-							currencyId={currencies[currencyId].glyph}
+							currencyGlyph={currencies[currencyId].glyph}
 							btnClickHandler={handleSupportOnceBtnClick}
 						/>
 					)}
