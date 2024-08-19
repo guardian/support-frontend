@@ -3,7 +3,6 @@
 import { viewId } from 'ophan';
 import type { $Keys } from 'utility-types';
 import type { Participations } from 'helpers/abTests/abtest';
-import { getCampaignCode } from 'helpers/campaigns/campaigns';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -147,9 +146,7 @@ function buildReferrerAcquisitionData(
 		getQueryParameter('REFPVID');
 
 	const campaignCode =
-		getCampaignCode() ??
-		(acquisitionData.campaignCode as string | undefined) ??
-		(getQueryParameter('INTCMP') || getQueryParameter('CMP') || undefined);
+		getQueryParameter('INTCMP') || getQueryParameter('CMP') || undefined;
 
 	const parameterExclusions = [
 		'REFPVID',
