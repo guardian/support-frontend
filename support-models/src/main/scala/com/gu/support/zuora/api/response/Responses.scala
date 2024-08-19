@@ -75,7 +75,6 @@ case class BasicInfo(
     status: String,
     crmId: String,
     batch: String,
-    invoiceTemplateId: String,
     communicationProfileId: Option[String],
 )
 
