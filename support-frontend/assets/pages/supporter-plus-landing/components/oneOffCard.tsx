@@ -58,7 +58,7 @@ function LandingPageContributionsPriceCards({
 	currencyId,
 }: {
 	currencyId: string;
-}): JSX.Element {
+}) {
 	return (
 		<div
 			css={css`
@@ -113,10 +113,7 @@ interface Props {
 	btnClickHandler: () => void;
 }
 
-export function OneOffCard({
-	currencyId,
-	btnClickHandler,
-}: Props): JSX.Element {
+export function OneOffCard({ currencyId, btnClickHandler }: Props) {
 	return (
 		<section css={sectionStyle}>
 			<LandingPageContributionsPriceCards currencyId={currencyId} />
