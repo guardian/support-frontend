@@ -6,15 +6,11 @@ import {
 	neutral,
 	palette,
 	space,
-	textSans,
 	until,
 } from '@guardian/source/foundations';
 import {
 	Button,
 	Checkbox,
-	Column,
-	Columns,
-	Container,
 	Label,
 	Radio,
 	RadioGroup,
@@ -24,8 +20,6 @@ import {
 import {
 	Divider,
 	ErrorSummary,
-	FooterLinks,
-	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
@@ -38,16 +32,13 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	getTermsConditions,
 	getTermsStartDateTier3,
 } from 'components/orderSummary/contributionsOrderSummaryContainer';
-import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
@@ -124,6 +115,7 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
+import { CheckoutScaffold } from './components/checkoutScaffold';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /**
@@ -135,28 +127,6 @@ type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
 
 /** Page styles - styles used specifically for the checkout page */
-const darkBackgroundContainerMobile = css`
-	background-color: ${palette.neutral[97]};
-	${until.tablet} {
-		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
-	}
-`;
-
-const columns = css`
-	position: relative;
-	color: ${palette.neutral[7]};
-	${textSans.medium()};
-	padding-top: ${space[2]}px;
-`;
-
-const secureTransactionIndicator = css`
-	margin-bottom: ${space[3]}px;
-	${from.tablet} {
-		margin-bottom: ${space[4]}px;
-	}
-`;
-
 const shorterBoxMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
@@ -1052,924 +1022,852 @@ function CheckoutComponent({
 	);
 
 	return (
-		<PageScaffold
-			header={<Header></Header>}
-			footer={
-				<FooterWithContents>
-					<FooterLinks></FooterLinks>
-				</FooterWithContents>
-			}
-		>
-			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
-			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
-				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 2, 3, 4]}></Column>
-					<Column span={[1, 8, 8, 8, 8]}>
-						<SecureTransactionIndicator
-							align="center"
-							theme="light"
-							cssOverrides={secureTransactionIndicator}
-						/>
-						<Box cssOverrides={shorterBoxMargin}>
-							<BoxContents>
-								<ContributionsOrderSummary
-									description={productDescription.label}
-									paymentFrequency={
-										ratePlanDescription.billingPeriod === 'Annual'
-											? 'year'
-											: ratePlanDescription.billingPeriod === 'Monthly'
-											? 'month'
-											: 'quarter'
-									}
-									amount={originalAmount}
-									promotion={promotion}
-									currency={currency}
-									checkListData={[
-										...productDescription.benefits
-											.filter((benefit) =>
-												filterBenefitByRegion(benefit, countryGroupId),
-											)
-											.map((benefit) => ({
-												isChecked: true,
-												text: benefit.copy,
-											})),
-										...(productDescription.benefitsAdditional ?? [])
-											.filter((benefit) =>
-												filterBenefitByRegion(benefit, countryGroupId),
-											)
-											.map((benefit) => ({
-												isChecked: true,
-												text: benefit.copy,
-											})),
-										...(productDescription.benefitsMissing ?? [])
-											.filter((benefit) =>
-												filterBenefitByRegion(benefit, countryGroupId),
-											)
-											.map((benefit) => ({
-												isChecked: false,
-												text: benefit.copy,
-												maybeGreyedOut: css`
-													color: ${palette.neutral[60]};
+		<CheckoutScaffold>
+			<Box cssOverrides={shorterBoxMargin}>
+				<BoxContents>
+					<ContributionsOrderSummary
+						description={productDescription.label}
+						paymentFrequency={
+							ratePlanDescription.billingPeriod === 'Annual'
+								? 'year'
+								: ratePlanDescription.billingPeriod === 'Monthly'
+								? 'month'
+								: 'quarter'
+						}
+						amount={originalAmount}
+						promotion={promotion}
+						currency={currency}
+						checkListData={[
+							...productDescription.benefits
+								.filter((benefit) =>
+									filterBenefitByRegion(benefit, countryGroupId),
+								)
+								.map((benefit) => ({
+									isChecked: true,
+									text: benefit.copy,
+								})),
+							...(productDescription.benefitsAdditional ?? [])
+								.filter((benefit) =>
+									filterBenefitByRegion(benefit, countryGroupId),
+								)
+								.map((benefit) => ({
+									isChecked: true,
+									text: benefit.copy,
+								})),
+							...(productDescription.benefitsMissing ?? [])
+								.filter((benefit) =>
+									filterBenefitByRegion(benefit, countryGroupId),
+								)
+								.map((benefit) => ({
+									isChecked: false,
+									text: benefit.copy,
+									maybeGreyedOut: css`
+										color: ${palette.neutral[60]};
 
-													svg {
-														fill: ${palette.neutral[60]};
-													}
-												`,
-											})),
-									]}
-									onCheckListToggle={(isOpen) => {
-										trackComponentClick(
-											`contribution-order-summary-${
-												isOpen ? 'opened' : 'closed'
-											}`,
-										);
+										svg {
+											fill: ${palette.neutral[60]};
+										}
+									`,
+								})),
+						]}
+						onCheckListToggle={(isOpen) => {
+							trackComponentClick(
+								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
+							);
+						}}
+						enableCheckList={true}
+						tsAndCsTier3={
+							productKey === 'TierThree'
+								? getTermsStartDateTier3(
+										formatUserDate(getTierThreeDeliveryDate()),
+								  )
+								: null
+						}
+						tsAndCs={getTermsConditions(
+							countryGroupId,
+							productFields.billingPeriod === 'Monthly'
+								? 'MONTHLY'
+								: productFields.billingPeriod === 'Annual'
+								? 'ANNUAL'
+								: 'ONE_OFF',
+							productFields.productType,
+							promotion,
+						)}
+						headerButton={<ChangeButton geoId={geoId} />}
+					/>
+				</BoxContents>
+			</Box>
+			<form
+				ref={formRef}
+				action="/contribute/recurring/create"
+				method="POST"
+				onSubmit={(event) => {
+					event.preventDefault();
+					const form = event.currentTarget;
+					const formData = new FormData(form);
+					/** we defer this to an external function as a lot of the payment methods use async */
+					void formOnSubmit(formData);
+
+					return false;
+				}}
+			>
+				<Box cssOverrides={shorterBoxMargin}>
+					<BoxContents>
+						{useStripeExpressCheckout && (
+							<>
+								<ExpressCheckoutElement
+									onReady={({ availablePaymentMethods }) => {
+										/**
+										 * This is use to show UI needed besides this Element
+										 * i.e. The "or" divider
+										 */
+										if (
+											!!availablePaymentMethods?.applePay ||
+											!!availablePaymentMethods?.googlePay
+										) {
+											setStripeExpressCheckoutReady(true);
+										}
 									}}
-									enableCheckList={true}
-									tsAndCsTier3={
-										productKey === 'TierThree'
-											? getTermsStartDateTier3(
-													formatUserDate(getTierThreeDeliveryDate()),
-											  )
-											: null
-									}
-									tsAndCs={getTermsConditions(
-										countryGroupId,
-										productFields.billingPeriod === 'Monthly'
-											? 'MONTHLY'
-											: productFields.billingPeriod === 'Annual'
-											? 'ANNUAL'
-											: 'ONE_OFF',
-										productFields.productType,
-										promotion,
-									)}
-									headerButton={<ChangeButton geoId={geoId} />}
+									onClick={({ resolve }) => {
+										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+										const options = {
+											emailRequired: true,
+										};
+										resolve(options);
+									}}
+									onConfirm={async (event) => {
+										if (!(stripe && elements)) {
+											console.error('Stripe not loaded');
+											return;
+										}
+
+										const { error: submitError } = await elements.submit();
+
+										if (submitError) {
+											setErrorMessage(submitError.message);
+											return;
+										}
+
+										const name = event.billingDetails?.name ?? '';
+
+										/**
+										 * splits by the last space, and uses the head as firstName
+										 * and tail as lastName
+										 */
+										const firstName = name
+											.substring(0, name.lastIndexOf(' ') + 1)
+											.trim();
+										const lastName = name
+											.substring(name.lastIndexOf(' ') + 1, name.length)
+											.trim();
+										setFirstName(firstName);
+										setLastName(lastName);
+
+										event.billingDetails?.address.postal_code &&
+											setBillingPostcode(
+												event.billingDetails.address.postal_code,
+											);
+
+										event.billingDetails?.address.state &&
+											setBillingState(event.billingDetails.address.state);
+
+										event.billingDetails?.email &&
+											setEmail(event.billingDetails.email);
+
+										setPaymentMethod('StripeExpressCheckoutElement');
+										setStripeExpressCheckoutPaymentType(
+											event.expressPaymentType,
+										);
+										/**
+										 * There is a useEffect that listens to this and submits the form
+										 * when true
+										 */
+										setStripeExpressCheckoutSuccessful(true);
+									}}
+									options={{
+										paymentMethods: {
+											applePay: 'auto',
+											googlePay: 'auto',
+											link: 'never',
+										},
+									}}
 								/>
-							</BoxContents>
-						</Box>
-						<form
-							ref={formRef}
-							action="/contribute/recurring/create"
-							method="POST"
-							onSubmit={(event) => {
-								event.preventDefault();
-								const form = event.currentTarget;
-								const formData = new FormData(form);
-								/** we defer this to an external function as a lot of the payment methods use async */
-								void formOnSubmit(formData);
 
-								return false;
-							}}
-						>
-							<Box cssOverrides={shorterBoxMargin}>
-								<BoxContents>
-									{useStripeExpressCheckout && (
-										<>
-											<ExpressCheckoutElement
-												onReady={({ availablePaymentMethods }) => {
-													/**
-													 * This is use to show UI needed besides this Element
-													 * i.e. The "or" divider
-													 */
-													if (
-														!!availablePaymentMethods?.applePay ||
-														!!availablePaymentMethods?.googlePay
-													) {
-														setStripeExpressCheckoutReady(true);
-													}
-												}}
-												onClick={({ resolve }) => {
-													/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-													const options = {
-														emailRequired: true,
-													};
-													resolve(options);
-												}}
-												onConfirm={async (event) => {
-													if (!(stripe && elements)) {
-														console.error('Stripe not loaded');
-														return;
-													}
+								{stripeExpressCheckoutReady && (
+									<Divider
+										displayText="or"
+										size="full"
+										cssOverrides={css`
+											::before {
+												margin-left: 0;
+											}
 
-													const { error: submitError } =
-														await elements.submit();
+											::after {
+												margin-right: 0;
+											}
 
-													if (submitError) {
-														setErrorMessage(submitError.message);
-														return;
-													}
+											margin: 0;
+											margin-top: 14px;
+											margin-bottom: 14px;
+											width: 100%;
 
-													const name = event.billingDetails?.name ?? '';
+											@keyframes fadeIn {
+												0% {
+													opacity: 0;
+												}
+												100% {
+													opacity: 1;
+												}
+											}
+											animation: fadeIn 1s;
+										`}
+									/>
+								)}
+							</>
+						)}
+						<fieldset css={fieldset}>
+							<legend css={legend}>1. Your details</legend>
+							<div>
+								<TextInput
+									id="email"
+									data-qm-masking="blocklist"
+									label="Email address"
+									value={email}
+									type="email"
+									autoComplete="email"
+									onChange={(event) => {
+										setEmail(event.currentTarget.value);
+									}}
+									onBlur={(event) => {
+										event.target.checkValidity();
+									}}
+									readOnly={isSignedIn}
+									name="email"
+									required
+									maxLength={80}
+									error={emailError}
+									onInvalid={(event) => {
+										preventDefaultValidityMessage(event.currentTarget);
+										const validityState = event.currentTarget.validity;
+										if (validityState.valid) {
+											setEmailError(undefined);
+										} else {
+											if (validityState.valueMissing) {
+												setEmailError('Please enter your email address.');
+											} else {
+												setEmailError('Please enter a valid email address.');
+											}
+										}
+									}}
+								/>
+							</div>
 
-													/**
-													 * splits by the last space, and uses the head as firstName
-													 * and tail as lastName
-													 */
-													const firstName = name
-														.substring(0, name.lastIndexOf(' ') + 1)
-														.trim();
-													const lastName = name
-														.substring(name.lastIndexOf(' ') + 1, name.length)
-														.trim();
-													setFirstName(firstName);
-													setLastName(lastName);
+							<Signout isSignedIn={isSignedIn} />
 
-													event.billingDetails?.address.postal_code &&
-														setBillingPostcode(
-															event.billingDetails.address.postal_code,
-														);
-
-													event.billingDetails?.address.state &&
-														setBillingState(event.billingDetails.address.state);
-
-													event.billingDetails?.email &&
-														setEmail(event.billingDetails.email);
-
-													setPaymentMethod('StripeExpressCheckoutElement');
-													setStripeExpressCheckoutPaymentType(
-														event.expressPaymentType,
-													);
-													/**
-													 * There is a useEffect that listens to this and submits the form
-													 * when true
-													 */
-													setStripeExpressCheckoutSuccessful(true);
-												}}
-												options={{
-													paymentMethods: {
-														applePay: 'auto',
-														googlePay: 'auto',
-														link: 'never',
-													},
-												}}
-											/>
-
-											{stripeExpressCheckoutReady && (
-												<Divider
-													displayText="or"
-													size="full"
-													cssOverrides={css`
-														::before {
-															margin-left: 0;
-														}
-
-														::after {
-															margin-right: 0;
-														}
-
-														margin: 0;
-														margin-top: 14px;
-														margin-bottom: 14px;
-														width: 100%;
-
-														@keyframes fadeIn {
-															0% {
-																opacity: 0;
-															}
-															100% {
-																opacity: 1;
-															}
-														}
-														animation: fadeIn 1s;
-													`}
-												/>
-											)}
-										</>
-									)}
-									<fieldset css={fieldset}>
-										<legend css={legend}>1. Your details</legend>
-										<div>
-											<TextInput
-												id="email"
-												data-qm-masking="blocklist"
-												label="Email address"
-												value={email}
-												type="email"
-												autoComplete="email"
-												onChange={(event) => {
-													setEmail(event.currentTarget.value);
-												}}
-												onBlur={(event) => {
-													event.target.checkValidity();
-												}}
-												readOnly={isSignedIn}
-												name="email"
-												required
-												maxLength={80}
-												error={emailError}
-												onInvalid={(event) => {
-													preventDefaultValidityMessage(event.currentTarget);
-													const validityState = event.currentTarget.validity;
-													if (validityState.valid) {
-														setEmailError(undefined);
-													} else {
-														if (validityState.valueMissing) {
-															setEmailError('Please enter your email address.');
-														} else {
-															setEmailError(
-																'Please enter a valid email address.',
-															);
-														}
-													}
-												}}
-											/>
-										</div>
-
-										<Signout isSignedIn={isSignedIn} />
-
-										<>
-											<div>
-												<TextInput
-													id="firstName"
-													data-qm-masking="blocklist"
-													label="First name"
-													value={firstName}
-													autoComplete="given-name"
-													autoCapitalize="words"
-													onChange={(event) => {
-														setFirstName(event.target.value);
-													}}
-													onBlur={(event) => {
-														event.target.checkValidity();
-													}}
-													name="firstName"
-													required
-													maxLength={40}
-													error={firstNameError}
-													pattern={doesNotContainEmojiPattern}
-													onInvalid={(event) => {
-														preventDefaultValidityMessage(event.currentTarget);
-														const validityState = event.currentTarget.validity;
-														if (validityState.valid) {
-															setFirstNameError(undefined);
-														} else {
-															if (validityState.valueMissing) {
-																setFirstNameError(
-																	'Please enter your first name.',
-																);
-															} else {
-																setFirstNameError(
-																	'Please enter a valid first name.',
-																);
-															}
-														}
-													}}
-												/>
-											</div>
-											<div>
-												<TextInput
-													id="lastName"
-													data-qm-masking="blocklist"
-													label="Last name"
-													value={lastName}
-													autoComplete="family-name"
-													autoCapitalize="words"
-													onChange={(event) => {
-														setLastName(event.target.value);
-													}}
-													onBlur={(event) => {
-														event.target.checkValidity();
-													}}
-													name="lastName"
-													required
-													maxLength={40}
-													error={lastNameError}
-													pattern={doesNotContainEmojiPattern}
-													onInvalid={(event) => {
-														preventDefaultValidityMessage(event.currentTarget);
-														const validityState = event.currentTarget.validity;
-														if (validityState.valid) {
-															setLastNameError(undefined);
-														} else {
-															if (validityState.valueMissing) {
-																setLastNameError(
-																	'Please enter your last name.',
-																);
-															} else {
-																setLastNameError(
-																	'Please enter a valid last name.',
-																);
-															}
-														}
-													}}
-												/>
-											</div>
-										</>
-										{/*For deliverable products we take the state and
+							<>
+								<div>
+									<TextInput
+										id="firstName"
+										data-qm-masking="blocklist"
+										label="First name"
+										value={firstName}
+										autoComplete="given-name"
+										autoCapitalize="words"
+										onChange={(event) => {
+											setFirstName(event.target.value);
+										}}
+										onBlur={(event) => {
+											event.target.checkValidity();
+										}}
+										name="firstName"
+										required
+										maxLength={40}
+										error={firstNameError}
+										pattern={doesNotContainEmojiPattern}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setFirstNameError(undefined);
+											} else {
+												if (validityState.valueMissing) {
+													setFirstNameError('Please enter your first name.');
+												} else {
+													setFirstNameError('Please enter a valid first name.');
+												}
+											}
+										}}
+									/>
+								</div>
+								<div>
+									<TextInput
+										id="lastName"
+										data-qm-masking="blocklist"
+										label="Last name"
+										value={lastName}
+										autoComplete="family-name"
+										autoCapitalize="words"
+										onChange={(event) => {
+											setLastName(event.target.value);
+										}}
+										onBlur={(event) => {
+											event.target.checkValidity();
+										}}
+										name="lastName"
+										required
+										maxLength={40}
+										error={lastNameError}
+										pattern={doesNotContainEmojiPattern}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setLastNameError(undefined);
+											} else {
+												if (validityState.valueMissing) {
+													setLastNameError('Please enter your last name.');
+												} else {
+													setLastNameError('Please enter a valid last name.');
+												}
+											}
+										}}
+									/>
+								</div>
+							</>
+							{/*For deliverable products we take the state and
                     zip code with the delivery address*/}
-										{showStateSelect && !productDescription.deliverableTo && (
-											<StateSelect
-												countryId={countryId}
-												state={billingState}
-												onStateChange={(event) => {
-													setBillingState(event.currentTarget.value);
-												}}
-												onBlur={(event) => {
-													event.currentTarget.checkValidity();
-												}}
-												onInvalid={(event) => {
-													preventDefaultValidityMessage(event.currentTarget);
-													const validityState = event.currentTarget.validity;
-													if (validityState.valid) {
-														setBillingStateError(undefined);
-													} else {
-														setBillingStateError(
-															'Please enter a state, province or territory.',
-														);
-													}
-												}}
-												error={billingStateError}
-											/>
-										)}
+							{showStateSelect && !productDescription.deliverableTo && (
+								<StateSelect
+									countryId={countryId}
+									state={billingState}
+									onStateChange={(event) => {
+										setBillingState(event.currentTarget.value);
+									}}
+									onBlur={(event) => {
+										event.currentTarget.checkValidity();
+									}}
+									onInvalid={(event) => {
+										preventDefaultValidityMessage(event.currentTarget);
+										const validityState = event.currentTarget.validity;
+										if (validityState.valid) {
+											setBillingStateError(undefined);
+										} else {
+											setBillingStateError(
+												'Please enter a state, province or territory.',
+											);
+										}
+									}}
+									error={billingStateError}
+								/>
+							)}
 
-										{countryId === 'US' &&
-											!productDescription.deliverableTo && (
-												<div>
-													<TextInput
-														id="zipCode"
-														label="ZIP code"
-														name="billing-postcode"
-														onChange={(event) => {
-															setBillingPostcode(event.target.value);
+							{countryId === 'US' && !productDescription.deliverableTo && (
+								<div>
+									<TextInput
+										id="zipCode"
+										label="ZIP code"
+										name="billing-postcode"
+										onChange={(event) => {
+											setBillingPostcode(event.target.value);
+										}}
+										onBlur={(event) => {
+											event.target.checkValidity();
+										}}
+										maxLength={20}
+										value={billingPostcode}
+										pattern={doesNotContainEmojiPattern}
+										error={billingPostcodeError}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingPostcodeError(undefined);
+											} else {
+												if (!validityState.valueMissing) {
+													setBillingPostcodeError(
+														'Please enter a valid zip code.',
+													);
+												}
+											}
+										}}
+									/>
+								</div>
+							)}
+						</fieldset>
+
+						<CheckoutDivider spacing="loose" />
+
+						{/**
+						 * We need the billing-country for all transactions, even non-deliverable ones
+						 * which we get from the GU_country cookie which comes from the Fastly geo client.
+						 */}
+						{!productDescription.deliverableTo && (
+							<input type="hidden" name="billing-country" value={countryId} />
+						)}
+						{productDescription.deliverableTo && (
+							<>
+								<fieldset>
+									<legend css={legend}>2. Delivery address</legend>
+									<AddressFields
+										scope={'delivery'}
+										lineOne={deliveryLineOne}
+										lineTwo={deliveryLineTwo}
+										city={deliveryCity}
+										country={deliveryCountry}
+										state={deliveryState}
+										postCode={deliveryPostcode}
+										countries={productDescription.deliverableTo}
+										errors={[]}
+										postcodeState={{
+											results: deliveryPostcodeStateResults,
+											isLoading: deliveryPostcodeStateLoading,
+											postcode: deliveryPostcode,
+											error: '',
+										}}
+										setLineOne={(lineOne) => {
+											setDeliveryLineOne(lineOne);
+										}}
+										setLineTwo={(lineTwo) => {
+											setDeliveryLineTwo(lineTwo);
+										}}
+										setTownCity={(city) => {
+											setDeliveryCity(city);
+										}}
+										setState={(state) => {
+											setDeliveryState(state);
+										}}
+										setPostcode={(postcode) => {
+											setDeliveryPostcode(postcode);
+										}}
+										setCountry={(country) => {
+											setDeliveryCountry(country);
+										}}
+										setPostcodeForFinder={() => {
+											// no-op
+										}}
+										setPostcodeErrorForFinder={() => {
+											// no-op
+										}}
+										onFindAddress={(postcode) => {
+											setDeliveryPostcodeStateLoading(true);
+											void findAddressesForPostcode(postcode).then(
+												(results) => {
+													setDeliveryPostcodeStateLoading(false);
+													setDeliveryPostcodeStateResults(results);
+												},
+											);
+										}}
+									/>
+								</fieldset>
+
+								<fieldset
+									css={css`
+										margin-bottom: ${space[6]}px;
+									`}
+								>
+									<Label
+										text="Billing address"
+										htmlFor="billingAddressMatchesDelivery"
+									/>
+									<Checkbox
+										checked={billingAddressMatchesDelivery}
+										value="yes"
+										onChange={() => {
+											setBillingAddressMatchesDelivery(
+												!billingAddressMatchesDelivery,
+											);
+										}}
+										id="billingAddressMatchesDelivery"
+										name="billingAddressMatchesDelivery"
+										label="Billing address same as delivery address"
+									/>
+								</fieldset>
+
+								{!billingAddressMatchesDelivery && (
+									<fieldset>
+										<AddressFields
+											scope={'billing'}
+											lineOne={billingLineOne}
+											lineTwo={billingLineTwo}
+											city={billingCity}
+											country={billingCountry}
+											state={billingState}
+											postCode={billingPostcode}
+											countries={productDescription.deliverableTo}
+											errors={[]}
+											postcodeState={{
+												results: billingPostcodeStateResults,
+												isLoading: billingPostcodeStateLoading,
+												postcode: billingPostcode,
+												error: '',
+											}}
+											setLineOne={(lineOne) => {
+												setBillingLineOne(lineOne);
+											}}
+											setLineTwo={(lineTwo) => {
+												setBillingLineTwo(lineTwo);
+											}}
+											setTownCity={(city) => {
+												setBillingCity(city);
+											}}
+											setState={(state) => {
+												setBillingState(state);
+											}}
+											setPostcode={(postcode) => {
+												setBillingPostcode(postcode);
+											}}
+											setCountry={(country) => {
+												setBillingCountry(country);
+											}}
+											setPostcodeForFinder={() => {
+												// no-op
+											}}
+											setPostcodeErrorForFinder={() => {
+												// no-op
+											}}
+											onFindAddress={(postcode) => {
+												setBillingPostcodeStateLoading(true);
+												void findAddressesForPostcode(postcode).then(
+													(results) => {
+														setBillingPostcodeStateLoading(false);
+														setBillingPostcodeStateResults(results);
+													},
+												);
+											}}
+										/>
+									</fieldset>
+								)}
+
+								<CheckoutDivider spacing="loose" />
+							</>
+						)}
+
+						<fieldset css={fieldset}>
+							<legend css={legend}>
+								{productDescription.deliverableTo ? '3' : '2'}. Payment method
+								<SecureTransactionIndicator
+									hideText={true}
+									cssOverrides={css``}
+								/>
+							</legend>
+
+							<RadioGroup>
+								{validPaymentMethods.map((validPaymentMethod) => {
+									const selected = paymentMethod === validPaymentMethod;
+									const { label, icon } = paymentMethodData[validPaymentMethod];
+									return (
+										<div
+											css={
+												selected
+													? paymentMethodSelected
+													: paymentMethodNotSelected
+											}
+										>
+											<div
+												css={[
+													paymentMethodRadioWithImage,
+													selected
+														? paymentMethodRadioWithImageSelected
+														: undefined,
+												]}
+											>
+												<Radio
+													label={label}
+													name="paymentMethod"
+													value={validPaymentMethod}
+													css={
+														selected
+															? checkedRadioLabelColour
+															: defaultRadioLabelColour
+													}
+													onChange={() => {
+														setPaymentMethod(validPaymentMethod);
+													}}
+												/>
+												<div>{icon}</div>
+											</div>
+											{validPaymentMethod === 'Stripe' && selected && (
+												<div css={paymentMethodBody}>
+													<input
+														type="hidden"
+														name="recaptchaToken"
+														value={recaptchaToken}
+													/>
+													<StripeCardForm
+														onCardNumberChange={() => {
+															// no-op
 														}}
-														onBlur={(event) => {
-															event.target.checkValidity();
+														onExpiryChange={() => {
+															// no-op
 														}}
-														maxLength={20}
-														value={billingPostcode}
-														pattern={doesNotContainEmojiPattern}
-														error={billingPostcodeError}
-														onInvalid={(event) => {
-															preventDefaultValidityMessage(
-																event.currentTarget,
-															);
-															const validityState =
-																event.currentTarget.validity;
-															if (validityState.valid) {
-																setBillingPostcodeError(undefined);
-															} else {
-																if (!validityState.valueMissing) {
-																	setBillingPostcodeError(
-																		'Please enter a valid zip code.',
-																	);
-																}
-															}
+														onCvcChange={() => {
+															// no-op
 														}}
+														errors={{}}
+														recaptcha={
+															<Recaptcha
+																// We could change the parents type to Promise and uses await here, but that has
+																// a lot of refactoring with not too much gain
+																onRecaptchaCompleted={(token) => {
+																	setStripeClientSecretInProgress(true);
+																	setRecaptchaToken(token);
+																	void fetch(
+																		'/stripe/create-setup-intent/recaptcha',
+																		{
+																			method: 'POST',
+																			headers: {
+																				'Content-Type': 'application/json',
+																			},
+																			body: JSON.stringify({
+																				isTestUser,
+																				stripePublicKey,
+																				token,
+																			}),
+																		},
+																	)
+																		.then((resp) => resp.json())
+																		.then((json) => {
+																			setStripeClientSecret(
+																				(json as Record<string, string>)
+																					.client_secret,
+																			);
+																			setStripeClientSecretInProgress(false);
+																		});
+																}}
+																onRecaptchaExpired={() => {
+																	// no-op
+																}}
+															/>
+														}
 													/>
 												</div>
 											)}
-									</fieldset>
 
-									<CheckoutDivider spacing="loose" />
-
-									{/**
-									 * We need the billing-country for all transactions, even non-deliverable ones
-									 * which we get from the GU_country cookie which comes from the Fastly geo client.
-									 */}
-									{!productDescription.deliverableTo && (
-										<input
-											type="hidden"
-											name="billing-country"
-											value={countryId}
-										/>
-									)}
-									{productDescription.deliverableTo && (
-										<>
-											<fieldset>
-												<legend css={legend}>2. Delivery address</legend>
-												<AddressFields
-													scope={'delivery'}
-													lineOne={deliveryLineOne}
-													lineTwo={deliveryLineTwo}
-													city={deliveryCity}
-													country={deliveryCountry}
-													state={deliveryState}
-													postCode={deliveryPostcode}
-													countries={productDescription.deliverableTo}
-													errors={[]}
-													postcodeState={{
-														results: deliveryPostcodeStateResults,
-														isLoading: deliveryPostcodeStateLoading,
-														postcode: deliveryPostcode,
-														error: '',
-													}}
-													setLineOne={(lineOne) => {
-														setDeliveryLineOne(lineOne);
-													}}
-													setLineTwo={(lineTwo) => {
-														setDeliveryLineTwo(lineTwo);
-													}}
-													setTownCity={(city) => {
-														setDeliveryCity(city);
-													}}
-													setState={(state) => {
-														setDeliveryState(state);
-													}}
-													setPostcode={(postcode) => {
-														setDeliveryPostcode(postcode);
-													}}
-													setCountry={(country) => {
-														setDeliveryCountry(country);
-													}}
-													setPostcodeForFinder={() => {
-														// no-op
-													}}
-													setPostcodeErrorForFinder={() => {
-														// no-op
-													}}
-													onFindAddress={(postcode) => {
-														setDeliveryPostcodeStateLoading(true);
-														void findAddressesForPostcode(postcode).then(
-															(results) => {
-																setDeliveryPostcodeStateLoading(false);
-																setDeliveryPostcodeStateResults(results);
-															},
-														);
-													}}
-												/>
-											</fieldset>
-
-											<fieldset
-												css={css`
-													margin-bottom: ${space[6]}px;
-												`}
-											>
-												<Label
-													text="Billing address"
-													htmlFor="billingAddressMatchesDelivery"
-												/>
-												<Checkbox
-													checked={billingAddressMatchesDelivery}
-													value="yes"
-													onChange={() => {
-														setBillingAddressMatchesDelivery(
-															!billingAddressMatchesDelivery,
-														);
-													}}
-													id="billingAddressMatchesDelivery"
-													name="billingAddressMatchesDelivery"
-													label="Billing address same as delivery address"
-												/>
-											</fieldset>
-
-											{!billingAddressMatchesDelivery && (
-												<fieldset>
-													<AddressFields
-														scope={'billing'}
-														lineOne={billingLineOne}
-														lineTwo={billingLineTwo}
-														city={billingCity}
-														country={billingCountry}
-														state={billingState}
-														postCode={billingPostcode}
-														countries={productDescription.deliverableTo}
-														errors={[]}
-														postcodeState={{
-															results: billingPostcodeStateResults,
-															isLoading: billingPostcodeStateLoading,
-															postcode: billingPostcode,
-															error: '',
-														}}
-														setLineOne={(lineOne) => {
-															setBillingLineOne(lineOne);
-														}}
-														setLineTwo={(lineTwo) => {
-															setBillingLineTwo(lineTwo);
-														}}
-														setTownCity={(city) => {
-															setBillingCity(city);
-														}}
-														setState={(state) => {
-															setBillingState(state);
-														}}
-														setPostcode={(postcode) => {
-															setBillingPostcode(postcode);
-														}}
-														setCountry={(country) => {
-															setBillingCountry(country);
-														}}
-														setPostcodeForFinder={() => {
-															// no-op
-														}}
-														setPostcodeErrorForFinder={() => {
-															// no-op
-														}}
-														onFindAddress={(postcode) => {
-															setBillingPostcodeStateLoading(true);
-															void findAddressesForPostcode(postcode).then(
-																(results) => {
-																	setBillingPostcodeStateLoading(false);
-																	setBillingPostcodeStateResults(results);
-																},
-															);
-														}}
-													/>
-												</fieldset>
-											)}
-
-											<CheckoutDivider spacing="loose" />
-										</>
-									)}
-
-									<fieldset css={fieldset}>
-										<legend css={legend}>
-											{productDescription.deliverableTo ? '3' : '2'}. Payment
-											method
-											<SecureTransactionIndicator
-												hideText={true}
-												cssOverrides={css``}
-											/>
-										</legend>
-
-										<RadioGroup>
-											{validPaymentMethods.map((validPaymentMethod) => {
-												const selected = paymentMethod === validPaymentMethod;
-												const { label, icon } =
-													paymentMethodData[validPaymentMethod];
-												return (
-													<div
-														css={
-															selected
-																? paymentMethodSelected
-																: paymentMethodNotSelected
+											{validPaymentMethod === 'DirectDebit' && selected && (
+												<div
+													css={css`
+														padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+													`}
+												>
+													<DirectDebitForm
+														countryGroupId={countryGroupId}
+														accountHolderName={accountHolderName}
+														accountNumber={accountNumber}
+														accountHolderConfirmation={
+															accountHolderConfirmation
 														}
-													>
-														<div
-															css={[
-																paymentMethodRadioWithImage,
-																selected
-																	? paymentMethodRadioWithImageSelected
-																	: undefined,
-															]}
-														>
-															<Radio
-																label={label}
-																name="paymentMethod"
-																value={validPaymentMethod}
-																css={
-																	selected
-																		? checkedRadioLabelColour
-																		: defaultRadioLabelColour
-																}
-																onChange={() => {
-																	setPaymentMethod(validPaymentMethod);
+														sortCode={sortCode}
+														recaptchaCompleted={false}
+														updateAccountHolderName={(name: string) => {
+															setAccountHolderName(name);
+														}}
+														updateAccountNumber={(number: string) => {
+															setAccountNumber(number);
+														}}
+														updateSortCode={(sortCode: string) => {
+															setSortCode(sortCode);
+														}}
+														updateAccountHolderConfirmation={(
+															confirmation: boolean,
+														) => {
+															setAccountHolderConfirmation(confirmation);
+														}}
+														recaptcha={
+															<Recaptcha
+																// We could change the parents type to Promise and uses await here, but that has
+																// a lot of refactoring with not too much gain
+																onRecaptchaCompleted={(token) => {
+																	setRecaptchaToken(token);
+																}}
+																onRecaptchaExpired={() => {
+																	// no-op
 																}}
 															/>
-															<div>{icon}</div>
-														</div>
-														{validPaymentMethod === 'Stripe' && selected && (
-															<div css={paymentMethodBody}>
-																<input
-																	type="hidden"
-																	name="recaptchaToken"
-																	value={recaptchaToken}
-																/>
-																<StripeCardForm
-																	onCardNumberChange={() => {
-																		// no-op
-																	}}
-																	onExpiryChange={() => {
-																		// no-op
-																	}}
-																	onCvcChange={() => {
-																		// no-op
-																	}}
-																	errors={{}}
-																	recaptcha={
-																		<Recaptcha
-																			// We could change the parents type to Promise and uses await here, but that has
-																			// a lot of refactoring with not too much gain
-																			onRecaptchaCompleted={(token) => {
-																				setStripeClientSecretInProgress(true);
-																				setRecaptchaToken(token);
-																				void fetch(
-																					'/stripe/create-setup-intent/recaptcha',
-																					{
-																						method: 'POST',
-																						headers: {
-																							'Content-Type':
-																								'application/json',
-																						},
-																						body: JSON.stringify({
-																							isTestUser,
-																							stripePublicKey,
-																							token,
-																						}),
-																					},
-																				)
-																					.then((resp) => resp.json())
-																					.then((json) => {
-																						setStripeClientSecret(
-																							(json as Record<string, string>)
-																								.client_secret,
-																						);
-																						setStripeClientSecretInProgress(
-																							false,
-																						);
-																					});
-																			}}
-																			onRecaptchaExpired={() => {
-																				// no-op
-																			}}
-																		/>
-																	}
-																/>
-															</div>
-														)}
-
-														{validPaymentMethod === 'DirectDebit' &&
-															selected && (
-																<div
-																	css={css`
-																		padding: ${space[5]}px ${space[3]}px
-																			${space[6]}px;
-																	`}
-																>
-																	<DirectDebitForm
-																		countryGroupId={countryGroupId}
-																		accountHolderName={accountHolderName}
-																		accountNumber={accountNumber}
-																		accountHolderConfirmation={
-																			accountHolderConfirmation
-																		}
-																		sortCode={sortCode}
-																		recaptchaCompleted={false}
-																		updateAccountHolderName={(name: string) => {
-																			setAccountHolderName(name);
-																		}}
-																		updateAccountNumber={(number: string) => {
-																			setAccountNumber(number);
-																		}}
-																		updateSortCode={(sortCode: string) => {
-																			setSortCode(sortCode);
-																		}}
-																		updateAccountHolderConfirmation={(
-																			confirmation: boolean,
-																		) => {
-																			setAccountHolderConfirmation(
-																				confirmation,
-																			);
-																		}}
-																		recaptcha={
-																			<Recaptcha
-																				// We could change the parents type to Promise and uses await here, but that has
-																				// a lot of refactoring with not too much gain
-																				onRecaptchaCompleted={(token) => {
-																					setRecaptchaToken(token);
-																				}}
-																				onRecaptchaExpired={() => {
-																					// no-op
-																				}}
-																			/>
-																		}
-																		formError={''}
-																		errors={{}}
-																	/>
-																</div>
-															)}
-													</div>
-												);
-											})}
-										</RadioGroup>
-									</fieldset>
-									<SummaryTsAndCs
-										countryGroupId={countryGroupId}
-										contributionType={
-											productFields.billingPeriod === 'Monthly'
-												? 'MONTHLY'
-												: productFields.billingPeriod === 'Annual'
-												? 'ANNUAL'
-												: 'ONE_OFF'
-										}
-										currency={currencyKey}
-										amount={originalAmount}
-										productKey={productKey}
-										promotion={promotion}
-									/>
-									<div
-										css={css`
-											margin-top: ${space[8]}px;
-											margin-bottom: ${space[8]}px;
-										`}
-									>
-										{paymentMethod !== 'PayPal' && (
-											<DefaultPaymentButton
-												isLoading={stripeClientSecretInProgress}
-												buttonText={
-													stripeClientSecretInProgress
-														? 'Validating reCAPTCHA...'
-														: `Pay ${simpleFormatAmount(
-																currency,
-																finalAmount,
-														  )} per ${
-																ratePlanDescription.billingPeriod === 'Annual'
-																	? 'year'
-																	: ratePlanDescription.billingPeriod ===
-																	  'Monthly'
-																	? 'month'
-																	: 'quarter'
-														  }`
-												}
-												onClick={() => {
-													// no-op
-													// This isn't needed because we are now using the form onSubmit handler
-												}}
-												type="submit"
-												disabled={stripeClientSecretInProgress}
-											/>
-										)}
-										{payPalLoaded && paymentMethod === 'PayPal' && (
-											<>
-												<input
-													type="hidden"
-													name="payPalBAID"
-													value={payPalBAID}
-												/>
-
-												<PayPalButton
-													env={
-														isProd() && !isTestUser ? 'production' : 'sandbox'
-													}
-													style={{
-														color: 'blue',
-														size: 'responsive',
-														label: 'pay',
-														tagline: false,
-														layout: 'horizontal',
-														fundingicons: false,
-													}}
-													commit={true}
-													validate={({ disable, enable }) => {
-														/** We run this initially to set the button to the correct state */
-														const valid = formRef.current?.checkValidity();
-														if (valid) {
-															enable();
-														} else {
-															disable();
 														}
-
-														/** And then run it on form change */
-														formRef.current?.addEventListener(
-															'change',
-															(event) => {
-																const valid =
-																	// TODO - we shouldn't have to type infer here
-																	(
-																		event.currentTarget as HTMLFormElement
-																	).checkValidity();
-																if (valid) {
-																	enable();
-																} else {
-																	disable();
-																}
-															},
-														);
-													}}
-													funding={{
-														disallowed: [window.paypal.FUNDING.CREDIT],
-													}}
-													onClick={() => {
-														// TODO
-													}}
-													/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-													payment={(resolve, reject) => {
-														const requestBody = {
-															amount: finalAmount,
-															billingPeriod: ratePlanDescription.billingPeriod,
-															currency: currencyKey,
-															requireShippingAddress: false,
-														};
-														void fetch('/paypal/setup-payment', {
-															credentials: 'include',
-															method: 'POST',
-															headers: {
-																'Content-Type': 'application/json',
-																'Csrf-Token': csrf,
-															},
-															body: JSON.stringify(requestBody),
-														})
-															.then((response) => response.json())
-															.then((json) => {
-																resolve((json as { token: string }).token);
-															})
-															.catch((error) => {
-																console.error(error);
-																reject(error as Error);
-															});
-													}}
-													onAuthorize={(
-														payPalData: Record<string, unknown>,
-													) => {
-														const body = {
-															token: payPalData.paymentToken,
-														};
-														void fetch('/paypal/one-click-checkout', {
-															credentials: 'include',
-															method: 'POST',
-															headers: {
-																'Content-Type': 'application/json',
-																'Csrf-Token': csrf,
-															},
-															body: JSON.stringify(body),
-														})
-															.then((response) => response.json())
-															.then((json) => {
-																// The state below has a useEffect that submits the form
-																setPayPalBAID((json as { baid: string }).baid);
-															});
-													}}
-												/>
-											</>
-										)}
-									</div>
-									{errorMessage && (
-										<div role="alert" data-qm-error>
-											<ErrorSummary
-												cssOverrides={css`
-													margin-bottom: ${space[6]}px;
-												`}
-												message={errorMessage}
-												context={errorContext}
-											/>
+														formError={''}
+														errors={{}}
+													/>
+												</div>
+											)}
 										</div>
-									)}
-									<PaymentTsAndCs
-										countryGroupId={countryGroupId}
-										contributionType={
-											productFields.billingPeriod === 'Monthly'
-												? 'MONTHLY'
-												: productFields.billingPeriod === 'Annual'
-												? 'ANNUAL'
-												: 'ONE_OFF'
-										}
-										currency={currencyKey}
-										amount={originalAmount}
-										amountIsAboveThreshold={
-											productKey === 'SupporterPlus' ||
-											productKey === 'TierThree'
-										}
-										productKey={productKey}
-										promotion={promotion}
-									/>
-								</BoxContents>
-							</Box>
-						</form>
-						<PatronsMessage
+									);
+								})}
+							</RadioGroup>
+						</fieldset>
+						<SummaryTsAndCs
 							countryGroupId={countryGroupId}
-							mobileTheme={'light'}
+							contributionType={
+								productFields.billingPeriod === 'Monthly'
+									? 'MONTHLY'
+									: productFields.billingPeriod === 'Annual'
+									? 'ANNUAL'
+									: 'ONE_OFF'
+							}
+							currency={currencyKey}
+							amount={originalAmount}
+							productKey={productKey}
+							promotion={promotion}
 						/>
-						<GuardianTsAndCs
-							mobileTheme={'light'}
-							displayPatronsCheckout={false}
+						<div
+							css={css`
+								margin-top: ${space[8]}px;
+								margin-bottom: ${space[8]}px;
+							`}
+						>
+							{paymentMethod !== 'PayPal' && (
+								<DefaultPaymentButton
+									isLoading={stripeClientSecretInProgress}
+									buttonText={
+										stripeClientSecretInProgress
+											? 'Validating reCAPTCHA...'
+											: `Pay ${simpleFormatAmount(currency, finalAmount)} per ${
+													ratePlanDescription.billingPeriod === 'Annual'
+														? 'year'
+														: ratePlanDescription.billingPeriod === 'Monthly'
+														? 'month'
+														: 'quarter'
+											  }`
+									}
+									onClick={() => {
+										// no-op
+										// This isn't needed because we are now using the form onSubmit handler
+									}}
+									type="submit"
+									disabled={stripeClientSecretInProgress}
+								/>
+							)}
+							{payPalLoaded && paymentMethod === 'PayPal' && (
+								<>
+									<input type="hidden" name="payPalBAID" value={payPalBAID} />
+
+									<PayPalButton
+										env={isProd() && !isTestUser ? 'production' : 'sandbox'}
+										style={{
+											color: 'blue',
+											size: 'responsive',
+											label: 'pay',
+											tagline: false,
+											layout: 'horizontal',
+											fundingicons: false,
+										}}
+										commit={true}
+										validate={({ disable, enable }) => {
+											/** We run this initially to set the button to the correct state */
+											const valid = formRef.current?.checkValidity();
+											if (valid) {
+												enable();
+											} else {
+												disable();
+											}
+
+											/** And then run it on form change */
+											formRef.current?.addEventListener('change', (event) => {
+												const valid =
+													// TODO - we shouldn't have to type infer here
+													(
+														event.currentTarget as HTMLFormElement
+													).checkValidity();
+												if (valid) {
+													enable();
+												} else {
+													disable();
+												}
+											});
+										}}
+										funding={{
+											disallowed: [window.paypal.FUNDING.CREDIT],
+										}}
+										onClick={() => {
+											// TODO
+										}}
+										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
+										payment={(resolve, reject) => {
+											const requestBody = {
+												amount: finalAmount,
+												billingPeriod: ratePlanDescription.billingPeriod,
+												currency: currencyKey,
+												requireShippingAddress: false,
+											};
+											void fetch('/paypal/setup-payment', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(requestBody),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													resolve((json as { token: string }).token);
+												})
+												.catch((error) => {
+													console.error(error);
+													reject(error as Error);
+												});
+										}}
+										onAuthorize={(payPalData: Record<string, unknown>) => {
+											const body = {
+												token: payPalData.paymentToken,
+											};
+											void fetch('/paypal/one-click-checkout', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(body),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													// The state below has a useEffect that submits the form
+													setPayPalBAID((json as { baid: string }).baid);
+												});
+										}}
+									/>
+								</>
+							)}
+						</div>
+						{errorMessage && (
+							<div role="alert" data-qm-error>
+								<ErrorSummary
+									cssOverrides={css`
+										margin-bottom: ${space[6]}px;
+									`}
+									message={errorMessage}
+									context={errorContext}
+								/>
+							</div>
+						)}
+						<PaymentTsAndCs
+							countryGroupId={countryGroupId}
+							contributionType={
+								productFields.billingPeriod === 'Monthly'
+									? 'MONTHLY'
+									: productFields.billingPeriod === 'Annual'
+									? 'ANNUAL'
+									: 'ONE_OFF'
+							}
+							currency={currencyKey}
+							amount={originalAmount}
+							amountIsAboveThreshold={
+								productKey === 'SupporterPlus' || productKey === 'TierThree'
+							}
+							productKey={productKey}
+							promotion={promotion}
 						/>
-					</Column>
-				</Columns>
-			</Container>
+					</BoxContents>
+				</Box>
+			</form>
+			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
+			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>
 					<p>Please wait</p>
 				</LoadingOverlay>
 			)}
-		</PageScaffold>
+		</CheckoutScaffold>
 	);
 }
