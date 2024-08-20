@@ -119,15 +119,16 @@ export function AddressFields({
 			</Select>
 			{countryGroupId && (
 				<div css={countryGroupSelectContainer}>
-					<span>Not in the {countryGroups[countryGroupId].name}?</span>
+					<span>Can't find your country? Try another zone</span>
 					<select
 						css={countryGroupSelect}
-						onChange={(e) => {
+						onChange={(event) => {
+							event.preventDefault();
 							const pathname = window.location.pathname;
 							const currentCountryGroup = pathname.split('/')[1];
 							const newPathname = pathname.replace(
 								currentCountryGroup,
-								e.currentTarget.value,
+								event.currentTarget.value,
 							);
 							const location = `${newPathname}${window.location.search}`;
 							window.location.href = location;
@@ -140,7 +141,8 @@ export function AddressFields({
 								value={value.supportInternationalisationId}
 								selected={key === countryGroupId}
 							>
-								{value.name}
+								{value.supportInternationalisationId.toUpperCase()}{' '}
+								{value.currency}
 							</option>
 						))}
 					</select>

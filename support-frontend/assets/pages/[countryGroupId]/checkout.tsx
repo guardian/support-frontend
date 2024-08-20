@@ -378,6 +378,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		}
 
 		payment = {
+			contributionAmount,
 			originalAmount: contributionAmount,
 			finalAmount: contributionAmount,
 		};
@@ -1024,7 +1025,17 @@ function CheckoutComponent({
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
-				window.location.href = `/${geoId}/thank-you?product=${productKey}&ratePlan=${ratePlanKey}&promoCode=${promoCode}`;
+				const thankYouUrlSearchParams = new URLSearchParams();
+				thankYouUrlSearchParams.set('product', productKey);
+				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
+				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
+				contributionAmount &&
+					thankYouUrlSearchParams.set(
+						'contribution',
+						contributionAmount.toString(),
+					);
+
+				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				// TODO - error handling
 				console.error(
