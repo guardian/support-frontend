@@ -60,6 +60,7 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -330,7 +331,8 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
-	const enableSingle = countryGroupId === UnitedStates; // TODO - use campaign config
+	const campaignSettings = getCampaignSettings(countryGroupId);
+	const enableSingle = campaignSettings?.enableSingleContributions;
 
 	useEffect(() => {
 		dispatch(resetValidation());
