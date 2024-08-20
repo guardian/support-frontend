@@ -25,6 +25,7 @@ case class FeatureSwitches(
 case class CampaignSwitches(
     enableContributionsCampaign: Option[SwitchState],
     forceContributionsCampaign: Option[SwitchState],
+    usEoy2024: Option[SwitchState] = None,
 )
 
 case class SubscriptionsSwitches(
