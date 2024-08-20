@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -46,6 +46,13 @@ type PropTypes = StatePropTypes & {
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
+`;
+
+const selectStateStyles = css`
+	&:invalid {
+		/* Remove styling of invalid select element */
+		border: 1px solid ${palette.neutral[46]};
+	}
 `;
 
 const MaybeSelect = canShow(Select);
@@ -156,7 +163,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				name={`${scope}-city`}
 			/>
 			<MaybeSelect
-				css={marginBottom}
+				css={[marginBottom, selectStateStyles]}
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
@@ -165,6 +172,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('state', props.errors)}
 				isShown={shouldShowStateDropdown(props.country)}
 				name={`${scope}-stateProvince`}
+				required={shouldShowStateDropdown(props.country)}
 			>
 				<>
 					<OptionForSelect value="">{`Select a ${
