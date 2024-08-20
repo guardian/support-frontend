@@ -54,60 +54,6 @@ const buttonContainer = css`
 	flex-direction: column;
 `;
 
-function LandingPageContributionsPriceCards({
-	currencyGlyph,
-}: {
-	currencyGlyph: string;
-}) {
-	return (
-		<div
-			css={css`
-				${textSans.medium()}
-			`}
-		>
-			<h2 css={titleStyle}>Support just once</h2>
-			<p css={standFirst}>
-				We welcome support of any size, any time, whether you choose to give{' '}
-				{currencyGlyph}1 or much more.
-			</p>
-			<PriceCardsContainer
-				paymentFrequency={'ONE_OFF'}
-				renderPriceCards={({
-					amounts,
-					selectedAmount,
-					otherAmount,
-					currency,
-					paymentInterval,
-					onAmountChange,
-					minAmount,
-					onOtherAmountChange,
-					hideChooseYourAmount,
-					errors,
-				}) => (
-					<PriceCards
-						amounts={amounts}
-						selectedAmount={selectedAmount}
-						currency={currency}
-						paymentInterval={paymentInterval}
-						onAmountChange={onAmountChange}
-						hideChooseYourAmount={hideChooseYourAmount}
-						otherAmountField={
-							<OtherAmount
-								currency={currency}
-								minAmount={minAmount}
-								selectedAmount={selectedAmount}
-								otherAmount={otherAmount}
-								onOtherAmountChange={onOtherAmountChange}
-								errors={errors}
-							/>
-						}
-					/>
-				)}
-			/>
-		</div>
-	);
-}
-
 interface Props {
 	currencyGlyph: string;
 	btnClickHandler: () => void;
@@ -116,7 +62,51 @@ interface Props {
 export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
 	return (
 		<section css={sectionStyle}>
-			<LandingPageContributionsPriceCards currencyGlyph={currencyGlyph} />
+			<div
+				css={css`
+					${textSans.medium()}
+				`}
+			>
+				<h2 css={titleStyle}>Support just once</h2>
+				<p css={standFirst}>
+					We welcome support of any size, any time, whether you choose to give{' '}
+					{currencyGlyph}1 or much more.
+				</p>
+				<PriceCardsContainer
+					paymentFrequency={'ONE_OFF'}
+					renderPriceCards={({
+						amounts,
+						selectedAmount,
+						otherAmount,
+						currency,
+						paymentInterval,
+						onAmountChange,
+						minAmount,
+						onOtherAmountChange,
+						hideChooseYourAmount,
+						errors,
+					}) => (
+						<PriceCards
+							amounts={amounts}
+							selectedAmount={selectedAmount}
+							currency={currency}
+							paymentInterval={paymentInterval}
+							onAmountChange={onAmountChange}
+							hideChooseYourAmount={hideChooseYourAmount}
+							otherAmountField={
+								<OtherAmount
+									currency={currency}
+									minAmount={minAmount}
+									selectedAmount={selectedAmount}
+									otherAmount={otherAmount}
+									onOtherAmountChange={onOtherAmountChange}
+									errors={errors}
+								/>
+							}
+						/>
+					)}
+				/>
+			</div>
 			<div css={buttonContainer}>
 				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<Button cssOverrides={btnStyleOverrides} onClick={btnClickHandler}>
