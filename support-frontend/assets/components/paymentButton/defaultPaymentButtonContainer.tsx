@@ -51,7 +51,7 @@ export function DefaultPaymentButtonContainer({
 	onClick,
 	createButtonText = getButtonText,
 }: DefaultPaymentContainerProps): JSX.Element {
-	const { currencyId } = useContributionsSelector(
+	const { currencyId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
@@ -77,10 +77,6 @@ export function DefaultPaymentButtonContainer({
 
 	const currency = currencies[currencyId];
 	const amountWithCurrency = simpleFormatAmount(currency, amount);
-
-	const { countryId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 

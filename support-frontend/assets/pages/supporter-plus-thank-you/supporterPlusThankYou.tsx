@@ -8,15 +8,13 @@ import {
 } from '@guardian/source/foundations';
 import { Column, Columns, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import { useEffect, useMemo } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import type { CampaignSettings } from 'helpers/campaigns/campaigns';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -109,18 +107,11 @@ export type SupporterPlusThankYouProps = {
 export function SupporterPlusThankYou({
 	overideThresholdPrice,
 }: SupporterPlusThankYouProps): JSX.Element {
-	const campaignSettings = useMemo<CampaignSettings | null>(
-		() => getCampaignSettings(campaignCode),
-		[],
-	);
 	const { amounts } = useContributionsSelector((state) => state.common);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
-	const { campaignCode } = useContributionsSelector(
-		(state) => state.common.referrerAcquisitionData,
-	);
 	const { firstName, email, userTypeFromIdentityResponse } =
 		useContributionsSelector(
 			(state) => state.page.checkoutForm.personalDetails,
@@ -228,7 +219,6 @@ export function SupporterPlusThankYou({
 		isOneOff,
 		amountIsAboveThreshold,
 		email,
-		campaignSettings?.campaignCode,
 	);
 
 	const maybeThankYouModule = (

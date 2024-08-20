@@ -49,7 +49,6 @@ object Fixtures {
            "status" : "Active",
            "crmId" : "001g000001gPV73AAG",
            "batch" : "Batch1",
-           "invoiceTemplateId" : "2c92c0f849369b8801493bf7db7e450e",
            "communicationProfileId" : null,
            "IdentityId__c" : "30000291",
            "sfContactId__c" : "003g000001UtN1qAAF",
@@ -120,7 +119,6 @@ object Fixtures {
     identityId__c = identityId,
     paymentGateway = Some(paymentGateway),
     createdRequestId__c = "createdreqid_hi",
-    invoiceTemplateId = "defaultInvoiceTemplateId",
   )
 
   def auAccount(
@@ -134,7 +132,6 @@ object Fixtures {
     identityId__c = identityId,
     paymentGateway = Some(paymentGateway),
     createdRequestId__c = "createdreqid_hi",
-    invoiceTemplateId = "auInvoiceTemplateId",
   )
 
   val deliveryInstructions = "Leave behind the dustbin"
@@ -235,8 +232,7 @@ object Fixtures {
         "AutoPay" : true,
         "PaymentTerm" : "Due Upon Receipt",
         "BcdSettingOption" : "AutoSet",
-        "Batch" : "Batch1",
-        "InvoiceTemplateId" : "anInvoiceTemplateId"
+        "Batch" : "Batch1"
       }
     """
   val subscriptionJson =

@@ -27,16 +27,10 @@ case class V2(
     annualContributionChargeId: String,
 )
 
-case class ZuoraInvoiceTemplatesConfig(
-    auTemplateId: String,
-    defaultTemplateId: String,
-)
-
 case class ZuoraConfig(
     url: String,
     username: String,
     password: String,
-    invoiceTemplateIds: ZuoraInvoiceTemplatesConfig,
     monthlyContribution: ZuoraContributionConfig,
     annualContribution: ZuoraContributionConfig,
     digitalPack: ZuoraDigitalPackConfig,
@@ -57,7 +51,6 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
     url = config.getString(s"zuora.api.url"),
     username = config.getString(s"zuora.api.username"),
     password = config.getString(s"zuora.api.password"),
-    invoiceTemplateIds = invoiceTemplatesFromConfig(config.getConfig("zuora.invoiceTemplateIds")),
     monthlyContribution = contributionFromConfig(config.getConfig("zuora.contribution.monthly")),
     annualContribution = contributionFromConfig(config.getConfig("zuora.contribution.annual")),
     digitalPack = digitalPackFromConfig(config.getConfig("zuora.digitalpack")),
@@ -83,10 +76,5 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
       monthlyContributionChargeId = config.getString("v2.monthly.contribution.productRatePlanChargeId"),
       annualContributionChargeId = config.getString("v2.annual.contribution.productRatePlanChargeId"),
     ),
-  )
-
-  private def invoiceTemplatesFromConfig(config: Config) = ZuoraInvoiceTemplatesConfig(
-    defaultTemplateId = config.getString("defaultTemplateId"),
-    auTemplateId = config.getString("auTemplateId"),
   )
 }

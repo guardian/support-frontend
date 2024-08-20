@@ -1,6 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral, space, textSans } from '@guardian/source/foundations';
+import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
 	ContributionType,
@@ -119,6 +120,9 @@ function TsAndCsFooterLinks({
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
+			</p>
+			<p css={marginTop}>
+				<StripeDisclaimer />
 			</p>
 		</div>
 	);

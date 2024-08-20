@@ -24,6 +24,10 @@ import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import {
+	DisclaimerOnSubscribeStyles,
+	StripeDisclaimer,
+} from 'components/stripe/stripeDisclaimer';
+import {
 	BillingAddress,
 	DeliveryAddress,
 	PaperAddress,
@@ -526,6 +530,9 @@ function PaperCheckoutForm(props: PropTypes) {
 								props.setStripePublicKey(key)
 							}
 						/>
+						<p css={DisclaimerOnSubscribeStyles}>
+							<StripeDisclaimer />
+						</p>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected
 						id="directDebitForm"
