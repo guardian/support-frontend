@@ -1559,6 +1559,7 @@ function CheckoutComponent({
 												<fieldset>
 													<AddressFields
 														scope={'billing'}
+														countryGroupId={countryGroupId}
 														lineOne={billingLineOne}
 														lineTwo={billingLineTwo}
 														city={billingCity}

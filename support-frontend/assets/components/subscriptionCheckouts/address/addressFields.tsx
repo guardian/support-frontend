@@ -30,7 +30,7 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
-	countryGroupId: CountryGroupId;
+	countryGroupId?: CountryGroupId;
 	countries: Record<string, string>;
 	postcodeState: PostcodeFinderState;
 };
@@ -78,6 +78,19 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
+const countryGroupSelectContainer = css`
+	${textSans.xsmall({ fontWeight: 'light' })}
+	color: ${neutral[7]};
+	margin-top: -20px;
+	margin-bottom: 20px;
+	display: block;
+	position: relative;
+`;
+
+const countryGroupSelect = css`
+	margin-left: 5px;
+`;
+
 export function AddressFields({
 	scope,
 	countryGroupId,
@@ -104,43 +117,35 @@ export function AddressFields({
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
 			</Select>
-			<div
-				css={css`
-					${textSans.xsmall({ fontWeight: 'light' })}
-					color: ${neutral[7]};
-					margin-top: -20px;
-					margin-bottom: 20px;
-					display: block;
-					position: relative;
-				`}
-			>
-				<span>Not in the {countryGroups[countryGroupId].name}?</span>
-				<select
-					css={css`
-						margin-left: 5px;
-					`}
-					onChange={(e) => {
-						const pathname = window.location.pathname;
-						const currentCountryGroup = pathname.split('/')[1];
-						const newPathname = pathname.replace(
-							currentCountryGroup,
-							e.currentTarget.value,
-						);
-						const location = `${newPathname}${window.location.search}`;
-						window.location.href = location;
-					}}
-				>
-					{Object.entries(countryGroups).map(([key, value]) => (
-						<option
-							key={key}
-							value={value.supportInternationalisationId}
-							selected={key === countryGroupId}
-						>
-							{value.name}
-						</option>
-					))}
-				</select>
-			</div>
+			{countryGroupId && (
+				<div css={countryGroupSelectContainer}>
+					<span>Not in the {countryGroups[countryGroupId].name}?</span>
+					<select
+						css={countryGroupSelect}
+						onChange={(e) => {
+							const pathname = window.location.pathname;
+							const currentCountryGroup = pathname.split('/')[1];
+							const newPathname = pathname.replace(
+								currentCountryGroup,
+								e.currentTarget.value,
+							);
+							const location = `${newPathname}${window.location.search}`;
+							window.location.href = location;
+						}}
+						data-link-name={`${scope}CountryGroupSelect : ${props.country}`}
+					>
+						{Object.entries(countryGroups).map(([key, value]) => (
+							<option
+								key={key}
+								value={value.supportInternationalisationId}
+								selected={key === countryGroupId}
+							>
+								{value.name}
+							</option>
+						))}
+					</select>
+				</div>
+			)}
 			{props.country === 'GB' ? (
 				<PostcodeFinder
 					postcode={props.postcodeState.postcode}
