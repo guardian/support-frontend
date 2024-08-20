@@ -14,7 +14,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { CheckoutLayout } from './components/checkoutScaffold';
+import { CheckoutLayout } from './components/checkoutLayout';
 
 const titleAndButtonContainer = css`
 	display: flex;

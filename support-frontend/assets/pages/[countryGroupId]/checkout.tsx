@@ -115,7 +115,7 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
-import { CheckoutLayout } from './components/checkoutScaffold';
+import { CheckoutLayout } from './components/checkoutLayout';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /**
