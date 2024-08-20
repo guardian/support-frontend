@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	ContributionTypes,
@@ -144,14 +143,8 @@ function selectInitialAmounts(
 	}
 }
 
-// Override the settings from the server if contributionTypes are defined in url params or campaign settings
+// Override the settings from the server if contributionTypes are defined in url params
 function getContributionTypes(state: ContributionsState): ContributionTypes {
-	const campaignSettings = getCampaignSettings();
-
-	if (campaignSettings?.contributionTypes) {
-		return campaignSettings.contributionTypes;
-	}
-
 	return getValidContributionTypesFromUrlOrElse(
 		state.common.settings.contributionTypes,
 	);
