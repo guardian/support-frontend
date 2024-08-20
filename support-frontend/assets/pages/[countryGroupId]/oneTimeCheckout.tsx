@@ -14,7 +14,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { CheckoutScaffold } from './components/checkoutScaffold';
+import { CheckoutLayout } from './components/checkoutScaffold';
 
 const titleAndButtonContainer = css`
 	display: flex;
@@ -55,7 +55,7 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 	const [otherAmount, setOtherAmount] = useState<string>('');
 
 	return (
-		<CheckoutScaffold>
+		<CheckoutLayout>
 			<Box>
 				<BoxContents>
 					<div
@@ -96,6 +96,6 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 			></form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
 			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
-		</CheckoutScaffold>
+		</CheckoutLayout>
 	);
 }

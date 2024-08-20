@@ -39,11 +39,11 @@ const columns = css`
 	padding-top: ${space[2]}px;
 `;
 
-type CheckoutScaffoldProps = {
+type CheckoutLayoutProps = {
 	children: ReactNode;
 };
 
-export function CheckoutScaffold({ children }: CheckoutScaffoldProps) {
+export function CheckoutLayout({ children }: CheckoutLayoutProps) {
 	return (
 		<PageScaffold
 			header={<Header></Header>}

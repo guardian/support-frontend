@@ -115,7 +115,7 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
-import { CheckoutScaffold } from './components/checkoutScaffold';
+import { CheckoutLayout } from './components/checkoutScaffold';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /**
@@ -1018,7 +1018,7 @@ function CheckoutComponent({
 	);
 
 	return (
-		<CheckoutScaffold>
+		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					<ContributionsOrderSummary
@@ -1864,6 +1864,6 @@ function CheckoutComponent({
 					<p>Please wait</p>
 				</LoadingOverlay>
 			)}
-		</CheckoutScaffold>
+		</CheckoutLayout>
 	);
 }
