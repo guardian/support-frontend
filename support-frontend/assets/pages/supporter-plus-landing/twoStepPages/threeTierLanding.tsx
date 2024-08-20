@@ -332,11 +332,12 @@ export function ThreeTierLanding(): JSX.Element {
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
 	const campaignSettings = getCampaignSettings(countryGroupId);
-	const enableSingle = campaignSettings?.enableSingleContributions;
+	const enableSingleContributionsTab =
+		campaignSettings?.enableSingleContributions;
 
 	useEffect(() => {
 		dispatch(resetValidation());
-		if (!enableSingle && contributionType === 'ONE_OFF') {
+		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
 			/*
 			 * Reset the product type to monthly if one_off not available
 			 */
@@ -345,7 +346,7 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
 
-	const paymentFrequencies: ContributionType[] = enableSingle
+	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
 		: ['MONTHLY', 'ANNUAL'];
 
@@ -649,7 +650,7 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				{contributionType !== 'ONE_OFF' && (
+				{!enableSingleContributionsTab && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						btnClickHandler={handleSupportOnceBtnClick}
