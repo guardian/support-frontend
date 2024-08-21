@@ -17,6 +17,7 @@ import { Country } from 'helpers/internationalisation';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 
 const countryId = Country.detect();
@@ -86,7 +87,7 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 					>
 						<div css={titleAndButtonContainer}>
 							<h2 css={title}>Support just once</h2>
-							<Link href="" />
+							<BackButton geoId={geoId} buttonText="back" />
 						</div>
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
