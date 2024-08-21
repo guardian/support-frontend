@@ -1,4 +1,5 @@
 import { loadScript } from '@guardian/libs';
+import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -18,6 +19,8 @@ import {
 // ---- Types ---- //
 
 type SendEventTestParticipationId = 30;
+
+type SendEventPageViewId = 181;
 
 enum SendEventAcquisitionDataFromQueryParam {
 	Source = 94,
@@ -66,7 +69,8 @@ type SendEventId =
 	| SendEventContributionAmountUpdate
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
-	| SendEventAcquisitionDataFromQueryParam;
+	| SendEventAcquisitionDataFromQueryParam
+	| SendEventPageViewId;
 
 // ---- sendEvent logic ---- //
 
@@ -359,7 +363,7 @@ function sendEventConversionPaymentMethod(paymentMethod: PaymentMethod): void {
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
-	const sendEventABTestId = 30;
+	const sendEventABTestId: SendEventTestParticipationId = 30;
 	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
@@ -392,6 +396,16 @@ function sendEventABTestParticipations(participations: Participations): void {
 	}
 }
 
+function sendEventPageViewId(): void {
+	const sendEventPageViewId: SendEventPageViewId = 181;
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			sendEvent(sendEventPageViewId, false, viewId);
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
+
 // ---- initialisation logic ---- //
 
 function addQM() {
@@ -416,10 +430,12 @@ function init(
 		void addQM().then(() => {
 			/**
 			 * Quantum Metric's script has loaded so we can attempt to
-			 * send user AB test participations via the sendEvent function.
+			 * send user AB test participations, acquisition data and
+			 * the current page view ID via the sendEvent function.
 			 */
 			sendEventABTestParticipations(participations);
 			sendEventAcquisitionDataFromQueryParamEvent(acquisitionData);
+			sendEventPageViewId();
 		});
 	});
 }

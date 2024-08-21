@@ -9,6 +9,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import * as cookie from 'helpers/storage/cookie';
+import { getPageViewId } from 'helpers/tracking/ophan';
 import { isProd } from 'helpers/urls/url';
 
 const darkBackgroundContainerMobile = css`
@@ -67,6 +68,30 @@ export function Events() {
 	const termsEvents = <a href={guardianLiveTermsLink}>Terms and Conditions</a>;
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const presetData = urlSearchParams.get('presetData') === '1';
+	let presetDataUrl = '';
+	if (presetData) {
+		const pageviewId = getPageViewId();
+		const hashUrlSearchParams = new URLSearchParams({
+			'p[meta_page_view_id]': pageviewId,
+		});
+		const user = window.guardian.user;
+		if (user) {
+			hashUrlSearchParams.set('p[meta_identity_id]', user.id);
+			user.firstName &&
+				hashUrlSearchParams.set('p[first_name]', user.firstName);
+			user.lastName && hashUrlSearchParams.set('p[last_name]', user.lastName);
+			user.email && hashUrlSearchParams.set('p[email]', user.email);
+		}
+		/** we decode this as that is what Ticket Tailor want */
+		presetDataUrl = `?preset_data=1&widget=true#${decodeURIComponent(
+			hashUrlSearchParams.toString(),
+		)}`;
+	}
+
+	const embedUrl = `${ticketTailorUrl}/${eventId}/book${presetDataUrl}`;
+
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -96,7 +121,7 @@ export function Events() {
 									</div>
 									<script
 										src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-										data-url={`${ticketTailorUrl}/${eventId}/book`}
+										data-url={`${embedUrl}`}
 										data-type="inline"
 										data-inline-minimal="true"
 										data-inline-show-logo="false"
