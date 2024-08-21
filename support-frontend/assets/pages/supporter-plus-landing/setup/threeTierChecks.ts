@@ -33,11 +33,8 @@ export const threeTierCheckoutEnabled = (
 	}
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
-	const displaySupportPlusOnlyCheckout = !!abParticipations.supporterPlusOnly;
 
 	return !(
-		displayPatronsCheckout ||
-		displaySupportPlusOnlyCheckout ||
-		isContributionsOnlyCountry(amountsVariant)
+		displayPatronsCheckout || isContributionsOnlyCountry(amountsVariant)
 	);
 };
