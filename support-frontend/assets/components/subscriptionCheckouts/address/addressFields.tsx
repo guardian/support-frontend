@@ -17,8 +17,8 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	AddressFieldsState,
-	PostcodeFinderState,
-} from 'helpers/redux/checkout/address/state';
+	AddressFields as AddressFieldsType,
+ PostcodeFinderState } from 'helpers/redux/checkout/address/state';
 import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
@@ -42,6 +42,11 @@ type PropTypes = StatePropTypes & {
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
 	onFindAddress: (postcode: string) => void;
+	onAddressFieldInvalid?: (
+		event: React.FormEvent<HTMLInputElement>,
+		field: keyof AddressFieldsType,
+		message: string,
+	) => void;
 };
 
 const marginBottom = css`
@@ -130,6 +135,17 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setLineOne(e.target.value)}
 				error={firstError('lineOne', props.errors)}
 				name={`${scope}-lineOne`}
+				maxLength={100}
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					props.onAddressFieldInvalid?.(
+						event,
+						'lineOne',
+						'Please enter a delivery address.',
+					);
+				}}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -142,6 +158,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setLineTwo(e.target.value)}
 				error={firstError('lineTwo', props.errors)}
 				name={`${scope}-lineTwo`}
+				maxLength={100}
 			/>
 			<TextInput
 				css={marginBottom}

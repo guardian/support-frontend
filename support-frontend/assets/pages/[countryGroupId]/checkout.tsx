@@ -89,6 +89,10 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import type {
+	AddressFields as AddressFieldsType,
+	AddressFormFieldError,
+} from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -674,6 +678,9 @@ function CheckoutComponent({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -969,6 +976,32 @@ function CheckoutComponent({
 		supportInternationalisationId,
 		abParticipations.abandonedBasket === 'variant',
 	);
+
+	const onAddressFieldInvalid = (
+		event: React.FormEvent<HTMLInputElement>,
+		field: keyof AddressFieldsType,
+		message: string,
+	) => {
+		preventDefaultValidityMessage(event.currentTarget);
+		const validityState = event.currentTarget.validity;
+		if (validityState.valid) {
+			const filteredDeliveryAddressErrors = deliveryAddressErrors.filter(
+				(error: AddressFormFieldError) => {
+					return error.field != field;
+				},
+			);
+			setDeliveryAddressErrors(filteredDeliveryAddressErrors);
+		} else {
+			const updatedDeliveryAddressErrors = [
+				...deliveryAddressErrors,
+				{
+					field,
+					message,
+				},
+			];
+			setDeliveryAddressErrors(updatedDeliveryAddressErrors);
+		}
+	};
 
 	return (
 		<CheckoutLayout>
@@ -1366,7 +1399,7 @@ function CheckoutComponent({
 										state={deliveryState}
 										postCode={deliveryPostcode}
 										countries={productDescription.deliverableTo}
-										errors={[]}
+										errors={deliveryAddressErrors}
 										postcodeState={{
 											results: deliveryPostcodeStateResults,
 											isLoading: deliveryPostcodeStateLoading,
@@ -1406,6 +1439,7 @@ function CheckoutComponent({
 												},
 											);
 										}}
+										onAddressFieldInvalid={onAddressFieldInvalid}
 									/>
 								</fieldset>
 
