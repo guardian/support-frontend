@@ -112,15 +112,15 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
-import {
-	doesNotContainEmojiPattern,
-	preventDefaultValidityMessage,
-} from './ validation';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { FormSection } from './components/formSection';
 import { Legend } from './components/legend';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from './validation';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod

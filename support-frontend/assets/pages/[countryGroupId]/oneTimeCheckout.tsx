@@ -20,14 +20,14 @@ import { Country } from 'helpers/internationalisation';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	doesNotContainEmojiPattern,
-	preventDefaultValidityMessage,
-} from './ validation';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { FormSection } from './components/formSection';
 import { Legend } from './components/legend';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from './validation';
 
 const countryId = Country.detect();
 
