@@ -982,7 +982,9 @@ function CheckoutComponent({
 	>;
 
 	const onAddressFieldInvalid = (
-		event: React.FormEvent<HTMLInputElement>,
+		event:
+			| React.FormEvent<HTMLInputElement>
+			| React.FormEvent<HTMLSelectElement>,
 		field: keyof AddressFieldsType,
 		message: string,
 		errorList: AddressFormFieldError[],
@@ -1444,7 +1446,9 @@ function CheckoutComponent({
 											);
 										}}
 										onAddressFieldInvalid={(
-											event: React.FormEvent<HTMLInputElement>,
+											event:
+												| React.FormEvent<HTMLInputElement>
+												| React.FormEvent<HTMLSelectElement>,
 											field: keyof AddressFieldsType,
 											message: string,
 										) => {
