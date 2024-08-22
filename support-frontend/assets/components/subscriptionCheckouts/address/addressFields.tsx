@@ -153,7 +153,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					props.onAddressFieldInvalid?.(
 						event,
 						'lineOne',
-						'Please enter a delivery address.',
+						`Please enter a ${scope} address.`,
 					);
 				}}
 			/>
@@ -188,7 +188,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					props.onAddressFieldInvalid?.(
 						event,
 						'city',
-						'Please enter a delivery town/city.',
+						`Please enter a ${scope} town/city.`,
 					);
 				}}
 			/>
@@ -211,8 +211,8 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 						event,
 						'state',
 						props.country === 'CA'
-							? `Please select a delivery province/territory.`
-							: `Please select a delivery state.`,
+							? `Please select a ${scope} province/territory.`
+							: `Please select a ${scope} state.`,
 					);
 				}}
 			>
@@ -254,7 +254,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					props.onAddressFieldInvalid?.(
 						event,
 						'postCode',
-						`Please enter a delivery ${
+						`Please enter a ${scope} ${
 							props.country === 'US' ? 'ZIP code' : 'postcode'
 						}`,
 					);
