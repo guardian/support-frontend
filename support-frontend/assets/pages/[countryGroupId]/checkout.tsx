@@ -977,29 +977,33 @@ function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	type SetAddressErrors = React.Dispatch<
+		React.SetStateAction<AddressFormFieldError[]>
+	>;
+
 	const onAddressFieldInvalid = (
 		event: React.FormEvent<HTMLInputElement>,
 		field: keyof AddressFieldsType,
 		message: string,
+		errorList: AddressFormFieldError[],
+		setErrorList: SetAddressErrors,
 	) => {
 		preventDefaultValidityMessage(event.currentTarget);
 		const validityState = event.currentTarget.validity;
 		if (validityState.valid) {
-			const filteredDeliveryAddressErrors = deliveryAddressErrors.filter(
-				(error: AddressFormFieldError) => {
+			setErrorList(
+				errorList.filter((error) => {
 					return error.field != field;
-				},
+				}),
 			);
-			setDeliveryAddressErrors(filteredDeliveryAddressErrors);
 		} else {
-			const updatedDeliveryAddressErrors = [
-				...deliveryAddressErrors,
+			setErrorList([
+				...errorList,
 				{
 					field,
 					message,
 				},
-			];
-			setDeliveryAddressErrors(updatedDeliveryAddressErrors);
+			]);
 		}
 	};
 
@@ -1439,7 +1443,19 @@ function CheckoutComponent({
 												},
 											);
 										}}
-										onAddressFieldInvalid={onAddressFieldInvalid}
+										onAddressFieldInvalid={(
+											event: React.FormEvent<HTMLInputElement>,
+											field: keyof AddressFieldsType,
+											message: string,
+										) => {
+											onAddressFieldInvalid(
+												event,
+												field,
+												message,
+												deliveryAddressErrors,
+												setDeliveryAddressErrors,
+											);
+										}}
 									/>
 								</fieldset>
 

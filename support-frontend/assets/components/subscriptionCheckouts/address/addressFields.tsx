@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -18,7 +18,8 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
- PostcodeFinderState } from 'helpers/redux/checkout/address/state';
+	PostcodeFinderState,
+} from 'helpers/redux/checkout/address/state';
 import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
@@ -43,7 +44,9 @@ type PropTypes = StatePropTypes & {
 	setPostcodeErrorForFinder: (error: string) => void;
 	onFindAddress: (postcode: string) => void;
 	onAddressFieldInvalid?: (
-		event: React.FormEvent<HTMLInputElement>,
+		event:
+			| React.FormEvent<HTMLInputElement>
+			| React.FormEvent<HTMLSelectElement>,
 		field: keyof AddressFieldsType,
 		message: string,
 	) => void;
@@ -51,6 +54,13 @@ type PropTypes = StatePropTypes & {
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
+`;
+
+const requiredSelectStyles = css`
+	&:invalid {
+		/* Remove styling of invalid select element */
+		border: 1px solid ${palette.neutral[46]};
+	}
 `;
 
 const MaybeSelect = canShow(Select);
@@ -171,9 +181,19 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setTownCity(e.target.value)}
 				error={firstError('city', props.errors)}
 				name={`${scope}-city`}
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					props.onAddressFieldInvalid?.(
+						event,
+						'city',
+						'Please enter a delivery town/city.',
+					);
+				}}
 			/>
 			<MaybeSelect
-				css={marginBottom}
+				css={[marginBottom, requiredSelectStyles]}
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
@@ -182,6 +202,19 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('state', props.errors)}
 				isShown={shouldShowStateDropdown(props.country)}
 				name={`${scope}-stateProvince`}
+				required
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					props.onAddressFieldInvalid?.(
+						event,
+						'state',
+						props.country === 'CA'
+							? `Please select a delivery province/territory.`
+							: `Please select a delivery state.`,
+					);
+				}}
 			>
 				<>
 					<OptionForSelect value="">{`Select a ${
@@ -213,6 +246,19 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setPostcode(e.target.value)}
 				error={firstError('postCode', props.errors)}
 				name={`${scope}-postcode`}
+				maxLength={20}
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					props.onAddressFieldInvalid?.(
+						event,
+						'postCode',
+						`Please enter a delivery ${
+							props.country === 'US' ? 'ZIP code' : 'postcode'
+						}`,
+					);
+				}}
 			/>
 		</div>
 	);
