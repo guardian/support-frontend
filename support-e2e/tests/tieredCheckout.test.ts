@@ -279,10 +279,36 @@ const testDetailsPromo = [
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
 	},
+	{
+		tier: 2,
+		frequency: 'Monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		expectedCardHeading: 'All-access digital',
+		expectedPromoText:
+			/£(\d|\.)+\/month for (\d|\.) months, then £(\d|\.)+\/month/,
+		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
+		expectedThankYouText:
+			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
+		abTestHash: '#ab-useGenericCheckout=variant',
+	},
+	{
+		tier: 2,
+		frequency: 'Annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		expectedCardHeading: 'All-access digital',
+		expectedPromoText:
+			/£(\d|\.)+\/year for the first year, then £(\d|\.)+\/year/i,
+		expectedCheckoutTotalText: /Was £(\d|\.)+, now £(\d|\.)+\/year/i,
+		expectedThankYouText:
+			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
+		abTestHash: '#ab-useGenericCheckout=variant',
+	},
 ];
 test.describe('SupporterPlus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`Tier-${testDetails.tier} incl PromoCode ${testDetails.frequency} with Credit/Debit card - UK`, async ({
+		test(`Tier-${testDetails.tier} incl PromoCode ${
+			testDetails.frequency
+		} with Credit/Debit card - UK${testDetails.abTestHash ?? ''}`, async ({
 			context,
 			baseURL,
 		}) => {
@@ -297,7 +323,9 @@ test.describe('SupporterPlus promoCodes', () => {
 				page,
 				context,
 				baseURL,
-				`/uk/contribute?promoCode=${testDetails.promoCode}`,
+				`/uk/contribute?promoCode=${testDetails.promoCode}${
+					testDetails.abTestHash ?? ''
+				}`,
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 

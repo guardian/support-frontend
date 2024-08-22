@@ -1,39 +1,43 @@
-import type { TickerSettings } from 'components/ticker/types';
-import type { ContributionTypes } from 'helpers/contributions';
-
-type CampaignCopy = {
-	headerCopy?: string | JSX.Element;
-	contributeCopy?: string | JSX.Element;
-};
+import type { CountryGroupId } from '../internationalisation/countryGroup';
+import { UnitedStates } from '../internationalisation/countryGroup';
 
 export type CampaignSettings = {
-	campaignCode: string;
-	campaignPath: string;
-	tickerId: string;
-	copy?: (goalReached: boolean) => CampaignCopy;
-	formMessage?: JSX.Element;
-	termsAndConditions?: (
-		contributionsTermsLink: string,
-		contactEmail: string,
-	) => JSX.Element;
-	cssModifiers?: string[];
-	contributionTypes?: ContributionTypes;
-	backgroundImage?: string;
-	extraComponent?: JSX.Element;
-	tickerSettings: TickerSettings;
-	goalReachedCopy?: JSX.Element;
-	// If set, the form will be replaced with this if goal reached
+	isEligible: (countryGroupId: CountryGroupId) => boolean;
+	enableSingleContributions: boolean;
 };
 
-export function getCampaignSettings(): CampaignSettings | null {
+const campaigns: Record<string, CampaignSettings> = {
+	usEoy2024: {
+		isEligible: (countryGroupId: CountryGroupId) =>
+			countryGroupId === UnitedStates,
+		enableSingleContributions: true,
+	},
+};
+
+const forceCampaign = (campaignId: string): boolean => {
+	const urlParams = new URLSearchParams(window.location.search);
+	return urlParams.get('forceCampaign') === campaignId;
+};
+
+export function getCampaignSettings(
+	countryGroupId: CountryGroupId,
+): CampaignSettings | null {
+	for (const campaignId in campaigns) {
+		const isEligible =
+			isCampaignEnabled(campaignId) &&
+			campaigns[campaignId].isEligible(countryGroupId);
+		if (isEligible || forceCampaign(campaignId)) {
+			return campaigns[campaignId];
+		}
+	}
 	return null;
 }
 
-export function isCampaignEnabled(campaignCode: string): boolean {
+function isCampaignEnabled(campaignId: string): boolean {
 	const { campaignSwitches } = window.guardian.settings.switches;
 	return (
 		window.location.hash ===
-			`#settings.switches.campaignSwitches.${campaignCode}=On` ||
-		campaignSwitches[campaignCode] === 'On'
+			`#settings.switches.campaignSwitches.${campaignId}=On` ||
+		campaignSwitches[campaignId] === 'On'
 	);
 }
