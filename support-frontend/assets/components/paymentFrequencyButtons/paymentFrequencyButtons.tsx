@@ -2,11 +2,11 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, palette, space, textSans } from '@guardian/source/foundations';
 import { useState } from 'react';
-import type { RegularContributionType } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 
 interface PaymentFrequencyButtonObj {
 	paymentFrequencyLabel: string;
-	paymentFrequencyId: RegularContributionType;
+	paymentFrequencyId: ContributionType;
 	isPreSelected?: boolean;
 }
 
