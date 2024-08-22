@@ -4,11 +4,14 @@ import {
 	headlineBold24,
 	space,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
-import { useState } from 'react';
+import { TextInput } from '@guardian/source/react-components';
+import { useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { PriceCards } from 'components/priceCards/priceCards';
+import Signout from 'components/signout/signout';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
@@ -17,8 +20,14 @@ import { Country } from 'helpers/internationalisation';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from './ validation';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
+import { FormSection } from './components/formSection';
+import { Legend } from './components/legend';
 
 const countryId = Country.detect();
 
@@ -47,6 +56,14 @@ const standFirst = css`
 	}
 `;
 
+const shorterBoxMargin = css`
+	:not(:last-child) {
+		${until.tablet} {
+			margin-bottom: ${space[2]}px;
+		}
+	}
+`;
+
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -56,8 +73,11 @@ export function OneTimeCheckout({ geoId, appConfig }: Props) {
 	return <OneTimeCheckoutComponent geoId={geoId} appConfig={appConfig} />;
 }
 
-function OneTimeCheckoutComponent({ geoId }: Props) {
+function OneTimeCheckoutComponent({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+
+	const user = appConfig.user;
+	const isSignedIn = !!user?.email;
 
 	const settings = getSettings();
 	const { selectedAmountsVariant } = getAmountsTestVariant(
@@ -75,6 +95,14 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountErrors] = useState<string[]>([]);
+
+	const [email, setEmail] = useState(user?.email ?? '');
+	const [emailError, setEmailError] = useState<string>();
+
+	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
+
+	const formRef = useRef<HTMLFormElement>(null);
 
 	return (
 		<CheckoutLayout>
@@ -114,7 +142,91 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 					</div>
 				</BoxContents>
 			</Box>
-			<form></form>
+			<form
+				ref={formRef}
+				action="todo"
+				method="POST"
+				onSubmit={() => {
+					/* ToDo */
+				}}
+			>
+				<Box cssOverrides={shorterBoxMargin}>
+					<BoxContents>
+						<FormSection>
+							<Legend>1. Your details</Legend>
+							<div>
+								<TextInput
+									id="email"
+									data-qm-masking="blocklist"
+									label="Email address"
+									value={email}
+									type="email"
+									autoComplete="email"
+									onChange={(event) => {
+										setEmail(event.currentTarget.value);
+									}}
+									onBlur={(event) => {
+										event.target.checkValidity();
+									}}
+									readOnly={isSignedIn}
+									name="email"
+									required
+									maxLength={80}
+									error={emailError}
+									onInvalid={(event) => {
+										preventDefaultValidityMessage(event.currentTarget);
+										const validityState = event.currentTarget.validity;
+										if (validityState.valid) {
+											setEmailError(undefined);
+										} else {
+											if (validityState.valueMissing) {
+												setEmailError('Please enter your email address.');
+											} else {
+												setEmailError('Please enter a valid email address.');
+											}
+										}
+									}}
+								/>
+							</div>
+
+							<Signout isSignedIn={isSignedIn} />
+
+							{countryId === 'US' && (
+								<div>
+									<TextInput
+										id="zipCode"
+										label="ZIP code"
+										name="billing-postcode"
+										onChange={(event) => {
+											setBillingPostcode(event.target.value);
+										}}
+										onBlur={(event) => {
+											event.target.checkValidity();
+										}}
+										maxLength={20}
+										value={billingPostcode}
+										pattern={doesNotContainEmojiPattern}
+										error={billingPostcodeError}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingPostcodeError(undefined);
+											} else {
+												if (!validityState.valueMissing) {
+													setBillingPostcodeError(
+														'Please enter a valid zip code.',
+													);
+												}
+											}
+										}}
+									/>
+								</div>
+							)}
+						</FormSection>
+					</BoxContents>
+				</Box>
+			</form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
 			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
 		</CheckoutLayout>
