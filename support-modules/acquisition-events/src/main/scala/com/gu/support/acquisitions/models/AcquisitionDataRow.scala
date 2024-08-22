@@ -16,7 +16,7 @@ case class AcquisitionDataRow(
     eventTimeStamp: DateTime,
     product: AcquisitionProduct,
     amount: Option[BigDecimal],
-    country: Country,
+    country: Option[Country],
     currency: Currency,
     componentId: Option[String],
     componentType: Option[String],

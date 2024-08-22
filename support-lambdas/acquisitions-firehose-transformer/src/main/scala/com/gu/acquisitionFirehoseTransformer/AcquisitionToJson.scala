@@ -37,7 +37,7 @@ object AcquisitionToJson {
   ): Json = {
     AcquisitionOutput(
       acquisition.paymentFrequency.value,
-      acquisition.country.alpha2,
+      acquisition.country.map(_.alpha2).getOrElse(""),
       amount,
       annualisedValue,
       annualisedValueGBP,

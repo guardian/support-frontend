@@ -65,7 +65,7 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = acquisitionProduct,
       amount = amount,
-      country = commonState.user.billingAddress.country,
+      country = Some(commonState.user.billingAddress.country),
       currency = commonState.product.currency,
       componentId = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentId),
       componentType = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentType),

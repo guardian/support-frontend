@@ -64,7 +64,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       eventTimeStamp = new DateTime(1544710504165L),
       product = AcquisitionProduct.RecurringContribution,
       amount = amount,
-      country = Country.UK,
+      country = Some(Country.UK),
       currency = Currency.USD,
       componentId = Some("MY_COMPONENT_ID"),
       componentType = None,

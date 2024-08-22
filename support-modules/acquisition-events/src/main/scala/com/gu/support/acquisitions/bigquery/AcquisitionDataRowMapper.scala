@@ -34,6 +34,7 @@ object AcquisitionDataRowMapper {
       acquisition.zuoraSubscriptionNumber.map("zuora_subscription_number" -> _),
       acquisition.contributionId.map("contribution_id" -> _),
       acquisition.paymentId.map("payment_id" -> _),
+      acquisition.country.map("country_code" -> _.alpha2),
     ).flatten.toMap
 
     new JSONObject(
@@ -41,7 +42,6 @@ object AcquisitionDataRowMapper {
         "event_timestamp" -> ISODateTimeFormat.dateTime().print(acquisition.eventTimeStamp),
         "product" -> acquisition.product.value,
         "payment_frequency" -> acquisition.paymentFrequency.value,
-        "country_code" -> acquisition.country.alpha2,
         "currency" -> acquisition.currency.iso,
         "reused_existing_payment_method" -> acquisition.reusedExistingPaymentMethod,
         "acquisition_type" -> acquisition.acquisitionType.value,

@@ -34,8 +34,7 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country =
-        StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
+      country = StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.componentId,
       componentType = acquisitionData.componentType,
@@ -74,7 +73,7 @@ object AcquisitionDataRowBuilder {
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
       amount = Some(paymentData.amount),
-      country = acquisition.countryCode.flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
+      country = acquisition.countryCode.flatMap(CountryGroup.countryByCode),
       currency = mapCurrency(paymentData.currency),
       componentId = acquisitionData.flatMap(_.componentId),
       componentType = acquisitionData.flatMap(_.componentType),
@@ -109,7 +108,7 @@ object AcquisitionDataRowBuilder {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
     val country =
-      CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode).getOrElse(Country.UK)
+      CountryGroup.countryByCode(acquisition.payment.getPayer.getPayerInfo.getCountryCode)
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
