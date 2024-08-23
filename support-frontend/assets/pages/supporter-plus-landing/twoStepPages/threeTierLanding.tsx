@@ -62,6 +62,7 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
+import Countdown from '../components/countdown';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -426,6 +427,9 @@ export function ThreeTierLanding({
 		);
 	};
 
+	const EOYDeadline = 'Nov 26, 2024 23:59:59';
+	const countdownDateTime = Date.parse(EOYDeadline);
+
 	const generateOneOffCheckoutLink = () => {
 		const urlParams = new URLSearchParams();
 		urlParams.set('selected-contribution-type', 'one_off');
@@ -590,6 +594,9 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
+					{campaignSettings?.isEligible && <Countdown
+						deadlineDateTime={countdownDateTime} />
+					}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
