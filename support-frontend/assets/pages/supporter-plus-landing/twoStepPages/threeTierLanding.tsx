@@ -594,9 +594,9 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{campaignSettings?.isEligible && <Countdown
-						deadlineDateTime={countdownDateTime} />
-					}
+					{campaignSettings?.isEligible && (
+						<Countdown deadlineDateTime={countdownDateTime} />
+					)}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
