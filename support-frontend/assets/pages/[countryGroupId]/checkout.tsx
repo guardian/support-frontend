@@ -984,6 +984,17 @@ function CheckoutComponent({
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
 
+	/**
+	 * onAddressFieldInvalid can be passed to the AddressFields
+	 * component. It can then be used as onInvalid handler
+	 * on an address field to add / remove errors to the
+	 * deliveryAddressErrors or billingAddressErrors lists
+	 * @param event Invalid Form Input Event
+	 * @param field ID of the field
+	 * @param message Error message
+	 * @param errorList deliveryAddressErrors OR billingAddressErrors list
+	 * @param setErrorList setDeliveryAddressErrors OR setBillingAddressErrors
+	 */
 	const onAddressFieldInvalid = (
 		event:
 			| React.FormEvent<HTMLInputElement>
