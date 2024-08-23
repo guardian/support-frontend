@@ -986,7 +986,7 @@ function CheckoutComponent({
 
 	/**
 	 * onAddressFieldInvalid can be passed to the AddressFields
-	 * component. It can then be used as onInvalid handler
+	 * component. It can then be called as the onInvalid event handler
 	 * on an address field to add / remove errors to the
 	 * deliveryAddressErrors or billingAddressErrors lists
 	 * @param event Invalid Form Input Event
