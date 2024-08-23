@@ -89,10 +89,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type {
-	AddressFields as AddressFieldsType,
-	AddressFormFieldError,
-} from 'helpers/redux/checkout/address/state';
+import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -980,49 +977,6 @@ function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	type SetAddressErrors = React.Dispatch<
-		React.SetStateAction<AddressFormFieldError[]>
-	>;
-
-	/**
-	 * onAddressFieldInvalid can be passed to the AddressFields
-	 * component. It can then be called as the onInvalid event handler
-	 * on an address field to add / remove errors to the
-	 * deliveryAddressErrors or billingAddressErrors lists
-	 * @param event Invalid Form Input Event
-	 * @param field ID of the field
-	 * @param message Error message
-	 * @param errorList deliveryAddressErrors OR billingAddressErrors list
-	 * @param setErrorList setDeliveryAddressErrors OR setBillingAddressErrors
-	 */
-	const onAddressFieldInvalid = (
-		event:
-			| React.FormEvent<HTMLInputElement>
-			| React.FormEvent<HTMLSelectElement>,
-		field: keyof AddressFieldsType,
-		message: string,
-		errorList: AddressFormFieldError[],
-		setErrorList: SetAddressErrors,
-	) => {
-		preventDefaultValidityMessage(event.currentTarget);
-		const validityState = event.currentTarget.validity;
-		if (validityState.valid) {
-			setErrorList(
-				errorList.filter((error) => {
-					return error.field != field;
-				}),
-			);
-		} else {
-			setErrorList([
-				...errorList,
-				{
-					field,
-					message,
-				},
-			]);
-		}
-	};
-
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -1450,6 +1404,9 @@ function CheckoutComponent({
 										setPostcodeErrorForFinder={() => {
 											// no-op
 										}}
+										setErrors={(errors) => {
+											setDeliveryAddressErrors(errors);
+										}}
 										onFindAddress={(postcode) => {
 											setDeliveryPostcodeStateLoading(true);
 											void findAddressesForPostcode(postcode).then(
@@ -1457,21 +1414,6 @@ function CheckoutComponent({
 													setDeliveryPostcodeStateLoading(false);
 													setDeliveryPostcodeStateResults(results);
 												},
-											);
-										}}
-										onAddressFieldInvalid={(
-											event:
-												| React.FormEvent<HTMLInputElement>
-												| React.FormEvent<HTMLSelectElement>,
-											field: keyof AddressFieldsType,
-											message: string,
-										) => {
-											onAddressFieldInvalid(
-												event,
-												field,
-												message,
-												deliveryAddressErrors,
-												setDeliveryAddressErrors,
 											);
 										}}
 									/>
@@ -1542,6 +1484,9 @@ function CheckoutComponent({
 											setPostcodeErrorForFinder={() => {
 												// no-op
 											}}
+											setErrors={(errors) => {
+												setBillingAddressErrors(errors);
+											}}
 											onFindAddress={(postcode) => {
 												setBillingPostcodeStateLoading(true);
 												void findAddressesForPostcode(postcode).then(
@@ -1549,21 +1494,6 @@ function CheckoutComponent({
 														setBillingPostcodeStateLoading(false);
 														setBillingPostcodeStateResults(results);
 													},
-												);
-											}}
-											onAddressFieldInvalid={(
-												event:
-													| React.FormEvent<HTMLInputElement>
-													| React.FormEvent<HTMLSelectElement>,
-												field: keyof AddressFieldsType,
-												message: string,
-											) => {
-												onAddressFieldInvalid(
-													event,
-													field,
-													message,
-													billingAddressErrors,
-													setBillingAddressErrors,
 												);
 											}}
 										/>

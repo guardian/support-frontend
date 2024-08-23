@@ -18,6 +18,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
+	AddressFormFieldError,
 	PostcodeFinderState,
 } from 'helpers/redux/checkout/address/state';
 import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
@@ -25,6 +26,10 @@ import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { canShow } from 'hocs/canShow';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from '../../../pages/[countryGroupId]/validation';
 import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
@@ -42,14 +47,8 @@ type PropTypes = StatePropTypes & {
 	setCountry: (countryRaw: IsoCountry) => void;
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
+	setErrors?: React.Dispatch<React.SetStateAction<AddressFormFieldError[]>>;
 	onFindAddress: (postcode: string) => void;
-	onAddressFieldInvalid?: (
-		event:
-			| React.FormEvent<HTMLInputElement>
-			| React.FormEvent<HTMLSelectElement>,
-		field: keyof AddressFieldsType,
-		message: string,
-	) => void;
 };
 
 const marginBottom = css`
@@ -84,6 +83,32 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 }
 
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
+	const onAddressFieldInvalid = (
+		event:
+			| React.FormEvent<HTMLInputElement>
+			| React.FormEvent<HTMLSelectElement>,
+		field: keyof AddressFieldsType,
+		message: string,
+	) => {
+		preventDefaultValidityMessage(event.currentTarget);
+		const validityState = event.currentTarget.validity;
+		if (validityState.valid) {
+			props.setErrors?.(
+				props.errors.filter((error) => {
+					return error.field != field;
+				}),
+			);
+		} else {
+			props.setErrors?.([
+				...props.errors,
+				{
+					field,
+					message,
+				},
+			]);
+		}
+	};
+
 	return (
 		<div data-component={`${scope}AddressFields`}>
 			<Select
@@ -142,8 +167,9 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
+				pattern={doesNotContainEmojiPattern}
 				onInvalid={(event) => {
-					props.onAddressFieldInvalid?.(
+					onAddressFieldInvalid(
 						event,
 						'lineOne',
 						`Please enter a ${scope} address.`,
@@ -178,7 +204,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					props.onAddressFieldInvalid?.(
+					onAddressFieldInvalid(
 						event,
 						'city',
 						`Please enter a ${scope} town/city.`,
@@ -200,7 +226,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					props.onAddressFieldInvalid?.(
+					onAddressFieldInvalid(
 						event,
 						'state',
 						props.country === 'CA'
@@ -244,7 +270,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					props.onAddressFieldInvalid?.(
+					onAddressFieldInvalid(
 						event,
 						'postCode',
 						`Please enter a ${scope} ${
