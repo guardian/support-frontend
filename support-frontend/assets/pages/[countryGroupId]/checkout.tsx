@@ -702,6 +702,9 @@ function CheckoutComponent({
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingAddressErrors, setBillingAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -1497,7 +1500,7 @@ function CheckoutComponent({
 											state={billingState}
 											postCode={billingPostcode}
 											countries={productDescription.deliverableTo}
-											errors={[]}
+											errors={billingAddressErrors}
 											postcodeState={{
 												results: billingPostcodeStateResults,
 												isLoading: billingPostcodeStateLoading,
@@ -1535,6 +1538,21 @@ function CheckoutComponent({
 														setBillingPostcodeStateLoading(false);
 														setBillingPostcodeStateResults(results);
 													},
+												);
+											}}
+											onAddressFieldInvalid={(
+												event:
+													| React.FormEvent<HTMLInputElement>
+													| React.FormEvent<HTMLSelectElement>,
+												field: keyof AddressFieldsType,
+												message: string,
+											) => {
+												onAddressFieldInvalid(
+													event,
+													field,
+													message,
+													billingAddressErrors,
+													setBillingAddressErrors,
 												);
 											}}
 										/>
