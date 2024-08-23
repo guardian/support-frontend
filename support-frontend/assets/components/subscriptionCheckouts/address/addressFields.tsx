@@ -82,30 +82,97 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
+type ValidityStateError = 'valueMissing' | 'patternMismatch';
+
+function getErrorMessage(
+	field: keyof AddressFieldsType,
+	scope: 'delivery' | 'billing',
+	validityStateError: ValidityStateError,
+	country: IsoCountry,
+): string {
+	const patternMismatch = 'Please use only letters, numbers and punctuation.';
+	const errorMessages: Record<string, {
+			[key in ValidityStateError]?: string;
+		}> = {
+		lineOne: {
+			valueMissing: `Please enter a ${scope} address.`,
+			patternMismatch,
+		},
+		lineTwo: {
+			patternMismatch,
+		},
+		city: {
+			valueMissing: `Please enter a ${scope} town/city.`,
+			patternMismatch,
+		},
+		state: {
+			valueMissing:
+				country === 'CA'
+					? `Please select a ${scope} province/territory.`
+					: `Please select a ${scope} state.`,
+			patternMismatch,
+		},
+		postCode: {
+			valueMissing: `Please enter a ${scope} ${
+				country === 'US' ? 'ZIP code' : 'postcode'
+			}`,
+			patternMismatch,
+		},
+	};
+
+	return (
+		(errorMessages[field][validityStateError]) ?? ''
+	);
+}
+
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	const onAddressFieldInvalid = (
 		event:
 			| React.FormEvent<HTMLInputElement>
 			| React.FormEvent<HTMLSelectElement>,
 		field: keyof AddressFieldsType,
-		message: string,
 	) => {
+		if (!props.setErrors) {
+			return;
+		}
+
 		preventDefaultValidityMessage(event.currentTarget);
 		const validityState = event.currentTarget.validity;
 		if (validityState.valid) {
-			props.setErrors?.(
+			// remove all errors for the field
+			props.setErrors(
 				props.errors.filter((error) => {
 					return error.field != field;
 				}),
 			);
 		} else {
-			props.setErrors?.([
-				...props.errors,
-				{
-					field,
-					message,
-				},
-			]);
+			const possibleValidityStateErrors: ValidityStateError[] = [
+				'valueMissing',
+				'patternMismatch',
+			];
+			const updatedErrors: AddressFormFieldError[] = [
+				// remove all errors for field
+				...props.errors.filter((error) => {
+					return error.field != field;
+				}),
+				// include all unresolved errors for the field
+				...(possibleValidityStateErrors
+					.map((possibleValidityStateError) => {
+						if (validityState[possibleValidityStateError]) {
+							return {
+								field,
+								message: getErrorMessage(
+									field,
+									scope,
+									possibleValidityStateError,
+									props.country,
+								),
+							};
+						}
+					})
+					.filter(Boolean) as AddressFormFieldError[]),
+			];
+			props.setErrors(updatedErrors);
 		}
 	};
 
@@ -164,16 +231,12 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('lineOne', props.errors)}
 				name={`${scope}-lineOne`}
 				maxLength={100}
+				pattern={doesNotContainEmojiPattern}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
-				pattern={doesNotContainEmojiPattern}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(
-						event,
-						'lineOne',
-						`Please enter a ${scope} address.`,
-					);
+					onAddressFieldInvalid(event, 'lineOne');
 				}}
 			/>
 			<TextInput
@@ -188,6 +251,13 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('lineTwo', props.errors)}
 				name={`${scope}-lineTwo`}
 				maxLength={100}
+				pattern={doesNotContainEmojiPattern}
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					onAddressFieldInvalid(event, 'lineTwo');
+				}}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -200,15 +270,12 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setTownCity(e.target.value)}
 				error={firstError('city', props.errors)}
 				name={`${scope}-city`}
+				pattern={doesNotContainEmojiPattern}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(
-						event,
-						'city',
-						`Please enter a ${scope} town/city.`,
-					);
+					onAddressFieldInvalid(event, 'city');
 				}}
 			/>
 			<MaybeSelect
@@ -226,13 +293,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(
-						event,
-						'state',
-						props.country === 'CA'
-							? `Please select a ${scope} province/territory.`
-							: `Please select a ${scope} state.`,
-					);
+					onAddressFieldInvalid(event, 'state');
 				}}
 			>
 				<>
@@ -253,6 +314,13 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				optional
 				isShown={shouldShowStateInput(props.country)}
 				name={`${scope}-stateProvince`}
+				pattern={doesNotContainEmojiPattern}
+				onBlur={(event) => {
+					event.target.checkValidity();
+				}}
+				onInvalid={(event) => {
+					onAddressFieldInvalid(event, 'state');
+				}}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -266,17 +334,12 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('postCode', props.errors)}
 				name={`${scope}-postcode`}
 				maxLength={20}
+				pattern={doesNotContainEmojiPattern}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(
-						event,
-						'postCode',
-						`Please enter a ${scope} ${
-							props.country === 'US' ? 'ZIP code' : 'postcode'
-						}`,
-					);
+					onAddressFieldInvalid(event, 'postCode');
 				}}
 			/>
 		</div>
