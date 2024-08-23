@@ -84,48 +84,47 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
-function getErrorMessage(
-	field: keyof AddressFieldsType,
-	scope: 'delivery' | 'billing',
-	validityStateError: ValidityStateError,
-	country: IsoCountry,
-): string {
-	const patternMismatch = 'Please use only letters, numbers and punctuation.';
-	const errorMessages: Record<string, {
-			[key in ValidityStateError]?: string;
-		}> = {
-		lineOne: {
-			valueMissing: `Please enter a ${scope} address.`,
-			patternMismatch,
-		},
-		lineTwo: {
-			patternMismatch,
-		},
-		city: {
-			valueMissing: `Please enter a ${scope} town/city.`,
-			patternMismatch,
-		},
-		state: {
-			valueMissing:
-				country === 'CA'
-					? `Please select a ${scope} province/territory.`
-					: `Please select a ${scope} state.`,
-			patternMismatch,
-		},
-		postCode: {
-			valueMissing: `Please enter a ${scope} ${
-				country === 'US' ? 'ZIP code' : 'postcode'
-			}`,
-			patternMismatch,
-		},
+export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
+	const getErrorMessage = (
+		field: keyof AddressFieldsType,
+		validityStateError: ValidityStateError,
+	): string => {
+		const patternMismatch = 'Please use only letters, numbers and punctuation.';
+		const errorMessages: Record<
+			string,
+			{
+				[key in ValidityStateError]?: string;
+			}
+		> = {
+			lineOne: {
+				valueMissing: `Please enter a ${scope} address.`,
+				patternMismatch,
+			},
+			lineTwo: {
+				patternMismatch,
+			},
+			city: {
+				valueMissing: `Please enter a ${scope} town/city.`,
+				patternMismatch,
+			},
+			state: {
+				valueMissing:
+					props.country === 'CA'
+						? `Please select a ${scope} province/territory.`
+						: `Please select a ${scope} state.`,
+				patternMismatch,
+			},
+			postCode: {
+				valueMissing: `Please enter a ${scope} ${
+					props.country === 'US' ? 'ZIP code' : 'postcode'
+				}`,
+				patternMismatch,
+			},
+		};
+
+		return errorMessages[field][validityStateError] ?? '';
 	};
 
-	return (
-		(errorMessages[field][validityStateError]) ?? ''
-	);
-}
-
-export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	const onAddressFieldInvalid = (
 		event:
 			| React.FormEvent<HTMLInputElement>
@@ -161,12 +160,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 						if (validityState[possibleValidityStateError]) {
 							return {
 								field,
-								message: getErrorMessage(
-									field,
-									scope,
-									possibleValidityStateError,
-									props.country,
-								),
+								message: getErrorMessage(field, possibleValidityStateError),
 							};
 						}
 					})
