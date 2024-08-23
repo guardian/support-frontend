@@ -2,28 +2,51 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
+	palette,
 	space,
 	textSans17,
 	until,
 } from '@guardian/source/foundations';
-import { TextInput } from '@guardian/source/react-components';
+import {
+	Radio,
+	RadioGroup,
+	TextInput,
+} from '@guardian/source/react-components';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
+import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PriceCards } from 'components/priceCards/priceCards';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
+import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+	AmazonPay,
+	isPaymentMethod,
+	PayPal,
+	Stripe,
+} from 'helpers/forms/paymentMethods';
+import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
+import * as cookie from 'helpers/storage/cookie';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { FormSection } from './components/formSection';
 import { Legend } from './components/legend';
+import { PaymentMethodRadio } from './components/paymentMethodRadio';
+import { PaymentMethodSelector } from './components/paymentMethodSelector';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
@@ -64,16 +87,65 @@ const shorterBoxMargin = css`
 	}
 `;
 
-type Props = {
+const defaultRadioLabelColour = css`
+	+ label div {
+		color: ${palette.neutral[46]};
+		font-weight: bold;
+	}
+`;
+
+const checkedRadioLabelColour = css`
+	+ label div {
+		color: ${palette.brand[400]};
+		font-weight: bold;
+	}
+`;
+
+const paymentMethodBody = css`
+	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+`;
+
+type OneTimeCheckoutProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 };
 
-export function OneTimeCheckout({ geoId, appConfig }: Props) {
-	return <OneTimeCheckoutComponent geoId={geoId} appConfig={appConfig} />;
+type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
+	stripePublicKey: string;
+	isTestUser: boolean;
+};
+
+export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
+	const { currencyKey } = getGeoIdConfig(geoId);
+	const isTestUser = !!cookie.get('_test_username');
+
+	const stripePublicKey = getStripeKey(
+		'ONE_OFF',
+		countryId,
+		currencyKey,
+		isTestUser,
+	);
+
+	const stripePromise = loadStripe(stripePublicKey);
+
+	return (
+		<Elements stripe={stripePromise}>
+			<OneTimeCheckoutComponent
+				geoId={geoId}
+				appConfig={appConfig}
+				stripePublicKey={stripePublicKey}
+				isTestUser={isTestUser}
+			/>
+		</Elements>
+	);
 }
 
-function OneTimeCheckoutComponent({ geoId, appConfig }: Props) {
+function OneTimeCheckoutComponent({
+	isTestUser,
+	stripePublicKey,
+	geoId,
+	appConfig,
+}: OneTimeCheckoutComponentProps) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const user = appConfig.user;
@@ -96,11 +168,31 @@ function OneTimeCheckoutComponent({ geoId, appConfig }: Props) {
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountErrors] = useState<string[]>([]);
 
+	const [, setStripeClientSecret] = useState<string>();
+
+	/**
+	 * flag that disables the submission of the form until the stripeClientSecret is
+	 * fetched from the Stripe API with using the reCaptcha token
+	 */
+	const [, setStripeClientSecretInProgress] = useState(false);
+
+	/** Recaptcha */
+	const [recaptchaToken, setRecaptchaToken] = useState<string>();
+
+	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
 	const [emailError, setEmailError] = useState<string>();
 
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
+
+	const validPaymentMethods = [
+		Stripe,
+		PayPal,
+		countryId === 'US' && AmazonPay,
+	].filter(isPaymentMethod);
+
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -223,6 +315,99 @@ function OneTimeCheckoutComponent({ geoId, appConfig }: Props) {
 									/>
 								</div>
 							)}
+						</FormSection>
+						<CheckoutDivider spacing="loose" />
+						<FormSection>
+							<Legend>
+								2. Payment method
+								<SecureTransactionIndicator
+									hideText={true}
+									cssOverrides={css``}
+								/>
+							</Legend>
+							<RadioGroup>
+								{validPaymentMethods.map((validPaymentMethod) => {
+									const selected = paymentMethod === validPaymentMethod;
+									const { label, icon } = paymentMethodData[validPaymentMethod];
+
+									return (
+										<PaymentMethodSelector selected={selected}>
+											<PaymentMethodRadio selected={selected}>
+												<Radio
+													label={label}
+													name="paymentMethod"
+													value={validPaymentMethod}
+													css={
+														selected
+															? checkedRadioLabelColour
+															: defaultRadioLabelColour
+													}
+													onChange={() => {
+														setPaymentMethod(validPaymentMethod);
+													}}
+												/>
+												<div>{icon}</div>
+											</PaymentMethodRadio>
+											{validPaymentMethod === 'Stripe' && selected && (
+												<div css={paymentMethodBody}>
+													<input
+														type="hidden"
+														name="recaptchaToken"
+														value={recaptchaToken}
+													/>
+													<StripeCardForm
+														onCardNumberChange={() => {
+															// no-op
+														}}
+														onExpiryChange={() => {
+															// no-op
+														}}
+														onCvcChange={() => {
+															// no-op
+														}}
+														errors={{}}
+														recaptcha={
+															<Recaptcha
+																// We could change the parents type to Promise and uses await here, but that has
+																// a lot of refactoring with not too much gain
+																onRecaptchaCompleted={(token) => {
+																	setStripeClientSecretInProgress(true);
+																	setRecaptchaToken(token);
+																	void fetch(
+																		'/stripe/create-setup-intent/recaptcha',
+																		{
+																			method: 'POST',
+																			headers: {
+																				'Content-Type': 'application/json',
+																			},
+																			body: JSON.stringify({
+																				isTestUser,
+																				stripePublicKey,
+																				token,
+																			}),
+																		},
+																	)
+																		.then((resp) => resp.json())
+																		.then((json) => {
+																			setStripeClientSecret(
+																				(json as Record<string, string>)
+																					.client_secret,
+																			);
+																			setStripeClientSecretInProgress(false);
+																		});
+																}}
+																onRecaptchaExpired={() => {
+																	// no-op
+																}}
+															/>
+														}
+													/>
+												</div>
+											)}
+										</PaymentMethodSelector>
+									);
+								})}
+							</RadioGroup>
 						</FormSection>
 					</BoxContents>
 				</Box>
