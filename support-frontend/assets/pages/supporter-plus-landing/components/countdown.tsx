@@ -48,19 +48,15 @@ export type CountdownProps = {
 
 // create countdown logic
 const initialTimePart = '00';
-const millisecondsinSecond = 1000;
-const millisecondsinMinute = 60 * millisecondsinSecond;
-const millisecondsinHour = 60 * millisecondsinMinute;
-const millisecondsInDay = 24 * millisecondsinHour;
+const millisecondsInSecond = 1000;
+const millisecondsInMinute = 60 * millisecondsInSecond;
+const millisecondsInHour = 60 * millisecondsInMinute;
+const millisecondsInDay = 24 * millisecondsInHour;
 
 // Questions:
 // could each portion be a component so that not everything gets updated each time?
 // handle inactive tabs via the Page Visibility API and calculate on visibility change?
 // how do we assess performance?
-
-const getTotalMillisRemaining = (targetDate: number) => {
-	return targetDate - Date.now();
-};
 
 const ensureDoubleDigits = (timeSection: number): string => {
 	if (timeSection < 0) {
@@ -85,34 +81,40 @@ export default function Countdown({
 
 	useEffect(() => {
 		
-		function updateTimeparts() {
+		// console.log('The time now is: ', new Date());
+		
+		const getTotalMillisRemaining = (targetDate: number) => {
+			return targetDate - Date.now();
+		};
+		
+		function updateTimeParts() {
 
 			const timeRemaining = getTotalMillisRemaining(deadlineDateTime);
 
-			console.log(`time > 0 ${timeRemaining}`);
+			// console.log(`time > 0 ${timeRemaining}`);
 			setDays(ensureDoubleDigits(Math.floor(
 				timeRemaining / millisecondsInDay))
 			);
 			setHours(ensureDoubleDigits(Math.floor(
 				(timeRemaining % millisecondsInDay) / 
-				millisecondsinHour))
+				millisecondsInHour))
 			);
 			setMinutes(ensureDoubleDigits(Math.floor(
-				(timeRemaining % millisecondsinHour) /
-				millisecondsinMinute))
+				(timeRemaining % millisecondsInHour) /
+				millisecondsInMinute))
 			);
 			setSeconds(ensureDoubleDigits(Math.floor(
-				(timeRemaining % millisecondsinMinute) /
-				millisecondsinSecond))
+				(timeRemaining % millisecondsInMinute) /
+				millisecondsInSecond))
 			);
 		};
 		
 		if (getTotalMillisRemaining(deadlineDateTime) > 0) {
-			const id = setInterval(updateTimeparts, 1000); // run once per second
+			const id = setInterval(updateTimeParts, 1000); // run once per second
 			return () => clearInterval(id); // clear on onload
 		} 
 		else {
-			console.log(`deadline already passed on page load`);
+			// console.log(`deadline already passed on page load`);
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));
 			setHours(ensureDoubleDigits(0));
