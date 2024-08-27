@@ -1,6 +1,7 @@
 package com.gu.i18n
 
 import java.util.Locale
+import scala.util.Try
 
 case class CountryGroup(
     name: String,
@@ -336,9 +337,12 @@ object CountryGroup {
 
   val countriesByISO2: Map[String, Country] = countries.map { c => c.alpha2 -> c }.toMap
 
-  val countriesByISO3 = countries.map { country =>
-    val locale = new Locale("", country.alpha2)
-    locale.getISO3Country.toUpperCase -> country
+  val countriesByISO3 = countries.flatMap { country =>
+    Try {
+      // java's locale library may throw an exception if no locale is found
+      val locale = new Locale("", country.alpha2)
+      locale.getISO3Country.toUpperCase -> country
+    }.toOption
   }.toMap
 
   def countryByCode(str: String): Option[Country] = {
