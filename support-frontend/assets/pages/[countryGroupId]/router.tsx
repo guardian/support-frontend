@@ -4,6 +4,7 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
+import { OneTimeCheckout } from './oneTimeCheckout';
 import { ThankYou } from './thank-you';
 
 setUpTrackingAndConsents();
@@ -16,8 +17,12 @@ const router = createBrowserRouter(
 			element: <Checkout geoId={geoId} appConfig={appConfig} />,
 		},
 		{
+			path: `/${geoId}/one-time-checkout`,
+			element: <OneTimeCheckout geoId={geoId} appConfig={appConfig} />,
+		},
+		{
 			path: `/${geoId}/thank-you`,
-			element: <ThankYou geoId={geoId} />,
+			element: <ThankYou geoId={geoId} appConfig={appConfig} />,
 		},
 	]),
 );

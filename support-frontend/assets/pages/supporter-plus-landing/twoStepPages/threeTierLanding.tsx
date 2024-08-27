@@ -60,6 +60,8 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
+import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
@@ -215,9 +217,9 @@ const links = [
 ];
 
 // The three tier checkout only supports monthly and annual contributions
-const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
 const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
+	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
 	ANNUAL: 'Annual',
 };
@@ -302,10 +304,7 @@ export function ThreeTierLanding(): JSX.Element {
 		subPath: '/contribute',
 	};
 
-	const contributionTypeFromState =
-		useContributionsSelector(getContributionType);
-	const contributionType =
-		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+	const contributionType = useContributionsSelector(getContributionType);
 	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
@@ -332,19 +331,24 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
+	const campaignSettings = getCampaignSettings(countryGroupId);
+	const enableSingleContributionsTab =
+		campaignSettings?.enableSingleContributions;
+
 	useEffect(() => {
 		dispatch(resetValidation());
-		if (contributionTypeFromState === 'ONE_OFF') {
-			dispatch(setProductType('MONTHLY'));
+		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
 			/*
-			 * Interaction on this page only works
-			 * with regular contributions (monthly | annual)
-			 * this resets the product type to monthly if
-			 * coming from the one off contribution checkout
+			 * Reset the product type to monthly if one_off not available
 			 */
+			dispatch(setProductType('MONTHLY'));
 		}
 		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
+
+	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
+		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
+		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
@@ -392,7 +396,7 @@ export function ThreeTierLanding(): JSX.Element {
 			/**
 			 * Only Testing CardTier1 wth checkout
 			 */
-			if ((useGenericCheckout && cardTier === 1) || tier2UseGenericCheckout) {
+			if (useGenericCheckout) {
 				/**
 				 * Generic Checkout is not defined in supporterPlusRouter
 				 */
@@ -469,8 +473,6 @@ export function ThreeTierLanding(): JSX.Element {
 	};
 
 	/** Tier 2: SupporterPlus */
-	const tier2UseGenericCheckout = abParticipations.tierTwoFromApi === 'variant';
-
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	const tier2Pricing =
@@ -481,21 +483,20 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier2GenericUrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: supporterPlusRatePlan,
-		price: tier2Pricing.toString(),
 	});
 	const tier2ContributeUrlParams = new URLSearchParams({
 		'selected-amount': tier2Pricing.toString(),
 		'selected-contribution-type': selectedContributionType,
 		product: 'SupporterPlus',
 	});
-	const tier2UrlParams = tier2UseGenericCheckout
+	const tier2UrlParams = useGenericCheckout
 		? tier2GenericUrlParams
 		: tier2ContributeUrlParams;
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
 	const tier2Url = `${
-		tier2UseGenericCheckout ? '' : 'contribute/'
+		useGenericCheckout ? '' : 'contribute/'
 	}checkout?${tier2UrlParams.toString()}`;
 	const tier2Card = {
 		productDescription: productCatalogDescription.SupporterPlus,
@@ -627,13 +628,21 @@ export function ThreeTierLanding(): JSX.Element {
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					<ThreeTierCards
-						cardsContent={[tier1Card, tier2Card, tier3Card]}
-						currencyId={currencyId}
-						countryGroupId={countryGroupId}
-						paymentFrequency={contributionType}
-						linkCtaClickHandler={handleLinkCtaClick}
-					/>
+					{contributionType === 'ONE_OFF' && (
+						<OneOffCard
+							currencyGlyph={currencies[currencyId].glyph}
+							btnClickHandler={handleSupportOnceBtnClick}
+						/>
+					)}
+					{contributionType !== 'ONE_OFF' && (
+						<ThreeTierCards
+							cardsContent={[tier1Card, tier2Card, tier3Card]}
+							currencyId={currencyId}
+							countryGroupId={countryGroupId}
+							paymentFrequency={contributionType}
+							linkCtaClickHandler={handleLinkCtaClick}
+						/>
+					)}
 				</div>
 			</Container>
 			<Container
@@ -641,10 +650,12 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				<SupportOnce
-					currency={currencies[currencyId].glyph}
-					btnClickHandler={handleSupportOnceBtnClick}
-				/>
+				{!enableSingleContributionsTab && (
+					<SupportOnce
+						currency={currencies[currencyId].glyph}
+						btnClickHandler={handleSupportOnceBtnClick}
+					/>
+				)}
 				{countryGroupId === UnitedStates && (
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>
