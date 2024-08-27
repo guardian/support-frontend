@@ -72,7 +72,6 @@ const ensureDoubleDigits = (timeSection: number): string => {
 export default function Countdown({
 	deadlineDateTime,
 }: CountdownProps): JSX.Element {
-
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
@@ -80,75 +79,76 @@ export default function Countdown({
 	const [days, setDays] = useState<string>(initialTimePart);
 
 	useEffect(() => {
-		
-		// console.log('The time now is: ', new Date());
-		
+		console.log('The time now is: ', new Date());
+
 		const getTotalMillisRemaining = (targetDate: number) => {
 			return targetDate - Date.now();
 		};
-		
-		function updateTimeParts() {
 
+		function updateTimeParts() {
 			const timeRemaining = getTotalMillisRemaining(deadlineDateTime);
 
 			// console.log(`time > 0 ${timeRemaining}`);
-			setDays(ensureDoubleDigits(Math.floor(
-				timeRemaining / millisecondsInDay))
+			setDays(
+				ensureDoubleDigits(Math.floor(timeRemaining / millisecondsInDay)),
 			);
-			setHours(ensureDoubleDigits(Math.floor(
-				(timeRemaining % millisecondsInDay) / 
-				millisecondsInHour))
+			setHours(
+				ensureDoubleDigits(
+					Math.floor((timeRemaining % millisecondsInDay) / millisecondsInHour),
+				),
 			);
-			setMinutes(ensureDoubleDigits(Math.floor(
-				(timeRemaining % millisecondsInHour) /
-				millisecondsInMinute))
+			setMinutes(
+				ensureDoubleDigits(
+					Math.floor(
+						(timeRemaining % millisecondsInHour) / millisecondsInMinute,
+					),
+				),
 			);
-			setSeconds(ensureDoubleDigits(Math.floor(
-				(timeRemaining % millisecondsInMinute) /
-				millisecondsInSecond))
+			setSeconds(
+				ensureDoubleDigits(
+					Math.floor(
+						(timeRemaining % millisecondsInMinute) / millisecondsInSecond,
+					),
+				),
 			);
-		};
-		
+		}
+
 		if (getTotalMillisRemaining(deadlineDateTime) > 0) {
 			const id = setInterval(updateTimeParts, 1000); // run once per second
 			return () => clearInterval(id); // clear on onload
-		} 
-		else {
+		} else {
 			// console.log(`deadline already passed on page load`);
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));
 			setHours(ensureDoubleDigits(0));
-			setDays(ensureDoubleDigits(0)); 
-		};
-		
+			setDays(ensureDoubleDigits(0));
+		}
 	}, [deadlineDateTime]);
 
 	return (
 		<>
 			<div css={grid}>
-				<TimePart timePart={days} label={"days"} />
-				<TimePart timePart={hours} label={"hours"} />
-				<TimePart timePart={minutes} label={"mins"} />
-				<TimePart timePart={seconds} label={"secs"} />
+				<TimePart timePart={days} label={'days'} />
+				<TimePart timePart={hours} label={'hours'} />
+				<TimePart timePart={minutes} label={'mins'} />
+				<TimePart timePart={seconds} label={'secs'} />
 			</div>
 		</>
 	);
-};
+}
 
 // internal components
 
 type TimePartProps = {
 	timePart: string;
 	label: string;
-}
+};
 
-function TimePart({
-	timePart, label
-}: TimePartProps): JSX.Element {
+function TimePart({ timePart, label }: TimePartProps): JSX.Element {
 	return (
 		<div css={gridItem}>
 			<div>{timePart}</div>
 			<div css={timePortion}>{label}</div>
 		</div>
 	);
-};
+}
