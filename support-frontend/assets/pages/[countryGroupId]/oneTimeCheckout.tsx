@@ -141,8 +141,6 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 }
 
 function OneTimeCheckoutComponent({
-	isTestUser,
-	stripePublicKey,
 	geoId,
 	appConfig,
 }: OneTimeCheckoutComponentProps) {
@@ -167,14 +165,6 @@ function OneTimeCheckoutComponent({
 	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountErrors] = useState<string[]>([]);
-
-	const [, setStripeClientSecret] = useState<string>();
-
-	/**
-	 * flag that disables the submission of the form until the stripeClientSecret is
-	 * fetched from the Stripe API with using the reCaptcha token
-	 */
-	const [, setStripeClientSecretInProgress] = useState(false);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -368,36 +358,12 @@ function OneTimeCheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and uses await here, but that has
-																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
-																	setStripeClientSecretInProgress(true);
 																	setRecaptchaToken(token);
-																	void fetch(
-																		'/stripe/create-setup-intent/recaptcha',
-																		{
-																			method: 'POST',
-																			headers: {
-																				'Content-Type': 'application/json',
-																			},
-																			body: JSON.stringify({
-																				isTestUser,
-																				stripePublicKey,
-																				token,
-																			}),
-																		},
-																	)
-																		.then((resp) => resp.json())
-																		.then((json) => {
-																			setStripeClientSecret(
-																				(json as Record<string, string>)
-																					.client_secret,
-																			);
-																			setStripeClientSecretInProgress(false);
-																		});
 																}}
 																onRecaptchaExpired={() => {
 																	// no-op
+																	// ToDo - Should we not expire this?
 																}}
 															/>
 														}
