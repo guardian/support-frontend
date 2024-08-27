@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { isNonNullable } from '@guardian/libs';
 import { space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
@@ -87,11 +88,12 @@ type ValidityStateError = 'valueMissing' | 'patternMismatch';
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	const patternMismatch = 'Please use only letters, numbers and punctuation.';
 	const errorMessages: Record<
-		string,
-		{
-			[key in ValidityStateError]?: string;
-		}
+		keyof AddressFieldsType,
+		{ [key in ValidityStateError]?: string }
 	> = {
+		country: {
+			valueMissing: `Please enter a ${scope} country.`,
+		},
 		lineOne: {
 			valueMissing: `Please enter a ${scope} address.`,
 			patternMismatch,
@@ -116,12 +118,6 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 			}`,
 			patternMismatch,
 		},
-	};
-	const getErrorMessage = (
-		field: keyof AddressFieldsType,
-		validityStateError: ValidityStateError,
-	): string => {
-		return errorMessages[field][validityStateError] ?? '';
 	};
 	const setErrorsOnInvalid = (
 		event:
@@ -158,16 +154,16 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					return error.field != field;
 				}),
 				// add all unresolved errors for the field
-				...(possibleValidityStateErrors
+				...possibleValidityStateErrors
 					.map((possibleValidityStateError) => {
 						if (validityState[possibleValidityStateError]) {
 							return {
 								field,
-								message: getErrorMessage(field, possibleValidityStateError),
+								message: errorMessages[field][possibleValidityStateError] ?? '',
 							};
 						}
 					})
-					.filter(Boolean) as AddressFormFieldError[]),
+					.filter(isNonNullable),
 			];
 			props.setErrors(updatedErrors);
 		}
