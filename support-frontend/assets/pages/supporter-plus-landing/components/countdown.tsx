@@ -45,7 +45,6 @@ export type CountdownProps = {
 };
 
 // create countdown logic
-
 const initialTimePart = '00';
 const millisecondsinSecond = 1000;
 const millisecondsinMinute = 60 * millisecondsinSecond;
@@ -75,6 +74,8 @@ const ensureDoubleDigits = (timeSection: number): string => {
 export default function Countdown({
 	deadlineDateTime,
 }: CountdownProps): JSX.Element {
+
+	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
@@ -82,37 +83,36 @@ export default function Countdown({
 
 	useEffect(() => {
 		function updateTimeparts() {
-			const timeRemainingOnInitialLoad =
-				getTotalMillisRemaining(deadlineDateTime);
-			if (timeRemainingOnInitialLoad <= 0) {
-				setSeconds(ensureDoubleDigits(0));
-				setMinutes(ensureDoubleDigits(0));
-				setHours(ensureDoubleDigits(0));
-				setDays(ensureDoubleDigits(0));
-				// console.log(`time <= 0 ${timeRemainingOnInitialLoad}`);
-			} else {
-				// console.log(`time > 0 ${timeRemainingOnInitialLoad}`);
-				const d = Math.floor(timeRemainingOnInitialLoad / millisecondsInDay);
-				const h = Math.floor(
-					(timeRemainingOnInitialLoad % millisecondsInDay) / millisecondsinHour,
-				);
-				const m = Math.floor(
-					(timeRemainingOnInitialLoad % millisecondsinHour) /
-						millisecondsinMinute,
-				);
-				const s = Math.floor(
-					(timeRemainingOnInitialLoad % millisecondsinMinute) /
-						millisecondsinSecond,
-				);
-				setSeconds(ensureDoubleDigits(s));
-				setMinutes(ensureDoubleDigits(m));
-				setHours(ensureDoubleDigits(h));
-				setDays(ensureDoubleDigits(d));
-			}
+
+			const timeRemaining = getTotalMillisRemaining(deadlineDateTime);
+			console.log(`time > 0 ${timeRemaining}`);
+			setDays(ensureDoubleDigits(Math.floor(
+				timeRemaining / millisecondsInDay))
+			);
+			setHours(ensureDoubleDigits(Math.floor(
+				(timeRemaining % millisecondsInDay) / 
+					millisecondsinHour))
+			);
+			setMinutes(ensureDoubleDigits(Math.floor(
+				(timeRemaining % millisecondsinHour) /
+					millisecondsinMinute))
+			);
+			setSeconds(ensureDoubleDigits(Math.floor(
+				(timeRemaining % millisecondsinMinute) /
+					millisecondsinSecond))
+			);
 		}
-		updateTimeparts();
-		const id = setInterval(updateTimeparts, 1000);
-		return () => clearInterval(id);
+
+		if(getTotalMillisRemaining(deadlineDateTime) > 0) {
+			const id = setInterval(updateTimeparts, 1000); // run once per second
+			return () => clearInterval(id); // clear on onload
+		} 
+		else {
+			setSeconds(ensureDoubleDigits(0));
+			setMinutes(ensureDoubleDigits(0));
+			setHours(ensureDoubleDigits(0));
+			setDays(ensureDoubleDigits(0)); 
+		}
 	}, [deadlineDateTime]);
 
 	return (

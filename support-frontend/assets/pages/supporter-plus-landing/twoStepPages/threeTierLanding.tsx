@@ -428,6 +428,7 @@ export function ThreeTierLanding({
 	};
 
 	const EOYDeadline = 'Nov 26, 2024 23:59:59';
+	// const EOYDeadline = 'Aug 26, 2024 23:59:59'; // deadline passed TODO: remove
 	const countdownDateTime = Date.parse(EOYDeadline);
 
 	const generateOneOffCheckoutLink = () => {
