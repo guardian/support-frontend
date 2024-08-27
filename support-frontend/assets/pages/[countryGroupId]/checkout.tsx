@@ -9,7 +9,6 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button,
 	Checkbox,
 	Label,
 	Radio,
@@ -115,6 +114,7 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
+import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
@@ -260,20 +260,6 @@ function preventDefaultValidityMessage(
 		// 2. setCustomValidity to " " which avoids the browser's default message
 		currentTarget.setCustomValidity(' ');
 	}
-}
-
-type ChangeButtonProps = {
-	geoId: GeoId;
-};
-
-function ChangeButton({ geoId }: ChangeButtonProps) {
-	return (
-		<a href={`/${geoId}/contribute`}>
-			<Button priority="tertiary" size="xsmall" role="link">
-				Change
-			</Button>
-		</a>
-	);
 }
 
 type Props = {
@@ -1100,7 +1086,7 @@ function CheckoutComponent({
 							productFields.productType,
 							promotion,
 						)}
-						headerButton={<ChangeButton geoId={geoId} />}
+						headerButton={<BackButton geoId={geoId} buttonText="Change" />}
 					/>
 				</BoxContents>
 			</Box>

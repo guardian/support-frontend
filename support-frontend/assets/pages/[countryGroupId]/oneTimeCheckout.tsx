@@ -1,20 +1,26 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headline,
+	headlineBold24,
 	space,
 	textSans17,
 } from '@guardian/source/foundations';
-import { Link } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { PriceCards } from 'components/priceCards/priceCards';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { config } from 'helpers/contributions';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import { Country } from 'helpers/internationalisation';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
+
+const countryId = Country.detect();
 
 const titleAndButtonContainer = css`
 	display: flex;
@@ -27,7 +33,7 @@ const titleAndButtonContainer = css`
 `;
 
 const title = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headlineBold24};
 	${from.tablet} {
 		font-size: 28px;
 	}
@@ -45,14 +51,30 @@ type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 };
+
 export function OneTimeCheckout({ geoId, appConfig }: Props) {
 	return <OneTimeCheckoutComponent geoId={geoId} appConfig={appConfig} />;
 }
 
 function OneTimeCheckoutComponent({ geoId }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const [amount, setAmount] = useState<string>('other');
+
+	const settings = getSettings();
+	const { selectedAmountsVariant } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		settings,
+	);
+
+	const { amountsCardData } = selectedAmountsVariant;
+	const { amounts, defaultAmount, hideChooseYourAmount } =
+		amountsCardData['ONE_OFF'];
+
+	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+
+	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
+	const [otherAmountErrors] = useState<string[]>([]);
 
 	return (
 		<CheckoutLayout>
@@ -65,35 +87,34 @@ function OneTimeCheckoutComponent({ geoId }: Props) {
 					>
 						<div css={titleAndButtonContainer}>
 							<h2 css={title}>Support just once</h2>
-							<Link href="" />
+							<BackButton geoId={geoId} buttonText="back" />
 						</div>
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
-							amounts={[1, 5, 10]}
-							selectedAmount={amount as number | 'other'}
+							amounts={amounts}
+							selectedAmount={amount}
 							currency={currencyKey}
-							paymentInterval={'month'}
-							onAmountChange={setAmount}
-							hideChooseYourAmount={false}
+							onAmountChange={(amount: string) => {
+								setAmount(
+									amount === 'other' ? amount : Number.parseFloat(amount),
+								);
+							}}
+							hideChooseYourAmount={hideChooseYourAmount}
 							otherAmountField={
 								<OtherAmount
 									currency={currencyKey}
-									minAmount={2}
-									selectedAmount={amount as number | 'other'}
+									minAmount={minAmount}
+									selectedAmount={amount}
 									otherAmount={otherAmount}
 									onOtherAmountChange={setOtherAmount}
-									errors={[]}
+									errors={otherAmountErrors}
 								/>
 							}
 						/>
 					</div>
 				</BoxContents>
 			</Box>
-			<form
-				css={css`
-					height: 50px;
-				`}
-			></form>
+			<form></form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
 			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
 		</CheckoutLayout>

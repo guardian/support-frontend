@@ -85,7 +85,7 @@ export function Events() {
 			user.email && hashUrlSearchParams.set('p[email]', user.email);
 		}
 		/** we decode this as that is what Ticket Tailor want */
-		presetDataUrl = `?preset_data=1#${decodeURIComponent(
+		presetDataUrl = `?preset_data=1&widget=true#${decodeURIComponent(
 			hashUrlSearchParams.toString(),
 		)}`;
 	}
