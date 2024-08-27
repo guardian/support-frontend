@@ -191,14 +191,13 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 			const ctaCopy =
 				testDetails.internationalisationId === 'US' ? 'Subscribe' : 'Support';
 
-			// TODO : Temporary tier3 generic checkout forced within Playwright
 			await setupPage(
 				page,
 				context,
 				baseURL,
 				`/${
 					testDetails.internationalisationId?.toLowerCase() || 'uk'
-				}/contribute#ab-tierThreeFromApi=variant`,
+				}/contribute`,
 			);
 
 			await page.getByRole('tab').getByText(testDetails.ratePlan).click();
