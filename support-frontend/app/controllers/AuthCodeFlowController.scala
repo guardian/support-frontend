@@ -45,10 +45,16 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
     val state = Random.alphanumeric.take(32).mkString
     val codeVerifier = Pkce.codeVerifier()
     val codeChallenge = Pkce.codeChallenge(codeVerifier)
+
+    /** /events is served from live.theguardian.com to avoid apps blocking the domain as an in app purchase. We should
+      * redirect to this domain. We have no testing
+      */
+    val oauthCallbackUrl =
+      if (request.host.startsWith("live.")) config.oauthEventsCallbackUrl else config.oauthCallbackUrl
     val queryParams = Map(
       "response_type" -> "code",
       "client_id" -> config.oauthClientId,
-      "redirect_uri" -> config.oauthCallbackUrl,
+      "redirect_uri" -> oauthCallbackUrl,
       "scope" -> config.oauthScopes.trim.replaceAll("\\s+", " "),
       "state" -> state,
       "code_challenge" -> codeChallenge,
