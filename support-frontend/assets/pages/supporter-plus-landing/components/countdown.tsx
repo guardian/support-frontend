@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 const grid = css`
 	display: flex;
 	padding-top: 33px;
+	padding-bottom: 15px;
 	justify-content: center;
 	align-items: center;
 `;
@@ -28,6 +29,7 @@ const gridItem = css`
 	padding: 2px;
 	border: 1px solid ${palette.brand[400]};
 	border-radius: 4px;
+	text-align: center;
 `;
 const timePortion = css`
 	color: ${palette.brand[400]};
@@ -70,7 +72,7 @@ const ensureDoubleDigits = (timeSection: number): string => {
 	}
 };
 
-// return a component
+// return the countdown component
 export default function Countdown({
 	deadlineDateTime,
 }: CountdownProps): JSX.Element {
@@ -82,59 +84,69 @@ export default function Countdown({
 	const [days, setDays] = useState<string>(initialTimePart);
 
 	useEffect(() => {
+		
 		function updateTimeparts() {
 
 			const timeRemaining = getTotalMillisRemaining(deadlineDateTime);
+
 			console.log(`time > 0 ${timeRemaining}`);
 			setDays(ensureDoubleDigits(Math.floor(
 				timeRemaining / millisecondsInDay))
 			);
 			setHours(ensureDoubleDigits(Math.floor(
 				(timeRemaining % millisecondsInDay) / 
-					millisecondsinHour))
+				millisecondsinHour))
 			);
 			setMinutes(ensureDoubleDigits(Math.floor(
 				(timeRemaining % millisecondsinHour) /
-					millisecondsinMinute))
+				millisecondsinMinute))
 			);
 			setSeconds(ensureDoubleDigits(Math.floor(
 				(timeRemaining % millisecondsinMinute) /
-					millisecondsinSecond))
+				millisecondsinSecond))
 			);
-		}
-
-		if(getTotalMillisRemaining(deadlineDateTime) > 0) {
+		};
+		
+		if (getTotalMillisRemaining(deadlineDateTime) > 0) {
 			const id = setInterval(updateTimeparts, 1000); // run once per second
 			return () => clearInterval(id); // clear on onload
 		} 
 		else {
+			console.log(`deadline already passed on page load`);
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));
 			setHours(ensureDoubleDigits(0));
 			setDays(ensureDoubleDigits(0)); 
-		}
+		};
+		
 	}, [deadlineDateTime]);
 
 	return (
 		<>
 			<div css={grid}>
-				<div css={gridItem}>
-					<div>{days}</div>
-					<div css={timePortion}>days</div>
-				</div>
-				<div css={gridItem}>
-					<div>{hours}</div>
-					<div css={timePortion}>hours</div>
-				</div>
-				<div css={gridItem}>
-					<div>{minutes}</div>
-					<div css={timePortion}>mins</div>
-				</div>
-				<div css={gridItem}>
-					<div>{seconds}</div>
-					<div css={timePortion}>secs</div>
-				</div>
+				<TimePart timePart={days} label={"days"} />
+				<TimePart timePart={hours} label={"hours"} />
+				<TimePart timePart={minutes} label={"mins"} />
+				<TimePart timePart={seconds} label={"secs"} />
 			</div>
 		</>
 	);
+};
+
+// internal components
+
+type TimePartProps = {
+	timePart: string;
+	label: string;
 }
+
+function TimePart({
+	timePart, label
+}: TimePartProps): JSX.Element {
+	return (
+		<div css={gridItem}>
+			<div>{timePart}</div>
+			<div css={timePortion}>{label}</div>
+		</div>
+	);
+};
