@@ -310,10 +310,7 @@ function OneTimeCheckoutComponent({
 						<FormSection>
 							<Legend>
 								2. Payment method
-								<SecureTransactionIndicator
-									hideText={true}
-									cssOverrides={css``}
-								/>
+								<SecureTransactionIndicator hideText={true} />
 							</Legend>
 							<RadioGroup>
 								{validPaymentMethods.map((validPaymentMethod) => {
