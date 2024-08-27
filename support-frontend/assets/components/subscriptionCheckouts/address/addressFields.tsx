@@ -85,52 +85,55 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
+	const patternMismatch = 'Please use only letters, numbers and punctuation.';
+	const errorMessages: Record<
+		string,
+		{
+			[key in ValidityStateError]?: string;
+		}
+	> = {
+		lineOne: {
+			valueMissing: `Please enter a ${scope} address.`,
+			patternMismatch,
+		},
+		lineTwo: {
+			patternMismatch,
+		},
+		city: {
+			valueMissing: `Please enter a ${scope} town/city.`,
+			patternMismatch,
+		},
+		state: {
+			valueMissing:
+				props.country === 'CA'
+					? `Please select a ${scope} province/territory.`
+					: `Please select a ${scope} state.`,
+			patternMismatch,
+		},
+		postCode: {
+			valueMissing: `Please enter a ${scope} ${
+				props.country === 'US' ? 'ZIP code' : 'postcode'
+			}`,
+			patternMismatch,
+		},
+	};
 	const getErrorMessage = (
 		field: keyof AddressFieldsType,
 		validityStateError: ValidityStateError,
 	): string => {
-		const patternMismatch = 'Please use only letters, numbers and punctuation.';
-		const errorMessages: Record<
-			string,
-			{
-				[key in ValidityStateError]?: string;
-			}
-		> = {
-			lineOne: {
-				valueMissing: `Please enter a ${scope} address.`,
-				patternMismatch,
-			},
-			lineTwo: {
-				patternMismatch,
-			},
-			city: {
-				valueMissing: `Please enter a ${scope} town/city.`,
-				patternMismatch,
-			},
-			state: {
-				valueMissing:
-					props.country === 'CA'
-						? `Please select a ${scope} province/territory.`
-						: `Please select a ${scope} state.`,
-				patternMismatch,
-			},
-			postCode: {
-				valueMissing: `Please enter a ${scope} ${
-					props.country === 'US' ? 'ZIP code' : 'postcode'
-				}`,
-				patternMismatch,
-			},
-		};
-
 		return errorMessages[field][validityStateError] ?? '';
 	};
-
-	const onAddressFieldInvalid = (
+	const setErrorsOnInvalid = (
 		event:
 			| React.FormEvent<HTMLInputElement>
 			| React.FormEvent<HTMLSelectElement>,
 		field: keyof AddressFieldsType,
 	) => {
+		/**
+		 * We only pass/use setErrors on the generic checkout
+		 * If it's not been passed to AddressFields then Redux handles
+		 * validation errors.
+		 **/
 		if (!props.setErrors) {
 			return;
 		}
@@ -154,7 +157,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				...props.errors.filter((error) => {
 					return error.field != field;
 				}),
-				// include all unresolved errors for the field
+				// add all unresolved errors for the field
 				...(possibleValidityStateErrors
 					.map((possibleValidityStateError) => {
 						if (validityState[possibleValidityStateError]) {
@@ -230,7 +233,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'lineOne');
+					setErrorsOnInvalid(event, 'lineOne');
 				}}
 			/>
 			<TextInput
@@ -250,7 +253,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'lineTwo');
+					setErrorsOnInvalid(event, 'lineTwo');
 				}}
 			/>
 			<TextInput
@@ -269,7 +272,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'city');
+					setErrorsOnInvalid(event, 'city');
 				}}
 			/>
 			<MaybeSelect
@@ -287,7 +290,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'state');
+					setErrorsOnInvalid(event, 'state');
 				}}
 			>
 				<>
@@ -313,7 +316,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'state');
+					setErrorsOnInvalid(event, 'state');
 				}}
 			/>
 			<TextInput
@@ -333,7 +336,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					event.target.checkValidity();
 				}}
 				onInvalid={(event) => {
-					onAddressFieldInvalid(event, 'postCode');
+					setErrorsOnInvalid(event, 'postCode');
 				}}
 			/>
 		</div>
