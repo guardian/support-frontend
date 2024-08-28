@@ -12,7 +12,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import play.api.mvc.Cookie
 import play.api.mvc.Cookie.SameSite.Lax
-import play.api.test.FakeRequest
+import play.api.test.{FakeHeaders, FakeRequest, Helpers}
 import play.api.test.Helpers._
 import services.AsyncAuthenticationService
 
@@ -42,6 +42,26 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
       locationHeader must include("response_type=code")
       locationHeader must include("prompt=none")
       locationHeader must include("redirect_uri=redirectUrl")
+    }
+
+    "return events redirect" in {
+
+      /** /events is served from live.theguardian.com to avoid apps blocking the domain as an in app purchase. We should
+        * redirect back to this domain.
+        */
+      val authService = mock[AsyncAuthenticationService]
+      val config = mock[Identity]
+      when(config.oauthClientId).thenReturn("clientId")
+      when(config.oauthAuthorizeUrl).thenReturn("authServerUrl")
+      when(config.oauthScopes).thenReturn("a b c")
+      when(config.oauthCallbackUrl).thenReturn("redirectUrl")
+      when(config.oauthEventsCallbackUrl).thenReturn("eventsRedirectUrl")
+      val controller = new AuthCodeFlowController(stubControllerComponents(), authService, config)
+      val result =
+        controller.authorize()(FakeRequest().withHeaders(("Host", "live.theguardian.com")))
+      status(result) mustEqual 303
+      val locationHeader = headers(result).get(LOCATION).get
+      locationHeader must include("redirect_uri=eventsRedirectUrl")
     }
   }
 

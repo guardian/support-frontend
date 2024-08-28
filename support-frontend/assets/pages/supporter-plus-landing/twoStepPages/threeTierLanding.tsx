@@ -24,6 +24,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -57,6 +58,8 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import type { GeoId } from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
@@ -275,16 +278,20 @@ const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
 	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
 };
 
-export function ThreeTierLanding(): JSX.Element {
+type ThreeTierLandingProps = {
+	geoId: GeoId;
+};
+export function ThreeTierLanding({
+	geoId,
+}: ThreeTierLandingProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
 
-	const { countryGroupId, currencyId, countryId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
+	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
+	const countryId = CountryHelper.detect();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [

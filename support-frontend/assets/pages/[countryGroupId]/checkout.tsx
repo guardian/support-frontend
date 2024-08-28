@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import {
 	brand,
-	from,
-	headline,
 	neutral,
 	palette,
 	space,
@@ -91,6 +89,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -116,7 +115,13 @@ import {
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
+import { FormSection } from './components/formSection';
+import { Legend } from './components/legend';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from './validation';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -131,32 +136,6 @@ const shorterBoxMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const legend = css`
-	margin-bottom: ${space[3]}px;
-	${headline.xsmall({ fontWeight: 'bold' })};
-	${from.tablet} {
-		font-size: 28px;
-	}
-
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-`;
-
-const fieldset = css`
-	position: relative;
-
-	& > *:not(:first-of-type) {
-		margin-top: ${space[3]}px;
-	}
-
-	${from.tablet} {
-		& > *:not(:first-of-type) {
-			margin-top: ${space[4]}px;
 		}
 	}
 `;
@@ -239,28 +218,6 @@ const processPayment = async (
 		}
 	});
 };
-
-/** Form Validation */
-/**
- * This uses a Unicode character class escape
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
- */
-const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
-function preventDefaultValidityMessage(
-	currentTarget: HTMLInputElement | HTMLSelectElement,
-) {
-	/**
-	 * Prevents default message showing, but maintains the default validation methods occuring
-	 * such as onInvalid.
-	 */
-	// 3. Reset the value from previous invalid events
-	currentTarget.setCustomValidity('');
-	// 1. Check the validity of the input
-	if (!currentTarget.validity.valid) {
-		// 2. setCustomValidity to " " which avoids the browser's default message
-		currentTarget.setCustomValidity(' ');
-	}
-}
 
 type Props = {
 	geoId: GeoId;
@@ -718,6 +675,9 @@ function CheckoutComponent({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -739,6 +699,9 @@ function CheckoutComponent({
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingAddressErrors, setBillingAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -1218,8 +1181,8 @@ function CheckoutComponent({
 								)}
 							</>
 						)}
-						<fieldset css={fieldset}>
-							<legend css={legend}>1. Your details</legend>
+						<FormSection>
+							<Legend>1. Your details</Legend>
 							<div>
 								<TextInput
 									id="email"
@@ -1386,7 +1349,7 @@ function CheckoutComponent({
 									/>
 								</div>
 							)}
-						</fieldset>
+						</FormSection>
 
 						<CheckoutDivider spacing="loose" />
 
@@ -1400,7 +1363,7 @@ function CheckoutComponent({
 						{productDescription.deliverableTo && (
 							<>
 								<fieldset>
-									<legend css={legend}>2. Delivery address</legend>
+									<Legend>2. Delivery address</Legend>
 									<AddressFields
 										scope={'delivery'}
 										lineOne={deliveryLineOne}
@@ -1410,7 +1373,7 @@ function CheckoutComponent({
 										state={deliveryState}
 										postCode={deliveryPostcode}
 										countries={productDescription.deliverableTo}
-										errors={[]}
+										errors={deliveryAddressErrors}
 										postcodeState={{
 											results: deliveryPostcodeStateResults,
 											isLoading: deliveryPostcodeStateLoading,
@@ -1440,6 +1403,9 @@ function CheckoutComponent({
 										}}
 										setPostcodeErrorForFinder={() => {
 											// no-op
+										}}
+										setErrors={(errors) => {
+											setDeliveryAddressErrors(errors);
 										}}
 										onFindAddress={(postcode) => {
 											setDeliveryPostcodeStateLoading(true);
@@ -1487,7 +1453,7 @@ function CheckoutComponent({
 											state={billingState}
 											postCode={billingPostcode}
 											countries={productDescription.deliverableTo}
-											errors={[]}
+											errors={billingAddressErrors}
 											postcodeState={{
 												results: billingPostcodeStateResults,
 												isLoading: billingPostcodeStateLoading,
@@ -1518,6 +1484,9 @@ function CheckoutComponent({
 											setPostcodeErrorForFinder={() => {
 												// no-op
 											}}
+											setErrors={(errors) => {
+												setBillingAddressErrors(errors);
+											}}
 											onFindAddress={(postcode) => {
 												setBillingPostcodeStateLoading(true);
 												void findAddressesForPostcode(postcode).then(
@@ -1535,14 +1504,14 @@ function CheckoutComponent({
 							</>
 						)}
 
-						<fieldset css={fieldset}>
-							<legend css={legend}>
+						<FormSection>
+							<Legend>
 								{productDescription.deliverableTo ? '3' : '2'}. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
 									cssOverrides={css``}
 								/>
-							</legend>
+							</Legend>
 
 							<RadioGroup>
 								{validPaymentMethods.map((validPaymentMethod) => {
@@ -1686,7 +1655,7 @@ function CheckoutComponent({
 									);
 								})}
 							</RadioGroup>
-						</fieldset>
+						</FormSection>
 						<SummaryTsAndCs
 							countryGroupId={countryGroupId}
 							contributionType={

@@ -20,7 +20,7 @@ const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
 		{
 			path: `/${geoId}/events/:eventId`,
-			element: <Events />,
+			element: <Events geoId={geoId} />,
 		},
 	]),
 );
