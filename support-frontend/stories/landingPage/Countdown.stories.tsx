@@ -6,6 +6,13 @@ import Countdown from "pages/supporter-plus-landing/components/countdown";
 export default {
     title: 'LandingPage/Countdown',
     component: Countdown,
+    parameters: {
+		docs: {
+			description: {
+				component: `A countdown component for use in campaigns, particularly for example, the US end of year. Note that the current date set in Storybook is 01-01-2024 so that will affect the countdown values.`,
+			},
+		},
+	},
 };
 
 function Template(args: CountdownProps) {
@@ -23,7 +30,10 @@ function Template(args: CountdownProps) {
 Template.args = {} as CountdownProps;
 
 export const Default = Template.bind({});
-Default.args = {deadlineDateTime: Date.parse('Nov 26, 2024 23:59:59')};
+Default.args = {deadlineDateTime: Date.parse('Mar 26, 2024 23:59:59')};
+
+export const DeadlineNear = Template.bind({});
+DeadlineNear.args = {deadlineDateTime: Date.parse('Jan 1, 2024 12:10:59')};
 
 export const DeadlinePassed = Template.bind({});
-DeadlinePassed.args = {deadlineDateTime: Date.parse('Aug 26, 2024 23:59:59')};
+DeadlinePassed.args = {deadlineDateTime: Date.parse('Aug 26, 2023 23:59:59')};
