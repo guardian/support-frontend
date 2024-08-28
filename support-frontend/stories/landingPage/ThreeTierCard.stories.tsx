@@ -13,10 +13,10 @@ import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 const promotionEURCountries = {
 	name: 'SupportPlusAndGuardianWeekly',
 	description: 'Supporter Plus and Guardian Weekly',
-	promoCode: '3TIER_WEEKLY_EU_ANNUAL_V2',
-	discountedPrice: 325,
+	promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
+	discountedPrice: 30,
 	discount: {
-		amount: 25.7991,
+		amount: 22.09,
 		durationMonths: 12,
 	},
 } as const;
