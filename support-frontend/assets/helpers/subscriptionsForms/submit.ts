@@ -219,7 +219,6 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: false,
 	};
 }
 
