@@ -1,0 +1,32 @@
+name: Playwright Cron Tests
+on:
+  workflow_dispatch:  
+  schedule:
+    # every hour, 9-17:00, Mon - Fri
+    - cron: "0 9-17 * * 1-5"
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      PAYPAL_TEST_PASSWORD: ${{ secrets.PAYPAL_TEST_PASSWORD }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.11.0
+    - name: Install dependencies
+      working-directory: ./support-e2e
+      run: yarn install
+    - name: Install Playwright Browsers
+      working-directory: ./support-e2e
+      run: yarn playwright install --with-deps
+    - name: Run Playwright tests
+      working-directory: ./support-e2e
+      run: yarn playwright test --project=cron --config=playwright.config.ts
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: support-e2e/playwright-report/
+        retention-days: 30

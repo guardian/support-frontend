@@ -1,6 +1,7 @@
 {
 	"name": "support-e2e",
-	"version": "0.0.0",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
 	"scripts": {
 		"prettier-check": "prettier --check ./",
 		"prettier-fix": "prettier --write ./",
@@ -9,26 +10,26 @@
 		"test-prod": "playwright test --ui --config=playwright.prod.config.ts"
 	},
 	"dependencies": {
-		"@playwright/test": "1.40.1",
+		"@playwright/test": "1.46.1",
 		"browserstack-local": "^1.5.5",
 		"nanoid": "3.1.31"
 	},
 	"devDependencies": {
-    "@guardian/prettier": "^8.0.0",
+		"@guardian/prettier": "^8.0.0",
 		"dotenv": "^16.3.1",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
+		"husky": "^9.0.11",
+		"lint-staged": "^15.2.2",
 		"prettier": "^3.0.3"
 	},
-  "lint-staged": {
-    "*.ts": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  }
+	"lint-staged": {
+		"*.ts": [
+			"prettier --write",
+			"git add"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	}
 }
