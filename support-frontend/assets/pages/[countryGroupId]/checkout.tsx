@@ -89,6 +89,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -674,6 +675,9 @@ function CheckoutComponent({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -695,6 +699,9 @@ function CheckoutComponent({
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingAddressErrors, setBillingAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -1366,7 +1373,7 @@ function CheckoutComponent({
 										state={deliveryState}
 										postCode={deliveryPostcode}
 										countries={productDescription.deliverableTo}
-										errors={[]}
+										errors={deliveryAddressErrors}
 										postcodeState={{
 											results: deliveryPostcodeStateResults,
 											isLoading: deliveryPostcodeStateLoading,
@@ -1396,6 +1403,9 @@ function CheckoutComponent({
 										}}
 										setPostcodeErrorForFinder={() => {
 											// no-op
+										}}
+										setErrors={(errors) => {
+											setDeliveryAddressErrors(errors);
 										}}
 										onFindAddress={(postcode) => {
 											setDeliveryPostcodeStateLoading(true);
@@ -1443,7 +1453,7 @@ function CheckoutComponent({
 											state={billingState}
 											postCode={billingPostcode}
 											countries={productDescription.deliverableTo}
-											errors={[]}
+											errors={billingAddressErrors}
 											postcodeState={{
 												results: billingPostcodeStateResults,
 												isLoading: billingPostcodeStateLoading,
@@ -1473,6 +1483,9 @@ function CheckoutComponent({
 											}}
 											setPostcodeErrorForFinder={() => {
 												// no-op
+											}}
+											setErrors={(errors) => {
+												setBillingAddressErrors(errors);
 											}}
 											onFindAddress={(postcode) => {
 												setBillingPostcodeStateLoading(true);
