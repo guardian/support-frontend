@@ -29,11 +29,16 @@ function Template(args: CountdownProps) {
 
 Template.args = {} as CountdownProps;
 
+// is there a way of getting the mocked date and adding some months to it (as it likely changes)?
+const deadlineFar = 'Mar 26, 2024 23:59:59'; 
+const deadlineNear = 'Jan 1, 2024 12:10:59';
+const deadlinePassed = 'Aug 26, 2023 23:59:59';
+
 export const Default = Template.bind({});
-Default.args = {deadlineDateTime: Date.parse('Mar 26, 2024 23:59:59')};
+Default.args = {deadlineDateTime: Date.parse(deadlineFar)};
 
 export const DeadlineNear = Template.bind({});
-DeadlineNear.args = {deadlineDateTime: Date.parse('Jan 1, 2024 12:10:59')};
+DeadlineNear.args = {deadlineDateTime: Date.parse(deadlineNear)};
 
 export const DeadlinePassed = Template.bind({});
-DeadlinePassed.args = {deadlineDateTime: Date.parse('Aug 26, 2023 23:59:59')};
+DeadlinePassed.args = {deadlineDateTime: Date.parse(deadlinePassed)};
