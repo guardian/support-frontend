@@ -104,7 +104,7 @@ const router = () => {
 									 */
 									inThreeTier ? (
 										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
-											<ThreeTierLanding />
+											<ThreeTierLanding geoId={countryId} />
 										</ThreeTierRedirectOneOffToCheckout>
 									) : (
 										<SupporterPlusInitialLandingPage
