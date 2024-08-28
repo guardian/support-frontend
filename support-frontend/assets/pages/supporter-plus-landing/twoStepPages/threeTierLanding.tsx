@@ -62,7 +62,6 @@ import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
-import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -302,7 +301,7 @@ export function ThreeTierLanding(): JSX.Element {
 	};
 
 	const contributionType = useContributionsSelector(getContributionType);
-	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
+	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 

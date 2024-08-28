@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans } from '@guardian/source/foundations';
+import type { RegularContributionType } from 'helpers/contributions';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
 	getNumericYear,
 } from 'helpers/utilities/dateFormatting';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import type { TierPlanCosts } from '../setup/threeTierConfig';
 
 export interface TsAndCsProps {
 	title: string;
@@ -24,6 +24,16 @@ interface OfferTsAndCsProps {
 	currency: string;
 	offerCostMonthly: number;
 	offerCostAnnual: number;
+}
+
+interface TierPlanCosts {
+	price: number;
+	promoCode?: string;
+	discount?: {
+		percentage: number;
+		price: number;
+		duration: { value: number; period: RegularContributionType };
+	};
 }
 
 const container = css`
