@@ -1,11 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	brand,
-	neutral,
-	palette,
-	space,
-	until,
-} from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	Checkbox,
 	Label,
@@ -114,10 +108,14 @@ import {
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
-import { FormSection } from './components/formSection';
-import { Legend } from './components/legend';
-import { PaymentMethodRadio } from './components/paymentMethodRadio';
-import { PaymentMethodSelector } from './components/paymentMethodSelector';
+import { FormSection, Legend, shorterBoxMargin } from './components/form';
+import {
+	checkedRadioLabelColour,
+	defaultRadioLabelColour,
+	paymentMethodBody,
+	PaymentMethodRadio,
+	PaymentMethodSelector,
+} from './components/paymentMethod';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 import {
 	doesNotContainEmojiPattern,
@@ -131,33 +129,6 @@ import {
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
-
-/** Page styles - styles used specifically for the checkout page */
-const shorterBoxMargin = css`
-	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const paymentMethodBody = css`
-	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
-`;
-
-const defaultRadioLabelColour = css`
-	+ label div {
-		color: ${neutral[46]};
-		font-weight: bold;
-	}
-`;
-
-const checkedRadioLabelColour = css`
-	+ label div {
-		color: ${brand[400]};
-		font-weight: bold;
-	}
-`;
 
 /**
  * This method removes the `pending` state by retrying,

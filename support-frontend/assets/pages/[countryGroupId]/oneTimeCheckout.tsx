@@ -2,10 +2,8 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
-	palette,
 	space,
 	textSans17,
-	until,
 } from '@guardian/source/foundations';
 import {
 	Radio,
@@ -43,10 +41,14 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
-import { FormSection } from './components/formSection';
-import { Legend } from './components/legend';
-import { PaymentMethodRadio } from './components/paymentMethodRadio';
-import { PaymentMethodSelector } from './components/paymentMethodSelector';
+import { FormSection, Legend, shorterBoxMargin } from './components/form';
+import {
+	checkedRadioLabelColour,
+	defaultRadioLabelColour,
+	paymentMethodBody,
+	PaymentMethodRadio,
+	PaymentMethodSelector,
+} from './components/paymentMethod';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
@@ -77,32 +79,6 @@ const standFirst = css`
 	${from.desktop} {
 		margin-bottom: ${space[3]}px;
 	}
-`;
-
-const shorterBoxMargin = css`
-	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const defaultRadioLabelColour = css`
-	+ label div {
-		color: ${palette.neutral[46]};
-		font-weight: bold;
-	}
-`;
-
-const checkedRadioLabelColour = css`
-	+ label div {
-		color: ${palette.brand[400]};
-		font-weight: bold;
-	}
-`;
-
-const paymentMethodBody = css`
-	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
 `;
 
 type OneTimeCheckoutProps = {
