@@ -40,9 +40,6 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription,
-	supporterPlusWithGuardianWeeklyAnnualPromos,
-	supporterPlusWithGuardianWeeklyDescription,
-	supporterPlusWithGuardianWeeklyMonthlyPromos,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -331,10 +328,6 @@ export function ThreeTierLanding({
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 		),
 	);
-	const promotionTier3Hardcoded =
-		contributionType === 'ANNUAL'
-			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
-			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
@@ -535,8 +528,6 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const tier3UseGenericCheckout =
-		abParticipations.tierThreeFromApi === 'variant';
 
 	const tier3RatePlan =
 		countryGroupId === 'International'
@@ -549,24 +540,6 @@ export function ThreeTierLanding({
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
-	const tier3UrlParamsHardcoded = new URLSearchParams({
-		threeTierCreateSupporterPlusSubscription: 'true',
-		period: paymentFrequencyMap[contributionType],
-		promoCode: promotionTier3Hardcoded.promoCode,
-	});
-	const tier3CardHarcoded = {
-		productDescription: supporterPlusWithGuardianWeeklyDescription,
-		price: tier3Pricing,
-		link: `/subscribe/weekly/checkout?${tier3UrlParamsHardcoded.toString()}`,
-		promotion: promotionTier3Hardcoded,
-		isRecommended: false,
-		isUserSelected: isCardUserSelected(
-			tier3Pricing,
-			promotionTier3Hardcoded.discount.amount,
-		),
-		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
-	};
-
 	const tier3UrlParams = new URLSearchParams({
 		product: 'TierThree',
 		ratePlan: tier3RatePlan,
@@ -574,7 +547,7 @@ export function ThreeTierLanding({
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
-	const tier3CardFromApi = {
+	const tier3Card = {
 		productDescription: productCatalogDescription.TierThree,
 		price: tier3Pricing,
 		link: `checkout?${tier3UrlParams.toString()}`,
@@ -586,10 +559,6 @@ export function ThreeTierLanding({
 		),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
-
-	const tier3Card = tier3UseGenericCheckout
-		? tier3CardFromApi
-		: tier3CardHarcoded;
 
 	return (
 		<PageScaffold
