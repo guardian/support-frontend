@@ -126,9 +126,9 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 		field: keyof AddressFieldsType,
 	) => {
 		/**
-		 * We only pass/use setErrors on the generic checkout
-		 * If it's not been passed to AddressFields then Redux handles
-		 * validation errors.
+		 * We only pass/use setErrors on the generic checkout.
+		 * On the non-generic checkouts we don't pass it
+		 * to AddressFields as Redux/Zod handles validation errors.
 		 **/
 		if (!props.setErrors) {
 			return;
