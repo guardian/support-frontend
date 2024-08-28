@@ -339,7 +339,7 @@ object CountryGroup {
 
   val countriesByISO3 = countries.flatMap { country =>
     Try {
-      // java's locale library may throw an exception if no locale is found
+      // getISO3Country will throw a MissingResourceException if the three-letter country abbreviation is not available for this locale
       val locale = new Locale("", country.alpha2)
       locale.getISO3Country.toUpperCase -> country
     }.toOption
