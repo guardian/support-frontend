@@ -10,11 +10,19 @@ import {
 	RadioGroup,
 	TextInput,
 } from '@guardian/source/react-components';
-import { Elements } from '@stripe/react-stripe-js';
+import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
+import {
+	CardNumberElement,
+	Elements,
+	useElements,
+	useStripe,
+} from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
+import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -23,6 +31,12 @@ import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
+import {
+	type CreateStripePaymentIntentRequest,
+	processStripePaymentIntentRequest,
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -35,6 +49,9 @@ import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
 import * as cookie from 'helpers/storage/cookie';
+import { getOphanIds } from 'helpers/tracking/acquisitions';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
@@ -119,8 +136,9 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 function OneTimeCheckoutComponent({
 	geoId,
 	appConfig,
+	stripePublicKey,
 }: OneTimeCheckoutComponentProps) {
-	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -142,6 +160,13 @@ function OneTimeCheckoutComponent({
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountErrors] = useState<string[]>([]);
 
+	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
+
+	/** Payment methods: Stripe */
+	const stripe = useStripe();
+	const elements = useElements();
+	const cardElement = elements?.getElement(CardNumberElement);
+
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
@@ -152,6 +177,12 @@ function OneTimeCheckoutComponent({
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 
+	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+	/** General error that can occur via fetch validations */
+	const [errorMessage, setErrorMessage] = useState<string>();
+	const [errorContext, setErrorContext] = useState<string>();
+
 	const validPaymentMethods = [
 		Stripe,
 		PayPal,
@@ -161,6 +192,83 @@ function OneTimeCheckoutComponent({
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	const formOnSubmit = () => {
+		setIsProcessingPayment(true);
+
+		const { pageviewId } = getOphanIds();
+
+		if (paymentMethod === 'Stripe' && stripe && cardElement) {
+			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+			const handle3DS = (clientSecret: string) => {
+				trackComponentLoad('stripe-3ds');
+				return stripe.handleCardAction(clientSecret);
+			};
+
+			void stripe
+				.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: billingPostcode,
+						},
+					},
+				})
+				.then((result) => {
+					if (result.error) {
+						logException(
+							`Error creating Payment Method: ${JSON.stringify(result.error)}`,
+						);
+
+						if (result.error.type === 'validation_error') {
+							setErrorMessage('There was an issue with your card details.');
+							setErrorContext(
+								appropriateErrorMessage('payment_details_incorrect'),
+							);
+						}
+
+						setErrorMessage('There was an issue with your payment.');
+						setErrorContext(
+							appropriateErrorMessage('payment_provider_unavailable'),
+						);
+					} else {
+						const stripeData: CreateStripePaymentIntentRequest = {
+							paymentData: {
+								currency: currencyKey,
+								amount: finalAmount,
+								email,
+								stripePaymentMethod: 'StripeCheckout',
+							},
+							acquisitionData: {
+								pageviewId,
+								postalCode: billingPostcode,
+							},
+							publicKey: stripePublicKey,
+							recaptchaToken: recaptchaToken ?? null,
+							paymentMethodId: result.paymentMethod.id,
+						};
+
+						void processStripePaymentIntentRequest(stripeData, handle3DS).then(
+							(paymentResult) => {
+								switch (paymentResult.paymentStatus) {
+									case 'success':
+										break;
+									case 'failure':
+										setErrorMessage('There was an issue with your payment.');
+										setErrorContext(
+											appropriateErrorMessage(paymentResult.error ?? ''),
+										);
+										break;
+								}
+							},
+						);
+					}
+				});
+		}
+
+		setIsProcessingPayment(false);
+	};
 
 	return (
 		<CheckoutLayout>
@@ -204,8 +312,14 @@ function OneTimeCheckoutComponent({
 				ref={formRef}
 				action="todo"
 				method="POST"
-				onSubmit={() => {
-					/* ToDo */
+				onSubmit={(event) => {
+					event.preventDefault();
+					// const form = event.currentTarget;
+					// const formData = new FormData(form);
+					/** we defer this to an external function as a lot of the payment methods use async */
+					void formOnSubmit();
+
+					return false;
 				}}
 			>
 				<Box cssOverrides={shorterBoxMargin}>
@@ -348,11 +462,51 @@ function OneTimeCheckoutComponent({
 								})}
 							</RadioGroup>
 						</FormSection>
+						<div
+							css={css`
+								margin: ${space[8]}px 0;
+							`}
+						>
+							{paymentMethod !== 'PayPal' && (
+								<DefaultPaymentButton
+									buttonText={
+										Number.isNaN(finalAmount)
+											? 'Pay now'
+											: `Support us with ${simpleFormatAmount(
+													currency,
+													finalAmount,
+											  )}`
+									}
+									onClick={() => {
+										// no-op
+										// This isn't needed because we are now using the form onSubmit handler
+									}}
+									type="submit"
+								/>
+							)}
+						</div>
+						{errorMessage && (
+							<div role="alert" data-qm-error>
+								<ErrorSummary
+									cssOverrides={css`
+										margin-bottom: ${space[6]}px;
+									`}
+									message={errorMessage}
+									context={errorContext}
+								/>
+							</div>
+						)}
 					</BoxContents>
 				</Box>
 			</form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
 			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			{isProcessingPayment && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
 		</CheckoutLayout>
 	);
 }

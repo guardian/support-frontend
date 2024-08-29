@@ -725,8 +725,6 @@ function CheckoutComponent({
 			cardElement &&
 			stripeClientSecret
 		) {
-			// TODO - ONE_OFF support - we'll need to implement the ONE_OFF stripe payment.
-			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -1606,8 +1604,7 @@ function CheckoutComponent({
 						/>
 						<div
 							css={css`
-								margin-top: ${space[8]}px;
-								margin-bottom: ${space[8]}px;
+								margin: ${space[8]}px 0;
 							`}
 						>
 							{paymentMethod !== 'PayPal' && (
