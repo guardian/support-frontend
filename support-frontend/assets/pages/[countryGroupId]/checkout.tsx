@@ -1279,13 +1279,14 @@ function CheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
+										optional
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
 											if (validityState.valid) {
 												setBillingPostcodeError(undefined);
 											} else {
-												if (!validityState.valueMissing) {
+												if (validityState.patternMismatch) {
 													setBillingPostcodeError(
 														'Please enter a valid zip code.',
 													);
