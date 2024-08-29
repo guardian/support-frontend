@@ -19,17 +19,12 @@ export const threeTierCheckoutEnabled = (
 		'/subscribe/digitaledition',
 	);
 
-	if (isPaperCheckout || isDigitalEditionCheckout) {
-		return false;
-	}
-
 	const isWeeklyCheckout = window.location.pathname.startsWith(
 		'/subscribe/weekly/checkout',
 	);
 
-	if (isWeeklyCheckout) {
-		const urlParams = new URLSearchParams(window.location.search);
-		return urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
+	if (isPaperCheckout || isDigitalEditionCheckout || isWeeklyCheckout) {
+		return false;
 	}
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;

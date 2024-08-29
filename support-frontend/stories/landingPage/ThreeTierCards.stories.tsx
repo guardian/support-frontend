@@ -4,10 +4,7 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import {
-	productCatalogDescription,
-	supporterPlusWithGuardianWeeklyDescription,
-} from 'helpers/productCatalog';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -70,7 +67,7 @@ Default.args = {
 			isRecommended: false,
 			isUserSelected: true,
 			price: 25,
-			productDescription: supporterPlusWithGuardianWeeklyDescription,
+			productDescription: productCatalogDescription.TierThree,
 			promotion: {
 				discountedPrice: 16,
 				discount: {

@@ -4,15 +4,22 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import {
-	productCatalogDescription,
-	supporterPlusWithGuardianWeeklyDescription,
-	supporterPlusWithGuardianWeeklyMonthlyPromos,
-} from 'helpers/productCatalog';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+
+const promotionEURCountries = {
+	name: 'SupportPlusAndGuardianWeekly',
+	description: 'Supporter Plus and Guardian Weekly',
+	promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
+	discountedPrice: 30,
+	discount: {
+		amount: 22.09,
+		durationMonths: 12,
+	},
+} as const;
 
 export default {
 	title: 'LandingPage/Three Tier Card',
@@ -74,8 +81,8 @@ Promotion.args = {
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
 	price: 38.5,
-	productDescription: supporterPlusWithGuardianWeeklyDescription,
-	promotion: supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries,
+	productDescription: productCatalogDescription.TierThree,
+	promotion: promotionEURCountries,
 };
 
 export const Offer = Template.bind({});
@@ -88,7 +95,7 @@ Offer.args = {
 	paymentFrequency: 'MONTHLY',
 	price: 15,
 	productDescription: {
-		...supporterPlusWithGuardianWeeklyDescription,
+		...productCatalogDescription.TierThree,
 		offersSummary: [
 			{ strong: true, copy: 'including a free book as our gift to you**' },
 		],
