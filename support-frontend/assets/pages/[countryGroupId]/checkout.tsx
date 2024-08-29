@@ -92,6 +92,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { isProd } from 'helpers/urls/url';
+import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -1063,6 +1064,12 @@ function CheckoutComponent({
 												event.billingDetails.address.postal_code,
 											);
 
+										if (!event.billingDetails?.address.state) {
+											logException(
+												"Could not find state from Stripe's billingDetails",
+												{ geoId, countryGroupId, countryId },
+											);
+										}
 										event.billingDetails?.address.state &&
 											setBillingState(event.billingDetails.address.state);
 
