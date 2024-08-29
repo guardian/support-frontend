@@ -1,18 +1,11 @@
 import { css } from '@emotion/react';
-import {
-	brand,
-	neutral,
-	palette,
-	space,
-	until,
-} from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	Checkbox,
 	Label,
 	Radio,
 	RadioGroup,
 	TextInput,
-	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
 	Divider,
@@ -115,8 +108,14 @@ import {
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
-import { FormSection } from './components/formSection';
-import { Legend } from './components/legend';
+import { FormSection, Legend, shorterBoxMargin } from './components/form';
+import {
+	checkedRadioLabelColour,
+	defaultRadioLabelColour,
+	paymentMethodBody,
+	PaymentMethodRadio,
+	PaymentMethodSelector,
+} from './components/paymentMethod';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 import {
 	doesNotContainEmojiPattern,
@@ -130,62 +129,6 @@ import {
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
-
-/** Page styles - styles used specifically for the checkout page */
-const shorterBoxMargin = css`
-	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const paymentMethodSelected = css`
-	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
-	margin-top: ${space[2]}px;
-	border-radius: 4px;
-`;
-
-const paymentMethodNotSelected = css`
-	/* Using box shadows prevents layout shift when the rows are expanded */
-	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
-	margin-top: ${space[2]}px;
-	border-radius: 4px;
-`;
-
-const paymentMethodBody = css`
-	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
-`;
-
-const paymentMethodRadioWithImage = css`
-	display: inline-flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	padding: ${space[2]}px ${space[3]}px;
-	font-weight: bold;
-`;
-const paymentMethodRadioWithImageSelected = css`
-	background-image: linear-gradient(
-		to top,
-		${palette.brand[500]} 2px,
-		transparent 2px
-	);
-`;
-
-const defaultRadioLabelColour = css`
-	+ label div {
-		color: ${neutral[46]};
-		font-weight: bold;
-	}
-`;
-
-const checkedRadioLabelColour = css`
-	+ label div {
-		color: ${brand[400]};
-		font-weight: bold;
-	}
-`;
 
 /**
  * This method removes the `pending` state by retrying,
@@ -223,6 +166,7 @@ type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 };
+
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const searchParams = new URLSearchParams(window.location.search);
@@ -372,7 +316,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 */
 	const isTestUser = !!cookie.get('_test_username');
 	const stripePublicKey = getStripeKey(
-		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
 		'REGULAR',
 		countryId,
 		currencyKey,
@@ -412,6 +355,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 			<CheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
+				stripePublicKey={stripePublicKey}
+				isTestUser={isTestUser}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
@@ -428,6 +373,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
 	productKey: ProductKey;
 	ratePlanKey: string;
 	originalAmount: number;
@@ -441,6 +388,8 @@ type CheckoutComponentProps = {
 function CheckoutComponent({
 	geoId,
 	appConfig,
+	stripePublicKey,
+	isTestUser,
 	productKey,
 	ratePlanKey,
 	originalAmount,
@@ -455,7 +404,6 @@ function CheckoutComponent({
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-	const isTestUser = !!cookie.get('_test_username');
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -587,26 +535,17 @@ function CheckoutComponent({
 	const validPaymentMethods = [
 		countryGroupId === 'EURCountries' && Sepa,
 		countryId === 'GB' && DirectDebit,
-		// TODO - ONE_OFF support - ☝️ these will be inactivated for ONE_OFF payments
 		Stripe,
 		PayPal,
 		countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
 
-	// TODO - ONE_OFF support, this should be false when ONE_OFF
 	const showStateSelect =
 		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	/** Payment methods: Stripe */
-	const stripePublicKey = getStripeKey(
-		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
-		'REGULAR',
-		countryId,
-		currencyKey,
-		isTestUser,
-	);
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
@@ -1518,21 +1457,8 @@ function CheckoutComponent({
 									const selected = paymentMethod === validPaymentMethod;
 									const { label, icon } = paymentMethodData[validPaymentMethod];
 									return (
-										<div
-											css={
-												selected
-													? paymentMethodSelected
-													: paymentMethodNotSelected
-											}
-										>
-											<div
-												css={[
-													paymentMethodRadioWithImage,
-													selected
-														? paymentMethodRadioWithImageSelected
-														: undefined,
-												]}
-											>
+										<PaymentMethodSelector selected={selected}>
+											<PaymentMethodRadio selected={selected}>
 												<Radio
 													label={label}
 													name="paymentMethod"
@@ -1547,7 +1473,7 @@ function CheckoutComponent({
 													}}
 												/>
 												<div>{icon}</div>
-											</div>
+											</PaymentMethodRadio>
 											{validPaymentMethod === 'Stripe' && selected && (
 												<div css={paymentMethodBody}>
 													<input
@@ -1651,7 +1577,7 @@ function CheckoutComponent({
 													/>
 												</div>
 											)}
-										</div>
+										</PaymentMethodSelector>
 									);
 								})}
 							</RadioGroup>
