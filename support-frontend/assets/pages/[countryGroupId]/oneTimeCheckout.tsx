@@ -193,7 +193,7 @@ function OneTimeCheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const formOnSubmit = () => {
+	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
 		const { pageviewId } = getOphanIds();
@@ -205,66 +205,57 @@ function OneTimeCheckoutComponent({
 				return stripe.handleCardAction(clientSecret);
 			};
 
-			void stripe
-				.createPaymentMethod({
-					type: 'card',
-					card: cardElement,
-					billing_details: {
-						address: {
-							postal_code: billingPostcode,
-						},
+			const paymentMethodResult = await stripe.createPaymentMethod({
+				type: 'card',
+				card: cardElement,
+				billing_details: {
+					address: {
+						postal_code: billingPostcode,
 					},
-				})
-				.then((result) => {
-					if (result.error) {
-						logException(
-							`Error creating Payment Method: ${JSON.stringify(result.error)}`,
-						);
+				},
+			});
+			if (paymentMethodResult.error) {
+				logException(
+					`Error creating Payment Method: ${JSON.stringify(
+						paymentMethodResult.error,
+					)}`,
+				);
 
-						if (result.error.type === 'validation_error') {
-							setErrorMessage('There was an issue with your card details.');
-							setErrorContext(
-								appropriateErrorMessage('payment_details_incorrect'),
-							);
-						}
+				if (paymentMethodResult.error.type === 'validation_error') {
+					setErrorMessage('There was an issue with your card details.');
+					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
+				}
 
-						setErrorMessage('There was an issue with your payment.');
-						setErrorContext(
-							appropriateErrorMessage('payment_provider_unavailable'),
-						);
-					} else {
-						const stripeData: CreateStripePaymentIntentRequest = {
-							paymentData: {
-								currency: currencyKey,
-								amount: finalAmount,
-								email,
-								stripePaymentMethod: 'StripeCheckout',
-							},
-							acquisitionData: {
-								pageviewId,
-								postalCode: billingPostcode,
-							},
-							publicKey: stripePublicKey,
-							recaptchaToken: recaptchaToken ?? null,
-							paymentMethodId: result.paymentMethod.id,
-						};
+				setErrorMessage('There was an issue with your payment.');
+				setErrorContext(
+					appropriateErrorMessage('payment_provider_unavailable'),
+				);
+			} else {
+				const stripeData: CreateStripePaymentIntentRequest = {
+					paymentData: {
+						currency: currencyKey,
+						amount: finalAmount,
+						email,
+						stripePaymentMethod: 'StripeCheckout',
+					},
+					acquisitionData: {
+						pageviewId,
+						postalCode: billingPostcode,
+					},
+					publicKey: stripePublicKey,
+					recaptchaToken: recaptchaToken ?? null,
+					paymentMethodId: paymentMethodResult.paymentMethod.id,
+				};
 
-						void processStripePaymentIntentRequest(stripeData, handle3DS).then(
-							(paymentResult) => {
-								switch (paymentResult.paymentStatus) {
-									case 'success':
-										break;
-									case 'failure':
-										setErrorMessage('There was an issue with your payment.');
-										setErrorContext(
-											appropriateErrorMessage(paymentResult.error ?? ''),
-										);
-										break;
-								}
-							},
-						);
-					}
-				});
+				const paymentResult = await processStripePaymentIntentRequest(
+					stripeData,
+					handle3DS,
+				);
+				if (paymentResult.paymentStatus === 'failure') {
+					setErrorMessage('There was an issue with your payment.');
+					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+				}
+			}
 		}
 
 		setIsProcessingPayment(false);
