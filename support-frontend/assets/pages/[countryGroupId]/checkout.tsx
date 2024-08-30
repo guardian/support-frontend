@@ -57,7 +57,6 @@ import type {
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
-	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -538,7 +537,8 @@ function CheckoutComponent({
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
-		countryId === 'US' && AmazonPay,
+		// Todo shouldn't this be checking the switches?
+		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
 
 	const showStateSelect =
