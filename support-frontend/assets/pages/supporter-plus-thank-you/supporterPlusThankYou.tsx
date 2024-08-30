@@ -21,6 +21,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getAmountCoveringTransactionCost } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
@@ -120,6 +121,7 @@ export function SupporterPlusThankYou({
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
 	const {
+		coverTransactionCost,
 		selectedAmounts,
 		otherAmounts,
 		billingPeriod,
@@ -133,9 +135,16 @@ export function SupporterPlusThankYou({
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 	const isOneOff = contributionType === 'ONE_OFF';
-	const amount =
+
+	const amountPreTransactionFee =
 		getAmountFromSessionStorage() ??
 		getAmount(selectedAmounts, otherAmounts, contributionType);
+
+	const amount = getAmountCoveringTransactionCost(
+		amountPreTransactionFee,
+		coverTransactionCost && isOneOff,
+	);
+
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
