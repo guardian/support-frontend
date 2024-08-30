@@ -7,7 +7,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	getAmountCoveringTransactionCost,
+	getUserSelectedAmount,
+} from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
@@ -61,6 +64,11 @@ export function DefaultPaymentButtonContainer({
 			? getLowerBenefitsThreshold(
 					state,
 					contributionType as RegularContributionType,
+			  )
+			: contributionType === 'ONE_OFF'
+			? getAmountCoveringTransactionCost(
+					getUserSelectedAmount(state),
+					state.page.checkoutForm.product.coverTransactionCost,
 			  )
 			: getUserSelectedAmount(state),
 	);

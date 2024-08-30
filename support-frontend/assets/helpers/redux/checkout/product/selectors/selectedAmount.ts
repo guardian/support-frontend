@@ -15,6 +15,17 @@ export function getUserSelectedAmount(state: ContributionsState): number {
 	return priceCardAmountSelected;
 }
 
+export function getAmountCoveringTransactionCost(
+	amount: number,
+	coverTransactionCost?: boolean,
+): number {
+	if (coverTransactionCost) {
+		return amount * 1.04;
+	}
+
+	return amount;
+}
+
 export function getUserSelectedOtherAmount(
 	state: ContributionsState,
 ): number | string {
