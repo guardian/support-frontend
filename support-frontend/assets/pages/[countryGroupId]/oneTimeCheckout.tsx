@@ -29,7 +29,10 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -49,7 +52,10 @@ import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
 import * as cookie from 'helpers/storage/cookie';
-import { getOphanIds } from 'helpers/tracking/acquisitions';
+import {
+	derivePaymentApiAcquisitionData,
+	getReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -150,6 +156,8 @@ function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		amountsCardData['ONE_OFF'];
@@ -177,11 +185,11 @@ function OneTimeCheckoutComponent({
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 
-	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
+
+	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
 	const validPaymentMethods = [
 		Stripe,
@@ -195,8 +203,6 @@ function OneTimeCheckoutComponent({
 
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
-
-		const { pageviewId } = getOphanIds();
 
 		if (paymentMethod === 'Stripe' && stripe && cardElement) {
 			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
@@ -224,12 +230,12 @@ function OneTimeCheckoutComponent({
 				if (paymentMethodResult.error.type === 'validation_error') {
 					setErrorMessage('There was an issue with your card details.');
 					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
+				} else {
+					setErrorMessage('Sorry, something went wrong.');
+					setErrorContext(
+						appropriateErrorMessage('payment_provider_unavailable'),
+					);
 				}
-
-				setErrorMessage('There was an issue with your payment.');
-				setErrorContext(
-					appropriateErrorMessage('payment_provider_unavailable'),
-				);
 			} else {
 				const stripeData: CreateStripePaymentIntentRequest = {
 					paymentData: {
@@ -238,10 +244,11 @@ function OneTimeCheckoutComponent({
 						email,
 						stripePaymentMethod: 'StripeCheckout',
 					},
-					acquisitionData: {
-						pageviewId,
-						postalCode: billingPostcode,
-					},
+					acquisitionData: derivePaymentApiAcquisitionData(
+						{ ...getReferrerAcquisitionData(), labels: ['one-time-checkout'] },
+						abParticipations,
+						billingPostcode,
+					),
 					publicKey: stripePublicKey,
 					recaptchaToken: recaptchaToken ?? null,
 					paymentMethodId: paymentMethodResult.paymentMethod.id,
@@ -252,7 +259,7 @@ function OneTimeCheckoutComponent({
 					handle3DS,
 				);
 				if (paymentResult.paymentStatus === 'failure') {
-					setErrorMessage('There was an issue with your payment.');
+					setErrorMessage('Sorry, something went wrong.');
 					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
 				}
 			}
