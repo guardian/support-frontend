@@ -86,11 +86,18 @@ export default function Countdown({
 		const getTotalMillisRemaining = (targetDate: number) => {
 			return targetDate - Date.now();
 		};
+
+		const canDisplayCountdown = () => {
+			const now = Date.now();
+			console.log('Checking if campaign currently active...');
+			return (
+				campaign.countdownStartInMillis < now &&
+				campaign.countdownHideInMillis > now
+			);
+		}
 		
 		function updateTimeParts() {
-			// TODO: add some validation of the dates
-			// TODO: handle hiding if the start date is in the future.
-			
+
 			const timeRemaining = getTotalMillisRemaining(campaign.countdownDeadlineInMillis);
 			setTimeRemainingInMillis(timeRemaining);
 
@@ -119,11 +126,12 @@ export default function Countdown({
 			);
 		}
 
-		if (getTotalMillisRemaining(campaign.countdownDeadlineInMillis) > 0) {
+		if (canDisplayCountdown()) {
 			const id = setInterval(updateTimeParts, 1000); // run once per second
-			console.log(`The timer has been created.`);
+			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
-		} else {
+		} 
+		else {
 			// deadline already passed on page load
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));

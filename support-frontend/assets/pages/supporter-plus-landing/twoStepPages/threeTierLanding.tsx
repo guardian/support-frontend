@@ -350,30 +350,18 @@ export function ThreeTierLanding({
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	useEffect(() => {
-		// console.log(`in useEffect where countdownSettings passed in.`);
-		const isThisCampaignCurrent = (campaign:CountdownSetting | undefined):boolean => {
-			if (!campaign) { // is defined
-				return false;
-			} 
-			else {
-				const isCampaignStarted = campaign.countdownStartInMillis < Date.now();
-				const isCampaignEnded = campaign.countdownHideInMillis < Date.now();
-				// console.log(`isCampaignStarted: ${isCampaignStarted}, isCampaignEnded ${!isCampaignEnded}`);
-				return isCampaignStarted && !isCampaignEnded;
-			}
-		};
-		// assumes there will only be one current campaign.
-		if (campaignSettings){
-			const currentCampaign:CountdownSetting | undefined = campaignSettings.countdownSettings.findLast((campaign) => isThisCampaignCurrent(campaign));
-	
-			if(currentCampaign) {
-				setCurrentCampaign(currentCampaign);
-				setShowCountdown(true);
-			}
-		}
+		if (!campaignSettings) { return; }
 
-	}, [campaignSettings?.isEligible, campaignSettings?.countdownSettings]); 
-	// TODO: something not right here...
+		const now = Date.now();
+		const currentCampaign = campaignSettings.countdownSettings.find((c) => 
+			c.countdownStartInMillis < now && c.countdownHideInMillis > now
+		);
+	
+		if (currentCampaign) {
+			setCurrentCampaign(currentCampaign);
+			setShowCountdown(true);
+		}
+	}, [campaignSettings?.countdownSettings]); 
 	
 	/*
 	* /////////////// END US EOY 2024 Campaign
