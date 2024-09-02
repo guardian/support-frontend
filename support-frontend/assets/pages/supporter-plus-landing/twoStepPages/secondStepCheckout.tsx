@@ -17,6 +17,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setCoverTransactionCost,
@@ -184,6 +185,13 @@ export function SupporterPlusCheckout({
 								<Checkbox
 									checked={coverTransactionCost}
 									onChange={(e) => {
+										if (e.target.checked) {
+											console.log('sending tracking event');
+											sendTrackingEventsOnClick({
+												id: 'cover-transaction-cost-checkbox',
+												componentType: 'ACQUISITIONS_BUTTON',
+											})();
+										}
 										dispatch(setCoverTransactionCost(e.target.checked));
 									}}
 									label={`I’ll generously add 4% of ${
