@@ -35,9 +35,11 @@ export const testCheckout = (testDetails: TestDetails) => {
 			testLastName,
 			testEmail,
 		);
+
 		if (internationalisationId === 'au') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		}
+
 		await page.getByRole('radio', { name: paymentType }).check();
 		switch (paymentType) {
 			case 'PayPal':
