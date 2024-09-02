@@ -57,12 +57,11 @@ import type {
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
-	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
-	Sepa,
+	// Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
@@ -533,16 +532,14 @@ function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
+	// Todo shouldn't this be checking the switches?
 	const validPaymentMethods = [
-		countryGroupId === 'EURCountries' && Sepa,
+		// countryGroupId === 'EURCountries' && Sepa,
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
-		countryId === 'US' && AmazonPay,
+		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
-
-	const showStateSelect =
-		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
@@ -725,8 +722,6 @@ function CheckoutComponent({
 			cardElement &&
 			stripeClientSecret
 		) {
-			// TODO - ONE_OFF support - we'll need to implement the ONE_OFF stripe payment.
-			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -1163,9 +1158,7 @@ function CheckoutComponent({
 									}}
 								/>
 							</div>
-
 							<Signout isSignedIn={isSignedIn} />
-
 							<>
 								<div>
 									<TextInput
@@ -1236,33 +1229,36 @@ function CheckoutComponent({
 									/>
 								</div>
 							</>
-							{/*For deliverable products we take the state and
-                    zip code with the delivery address*/}
-							{showStateSelect && !productDescription.deliverableTo && (
-								<StateSelect
-									countryId={countryId}
-									state={billingState}
-									onStateChange={(event) => {
-										setBillingState(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.currentTarget.checkValidity();
-									}}
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setBillingStateError(undefined);
-										} else {
-											setBillingStateError(
-												'Please enter a state, province or territory.',
-											);
-										}
-									}}
-									error={billingStateError}
-								/>
-							)}
 
+							{/**
+							 * We require state for non-deliverable products as we use different taxes within those regions upstream
+							 * For deliverable products we take the state and zip code with the delivery address
+							 */}
+							{['US', 'CA', 'AU'].includes(countryId) &&
+								!productDescription.deliverableTo && (
+									<StateSelect
+										countryId={countryId}
+										state={billingState}
+										onStateChange={(event) => {
+											setBillingState(event.currentTarget.value);
+										}}
+										onBlur={(event) => {
+											event.currentTarget.checkValidity();
+										}}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingStateError(undefined);
+											} else {
+												setBillingStateError(
+													'Please enter a state, province or territory.',
+												);
+											}
+										}}
+										error={billingStateError}
+									/>
+								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
 								<div>
 									<TextInput
@@ -1606,8 +1602,7 @@ function CheckoutComponent({
 						/>
 						<div
 							css={css`
-								margin-top: ${space[8]}px;
-								margin-bottom: ${space[8]}px;
+								margin: ${space[8]}px 0;
 							`}
 						>
 							{paymentMethod !== 'PayPal' && (
