@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { from, palette, space, textSans } from '@guardian/source/foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
+import { NewBenefitPill } from './newBenefitPill';
 
 const checkListIconCss = (style: CheckListStyle) => css`
 	vertical-align: top;
@@ -57,18 +58,19 @@ const tableCss = (style: CheckListStyle) => css`
 	}
 `;
 
-export type CheckListData = {
+export type BenefitsCheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element | string;
 	maybeGreyedOut?: SerializedStyles;
 	toolTip?: string;
 	strong?: boolean;
+	isNew?: boolean;
 };
 
 type CheckListStyle = 'standard' | 'compact' | 'hidden';
 
-export type CheckListProps = {
-	checkListData: CheckListData[];
+export type BenefitsCheckListProps = {
+	checkListData: BenefitsCheckListData[];
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
@@ -94,12 +96,12 @@ function ChecklistItemIcon({
 	);
 }
 
-export function CheckList({
+export function BenefitsCheckList({
 	checkListData,
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
-}: CheckListProps): JSX.Element {
+}: BenefitsCheckListProps): JSX.Element {
 	return (
 		<table css={[tableCss(style), cssOverrides]}>
 			{checkListData.map((item) => (
@@ -120,6 +122,7 @@ export function CheckList({
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
 							<span css={checkListTextItemCss}>
+								{item.isNew && <NewBenefitPill />}
 								{item.strong ? <strong>{item.text}</strong> : item.text}
 								{item.toolTip && (
 									<Tooltip

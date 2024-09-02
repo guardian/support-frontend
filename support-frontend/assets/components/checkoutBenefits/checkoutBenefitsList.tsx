@@ -8,8 +8,8 @@ import {
 	textSans,
 	until,
 } from '@guardian/source/foundations';
-import { CheckList } from 'components/checkList/checkList';
-import type { CheckListData } from 'components/checkList/checkList';
+import type { BenefitsCheckListData } from './benefitsCheckList';
+import { BenefitsCheckList } from './benefitsCheckList';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
@@ -56,7 +56,7 @@ const hrCss = (margin: string) => css`
 
 export type CheckoutBenefitsListProps = {
 	title: string;
-	checkListData: CheckListData[];
+	checkListData: BenefitsCheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	withBackground?: boolean;
@@ -85,7 +85,7 @@ export function CheckoutBenefitsList({
 				<span>{title}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
-			<CheckList
+			<BenefitsCheckList
 				checkListData={checkListData}
 				style={isCompactList ? 'compact' : 'standard'}
 				iconColor={palette.brand[500]}

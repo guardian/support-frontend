@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
 import { useState } from 'react';
-import { CheckList, type CheckListData } from 'components/checkList/checkList';
+import {
+	BenefitsCheckList,
+	type BenefitsCheckListData,
+} from 'components/checkoutBenefits/benefitsCheckList';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -102,7 +105,7 @@ export const getThankYouModuleData = (
 	email?: string,
 	campaignCode?: string,
 	isTier3?: boolean,
-	checklistData?: CheckListData[],
+	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
@@ -208,7 +211,7 @@ export const getThankYouModuleData = (
 				<>
 					<BenefitsBodyCopy />
 					{checklistData && (
-						<CheckList
+						<BenefitsCheckList
 							checkListData={checklistData}
 							cssOverrides={checklistCss}
 						/>

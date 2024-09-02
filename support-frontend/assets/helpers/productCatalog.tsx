@@ -13,6 +13,7 @@ type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
+	isNew?: boolean;
 };
 
 export type ProductDescription = {
@@ -62,6 +63,10 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				{
 					copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+				},
+				{
+					copy: 'Newspaper archive',
+					isNew: true,
 				},
 			],
 			/** These are just the SupporterPlus benefits */
