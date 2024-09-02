@@ -30,7 +30,8 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 		return (
 			<>
 				<h1 css={headerTitleText}>
-					Thank you {name}for supporting us with{' '}
+					Thank you <span data-qm-masking="blocklist">{name}</span>for
+					supporting us with{' '}
 					<YellowHighlight amount={promotionPrice} currency={isoCurrency} />
 					{`/month`}
 					<sup css={supCss}>*</sup>
@@ -62,8 +63,9 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 
 	return (
 		<h1 css={headerTitleText}>
-			Thank you {name}for supporting us with{' '}
-			<YellowHighlight currency={isoCurrency} amount={amount} /> each month ❤️
+			Thank you <span data-qm-masking="blocklist">{name}</span>for supporting us
+			with <YellowHighlight currency={isoCurrency} amount={amount} /> each month
+			❤️
 		</h1>
 	);
 }
@@ -81,7 +83,8 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 		return (
 			<>
 				<h1 css={headerTitleText}>
-					Thank you {name}for supporting us with{' '}
+					Thank you <span data-qm-masking="blocklist">{name}</span>for
+					supporting us with{' '}
 					<YellowHighlight amount={promotionPrice} currency={isoCurrency} />
 					{`/year`}
 					<sup css={supCss}>*</sup>
@@ -118,8 +121,9 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 
 	return (
 		<h1 css={headerTitleText}>
-			Thank you {name}for supporting us with{' '}
-			<YellowHighlight currency={isoCurrency} amount={amount} /> each year ❤️
+			Thank you <span data-qm-masking="blocklist">{name}</span>for supporting us
+			with <YellowHighlight currency={isoCurrency} amount={amount} /> each year
+			❤️
 		</h1>
 	);
 }
@@ -195,7 +199,9 @@ function Heading({
 	if (isOneOffPayPal || !amount) {
 		return (
 			<h1 css={headerTitleText}>
-				Thank you {maybeNameAndTrailingSpace}for your valuable contribution
+				Thank you{' '}
+				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
+				your valuable contribution
 			</h1>
 		);
 	}
@@ -203,7 +209,9 @@ function Heading({
 	if (isTier3) {
 		return (
 			<h1 css={tier3HeaderTitleText}>
-				Thank you {maybeNameAndTrailingSpace}for subscribing to{' '}
+				Thank you{' '}
+				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
+				subscribing to{' '}
 				<YellowHighlight
 					currency={currency}
 					amount={amount}
@@ -247,7 +255,9 @@ function Heading({
 		default:
 			return (
 				<h1 css={headerTitleText}>
-					Thank you {maybeNameAndTrailingSpace}for your valuable contribution
+					Thank you{' '}
+					<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
+					for your valuable contribution
 				</h1>
 			);
 	}
