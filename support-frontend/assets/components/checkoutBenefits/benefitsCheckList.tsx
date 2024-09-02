@@ -122,7 +122,11 @@ export function BenefitsCheckList({
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
 							<span css={checkListTextItemCss}>
-								{item.isNew && <NewBenefitPill />}
+								{item.isNew && (
+									<>
+										<NewBenefitPill />{' '}
+									</>
+								)}
 								{item.strong ? <strong>{item.text}</strong> : item.text}
 								{item.toolTip && (
 									<Tooltip
