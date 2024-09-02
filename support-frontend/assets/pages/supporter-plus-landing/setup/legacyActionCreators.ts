@@ -253,10 +253,13 @@ const amazonPayDataFromAuthorisation = (
 ): AmazonPayData => ({
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
-		amount: getAmount(
-			state.page.checkoutForm.product.selectedAmounts,
-			state.page.checkoutForm.product.otherAmounts,
-			getContributionType(state),
+		amount: getAmountCoveringTransactionCost(
+			getAmount(
+				state.page.checkoutForm.product.selectedAmounts,
+				state.page.checkoutForm.product.otherAmounts,
+				getContributionType(state),
+			),
+			state.page.checkoutForm.product.coverTransactionCost,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
 		email: state.page.checkoutForm.personalDetails.email,
