@@ -57,7 +57,6 @@ import type {
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
-	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
@@ -92,6 +91,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { isProd } from 'helpers/urls/url';
+import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -537,11 +537,9 @@ function CheckoutComponent({
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
-		countryId === 'US' && AmazonPay,
+		// Todo shouldn't this be checking the switches?
+		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
-
-	const showStateSelect =
-		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
@@ -1063,6 +1061,12 @@ function CheckoutComponent({
 												event.billingDetails.address.postal_code,
 											);
 
+										if (!event.billingDetails?.address.state) {
+											logException(
+												"Could not find state from Stripe's billingDetails",
+												{ geoId, countryGroupId, countryId },
+											);
+										}
 										event.billingDetails?.address.state &&
 											setBillingState(event.billingDetails.address.state);
 
@@ -1156,9 +1160,7 @@ function CheckoutComponent({
 									}}
 								/>
 							</div>
-
 							<Signout isSignedIn={isSignedIn} />
-
 							<>
 								<div>
 									<TextInput
@@ -1229,33 +1231,36 @@ function CheckoutComponent({
 									/>
 								</div>
 							</>
-							{/*For deliverable products we take the state and
-                    zip code with the delivery address*/}
-							{showStateSelect && !productDescription.deliverableTo && (
-								<StateSelect
-									countryId={countryId}
-									state={billingState}
-									onStateChange={(event) => {
-										setBillingState(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.currentTarget.checkValidity();
-									}}
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setBillingStateError(undefined);
-										} else {
-											setBillingStateError(
-												'Please enter a state, province or territory.',
-											);
-										}
-									}}
-									error={billingStateError}
-								/>
-							)}
 
+							{/**
+							 * We require state for non-deliverable products as we use different taxes within those regions upstream
+							 * For deliverable products we take the state and zip code with the delivery address
+							 */}
+							{['US', 'CA', 'AU'].includes(countryId) &&
+								!productDescription.deliverableTo && (
+									<StateSelect
+										countryId={countryId}
+										state={billingState}
+										onStateChange={(event) => {
+											setBillingState(event.currentTarget.value);
+										}}
+										onBlur={(event) => {
+											event.currentTarget.checkValidity();
+										}}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingStateError(undefined);
+											} else {
+												setBillingStateError(
+													'Please enter a state, province or territory.',
+												);
+											}
+										}}
+										error={billingStateError}
+									/>
+								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
 								<div>
 									<TextInput
@@ -1272,13 +1277,14 @@ function CheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
+										optional
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
 											if (validityState.valid) {
 												setBillingPostcodeError(undefined);
 											} else {
-												if (!validityState.valueMissing) {
+												if (validityState.patternMismatch) {
 													setBillingPostcodeError(
 														'Please enter a valid zip code.',
 													);
