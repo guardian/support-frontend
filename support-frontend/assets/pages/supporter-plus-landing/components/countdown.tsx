@@ -68,16 +68,13 @@ const ensureDoubleDigits = (timeSection: number): string => {
 };
 
 // return the countdown component
-export default function Countdown({
-	campaign,
-}: CountdownProps): JSX.Element {
-		
+export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	const [timeRemainingInMillis, setTimeRemainingInMillis] = useState<number>(0);	
+	const [timeRemainingInMillis, setTimeRemainingInMillis] = useState<number>(0);
 
 	useEffect(() => {
 		// console.log('The time now is: ', new Date());
@@ -94,11 +91,12 @@ export default function Countdown({
 				campaign.countdownStartInMillis < now &&
 				campaign.countdownHideInMillis > now
 			);
-		}
-		
-		function updateTimeParts() {
+		};
 
-			const timeRemaining = getTotalMillisRemaining(campaign.countdownDeadlineInMillis);
+		function updateTimeParts() {
+			const timeRemaining = getTotalMillisRemaining(
+				campaign.countdownDeadlineInMillis,
+			);
 			setTimeRemainingInMillis(timeRemaining);
 
 			// console.log(`time > 0 ${timeRemaining}`);
@@ -130,8 +128,7 @@ export default function Countdown({
 			const id = setInterval(updateTimeParts, 1000); // run once per second
 			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
-		} 
-		else {
+		} else {
 			// deadline already passed on page load
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));
@@ -142,15 +139,14 @@ export default function Countdown({
 
 	return (
 		<>
-			{
-				timeRemainingInMillis > 0 && 
+			{timeRemainingInMillis > 0 && (
 				<div role="timer" css={grid}>
 					<TimePart timePart={days} label={'days'} />
 					<TimePart timePart={hours} label={'hours'} />
 					<TimePart timePart={minutes} label={'mins'} />
 					<TimePart timePart={seconds} label={'secs'} />
 				</div>
-			}
+			)}
 		</>
 	);
 }

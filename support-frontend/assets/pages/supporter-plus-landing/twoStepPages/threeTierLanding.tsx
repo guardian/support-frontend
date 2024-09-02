@@ -334,8 +334,8 @@ export function ThreeTierLanding({
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
 	/*
-	* US EOY 2024 Campaign
-	*/
+	 * US EOY 2024 Campaign
+	 */
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions;
@@ -343,29 +343,31 @@ export function ThreeTierLanding({
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
 		label: 'testing',
-		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
-		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
-		countdownHideInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
+		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
+		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
+		countdownHideInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 	});
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (!campaignSettings) { return; }
+		if (!campaignSettings) {
+			return;
+		}
 
 		const now = Date.now();
-		const currentCampaign = campaignSettings.countdownSettings.find((c) => 
-			c.countdownStartInMillis < now && c.countdownHideInMillis > now
+		const currentCampaign = campaignSettings.countdownSettings.find(
+			(c) => c.countdownStartInMillis < now && c.countdownHideInMillis > now,
 		);
-	
+
 		if (currentCampaign) {
 			setCurrentCampaign(currentCampaign);
 			setShowCountdown(true);
 		}
-	}, [campaignSettings?.countdownSettings]); 
-	
+	}, [campaignSettings?.countdownSettings]);
+
 	/*
-	* /////////////// END US EOY 2024 Campaign
-	*/
+	 * /////////////// END US EOY 2024 Campaign
+	 */
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -622,9 +624,7 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && (
-						<Countdown campaign={currentCampaign} />
-					)}
+					{showCountdown && <Countdown campaign={currentCampaign} />}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
