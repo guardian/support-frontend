@@ -115,6 +115,9 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
+	const showCoverTransactionCost =
+		abParticipations.coverTransactionCost === 'variant';
+
 	/** Promotions on the checkout are for SupporterPlus only for now */
 	const promotion = isSupporterPlus
 		? useContributionsSelector((state) =>
@@ -176,7 +179,7 @@ export function SupporterPlusCheckout({
 								promotion={promotion}
 							/>
 						)}
-						{contributionType === 'ONE_OFF' && (
+						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
 							<div
 								css={css`
 									margin-top: ${space[4]}px;
