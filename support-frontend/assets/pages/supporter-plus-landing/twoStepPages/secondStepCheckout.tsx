@@ -189,7 +189,6 @@ export function SupporterPlusCheckout({
 									checked={coverTransactionCost}
 									onChange={(e) => {
 										if (e.target.checked) {
-											console.log('sending tracking event');
 											sendTrackingEventsOnClick({
 												id: 'cover-transaction-cost-checkbox',
 												componentType: 'ACQUISITIONS_BUTTON',
