@@ -353,10 +353,10 @@ export function ThreeTierLanding({
 		if (!campaignSettings) {
 			return undefined;
 		}
-	
+
 		const now = Date.now();
-		return campaignSettings.countdownSettings.find((c) => 
-			c.countdownStartInMillis < now && c.countdownHideInMillis > now
+		return campaignSettings.countdownSettings.find(
+			(c) => c.countdownStartInMillis < now && c.countdownHideInMillis > now,
 		);
 	}, [campaignSettings?.countdownSettings]);
 

@@ -22,9 +22,9 @@ const campaigns: Record<string, CampaignSettings> = {
 		countdownSettings: [
 			{
 				label: 'testing',
-				countdownStartInMillis: Date.parse('Aug 28, 2024 17:30:00'),
-				countdownDeadlineInMillis: Date.parse('Sep 03, 2024 17:45:00'),
-				countdownHideInMillis: Date.parse('Sept 04, 2024 17:50:00'),
+				countdownStartInMillis: Date.parse('Sept 02, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Sep 03, 2024 14:15:00'),
+				countdownHideInMillis: Date.parse('Sept 03, 2024 14:20:00'),
 			},
 		],
 	},
