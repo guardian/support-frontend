@@ -1,3 +1,4 @@
+import { round } from 'helpers/forms/checkouts';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getContributionType } from './productType';
 
@@ -20,7 +21,8 @@ export function getAmountCoveringTransactionCost(
 	coverTransactionCost?: boolean,
 ): number {
 	if (coverTransactionCost) {
-		return amount * 1.04;
+		// Use the same rounding logic as the displayed price
+		return round(amount * 1.04);
 	}
 
 	return amount;

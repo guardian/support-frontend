@@ -206,7 +206,7 @@ function getPaymentDescription(
 	return '';
 }
 
-function round(amount: number) {
+export function round(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
 	 *
