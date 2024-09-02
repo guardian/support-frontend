@@ -541,9 +541,6 @@ function CheckoutComponent({
 		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
 
-	const showStateSelect =
-		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
-
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	/** Payment methods: Stripe */
@@ -1163,9 +1160,7 @@ function CheckoutComponent({
 									}}
 								/>
 							</div>
-
 							<Signout isSignedIn={isSignedIn} />
-
 							<>
 								<div>
 									<TextInput
@@ -1236,33 +1231,36 @@ function CheckoutComponent({
 									/>
 								</div>
 							</>
-							{/*For deliverable products we take the state and
-                    zip code with the delivery address*/}
-							{showStateSelect && !productDescription.deliverableTo && (
-								<StateSelect
-									countryId={countryId}
-									state={billingState}
-									onStateChange={(event) => {
-										setBillingState(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.currentTarget.checkValidity();
-									}}
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setBillingStateError(undefined);
-										} else {
-											setBillingStateError(
-												'Please enter a state, province or territory.',
-											);
-										}
-									}}
-									error={billingStateError}
-								/>
-							)}
 
+							{/**
+							 * We require state for non-deliverable products as we use different taxes within those regions upstream
+							 * For deliverable products we take the state and zip code with the delivery address
+							 */}
+							{['US', 'CA', 'AU'].includes(countryId) &&
+								!productDescription.deliverableTo && (
+									<StateSelect
+										countryId={countryId}
+										state={billingState}
+										onStateChange={(event) => {
+											setBillingState(event.currentTarget.value);
+										}}
+										onBlur={(event) => {
+											event.currentTarget.checkValidity();
+										}}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingStateError(undefined);
+											} else {
+												setBillingStateError(
+													'Please enter a state, province or territory.',
+												);
+											}
+										}}
+										error={billingStateError}
+									/>
+								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
 								<div>
 									<TextInput
