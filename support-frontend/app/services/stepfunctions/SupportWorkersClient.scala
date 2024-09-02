@@ -60,10 +60,6 @@ case class CreateSupportWorkersRequest(
     telephoneNumber: Option[String],
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
-    /** We do not generally set default values, but because this is a test it is a way of avoiding having to edit loads
-      * of places in the code base
-      */
-    threeTierCreateSupporterPlusSubscription: Option[Boolean] = None,
 )
 
 object SupportWorkersClient {
@@ -167,7 +163,6 @@ class SupportWorkersClient(
             ophanIds = request.body.ophanIds,
             referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
             supportAbTests = request.body.supportAbTests,
-            threeTierCreateSupporterPlusSubscription = request.body.threeTierCreateSupporterPlusSubscription,
           ),
         ),
         promoCode = request.body.promoCode,
