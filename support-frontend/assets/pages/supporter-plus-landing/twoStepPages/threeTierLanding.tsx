@@ -12,7 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -349,21 +349,23 @@ export function ThreeTierLanding({
 	});
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	useEffect(() => {
+	const memoizedCurrentCampaign = useMemo(() => {
 		if (!campaignSettings) {
-			return;
+			return undefined;
 		}
-
+	
 		const now = Date.now();
-		const currentCampaign = campaignSettings.countdownSettings.find(
-			(c) => c.countdownStartInMillis < now && c.countdownHideInMillis > now,
+		return campaignSettings.countdownSettings.find((c) => 
+			c.countdownStartInMillis < now && c.countdownHideInMillis > now
 		);
+	}, [campaignSettings?.countdownSettings]);
 
-		if (currentCampaign) {
-			setCurrentCampaign(currentCampaign);
+	useEffect(() => {
+		if (memoizedCurrentCampaign) {
+			setCurrentCampaign(memoizedCurrentCampaign);
 			setShowCountdown(true);
 		}
-	}, [campaignSettings?.countdownSettings]);
+	}, [memoizedCurrentCampaign]);
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
