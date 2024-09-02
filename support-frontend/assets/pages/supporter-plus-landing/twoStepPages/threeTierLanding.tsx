@@ -12,7 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -62,6 +62,7 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
+import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
@@ -332,9 +333,51 @@ export function ThreeTierLanding({
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
+	/*
+	* US EOY 2024 Campaign
+	*/
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions;
+
+	// Handle which countdown to show (if any).
+	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
+		label: 'testing',
+		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
+		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
+		countdownHideInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'), 
+	});
+	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+
+	useEffect(() => {
+		// console.log(`in useEffect where countdownSettings passed in.`);
+		const isThisCampaignCurrent = (campaign:CountdownSetting | undefined):boolean => {
+			if (!campaign) { // is defined
+				return false;
+			} 
+			else {
+				const isCampaignStarted = campaign.countdownStartInMillis < Date.now();
+				const isCampaignEnded = campaign.countdownHideInMillis < Date.now();
+				// console.log(`isCampaignStarted: ${isCampaignStarted}, isCampaignEnded ${!isCampaignEnded}`);
+				return isCampaignStarted && !isCampaignEnded;
+			}
+		};
+		// assumes there will only be one current campaign.
+		if (campaignSettings){
+			const currentCampaign:CountdownSetting | undefined = campaignSettings.countdownSettings.findLast((campaign) => isThisCampaignCurrent(campaign));
+	
+			if(currentCampaign) {
+				setCurrentCampaign(currentCampaign);
+				setShowCountdown(true);
+			}
+		}
+
+	}, [campaignSettings?.isEligible, campaignSettings?.countdownSettings]); 
+	// TODO: something not right here...
+	
+	/*
+	* /////////////// END US EOY 2024 Campaign
+	*/
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -426,10 +469,6 @@ export function ThreeTierLanding({
 			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
 		);
 	};
-
-	const EOYDeadline = 'Nov 26, 2024 23:59:59';
-	// const EOYDeadline = 'Aug 26, 2024 23:59:59'; // deadline passed TODO: remove
-	const countdownDateTime = Date.parse(EOYDeadline);
 
 	const generateOneOffCheckoutLink = () => {
 		const urlParams = new URLSearchParams();
@@ -595,8 +634,8 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{campaignSettings?.isEligible && (
-						<Countdown deadlineDateTime={countdownDateTime} />
+					{showCountdown && (
+						<Countdown campaign={currentCampaign} />
 					)}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { headlineBold28, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
  * This is used during the annual US End of Year Campaign.
  */
@@ -43,7 +44,7 @@ const timePortion = css`
 
 // props
 export type CountdownProps = {
-	deadlineDateTime: number;
+	campaign: CountdownSetting;
 };
 
 // create countdown logic
@@ -54,9 +55,7 @@ const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
 // Questions:
-// could each portion be a component so that not everything gets updated each time?
 // handle inactive tabs via the Page Visibility API and calculate on visibility change?
-// how do we assess performance?
 
 const ensureDoubleDigits = (timeSection: number): string => {
 	if (timeSection < 0) {
@@ -70,23 +69,30 @@ const ensureDoubleDigits = (timeSection: number): string => {
 
 // return the countdown component
 export default function Countdown({
-	deadlineDateTime,
+	campaign,
 }: CountdownProps): JSX.Element {
+		
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
+	const [timeRemainingInMillis, setTimeRemainingInMillis] = useState<number>(0);	
 
 	useEffect(() => {
-		console.log('The time now is: ', new Date());
+		// console.log('The time now is: ', new Date());
+		// console.log(`the campaign start time is: ${currentCampaign.countdownStartInMillis}`);
 
 		const getTotalMillisRemaining = (targetDate: number) => {
 			return targetDate - Date.now();
 		};
-
+		
 		function updateTimeParts() {
-			const timeRemaining = getTotalMillisRemaining(deadlineDateTime);
+			// TODO: add some validation of the dates
+			// TODO: handle hiding if the start date is in the future.
+			
+			const timeRemaining = getTotalMillisRemaining(campaign.countdownDeadlineInMillis);
+			setTimeRemainingInMillis(timeRemaining);
 
 			// console.log(`time > 0 ${timeRemaining}`);
 			setDays(
@@ -113,26 +119,30 @@ export default function Countdown({
 			);
 		}
 
-		if (getTotalMillisRemaining(deadlineDateTime) > 0) {
+		if (getTotalMillisRemaining(campaign.countdownDeadlineInMillis) > 0) {
 			const id = setInterval(updateTimeParts, 1000); // run once per second
-			return () => clearInterval(id); // clear on onload
+			console.log(`The timer has been created.`);
+			return () => clearInterval(id); // clear on on unmount
 		} else {
-			// console.log(`deadline already passed on page load`);
+			// deadline already passed on page load
 			setSeconds(ensureDoubleDigits(0));
 			setMinutes(ensureDoubleDigits(0));
 			setHours(ensureDoubleDigits(0));
 			setDays(ensureDoubleDigits(0));
 		}
-	}, [deadlineDateTime]);
+	}, [campaign]);
 
 	return (
 		<>
-			<div css={grid}>
-				<TimePart timePart={days} label={'days'} />
-				<TimePart timePart={hours} label={'hours'} />
-				<TimePart timePart={minutes} label={'mins'} />
-				<TimePart timePart={seconds} label={'secs'} />
-			</div>
+			{
+				timeRemainingInMillis > 0 && 
+				<div role="timer" css={grid}>
+					<TimePart timePart={days} label={'days'} />
+					<TimePart timePart={hours} label={'hours'} />
+					<TimePart timePart={minutes} label={'mins'} />
+					<TimePart timePart={seconds} label={'secs'} />
+				</div>
+			}
 		</>
 	);
 }

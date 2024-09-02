@@ -29,16 +29,45 @@ function Template(args: CountdownProps) {
 
 Template.args = {} as CountdownProps;
 
-// is there a way of getting the mocked date and adding some months to it (as it likely changes)?
-const deadlineFar = 'Mar 26, 2024 23:59:59'; 
-const deadlineNear = 'Jan 1, 2024 12:10:59';
-const deadlinePassed = 'Aug 26, 2023 23:59:59';
+// TODO: is there a way of getting the mocked date and adding some months to it (as it likely changes to the mocked date)?
+
 
 export const Default = Template.bind({});
-Default.args = {deadlineDateTime: Date.parse(deadlineFar)};
+Default.args = { campaign: 
+		{
+			label: 'default',
+			countdownStartInMillis: Date.parse('Dec 30, 2023 12:10:59'), 
+			countdownDeadlineInMillis: Date.parse('Jan 30, 2024 12:10:59'), 
+			countdownHideInMillis: Date.parse('Feb 01, 2024 15:06:00'), 
+		},
+	};
 
 export const DeadlineNear = Template.bind({});
-DeadlineNear.args = {deadlineDateTime: Date.parse(deadlineNear)};
+DeadlineNear.args = { campaign: 
+		{
+			label: 'deadline near',
+			countdownStartInMillis: Date.parse('Dec 30, 2023 12:10:59'), 
+			countdownDeadlineInMillis: Date.parse('Jan 1, 2024 12:10:59'), 
+			countdownHideInMillis: Date.parse('Jan 1, 2024 13:10:59'), 
+		},
+	};
 
-export const DeadlinePassed = Template.bind({});
-DeadlinePassed.args = {deadlineDateTime: Date.parse(deadlinePassed)};
+export const DeadlinePassedHidden = Template.bind({});
+DeadlinePassedHidden.args = { campaign: 
+		{
+			label: 'deadline passed',
+			countdownStartInMillis: Date.parse('Aug 29, 2023 15:00:00'), 
+			countdownDeadlineInMillis: Date.parse('Aug 29, 2023 15:05:00'), 
+			countdownHideInMillis: Date.parse('Aug 29, 2023 15:06:00'), 
+		},
+	};
+
+export const NotYetAvailableHidden = Template.bind({});
+NotYetAvailableHidden.args = { campaign: 
+	{
+		label: 'start date well in future',
+		countdownStartInMillis: Date.parse('Aug 29, 2025 15:00:00'), 
+		countdownDeadlineInMillis: Date.parse('Aug 29, 2025 15:05:00'), 
+		countdownHideInMillis: Date.parse('Aug 29, 2025 15:06:00'), 
+	},
+};
