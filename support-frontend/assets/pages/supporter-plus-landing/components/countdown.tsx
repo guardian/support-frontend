@@ -74,30 +74,31 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	const [timeRemainingInMillis, setTimeRemainingInMillis] = useState<number>(0);
+	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	useEffect(() => {
-		// console.log('The time now is: ', new Date());
-		// console.log(`the campaign start time is: ${currentCampaign.countdownStartInMillis}`);
 
 		const getTotalMillisRemaining = (targetDate: number) => {
 			return targetDate - Date.now();
 		};
-
 		const canDisplayCountdown = () => {
 			const now = Date.now();
 			console.log('Checking if campaign currently active...');
-			return (
-				campaign.countdownStartInMillis < now &&
-				campaign.countdownHideInMillis > now
-			);
+			const isActive = campaign.countdownStartInMillis < now && campaign.countdownHideInMillis > now;
+			setShowCountdown(isActive);
+			return isActive;
 		};
 
 		function updateTimeParts() {
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-			setTimeRemainingInMillis(timeRemaining);
+			// setTimeRemainingInMillis(timeRemaining);
+			console.log(`time > 0: ${timeRemaining}`);
+			const now = Date.now();
+			if (now > campaign.countdownHideInMillis) {
+				setShowCountdown(false);
+			}
 
 			// console.log(`time > 0 ${timeRemaining}`);
 			setDays(
@@ -125,8 +126,8 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		}
 
 		if (canDisplayCountdown()) {
-			const id = setInterval(updateTimeParts, 1000); // run once per second
-			// console.log(`The timer has been created.`);
+			const id = setInterval(updateTimeParts, 1000); // run once per second 
+			console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
@@ -139,7 +140,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 	return (
 		<>
-			{timeRemainingInMillis > 0 && (
+			{showCountdown && (
 				<div role="timer" css={grid}>
 					<TimePart timePart={days} label={'days'} />
 					<TimePart timePart={hours} label={'hours'} />
