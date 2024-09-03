@@ -15,5 +15,5 @@ const newBenefitPill = css`
 `;
 
 export function NewBenefitPill() {
-	return <div css={newBenefitPill}>New</div>;
+	return <span css={newBenefitPill}>New</span>;
 }
