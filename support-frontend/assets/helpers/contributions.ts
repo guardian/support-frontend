@@ -13,7 +13,7 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { logException } from 'helpers/utilities/logger';
-import { roundDp } from 'helpers/utilities/utilities';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
 export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
@@ -136,32 +136,22 @@ const getAmount = (
 	contributionType: ContributionType,
 	coverTransactionCostSelected?: boolean,
 ): number => {
-	const selectedAmount = selectedAmounts[contributionType];
+	const selectedChoiceCardAmount = selectedAmounts[contributionType];
 	const otherAmount = otherAmounts[contributionType].amount ?? '';
+
+	const selectedAmount =
+		selectedChoiceCardAmount === 'other'
+			? parseFloat(otherAmount)
+			: selectedChoiceCardAmount;
 
 	// Only cover transaction costs for one off contributions
 	const coverTransactionCost =
 		coverTransactionCostSelected && contributionType === 'ONE_OFF';
 
-	return getAmountWithTransactionCostCovered(
-		parseFloat(
-			selectedAmount === 'other' ? otherAmount : selectedAmount.toString(),
-		),
-		coverTransactionCost,
-	);
+	return coverTransactionCost
+		? roundToDecimalPlaces(selectedAmount * 1.04)
+		: selectedAmount;
 };
-
-function getAmountWithTransactionCostCovered(
-	amount: number,
-	coverTransactionCost?: boolean,
-): number {
-	if (coverTransactionCost) {
-		// Use the same rounding logic as the displayed price
-		return roundDp(amount * 1.04);
-	}
-
-	return amount;
-}
 
 // ----- Setup ----- //
 
@@ -349,7 +339,7 @@ function parseContribution(input: string): ParsedContribution {
 
 	return {
 		valid: true,
-		amount: roundDp(amount),
+		amount: roundToDecimalPlaces(amount),
 	};
 }
 

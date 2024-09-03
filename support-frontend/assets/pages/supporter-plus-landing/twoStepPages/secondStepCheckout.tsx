@@ -76,7 +76,6 @@ export function SupporterPlusCheckout({
 		),
 	);
 
-	// ToDo: clean this up?
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
