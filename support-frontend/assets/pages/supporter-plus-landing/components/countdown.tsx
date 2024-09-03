@@ -7,14 +7,14 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
  */
 
 // create the style - TODO: design not yet confirmed...
-const grid = css`
+const gridStyle = css`
 	display: flex;
 	padding-top: 33px;
 	padding-bottom: 15px;
 	justify-content: center;
 	align-items: center;
 `;
-const gridItem = css`
+const gridItemStyle = css`
 	font-variant-numeric: lining-nums proportional-nums;
 	color: ${palette.brand[400]};
 	background-color: ${palette.neutral[100]};
@@ -32,7 +32,7 @@ const gridItem = css`
 	border-radius: 4px;
 	text-align: center;
 `;
-const timePortion = css`
+const timePortionStyle = css`
 	color: ${palette.brand[400]};
 	/* 🖥 Text Sans/text.sans.12 */
 	font-family: 'GuardianTextSans';
@@ -83,7 +83,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		};
 		const canDisplayCountdown = () => {
 			const now = Date.now();
-			console.log('Checking if campaign currently active...');
+			// console.log('Checking if campaign currently active...');
 			const isActive = campaign.countdownStartInMillis < now && campaign.countdownHideInMillis > now;
 			setShowCountdown(isActive);
 			return isActive;
@@ -93,14 +93,14 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-			// setTimeRemainingInMillis(timeRemaining);
-			console.log(`time > 0: ${timeRemaining}`);
+
+			// console.log(`time > 0: ${timeRemaining}`);
+
 			const now = Date.now();
 			if (now > campaign.countdownHideInMillis) {
 				setShowCountdown(false);
 			}
 
-			// console.log(`time > 0 ${timeRemaining}`);
 			setDays(
 				ensureDoubleDigits(Math.floor(timeRemaining / millisecondsInDay)),
 			);
@@ -127,7 +127,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 		if (canDisplayCountdown()) {
 			const id = setInterval(updateTimeParts, 1000); // run once per second 
-			console.log(`The timer has been created.`);
+			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
@@ -141,7 +141,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	return (
 		<>
 			{showCountdown && (
-				<div role="timer" css={grid}>
+				<div role="timer" css={gridStyle}>
 					<TimePart timePart={days} label={'days'} />
 					<TimePart timePart={hours} label={'hours'} />
 					<TimePart timePart={minutes} label={'mins'} />
@@ -161,9 +161,9 @@ type TimePartProps = {
 
 function TimePart({ timePart, label }: TimePartProps): JSX.Element {
 	return (
-		<div css={gridItem}>
+		<div css={gridItemStyle}>
 			<div>{timePart}</div>
-			<div css={timePortion}>{label}</div>
+			<div css={timePortionStyle}>{label}</div>
 		</div>
 	);
 }
