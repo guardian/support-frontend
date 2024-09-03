@@ -1,4 +1,4 @@
-import type { ContributionType } from 'helpers/contributions';
+import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -10,13 +10,17 @@ function getContributionCartValueData(contributionsState: ContributionsState): {
 	contributionCurrency: IsoCurrency;
 } {
 	const pageState = contributionsState.page;
-	const selectedAmounts = pageState.checkoutForm.product.selectedAmounts;
 	const contributionType = getContributionType(contributionsState);
-	const selectedAmount = selectedAmounts[contributionType];
-	const contributionAmount =
-		selectedAmount === 'other'
-			? pageState.checkoutForm.product.otherAmounts[contributionType].amount
-			: selectedAmount;
+	const { coverTransactionCost, otherAmounts, selectedAmounts } =
+		pageState.checkoutForm.product;
+
+	const contributionAmount = getAmount(
+		selectedAmounts,
+		otherAmounts,
+		contributionType,
+		coverTransactionCost,
+	);
+
 	const contributionCurrency = pageState.checkoutForm.product.currency;
 
 	return {

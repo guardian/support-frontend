@@ -1,9 +1,6 @@
 import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
-import {
-	getAmountCoveringTransactionCost,
-	getUserSelectedAmount,
-} from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -21,13 +18,7 @@ export function PayPalButtonOneOffContainer({
 	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { coverTransactionCost } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	const amount = getAmountCoveringTransactionCost(
-		useContributionsSelector(getUserSelectedAmount),
-		coverTransactionCost,
-	);
+	const amount = useContributionsSelector(getUserSelectedAmount);
 	const { email } = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails,
 	);

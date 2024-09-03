@@ -134,14 +134,34 @@ const getAmount = (
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
+	coverTransactionCostSelected?: boolean,
 ): number => {
 	const selectedAmount = selectedAmounts[contributionType];
 	const otherAmount = otherAmounts[contributionType].amount ?? '';
 
-	return parseFloat(
-		selectedAmount === 'other' ? otherAmount : selectedAmount.toString(),
+	// Only cover transaction costs for one off contributions
+	const coverTransactionCost =
+		coverTransactionCostSelected && contributionType === 'ONE_OFF';
+
+	return getAmountWithTransactionCostCovered(
+		parseFloat(
+			selectedAmount === 'other' ? otherAmount : selectedAmount.toString(),
+		),
+		coverTransactionCost,
 	);
 };
+
+function getAmountWithTransactionCostCovered(
+	amount: number,
+	coverTransactionCost?: boolean,
+): number {
+	if (coverTransactionCost) {
+		// Use the same rounding logic as the displayed price
+		return roundDp(amount * 1.04);
+	}
+
+	return amount;
+}
 
 // ----- Setup ----- //
 

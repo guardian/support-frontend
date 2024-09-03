@@ -13,6 +13,7 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getAmount } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -66,6 +67,16 @@ export function SupporterPlusCheckout({
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const amountBeforeTransactionCostCovered = useContributionsSelector((state) =>
+		getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+			false,
+		),
+	);
+
+	// ToDo: clean this up?
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
@@ -199,7 +210,10 @@ export function SupporterPlusCheckout({
 									label={`I’ll generously add 4% of ${
 										Number.isNaN(amount)
 											? 'my contribution'
-											: simpleFormatAmount(currency, amount)
+											: simpleFormatAmount(
+													currency,
+													amountBeforeTransactionCostCovered,
+											  )
 									} to cover transaction fees so my whole gift goes to the Guardian`}
 								/>
 							</div>
