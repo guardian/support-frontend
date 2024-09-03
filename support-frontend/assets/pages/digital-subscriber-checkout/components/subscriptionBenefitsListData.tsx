@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import type { CheckListData } from 'components/checkList/checkList';
+import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
 
 const boldText = css`
 	font-weight: bold;
 `;
 
-export const checkListData = (): CheckListData[] => {
+export const checkListData = (): BenefitsCheckListData[] => {
 	return [
 		{
 			isChecked: true,

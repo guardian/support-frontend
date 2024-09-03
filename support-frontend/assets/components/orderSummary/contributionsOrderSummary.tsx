@@ -12,8 +12,10 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
-import type { CheckListData } from 'components/checkList/checkList';
-import { CheckList } from 'components/checkList/checkList';
+import {
+	BenefitsCheckList,
+	type BenefitsCheckListData,
+} from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -144,7 +146,7 @@ export type ContributionsOrderSummaryProps = {
 	promotion?: Promotion;
 	currency: Currency;
 	enableCheckList: boolean;
-	checkListData: CheckListData[];
+	checkListData: BenefitsCheckListData[];
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -179,8 +181,8 @@ export function ContributionsOrderSummary({
 
 	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
-		<CheckList
-			checkListData={checkListData}
+		<BenefitsCheckList
+			benefitsCheckListData={checkListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>

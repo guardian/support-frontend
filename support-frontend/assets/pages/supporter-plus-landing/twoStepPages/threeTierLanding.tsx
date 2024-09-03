@@ -38,8 +38,9 @@ import {
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
+	productCatalogDescription as canonicalProductCatalogDescription,
 	productCatalog,
-	productCatalogDescription,
+	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -436,6 +437,12 @@ export function ThreeTierLanding({
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+
+	const productCatalogDescription = ['v1', 'v2'].includes(
+		abParticipations.newspaperArchiveBenefit,
+	)
+		? productCatalogDescriptionNewBenefits
+		: canonicalProductCatalogDescription;
 
 	/**
 	 * Tier 1: Contributions
