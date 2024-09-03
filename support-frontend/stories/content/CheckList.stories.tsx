@@ -41,7 +41,7 @@ Template.args = {} as BenefitsCheckListProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	checkListData: checkListData({
+	benefitsCheckListData: checkListData({
 		higherTier: true,
 		countryGroupId: 'GBPCountries',
 	}),
@@ -50,7 +50,7 @@ Default.args = {
 export const Compact = Template.bind({});
 
 Compact.args = {
-	checkListData: checkListData({
+	benefitsCheckListData: checkListData({
 		higherTier: true,
 		countryGroupId: 'GBPCountries',
 	}),

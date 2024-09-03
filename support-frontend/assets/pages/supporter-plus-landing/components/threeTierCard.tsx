@@ -300,7 +300,7 @@ export function ThreeTierCard({
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<BenefitsCheckList
-				checkListData={benefits
+				benefitsCheckListData={benefits
 					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
 					.map((benefit) => {
 						return {
@@ -318,7 +318,7 @@ export function ThreeTierCard({
 				<>
 					<span css={benefitsPrefixPlus}>new</span>
 					<BenefitsCheckList
-						checkListData={offers.map((offer) => {
+						benefitsCheckListData={offers.map((offer) => {
 							return {
 								text: offer.copy,
 								isChecked: true,

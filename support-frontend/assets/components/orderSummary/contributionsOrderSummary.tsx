@@ -182,7 +182,7 @@ export function ContributionsOrderSummary({
 	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
 		<BenefitsCheckList
-			checkListData={checkListData}
+			benefitsCheckListData={checkListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>

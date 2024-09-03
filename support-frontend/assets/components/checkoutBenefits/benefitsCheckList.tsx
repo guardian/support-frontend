@@ -70,7 +70,7 @@ export type BenefitsCheckListData = {
 type CheckListStyle = 'standard' | 'compact' | 'hidden';
 
 export type BenefitsCheckListProps = {
-	checkListData: BenefitsCheckListData[];
+	benefitsCheckListData: BenefitsCheckListData[];
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
@@ -97,14 +97,14 @@ function ChecklistItemIcon({
 }
 
 export function BenefitsCheckList({
-	checkListData,
+	benefitsCheckListData,
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<table css={[tableCss(style), cssOverrides]}>
-			{checkListData.map((item) => (
+			{benefitsCheckListData.map((item) => (
 				<tr>
 					{style !== 'hidden' && (
 						<td

@@ -212,7 +212,7 @@ export const getThankYouModuleData = (
 					<BenefitsBodyCopy />
 					{checklistData && (
 						<BenefitsCheckList
-							checkListData={checklistData}
+							benefitsCheckListData={checklistData}
 							cssOverrides={checklistCss}
 						/>
 					)}

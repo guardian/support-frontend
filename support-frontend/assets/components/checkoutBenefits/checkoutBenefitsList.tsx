@@ -86,7 +86,7 @@ export function CheckoutBenefitsList({
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
 			<BenefitsCheckList
-				checkListData={checkListData}
+				benefitsCheckListData={checkListData}
 				style={isCompactList ? 'compact' : 'standard'}
 				iconColor={palette.brand[500]}
 			/>
