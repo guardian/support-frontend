@@ -77,14 +77,15 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	useEffect(() => {
-
 		const getTotalMillisRemaining = (targetDate: number) => {
 			return targetDate - Date.now();
 		};
 		const canDisplayCountdown = () => {
 			const now = Date.now();
 			// console.log('Checking if campaign currently active...');
-			const isActive = campaign.countdownStartInMillis < now && campaign.countdownHideInMillis > now;
+			const isActive =
+				campaign.countdownStartInMillis < now &&
+				campaign.countdownHideInMillis > now;
 			setShowCountdown(isActive);
 			return isActive;
 		};
@@ -126,7 +127,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		}
 
 		if (canDisplayCountdown()) {
-			const id = setInterval(updateTimeParts, 1000); // run once per second 
+			const id = setInterval(updateTimeParts, 1000); // run once per second
 			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
