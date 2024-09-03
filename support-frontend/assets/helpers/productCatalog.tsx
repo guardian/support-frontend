@@ -64,10 +64,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 				},
-				{
-					copy: 'Newspaper archive',
-					isNew: true,
-				},
 			],
 			/** These are just the SupporterPlus benefits */
 			benefitsAdditional: [
@@ -106,7 +102,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				},
 			},
 		},
-
 		DigitalSubscription: {
 			label: 'The Guardian Digital Edition',
 			benefits: [
@@ -317,3 +312,33 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 			},
 		},
 	};
+
+export const productCatalogDescriptionNewBenefits: Record<
+	ProductKey,
+	ProductDescription
+> = {
+	...productCatalogDescription,
+	TierThree: {
+		...productCatalogDescription.TierThree,
+		benefits: [
+			...productCatalogDescription.TierThree.benefits,
+			{
+				copy: 'Newspaper archive',
+				isNew: true,
+			},
+		],
+	},
+	SupporterPlus: {
+		...productCatalogDescription.SupporterPlus,
+		benefits: [
+			...productCatalogDescription.SupporterPlus.benefits,
+			{
+				copy: 'Unlimited access to the Guardian Feast App',
+				isNew: true,
+				tooltip:
+					'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+			},
+		],
+		offers: [],
+	},
+};
