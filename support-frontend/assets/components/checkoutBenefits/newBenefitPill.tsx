@@ -11,7 +11,7 @@ const newBenefitPill = css`
 	color: ${neutral[100]};
 	${textSansBold14};
 	border-radius: 4px;
-	padding: ${space[1]}px;
+	padding: 0 ${space[1]}px;
 `;
 
 export function NewBenefitPill() {
