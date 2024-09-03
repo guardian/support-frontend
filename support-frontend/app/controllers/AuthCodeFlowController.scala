@@ -146,9 +146,7 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
                 secureCookie(config.accessTokenCookieName, accessToken),
               )
             } else {
-              logger.error(
-                s"[${request.host}] [${request.path}] Failed to generate auth tokens: HTTP ${response.status}: ${response.body}",
-              )
+              logger.error(s"Failed to generate auth tokens: HTTP ${response.status}: ${response.body}")
               redirect
             }
           }
@@ -158,12 +156,12 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
         Future.successful(redirect)
 
       case (None, _, _, Some(error), Some(errorDescription)) =>
-        logger.error(s"[${request.host}] [${request.path}] Failed to generate auth tokens: $error: $errorDescription")
+        logger.error(s"Failed to generate auth tokens: $error: $errorDescription")
         Future.successful(cleansed(BadRequest(s"$error: $errorDescription")))
 
       case _ =>
         // Should never get to this case
-        logger.error(s"[${request.host}] [${request.path}] Failed to generate auth tokens for request: ${request.body}")
+        logger.error(s"Failed to generate auth tokens for request: ${request.body}")
         Future.successful(cleansed(BadRequest))
     }
   }

@@ -142,6 +142,9 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
         },
         "FunctionName": "bigquery-acquisitions-publisher-PROD",
         "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
+        "LoggingConfig": {
+          "LogFormat": "JSON",
+        },
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
