@@ -23,7 +23,7 @@ describe('utilities', () => {
 			expect(unsorted.sort(ascending)).toEqual(sorted);
 		});
 	});
-	describe('roundDp', () => {
+	describe('roundToDecimalPlaces', () => {
 		it('should by default round to two decimal places', () => {
 			expect(roundToDecimalPlaces(1234.5678)).toBe(1234.57);
 		});
