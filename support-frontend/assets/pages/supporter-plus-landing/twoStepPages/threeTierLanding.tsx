@@ -12,7 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -45,12 +45,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setBillingPeriod,
-	setProductType,
-	setSelectedAmount,
-} from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -307,10 +302,13 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const [contributionType, setContributionType] =
+		useState<ContributionType>('MONTHLY');
+
 	const tierPlanPeriod = contributionType.toLowerCase();
-	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+	const intialBillingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
+	const [billingPeriod, setBillingPeriod] = useState(intialBillingPeriod);
 
 	const promotionTier2 = useContributionsSelector((state) =>
 		getPromotion(
@@ -340,9 +338,9 @@ export function ThreeTierLanding({
 			/*
 			 * Reset the product type to monthly if one_off not available
 			 */
-			dispatch(setProductType('MONTHLY'));
+			setContributionType('MONTHLY');
 		}
-		dispatch(setBillingPeriod(billingPeriod));
+		setBillingPeriod(billingPeriod);
 	}, []);
 
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
@@ -350,8 +348,8 @@ export function ThreeTierLanding({
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		dispatch(setProductType(paymentFrequencies[buttonIndex]));
-		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
+		setContributionType(paymentFrequencies[buttonIndex]);
+		setBillingPeriod(billingFrequencies[buttonIndex]);
 	};
 
 	const handleLinkCtaClick = (
@@ -414,7 +412,7 @@ export function ThreeTierLanding({
 	};
 
 	const handleSupportOnceBtnClick = () => {
-		dispatch(setProductType('ONE_OFF'));
+		setContributionType('ONE_OFF');
 		navigateWithPageView(
 			navigate,
 			generateOneOffCheckoutLink(),
