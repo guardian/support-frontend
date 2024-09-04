@@ -1,0 +1,9 @@
+name: support-frontend
+domain-root: thegulocal.com
+mappings:
+  - port: 9211
+    prefix: support
+    websocket: /ws
+  - port: 9211
+    prefix: live
+    websocket: /ws
