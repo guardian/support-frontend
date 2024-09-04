@@ -891,11 +891,17 @@ function CheckoutComponent({
 
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
-				// TODO - error handling
 				console.error(
 					'processPaymentResponse error:',
 					processPaymentResponse.failureReason,
 				);
+				setErrorMessage('Sorry, something went wrong.');
+				setErrorContext(
+					appropriateErrorMessage(
+						processPaymentResponse.failureReason ?? 'unknown',
+					),
+				);
+				setIsProcessingPayment(false);
 			}
 		} else {
 			setIsProcessingPayment(false);

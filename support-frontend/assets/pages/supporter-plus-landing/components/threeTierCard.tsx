@@ -10,7 +10,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
-import { CheckList } from 'components/checkList/checkList';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -299,14 +299,15 @@ export function ThreeTierCard({
 			{(benefitsSummary ?? offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
-			<CheckList
-				checkListData={benefits
+			<BenefitsCheckList
+				benefitsCheckListData={benefits
 					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
 					.map((benefit) => {
 						return {
 							text: benefit.copy,
 							isChecked: true,
 							toolTip: benefit.tooltip,
+							isNew: benefit.isNew,
 						};
 					})}
 				style={'compact'}
@@ -316,8 +317,8 @@ export function ThreeTierCard({
 			{offers && offers.length > 0 && (
 				<>
 					<span css={benefitsPrefixPlus}>new</span>
-					<CheckList
-						checkListData={offers.map((offer) => {
+					<BenefitsCheckList
+						benefitsCheckListData={offers.map((offer) => {
 							return {
 								text: offer.copy,
 								isChecked: true,

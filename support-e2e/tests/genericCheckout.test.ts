@@ -8,6 +8,7 @@ import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
+/** These have been covered in smoke/cron tests */
 const testDetails = [
 	{
 		product: 'SupporterPlus',

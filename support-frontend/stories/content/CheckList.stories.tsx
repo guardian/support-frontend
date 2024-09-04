@@ -1,15 +1,15 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
-import type { CheckListProps } from 'components/checkList/checkList';
-import { CheckList } from 'components/checkList/checkList';
+import type { BenefitsCheckListProps } from 'components/checkoutBenefits/benefitsCheckList';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
-	title: 'Content/Check List',
-	component: CheckList,
+	title: 'Content/Benefits Check List',
+	component: BenefitsCheckList,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -32,16 +32,16 @@ export default {
 	],
 };
 
-function Template(args: CheckListProps) {
-	return <CheckList {...args} />;
+function Template(args: BenefitsCheckListProps) {
+	return <BenefitsCheckList {...args} />;
 }
 
-Template.args = {} as CheckListProps;
+Template.args = {} as BenefitsCheckListProps;
 
 export const Default = Template.bind({});
 
 Default.args = {
-	checkListData: checkListData({
+	benefitsCheckListData: checkListData({
 		higherTier: true,
 		countryGroupId: 'GBPCountries',
 	}),
@@ -50,7 +50,7 @@ Default.args = {
 export const Compact = Template.bind({});
 
 Compact.args = {
-	checkListData: checkListData({
+	benefitsCheckListData: checkListData({
 		higherTier: true,
 		countryGroupId: 'GBPCountries',
 	}),

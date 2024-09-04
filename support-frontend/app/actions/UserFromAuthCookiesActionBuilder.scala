@@ -145,8 +145,20 @@ object UserFromAuthCookiesActionBuilder extends Logging {
           val withoutReferrer = request.session + (originUrl -> request.uri)
           request.headers
             .get(REFERER)
-            .map(referrer => withoutReferrer + (referringUrl -> referrer))
-            .getOrElse(withoutReferrer)
+            .map(referrer => {
+
+              /** This is temporary for debugging a live bug */
+              if (request.host.startsWith("live.")) {
+                logger.info(s"Request ${request.host}/${request.path} has referrer $referrer")
+              }
+              withoutReferrer + (referringUrl -> referrer)
+            })
+            .getOrElse({
+
+              /** We warn here as the referrer is required to make a valid request to the auth server. */
+              logger.warn(s"Request ${request.host}/${request.path} doesn't have a referrer header")
+              withoutReferrer
+            })
         }
         Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
       case false =>
