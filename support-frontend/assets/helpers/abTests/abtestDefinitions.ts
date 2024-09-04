@@ -126,7 +126,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-  coverTransactionCost: {
+	coverTransactionCost: {
 		variants: [
 			{
 				id: 'control',
