@@ -62,6 +62,24 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
         "Namespace": "AWS/SQS",
         "Period": 300,
         "Statistic": "Maximum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "ignore",
       },
@@ -96,6 +114,24 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
     "acquisitionsbusPROD768AFDE3": {
       "Properties": {
         "Name": "acquisitions-bus-PROD",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
       },
       "Type": "AWS::Events::EventBus",
     },
@@ -259,6 +295,24 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
               "Stat": "Sum",
             },
             "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
           },
         ],
         "Threshold": 0,
