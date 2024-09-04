@@ -15,6 +15,11 @@ export default {
 	},
 };
 
+const millisecondsInSecond = 1000;
+const millisecondsInMinute = 60 * millisecondsInSecond;
+const millisecondsInHour = 60 * millisecondsInMinute;
+const millisecondsInDay = 24 * millisecondsInHour;
+
 function Template(args: CountdownProps) {
 	const innerContentContainer = css`
 		margin: 0 auto;
@@ -29,45 +34,42 @@ function Template(args: CountdownProps) {
 
 Template.args = {} as CountdownProps;
 
-// TODO: is there a way of getting the mocked date and adding some months to it (as it likely changes to the mocked date)?
-
-
 export const Default = Template.bind({});
 Default.args = { campaign: 
-		{
-			label: 'default',
-			countdownStartInMillis: Date.parse('Dec 30, 2023 12:10:59'), 
-			countdownDeadlineInMillis: Date.parse('Jan 30, 2024 12:10:59'), 
-			countdownHideInMillis: Date.parse('Feb 01, 2024 15:06:00'), 
-		},
-	};
+	{
+		label: 'default',
+		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
+		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
+		countdownHideInMillis: (Date.now() + (6 * millisecondsInDay))
+	}
+};
 
 export const DeadlineNear = Template.bind({});
 DeadlineNear.args = { campaign: 
-		{
-			label: 'deadline near',
-			countdownStartInMillis: Date.parse('Dec 30, 2023 12:10:59'), 
-			countdownDeadlineInMillis: Date.parse('Jan 1, 2024 12:10:59'), 
-			countdownHideInMillis: Date.parse('Jan 1, 2024 13:10:59'), 
-		},
-	};
+	{
+		label: 'deadline near',
+		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
+		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInSecond)),
+		countdownHideInMillis: (Date.now() + (6 * millisecondsInSecond)), 
+	}
+};
 
 export const DeadlinePassedHidden = Template.bind({});
 DeadlinePassedHidden.args = { campaign: 
-		{
-			label: 'deadline passed',
-			countdownStartInMillis: Date.parse('Aug 29, 2023 15:00:00'), 
-			countdownDeadlineInMillis: Date.parse('Aug 29, 2023 15:05:00'), 
-			countdownHideInMillis: Date.parse('Aug 29, 2023 15:06:00'), 
-		},
-	};
+	{
+		label: 'deadline passed',
+		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
+		countdownDeadlineInMillis: (Date.now() - (5 * millisecondsInSecond)),
+		countdownHideInMillis: (Date.now() - (4 * millisecondsInSecond)),
+	}
+};
 
 export const NotYetAvailableHidden = Template.bind({});
 NotYetAvailableHidden.args = { campaign: 
 	{
 		label: 'start date well in future',
-		countdownStartInMillis: Date.parse('Aug 29, 2025 15:00:00'), 
-		countdownDeadlineInMillis: Date.parse('Aug 29, 2025 15:05:00'), 
-		countdownHideInMillis: Date.parse('Aug 29, 2025 15:06:00'), 
-	},
+		countdownStartInMillis: (Date.now() + (1 * millisecondsInDay)),
+		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInDay)),
+		countdownHideInMillis: (Date.now() + (4 * millisecondsInDay)),
+	}
 };
