@@ -127,6 +127,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		}
 
 		if (canDisplayCountdown()) {
+			updateTimeParts(); // called first
 			const id = setInterval(updateTimeParts, 1000); // run once per second
 			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
