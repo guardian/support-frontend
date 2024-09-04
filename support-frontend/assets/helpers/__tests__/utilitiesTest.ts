@@ -3,7 +3,7 @@ import {
 	ascending,
 	classNameWithModifiers,
 	deserialiseJsonObject,
-	roundDp,
+	roundToDecimalPlaces,
 } from '../utilities/utilities';
 // ----- Tests ----- //
 describe('utilities', () => {
@@ -23,17 +23,17 @@ describe('utilities', () => {
 			expect(unsorted.sort(ascending)).toEqual(sorted);
 		});
 	});
-	describe('roundDp', () => {
+	describe('roundToDecimalPlaces', () => {
 		it('should by default round to two decimal places', () => {
-			expect(roundDp(1234.5678)).toBe(1234.57);
+			expect(roundToDecimalPlaces(1234.5678)).toBe(1234.57);
 		});
 		it('should round, not floor or ceil', () => {
-			expect(roundDp(12.345)).toBe(12.35);
-			expect(roundDp(12.344)).toBe(12.34);
+			expect(roundToDecimalPlaces(12.345)).toBe(12.35);
+			expect(roundToDecimalPlaces(12.344)).toBe(12.34);
 		});
 		it('should round to a given number of decimal places', () => {
-			expect(roundDp(12.3456789, 5)).toBe(12.34568);
-			expect(roundDp(12.34, 5)).toBe(12.34);
+			expect(roundToDecimalPlaces(12.3456789, 5)).toBe(12.34568);
+			expect(roundToDecimalPlaces(12.34, 5)).toBe(12.34);
 		});
 	});
 	describe('classNameWithModifiers', () => {

@@ -1,31 +1,18 @@
-import { round } from 'helpers/forms/checkouts';
+import { getAmount } from 'helpers/contributions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getContributionType } from './productType';
 
 export function getUserSelectedAmount(state: ContributionsState): number {
 	const contributionType = getContributionType(state);
-	const { selectedAmounts, otherAmounts } = state.page.checkoutForm.product;
-	const priceCardAmountSelected = selectedAmounts[contributionType];
+	const { coverTransactionCost, selectedAmounts, otherAmounts } =
+		state.page.checkoutForm.product;
 
-	if (priceCardAmountSelected === 'other') {
-		const customAmount = otherAmounts[contributionType];
-		// TODO: what do we do when this is NaN? Do we handle elsewhere?
-		return Number.parseFloat(customAmount.amount ?? '');
-	}
-
-	return priceCardAmountSelected;
-}
-
-export function getAmountCoveringTransactionCost(
-	amount: number,
-	coverTransactionCost?: boolean,
-): number {
-	if (coverTransactionCost) {
-		// Use the same rounding logic as the displayed price
-		return round(amount * 1.04);
-	}
-
-	return amount;
+	return getAmount(
+		selectedAmounts,
+		otherAmounts,
+		contributionType,
+		coverTransactionCost,
+	);
 }
 
 export function getUserSelectedOtherAmount(

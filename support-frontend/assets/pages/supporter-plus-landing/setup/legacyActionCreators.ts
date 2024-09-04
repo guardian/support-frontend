@@ -51,7 +51,6 @@ import {
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getAmountCoveringTransactionCost } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
@@ -99,12 +98,10 @@ const buildStripeChargeDataFromAuthorisation = (
 ): StripeChargeData => ({
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
-		amount: getAmountCoveringTransactionCost(
-			getAmount(
-				state.page.checkoutForm.product.selectedAmounts,
-				state.page.checkoutForm.product.otherAmounts,
-				getContributionType(state),
-			),
+		amount: getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			getContributionType(state),
 			state.page.checkoutForm.product.coverTransactionCost,
 		),
 		email: state.page.checkoutForm.personalDetails.email,
@@ -257,12 +254,10 @@ const amazonPayDataFromAuthorisation = (
 ): AmazonPayData => ({
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
-		amount: getAmountCoveringTransactionCost(
-			getAmount(
-				state.page.checkoutForm.product.selectedAmounts,
-				state.page.checkoutForm.product.otherAmounts,
-				getContributionType(state),
-			),
+		amount: getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			getContributionType(state),
 			state.page.checkoutForm.product.coverTransactionCost,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
