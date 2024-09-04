@@ -16,7 +16,12 @@ import {
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import {
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  UserData,
+} from "aws-cdk-lib/aws-ec2";
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
@@ -39,11 +44,12 @@ export class Frontend extends GuStack {
 
     const app = "frontend";
 
-    const userData = `#!/bin/bash -ev
+    const userData = UserData.forLinux();
+    userData.addCommands(`#!/bin/bash -ev
     mkdir /etc/gu
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/support-frontend_1.0-SNAPSHOT_all.deb /tmp
     dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'`;
+    /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'`);
 
     const policies = [
       // TODO: can we 'standardise' the way we load config to use the default permissons from GuEc2App?
