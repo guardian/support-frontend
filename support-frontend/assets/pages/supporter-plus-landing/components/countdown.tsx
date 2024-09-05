@@ -82,7 +82,6 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		};
 		const canDisplayCountdown = () => {
 			const now = Date.now();
-			// console.log('Checking if campaign currently active...');
 			const isActive =
 				campaign.countdownStartInMillis < now &&
 				campaign.countdownDeadlineInMillis > now;
@@ -94,13 +93,6 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-
-			// console.log(`time > 0: ${timeRemaining}`);
-
-			// const now = Date.now();
-			// if (now > campaign.countdownHideInMillis) {
-			// 	setShowCountdown(false);
-			// }
 
 			setDays(
 				ensureDoubleDigits(Math.floor(timeRemaining / millisecondsInDay)),
