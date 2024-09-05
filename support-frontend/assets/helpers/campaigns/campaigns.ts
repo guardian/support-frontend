@@ -5,6 +5,12 @@ export type CountdownSetting = {
 	label: string;
 	countdownStartInMillis: number;
 	countdownDeadlineInMillis: number;
+	// TODO: when design agreed add theme
+	//theme: {
+	//	backgroundColor: string;
+	// 	primaryColor: string;
+	//  secondaryColor: string;
+	//};
 };
 
 export type CampaignSettings = {
