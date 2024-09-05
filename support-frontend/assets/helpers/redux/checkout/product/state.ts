@@ -50,6 +50,7 @@ export type ProductState = {
 	tierThreeProductPrices: ProductPrices;
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
+	coverTransactionCost?: boolean;
 	selectedAmountsBeforeAmendment: SelectedAmounts;
 	otherAmountsBeforeAmendment: OtherAmounts;
 	currency: IsoCurrency;

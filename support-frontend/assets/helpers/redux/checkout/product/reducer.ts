@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { WritableDraft } from 'immer/dist/types/types-external';
-import type { SelectedAmounts } from 'helpers/contributions';
+import { type SelectedAmounts } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -88,6 +88,10 @@ export const productSlice = createSlice({
 		setOtherAmountBeforeAmendment(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
 			state.otherAmountsBeforeAmendment[contributionType].amount = amount;
+		},
+		setCoverTransactionCost(state, action: PayloadAction<boolean>) {
+			/* Add 4% to their contribution amount */
+			state.coverTransactionCost = action.payload;
 		},
 		setCurrency(state, action: PayloadAction<IsoCurrency>) {
 			state.currency = action.payload;
