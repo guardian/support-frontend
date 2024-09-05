@@ -27,18 +27,18 @@ const campaigns: Record<string, CampaignSettings> = {
 			{
 				label: 'Discount',
 				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 12, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 13, 2024 00:00:00'),
 			},
 			{
 				label: 'Final Countdown',
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Jan 02, 2025 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 			},
-			{
-				label: 'testing',
-				countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Sep 05, 2024 12:17:00'),
-			},
+			// {
+			// 	label: 'testing', // adjust this one as needed
+			// 	countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
+			// 	countdownDeadlineInMillis: Date.parse('Sep 06, 2024 00:00:00'),
+			// },
 		],
 	},
 };
