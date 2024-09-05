@@ -355,7 +355,8 @@ export function ThreeTierLanding({
 
 		const now = Date.now();
 		return campaignSettings.countdownSettings.find(
-			(c) => c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
+			(c) =>
+				c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
 		);
 	}, [campaignSettings?.countdownSettings]);
 
