@@ -21,19 +21,25 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: true,
 		countdownSettings: [
 			{
+				label: 'Giving Tuesday',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
+				countdownHideInMillis: Date.parse('Dec 05, 2024 00:01:00'),
+			},
+			{
+				label: 'Discount',
+				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 12, 2024 00:00:00'),
+				countdownHideInMillis: Date.parse('Dec 12, 2024 00:01:00'),
+			},
+			{
+				label: 'Final Countdown',
+				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Jan 02, 2025 00:00:00'),
+				countdownHideInMillis: Date.parse('Jan 03, 2025 00:01:00'),
+			},
+			{
 				label: 'testing',
-				countdownStartInMillis: Date.parse('Sept 01, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Sep 02, 2024 10:15:00'),
-				countdownHideInMillis: Date.parse('Sept 02, 2024 10:20:00'),
-			},
-			{
-				label: 'testing 2',
-				countdownStartInMillis: Date.parse('Sept 02, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Sep 04, 2024 16:59:00'),
-				countdownHideInMillis: Date.parse('Sept 04, 2024 17:00:00'),
-			},
-			{
-				label: 'testing 3',
 				countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Sep 06, 2024 12:04:00'),
 				countdownHideInMillis: Date.parse('Sept 06, 2024 12:05:00'),
