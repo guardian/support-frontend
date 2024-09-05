@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { space, until } from '@guardian/source/foundations';
-import { Button } from '@guardian/source/react-components';
+import { Button, Checkbox } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
@@ -13,10 +13,17 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getAmount } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setCoverTransactionCost,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -55,14 +62,29 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const currency = currencies[currencyId];
+
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const amountBeforeTransactionCostCovered = useContributionsSelector((state) =>
+		getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+			false,
+		),
+	);
+
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
+
+	const coverTransactionCost = useContributionsSelector(
+		(state) => state.page.checkoutForm.product.coverTransactionCost,
+	);
 
 	const navigate = useNavigate();
 	const { abParticipations, amounts } = useContributionsSelector(
@@ -102,6 +124,9 @@ export function SupporterPlusCheckout({
 			Change
 		</Button>
 	);
+
+	const showCoverTransactionCost =
+		abParticipations.coverTransactionCost === 'variant';
 
 	/** Promotions on the checkout are for SupporterPlus only for now */
 	const promotion = isSupporterPlus
@@ -163,6 +188,34 @@ export function SupporterPlusCheckout({
 								productKey={product}
 								promotion={promotion}
 							/>
+						)}
+						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
+							<div
+								css={css`
+									margin-top: ${space[4]}px;
+								`}
+							>
+								<Checkbox
+									checked={coverTransactionCost}
+									onChange={(e) => {
+										if (e.target.checked) {
+											sendTrackingEventsOnClick({
+												id: 'cover-transaction-cost-checkbox',
+												componentType: 'ACQUISITIONS_BUTTON',
+											})();
+										}
+										dispatch(setCoverTransactionCost(e.target.checked));
+									}}
+									label={`I’ll generously add 4% of ${
+										Number.isNaN(amount)
+											? 'my contribution'
+											: simpleFormatAmount(
+													currency,
+													amountBeforeTransactionCostCovered,
+											  )
+									} to cover transaction fees so my whole gift goes to the Guardian`}
+								/>
+							</div>
 						)}
 						<PaymentButtonController
 							cssOverrides={css`

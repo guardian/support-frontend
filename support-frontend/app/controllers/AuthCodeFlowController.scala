@@ -41,20 +41,23 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
    *
    * See https://developer.okta.com/docs/reference/api/oidc/#authorize
    */
+
+  /** /events is served from live.theguardian.com to avoid apps blocking the domain as an in app purchase. We should
+    * redirect back to this domain.
+    */
+  def oauthCallbackUrl(request: Request[AnyContent]): String = {
+    if (request.host.startsWith("live.")) config.oauthEventsCallbackUrl else config.oauthCallbackUrl
+  }
+
   def authorize(): Action[AnyContent] = Action { implicit request =>
     val state = Random.alphanumeric.take(32).mkString
     val codeVerifier = Pkce.codeVerifier()
     val codeChallenge = Pkce.codeChallenge(codeVerifier)
 
-    /** /events is served from live.theguardian.com to avoid apps blocking the domain as an in app purchase. We should
-      * redirect back to this domain.
-      */
-    val oauthCallbackUrl =
-      if (request.host.startsWith("live.")) config.oauthEventsCallbackUrl else config.oauthCallbackUrl
     val queryParams = Map(
       "response_type" -> "code",
       "client_id" -> config.oauthClientId,
-      "redirect_uri" -> oauthCallbackUrl,
+      "redirect_uri" -> oauthCallbackUrl(request),
       "scope" -> config.oauthScopes.trim.replaceAll("\\s+", " "),
       "state" -> state,
       "code_challenge" -> codeChallenge,
@@ -133,8 +136,9 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
           "client_id" -> config.oauthClientId,
           "code_verifier" -> verifier,
           "code" -> authorisationCode,
-          "redirect_uri" -> config.oauthCallbackUrl,
+          "redirect_uri" -> oauthCallbackUrl(request),
         )
+
         authService
           .getTokens(toQuery(requestBody))
           .map { response =>
