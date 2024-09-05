@@ -187,6 +187,8 @@ GET /prices                                                       controllers.Pr
 # Not 100% sure why as it works locally via the /*path route
 GET  /.well-known/*file                                            controllers.Assets.at(path="/public", file)
 
+GET /api/app-config                                                controllers.Application.appConfigJson()
+
 # ----- Assets ----- #
 # See application.conf for cache time config
 
