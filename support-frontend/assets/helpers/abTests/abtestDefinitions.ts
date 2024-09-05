@@ -143,7 +143,7 @@ export const tests: Tests = {
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 2,
+		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},

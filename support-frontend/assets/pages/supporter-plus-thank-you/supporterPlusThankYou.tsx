@@ -133,11 +133,9 @@ export function SupporterPlusThankYou({
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 	const isOneOff = contributionType === 'ONE_OFF';
-
 	const amount =
 		getAmountFromSessionStorage() ??
 		getAmount(selectedAmounts, otherAmounts, contributionType);
-
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
