@@ -85,7 +85,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			// console.log('Checking if campaign currently active...');
 			const isActive =
 				campaign.countdownStartInMillis < now &&
-				campaign.countdownHideInMillis > now;
+				campaign.countdownDeadlineInMillis > now;
 			setShowCountdown(isActive);
 			return isActive;
 		};
@@ -97,10 +97,10 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 			// console.log(`time > 0: ${timeRemaining}`);
 
-			const now = Date.now();
-			if (now > campaign.countdownHideInMillis) {
-				setShowCountdown(false);
-			}
+			// const now = Date.now();
+			// if (now > campaign.countdownHideInMillis) {
+			// 	setShowCountdown(false);
+			// }
 
 			setDays(
 				ensureDoubleDigits(Math.floor(timeRemaining / millisecondsInDay)),

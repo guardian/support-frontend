@@ -345,7 +345,6 @@ export function ThreeTierLanding({
 		label: 'testing',
 		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		countdownHideInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 	});
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
@@ -356,7 +355,7 @@ export function ThreeTierLanding({
 
 		const now = Date.now();
 		return campaignSettings.countdownSettings.find(
-			(c) => c.countdownStartInMillis < now && c.countdownHideInMillis > now,
+			(c) => c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
 		);
 	}, [campaignSettings?.countdownSettings]);
 
