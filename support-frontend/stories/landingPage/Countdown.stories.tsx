@@ -40,7 +40,6 @@ Default.args = { campaign:
 		label: 'default',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
 		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
-		countdownHideInMillis: (Date.now() + (6 * millisecondsInDay))
 	}
 };
 
@@ -50,7 +49,6 @@ DeadlineNear.args = { campaign:
 		label: 'deadline near',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInSecond)),
-		countdownHideInMillis: (Date.now() + (6 * millisecondsInSecond)), 
 	}
 };
 
@@ -60,7 +58,6 @@ DeadlinePassedHidden.args = { campaign:
 		label: 'deadline passed',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() - (5 * millisecondsInSecond)),
-		countdownHideInMillis: (Date.now() - (4 * millisecondsInSecond)),
 	}
 };
 
@@ -70,6 +67,5 @@ NotYetAvailableHidden.args = { campaign:
 		label: 'start date well in future',
 		countdownStartInMillis: (Date.now() + (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInDay)),
-		countdownHideInMillis: (Date.now() + (4 * millisecondsInDay)),
 	}
 };
