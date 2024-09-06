@@ -62,6 +62,7 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
+import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -566,6 +567,9 @@ export function ThreeTierLanding({
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
+	const showNewspaperArchiveBanner =
+		abParticipations.newspaperArchiveBenefit === 'v2';
+
 	return (
 		<PageScaffold
 			header={
@@ -625,6 +629,7 @@ export function ThreeTierLanding({
 							linkCtaClickHandler={handleLinkCtaClick}
 						/>
 					)}
+					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
 				</div>
 			</Container>
 			<Container
