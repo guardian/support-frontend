@@ -54,17 +54,8 @@ const millisecondsInMinute = 60 * millisecondsInSecond;
 const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
-// Questions:
-// handle inactive tabs via the Page Visibility API and calculate on visibility change?
-
-const ensureDoubleDigits = (timeSection: number): string => {
-	if (timeSection < 0) {
-		return '00';
-	} else {
-		return timeSection > 9
-			? timeSection.toString()
-			: `0${timeSection.toString()}`;
-	}
+const ensureRoundedDoubleDigits = (timeSection: number): string => {
+	return String(Math.floor(timeSection)).padStart(2, '0');
 };
 
 // return the countdown component
@@ -95,25 +86,23 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			);
 
 			setDays(
-				ensureDoubleDigits(Math.floor(timeRemaining / millisecondsInDay)),
+				ensureRoundedDoubleDigits(
+					Math.floor(timeRemaining / millisecondsInDay),
+				),
 			);
 			setHours(
-				ensureDoubleDigits(
-					Math.floor((timeRemaining % millisecondsInDay) / millisecondsInHour),
+				ensureRoundedDoubleDigits(
+					(timeRemaining % millisecondsInDay) / millisecondsInHour,
 				),
 			);
 			setMinutes(
-				ensureDoubleDigits(
-					Math.floor(
-						(timeRemaining % millisecondsInHour) / millisecondsInMinute,
-					),
+				ensureRoundedDoubleDigits(
+					(timeRemaining % millisecondsInHour) / millisecondsInMinute,
 				),
 			);
 			setSeconds(
-				ensureDoubleDigits(
-					Math.floor(
-						(timeRemaining % millisecondsInMinute) / millisecondsInSecond,
-					),
+				ensureRoundedDoubleDigits(
+					(timeRemaining % millisecondsInMinute) / millisecondsInSecond,
 				),
 			);
 		}
@@ -125,10 +114,10 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
-			setSeconds(ensureDoubleDigits(0));
-			setMinutes(ensureDoubleDigits(0));
-			setHours(ensureDoubleDigits(0));
-			setDays(ensureDoubleDigits(0));
+			setSeconds(ensureRoundedDoubleDigits(0));
+			setMinutes(ensureRoundedDoubleDigits(0));
+			setHours(ensureRoundedDoubleDigits(0));
+			setDays(ensureRoundedDoubleDigits(0));
 		}
 	}, [campaign]);
 
