@@ -55,7 +55,7 @@ const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
 const ensureRoundedDoubleDigits = (timeSection: number): string => {
-	return String(Math.floor(timeSection)).padStart(2, '0');
+	return timeSection < 0 ? String(0).padStart(2, '0') : String(Math.floor(timeSection)).padStart(2, '0');
 };
 
 // return the countdown component
