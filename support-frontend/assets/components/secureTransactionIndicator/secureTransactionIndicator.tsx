@@ -49,9 +49,8 @@ export function SecureTransactionIndicator({
 	const mainCss = hideText
 		? secureTransactionIcon
 		: secureTransactionWithText(align);
-	const overrides = cssOverrides ?? css``;
 	return (
-		<div css={[mainCss, theming(theme), overrides]}>
+		<div css={[mainCss, theming(theme), cssOverrides]}>
 			{hideText ? (
 				<SecurePadlockCircle css={padlock} />
 			) : (

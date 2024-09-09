@@ -1,6 +1,7 @@
 package com.gu.i18n
 
 import java.util.Locale
+import scala.util.Try
 
 case class CountryGroup(
     name: String,
@@ -95,6 +96,7 @@ object CountryGroup {
       Country("GR", "Greece"),
       Country("HR", "Croatia"),
       Country("HU", "Hungary"),
+      Country("IC", "Canary Islands"),
       C.Ireland,
       Country("IT", "Italy"),
       Country("LI", "Liechtenstein"),
@@ -335,9 +337,12 @@ object CountryGroup {
 
   val countriesByISO2: Map[String, Country] = countries.map { c => c.alpha2 -> c }.toMap
 
-  val countriesByISO3 = countries.map { country =>
-    val locale = new Locale("", country.alpha2)
-    locale.getISO3Country.toUpperCase -> country
+  val countriesByISO3 = countries.flatMap { country =>
+    Try {
+      // getISO3Country will throw a MissingResourceException if the three-letter country abbreviation is not available for this locale
+      val locale = new Locale("", country.alpha2)
+      locale.getISO3Country.toUpperCase -> country
+    }.toOption
   }.toMap
 
   def countryByCode(str: String): Option[Country] = {

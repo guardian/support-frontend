@@ -16,8 +16,17 @@ import {
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
-import {ApplicationListenerRule, ListenerAction, ListenerCondition} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {
+  InstanceClass,
+  InstanceSize,
+  InstanceType,
+  UserData,
+} from "aws-cdk-lib/aws-ec2";
+import {
+  ApplicationListenerRule,
+  ListenerAction,
+  ListenerCondition,
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 interface PaymentApiProps extends GuStackProps {
   domainName: string;
@@ -81,14 +90,15 @@ export class PaymentApi extends GuStack {
     const projectVersion = "0.1";
 
     const app = "payment-api";
-    const userData = `#!/bin/bash -ev
+    const userData = UserData.forLinux();
+    userData.addCommands(`#!/bin/bash -ev
     mkdir /etc/gu
 
     echo ${this.stage} > /etc/gu/stage
 
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/${projectName}_${projectVersion}_all.deb /tmp
     dpkg -i /tmp/${projectName}_${projectVersion}_all.deb
-    /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/${app}/application.log`;
+    /opt/cloudwatch-logs/configure-logs application ${this.stack} ${this.stage} ${app} /var/log/${app}/application.log`);
 
     const playApp = new GuPlayApp(this, {
       app: "payment-api",
@@ -194,21 +204,28 @@ export class PaymentApi extends GuStack {
     });
 
     // Rule to only allow known http methods
-    new ApplicationListenerRule(this, 'AllowKnownMethods', {
+    new ApplicationListenerRule(this, "AllowKnownMethods", {
       listener: playApp.listener,
       priority: 1,
-      conditions: [ListenerCondition.httpRequestMethods(['GET', 'POST', 'OPTIONS', 'DELETE', 'HEAD'])],
+      conditions: [
+        ListenerCondition.httpRequestMethods([
+          "GET",
+          "POST",
+          "OPTIONS",
+          "DELETE",
+          "HEAD",
+        ]),
+      ],
       targetGroups: [playApp.targetGroup],
     });
     // Default rule to block requests which don't match the above rule
-    new ApplicationListenerRule(this, 'BlockUnknownMethods', {
+    new ApplicationListenerRule(this, "BlockUnknownMethods", {
       listener: playApp.listener,
       priority: 2,
-      conditions: [ListenerCondition.pathPatterns(['*'])],  // anything
+      conditions: [ListenerCondition.pathPatterns(["*"])], // anything
       action: ListenerAction.fixedResponse(400, {
-        contentType: 'application/json',
-        messageBody:
-          'Unsupported http method',
+        contentType: "application/json",
+        messageBody: "Unsupported http method",
       }),
     });
 

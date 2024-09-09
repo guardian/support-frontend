@@ -13,6 +13,7 @@ type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
+	isNew?: boolean;
 };
 
 export type ProductDescription = {
@@ -101,7 +102,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				},
 			},
 		},
-
 		DigitalSubscription: {
 			label: 'The Guardian Digital Edition',
 			benefits: [
@@ -313,243 +313,32 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		},
 	};
 
-/**
- * We need `SupporterPlusWithGuardianWeekly` for the the landing page while we migrate
- * away from the hacked TierThree product to the actual TierThree product below.
- */
-export const supporterPlusWithGuardianWeekly = {
-	ratePlans: {
-		MonthlyWithGuardianWeekly: {
-			id: '',
-			pricing: {
-				USD: 45,
-				NZD: 70,
-				EUR: 38.5,
-				GBP: 27,
-				CAD: 48,
-				AUD: 60,
+export const productCatalogDescriptionNewBenefits: Record<
+	ProductKey,
+	ProductDescription
+> = {
+	...productCatalogDescription,
+	TierThree: {
+		...productCatalogDescription.TierThree,
+		benefits: [
+			...productCatalogDescription.TierThree.benefits,
+			{
+				copy: 'Newspaper archive',
+				isNew: true,
 			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
+		],
+	},
+	SupporterPlus: {
+		...productCatalogDescription.SupporterPlus,
+		benefits: [
+			...productCatalogDescription.SupporterPlus.benefits,
+			{
+				copy: 'Unlimited access to the Guardian Feast App',
+				isNew: true,
+				tooltip:
+					'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
 			},
-		},
-		AnnualWithGuardianWeekly: {
-			id: '',
-			pricing: {
-				USD: 510,
-				NZD: 800,
-				EUR: 438,
-				GBP: 300,
-				CAD: 546,
-				AUD: 680,
-			},
-			charges: {
-				Contribution: {
-					id: '',
-				},
-			},
-		},
-		MonthlyWithGuardianWeeklyInt: {
-			id: '',
-			pricing: {
-				USD: 48,
-			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
-			},
-		},
-		AnnualWithGuardianWeeklyInt: {
-			id: '',
-			pricing: {
-				USD: 546,
-			},
-			charges: {
-				Subscription: {
-					id: '',
-				},
-			},
-		},
-	},
-} as const;
-
-export const supporterPlusWithGuardianWeeklyDescription: ProductDescription = {
-	label: 'Digital + print',
-	benefitsSummary: ['The rewards from All-access digital'],
-	offersSummary: [
-		{
-			strong: true,
-			copy: `including unlimited access to the Guardian Feast App.`,
-		},
-	],
-	benefits: [
-		{
-			copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-			tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-		},
-	],
-	deliverableTo: gwDeliverableCountries,
-	ratePlans: {
-		MonthlyWithGuardianWeekly: {
-			billingPeriod: 'Monthly',
-		},
-		AnnualWithGuardianWeekly: {
-			billingPeriod: 'Annual',
-		},
-		MonthlyWithGuardianWeeklyInt: {
-			billingPeriod: 'Monthly',
-		},
-		AnnualWithGuardianWeeklyInt: {
-			billingPeriod: 'Annual',
-		},
-	},
-};
-
-export const supporterPlusWithGuardianWeeklyAnnualPromos = {
-	GBPCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_UK_ANNUAL_V2',
-		discountedPrice: 190,
-		discount: {
-			amount: 36.6667,
-			durationMonths: 12,
-		},
-	},
-	EURCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_EU_ANNUAL_V2',
-		discountedPrice: 325,
-		discount: {
-			amount: 25.7991,
-			durationMonths: 12,
-		},
-	},
-	International: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_INT_ANNUAL_V2',
-		discountedPrice: 390,
-		discount: {
-			amount: 28.5714,
-			durationMonths: 12,
-		},
-	},
-	UnitedStates: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_US_ANNUAL_V2',
-		discountedPrice: 405,
-		discount: {
-			amount: 20.5882,
-			durationMonths: 12,
-		},
-	},
-	Canada: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_CA_ANNUAL_V2',
-		discountedPrice: 400,
-		discount: {
-			amount: 26.7399,
-			durationMonths: 12,
-		},
-	},
-	NZDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_NZ_ANNUAL_V2',
-		discountedPrice: 580,
-		discount: {
-			amount: 27.5,
-			durationMonths: 12,
-		},
-	},
-	AUDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_AU_ANNUAL_V2',
-		discountedPrice: 520,
-		discount: {
-			amount: 23.5294,
-			durationMonths: 12,
-		},
-	},
-};
-
-export const supporterPlusWithGuardianWeeklyMonthlyPromos = {
-	GBPCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_UK_MONTHLY_V2',
-		discountedPrice: 18,
-		discount: {
-			amount: 33.33,
-			durationMonths: 12,
-		},
-	},
-	EURCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
-		discountedPrice: 30,
-		discount: {
-			amount: 22.09,
-			durationMonths: 12,
-		},
-	},
-	International: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_INT_MONTHLY_V2',
-		discountedPrice: 36,
-		discount: {
-			amount: 25,
-			durationMonths: 12,
-		},
-	},
-	UnitedStates: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_US_MONTHLY_V2',
-		discountedPrice: 37,
-		discount: {
-			amount: 17.77,
-			durationMonths: 12,
-		},
-	},
-	Canada: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_CA_MONTHLY_V2',
-		discountedPrice: 37,
-		discount: {
-			amount: 22.92,
-			durationMonths: 12,
-		},
-	},
-	NZDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_NZ_MONTHLY_V2',
-		discountedPrice: 54,
-		discount: {
-			amount: 22.8571,
-			durationMonths: 12,
-		},
-	},
-	AUDCountries: {
-		name: 'SupportPlusAndGuardianWeekly',
-		description: 'Supporter Plus and Guardian Weekly',
-		promoCode: '3TIER_WEEKLY_AU_MONTHLY_V2',
-		discountedPrice: 48,
-		discount: {
-			amount: 20.0,
-			durationMonths: 12,
-		},
+		],
+		offers: [],
 	},
 };

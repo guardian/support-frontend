@@ -54,6 +54,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
+import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	derivePaymentApiAcquisitionData,
 	getOphanIds,
@@ -101,12 +102,16 @@ const buildStripeChargeDataFromAuthorisation = (
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
 			getContributionType(state),
+			state.page.checkoutForm.product.coverTransactionCost,
 		),
 		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
-		state.common.referrerAcquisitionData,
+		addTransactionCoveredAcquisitionEventLabel(
+			state.common.referrerAcquisitionData,
+			state.page.checkoutForm.product.coverTransactionCost,
+		),
 		state.common.abParticipations,
 		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
@@ -253,12 +258,16 @@ const amazonPayDataFromAuthorisation = (
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
 			getContributionType(state),
+			state.page.checkoutForm.product.coverTransactionCost,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
 		email: state.page.checkoutForm.personalDetails.email,
 	},
 	acquisitionData: derivePaymentApiAcquisitionData(
-		state.common.referrerAcquisitionData,
+		addTransactionCoveredAcquisitionEventLabel(
+			state.common.referrerAcquisitionData,
+			state.page.checkoutForm.product.coverTransactionCost,
+		),
 		state.common.abParticipations,
 		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
@@ -334,7 +343,10 @@ const onCreateOneOffPayPalPaymentResponse =
 		void paymentResult.then((result: CreatePayPalPaymentResponse) => {
 			const state = getState();
 			const acquisitionData = derivePaymentApiAcquisitionData(
-				state.common.referrerAcquisitionData,
+				addTransactionCoveredAcquisitionEventLabel(
+					state.common.referrerAcquisitionData,
+					state.page.checkoutForm.product.coverTransactionCost,
+				),
 				state.common.abParticipations,
 				state.page.checkoutForm.billingAddress.fields.postCode,
 			);
@@ -550,6 +562,23 @@ const onThirdPartyPaymentAuthorised =
 			state.page.checkoutForm.payment.paymentMethod.name
 		](dispatch, state, paymentAuthorisation);
 	};
+
+function addTransactionCoveredAcquisitionEventLabel(
+	referrerAcquisitionData: ReferrerAcquisitionData,
+	coverTransactionCost?: boolean,
+) {
+	if (coverTransactionCost) {
+		return {
+			...referrerAcquisitionData,
+			labels: [
+				...(referrerAcquisitionData.labels ?? []),
+				'transaction-fee-covered',
+			],
+		};
+	}
+
+	return referrerAcquisitionData;
+}
 
 export {
 	paymentFailure,

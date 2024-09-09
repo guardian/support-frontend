@@ -19,6 +19,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
+      "GuSsmSshPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -104,6 +105,15 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         },
         "MaxSize": "6",
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute",
+            "Metrics": [
+              "GroupTotalInstances",
+              "GroupInServiceInstances",
+            ],
+          },
+        ],
         "MinSize": "3",
         "Tags": [
           {
@@ -185,6 +195,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Average",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -291,6 +319,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -382,6 +428,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -644,6 +708,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
         ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 5,
         "TreatMissingData": "notBreaching",
       },
@@ -663,20 +745,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
-              ],
-            ],
-          },
-        ],
         "Path": "/",
         "Tags": [
           {
@@ -752,6 +820,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "AWS/ApplicationELB",
         "Period": 60,
         "Statistic": "Average",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -778,6 +864,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         },
         "Port": 443,
         "Protocol": "HTTPS",
+        "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-2021-06",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
@@ -786,6 +873,14 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "LoadBalancerAttributes": [
           {
             "Key": "deletion_protection.enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "routing.http.x_amzn_tls_version_and_cipher_suite.enabled",
+            "Value": "true",
+          },
+          {
+            "Key": "routing.http.drop_invalid_header_fields.enabled",
             "Value": "true",
           },
         ],
@@ -958,6 +1053,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "AWS/ApplicationELB",
         "Period": 60,
         "Statistic": "Average",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 0.5,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -1115,6 +1228,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "AWS/ApplicationELB",
         "Period": 300,
         "Statistic": "Average",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 2,
       },
       "Type": "AWS::CloudWatch::Alarm",
@@ -1190,6 +1321,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "support-frontend",
         "Period": 60,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -1208,6 +1357,42 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SettingsBucket420EA4B0",
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SsmSshPolicy4CFC977E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-ssh-policy",
         "Roles": [
           {
             "Ref": "InstanceRoleFrontend9A970131",
@@ -1245,6 +1430,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "support-frontend-PROD",
         "Period": 60,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -1467,6 +1670,24 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "Namespace": "AWS/ApplicationELB",
         "Period": 60,
         "Statistic": "Maximum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
         "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
@@ -1556,6 +1777,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "InstanceType": "t4g.small",
           "MetadataOptions": {
             "HttpTokens": "required",
+            "InstanceMetadataTags": "enabled",
           },
           "SecurityGroupIds": [
             {
@@ -1575,6 +1797,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             {
               "ResourceType": "instance",
               "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "frontend",
+                },
                 {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
@@ -1600,6 +1826,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             {
               "ResourceType": "volume",
               "Tags": [
+                {
+                  "Key": "App",
+                  "Value": "frontend",
+                },
                 {
                   "Key": "gu:cdk:version",
                   "Value": "TEST",
@@ -1628,7 +1858,8 @@ exports[`The Frontend stack matches the snapshot 1`] = `
               "Fn::Join": [
                 "",
                 [
-                  "#!/bin/bash -ev
+                  "#!/bin/bash
+#!/bin/bash -ev
     mkdir /etc/gu
     aws --region ",
                   {
@@ -1646,6 +1877,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           {
             "ResourceType": "launch-template",
             "Tags": [
+              {
+                "Key": "App",
+                "Value": "frontend",
+              },
               {
                 "Key": "gu:cdk:version",
                 "Value": "TEST",

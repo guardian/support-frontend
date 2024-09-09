@@ -1,21 +1,11 @@
 import { css } from '@emotion/react';
+import { palette, space } from '@guardian/source/foundations';
 import {
-	brand,
-	from,
-	headline,
-	neutral,
-	palette,
-	space,
-	until,
-} from '@guardian/source/foundations';
-import {
-	Button,
 	Checkbox,
 	Label,
 	Radio,
 	RadioGroup,
 	TextInput,
-	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
 	Divider,
@@ -67,12 +57,11 @@ import type {
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
-	AmazonPay,
 	DirectDebit,
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
-	Sepa,
+	// Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
@@ -92,6 +81,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -101,6 +91,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { isProd } from 'helpers/urls/url';
+import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -115,8 +106,21 @@ import {
 	formatUserDate,
 } from '../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../weekly-subscription-checkout/helpers/deliveryDays';
+import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
+import { FormSection, Legend, shorterBoxMargin } from './components/form';
+import {
+	checkedRadioLabelColour,
+	defaultRadioLabelColour,
+	paymentMethodBody,
+	PaymentMethodRadio,
+	PaymentMethodSelector,
+} from './components/paymentMethod';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
+import {
+	doesNotContainEmojiPattern,
+	preventDefaultValidityMessage,
+} from './validation';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -125,88 +129,6 @@ import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
-
-/** Page styles - styles used specifically for the checkout page */
-const shorterBoxMargin = css`
-	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const legend = css`
-	margin-bottom: ${space[3]}px;
-	${headline.xsmall({ fontWeight: 'bold' })};
-	${from.tablet} {
-		font-size: 28px;
-	}
-
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-`;
-
-const fieldset = css`
-	position: relative;
-
-	& > *:not(:first-of-type) {
-		margin-top: ${space[3]}px;
-	}
-
-	${from.tablet} {
-		& > *:not(:first-of-type) {
-			margin-top: ${space[4]}px;
-		}
-	}
-`;
-
-const paymentMethodSelected = css`
-	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
-	margin-top: ${space[2]}px;
-	border-radius: 4px;
-`;
-
-const paymentMethodNotSelected = css`
-	/* Using box shadows prevents layout shift when the rows are expanded */
-	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
-	margin-top: ${space[2]}px;
-	border-radius: 4px;
-`;
-
-const paymentMethodBody = css`
-	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
-`;
-
-const paymentMethodRadioWithImage = css`
-	display: inline-flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	padding: ${space[2]}px ${space[3]}px;
-	font-weight: bold;
-`;
-const paymentMethodRadioWithImageSelected = css`
-	background-image: linear-gradient(
-		to top,
-		${palette.brand[500]} 2px,
-		transparent 2px
-	);
-`;
-
-const defaultRadioLabelColour = css`
-	+ label div {
-		color: ${neutral[46]};
-		font-weight: bold;
-	}
-`;
-
-const checkedRadioLabelColour = css`
-	+ label div {
-		color: ${brand[400]};
-		font-weight: bold;
-	}
-`;
 
 /**
  * This method removes the `pending` state by retrying,
@@ -240,46 +162,11 @@ const processPayment = async (
 	});
 };
 
-/** Form Validation */
-/**
- * This uses a Unicode character class escape
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
- */
-const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
-function preventDefaultValidityMessage(
-	currentTarget: HTMLInputElement | HTMLSelectElement,
-) {
-	/**
-	 * Prevents default message showing, but maintains the default validation methods occuring
-	 * such as onInvalid.
-	 */
-	// 3. Reset the value from previous invalid events
-	currentTarget.setCustomValidity('');
-	// 1. Check the validity of the input
-	if (!currentTarget.validity.valid) {
-		// 2. setCustomValidity to " " which avoids the browser's default message
-		currentTarget.setCustomValidity(' ');
-	}
-}
-
-type ChangeButtonProps = {
-	geoId: GeoId;
-};
-
-function ChangeButton({ geoId }: ChangeButtonProps) {
-	return (
-		<a href={`/${geoId}/contribute`}>
-			<Button priority="tertiary" size="xsmall" role="link">
-				Change
-			</Button>
-		</a>
-	);
-}
-
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 };
+
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const searchParams = new URLSearchParams(window.location.search);
@@ -429,7 +316,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 */
 	const isTestUser = !!cookie.get('_test_username');
 	const stripePublicKey = getStripeKey(
-		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
 		'REGULAR',
 		countryId,
 		currencyKey,
@@ -469,6 +355,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 			<CheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
+				stripePublicKey={stripePublicKey}
+				isTestUser={isTestUser}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
@@ -485,6 +373,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	stripePublicKey: string;
+	isTestUser: boolean;
 	productKey: ProductKey;
 	ratePlanKey: string;
 	originalAmount: number;
@@ -498,6 +388,8 @@ type CheckoutComponentProps = {
 function CheckoutComponent({
 	geoId,
 	appConfig,
+	stripePublicKey,
+	isTestUser,
 	productKey,
 	ratePlanKey,
 	originalAmount,
@@ -512,7 +404,6 @@ function CheckoutComponent({
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-	const isTestUser = !!cookie.get('_test_username');
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -641,29 +532,18 @@ function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
+	// Todo shouldn't this be checking the switches?
 	const validPaymentMethods = [
-		countryGroupId === 'EURCountries' && Sepa,
+		// countryGroupId === 'EURCountries' && Sepa,
 		countryId === 'GB' && DirectDebit,
-		// TODO - ONE_OFF support - ☝️ these will be inactivated for ONE_OFF payments
 		Stripe,
 		PayPal,
-		countryId === 'US' && AmazonPay,
+		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
-
-	// TODO - ONE_OFF support, this should be false when ONE_OFF
-	const showStateSelect =
-		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	/** Payment methods: Stripe */
-	const stripePublicKey = getStripeKey(
-		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
-		'REGULAR',
-		countryId,
-		currencyKey,
-		isTestUser,
-	);
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
@@ -732,6 +612,9 @@ function CheckoutComponent({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -753,6 +636,9 @@ function CheckoutComponent({
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingAddressErrors, setBillingAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -836,8 +722,6 @@ function CheckoutComponent({
 			cardElement &&
 			stripeClientSecret
 		) {
-			// TODO - ONE_OFF support - we'll need to implement the ONE_OFF stripe payment.
-			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -1007,11 +891,17 @@ function CheckoutComponent({
 
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
-				// TODO - error handling
 				console.error(
 					'processPaymentResponse error:',
 					processPaymentResponse.failureReason,
 				);
+				setErrorMessage('Sorry, something went wrong.');
+				setErrorContext(
+					appropriateErrorMessage(
+						processPaymentResponse.failureReason ?? 'unknown',
+					),
+				);
+				setIsProcessingPayment(false);
 			}
 		} else {
 			setIsProcessingPayment(false);
@@ -1100,7 +990,7 @@ function CheckoutComponent({
 							productFields.productType,
 							promotion,
 						)}
-						headerButton={<ChangeButton geoId={geoId} />}
+						headerButton={<BackButton geoId={geoId} buttonText="Change" />}
 					/>
 				</BoxContents>
 			</Box>
@@ -1175,6 +1065,12 @@ function CheckoutComponent({
 												event.billingDetails.address.postal_code,
 											);
 
+										if (!event.billingDetails?.address.state) {
+											logException(
+												"Could not find state from Stripe's billingDetails",
+												{ geoId, countryGroupId, countryId },
+											);
+										}
 										event.billingDetails?.address.state &&
 											setBillingState(event.billingDetails.address.state);
 
@@ -1232,8 +1128,8 @@ function CheckoutComponent({
 								)}
 							</>
 						)}
-						<fieldset css={fieldset}>
-							<legend css={legend}>1. Your details</legend>
+						<FormSection>
+							<Legend>1. Your details</Legend>
 							<div>
 								<TextInput
 									id="email"
@@ -1268,9 +1164,7 @@ function CheckoutComponent({
 									}}
 								/>
 							</div>
-
 							<Signout isSignedIn={isSignedIn} />
-
 							<>
 								<div>
 									<TextInput
@@ -1341,33 +1235,36 @@ function CheckoutComponent({
 									/>
 								</div>
 							</>
-							{/*For deliverable products we take the state and
-                    zip code with the delivery address*/}
-							{showStateSelect && !productDescription.deliverableTo && (
-								<StateSelect
-									countryId={countryId}
-									state={billingState}
-									onStateChange={(event) => {
-										setBillingState(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.currentTarget.checkValidity();
-									}}
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setBillingStateError(undefined);
-										} else {
-											setBillingStateError(
-												'Please enter a state, province or territory.',
-											);
-										}
-									}}
-									error={billingStateError}
-								/>
-							)}
 
+							{/**
+							 * We require state for non-deliverable products as we use different taxes within those regions upstream
+							 * For deliverable products we take the state and zip code with the delivery address
+							 */}
+							{['US', 'CA', 'AU'].includes(countryId) &&
+								!productDescription.deliverableTo && (
+									<StateSelect
+										countryId={countryId}
+										state={billingState}
+										onStateChange={(event) => {
+											setBillingState(event.currentTarget.value);
+										}}
+										onBlur={(event) => {
+											event.currentTarget.checkValidity();
+										}}
+										onInvalid={(event) => {
+											preventDefaultValidityMessage(event.currentTarget);
+											const validityState = event.currentTarget.validity;
+											if (validityState.valid) {
+												setBillingStateError(undefined);
+											} else {
+												setBillingStateError(
+													'Please enter a state, province or territory.',
+												);
+											}
+										}}
+										error={billingStateError}
+									/>
+								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
 								<div>
 									<TextInput
@@ -1384,13 +1281,14 @@ function CheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
+										optional
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
 											if (validityState.valid) {
 												setBillingPostcodeError(undefined);
 											} else {
-												if (!validityState.valueMissing) {
+												if (validityState.patternMismatch) {
 													setBillingPostcodeError(
 														'Please enter a valid zip code.',
 													);
@@ -1400,7 +1298,7 @@ function CheckoutComponent({
 									/>
 								</div>
 							)}
-						</fieldset>
+						</FormSection>
 
 						<CheckoutDivider spacing="loose" />
 
@@ -1414,7 +1312,7 @@ function CheckoutComponent({
 						{productDescription.deliverableTo && (
 							<>
 								<fieldset>
-									<legend css={legend}>2. Delivery address</legend>
+									<Legend>2. Delivery address</Legend>
 									<AddressFields
 										scope={'delivery'}
 										lineOne={deliveryLineOne}
@@ -1433,7 +1331,7 @@ function CheckoutComponent({
 												},
 											),
 										)}
-										errors={[]}
+										errors={deliveryAddressErrors}
 										postcodeState={{
 											results: deliveryPostcodeStateResults,
 											isLoading: deliveryPostcodeStateLoading,
@@ -1463,6 +1361,9 @@ function CheckoutComponent({
 										}}
 										setPostcodeErrorForFinder={() => {
 											// no-op
+										}}
+										setErrors={(errors) => {
+											setDeliveryAddressErrors(errors);
 										}}
 										onFindAddress={(postcode) => {
 											setDeliveryPostcodeStateLoading(true);
@@ -1519,7 +1420,7 @@ function CheckoutComponent({
 													},
 												),
 											)}
-											errors={[]}
+											errors={billingAddressErrors}
 											postcodeState={{
 												results: billingPostcodeStateResults,
 												isLoading: billingPostcodeStateLoading,
@@ -1550,6 +1451,9 @@ function CheckoutComponent({
 											setPostcodeErrorForFinder={() => {
 												// no-op
 											}}
+											setErrors={(errors) => {
+												setBillingAddressErrors(errors);
+											}}
 											onFindAddress={(postcode) => {
 												setBillingPostcodeStateLoading(true);
 												void findAddressesForPostcode(postcode).then(
@@ -1567,35 +1471,22 @@ function CheckoutComponent({
 							</>
 						)}
 
-						<fieldset css={fieldset}>
-							<legend css={legend}>
+						<FormSection>
+							<Legend>
 								{productDescription.deliverableTo ? '3' : '2'}. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
 									cssOverrides={css``}
 								/>
-							</legend>
+							</Legend>
 
 							<RadioGroup>
 								{validPaymentMethods.map((validPaymentMethod) => {
 									const selected = paymentMethod === validPaymentMethod;
 									const { label, icon } = paymentMethodData[validPaymentMethod];
 									return (
-										<div
-											css={
-												selected
-													? paymentMethodSelected
-													: paymentMethodNotSelected
-											}
-										>
-											<div
-												css={[
-													paymentMethodRadioWithImage,
-													selected
-														? paymentMethodRadioWithImageSelected
-														: undefined,
-												]}
-											>
+										<PaymentMethodSelector selected={selected}>
+											<PaymentMethodRadio selected={selected}>
 												<Radio
 													label={label}
 													name="paymentMethod"
@@ -1610,7 +1501,7 @@ function CheckoutComponent({
 													}}
 												/>
 												<div>{icon}</div>
-											</div>
+											</PaymentMethodRadio>
 											{validPaymentMethod === 'Stripe' && selected && (
 												<div css={paymentMethodBody}>
 													<input
@@ -1714,11 +1605,11 @@ function CheckoutComponent({
 													/>
 												</div>
 											)}
-										</div>
+										</PaymentMethodSelector>
 									);
 								})}
 							</RadioGroup>
-						</fieldset>
+						</FormSection>
 						<SummaryTsAndCs
 							countryGroupId={countryGroupId}
 							contributionType={
@@ -1735,8 +1626,7 @@ function CheckoutComponent({
 						/>
 						<div
 							css={css`
-								margin-top: ${space[8]}px;
-								margin-bottom: ${space[8]}px;
+								margin: ${space[8]}px 0;
 							`}
 						>
 							{paymentMethod !== 'PayPal' && (

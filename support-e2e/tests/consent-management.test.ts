@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+/** These have been covered in smoke/cron tests */
 test('Should show a dismissable consent management banner', async ({
 	context,
 	baseURL,

@@ -6,7 +6,7 @@ function ascending(a: number, b: number): number {
 }
 
 // Converts a number to a given number of decimal places, default two.
-function roundDp(num: number, dps = 2): number {
+function roundToDecimalPlaces(num: number, dps = 2): number {
 	return Math.round(num * 10 ** dps) / 10 ** dps;
 }
 
@@ -48,7 +48,7 @@ function deserialiseJsonObject(
 // ----- Exports ----- //
 export {
 	ascending,
-	roundDp,
+	roundToDecimalPlaces,
 	classNameWithModifiers,
 	hiddenIf,
 	deserialiseJsonObject,

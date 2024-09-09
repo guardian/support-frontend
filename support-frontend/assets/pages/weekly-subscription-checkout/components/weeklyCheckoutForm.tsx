@@ -30,7 +30,6 @@ import {
 	DeliveryAddress,
 } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
-import { DigitalPlusPrintSummary } from 'components/subscriptionCheckouts/digitalPlusPrintSummary';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
@@ -38,20 +37,15 @@ import { PayPalSubmitButton } from 'components/subscriptionCheckouts/payPalSubmi
 import PersonalDetails from 'components/subscriptionCheckouts/personalDetails';
 import { StripeProviderForCountry } from 'components/subscriptionCheckouts/stripeForm/stripeProviderForCountry';
 import Summary from 'components/subscriptionCheckouts/summary';
-import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import {
-	currencies,
-	currencyFromCountryCode,
-} from 'helpers/internationalisation/currency';
+import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { gwCountries } from 'helpers/internationalisation/gwCountries';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
@@ -86,21 +80,12 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
-import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
-`;
-
-const summaryTerm = css`
-	margin: 0px 10px ${space[4]}px;
-	max-width: 23.75rem;
-	/* padding: 0.375rem 0.625rem 1.5rem; */
 `;
 
 // ----- Map State/Props ----- //
@@ -179,26 +164,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	useEffect(() => {
-		/**
-		 * Rewrite the price (cart value) to report to QM
-		 * for users inThreeTierTestVariant as the original props.price
-		 * object doesn't account for the addition of S+ and associated promotions.
-		 */
-		const priceForQuantumMetric: ProductPrice = inTierThree
-			? {
-					...props.price,
-					promotions: [],
-					price: discountedDigitalPlusPrintPrice,
-			  }
-			: props.price;
-
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			priceForQuantumMetric,
+			props.price,
 			props.billingPeriod,
 		);
-		inTierThree && props.setPaymentMethod({ paymentMethod: 'Stripe' });
 	}, []);
 
 	const submissionErrorHeading =
@@ -211,43 +182,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const urlParams = new URLSearchParams(window.location.search);
-
-	const inTierThree =
-		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
-
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
 		props.billingCountry,
 	);
-
-	/**
-	 * PayPal is not supported as a payment method for users
-	 * inThreeTierTestVariant, so remove it from paymentMethods
-	 * array.
-	 **/
-	if (inTierThree) {
-		const paypalIndex = paymentMethods.findIndex(
-			(subscriptionPaymentMethod) => subscriptionPaymentMethod === 'PayPal',
-		);
-
-		if (paypalIndex !== -1) {
-			paymentMethods.splice(paypalIndex);
-		}
-	}
-
-	const tierBillingPeriod = props.billingPeriod === 'Annual' ? 'year' : 'month';
-	const tierBillingPeriodName =
-		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
-
-	const standardDigitalPlusPrintPrice =
-		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
-			.price;
-	const digitalPlusPrintPotentialDiscount =
-		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
-			.discount;
-	const discountedDigitalPlusPrintPrice =
-		digitalPlusPrintPotentialDiscount?.price ?? standardDigitalPlusPrintPrice;
 
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
@@ -257,49 +195,28 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
-	const potentialDiscount = digitalPlusPrintPotentialDiscount
-		? {
-				total: digitalPlusPrintPotentialDiscount.price,
-				duration: digitalPlusPrintPotentialDiscount.duration.value,
-				period: recurringContributionPeriodMap[
-					digitalPlusPrintPotentialDiscount.duration.period
-				] as 'month' | 'year',
-		  }
-		: undefined;
-
 	return (
 		<Content>
 			<Layout
-				asideNoBorders={inTierThree}
 				aside={
 					<>
-						{inTierThree ? (
-							<DigitalPlusPrintSummary
-								total={standardDigitalPlusPrintPrice}
-								currencySymbol={currencies[props.price.currency].glyph}
-								paymentFrequency={tierBillingPeriod}
-								discount={potentialDiscount}
-								startDateGW={formatUserDate(publicationStartDays[0])}
-							/>
-						) : (
-							<Summary
-								image={
-									<GridImage
-										gridId="checkoutPackshotWeekly"
-										srcSizes={[500]}
-										sizes="(max-width: 740px) 50vw, 548"
-										imgType="png"
-										altText=""
-									/>
-								}
-								title="Guardian Weekly"
-								description=""
-								productPrice={props.price}
-								billingPeriod={props.billingPeriod}
-								changeSubscription={routes.guardianWeeklySubscriptionLanding}
-								product={props.product}
-							/>
-						)}
+						<Summary
+							image={
+								<GridImage
+									gridId="checkoutPackshotWeekly"
+									srcSizes={[500]}
+									sizes="(max-width: 740px) 50vw, 548"
+									imgType="png"
+									altText=""
+								/>
+							}
+							title="Guardian Weekly"
+							description=""
+							productPrice={props.price}
+							billingPeriod={props.billingPeriod}
+							changeSubscription={routes.guardianWeeklySubscriptionLanding}
+							product={props.product}
+						/>
 					</>
 				}
 			>
@@ -382,57 +299,52 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<BillingAddress countries={gwCountries} />
 						</FormSection>
 					) : null}
-					{!inTierThree && (
-						<FormSection title="Please select the first publication you’d like to receive">
-							<Rows>
-								<RadioGroup
-									id="startDate"
-									error={firstError('startDate', props.formErrors)}
-									label="Please select the first publication you’d like to receive"
-									hideLabel={true}
-								>
-									{publicationStartDays.map((day) => {
-										const [userDate, machineDate] = [
-											formatUserDate(day),
-											formatMachineDate(day),
-										];
 
-										return (
-											<Radio
-												label={userDate}
-												value={userDate}
-												name={machineDate}
-												checked={machineDate === props.startDate}
-												onChange={() => props.setStartDate(machineDate)}
-											/>
-										);
-									})}
-								</RadioGroup>
-								<Text className="component-text__paddingTop">
-									<p className="component-text__sans">
-										We will take the first payment on the date of your first
-										publication.
-									</p>
-									<p className="component-text__sans">
-										Please allow 1 to 7 days after publication date for your
-										magazine to arrive, depending on national post services.
-									</p>
-								</Text>
-							</Rows>
-						</FormSection>
-					)}
-					{!inTierThree && (
-						<BillingPeriodSelector
-							fulfilmentOption={props.fulfilmentOption}
-							onChange={(billingPeriod) =>
-								props.setBillingPeriod(billingPeriod)
-							}
-							billingPeriods={weeklyBillingPeriods()}
-							pricingCountry={props.deliveryCountry}
-							productPrices={props.productPrices}
-							selected={props.billingPeriod}
-						/>
-					)}
+					<FormSection title="Please select the first publication you’d like to receive">
+						<Rows>
+							<RadioGroup
+								id="startDate"
+								error={firstError('startDate', props.formErrors)}
+								label="Please select the first publication you’d like to receive"
+								hideLabel={true}
+							>
+								{publicationStartDays.map((day) => {
+									const [userDate, machineDate] = [
+										formatUserDate(day),
+										formatMachineDate(day),
+									];
+
+									return (
+										<Radio
+											label={userDate}
+											value={userDate}
+											name={machineDate}
+											checked={machineDate === props.startDate}
+											onChange={() => props.setStartDate(machineDate)}
+										/>
+									);
+								})}
+							</RadioGroup>
+							<Text className="component-text__paddingTop">
+								<p className="component-text__sans">
+									We will take the first payment on the date of your first
+									publication.
+								</p>
+								<p className="component-text__sans">
+									Please allow 1 to 7 days after publication date for your
+									magazine to arrive, depending on national post services.
+								</p>
+							</Text>
+						</Rows>
+					</FormSection>
+					<BillingPeriodSelector
+						fulfilmentOption={props.fulfilmentOption}
+						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
+						billingPeriods={weeklyBillingPeriods()}
+						pricingCountry={props.deliveryCountry}
+						productPrices={props.productPrices}
+						selected={props.billingPeriod}
+					/>
 					{paymentMethods.length > 0 ? (
 						<FormSection
 							title={
@@ -475,14 +387,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							]}
 							name={`${props.firstName} ${props.lastName}`}
 							validateForm={props.validateForm}
-							buttonText={
-								inTierThree
-									? `Pay ${currencies[props.price.currency].glyph}${
-											digitalPlusPrintPotentialDiscount?.price ??
-											standardDigitalPlusPrintPrice
-									  } per ${tierBillingPeriod}`
-									: 'Pay now'
-							}
+							buttonText="Pay now"
 							csrf={props.csrf}
 							setStripePublicKey={(key: string) =>
 								props.setStripePublicKey(key)
@@ -534,42 +439,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorReason={props.submissionError ?? undefined}
 						errorHeading={submissionErrorHeading}
 					/>
-					{inTierThree ? (
-						<>
-							{props.countryGroupId === 'UnitedStates' && (
-								<SummaryTsAndCs
-									cssOverrides={summaryTerm}
-									countryGroupId={props.countryGroupId}
-									contributionType={
-										props.billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'
-									}
-									currency={props.currencyId}
-									amount={props.price.price}
-									productKey={'TierThree'}
-								/>
-							)}
-							<Total
-								price={
-									digitalPlusPrintPotentialDiscount?.price ??
-									standardDigitalPlusPrintPrice
-								}
-								currency={props.currencyId}
-							/>
-						</>
-					) : (
-						<Total
-							price={props.discountedPrice.price}
-							currency={props.currencyId}
-						/>
-					)}
-					{inTierThree ? (
-						<TierThreeTerms
-							paymentMethod={props.paymentMethod}
-							paymentFrequency={tierBillingPeriod}
-						/>
-					) : (
-						<PaymentTerms paymentMethod={props.paymentMethod} />
-					)}
+					<Total
+						price={props.discountedPrice.price}
+						currency={props.currencyId}
+					/>
+					<PaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
 			</Layout>
 		</Content>

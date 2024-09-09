@@ -4,6 +4,11 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 export const baseObject: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: '**/*.test.ts',
+	testIgnore: [
+		'tests/smoke/**/*.test.ts',
+		'tests/cron/**/*.test.ts',
+		'tests/test/**/*.test.ts',
+	],
 	/* Maximum time one test can run for. */
 	timeout: 120 * 1000,
 	fullyParallel: true,

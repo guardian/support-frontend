@@ -1,14 +1,15 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
+import type { BenefitsCheckListProps } from 'components/checkoutBenefits/benefitsCheckList';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import type { InfoBlockProps } from 'components/infoBlock/infoBlock';
-import { InfoBlock } from 'components/infoBlock/infoBlock';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
-	title: 'Content/Info Block',
-	component: InfoBlock,
+	title: 'Content/Benefits Check List',
+	component: BenefitsCheckList,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -31,40 +32,27 @@ export default {
 	],
 };
 
-function Template(args: InfoBlockProps) {
-	return <InfoBlock {...args} />;
+function Template(args: BenefitsCheckListProps) {
+	return <BenefitsCheckList {...args} />;
 }
 
-Template.args = {} as InfoBlockProps;
+Template.args = {} as BenefitsCheckListProps;
 
 export const Default = Template.bind({});
 
 Default.args = {
-	header: (
-		<div
-			css={css`
-				display: flex;
-				justify-content: space-between;
-			`}
-		>
-			<span>Total due today</span>
-			{''}
-			<strong
-				css={css`
-					font-weight: 700;
-				`}
-			>
-				£95
-			</strong>
-		</div>
-	),
-	content: (
-		<ul>
-			<li>Next billing date will be XX Month Year.</li>
-			<li>
-				Cancel or change your support anytime. If you cancel within the first 14
-				days, you will receive a full refund.
-			</li>
-		</ul>
-	),
+	benefitsCheckListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
+};
+
+export const Compact = Template.bind({});
+
+Compact.args = {
+	benefitsCheckListData: checkListData({
+		higherTier: true,
+		countryGroupId: 'GBPCountries',
+	}),
+	style: 'compact',
 };
