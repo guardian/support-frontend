@@ -212,6 +212,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 							const urlSearchParams = new URLSearchParams(
 								window.location.search,
 							);
+							urlSearchParams.set('country', selectedCountry);
 							const product = urlSearchParams.get('product') as ProductKey;
 							const ratePlan = urlSearchParams.get('ratePlan') as string;
 							const { productKey, ratePlanKey } =
@@ -223,7 +224,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 							urlSearchParams.set('product', productKey);
 							urlSearchParams.set('ratePlan', ratePlanKey);
 
-							const location = `${redirectPathname}?${urlSearchParams.toString()}`;
+							const location = `${redirectPathname}?${urlSearchParams.toString()}${
+								window.location.hash
+							}`;
 							window.location.href = location;
 						}
 					}
