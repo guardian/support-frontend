@@ -18,7 +18,8 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
+import type { ProductKey } from 'helpers/productCatalog';
+import { getProductAndRatePlanFor } from 'helpers/productCatalog';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
@@ -60,10 +61,6 @@ const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 
-const readOnlyInput = css`
-	background: #f6f6f6 !important;
-`;
-
 const selectStateStyles = css`
 	&:invalid:not(&:user-invalid) {
 		/* Remove styling of invalid select element */
@@ -100,11 +97,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
-export function AddressFields({
-	scope,
-	countryGroupId,
-	...props
-}: PropTypes): JSX.Element {
+export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 	const patternMismatch = 'Please use only letters, numbers and punctuation.';
 	const errorMessages: Record<
 		keyof AddressFieldsType,
@@ -188,89 +181,64 @@ export function AddressFields({
 		}
 	};
 
-	const countriesLength = Object.keys(props.countries).length;
 	return (
 		<div data-component={`${scope}AddressFields`}>
-			{countryGroupId && (
-				<Select
-					css={[marginBottom]}
-					id={`${scope}-country-group`}
-					data-qm-masking="blocklist"
-					label="World zone"
-					value={countryGroupId}
-					onChange={(event) => {
-						event.preventDefault();
-						const pathname = window.location.pathname;
-						const currentCountryGroup = pathname.split('/')[1];
-						const supportInternationalisationId =
-							countryGroups[event.currentTarget.value as CountryGroupId]
-								.supportInternationalisationId;
-						const newPathname = pathname.replace(
-							currentCountryGroup,
-							supportInternationalisationId,
-						);
-						const location = `${newPathname}${window.location.search}`;
-						window.location.href = location;
-					}}
-					data-link-name={`${scope}CountryGroupSelect : ${props.country}`}
-					error={firstError('country', props.errors)}
-					name={`${scope}-country-group`}
-				>
-					{Object.entries(countryGroups)
-						.sort()
-						.map(([key, countryGroup]) => (
-							<OptionForSelect
-								key={key}
-								value={key}
-								selected={key === countryGroupId}
-							>
-								{/** we use a join here due to the type of children being `string` */}
-								{/** this isn't actually the case for options, but Source has rewritten it as such */}
-								{/** @see https://github.com/guardian/csnx/blob/3ac083e3f7e0e14ba5f8efd46a58029b7ce2cd3a/libs/%40guardian/source/src/react-components/select/Option.tsx#L7 */}
-								{[
-									countryGroup.name,
-									' | ',
-									currencies[countryGroups[key as CountryGroupId].currency]
-										.extendedGlyph,
-								].join('')}
-							</OptionForSelect>
-						))}
-				</Select>
-			)}
-			{countriesLength > 1 && (
-				<Select
-					css={marginBottom}
-					id={`${scope}-country`}
-					data-qm-masking="blocklist"
-					label="Country"
-					value={props.country}
-					onChange={(e) => {
-						const isoCountry = Country.fromString(e.target.value);
-						if (isoCountry) {
-							props.setCountry(isoCountry);
+			<Select
+				css={marginBottom}
+				id={`${scope}-country`}
+				data-qm-masking="blocklist"
+				label="Country"
+				value={props.country}
+				onChange={(event) => {
+					const selectedCountry = Country.fromString(event.target.value);
+
+					if (selectedCountry && countryGroupId) {
+						const selectedCountryGroup = Object.entries(countryGroups).find(
+							([, countryGroup]) =>
+								countryGroup.countries.includes(selectedCountry),
+						)?.[0];
+
+						if (countryGroupId !== selectedCountryGroup) {
+							const pathname = window.location.pathname;
+							const currentInternationalisationId = pathname.split('/')[1];
+							const selectedInternationalisationId =
+								countryGroups[selectedCountryGroup as CountryGroupId]
+									.supportInternationalisationId;
+							const redirectPathname = pathname.replace(
+								currentInternationalisationId,
+								selectedInternationalisationId,
+							);
+
+							const urlSearchParams = new URLSearchParams(
+								window.location.search,
+							);
+							const product = urlSearchParams.get('product') as ProductKey;
+							const ratePlan = urlSearchParams.get('ratePlan') as string;
+							const { productKey, ratePlanKey } = getProductAndRatePlanFor(
+								selectedInternationalisationId,
+								product,
+								ratePlan,
+							);
+							urlSearchParams.set('product', productKey);
+							urlSearchParams.set('ratePlan', ratePlanKey);
+
+							const location = `${redirectPathname}?${urlSearchParams.toString()}`;
+							window.location.href = location;
 						}
-					}}
-					error={firstError('country', props.errors)}
-					name={`${scope}-country`}
-					data-link-name={`${scope}CountrySelect : ${props.country}`}
-				>
-					<OptionForSelect value="">Select a country</OptionForSelect>
-					{sortedOptions(props.countries)}
-				</Select>
-			)}
-			{countriesLength === 1 && (
-				<TextInput
-					css={[marginBottom, readOnlyInput]}
-					id={`${scope}-country`}
-					data-qm-masking="blocklist"
-					label="Country"
-					value={props.country}
-					error={firstError('country', props.errors)}
-					name={`${scope}-country`}
-					data-link-name={`${scope}CountryTextInput : ${props.country}`}
-					readOnly={true}
-				/>
-			)}
+					}
+
+					if (selectedCountry) {
+						props.setCountry(selectedCountry);
+					}
+				}}
+				error={firstError('country', props.errors)}
+				name={`${scope}-country`}
+				data-link-name={`${scope}CountrySelect : ${props.country}`}
+			>
+				<OptionForSelect value="">Select a country</OptionForSelect>
+				{sortedOptions(props.countries)}
+			</Select>
+
 			{props.country === 'GB' ? (
 				<PostcodeFinder
 					postcode={props.postcodeState.postcode}

@@ -2,7 +2,10 @@ import type { ProductKey } from '@guardian/support-service-lambdas/modules/produ
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
-import type { CountryGroupId } from './internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportInternationalisationId,
+} from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
 export type { ProductKey };
@@ -342,3 +345,37 @@ export const productCatalogDescriptionNewBenefits: Record<
 		offers: [],
 	},
 };
+
+export function getProductAndRatePlanFor(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ProductKey,
+	ratePlanKey: string,
+): { productKey: ProductKey; ratePlanKey: string } {
+	let productKeyToUse = productKey;
+	let ratePlanToUse = ratePlanKey;
+
+	if (productKey === 'SupporterPlus') {
+		if (supportInternationalisationId === 'int') {
+			if (ratePlanKey === 'DomesticAnnual') {
+				ratePlanToUse = 'RestOfWorldAnnual';
+			}
+			if (ratePlanKey === 'DomesticMonthly') {
+				ratePlanToUse = 'RestOfWorldMonthly';
+			}
+		}
+	}
+
+	if (
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld'
+	) {
+		if (supportInternationalisationId === 'int') {
+			productKeyToUse = 'GuardianWeeklyRestOfWorld';
+		}
+		if (supportInternationalisationId !== 'int') {
+			productKeyToUse = 'GuardianWeeklyDomestic';
+		}
+	}
+
+	return { productKey: productKeyToUse, ratePlanKey: ratePlanToUse };
+}

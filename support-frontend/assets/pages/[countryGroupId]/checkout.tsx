@@ -1322,15 +1322,7 @@ function CheckoutComponent({
 										state={deliveryState}
 										postCode={deliveryPostcode}
 										countryGroupId={countryGroupId}
-										countries={Object.fromEntries(
-											Object.entries(productDescription.deliverableTo).filter(
-												([code]) => {
-													return countryGroups[
-														countryGroupId
-													].countries.includes(code as IsoCountry);
-												},
-											),
-										)}
+										countries={productDescription.deliverableTo}
 										errors={deliveryAddressErrors}
 										postcodeState={{
 											results: deliveryPostcodeStateResults,
@@ -1411,15 +1403,7 @@ function CheckoutComponent({
 											state={billingState}
 											postCode={billingPostcode}
 											countryGroupId={countryGroupId}
-											countries={Object.fromEntries(
-												Object.entries(productDescription.deliverableTo).filter(
-													([code]) => {
-														return countryGroups[
-															countryGroupId
-														].countries.includes(code as IsoCountry);
-													},
-												),
-											)}
+											countries={productDescription.deliverableTo}
 											errors={billingAddressErrors}
 											postcodeState={{
 												results: billingPostcodeStateResults,
