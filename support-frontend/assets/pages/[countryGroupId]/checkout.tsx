@@ -918,6 +918,9 @@ function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const redirectCountryToCountryGroup =
+		abParticipations.redirectCountryToCountryGroup === 'variant';
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -1321,6 +1324,9 @@ function CheckoutComponent({
 										country={deliveryCountry}
 										state={deliveryState}
 										postCode={deliveryPostcode}
+										countryGroupId={
+											redirectCountryToCountryGroup ? countryGroupId : undefined
+										}
 										countries={productDescription.deliverableTo}
 										errors={deliveryAddressErrors}
 										postcodeState={{
@@ -1401,6 +1407,11 @@ function CheckoutComponent({
 											country={billingCountry}
 											state={billingState}
 											postCode={billingPostcode}
+											countryGroupId={
+												redirectCountryToCountryGroup
+													? countryGroupId
+													: undefined
+											}
 											countries={productDescription.deliverableTo}
 											errors={billingAddressErrors}
 											postcodeState={{
