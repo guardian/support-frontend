@@ -16,7 +16,7 @@ export type CountdownSetting = {
 export type CampaignSettings = {
 	isEligible: (countryGroupId: CountryGroupId) => boolean;
 	enableSingleContributions: boolean;
-	countdownSettings: CountdownSetting[];
+	countdownSettings?: CountdownSetting[];
 };
 
 const campaigns: Record<string, CampaignSettings> = {

@@ -350,7 +350,7 @@ export function ThreeTierLanding({
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	const memoizedCurrentCampaign = useMemo(() => {
-		if (!campaignSettings) {
+		if (!campaignSettings?.countdownSettings) {
 			return undefined;
 		}
 
