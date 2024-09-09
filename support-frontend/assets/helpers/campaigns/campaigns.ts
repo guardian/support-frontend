@@ -1,9 +1,22 @@
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { UnitedStates } from '../internationalisation/countryGroup';
 
+export type CountdownSetting = {
+	label: string;
+	countdownStartInMillis: number;
+	countdownDeadlineInMillis: number;
+	// TODO: when design agreed add theme
+	//theme: {
+	//	backgroundColor: string;
+	// 	primaryColor: string;
+	//  secondaryColor: string;
+	//};
+};
+
 export type CampaignSettings = {
 	isEligible: (countryGroupId: CountryGroupId) => boolean;
 	enableSingleContributions: boolean;
+	countdownSettings?: CountdownSetting[];
 };
 
 const campaigns: Record<string, CampaignSettings> = {
@@ -11,6 +24,28 @@ const campaigns: Record<string, CampaignSettings> = {
 		isEligible: (countryGroupId: CountryGroupId) =>
 			countryGroupId === UnitedStates,
 		enableSingleContributions: true,
+		countdownSettings: [
+			{
+				label: 'Giving Tuesday',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
+			},
+			{
+				label: 'Discount',
+				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 13, 2024 00:00:00'),
+			},
+			{
+				label: 'Final Countdown',
+				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
+			},
+			// {
+			// 	label: 'testing', // adjust this one as needed
+			// 	countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
+			// 	countdownDeadlineInMillis: Date.parse('Sep 06, 2024 00:00:00'),
+			// },
+		],
 	},
 };
 
