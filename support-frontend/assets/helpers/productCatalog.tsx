@@ -378,6 +378,13 @@ export function internationaliseProductAndRatePlan(
 			if (ratePlanKey === 'DomesticMonthly') {
 				ratePlanToUse = 'RestOfWorldMonthly';
 			}
+		} else {
+			if (ratePlanKey === 'RestOfWorldAnnual') {
+				ratePlanToUse = 'DomesticAnnual';
+			}
+			if (ratePlanKey === 'RestOfWorldMonthly') {
+				ratePlanToUse = 'DomesticMonthly';
+			}
 		}
 	}
 
@@ -387,8 +394,7 @@ export function internationaliseProductAndRatePlan(
 	) {
 		if (supportInternationalisationId === 'int') {
 			productKeyToUse = 'GuardianWeeklyRestOfWorld';
-		}
-		if (supportInternationalisationId !== 'int') {
+		} else {
 			productKeyToUse = 'GuardianWeeklyDomestic';
 		}
 	}
