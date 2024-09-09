@@ -40,6 +40,7 @@ if (
     client.geo.country_code == "CK" ||
     client.geo.country_code == "CL" ||
     client.geo.country_code == "CM" ||
+    client.geo.country_code == "CN" ||
     client.geo.country_code == "CO" ||
     client.geo.country_code == "CR" ||
     client.geo.country_code == "CU" ||
@@ -142,6 +143,7 @@ if (
     client.geo.country_code == "PR" ||
     client.geo.country_code == "PW" ||
     client.geo.country_code == "PY" ||
+    client.geo.country_code == "QA" ||
     client.geo.country_code == "RE" ||
     client.geo.country_code == "RS" ||
     client.geo.country_code == "RW" ||
