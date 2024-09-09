@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 import { isNonNullable } from '@guardian/libs';
-import {
-	neutral,
-	palette,
-	space,
-	textSans,
-} from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -23,6 +18,7 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
@@ -64,6 +60,10 @@ const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 
+const readOnlyInput = css`
+	background: #f6f6f6 !important;
+`;
+
 const selectStateStyles = css`
 	&:invalid:not(&:user-invalid) {
 		/* Remove styling of invalid select element */
@@ -97,19 +97,6 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 			return null;
 	}
 }
-
-const countryGroupSelectContainer = css`
-	${textSans.xsmall({ fontWeight: 'light' })}
-	color: ${neutral[7]};
-	margin-top: -20px;
-	margin-bottom: 20px;
-	display: block;
-	position: relative;
-`;
-
-const countryGroupSelect = css`
-	margin-left: 5px;
-`;
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
@@ -201,57 +188,88 @@ export function AddressFields({
 		}
 	};
 
+	const countriesLength = Object.keys(props.countries).length;
 	return (
 		<div data-component={`${scope}AddressFields`}>
-			<Select
-				css={marginBottom}
-				id={`${scope}-country`}
-				data-qm-masking="blocklist"
-				label="Country"
-				value={props.country}
-				onChange={(e) => {
-					const isoCountry = Country.fromString(e.target.value);
-					if (isoCountry) {
-						props.setCountry(isoCountry);
-					}
-				}}
-				error={firstError('country', props.errors)}
-				name={`${scope}-country`}
-				data-link-name={`${scope}CountrySelect : ${props.country}`}
-			>
-				<OptionForSelect value="">Select a country</OptionForSelect>
-				{sortedOptions(props.countries)}
-			</Select>
 			{countryGroupId && (
-				<div css={countryGroupSelectContainer}>
-					<span>Can't find your country? Try another zone</span>
-					<select
-						css={countryGroupSelect}
-						onChange={(event) => {
-							event.preventDefault();
-							const pathname = window.location.pathname;
-							const currentCountryGroup = pathname.split('/')[1];
-							const newPathname = pathname.replace(
-								currentCountryGroup,
-								event.currentTarget.value,
-							);
-							const location = `${newPathname}${window.location.search}`;
-							window.location.href = location;
-						}}
-						data-link-name={`${scope}CountryGroupSelect : ${props.country}`}
-					>
-						{Object.entries(countryGroups).map(([key, value]) => (
-							<option
+				<Select
+					css={[marginBottom]}
+					id={`${scope}-country-group`}
+					data-qm-masking="blocklist"
+					label="World zone"
+					value={countryGroupId}
+					onChange={(event) => {
+						event.preventDefault();
+						const pathname = window.location.pathname;
+						const currentCountryGroup = pathname.split('/')[1];
+						const supportInternationalisationId =
+							countryGroups[event.currentTarget.value as CountryGroupId]
+								.supportInternationalisationId;
+						const newPathname = pathname.replace(
+							currentCountryGroup,
+							supportInternationalisationId,
+						);
+						const location = `${newPathname}${window.location.search}`;
+						window.location.href = location;
+					}}
+					data-link-name={`${scope}CountryGroupSelect : ${props.country}`}
+					error={firstError('country', props.errors)}
+					name={`${scope}-country-group`}
+				>
+					{Object.entries(countryGroups)
+						.sort()
+						.map(([key, countryGroup]) => (
+							<OptionForSelect
 								key={key}
-								value={value.supportInternationalisationId}
+								value={key}
 								selected={key === countryGroupId}
 							>
-								{value.supportInternationalisationId.toUpperCase()}{' '}
-								{value.currency}
-							</option>
+								{/** we use a join here due to the type of children being `string` */}
+								{/** this isn't actually the case for options, but Source has rewritten it as such */}
+								{/** @see https://github.com/guardian/csnx/blob/3ac083e3f7e0e14ba5f8efd46a58029b7ce2cd3a/libs/%40guardian/source/src/react-components/select/Option.tsx#L7 */}
+								{[
+									countryGroup.name,
+									' | ',
+									currencies[countryGroups[key as CountryGroupId].currency]
+										.extendedGlyph,
+								].join('')}
+							</OptionForSelect>
 						))}
-					</select>
-				</div>
+				</Select>
+			)}
+			{countriesLength > 1 && (
+				<Select
+					css={marginBottom}
+					id={`${scope}-country`}
+					data-qm-masking="blocklist"
+					label="Country"
+					value={props.country}
+					onChange={(e) => {
+						const isoCountry = Country.fromString(e.target.value);
+						if (isoCountry) {
+							props.setCountry(isoCountry);
+						}
+					}}
+					error={firstError('country', props.errors)}
+					name={`${scope}-country`}
+					data-link-name={`${scope}CountrySelect : ${props.country}`}
+				>
+					<OptionForSelect value="">Select a country</OptionForSelect>
+					{sortedOptions(props.countries)}
+				</Select>
+			)}
+			{countriesLength === 1 && (
+				<TextInput
+					css={[marginBottom, readOnlyInput]}
+					id={`${scope}-country`}
+					data-qm-masking="blocklist"
+					label="Country"
+					value={props.country}
+					error={firstError('country', props.errors)}
+					name={`${scope}-country`}
+					data-link-name={`${scope}CountryTextInput : ${props.country}`}
+					readOnly={true}
+				/>
 			)}
 			{props.country === 'GB' ? (
 				<PostcodeFinder
