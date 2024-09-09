@@ -13,7 +13,7 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { logException } from 'helpers/utilities/logger';
-import { roundDp } from 'helpers/utilities/utilities';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
 export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
@@ -134,13 +134,23 @@ const getAmount = (
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
+	coverTransactionCostSelected?: boolean,
 ): number => {
-	const selectedAmount = selectedAmounts[contributionType];
+	const selectedChoiceCardAmount = selectedAmounts[contributionType];
 	const otherAmount = otherAmounts[contributionType].amount ?? '';
 
-	return parseFloat(
-		selectedAmount === 'other' ? otherAmount : selectedAmount.toString(),
-	);
+	const selectedAmount =
+		selectedChoiceCardAmount === 'other'
+			? parseFloat(otherAmount)
+			: selectedChoiceCardAmount;
+
+	// Only cover transaction costs for one off contributions
+	const coverTransactionCost =
+		coverTransactionCostSelected && contributionType === 'ONE_OFF';
+
+	return coverTransactionCost
+		? roundToDecimalPlaces(selectedAmount * 1.04)
+		: selectedAmount;
 };
 
 // ----- Setup ----- //
@@ -329,7 +339,7 @@ function parseContribution(input: string): ParsedContribution {
 
 	return {
 		valid: true,
-		amount: roundDp(amount),
+		amount: roundToDecimalPlaces(amount),
 	};
 }
 

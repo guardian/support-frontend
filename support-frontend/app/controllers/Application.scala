@@ -481,7 +481,7 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
-  def z: Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  def appConfigJson: Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val isTestUser = testUserService.isTestUser(request)
 

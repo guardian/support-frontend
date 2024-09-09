@@ -12,7 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -62,6 +62,9 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
+import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
+import Countdown from '../components/countdown';
+import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -331,9 +334,43 @@ export function ThreeTierLanding({
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
+	/*
+	 * US EOY 2024 Campaign
+	 */
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions;
+
+	// Handle which countdown to show (if any).
+	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
+		label: 'testing',
+		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
+		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
+	});
+	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+
+	const memoizedCurrentCampaign = useMemo(() => {
+		if (!campaignSettings?.countdownSettings) {
+			return undefined;
+		}
+
+		const now = Date.now();
+		return campaignSettings.countdownSettings.find(
+			(c) =>
+				c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
+		);
+	}, [campaignSettings?.countdownSettings]);
+
+	useEffect(() => {
+		if (memoizedCurrentCampaign) {
+			setCurrentCampaign(memoizedCurrentCampaign);
+			setShowCountdown(true);
+		}
+	}, [memoizedCurrentCampaign]);
+
+	/*
+	 * /////////////// END US EOY 2024 Campaign
+	 */
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -566,6 +603,9 @@ export function ThreeTierLanding({
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
+	const showNewspaperArchiveBanner =
+		abParticipations.newspaperArchiveBenefit === 'v2';
+
 	return (
 		<PageScaffold
 			header={
@@ -590,6 +630,7 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
+					{showCountdown && <Countdown campaign={currentCampaign} />}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
@@ -625,6 +666,7 @@ export function ThreeTierLanding({
 							linkCtaClickHandler={handleLinkCtaClick}
 						/>
 					)}
+					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
 				</div>
 			</Container>
 			<Container
