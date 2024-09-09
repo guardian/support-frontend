@@ -19,7 +19,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { ProductKey } from 'helpers/productCatalog';
-import { getProductAndRatePlanFor } from 'helpers/productCatalog';
+import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
@@ -214,11 +214,12 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 							);
 							const product = urlSearchParams.get('product') as ProductKey;
 							const ratePlan = urlSearchParams.get('ratePlan') as string;
-							const { productKey, ratePlanKey } = getProductAndRatePlanFor(
-								selectedInternationalisationId,
-								product,
-								ratePlan,
-							);
+							const { productKey, ratePlanKey } =
+								internationaliseProductAndRatePlan(
+									selectedInternationalisationId,
+									product,
+									ratePlan,
+								);
 							urlSearchParams.set('product', productKey);
 							urlSearchParams.set('ratePlan', ratePlanKey);
 
