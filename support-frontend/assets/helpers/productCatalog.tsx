@@ -370,7 +370,7 @@ export function internationaliseProductAndRatePlan(
 	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 
-	if (productKey === 'SupporterPlus') {
+	if (productKey === 'TierThree') {
 		if (supportInternationalisationId === 'int') {
 			if (ratePlanKey === 'DomesticAnnual') {
 				ratePlanToUse = 'RestOfWorldAnnual';
