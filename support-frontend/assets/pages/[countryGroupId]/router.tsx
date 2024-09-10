@@ -22,17 +22,15 @@ function isContributionType(val: unknown): val is SelectedContributionType {
 	return contributionTypes.includes(val as SelectedContributionType);
 }
 
-type ContributionCheckoutRedirectProps = {
-	geoId: GeoId;
-	appConfig: AppConfig;
-};
-function ContributionCheckoutRedirect({
-	geoId,
-	appConfig,
-}: ContributionCheckoutRedirectProps) {
-	const urlSearchParams = new URLSearchParams(window.location.search);
-
-	/** get the old QS params */
+function getProductFromContributionParams(
+	geoId: GeoId,
+	productCatalog: AppConfig['productCatalog'],
+	urlSearchParams: URLSearchParams,
+): {
+	product: 'SupporterPlus' | 'Contribution';
+	ratePlan: 'Monthly' | 'Annual';
+	amount?: number;
+} | null {
 	const contributionTypeParam = urlSearchParams.get(
 		'selected-contribution-type',
 	);
@@ -47,7 +45,7 @@ function ContributionCheckoutRedirect({
 		typeof parsedAmountParam === 'number' ? parsedAmountParam : undefined;
 
 	if (!contributionType || !amount) {
-		return <p>Null</p>;
+		return null;
 	}
 
 	/**
@@ -57,15 +55,40 @@ function ContributionCheckoutRedirect({
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const ratePlan = contributionType === 'annual' ? 'Annual' : 'Monthly';
 	const supporterPlusAmount =
-		appConfig.productCatalog.SupporterPlus.ratePlans[ratePlan].pricing[
-			currencyKey
-		];
+		productCatalog.SupporterPlus.ratePlans[ratePlan].pricing[currencyKey];
 
 	let product: 'SupporterPlus' | 'Contribution';
 	if (amount >= supporterPlusAmount) {
 		product = 'SupporterPlus';
 	} else {
 		product = 'Contribution';
+	}
+
+	return { product, amount, ratePlan };
+}
+/** we only export this for testing and shouldn't be coupled/used elsewhere */
+export function testGetProductFromContributionParams(
+	...args: Parameters<typeof getProductFromContributionParams>
+) {
+	return getProductFromContributionParams(...args);
+}
+
+type ContributionCheckoutRedirectProps = {
+	geoId: GeoId;
+	productCatalog: AppConfig['productCatalog'];
+	urlSearchParams: URLSearchParams;
+};
+function ContributionCheckoutRedirect({
+	geoId,
+	productCatalog,
+	urlSearchParams,
+}: ContributionCheckoutRedirectProps) {
+	const { product, ratePlan, amount } =
+		getProductFromContributionParams(geoId, productCatalog, urlSearchParams) ??
+		{};
+
+	if (!product || !ratePlan || !amount) {
+		return null;
 	}
 
 	return (
@@ -84,7 +107,11 @@ const router = createBrowserRouter(
 		{
 			path: `/${geoId}/contribute/checkout`,
 			element: (
-				<ContributionCheckoutRedirect geoId={geoId} appConfig={appConfig} />
+				<ContributionCheckoutRedirect
+					geoId={geoId}
+					productCatalog={appConfig.productCatalog}
+					urlSearchParams={new URLSearchParams(window.location.search)}
+				/>
 			),
 		},
 		{
