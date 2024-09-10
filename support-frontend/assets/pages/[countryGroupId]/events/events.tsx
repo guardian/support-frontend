@@ -31,9 +31,19 @@ const columns = css`
 `;
 
 const shorterBoxMargin = css`
-	border-radius: ${space[2]}px;
+	border-radius: ${space[4]}px;
 	:not(:last-child) {
 		margin-bottom: ${space[4]}px;
+	}
+
+	> div {
+		padding: 0;
+	}
+
+	// ticket tailor widget (class:box-color-background) margin
+	// needs removal, its container we can reduce to hide
+	> div div div {
+		margin: -2px -2px -8px -2px;
 	}
 `;
 
