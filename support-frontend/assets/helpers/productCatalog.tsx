@@ -2,7 +2,10 @@ import type { ProductKey } from '@guardian/support-service-lambdas/modules/produ
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
-import type { CountryGroupId } from './internationalisation/countryGroup';
+import type {
+	CountryGroupId,
+	SupportInternationalisationId,
+} from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
 export type { ProductKey };
@@ -342,3 +345,59 @@ export const productCatalogDescriptionNewBenefits: Record<
 		offers: [],
 	},
 };
+
+/**
+ * This method is to help us determine which product and rateplan to
+ * use based on a person's internationalisation ID.
+ *
+ * The reason this exists is because we have different pricing for
+ * `int` and `us` for SupporterPlus and GuardianWeekly, but they
+ * both use `USD`.
+ *
+ * As Zuora is restricted to only being able to vary on currency,
+ * we express this in the product catalog by having different products
+ * for GuardianWeekly, and different ratePlans for SupporterPlus.
+ *
+ * We are potentially going to look at Attribute based pricing in the future.
+ *
+ * @see: https://knowledgecenter.zuora.com/Zuora_Billing/Build_products_and_prices/Attribute-based_pricing/AA_Overview_of_Attribute-based_Pricing
+ * */
+export function internationaliseProductAndRatePlan(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ProductKey,
+	ratePlanKey: string,
+): { productKey: ProductKey; ratePlanKey: string } {
+	let productKeyToUse = productKey;
+	let ratePlanToUse = ratePlanKey;
+
+	if (productKey === 'TierThree') {
+		if (supportInternationalisationId === 'int') {
+			if (ratePlanKey === 'DomesticAnnual') {
+				ratePlanToUse = 'RestOfWorldAnnual';
+			}
+			if (ratePlanKey === 'DomesticMonthly') {
+				ratePlanToUse = 'RestOfWorldMonthly';
+			}
+		} else {
+			if (ratePlanKey === 'RestOfWorldAnnual') {
+				ratePlanToUse = 'DomesticAnnual';
+			}
+			if (ratePlanKey === 'RestOfWorldMonthly') {
+				ratePlanToUse = 'DomesticMonthly';
+			}
+		}
+	}
+
+	if (
+		productKey === 'GuardianWeeklyDomestic' ||
+		productKey === 'GuardianWeeklyRestOfWorld'
+	) {
+		if (supportInternationalisationId === 'int') {
+			productKeyToUse = 'GuardianWeeklyRestOfWorld';
+		} else {
+			productKeyToUse = 'GuardianWeeklyDomestic';
+		}
+	}
+
+	return { productKey: productKeyToUse, ratePlanKey: ratePlanToUse };
+}
