@@ -81,24 +81,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	useGenericCheckout: {
-		variants: [
-			{
-				id: 'control',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
 	abandonedBasket: {
 		variants: [
 			{
