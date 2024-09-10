@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { palette, space, textSans, until } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSans,
+	until,
+} from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useParams } from 'react-router-dom';
@@ -17,6 +23,12 @@ const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
+	}
+`;
+
+const darkBackgroundContainerTablet = css`
+	${from.tablet} {
+		min-height: 400px;
 	}
 `;
 
@@ -110,7 +122,10 @@ export function Events({ geoId }: Props) {
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
+			<CheckoutHeading
+				withTopBorder={true}
+				cssOverrides={darkBackgroundContainerTablet}
+			></CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
 					<Column span={[0, 2, 2, 3, 4]}></Column>
