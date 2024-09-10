@@ -91,7 +91,11 @@ export function Events({ geoId }: Props) {
 
 	const params = useParams();
 	const eventId = params.eventId;
-	const termsEvents = <a href={guardianLiveTermsLink}>Terms and Conditions</a>;
+	const termsEvents = (
+		<a href={guardianLiveTermsLink} target="_blank">
+			Terms and Conditions
+		</a>
+	);
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const pageviewId = getPageViewId();
