@@ -282,18 +282,11 @@ class Application(
       countryCode: String,
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    type Attempt[A] = EitherT[Future, String, A]
-
-    val geoData = request.geoData
-
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
-
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken),
+      contributionsHtml(countryCode, campaignCodeOption),
     ).withSettingsSurrogateKey
   }
 
@@ -315,11 +308,13 @@ class Application(
 
   private def contributionsHtml(
       countryCode: String,
-      geoData: GeoData,
-      idUser: Option[IdUser],
       campaignCode: Option[String],
-      guestAccountCreationToken: Option[String],
-  )(implicit request: RequestHeader, settings: AllSettings) = {
+  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
+    val geoData = request.geoData
+    val idUser = request.user
+
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -423,12 +418,22 @@ class Application(
   }
 
   def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    request.queryString
-      .getOrElse("product", Nil)
-      .headOption
-      .flatMap(productString => Product.fromString(productString))
-      .map(routeForProduct(_))
-      .getOrElse(BadRequest("No product name provided"))
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val isOneOff = request.queryString.get("selected-contribution-type").flatMap(_.headOption).contains("one_off")
+
+    if (isOneOff) {
+      Ok(
+        contributionsHtml(countryGroupId, None),
+      ).withSettingsSurrogateKey
+    } else {
+      val product = request.queryString
+        .getOrElse("product", Nil)
+        .headOption
+        .flatMap(productString => Product.fromString(productString))
+        .getOrElse(SupporterPlus)
+
+      routeForProduct(product)
+    }
   }
 
   def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
