@@ -1,9 +1,6 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type {
-	ContributionType,
-	RegularContributionType,
-} from 'helpers/contributions';
+import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
@@ -23,14 +20,6 @@ export type ThreeTierCardsProps = {
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
-	linkCtaClickHandler: (
-		event: React.MouseEvent<HTMLAnchorElement>,
-		link: string,
-		price: number,
-		cardTier: 1 | 2 | 3,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
 };
 
 const container = (cardCount: number) => css`
@@ -67,7 +56,6 @@ export function ThreeTierCards({
 	currencyId,
 	countryGroupId,
 	paymentFrequency,
-	linkCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveRecommendedAndSelectedCards =
 		cardsContent.filter((card) => card.isRecommended || card.isUserSelected)
@@ -94,7 +82,6 @@ export function ThreeTierCards({
 						currencyId={currencyId}
 						countryGroupId={countryGroupId}
 						paymentFrequency={paymentFrequency}
-						linkCtaClickHandler={linkCtaClickHandler}
 						ctaCopy={cardContent.ctaCopy}
 					/>
 				);
