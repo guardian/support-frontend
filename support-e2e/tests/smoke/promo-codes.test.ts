@@ -48,9 +48,7 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 			page,
 			context,
 			baseURL,
-			`/uk/contribute?promoCode=${testDetails.promoCode}${
-				testDetails.abTestHash ?? ''
-			}`,
+			`/uk/contribute?promoCode=${testDetails.promoCode}`,
 		);
 		await page.getByRole('tab').getByText(testDetails.frequency).click();
 
