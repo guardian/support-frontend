@@ -42,7 +42,7 @@ const columns = css`
 	}
 `;
 
-const shorterBoxMargin = css`
+const narrowBoxMarginAndPadding = css`
 	border-radius: ${space[4]}px;
 	:not(:last-child) {
 		margin-bottom: ${space[4]}px;
@@ -52,8 +52,10 @@ const shorterBoxMargin = css`
 		padding: 0;
 	}
 
-	// ticket tailor widget (class:box-color-background) margin
-	// needs removal, its container we can reduce to hide
+	// Ticket Tailor widget itself contains a margin & border
+	// not accessible directly (class:box-color-background)
+	// We can reduce its container box to hide
+	// the margin & border
 	> div div div {
 		margin: -2px -2px -8px -2px;
 	}
@@ -134,7 +136,7 @@ export function Events({ geoId }: Props) {
 				<Columns cssOverrides={columns} collapseUntil="tablet">
 					<Column span={[0, 2, 2, 3, 4]}></Column>
 					<Column span={[1, 8, 8, 8, 8]}>
-						<Box cssOverrides={shorterBoxMargin}>
+						<Box cssOverrides={narrowBoxMarginAndPadding}>
 							<BoxContents>
 								<div className="tt-widget">
 									<div className="tt-widget-fallback">
