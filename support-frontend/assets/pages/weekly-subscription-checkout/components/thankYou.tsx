@@ -17,7 +17,7 @@ import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	helpCentreUrl,
 	homeDeliveryUrl,
-	manageSubsUrl,
+	manageUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
@@ -195,7 +195,7 @@ function ThankYouContent({
 					<SansParagraph>
 						You can manage your subscription by visiting{' '}
 						<a
-							href={manageSubsUrl}
+							href={manageUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_my_account',
 								product: 'Paper',

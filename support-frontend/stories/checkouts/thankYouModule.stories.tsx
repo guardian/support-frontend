@@ -1,6 +1,11 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source/foundations';
-import { Column, Columns, Container } from '@guardian/source/react-components';
+import {
+	Column,
+	Columns,
+	Container,
+	LinkButton,
+} from '@guardian/source/react-components';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
@@ -45,6 +50,7 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
+import { manageUrl } from 'helpers/urls/externalLinks';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -167,6 +173,27 @@ NewsFeastApps.args = {
 	),
 	ctasSecond: (
 		<AppDownloadBadges countryGroupId={'GBPCountries'} isFeast={true} />
+	),
+};
+
+export const NewspaperArchiveBenefit = Template.bind({});
+
+NewspaperArchiveBenefit.args = {
+	moduleType: 'newspaperArchiveBenefit',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
+	header: 'Discover your Guardian archives benefit',
+	bodyCopy: <>Lorum ipsum</>,
+	ctas: (
+		<LinkButton
+			href={manageUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			priority="primary"
+			size="default"
+		>
+			Explore the archive
+		</LinkButton>
 	),
 };
 

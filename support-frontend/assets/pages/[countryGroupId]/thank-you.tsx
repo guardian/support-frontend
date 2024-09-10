@@ -353,9 +353,10 @@ function ThankYouComponent({
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
-		...maybeThankYouModule(emailExists, 'feedback'),
+		...maybeThankYouModule(emailExists && !isTier3, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3, 'socialShare'),
+		...maybeThankYouModule(isTier3, 'newspaperArchiveBenefit'),
 	];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;

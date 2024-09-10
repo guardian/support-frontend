@@ -36,7 +36,6 @@ const feastAppUrl = 'https://guardian-feast.go.link?adj_t=1dufrlhf';
 const androidDailyUrl =
 	'https://play.google.com/store/apps/details?id=com.guardian.editions';
 const myAccountUrl = `${profileUrl}/account/edit`;
-const manageSubsUrl = `${manageUrl}/subscriptions`;
 const helpCentreUrl = `${manageUrl}/help-centre`;
 const emailPreferences = `${manageUrl}/email-prefs`;
 const memUrls: Record<MemProduct, string> = {
@@ -140,7 +139,7 @@ export {
 	getSignoutUrl,
 	getReauthenticateUrl,
 	myAccountUrl,
-	manageSubsUrl,
+	manageUrl,
 	homeDeliveryUrl,
 	helpCentreUrl,
 	emailPreferences,

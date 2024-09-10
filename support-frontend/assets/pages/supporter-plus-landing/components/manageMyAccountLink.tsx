@@ -1,9 +1,9 @@
 import { sendTrackingEventsOnClick } from '../../../helpers/productPrice/subscriptions';
-import { manageSubsUrl } from '../../../helpers/urls/externalLinks';
+import { manageUrl } from '../../../helpers/urls/externalLinks';
 
 export const ManageMyAccountLink = (
 	<a
-		href={manageSubsUrl}
+		href={manageUrl}
 		onClick={sendTrackingEventsOnClick({
 			id: 'checkout_my_account',
 			product: 'PremiumTier',
