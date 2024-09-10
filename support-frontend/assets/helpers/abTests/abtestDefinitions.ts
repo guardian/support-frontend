@@ -84,7 +84,7 @@ export const tests: Tests = {
 	useGenericCheckout: {
 		variants: [
 			{
-				id: 'control',
+				id: 'variant',
 			},
 		],
 		audiences: {
