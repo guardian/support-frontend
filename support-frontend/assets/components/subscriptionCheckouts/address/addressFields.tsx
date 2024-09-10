@@ -16,6 +16,10 @@ import {
 	usStates,
 } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { ProductKey } from 'helpers/productCatalog';
+import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type {
 	AddressFieldsState,
 	AddressFields as AddressFieldsType,
@@ -35,6 +39,7 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 
 type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
+	countryGroupId?: CountryGroupId;
 	countries: Record<string, string>;
 	postcodeState: PostcodeFinderState;
 };
@@ -92,7 +97,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 
 type ValidityStateError = 'valueMissing' | 'patternMismatch';
 
-export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
+export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 	const patternMismatch = 'Please use only letters, numbers and punctuation.';
 	const errorMessages: Record<
 		keyof AddressFieldsType,
@@ -184,10 +189,50 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				data-qm-masking="blocklist"
 				label="Country"
 				value={props.country}
-				onChange={(e) => {
-					const isoCountry = Country.fromString(e.target.value);
-					if (isoCountry) {
-						props.setCountry(isoCountry);
+				onChange={(event) => {
+					const selectedCountry = Country.fromString(event.target.value);
+
+					if (selectedCountry && countryGroupId) {
+						const selectedCountryGroup = Object.entries(countryGroups).find(
+							([, countryGroup]) =>
+								countryGroup.countries.includes(selectedCountry),
+						)?.[0];
+
+						if (countryGroupId !== selectedCountryGroup) {
+							const pathname = window.location.pathname;
+							const currentInternationalisationId = pathname.split('/')[1];
+							const selectedInternationalisationId =
+								countryGroups[selectedCountryGroup as CountryGroupId]
+									.supportInternationalisationId;
+							const redirectPathname = pathname.replace(
+								currentInternationalisationId,
+								selectedInternationalisationId,
+							);
+
+							const urlSearchParams = new URLSearchParams(
+								window.location.search,
+							);
+							urlSearchParams.set('country', selectedCountry);
+							const product = urlSearchParams.get('product') as ProductKey;
+							const ratePlan = urlSearchParams.get('ratePlan') as string;
+							const { productKey, ratePlanKey } =
+								internationaliseProductAndRatePlan(
+									selectedInternationalisationId,
+									product,
+									ratePlan,
+								);
+							urlSearchParams.set('product', productKey);
+							urlSearchParams.set('ratePlan', ratePlanKey);
+
+							const location = `${redirectPathname}?${urlSearchParams.toString()}${
+								window.location.hash
+							}`;
+							window.location.href = location;
+						}
+					}
+
+					if (selectedCountry) {
+						props.setCountry(selectedCountry);
 					}
 				}}
 				error={firstError('country', props.errors)}
@@ -197,6 +242,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
 			</Select>
+
 			{props.country === 'GB' ? (
 				<PostcodeFinder
 					postcode={props.postcodeState.postcode}

@@ -43,6 +43,25 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
+	redirectCountryToCountryGroup: {
+		variants: [
+			// not really an AB test
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: true,
+		seed: 1,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
 	patronsOneOffOnly: {
 		variants: [
 			// not really an AB test
@@ -64,9 +83,6 @@ export const tests: Tests = {
 	},
 	useGenericCheckout: {
 		variants: [
-			{
-				id: 'control',
-			},
 			{
 				id: 'variant',
 			},

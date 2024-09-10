@@ -1,32 +1,174 @@
 package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
-import actions.{AsyncAuthenticatedBuilder, CacheControl, CustomActionBuilders}
-import admin.ServersideAbTest.generateParticipations
-import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import actions.CustomActionBuilders
+import admin.ServersideAbTest.{Participation, generateParticipations}
+import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
+import assets.{AssetsResolver, RefPath}
 import cats.data.EitherT
 import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.{Product, SupporterPlus, TierThree}
 import com.gu.support.config._
+import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
+import controllers.AppConfig.CsrfToken
+import views.html.helper.CSRF
+import io.circe.JsonObject
+import io.circe.syntax.EncoderOps
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.libs.circe.Circe
-import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
-import wiring.GoogleAuth
 
 import scala.concurrent.{ExecutionContext, Future}
+
+case class AppConfig private (
+    geoip: AppConfig.Geoip,
+    stripeKeyDefaultCurrencies: AppConfig.StripeKeyConfig,
+    stripeKeyAustralia: AppConfig.StripeKeyConfig,
+    stripeKeyUnitedStates: AppConfig.StripeKeyConfig,
+    payPalEnvironment: AppConfig.ConfigKeyValues,
+    amazonPaySellerId: AppConfig.ConfigKeyValues,
+    amazonPayClientId: AppConfig.ConfigKeyValues,
+    paymentApiUrl: String,
+    paymentApiPayPalEndpoint: String,
+    mdapiUrl: String,
+    csrf: AppConfig.CsrfToken,
+    guestAccountCreationToken: Option[String],
+    recaptchaEnabled: Boolean,
+    v2recaptchaPublicKey: String,
+    checkoutPostcodeLookup: Boolean,
+    productCatalog: JsonObject,
+    productPrices: ProductPrices,
+    serversideTests: Map[String, Participation],
+    user: Option[AppConfig.User],
+    settings: AllSettings,
+)
+
+// InternationalisationCodecs is needed for ProductPrices
+object AppConfig extends InternationalisationCodecs {
+  import io.circe.Encoder
+  import io.circe.generic.semiauto.deriveEncoder
+  import io.circe.JsonObject // This is needed for the JsonObject derivation
+  implicit val geoipEncoder: Encoder[Geoip] = deriveEncoder
+  implicit val configKeyValuesEncoder: Encoder[ConfigKeyValues] = deriveEncoder
+  implicit val stripeKeyConfigEncoder: Encoder[StripeKeyConfig] = deriveEncoder
+  implicit val csrfTokenEncoder: Encoder[CsrfToken] = deriveEncoder
+  implicit val userEncoder: Encoder[User] = deriveEncoder
+  implicit val guardianEncoder: Encoder[AppConfig] = deriveEncoder
+
+  def fromConfig(
+      geoData: GeoData,
+      paymentMethodConfigs: PaymentMethodConfigs,
+      paymentAPIService: PaymentAPIService,
+      membersDataApiUrl: String,
+      csrfToken: String,
+      guestAccountCreationToken: Option[String],
+      recaptchaConfigProvider: RecaptchaConfigProvider,
+      productCatalog: JsonObject,
+      serversideTests: Map[String, Participation],
+      productPrices: ProductPrices,
+      user: Option[IdUser],
+      isTestUser: Boolean,
+      settings: AllSettings,
+  ): AppConfig =
+    AppConfig(
+      geoip = Geoip(
+        countryGroup = geoData.countryGroup.map(_.id).mkString,
+        countryCode = geoData.country.map(_.alpha2).mkString,
+        stateCode = geoData.validatedStateCodeForCountry.mkString,
+      ),
+      stripeKeyDefaultCurrencies = StripeKeyConfig(
+        ONE_OFF = ConfigKeyValues(
+          default = paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.rawPublicKey,
+          test = paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.rawPublicKey,
+        ),
+        REGULAR = ConfigKeyValues(
+          default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+          test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+        ),
+      ),
+      stripeKeyAustralia = StripeKeyConfig(
+        ONE_OFF = ConfigKeyValues(
+          default = paymentMethodConfigs.oneOffDefaultStripeConfig.australiaAccount.rawPublicKey,
+          test = paymentMethodConfigs.oneOffTestStripeConfig.australiaAccount.rawPublicKey,
+        ),
+        REGULAR = ConfigKeyValues(
+          default = paymentMethodConfigs.regularDefaultStripeConfig.australiaAccount.rawPublicKey,
+          test = paymentMethodConfigs.regularTestStripeConfig.australiaAccount.rawPublicKey,
+        ),
+      ),
+      stripeKeyUnitedStates = if (settings.switches.featureSwitches.usStripeAccountForSingle.contains(On)) {
+        StripeKeyConfig(
+          ONE_OFF = ConfigKeyValues(
+            default = paymentMethodConfigs.oneOffDefaultStripeConfig.unitedStatesAccount.rawPublicKey,
+            test = paymentMethodConfigs.oneOffTestStripeConfig.unitedStatesAccount.rawPublicKey,
+          ),
+          REGULAR = ConfigKeyValues(
+            default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+        )
+      } else {
+        StripeKeyConfig(
+          ONE_OFF = ConfigKeyValues(
+            default = paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+          REGULAR = ConfigKeyValues(
+            default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+        )
+      },
+      ConfigKeyValues(
+        default = paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment,
+        test = paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment,
+      ),
+      amazonPaySellerId = ConfigKeyValues(
+        default = paymentMethodConfigs.defaultAmazonPayConfig.sellerId,
+        test = paymentMethodConfigs.testAmazonPayConfig.sellerId,
+      ),
+      amazonPayClientId = ConfigKeyValues(
+        default = paymentMethodConfigs.defaultAmazonPayConfig.clientId,
+        test = paymentMethodConfigs.testAmazonPayConfig.clientId,
+      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      mdapiUrl = membersDataApiUrl,
+      csrf = CsrfToken(token = csrfToken),
+      guestAccountCreationToken = guestAccountCreationToken,
+      recaptchaEnabled = settings.switches.recaptchaSwitches.enableRecaptchaFrontend.contains(On),
+      v2recaptchaPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+      checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
+      productCatalog = productCatalog,
+      serversideTests = serversideTests,
+      productPrices = productPrices,
+      user = user.map(user =>
+        User(
+          id = user.id,
+          email = user.primaryEmailAddress,
+          firstName = user.privateFields.firstName,
+          lastName = user.privateFields.secondName,
+        ),
+      ),
+      settings = settings,
+    )
+
+  case class Geoip(countryGroup: String, countryCode: String, stateCode: String)
+  case class ConfigKeyValues(default: String, test: String)
+  case class StripeKeyConfig(ONE_OFF: ConfigKeyValues, REGULAR: ConfigKeyValues)
+  case class CsrfToken(token: String)
+  case class User(id: String, email: String, firstName: Option[String], lastName: Option[String])
+}
 
 case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripePublicConfig,
@@ -337,5 +479,40 @@ class Application(
         user = request.user,
       ),
     ).withSettingsSurrogateKey
+  }
+
+  def appConfigJson: Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val isTestUser = testUserService.isTestUser(request)
+
+    val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+
+    val appConfig = AppConfig.fromConfig(
+      geoData = request.geoData,
+      paymentMethodConfigs = PaymentMethodConfigs(
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularTestStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularTestPayPalConfig = payPalConfigProvider.get(true),
+        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+        testAmazonPayConfig = amazonPayConfigProvider.get(true),
+      ),
+      paymentAPIService = paymentAPIService,
+      membersDataApiUrl = membersDataApiUrl,
+      csrfToken = CsrfToken(CSRF.getToken.value).token,
+      // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+      guestAccountCreationToken = request.flash.get("guestAccountCreationToken"),
+      recaptchaConfigProvider: RecaptchaConfigProvider,
+      productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
+      serversideTests = generateParticipations(Nil),
+      productPrices = productPrices,
+      user = request.user,
+      isTestUser = isTestUser,
+      settings = settings,
+    )
+    Ok(appConfig.asJson)
   }
 }
