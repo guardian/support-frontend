@@ -934,7 +934,7 @@ function CheckoutComponent({
 								? 'month'
 								: 'quarter'
 						}
-						amount={originalAmount}
+						amount={finalAmount}
 						promotion={promotion}
 						currency={currency}
 						checkListData={[
