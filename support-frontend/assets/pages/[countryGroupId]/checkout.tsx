@@ -1017,6 +1017,10 @@ function CheckoutComponent({
 							<>
 								<ExpressCheckoutElement
 									onReady={({ availablePaymentMethods }) => {
+										console.log(
+											'availablePaymentMethods --->',
+											availablePaymentMethods,
+										);
 										/**
 										 * This is use to show UI needed besides this Element
 										 * i.e. The "or" divider
