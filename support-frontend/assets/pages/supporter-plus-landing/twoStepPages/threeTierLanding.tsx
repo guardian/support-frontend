@@ -340,8 +340,7 @@ export function ThreeTierLanding({
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
 		abParticipations.landingPageOneTimeTab === 'oneTimeTab' ||
-		abParticipations.landingPageOneTimeTab === 'both' ||
-		campaignSettings?.enableSingleContributions;
+		abParticipations.landingPageOneTimeTab === 'both';
 
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
