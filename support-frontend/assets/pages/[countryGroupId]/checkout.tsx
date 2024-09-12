@@ -335,6 +335,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		 * which then needs this configuration.
 		 */
 		if (productKey === 'Contribution' || productKey === 'SupporterPlus') {
+			console.log('*** amount --->', payment.finalAmount * 100);
 			elementsOptions = {
 				mode: 'payment',
 				/**
@@ -1018,7 +1019,7 @@ function CheckoutComponent({
 								<ExpressCheckoutElement
 									onReady={({ availablePaymentMethods }) => {
 										console.log(
-											'availablePaymentMethods --->',
+											'*** availablePaymentMethods --->',
 											availablePaymentMethods,
 										);
 										/**
@@ -1094,14 +1095,16 @@ function CheckoutComponent({
 										 */
 										setStripeExpressCheckoutSuccessful(true);
 									}}
-									options={{
-										paymentMethods: {
-											applePay: 'auto',
-											googlePay: 'auto',
-											link: 'never',
-											paypal: 'auto',
-										},
-									}}
+									options={
+										{
+											// paymentMethods: {
+											// 	applePay: 'auto',
+											// 	googlePay: 'auto',
+											// 	link: 'never',
+											// 	paypal: 'auto',
+											// },
+										}
+									}
 								/>
 
 								{stripeExpressCheckoutReady && (
