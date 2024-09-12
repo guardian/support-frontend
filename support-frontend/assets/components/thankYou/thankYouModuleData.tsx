@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
-import { LinkButton } from '@guardian/source/react-components';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -22,7 +21,6 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
-import { manageUrl } from 'helpers/urls/externalLinks';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -226,17 +224,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
 			header: 'Discover your Guardian archives benefit',
 			bodyCopy: <>Lorum ipsum</>,
-			ctas: (
-				<LinkButton
-					href={manageUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					priority="primary"
-					size="default"
-				>
-					Explore the archive
-				</LinkButton>
-			),
+			ctas: null,
 		},
 		subscriptionStart: {
 			icon: getThankYouModuleIcon('subscriptionStart'),

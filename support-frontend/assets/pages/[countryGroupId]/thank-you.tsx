@@ -15,6 +15,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
+import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
@@ -330,6 +331,8 @@ function ThankYouComponent({
 			})),
 	];
 
+	const showNewspaperArchiveBenefit = abTests.newspaperArchiveBenefit.isActive;
+
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -353,10 +356,16 @@ function ThankYouComponent({
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
-		...maybeThankYouModule(emailExists && !isTier3, 'feedback'),
+		...maybeThankYouModule(
+			emailExists && !(isTier3 && showNewspaperArchiveBenefit),
+			'feedback',
+		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3, 'socialShare'),
-		...maybeThankYouModule(isTier3, 'newspaperArchiveBenefit'),
+		...maybeThankYouModule(
+			isTier3 && showNewspaperArchiveBenefit,
+			'newspaperArchiveBenefit',
+		),
 	];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
