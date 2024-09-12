@@ -387,7 +387,7 @@ function ThankYouComponent({
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
 							name={order.firstName}
-							amount={payment.finalAmount}
+							amount={payment.originalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
 							isTier3={isTier3}
