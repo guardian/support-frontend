@@ -7,7 +7,12 @@ import {
 	textSans,
 	until,
 } from '@guardian/source/foundations';
-import { Column, Columns, Hide } from '@guardian/source/react-components';
+import {
+	Column,
+	Columns,
+	Hide,
+	SvgGuardianLogo,
+} from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
@@ -70,7 +75,7 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 	subPath: '/contribute',
 };
 
-function PreRenderSupporterPlusLandingPage(): JSX.Element {
+export function PreRenderSupporterPlusLandingPage(): JSX.Element {
 	return (
 		<PageScaffold
 			header={
@@ -105,4 +110,12 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 	);
 }
 
-export const supporterPlusLanding = <PreRenderSupporterPlusLandingPage />;
+function PreRenderBlank() {
+	return (
+		<div>
+			<SvgGuardianLogo />
+		</div>
+	);
+}
+
+export const supporterPlusLanding = <PreRenderBlank />; // <PreRenderSupporterPlusLandingPage />;
