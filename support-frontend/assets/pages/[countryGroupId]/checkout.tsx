@@ -1099,6 +1099,7 @@ function CheckoutComponent({
 											applePay: 'auto',
 											googlePay: 'auto',
 											link: 'never',
+											paypal: 'auto',
 										},
 									}}
 								/>
