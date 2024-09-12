@@ -163,4 +163,28 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
+	landingPageOneTimeTab: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'oneTimeTab',
+			},
+			{
+				id: 'both',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 6,
+		targetPage: pageUrlRegexes.contributions.usLandingPage,
+		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+	},
 };
