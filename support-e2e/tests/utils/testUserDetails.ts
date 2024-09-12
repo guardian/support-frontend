@@ -12,6 +12,18 @@ export const setTestUserRequiredDetails = async (
 	await page.getByLabel('Last name').fill(lastName);
 };
 
+export const setTicketTailorTestUserRequiredDetails = async (
+	page: Page,
+	firstName: string,
+	lastName: string,
+	email: string,
+) => {
+	await page.getByLabel('First name').fill(firstName);
+	await page.getByLabel('Last name').fill(lastName);
+	await page.getByLabel('Email').fill(email);
+	await page.getByLabel('Repeat Email').fill(email);
+};
+
 export const setTestUserDetails = async (
 	page: Page,
 	testDetails: TestDetails,
