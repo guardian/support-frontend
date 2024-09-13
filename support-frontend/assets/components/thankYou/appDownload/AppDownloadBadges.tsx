@@ -16,7 +16,6 @@ import {
 const container = css`
 	display: flex;
 	align-items: center;
-	margin-top: ${space[6]}px;
 `;
 
 const googlePlayLink = css`
