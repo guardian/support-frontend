@@ -46,9 +46,10 @@ import {
 	isPaymentMethod,
 	PayPal,
 	Stripe,
+	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
 import * as cookie from 'helpers/storage/cookie';
@@ -113,6 +114,12 @@ type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 	stripePublicKey: string;
 	isTestUser: boolean;
 };
+
+function paymentMethodIsActive(paymentMethod: PaymentMethod) {
+	return isSwitchOn(
+		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
+	);
+}
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 	const { currencyKey } = getGeoIdConfig(geoId);
@@ -191,11 +198,9 @@ function OneTimeCheckoutComponent({
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-	const validPaymentMethods = [
-		Stripe,
-		PayPal,
-		countryId === 'US' && AmazonPay,
-	].filter(isPaymentMethod);
+	const validPaymentMethods = [Stripe, PayPal, countryId === 'US' && AmazonPay]
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
