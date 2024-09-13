@@ -61,7 +61,6 @@ import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
-	// Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
@@ -532,13 +531,15 @@ function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	// Todo shouldn't this be checking the switches?
 	const validPaymentMethods = [
-		// countryGroupId === 'EURCountries' && Sepa,
+		/* NOT YET IMPLEMENTED -
+    SHOULD CHECK FEATURE SWITCHES
+		countryGroupId === 'EURCountries' && Sepa,
+    countryId === 'US' && AmazonPay,
+    */
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
-		//countryId === 'US' && AmazonPay,
 	].filter(isPaymentMethod);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
