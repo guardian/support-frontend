@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, until } from '@guardian/source/foundations';
-import { Button, Checkbox } from '@guardian/source/react-components';
+import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
+import { Checkbox } from 'components/checkbox/Checkbox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
