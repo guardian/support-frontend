@@ -8,7 +8,7 @@ test.describe('TicketTailor', () => {
 	[
 		{
 			internationalisationId: 'uk',
-			eventId: '4467889',
+			eventId: '1354460',
 		},
 	].forEach((testDetails) => {
 		testTicketTailor(testDetails);

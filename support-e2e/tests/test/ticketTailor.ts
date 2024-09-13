@@ -1,13 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import {
-	setTestUserRequiredDetails,
-	setTicketTailorTestUserRequiredDetails,
-} from '../utils/testUserDetails';
-import { fillInPayPalDetails } from '../utils/paypal';
-import { fillInCardDetails } from '../utils/cardDetails';
-import { checkRecaptcha } from '../utils/recaptcha';
 
 type TestDetails = {
 	internationalisationId: string;
@@ -17,7 +10,7 @@ type TestDetails = {
 export const testTicketTailor = (testDetails: TestDetails) => {
 	const { internationalisationId, eventId } = testDetails;
 
-	test(`event ${eventId} in ${internationalisationId}`, async ({
+	test(`${internationalisationId.toUpperCase()} event ${eventId}`, async ({
 		context,
 		baseURL,
 	}) => {
@@ -25,35 +18,41 @@ export const testTicketTailor = (testDetails: TestDetails) => {
 		const page = await context.newPage();
 		await setupPage(page, context, baseURL, url);
 
-		await page
-			.locator("iframe[id^='tt-iframe-408503']")
-			.scrollIntoViewIfNeeded();
-		await page
-			.frameLocator("iframe[id^='tt-iframe-408503']")
-			// this class gets added to the iframe body after the JavaScript has finished executing
-			.locator('body.dom-ready')
-			.locator('[role="button"]:has-text("Next")') //?input?
-			.click({ delay: 2000 });
+		// -------- iFrame Locator Notes (wip) ---------
+		// page.frameLocator(
+		//    "iframe"
+		//    "iframe[name^/title^='']"
+		//    "iframe[url^='https://www.tickettailor.com/events/guardianlivecode/1354460/book']" -> ? Possible ?
+		//  )
+		//  .first() / .nth(*) / .last()
+		//  .locator(
+		//      'body.dom-ready' => ? Possible, class gets added to the iframe body after the JavaScript has finished executing ?
+		//      '[role="heading"]:has-text["CODE"]' Or .getByRole('heading', { name: `CODE` }) Or .getByText('CODE')
+		//      '[role="link"]:has-text["Next"]' Or .getByRole('link', { name: `Next` })
+		//      '#<Name>'
 
-		const testFirstName = firstName();
-		const testLastName = lastName();
-		const testEmail = email();
-		await setTicketTailorTestUserRequiredDetails(
-			page,
-			testFirstName,
-			testLastName,
-			testEmail,
-		);
-		await page.getByRole('button', { name: `Next` }).click();
-
-		await page
-			.getByRole('button', { name: `Click here to complete this order` })
-			.click();
-
+		const iFrame = page.frameLocator('iframe').first();
 		await expect(
-			page.getByRole('heading', { name: 'Order complete' }),
+			iFrame.locator('[role="heading"]:has-text["CODE"]'),
 		).toBeVisible({
-			timeout: 600000,
+			timeout: 10000,
+		});
+		await iFrame.locator('#submit').click({ delay: 2000 });
+		await iFrame
+			.frameLocator('iframe')
+			.first()
+			.getByLabel('First name')
+			.fill(firstName());
+		await iFrame.getByLabel('Last name').fill(lastName());
+		await iFrame.getByLabel('Email').fill(email());
+		await iFrame.getByLabel('Repeat Email').fill(email());
+		await iFrame.locator('#submit').click({ delay: 2000 });
+		await expect(
+			iFrame.locator(
+				'[role="link"]:has-text["Click here to complete this order"]',
+			),
+		).toBeVisible({
+			timeout: 10000,
 		});
 	});
 };
