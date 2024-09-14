@@ -27,7 +27,10 @@ function useValidation<
 	const errorsPreventSubmission = useContributionsSelector(
 		contributionsFormHasErrors,
 	);
-
+	console.log(
+		'useValidation.errorsPreventSubmission->',
+		errorsPreventSubmission,
+	);
 	const validateAndPay = useCallback(
 		function validateAndPay(event: EventType) {
 			event.preventDefault();
@@ -71,7 +74,7 @@ export function useFormValidation<
 		() => validateForm(paymentMethod.name),
 		dispatchPaymentWaiting,
 	);
-
+	console.log('TEST useFormValidation.validateAndPay->', validateAndPay);
 	return validateAndPay;
 }
 

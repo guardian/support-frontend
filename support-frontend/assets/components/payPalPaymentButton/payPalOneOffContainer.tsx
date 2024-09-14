@@ -39,7 +39,7 @@ export function PayPalButtonOneOffContainer({
 	return (
 		<DefaultButtonContainer
 			onClick={payOneOffWithPayPal}
-			createButtonText={(amount) => `Pay ${amount} with PayPal`}
+			createButtonText={(amount) => `Pay ${amount} 1with PayPal`}
 		/>
 	);
 }
