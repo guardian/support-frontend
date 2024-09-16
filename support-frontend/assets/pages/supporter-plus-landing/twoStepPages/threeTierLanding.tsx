@@ -674,7 +674,7 @@ export function ThreeTierLanding({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				{enableSingleContributionsTab && (
+				{!enableSingleContributionsTab && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						btnClickHandler={handleSupportOnceBtnClick}
