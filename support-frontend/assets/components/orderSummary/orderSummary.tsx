@@ -1,4 +1,4 @@
-import { SvgInfo } from '@guardian/source/react-components';
+import { SvgInfoRound } from '@guardian/source/dist/react-components';
 import type { ReactNode } from 'react';
 import 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';
@@ -37,7 +37,7 @@ function OrderSummary(props: PropTypes): JSX.Element {
 				<div>{props.children}</div>
 				<div css={styles.infoContainer}>
 					<div css={styles.info}>
-						<SvgInfo />
+						<SvgInfoRound />
 						<span>You can cancel any time</span>
 					</div>
 				</div>

@@ -170,6 +170,17 @@ NewsFeastApps.args = {
 	),
 };
 
+export const NewspaperArchiveBenefit = Template.bind({});
+
+NewspaperArchiveBenefit.args = {
+	moduleType: 'newspaperArchiveBenefit',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
+	header: 'Discover your Guardian archives benefit',
+	bodyCopy: <>Lorum ipsum</>,
+	ctas: null,
+};
+
 export const ShareYourSupport = Template.bind({});
 
 ShareYourSupport.args = {

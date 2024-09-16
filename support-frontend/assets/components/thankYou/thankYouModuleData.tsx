@@ -220,6 +220,12 @@ export const getThankYouModuleData = (
 			),
 			ctas: null,
 		},
+		newspaperArchiveBenefit: {
+			icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
+			header: 'Discover your Guardian archives benefit',
+			bodyCopy: <>Lorum ipsum</>,
+			ctas: null,
+		},
 		subscriptionStart: {
 			icon: getThankYouModuleIcon('subscriptionStart'),
 			header: subscriptionStartHeader,
