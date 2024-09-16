@@ -28,7 +28,7 @@ function useValidation<
 		contributionsFormHasErrors,
 	);
 	console.log(
-		'useValidation.errorsPreventSubmission->',
+		'TEST useValidation.errorsPreventSubmission->',
 		errorsPreventSubmission,
 	);
 	const validateAndPay = useCallback(

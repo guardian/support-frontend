@@ -67,6 +67,7 @@ export function PaymentRequestButtonContainer({
 		handleButtonClick(event);
 	}
 
+	console.log('TEST paymentRequest=', paymentRequest);
 	if (paymentRequest) {
 		if (buttonType === 'PAY_NOW') {
 			return (

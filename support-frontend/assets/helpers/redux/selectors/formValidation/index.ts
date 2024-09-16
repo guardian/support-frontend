@@ -17,10 +17,18 @@ export function getAllErrorsForContributions(
 	const prbErrors = getPaymentRequestButtonErrors(state);
 
 	if (prbErrors) {
+		console.log(
+			'TEST getAllErrorsForContributions.prbErrors FOUND =',
+			prbErrors,
+		);
 		return prbErrors;
 	}
 
 	const personalDetailsErrors = getPersonalDetailsErrors(state);
+	console.log(
+		'TEST getAllErrorsForContributions.personalDetailsErrors=',
+		personalDetailsErrors,
+	);
 
 	const otherAmount = getOtherAmountErrors(state);
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
