@@ -2,9 +2,9 @@
 import { css, ThemeProvider } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenueBrandAlt,
 	LinkButton,
 	SvgArrowRightStraight,
+  themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import 'helpers/internationalisation/countryGroup';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
@@ -57,7 +57,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 					Daily, Australia Weekend and other special editions.
 				</p>
 				<div css={ctas}>
-					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
+					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
 							css={marginForFirstButton}
 							priority="tertiary"
@@ -109,7 +109,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 					happens.
 				</p>
 				<div css={ctas}>
-					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
+					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
 							css={marginForFirstButton}
 							priority="tertiary"
@@ -156,7 +156,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 					Never be interrupted or distracted by ads again by signing in. Just
 					use your subscriber email and password when you next visit.
 				</p>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
+				<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 					<LinkButton
 						css={marginForFirstButton}
 						priority="tertiary"

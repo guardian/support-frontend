@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import {
 	between,
-	body,
 	from,
 	neutral,
 	space,
+  textEgyptian15,
+    textSansBold17,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import AppImageGuardianNews from 'components/svgs/appGuardianNews';
@@ -100,7 +101,7 @@ const iconContainer = css`
 
 const headerContainer = css`
 	grid-area: header;
-	${body.medium({ fontWeight: 'bold' })}
+	${textSansBold17};
 	align-self: center;
 
 	${from.desktop} {
@@ -132,7 +133,7 @@ const bodyStyle = css`
 `;
 
 const bodyCopyStyle = css`
-	${body.small()};
+	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
 		font-size: 17px;

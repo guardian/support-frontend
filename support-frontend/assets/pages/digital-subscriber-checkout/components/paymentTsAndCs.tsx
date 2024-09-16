@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source/foundations';
+import { neutral, textSans12 } from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import { privacyLink } from 'helpers/legal';
 
@@ -8,7 +8,7 @@ const marginTop = css`
 `;
 
 const container = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	color: ${neutral[20]};
 
 	& a {

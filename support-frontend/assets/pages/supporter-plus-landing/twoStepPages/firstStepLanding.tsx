@@ -4,12 +4,12 @@ import {
 	from,
 	neutral,
 	space,
-	textSans,
+  textSans12,
+  textSans14,
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button,
-	buttonThemeReaderRevenueBrand,
+	Button, themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router';
@@ -67,7 +67,7 @@ const checkoutBtnStyleOverrides = css`
 `;
 
 const cancelAnytime = css`
-	${textSans.xsmall()};
+	${textSans14};
 	text-align: center;
 	color: ${neutral[20]};
 	margin: ${space[3]}px 0;
@@ -77,7 +77,7 @@ const cancelAnytime = css`
 `;
 
 const cancelAnytimeDescription = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	color: ${neutral[20]};
 	margin: ${space[4]}px 0 ${space[3]}px;
 	${from.tablet} {
@@ -157,7 +157,7 @@ export function SupporterPlusInitialLandingPage({
 				)}
 
 				<div css={checkoutBtnAndPaymentIconsHolder}>
-					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+					<ThemeProvider theme={themeButtonReaderRevenueBrand}>
 						<Button
 							iconSide="left"
 							priority="primary"

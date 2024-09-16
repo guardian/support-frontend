@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { from, headline, space } from '@guardian/source/foundations';
+import { from, headlineBold24, space } from '@guardian/source/foundations';
 import { Accordion, RadioGroup } from '@guardian/source/react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -15,7 +15,7 @@ const container = css`
 
 const header = css`
 	margin-bottom: ${space[3]}px;
-	${headline.xsmall({ fontWeight: 'bold' })};
+	${headlineBold24};
 	${from.tablet} {
 		font-size: 28px;
 	}

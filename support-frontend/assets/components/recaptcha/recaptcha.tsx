@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, textSans, until } from '@guardian/source/foundations';
+import { palette, textSans12, until } from '@guardian/source/foundations';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const container = css`
@@ -17,7 +17,7 @@ const container = css`
 
 const terms = css`
 	color: ${palette.neutral[46]};
-	${textSans.xxsmall()}
+	${textSans12};
 
 	margin-top: 5px;
 

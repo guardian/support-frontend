@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source/foundations';
+import { neutral, textSans14,  } from '@guardian/source/foundations';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
 const signOutStyles = css`
-	${textSans.xsmall({ fontWeight: 'light' })}
+	${textSans14};
 	color: ${neutral[7]};
 `;
 

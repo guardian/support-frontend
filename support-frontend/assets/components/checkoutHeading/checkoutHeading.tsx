@@ -5,7 +5,7 @@ import {
 	from,
 	neutral,
 	space,
-	textSans,
+    textSansBold20,
 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
 import { Container } from 'components/layout/container';
@@ -24,7 +24,7 @@ const headingContentContainer = css`
 		min-height: 432px;
 	}
 	padding-top: ${space[6]}px;
-	${textSans.large({ fontWeight: 'bold' })}
+	${textSansBold20}
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {

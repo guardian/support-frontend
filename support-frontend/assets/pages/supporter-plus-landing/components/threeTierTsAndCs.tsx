@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, palette, textSans } from '@guardian/source/foundations';
+import { from, palette, textSans12} from '@guardian/source/foundations';
 import type { RegularContributionType } from 'helpers/contributions';
 import {
 	getDateWithOrdinal,
@@ -39,7 +39,7 @@ interface TierPlanCosts {
 const container = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
-	${textSans.xxsmall({ lineHeight: 'tight' })};
+	${textSans12};
 	${from.desktop} {
 		max-width: 780px;
 	}

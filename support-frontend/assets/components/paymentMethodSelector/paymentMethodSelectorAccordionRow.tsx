@@ -27,14 +27,14 @@ const radio = css`
 `;
 
 const focused = css`
-	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
+	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive}; //TODO check what to update this to
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
 
 const notFocused = css`
 	/* Using box shadows prevents layout shift when the rows are expanded */
-	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
+	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border}; //TODO check what to update this to
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
@@ -54,7 +54,7 @@ const accordionBodyPadding = css`
 const expandedBody = css`
 	/*
 	Hardcoded max-height to exceed existing max content height
-	Otherwise, there will be a temporary scrollbar visible as 
+	Otherwise, there will be a temporary scrollbar visible as
 	the row height transitions
 	*/
 	max-height: 1200px;

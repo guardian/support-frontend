@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space, titlepiece } from '@guardian/source/foundations';
+import { from, space, titlepiece42 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -160,14 +160,14 @@ function YellowHighlight({ amount, currency, productName }: YellowAmountProps) {
 }
 
 const headerTitleText = css`
-	${titlepiece.small()};
+	${titlepiece42};
 	font-size: 24px;
 	${from.tablet} {
 		font-size: 40px;
 	}
 `;
 const tier3HeaderTitleText = css`
-	${titlepiece.small()};
+	${titlepiece42};
 	font-size: 24px;
 	${from.tablet} {
 		font-size: 28px;

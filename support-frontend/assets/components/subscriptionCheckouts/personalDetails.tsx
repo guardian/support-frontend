@@ -1,9 +1,9 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import { space, textSans17,  } from '@guardian/source/foundations';
 import {
 	Button,
-	buttonThemeReaderRevenueBrandAlt,
 	TextInput,
+    themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
@@ -16,11 +16,11 @@ const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 const sansText = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 const paragraphWithButton = css`
 	margin-top: ${space[2]}px;
-	${textSans.medium()};
+	${textSans17};
 `;
 
 export type PropTypes = {
@@ -55,7 +55,7 @@ function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
 			</CheckoutExpander>
 			<CheckoutExpander copy="Not you?">
 				<p css={paragraphWithButton}>
-					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
+					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<Button
 							type="button"
 							data-testid="sign-out"

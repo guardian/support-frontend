@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { from, headline, neutral, space } from '@guardian/source/foundations';
+import { from, headlineBold42, neutral, space } from '@guardian/source/foundations';
 
 const headingStyles = css`
 	display: none;
 
 	color: ${neutral[100]};
 	max-width: 480px;
-	${headline.large({ fontWeight: 'bold' })}
+	${headlineBold42};
 	margin-bottom: ${space[3]}px;
 
 	${from.desktop} {

@@ -1,15 +1,14 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-	headline,
+  headlineBold24,
 	palette,
 	space,
-	textSans,
+  textSans17,
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button,
-	buttonThemeReaderRevenueBrand,
+	Button, themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
@@ -29,7 +28,7 @@ const sectionStyle = css`
 const titleStyle = css`
 	margin: 0 0 ${space[3]}px;
 	text-align: center;
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headlineBold24}
 	${from.tablet} {
 		font-size: 22px;
 	}
@@ -64,7 +63,7 @@ export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
 		<section css={sectionStyle}>
 			<div
 				css={css`
-					${textSans.medium()}
+					${textSans17}
 				`}
 			>
 				<h2 css={titleStyle}>Support just once</h2>
@@ -108,7 +107,7 @@ export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
 				/>
 			</div>
 			<div css={buttonContainer}>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+				<ThemeProvider theme={themeButtonReaderRevenueBrand}>
 					<Button cssOverrides={btnStyleOverrides} onClick={btnClickHandler}>
 						Continue to checkout
 					</Button>

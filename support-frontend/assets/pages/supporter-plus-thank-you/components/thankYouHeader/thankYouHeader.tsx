@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { body, from, space } from '@guardian/source/foundations';
+import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -19,7 +19,7 @@ export const header = css`
 `;
 
 export const headerSupportingText = css`
-	${body.small()};
+	${textEgyptian15};
 	padding-top: ${space[3]}px;
 
 	${from.tablet} {

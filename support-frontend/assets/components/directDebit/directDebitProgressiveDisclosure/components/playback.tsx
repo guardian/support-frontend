@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import { space, textSans15, textSans17, textSansBold17, } from '@guardian/source/foundations';
 import {
 	Button,
-	buttonThemeReaderRevenueBrand,
-	buttonThemeReaderRevenueBrandAlt,
 	SvgArrowRightStraight,
+  themeButtonReaderRevenueBrand,
+    themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
@@ -20,22 +20,20 @@ const directDebitForm = css`
 
 const fieldLabel = css`
 	display: block;
-	${textSans.medium({
-		fontWeight: 'bold',
-	})};
+	${textSansBold17};
 	margin: 8px 0 6px;
 `;
 
 const fieldData = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 
 const fieldInfo = css`
-	${textSans.small()};
+	${textSans15};
 `;
 
 const fieldInfoWithMargin = css`
-	${textSans.small()};
+	${textSans15};
 	margin: ${space[2]}px 0 ${space[5]}px;
 `;
 
@@ -113,10 +111,10 @@ function Playback(props: {
 			</div>
 
 			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
+				<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 					<Button onClick={props.editDirectDebitClicked}>Edit</Button>
 				</ThemeProvider>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+				<ThemeProvider theme={themeButtonReaderRevenueBrand}>
 					<Button
 						id="qa-submit-button-2"
 						onClick={props.onSubmit}

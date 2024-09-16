@@ -1,17 +1,18 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	body,
 	brandAlt,
 	from,
-	headline,
+  headlineBold34,
+  headlineBold42,
+  palette,
 	space,
-	text,
+    textEgyptian17,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeBrand,
 	LinkButton,
 	SvgArrowDownStraight,
+    themeButtonBrand,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -46,24 +47,18 @@ const heroCopy = css`
 	}
 `;
 const heroTitle = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})};
+	${headlineBold34};
 	margin-bottom: ${space[3]}px;
 
 	${from.tablet} {
-		${headline.large({
-			fontWeight: 'bold',
-		})};
+		${headlineBold42};
 	}
 `;
 const heroTitleHighlight = css`
 	color: ${brandAlt[400]};
 `;
 const heroParagraph = css`
-	${body.medium({
-		lineHeight: 'loose',
-	})}
+	${textEgyptian17};
 	margin-bottom: ${space[6]}px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */
@@ -120,7 +115,7 @@ export function PaperHero({
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.primary}
+					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
 					copy={roundelText}
 				/>
@@ -142,7 +137,7 @@ export function PaperHero({
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
 						<p css={heroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
+						<ThemeProvider theme={themeButtonBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',
@@ -177,7 +172,7 @@ export function PriceCardsPaperHero({
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.primary}
+					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
 					copy={roundelText}
 				/>

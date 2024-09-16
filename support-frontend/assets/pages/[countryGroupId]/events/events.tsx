@@ -3,7 +3,6 @@ import {
 	from,
 	palette,
 	space,
-	textSans,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
@@ -35,7 +34,7 @@ const darkBackgroundContainerTablet = css`
 const columns = css`
 	position: relative;
 	color: ${palette.neutral[7]};
-	${textSans.medium()};
+	${textSans17};
 	padding-top: ${space[10]}px;
 	${until.tablet} {
 		padding-top: ${space[3]}px;
@@ -63,7 +62,7 @@ const narrowBoxMarginAndPadding = css`
 
 const tscs = css`
 	color: #606060;
-	${textSans.xxsmall()};
+	${textSans12};
 	padding-bottom: ${space[14]}px;
 	${until.tablet} {
 		padding-bottom: ${space[2]}px;

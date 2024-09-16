@@ -15,7 +15,7 @@ import {
 	between,
 	from,
 	space,
-	textSans,
+  textSans15,
 	until,
 	visuallyHidden,
 } from '@guardian/source/foundations';
@@ -70,7 +70,7 @@ const tooltipContainerDisplay = (open: boolean, desktopOnly?: boolean) => css`
 
 const tooltipCss = css`
 	overflow: hidden;
-	${textSans.small()};
+	${textSans15};
 	background-color: #606060;
 	color: white;
 	padding: 12px 24px 16px 16px;

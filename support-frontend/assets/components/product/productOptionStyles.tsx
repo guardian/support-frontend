@@ -3,15 +3,21 @@ import {
 	between,
 	brandAlt,
 	from,
-	headline,
+  headlineBold17,
+  headlineBold20,
+  headlineBold24,
+  headlineBold28,
+  headlineBold42,
 	neutral,
 	space,
-	textSans,
+  textSans14,
+  textSans15,
+  textSans17,
 	until,
 } from '@guardian/source/foundations';
 
 export const productOption = css`
-	${textSans.medium()};
+	${textSans17};
 	position: relative;
 	display: grid;
 	grid-template-columns: 2fr 1fr;
@@ -55,61 +61,51 @@ export const productOptionVerticalLine = css`
 `;
 
 export const productOptionTitle = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 	padding-bottom: ${space[5]}px;
 	${from.tablet} {
 		margin-bottom: ${space[2]}px;
 	}
 	${between.tablet.and.leftCol} {
-		${headline.xxxsmall({
-			fontWeight: 'bold',
-		})};
+		${headlineBold17};
 	}
 `;
 
 export const productOptionOfferCopy = css`
-	${textSans.medium()};
+	${textSans17};
 	${from.tablet} {
 		height: 100%;
 		padding-bottom: ${space[2]}px;
 	}
 	${between.tablet.and.leftCol} {
-		${textSans.small()};
+		${textSans15};
 	}
 `;
 
 export const productOptionPrice = css`
 	display: block;
 	padding-bottom: ${space[5]}px;
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 	${between.tablet.and.leftCol} {
-		${headline.small({
-			fontWeight: 'bold',
-		})};
+		${headlineBold28};
 	}
 	${from.leftCol} {
-		${headline.large({
-			fontWeight: 'bold',
-		})};
+		${headlineBold42};
 		padding-bottom: 0;
 	}
 `;
 
 export const productOptionPriceCopy = css`
-	${textSans.xsmall()};
+	${textSans14};
 	${from.tablet} {
 		height: 100%;
 		margin-bottom: ${space[4]}px;
 	}
 	${between.phablet.and.leftCol} {
-		${textSans.small()};
+		${textSans15};
 	}
 	${from.leftCol} {
-		${textSans.medium()};
+		${textSans17};
 	}
 `;
 
@@ -122,15 +118,13 @@ export const productOptionHighlight = css`
 	transform: translateY(-100%);
 	text-align: center;
 	padding: ${space[2]}px ${space[3]}px;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold20};
 `;
 
 export const specialOfferHighlight = css`
-	width: calc(100% + 10px);
-	top: 0px;
-	left: -5px;
+  width: calc(100% + 10px);
+  top: 0;
+  left: -5px;
 `;
 
 export const buttonDiv = css`

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space, sport, textSans } from '@guardian/source/foundations';
+import { neutral, space, sport, textEgyptian15 } from '@guardian/source/foundations';
 
 const container = css`
 	display: flex;
@@ -19,7 +19,7 @@ const qrContainer = css`
 `;
 
 const title = css`
-	${textSans.small({ lineHeight: 'regular' })};
+	${textEgyptian15};
 	margin-top: ${space[3]}px;
 	margin-left: ${space[3]}px;
 `;

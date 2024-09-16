@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source/foundations';
+import { from, neutral, space, textSans17 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
 import {
 	FooterLinks,
@@ -29,7 +29,7 @@ import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components
 const checkoutContainer = css`
 	position: relative;
 	color: ${neutral[7]};
-	${textSans.medium()};
+	${textSans17};
 
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;

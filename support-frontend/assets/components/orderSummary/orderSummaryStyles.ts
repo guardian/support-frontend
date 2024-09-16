@@ -1,26 +1,27 @@
 import { css } from '@emotion/react';
 import {
-	background,
 	between,
-	border,
-	brand,
 	from,
-	headline,
+  headlineBold17,
+  headlineBold24,
+  headlineMedium17,
 	neutral,
+  palette,
 	space,
-	text,
-	textSans,
+  textSans14,
+  textSans15,
+  textSansBold17,
 	until,
 } from '@guardian/source/foundations';
 
 export const wrapper = css`
-	background-color: ${background.primary};
-	color: ${text.primary};
+	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
 	${until.desktop} {
 		padding: ${space[2]}px ${space[3]}px;
 	}
 	${until.tablet} {
-		box-shadow: 0 4px 4px ${border.secondary};
+		box-shadow: 0 4px 4px ${palette.neutral[86]};
 	}
 `;
 export const topLine = css`
@@ -35,13 +36,11 @@ export const topLine = css`
 	a,
 	a:visited {
 		display: block;
-		${textSans.small()};
-		color: ${text.primary};
+		${textSans15};
+		color: ${palette.neutral[7]};
 		text-decoration: none;
 		${from.desktop} {
-			${textSans.medium({
-				fontWeight: 'bold',
-			})};
+			${textSansBold17};
 		}
 	}
 
@@ -65,15 +64,16 @@ export const topLineBorder = css`
 	}
 `;
 export const title = css`
-	${headline.xxxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'loose',
-	})};
+	${headlineBold17};
+/**
+//Is this comment now redundant?
+ * @TODO Typography preset styles should not be overridden.
+ * Please speak to your team's designer and update this to use a more appropriate preset.
+*/
+line-height: 1.4;;
 
-	${from.desktop} {
-		${headline.xsmall({
-			fontWeight: 'bold',
-		})}
+    ${from.desktop} {
+		${headlineBold24}
 	}
 `;
 export const contentBlock = css`
@@ -89,7 +89,7 @@ export const contentBlock = css`
 	}
 `;
 export const mobileSummary = css`
-	${headline.xxxsmall()};
+	${headlineMedium17};
 	width: 100%;
 
 	h4 {
@@ -139,7 +139,7 @@ export const infoContainer = css`
 	padding: 0 ${space[2]}px;
 `;
 export const info = css`
-	${textSans.xsmall()};
+	${textSans14};
 	line-height: 22px;
 	display: flex;
 	padding: ${space[2]}px 0;
@@ -149,14 +149,12 @@ export const info = css`
 		/* Repeat height here to fix Safari issue with inline-flex SVGs */
 		height: 22px;
 		max-width: 22px;
-		fill: ${brand[400]};
+		fill: ${palette.brand[400]};
 		margin-right: ${space[2]}px;
 	}
 `;
 export const total = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px;
 	display: flex;

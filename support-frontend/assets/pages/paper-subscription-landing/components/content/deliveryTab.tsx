@@ -2,9 +2,9 @@
 import { css } from '@emotion/react';
 import {
 	from,
+  headlineMedium28,
 	neutral,
 	space,
-	textSans,
 	until,
 } from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';
@@ -42,7 +42,7 @@ export const accordionContainer = css`
 
 	p,
 	a {
-		${textSans.small()};
+		${headlineMedium28};
 		margin-bottom: ${space[3]}px;
 	}
 

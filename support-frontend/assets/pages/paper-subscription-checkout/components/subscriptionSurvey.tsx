@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import { from, headlineBold20, space, textSans17 } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
@@ -11,20 +11,10 @@ import Content from 'components/content/contentSimple';
 
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'loose',
-	})};
+	${headlineBold20};
 `;
 const sansText = css`
-	${textSans.medium({
-		lineHeight: 'regular',
-	})}
-	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})}
-	}
+	${textSans17}
 `;
 const maxWidth = css`
 	${from.tablet} {

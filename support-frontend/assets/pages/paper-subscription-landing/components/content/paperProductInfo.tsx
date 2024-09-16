@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import {
-	body,
 	brandAlt,
 	from,
-	headline,
+  headlineBold34,
+  headlineBold42,
 	space,
+    textEgyptian17,
 } from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
@@ -25,24 +26,18 @@ const heroCopy = css`
 	}
 `;
 const heroTitle = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})};
+	${headlineBold34};
 	margin-bottom: ${space[3]}px;
 
 	${from.tablet} {
-		${headline.large({
-			fontWeight: 'bold',
-		})};
+		${headlineBold42};
 	}
 `;
 const heroTitleHighlight = css`
 	color: ${brandAlt[400]};
 `;
 const heroParagraph = css`
-	${body.medium({
-		lineHeight: 'loose',
-	})}
+	${textEgyptian17};
 	margin-bottom: ${space[6]}px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */

@@ -4,7 +4,7 @@ import {
 	neutral,
 	palette,
 	space,
-	textSans,
+  textSans17,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
@@ -34,7 +34,7 @@ import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
 const checkoutContainer = css`
 	position: relative;
 	color: ${neutral[7]};
-	${textSans.medium()};
+	${textSans17};
 
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;

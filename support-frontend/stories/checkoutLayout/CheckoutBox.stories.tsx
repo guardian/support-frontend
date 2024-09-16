@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand, neutral } from '@guardian/source/foundations';
+import { neutral, palette } from '@guardian/source/foundations';
 import { Column, Columns, TextInput } from '@guardian/source/react-components';
 import type { BoxProps } from 'components/checkoutBox/checkoutBox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -66,7 +66,7 @@ WithoutBoxContents.args = {
 		<div>
 			<h2
 				style={{
-					backgroundColor: brand[600],
+					backgroundColor: palette.brand[600],
 					color: neutral[100],
 					height: '42px',
 					padding: '8px',

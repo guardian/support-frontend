@@ -3,12 +3,14 @@ import {
 	from,
 	palette,
 	space,
-	textSans,
+  textSans15,
+  textSansBold14,
+  textSansBold24,
 	until,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenueBrand,
 	LinkButton,
+  themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type {
@@ -82,12 +84,12 @@ const container = (
 };
 
 const titleCss = css`
-	${textSans.small({ fontWeight: 'bold' })};
+	${textSansBold14};
 	color: #606060;
 `;
 
 const priceCss = (hasPromotion: boolean) => css`
-	${textSans.xlarge({ fontWeight: 'bold' })};
+	${textSansBold24};
 	position: relative;
 	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
 	${from.desktop} {
@@ -136,7 +138,7 @@ const checkmarkOfferList = css`
 `;
 
 const benefitsPrefixCss = css`
-	${textSans.small()};
+	${textSans15};
 	color: ${palette.neutral[7]};
 	text-align: left;
 	strong {
@@ -145,7 +147,7 @@ const benefitsPrefixCss = css`
 `;
 
 const benefitsPrefixPlus = css`
-	${textSans.small()};
+	${textSans15};
 	color: #545454; // neutral[38] unavailable
 	display: flex;
 	align-items: center;
@@ -250,7 +252,7 @@ export function ThreeTierCard({
 				)}
 				{!promotion && `${formattedPrice}/${period}`}
 			</p>
-			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+			<ThemeProvider theme={themeButtonReaderRevenueBrand}>
 				<LinkButton
 					href={link}
 					cssOverrides={btnStyleOverrides}

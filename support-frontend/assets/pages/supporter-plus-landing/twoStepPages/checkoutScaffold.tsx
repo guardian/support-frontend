@@ -4,7 +4,7 @@ import {
 	from,
 	palette,
 	space,
-	textSans,
+  textSans17,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
@@ -55,7 +55,7 @@ const checkoutContainer = (isPaymentPage?: boolean) => {
 	return css`
 		position: relative;
 		color: ${palette.neutral[7]};
-		${textSans.medium()};
+		${textSans17};
 		padding-top: ${space[paddingTop]}px;
 	`;
 };
@@ -69,7 +69,7 @@ const darkBackgroundContainerMobile = css`
 `;
 
 const subHeading = css`
-	${textSans.medium()};
+	${textSans17};
 	padding-right: ${space[2]}px;
 	padding-bottom: 32px;
 `;

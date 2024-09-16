@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source/foundations';
+import {headlineBold17, space } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
@@ -8,7 +8,7 @@ import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 
 const headingStyles = css`
-	${headline.xxxsmall({ fontWeight: 'bold' })};
+	${headlineBold17};
 	margin-bottom: ${space[1]}px;
 `;
 

@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { isOneOf } from '@guardian/libs';
-import { palette, space, textSans } from '@guardian/source/foundations';
+import { palette, space, textSans15, textSans17, textSansItalic15 } from '@guardian/source/foundations';
 import { Label, Radio, RadioGroup } from '@guardian/source/react-components';
 import type { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import type {
@@ -92,7 +92,7 @@ function SingleDeliveryProvider({
 			<Label text="Delivery provider">
 				<div
 					css={css`
-						${textSans.medium()};
+						${textSans17};
 						margin-bottom: ${space[1]}px;
 					`}
 				>
@@ -118,7 +118,7 @@ function GreenLabel({ deliveryMethod }: { deliveryMethod: string }) {
 		<span
 			css={css`
 				color: ${palette.success[400]};
-				${textSans.small({ fontStyle: 'italic' })};
+				${textSansItalic15};
 			`}
 		>
 			{deliveryMethod}
@@ -134,7 +134,7 @@ function DeliveryProviderSummary({ summary }: { summary: string }) {
 	return (
 		<p
 			css={css`
-				${textSans.small()};
+				${textSans15};
 				margin-bottom: ${space[2]}px;
 			`}
 		>
@@ -154,7 +154,7 @@ function GreenDeliverySummary({ deliveryMethod }: { deliveryMethod: string }) {
 		<p
 			css={css`
 				color: ${palette.success[400]};
-				${textSans.small({ fontStyle: 'italic' })};
+				${textSansItalic15};
 				margin-bottom: ${space[2]}px;
 			`}
 		>

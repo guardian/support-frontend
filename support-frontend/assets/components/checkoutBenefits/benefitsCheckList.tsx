@@ -1,7 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source/foundations';
-import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
+import { from, palette, space, textSans15, textSans17,  } from '@guardian/source/foundations';
+import { SvgCrossRoundFilled, SvgTickRound } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
 import { NewBenefitPill } from './newBenefitPill';
 
@@ -42,8 +42,8 @@ const checkListTextItemCss = css`
 `;
 const tableCss = (style: CheckListStyle) => css`
 	${style === 'standard'
-		? textSans.medium({ lineHeight: 'tight' })
-		: textSans.small()}
+		? {textSans17}
+		: {textSans15}}
 
 	padding-top: ${space[4]}px;
 
@@ -89,7 +89,7 @@ function ChecklistItemIcon({
 			size={style === 'standard' ? 'small' : 'xsmall'}
 		/>
 	) : (
-		<SvgCrossRound
+		<SvgCrossRoundFilled
 			isAnnouncedByScreenReader
 			size={style === 'standard' ? 'small' : 'xsmall'}
 		/>

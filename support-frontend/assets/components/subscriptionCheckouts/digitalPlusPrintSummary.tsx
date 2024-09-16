@@ -1,16 +1,20 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-	headline,
+  headlineBold24,
 	palette,
 	space,
-	textSans,
+  textSans12,
+  textSans14,
+    textSansBold12,
+    textSansBold15,
+    textSansBold17,
 } from '@guardian/source/foundations';
 import {
 	Link,
-	linkThemeDefault,
 	SvgChevronDownSingle,
 	SvgChevronUpSingle,
+    themeLink,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
 
@@ -42,16 +46,16 @@ const titleContainer = css`
 `;
 
 const title = css`
-	${headline.xxsmall({ fontWeight: 'bold' })};
+	${textSansBold12};
 	color: ${palette.neutral[7]};
 	margin-bottom: ${space[5]}px;
 	${from.desktop} {
-		${headline.xsmall({ fontWeight: 'bold' })};
+		${headlineBold24};
 	}
 `;
 
 const subtitle = (showDetailsStatus: 'visible' | 'hidden') => css`
-	${textSans.xsmall()};
+	${textSans14};
 	color: ${palette.neutral[7]};
 	display: ${showDetailsStatus === 'visible' ? 'none' : 'block'};
 	${from.desktop} {
@@ -69,14 +73,14 @@ const subTitleAndDescription = (showDetailsStatus: 'visible' | 'hidden') => css`
 	padding-top: ${space[1]}px;
 	margin-bottom: ${space[5]}px;
 	h3 {
-		${textSans.small({ fontWeight: 'bold' })};
+		${textSansBold15};
 		color: ${palette.neutral[7]};
 		${from.desktop} {
-			${textSans.medium({ fontWeight: 'bold' })};
+			${textSansBold17};
 		}
 	}
 	p {
-		${textSans.xsmall()};
+		${textSans14};
 	}
 `;
 
@@ -87,9 +91,9 @@ const totalContainer = css`
 	justify-content: space-between;
 	margin-bottom: ${space[5]}px;
 	h3 {
-		${textSans.small({ fontWeight: 'bold' })};
+		${textSansBold15};
 		${from.desktop} {
-			${textSans.medium({ fontWeight: 'bold' })};
+			${textSansBold17};
 		}
 		color: ${palette.neutral[7]};
 	}
@@ -107,14 +111,14 @@ const priceDescription = css`
 	${from.desktop} {
 		margin-bottom: ${space[5]}px;
 	}
-	${textSans.xxsmall()};
+	${textSans14};
 	color: #606060;
 `;
 
 const productStartDates = (showDetailsStatus: 'visible' | 'hidden') => css`
 	list-style-type: none;
 	background-color: ${palette.neutral[97]};
-	${textSans.xxsmall()};
+	${textSans12};
 	border-top: 1px solid ${palette.neutral['86']};
 	padding-top: ${space[2]}px;
 	margin-top: ${space[2]}px;
@@ -142,7 +146,7 @@ const detailsAndChangeButtons = css`
 `;
 
 const showDetails = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	color: ${palette.brand[500]};
 	text-decoration: none;
 	display: flex;
@@ -164,14 +168,14 @@ const showDetails = css`
 `;
 
 const changeSubscriptionLink = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	align-self: flex-end;
 	color: #606060;
 	:visited {
 		color: #606060;
 	}
 	${from.desktop} {
-		${textSans.xsmall()};
+		${textSans14};
 		color: ${palette.brand[500]};
 		:visited {
 			color: ${palette.brand[500]};
@@ -268,7 +272,7 @@ export function DigitalPlusPrintSummary({
 						<SvgChevronDownSingle isAnnouncedByScreenReader size="xsmall" />
 					)}
 				</button>
-				<ThemeProvider theme={linkThemeDefault}>
+				<ThemeProvider theme={themeLink}>
 					<Link href="/contribute" cssOverrides={changeSubscriptionLink}>
 						Change subscription
 					</Link>

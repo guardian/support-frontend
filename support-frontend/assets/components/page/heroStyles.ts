@@ -1,12 +1,13 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
 import {
-	body,
-	brand,
 	from,
-	headline,
+  headlineMedium20,
 	neutral,
+  palette,
 	space,
+  textEgyptian15,
+  textEgyptian17,
 	until,
 } from '@guardian/source/foundations';
 import type { Breakpoint } from '@guardian/source/foundations';
@@ -19,7 +20,7 @@ export const hero = css`
 	color: ${neutral[100]};
 	border: none;
 	padding-top: ${space[3]}px;
-	background-color: ${brand[400]};
+	background-color: ${palette.brand[400]};
 	width: 100%;
 
 	${from.tablet} {
@@ -27,14 +28,14 @@ export const hero = css`
 	}
 
 	/* Typography defaults */
-	${body.small()};
+	${textEgyptian15};
 
 	${from.mobileMedium} {
-		${body.medium()};
+		${textEgyptian17};
 	}
 
 	${from.desktop} {
-		${headline.xxsmall()};
+		${headlineMedium20};
 		line-height: 135%;
 	}
 	/* TODO: fix this when we port over the image components */

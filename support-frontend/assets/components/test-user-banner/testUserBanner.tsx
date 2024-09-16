@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { error, neutral, space, textSans } from '@guardian/source/foundations';
+import { error, neutral, space, textSans20 } from '@guardian/source/foundations';
 import { isTestUser } from 'helpers/user/user';
 import { ThankYouUserTypeSelector } from './thankYouUserTypeSelector';
 
 const testUserBannerStyles = css`
-	${textSans.large()};
+	${textSans20};
 	background-color: ${error[400]};
 	color: ${neutral[100]};
 	text-align: center;

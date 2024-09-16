@@ -3,7 +3,8 @@ import {
 	from,
 	palette,
 	space,
-	textSans,
+  textSans17,
+  textSansBold17,
 	visuallyHidden,
 } from '@guardian/source/foundations';
 
@@ -34,7 +35,7 @@ export const tickerProgressBarFill = css`
 `;
 
 export const tickerHeadline = css`
-	${textSans.medium({ fontWeight: 'bold' })}
+	${textSansBold17};
 	margin-bottom: ${space[2]}px;
 
 	${from.desktop} {
@@ -49,7 +50,7 @@ export const tickerLabelContainer = css`
 `;
 
 export const tickerLabel = css`
-	${textSans.medium()}
+	${textSans17}
 `;
 
 export const tickerLabelTotal = css`

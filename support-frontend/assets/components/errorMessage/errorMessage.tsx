@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { error, textSans } from '@guardian/source/foundations';
+import { error, textSans14 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 // ---- Types ----- //
@@ -25,7 +25,7 @@ export default function ErrorMessage(props: PropTypes): JSX.Element {
 
 const styles = {
 	container: css`
-		${textSans.xsmall()}
+		${textSans14};
 		color: ${error[400]};
 	`,
 };

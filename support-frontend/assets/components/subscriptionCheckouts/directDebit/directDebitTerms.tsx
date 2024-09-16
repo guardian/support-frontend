@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
-import { textSans } from '@guardian/source/foundations';
+import {textSans12, textSans14} from '@guardian/source/foundations';
 
 const directDebitTerms = (isThreeTier?: true) => css`
-	${isThreeTier ? textSans.xxsmall() : textSans.xsmall()};
+	${isThreeTier ? textSans12 : textSans14};
 
 	a,
 	a:visited {

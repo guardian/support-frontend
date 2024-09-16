@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, neutral, space, titlepiece } from '@guardian/source/foundations';
+import { from, neutral, space, titlepiece42, titlepiece50, titlepiece70 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,
@@ -55,9 +55,7 @@ const header = css`
 	}
 `;
 export const pageTitle = css`
-	${titlepiece.small({
-		fontWeight: 'bold',
-	})};
+	${titlepiece42}; //TODO check whether this is also bold by default
 	z-index: 10;
 	padding: ${space[3]}px ${space[3]}px ${space[4]}px;
 	width: 100%;
@@ -70,17 +68,13 @@ export const pageTitle = css`
 	}
 
 	${from.desktop} {
-		${titlepiece.medium({
-			fontWeight: 'bold',
-		})}
+		${titlepiece50}; //TODO check whether this is also bold by default
 		margin: 0 auto;
 		max-width: 1290px;
 	}
 
 	${from.leftCol} {
-		${titlepiece.large({
-			fontWeight: 'bold',
-		})}
+		${titlepiece70}  //TODO check whether this is also bold by default
 	}
 `;
 

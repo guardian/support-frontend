@@ -1,17 +1,17 @@
 import { css } from '@emotion/react';
 import {
-	brand,
 	focus,
 	from,
 	neutral,
+  palette,
 	space,
-	textSans,
+  textSansBold17,
 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 const tabButtonStyles = css`
-	${textSans.medium({ fontWeight: 'bold' })}
-	background-color: ${brand[500]};
+	${textSansBold17};
+	background-color: ${palette.brand[500]};
 	color: ${neutral[100]};
 	margin: 0;
 	border: none;

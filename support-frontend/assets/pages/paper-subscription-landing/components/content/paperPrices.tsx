@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
+import { SvgInfoRound } from '@guardian/source/dist/react-components';
 import {
 	between,
-	brand,
 	from,
-	headline,
+  headlineBold24,
+  palette,
 	space,
 } from '@guardian/source/foundations';
-import { SvgInfo } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
@@ -28,9 +28,7 @@ const pricesSection = css`
 `;
 
 const pricesHeadline = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 	${from.tablet} {
 		font-size: 34px;
 	}
@@ -84,7 +82,7 @@ const pricesInfo = css`
 const pricesTabs = css`
 	margin-bottom: 13px;
 	display: flex;
-	border-bottom: 1px solid ${brand[600]};
+	border-bottom: 1px solid ${palette.brand[600]};
 `;
 
 export function PaperPrices({
@@ -137,7 +135,7 @@ export function PaperPrices({
 				))}
 			</FlexContainer>
 			<div css={pricesInfo}>
-				<ProductInfoChip icon={<SvgInfo />}>{infoText}</ProductInfoChip>
+				<ProductInfoChip icon={<SvgInfoRound />}>{infoText}</ProductInfoChip>
 			</div>
 		</section>
 	);

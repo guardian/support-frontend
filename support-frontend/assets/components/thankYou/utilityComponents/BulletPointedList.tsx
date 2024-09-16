@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand, space } from '@guardian/source/foundations';
+import {palette, space } from '@guardian/source/foundations';
 
 const listItem = css`
 	display: flex;
@@ -30,7 +30,7 @@ function SvgBullet() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="4" cy="4" r="4" fill={`${brand[500]}`} />
+			<circle cx="4" cy="4" r="4" fill={`${palette.brand[500]}`} />
 		</svg>
 	);
 }

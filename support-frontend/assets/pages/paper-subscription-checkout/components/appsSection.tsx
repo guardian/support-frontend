@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import { from, headlineBold20, headlineBold28, headlineBold34, space, textSans17 } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
+    themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import type { MouseEventHandler, ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
@@ -38,37 +38,21 @@ const marginForButton = css`
 	margin: ${space[5]}px 0;
 `;
 const mainHeading = css`
-	${headline.small({
-		fontWeight: 'bold',
-		lineHeight: 'tight',
-	})};
+	${headlineBold28};
 	${from.phablet} {
-		${headline.medium({
-			fontWeight: 'bold',
-			lineHeight: 'regular',
-		})};
+		${headlineBold34};
 	}
 `;
 const subHeading = css`
 	margin: ${space[6]}px 0 ${space[1]}px;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'tight',
-	})};
+	${headlineBold20};
 	${from.desktop} {
 		margin: ${space[9]}px 0 ${space[1]}px;
 		line-height: normal;
 	}
 `;
 const sansText = css`
-	${textSans.medium({
-		lineHeight: 'regular',
-	})}
-	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})}
-	}
+	${textSans17}
 `;
 const maxWidth = css`
 	${from.tablet} {
@@ -217,7 +201,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					Never be interrupted or distracted by ads again by signing in. Just
 					use your subscriber email and password when you next visit.
 				</p>
-				<ThemeProvider theme={buttonThemeReaderRevenue}>
+				<ThemeProvider theme={themeButtonReaderRevenue}>
 					<LinkButton
 						css={marginForButton}
 						priority="tertiary"

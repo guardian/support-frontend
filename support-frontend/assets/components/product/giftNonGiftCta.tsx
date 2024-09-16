@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { body, headline, space } from '@guardian/source/foundations';
+import {headlineBold34, space, textEgyptian17 } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
@@ -17,13 +17,11 @@ const giftOrPersonal = css`
 	padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 `;
 const giftOrPersonalCopy = css`
-	${body.medium()};
+	${textEgyptian17};
 	margin-bottom: ${space[9]}px;
 `;
 const giftOrPersonalHeading = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})};
+	${headlineBold34};
 `;
 
 function GiftOrPersonalOrStudent({

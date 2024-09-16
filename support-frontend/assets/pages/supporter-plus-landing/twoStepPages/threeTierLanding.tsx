@@ -2,10 +2,12 @@ import { css } from '@emotion/react';
 import { cmp } from '@guardian/libs';
 import {
 	from,
-	headline,
+  headlineBold24,
 	palette,
 	space,
-	textSans,
+  textSans15,
+  textSans17,
+  textSansBold17,
 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import {
@@ -117,9 +119,7 @@ const heading = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
 	margin-top: ${space[4]}px;
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})}
+	${headlineBold24}
 	${from.tablet} {
 		text-align: center;
 	}
@@ -132,7 +132,7 @@ const standFirst = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
 	margin: 0 0 ${space[4]}px;
-	${textSans.medium()};
+	${textSans17};
 	line-height: 1.35;
 	strong {
 		font-weight: bold;
@@ -168,10 +168,10 @@ const suppportAnotherWayContainer = css`
 	text-align: left;
 	color: #606060;
 	h4 {
-		${textSans.medium({ fontWeight: 'bold' })};
+		${textSansBold17};
 	}
 	p {
-		${textSans.small()};
+		${textSans15};
 	}
 	a {
 		color: #606060;

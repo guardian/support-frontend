@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import {
 	error as errorColour,
 	space,
-	textSans,
+    textSans15,
 } from '@guardian/source/foundations';
 import { InlineError } from '@guardian/source/react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -16,7 +16,7 @@ const errorContainer = css`
 	margin-top: ${space[6]}px;
 `;
 const errorMessage = css`
-	${textSans.small()}
+	${textSans15};
 	display: list-item;
 	list-style-position: outside;
 	list-style-type: disc;

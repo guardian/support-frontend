@@ -2,10 +2,12 @@ import { css } from '@emotion/react';
 import {
 	brand,
 	from,
-	headline,
+  headlineBold20,
+  headlineBold28,
 	neutral,
 	space,
-	textSans,
+    textSans15,
+    textSans17,
 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -51,7 +53,7 @@ const heading = (
 	marginBottom?: number,
 ) => css`
 	margin-left: 9px;
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	${headlineBold20};
 	color: ${color};
 
 	${from.mobileMedium} {
@@ -61,7 +63,7 @@ const heading = (
 	}
 	${from.tablet} {
 		margin-left: 12px;
-		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+		${headlineBold28};
 	}
 `;
 const para = css`
@@ -69,24 +71,24 @@ const para = css`
 	margin-left: 9px;
 	margin-right: 10px;
 	margin-bottom: ${space[2]}px;
-	${textSans.small({ lineHeight: 'regular' })};
+	${textSans15};
 
 	${from.mobileMedium} {
 		max-width: 470px;
 	}
 	${from.tablet} {
 		margin-left: 12px;
-		${textSans.medium({ lineHeight: 'regular' })};
+		${textSans17};
 	}
 `;
 const link = css`
 	margin-left: 9px;
-	${textSans.small({ lineHeight: 'regular' })};
+	${textSans15};
 	padding-bottom: ${space[5]}px;
 
 	${from.tablet} {
 		margin-left: 12px;
-		${textSans.medium({ lineHeight: 'tight' })};
+		${textSans17};
 	}
 `;
 const alink = css`

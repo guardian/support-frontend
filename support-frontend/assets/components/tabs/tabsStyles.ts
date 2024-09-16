@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
 import {
-	border,
 	brandAlt,
 	from,
-	headline,
+  headlineBold17,
+  headlineBold20,
 	neutral,
+  palette,
 	space,
 } from '@guardian/source/foundations';
 
@@ -15,9 +16,7 @@ export const tabList = css`
 `;
 export const tabButton = css`
 	background-color: ${neutral[100]};
-	${headline.xxxsmall({
-		fontWeight: 'bold',
-	})}
+	${headlineBold17};
 	position: relative;
 	display: block;
 	text-decoration: none;
@@ -27,16 +26,14 @@ export const tabButton = css`
 	text-align: left;
 	color: ${neutral[7]};
 	padding: ${space[2]}px ${space[3]}px;
-	border: 1px solid ${border.secondary};
+	border: 1px solid ${palette.neutral[86]};
 	border-bottom: none;
 	box-shadow: inset 0 ${space[1]}px 0 0 ${brandAlt[400]};
 	transition: box-shadow 0.2s;
 	cursor: pointer;
 
 	${from.phablet} {
-		${headline.xxsmall({
-			fontWeight: 'bold',
-		})}
+		${headlineBold20};
 		width: 210px;
 	}
 
@@ -63,5 +60,5 @@ export const tabButton = css`
 export const tabPanel = css`
 	position: relative;
 	padding: ${space[2]}px;
-	border: 1px solid ${border.secondary};
+	border: 1px solid ${palette.neutral[86]};
 `;
