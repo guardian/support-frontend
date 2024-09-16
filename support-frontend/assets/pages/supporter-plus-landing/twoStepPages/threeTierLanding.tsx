@@ -339,8 +339,7 @@ export function ThreeTierLanding({
 	 */
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
-		abParticipations.landingPageOneTimeTab === 'oneTimeTab' ||
-		abParticipations.landingPageOneTimeTab === 'both';
+		abParticipations.landingPageOneTimeTab === 'oneTimeTab';
 
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
@@ -675,7 +674,7 @@ export function ThreeTierLanding({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				{abParticipations.landingPageOneTimeTab !== 'oneTimeTab' && (
+				{enableSingleContributionsTab && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						btnClickHandler={handleSupportOnceBtnClick}

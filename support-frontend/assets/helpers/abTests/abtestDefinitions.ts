@@ -171,9 +171,6 @@ export const tests: Tests = {
 			{
 				id: 'oneTimeTab',
 			},
-			{
-				id: 'both',
-			},
 		],
 		audiences: {
 			ALL: {
