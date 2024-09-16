@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import {
 	brandAlt,
-  palette,
-  textSansBold15,
+	palette,
+	textSansBold15,
 } from '@guardian/source/foundations';
 
 const iconHeight = '42px';

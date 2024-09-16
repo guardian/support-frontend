@@ -1,6 +1,13 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, neutral, space, titlepiece42, titlepiece50, titlepiece70 } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	titlepiece42,
+	titlepiece50,
+	titlepiece70,
+} from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,
@@ -74,7 +81,7 @@ export const pageTitle = css`
 	}
 
 	${from.leftCol} {
-		${titlepiece70}  //TODO check whether this is also bold by default
+		${titlepiece70}//TODO check whether this is also bold by default
 	}
 `;
 

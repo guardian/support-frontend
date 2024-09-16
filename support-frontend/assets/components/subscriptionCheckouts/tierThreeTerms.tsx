@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {textSans12} from '@guardian/source/foundations';
+import { textSans12 } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';

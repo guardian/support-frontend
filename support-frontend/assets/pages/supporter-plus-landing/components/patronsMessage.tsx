@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {headlineBold17, space } from '@guardian/source/foundations';
+import { headlineBold17, space } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';

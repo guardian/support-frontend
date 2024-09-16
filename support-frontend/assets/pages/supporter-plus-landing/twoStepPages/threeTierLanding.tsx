@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 import { cmp } from '@guardian/libs';
 import {
 	from,
-  headlineBold24,
+	headlineBold24,
 	palette,
 	space,
-  textSans15,
-  textSans17,
-  textSansBold17,
+	textSans15,
+	textSans17,
+	textSansBold17,
 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import {

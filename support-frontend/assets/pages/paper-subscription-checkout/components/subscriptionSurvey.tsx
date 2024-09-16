@@ -1,7 +1,12 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headlineBold20, space, textSans17 } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	space,
+	textSans17,
+} from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,

@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import {  from, neutral, space, textEgyptianBold15 } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	textEgyptianBold15,
+} from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';

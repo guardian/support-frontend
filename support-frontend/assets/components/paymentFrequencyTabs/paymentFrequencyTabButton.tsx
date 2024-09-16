@@ -3,9 +3,9 @@ import {
 	focus,
 	from,
 	neutral,
-  palette,
+	palette,
 	space,
-  textSansBold17,
+	textSansBold17,
 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 

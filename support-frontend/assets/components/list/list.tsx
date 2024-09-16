@@ -3,9 +3,9 @@ import type { SerializedStyles } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-  palette,
+	palette,
 	space,
-    textEgyptian17,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import * as React from 'react';
 

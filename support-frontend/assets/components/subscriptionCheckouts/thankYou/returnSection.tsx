@@ -4,7 +4,7 @@ import { from, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-    themeButtonReaderRevenue,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';

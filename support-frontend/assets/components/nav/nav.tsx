@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {palette, space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Container } from 'components/layout/container';

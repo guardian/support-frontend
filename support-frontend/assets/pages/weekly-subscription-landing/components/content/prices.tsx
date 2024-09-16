@@ -1,17 +1,17 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-  headlineBold24,
+	headlineBold24,
 	neutral,
 	space,
-  textEgyptian17,
-  textSans12,
+	textEgyptian17,
+	textSans12,
 } from '@guardian/source/foundations';
 import {
 	Link,
 	SvgGift,
-  SvgInfoRound,
-  themeLinkBrand,
+	SvgInfoRound,
+	themeLinkBrand,
 } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';

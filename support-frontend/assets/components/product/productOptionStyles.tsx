@@ -3,16 +3,16 @@ import {
 	between,
 	brandAlt,
 	from,
-  headlineBold17,
-  headlineBold20,
-  headlineBold24,
-  headlineBold28,
-  headlineBold42,
+	headlineBold17,
+	headlineBold20,
+	headlineBold24,
+	headlineBold28,
+	headlineBold42,
 	neutral,
 	space,
-  textSans14,
-  textSans15,
-  textSans17,
+	textSans14,
+	textSans15,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 
@@ -122,9 +122,9 @@ export const productOptionHighlight = css`
 `;
 
 export const specialOfferHighlight = css`
-  width: calc(100% + 10px);
-  top: 0;
-  left: -5px;
+	width: calc(100% + 10px);
+	top: 0;
+	left: -5px;
 `;
 
 export const buttonDiv = css`

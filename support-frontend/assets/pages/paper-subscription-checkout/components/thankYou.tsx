@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from, headlineBold20, space, textSans17 } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	space,
+	textSans17,
+} from '@guardian/source/foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';

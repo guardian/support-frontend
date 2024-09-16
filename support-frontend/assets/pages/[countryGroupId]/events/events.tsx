@@ -1,10 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	palette,
-	space,
-	until,
-} from '@guardian/source/foundations';
+import { from, palette, space, until } from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useParams } from 'react-router-dom';

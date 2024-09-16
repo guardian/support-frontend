@@ -3,16 +3,16 @@ import { css, ThemeProvider } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-  headlineBold34,
-  headlineBold42,
-  palette,
+	headlineBold34,
+	headlineBold42,
+	palette,
 	space,
-    textEgyptian17,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowDownStraight,
-    themeButtonBrand,
+	themeButtonBrand,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';

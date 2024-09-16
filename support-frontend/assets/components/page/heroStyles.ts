@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
 import {
 	from,
-  headlineMedium20,
+	headlineMedium20,
 	neutral,
-  palette,
+	palette,
 	space,
-  textEgyptian15,
-  textEgyptian17,
+	textEgyptian15,
+	textEgyptian17,
 	until,
 } from '@guardian/source/foundations';
 import type { Breakpoint } from '@guardian/source/foundations';

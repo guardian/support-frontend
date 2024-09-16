@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {palette, space, until } from '@guardian/source/foundations';
+import { palette, space, until } from '@guardian/source/foundations';
 import { Divider } from '@guardian/source-development-kitchen/react-components';
 import type { FinePrintTheme } from './finePrint';
 

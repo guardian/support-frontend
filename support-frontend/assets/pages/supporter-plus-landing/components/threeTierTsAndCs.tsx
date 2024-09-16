@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, palette, textSans12} from '@guardian/source/foundations';
+import { from, palette, textSans12 } from '@guardian/source/foundations';
 import type { RegularContributionType } from 'helpers/contributions';
 import {
 	getDateWithOrdinal,

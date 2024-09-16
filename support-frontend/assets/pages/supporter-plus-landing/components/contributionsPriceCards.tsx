@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, space, textSans17, textSansBold14, } from '@guardian/source/foundations';
+import {
+	from,
+	space,
+	textSans17,
+	textSansBold14,
+} from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
 import { OtherAmount } from 'components/otherAmount/otherAmount';

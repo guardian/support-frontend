@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import {
 	from,
-  headlineBold28,
-  palette,
+	headlineBold28,
+	palette,
 	space,
-  textSans12,
-  textSans17,
-  textSansBold14,
+	textSans12,
+	textSans17,
+	textSansBold14,
 	until,
 } from '@guardian/source/foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source/react-components';

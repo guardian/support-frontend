@@ -2,15 +2,15 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-  headlineBold17,
-  headlineBold24,
-  headlineMedium17,
+	headlineBold17,
+	headlineBold24,
+	headlineMedium17,
 	neutral,
-  palette,
+	palette,
 	space,
-  textSans14,
-  textSans15,
-  textSansBold17,
+	textSans14,
+	textSans15,
+	textSansBold17,
 	until,
 } from '@guardian/source/foundations';
 
@@ -65,14 +65,14 @@ export const topLineBorder = css`
 `;
 export const title = css`
 	${headlineBold17};
-/**
+	/**
 //Is this comment now redundant?
  * @TODO Typography preset styles should not be overridden.
  * Please speak to your team's designer and update this to use a more appropriate preset.
 */
-line-height: 1.4;;
+	line-height: 1.4;
 
-    ${from.desktop} {
+	${from.desktop} {
 		${headlineBold24}
 	}
 `;

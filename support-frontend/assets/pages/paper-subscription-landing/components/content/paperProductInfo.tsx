@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-  headlineBold34,
-  headlineBold42,
+	headlineBold34,
+	headlineBold42,
 	space,
-    textEgyptian17,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';

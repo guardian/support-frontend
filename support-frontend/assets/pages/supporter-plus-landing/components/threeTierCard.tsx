@@ -3,14 +3,14 @@ import {
 	from,
 	palette,
 	space,
-  textSans15,
-  textSansBold14,
-  textSansBold24,
+	textSans15,
+	textSansBold14,
+	textSansBold24,
 	until,
 } from '@guardian/source/foundations';
 import {
 	LinkButton,
-  themeButtonReaderRevenueBrand,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type {

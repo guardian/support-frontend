@@ -1,7 +1,17 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { from, palette, space, textSans12, textSans14, textSans15, textSansBold12,
-  textSansBold14, textSansBold17, textSansBold24,  } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSans12,
+	textSans14,
+	textSans15,
+	textSansBold12,
+	textSansBold14,
+	textSansBold17,
+	textSansBold24,
+} from '@guardian/source/foundations';
 
 export const container = (customMargin?: string): SerializedStyles => css`
 	background-color: #f0f6fe;
@@ -120,9 +130,10 @@ export const amountOptionValue = (isSelected: boolean): SerializedStyles => css`
 export const amountOptionAction = (
 	isSelected: boolean,
 ): SerializedStyles => css`
-	${isSelected ? textSansBold12 : textSans12 }
+	${isSelected ? textSansBold12 : textSans12}
 	${from.mobileMedium} {
-		${isSelected ? textSansBold14 : textSans14 }}
+		${isSelected ? textSansBold14 : textSans14}
+	}
 	color: ${isSelected ? palette.brand[400] : palette.neutral[46]};
 	align-self: start;
 	pointer-events: none;

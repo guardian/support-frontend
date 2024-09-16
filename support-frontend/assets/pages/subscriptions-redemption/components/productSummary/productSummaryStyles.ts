@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import {
 	from,
-  headlineMedium20,
-  palette,
+	headlineMedium20,
+	palette,
 	space,
-  textSans15,
-  textSansBold17,
+	textSans15,
+	textSansBold17,
 	until,
 } from '@guardian/source/foundations';
 

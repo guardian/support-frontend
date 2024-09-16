@@ -4,7 +4,7 @@ import { from, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-  themeButtonReaderRevenueBrandAlt,
+	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import 'helpers/internationalisation/countryGroup';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';

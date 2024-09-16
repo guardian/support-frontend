@@ -4,7 +4,7 @@ import {
 	neutral,
 	palette,
 	space,
-  textSans17,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';

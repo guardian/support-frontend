@@ -1,11 +1,16 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans15, textSans17, textSansBold17, } from '@guardian/source/foundations';
+import {
+	space,
+	textSans15,
+	textSans17,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	SvgArrowRightStraight,
-  themeButtonReaderRevenueBrand,
-    themeButtonReaderRevenueBrandAlt,
+	themeButtonReaderRevenueBrand,
+	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';

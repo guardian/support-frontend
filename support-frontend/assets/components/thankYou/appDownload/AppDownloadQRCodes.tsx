@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { neutral, space, sport, textEgyptian15 } from '@guardian/source/foundations';
+import {
+	neutral,
+	space,
+	sport,
+	textEgyptian15,
+} from '@guardian/source/foundations';
 
 const container = css`
 	display: flex;

@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-  headlineBold17,
-  headlineBold20,
+	headlineBold17,
+	headlineBold20,
 	neutral,
-  palette,
+	palette,
 	space,
 } from '@guardian/source/foundations';
 

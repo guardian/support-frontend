@@ -2,8 +2,8 @@ import { css } from '@emotion/react';
 import {
 	breakpoints,
 	from,
-  palette,
-  textSansBold17,
+	palette,
+	textSansBold17,
 } from '@guardian/source/foundations';
 
 export const container = css`

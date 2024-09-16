@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import {
-  headlineBold24,
+	headlineBold24,
 	neutral,
 	space,
-    textSans17,
+	textSans17,
 } from '@guardian/source/foundations';
 import type { ListItemText } from 'components/list/list';
 import { ListWithSubText } from 'components/list/list';

@@ -3,8 +3,8 @@ import { SvgInfoRound } from '@guardian/source/dist/react-components';
 import {
 	between,
 	from,
-  headlineBold24,
-  palette,
+	headlineBold24,
+	palette,
 	space,
 } from '@guardian/source/foundations';
 import FlexContainer from 'components/containers/flexContainer';

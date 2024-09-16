@@ -1,5 +1,9 @@
 import { css } from '@emotion/react';
-import {headlineBold34, space, textEgyptian17 } from '@guardian/source/foundations';
+import {
+	headlineBold34,
+	space,
+	textEgyptian17,
+} from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,

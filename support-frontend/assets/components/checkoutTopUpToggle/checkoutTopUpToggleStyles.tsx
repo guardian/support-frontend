@@ -4,8 +4,8 @@ import {
 	palette,
 	pxToRem,
 	space,
-  textSans15,
-  textSansBold17,
+	textSans15,
+	textSansBold17,
 } from '@guardian/source/foundations';
 
 export const topUpToggleContainer = css`

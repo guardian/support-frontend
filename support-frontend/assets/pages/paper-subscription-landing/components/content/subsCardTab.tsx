@@ -4,7 +4,7 @@ import {
 	from,
 	neutral,
 	space,
-  textSans15,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';

@@ -15,7 +15,7 @@ import {
 	between,
 	from,
 	space,
-  textSans15,
+	textSans15,
 	until,
 	visuallyHidden,
 } from '@guardian/source/foundations';

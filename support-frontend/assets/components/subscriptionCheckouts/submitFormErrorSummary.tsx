@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import {
 	error as errorColour,
 	space,
-    textSans15,
+	textSans15,
 } from '@guardian/source/foundations';
 import { InlineError } from '@guardian/source/react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';

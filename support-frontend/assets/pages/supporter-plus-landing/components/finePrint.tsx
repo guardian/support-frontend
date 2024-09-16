@@ -5,7 +5,7 @@ import { neutral, textSans14, until } from '@guardian/source/foundations';
 //TODO check this file as some logic has changed
 
 const textStyles = (theme: FinePrintTheme) => css`
-  ${textSans14};
+	${textSans14};
 	color: #606060;
 
 	${until.tablet} {
@@ -29,7 +29,5 @@ export function FinePrint({
 	cssOverrides,
 	children,
 }: FinePrintProps): JSX.Element {
-	return (
-		<div css={[textStyles(mobileTheme), cssOverrides]}>{children}</div>
-	);
+	return <div css={[textStyles(mobileTheme), cssOverrides]}>{children}</div>;
 }

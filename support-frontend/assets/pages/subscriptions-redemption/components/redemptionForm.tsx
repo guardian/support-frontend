@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, headlineMedium24, palette, space } from '@guardian/source/foundations';
+import {
+	from,
+	headlineMedium24,
+	palette,
+	space,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	SvgArrowRightStraight,

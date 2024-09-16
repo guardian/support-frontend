@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space, textSans12,  } from '@guardian/source/foundations';
+import { space, textSans12 } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,

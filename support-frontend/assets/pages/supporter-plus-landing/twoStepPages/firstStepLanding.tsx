@@ -4,12 +4,13 @@ import {
 	from,
 	neutral,
 	space,
-  textSans12,
-  textSans14,
+	textSans12,
+	textSans14,
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button, themeButtonReaderRevenueBrand,
+	Button,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router';

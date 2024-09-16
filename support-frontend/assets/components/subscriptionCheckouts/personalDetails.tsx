@@ -1,9 +1,9 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans17,  } from '@guardian/source/foundations';
+import { space, textSans17 } from '@guardian/source/foundations';
 import {
 	Button,
 	TextInput,
-    themeButtonReaderRevenueBrandAlt,
+	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';

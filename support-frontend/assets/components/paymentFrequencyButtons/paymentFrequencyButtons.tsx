@@ -1,6 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space, textSansBold17, } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import { useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 

@@ -1,20 +1,20 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-  headlineBold24,
+	headlineBold24,
 	palette,
 	space,
-  textSans12,
-  textSans14,
-    textSansBold12,
-    textSansBold15,
-    textSansBold17,
+	textSans12,
+	textSans14,
+	textSansBold12,
+	textSansBold15,
+	textSansBold17,
 } from '@guardian/source/foundations';
 import {
 	Link,
 	SvgChevronDownSingle,
 	SvgChevronUpSingle,
-    themeLink,
+	themeLink,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
 

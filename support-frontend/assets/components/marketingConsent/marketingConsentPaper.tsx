@@ -1,11 +1,17 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headlineBold20, space, textSans17, textSansItalic15,  } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	space,
+	textSans17,
+	textSansItalic15,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	SvgEnvelope,
-    themeButtonBrandAlt,
+	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';

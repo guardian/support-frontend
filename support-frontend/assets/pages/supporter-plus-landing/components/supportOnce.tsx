@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-  headlineBold24,
+	headlineBold24,
 	palette,
 	space,
-    textSans17,
+	textSans17,
 } from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
 

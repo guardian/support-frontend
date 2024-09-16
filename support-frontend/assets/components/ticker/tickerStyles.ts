@@ -3,8 +3,8 @@ import {
 	from,
 	palette,
 	space,
-  textSans17,
-  textSansBold17,
+	textSans17,
+	textSansBold17,
 	visuallyHidden,
 } from '@guardian/source/foundations';
 

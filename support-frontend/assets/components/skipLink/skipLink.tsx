@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { focus, neutral, textSans17,  } from '@guardian/source/foundations';
+import { focus, neutral, textSans17 } from '@guardian/source/foundations';
 
 const skipLinkStyles = css`
 	${textSans17};

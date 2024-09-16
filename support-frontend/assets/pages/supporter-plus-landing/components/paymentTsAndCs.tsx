@@ -1,6 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, space, textSans12, textSans14,  } from '@guardian/source/foundations';
+import {
+	neutral,
+	space,
+	textSans12,
+	textSans14,
+} from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {

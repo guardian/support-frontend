@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import {
 	from,
-  headlineMedium28,
+	headlineMedium28,
 	neutral,
 	space,
 	until,

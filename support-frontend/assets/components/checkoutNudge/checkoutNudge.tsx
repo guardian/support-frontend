@@ -2,12 +2,12 @@ import { css } from '@emotion/react';
 import {
 	brand,
 	from,
-  headlineBold20,
-  headlineBold28,
+	headlineBold20,
+	headlineBold28,
 	neutral,
 	space,
-    textSans15,
-    textSans17,
+	textSans15,
+	textSans17,
 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

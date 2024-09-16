@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, textSansBold17, textSansBold20, textSansBold24,  } from '@guardian/source/foundations';
+import {
+	from,
+	textSansBold17,
+	textSansBold20,
+	textSansBold24,
+} from '@guardian/source/foundations';
 import type { ReactElement } from 'react';
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars

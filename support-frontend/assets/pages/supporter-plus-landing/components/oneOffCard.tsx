@@ -1,14 +1,15 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-  headlineBold24,
+	headlineBold24,
 	palette,
 	space,
-  textSans17,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button, themeButtonReaderRevenueBrand,
+	Button,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';

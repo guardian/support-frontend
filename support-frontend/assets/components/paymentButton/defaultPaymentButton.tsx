@@ -2,7 +2,8 @@ import { css, ThemeProvider } from '@emotion/react';
 import { neutral } from '@guardian/source/foundations';
 import type { ButtonProps } from '@guardian/source/react-components';
 import {
-	Button, themeButtonReaderRevenueBrand,
+	Button,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 
 const buttonOverrides = css`

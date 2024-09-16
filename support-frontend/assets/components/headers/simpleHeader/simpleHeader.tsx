@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import {
 	from,
 	neutral,
-  palette,
+	palette,
 	space,
 	visuallyHidden,
 } from '@guardian/source/foundations';

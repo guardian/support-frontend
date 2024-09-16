@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import {headlineBold24, space } from '@guardian/source/foundations';
+import { headlineBold24, space } from '@guardian/source/foundations';
 
 const heading = css`
 	${headlineBold24};

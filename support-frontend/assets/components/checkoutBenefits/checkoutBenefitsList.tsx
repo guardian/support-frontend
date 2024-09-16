@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-  headlineBold24,
-  headlineBold28,
+	headlineBold24,
+	headlineBold28,
 	palette,
 	space,
-  textSans17,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 import type { BenefitsCheckListData } from './benefitsCheckList';

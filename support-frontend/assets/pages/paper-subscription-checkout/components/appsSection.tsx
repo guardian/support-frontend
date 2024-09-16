@@ -1,10 +1,17 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headlineBold20, headlineBold28, headlineBold34, space, textSans17 } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	headlineBold28,
+	headlineBold34,
+	space,
+	textSans17,
+} from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-    themeButtonReaderRevenue,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import type { MouseEventHandler, ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';

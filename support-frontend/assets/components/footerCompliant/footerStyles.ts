@@ -7,9 +7,9 @@ import {
 	from,
 	neutral,
 	space,
-  textSans14,
-  textSans15,
-  textSansBold15,
+	textSans14,
+	textSans15,
+	textSansBold15,
 	until,
 } from '@guardian/source/foundations';
 

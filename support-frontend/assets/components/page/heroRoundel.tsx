@@ -3,8 +3,8 @@ import type { SerializedStyles } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-  headlineBold20,
-  headlineBold28,
+	headlineBold20,
+	headlineBold28,
 	neutral,
 	space,
 } from '@guardian/source/foundations';
