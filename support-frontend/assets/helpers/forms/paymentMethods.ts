@@ -1,3 +1,4 @@
+import type { PaymentMethodSwitch } from './checkouts';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 const Stripe = 'Stripe';
@@ -43,5 +44,29 @@ export const isPaymentMethod = (
 		typeof paymentMethod === 'string' && paymentMethods.includes(paymentMethod)
 	);
 };
+
+export function toPaymentMethodSwitchNaming(
+	paymentMethod: PaymentMethod,
+): PaymentMethodSwitch | null {
+	switch (paymentMethod) {
+		case PayPal:
+			return 'payPal';
+
+		case Stripe:
+			return 'stripe';
+
+		case DirectDebit:
+			return 'directDebit';
+
+		case AmazonPay:
+			return 'amazonPay';
+
+		case Sepa:
+			return 'sepa';
+
+		case None:
+			return null;
+	}
+}
 
 export { Stripe, PayPal, DirectDebit, Sepa, AmazonPay };
