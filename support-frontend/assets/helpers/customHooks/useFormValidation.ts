@@ -93,7 +93,13 @@ export function useOtherAmountValidation<
 		validateOtherAmount,
 		dispatchPaymentWaiting,
 	);
-
+	console.log(
+		'TEST useOtherAmountValidation.validateAndPay = useValidation(paymentHandler,validateOtherAmount,dispatchPaymentWaiting)=',
+		validateAndPay,
+		paymentHandler,
+		validateOtherAmount,
+		dispatchPaymentWaiting,
+	);
 	return validateAndPay;
 }
 
