@@ -36,8 +36,8 @@ const button = (isSelected: boolean) => css`
 
 	padding: ${space[3]}px 0;
 	${from.tablet} {
-	  padding: ${space[3]}px ${space[9]}px;
-  }
+		padding: ${space[3]}px ${space[9]}px;
+	}
 
 	color: ${palette.brand[400]};
 	:hover {
