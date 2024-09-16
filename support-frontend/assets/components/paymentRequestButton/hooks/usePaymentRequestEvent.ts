@@ -71,6 +71,7 @@ export function usePaymentRequestEvent(
 				// only proceed if we don't yet have a PaymentMethod object
 				// cf. https://stripe.com/docs/js/payment_request/events/on_cancel
 				if (!paymentMethod) {
+					console.log('TEST UnClick PRB');
 					dispatch(unClickPaymentRequestButton(stripeAccount));
 					dispatch(setPaymentMethod({ paymentMethod: 'None' }));
 				}

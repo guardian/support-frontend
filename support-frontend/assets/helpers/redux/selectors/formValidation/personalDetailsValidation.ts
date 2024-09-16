@@ -24,7 +24,7 @@ export function getPersonalDetailsErrors(
 
 	const { firstName, lastName, email } =
 		state.page.checkoutForm.personalDetails.errors ?? {};
-
+	console.log('TEST getPersonalDetailsErrors.email->', email);
 	const stateOrProvinceErrors = getStateOrProvinceError(state);
 
 	if (contributionType === 'ONE_OFF') {

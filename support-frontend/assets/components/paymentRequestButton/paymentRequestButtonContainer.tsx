@@ -47,6 +47,7 @@ export function PaymentRequestButtonContainer({
 	const handleButtonClick =
 		useOtherAmountValidation<StripePaymentRequestButtonElementClickEvent>(
 			function handleButtonClick() {
+				console.log('TEST useOtherAmountValidation.handleButtonClick');
 				paymentRequest?.show();
 				if (internalPaymentMethodName) {
 					trackComponentClick(`${internalPaymentMethodName}-${buttonType}`);

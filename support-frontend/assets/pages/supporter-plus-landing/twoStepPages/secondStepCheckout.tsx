@@ -32,6 +32,7 @@ import {
 	getUserSelectedAmountBeforeAmendment,
 	getUserSelectedOtherAmount,
 } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -159,7 +160,13 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards paymentFrequency={contributionType} />
+						<>
+							<ContributionsPriceCards paymentFrequency={contributionType} />
+							<div>
+								EMAIL VALID STATUS=
+								{useContributionsSelector(contributionsFormHasErrors)}
+							</div>
+						</>
 					) : (
 						<ContributionsOrderSummaryContainer
 							promotion={promotion}
