@@ -19,7 +19,7 @@ export interface PaymentFrequencyButtonsProps {
 const container = (numberOfChildren: number) => css`
 	display: grid;
 	width: 100%;
-	grid-template-columns: repeat(${numberOfChildren}, 1fr);
+	grid-template-columns: repeat(${numberOfChildren}, minmax(0, 1fr));
 	gap: 1px;
 	${from.tablet} {
 		width: fit-content;
@@ -31,7 +31,12 @@ const button = (isSelected: boolean) => css`
 	transition: background-color 0.3s;
 	${textSansBold17};
 	border: 0;
-	padding: ${space[3]}px ${space[9]}px;
+
+	padding: ${space[3]}px 0;
+	${from.tablet} {
+		padding: ${space[3]}px ${space[9]}px;
+	}
+
 	color: ${palette.brand[400]};
 	:hover {
 		background-color: ${isSelected ? palette.neutral[100] : '#DAE0EA'};
