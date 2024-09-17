@@ -575,11 +575,11 @@ export function ThreeTierLanding({
 	const tier3RatePlan =
 		countryGroupId === 'International'
 			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
+				? 'RestOfWorldAnnualV2'
+				: 'RestOfWorldMonthlyV2'
 			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
+			? 'DomesticAnnualV2'
+			: 'DomesticMonthlyV2';
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 

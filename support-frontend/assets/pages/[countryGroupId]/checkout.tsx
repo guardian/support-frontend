@@ -79,7 +79,10 @@ import {
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	NoProductOptions,
+	type ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -285,12 +288,27 @@ export function Checkout({ geoId, appConfig }: Props) {
 			}
 		};
 		const fulfilmentOption = getFulfilmentOptions(productKey);
+		const getProductOptions = (productKey: string): ProductOptions => {
+			switch (productKey) {
+				case 'SupporterPlus':
+				case 'Contribution':
+					return 'NoProductOptions';
+				case 'TierThree':
+					return ratePlanKey.endsWith('V2')
+						? 'NewspaperArchive'
+						: 'NoProductOptions';
+				default:
+					return 'NoProductOptions';
+			}
+		};
+		const productOptions: ProductOptions = getProductOptions(productKey);
 
 		promotion = getPromotion(
 			productPrices,
 			countryId,
 			billingPeriod,
 			fulfilmentOption,
+			productOptions,
 		);
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
@@ -445,6 +463,9 @@ function CheckoutComponent({
 						  ratePlanKey === 'RestOfWorldAnnualV2'
 						? 'RestOfWorld'
 						: 'Domestic',
+				productOptions: ratePlanKey.endsWith('V2')
+					? 'NewspaperArchive'
+					: 'NoProductOptions',
 			};
 			break;
 

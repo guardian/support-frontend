@@ -10,6 +10,7 @@ const Sixday = 'Sixday';
 const SixdayPlus = 'SixdayPlus';
 const Everyday = 'Everyday';
 const EverydayPlus = 'EverydayPlus';
+const NewspaperArchive = 'NewspaperArchive';
 
 export type ProductOptions =
 	| typeof NoProductOptions
@@ -22,7 +23,8 @@ export type ProductOptions =
 	| typeof Sixday
 	| typeof SixdayPlus
 	| typeof Everyday
-	| typeof EverydayPlus;
+	| typeof EverydayPlus
+	| typeof NewspaperArchive;
 
 export type PaperProductOptions =
 	| typeof Saturday
@@ -99,6 +101,7 @@ export {
 	SixdayPlus,
 	Everyday,
 	EverydayPlus,
+	NewspaperArchive,
 	ActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
