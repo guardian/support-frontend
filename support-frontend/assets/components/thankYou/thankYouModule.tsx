@@ -4,9 +4,9 @@ import {
 	from,
 	neutral,
 	space,
-  textEgyptian15,
-  textSansBold17,
-  until,
+	textEgyptian15,
+	textSansBold17,
+	until,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import AppImageGuardianNews from 'components/svgs/appGuardianNews';

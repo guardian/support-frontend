@@ -4,7 +4,7 @@ import {
 	RadioGroup,
 	SvgCreditCard,
 	SvgDirectDebit,
-  SvgPayPalBrand,
+	SvgPayPalBrand,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';

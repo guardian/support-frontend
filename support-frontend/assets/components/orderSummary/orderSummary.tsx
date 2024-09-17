@@ -1,4 +1,4 @@
-import { SvgInfoRound } from '@guardian/source/dist/react-components';
+import { SvgInfoRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import 'components/gridImage/gridImage';
 import * as styles from './orderSummaryStyles';

@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { SvgInfoRound } from '@guardian/source/dist/react-components';
 import {
 	between,
 	from,
@@ -7,6 +6,7 @@ import {
 	palette,
 	space,
 } from '@guardian/source/foundations';
+import { SvgInfoRound } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
