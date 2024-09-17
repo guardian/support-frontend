@@ -326,7 +326,7 @@ class Application(
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"supporter-plus-landing-page-$countryCode",
-      file = "supporter-plus-landing.html",
+      file = "ssr-holding-content.html",
       classes = Some(classes),
     )
 
