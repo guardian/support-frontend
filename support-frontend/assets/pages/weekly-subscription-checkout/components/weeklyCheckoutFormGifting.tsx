@@ -223,7 +223,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					</FormSection>
 					<FormSection title="Gift recipient's details" border="bottom">
 						<Select
-              cssOverrides={marginBottom}
+							cssOverrides={marginBottom}
 							id="title"
 							data-qm-masking="blocklist"
 							label="Title"

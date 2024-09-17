@@ -234,7 +234,7 @@ export default function Tooltip({
 						hideLabel
 						icon={<InfoRound />}
 						priority="tertiary"
-            cssOverrides={buttonOverrides}
+						cssOverrides={buttonOverrides}
 					>
 						{buttonLabel}
 					</Button>

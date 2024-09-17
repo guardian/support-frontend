@@ -23,7 +23,7 @@ function PersonalDetailsGift(props: PropTypes): JSX.Element {
 	return (
 		<div>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="firstNameGiftRecipient"
 				data-qm-masking="blocklist"
 				label="First name"
@@ -33,7 +33,7 @@ function PersonalDetailsGift(props: PropTypes): JSX.Element {
 				error={firstError('firstNameGiftRecipient', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="lastNameGiftRecipient"
 				data-qm-masking="blocklist"
 				label="Last name"
@@ -43,7 +43,7 @@ function PersonalDetailsGift(props: PropTypes): JSX.Element {
 				error={firstError('lastNameGiftRecipient', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="emailGiftRecipient"
 				data-qm-masking="blocklist"
 				label="Email"
@@ -61,7 +61,7 @@ function PersonalDetailsDigitalGift(props: PropTypes): JSX.Element {
 	return (
 		<div>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="firstNameGiftRecipient"
 				data-qm-masking="blocklist"
 				label="First name"
@@ -71,7 +71,7 @@ function PersonalDetailsDigitalGift(props: PropTypes): JSX.Element {
 				error={firstError('firstNameGiftRecipient', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="lastNameGiftRecipient"
 				data-qm-masking="blocklist"
 				label="Last name"
@@ -81,7 +81,7 @@ function PersonalDetailsDigitalGift(props: PropTypes): JSX.Element {
 				error={firstError('lastNameGiftRecipient', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBotom}
+				cssOverrides={marginBotom}
 				id="emailGiftRecipient"
 				data-qm-masking="blocklist"
 				label="Email"

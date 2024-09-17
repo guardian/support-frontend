@@ -118,7 +118,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 	return (
 		<div id="qa-personal-details">
 			<TextInput
-        cssOverrides={marginBottom}
+				cssOverrides={marginBottom}
 				id="first-name"
 				data-testid="first-name"
 				data-qm-masking="blocklist"
@@ -129,7 +129,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 				error={firstError('firstName', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBottom}
+				cssOverrides={marginBottom}
 				id="last-name"
 				data-testid="last-name"
 				data-qm-masking="blocklist"
@@ -140,7 +140,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 				error={firstError('lastName', props.formErrors)}
 			/>
 			<TextInput
-        cssOverrides={marginBottom}
+				cssOverrides={marginBottom}
 				id="email"
 				data-testid="email"
 				data-qm-masking="blocklist"

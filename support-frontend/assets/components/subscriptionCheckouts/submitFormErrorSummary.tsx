@@ -35,7 +35,9 @@ type PropTypes = {
 export function ErrorSummary(props: PropTypes): JSX.Element {
 	return (
 		<div role="status" aria-live="assertive" css={errorContainer}>
-			<InlineError cssOverrides={boldText}>Some information is missing</InlineError>
+			<InlineError cssOverrides={boldText}>
+				Some information is missing
+			</InlineError>
 			<ul>
 				{props.errors.map((error) => (
 					<li key={error.message} css={errorMessage}>

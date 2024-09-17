@@ -89,7 +89,7 @@ export function SignInBodyCopy({
 							unnecessary messages asking for financial support.{' '}
 							{!isExpanded && (
 								<ButtonLink
-                  cssOverrides={bodyText}
+									cssOverrides={bodyText}
 									priority="secondary"
 									onClick={onReadMoreClick}
 								>

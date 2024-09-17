@@ -59,7 +59,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 				<div css={ctas}>
 					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
-              cssOverrides={marginForFirstButton}
+							cssOverrides={marginForFirstButton}
 							priority="tertiary"
 							size="default"
 							icon={<SvgArrowRightStraight />}
@@ -111,7 +111,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 				<div css={ctas}>
 					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
-              cssOverrides={marginForFirstButton}
+							cssOverrides={marginForFirstButton}
 							priority="tertiary"
 							size="default"
 							icon={<SvgArrowRightStraight />}

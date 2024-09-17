@@ -1494,7 +1494,7 @@ function CheckoutComponent({
 													label={label}
 													name="paymentMethod"
 													value={validPaymentMethod}
-                          cssOverrides={
+													cssOverrides={
 														selected
 															? checkedRadioLabelColour
 															: defaultRadioLabelColour

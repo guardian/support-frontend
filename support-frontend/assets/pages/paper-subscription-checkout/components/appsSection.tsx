@@ -210,7 +210,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 				</p>
 				<ThemeProvider theme={themeButtonReaderRevenue}>
 					<LinkButton
-            cssOverrides={marginForButton}
+						cssOverrides={marginForButton}
 						priority="tertiary"
 						size="default"
 						icon={<SvgArrowRightStraight />}
