@@ -228,7 +228,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 				>
 					<FormSection title="Your details">
 						<Select
-							css={marginBottom}
+              cssOverrides={marginBottom}
 							id="title"
 							data-qm-masking="blocklist"
 							label="Title"

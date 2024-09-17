@@ -54,7 +54,7 @@ export function DeliveryAgentsSelect(
 			<RadioGroup
 				label="Select delivery provider"
 				id="delivery-provider"
-				css={marginBottom}
+        cssOverrides={marginBottom}
 				error={firstError('deliveryProvider', props.formErrors)}
 			>
 				<>

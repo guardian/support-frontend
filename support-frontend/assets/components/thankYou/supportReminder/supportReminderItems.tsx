@@ -242,7 +242,7 @@ export function SupportReminderCTAandPrivacy({
 				To find out what personal data we collect and how we use it, please
 				visit our{' '}
 				<Link
-					css={privacyTextLink}
+          cssOverrides={privacyTextLink}
 					href={privacyLink}
 					target="_blank"
 					rel="noopener noreferrer"

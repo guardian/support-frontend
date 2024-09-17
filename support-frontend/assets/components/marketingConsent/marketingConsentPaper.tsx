@@ -98,7 +98,7 @@ function MarketingButton(props: ButtonPropTypes) {
 		return (
 			<ThemeProvider theme={themeButtonBrandAlt}>
 				<Button
-					css={marginForButton}
+					cssOverrides={marginForButton}
 					iconSide="right"
 					icon={<SvgEnvelope />}
 					disabled
@@ -112,7 +112,7 @@ function MarketingButton(props: ButtonPropTypes) {
 	return (
 		<ThemeProvider theme={themeButtonBrandAlt}>
 			<Button
-				css={marginForButton}
+				cssOverrides={marginForButton}
 				iconSide="right"
 				aria-label="Sign me up to news and offers from the Guardian"
 				onClick={() => props.onClick(props.email, props.csrf)}

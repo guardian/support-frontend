@@ -47,7 +47,7 @@ function SubscriptionsSurvey(): JSX.Element | null {
 				<p css={sansText}>{message}</p>
 				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
-						css={marginForButton}
+            cssOverrides={marginForButton}
 						href={surveyLink}
 						priority="tertiary"
 						icon={<SvgArrowRightStraight />}

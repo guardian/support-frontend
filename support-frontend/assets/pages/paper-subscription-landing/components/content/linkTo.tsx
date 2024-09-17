@@ -46,7 +46,7 @@ function LinkTo({
 }): JSX.Element {
 	return (
 		<Link
-			css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
+      cssOverrides={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
 			href={paperSubsUrl(activeTab)}
 			aria-current={tab === activeTab}
 			onClick={(ev) => {

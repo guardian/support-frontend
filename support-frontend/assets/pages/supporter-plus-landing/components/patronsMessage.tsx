@@ -50,7 +50,7 @@ export function PatronsMessage({
 							{patronageAmountsWithGlyph[countryGroupId]} a month, you can join
 							us as a Guardian Patron.{' '}
 							<Link
-								css={linkStyles}
+								cssOverrides={linkStyles}
 								priority="secondary"
 								href={getPatronsLink(intCMPParameter, countryGroupId)}
 							>

@@ -417,7 +417,7 @@ function OneTimeCheckoutComponent({
 													label={label}
 													name="paymentMethod"
 													value={validPaymentMethod}
-													css={
+                          cssOverrides={
 														selected
 															? checkedRadioLabelColour
 															: defaultRadioLabelColour

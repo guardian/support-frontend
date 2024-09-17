@@ -59,7 +59,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 				<div css={ctas}>
 					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
-							css={marginForFirstButton}
+              cssOverrides={marginForFirstButton}
 							priority="tertiary"
 							size="default"
 							icon={<SvgArrowRightStraight />}
@@ -111,7 +111,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 				<div css={ctas}>
 					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 						<LinkButton
-							css={marginForFirstButton}
+              cssOverrides={marginForFirstButton}
 							priority="tertiary"
 							size="default"
 							icon={<SvgArrowRightStraight />}
@@ -158,7 +158,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 				</p>
 				<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
 					<LinkButton
-						css={marginForFirstButton}
+						cssOverrides={marginForFirstButton}
 						priority="tertiary"
 						size="default"
 						icon={<SvgArrowRightStraight />}
