@@ -8,8 +8,10 @@
 		"test-browserstack": "RUNNING_IN_BROWSERSTACK=true playwright test --config=playwright.browserstack.config.ts",
 		"test-local": "playwright test --ui --config=playwright.local.config.ts",
 		"test-prod": "playwright test --ui --config=playwright.prod.config.ts",
-		"test-smoke": "playwright test --project=smoke --ui --config=playwright.config.ts",
-		"test-cron": "playwright test --project=cron --ui --config=playwright.config.ts"
+		"test-smoke": "playwright test --project=smoke --config=playwright.config.ts",
+		"test-smoke-ui": "playwright test --project=smoke --config=playwright.config.ts --ui",
+		"test-cron": "playwright test --project=cron --config=playwright.config.ts",
+		"test-cron-ui": "playwright test --project=cron --config=playwright.config.ts --ui"
 	},
 	"dependencies": {
 		"@playwright/test": "1.46.1",
