@@ -8,7 +8,7 @@ function isContributionType(val: unknown): val is SelectedContributionType {
 	return contributionTypes.includes(val as SelectedContributionType);
 }
 
-export function getProductFromContributionParams(
+function getProductFromContributionParams(
 	geoId: GeoId,
 	productCatalog: AppConfig['productCatalog'],
 	urlSearchParams: URLSearchParams,
@@ -90,6 +90,7 @@ export function ContributionCheckoutRedirect({
 		/>
 	);
 }
+
 /** we only export this for testing and shouldn't be coupled/used elsewhere */
 export function testGetProductFromContributionParams(
 	...args: Parameters<typeof getProductFromContributionParams>
