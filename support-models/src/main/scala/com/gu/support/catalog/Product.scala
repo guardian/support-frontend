@@ -65,10 +65,10 @@ case object TierThree extends Product {
         productRatePlan("8a1299788ff2ec100190024d1e3b1a09", Annual, RestOfWorld),
       ),
       CODE -> List(
-        productRatePlan("8ad097b48ff26452019001cebac92376", Monthly, Domestic),
-        productRatePlan("8ad081dd8ff24a9a019001d95e4e3574", Annual, Domestic),
-        productRatePlan("8ad081dd8ff24a9a019001df2ce83657", Monthly, RestOfWorld),
-        productRatePlan("8ad097b48ff26452019001e65bbf2ca8", Annual, RestOfWorld),
+        productRatePlan("8ad081dd91dae1d30191e0ce082d18d3", Monthly, Domestic),
+        productRatePlan("8ad097b491daf9180191e0cd58e5180b", Annual, Domestic),
+        productRatePlan("8ad097b491daf9180191e0cdba5f183c", Monthly, RestOfWorld),
+        productRatePlan("8ad097b491daf9180191e0cdf34e185e", Annual, RestOfWorld),
       ),
     )
 }

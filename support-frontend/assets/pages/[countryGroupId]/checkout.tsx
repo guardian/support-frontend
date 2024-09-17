@@ -434,10 +434,15 @@ function CheckoutComponent({
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
 				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' || ratePlanKey === 'DomesticAnnual'
+					ratePlanKey === 'DomesticMonthly' ||
+					ratePlanKey === 'DomesticAnnual' ||
+					ratePlanKey === 'DomesticMonthlyV2' ||
+					ratePlanKey === 'DomesticAnnualV2'
 						? 'Domestic'
 						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual'
+						  ratePlanKey === 'RestOfWorldAnnual' ||
+						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
+						  ratePlanKey === 'RestOfWorldAnnualV2'
 						? 'RestOfWorld'
 						: 'Domestic',
 			};
