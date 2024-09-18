@@ -24,7 +24,7 @@ jobs:
       run: yarn playwright install --with-deps
     - name: Run Playwright tests
       working-directory: ./support-e2e
-      run: yarn playwright test --project=cron --config=playwright.config.ts
+      run: yarn test-cron
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

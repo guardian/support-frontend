@@ -26,7 +26,7 @@
 
 @main(
   title = "Support the Guardian | Checkout",
-  mainElement = EmptyDiv("checkout"),
+  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
   mainJsBundle = RefPath("[countryGroupId]/router.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
@@ -42,6 +42,7 @@
     window.guardian = window.guardian || {};
     window.guardian.productPrices = @Html(outputJson(productPrices))
   </script>
+
   @windowGuardianPaymentConfig(
     geoData = geoData,
     paymentMethodConfigs = paymentMethodConfigs,

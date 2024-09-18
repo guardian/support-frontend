@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	brand,
@@ -19,8 +20,8 @@ const mainStyles = css`
 
 const headingContentContainer = css`
 	min-height: 480px;
-	${from.desktop} {
-		min-height: 440px;
+	${from.tablet} {
+		min-height: 432px;
 	}
 	padding-top: ${space[6]}px;
 	${textSans.large({ fontWeight: 'bold' })}
@@ -31,6 +32,7 @@ export interface CheckoutHeadingProps extends CSSOverridable {
 	children?: React.ReactNode;
 	image?: React.ReactNode;
 	withTopBorder?: true;
+	cssOverrides?: SerializedStyles;
 }
 
 export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
@@ -44,7 +46,7 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 			>
 				<Columns collapseUntil="desktop">
 					<Column span={[1, 2, 5]}>
-						<div css={headingContentContainer}>
+						<div css={[headingContentContainer, props.cssOverrides]}>
 							<Hide until="desktop">
 								{props.heading}
 								{props.children}

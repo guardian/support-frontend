@@ -75,7 +75,7 @@ class DigitalSubscriptionController(
         }
         val mainElement = assets.getSsrCacheContentsAsHtml(
           divId = s"digital-subscription-landing-$countryCode",
-          file = "digital-subscription-landing.html",
+          file = "ssr-holding-content.html",
         )
 
         val isTestUser = testUserService.isTestUser(request)
