@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
+import type { FocusEventHandler, FormEventHandler } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { numericOnlyPattern } from 'pages/[countryGroupId]/validation';
 
 const topSpacing = css`
 	margin-top: ${space[2]}px;
@@ -14,6 +16,8 @@ export type OtherAmountProps = {
 	currency: IsoCurrency;
 	minAmount: number;
 	onOtherAmountChange: (newAmount: string) => void;
+	onBlur?: FocusEventHandler<HTMLInputElement>;
+	onInvalid?: FormEventHandler<HTMLInputElement>;
 	errors?: string[];
 };
 
@@ -22,6 +26,8 @@ export function OtherAmount({
 	otherAmount,
 	currency,
 	onOtherAmountChange,
+	onBlur,
+	onInvalid,
 	errors,
 }: OtherAmountProps): JSX.Element | null {
 	const currencyDetails = currencies[currency];
@@ -42,9 +48,12 @@ export function OtherAmount({
 					suffixText={suffix}
 					error={errors?.[0]}
 					value={otherAmount}
+					pattern={numericOnlyPattern}
+					onBlur={onBlur}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 						onOtherAmountChange(e.target.value)
 					}
+					onInvalid={onInvalid}
 				/>
 			</div>
 		);
