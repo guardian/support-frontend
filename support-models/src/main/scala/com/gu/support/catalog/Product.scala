@@ -64,6 +64,10 @@ case object TierThree extends Product {
         productRatePlan("8a1288a38ff2af980190025b32591ccc", Annual, Domestic, NoProductOptions),
         productRatePlan("8a128ab18ff2af9301900255d77979ac", Monthly, RestOfWorld, NoProductOptions),
         productRatePlan("8a1299788ff2ec100190024d1e3b1a09", Annual, RestOfWorld, NoProductOptions),
+        productRatePlan("8a128dfb91f04b9a0191fa315d091c51", Monthly, Domestic, NewspaperArchive),
+        productRatePlan("8a128dfb91f04b9a0191fa30ae2e1b7e", Annual, Domestic, NewspaperArchive),
+        productRatePlan("8a12891291f04b9d0191fa2ffbe10975", Monthly, RestOfWorld, NewspaperArchive),
+        productRatePlan("8a129c2591f06a5d0191fa2edb383026", Annual, RestOfWorld, NewspaperArchive),
       ),
       CODE -> List(
         productRatePlan("8ad097b48ff26452019001cebac92376", Monthly, Domestic, NoProductOptions),
