@@ -222,8 +222,15 @@ export const getThankYouModuleData = (
 		},
 		newspaperArchiveBenefit: {
 			icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
-			header: 'Discover your Guardian archives benefit',
-			bodyCopy: <>Lorum ipsum</>,
+			header: 'The Guardian and Observer newspapers archive',
+			bodyCopy: (
+				<>
+					Sign in and start exploring more than 200 years of world history with
+					our newspapers archive. View digital reproductions of every front
+					page, article and advertisement printed in the Guardian from 1821 and
+					in the Observer from 1791.
+				</>
+			),
 			ctas: null,
 		},
 		subscriptionStart: {

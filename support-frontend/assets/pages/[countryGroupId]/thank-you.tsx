@@ -15,7 +15,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
+//import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
@@ -331,7 +331,8 @@ function ThankYouComponent({
 			})),
 	];
 
-	const showNewspaperArchiveBenefit = abTests.newspaperArchiveBenefit.isActive;
+	//const showNewspaperArchiveBenefit = abTests.newspaperArchiveBenefit.isActive;
+	const showNewspaperArchiveBenefit = true;
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
