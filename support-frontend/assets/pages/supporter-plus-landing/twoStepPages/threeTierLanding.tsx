@@ -481,6 +481,8 @@ export function ThreeTierLanding({
 		? productCatalogDescriptionNewBenefits
 		: canonicalProductCatalogDescription;
 
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsProduct = urlSearchParams.get('product');
 	/**
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
@@ -510,7 +512,9 @@ export function ThreeTierLanding({
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
-		isUserSelected: isCardUserSelected(recurringAmount),
+		isUserSelected:
+			urlSearchParamsProduct === 'Contribution' ||
+			isCardUserSelected(recurringAmount),
 		isRecommended: false,
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
@@ -548,10 +552,9 @@ export function ThreeTierLanding({
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: promotionTier2,
 		isRecommended: true,
-		isUserSelected: isCardUserSelected(
-			tier2Pricing,
-			promotionTier2?.discount?.amount,
-		),
+		isUserSelected:
+			urlSearchParamsProduct === 'SupporterPlus' ||
+			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
@@ -596,10 +599,9 @@ export function ThreeTierLanding({
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: promotionTier3,
 		isRecommended: false,
-		isUserSelected: isCardUserSelected(
-			tier3Pricing,
-			promotionTier3?.discount?.amount,
-		),
+		isUserSelected:
+			urlSearchParamsProduct === 'TierThree' ||
+			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
