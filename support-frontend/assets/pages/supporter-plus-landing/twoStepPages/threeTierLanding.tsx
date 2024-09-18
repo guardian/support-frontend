@@ -451,25 +451,6 @@ export function ThreeTierLanding({
 		}
 	};
 
-	const handleSupportOnceBtnClick = () => {
-		dispatch(setProductType('ONE_OFF'));
-		navigateWithPageView(
-			navigate,
-			generateOneOffCheckoutLink(),
-			abParticipations,
-		);
-		trackComponentClick(
-			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
-		);
-	};
-
-	const generateOneOffCheckoutLink = () => {
-		const urlParams = new URLSearchParams();
-		urlParams.set('selected-contribution-type', 'one_off');
-
-		return `checkout?${urlParams.toString()}${window.location.hash}`;
-	};
-
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
@@ -655,8 +636,10 @@ export function ThreeTierLanding({
 					/>
 					{contributionType === 'ONE_OFF' && (
 						<OneOffCard
+							amounts={amounts}
 							currencyGlyph={currencies[currencyId].glyph}
-							btnClickHandler={handleSupportOnceBtnClick}
+							countryGroupId={countryGroupId}
+							currencyId={currencyId}
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (
@@ -679,7 +662,7 @@ export function ThreeTierLanding({
 				{!enableSingleContributionsTab && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
-						btnClickHandler={handleSupportOnceBtnClick}
+						countryGroupId={countryGroupId}
 					/>
 				)}
 				{countryGroupId === UnitedStates && (

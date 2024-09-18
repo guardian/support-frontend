@@ -7,7 +7,12 @@ import {
 	space,
 	textSans,
 } from '@guardian/source/foundations';
-import { Button } from '@guardian/source/react-components';
+import { LinkButton } from '@guardian/source/react-components';
+import {
+	type CountryGroupId,
+	countryGroups,
+} from 'helpers/internationalisation/countryGroup';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const container = css`
 	text-align: center;
@@ -56,12 +61,12 @@ const btnStyleOverrides = css`
 
 interface SupportOnceProps {
 	currency: string;
-	btnClickHandler: () => void;
+	countryGroupId: CountryGroupId;
 }
 
 export function SupportOnce({
 	currency,
-	btnClickHandler,
+	countryGroupId,
 }: SupportOnceProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -71,16 +76,21 @@ export function SupportOnce({
 				give&nbsp;
 				{currency}1 or more.
 			</p>
-			<Button
+			<LinkButton
+				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute/checkout?selected-contribution-type=one_off`}
 				iconSide="left"
 				priority="primary"
 				size="default"
 				cssOverrides={btnStyleOverrides}
-				onClick={() => btnClickHandler()}
+				onClick={() => {
+					trackComponentClick(
+						`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+					);
+				}}
 				data-qm-trackable="support-once-button"
 			>
 				Support now
-			</Button>
+			</LinkButton>
 		</div>
 	);
 }
