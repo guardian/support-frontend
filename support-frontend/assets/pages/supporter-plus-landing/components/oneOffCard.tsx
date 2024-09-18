@@ -128,7 +128,11 @@ export function OneOffCard({
 			<div css={buttonContainer}>
 				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<LinkButton
-						href={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${selectedAmount}`}
+						href={`/${
+							countryGroups[countryGroupId].supportInternationalisationId
+						}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
+							selectedAmount === 'other' ? otherAmount : selectedAmount
+						}`}
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
 							trackComponentClick(
