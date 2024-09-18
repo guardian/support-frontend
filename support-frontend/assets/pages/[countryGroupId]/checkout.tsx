@@ -290,13 +290,11 @@ export function Checkout({ geoId, appConfig }: Props) {
 		const fulfilmentOption = getFulfilmentOptions(productKey);
 		const getProductOptions = (productKey: string): ProductOptions => {
 			switch (productKey) {
-				case 'SupporterPlus':
-				case 'Contribution':
-					return 'NoProductOptions';
 				case 'TierThree':
 					return ratePlanKey.endsWith('V2')
 						? 'NewspaperArchive'
 						: 'NoProductOptions';
+				// TODO: define for newspaper
 				default:
 					return 'NoProductOptions';
 			}
