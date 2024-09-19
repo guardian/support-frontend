@@ -30,7 +30,7 @@ test.describe('Sign up for a one-off contribution', () => {
 		}) => {
 			const page = await context.newPage();
 			await setupPage(page, context, baseURL, '/uk/contribute');
-			await page.getByRole('button', { name: 'Support now' }).click();
+			await page.getByRole('link', { name: 'Support now' }).click();
 			await expect(page).toHaveURL(/\/uk\/contribute\/checkout/);
 			if (testDetails.customAmount) {
 				await page.locator("label[for='amount-other']").click();
