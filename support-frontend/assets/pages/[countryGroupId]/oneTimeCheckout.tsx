@@ -173,7 +173,7 @@ function OneTimeCheckoutComponent({
 
 	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
-	const [otherAmountErrors] = useState<string[]>([]);
+	const [otherAmountError, setOtherAmountError] = useState<string>();
 
 	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
@@ -187,7 +187,7 @@ function OneTimeCheckoutComponent({
 
 	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [emailError, setEmailError] = useState<string>();
+	const [emailErrors, setEmailErrors] = useState<string>();
 
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
@@ -205,6 +205,25 @@ function OneTimeCheckoutComponent({
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	const validate = (
+		event: React.FormEvent<HTMLInputElement>,
+		setAction: React.Dispatch<React.SetStateAction<string | undefined>>,
+		missing: string,
+		invalid?: string,
+	) => {
+		preventDefaultValidityMessage(event.currentTarget); // prevent default browser error message
+		const validityState = event.currentTarget.validity;
+		if (validityState.valid) {
+			setAction(undefined); // clear error
+		} else {
+			if (validityState.valueMissing) {
+				setAction(missing); // required
+			} else {
+				setAction(invalid ?? ' '); // pattern mismatch
+			}
+		}
+	};
 
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
@@ -303,8 +322,18 @@ function OneTimeCheckoutComponent({
 									minAmount={minAmount}
 									selectedAmount={amount}
 									otherAmount={otherAmount}
+									onBlur={(event) => {
+										event.target.checkValidity(); // loose focus, onInvalid check fired
+									}}
 									onOtherAmountChange={setOtherAmount}
-									errors={otherAmountErrors}
+									errors={[otherAmountError ?? '']}
+									onInvalid={(event) => {
+										validate(
+											event,
+											setOtherAmountError,
+											'Please enter an amount.',
+										);
+									}}
 								/>
 							}
 						/>
@@ -347,19 +376,14 @@ function OneTimeCheckoutComponent({
 									name="email"
 									required
 									maxLength={80}
-									error={emailError}
+									error={emailErrors}
 									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setEmailError(undefined);
-										} else {
-											if (validityState.valueMissing) {
-												setEmailError('Please enter your email address.');
-											} else {
-												setEmailError('Please enter a valid email address.');
-											}
-										}
+										validate(
+											event,
+											setEmailErrors,
+											'Please enter your email address.',
+											'Please enter a valid email address.',
+										);
 									}}
 								/>
 							</div>
@@ -383,17 +407,11 @@ function OneTimeCheckoutComponent({
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
 										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingPostcodeError(undefined);
-											} else {
-												if (!validityState.valueMissing) {
-													setBillingPostcodeError(
-														'Please enter a valid zip code.',
-													);
-												}
-											}
+											validate(
+												event,
+												setBillingPostcodeError,
+												'Please enter a valid zip code.',
+											);
 										}}
 									/>
 								</div>

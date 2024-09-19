@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
+import type { HTMLAttributes } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -15,13 +16,15 @@ export type OtherAmountProps = {
 	minAmount: number;
 	onOtherAmountChange: (newAmount: string) => void;
 	errors?: string[];
-};
+} & HTMLAttributes<HTMLInputElement>;
 
 export function OtherAmount({
 	selectedAmount,
 	otherAmount,
 	currency,
 	onOtherAmountChange,
+	onBlur,
+	onInvalid,
 	errors,
 }: OtherAmountProps): JSX.Element | null {
 	const currencyDetails = currencies[currency];
@@ -42,9 +45,12 @@ export function OtherAmount({
 					suffixText={suffix}
 					error={errors?.[0]}
 					value={otherAmount}
+					type="number"
+					onBlur={onBlur}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 						onOtherAmountChange(e.target.value)
 					}
+					onInvalid={onInvalid}
 				/>
 			</div>
 		);
