@@ -8,12 +8,19 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button,
 	buttonThemeReaderRevenueBrand,
+	LinkButton,
 } from '@guardian/source/react-components';
+import { useState } from 'react';
+import { config, type SelectedAmountsVariant } from 'helpers/contributions';
+import {
+	type CountryGroupId,
+	countryGroups,
+} from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
-import { PriceCardsContainer } from '../../../components/priceCards/priceCardsContainer';
 import { PaymentCards } from './PaymentIcons';
 
 const sectionStyle = css`
@@ -55,11 +62,25 @@ const buttonContainer = css`
 `;
 
 interface Props {
+	amounts: SelectedAmountsVariant;
 	currencyGlyph: string;
-	btnClickHandler: () => void;
+	countryGroupId: CountryGroupId;
+	currencyId: IsoCurrency;
 }
 
-export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
+export function OneOffCard({
+	currencyGlyph,
+	countryGroupId,
+	amounts,
+	currencyId,
+}: Props) {
+	const oneOffAmounts = amounts.amountsCardData.ONE_OFF;
+	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
+		oneOffAmounts.defaultAmount,
+	);
+	const [otherAmount, setOtherAmount] = useState('');
+	const { min: minAmount } = config[countryGroupId].ONE_OFF;
+
 	return (
 		<section css={sectionStyle}>
 			<div
@@ -72,46 +93,55 @@ export function OneOffCard({ currencyGlyph, btnClickHandler }: Props) {
 					We welcome support of any size, any time, whether you choose to give{' '}
 					{currencyGlyph}1 or much more.
 				</p>
-				<PriceCardsContainer
-					paymentFrequency={'ONE_OFF'}
-					renderPriceCards={({
-						amounts,
-						selectedAmount,
-						otherAmount,
-						currency,
-						paymentInterval,
-						onAmountChange,
-						minAmount,
-						onOtherAmountChange,
-						hideChooseYourAmount,
-						errors,
-					}) => (
-						<PriceCards
-							amounts={amounts}
-							selectedAmount={selectedAmount}
-							currency={currency}
-							paymentInterval={paymentInterval}
-							onAmountChange={onAmountChange}
-							hideChooseYourAmount={hideChooseYourAmount}
-							otherAmountField={
-								<OtherAmount
-									currency={currency}
-									minAmount={minAmount}
-									selectedAmount={selectedAmount}
-									otherAmount={otherAmount}
-									onOtherAmountChange={onOtherAmountChange}
-									errors={errors}
-								/>
+
+				<PriceCards
+					amounts={oneOffAmounts.amounts}
+					selectedAmount={selectedAmount}
+					currency={currencyId}
+					// This is always undefined as we're ONE_OFF
+					paymentInterval={undefined}
+					onAmountChange={(amount: string) => {
+						if (amount === 'other') {
+							setSelectedAmount(amount);
+						} else {
+							const amountNumber = parseInt(amount, 10);
+							if (!isNaN(amountNumber)) {
+								setSelectedAmount(amountNumber);
 							}
+						}
+					}}
+					hideChooseYourAmount={oneOffAmounts.hideChooseYourAmount}
+					otherAmountField={
+						<OtherAmount
+							currency={currencyId}
+							minAmount={minAmount}
+							selectedAmount={selectedAmount}
+							otherAmount={otherAmount}
+							onOtherAmountChange={(otherAmount) => {
+								setOtherAmount(otherAmount);
+							}}
+							errors={[]}
 						/>
-					)}
+					}
 				/>
 			</div>
 			<div css={buttonContainer}>
 				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-					<Button cssOverrides={btnStyleOverrides} onClick={btnClickHandler}>
+					<LinkButton
+						href={`/${
+							countryGroups[countryGroupId].supportInternationalisationId
+						}/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
+							selectedAmount === 'other' ? otherAmount : selectedAmount
+						}`}
+						cssOverrides={btnStyleOverrides}
+						onClick={() => {
+							trackComponentClick(
+								`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+							);
+						}}
+					>
 						Continue to checkout
-					</Button>
+					</LinkButton>
 				</ThemeProvider>
 				<PaymentCards />
 			</div>
