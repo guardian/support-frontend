@@ -4,7 +4,6 @@ import { NumericInput } from '@guardian/source-development-kitchen/react-compone
 import type { FocusEventHandler, FormEventHandler } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { numericOnlyPattern } from 'pages/[countryGroupId]/validation';
 
 const topSpacing = css`
 	margin-top: ${space[2]}px;
@@ -48,7 +47,7 @@ export function OtherAmount({
 					suffixText={suffix}
 					error={errors?.[0]}
 					value={otherAmount}
-					pattern={numericOnlyPattern}
+					type="number"
 					onBlur={onBlur}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 						onOtherAmountChange(e.target.value)
