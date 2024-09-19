@@ -79,10 +79,7 @@ import {
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	NoProductOptions,
-	type ProductOptions,
-} from 'helpers/productPrice/productOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -288,25 +285,12 @@ export function Checkout({ geoId, appConfig }: Props) {
 			}
 		};
 		const fulfilmentOption = getFulfilmentOptions(productKey);
-		const getProductOptions = (productKey: string): ProductOptions => {
-			switch (productKey) {
-				case 'TierThree':
-					return ratePlanKey.endsWith('V2')
-						? 'NewspaperArchive'
-						: 'NoProductOptions';
-				// TODO: define for newspaper
-				default:
-					return 'NoProductOptions';
-			}
-		};
-		const productOptions: ProductOptions = getProductOptions(productKey);
 
 		promotion = getPromotion(
 			productPrices,
 			countryId,
 			billingPeriod,
 			fulfilmentOption,
-			productOptions,
 		);
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
@@ -450,20 +434,12 @@ function CheckoutComponent({
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
 				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' ||
-					ratePlanKey === 'DomesticAnnual' ||
-					ratePlanKey === 'DomesticMonthlyV2' ||
-					ratePlanKey === 'DomesticAnnualV2'
+					ratePlanKey === 'DomesticMonthly' || ratePlanKey === 'DomesticAnnual'
 						? 'Domestic'
 						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual' ||
-						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
-						  ratePlanKey === 'RestOfWorldAnnualV2'
+						  ratePlanKey === 'RestOfWorldAnnual'
 						? 'RestOfWorld'
 						: 'Domestic',
-				productOptions: ratePlanKey.endsWith('V2')
-					? 'NewspaperArchive'
-					: 'NoProductOptions',
 			};
 			break;
 

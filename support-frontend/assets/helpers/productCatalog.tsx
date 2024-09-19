@@ -103,18 +103,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				RestOfWorldAnnual: {
 					billingPeriod: 'Annual',
 				},
-				DomesticMonthlyV2: {
-					billingPeriod: 'Monthly',
-				},
-				DomesticAnnualV2: {
-					billingPeriod: 'Annual',
-				},
-				RestOfWorldMonthlyV2: {
-					billingPeriod: 'Monthly',
-				},
-				RestOfWorldAnnualV2: {
-					billingPeriod: 'Annual',
-				},
 			},
 		},
 		DigitalSubscription: {
