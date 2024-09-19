@@ -215,7 +215,7 @@ function OneTimeCheckoutComponent({
 		preventDefaultValidityMessage(event.currentTarget); // prevent default browser error message
 		const validityState = event.currentTarget.validity;
 		if (validityState.valid) {
-			setOtherAmountErrors(undefined); // clear error
+			setAction(undefined); // clear error
 		} else {
 			if (validityState.valueMissing) {
 				setAction(missing); // required
@@ -326,7 +326,7 @@ function OneTimeCheckoutComponent({
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
 									onOtherAmountChange={setOtherAmount}
-									errors={[otherAmountErrors ?? ' ']}
+									errors={[otherAmountErrors ?? '']}
 									onInvalid={(event) => {
 										validate(
 											event,
