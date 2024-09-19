@@ -206,7 +206,7 @@ function OneTimeCheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const displayValidity = (
+	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
 		setAction: React.Dispatch<React.SetStateAction<string | undefined>>,
 		missing: string,
@@ -328,7 +328,7 @@ function OneTimeCheckoutComponent({
 									onOtherAmountChange={setOtherAmount}
 									errors={[otherAmountErrors ?? ' ']}
 									onInvalid={(event) => {
-										displayValidity(
+										validate(
 											event,
 											setOtherAmountErrors,
 											'Please enter an amount.',
@@ -379,7 +379,7 @@ function OneTimeCheckoutComponent({
 									maxLength={80}
 									error={emailErrors}
 									onInvalid={(event) => {
-										displayValidity(
+										validate(
 											event,
 											setEmailErrors,
 											'Please enter your email address.',
@@ -408,7 +408,7 @@ function OneTimeCheckoutComponent({
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
 										onInvalid={(event) => {
-											displayValidity(
+											validate(
 												event,
 												setBillingPostcodeError,
 												'Please enter a valid zip code.',
