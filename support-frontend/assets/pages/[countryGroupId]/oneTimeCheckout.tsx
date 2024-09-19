@@ -206,6 +206,25 @@ function OneTimeCheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 
+	const displayValidity = (
+		event: React.FormEvent<HTMLInputElement>,
+		setAction: React.Dispatch<React.SetStateAction<string | undefined>>,
+		missing: string,
+		invalid?: string,
+	) => {
+		preventDefaultValidityMessage(event.currentTarget); // prevent default browser error message
+		const validityState = event.currentTarget.validity;
+		if (validityState.valid) {
+			setOtherAmountErrors([]); // clear error
+		} else {
+			if (validityState.valueMissing) {
+				setAction(missing); // required
+			} else {
+				setAction(invalid ?? ' '); // pattern mismatch
+			}
+		}
+	};
+
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
@@ -365,17 +384,12 @@ function OneTimeCheckoutComponent({
 									maxLength={80}
 									error={emailError}
 									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setEmailError(undefined);
-										} else {
-											if (validityState.valueMissing) {
-												setEmailError('Please enter your email address.');
-											} else {
-												setEmailError('Please enter a valid email address.');
-											}
-										}
+										displayValidity(
+											event,
+											setEmailError,
+											'Please enter your email address.',
+											'Please enter a valid email address.',
+										);
 									}}
 								/>
 							</div>
@@ -399,17 +413,11 @@ function OneTimeCheckoutComponent({
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
 										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingPostcodeError(undefined);
-											} else {
-												if (!validityState.valueMissing) {
-													setBillingPostcodeError(
-														'Please enter a valid zip code.',
-													);
-												}
-											}
+											displayValidity(
+												event,
+												setBillingPostcodeError,
+												'Please enter a valid zip code.',
+											);
 										}}
 									/>
 								</div>
