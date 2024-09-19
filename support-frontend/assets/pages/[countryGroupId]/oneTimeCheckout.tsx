@@ -173,7 +173,7 @@ function OneTimeCheckoutComponent({
 
 	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
-	const [otherAmountErrors, setOtherAmountErrors] = useState<string>();
+	const [otherAmountError, setOtherAmountError] = useState<string>();
 
 	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
@@ -326,13 +326,12 @@ function OneTimeCheckoutComponent({
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
 									onOtherAmountChange={setOtherAmount}
-									errors={[otherAmountErrors ?? '']}
+									errors={[otherAmountError ?? '']}
 									onInvalid={(event) => {
 										validate(
 											event,
-											setOtherAmountErrors,
+											setOtherAmountError,
 											'Please enter an amount.',
-											'Please enter a valid amount.',
 										);
 									}}
 								/>
