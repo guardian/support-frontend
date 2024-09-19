@@ -329,6 +329,10 @@ export function ThreeTierLanding({
 			countryId,
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+			abParticipations.newspaperArchiveBenefit === 'v1' ||
+				abParticipations.newspaperArchiveBenefit === 'v2'
+				? 'NewspaperArchive'
+				: 'NoProductOptions',
 		),
 	);
 
@@ -555,15 +559,26 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
+	const getTier3RatePlan = () => {
+		const ratePlan =
+			countryGroupId === 'International'
+				? contributionType === 'ANNUAL'
+					? 'RestOfWorldAnnual'
+					: 'RestOfWorldMonthly'
+				: contributionType === 'ANNUAL'
+				? 'DomesticAnnual'
+				: 'DomesticMonthly';
 
-	const tier3RatePlan =
-		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
+		if (
+			abParticipations.newspaperArchiveBenefit === 'v1' ||
+			abParticipations.newspaperArchiveBenefit === 'v2'
+		) {
+			return `${ratePlan}V2`;
+		}
+		return ratePlan;
+	};
+
+	const tier3RatePlan = getTier3RatePlan();
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 

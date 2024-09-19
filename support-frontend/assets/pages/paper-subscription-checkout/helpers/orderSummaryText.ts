@@ -17,6 +17,7 @@ const productOptionDisplayNames = {
 	SixdayPlus: 'Six day',
 	Everyday: 'Every day',
 	EverydayPlus: 'Every day',
+	NewspaperArchive: 'Newspaper Archive',
 };
 export function getOrderSummaryTitle(
 	productOption: ProductOptions,
