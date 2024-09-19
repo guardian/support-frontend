@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { NumericInput } from '@guardian/source-development-kitchen/react-components';
-import type { FocusEventHandler, FormEventHandler } from 'react';
+import type { HTMLAttributes } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -15,10 +15,8 @@ export type OtherAmountProps = {
 	currency: IsoCurrency;
 	minAmount: number;
 	onOtherAmountChange: (newAmount: string) => void;
-	onBlur?: FocusEventHandler<HTMLInputElement>;
-	onInvalid?: FormEventHandler<HTMLInputElement>;
 	errors?: string[];
-};
+} & HTMLAttributes<HTMLInputElement>;
 
 export function OtherAmount({
 	selectedAmount,
