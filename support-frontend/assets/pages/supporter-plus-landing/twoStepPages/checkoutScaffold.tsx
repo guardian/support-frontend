@@ -39,9 +39,9 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
+import { navigateWithPageView } from '../../../helpers/tracking/trackingOphan';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { PatronsMessage } from '../components/patronsMessage';
 

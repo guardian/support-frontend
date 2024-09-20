@@ -69,13 +69,13 @@ export type OphanComponentEvent = {
 	};
 };
 
-type OphanABEvent = {
+export type OphanABEvent = {
 	variantName: string;
 	complete: boolean;
 	campaignCodes?: string[];
 };
 
-type OphanABPayload = Record<string, OphanABEvent>;
+export type OphanABPayload = Record<string, OphanABEvent>;
 
 // ----- Functions ----- //
 const trackComponentEvents = (componentEvent: OphanComponentEvent): void =>
@@ -91,7 +91,9 @@ const pageView = (url: string, referrer: string): void => {
 	}
 };
 
-const buildOphanPayload = (participations: Participations): OphanABPayload =>
+export const buildOphanPayload = (
+	participations: Participations,
+): OphanABPayload =>
 	Object.keys(participations).reduce((payload, participation) => {
 		const ophanABEvent: OphanABEvent = {
 			variantName: participations[participation],

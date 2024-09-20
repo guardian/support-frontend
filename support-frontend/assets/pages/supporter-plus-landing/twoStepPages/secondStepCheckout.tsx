@@ -37,7 +37,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { navigateWithPageView } from '../../../helpers/tracking/trackingOphan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';

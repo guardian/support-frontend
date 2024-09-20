@@ -31,7 +31,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { getOrigin, getQueryParameter } from 'helpers/urls/url';
-import type { OphanComponentType } from '../../../helpers/tracking/ophan';
+import type { OphanComponentType } from '../../../helpers/tracking/trackingOphan';
 import Prices from './content/prices';
 
 const getCheckoutUrl = (

@@ -10,7 +10,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { trackComponentEvents } from '../../../helpers/tracking/trackingOphan';
 import { addPayerDetailsToRedux } from './payerDetails';
 
 export type PaymentEventDetails = {
