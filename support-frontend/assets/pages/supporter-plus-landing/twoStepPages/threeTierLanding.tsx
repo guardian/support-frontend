@@ -288,6 +288,10 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	geoId,
 }: ThreeTierLandingProps): JSX.Element {
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsProduct = urlSearchParams.get('product');
+	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
@@ -311,7 +315,12 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType = urlSearchParamsRatePlan
+		? urlSearchParamsRatePlan === 'Monthly'
+			? 'MONTHLY'
+			: 'ANNUAL'
+		: useContributionsSelector(getContributionType);
+
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
@@ -466,8 +475,6 @@ export function ThreeTierLanding({
 		? productCatalogDescriptionNewBenefits
 		: canonicalProductCatalogDescription;
 
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsProduct = urlSearchParams.get('product');
 	/**
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
