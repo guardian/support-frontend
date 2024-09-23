@@ -1,4 +1,7 @@
-import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type {
+	ProductKey,
+	ProductKeyPlusOneTime,
+} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import { OfferFeast } from 'components/offer/offer';
 import { newspaperCountries } from './internationalisation/country';
@@ -11,6 +14,10 @@ import { gwDeliverableCountries } from './internationalisation/gwDeliverableCoun
 export type { ProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
+export const productCatalogPlusOneTime = {
+	...productCatalog,
+	OneTime: {},
+} as Record<ProductKeyPlusOneTime, ProductDescription>;
 
 type ProductBenefit = {
 	copy: string;
@@ -52,6 +59,15 @@ export function filterBenefitByRegion(
 export const productKeys = Object.keys(typeObject) as ProductKey[];
 export function isProductKey(val: unknown): val is ProductKey {
 	return productKeys.includes(val as ProductKey);
+}
+
+export const productKeysPlusOneTime = Object.keys(
+	typeObject,
+) as ProductKeyPlusOneTime[];
+export function isProductKeyPlusOneTime(
+	val: unknown,
+): val is ProductKeyPlusOneTime {
+	return productKeysPlusOneTime.includes(val as ProductKeyPlusOneTime);
 }
 
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
@@ -358,6 +374,22 @@ export const productCatalogDescriptionNewBenefits: Record<
 	},
 };
 
+export const productCatalogDescriptionPlusOneTime: Record<
+	ProductKeyPlusOneTime,
+	ProductDescription
+> = {
+	...productCatalogDescription,
+	OneTime: {
+		label: 'One Time',
+		benefits: [],
+
+		ratePlans: {
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+};
 /**
  * This method is to help us determine which product and rateplan to
  * use based on a person's internationalisation ID.

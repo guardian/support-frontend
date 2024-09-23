@@ -22,8 +22,10 @@ import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	isProductKey,
+	// isProductKeyPlusOneTime,
 	productCatalog,
 	productCatalogDescription,
+	// productCatalogPlusOneTime,
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -98,11 +100,20 @@ export function ThankYou({ geoId, appConfig }: Props) {
 
 	/** Get and validate product */
 	const productParam = searchParams.get('product');
+	// const productKey =
+	// 	productParam && isProductKeyPlusOneTime(productParam)
+	// 		? productParam
+	// 		: undefined;
+	// const product = productKey && productCatalogPlusOneTime[productKey];
 	const productKey =
 		productParam && isProductKey(productParam) ? productParam : undefined;
 	const product = productKey && productCatalog[productKey];
 	if (!product) {
-		return <div>Product not found</div>;
+		return (
+			<div>
+				Product not found productKey={productKey} product={product}
+			</div>
+		);
 	}
 
 	/** Get and validate ratePlan */
