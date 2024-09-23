@@ -1,6 +1,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { trackComponentEvents } from '../../tracking/trackingOphan';
 
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';

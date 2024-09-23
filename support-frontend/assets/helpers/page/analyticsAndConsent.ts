@@ -6,13 +6,13 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
-import {
-	setReferrerDataInLocalStorage,
-	trackAbTests,
-} from 'helpers/tracking/ophan';
 import { init as initQuantumMetric } from 'helpers/tracking/quantumMetric';
 import { isPostDeployUser } from 'helpers/user/user';
 import { init as initLogger } from 'helpers/utilities/logger';
+import {
+	setReferrerDataInLocalStorage,
+	trackAbTests,
+} from '../tracking/trackingOphan';
 import 'helpers/internationalisation/country';
 
 // ----- Functions ----- //
