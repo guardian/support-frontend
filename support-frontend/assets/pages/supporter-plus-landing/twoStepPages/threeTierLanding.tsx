@@ -339,9 +339,9 @@ export function ThreeTierLanding({
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 
-			abParticipations.newspaperArchiveBenefit !== undefined
-				? 'NewspaperArchive'
-				: 'NoProductOptions',
+			abParticipations.newspaperArchiveBenefit === undefined
+				? 'NoProductOptions'
+				: 'NewspaperArchive',
 		),
 	);
 
@@ -576,9 +576,9 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		return abParticipations.newspaperArchiveBenefit !== undefined
-			? `${ratePlan}V2`
-			: ratePlan;
+		return abParticipations.newspaperArchiveBenefit === undefined
+			? ratePlan
+			: `${ratePlan}V2`;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
