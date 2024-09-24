@@ -338,10 +338,10 @@ export function ThreeTierLanding({
 			countryId,
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-			abParticipations.newspaperArchiveBenefit === 'v1' ||
-				abParticipations.newspaperArchiveBenefit === 'v2'
-				? 'NewspaperArchive'
-				: 'NoProductOptions',
+
+			abParticipations.newspaperArchiveBenefit === undefined
+				? 'NoProductOptions'
+				: 'NewspaperArchive',
 		),
 	);
 
@@ -470,7 +470,7 @@ export function ThreeTierLanding({
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	const productCatalogDescription = ['v1', 'v2'].includes(
-		abParticipations.newspaperArchiveBenefit,
+		abParticipations.newspaperArchiveBenefit ?? '',
 	)
 		? productCatalogDescriptionNewBenefits
 		: canonicalProductCatalogDescription;
@@ -576,13 +576,9 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		if (
-			abParticipations.newspaperArchiveBenefit === 'v1' ||
-			abParticipations.newspaperArchiveBenefit === 'v2'
-		) {
-			return `${ratePlan}V2`;
-		}
-		return ratePlan;
+		return abParticipations.newspaperArchiveBenefit === undefined
+			? ratePlan
+			: `${ratePlan}V2`;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
