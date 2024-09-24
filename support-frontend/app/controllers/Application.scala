@@ -481,6 +481,9 @@ class Application(
     val (product, ratePlan) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
+    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
+      * should remove this.
+      */
     if (product == "OneOff") {
       Ok(
         contributionsHtml(countryGroupId, None),
