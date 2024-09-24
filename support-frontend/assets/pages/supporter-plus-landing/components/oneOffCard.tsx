@@ -16,11 +16,8 @@ import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
 import { config } from '../../../helpers/contributions';
-import type {
-	CountryGroupId} from '../../../helpers/internationalisation/countryGroup';
-import {
-	countryGroups,
-} from '../../../helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
+import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 import { PaymentCards } from './PaymentIcons';
