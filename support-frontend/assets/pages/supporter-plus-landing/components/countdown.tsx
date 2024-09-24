@@ -4,81 +4,67 @@ import { useEffect, useState } from 'react';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
  * This is used during the annual US End of Year Campaign.
+ * Beware that this is only accurate to less than a second and is locale specific.
  */
 
-// create the style - TODO: design not yet confirmed...
-const gridStyle = css`
-	display: flex;
-	justify-content: center;
-	align-items: center; 
+// TODO: colours will change with sub-campaigns and design not yet confirmed...
+const outer = css`
+	width: 272px;
+	height: 71px;
 	margin: auto;
-	width: 400px;
-	/* width: 272px; */
-	height: 69px;
-	padding: 12px 40px;
-	flex-shrink: 0;
-	background-color: #fff; /* debugging*/
-	/* background-color: #1E3E72; */
-	border-radius: 8px;
-	color: ${palette.sport[100]}; /* debugging */
-	/* color: ${palette.neutral[100]}; */
-	/* debugging */
-	border: 1px dotted black;
-	padding: 1px;
+	padding-top: 15px;
 `;
 
-const gridItemStyle = css`
-	/* font-variant-numeric: lining-nums proportional-nums; */
-	justify-content: center;
-	
+const container = css`
+    width: 100%;
+    background-color: #1E3E72;
+	color: ${palette.neutral[100]};
+	padding: 12px 40px;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* align-items: center; */
+    flex-wrap: nowrap;
+`;
+
+const flexItem = css`
 	/* 🖥 Text Sans/text.sans.24 */
 	font-family: GuardianTextSans;
 	font-size: 24px;
 	font-style: normal;
-	font-weight: 700;
 	line-height: 130%; /* 31.2px */
 
-    width: 100px;
-    /* width: 65px; */
-	text-align: center;
-
-	/* debugging */
-	border: 1px dotted red;
-	padding: 2px;
+    display: flex;
+    flex-direction: column;
+	justify-content: center;
+    /* align-items: center; */
+	/* padding: 0 1px; */
 `;
 
 const timePartStyle = css`
-	display: flex;
-	justify-content: center;
-	align-items: center; 
-	flex-shrink: 0;
-	/* debugging */
-	border: 1px dotted green;
-	padding: 2px;
+	width: 33px;
+	flex-grow: 1;
+	font-weight: 700;
 `;
 
-const timepartcss = css`
-
-	/* debugging */
-	border: 1px dotted turquoise;
-	padding: 2px;	
-`
-
-const colonStyle = css`
-	font-size: 12px;
-	color: #ee1212;
-	/* debugging */
-	border: 1px dotted blue;
-	padding: 2px;
+const colon = css`
+    font-size: 12px;
+	font-weight: 400px;
+	line-height: 135%; /* 16.2px */
+	margin: 0 2px;
+    margin-bottom: 17px;
 `;
 
 const timeLabelStyle = css`
+	width: 33px;
 	font-size: 12px;
-	/* debugging */
-	border: 1px dotted purple;
-	padding: 2px;
+	font-weight: 400px;
+	line-height: 135%; /* 16.2px */
+	flex-grow: 1;
+	text-align: center;
 `;
-
 
 // props
 export type CountdownProps = {
@@ -164,11 +150,16 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	return (
 		<>
 			{showCountdown && (
-				<div id="timer" role="timer" css={gridStyle}>
-					<TimePart timePart={days} colon={':'} label={'days'} />
-					<TimePart timePart={hours} colon={':'} label={'hrs'} />
-					<TimePart timePart={minutes} colon={':'} label={'mins'} />
-					<TimePart timePart={seconds} label={'secs'} />
+				<div id="timer" role="timer" css={outer}>
+					<div css={container}>
+						<TimePart timePart={days} label={'days'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={hours} label={'hrs'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={minutes} label={'mins'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={seconds} label={'secs'} />
+					</div>
 				</div>
 			)}
 		</>
@@ -179,18 +170,14 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 type TimePartProps = {
 	timePart: string;
-	colon?: string;
 	label: string;
 };
 
-function TimePart({ timePart, colon, label }: TimePartProps): JSX.Element {
+function TimePart({ timePart, label }: TimePartProps): JSX.Element {
 	return (
-		<div id="gridItem" css={gridItemStyle}>
-			<div id="timepart-container" css={timePartStyle}>
-				<div css={timepartcss} id="timepart">{timePart}</div>
-				{colon ? <div id="colon" css={colonStyle}>{colon}</div> : <div css={colonStyle}>&nbsp;</div>}
-			</div>
-			<div id="label" css={timeLabelStyle}>{label}</div><div css={colonStyle}>&nbsp;</div>
+		<div css={flexItem}>
+			<div css={timePartStyle}>{timePart}</div>
+			<div css={timeLabelStyle}>{label}</div>
 		</div>
 	);
 }
