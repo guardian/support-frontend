@@ -455,7 +455,7 @@ class Application(
       .as[Double]
       .toOption
 
-    val isSupporterPlus = (for {
+    val isSupporterPlus: Boolean = (for {
       supporterPlusAmount <- maybeSupporterPlusAmount
       selectedAmount <- maybeSelectedAmount
     } yield selectedAmount >= supporterPlusAmount).getOrElse(true)
