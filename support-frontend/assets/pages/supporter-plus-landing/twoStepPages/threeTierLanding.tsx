@@ -59,8 +59,8 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -288,6 +288,10 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	geoId,
 }: ThreeTierLandingProps): JSX.Element {
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsProduct = urlSearchParams.get('product');
+	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
@@ -311,7 +315,12 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType = urlSearchParamsRatePlan
+		? urlSearchParamsRatePlan === 'Monthly'
+			? 'MONTHLY'
+			: 'ANNUAL'
+		: useContributionsSelector(getContributionType);
+
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
@@ -329,6 +338,10 @@ export function ThreeTierLanding({
 			countryId,
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+			abParticipations.newspaperArchiveBenefit === 'v1' ||
+				abParticipations.newspaperArchiveBenefit === 'v2'
+				? 'NewspaperArchive'
+				: 'NoProductOptions',
 		),
 	);
 
@@ -339,7 +352,7 @@ export function ThreeTierLanding({
 	 */
 	const campaignSettings = getCampaignSettings(countryGroupId);
 	const enableSingleContributionsTab =
-		campaignSettings?.enableSingleContributions;
+		abParticipations.landingPageOneTimeTab === 'oneTimeTab';
 
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
@@ -451,25 +464,6 @@ export function ThreeTierLanding({
 		}
 	};
 
-	const handleSupportOnceBtnClick = () => {
-		dispatch(setProductType('ONE_OFF'));
-		navigateWithPageView(
-			navigate,
-			generateOneOffCheckoutLink(),
-			abParticipations,
-		);
-		trackComponentClick(
-			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
-		);
-	};
-
-	const generateOneOffCheckoutLink = () => {
-		const urlParams = new URLSearchParams();
-		urlParams.set('selected-contribution-type', 'one_off');
-
-		return `checkout?${urlParams.toString()}${window.location.hash}`;
-	};
-
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
@@ -510,7 +504,9 @@ export function ThreeTierLanding({
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
-		isUserSelected: isCardUserSelected(recurringAmount),
+		isUserSelected:
+			urlSearchParamsProduct === 'Contribution' ||
+			isCardUserSelected(recurringAmount),
 		isRecommended: false,
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
@@ -548,10 +544,9 @@ export function ThreeTierLanding({
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: promotionTier2,
 		isRecommended: true,
-		isUserSelected: isCardUserSelected(
-			tier2Pricing,
-			promotionTier2?.discount?.amount,
-		),
+		isUserSelected:
+			urlSearchParamsProduct === 'SupporterPlus' ||
+			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
@@ -571,15 +566,26 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
+	const getTier3RatePlan = () => {
+		const ratePlan =
+			countryGroupId === 'International'
+				? contributionType === 'ANNUAL'
+					? 'RestOfWorldAnnual'
+					: 'RestOfWorldMonthly'
+				: contributionType === 'ANNUAL'
+				? 'DomesticAnnual'
+				: 'DomesticMonthly';
 
-	const tier3RatePlan =
-		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
+		if (
+			abParticipations.newspaperArchiveBenefit === 'v1' ||
+			abParticipations.newspaperArchiveBenefit === 'v2'
+		) {
+			return `${ratePlan}V2`;
+		}
+		return ratePlan;
+	};
+
+	const tier3RatePlan = getTier3RatePlan();
 	const tier3Pricing =
 		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
 
@@ -596,10 +602,9 @@ export function ThreeTierLanding({
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: promotionTier3,
 		isRecommended: false,
-		isUserSelected: isCardUserSelected(
-			tier3Pricing,
-			promotionTier3?.discount?.amount,
-		),
+		isUserSelected:
+			urlSearchParamsProduct === 'TierThree' ||
+			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
 		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
@@ -653,8 +658,10 @@ export function ThreeTierLanding({
 					/>
 					{contributionType === 'ONE_OFF' && (
 						<OneOffCard
+							amounts={amounts}
 							currencyGlyph={currencies[currencyId].glyph}
-							btnClickHandler={handleSupportOnceBtnClick}
+							countryGroupId={countryGroupId}
+							currencyId={currencyId}
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (
@@ -677,7 +684,7 @@ export function ThreeTierLanding({
 				{!enableSingleContributionsTab && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
-						btnClickHandler={handleSupportOnceBtnClick}
+						countryGroupId={countryGroupId}
 					/>
 				)}
 				{countryGroupId === UnitedStates && (

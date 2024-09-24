@@ -36,8 +36,12 @@ export function getUserSelectedAmountBeforeAmendment(
 
 	if (priceCardAmountSelected === 'other') {
 		const customAmount = otherAmountsBeforeAmendment[contributionType];
-		// TODO: what do we do when this is NaN? Do we handle elsewhere?
-		return Number.parseFloat(customAmount.amount ?? '');
+		const amount = parseFloat(customAmount.amount ?? '');
+		if (!isNaN(amount)) {
+			return amount;
+		} else {
+			return 0;
+		}
 	}
 
 	return priceCardAmountSelected;

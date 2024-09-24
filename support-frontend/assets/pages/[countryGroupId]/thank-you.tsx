@@ -271,11 +271,15 @@ function ThankYouComponent({
 		isContributionProduct &&
 		(ratePlanKey === 'Monthly' ||
 		ratePlanKey === 'RestOfWorldMonthly' ||
-		ratePlanKey === 'DomesticMonthly'
+		ratePlanKey === 'DomesticMonthly' ||
+		ratePlanKey === 'RestOfWorldMonthlyV2' ||
+		ratePlanKey === 'DomesticMonthlyV2'
 			? 'MONTHLY'
 			: ratePlanKey === 'Annual' ||
 			  ratePlanKey === 'RestOfWorldAnnual' ||
-			  ratePlanKey === 'DomesticAnnual'
+			  ratePlanKey === 'DomesticAnnual' ||
+			  ratePlanKey === 'RestOfWorldAnnualV2' ||
+			  ratePlanKey === 'DomesticAnnualV2'
 			? 'ANNUAL'
 			: productKey === 'Contribution'
 			? 'ONE_OFF'
