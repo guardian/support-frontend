@@ -498,13 +498,12 @@ class Application(
   }
 
   def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    val product = request.queryString
+    request.queryString
       .getOrElse("product", Nil)
       .headOption
       .flatMap(productString => Product.fromString(productString))
-      .getOrElse(SupporterPlus)
-
-    routeForProduct(product)
+      .map(routeForProduct(_))
+      .getOrElse(BadRequest("No product name provided"))
   }
 
   def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
