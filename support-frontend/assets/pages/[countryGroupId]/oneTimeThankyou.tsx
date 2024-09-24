@@ -23,9 +23,9 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
-import ThankYouHeader from 'pages/digital-subscriber-thank-you/components/thankYouHeader';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
+import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	columnContainer,
 	firstColumnContainer,
@@ -79,6 +79,7 @@ type OneTimeThankyouProps = {
 };
 
 export function OneTimeThankYou({ geoId, appConfig }: OneTimeThankyouProps) {
+	/** Get and validate the amount */
 	const searchParams = new URLSearchParams(window.location.search);
 	const contributionParam = searchParams.get('contribution');
 	const contributionAmount = contributionParam
@@ -129,13 +130,13 @@ function OneTimeThankYouComponent({
 		order.paymentMethod === 'StripeExpressCheckoutElement'
 			? 'Stripe'
 			: order.paymentMethod;
-
 	successfulContributionConversion(
 		finalAmount,
 		'ONE_OFF',
 		currencyKey,
 		paymentMethod,
 	);
+
 	// track conversion with QM
 	sendEventContributionCheckoutConversion(finalAmount, 'ONE_OFF', currencyKey);
 
@@ -152,15 +153,17 @@ function OneTimeThankYouComponent({
 		false,
 	);
 	const maybeThankYouModule = (
-		condtion: boolean,
+		condition: boolean,
 		moduleType: ThankYouModuleType,
-	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(emailExists, 'supportReminder'),
+		'feedback',
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
+		'socialShare',
 	];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
@@ -182,6 +185,15 @@ function OneTimeThankYouComponent({
 						<ThankYouHeader
 							name={order.firstName}
 							showDirectDebitMessage={false}
+							isOneOffPayPal={false}
+							contributionType={'ONE_OFF'}
+							amount={finalAmount}
+							currency={currencyKey}
+							amountIsAboveThreshold={false}
+							isTier3={false}
+							isSignedIn={isSignedIn}
+							// TODO - get this from the /identity/get-user-type endpoint
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
 					</div>
 

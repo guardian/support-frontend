@@ -293,13 +293,13 @@ function OneTimeCheckoutComponent({
 						paymentMethod: paymentMethod,
 					};
 					setThankYouOrder(order);
-					const thankYouUrlSearchParams = new URLSearchParams();
-					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
 
 					/* Currently, router requires a recurring product (Contribution perhaps closest?) */
-					thankYouUrlSearchParams.set('contribution', 'Contribution');
+					const thankYouUrlSearchParams = new URLSearchParams();
+					thankYouUrlSearchParams.set('product', 'Contribution');
+					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
 
-					window.location.href = `/${geoId}/one-time-thank-you?product=Contribution&${thankYouUrlSearchParams.toString()}`;
+					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
 				}
 			}
 		}
