@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { headlineBold28, palette } from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
@@ -9,38 +9,76 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 // create the style - TODO: design not yet confirmed...
 const gridStyle = css`
 	display: flex;
-	padding-top: 33px;
-	padding-bottom: 15px;
 	justify-content: center;
-	align-items: center;
+	align-items: center; 
+	margin: auto;
+	width: 400px;
+	/* width: 272px; */
+	height: 69px;
+	padding: 12px 40px;
+	flex-shrink: 0;
+	background-color: #fff; /* debugging*/
+	/* background-color: #1E3E72; */
+	border-radius: 8px;
+	color: ${palette.sport[100]}; /* debugging */
+	/* color: ${palette.neutral[100]}; */
+	/* debugging */
+	border: 1px dotted black;
+	padding: 1px;
 `;
+
 const gridItemStyle = css`
-	font-variant-numeric: lining-nums proportional-nums;
-	color: ${palette.brand[400]};
-	background-color: ${palette.neutral[100]};
-	/* 🖥 Headline/headline.bld.28 */
-	${headlineBold28}
-	/* font-family: 'headlineBold28';
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 700; 
-    line-height: 115%;*/ /* 32.2px */
-    width: 65px;
-	margin: 3px;
-	padding: 2px;
-	border: 1px solid ${palette.brand[400]};
-	border-radius: 4px;
-	text-align: center;
-`;
-const timePortionStyle = css`
-	color: ${palette.brand[400]};
-	/* 🖥 Text Sans/text.sans.12 */
-	font-family: 'GuardianTextSans';
-	font-size: 12px;
+	/* font-variant-numeric: lining-nums proportional-nums; */
+	justify-content: center;
+	
+	/* 🖥 Text Sans/text.sans.24 */
+	font-family: GuardianTextSans;
+	font-size: 24px;
 	font-style: normal;
-	font-weight: 400;
-	line-height: 130%; /* 15.6px */
+	font-weight: 700;
+	line-height: 130%; /* 31.2px */
+
+    width: 100px;
+    /* width: 65px; */
+	text-align: center;
+
+	/* debugging */
+	border: 1px dotted red;
+	padding: 2px;
 `;
+
+const timePartStyle = css`
+	display: flex;
+	justify-content: center;
+	align-items: center; 
+	flex-shrink: 0;
+	/* debugging */
+	border: 1px dotted green;
+	padding: 2px;
+`;
+
+const timepartcss = css`
+
+	/* debugging */
+	border: 1px dotted turquoise;
+	padding: 2px;	
+`
+
+const colonStyle = css`
+	font-size: 12px;
+	color: #ee1212;
+	/* debugging */
+	border: 1px dotted blue;
+	padding: 2px;
+`;
+
+const timeLabelStyle = css`
+	font-size: 12px;
+	/* debugging */
+	border: 1px dotted purple;
+	padding: 2px;
+`;
+
 
 // props
 export type CountdownProps = {
@@ -126,10 +164,10 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	return (
 		<>
 			{showCountdown && (
-				<div role="timer" css={gridStyle}>
-					<TimePart timePart={days} label={'days'} />
-					<TimePart timePart={hours} label={'hours'} />
-					<TimePart timePart={minutes} label={'mins'} />
+				<div id="timer" role="timer" css={gridStyle}>
+					<TimePart timePart={days} colon={':'} label={'days'} />
+					<TimePart timePart={hours} colon={':'} label={'hrs'} />
+					<TimePart timePart={minutes} colon={':'} label={'mins'} />
 					<TimePart timePart={seconds} label={'secs'} />
 				</div>
 			)}
@@ -141,14 +179,18 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 type TimePartProps = {
 	timePart: string;
+	colon?: string;
 	label: string;
 };
 
-function TimePart({ timePart, label }: TimePartProps): JSX.Element {
+function TimePart({ timePart, colon, label }: TimePartProps): JSX.Element {
 	return (
-		<div css={gridItemStyle}>
-			<div>{timePart}</div>
-			<div css={timePortionStyle}>{label}</div>
+		<div id="gridItem" css={gridItemStyle}>
+			<div id="timepart-container" css={timePartStyle}>
+				<div css={timepartcss} id="timepart">{timePart}</div>
+				{colon ? <div id="colon" css={colonStyle}>{colon}</div> : <div css={colonStyle}>&nbsp;</div>}
+			</div>
+			<div id="label" css={timeLabelStyle}>{label}</div><div css={colonStyle}>&nbsp;</div>
 		</div>
 	);
 }
