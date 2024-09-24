@@ -61,7 +61,6 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { tests } from '../../../helpers/abTests/abtestDefinitions';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
@@ -340,9 +339,9 @@ export function ThreeTierLanding({
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
 
-			tests.newspaperArchiveBenefit.isActive
-				? 'NewspaperArchive'
-				: 'NoProductOptions',
+			abParticipations.newspaperArchiveBenefit === undefined
+				? 'NoProductOptions'
+				: 'NewspaperArchive',
 		),
 	);
 
@@ -577,7 +576,9 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		return tests.newspaperArchiveBenefit.isActive ? `${ratePlan}V2` : ratePlan;
+		return abParticipations.newspaperArchiveBenefit === undefined
+			? ratePlan
+			: `${ratePlan}V2`;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
