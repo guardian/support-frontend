@@ -1929,10 +1929,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-2.1.5.tgz#715fff5b110006408f92a3fe2a803ad0e4c79e06"
   integrity sha512-4fehERf5HHS9Nkaw+4u5EZ1OrFEHL4lYhLUWkpwEx4VmHI+RgcMezfDfosb3TD8cPFCKakrpdQEJUwNP283SJw==
 
-"@guardian/source-development-kitchen@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/source-development-kitchen/-/source-development-kitchen-1.0.0.tgz#9ac7efe9b28cb33170ed97c67eba1c25dc10a227"
-  integrity sha512-nZYJuHici8Bja7bKs3GZY5UzNCnbWOq1OCYclC6rhvpkcXdrtP+zyqX6YwJKWMgEKg+aL/l595OubBdGenn7OA==
+"@guardian/source-development-kitchen@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/source-development-kitchen/-/source-development-kitchen-10.0.0.tgz#f8c4139f861007cfd418284202a6b2bd4e08935c"
+  integrity sha512-r4R20ucviXX1O+r/hPN7sBwtlspNRKRwQ8i0YDBwjvcEAfEgSpvY1F5GwLd+1ENthjmD1uJcZRISTWo5WyFofg==
 
 "@guardian/source@8.0.0":
   version "8.0.0"
