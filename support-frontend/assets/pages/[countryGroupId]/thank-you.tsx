@@ -105,30 +105,34 @@ export function ThankYou({ geoId, appConfig }: Props) {
 		return <div>Product not found</div>;
 	}
 
-	/** Get and validate ratePlan */
+	/** Get ratePlan */
 	const ratePlanParam = searchParams.get('ratePlan');
-	const ratePlanKey =
+	const ratePlanKeyOneOff =
+		productKey === 'Contribution' && !ratePlanParam ? 'OneOff' : undefined;
+	const ratePlanKeyRecurring =
 		ratePlanParam && ratePlanParam in product.ratePlans
 			? ratePlanParam
 			: undefined;
-	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
+	const ratePlanKey = ratePlanKeyOneOff ?? ratePlanKeyRecurring;
+	const ratePlan = ratePlanKey && (product.ratePlans[ratePlanKey] ?? 'OneOff');
 	if (!ratePlan) {
 		return <div>Rate plan not found</div>;
 	}
 
-	/** Get and validate the amount */
+	/** Get and validate the contribution amount */
+	const contributionParam = searchParams.get('contribution');
+	const contributionAmount = contributionParam
+		? parseInt(contributionParam, 10)
+		: undefined;
 	let payment: {
 		originalAmount: number;
 		discountedAmount?: number;
 		contributionAmount?: number;
 		finalAmount: number;
+	} = {
+		originalAmount: 0,
+		finalAmount: 0,
 	};
-
-	const contributionParam = searchParams.get('contribution');
-	const contributionAmount = contributionParam
-		? parseInt(contributionParam, 10)
-		: undefined;
-
 	let promotion;
 	if (productKey === 'Contribution') {
 		if (!contributionAmount) {
@@ -281,7 +285,7 @@ function ThankYouComponent({
 			  ratePlanKey === 'RestOfWorldAnnualV2' ||
 			  ratePlanKey === 'DomesticAnnualV2'
 			? 'ANNUAL'
-			: productKey === 'Contribution'
+			: ratePlanKey === 'OneOff'
 			? 'ONE_OFF'
 			: undefined);
 
@@ -361,7 +365,7 @@ function ThankYouComponent({
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
 		...maybeThankYouModule(
-			emailExists && !(isTier3 && showNewspaperArchiveBenefit),
+			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && emailExists),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),

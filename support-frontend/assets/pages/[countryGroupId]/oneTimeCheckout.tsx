@@ -294,12 +294,13 @@ function OneTimeCheckoutComponent({
 					};
 					setThankYouOrder(order);
 
-					/* Currently, router requires a recurring product (Contribution perhaps closest?) */
+					/*  Contribution product reused for both
+              OneOff (excl ratePlan)
+              Recurring (incl ratePlan) */
 					const thankYouUrlSearchParams = new URLSearchParams();
 					thankYouUrlSearchParams.set('product', 'Contribution');
 					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-
-					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+					window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 				}
 			}
 		}
