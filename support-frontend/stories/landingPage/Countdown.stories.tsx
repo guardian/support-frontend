@@ -23,7 +23,7 @@ const millisecondsInDay = 24 * millisecondsInHour;
 function Template(args: CountdownProps) {
 	const innerContentContainer = css`
 		margin: 0 auto;
-		background-color: ${palette.brand[400]};
+		background-color: ${palette.neutral[100]};
 	`;
 	return (
 		<div css={innerContentContainer} >
