@@ -379,7 +379,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * Where this is currently used is in the addressFields when someone selects
 	 * a country that doesn't correspond to the countryGroup a product is in.
 	 */
-	const forcedCountry = urlSearchParams.get('country');
+	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
