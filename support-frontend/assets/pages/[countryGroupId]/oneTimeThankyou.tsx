@@ -78,7 +78,7 @@ type OneTimeThankyouProps = {
 	appConfig: AppConfig;
 };
 
-export function oneTimeThankYou({ geoId, appConfig }: OneTimeThankyouProps) {
+export function OneTimeThankYou({ geoId, appConfig }: OneTimeThankyouProps) {
 	const searchParams = new URLSearchParams(window.location.search);
 	const contributionParam = searchParams.get('contribution');
 	const contributionAmount = contributionParam

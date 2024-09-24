@@ -295,7 +295,11 @@ function OneTimeCheckoutComponent({
 					setThankYouOrder(order);
 					const thankYouUrlSearchParams = new URLSearchParams();
 					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-					window.location.href = `/${geoId}/oneTimeThankyou?${thankYouUrlSearchParams.toString()}`;
+
+					/* Currently, router requires a recurring product (Contribution perhaps closest?) */
+					thankYouUrlSearchParams.set('contribution', 'Contribution');
+
+					window.location.href = `/${geoId}/one-time-thank-you?product=Contribution&${thankYouUrlSearchParams.toString()}`;
 				}
 			}
 		}
