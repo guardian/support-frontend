@@ -112,16 +112,17 @@ export function OfferTsAndCs({
 }: OfferTsAndCsProps): JSX.Element {
 	return (
 		<div css={container}>
-      <p>
-        {' '}
-        {/*check this UI*/}
-        <sup>**</sup> Free books are only available for qualified new recurring supporters
-        (monthly: {currency}
-        {offerCostMonthly} or more; annual: {currency}
-        {offerCostAnnual} or more) on a first come, first served basis while supplies last. Limit one per customer.
-        Distribution to US and APO/FPO/DPO addresses only. Instructions to redeem your free book offer will be sent to
-        your email within 24 hours.
-      </p>
-    </div>
-  );
+			<p>
+				{' '}
+				{/*check this UI*/}
+				<sup>**</sup> Free books are only available for qualified new recurring
+				supporters (monthly: {currency}
+				{offerCostMonthly} or more; annual: {currency}
+				{offerCostAnnual} or more) on a first come, first served basis while
+				supplies last. Limit one per customer. Distribution to US and
+				APO/FPO/DPO addresses only. Instructions to redeem your free book offer
+				will be sent to your email within 24 hours.
+			</p>
+		</div>
+	);
 }
