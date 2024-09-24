@@ -1,6 +1,6 @@
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { trackComponentEvents } from './trackingOphan';
 
 export type ProductCheckout =
 	| 'Contribution'

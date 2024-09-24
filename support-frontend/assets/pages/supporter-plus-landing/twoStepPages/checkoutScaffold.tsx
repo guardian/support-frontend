@@ -39,7 +39,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';

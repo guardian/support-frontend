@@ -15,7 +15,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import * as cookie from 'helpers/storage/cookie';
-import { getPageViewId } from 'helpers/tracking/ophan';
+import { getPageViewId } from 'helpers/tracking/trackingOphan';
 import { isProd } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 

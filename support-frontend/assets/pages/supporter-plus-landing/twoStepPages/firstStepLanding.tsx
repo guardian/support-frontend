@@ -25,7 +25,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';

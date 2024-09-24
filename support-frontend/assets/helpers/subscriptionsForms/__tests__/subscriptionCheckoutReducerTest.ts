@@ -8,8 +8,6 @@ import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutRe
 import type { FormField, Stage } from '../formFields';
 import type { FormError } from '../validation';
 
-jest.mock('ophan', () => () => ({}));
-
 // ----- Tests ----- //
 
 describe('Subscription Checkout Reducer', () => {
