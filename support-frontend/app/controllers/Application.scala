@@ -427,8 +427,6 @@ class Application(
       .get("selected-contribution-type")
       .flatMap(_.headOption)
       .map(_.toLowerCase)
-      .map(Try(_))
-      .flatMap(_.toOption)
 
     val maybeSelectedAmount = queryString
       .get("selected-amount")
