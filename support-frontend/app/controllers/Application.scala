@@ -481,8 +481,6 @@ class Application(
     val (product, ratePlan) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
-    println(product, ratePlan)
-
     if (product == "OneOff") {
       Ok(
         contributionsHtml(countryGroupId, None),
