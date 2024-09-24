@@ -3,6 +3,7 @@ import { FooterWithContents } from '@guardian/source-development-kitchen/react-c
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
+import ThankYouFooter from 'components/thankYou/headerFooter/thankYouFooter';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
@@ -11,7 +12,6 @@ import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selecto
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import {
 	buttonContainer,
 	checkoutContainer,

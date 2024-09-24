@@ -12,6 +12,8 @@ import type { InferInput } from 'valibot';
 import { object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import ThankYouFooter from 'components/thankYou/headerFooter/thankYouFooter';
+import ThankYouHeader from 'components/thankYou/headerFooter/thankYouHeader';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
@@ -35,8 +37,6 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
-import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	columnContainer,
 	firstColumnContainer,

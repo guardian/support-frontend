@@ -32,8 +32,8 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
-import ThankYouFooter from './components/thankYouFooter';
-import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
+import ThankYouFooter from '../../components/thankYou/headerFooter/thankYouFooter';
+import ThankYouHeader from '../../components/thankYou/headerFooter/thankYouHeader';
 
 export const checkoutContainer = css`
 	background-color: ${neutral[100]};

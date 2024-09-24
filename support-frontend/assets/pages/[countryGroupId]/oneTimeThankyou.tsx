@@ -12,6 +12,8 @@ import type { InferInput } from 'valibot';
 import { object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import ThankYouFooter from 'components/thankYou/headerFooter/thankYouFooter';
+import ThankYouHeader from 'components/thankYou/headerFooter/thankYouHeader';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
@@ -24,8 +26,6 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
-import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
 	columnContainer,
 	firstColumnContainer,
@@ -124,6 +124,7 @@ function OneTimeThankYouComponent({
 		);
 	}
 	const order = parsedOrder.output;
+	const isOneOffPayPal = order.paymentMethod === 'PayPal';
 
 	// track conversion with GTM
 	const paymentMethod =
@@ -140,7 +141,6 @@ function OneTimeThankYouComponent({
 	// track conversion with QM
 	sendEventContributionCheckoutConversion(finalAmount, 'ONE_OFF', currencyKey);
 
-	const isOneOff = true;
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
@@ -149,7 +149,7 @@ function OneTimeThankYouComponent({
 		countryId,
 		countryGroupId,
 		csrf,
-		isOneOff,
+		true,
 		false,
 	);
 	const maybeThankYouModule = (
@@ -185,7 +185,7 @@ function OneTimeThankYouComponent({
 						<ThankYouHeader
 							name={order.firstName}
 							showDirectDebitMessage={false}
-							isOneOffPayPal={false}
+							isOneOffPayPal={isOneOffPayPal}
 							contributionType={'ONE_OFF'}
 							amount={finalAmount}
 							currency={currencyKey}

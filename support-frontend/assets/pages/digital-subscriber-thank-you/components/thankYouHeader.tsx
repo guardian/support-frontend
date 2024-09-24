@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { from, titlepiece } from '@guardian/source/foundations';
-import DirectDebitMessage from 'pages/supporter-plus-thank-you/components/thankYouHeader/directDebitMessage';
+import DirectDebitMessage from 'components/thankYou/headerFooter/directDebitMessage';
 import {
 	header,
 	headerSupportingText,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+} from 'components/thankYou/headerFooter/thankYouHeader';
 import Heading from './heading';
 import Subheading from './subheading';
 
