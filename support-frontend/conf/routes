@@ -54,13 +54,19 @@ GET  /monthly-contributions                                        controllers.A
 
 # ----- Contributions ----- #
 
+# Contribution checkout redirect => checkout 👇
+GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.redirectContributionsCheckout(countryGroupId: String)
+
+# Checkout
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
+
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
-# GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
-
-# GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
-# GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/checkout        controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
@@ -88,14 +94,6 @@ POST /identity/signin-url                                          controllers.I
 
 GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
-
-# Contribution checkout redirect => checkout 👇
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.Application.router(countryGroupId: String)
-
-# Checkout
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.router(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.router(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
 
 # Events
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.Application.eventsRouter(countryGroupId: String, eventId: String)

@@ -29,6 +29,7 @@ import utils.FastlyGEOIP._
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -417,23 +418,92 @@ class Application(
     }
   }
 
-  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val isOneOff = request.queryString.get("selected-contribution-type").flatMap(_.headOption).contains("one_off")
+  def getProductParamsFromContributionParams(
+      countryGroupId: String,
+      productCatalog: JsonObject,
+      queryString: Map[String, Seq[String]],
+  ) = {
+    val maybeSelectedContributionType = queryString
+      .get("selected-contribution-type")
+      .flatMap(_.headOption)
+      .map(_.toLowerCase)
+      .map(Try(_))
+      .flatMap(_.toOption)
 
+    val maybeSelectedAmount = queryString
+      .get("selected-amount")
+      .flatMap(_.headOption)
+      .map(s => Try(s.toDouble))
+      .flatMap(_.toOption)
+
+    val currency = countryGroupId match {
+      case "uk" => "GBP"
+      case "us" => "USD"
+      case "au" => "AUD"
+      case "eu" => "EUR"
+      case "int" => "USD"
+      case "nz" => "NZD"
+      case "ca" => "CAD"
+      case _ => "GBP"
+    }
+    val isAnnual = maybeSelectedContributionType.contains("annual")
+    val ratePlan = if (isAnnual) "Annual" else "Monthly"
+    val maybeSupporterPlusAmount = productCatalog.asJson.hcursor
+      .downField("SupporterPlus")
+      .downField("ratePlans")
+      .downField(ratePlan)
+      .downField("pricing")
+      .downField(currency)
+      .as[Double]
+      .toOption
+
+    val isSupporterPlus = (for {
+      supporterPlusAmount <- maybeSupporterPlusAmount
+      selectedAmount <- maybeSelectedAmount
+    } yield selectedAmount >= supporterPlusAmount).getOrElse(true)
+
+    val isOneOff = maybeSelectedContributionType.contains("one_off")
     if (isOneOff) {
+      ("OneOff", "OneOff")
+    } else if (isSupporterPlus) {
+      ("SupporterPlus", ratePlan)
+    } else {
+      ("Contribution", ratePlan)
+    }
+  }
+
+  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val isTestUser = testUserService.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+    val (product, ratePlan) =
+      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
+
+    println(product, ratePlan)
+
+    if (product == "OneOff") {
       Ok(
         contributionsHtml(countryGroupId, None),
       ).withSettingsSurrogateKey
     } else {
-      val product = request.queryString
-        .getOrElse("product", Nil)
-        .headOption
-        .flatMap(productString => Product.fromString(productString))
-        .getOrElse(SupporterPlus)
-
-      routeForProduct(product)
+      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+        "product" -> Seq(product),
+        "ratePlan" -> Seq(ratePlan),
+      )
+      Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
     }
+  }
+
+  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val product = request.queryString
+      .getOrElse("product", Nil)
+      .headOption
+      .flatMap(productString => Product.fromString(productString))
+      .getOrElse(SupporterPlus)
+
+    routeForProduct(product)
   }
 
   def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
@@ -449,6 +519,7 @@ class Application(
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
+
     val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(product, queryPromos)
 
     Ok(
