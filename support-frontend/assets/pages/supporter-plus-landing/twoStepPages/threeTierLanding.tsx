@@ -43,11 +43,7 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -208,8 +204,6 @@ const links = [
 	},
 ];
 
-// The three tier checkout only supports monthly and annual contributions
-const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
 	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
@@ -281,7 +275,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	const dispatch = useContributionsDispatch();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
@@ -304,9 +297,10 @@ export function ThreeTierLanding({
 	};
 
 	const initialContributionType =
-		urlSearchParamsRatePlan && urlSearchParamsRatePlan === 'Monthly'
-			? 'MONTHLY'
-			: 'ANNUAL';
+		urlSearchParamsRatePlan && urlSearchParamsRatePlan === 'Annual'
+			? 'ANNUAL'
+			: 'MONTHLY';
+
 	const [contributionType, setContributionType] = useState<ContributionType>(
 		initialContributionType,
 	);
@@ -359,7 +353,6 @@ export function ThreeTierLanding({
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setContributionType(paymentFrequencies[buttonIndex]);
-		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
 	const selectedContributionRatePlan =
