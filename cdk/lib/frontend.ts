@@ -109,7 +109,7 @@ export class Frontend extends GuStack {
     ];
 
     const alarmName = (shortDescription: string) =>
-      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
+      `${shortDescription.charAt(0).toUpperCase() + shortDescription.slice(1)}`;
 
     const alarmDescription = (description: string) =>
       `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;

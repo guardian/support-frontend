@@ -37,7 +37,11 @@ type BreakpointRange = {
 	maxWidth?: Breakpoint;
 };
 
-export type Participations = Record<string, string>;
+export type Participations = Record<string, string | undefined>;
+
+export const testIsActive = (
+	value: [string, string | undefined],
+): value is [string, string] => value[1] !== undefined;
 
 export type Audience = {
 	offset: number;
