@@ -150,16 +150,10 @@ export function ThankYou({ geoId, appConfig }: Props) {
 		}
 
 		/** Get any promotions */
-		const allProductPrices = appConfig.allProductPrices;
-		const productPricesKey =
-			productKey === 'TierThree'
-				? 'tierThreeProductPrices'
-				: productKey === 'SupporterPlus'
-				? 'supporterPlusProductPrices'
+		const productPrices =
+			productKey === 'SupporterPlus' || productKey === 'TierThree'
+				? appConfig.allProductPrices[productKey]
 				: undefined;
-		const productPrices = productPricesKey
-			? allProductPrices[productPricesKey]
-			: undefined;
 
 		/**
 		 * This is some annoying transformation we need from

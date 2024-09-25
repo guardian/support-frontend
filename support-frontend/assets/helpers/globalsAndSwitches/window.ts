@@ -230,8 +230,8 @@ const ProductCatalogSchema = object({
  */
 const ProductPricesSchema = object({
 	allProductPrices: object({
-		supporterPlusProductPrices: looseObject({}),
-		tierThreeProductPrices: looseObject({}),
+		SupporterPlus: looseObject({}),
+		TierThree: looseObject({}),
 	}),
 });
 const AppConfigSchema = intersect([
@@ -242,8 +242,8 @@ const AppConfigSchema = intersect([
 
 export type AppConfig = InferOutput<typeof AppConfigSchema> & {
 	allProductPrices: {
-		supporterPlusProductPrices: ProductPrices;
-		tierThreeProductPrices: ProductPrices;
+		SupporterPlus: ProductPrices;
+		TierThree: ProductPrices;
 	};
 };
 

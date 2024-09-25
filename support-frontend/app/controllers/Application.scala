@@ -5,12 +5,10 @@ import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath}
-import cats.data.EitherT
-import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{Product, SupporterPlus, TierThree}
+import com.gu.support.catalog.{SupporterPlus, TierThree}
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
@@ -183,9 +181,16 @@ case class PaymentMethodConfigs(
     testAmazonPayConfig: AmazonPayConfig,
 )
 
-// This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
-// product prices to the contributions template would exceed that limit.
-case class AllProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
+/** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
+  * of product prices to the contributions template would exceed that limit.
+  *
+  * We've also gone against the grain with Capitalising the prop names, but that's to match the ProductKeys in the
+  * Product API.
+  *
+  * @see
+  *   https://product-catalog.guardianapis.com/product-catalog.json
+  */
+case class AllProductPrices(SupporterPlus: ProductPrices, TierThree: ProductPrices)
 object AllProductPrices extends InternationalisationCodecs {
   implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
 }
@@ -504,9 +509,8 @@ class Application(
         .toList
 
     val allProductPrices = AllProductPrices(
-      supporterPlusProductPrices =
-        priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
-      tierThreeProductPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
     )
 
     Ok(

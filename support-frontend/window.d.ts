@@ -42,8 +42,8 @@ declare global {
 			orderIsAGift: boolean;
 			productPrices?: ProductPrices;
 			allProductPrices?: {
-				supporterPlusProductPrices: ProductPrices;
-				tierThreeProductPrices: ProductPrices;
+				SupporterPlus: ProductPrices;
+				TierThree: ProductPrices;
 			};
 			serversideTests?: Participations | null;
 			settings: Settings;
