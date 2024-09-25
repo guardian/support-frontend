@@ -184,9 +184,9 @@ case class PaymentMethodConfigs(
 
 // This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
 // product prices to the contributions template would exceed that limit.
-case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
-object LandingPageProductPrices extends InternationalisationCodecs {
-  implicit val landingPageProductPricesEncoder: Encoder[LandingPageProductPrices] = deriveEncoder
+case class AllProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
+object AllProductPrices extends InternationalisationCodecs {
+  implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
 }
 
 class Application(
@@ -375,7 +375,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      landingPageProductPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
@@ -439,7 +439,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val landingPageProductPrices = LandingPageProductPrices(
+    val allProductPrices = AllProductPrices(
       supporterPlusProductPrices =
         priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
       tierThreeProductPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
@@ -465,7 +465,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        landingPageProductPrices = landingPageProductPrices,
+        allProductPrices = allProductPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey

@@ -15,7 +15,7 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
-  landingPageProductPrices: LandingPageProductPrices,
+  allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
   user: Option[User]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
@@ -36,7 +36,7 @@
 ){
   <script type="text/javascript">
     window.guardian = window.guardian || {};
-    window.guardian.allProductPrices = @Html(outputJson(landingPageProductPrices))
+    window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
   </script>
 
   @windowGuardianPaymentConfig(
