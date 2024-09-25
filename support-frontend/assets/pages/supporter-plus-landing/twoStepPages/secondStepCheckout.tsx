@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
-import { space, until } from '@guardian/source/foundations';
-import { Button, Checkbox } from '@guardian/source/react-components';
+import { from, neutral, space, until } from '@guardian/source/foundations';
+import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
+import { Checkbox } from 'components/checkbox/Checkbox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
@@ -36,7 +37,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
@@ -50,6 +51,19 @@ const shorterBoxMargin = css`
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	}
+`;
+
+const coverTransactionCheckboxContainer = css`
+	padding: ${space[4]}px;
+	background-color: ${neutral[97]};
+	border-radius: 12px;
+`;
+
+const paymentButtonSpacing = css`
+	margin-top: ${space[6]}px;
+	${from.tablet} {
+		margin-top: ${space[8]}px;
 	}
 `;
 
@@ -67,6 +81,7 @@ export function SupporterPlusCheckout({
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+
 	const amountBeforeTransactionCostCovered = useContributionsSelector((state) =>
 		getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
@@ -75,6 +90,7 @@ export function SupporterPlusCheckout({
 			false,
 		),
 	);
+	const transactionCoverCost = amountBeforeTransactionCostCovered * 0.04;
 
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
@@ -191,9 +207,7 @@ export function SupporterPlusCheckout({
 						)}
 						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
 							<div
-								css={css`
-									margin-top: ${space[4]}px;
-								`}
+								css={[paymentButtonSpacing, coverTransactionCheckboxContainer]}
 							>
 								<Checkbox
 									checked={coverTransactionCost}
@@ -206,21 +220,16 @@ export function SupporterPlusCheckout({
 										}
 										dispatch(setCoverTransactionCost(e.target.checked));
 									}}
-									label={`I’ll generously add 4% of ${
-										Number.isNaN(amount)
-											? 'my contribution'
-											: simpleFormatAmount(
-													currency,
-													amountBeforeTransactionCostCovered,
-											  )
-									} to cover transaction fees so my whole gift goes to the Guardian`}
+									label={`I’ll generously add ${
+										Number.isNaN(transactionCoverCost)
+											? '4% of my contribution'
+											: simpleFormatAmount(currency, transactionCoverCost)
+									} to cover transaction fees so 100% of my amount goes to the Guardian`}
 								/>
 							</div>
 						)}
 						<PaymentButtonController
-							cssOverrides={css`
-								margin-top: 30px;
-							`}
+							cssOverrides={paymentButtonSpacing}
 							paymentButtons={getPaymentMethodButtons(
 								contributionType,
 								countryId,

@@ -10,7 +10,7 @@
 
 @main(
   title = "Support the Guardian | Events",
-  mainElement = EmptyDiv("events"),
+  mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
   mainJsBundle = RefPath("[countryGroupId]/events/router.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),

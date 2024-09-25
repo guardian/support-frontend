@@ -6,7 +6,7 @@ import {
 	pageView,
 	setReferrerDataInLocalStorage,
 	trackAbTests,
-} from './ophan';
+} from './trackingOphan';
 
 type NavigateWithPageViewProps = {
 	destination: string;

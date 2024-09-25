@@ -10,6 +10,7 @@ import {
 import {
 	Divider,
 	ErrorSummary,
+	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
@@ -61,10 +62,11 @@ import {
 	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
-	// Sepa,
 	Stripe,
+	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -78,7 +80,10 @@ import {
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	NoProductOptions,
+	type ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -130,6 +135,12 @@ import {
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
 
+function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
+	return isSwitchOn(
+		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
+	);
+}
+
 /**
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
@@ -169,11 +180,11 @@ type Props = {
 
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const searchParams = new URLSearchParams(window.location.search);
+	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	/** 👇 a lot of this is copy/pasted into the thank you page */
 	/** Get and validate product */
-	const productParam = searchParams.get('product');
+	const productParam = urlSearchParams.get('product');
 	const productKey =
 		productParam && isProductKey(productParam) ? productParam : undefined;
 	const product = productKey && productCatalog[productKey];
@@ -188,7 +199,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * API being completely based on literals, so we've left it as `string`
 	 * although we do validate it is a valid ratePlan for this product
 	 */
-	const ratePlanParam = searchParams.get('ratePlan');
+	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
 			? ratePlanParam
@@ -219,7 +230,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		finalAmount: number;
 	};
 
-	const contributionParam = searchParams.get('contribution');
+	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
@@ -278,12 +289,25 @@ export function Checkout({ geoId, appConfig }: Props) {
 			}
 		};
 		const fulfilmentOption = getFulfilmentOptions(productKey);
+		const getProductOptions = (productKey: string): ProductOptions => {
+			switch (productKey) {
+				case 'TierThree':
+					return ratePlanKey.endsWith('V2')
+						? 'NewspaperArchive'
+						: 'NoProductOptions';
+				// TODO: define for newspaper
+				default:
+					return 'NoProductOptions';
+			}
+		};
+		const productOptions: ProductOptions = getProductOptions(productKey);
 
 		promotion = getPromotion(
 			productPrices,
 			countryId,
 			billingPeriod,
 			fulfilmentOption,
+			productOptions,
 		);
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
@@ -350,6 +374,12 @@ export function Checkout({ geoId, appConfig }: Props) {
 		}
 	}
 
+	/**
+	 * We use the country ULRSearchParam to force a person into a country.
+	 * Where this is currently used is in the addressFields when someone selects
+	 * a country that doesn't correspond to the countryGroup a product is in.
+	 */
+	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -365,6 +395,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				contributionAmount={payment.contributionAmount}
 				finalAmount={payment.finalAmount}
 				useStripeExpressCheckout={useStripeExpressCheckout}
+				forcedCountry={forcedCountry}
 			/>
 		</Elements>
 	);
@@ -383,6 +414,7 @@ type CheckoutComponentProps = {
 	finalAmount: number;
 	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
+	forcedCountry?: string;
 };
 
 function CheckoutComponent({
@@ -397,6 +429,7 @@ function CheckoutComponent({
 	finalAmount,
 	promotion,
 	useStripeExpressCheckout,
+	forcedCountry,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
@@ -427,12 +460,20 @@ function CheckoutComponent({
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
 				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' || ratePlanKey === 'DomesticAnnual'
+					ratePlanKey === 'DomesticMonthly' ||
+					ratePlanKey === 'DomesticAnnual' ||
+					ratePlanKey === 'DomesticMonthlyV2' ||
+					ratePlanKey === 'DomesticAnnualV2'
 						? 'Domestic'
 						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual'
+						  ratePlanKey === 'RestOfWorldAnnual' ||
+						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
+						  ratePlanKey === 'RestOfWorldAnnualV2'
 						? 'RestOfWorld'
 						: 'Domestic',
+				productOptions: ratePlanKey.endsWith('V2')
+					? 'NewspaperArchive'
+					: 'NoProductOptions',
 			};
 			break;
 
@@ -532,14 +573,17 @@ function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	// Todo shouldn't this be checking the switches?
 	const validPaymentMethods = [
-		// countryGroupId === 'EURCountries' && Sepa,
+		/* NOT YET IMPLEMENTED
+		countryGroupId === 'EURCountries' && Sepa,
+    countryId === 'US' && AmazonPay,
+    */
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
-		//countryId === 'US' && AmazonPay,
-	].filter(isPaymentMethod);
+	]
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
@@ -918,13 +962,22 @@ function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const redirectCountryToCountryGroup =
-		abParticipations.redirectCountryToCountryGroup === 'variant';
-
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
+					{forcedCountry &&
+						productDescription.deliverableTo?.[forcedCountry] && (
+							<div role="alert">
+								<InfoSummary
+									cssOverrides={css`
+										margin-bottom: ${space[6]}px;
+									`}
+									message={`You've changed your delivery country to ${productDescription.deliverableTo[forcedCountry]}.`}
+									context={`Your subscription price has been updated to reflect the rates in your new location.`}
+								/>
+							</div>
+						)}
 					<ContributionsOrderSummary
 						description={productDescription.label}
 						paymentFrequency={
@@ -1324,9 +1377,7 @@ function CheckoutComponent({
 										country={deliveryCountry}
 										state={deliveryState}
 										postCode={deliveryPostcode}
-										countryGroupId={
-											redirectCountryToCountryGroup ? countryGroupId : undefined
-										}
+										countryGroupId={countryGroupId}
 										countries={productDescription.deliverableTo}
 										errors={deliveryAddressErrors}
 										postcodeState={{
@@ -1407,11 +1458,7 @@ function CheckoutComponent({
 											country={billingCountry}
 											state={billingState}
 											postCode={billingPostcode}
-											countryGroupId={
-												redirectCountryToCountryGroup
-													? countryGroupId
-													: undefined
-											}
+											countryGroupId={countryGroupId}
 											countries={productDescription.deliverableTo}
 											errors={billingAddressErrors}
 											postcodeState={{

@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PAYPAL_TEST_PASSWORD: ${{ secrets.PAYPAL_TEST_PASSWORD }}
+      GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -23,10 +24,16 @@ jobs:
       run: yarn playwright install --with-deps
     - name: Run Playwright tests
       working-directory: ./support-e2e
-      run: yarn playwright test --project=cron --config=playwright.config.ts
+      run: yarn test-cron
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
         path: support-e2e/playwright-report/
         retention-days: 30
+    - name: Notify on Failure
+      if: ${{ failure() }}
+      run: |
+        failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
+        prTrigger="https://github.com/guardian/support-frontend/pull/${{ github.event.number }}"
+        curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright cron tests for support-frontend have failed 🚨\n\n- <'"$failedWorkflowRun"'|You can see the reason for this failure on GitHub>. \n- <'"$prTrigger"'|PR that triggered this>.\n\n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'

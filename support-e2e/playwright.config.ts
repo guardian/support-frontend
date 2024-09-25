@@ -1,6 +1,6 @@
-import { defineConfig, devices } from '@playwright/test';
+import { devices } from '@playwright/test';
 
-export default defineConfig({
+export const config = {
 	testDir: 'tests',
 	testMatch: '**/*.test.ts',
 	/* Maximum time one test can run for. */
@@ -43,4 +43,6 @@ export default defineConfig({
 			},
 		},
 	],
-});
+};
+
+export default config;

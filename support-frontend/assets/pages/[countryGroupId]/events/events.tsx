@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { palette, space, textSans, until } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSans,
+	until,
+} from '@guardian/source/foundations';
 import { Column, Columns, Container } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useParams } from 'react-router-dom';
@@ -9,7 +15,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import * as cookie from 'helpers/storage/cookie';
-import { getPageViewId } from 'helpers/tracking/ophan';
+import { getPageViewId } from 'helpers/tracking/trackingOphan';
 import { isProd } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 
@@ -17,6 +23,12 @@ const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
+	}
+`;
+
+const darkBackgroundContainerTablet = css`
+	${from.tablet} {
+		min-height: 400px;
 	}
 `;
 
@@ -30,10 +42,22 @@ const columns = css`
 	}
 `;
 
-const shorterBoxMargin = css`
-	border-radius: ${space[2]}px;
+const narrowBoxMarginAndPadding = css`
+	border-radius: ${space[4]}px;
 	:not(:last-child) {
 		margin-bottom: ${space[4]}px;
+	}
+
+	> div {
+		padding: 0;
+	}
+
+	// Ticket Tailor widget itself contains a margin & border
+	// not accessible directly (class:box-color-background)
+	// We can reduce its container box to hide
+	// the margin & border
+	> div div div {
+		margin: -2px -2px -8px -2px;
 	}
 `;
 
@@ -69,7 +93,11 @@ export function Events({ geoId }: Props) {
 
 	const params = useParams();
 	const eventId = params.eventId;
-	const termsEvents = <a href={guardianLiveTermsLink}>Terms and Conditions</a>;
+	const termsEvents = (
+		<a href={guardianLiveTermsLink} target="_blank">
+			Terms and Conditions
+		</a>
+	);
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const pageviewId = getPageViewId();
@@ -100,12 +128,15 @@ export function Events({ geoId }: Props) {
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
+			<CheckoutHeading
+				withTopBorder={true}
+				cssOverrides={darkBackgroundContainerTablet}
+			></CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
 					<Column span={[0, 2, 2, 3, 4]}></Column>
 					<Column span={[1, 8, 8, 8, 8]}>
-						<Box cssOverrides={shorterBoxMargin}>
+						<Box cssOverrides={narrowBoxMarginAndPadding}>
 							<BoxContents>
 								<div className="tt-widget">
 									<div className="tt-widget-fallback">

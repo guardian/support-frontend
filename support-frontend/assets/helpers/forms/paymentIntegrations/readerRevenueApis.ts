@@ -67,6 +67,7 @@ export type TierThree = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
+	productOptions: ProductOptions;
 };
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;

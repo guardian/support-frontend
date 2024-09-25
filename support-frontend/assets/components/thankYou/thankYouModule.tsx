@@ -5,6 +5,7 @@ import {
 	from,
 	neutral,
 	space,
+	until,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import AppImageGuardianNews from 'components/svgs/appGuardianNews';
@@ -44,14 +45,14 @@ const defaultGridContainer = css`
 	}
 `;
 
-const downloadAppGridContainer = css`
+const imageryAndQrCodesGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
 	grid-template-columns: min-content 1fr;
 	grid-template-areas:
-		'img img'
 		'icon header'
-		'body body';
+		'body body'
+		'img img';
 
 	${from.tablet} {
 		grid-template-columns: min-content 270px 1fr;
@@ -66,21 +67,6 @@ const downloadAppGridContainer = css`
 			'icon header header'
 			'---- body body'
 			'---- qrCodes qrCodes';
-	}
-`;
-
-const downloadAppsGridContainer = css`
-	display: grid;
-	grid-column-gap: ${space[3]}px;
-	grid-template-columns: min-content 1fr;
-	grid-template-areas:
-		'icon header'
-		'body body';
-
-	${from.tablet} {
-		grid-template-areas:
-			'icon header'
-			'---- body';
 	}
 `;
 
@@ -155,12 +141,10 @@ const appContainer = css`
 const imgContainer = css`
 	grid-area: img;
 	align-self: flex-end;
-	border-bottom: 1px solid ${neutral[86]};
-	margin-bottom: ${space[3]}px;
+	margin-top: ${space[2]}px;
 
-	${from.tablet} {
-		border-bottom: none;
-		margin-bottom: 0;
+	${until.tablet} {
+		margin-top: ${space[4]}px;
 	}
 `;
 
@@ -182,6 +166,12 @@ const paddingRight = css`
 const paddingRightApps = css`
 	${from.tablet} {
 		padding-right: ${space[4]}px;
+	}
+`;
+
+const imageryPadding = css`
+	${until.tablet} {
+		padding-bottom: 0;
 	}
 `;
 
@@ -224,14 +214,15 @@ export type ThankYouModuleType =
 	| 'socialShare'
 	| 'supportReminder'
 	| 'benefits'
-	| 'subscriptionStart';
+	| 'subscriptionStart'
+	| 'newspaperArchiveBenefit';
 
 export interface ThankYouModuleProps {
 	icon: JSX.Element;
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
-	moduleType?: ThankYouModuleType;
+	moduleType: ThankYouModuleType;
 	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: JSX.Element | string;
@@ -253,21 +244,22 @@ function ThankYouModule({
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
-	const isDownloadModule = moduleType === 'appDownload';
+	const hasQrCodes = moduleType === 'appDownload';
 	const isDownloadModules = moduleType === 'appsDownload';
+	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
+		moduleType,
+	);
 
-	const gridContainer = isDownloadModule
-		? downloadAppGridContainer
-		: isDownloadModules
-		? downloadAppsGridContainer
-		: defaultGridContainer;
+	const gridContainer =
+		hasImagery || hasQrCodes
+			? imageryAndQrCodesGridContainer
+			: defaultGridContainer;
 
 	const maybePaddingRight =
-		!isDownloadModule && (isDownloadModules ? paddingRightApps : paddingRight);
-	const maybeMarginTop = !isDownloadModule && marginTop;
+		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);
 
 	return (
-		<section css={[container, maybePaddingRight]}>
+		<section css={[container, maybePaddingRight, hasImagery && imageryPadding]}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
 				<div css={headerContainer}>{header}</div>
@@ -296,18 +288,18 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={maybeMarginTop}>{ctas}</div>
+							<div css={marginTop}>{ctas}</div>
 						</>
 					)}
 				</div>
 
-				{isDownloadModule ? (
-					<div css={[imgContainer, !isSignedIn && hideBelowTablet]}>
+				{hasImagery ? (
+					<div css={[imgContainer]}>
 						<AppDownloadImage />
 					</div>
 				) : null}
 
-				{isDownloadModule && isSignedIn ? (
+				{hasQrCodes && isSignedIn ? (
 					<div css={[qrCodesContainer, hideBelowTablet]}>
 						<AppDownloadQRCodes />
 					</div>
