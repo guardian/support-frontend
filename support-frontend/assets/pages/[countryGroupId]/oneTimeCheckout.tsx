@@ -73,7 +73,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './components/paymentMethod';
-import { setThankYouOrder } from './thank-you';
+import { setThankYouOrder } from './components/thankyou';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
