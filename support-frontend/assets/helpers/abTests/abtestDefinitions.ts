@@ -125,9 +125,9 @@ export const tests: Tests = {
 	},
 	coverTransactionCost: {
 		variants: [
-			{
-				id: 'control',
-			},
+			// {
+			// 	id: 'control',
+			// },
 			{
 				id: 'variant',
 			},
@@ -138,7 +138,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
