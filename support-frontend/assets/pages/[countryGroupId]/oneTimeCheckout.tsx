@@ -294,7 +294,6 @@ function OneTimeCheckoutComponent({
 					};
 					setThankYouOrder(order);
 					const thankYouUrlSearchParams = new URLSearchParams();
-					thankYouUrlSearchParams.set('product', 'Contribution');
 					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
 					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
 				}
