@@ -9,6 +9,7 @@ import { ThankYou } from './thank-you';
 
 setUpTrackingAndConsents();
 const appConfig = parseAppConfig(window.guardian);
+appConfig.allProductPrices;
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [

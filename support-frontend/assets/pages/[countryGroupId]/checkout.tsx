@@ -261,7 +261,16 @@ export function Checkout({ geoId, appConfig }: Props) {
 		}
 
 		/** Get any promotions */
-		const productPrices = appConfig.productPrices;
+		const allProductPrices = appConfig.allProductPrices;
+		const productPricesKey =
+			productKey === 'TierThree'
+				? 'tierThreeProductPrices'
+				: productKey === 'SupporterPlus'
+				? 'supporterPlusProductPrices'
+				: undefined;
+		const productPrices = productPricesKey
+			? allProductPrices[productPricesKey]
+			: undefined;
 
 		/**
 		 * This is some annoying transformation we need from
@@ -302,13 +311,15 @@ export function Checkout({ geoId, appConfig }: Props) {
 		};
 		const productOptions: ProductOptions = getProductOptions(productKey);
 
-		promotion = getPromotion(
-			productPrices,
-			countryId,
-			billingPeriod,
-			fulfilmentOption,
-			productOptions,
-		);
+		promotion = productPrices
+			? getPromotion(
+					productPrices,
+					countryId,
+					billingPeriod,
+					fulfilmentOption,
+					productOptions,
+			  )
+			: undefined;
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
 			: undefined;

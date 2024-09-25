@@ -16,8 +16,9 @@ import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
+import io.circe.generic.semiauto.deriveEncoder
 import views.html.helper.CSRF
-import io.circe.JsonObject
+import io.circe.{Encoder, JsonObject}
 import io.circe.syntax.EncoderOps
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
@@ -184,6 +185,9 @@ case class PaymentMethodConfigs(
 // This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
 // product prices to the contributions template would exceed that limit.
 case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
+object LandingPageProductPrices extends InternationalisationCodecs {
+  implicit val landingPageProductPricesEncoder: Encoder[LandingPageProductPrices] = deriveEncoder
+}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -200,7 +204,6 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    authAction: AuthAction[AnyContent],
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
@@ -422,16 +425,7 @@ class Application(
     }
   }
 
-  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    request.queryString
-      .getOrElse("product", Nil)
-      .headOption
-      .flatMap(productString => Product.fromString(productString))
-      .map(routeForProduct(_))
-      .getOrElse(BadRequest("No product name provided"))
-  }
-
-  def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
+  def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
@@ -444,7 +438,12 @@ class Application(
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(product, queryPromos)
+
+    val landingPageProductPrices = LandingPageProductPrices(
+      supporterPlusProductPrices =
+        priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      tierThreeProductPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     Ok(
       views.html.router(
@@ -466,7 +465,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        productPrices = productPrices,
+        landingPageProductPrices = landingPageProductPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey
