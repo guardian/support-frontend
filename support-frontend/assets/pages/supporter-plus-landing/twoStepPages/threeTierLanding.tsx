@@ -43,11 +43,7 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import {
-	setBillingPeriod,
-	setProductType,
-} from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -307,11 +303,13 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = urlSearchParamsRatePlan
-		? urlSearchParamsRatePlan === 'Monthly'
+	const initialContributionType =
+		urlSearchParamsRatePlan && urlSearchParamsRatePlan === 'Monthly'
 			? 'MONTHLY'
-			: 'ANNUAL'
-		: useContributionsSelector(getContributionType);
+			: 'ANNUAL';
+	const [contributionType, setContributionType] = useState<ContributionType>(
+		initialContributionType,
+	);
 
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
@@ -355,22 +353,12 @@ export function ThreeTierLanding({
 	 * /////////////// END US EOY 2024 Campaign
 	 */
 
-	useEffect(() => {
-		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
-			/*
-			 * Reset the product type to monthly if one_off not available
-			 */
-			dispatch(setProductType('MONTHLY'));
-		}
-		dispatch(setBillingPeriod(billingPeriod));
-	}, []);
-
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		dispatch(setProductType(paymentFrequencies[buttonIndex]));
+		setContributionType(paymentFrequencies[buttonIndex]);
 		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
