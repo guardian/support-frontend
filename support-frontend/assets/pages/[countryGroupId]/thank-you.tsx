@@ -361,7 +361,7 @@ function ThankYouComponent({
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
 		...maybeThankYouModule(
-			emailExists && !(isTier3 && showNewspaperArchiveBenefit),
+			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && emailExists),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
@@ -370,6 +370,7 @@ function ThankYouComponent({
 			isTier3 && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
+		...maybeThankYouModule(isOneOff, 'socialShare'),
 	];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
