@@ -968,7 +968,7 @@ function CheckoutComponent({
 				<BoxContents>
 					{forcedCountry &&
 						productDescription.deliverableTo?.[forcedCountry] && (
-							<div role="alert" data-qm-error>
+							<div role="alert">
 								<InfoSummary
 									cssOverrides={css`
 										margin-bottom: ${space[6]}px;
