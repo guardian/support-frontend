@@ -47,8 +47,8 @@ export type ProductState = {
 	billingPeriod: BillingPeriod;
 	productPrices: ProductPrices;
 	allProductPrices: {
-		supporterPlusProductPrices: ProductPrices;
-		tierThreeProductPrices: ProductPrices;
+		SupporterPlus: ProductPrices;
+		TierThree: ProductPrices;
 	};
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
