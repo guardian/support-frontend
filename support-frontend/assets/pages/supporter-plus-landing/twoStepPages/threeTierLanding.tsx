@@ -19,7 +19,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -44,7 +47,6 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -276,10 +278,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
-
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
 
@@ -296,6 +294,8 @@ export function ThreeTierLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
+
+	const abParticipations = abTestInit({ countryId, countryGroupId });
 
 	const initialContributionType =
 		urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
