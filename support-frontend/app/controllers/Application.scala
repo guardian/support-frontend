@@ -422,6 +422,43 @@ class Application(
     }
   }
 
+  // def routerNoProduct(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  //   implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+  //   val geoData = request.geoData
+  //   val serversideTests = generateParticipations(Nil)
+  //   val isTestUser = testUserService.isTestUser(request)
+  //   // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+  //   val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+  //   val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+  //   val productPrices = Nil // TODO : Where is this defined/required?
+  //   Ok(
+  //     views.html.router(
+  //       geoData = geoData,
+  //       paymentMethodConfigs = PaymentMethodConfigs(
+  //         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+  //         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+  //         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+  //         regularTestStripeConfig = regularStripeConfigProvider.get(true),
+  //         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+  //         regularTestPayPalConfig = payPalConfigProvider.get(true),
+  //         defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+  //         testAmazonPayConfig = amazonPayConfigProvider.get(true),
+  //       ),
+  //       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+  //       serversideTests = serversideTests,
+  //       paymentApiUrl = paymentAPIService.paymentAPIUrl,
+  //       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+  //       membersDataApiUrl = membersDataApiUrl,
+  //       guestAccountCreationToken = guestAccountCreationToken,
+  //       productCatalog = productCatalog,
+  //       productPrices = productPrices, // TODO : Where is this defined/required?
+  //       user = request.user,
+  //     ),
+  //   ).withSettingsSurrogateKey
+  // }
+
   def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     request.queryString
       .getOrElse("product", Nil)
