@@ -43,7 +43,6 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setBillingPeriod,
 	setProductType,
@@ -357,7 +356,6 @@ export function ThreeTierLanding({
 	 */
 
 	useEffect(() => {
-		dispatch(resetValidation());
 		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
 			/*
 			 * Reset the product type to monthly if one_off not available
