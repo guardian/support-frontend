@@ -19,6 +19,7 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -297,9 +298,7 @@ export function ThreeTierLanding({
 	};
 
 	const initialContributionType =
-		urlSearchParamsRatePlan && urlSearchParamsRatePlan === 'Annual'
-			? 'ANNUAL'
-			: 'MONTHLY';
+		urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
 
 	const [contributionType, setContributionType] = useState<ContributionType>(
 		initialContributionType,
@@ -368,7 +367,11 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
 	 */
-	const { amounts } = useContributionsSelector((state) => state.common);
+	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		window.guardian.settings,
+	);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
 	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
 	const recurringAmount =
