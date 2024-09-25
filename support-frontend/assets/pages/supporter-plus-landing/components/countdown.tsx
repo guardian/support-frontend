@@ -39,8 +39,11 @@ const flexItem = css`
     display: flex;
     flex-direction: column;
 	justify-content: center;
-    /* align-items: center; */
-	/* padding: 0 1px; */
+	text-align: center;
+    /* debug start */
+	/* margin: 1px; 
+	border: 1px dashed red; */
+    /* debug end */
 `;
 
 const timePartStyle = css`
@@ -63,7 +66,7 @@ const timeLabelStyle = css`
 	font-weight: 400px;
 	line-height: 135%; /* 16.2px */
 	flex-grow: 1;
-	text-align: center;
+	align-self: center;
 `;
 
 // props
