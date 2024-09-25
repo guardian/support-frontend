@@ -434,16 +434,7 @@ class Application(
       .map(s => Try(s.toDouble))
       .flatMap(_.toOption)
 
-    val currency = countryGroupId match {
-      case "uk" => "GBP"
-      case "us" => "USD"
-      case "au" => "AUD"
-      case "eu" => "EUR"
-      case "int" => "USD"
-      case "nz" => "NZD"
-      case "ca" => "CAD"
-      case _ => "GBP"
-    }
+val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
     val isAnnual = maybeSelectedContributionType.contains("annual")
     val ratePlan = if (isAnnual) "Annual" else "Monthly"
     val maybeSupporterPlusAmount = productCatalog.asJson.hcursor
