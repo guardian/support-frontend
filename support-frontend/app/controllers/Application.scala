@@ -30,6 +30,7 @@ import utils.FastlyGEOIP._
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -285,18 +286,11 @@ class Application(
       countryCode: String,
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    type Attempt[A] = EitherT[Future, String, A]
-
-    val geoData = request.geoData
-
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
-
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken),
+      contributionsHtml(countryCode, campaignCodeOption),
     ).withSettingsSurrogateKey
   }
 
@@ -318,11 +312,13 @@ class Application(
 
   private def contributionsHtml(
       countryCode: String,
-      geoData: GeoData,
-      idUser: Option[IdUser],
       campaignCode: Option[String],
-      guestAccountCreationToken: Option[String],
-  )(implicit request: RequestHeader, settings: AllSettings) = {
+  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
+    val geoData = request.geoData
+    val idUser = request.user
+
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -422,6 +418,74 @@ class Application(
       case Some(NewZealand) => s"/nz/$path"
       case Some(RestOfTheWorld) => s"/int/$path"
       case _ => s"/uk/$path"
+    }
+  }
+
+  def getProductParamsFromContributionParams(
+      countryGroupId: String,
+      productCatalog: JsonObject,
+      queryString: Map[String, Seq[String]],
+  ) = {
+    val maybeSelectedContributionType = queryString
+      .get("selected-contribution-type")
+      .flatMap(_.headOption)
+      .map(_.toLowerCase)
+
+    val maybeSelectedAmount = queryString
+      .get("selected-amount")
+      .flatMap(_.headOption)
+      .map(s => Try(s.toDouble))
+      .flatMap(_.toOption)
+
+    val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
+    val isAnnual = maybeSelectedContributionType.contains("annual")
+    val ratePlan = if (isAnnual) "Annual" else "Monthly"
+    val maybeSupporterPlusAmount = productCatalog.asJson.hcursor
+      .downField("SupporterPlus")
+      .downField("ratePlans")
+      .downField(ratePlan)
+      .downField("pricing")
+      .downField(currency)
+      .as[Double]
+      .toOption
+
+    val isSupporterPlus: Boolean = (for {
+      supporterPlusAmount <- maybeSupporterPlusAmount
+      selectedAmount <- maybeSelectedAmount
+    } yield selectedAmount >= supporterPlusAmount).getOrElse(true)
+
+    val isOneOff = maybeSelectedContributionType.contains("one_off")
+    if (isOneOff) {
+      ("OneOff", "OneOff")
+    } else if (isSupporterPlus) {
+      ("SupporterPlus", ratePlan)
+    } else {
+      ("Contribution", ratePlan)
+    }
+  }
+
+  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val isTestUser = testUserService.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+    val (product, ratePlan) =
+      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
+
+    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
+      * should remove this.
+      */
+    if (product == "OneOff") {
+      Ok(
+        contributionsHtml(countryGroupId, None),
+      ).withSettingsSurrogateKey
+    } else {
+      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+        "product" -> Seq(product),
+        "ratePlan" -> Seq(ratePlan),
+      )
+      Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
     }
   }
 

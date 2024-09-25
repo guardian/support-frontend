@@ -13,7 +13,6 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
@@ -35,7 +34,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalogDescription as canonicalProductCatalogDescription,
@@ -49,16 +47,12 @@ import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setBillingPeriod,
 	setProductType,
-	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
-import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -293,7 +287,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
 	const dispatch = useContributionsDispatch();
-	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
@@ -345,8 +338,6 @@ export function ThreeTierLanding({
 				: 'NewspaperArchive',
 		),
 	);
-
-	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
 	/*
 	 * US EOY 2024 Campaign
@@ -406,67 +397,6 @@ export function ThreeTierLanding({
 		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
-	const handleLinkCtaClick = (
-		event: React.MouseEvent<HTMLAnchorElement>,
-		link: string,
-		price: number,
-		cardTier: 1 | 2 | 3,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => {
-		/** This is a workaround for now while we move tier 3 to a new SupporterPlus ratePlan */
-		if (cardTier === 3) {
-			sendEventContributionCartValue(
-				price.toString(),
-				contributionType,
-				contributionCurrency,
-			);
-			/**
-			 * Lower & middle tier track component click fired via redux side effects.
-			 * Top tier accessed via network request to GuardianWeekly landing page
-			 * therefore tracking required
-			 **/
-			trackComponentClick(
-				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
-			);
-		} else {
-			event.preventDefault();
-			dispatch(
-				setSelectedAmount({
-					contributionType,
-					amount: price.toString(),
-				}),
-			);
-
-			sendEventContributionCartValue(
-				recurringAmount.toString(),
-				contributionType,
-				currencyId,
-			);
-
-			/**
-			 * Only Testing CardTier1 wth checkout
-			 */
-			if (useGenericCheckout) {
-				/**
-				 * Generic Checkout is not defined in supporterPlusRouter
-				 */
-				window.location.href = link;
-			} else {
-				/**
-				 * I am not sure why links and the react router can't both use a direct link?
-				 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
-				 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
-				 */
-				const linkWithoutContribute = link.split('/')[1];
-				navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
-			}
-			return false;
-		}
-	};
-
-	const selectedContributionType =
-		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
@@ -487,24 +417,18 @@ export function ThreeTierLanding({
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
 			: annualRecurringAmount;
-	const tier1UrlParams = new URLSearchParams({
-		'selected-amount': recurringAmount.toString(),
-		'selected-contribution-type': selectedContributionType,
-		product: 'Contribution',
-	});
-	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
-	const tier1GenericCheckoutUrlParams = new URLSearchParams({
+	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: selectedContributionRatePlan,
 		contribution: recurringAmount.toString(),
 	});
-	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
+	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
 
 	const tier1Card = {
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
-		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
+		link: tier1Link,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(recurringAmount),
@@ -520,24 +444,15 @@ export function ThreeTierLanding({
 			currencyId
 		];
 
-	const tier2GenericUrlParams = new URLSearchParams({
+	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: supporterPlusRatePlan,
 	});
-	const tier2ContributeUrlParams = new URLSearchParams({
-		'selected-amount': tier2Pricing.toString(),
-		'selected-contribution-type': selectedContributionType,
-		product: 'SupporterPlus',
-	});
-	const tier2UrlParams = useGenericCheckout
-		? tier2GenericUrlParams
-		: tier2ContributeUrlParams;
+
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
-	const tier2Url = `${
-		useGenericCheckout ? '' : 'contribute/'
-	}checkout?${tier2UrlParams.toString()}`;
+	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
 	const tier2Card = {
 		productDescription: productCatalogDescription.SupporterPlus,
 		price: tier2Pricing,
@@ -667,7 +582,6 @@ export function ThreeTierLanding({
 							currencyId={currencyId}
 							countryGroupId={countryGroupId}
 							paymentFrequency={contributionType}
-							linkCtaClickHandler={handleLinkCtaClick}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
