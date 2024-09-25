@@ -47,7 +47,7 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    productPrices: ProductPrices,
+    allProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -75,7 +75,7 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      productPrices: ProductPrices,
+      allProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -151,7 +151,7 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -553,7 +553,10 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val allProductPrices = AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
@@ -575,7 +578,7 @@ class Application(
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
