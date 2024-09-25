@@ -6,12 +6,12 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ThankYouComponent } from './components/thankyou';
 
-type Props = {
+export type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 };
 
-export function ThankYou({ geoId, appConfig }: Props) {
+export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	/** 👇 a lot of this is copy/pasted from the checkout */
 	const countryId = CountryHelper.detect();
 
@@ -39,6 +39,11 @@ export function ThankYou({ geoId, appConfig }: Props) {
 	}
 
 	/** Get and validate the amount */
+	const contributionParam = searchParams.get('contribution');
+	const contributionAmount = contributionParam
+		? parseInt(contributionParam, 10)
+		: undefined;
+	let promotion;
 	let payment: {
 		originalAmount: number;
 		discountedAmount?: number;
@@ -46,12 +51,6 @@ export function ThankYou({ geoId, appConfig }: Props) {
 		finalAmount: number;
 	};
 
-	const contributionParam = searchParams.get('contribution');
-	const contributionAmount = contributionParam
-		? parseInt(contributionParam, 10)
-		: undefined;
-
-	let promotion;
 	if (productKey === 'Contribution') {
 		if (!contributionAmount) {
 			return <div>Contribution not specified</div>;
@@ -130,13 +129,14 @@ export function ThankYou({ geoId, appConfig }: Props) {
 			};
 		}
 	}
+
 	return (
 		<ThankYouComponent
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
 			geoId={geoId}
 			appConfig={appConfig}
 			payment={payment}
+			productKey={productKey}
+			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 		/>
 	);

@@ -16,6 +16,7 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
+import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
@@ -38,13 +39,12 @@ import {
 	firstColumnContainer,
 } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 
-export const checkoutContainer = css`
+const checkoutContainer = css`
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
 `;
-
-export const headerContainer = css`
+const headerContainer = css`
 	${from.desktop} {
 		width: 83%;
 	}
@@ -52,8 +52,7 @@ export const headerContainer = css`
 		width: calc(75% - ${space[3]}px);
 	}
 `;
-
-export const buttonContainer = css`
+const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
@@ -93,6 +92,7 @@ export type CheckoutComponentProps = {
 	ratePlanKey?: string;
 	promotion?: Promotion;
 };
+
 export function ThankYouComponent({
 	geoId,
 	payment,
@@ -123,27 +123,32 @@ export function ThankYouComponent({
 	 * contributionType is only applicable to SupporterPlus and Contributions.
 	 * We should remove it for something more generic.
 	 */
-	const isContributionProduct =
+	const isTier =
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
-	const contributionType =
-		isContributionProduct &&
-		(ratePlanKey === 'Monthly' ||
-		ratePlanKey === 'RestOfWorldMonthly' ||
-		ratePlanKey === 'DomesticMonthly' ||
-		ratePlanKey === 'RestOfWorldMonthlyV2' ||
-		ratePlanKey === 'DomesticMonthlyV2'
-			? 'MONTHLY'
-			: ratePlanKey === 'Annual' ||
-			  ratePlanKey === 'RestOfWorldAnnual' ||
-			  ratePlanKey === 'DomesticAnnual' ||
-			  ratePlanKey === 'RestOfWorldAnnualV2' ||
-			  ratePlanKey === 'DomesticAnnualV2'
-			? 'ANNUAL'
-			: productKey === 'Contribution'
-			? 'ONE_OFF'
-			: undefined);
+	let contributionType: ContributionType | undefined;
+	switch (ratePlanKey) {
+		case 'Monthly':
+		case 'RestOfWorldMonthly':
+		case 'DomesticMonthly':
+		case 'RestOfWorldMonthlyV2':
+		case 'DomesticMonthlyV2':
+			contributionType = 'MONTHLY';
+			break;
+		case 'Annual':
+		case 'RestOfWorldAnnual':
+		case 'DomesticAnnual':
+		case 'RestOfWorldAnnualV2':
+		case 'DomesticAnnualV2':
+			contributionType = 'ANNUAL';
+			break;
+		default:
+			if (!productKey && !ratePlanKey) {
+				contributionType = 'ONE_OFF';
+			}
+			break;
+	}
 
 	if (contributionType) {
 		// track conversion with GTM
@@ -165,35 +170,38 @@ export function ThankYouComponent({
 			currencyKey,
 		);
 	}
-
 	if (!contributionType) {
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isOneOff = productKey === 'Contribution';
+	const isOneOff = contributionType === 'ONE_OFF';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
+
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = !isNewAccount && isSignedIn;
 
-	const productDescription = productCatalogDescription[productKey];
-	const benefitsChecklist = [
-		...productDescription.benefits
-			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-			.map((benefit) => ({
-				isChecked: true,
-				text: benefit.copy,
-			})),
-		...(productDescription.benefitsAdditional ?? [])
-			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-			.map((benefit) => ({
-				isChecked: true,
-				text: benefit.copy,
-			})),
-	];
+	let benefitsChecklist;
+	if (isTier) {
+		const productDescription = productCatalogDescription[productKey];
+		benefitsChecklist = [
+			...productDescription.benefits
+				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+				.map((benefit) => ({
+					isChecked: true,
+					text: benefit.copy,
+				})),
+			...(productDescription.benefitsAdditional ?? [])
+				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+				.map((benefit) => ({
+					isChecked: true,
+					text: benefit.copy,
+				})),
+		];
+	}
 
 	const showNewspaperArchiveBenefit = abTests.newspaperArchiveBenefit.isActive;
 
