@@ -318,26 +318,6 @@ export function ThreeTierLanding({
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
-	const promotionTier2 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.allProductPrices.SupporterPlus,
-			countryId,
-			billingPeriod,
-		),
-	);
-	const promotionTier3 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.allProductPrices.TierThree,
-			countryId,
-			billingPeriod,
-			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-
-			abParticipations.newspaperArchiveBenefit === undefined
-				? 'NoProductOptions'
-				: 'NewspaperArchive',
-		),
-	);
-
 	/*
 	 * US EOY 2024 Campaign
 	 */
@@ -448,6 +428,11 @@ export function ThreeTierLanding({
 		ratePlan: supporterPlusRatePlan,
 	});
 
+	const promotionTier2 = getPromotion(
+		window.guardian.allProductPrices.SupporterPlus,
+		countryId,
+		billingPeriod,
+	);
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
@@ -504,6 +489,16 @@ export function ThreeTierLanding({
 		product: 'TierThree',
 		ratePlan: tier3RatePlan,
 	});
+	const promotionTier3 = getPromotion(
+		window.guardian.allProductPrices.TierThree,
+		countryId,
+		billingPeriod,
+		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+
+		abParticipations.newspaperArchiveBenefit === undefined
+			? 'NoProductOptions'
+			: 'NewspaperArchive',
+	);
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
