@@ -95,7 +95,7 @@ export function SupporterPlusRouter() {
 					{countryIds.map((countryId) => (
 						<Route
 							path={`/${countryId}`}
-							element={<ThreeTierLanding />}
+							element={<ThreeTierLanding geoId={countryId} />}
 						></Route>
 					))}
 					{countryIds.map((countryId) => (

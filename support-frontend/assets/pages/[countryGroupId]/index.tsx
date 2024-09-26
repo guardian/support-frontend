@@ -4,5 +4,11 @@ type Props = {
 	config: unknown;
 };
 export function Index({ config }: Props) {
-	return <Layout id={'supporterPlusLandingPage'} config={config}></Layout>;
+	return (
+		<Layout
+			id={'supporterPlusLandingPage'}
+			children={<h1>Hello</h1>}
+			config={config}
+		></Layout>
+	);
 }
