@@ -16,7 +16,7 @@ describe("The Frontend stack", () => {
         minimumInstances: 3,
         maximumInstances: 6,
       },
-      shouldEnableAlarms: true,
+      shouldCreateAlarms: true,
     });
 
     const template = Template.fromStack(stack);

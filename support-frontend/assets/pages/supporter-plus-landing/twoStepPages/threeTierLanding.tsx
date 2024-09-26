@@ -13,13 +13,16 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -35,7 +38,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalogDescription as canonicalProductCatalogDescription,
@@ -45,20 +47,6 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setBillingPeriod,
-	setProductType,
-	setSelectedAmount,
-} from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
-import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -219,8 +207,6 @@ const links = [
 	},
 ];
 
-// The three tier checkout only supports monthly and annual contributions
-const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
 	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
@@ -288,11 +274,9 @@ type ThreeTierLandingProps = {
 export function ThreeTierLanding({
 	geoId,
 }: ThreeTierLandingProps): JSX.Element {
-	const dispatch = useContributionsDispatch();
-	const navigate = useNavigate();
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsProduct = urlSearchParams.get('product');
+	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
@@ -311,32 +295,18 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+
+	const initialContributionType =
+		urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+
+	const [contributionType, setContributionType] = useState<ContributionType>(
+		initialContributionType,
+	);
+
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
-
-	const promotionTier2 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.supporterPlusProductPrices,
-			countryId,
-			billingPeriod,
-		),
-	);
-	const promotionTier3 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.tierThreeProductPrices,
-			countryId,
-			billingPeriod,
-			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-			abParticipations.newspaperArchiveBenefit === 'v1' ||
-				abParticipations.newspaperArchiveBenefit === 'v2'
-				? 'NewspaperArchive'
-				: 'NoProductOptions',
-		),
-	);
-
-	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 
 	/*
 	 * US EOY 2024 Campaign
@@ -376,127 +346,50 @@ export function ThreeTierLanding({
 	 * /////////////// END US EOY 2024 Campaign
 	 */
 
-	useEffect(() => {
-		dispatch(resetValidation());
-		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
-			/*
-			 * Reset the product type to monthly if one_off not available
-			 */
-			dispatch(setProductType('MONTHLY'));
-		}
-		dispatch(setBillingPeriod(billingPeriod));
-	}, []);
-
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		dispatch(setProductType(paymentFrequencies[buttonIndex]));
-		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
+		setContributionType(paymentFrequencies[buttonIndex]);
 	};
 
-	const handleLinkCtaClick = (
-		event: React.MouseEvent<HTMLAnchorElement>,
-		link: string,
-		price: number,
-		cardTier: 1 | 2 | 3,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => {
-		/** This is a workaround for now while we move tier 3 to a new SupporterPlus ratePlan */
-		if (cardTier === 3) {
-			sendEventContributionCartValue(
-				price.toString(),
-				contributionType,
-				contributionCurrency,
-			);
-			/**
-			 * Lower & middle tier track component click fired via redux side effects.
-			 * Top tier accessed via network request to GuardianWeekly landing page
-			 * therefore tracking required
-			 **/
-			trackComponentClick(
-				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
-			);
-		} else {
-			event.preventDefault();
-			dispatch(
-				setSelectedAmount({
-					contributionType,
-					amount: price.toString(),
-				}),
-			);
-
-			sendEventContributionCartValue(
-				recurringAmount.toString(),
-				contributionType,
-				currencyId,
-			);
-
-			/**
-			 * Only Testing CardTier1 wth checkout
-			 */
-			if (useGenericCheckout) {
-				/**
-				 * Generic Checkout is not defined in supporterPlusRouter
-				 */
-				window.location.href = link;
-			} else {
-				/**
-				 * I am not sure why links and the react router can't both use a direct link?
-				 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
-				 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
-				 */
-				const linkWithoutContribute = link.split('/')[1];
-				navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
-			}
-			return false;
-		}
-	};
-
-	const selectedContributionType =
-		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	const productCatalogDescription = ['v1', 'v2'].includes(
-		abParticipations.newspaperArchiveBenefit,
+		abParticipations.newspaperArchiveBenefit ?? '',
 	)
 		? productCatalogDescriptionNewBenefits
 		: canonicalProductCatalogDescription;
 
-	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsProduct = urlSearchParams.get('product');
 	/**
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
 	 */
-	const { amounts } = useContributionsSelector((state) => state.common);
+	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		window.guardian.settings,
+	);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
 	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
 			: annualRecurringAmount;
-	const tier1UrlParams = new URLSearchParams({
-		'selected-amount': recurringAmount.toString(),
-		'selected-contribution-type': selectedContributionType,
-		product: 'Contribution',
-	});
-	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
-	const tier1GenericCheckoutUrlParams = new URLSearchParams({
+	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: selectedContributionRatePlan,
 		contribution: recurringAmount.toString(),
 	});
-	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
+	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
 
 	const tier1Card = {
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
-		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
+		link: tier1Link,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(recurringAmount),
@@ -512,24 +405,20 @@ export function ThreeTierLanding({
 			currencyId
 		];
 
-	const tier2GenericUrlParams = new URLSearchParams({
+	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: supporterPlusRatePlan,
 	});
-	const tier2ContributeUrlParams = new URLSearchParams({
-		'selected-amount': tier2Pricing.toString(),
-		'selected-contribution-type': selectedContributionType,
-		product: 'SupporterPlus',
-	});
-	const tier2UrlParams = useGenericCheckout
-		? tier2GenericUrlParams
-		: tier2ContributeUrlParams;
+
+	const promotionTier2 = getPromotion(
+		window.guardian.allProductPrices.SupporterPlus,
+		countryId,
+		billingPeriod,
+	);
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
-	const tier2Url = `${
-		useGenericCheckout ? '' : 'contribute/'
-	}checkout?${tier2UrlParams.toString()}`;
+	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
 	const tier2Card = {
 		productDescription: productCatalogDescription.SupporterPlus,
 		price: tier2Pricing,
@@ -569,13 +458,9 @@ export function ThreeTierLanding({
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 
-		if (
-			abParticipations.newspaperArchiveBenefit === 'v1' ||
-			abParticipations.newspaperArchiveBenefit === 'v2'
-		) {
-			return `${ratePlan}V2`;
-		}
-		return ratePlan;
+		return abParticipations.newspaperArchiveBenefit === undefined
+			? ratePlan
+			: `${ratePlan}V2`;
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
@@ -586,6 +471,16 @@ export function ThreeTierLanding({
 		product: 'TierThree',
 		ratePlan: tier3RatePlan,
 	});
+	const promotionTier3 = getPromotion(
+		window.guardian.allProductPrices.TierThree,
+		countryId,
+		billingPeriod,
+		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+
+		abParticipations.newspaperArchiveBenefit === undefined
+			? 'NoProductOptions'
+			: 'NewspaperArchive',
+	);
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
@@ -663,7 +558,6 @@ export function ThreeTierLanding({
 							currencyId={currencyId}
 							countryGroupId={countryGroupId}
 							paymentFrequency={contributionType}
-							linkCtaClickHandler={handleLinkCtaClick}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}

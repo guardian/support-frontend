@@ -182,7 +182,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend could not load the Zuora catalog from S3",
+        "AlarmName": "Support-frontend could not load the Zuora catalog from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -306,7 +306,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - cannot display default product promotions on the support site",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend could not load default promo codes from S3",
+        "AlarmName": "Support-frontend could not load default promo codes from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -415,7 +415,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - support-frontend failed to get delivery agents from PaperRound. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend GetDeliveryAgentsFailure",
+        "AlarmName": "Support-frontend GetDeliveryAgentsFailure",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -629,7 +629,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Some or all actions on support website are failing. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend is returning 5XX errors",
+        "AlarmName": "Support-frontend is returning 5XX errors",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
@@ -793,7 +793,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend has high latency",
+        "AlarmName": "Support-frontend has high latency",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1026,7 +1026,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD no healthy instances for support-frontend",
+        "AlarmName": "No healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1201,7 +1201,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD reduced number healthy instances for support-frontend",
+        "AlarmName": "Reduced number healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1308,7 +1308,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Someone pressed buy on a recurring product but received an error. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-frontend create recurring product call failed",
+        "AlarmName": "Support-frontend create recurring product call failed",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1423,7 +1423,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD support-workers state machine unavailable",
+        "AlarmName": "Support-workers state machine unavailable",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": 2,
         "MetricName": "state-machine-unavailable",

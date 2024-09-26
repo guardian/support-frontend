@@ -36,7 +36,6 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
-    authAction,
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,

@@ -18,7 +18,6 @@ import { getAmount } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -37,7 +36,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
@@ -144,16 +143,6 @@ export function SupporterPlusCheckout({
 	const showCoverTransactionCost =
 		abParticipations.coverTransactionCost === 'variant';
 
-	/** Promotions on the checkout are for SupporterPlus only for now */
-	const promotion = isSupporterPlus
-		? useContributionsSelector((state) =>
-				getPromotion(
-					state.page.checkoutForm.product.productPrices,
-					countryId,
-					state.page.checkoutForm.product.billingPeriod,
-				),
-		  )
-		: undefined;
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -162,7 +151,6 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							promotion={promotion}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -202,7 +190,6 @@ export function SupporterPlusCheckout({
 								currency={currencyId}
 								amount={amount}
 								productKey={product}
-								promotion={promotion}
 							/>
 						)}
 						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
@@ -245,7 +232,6 @@ export function SupporterPlusCheckout({
 						amount={amount}
 						amountIsAboveThreshold={isSupporterPlus}
 						productKey={product}
-						promotion={promotion}
 					/>
 				</BoxContents>
 			</Box>

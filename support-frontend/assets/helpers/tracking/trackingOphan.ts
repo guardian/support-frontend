@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
 import type { NavigateFunction, NavigateOptions } from 'react-router';
-import type { Participations } from 'helpers/abTests/abtest';
+import { type Participations, testIsActive } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
@@ -69,13 +69,13 @@ export type OphanComponentEvent = {
 	};
 };
 
-type OphanABEvent = {
+export type OphanABEvent = {
 	variantName: string;
 	complete: boolean;
 	campaignCodes?: string[];
 };
 
-type OphanABPayload = Record<string, OphanABEvent>;
+export type OphanABPayload = Record<string, OphanABEvent>;
 
 // ----- Functions ----- //
 const trackComponentEvents = (componentEvent: OphanComponentEvent): void =>
@@ -91,17 +91,23 @@ const pageView = (url: string, referrer: string): void => {
 	}
 };
 
-const buildOphanPayload = (participations: Participations): OphanABPayload =>
-	Object.keys(participations).reduce((payload, participation) => {
+export const buildOphanPayload = (
+	participations: Participations,
+): OphanABPayload => {
+	const activeTests: Array<[string, string]> =
+		Object.entries(participations).filter(testIsActive);
+
+	return activeTests.reduce((payload, participation) => {
 		const ophanABEvent: OphanABEvent = {
-			variantName: participations[participation],
+			variantName: participation[1],
 			complete: false,
 			campaignCodes: [],
 		};
 		return Object.assign({}, payload, {
-			[participation]: ophanABEvent,
+			[participation[0]]: ophanABEvent,
 		});
 	}, {});
+};
 
 const trackAbTests = (participations: Participations): void =>
 	ophan.record({

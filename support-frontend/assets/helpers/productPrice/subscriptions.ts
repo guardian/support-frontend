@@ -4,12 +4,12 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly, Quarterly } from 'helpers/productPrice/billingPeriods';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { currencies, detect } from '../internationalisation/currency';
-import { trackComponentEvents } from '../tracking/ophan';
+import { trackComponentEvents } from '../tracking/trackingOphan';
 import type {
 	OphanAction,
 	OphanComponentEvent,
 	OphanComponentType,
-} from '../tracking/ophan';
+} from '../tracking/trackingOphan';
 
 // ----- Types ------ //
 const DigitalPack = 'DigitalPack';

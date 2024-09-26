@@ -11,7 +11,7 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { trackComponentEvents } from 'helpers/tracking/trackingOphan';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
