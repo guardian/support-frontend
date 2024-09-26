@@ -144,10 +144,10 @@ const supportAnotherWayContainer = css`
 	color: ${palette.neutral[100]};
 	background-color: #1e3e72;
 	h4 {
-		${textSans.medium({ fontWeight: 'bold' })};
+		${textSans.large({ fontWeight: 'bold' })};
 	}
 	p {
-		${textSans.small()};
+		${textSans.medium()};
 	}
 	a {
 		color: ${palette.neutral[100]};
