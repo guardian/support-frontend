@@ -320,14 +320,14 @@ export function ThreeTierLanding({
 
 	const promotionTier2 = useContributionsSelector((state) =>
 		getPromotion(
-			state.page.checkoutForm.product.supporterPlusProductPrices,
+			state.page.checkoutForm.product.allProductPrices.SupporterPlus,
 			countryId,
 			billingPeriod,
 		),
 	);
 	const promotionTier3 = useContributionsSelector((state) =>
 		getPromotion(
-			state.page.checkoutForm.product.tierThreeProductPrices,
+			state.page.checkoutForm.product.allProductPrices.TierThree,
 			countryId,
 			billingPeriod,
 			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',

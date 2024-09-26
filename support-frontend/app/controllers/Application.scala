@@ -5,19 +5,18 @@ import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath}
-import cats.data.EitherT
-import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{Product, SupporterPlus, TierThree}
+import com.gu.support.catalog.{SupporterPlus, TierThree}
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
+import io.circe.generic.semiauto.deriveEncoder
 import views.html.helper.CSRF
-import io.circe.JsonObject
+import io.circe.{Encoder, JsonObject}
 import io.circe.syntax.EncoderOps
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
@@ -48,7 +47,7 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    productPrices: ProductPrices,
+    allProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -76,7 +75,7 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      productPrices: ProductPrices,
+      allProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -152,7 +151,7 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -182,9 +181,19 @@ case class PaymentMethodConfigs(
     testAmazonPayConfig: AmazonPayConfig,
 )
 
-// This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
-// product prices to the contributions template would exceed that limit.
-case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
+/** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
+  * of product prices to the contributions template would exceed that limit.
+  *
+  * We've also gone against the grain with Capitalising the prop names, but that's to match the ProductKeys in the
+  * Product API.
+  *
+  * @see
+  *   https://product-catalog.guardianapis.com/product-catalog.json
+  */
+case class AllProductPrices(SupporterPlus: ProductPrices, TierThree: ProductPrices)
+object AllProductPrices extends InternationalisationCodecs {
+  implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
+}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -201,7 +210,6 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    authAction: AuthAction[AnyContent],
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
@@ -368,7 +376,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      landingPageProductPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
@@ -434,7 +442,7 @@ class Application(
       .map(s => Try(s.toDouble))
       .flatMap(_.toOption)
 
-val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
+    val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
     val isAnnual = maybeSelectedContributionType.contains("annual")
     val ratePlan = if (isAnnual) "Annual" else "Monthly"
     val maybeSupporterPlusAmount = productCatalog.asJson.hcursor
@@ -486,16 +494,7 @@ val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).curr
     }
   }
 
-  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    request.queryString
-      .getOrElse("product", Nil)
-      .headOption
-      .flatMap(productString => Product.fromString(productString))
-      .map(routeForProduct(_))
-      .getOrElse(BadRequest("No product name provided"))
-  }
-
-  def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
+  def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
@@ -509,7 +508,10 @@ val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).curr
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(product, queryPromos)
+    val allProductPrices = AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     Ok(
       views.html.router(
@@ -531,7 +533,7 @@ val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).curr
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        productPrices = productPrices,
+        allProductPrices = allProductPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey
@@ -551,7 +553,10 @@ val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).curr
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val allProductPrices = AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
@@ -573,7 +578,7 @@ val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).curr
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,

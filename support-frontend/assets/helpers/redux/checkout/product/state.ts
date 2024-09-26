@@ -46,8 +46,10 @@ export type ProductState = {
 	fulfilmentOption: FulfilmentOptions;
 	billingPeriod: BillingPeriod;
 	productPrices: ProductPrices;
-	supporterPlusProductPrices: ProductPrices;
-	tierThreeProductPrices: ProductPrices;
+	allProductPrices: {
+		SupporterPlus: ProductPrices;
+		TierThree: ProductPrices;
+	};
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
 	coverTransactionCost?: boolean;
@@ -67,8 +69,7 @@ export const initialProductState: ProductState = {
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',
 	productPrices: getGlobal('productPrices') ?? {},
-	supporterPlusProductPrices: getGlobal('supporterPlusProductPrices') ?? {},
-	tierThreeProductPrices: getGlobal('tierThreeProductPrices') ?? {},
+	allProductPrices: window.guardian.allProductPrices,
 	selectedAmounts: {
 		ONE_OFF: 0,
 		MONTHLY: 0,
