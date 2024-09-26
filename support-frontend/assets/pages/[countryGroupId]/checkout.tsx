@@ -260,7 +260,10 @@ export function Checkout({ geoId, appConfig }: Props) {
 			return <div>Price not found in product catalog</div>;
 		}
 
-		/** Get any promotions */
+		/**
+		 * Get any promotions.
+		 * Promos are only available on SupporterPlus and TierThree and we only use this value to determine promotion values
+		 */
 		const productPrices =
 			productKey === 'SupporterPlus' || productKey === 'TierThree'
 				? appConfig.allProductPrices[productKey]
