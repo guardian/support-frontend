@@ -84,9 +84,6 @@ const recurringContainer = css`
 const oneTimeContainer = css`
 	display: flex;
 	background-color: #1E3E72;
-	> div {
-		padding: ${space[6]}px 10px ${space[6]}px;
-}
 `;
 
 const innerContentContainer = css`
@@ -142,10 +139,9 @@ const tabletLineBreak = css`
 `;
 
 const supportAnotherWayContainer = css`
-	padding-top: 32px;
 	max-width: 940px;
 	text-align: left;
-	color:  ${palette.neutral[100]};
+	color: ${palette.neutral[100]};
   background-color: #1E3E72;
 	h4 {
 		${textSans.medium({ fontWeight: 'bold' })};
@@ -157,8 +153,10 @@ const supportAnotherWayContainer = css`
 		color: ${palette.neutral[100]};
 	}
 	${from.desktop} {
-		padding-top: ${space[9]}px;
-	}
+		padding-top: ${space[5]}px;
+    padding-bottom: ${space[5]}px;
+
+  }
 `;
 
 const disclaimerContainer = css`
@@ -169,7 +167,7 @@ const disclaimerContainer = css`
 	}
 	${from.mobileLandscape} {
 		> div {
-			padding: ${space[4]}px ${space[5]}px;
+			padding: ${space[5]}px ${space[5]}px;
 		}
 	}
 `;
