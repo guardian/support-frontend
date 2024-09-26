@@ -14,7 +14,7 @@ export function Layout({ children, id, config }: Props) {
 	return (
 		<html lang="en">
 			<head>
-				<meta charset="UTF-8" />
+				<meta charSet="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<meta
 					name="google-site-verification"
@@ -77,8 +77,8 @@ export function Layout({ children, id, config }: Props) {
 				</script>
 			</head>
 
-			<body class="header-tweaks">
-				<div class="gu-render-to" data-not-hydrated="true"></div>
+			<body className="header-tweaks">
+				<div className="gu-render-to" data-not-hydrated="true"></div>
 				{children}
 			</body>
 		</html>
