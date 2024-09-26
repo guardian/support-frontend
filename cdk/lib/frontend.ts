@@ -114,6 +114,17 @@ export class Frontend extends GuStack {
     const alarmDescription = (description: string) =>
       `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
 
+    const http5xxAlarm = shouldCreateAlarms
+      ? {
+          alarmName: alarmName("support-frontend is returning 5XX errors"),
+          alarmDescription: alarmDescription(
+            "Some or all actions on support website are failing"
+          ),
+          actionsEnabled: shouldCreateAlarms,
+          tolerated5xxPercentage: 5,
+        }
+      : false;
+
     const ec2App = new GuEc2App(this, {
       applicationPort: 9000,
       app: "frontend",
@@ -124,15 +135,8 @@ export class Frontend extends GuStack {
       },
       monitoringConfiguration: {
         snsTopicName: `alarms-handler-topic-${this.stage}`,
-        http5xxAlarm: {
-          alarmName: alarmName("support-frontend is returning 5XX errors"),
-          alarmDescription: alarmDescription(
-            "Some or all actions on support website are failing"
-          ),
-          actionsEnabled: shouldCreateAlarms,
-          tolerated5xxPercentage: 5,
-        },
-        unhealthyInstancesAlarm: true,
+        http5xxAlarm: http5xxAlarm,
+        unhealthyInstancesAlarm: shouldCreateAlarms,
       },
       userData,
       roleConfiguration: {
