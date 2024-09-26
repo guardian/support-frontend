@@ -1,0 +1,23 @@
+FROM node:20.11.0-alpine
+
+WORKDIR /opt/app/support-frontend
+COPY ./assets/ /opt/app/support-frontend/assets
+COPY ./package.json /opt/app/support-frontend/
+COPY ./server.tsx /opt/app/support-frontend/
+COPY ./tsconfig.json /opt/app/support-frontend/
+COPY ./tsconfig.server.json /opt/app/support-frontend/
+COPY ./webpack.common.js /opt/app/support-frontend/
+COPY ./webpack.dev-server.js /opt/app/support-frontend/
+COPY ./webpack.dev.js /opt/app/support-frontend/
+COPY ./webpack.entryPoints.js /opt/app/support-frontend/
+COPY ./webpack.prod.js /opt/app/support-frontend/
+COPY ./webpack.ssr.js /opt/app/support-frontend/
+COPY ./window.d.ts /opt/app/support-frontend/
+
+ENV NODE_ENV=production
+
+RUN ["yarn"]
+ADD ./node_modules/ /opt/app/support-frontend/node_modules
+
+EXPOSE 3000
+ENTRYPOINT ["yarn", "tsx", "watch",  "--tsconfig", "./tsconfig.server.json",  "./server.tsx"]
