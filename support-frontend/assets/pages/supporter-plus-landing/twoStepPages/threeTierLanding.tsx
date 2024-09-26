@@ -19,6 +19,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -43,16 +47,6 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setBillingPeriod,
-	setProductType,
-} from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
@@ -213,8 +207,6 @@ const links = [
 	},
 ];
 
-// The three tier checkout only supports monthly and annual contributions
-const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 const paymentFrequencyMap = {
 	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
@@ -286,11 +278,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 
-	const dispatch = useContributionsDispatch();
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
-
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
 
@@ -308,35 +295,18 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const contributionType = urlSearchParamsRatePlan
-		? urlSearchParamsRatePlan === 'Monthly'
-			? 'MONTHLY'
-			: 'ANNUAL'
-		: useContributionsSelector(getContributionType);
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+
+	const initialContributionType =
+		urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+
+	const [contributionType, setContributionType] = useState<ContributionType>(
+		initialContributionType,
+	);
 
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
-
-	const promotionTier2 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.allProductPrices.SupporterPlus,
-			countryId,
-			billingPeriod,
-		),
-	);
-	const promotionTier3 = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.allProductPrices.TierThree,
-			countryId,
-			billingPeriod,
-			countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-
-			abParticipations.newspaperArchiveBenefit === undefined
-				? 'NoProductOptions'
-				: 'NewspaperArchive',
-		),
-	);
 
 	/*
 	 * US EOY 2024 Campaign
@@ -376,24 +346,12 @@ export function ThreeTierLanding({
 	 * /////////////// END US EOY 2024 Campaign
 	 */
 
-	useEffect(() => {
-		dispatch(resetValidation());
-		if (!enableSingleContributionsTab && contributionType === 'ONE_OFF') {
-			/*
-			 * Reset the product type to monthly if one_off not available
-			 */
-			dispatch(setProductType('MONTHLY'));
-		}
-		dispatch(setBillingPeriod(billingPeriod));
-	}, []);
-
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		dispatch(setProductType(paymentFrequencies[buttonIndex]));
-		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
+		setContributionType(paymentFrequencies[buttonIndex]);
 	};
 
 	const selectedContributionRatePlan =
@@ -409,7 +367,11 @@ export function ThreeTierLanding({
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
 	 */
-	const { amounts } = useContributionsSelector((state) => state.common);
+	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		window.guardian.settings,
+	);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
 	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
 	const recurringAmount =
@@ -448,6 +410,11 @@ export function ThreeTierLanding({
 		ratePlan: supporterPlusRatePlan,
 	});
 
+	const promotionTier2 = getPromotion(
+		window.guardian.allProductPrices.SupporterPlus,
+		countryId,
+		billingPeriod,
+	);
 	if (promotionTier2) {
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
@@ -504,6 +471,16 @@ export function ThreeTierLanding({
 		product: 'TierThree',
 		ratePlan: tier3RatePlan,
 	});
+	const promotionTier3 = getPromotion(
+		window.guardian.allProductPrices.TierThree,
+		countryId,
+		billingPeriod,
+		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
+
+		abParticipations.newspaperArchiveBenefit === undefined
+			? 'NoProductOptions'
+			: 'NewspaperArchive',
+	);
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
