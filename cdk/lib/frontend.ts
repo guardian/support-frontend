@@ -28,7 +28,7 @@ interface FrontendProps extends GuStackProps {
   membershipSubPromotionsTables: string[];
   domainName: string;
   scaling: GuAsgCapacity;
-  shouldEnableAlarms: boolean;
+  shouldCreateAlarms: boolean;
 }
 
 export class Frontend extends GuStack {
@@ -37,7 +37,7 @@ export class Frontend extends GuStack {
       membershipSubPromotionsTables,
       domainName,
       scaling,
-      shouldEnableAlarms,
+      shouldCreateAlarms,
     } = props;
 
     super(scope, id, props);
@@ -129,7 +129,7 @@ export class Frontend extends GuStack {
           alarmDescription: alarmDescription(
             "Some or all actions on support website are failing"
           ),
-          actionsEnabled: shouldEnableAlarms,
+          actionsEnabled: shouldCreateAlarms,
           tolerated5xxPercentage: 5,
         },
         unhealthyInstancesAlarm: true,
@@ -143,207 +143,213 @@ export class Frontend extends GuStack {
     });
 
     // ---- Alarms ---- //
-
-    new GuAlarm(this, "NoHealthyInstancesAlarm", {
-      app,
-      alarmName: alarmName("no healthy instances for support-frontend"),
-      alarmDescription: alarmDescription(
-        "Cannot sell any subscriptions or contributions products"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 0.5,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HealthyHostCount",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-          TargetGroup: ec2App.targetGroup.targetGroupFullName,
-        },
-        statistic: "Average",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "ReducedHealthyInstancesAlarm", {
-      app,
-      alarmName: alarmName(
-        "reduced number healthy instances for support-frontend"
-      ),
-      alarmDescription: alarmDescription(
-        "Imminent issue cannot sell any subscriptions or contributions products"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: scaling.minimumInstances - 1,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "HealthyHostCount",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-          TargetGroup: ec2App.targetGroup.targetGroupFullName,
-        },
-        statistic: "Average",
-        period: Duration.seconds(300),
-      }),
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "LatencyNotificationAlarm", {
-      app,
-      alarmName: alarmName("support-frontend has high latency"),
-      alarmDescription: alarmDescription(
-        "support-frontend users are seeing slow responses"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "TargetResponseTime",
-        namespace: "AWS/ApplicationELB",
-        dimensionsMap: {
-          LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
-          TargetGroup: ec2App.targetGroup.targetGroupFullName,
-        },
-        statistic: "Average",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    // TODO: Do we still need this?
-    new GuAlarm(this, "CatalogLoadingFailureAlarm", {
-      app,
-      alarmName: alarmName(
-        "support-frontend could not load the Zuora catalog from S3"
-      ),
-      alarmDescription:
-        "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "CatalogLoadingFailure",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          Environment: "PROD",
-        },
-        statistic: "Average",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "DefaultPromotionsLoadingFailureAlarm", {
-      app,
-      alarmName: alarmName(
-        "support-frontend could not load default promo codes from S3"
-      ),
-      alarmDescription:
-        "Impact - cannot display default product promotions on the support site",
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "DefaultPromotionsLoadingFailure",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          Environment: "PROD",
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    const stateMachineUnavailableMetricFilter = new MetricFilter(
-      this,
-      "StateMachineUnavailableMetricFilter",
-      {
-        logGroup: LogGroup.fromLogGroupName(
-          this,
-          "SupportFrontendLogGroup",
-          `support-frontend-${this.stage}`
+    if (shouldCreateAlarms) {
+      new GuAlarm(this, "NoHealthyInstancesAlarm", {
+        app,
+        alarmName: alarmName("no healthy instances for support-frontend"),
+        alarmDescription: alarmDescription(
+          "Cannot sell any subscriptions or contributions products"
         ),
-        metricNamespace: `support-frontend-${this.stage}`,
-        metricName: "state-machine-unavailable",
-        filterPattern: FilterPattern.literal(
-          '"regular-contributions-state-machine-unavailable"'
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 0.5,
+        evaluationPeriods: 2,
+        comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "HealthyHostCount",
+          namespace: "AWS/ApplicationELB",
+          dimensionsMap: {
+            LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
+            TargetGroup: ec2App.targetGroup.targetGroupFullName,
+          },
+          statistic: "Average",
+          period: Duration.seconds(60),
+        }),
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+
+      new GuAlarm(this, "ReducedHealthyInstancesAlarm", {
+        app,
+        alarmName: alarmName(
+          "reduced number healthy instances for support-frontend"
         ),
-        metricValue: "1",
-      }
-    );
+        alarmDescription: alarmDescription(
+          "Imminent issue cannot sell any subscriptions or contributions products"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: scaling.minimumInstances - 1,
+        evaluationPeriods: 2,
+        comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "HealthyHostCount",
+          namespace: "AWS/ApplicationELB",
+          dimensionsMap: {
+            LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
+            TargetGroup: ec2App.targetGroup.targetGroupFullName,
+          },
+          statistic: "Average",
+          period: Duration.seconds(300),
+        }),
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
 
-    new GuAlarm(this, "StateMachineUnavailableAlarm", {
-      app,
-      alarmName: alarmName("support-workers state machine unavailable"),
-      alarmDescription: alarmDescription(
-        "Cannot sell any subscriptions products"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 2,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: stateMachineUnavailableMetricFilter.metric({
-        period: Duration.seconds(60),
-        statistic: "Sum",
-      }),
-      treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
+      new GuAlarm(this, "LatencyNotificationAlarm", {
+        app,
+        alarmName: alarmName("support-frontend has high latency"),
+        alarmDescription: alarmDescription(
+          "support-frontend users are seeing slow responses"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 2,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "TargetResponseTime",
+          namespace: "AWS/ApplicationELB",
+          dimensionsMap: {
+            LoadBalancer: ec2App.loadBalancer.loadBalancerFullName,
+            TargetGroup: ec2App.targetGroup.targetGroupFullName,
+          },
+          statistic: "Average",
+          period: Duration.seconds(60),
+        }),
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
 
-    new GuAlarm(this, "ServerSideCreateFailureAlarm", {
-      app,
-      alarmName: alarmName(
-        "support-frontend create recurring product call failed"
-      ),
-      alarmDescription: alarmDescription(
-        "Someone pressed buy on a recurring product but received an error"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "ServerSideCreateFailure",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          Stage: "PROD",
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
+      // TODO: Do we still need this?
+      new GuAlarm(this, "CatalogLoadingFailureAlarm", {
+        app,
+        alarmName: alarmName(
+          "support-frontend could not load the Zuora catalog from S3"
+        ),
+        alarmDescription:
+          "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "CatalogLoadingFailure",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Environment: "PROD",
+          },
+          statistic: "Average",
+          period: Duration.seconds(60),
+        }),
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
 
-    new GuAlarm(this, "GetDeliveryAgentsFailure", {
-      app,
-      alarmName: alarmName("support-frontend GetDeliveryAgentsFailure"),
-      alarmDescription: alarmDescription(
-        "support-frontend failed to get delivery agents from PaperRound"
-      ),
-      actionsEnabled: shouldEnableAlarms,
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      metric: new Metric({
-        metricName: "GetDeliveryAgentsFailure",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
+      new GuAlarm(this, "DefaultPromotionsLoadingFailureAlarm", {
+        app,
+        alarmName: alarmName(
+          "support-frontend could not load default promo codes from S3"
+        ),
+        alarmDescription:
+          "Impact - cannot display default product promotions on the support site",
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "DefaultPromotionsLoadingFailure",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Environment: "PROD",
+          },
+          statistic: "Sum",
+          period: Duration.seconds(60),
+        }),
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+      const stateMachineUnavailableMetricFilter = new MetricFilter(
+        this,
+        "StateMachineUnavailableMetricFilter",
+        {
+          logGroup: LogGroup.fromLogGroupName(
+            this,
+            "SupportFrontendLogGroup",
+            `support-frontend-${this.stage}`
+          ),
+          metricNamespace: `support-frontend-${this.stage}`,
+          metricName: "state-machine-unavailable",
+          filterPattern: FilterPattern.literal(
+            '"regular-contributions-state-machine-unavailable"'
+          ),
+          metricValue: "1",
+        }
+      );
+
+      new GuAlarm(this, "StateMachineUnavailableAlarm", {
+        app,
+        alarmName: alarmName("support-workers state machine unavailable"),
+        alarmDescription: alarmDescription(
+          "Cannot sell any subscriptions products"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 2,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: stateMachineUnavailableMetricFilter.metric({
+          period: Duration.seconds(60),
+          statistic: "Sum",
+        }),
+        treatMissingData: TreatMissingData.NOT_BREACHING,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+
+      new GuAlarm(this, "ServerSideCreateFailureAlarm", {
+        app,
+        alarmName: alarmName(
+          "support-frontend create recurring product call failed"
+        ),
+        alarmDescription: alarmDescription(
+          "Someone pressed buy on a recurring product but received an error"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "ServerSideCreateFailure",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Stage: "PROD",
+          },
+          statistic: "Sum",
+          period: Duration.seconds(60),
+        }),
+        treatMissingData: TreatMissingData.NOT_BREACHING,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+
+      new GuAlarm(this, "GetDeliveryAgentsFailure", {
+        app,
+        alarmName: alarmName("support-frontend GetDeliveryAgentsFailure"),
+        alarmDescription: alarmDescription(
+          "support-frontend failed to get delivery agents from PaperRound"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "GetDeliveryAgentsFailure",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Stage: this.stage,
+          },
+          statistic: "Sum",
+          period: Duration.seconds(60),
+        }),
+        treatMissingData: TreatMissingData.NOT_BREACHING,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+    }
   }
 }

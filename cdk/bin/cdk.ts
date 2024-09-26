@@ -22,7 +22,7 @@ new Frontend(app, "Frontend-PROD", {
     minimumInstances: 3,
     maximumInstances: 6,
   },
-  shouldEnableAlarms: true,
+  shouldCreateAlarms: true,
 });
 
 new Frontend(app, "Frontend-CODE", {
@@ -37,7 +37,7 @@ new Frontend(app, "Frontend-CODE", {
     minimumInstances: 1,
     maximumInstances: 2,
   },
-  shouldEnableAlarms: false,
+  shouldCreateAlarms: false,
 });
 
 new StripePatronsData(app, "StripePatronsData-CODE", {
