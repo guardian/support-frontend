@@ -337,7 +337,7 @@ export function ThreeTierLanding({
 
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
-		: ['ONE_OFF','MONTHLY', 'ANNUAL'];
+		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setContributionType(paymentFrequencies[buttonIndex]);
