@@ -54,7 +54,6 @@ import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
 import { OneOffCard } from '../components/oneOffCard';
-import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 
@@ -82,17 +81,12 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
+const oneTimeContainer = css`
 	display: flex;
-	background-color: ${palette.neutral[97]};
+	background-color: #1E3E72;
 	> div {
-		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
-	}
-	${from.desktop} {
-		> div {
-			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
-		}
-	}
+		padding: ${space[6]}px 10px ${space[6]}px;
+}
 `;
 
 const innerContentContainer = css`
@@ -148,12 +142,11 @@ const tabletLineBreak = css`
 `;
 
 const supportAnotherWayContainer = css`
-	margin: ${space[9]}px auto 0;
-	border-top: 1px solid ${palette.neutral[86]};
 	padding-top: 32px;
 	max-width: 940px;
 	text-align: left;
-	color: #606060;
+	color:  ${palette.neutral[100]};
+  background-color: #1E3E72;
 	h4 {
 		${textSans.medium({ fontWeight: 'bold' })};
 	}
@@ -161,10 +154,9 @@ const supportAnotherWayContainer = css`
 		${textSans.small()};
 	}
 	a {
-		color: #606060;
+		color: ${palette.neutral[100]};
 	}
 	${from.desktop} {
-		text-align: center;
 		padding-top: ${space[9]}px;
 	}
 `;
@@ -565,25 +557,18 @@ export function ThreeTierLanding({
 			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
+				cssOverrides={oneTimeContainer}
 			>
-				{!enableSingleContributionsTab && (
-					<SupportOnce
-						currency={currencies[currencyId].glyph}
-						countryGroupId={countryGroupId}
-					/>
-				)}
 				{countryGroupId === UnitedStates && (
 					<div css={supportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
-							If you are interested in contributing through a donor-advised
-							fund, foundation or retirement account, or by mailing a check,
-							please visit our{' '}
+              To learn more about other ways to support the Guardian, including checks and tax-exempt options, <br />
+              please visit our {' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-							to learn how.
+              on this topic.
 						</p>
 					</div>
 				)}
