@@ -11,10 +11,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import type {
-	ContributionType,
-	RegularContributionType,
-} from 'helpers/contributions';
+import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -39,14 +36,6 @@ export type ThreeTierCardProps = {
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
-	linkCtaClickHandler: (
-		event: React.MouseEvent<HTMLAnchorElement>,
-		link: string,
-		price: number,
-		cardTier: 1 | 2 | 3,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
 	link: string;
 	productDescription: ProductDescription;
 	price: number;
@@ -203,7 +192,6 @@ export function ThreeTierCard({
 	currencyId,
 	countryGroupId,
 	paymentFrequency,
-	linkCtaClickHandler,
 	link,
 	productDescription,
 	price,
@@ -254,16 +242,6 @@ export function ThreeTierCard({
 				<LinkButton
 					href={link}
 					cssOverrides={btnStyleOverrides}
-					onClick={(event) => {
-						linkCtaClickHandler(
-							event,
-							link,
-							price,
-							cardTier,
-							paymentFrequency,
-							currencyId,
-						);
-					}}
 					data-qm-trackable={quantumMetricButtonRef}
 				>
 					{ctaCopy}

@@ -229,7 +229,10 @@ const ProductCatalogSchema = object({
  * `Type instantiation is excessively deep and possibly infinite.`
  */
 const ProductPricesSchema = object({
-	productPrices: looseObject({}),
+	allProductPrices: object({
+		SupporterPlus: looseObject({}),
+		TierThree: looseObject({}),
+	}),
 });
 const AppConfigSchema = intersect([
 	PaymentConfigSchema,
@@ -238,7 +241,10 @@ const AppConfigSchema = intersect([
 ]);
 
 export type AppConfig = InferOutput<typeof AppConfigSchema> & {
-	productPrices: ProductPrices;
+	allProductPrices: {
+		SupporterPlus: ProductPrices;
+		TierThree: ProductPrices;
+	};
 };
 
 export const parseAppConfig = (obj: unknown) => {

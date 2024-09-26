@@ -2,7 +2,7 @@
 
 import { viewId } from 'ophan';
 import type { $Keys } from 'utility-types';
-import type { Participations } from 'helpers/abTests/abtest';
+import { type Participations, testIsActive } from 'helpers/abTests/abtest';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -130,7 +130,10 @@ const toAcquisitionQueryParameters = (
 const participationsToAcquisitionABTest = (
 	participations: Participations,
 ): AcquisitionABTest[] => {
-	return Object.entries(participations).map(([name, variant]) => ({
+	const activeTests: Array<[string, string]> =
+		Object.entries(participations).filter(testIsActive);
+
+	return activeTests.map(([name, variant]) => ({
 		name,
 		variant,
 	}));

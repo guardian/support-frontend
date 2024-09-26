@@ -229,7 +229,7 @@ function OneTimeCheckoutComponent({
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
-		if (paymentMethod === 'Stripe' && stripe && cardElement) {
+		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
 			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const handle3DS = (clientSecret: string) => {
 				trackComponentLoad('stripe-3ds');
@@ -275,7 +275,7 @@ function OneTimeCheckoutComponent({
 						billingPostcode,
 					),
 					publicKey: stripePublicKey,
-					recaptchaToken: recaptchaToken ?? null,
+					recaptchaToken: recaptchaToken,
 					paymentMethodId: paymentMethodResult.paymentMethod.id,
 				};
 
@@ -481,8 +481,7 @@ function OneTimeCheckoutComponent({
 																	setRecaptchaToken(token);
 																}}
 																onRecaptchaExpired={() => {
-																	// no-op
-																	// ToDo - Should we not expire this?
+																	setRecaptchaToken(undefined);
 																}}
 															/>
 														}

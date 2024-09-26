@@ -71,7 +71,10 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 		}
 
 		/** Get any promotions */
-		const productPrices = appConfig.productPrices;
+		const productPrices =
+			productKey === 'SupporterPlus' || productKey === 'TierThree'
+				? appConfig.allProductPrices[productKey]
+				: undefined;
 
 		/**
 		 * This is some annoying transformation we need from
@@ -100,12 +103,9 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 		};
 		const fulfilmentOption = getFulfilmentOptions(productKey);
 
-		promotion = getPromotion(
-			productPrices,
-			countryId,
-			billingPeriod,
-			fulfilmentOption,
-		);
+		promotion = productPrices
+			? getPromotion(productPrices, countryId, billingPeriod, fulfilmentOption)
+			: undefined;
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
 			: undefined;

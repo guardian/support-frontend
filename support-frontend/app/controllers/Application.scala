@@ -5,19 +5,18 @@ import actions.CustomActionBuilders
 import admin.ServersideAbTest.{Participation, generateParticipations}
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath}
-import cats.data.EitherT
-import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{Product, SupporterPlus, TierThree}
+import com.gu.support.catalog.{SupporterPlus, TierThree}
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
+import io.circe.generic.semiauto.deriveEncoder
 import views.html.helper.CSRF
-import io.circe.JsonObject
+import io.circe.{Encoder, JsonObject}
 import io.circe.syntax.EncoderOps
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
@@ -29,7 +28,7 @@ import utils.FastlyGEOIP._
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
-import com.gu.support.catalog.Contribution
+import scala.util.Try
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -48,7 +47,7 @@ case class AppConfig private (
     v2recaptchaPublicKey: String,
     checkoutPostcodeLookup: Boolean,
     productCatalog: JsonObject,
-    productPrices: ProductPrices,
+    allProductPrices: AllProductPrices,
     serversideTests: Map[String, Participation],
     user: Option[AppConfig.User],
     settings: AllSettings,
@@ -76,7 +75,7 @@ object AppConfig extends InternationalisationCodecs {
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog: JsonObject,
       serversideTests: Map[String, Participation],
-      productPrices: ProductPrices,
+      allProductPrices: AllProductPrices,
       user: Option[IdUser],
       isTestUser: Boolean,
       settings: AllSettings,
@@ -152,7 +151,7 @@ object AppConfig extends InternationalisationCodecs {
       checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.contains(On),
       productCatalog = productCatalog,
       serversideTests = serversideTests,
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = user.map(user =>
         User(
           id = user.id,
@@ -182,9 +181,19 @@ case class PaymentMethodConfigs(
     testAmazonPayConfig: AmazonPayConfig,
 )
 
-// This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types of
-// product prices to the contributions template would exceed that limit.
-case class LandingPageProductPrices(supporterPlusProductPrices: ProductPrices, tierThreeProductPrices: ProductPrices)
+/** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
+  * of product prices to the contributions template would exceed that limit.
+  *
+  * We've also gone against the grain with Capitalising the prop names, but that's to match the ProductKeys in the
+  * Product API.
+  *
+  * @see
+  *   https://product-catalog.guardianapis.com/product-catalog.json
+  */
+case class AllProductPrices(SupporterPlus: ProductPrices, TierThree: ProductPrices)
+object AllProductPrices extends InternationalisationCodecs {
+  implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
+}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -201,7 +210,6 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    authAction: AuthAction[AnyContent],
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
@@ -283,18 +291,11 @@ class Application(
       countryCode: String,
       campaignCode: String,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    type Attempt[A] = EitherT[Future, String, A]
-
-    val geoData = request.geoData
-
     val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
-
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken),
+      contributionsHtml(countryCode, campaignCodeOption),
     ).withSettingsSurrogateKey
   }
 
@@ -316,11 +317,13 @@ class Application(
 
   private def contributionsHtml(
       countryCode: String,
-      geoData: GeoData,
-      idUser: Option[IdUser],
       campaignCode: Option[String],
-      guestAccountCreationToken: Option[String],
-  )(implicit request: RequestHeader, settings: AllSettings) = {
+  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
+    val geoData = request.geoData
+    val idUser = request.user
+
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -373,7 +376,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      landingPageProductPrices = LandingPageProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
     )
   }
@@ -422,56 +425,75 @@ class Application(
       case _ => s"/uk/$path"
     }
   }
+  def getProductParamsFromContributionParams(
+      countryGroupId: String,
+      productCatalog: JsonObject,
+      queryString: Map[String, Seq[String]],
+  ) = {
+    val maybeSelectedContributionType = queryString
+      .get("selected-contribution-type")
+      .flatMap(_.headOption)
+      .map(_.toLowerCase)
 
-  def oneTimeRouter(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val maybeSelectedAmount = queryString
+      .get("selected-amount")
+      .flatMap(_.headOption)
+      .map(s => Try(s.toDouble))
+      .flatMap(_.toOption)
+
+    val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
+    val isAnnual = maybeSelectedContributionType.contains("annual")
+    val ratePlan = if (isAnnual) "Annual" else "Monthly"
+    val maybeSupporterPlusAmount = productCatalog.asJson.hcursor
+      .downField("SupporterPlus")
+      .downField("ratePlans")
+      .downField(ratePlan)
+      .downField("pricing")
+      .downField(currency)
+      .as[Double]
+      .toOption
+
+    val isSupporterPlus: Boolean = (for {
+      supporterPlusAmount <- maybeSupporterPlusAmount
+      selectedAmount <- maybeSelectedAmount
+    } yield selectedAmount >= supporterPlusAmount).getOrElse(true)
+
+    val isOneOff = maybeSelectedContributionType.contains("one_off")
+    if (isOneOff) {
+      ("OneOff", "OneOff")
+    } else if (isSupporterPlus) {
+      ("SupporterPlus", ratePlan)
+    } else {
+      ("Contribution", ratePlan)
+    }
+  }
+
+  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-    val geoData = request.geoData
-    val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
-    // a required field for the router template, ProductType forced to Contribution
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Contribution, Nil)
+    val (product, ratePlan) =
+      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
-    Ok(
-      views.html.router(
-        geoData = geoData,
-        paymentMethodConfigs = PaymentMethodConfigs(
-          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
-          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-          regularTestStripeConfig = regularStripeConfigProvider.get(true),
-          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-          regularTestPayPalConfig = payPalConfigProvider.get(true),
-          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-          testAmazonPayConfig = amazonPayConfigProvider.get(true),
-        ),
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        serversideTests = serversideTests,
-        paymentApiUrl = paymentAPIService.paymentAPIUrl,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        membersDataApiUrl = membersDataApiUrl,
-        guestAccountCreationToken = guestAccountCreationToken,
-        productCatalog = productCatalog,
-        productPrices = productPrices,
-        user = request.user,
-      ),
-    ).withSettingsSurrogateKey
+    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
+      * should remove this.
+      */
+    if (product == "OneOff") {
+      Ok(
+        contributionsHtml(countryGroupId, None),
+      ).withSettingsSurrogateKey
+    } else {
+      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+        "product" -> Seq(product),
+        "ratePlan" -> Seq(ratePlan),
+      )
+      Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
+    }
   }
 
-  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
-    request.queryString
-      .getOrElse("product", Nil)
-      .headOption
-      .flatMap(productString => Product.fromString(productString))
-      .map(routeForProduct(_))
-      .getOrElse(BadRequest("No product name provided"))
-  }
-
-  def routeForProduct(product: Product)(implicit request: OptionalAuthRequest[AnyContent]) = {
+  def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
@@ -484,7 +506,11 @@ class Application(
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(product, queryPromos)
+
+    val allProductPrices = AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     Ok(
       views.html.router(
@@ -506,7 +532,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
-        productPrices = productPrices,
+        allProductPrices = allProductPrices,
         user = request.user,
       ),
     ).withSettingsSurrogateKey
@@ -526,7 +552,10 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val allProductPrices = AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+    )
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
@@ -548,7 +577,7 @@ class Application(
       recaptchaConfigProvider: RecaptchaConfigProvider,
       productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get(),
       serversideTests = generateParticipations(Nil),
-      productPrices = productPrices,
+      allProductPrices = allProductPrices,
       user = request.user,
       isTestUser = isTestUser,
       settings = settings,
