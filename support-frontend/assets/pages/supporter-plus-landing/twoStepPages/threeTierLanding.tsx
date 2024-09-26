@@ -77,7 +77,7 @@ const recurringContainer = css`
 	}
 	${from.desktop} {
 		> div {
-			padding: 40px 10px ${space[6]}px;
+			padding: 40px 10px 72px;
 		}
 	}
 `;
@@ -104,7 +104,6 @@ const innerContentContainer = css`
 const heading = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
-	margin-top: ${space[4]}px;
 	${headline.xsmall({
 		fontWeight: 'bold',
 	})}
@@ -131,14 +130,14 @@ const standFirst = css`
 		margin: 0 auto;
 	}
 	${from.desktop} {
-		margin: ${space[4]}px auto ${space[6]}px;
+		margin: ${space[4]}px auto ${space[10]}px;
 	}
 `;
 
 const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
-		margin: ${space[6]}px auto ${space[12]}px;
+		margin: 0 auto ${space[9]}px;
 	}
 `;
 
@@ -148,7 +147,7 @@ const tabletLineBreak = css`
 	}
 `;
 
-const suppportAnotherWayContainer = css`
+const supportAnotherWayContainer = css`
 	margin: ${space[9]}px auto 0;
 	border-top: 1px solid ${palette.neutral[86]};
 	padding-top: 32px;
@@ -348,7 +347,7 @@ export function ThreeTierLanding({
 
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
-		: ['MONTHLY', 'ANNUAL'];
+		: ['ONE_OFF','MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setContributionType(paymentFrequencies[buttonIndex]);
@@ -575,7 +574,7 @@ export function ThreeTierLanding({
 					/>
 				)}
 				{countryGroupId === UnitedStates && (
-					<div css={suppportAnotherWayContainer}>
+					<div css={supportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
 							If you are interested in contributing through a donor-advised
