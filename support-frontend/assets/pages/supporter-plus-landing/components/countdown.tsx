@@ -10,9 +10,7 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 // TODO: colours will change with sub-campaigns and design not yet confirmed...
 const outer = css`
 	width: 272px;
-	height: 71px;
 	margin: auto;
-	padding-top: 15px;
 `;
 
 const container = css`
@@ -25,7 +23,7 @@ const container = css`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    /* align-items: center; */
+	text-align: center;
     flex-wrap: nowrap;
 `;
 
@@ -40,10 +38,6 @@ const flexItem = css`
     flex-direction: column;
 	justify-content: center;
 	text-align: center;
-    /* debug start */
-	/* margin: 1px; 
-	border: 1px dashed red; */
-    /* debug end */
 `;
 
 const timePartStyle = css`
@@ -57,7 +51,7 @@ const colon = css`
 	font-weight: 400px;
 	line-height: 135%; /* 16.2px */
 	margin: 0 2px;
-    margin-bottom: 17px;
+    margin-bottom: 20px;
 `;
 
 const timeLabelStyle = css`
