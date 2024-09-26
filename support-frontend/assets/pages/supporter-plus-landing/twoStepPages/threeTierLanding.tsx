@@ -83,7 +83,7 @@ const recurringContainer = css`
 
 const oneTimeContainer = css`
 	display: flex;
-	background-color: #1E3E72;
+	background-color: #1e3e72;
 `;
 
 const innerContentContainer = css`
@@ -142,7 +142,7 @@ const supportAnotherWayContainer = css`
 	max-width: 940px;
 	text-align: left;
 	color: ${palette.neutral[100]};
-  background-color: #1E3E72;
+	background-color: #1e3e72;
 	h4 {
 		${textSans.medium({ fontWeight: 'bold' })};
 	}
@@ -154,9 +154,8 @@ const supportAnotherWayContainer = css`
 	}
 	${from.desktop} {
 		padding-top: ${space[5]}px;
-    padding-bottom: ${space[5]}px;
-
-  }
+		padding-bottom: ${space[5]}px;
+	}
 `;
 
 const disclaimerContainer = css`
@@ -561,12 +560,13 @@ export function ThreeTierLanding({
 					<div css={supportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
-              To learn more about other ways to support the Guardian, including checks and tax-exempt options, <br />
-              please visit our {' '}
+							To learn more about other ways to support the Guardian, including
+							checks and tax-exempt options, <br />
+							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-              on this topic.
+							on this topic.
 						</p>
 					</div>
 				)}
