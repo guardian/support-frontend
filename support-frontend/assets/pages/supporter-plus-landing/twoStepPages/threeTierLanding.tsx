@@ -277,6 +277,12 @@ export function ThreeTierLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const urlSearchParamsOneTime = urlSearchParams.get('oneTime');
+	const urlSearchParamsOneTimeContribution =
+		urlSearchParams.get('oneTimeContribution') ?? undefined;
+	const oneTimeContributionAmount = urlSearchParamsOneTimeContribution
+		? parseInt(urlSearchParamsOneTimeContribution, 10)
+		: undefined;
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
@@ -297,8 +303,11 @@ export function ThreeTierLanding({
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 
-	const initialContributionType =
-		urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+	const initialContributionType = urlSearchParamsOneTime
+		? 'ONE_OFF'
+		: urlSearchParamsRatePlan === 'Annual'
+		? 'ANNUAL'
+		: 'MONTHLY';
 
 	const [contributionType, setContributionType] = useState<ContributionType>(
 		initialContributionType,
@@ -550,6 +559,7 @@ export function ThreeTierLanding({
 							currencyGlyph={currencies[currencyId].glyph}
 							countryGroupId={countryGroupId}
 							currencyId={currencyId}
+							defaultAmount={oneTimeContributionAmount}
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (

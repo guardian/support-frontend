@@ -66,6 +66,7 @@ interface Props {
 	currencyGlyph: string;
 	countryGroupId: CountryGroupId;
 	currencyId: IsoCurrency;
+	defaultAmount?: number;
 }
 
 export function OneOffCard({
@@ -73,10 +74,11 @@ export function OneOffCard({
 	countryGroupId,
 	amounts,
 	currencyId,
+	defaultAmount,
 }: Props) {
 	const oneOffAmounts = amounts.amountsCardData.ONE_OFF;
 	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
-		oneOffAmounts.defaultAmount,
+		defaultAmount ?? oneOffAmounts.defaultAmount,
 	);
 	const [otherAmount, setOtherAmount] = useState('');
 	const { min: minAmount } = config[countryGroupId].ONE_OFF;
