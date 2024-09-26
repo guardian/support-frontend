@@ -14,17 +14,17 @@ const outer = css`
 `;
 
 const container = css`
-    width: 100%;
-    background-color: #1E3E72;
+	width: 100%;
+	background-color: #1e3e72;
 	color: ${palette.neutral[100]};
 	padding: 12px 40px;
-    border-radius: 8px;
+	border-radius: 8px;
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	text-align: center;
-    flex-wrap: nowrap;
+	flex-wrap: nowrap;
 `;
 
 const flexItem = css`
@@ -34,8 +34,8 @@ const flexItem = css`
 	font-style: normal;
 	line-height: 130%; /* 31.2px */
 
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	text-align: center;
 `;
@@ -47,11 +47,11 @@ const timePartStyle = css`
 `;
 
 const colon = css`
-    font-size: 12px;
+	font-size: 12px;
 	font-weight: 400px;
 	line-height: 135%; /* 16.2px */
 	margin: 0 2px;
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 `;
 
 const timeLabelStyle = css`
