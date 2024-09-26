@@ -8,7 +8,7 @@ const server = fastify();
 server.register(replyFrom, { base: 'http://localhost:9211/' });
 
 server.get('/uk', async (request, reply) => {
-	const config = await fetch('http://localhost:9210/api/config').then(
+	const config = await fetch('http://localhost:9210/api/app-config').then(
 		(response) => response.json(),
 	);
 	reply.type('text/html');
