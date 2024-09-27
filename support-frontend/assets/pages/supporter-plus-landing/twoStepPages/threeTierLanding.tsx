@@ -82,9 +82,17 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = css`
+const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	display: flex;
-	background-color: #1e3e72;
+	background-color:  ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
+	> div {
+		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
+	}
+	${from.desktop} {
+		> div {
+			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
+    }
+	}
 `;
 
 const innerContentContainer = css`
@@ -555,9 +563,9 @@ export function ThreeTierLanding({
 			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={oneTimeContainer}
+				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				{!enableSingleContributionsTab && (
+				{!enableSingleContributionsTab && countryGroupId !== UnitedStates &&  (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
@@ -580,7 +588,6 @@ export function ThreeTierLanding({
 			</Container>
 			<Container
 				sideBorders
-				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={disclaimerContainer}
 			>
