@@ -268,6 +268,67 @@ function OneTimeCheckoutComponent({
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
+		if (
+			paymentMethod === 'StripeExpressCheckoutElement' &&
+			stripe &&
+			elements
+		) {
+			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+			const handle3DS = (clientSecret: string) => {
+				trackComponentLoad('stripe-3ds');
+				return stripe.handleCardAction(clientSecret);
+			};
+
+			/** 2. Get the Stripe paymentMethod from the Stripe elements */
+			const paymentMethodResult = await stripe.createPaymentMethod({
+				elements,
+			});
+
+			if (paymentMethodResult.error) {
+				logException(
+					`Error creating Payment Method: ${JSON.stringify(
+						paymentMethodResult.error,
+					)}`,
+				);
+
+				if (paymentMethodResult.error.type === 'validation_error') {
+					setErrorMessage('There was an issue with your card details.');
+					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
+				} else {
+					setErrorMessage('Sorry, something went wrong.');
+					setErrorContext(
+						appropriateErrorMessage('payment_provider_unavailable'),
+					);
+				}
+			} else {
+				const stripeData: CreateStripePaymentIntentRequest = {
+					paymentData: {
+						currency: currencyKey,
+						amount: finalAmount,
+						email,
+						stripePaymentMethod: 'StripeCheckout',
+					},
+					acquisitionData: derivePaymentApiAcquisitionData(
+						{ ...getReferrerAcquisitionData(), labels: ['one-time-checkout'] },
+						abParticipations,
+						billingPostcode,
+					),
+					publicKey: stripePublicKey,
+					recaptchaToken: null,
+					paymentMethodId: paymentMethodResult.paymentMethod.id,
+				};
+
+				const paymentResult = await processStripePaymentIntentRequest(
+					stripeData,
+					handle3DS,
+				);
+				if (paymentResult.paymentStatus === 'failure') {
+					setErrorMessage('Sorry, something went wrong.');
+					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+				}
+			}
+		}
+
 		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
 			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const handle3DS = (clientSecret: string) => {
@@ -430,6 +491,8 @@ function OneTimeCheckoutComponent({
 										return;
 									}
 
+									// ->
+
 									setPaymentMethod('StripeExpressCheckoutElement');
 									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
 
@@ -445,8 +508,8 @@ function OneTimeCheckoutComponent({
 								options={{
 									paymentMethods: {
 										applePay: 'auto',
-										googlePay: 'always',
-										link: 'never',
+										googlePay: 'auto',
+										link: 'auto',
 									},
 								}}
 							/>
