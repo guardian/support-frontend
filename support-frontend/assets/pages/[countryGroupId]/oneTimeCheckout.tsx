@@ -279,78 +279,19 @@ function OneTimeCheckoutComponent({
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
+		let paymentMethodResult;
 		if (
 			paymentMethod === 'StripeExpressCheckoutElement' &&
 			stripe &&
 			elements
 		) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
-
-			/** 2. Get the Stripe paymentMethod from the Stripe elements */
-			const paymentMethodResult = await stripe.createPaymentMethod({
+			paymentMethodResult = await stripe.createPaymentMethod({
 				elements,
 			});
-
-			if (paymentMethodResult.error) {
-				logException(
-					`Error creating Payment Method: ${JSON.stringify(
-						paymentMethodResult.error,
-					)}`,
-				);
-
-				if (paymentMethodResult.error.type === 'validation_error') {
-					setErrorMessage('There was an issue with your card details.');
-					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
-				} else {
-					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(
-						appropriateErrorMessage('payment_provider_unavailable'),
-					);
-				}
-			} else {
-				const stripeData: CreateStripePaymentIntentRequest = {
-					paymentData: {
-						currency: currencyKey,
-						amount: finalAmount,
-						email,
-						stripePaymentMethod: 'StripeCheckout',
-					},
-					acquisitionData: derivePaymentApiAcquisitionData(
-						{ ...getReferrerAcquisitionData(), labels: ['one-time-checkout'] },
-						abParticipations,
-						billingPostcode,
-					),
-					publicKey: stripePublicKey,
-					recaptchaToken: '',
-					paymentMethodId: paymentMethodResult.paymentMethod.id,
-				};
-				console.log('stripeData->', stripeData);
-				console.log('handle3DS->', handle3DS);
-				const paymentResult = await processStripePaymentIntentRequest(
-					stripeData,
-					handle3DS,
-				);
-				console.log('paymentResult->', paymentResult);
-
-				if (paymentResult.paymentStatus === 'failure') {
-					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
-				}
-			}
 		}
 
-		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
-
-			const paymentMethodResult = await stripe.createPaymentMethod({
+		if (paymentMethod === 'Stripe' && stripe && cardElement) {
+			paymentMethodResult = await stripe.createPaymentMethod({
 				type: 'card',
 				card: cardElement,
 				billing_details: {
@@ -359,6 +300,14 @@ function OneTimeCheckoutComponent({
 					},
 				},
 			});
+		}
+
+		if (paymentMethodResult && stripe) {
+			const handle3DS = (clientSecret: string) => {
+				trackComponentLoad('stripe-3ds');
+				return stripe.handleCardAction(clientSecret);
+			};
+
 			if (paymentMethodResult.error) {
 				logException(
 					`Error creating Payment Method: ${JSON.stringify(
@@ -389,10 +338,9 @@ function OneTimeCheckoutComponent({
 						billingPostcode,
 					),
 					publicKey: stripePublicKey,
-					recaptchaToken: recaptchaToken,
+					recaptchaToken: recaptchaToken ?? '',
 					paymentMethodId: paymentMethodResult.paymentMethod.id,
 				};
-
 				const paymentResult = await processStripePaymentIntentRequest(
 					stripeData,
 					handle3DS,
