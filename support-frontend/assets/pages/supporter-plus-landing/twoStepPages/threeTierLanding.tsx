@@ -54,6 +54,7 @@ import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
 import { OneOffCard } from '../components/oneOffCard';
+import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 
@@ -556,6 +557,12 @@ export function ThreeTierLanding({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer}
 			>
+				{!enableSingleContributionsTab && (
+					<SupportOnce
+						currency={currencies[currencyId].glyph}
+						countryGroupId={countryGroupId}
+					/>
+				)}
 				{countryGroupId === UnitedStates && (
 					<div css={supportAnotherWayContainer}>
 						<h4>Support another way</h4>
