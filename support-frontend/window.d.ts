@@ -40,7 +40,11 @@ declare global {
 			email?: string;
 			gitCommitId?: string;
 			orderIsAGift: boolean;
-			productPrices: ProductPrices;
+			productPrices?: ProductPrices;
+			allProductPrices?: {
+				SupporterPlus: ProductPrices;
+				TierThree: ProductPrices;
+			};
 			serversideTests?: Participations | null;
 			settings: Settings;
 			testMode?: boolean;

@@ -112,7 +112,7 @@ object UpdateSupporterProductData {
 
       case SendThankYouEmailTierThreeState(user, product, _, _, _, _, subscriptionNumber, _) =>
         catalogService
-          .getProductRatePlan(TierThree, product.billingPeriod, product.fulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(TierThree, product.billingPeriod, product.fulfilmentOptions, product.productOptions)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(
