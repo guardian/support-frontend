@@ -303,6 +303,7 @@ function OneTimeCheckoutComponent({
 		}
 
 		if (paymentMethodResult && stripe) {
+			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const handle3DS = (clientSecret: string) => {
 				trackComponentLoad('stripe-3ds');
 				return stripe.handleCardAction(clientSecret);
@@ -338,6 +339,7 @@ function OneTimeCheckoutComponent({
 						billingPostcode,
 					),
 					publicKey: stripePublicKey,
+					// ToDo: validate recaptchaToken for card payments
 					recaptchaToken: recaptchaToken ?? '',
 					paymentMethodId: paymentMethodResult.paymentMethod.id,
 				};
