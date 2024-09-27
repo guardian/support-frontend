@@ -158,7 +158,7 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 		 * @see https://docs.stripe.com/api/charges/object
 		 * @see https://docs.stripe.com/currencies#zero-decimal
 		 */
-		amount: 10000,
+		amount: 100,
 		currency: 'gbp',
 		paymentMethodCreation: 'manual',
 	} as const;
@@ -507,8 +507,8 @@ function OneTimeCheckoutComponent({
 								}}
 								options={{
 									paymentMethods: {
-										applePay: 'auto',
-										googlePay: 'auto',
+										applePay: 'always',
+										googlePay: 'always',
 										link: 'auto',
 									},
 								}}
