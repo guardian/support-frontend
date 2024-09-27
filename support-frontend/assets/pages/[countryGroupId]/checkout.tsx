@@ -10,6 +10,7 @@ import {
 import {
 	Divider,
 	ErrorSummary,
+	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
@@ -179,11 +180,11 @@ type Props = {
 
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const searchParams = new URLSearchParams(window.location.search);
+	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	/** 👇 a lot of this is copy/pasted into the thank you page */
 	/** Get and validate product */
-	const productParam = searchParams.get('product');
+	const productParam = urlSearchParams.get('product');
 	const productKey =
 		productParam && isProductKey(productParam) ? productParam : undefined;
 	const product = productKey && productCatalog[productKey];
@@ -198,7 +199,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * API being completely based on literals, so we've left it as `string`
 	 * although we do validate it is a valid ratePlan for this product
 	 */
-	const ratePlanParam = searchParams.get('ratePlan');
+	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
 			? ratePlanParam
@@ -229,7 +230,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		finalAmount: number;
 	};
 
-	const contributionParam = searchParams.get('contribution');
+	const contributionParam = urlSearchParams.get('contribution');
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
@@ -259,8 +260,14 @@ export function Checkout({ geoId, appConfig }: Props) {
 			return <div>Price not found in product catalog</div>;
 		}
 
-		/** Get any promotions */
-		const productPrices = appConfig.productPrices;
+		/**
+		 * Get any promotions.
+		 * Promos are only available on SupporterPlus and TierThree and we only use this value to determine promotion values
+		 */
+		const productPrices =
+			productKey === 'SupporterPlus' || productKey === 'TierThree'
+				? appConfig.allProductPrices[productKey]
+				: undefined;
 
 		/**
 		 * This is some annoying transformation we need from
@@ -301,13 +308,15 @@ export function Checkout({ geoId, appConfig }: Props) {
 		};
 		const productOptions: ProductOptions = getProductOptions(productKey);
 
-		promotion = getPromotion(
-			productPrices,
-			countryId,
-			billingPeriod,
-			fulfilmentOption,
-			productOptions,
-		);
+		promotion = productPrices
+			? getPromotion(
+					productPrices,
+					countryId,
+					billingPeriod,
+					fulfilmentOption,
+					productOptions,
+			  )
+			: undefined;
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
 			: undefined;
@@ -373,6 +382,12 @@ export function Checkout({ geoId, appConfig }: Props) {
 		}
 	}
 
+	/**
+	 * We use the country ULRSearchParam to force a person into a country.
+	 * Where this is currently used is in the addressFields when someone selects
+	 * a country that doesn't correspond to the countryGroup a product is in.
+	 */
+	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -388,6 +403,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				contributionAmount={payment.contributionAmount}
 				finalAmount={payment.finalAmount}
 				useStripeExpressCheckout={useStripeExpressCheckout}
+				forcedCountry={forcedCountry}
 			/>
 		</Elements>
 	);
@@ -406,6 +422,7 @@ type CheckoutComponentProps = {
 	finalAmount: number;
 	promotion?: Promotion;
 	useStripeExpressCheckout: boolean;
+	forcedCountry?: string;
 };
 
 function CheckoutComponent({
@@ -420,6 +437,7 @@ function CheckoutComponent({
 	finalAmount,
 	promotion,
 	useStripeExpressCheckout,
+	forcedCountry,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
@@ -952,13 +970,22 @@ function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const redirectCountryToCountryGroup =
-		abParticipations.redirectCountryToCountryGroup === 'variant';
-
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
+					{forcedCountry &&
+						productDescription.deliverableTo?.[forcedCountry] && (
+							<div role="alert">
+								<InfoSummary
+									cssOverrides={css`
+										margin-bottom: ${space[6]}px;
+									`}
+									message={`You've changed your delivery country to ${productDescription.deliverableTo[forcedCountry]}.`}
+									context={`Your subscription price has been updated to reflect the rates in your new location.`}
+								/>
+							</div>
+						)}
 					<ContributionsOrderSummary
 						description={productDescription.label}
 						paymentFrequency={
@@ -1358,9 +1385,7 @@ function CheckoutComponent({
 										country={deliveryCountry}
 										state={deliveryState}
 										postCode={deliveryPostcode}
-										countryGroupId={
-											redirectCountryToCountryGroup ? countryGroupId : undefined
-										}
+										countryGroupId={countryGroupId}
 										countries={productDescription.deliverableTo}
 										errors={deliveryAddressErrors}
 										postcodeState={{
@@ -1441,11 +1466,7 @@ function CheckoutComponent({
 											country={billingCountry}
 											state={billingState}
 											postCode={billingPostcode}
-											countryGroupId={
-												redirectCountryToCountryGroup
-													? countryGroupId
-													: undefined
-											}
+											countryGroupId={countryGroupId}
 											countries={productDescription.deliverableTo}
 											errors={billingAddressErrors}
 											postcodeState={{
@@ -1578,7 +1599,7 @@ function CheckoutComponent({
 																		});
 																}}
 																onRecaptchaExpired={() => {
-																	// no-op
+																	setRecaptchaToken(undefined);
 																}}
 															/>
 														}
@@ -1623,7 +1644,7 @@ function CheckoutComponent({
 																	setRecaptchaToken(token);
 																}}
 																onRecaptchaExpired={() => {
-																	// no-op
+																	setRecaptchaToken(undefined);
 																}}
 															/>
 														}
