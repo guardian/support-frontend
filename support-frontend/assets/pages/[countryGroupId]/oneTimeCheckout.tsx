@@ -124,7 +124,6 @@ type OneTimeCheckoutProps = {
 type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 	stripePublicKey: string;
 	isTestUser: boolean;
-	onFinalAmountChange: (amount: number) => void;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -136,7 +135,6 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
-	const [finalAmount, SetFinalAmount] = useState(1);
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
 
@@ -160,7 +158,7 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 		 * @see https://docs.stripe.com/api/charges/object
 		 * @see https://docs.stripe.com/currencies#zero-decimal
 		 */
-		amount: finalAmount * 100,
+		amount: 100,
 		currency: currencyKey.toLowerCase(),
 		paymentMethodCreation: 'manual',
 	} as const;
@@ -172,7 +170,6 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 				appConfig={appConfig}
 				stripePublicKey={stripePublicKey}
 				isTestUser={isTestUser}
-				onFinalAmountChange={SetFinalAmount}
 			/>
 		</Elements>
 	);
@@ -182,7 +179,6 @@ function OneTimeCheckoutComponent({
 	geoId,
 	appConfig,
 	stripePublicKey,
-	onFinalAmountChange,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -210,7 +206,6 @@ function OneTimeCheckoutComponent({
 	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
 	useEffect(() => {
-		//onFinalAmountChange(finalAmount);
 		if (!Number.isNaN(finalAmount)) {
 			setStripeExpressCheckoutEnable(true);
 			elements?.update({ amount: finalAmount * 100 });
