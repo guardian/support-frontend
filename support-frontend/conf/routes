@@ -1,3 +1,4 @@
+
 # ----- System ----- #
 
 GET /healthcheck                                                   controllers.Application.healthcheck()
@@ -95,12 +96,6 @@ POST /identity/signin-url                                          controllers.I
 
 GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
-
-# Checkout
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-thank-you  controllers.Application.productCheckoutRouter(countryGroupId: String)
 
 # Events
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.Application.eventsRouter(countryGroupId: String, eventId: String)
