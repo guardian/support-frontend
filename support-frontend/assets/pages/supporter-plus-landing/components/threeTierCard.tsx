@@ -9,8 +9,8 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
+	buttonThemeReaderRevenueBrand,
 	LinkButton,
-	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { RegularContributionType } from 'helpers/contributions';
@@ -240,7 +240,7 @@ export function ThreeTierCard({
 				)}
 				{!promotion && `${formattedPrice}/${period}`}
 			</p>
-			<ThemeProvider theme={themeButtonReaderRevenueBrand}>
+			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
 					href={link}
 					cssOverrides={btnStyleOverrides}

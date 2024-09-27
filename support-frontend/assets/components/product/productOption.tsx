@@ -2,8 +2,8 @@ import type { SerializedStyles } from '@emotion/react';
 import { css, ThemeProvider } from '@emotion/react';
 import { until } from '@guardian/source/foundations';
 import {
+	buttonThemeReaderRevenueBrand,
 	LinkButton,
-	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { ReactNode } from 'react';
@@ -126,7 +126,7 @@ function ProductOption(props: Product): JSX.Element {
 				</p>
 			</div>
 			<div css={buttonDiv}>
-				<ThemeProvider theme={themeButtonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<LinkButton
 						cssOverrides={button}
 						href={props.href}

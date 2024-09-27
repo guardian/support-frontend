@@ -3,7 +3,7 @@ import { neutral } from '@guardian/source/foundations';
 import type { ButtonProps } from '@guardian/source/react-components';
 import {
 	Button,
-	themeButtonReaderRevenueBrand,
+	buttonThemeReaderRevenueBrand,
 } from '@guardian/source/react-components';
 
 const buttonOverrides = css`
@@ -26,7 +26,7 @@ export function DefaultPaymentButton({
 	...buttonProps
 }: DefaultPaymentButtonProps): JSX.Element {
 	return (
-		<ThemeProvider theme={themeButtonReaderRevenueBrand}>
+		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 			<Button
 				id={id}
 				cssOverrides={buttonOverrides}
