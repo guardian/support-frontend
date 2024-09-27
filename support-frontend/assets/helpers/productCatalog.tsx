@@ -84,6 +84,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 				},
 			],
+			/** These are just the SupporterPlus benefits */
 			benefitsAdditional: [
 				{
 					copy: 'Unlimited access to the Guardian app',
@@ -102,6 +103,9 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					tooltip:
 						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 					specificToRegions: ['AUDCountries'],
+					specificToAbTest: [
+						{ name: 'auPartnerBenefit', variants: ['control'] },
+					],
 				},
 			],
 			deliverableTo: gwDeliverableCountries,

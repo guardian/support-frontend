@@ -71,12 +71,13 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { ProductKey } from 'helpers/productCatalog';
 import {
+	filterBenefitByABTest,
 	filterBenefitByRegion,
 	isProductKey,
 	productCatalog,
 	productCatalogDescription,
+	type ProductKey,
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -1003,6 +1004,9 @@ function CheckoutComponent({
 								.filter((benefit) =>
 									filterBenefitByRegion(benefit, countryGroupId),
 								)
+								.filter((benefit) =>
+									filterBenefitByABTest(benefit, abParticipations),
+								)
 								.map((benefit) => ({
 									isChecked: true,
 									text: benefit.copy,
@@ -1010,6 +1014,9 @@ function CheckoutComponent({
 							...(productDescription.benefitsAdditional ?? [])
 								.filter((benefit) =>
 									filterBenefitByRegion(benefit, countryGroupId),
+								)
+								.filter((benefit) =>
+									filterBenefitByABTest(benefit, abParticipations),
 								)
 								.map((benefit) => ({
 									isChecked: true,

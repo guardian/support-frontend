@@ -122,8 +122,8 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
-		targetPage: pageUrlRegexes.contributions.auLandingPage,
+		seed: 8,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	coverTransactionCost: {
