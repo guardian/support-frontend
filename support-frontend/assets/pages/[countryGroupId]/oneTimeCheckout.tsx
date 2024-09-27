@@ -10,15 +10,20 @@ import {
 	RadioGroup,
 	TextInput,
 } from '@guardian/source/react-components';
-import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
+import {
+	Divider,
+	ErrorSummary,
+} from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
 	Elements,
+	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
@@ -40,7 +45,7 @@ import {
 	type CreateStripePaymentIntentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	isPaymentMethod,
@@ -78,6 +83,12 @@ import {
 	preventDefaultValidityMessage,
 } from './validation';
 
+/**
+ * We have not added StripeExpressCheckoutElement to the old PaymentMethod
+ * as it is heavily coupled through the code base and would require adding
+ * a lot of extra unused code to those coupled areas.
+ */
+type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId = Country.detect();
 
 const titleAndButtonContainer = css`
@@ -117,7 +128,9 @@ type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 	return isSwitchOn(
-		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
+		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(
+			paymentMethod as LegacyPaymentMethod,
+		)}`,
 	);
 }
 
@@ -134,8 +147,24 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 
 	const stripePromise = loadStripe(stripePublicKey);
 
+	// const stripeExpressCheckoutSwitch =
+	// 	window.guardian.settings.switches.oneOffPaymentMethods
+	// 		.stripeExpressCheckout === 'On';
+
+	const elementsOptions = {
+		mode: 'payment',
+		/**
+		 * Stripe amounts are in the "smallest currency unit"
+		 * @see https://docs.stripe.com/api/charges/object
+		 * @see https://docs.stripe.com/currencies#zero-decimal
+		 */
+		amount: 10000,
+		currency: 'gbp',
+		paymentMethodCreation: 'manual',
+	} as const;
+
 	return (
-		<Elements stripe={stripePromise}>
+		<Elements stripe={stripePromise} options={elementsOptions}>
 			<OneTimeCheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
@@ -181,6 +210,17 @@ function OneTimeCheckoutComponent({
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
+	const [, setStripeExpressCheckoutPaymentType] =
+		useState<ExpressPaymentType>();
+	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
+		useState(false);
+	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
+		useState(false);
+	useEffect(() => {
+		if (stripeExpressCheckoutSuccessful) {
+			formRef.current?.requestSubmit();
+		}
+	}, [stripeExpressCheckoutSuccessful]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -356,6 +396,90 @@ function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
+						<>
+							<ExpressCheckoutElement
+								onReady={({ availablePaymentMethods }) => {
+									/**
+									 * This is use to show UI needed besides this Element
+									 * i.e. The "or" divider
+									 */
+									if (
+										!!availablePaymentMethods?.applePay ||
+										!!availablePaymentMethods?.googlePay
+									) {
+										setStripeExpressCheckoutReady(true);
+									}
+								}}
+								onClick={({ resolve }) => {
+									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+									const options = {
+										emailRequired: true,
+									};
+									resolve(options);
+								}}
+								onConfirm={async (event) => {
+									if (!(stripe && elements)) {
+										console.error('Stripe not loaded');
+										return;
+									}
+
+									const { error: submitError } = await elements.submit();
+
+									if (submitError) {
+										setErrorMessage(submitError.message);
+										return;
+									}
+
+									setPaymentMethod('StripeExpressCheckoutElement');
+									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
+
+									event.billingDetails?.email &&
+										setEmail(event.billingDetails.email);
+
+									/**
+									 * There is a useEffect that listens to this and submits the form
+									 * when true
+									 */
+									setStripeExpressCheckoutSuccessful(true);
+								}}
+								options={{
+									paymentMethods: {
+										applePay: 'auto',
+										googlePay: 'always',
+										link: 'never',
+									},
+								}}
+							/>
+
+							{stripeExpressCheckoutReady && (
+								<Divider
+									displayText="or"
+									size="full"
+									cssOverrides={css`
+										::before {
+											margin-left: 0;
+										}
+										::after {
+											margin-right: 0;
+										}
+										margin: 0;
+										margin-top: 14px;
+										margin-bottom: 14px;
+										width: 100%;
+										@keyframes fadeIn {
+											0% {
+												opacity: 0;
+											}
+											100% {
+												opacity: 1;
+											}
+										}
+										animation: fadeIn 1s;
+									`}
+								/>
+							)}
+						</>
+
 						<FormSection>
 							<Legend>1. Your details</Legend>
 							<div>
