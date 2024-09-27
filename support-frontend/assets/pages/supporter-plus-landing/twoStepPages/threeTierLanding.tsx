@@ -84,14 +84,14 @@ const recurringContainer = css`
 
 const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	display: flex;
-	background-color:  ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
+	background-color: ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
 	> div {
 		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
 	}
 	${from.desktop} {
 		> div {
 			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
-    }
+		}
 	}
 `;
 
@@ -565,7 +565,7 @@ export function ThreeTierLanding({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				{!enableSingleContributionsTab && countryGroupId !== UnitedStates &&  (
+				{!enableSingleContributionsTab && countryGroupId !== UnitedStates && (
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
