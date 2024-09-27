@@ -210,7 +210,14 @@ function OneTimeCheckoutComponent({
 	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
 	useEffect(() => {
-		onFinalAmountChange(finalAmount);
+		//onFinalAmountChange(finalAmount);
+		if (!Number.isNaN(finalAmount)) {
+			setStripeExpressCheckoutEnable(true);
+			elements?.update({ amount: finalAmount * 100 });
+		} else {
+			// no onclick?
+			setStripeExpressCheckoutEnable(false);
+		}
 	}, [finalAmount]);
 
 	/** Payment methods: Stripe */
@@ -222,6 +229,8 @@ function OneTimeCheckoutComponent({
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
 	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
+		useState(false);
+	const [stripeExpressCheckoutEnable, setStripeExpressCheckoutEnable] =
 		useState(false);
 	useEffect(() => {
 		if (stripeExpressCheckoutSuccessful) {
@@ -483,10 +492,12 @@ function OneTimeCheckoutComponent({
 								}}
 								onClick={({ resolve }) => {
 									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-									const options = {
-										emailRequired: true,
-									};
-									resolve(options);
+									if (stripeExpressCheckoutEnable) {
+										const options = {
+											emailRequired: true,
+										};
+										resolve(options);
+									}
 									console.log('onClick->');
 								}}
 								onConfirm={async (event) => {
