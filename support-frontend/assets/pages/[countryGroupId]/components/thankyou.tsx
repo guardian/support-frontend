@@ -145,6 +145,7 @@ export function ThankYouComponent({
 			break;
 		default:
 			if (!productKey && !ratePlanKey) {
+				// A one-off contribution indicated by the absence of product and ratePlan
 				contributionType = 'ONE_OFF';
 			}
 			break;

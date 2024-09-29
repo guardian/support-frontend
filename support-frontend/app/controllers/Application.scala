@@ -425,6 +425,7 @@ class Application(
       case _ => s"/uk/$path"
     }
   }
+
   def getProductParamsFromContributionParams(
       countryGroupId: String,
       productCatalog: JsonObject,
