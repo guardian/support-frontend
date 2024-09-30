@@ -942,7 +942,7 @@ function CheckoutComponent({
 						contributionAmount.toString(),
 					);
 
-				//window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
 					'processPaymentResponse error:',
@@ -1161,7 +1161,7 @@ function CheckoutComponent({
 									options={{
 										paymentMethods: {
 											applePay: 'auto',
-											googlePay: 'always',
+											googlePay: 'auto',
 											link: 'never',
 										},
 									}}
