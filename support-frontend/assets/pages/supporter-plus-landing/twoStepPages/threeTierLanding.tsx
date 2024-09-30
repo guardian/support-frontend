@@ -564,6 +564,7 @@ export function ThreeTierLanding({
 							currencyId={currencyId}
 							countryGroupId={countryGroupId}
 							paymentFrequency={contributionType}
+							abParticipations={abParticipations}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
