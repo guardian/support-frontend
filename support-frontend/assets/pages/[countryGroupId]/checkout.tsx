@@ -121,7 +121,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './components/paymentMethod';
-import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
+import { setThankYouOrder, unsetThankYouOrder } from './components/thankyou';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
