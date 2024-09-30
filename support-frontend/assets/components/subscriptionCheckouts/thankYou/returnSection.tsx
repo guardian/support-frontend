@@ -2,9 +2,9 @@
 import { css, ThemeProvider } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
 import {
+	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
-	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -26,7 +26,7 @@ function ReturnSection(props: PropTypes) {
 			<Divider />
 			<NarrowContent>
 				<div className="thank-you-stage__ctas">
-					<ThemeProvider theme={themeButtonReaderRevenue}>
+					<ThemeProvider theme={buttonThemeReaderRevenue}>
 						<LinkButton
 							cssOverrides={buttonStyles}
 							priority="tertiary"

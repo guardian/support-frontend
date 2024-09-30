@@ -8,9 +8,9 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
+	buttonThemeReaderRevenueBrand,
+	buttonThemeReaderRevenueBrandAlt,
 	SvgArrowRightStraight,
-	themeButtonReaderRevenueBrand,
-	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
@@ -116,10 +116,10 @@ function Playback(props: {
 			</div>
 
 			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>
-				<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 					<Button onClick={props.editDirectDebitClicked}>Edit</Button>
 				</ThemeProvider>
-				<ThemeProvider theme={themeButtonReaderRevenueBrand}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<Button
 						id="qa-submit-button-2"
 						onClick={props.onSubmit}

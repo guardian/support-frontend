@@ -2,8 +2,8 @@ import { css, ThemeProvider } from '@emotion/react';
 import { space, textSans17 } from '@guardian/source/foundations';
 import {
 	Button,
+	buttonThemeReaderRevenueBrandAlt,
 	TextInput,
-	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
@@ -55,7 +55,7 @@ function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
 			</CheckoutExpander>
 			<CheckoutExpander copy="Not you?">
 				<p css={paragraphWithButton}>
-					<ThemeProvider theme={themeButtonReaderRevenueBrandAlt}>
+					<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
 						<Button
 							type="button"
 							data-testid="sign-out"

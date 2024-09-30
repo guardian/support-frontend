@@ -11,9 +11,9 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
+	buttonThemeDefault,
 	LinkButton,
 	SvgArrowDownStraight,
-	themeButton,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -183,7 +183,7 @@ export function WeeklyHero({
 					<section css={styles.weeklyHeroCopy}>
 						<h2 css={styles.weeklyHeroTitle}>{title}</h2>
 						<p css={styles.weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={themeButton}>
+						<ThemeProvider theme={buttonThemeDefault}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',

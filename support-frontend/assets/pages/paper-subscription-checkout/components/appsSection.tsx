@@ -9,9 +9,9 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import {
+	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
-	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import type { MouseEventHandler, ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
@@ -208,7 +208,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					Never be interrupted or distracted by ads again by signing in. Just
 					use your subscriber email and password when you next visit.
 				</p>
-				<ThemeProvider theme={themeButtonReaderRevenue}>
+				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
 						cssOverrides={marginForButton}
 						priority="tertiary"

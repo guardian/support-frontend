@@ -10,9 +10,9 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
+	buttonThemeBrand,
 	LinkButton,
 	SvgArrowDownStraight,
-	themeButtonBrand,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -137,7 +137,7 @@ export function PaperHero({
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
 						<p css={heroParagraph}>{copy}</p>
-						<ThemeProvider theme={themeButtonBrand}>
+						<ThemeProvider theme={buttonThemeBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',

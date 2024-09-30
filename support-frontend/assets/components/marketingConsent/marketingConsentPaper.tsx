@@ -10,8 +10,8 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
+	buttonThemeBrandAlt,
 	SvgEnvelope,
-	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
@@ -96,7 +96,7 @@ function MarketingButton(props: ButtonPropTypes) {
 
 	if (confirmedOrPending) {
 		return (
-			<ThemeProvider theme={themeButtonBrandAlt}>
+			<ThemeProvider theme={buttonThemeBrandAlt}>
 				<Button
 					cssOverrides={marginForButton}
 					iconSide="right"
@@ -110,7 +110,7 @@ function MarketingButton(props: ButtonPropTypes) {
 	}
 
 	return (
-		<ThemeProvider theme={themeButtonBrandAlt}>
+		<ThemeProvider theme={buttonThemeBrandAlt}>
 			<Button
 				cssOverrides={marginForButton}
 				iconSide="right"

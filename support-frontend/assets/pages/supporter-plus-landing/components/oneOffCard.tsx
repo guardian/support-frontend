@@ -8,8 +8,8 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
+	buttonThemeReaderRevenueBrand,
 	LinkButton,
-	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
@@ -125,7 +125,7 @@ export function OneOffCard({
 				/>
 			</div>
 			<div css={buttonContainer}>
-				<ThemeProvider theme={themeButtonReaderRevenueBrand}>
+				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 					<LinkButton
 						href={`/${
 							countryGroups[countryGroupId].supportInternationalisationId

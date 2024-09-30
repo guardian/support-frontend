@@ -10,7 +10,7 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
-	themeButtonReaderRevenueBrand,
+	buttonThemeReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router';
@@ -158,7 +158,7 @@ export function SupporterPlusInitialLandingPage({
 				)}
 
 				<div css={checkoutBtnAndPaymentIconsHolder}>
-					<ThemeProvider theme={themeButtonReaderRevenueBrand}>
+					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 						<Button
 							iconSide="left"
 							priority="primary"
