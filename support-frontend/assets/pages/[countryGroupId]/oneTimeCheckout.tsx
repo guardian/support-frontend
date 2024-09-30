@@ -148,10 +148,6 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 
 	const stripePromise = loadStripe(stripePublicKey);
 
-	// const stripeExpressCheckoutSwitch =
-	// 	window.guardian.settings.switches.oneOffPaymentMethods
-	// 		.stripeExpressCheckout === 'On';
-
 	const elementsOptions = {
 		mode: 'payment',
 		/**
@@ -486,9 +482,9 @@ function OneTimeCheckoutComponent({
 								}}
 								options={{
 									paymentMethods: {
-										applePay: 'always',
-										googlePay: 'always',
-										link: 'auto',
+										applePay: 'auto',
+										googlePay: 'auto',
+										link: 'never',
 									},
 								}}
 							/>
