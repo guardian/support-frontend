@@ -77,21 +77,17 @@ const recurringContainer = css`
 	}
 	${from.desktop} {
 		> div {
-			padding: 40px 10px ${space[6]}px;
+			padding: 40px 10px 72px;
 		}
 	}
 `;
 
 const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	display: flex;
-	background-color: ${palette.neutral[97]};
+	background-color: ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
 	> div {
-		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
+		padding: ${space[5]}px ${withShortPaddingBottom ? space[5] : '72'}px;
 	}
-	${from.desktop} {
-		> div {
-			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
-		}
 	}
 `;
 
@@ -104,7 +100,6 @@ const innerContentContainer = css`
 const heading = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
-	margin-top: ${space[4]}px;
 	${headline.xsmall({
 		fontWeight: 'bold',
 	})}
@@ -131,14 +126,14 @@ const standFirst = css`
 		margin: 0 auto;
 	}
 	${from.desktop} {
-		margin: ${space[4]}px auto ${space[6]}px;
+		margin: ${space[4]}px auto ${space[9]}px;
 	}
 `;
 
 const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
-		margin: ${space[6]}px auto ${space[12]}px;
+		margin: 0 auto ${space[9]}px;
 	}
 `;
 
@@ -148,25 +143,19 @@ const tabletLineBreak = css`
 	}
 `;
 
-const suppportAnotherWayContainer = css`
-	margin: ${space[9]}px auto 0;
-	border-top: 1px solid ${palette.neutral[86]};
-	padding-top: 32px;
+const supportAnotherWayContainer = css`
 	max-width: 940px;
 	text-align: left;
-	color: #606060;
+	color: ${palette.neutral[100]};
+	background-color: #1e3e72;
 	h4 {
-		${textSans.medium({ fontWeight: 'bold' })};
+		${textSans.large({ fontWeight: 'bold' })};
 	}
 	p {
-		${textSans.small()};
+		${textSans.medium()};
 	}
 	a {
-		color: #606060;
-	}
-	${from.desktop} {
-		text-align: center;
-		padding-top: ${space[9]}px;
+		color: ${palette.neutral[100]};
 	}
 `;
 
@@ -178,7 +167,7 @@ const disclaimerContainer = css`
 	}
 	${from.mobileLandscape} {
 		> div {
-			padding: ${space[4]}px ${space[5]}px;
+			padding: ${space[5]}px ${space[5]}px;
 		}
 	}
 `;
@@ -298,8 +287,7 @@ export function ThreeTierLanding({
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 
-	const enableSingleContributionsTab =
-		abParticipations.landingPageOneTimeTab === 'oneTimeTab';
+	const enableSingleContributionsTab = countryGroupId === UnitedStates;
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
@@ -582,23 +570,22 @@ export function ThreeTierLanding({
 					/>
 				)}
 				{countryGroupId === UnitedStates && (
-					<div css={suppportAnotherWayContainer}>
+					<div css={supportAnotherWayContainer}>
 						<h4>Support another way</h4>
 						<p>
-							If you are interested in contributing through a donor-advised
-							fund, foundation or retirement account, or by mailing a check,
+							To learn more about other ways to support the Guardian, including
+							checks and tax-exempt options, <br />
 							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-							to learn how.
+							on this topic.
 						</p>
 					</div>
 				)}
 			</Container>
 			<Container
 				sideBorders
-				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={disclaimerContainer}
 			>

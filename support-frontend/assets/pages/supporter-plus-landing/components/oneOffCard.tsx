@@ -28,17 +28,17 @@ const sectionStyle = css`
 	margin: auto;
 	background-color: ${palette.neutral[100]};
 	border-radius: ${space[3]}px;
-	padding: 32px 48px ${space[6]}px 48px;
+	padding: 32px;
 	${until.desktop} {
 		padding-top: ${space[6]}px;
 	}
 `;
 const titleStyle = css`
-	margin: 0 0 ${space[3]}px;
+	margin: 0 0 ${space[2]}px;
 	text-align: center;
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
-		font-size: 22px;
+		font-size: 28px;
 	}
 `;
 const standFirst = css`
@@ -52,8 +52,8 @@ const standFirst = css`
 const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${space[6]}px;
-	margin-top: ${space[6]}px;
+	margin-bottom: ${space[3]}px;
+	margin-top: ${space[5]}px;
 `;
 
 const buttonContainer = css`
@@ -85,7 +85,7 @@ export function OneOffCard({
 		<section css={sectionStyle}>
 			<div
 				css={css`
-					${textSans.medium()}
+					${textSans.small()}
 				`}
 			>
 				<h2 css={titleStyle}>Support just once</h2>
