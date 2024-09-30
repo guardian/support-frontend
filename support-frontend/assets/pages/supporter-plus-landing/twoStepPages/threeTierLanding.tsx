@@ -277,7 +277,7 @@ export function ThreeTierLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const urlSearchParamsOneTime = !urlSearchParams.get('oneTime');
+	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
