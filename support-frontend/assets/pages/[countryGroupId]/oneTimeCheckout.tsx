@@ -200,10 +200,15 @@ function OneTimeCheckoutComponent({
 	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountError, setOtherAmountError] = useState<string>();
-	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
+	const finalAmount =
+		amount === 'other'
+			? Number.isNaN(parseFloat(otherAmount))
+				? undefined
+				: parseFloat(otherAmount)
+			: amount;
 
 	useEffect(() => {
-		if (!Number.isNaN(finalAmount)) {
+		if (finalAmount) {
 			setStripeExpressCheckoutEnable(true);
 			elements?.update({ amount: finalAmount * 100 });
 		} else {
@@ -323,40 +328,45 @@ function OneTimeCheckoutComponent({
 					);
 				}
 			} else {
-				const stripeData: CreateStripePaymentIntentRequest = {
-					paymentData: {
-						currency: currencyKey,
-						amount: finalAmount,
-						email,
-						stripePaymentMethod: 'StripeCheckout',
-					},
-					acquisitionData: derivePaymentApiAcquisitionData(
-						{ ...getReferrerAcquisitionData(), labels: ['one-time-checkout'] },
-						abParticipations,
-						billingPostcode,
-					),
-					publicKey: stripePublicKey,
-					// ToDo: validate recaptchaToken for card payments
-					recaptchaToken: recaptchaToken ?? '',
-					paymentMethodId: paymentMethodResult.paymentMethod.id,
-				};
-				const paymentResult = await processStripePaymentIntentRequest(
-					stripeData,
-					handle3DS,
-				);
-				if (paymentResult.paymentStatus === 'failure') {
-					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
-				}
-				if (paymentResult.paymentStatus === 'success') {
-					const order = {
-						firstName: '',
-						paymentMethod: paymentMethod,
+				if (finalAmount) {
+					const stripeData: CreateStripePaymentIntentRequest = {
+						paymentData: {
+							currency: currencyKey,
+							amount: finalAmount,
+							email,
+							stripePaymentMethod: 'StripeCheckout',
+						},
+						acquisitionData: derivePaymentApiAcquisitionData(
+							{
+								...getReferrerAcquisitionData(),
+								labels: ['one-time-checkout'],
+							},
+							abParticipations,
+							billingPostcode,
+						),
+						publicKey: stripePublicKey,
+						// ToDo: validate recaptchaToken for card payments
+						recaptchaToken: recaptchaToken ?? '',
+						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
-					setThankYouOrder(order);
-					const thankYouUrlSearchParams = new URLSearchParams();
-					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+					const paymentResult = await processStripePaymentIntentRequest(
+						stripeData,
+						handle3DS,
+					);
+					if (paymentResult.paymentStatus === 'failure') {
+						setErrorMessage('Sorry, something went wrong.');
+						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+					}
+					if (paymentResult.paymentStatus === 'success') {
+						const order = {
+							firstName: '',
+							paymentMethod: paymentMethod,
+						};
+						setThankYouOrder(order);
+						const thankYouUrlSearchParams = new URLSearchParams();
+						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+						window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+					}
 				}
 			}
 		}
@@ -652,12 +662,12 @@ function OneTimeCheckoutComponent({
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
 									buttonText={
-										Number.isNaN(finalAmount)
-											? 'Pay now'
-											: `Support us with ${simpleFormatAmount(
+										finalAmount
+											? `Support us with ${simpleFormatAmount(
 													currency,
 													finalAmount,
 											  )}`
+											: 'Pay now'
 									}
 									onClick={() => {
 										// no-op
