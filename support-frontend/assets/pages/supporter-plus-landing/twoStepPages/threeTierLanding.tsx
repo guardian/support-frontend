@@ -287,8 +287,7 @@ export function ThreeTierLanding({
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 
-	const enableSingleContributionsTab =
-		abParticipations.landingPageOneTimeTab === 'oneTimeTab';
+	const enableSingleContributionsTab = countryGroupId === UnitedStates;
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
@@ -309,8 +308,6 @@ export function ThreeTierLanding({
 	 * US EOY 2024 Campaign
 	 */
 	const campaignSettings = getCampaignSettings(countryGroupId);
-	const enableSingleContributionsTab = countryGroupId === UnitedStates;
-
 
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
