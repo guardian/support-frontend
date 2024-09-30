@@ -58,8 +58,6 @@ import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 
-//TODO REMOVE https://support.thegulocal.com/us/contribute#ab-landingPageOneTimeTab=oneTimeTab
-
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
@@ -88,12 +86,8 @@ const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	display: flex;
 	background-color: ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
 	> div {
-		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
+		padding: ${space[5]}px ${withShortPaddingBottom ? space[5] : '72'}px;
 	}
-	${from.desktop} {
-		> div {
-			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
-		}
 	}
 `;
 
@@ -132,7 +126,7 @@ const standFirst = css`
 		margin: 0 auto;
 	}
 	${from.desktop} {
-		margin: ${space[4]}px auto ${space[10]}px;
+		margin: ${space[4]}px auto ${space[9]}px;
 	}
 `;
 
@@ -162,10 +156,6 @@ const supportAnotherWayContainer = css`
 	}
 	a {
 		color: ${palette.neutral[100]};
-	}
-	${from.desktop} {
-		padding-top: ${space[5]}px;
-		padding-bottom: ${space[5]}px;
 	}
 `;
 
