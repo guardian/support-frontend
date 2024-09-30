@@ -13,6 +13,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -22,6 +23,7 @@ import type {
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import {
+	filterBenefitByABTest,
 	filterBenefitByRegion,
 	type ProductDescription,
 } from 'helpers/productCatalog';
@@ -44,6 +46,7 @@ export type ThreeTierCardProps = {
 	ctaCopy: string;
 	lozengeText?: string;
 	promotion?: Promotion;
+	abParticipations?: Participations | undefined;
 };
 
 const container = (
@@ -64,6 +67,7 @@ const container = (
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
+
 		${until.desktop} {
 			order: ${cardOrder};
 			padding-top: ${space[6]}px;
@@ -81,6 +85,7 @@ const priceCss = (hasPromotion: boolean) => css`
 	${textSansBold24};
 	position: relative;
 	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
+
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
 	}
@@ -92,6 +97,7 @@ const discountSummaryCss = css`
 	font-weight: 400;
 	color: #606060;
 	margin-bottom: ${space[4]}px;
+
 	${from.desktop} {
 		position: absolute;
 		top: 100%;
@@ -116,6 +122,7 @@ const btnStyleOverrides = css`
 const checkmarkBenefitList = css`
 	width: 100%;
 	text-align: left;
+
 	${from.desktop} {
 		width: 90%;
 	}
@@ -130,6 +137,7 @@ const benefitsPrefixCss = css`
 	${textSans15};
 	color: ${palette.neutral[7]};
 	text-align: left;
+
 	strong {
 		font-weight: bold;
 	}
@@ -141,6 +149,7 @@ const benefitsPrefixPlus = css`
 	display: flex;
 	align-items: center;
 	margin: ${space[3]}px 0;
+
 	:before,
 	:after {
 		content: '';
@@ -148,9 +157,11 @@ const benefitsPrefixPlus = css`
 		background-color: ${palette.neutral[86]};
 		flex-grow: 2;
 	}
+
 	:before {
 		margin-right: ${space[2]}px;
 	}
+
 	:after {
 		margin-left: ${space[2]}px;
 	}
@@ -199,6 +210,7 @@ export function ThreeTierCard({
 	price,
 	promotion,
 	ctaCopy,
+	abParticipations,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
@@ -282,6 +294,7 @@ export function ThreeTierCard({
 			<BenefitsCheckList
 				benefitsCheckListData={benefits
 					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+					.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
 					.map((benefit) => {
 						return {
 							text: benefit.copy,
