@@ -50,7 +50,7 @@ const checkListTextItemCss = css`
 	}
 `;
 const tableCss = (style: CheckListStyle) => css`
-	${style === 'standard' ? { textSans17 } : { textSans15 }}
+	${style === 'standard' ? { textSans17, lineHeight: 'tight' } : { textSans15 }}
 
 	padding-top: ${space[4]}px;
 

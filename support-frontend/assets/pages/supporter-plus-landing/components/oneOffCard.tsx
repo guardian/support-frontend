@@ -4,7 +4,7 @@ import {
 	headlineBold24,
 	palette,
 	space,
-  textSans15,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import {
