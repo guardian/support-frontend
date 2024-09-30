@@ -1599,7 +1599,7 @@ function CheckoutComponent({
 																		});
 																}}
 																onRecaptchaExpired={() => {
-																	// no-op
+																	setRecaptchaToken(undefined);
 																}}
 															/>
 														}
@@ -1644,7 +1644,7 @@ function CheckoutComponent({
 																	setRecaptchaToken(token);
 																}}
 																onRecaptchaExpired={() => {
-																	// no-op
+																	setRecaptchaToken(undefined);
 																}}
 															/>
 														}
