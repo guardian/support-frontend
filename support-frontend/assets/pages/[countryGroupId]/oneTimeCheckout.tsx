@@ -254,7 +254,7 @@ function OneTimeCheckoutComponent({
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 
 	const formRef = useRef<HTMLFormElement>(null);
 
