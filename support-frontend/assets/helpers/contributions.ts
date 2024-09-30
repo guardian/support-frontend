@@ -135,7 +135,7 @@ const getAmount = (
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
 	coverTransactionCostSelected?: boolean,
-): number => {
+): number | undefined => {
 	const selectedChoiceCardAmount = selectedAmounts[contributionType];
 	const otherAmount = otherAmounts[contributionType].amount ?? '';
 
@@ -147,6 +147,10 @@ const getAmount = (
 	// Only cover transaction costs for one off contributions
 	const coverTransactionCost =
 		coverTransactionCostSelected && contributionType === 'ONE_OFF';
+
+	if (Number.isNaN(selectedAmount)) {
+		return undefined;
+	}
 
 	return coverTransactionCost
 		? roundToDecimalPlaces(selectedAmount * 1.04)
