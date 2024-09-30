@@ -38,7 +38,7 @@ const titleStyle = css`
 	text-align: center;
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
-		font-size: 22px;
+		font-size: 28px;
 	}
 `;
 const standFirst = css`
@@ -85,7 +85,7 @@ export function OneOffCard({
 		<section css={sectionStyle}>
 			<div
 				css={css`
-					${textSans.medium()}
+					${textSans.small()}
 				`}
 			>
 				<h2 css={titleStyle}>Support just once</h2>
