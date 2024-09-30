@@ -78,6 +78,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './components/paymentMethod';
+import { setThankYouOrder } from './components/thankyou';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
@@ -350,6 +351,16 @@ function OneTimeCheckoutComponent({
 				if (paymentResult.paymentStatus === 'failure') {
 					setErrorMessage('Sorry, something went wrong.');
 					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+				}
+				if (paymentResult.paymentStatus === 'success') {
+					const order = {
+						firstName: '',
+						paymentMethod: paymentMethod,
+					};
+					setThankYouOrder(order);
+					const thankYouUrlSearchParams = new URLSearchParams();
+					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
 				}
 			}
 		}

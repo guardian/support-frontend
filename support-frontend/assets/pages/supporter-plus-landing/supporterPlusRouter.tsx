@@ -10,7 +10,6 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { NavigateWithPageView } from 'helpers/tracking/NavigateWithPageView';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
@@ -50,33 +49,6 @@ function ScrollToTop(): null {
 	return null;
 }
 
-type ThreeTierRedirectProps = {
-	children: React.ReactNode;
-	countryId: string;
-};
-function ThreeTierRedirectOneOffToCheckout({
-	children,
-	countryId,
-}: ThreeTierRedirectProps) {
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlSelectedContributionType = urlParams.get(
-		'selected-contribution-type',
-	);
-	const urlParamsString = urlParams.toString();
-	const oneOff = urlSelectedContributionType === 'ONE_OFF';
-
-	return oneOff ? (
-		<NavigateWithPageView
-			destination={`/${countryId}/contribute/checkout${`${
-				urlParamsString ? `?${urlParamsString}` : ''
-			}${window.location.hash}`}`}
-			participations={commonState.abParticipations}
-		/>
-	) : (
-		<>{children}</>
-	);
-}
-
 const commonState = store.getState().common;
 
 export const inThreeTier = threeTierCheckoutEnabled(
@@ -97,15 +69,8 @@ const router = () => {
 							<Route
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
-									/*
-									 * if you are coming to the /contribute route(s) and you also have a one off
-									 * contribution type (set in the url) and find yourself in the three tier
-									 * variant we should redirect you to the /contribute/checkout route
-									 */
 									inThreeTier ? (
-										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
-											<ThreeTierLanding geoId={countryId} />
-										</ThreeTierRedirectOneOffToCheckout>
+										<ThreeTierLanding geoId={countryId} />
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}
