@@ -1,6 +1,7 @@
 import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import { OfferFeast } from 'components/offer/offer';
+import type { Participations } from './abTests/abtest';
 import { newspaperCountries } from './internationalisation/country';
 import type {
 	CountryGroupId,
@@ -16,6 +17,7 @@ type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
+	specificToAbTest?: Array<{ name: string; variants: string[] }>;
 	isNew?: boolean;
 };
 
@@ -46,6 +48,20 @@ export function filterBenefitByRegion(
 		return benefit.specificToRegions.includes(countryGroupId);
 	}
 
+	return true;
+}
+
+export function filterBenefitByABTest(
+	benefit: ProductBenefit,
+	participations?: Participations,
+) {
+	if (participations && benefit.specificToAbTest !== undefined) {
+		return benefit.specificToAbTest.some(({ name, variants }) =>
+			participations[name]
+				? variants.includes(participations[name] ?? '')
+				: false,
+		);
+	}
 	return true;
 }
 
@@ -87,6 +103,9 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					tooltip:
 						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 					specificToRegions: ['AUDCountries'],
+					specificToAbTest: [
+						{ name: 'auPartnerBenefit', variants: ['control'] },
+					],
 				},
 			],
 			deliverableTo: gwDeliverableCountries,
@@ -181,6 +200,9 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					tooltip:
 						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 					specificToRegions: ['AUDCountries'],
+					specificToAbTest: [
+						{ name: 'auPartnerBenefit', variants: ['control'] },
+					],
 				},
 			],
 			offers: [
