@@ -5,7 +5,7 @@ import {
 	neutral,
 	space,
 	textEgyptian15,
-	textSansBold17,
+	textEgyptianBold17,
 	until,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
@@ -87,7 +87,7 @@ const iconContainer = css`
 
 const headerContainer = css`
 	grid-area: header;
-	${textSansBold17};
+	${textEgyptianBold17};
 	align-self: center;
 
 	${from.desktop} {
