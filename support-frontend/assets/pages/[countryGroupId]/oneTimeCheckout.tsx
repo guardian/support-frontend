@@ -136,7 +136,7 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
 
 	const stripePublicKey = getStripeKey(
@@ -148,6 +148,7 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 
 	const stripePromise = loadStripe(stripePublicKey);
 
+	const minAmount = config[countryGroupId]['ONE_OFF'].min;
 	const elementsOptions = {
 		mode: 'payment',
 		/**
@@ -155,7 +156,7 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 		 * @see https://docs.stripe.com/api/charges/object
 		 * @see https://docs.stripe.com/currencies#zero-decimal
 		 */
-		amount: 100,
+		amount: minAmount * 100,
 		currency: currencyKey.toLowerCase(),
 		paymentMethodCreation: 'manual',
 	} as const;
@@ -209,10 +210,11 @@ function OneTimeCheckoutComponent({
 
 	useEffect(() => {
 		if (finalAmount) {
-			setStripeExpressCheckoutEnable(true);
+			// valid final amount, set amount, enable Express checkout
 			elements?.update({ amount: finalAmount * 100 });
+			setStripeExpressCheckoutEnable(true);
 		} else {
-			// no onclick?
+			// invalid final amount, disable Express checkout
 			setStripeExpressCheckoutEnable(false);
 		}
 	}, [finalAmount]);
