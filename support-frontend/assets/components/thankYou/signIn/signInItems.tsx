@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space, textSans15 } from '@guardian/source/foundations';
+import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import {
 	ButtonLink,
 	LinkButton,
@@ -19,7 +19,7 @@ import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 
 const bodyText = css`
-	${textSans15};
+	${textEgyptian15};
 `;
 
 const expandableContainer = css`
