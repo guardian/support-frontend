@@ -5,9 +5,8 @@ import {
 	headlineBold24,
 	palette,
 	space,
-	textSans15,
 	textSans17,
-	textSansBold17,
+	textSansBold20,
 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import {
@@ -149,10 +148,10 @@ const supportAnotherWayContainer = css`
 	color: ${palette.neutral[100]};
 	background-color: #1e3e72;
 	h4 {
-		${textSansBold17};
+		${textSansBold20};
 	}
 	p {
-		${textSans15};
+		${textSans17};
 	}
 	a {
 		color: ${palette.neutral[100]};

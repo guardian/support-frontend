@@ -3,7 +3,7 @@ import {
 	neutral,
 	space,
 	sport,
-	textEgyptian15,
+	textSans15,
 } from '@guardian/source/foundations';
 
 const container = css`
@@ -24,7 +24,7 @@ const qrContainer = css`
 `;
 
 const title = css`
-	${textEgyptian15};
+	${textSans15};
 	margin-top: ${space[3]}px;
 	margin-left: ${space[3]}px;
 `;

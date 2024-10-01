@@ -40,6 +40,7 @@ const container = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
 	${textSans12};
+	line-height: 1.15;
 	${from.desktop} {
 		max-width: 780px;
 	}
@@ -115,8 +116,9 @@ export function OfferTsAndCs({
 			<p>
 				{' '}
 				{/*check this UI*/}
-				<sup>**</sup> Free books are only available for qualified new recurring
-				supporters (monthly: {currency}
+				<sup style={{ fontSize: '14px', fontWeight: 'lighter' }}>**</sup> Free
+				books are only available for qualified new recurring supporters
+				(monthly: {currency}
 				{offerCostMonthly} or more; annual: {currency}
 				{offerCostAnnual} or more) on a first come, first served basis while
 				supplies last. Limit one per customer. Distribution to US and

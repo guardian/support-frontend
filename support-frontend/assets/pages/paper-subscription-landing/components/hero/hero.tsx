@@ -59,6 +59,7 @@ const heroTitleHighlight = css`
 `;
 const heroParagraph = css`
 	${textEgyptian17};
+	line-height: 1.4;
 	margin-bottom: ${space[6]}px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */

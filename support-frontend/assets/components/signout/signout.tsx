@@ -4,6 +4,7 @@ import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
 const signOutStyles = css`
 	${textSans14};
+	font-weight: lighter;
 	color: ${neutral[7]};
 `;
 

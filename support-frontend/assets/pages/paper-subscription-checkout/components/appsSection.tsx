@@ -46,6 +46,7 @@ const marginForButton = css`
 `;
 const mainHeading = css`
 	${headlineBold28};
+	line-height: 1.15;
 	${from.phablet} {
 		${headlineBold34};
 	}
@@ -53,6 +54,7 @@ const mainHeading = css`
 const subHeading = css`
 	margin: ${space[6]}px 0 ${space[1]}px;
 	${headlineBold20};
+	line-height: 1.15;
 	${from.desktop} {
 		margin: ${space[9]}px 0 ${space[1]}px;
 		line-height: normal;
@@ -60,6 +62,9 @@ const subHeading = css`
 `;
 const sansText = css`
 	${textSans17}
+  ${from.desktop} {
+    line-height: 1.4;
+  }}
 `;
 const maxWidth = css`
 	${from.tablet} {

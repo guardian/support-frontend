@@ -62,7 +62,8 @@ const header = css`
 	}
 `;
 export const pageTitle = css`
-	${titlepiece42}; //TODO check whether this is also bold by default
+	${titlepiece42};
+	font-weight: bold;
 	z-index: 10;
 	padding: ${space[3]}px ${space[3]}px ${space[4]}px;
 	width: 100%;
@@ -75,13 +76,15 @@ export const pageTitle = css`
 	}
 
 	${from.desktop} {
-		${titlepiece50}; //TODO check whether this is also bold by default
+		${titlepiece50};
+		font-weight: bold;
 		margin: 0 auto;
 		max-width: 1290px;
 	}
 
 	${from.leftCol} {
-		${titlepiece70}//TODO check whether this is also bold by default
+		${titlepiece70};
+		font-weight: bold;
 	}
 `;
 

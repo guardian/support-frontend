@@ -27,12 +27,18 @@ import { logException } from 'helpers/utilities/logger';
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
 	${headlineBold20};
+	line-height: 1.15;
 	${from.desktop} {
 		line-height: normal;
 	}
 `;
 const sansText = css`
-	${textSans17};
+  ${textSans17};
+  line-height: 1.15;
+  ${from.desktop} {
+    line-height: 1.4;
+    }
+  }
 `;
 const tinyText = css`
 	${textSansItalic15};

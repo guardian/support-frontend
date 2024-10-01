@@ -27,14 +27,14 @@ const radio = css`
 `;
 
 const focused = css`
-	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive}; //TODO check what to update this to
+	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
 
 const notFocused = css`
 	/* Using box shadows prevents layout shift when the rows are expanded */
-	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border}; //TODO check what to update this to
+	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;

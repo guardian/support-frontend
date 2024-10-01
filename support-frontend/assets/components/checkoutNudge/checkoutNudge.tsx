@@ -79,19 +79,17 @@ const para = css`
 	${from.tablet} {
 		margin-left: 12px;
 		${textSans17};
-		line-height: 'regular';
 	}
 `;
 const link = css`
 	margin-left: 9px;
 	${textSans15};
-	line-height: 'regular';
 	padding-bottom: ${space[5]}px;
 
 	${from.tablet} {
 		margin-left: 12px;
 		${textSans17};
-		line-height: 'tight';
+		line-height: 1.15;
 	}
 `;
 const alink = css`

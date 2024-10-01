@@ -17,9 +17,13 @@ import Content from 'components/content/contentSimple';
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
 	${headlineBold20};
+	line-height: 1.4;
 `;
 const sansText = css`
 	${textSans17}
+	${from.desktop} {
+		line-height: 1.4;
+	}
 `;
 const maxWidth = css`
 	${from.tablet} {

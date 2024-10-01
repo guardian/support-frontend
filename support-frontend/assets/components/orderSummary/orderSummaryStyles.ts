@@ -65,13 +65,7 @@ export const topLineBorder = css`
 `;
 export const title = css`
 	${headlineBold17};
-	/**
-//Is this comment now redundant?
- * @TODO Typography preset styles should not be overridden.
- * Please speak to your team's designer and update this to use a more appropriate preset.
-*/
 	line-height: 1.4;
-
 	${from.desktop} {
 		${headlineBold24}
 	}

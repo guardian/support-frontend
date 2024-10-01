@@ -12,9 +12,9 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Link,
+	linkThemeDefault,
 	SvgChevronDownSingle,
 	SvgChevronUpSingle,
-	themeLink,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
 
@@ -111,7 +111,7 @@ const priceDescription = css`
 	${from.desktop} {
 		margin-bottom: ${space[5]}px;
 	}
-	${textSans14};
+	${textSans12};
 	color: #606060;
 `;
 
@@ -272,7 +272,7 @@ export function DigitalPlusPrintSummary({
 						<SvgChevronDownSingle isAnnouncedByScreenReader size="xsmall" />
 					)}
 				</button>
-				<ThemeProvider theme={themeLink}>
+				<ThemeProvider theme={linkThemeDefault}>
 					<Link href="/contribute" cssOverrides={changeSubscriptionLink}>
 						Change subscription
 					</Link>

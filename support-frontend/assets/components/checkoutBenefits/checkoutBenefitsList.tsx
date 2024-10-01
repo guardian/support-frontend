@@ -14,6 +14,7 @@ import { BenefitsCheckList } from './benefitsCheckList';
 
 const containerCss = css`
 	${textSans17};
+	line-height: 1.15;
 `;
 
 const containerWithBackgroundCss = css`
@@ -41,7 +42,8 @@ const maxWidth = css`
 const headingCss = css`
 	${headlineBold24}
 	${from.tablet} {
-		${headlineBold28}
+		${headlineBold28};
+		line-height: 1.15;
 	}
 `;
 

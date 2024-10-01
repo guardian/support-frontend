@@ -25,7 +25,7 @@ const inlineMessageMargin = css`
 
 const stripeElementErrorStyles = css`
 	& .StripeElement {
-		border: 2px solid ${textInputThemeDefault.textInput.borderError}; //TODO check what to do here
+		border: 2px solid ${textInputThemeDefault.textInput.borderError};
 	}
 `;
 
@@ -52,7 +52,7 @@ const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 
 	& .StripeElement {
 		height: ${height.inputMedium}px;
-		border: 1px solid ${textInputThemeDefault.textInput.border}; //TODO check what to do here
+		border: 1px solid ${textInputThemeDefault.textInput.border};
 		border-radius: ${space[1]}px;
 		padding: 10px ${space[2]}px;
 	}

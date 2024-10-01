@@ -47,6 +47,7 @@ type PropTypes = ConnectedProps<typeof connector> & {
 // ----- Component ----- //
 const subHeading = css`
 	${headlineBold20};
+	line-height: 1.4;
 	&:not(:last-of-type) {
 		margin-bottom: ${space[2]}px;
 	}
@@ -54,6 +55,9 @@ const subHeading = css`
 
 const sansText = css`
 	${textSans17};
+	${from.desktop} {
+		line-height: 1.4;
+	}
 `;
 
 const maxWidth = css`
@@ -80,6 +84,9 @@ const listStyle = css`
 		content: counter(step-counter) '.';
 	}
 	${textSans17}
+	${from.desktop} {
+		line-height: 1.4;
+	}
 `;
 
 const heroPictureHack = css`

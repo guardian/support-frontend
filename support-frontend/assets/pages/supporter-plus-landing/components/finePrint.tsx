@@ -1,11 +1,9 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, textSans14, until } from '@guardian/source/foundations';
-
-//TODO check this file as some logic has changed
+import { neutral, textSans12, until } from '@guardian/source/foundations';
 
 const textStyles = (theme: FinePrintTheme) => css`
-	${textSans14};
+	${textSans12};
 	color: #606060;
 
 	${until.tablet} {
@@ -15,11 +13,8 @@ const textStyles = (theme: FinePrintTheme) => css`
 
 export type FinePrintTheme = 'dark' | 'light';
 
-type FinePrintSize = 'xsmall' | 'xxsmall';
-
 type FinePrintProps = {
 	mobileTheme: FinePrintTheme;
-	size?: FinePrintSize;
 	cssOverrides?: SerializedStyles;
 	children: React.ReactNode;
 };
