@@ -43,7 +43,7 @@ export function PatronsMessage({
 			{!isUSA && (
 				<>
 					<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-					<FinePrint mobileTheme={mobileTheme} >
+					<FinePrint mobileTheme={mobileTheme}>
 						<h2 css={headingStyles}>{'Guardian Patrons programme'}</h2>
 						<p>
 							If you would like to support us at a higher level, from{' '}
