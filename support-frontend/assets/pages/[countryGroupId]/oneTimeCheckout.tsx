@@ -438,7 +438,12 @@ function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
-						<>
+						<div
+							css={css`
+								/* Prevent content layout shift */
+								min-height: 8px;
+							`}
+						>
 							<ExpressCheckoutElement
 								onReady={({ availablePaymentMethods }) => {
 									/**
@@ -526,7 +531,7 @@ function OneTimeCheckoutComponent({
 									`}
 								/>
 							)}
-						</>
+						</div>
 
 						<FormSection>
 							<Legend>1. Your details</Legend>
