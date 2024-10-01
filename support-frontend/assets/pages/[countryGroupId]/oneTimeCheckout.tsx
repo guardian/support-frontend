@@ -176,17 +176,7 @@ function OneTimeCheckoutComponent({
 	const [otherAmount, setOtherAmount] = useState<string>('');
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 
-	/**
-	 * TODO: otherAmount falls back to zero if no other amount
-	 * entered by user. This prevents the function returning NaN.
-	 * Ideally it would return undefined and we'd handle that, but the
-	 * impact of doing so was deemed too great, considering most use cases
-	 * are in the soon to be deprecated 2-step checkout.
-	 */
-	const finalAmount =
-		amount === 'other'
-			? parseFloat(otherAmount === '' ? '0' : otherAmount)
-			: amount;
+	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
@@ -511,7 +501,7 @@ function OneTimeCheckoutComponent({
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
 									buttonText={
-										finalAmount < minAmount
+										Number.isNaN(finalAmount)
 											? 'Pay now'
 											: `Support us with ${simpleFormatAmount(
 													currency,
