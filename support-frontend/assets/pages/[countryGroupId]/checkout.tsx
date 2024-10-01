@@ -1082,7 +1082,12 @@ function CheckoutComponent({
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
 						{useStripeExpressCheckout && (
-							<>
+							<div
+								css={css`
+									/* Prevent content layout shift */
+									min-height: 8px;
+								`}
+							>
 								<ExpressCheckoutElement
 									onReady={({ availablePaymentMethods }) => {
 										/**
@@ -1197,7 +1202,7 @@ function CheckoutComponent({
 										`}
 									/>
 								)}
-							</>
+							</div>
 						)}
 						<FormSection>
 							<Legend>1. Your details</Legend>
