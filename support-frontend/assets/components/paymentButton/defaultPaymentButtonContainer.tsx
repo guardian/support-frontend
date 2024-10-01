@@ -6,7 +6,10 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import {
+	getContributionType,
+	getMinimumContributionAmount,
+} from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
@@ -88,14 +91,17 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common,
 	);
 
-	const buttonText = Number.isNaN(selectedAmount)
-		? 'Pay now'
-		: createButtonText(
-				amountWithCurrency,
-				amountIsAboveThreshold ||
-					threeTierCheckoutEnabled(abParticipations, amounts),
-				contributionTypeToPaymentInterval[contributionType],
-		  );
+	const minAmount = useContributionsSelector(getMinimumContributionAmount());
+
+	const buttonText =
+		Number.isNaN(selectedAmount) || selectedAmount < minAmount
+			? 'Pay now'
+			: createButtonText(
+					amountWithCurrency,
+					amountIsAboveThreshold ||
+						threeTierCheckoutEnabled(abParticipations, amounts),
+					contributionTypeToPaymentInterval[contributionType],
+			  );
 
 	return (
 		<DefaultPaymentButton
