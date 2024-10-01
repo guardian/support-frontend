@@ -45,6 +45,7 @@ import {
 	type CreateStripePaymentIntentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -223,8 +224,15 @@ function OneTimeCheckoutComponent({
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
-	const [, setStripeExpressCheckoutPaymentType] =
-		useState<ExpressPaymentType>();
+	const [
+		stripeExpressCheckoutPaymentType,
+		setStripeExpressCheckoutPaymentType,
+	] = useState<ExpressPaymentType>();
+	const stripePaymentMethod: StripePaymentMethod =
+		stripeExpressCheckoutPaymentType === 'apple_pay'
+			? 'StripeApplePay'
+			: 'StripeCheckout';
+
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
 	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
@@ -336,7 +344,7 @@ function OneTimeCheckoutComponent({
 							currency: currencyKey,
 							amount: finalAmount,
 							email,
-							stripePaymentMethod: 'StripeCheckout',
+							stripePaymentMethod: stripePaymentMethod,
 						},
 						acquisitionData: derivePaymentApiAcquisitionData(
 							{
