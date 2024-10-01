@@ -133,7 +133,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   "getProductParamsFromContributionParams" should {
     "return return Contribution if selected-amount is < SupporterPlus.Monthly.GBP price" in {
-      val (product, ratePlan) = applicationMock.getProductParamsFromContributionParams(
+      val (product, ratePlan, maybeContributionAmount) = applicationMock.getProductParamsFromContributionParams(
         "uk",
         productCatalogJson,
         Map(
@@ -143,9 +143,10 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       )
       assert(product === "Contribution")
       assert(ratePlan === "Monthly")
+      assert(maybeContributionAmount === Some(10))
     }
     "return return SupporterPlus if selected-amount is >= SupporterPlus.Monthly.GBP price" in {
-      val (product, ratePlan) = applicationMock.getProductParamsFromContributionParams(
+      val (product, ratePlan, maybeContributionAmount) = applicationMock.getProductParamsFromContributionParams(
         "uk",
         productCatalogJson,
         Map(
@@ -155,9 +156,10 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       )
       assert(product === "SupporterPlus")
       assert(ratePlan === "Monthly")
+      assert(maybeContributionAmount === None)
     }
     "return return SupporterPlus if selected-amount is >= SupporterPlus.Annual.GBP price" in {
-      val (product, ratePlan) = applicationMock.getProductParamsFromContributionParams(
+      val (product, ratePlan, maybeContributionAmount) = applicationMock.getProductParamsFromContributionParams(
         "uk",
         productCatalogJson,
         Map(
@@ -167,9 +169,10 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       )
       assert(product === "SupporterPlus")
       assert(ratePlan === "Annual")
+      assert(maybeContributionAmount === None)
     }
     "return return Contribution if selected-amount is < SupporterPlus.Annual.USD price" in {
-      val (product, ratePlan) = applicationMock.getProductParamsFromContributionParams(
+      val (product, ratePlan, maybeContributionAmount) = applicationMock.getProductParamsFromContributionParams(
         "us",
         productCatalogJson,
         Map(
@@ -179,9 +182,10 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       )
       assert(product === "Contribution")
       assert(ratePlan === "Annual")
+      assert(maybeContributionAmount === Some(110))
     }
     "return return SupporterPlus if selected-amount is >= SupporterPlus.Annual.USD price" in {
-      val (product, ratePlan) = applicationMock.getProductParamsFromContributionParams(
+      val (product, ratePlan, maybeContributionAmount) = applicationMock.getProductParamsFromContributionParams(
         "us",
         productCatalogJson,
         Map(
@@ -191,6 +195,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       )
       assert(product === "SupporterPlus")
       assert(ratePlan === "Annual")
+      assert(maybeContributionAmount === None)
     }
   }
 }
