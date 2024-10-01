@@ -511,7 +511,7 @@ function OneTimeCheckoutComponent({
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
 									buttonText={
-										Number.isNaN(finalAmount) || finalAmount < minAmount
+										finalAmount < minAmount
 											? 'Pay now'
 											: `Support us with ${simpleFormatAmount(
 													currency,
