@@ -135,9 +135,16 @@ const getAmount = (
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
 	coverTransactionCostSelected?: boolean,
-): number | undefined => {
+): number => {
 	const selectedChoiceCardAmount = selectedAmounts[contributionType];
-	const otherAmount = otherAmounts[contributionType].amount ?? '';
+	/**
+	 * TODO: otherAmount falls back to zero if no other amount
+	 * entered by user. This prevents the function returning NaN.
+	 * Ideally it would return undefined and we'd handle that, but the
+	 * impact of doing so was deemed too great, considering most use cases
+	 * are in the soon to be deprecated 2-step checkout.
+	 */
+	const otherAmount = otherAmounts[contributionType].amount ?? '0';
 
 	const selectedAmount =
 		selectedChoiceCardAmount === 'other'
@@ -147,10 +154,6 @@ const getAmount = (
 	// Only cover transaction costs for one off contributions
 	const coverTransactionCost =
 		coverTransactionCostSelected && contributionType === 'ONE_OFF';
-
-	if (Number.isNaN(selectedAmount)) {
-		return undefined;
-	}
 
 	return coverTransactionCost
 		? roundToDecimalPlaces(selectedAmount * 1.04)
