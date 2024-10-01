@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { between, from, space } from '@guardian/source/dist/foundations';
-import { Column, Columns } from '@guardian/source/dist/react-components';
+import { between, from, space } from '@guardian/source/foundations';
+import { Column, Columns } from '@guardian/source/react-components';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import type { ThankYouModuleData } from 'components/thankYou/thankYouModuleData';
