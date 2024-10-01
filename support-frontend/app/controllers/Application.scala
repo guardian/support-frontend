@@ -439,7 +439,7 @@ class Application(
     val maybeSelectedAmount = queryString
       .get("selected-amount")
       .flatMap(_.headOption)
-      .map(s => Try(s.toDouble))
+      .map(s => Try(s.toInt))
       .flatMap(_.toOption)
 
     val currency = CountryGroup.byId(countryGroupId).getOrElse(CountryGroup.UK).currency.iso
@@ -461,11 +461,11 @@ class Application(
 
     val isOneOff = maybeSelectedContributionType.contains("one_off")
     if (isOneOff) {
-      ("OneOff", "OneOff")
+      ("OneOff", "OneOff", None)
     } else if (isSupporterPlus) {
-      ("SupporterPlus", ratePlan)
+      ("SupporterPlus", ratePlan, None)
     } else {
-      ("Contribution", ratePlan)
+      ("Contribution", ratePlan, maybeSelectedAmount)
     }
   }
 
@@ -475,7 +475,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
-    val (product, ratePlan) =
+    val (product, ratePlan, maybeSelectedAmount) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
     /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
@@ -490,7 +490,12 @@ class Application(
         "product" -> Seq(product),
         "ratePlan" -> Seq(ratePlan),
       )
-      Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
+
+      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
+        .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
+        .getOrElse(queryString)
+
+      Redirect(s"/$countryGroupId/checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
     }
   }
 
