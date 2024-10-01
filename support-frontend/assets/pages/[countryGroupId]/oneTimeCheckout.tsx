@@ -467,10 +467,8 @@ function OneTimeCheckoutComponent({
 										};
 										resolve(options);
 									}
-									console.log('onClick->');
 								}}
 								onConfirm={async (event) => {
-									console.log('onConfirm->');
 									if (!(stripe && elements)) {
 										console.error('Stripe not loaded');
 										return;
@@ -487,7 +485,6 @@ function OneTimeCheckoutComponent({
 
 									setPaymentMethod('StripeExpressCheckoutElement');
 									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
-									console.log('event->', event);
 									event.billingDetails?.email &&
 										setEmail(event.billingDetails.email);
 
