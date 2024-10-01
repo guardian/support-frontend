@@ -4,7 +4,7 @@ import {
 	palette,
 	space,
 	textSans15,
-	textSansBold14,
+  textSansBold15,
 	textSansBold24,
 	until,
 } from '@guardian/source/foundations';
@@ -77,7 +77,7 @@ const container = (
 };
 
 const titleCss = css`
-	${textSansBold14};
+	${textSansBold15};
 	color: #606060;
 `;
 
