@@ -14,6 +14,9 @@ export function OneTimeThankYou({ geoId, appConfig }: ThankYouProps) {
 		originalAmount: finalAmount,
 		finalAmount: finalAmount,
 	};
+	// if (!contributionAmount) {
+	//   return <div>Contribution not specified</div>;
+	// }
 
 	return (
 		<ThankYouComponent geoId={geoId} appConfig={appConfig} payment={payment} />

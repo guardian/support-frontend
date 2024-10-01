@@ -66,7 +66,7 @@ import {
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
 
-interface ThankYouModuleData {
+export interface ThankYouModuleData {
 	icon: JSX.Element;
 	header: string;
 	bodyCopy: string | JSX.Element;
