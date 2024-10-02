@@ -267,6 +267,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+	const enableSingleContributionsTab = urlSearchParams.has('enableOneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
@@ -286,8 +287,6 @@ export function ThreeTierLanding({
 	};
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-
-	const enableSingleContributionsTab = countryGroupId === UnitedStates;
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
