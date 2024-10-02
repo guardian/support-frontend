@@ -82,12 +82,11 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
+const oneTimeContainer = css`
 	display: flex;
-	background-color: ${withShortPaddingBottom ? '#1e3e72' : palette.neutral[97]};
+	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[5]}px ${withShortPaddingBottom ? space[5] : '72'}px;
-	}
+		padding: ${space[5]}px 72px;
 	}
 `;
 
@@ -144,10 +143,15 @@ const tabletLineBreak = css`
 `;
 
 const supportAnotherWayContainer = css`
+	display: flex;
+	background-color: #1e3e72;
+`;
+
+const supportAnotherWay = css`
+	margin: 20px 0;
 	max-width: 940px;
 	text-align: left;
 	color: ${palette.neutral[100]};
-	background-color: #1e3e72;
 	h4 {
 		${textSans.large({ fontWeight: 'bold' })};
 	}
@@ -557,19 +561,25 @@ export function ThreeTierLanding({
 					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
 				</div>
 			</Container>
-			<Container
-				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
-			>
-				{!enableSingleContributionsTab && (
+			{!enableSingleContributionsTab && (
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={oneTimeContainer}
+				>
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
 					/>
-				)}
-				{countryGroupId === UnitedStates && (
-					<div css={supportAnotherWayContainer}>
+				</Container>
+			)}
+			{countryGroupId === UnitedStates && (
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={supportAnotherWayContainer}
+				>
+					<div css={supportAnotherWay}>
 						<h4>Support another way</h4>
 						<p>
 							To learn more about other ways to support the Guardian, including
@@ -581,8 +591,8 @@ export function ThreeTierLanding({
 							on this topic.
 						</p>
 					</div>
-				)}
-			</Container>
+				</Container>
+			)}
 			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
