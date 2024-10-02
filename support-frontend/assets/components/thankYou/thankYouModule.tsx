@@ -5,6 +5,7 @@ import {
 	neutral,
 	space,
 	textEgyptian15,
+	textEgyptian17,
 	textEgyptianBold17,
 	until,
 } from '@guardian/source/foundations';
@@ -122,7 +123,7 @@ const bodyCopyStyle = css`
 	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
-		font-size: 17px;
+		${textEgyptian17};
 	}
 `;
 const bodyCopyMarginTop = css`
