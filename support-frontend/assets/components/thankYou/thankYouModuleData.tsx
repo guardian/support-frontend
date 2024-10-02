@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source/foundations';
+import {
+	from,
+	space,
+	textEgyptian15,
+	textEgyptian17,
+} from '@guardian/source/foundations';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -82,10 +87,9 @@ const headingCss = css`
 
 const checklistCss = css`
 	margin-top: ${space[4]}px;
-	font-family: 'GuardianTextEgyptian';
-	font-size: 15px;
+	${textEgyptian15}
 	${from.tablet} {
-		font-size: 17px;
+		${textEgyptian17}
 	}
 `;
 
