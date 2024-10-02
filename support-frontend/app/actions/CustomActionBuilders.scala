@@ -67,19 +67,25 @@ class CustomActionBuilders(
       AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
     }
 
+    private def isNon200Result(result: Result) = result.header.status.toString.head != '2'
+
     private def maybePushAlarmMetric(result: Result) = {
-      val silentFailureReasons = Set(
+      val ignoreList = Set(
         emailProviderRejectedCode,
         invalidEmailAddressCode,
         recaptchaFailedCode,
       )
-      if (!silentFailureReasons.contains(result.header.reasonPhrase.getOrElse(""))) {
-        logger.error(
-          scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
-        )
-        pushAlarmMetric
-      } else {
-        logger.info(s"not pushing alarm metric for ${result.header.status} ${result.header.reasonPhrase}")
+      if (isNon200Result(result)) {
+        if (!ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {
+          logger.error(
+            scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
+          )
+          pushAlarmMetric
+        } else {
+          logger.info(
+            s"not pushing alarm metric for ${result.header.status} ${result.header.reasonPhrase} as it is in our ignore list",
+          )
+        }
       }
     }
 
