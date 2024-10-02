@@ -18,12 +18,13 @@ import {
 	useStripe,
 } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
+import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -40,7 +41,8 @@ import {
 	type CreateStripePaymentIntentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	isPaymentMethod,
@@ -52,12 +54,14 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -79,6 +83,12 @@ import {
 	preventDefaultValidityMessage,
 } from './validation';
 
+/**
+ * We have not added StripeExpressCheckoutElement to the old PaymentMethod
+ * as it is heavily coupled through the code base and would require adding
+ * a lot of extra unused code to those coupled areas.
+ */
+type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId = Country.detect();
 
 const titleAndButtonContainer = css`
@@ -116,7 +126,7 @@ type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 	isTestUser: boolean;
 };
 
-function paymentMethodIsActive(paymentMethod: PaymentMethod) {
+function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
 		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
@@ -151,11 +161,16 @@ function OneTimeCheckoutComponent({
 	geoId,
 	appConfig,
 	stripePublicKey,
+	isTestUser,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
+	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
+
+	const productDescription = productCatalogDescription['Contribution'];
+	const ratePlanDescription = productDescription.ratePlans['ONE_OFF'];
 
 	const settings = getSettings();
 	const { selectedAmountsVariant } = getAmountsTestVariant(
@@ -178,10 +193,34 @@ function OneTimeCheckoutComponent({
 
 	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
 
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
+
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
+
+	/**
+	 * Payment method: PayPal
+	 * BAID = Billing Agreement ID
+	 */
+	const [payPalLoaded, setPayPalLoaded] = useState(false);
+	const [payPalBAID, setPayPalBAID] = useState('');
+	/**
+	 * PayPalBAID forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalBAID !== '') {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalBAID]);
+	useEffect(() => {
+		if (paymentMethod === 'PayPal' && !payPalLoaded) {
+			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
+		}
+	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
@@ -202,8 +241,6 @@ function OneTimeCheckoutComponent({
 	const validPaymentMethods = [Stripe, PayPal, countryId === 'US' && AmazonPay]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
-
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -514,6 +551,98 @@ function OneTimeCheckoutComponent({
 									}}
 									type="submit"
 								/>
+							)}
+							{payPalLoaded && paymentMethod === 'PayPal' && (
+								<>
+									<input type="hidden" name="payPalBAID" value={payPalBAID} />
+
+									<PayPalButton
+										env={isProd() && !isTestUser ? 'production' : 'sandbox'}
+										style={{
+											color: 'blue',
+											size: 'responsive',
+											label: 'pay',
+											tagline: false,
+											layout: 'horizontal',
+											fundingicons: false,
+										}}
+										commit={true}
+										validate={({ disable, enable }) => {
+											/** We run this initially to set the button to the correct state */
+											const valid = formRef.current?.checkValidity();
+											if (valid) {
+												enable();
+											} else {
+												disable();
+											}
+
+											/** And then run it on form change */
+											formRef.current?.addEventListener('change', (event) => {
+												const valid =
+													// TODO - we shouldn't have to type infer here
+													(
+														event.currentTarget as HTMLFormElement
+													).checkValidity();
+												if (valid) {
+													enable();
+												} else {
+													disable();
+												}
+											});
+										}}
+										funding={{
+											disallowed: [window.paypal.FUNDING.CREDIT],
+										}}
+										onClick={() => {
+											// TODO
+										}}
+										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
+										payment={(resolve, reject) => {
+											const requestBody = {
+												amount: finalAmount,
+												billingPeriod: ratePlanDescription.billingPeriod,
+												currency: currencyKey,
+												requireShippingAddress: false,
+											};
+											void fetch('/paypal/setup-payment', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(requestBody),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													resolve((json as { token: string }).token);
+												})
+												.catch((error) => {
+													console.error(error);
+													reject(error as Error);
+												});
+										}}
+										onAuthorize={(payPalData: Record<string, unknown>) => {
+											const body = {
+												token: payPalData.paymentToken,
+											};
+											void fetch('/paypal/one-click-checkout', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(body),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													// The state below has a useEffect that submits the form
+													setPayPalBAID((json as { baid: string }).baid);
+												});
+										}}
+									/>
+								</>
 							)}
 						</div>
 						{errorMessage && (
