@@ -12,6 +12,7 @@ import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
 import services.AsyncAuthenticationService
+import services.RecaptchaResponse.recaptchaFailedCode
 import utils.FastlyGEOIP
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -66,17 +67,21 @@ class CustomActionBuilders(
       AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
     }
 
-    private def maybePushAlarmMetric(result: Result) =
-      if (
-        result.header.status.toString.head != '2' && !result.header.reasonPhrase.contains(
-          emailProviderRejectedCode,
-        ) && !result.header.reasonPhrase.contains(
-          invalidEmailAddressCode,
+    private def maybePushAlarmMetric(result: Result) = {
+      val silentFailureReasons = Set(
+        emailProviderRejectedCode,
+        invalidEmailAddressCode,
+        recaptchaFailedCode,
+      )
+      if (!silentFailureReasons.contains(result.header.reasonPhrase.getOrElse(""))) {
+        logger.error(
+          scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
         )
-      ) {
-        logger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
         pushAlarmMetric
+      } else {
+        logger.info(s"not pushing alarm metric for ${result.header.status} ${result.header.reasonPhrase}")
       }
+    }
 
     def apply(requestHeader: RequestHeader): Accumulator[ByteString, Result] = {
       val accumulator = chainedAction.apply(requestHeader)

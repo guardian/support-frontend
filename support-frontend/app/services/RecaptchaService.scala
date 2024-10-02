@@ -14,6 +14,7 @@ case class RecaptchaResponse(success: Boolean, score: Option[BigDecimal])
 object RecaptchaResponse {
   implicit val readsGetUserTypeResponse: Reads[RecaptchaResponse] = Json.reads[RecaptchaResponse]
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
+  val recaptchaFailedCode = "recaptcha_validation_failed"
 }
 
 class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) extends SafeLogging {
