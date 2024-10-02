@@ -146,12 +146,14 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
  */
+type ProcessPaymentResponse =
+	| { status: 'success' }
+	| { status: 'failure'; failureReason?: ErrorReason };
+
 const processPayment = async (
 	statusResponse: StatusResponse,
 	geoId: GeoId,
-): Promise<
-	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
-> => {
+): Promise<ProcessPaymentResponse> => {
 	return new Promise((resolve) => {
 		const { trackingUri, status, failureReason } = statusResponse;
 		if (status === 'success') {
@@ -912,20 +914,27 @@ function CheckoutComponent({
 			};
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
-			const createSubscriptionResult = await fetch('/subscribe/create', {
+			const createResponse = await fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			})
-				.then((response) => response.json())
-				.then((json) => json as StatusResponse);
+			});
 
-			const processPaymentResponse = await processPayment(
-				createSubscriptionResult,
-				geoId,
-			);
+			let processPaymentResponse: ProcessPaymentResponse;
+
+			if (createResponse.ok) {
+				const statusResponse = (await createResponse.json()) as StatusResponse;
+				processPaymentResponse = await processPayment(statusResponse, geoId);
+			} else {
+				const errorReason = (await createResponse.text()) as ErrorReason;
+				processPaymentResponse = {
+					status: 'failure',
+					failureReason: errorReason,
+				};
+			}
+
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
