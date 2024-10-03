@@ -168,4 +168,36 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
+	amazonPay: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			US: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		canRun: () => {
+			/**
+			 * Only allocate users on old one-time
+			 * checkout to this AB test.
+			 */
+			const urlSearchParams = new URLSearchParams(window.location.search);
+			const selectedContributionType = urlSearchParams.get(
+				'selected-contribution-type',
+			);
+			return selectedContributionType === 'one_off';
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
 };
