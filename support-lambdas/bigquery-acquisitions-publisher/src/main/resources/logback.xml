@@ -5,6 +5,8 @@
         </encoder>
     </appender>
 
+    <logger name="com.google.cloud.bigquery" level="WARN"/>
+
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
