@@ -1750,11 +1750,14 @@ function CheckoutComponent({
 
 											/** And then run it on form change */
 											formRef.current?.addEventListener('change', (event) => {
-												const valid =
-													// TODO - we shouldn't have to type infer here
-													(
-														event.currentTarget as HTMLFormElement
-													).checkValidity();
+												const element = event.currentTarget as HTMLFormElement;
+												/* We call this twice because the first time does not
+                           not give us an accurate state of the form.
+                           This seems to be because we use `setCustomValidity` on the elements
+                        */
+												element.checkValidity();
+												const valid = element.checkValidity();
+
 												if (valid) {
 													enable();
 												} else {
@@ -1766,7 +1769,7 @@ function CheckoutComponent({
 											disallowed: [window.paypal.FUNDING.CREDIT],
 										}}
 										onClick={() => {
-											// TODO
+											// TODO - add tracking
 										}}
 										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 										payment={(resolve, reject) => {
