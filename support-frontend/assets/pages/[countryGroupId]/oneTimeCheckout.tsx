@@ -134,9 +134,7 @@ type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
-		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(
-			paymentMethod as LegacyPaymentMethod,
-		)}`,
+		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
 }
 
