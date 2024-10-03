@@ -44,6 +44,7 @@ case class CodeBody(code: String, body: String) {
 trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
+  val verboseLogging: Boolean = true
 
   private type ParamMap = Map[String, String]
 
@@ -83,14 +84,16 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
 
   }
 
-  protected def getResponse(rb: Request.Builder) =
+  private def maybeLog(message: String): Unit = if (verboseLogging) logger.info(message) else ()
+
+  protected def getResponse(rb: Request.Builder): Future[Response] =
     for {
       req <- wsPreExecute(rb).map(_.build())
-      _ = logger.info(s"Issuing request ${req.method} ${req.url}")
+      _ = maybeLog(s"Issuing request ${req.method} ${req.url}")
       response <- httpClient(req)
     } yield response
 
-  def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
+  private def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
     val code = response.code().toString
     for {
       body <- Option(response.body).toRight(WebServiceHelperError(CodeBody(code, ""), "no body")).toTry
@@ -99,14 +102,14 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
         .toTry
       responseBody <- Try(body.string())
       codeBody = CodeBody(code, responseBody)
-      _ = logger.info(s"response $code body: ${responseBody.replace("\n", "")}")
+      _ = maybeLog(s"response $code body: ${responseBody.replace("\n", "")}")
       _ <-
         if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
         else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
     } yield codeBody
   }
 
-  def decodeBody[A](codeBody: CodeBody)(implicit
+  private def decodeBody[A](codeBody: CodeBody)(implicit
       decoder: Decoder[A],
       errorDecoder: Decoder[Error],
       ctag: ClassTag[A],
@@ -133,13 +136,7 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
 
   }
 
-  /** Allow subclasses to customise the way errors are decoded
-    *
-    * @param responseBody
-    * @param errorDecoder
-    * @return
-    *   Either[circe.Error, Error]
-    */
+  /** Allow subclasses to customise the way errors are decoded */
   def decodeError(responseBody: String)(implicit errorDecoder: Decoder[Error]): Either[circe.Error, Error] =
     decode[Error](responseBody)
 
