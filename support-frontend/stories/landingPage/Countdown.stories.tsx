@@ -9,7 +9,7 @@ export default {
     parameters: {
 		docs: {
 			description: {
-				component: `A countdown component for use in campaigns, particularly for example, the US end of year. Note that the current date set in Storybook is 01-01-2024 so that will affect the countdown values.`,
+				component: `A countdown component for use in campaigns, particularly for example, the US end of year. NOTE: that the versions are fixed against the mocked current date set in Storybook and do not actually count down in Storybook.`,
 			},
 		},
 	},
@@ -21,12 +21,14 @@ const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
 function Template(args: CountdownProps) {
-	const innerContentContainer = css`
-		margin: 0 auto;
-		background-color: ${palette.brand[400]};
+	const contentContainer = css`
+		height: 500px;
+		width: 100%;
+		padding-top: 40px; 
+		background: ${palette.brand[400]};
 	`;
 	return (
-		<div css={innerContentContainer} >
+		<div css={contentContainer} >
             <Countdown {...args} />
         </div>
     );

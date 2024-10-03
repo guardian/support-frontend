@@ -1,45 +1,66 @@
 import { css } from '@emotion/react';
-import { headlineBold28, palette } from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
  * This is used during the annual US End of Year Campaign.
+ * Beware that this is only accurate to less than a second and is locale specific.
  */
 
-// create the style - TODO: design not yet confirmed...
-const gridStyle = css`
-	display: flex;
-	padding-top: 33px;
-	padding-bottom: 15px;
-	justify-content: center;
-	align-items: center;
+// TODO: colours will change with sub-campaigns and design not yet confirmed...
+const outer = css`
+	width: 272px;
+	margin: auto;
 `;
-const gridItemStyle = css`
-	font-variant-numeric: lining-nums proportional-nums;
-	color: ${palette.brand[400]};
-	background-color: ${palette.neutral[100]};
-	/* 🖥 Headline/headline.bld.28 */
-	${headlineBold28}
-	/* font-family: 'headlineBold28';
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 700; 
-    line-height: 115%;*/ /* 32.2px */
-    width: 65px;
-	margin: 3px;
-	padding: 2px;
-	border: 1px solid ${palette.brand[400]};
-	border-radius: 4px;
+
+const container = css`
+	width: 100%;
+	background-color: #1e3e72;
+	color: ${palette.neutral[100]};
+	padding: 12px 40px;
+	border-radius: 8px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	text-align: center;
+	flex-wrap: nowrap;
+`;
+
+const flexItem = css`
+	/* 🖥 Text Sans/text.sans.24 */
+	font-family: GuardianTextSans;
+	font-size: 24px;
+	font-style: normal;
+	line-height: 130%; /* 31.2px */
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	text-align: center;
 `;
-const timePortionStyle = css`
-	color: ${palette.brand[400]};
-	/* 🖥 Text Sans/text.sans.12 */
-	font-family: 'GuardianTextSans';
+
+const timePartStyle = css`
+	width: 33px;
+	flex-grow: 1;
+	font-weight: 700;
+`;
+
+const colon = css`
 	font-size: 12px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: 130%; /* 15.6px */
+	font-weight: 400px;
+	line-height: 135%; /* 16.2px */
+	margin: 0 2px;
+	margin-bottom: 20px;
+`;
+
+const timeLabelStyle = css`
+	width: 33px;
+	font-size: 12px;
+	font-weight: 400px;
+	line-height: 135%; /* 16.2px */
+	flex-grow: 1;
+	align-self: center;
 `;
 
 // props
@@ -126,11 +147,16 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 	return (
 		<>
 			{showCountdown && (
-				<div role="timer" css={gridStyle}>
-					<TimePart timePart={days} label={'days'} />
-					<TimePart timePart={hours} label={'hours'} />
-					<TimePart timePart={minutes} label={'mins'} />
-					<TimePart timePart={seconds} label={'secs'} />
+				<div id="timer" role="timer" css={outer}>
+					<div css={container}>
+						<TimePart timePart={days} label={'days'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={hours} label={'hrs'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={minutes} label={'mins'} />
+						<div css={[flexItem, colon]}>:</div>
+						<TimePart timePart={seconds} label={'secs'} />
+					</div>
 				</div>
 			)}
 		</>
@@ -146,9 +172,9 @@ type TimePartProps = {
 
 function TimePart({ timePart, label }: TimePartProps): JSX.Element {
 	return (
-		<div css={gridItemStyle}>
-			<div>{timePart}</div>
-			<div css={timePortionStyle}>{label}</div>
+		<div css={flexItem}>
+			<div css={timePartStyle}>{timePart}</div>
+			<div css={timeLabelStyle}>{label}</div>
 		</div>
 	);
 }
