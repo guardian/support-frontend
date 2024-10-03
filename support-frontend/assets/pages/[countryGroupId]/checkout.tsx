@@ -192,6 +192,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 		productParam && isProductKey(productParam) ? productParam : undefined;
 	const product = productKey && productCatalog[productKey];
 	if (!product) {
+		logException('Product not found');
+
 		return <div>Product not found</div>;
 	}
 
@@ -209,6 +211,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
+		logException('Rate plan not found');
+
 		return <div>Rate plan not found</div>;
 	}
 
@@ -245,6 +249,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 		 * @see https://support.gutools.co.uk/amounts
 		 */
 		if (!contributionAmount) {
+			logException('Contribution not specified');
+
 			return <div>Contribution not specified</div>;
 		}
 
@@ -260,6 +266,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 				: undefined;
 
 		if (!productPrice) {
+			logException('Price not found in product catalog');
+
 			return <div>Price not found in product catalog</div>;
 		}
 
