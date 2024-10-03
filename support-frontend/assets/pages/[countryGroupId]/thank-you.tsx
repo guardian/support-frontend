@@ -4,6 +4,7 @@ import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ThankYouComponent } from './components/thankyou';
 
@@ -54,9 +55,11 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	} else {
 		/** Recurring product must have product & ratePlan */
 		if (!product) {
+			logException('Product not found');
 			return <div>Product not found</div>;
 		}
 		if (!ratePlan) {
+			logException('Rate plan not found');
 			return <div>Rate plan not found</div>;
 		}
 
