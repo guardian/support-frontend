@@ -496,6 +496,9 @@ export function ThreeTierLanding({
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
 
+	const useNewOneTimeCheckout =
+		abParticipations.newOneTimeCheckout === 'variant';
+
 	return (
 		<PageScaffold
 			header={
@@ -570,6 +573,7 @@ export function ThreeTierLanding({
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
+						useNewOneTimeCheckout={useNewOneTimeCheckout}
 					/>
 				</Container>
 			)}

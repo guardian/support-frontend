@@ -136,6 +136,34 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 	);
 }
 
+function getPreSelectedAmount(
+	preSelectedAmountParam: string | null,
+	amountChoices: number[],
+): {
+	preSelectedOtherAmount?: string;
+	preSelectedPriceCard?: number | 'other';
+} {
+	const preSelectedAmount = preSelectedAmountParam
+		? parseInt(preSelectedAmountParam, 10)
+		: undefined;
+
+	if (preSelectedAmount === undefined) {
+		return {
+			preSelectedOtherAmount: undefined,
+			preSelectedPriceCard: undefined,
+		};
+	}
+
+	const preSelectedPriceCard = amountChoices.includes(preSelectedAmount)
+		? preSelectedAmount
+		: 'other';
+
+	return {
+		preSelectedOtherAmount: preSelectedAmount.toString(),
+		preSelectedPriceCard,
+	};
+}
+
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
@@ -180,6 +208,9 @@ function OneTimeCheckoutComponent({
 	stripePublicKey,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const urlSearchParams = new URLSearchParams(window.location.search);
+
+	const preSelectedAmountParam = urlSearchParams.get('contribution');
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -197,17 +228,28 @@ function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		amountsCardData['ONE_OFF'];
 
+	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
+		preSelectedAmountParam,
+		amounts,
+	);
+
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
 
-	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
-	const [otherAmount, setOtherAmount] = useState<string>('');
+	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
+		preSelectedPriceCard ?? defaultAmount,
+	);
+
+	const [otherAmount, setOtherAmount] = useState<string>(
+		preSelectedOtherAmount ?? '',
+	);
+
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 	const finalAmount =
-		amount === 'other'
+		selectedPriceCard === 'other'
 			? Number.isNaN(parseFloat(otherAmount))
 				? undefined
 				: parseFloat(otherAmount)
-			: amount;
+			: selectedPriceCard;
 
 	useEffect(() => {
 		if (finalAmount) {
@@ -375,7 +417,7 @@ function OneTimeCheckoutComponent({
 						setThankYouOrder(order);
 						const thankYouUrlSearchParams = new URLSearchParams();
 						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-						window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 					}
 				}
 			}
@@ -400,10 +442,10 @@ function OneTimeCheckoutComponent({
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
 							amounts={amounts}
-							selectedAmount={amount}
+							selectedAmount={selectedPriceCard}
 							currency={currencyKey}
 							onAmountChange={(amount: string) => {
-								setAmount(
+								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
 							}}
@@ -412,7 +454,7 @@ function OneTimeCheckoutComponent({
 								<OtherAmount
 									currency={currencyKey}
 									minAmount={minAmount}
-									selectedAmount={amount}
+									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
 									onBlur={(event) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired

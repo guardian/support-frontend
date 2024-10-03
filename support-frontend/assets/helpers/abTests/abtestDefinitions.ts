@@ -8,7 +8,7 @@ import type { Tests } from './abtest';
 export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages:
-			'/checkout|contribute|thankyou|thank-you(/.*)?$',
+			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
@@ -144,6 +144,27 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+	},
+	newOneTimeCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
