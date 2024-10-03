@@ -193,7 +193,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 	const product = productKey && productCatalog[productKey];
 	if (!product) {
 		logException('Product not found');
-
 		return <div>Product not found</div>;
 	}
 
@@ -212,7 +211,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
 		logException('Rate plan not found');
-
 		return <div>Rate plan not found</div>;
 	}
 
@@ -250,7 +248,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 		 */
 		if (!contributionAmount) {
 			logException('Contribution not specified');
-
 			return <div>Contribution not specified</div>;
 		}
 
@@ -267,7 +264,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 
 		if (!productPrice) {
 			logException('Price not found in product catalog');
-
 			return <div>Price not found in product catalog</div>;
 		}
 
