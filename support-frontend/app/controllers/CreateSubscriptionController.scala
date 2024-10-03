@@ -121,8 +121,8 @@ class CreateSubscriptionController(
         .subflatMap {
           case RecaptchaResponse(true, _) => Right(())
 
-          case RecaptchaResponse(false, _) =>
-            logErrorDetailedMessage("recaptcha failed")
+          case RecaptchaResponse(false, errorCodes) =>
+            logErrorDetailedMessage(s"recaptcha failed with error codes: ${errorCodes.getOrElse(Nil).mkString(", ")}")
             Left(RequestValidationError(RecaptchaResponse.recaptchaFailedCode))
         }
     } else {
