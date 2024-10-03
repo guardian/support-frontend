@@ -20,6 +20,7 @@ const errorReasons = [
 	'amazon_pay_fatal',
 	'email_provider_rejected',
 	'invalid_email_address',
+	'recaptcha_validation_failed',
 	'unknown',
 ] as const;
 function isErrorReason(value: string): value is ErrorReason {
@@ -79,6 +80,9 @@ function appropriateErrorMessage(errorReason: string): string {
 
 			case 'invalid_email_address':
 				return 'Please enter a valid email address';
+
+			case 'recaptcha_validation_failed':
+				return 'Please prove you are not a robot';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';

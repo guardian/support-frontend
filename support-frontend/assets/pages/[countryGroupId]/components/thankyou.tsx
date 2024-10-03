@@ -1,19 +1,13 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source/foundations';
-import {
-	Column,
-	Columns,
-	Container,
-	LinkButton,
-} from '@guardian/source/react-components';
+import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { InferInput } from 'valibot';
 import { object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
-import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import type { ContributionType } from 'helpers/contributions';
@@ -34,10 +28,7 @@ import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import {
-	columnContainer,
-	firstColumnContainer,
-} from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 
 const checkoutContainer = css`
 	${from.tablet} {
@@ -218,9 +209,9 @@ export function ThankYouComponent({
 		benefitsChecklist,
 	);
 	const maybeThankYouModule = (
-		condtion: boolean,
+		condition: boolean,
 		moduleType: ThankYouModuleType,
-	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
@@ -240,10 +231,6 @@ export function ThankYouComponent({
 			'newspaperArchiveBenefit',
 		),
 	];
-
-	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
-	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
-	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
 	return (
 		<PageScaffold
@@ -273,26 +260,11 @@ export function ThankYouComponent({
 						/>
 					</div>
 
-					<Columns collapseUntil="desktop">
-						<Column cssOverrides={[columnContainer, firstColumnContainer]}>
-							{firstColumn.map((moduleType) => (
-								<ThankYouModule
-									moduleType={moduleType}
-									isSignedIn={isSignedIn}
-									{...thankYouModuleData[moduleType]}
-								/>
-							))}
-						</Column>
-						<Column cssOverrides={columnContainer}>
-							{secondColumn.map((moduleType) => (
-								<ThankYouModule
-									moduleType={moduleType}
-									isSignedIn={isSignedIn}
-									{...thankYouModuleData[moduleType]}
-								/>
-							))}
-						</Column>
-					</Columns>
+					<ThankYouModules
+						isSignedIn={isSignedIn}
+						thankYouModules={thankYouModules}
+						thankYouModulesData={thankYouModuleData}
+					/>
 
 					<div css={buttonContainer}>
 						<LinkButton

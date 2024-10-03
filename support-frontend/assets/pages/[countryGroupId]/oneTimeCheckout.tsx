@@ -10,13 +10,18 @@ import {
 	RadioGroup,
 	TextInput,
 } from '@guardian/source/react-components';
-import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
+import {
+	Divider,
+	ErrorSummary,
+} from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
 	Elements,
+	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -42,6 +47,7 @@ import {
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -128,12 +134,42 @@ type OneTimeCheckoutComponentProps = OneTimeCheckoutProps & {
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
-		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
+		`oneOffPaymentMethods.${toPaymentMethodSwitchNaming(
+			paymentMethod as LegacyPaymentMethod,
+		)}`,
 	);
 }
 
+function getPreSelectedAmount(
+	preSelectedAmountParam: string | null,
+	amountChoices: number[],
+): {
+	preSelectedOtherAmount?: string;
+	preSelectedPriceCard?: number | 'other';
+} {
+	const preSelectedAmount = preSelectedAmountParam
+		? parseInt(preSelectedAmountParam, 10)
+		: undefined;
+
+	if (preSelectedAmount === undefined) {
+		return {
+			preSelectedOtherAmount: undefined,
+			preSelectedPriceCard: undefined,
+		};
+	}
+
+	const preSelectedPriceCard = amountChoices.includes(preSelectedAmount)
+		? preSelectedAmount
+		: 'other';
+
+	return {
+		preSelectedOtherAmount: preSelectedAmount.toString(),
+		preSelectedPriceCard,
+	};
+}
+
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
 
 	const stripePublicKey = getStripeKey(
@@ -145,8 +181,21 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 
 	const stripePromise = loadStripe(stripePublicKey);
 
+	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+	const elementsOptions = {
+		mode: 'payment',
+		/**
+		 * Stripe amounts are in the "smallest currency unit"
+		 * @see https://docs.stripe.com/api/charges/object
+		 * @see https://docs.stripe.com/currencies#zero-decimal
+		 */
+		amount: minAmount * 100,
+		currency: currencyKey.toLowerCase(),
+		paymentMethodCreation: 'manual',
+	} as const;
+
 	return (
-		<Elements stripe={stripePromise}>
+		<Elements stripe={stripePromise} options={elementsOptions}>
 			<OneTimeCheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
@@ -164,6 +213,9 @@ function OneTimeCheckoutComponent({
 	isTestUser,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const urlSearchParams = new URLSearchParams(window.location.search);
+
+	const preSelectedAmountParam = urlSearchParams.get('contribution');
 
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -185,13 +237,39 @@ function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		amountsCardData['ONE_OFF'];
 
+	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
+		preSelectedAmountParam,
+		amounts,
+	);
+
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
 
-	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
-	const [otherAmount, setOtherAmount] = useState<string>('');
-	const [otherAmountError, setOtherAmountError] = useState<string>();
+	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
+		preSelectedPriceCard ?? defaultAmount,
+	);
 
-	const finalAmount = amount === 'other' ? parseFloat(otherAmount) : amount;
+	const [otherAmount, setOtherAmount] = useState<string>(
+		preSelectedOtherAmount ?? '',
+	);
+
+	const [otherAmountError, setOtherAmountError] = useState<string>();
+	const finalAmount =
+		selectedPriceCard === 'other'
+			? Number.isNaN(parseFloat(otherAmount))
+				? undefined
+				: parseFloat(otherAmount)
+			: selectedPriceCard;
+
+	useEffect(() => {
+		if (finalAmount) {
+			// valid final amount, set amount, enable Express checkout
+			elements?.update({ amount: finalAmount * 100 });
+			setStripeExpressCheckoutEnable(true);
+		} else {
+			// invalid final amount, disable Express checkout
+			setStripeExpressCheckoutEnable(false);
+		}
+	}, [finalAmount]);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 
@@ -199,6 +277,26 @@ function OneTimeCheckoutComponent({
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
+	const [
+		stripeExpressCheckoutPaymentType,
+		setStripeExpressCheckoutPaymentType,
+	] = useState<ExpressPaymentType>();
+	const stripePaymentMethod: StripePaymentMethod =
+		stripeExpressCheckoutPaymentType === 'apple_pay'
+			? 'StripeApplePay'
+			: 'StripeCheckout';
+
+	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
+		useState(false);
+	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
+		useState(false);
+	const [stripeExpressCheckoutEnable, setStripeExpressCheckoutEnable] =
+		useState(false);
+	useEffect(() => {
+		if (stripeExpressCheckoutSuccessful) {
+			formRef.current?.requestSubmit();
+		}
+	}, [stripeExpressCheckoutSuccessful]);
 
 	/**
 	 * Payment method: PayPal
@@ -266,14 +364,19 @@ function OneTimeCheckoutComponent({
 	const formOnSubmit = async () => {
 		setIsProcessingPayment(true);
 
-		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
+		let paymentMethodResult;
+		if (
+			paymentMethod === 'StripeExpressCheckoutElement' &&
+			stripe &&
+			elements
+		) {
+			paymentMethodResult = await stripe.createPaymentMethod({
+				elements,
+			});
+		}
 
-			const paymentMethodResult = await stripe.createPaymentMethod({
+		if (paymentMethod === 'Stripe' && stripe && cardElement) {
+			paymentMethodResult = await stripe.createPaymentMethod({
 				type: 'card',
 				card: cardElement,
 				billing_details: {
@@ -282,6 +385,15 @@ function OneTimeCheckoutComponent({
 					},
 				},
 			});
+		}
+
+		if (paymentMethodResult && stripe) {
+			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+			const handle3DS = (clientSecret: string) => {
+				trackComponentLoad('stripe-3ds');
+				return stripe.handleCardAction(clientSecret);
+			};
+
 			if (paymentMethodResult.error) {
 				logException(
 					`Error creating Payment Method: ${JSON.stringify(
@@ -299,40 +411,45 @@ function OneTimeCheckoutComponent({
 					);
 				}
 			} else {
-				const stripeData: CreateStripePaymentIntentRequest = {
-					paymentData: {
-						currency: currencyKey,
-						amount: finalAmount,
-						email,
-						stripePaymentMethod: 'StripeCheckout',
-					},
-					acquisitionData: derivePaymentApiAcquisitionData(
-						{ ...getReferrerAcquisitionData(), labels: ['one-time-checkout'] },
-						abParticipations,
-						billingPostcode,
-					),
-					publicKey: stripePublicKey,
-					recaptchaToken: recaptchaToken,
-					paymentMethodId: paymentMethodResult.paymentMethod.id,
-				};
-
-				const paymentResult = await processStripePaymentIntentRequest(
-					stripeData,
-					handle3DS,
-				);
-				if (paymentResult.paymentStatus === 'failure') {
-					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
-				}
-				if (paymentResult.paymentStatus === 'success') {
-					const order = {
-						firstName: '',
-						paymentMethod: paymentMethod,
+				if (finalAmount) {
+					const stripeData: CreateStripePaymentIntentRequest = {
+						paymentData: {
+							currency: currencyKey,
+							amount: finalAmount,
+							email,
+							stripePaymentMethod: stripePaymentMethod,
+						},
+						acquisitionData: derivePaymentApiAcquisitionData(
+							{
+								...getReferrerAcquisitionData(),
+								labels: ['one-time-checkout'],
+							},
+							abParticipations,
+							billingPostcode,
+						),
+						publicKey: stripePublicKey,
+						// ToDo: validate recaptchaToken for card payments
+						recaptchaToken: recaptchaToken ?? '',
+						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
-					setThankYouOrder(order);
-					const thankYouUrlSearchParams = new URLSearchParams();
-					thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-					window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+					const paymentResult = await processStripePaymentIntentRequest(
+						stripeData,
+						handle3DS,
+					);
+					if (paymentResult.paymentStatus === 'failure') {
+						setErrorMessage('Sorry, something went wrong.');
+						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+					}
+					if (paymentResult.paymentStatus === 'success') {
+						const order = {
+							firstName: '',
+							paymentMethod: paymentMethod,
+						};
+						setThankYouOrder(order);
+						const thankYouUrlSearchParams = new URLSearchParams();
+						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+					}
 				}
 			}
 		}
@@ -356,10 +473,10 @@ function OneTimeCheckoutComponent({
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
 							amounts={amounts}
-							selectedAmount={amount}
+							selectedAmount={selectedPriceCard}
 							currency={currencyKey}
 							onAmountChange={(amount: string) => {
-								setAmount(
+								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
 							}}
@@ -368,7 +485,7 @@ function OneTimeCheckoutComponent({
 								<OtherAmount
 									currency={currencyKey}
 									minAmount={minAmount}
-									selectedAmount={amount}
+									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
 									onBlur={(event) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
@@ -404,6 +521,98 @@ function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
+						<div
+							css={css`
+								/* Prevent content layout shift */
+								min-height: 8px;
+							`}
+						>
+							<ExpressCheckoutElement
+								onReady={({ availablePaymentMethods }) => {
+									/**
+									 * This is use to show UI needed besides this Element
+									 * i.e. The "or" divider
+									 */
+									if (
+										!!availablePaymentMethods?.applePay ||
+										!!availablePaymentMethods?.googlePay
+									) {
+										setStripeExpressCheckoutReady(true);
+									}
+								}}
+								onClick={({ resolve }) => {
+									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+									if (stripeExpressCheckoutEnable) {
+										const options = {
+											emailRequired: true,
+										};
+										resolve(options);
+									}
+								}}
+								onConfirm={async (event) => {
+									if (!(stripe && elements)) {
+										console.error('Stripe not loaded');
+										return;
+									}
+
+									const { error: submitError } = await elements.submit();
+
+									if (submitError) {
+										setErrorMessage(submitError.message);
+										return;
+									}
+
+									// ->
+
+									setPaymentMethod('StripeExpressCheckoutElement');
+									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
+									event.billingDetails?.email &&
+										setEmail(event.billingDetails.email);
+
+									/**
+									 * There is a useEffect that listens to this and submits the form
+									 * when true
+									 */
+									setStripeExpressCheckoutSuccessful(true);
+								}}
+								options={{
+									paymentMethods: {
+										applePay: 'auto',
+										googlePay: 'auto',
+										link: 'never',
+									},
+								}}
+							/>
+
+							{stripeExpressCheckoutReady && (
+								<Divider
+									displayText="or"
+									size="full"
+									cssOverrides={css`
+										::before {
+											margin-left: 0;
+										}
+										::after {
+											margin-right: 0;
+										}
+										margin: 0;
+										margin-top: 14px;
+										margin-bottom: 14px;
+										width: 100%;
+										@keyframes fadeIn {
+											0% {
+												opacity: 0;
+											}
+											100% {
+												opacity: 1;
+											}
+										}
+										animation: fadeIn 1s;
+									`}
+								/>
+							)}
+						</div>
+
 						<FormSection>
 							<Legend>1. Your details</Legend>
 							<div>
@@ -538,12 +747,12 @@ function OneTimeCheckoutComponent({
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
 									buttonText={
-										Number.isNaN(finalAmount)
-											? 'Pay now'
-											: `Support us with ${simpleFormatAmount(
+										finalAmount
+											? `Support us with ${simpleFormatAmount(
 													currency,
 													finalAmount,
 											  )}`
+											: 'Pay now'
 									}
 									onClick={() => {
 										// no-op
