@@ -21,6 +21,7 @@ trait ProductCatalogService extends WebServiceHelper[ProductCatalogServiceError]
   val client: FutureHttpClient
   override val wsUrl: String
   override val httpClient: FutureHttpClient = client
+  override val verboseLogging: Boolean = false
 
   def get(): Future[JsonObject] = {
     get[JsonObject](endpoint = "product-catalog.json")
@@ -55,7 +56,7 @@ class CachedProductCatalogServiceProvider(
     codeCachedProductCatalogService: CachedProductCatalogService,
     prodCachedProductCatalogService: CachedProductCatalogService,
 ) {
-  def fromStage(stage: Stage, isTestUser: Boolean) =
+  def fromStage(stage: Stage, isTestUser: Boolean): CachedProductCatalogService =
     if (stage == DEV || stage == CODE || isTestUser)
       codeCachedProductCatalogService
     else prodCachedProductCatalogService
