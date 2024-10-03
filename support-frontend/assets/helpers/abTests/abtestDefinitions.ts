@@ -166,7 +166,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	amazonPay: {
 		variants: [
