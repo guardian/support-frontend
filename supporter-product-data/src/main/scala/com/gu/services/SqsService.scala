@@ -25,7 +25,7 @@ class SqsService(queueName: String, alarmService: AlarmService)(implicit val exe
 
   private val queueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
 
-  def sendBatch(supporterRatePlanItems: List[(SupporterRatePlanItem, Int)]) = {
+  def sendBatch(supporterRatePlanItems: List[(SupporterRatePlanItem, Int)]): Unit = {
     logger.info(s"Sending message batch with ${supporterRatePlanItems.length} items to SQS queue $queueUrl")
 
     val batchRequestEntries = supporterRatePlanItems.map { case (item, index) =>
@@ -60,7 +60,7 @@ class SqsService(queueName: String, alarmService: AlarmService)(implicit val exe
 
 object SqsService extends SafeLogging {
   import scala.concurrent.ExecutionContext.Implicits.global
-  def apply(stage: Stage) = {
+  def apply(stage: Stage): SqsService = {
     val queueName = s"supporter-product-data-${stage.value}"
     logger.info(s"Creating SqsService for SQS queue $queueName")
     new SqsService(queueName, new AlarmService(stage))

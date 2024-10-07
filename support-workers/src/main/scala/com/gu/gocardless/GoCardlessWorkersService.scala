@@ -10,7 +10,7 @@ import scala.concurrent.Future
 
 case class GoCardlessWorkersService(config: GoCardlessConfig) extends GoCardlessService(config) {
 
-  lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
+  lazy val client: GoCardlessClient = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 
   def getCustomerAccountIdFromMandateId(mandateId: String): Future[String] =
     Future {

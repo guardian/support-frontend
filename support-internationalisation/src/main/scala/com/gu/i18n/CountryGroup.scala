@@ -20,11 +20,11 @@ object CountryGroup {
   import Currency._
 
   val C = Country
-  val Canada = CountryGroup("Canada", "ca", Some(C.Canada), List(C.Canada), CAD, ZipCode)
+  val Canada: CountryGroup = CountryGroup("Canada", "ca", Some(C.Canada), List(C.Canada), CAD, ZipCode)
 
-  val US = CountryGroup("United States", "us", Some(C.US), List(C.US), USD, ZipCode)
+  val US: CountryGroup = CountryGroup("United States", "us", Some(C.US), List(C.US), USD, ZipCode)
 
-  val UK = CountryGroup(
+  val UK: CountryGroup = CountryGroup(
     "United Kingdom",
     "uk",
     Some(C.UK),
@@ -41,7 +41,7 @@ object CountryGroup {
     PostCode,
   )
 
-  val Australia = CountryGroup(
+  val Australia: CountryGroup = CountryGroup(
     "Australia",
     "au",
     Some(C.Australia),
@@ -56,7 +56,7 @@ object CountryGroup {
     PostCode,
   )
 
-  val NewZealand = CountryGroup(
+  val NewZealand: CountryGroup = CountryGroup(
     "New Zealand",
     "nz",
     Some(C.NewZealand),
@@ -68,7 +68,7 @@ object CountryGroup {
     PostCode,
   )
 
-  val Europe = CountryGroup(
+  val Europe: CountryGroup = CountryGroup(
     "Europe",
     "eu",
     None,
@@ -133,7 +133,7 @@ object CountryGroup {
     PostCode,
   )
 
-  val RestOfTheWorld = CountryGroup(
+  val RestOfTheWorld: CountryGroup = CountryGroup(
     "International",
     "int",
     None,
@@ -323,7 +323,7 @@ object CountryGroup {
     List(GBP),
   )
 
-  val allGroups = List(
+  val allGroups: List[CountryGroup] = List(
     UK,
     US,
     Canada,
@@ -337,7 +337,7 @@ object CountryGroup {
 
   val countriesByISO2: Map[String, Country] = countries.map { c => c.alpha2 -> c }.toMap
 
-  val countriesByISO3 = countries.flatMap { country =>
+  val countriesByISO3: Map[String, Country] = countries.flatMap { country =>
     Try {
       // getISO3Country will throw a MissingResourceException if the three-letter country abbreviation is not available for this locale
       val locale = new Locale("", country.alpha2)

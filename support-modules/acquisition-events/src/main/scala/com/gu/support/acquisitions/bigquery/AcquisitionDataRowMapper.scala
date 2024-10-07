@@ -55,7 +55,7 @@ object AcquisitionDataRowMapper {
     )
   }
 
-  def mapPlatformName(name: String) =
+  def mapPlatformName(name: String): String =
     name.toLowerCase match {
       case "iosnativeapp" => "IOS_NATIVE_APP"
       case "androidnativeapp" => "ANDROID_NATIVE_APP"

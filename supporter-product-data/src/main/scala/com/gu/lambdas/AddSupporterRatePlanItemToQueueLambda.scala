@@ -24,14 +24,17 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
 
 class AddSupporterRatePlanItemToQueueLambda
     extends Handler[AddSupporterRatePlanItemToQueueState, AddSupporterRatePlanItemToQueueState] {
-  override protected def handlerFuture(input: AddSupporterRatePlanItemToQueueState, context: Context) = {
+  override protected def handlerFuture(
+      input: AddSupporterRatePlanItemToQueueState,
+      context: Context,
+  ): Future[AddSupporterRatePlanItemToQueueState] = {
     addToQueue(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
 object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
   val maxBatchSize = 5
-  val timeoutBufferInMillis = maxBatchSize * 5 * 1000
+  val timeoutBufferInMillis: Int = maxBatchSize * 5 * 1000
 
   def addToQueue(
       stage: Stage,
@@ -84,7 +87,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     maybeSaveSuccessTime.map(_ => state.copy(processedCount = processedCount))
   }
 
-  def alarmAndExit(alarmService: AlarmService, message: String) = {
+  def alarmAndExit(alarmService: AlarmService, message: String): Nothing = {
     logger.error(
       s"CSV read failure: $message",
     )
@@ -92,7 +95,10 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     throw new RuntimeException(message)
   }
 
-  def getUnprocessedItems(csvReader: CsvReader[ReadResult[SupporterRatePlanItem]], processedCount: Int) =
+  def getUnprocessedItems(
+      csvReader: CsvReader[ReadResult[SupporterRatePlanItem]],
+      processedCount: Int,
+  ): List[(ReadResult[SupporterRatePlanItem], Int)] =
     csvReader.zipWithIndex.drop(processedCount).toList
 
   def writeBatchesUntilTimeout(

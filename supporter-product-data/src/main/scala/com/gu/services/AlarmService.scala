@@ -9,10 +9,11 @@ import com.gu.aws.AwsCloudWatchMetricPut.{
   MetricRequest,
 }
 import com.gu.supporterdata.model.Stage
+import scala.util.Try
 
 class AlarmService(stage: Stage) {
 
-  def triggerCsvReadAlarm = {
+  def triggerCsvReadAlarm: Try[Unit] = {
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
       MetricRequest(
         MetricNamespace("supporter-product-data"),
@@ -22,7 +23,7 @@ class AlarmService(stage: Stage) {
     )
   }
 
-  def triggerDynamoWriteAlarm = {
+  def triggerDynamoWriteAlarm: Try[Unit] = {
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
       MetricRequest(
         MetricNamespace("supporter-product-data"),
@@ -32,7 +33,7 @@ class AlarmService(stage: Stage) {
     )
   }
 
-  def triggerSQSWriteAlarm = {
+  def triggerSQSWriteAlarm: Try[Unit] = {
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
       MetricRequest(
         MetricNamespace("supporter-product-data"),

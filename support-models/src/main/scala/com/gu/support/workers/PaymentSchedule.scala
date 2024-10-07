@@ -12,7 +12,7 @@ case class Payment(date: LocalDate, amount: Double)
 case class PaymentSchedule(payments: List[Payment])
 
 object PaymentSchedule {
-  def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+  def round(d: Double): Double = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
   implicit val decoder: Decoder[Payment] = deriveDecoder[Payment].map(payment =>
     payment.copy(
       amount = round(payment.amount),

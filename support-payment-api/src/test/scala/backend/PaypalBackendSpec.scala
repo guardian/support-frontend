@@ -21,11 +21,13 @@ import util.FutureEitherValues
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
+import com.paypal.api.payments.Transaction
+import java.{util => ju}
 
 class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   // -- entities
-  val acquisitionData =
+  val acquisitionData: AcquisitionData =
     AcquisitionData(
       Some("platform"),
       None,
@@ -42,39 +44,39 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       Some("N1 9GU"),
     )
-  val capturePaypalPaymentData =
+  val capturePaypalPaymentData: CapturePaypalPaymentData =
     CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
-  val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
-  val executePaypalPaymentData = ExecutePaypalPaymentData(
+  val countrySubdivisionCode: Some[String] = Some("NY")
+  val clientBrowserInfo: ClientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
+  val executePaypalPaymentData: ExecutePaypalPaymentData = ExecutePaypalPaymentData(
     ExecutePaymentData("paymentId", "payerId"),
     acquisitionData,
     "email@email.com",
   )
-  val paypalRefundWebHookData = PaypalRefundWebHookData(
+  val paypalRefundWebHookData: PaypalRefundWebHookData = PaypalRefundWebHookData(
     body = PaypalRefundWebHookBody("parent_payment_id", "{}"),
     headers = Map.empty,
   )
-  val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
+  val dbError: ContributionsStoreService.Error = ContributionsStoreService.Error(new Exception("DB error response"))
 
-  val identityError = IdentityClient.ContextualError(
+  val identityError: IdentityClient.ContextualError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
-  val payPalSwitchError = PaypalApiError.fromString("Paypal Switch not enabled")
-  val paymentError = PaypalApiError.fromString("Error response")
-  val backendPaymentError = BackendError.fromPaypalAPIError(paymentError)
-  val backendDbError = BackendError.fromDatabaseError(dbError)
+  val payPalSwitchError: PaypalApiError = PaypalApiError.fromString("Paypal Switch not enabled")
+  val paymentError: PaypalApiError = PaypalApiError.fromString("Error response")
+  val backendPaymentError: BackendError = BackendError.fromPaypalAPIError(paymentError)
+  val backendDbError: BackendError = BackendError.fromDatabaseError(dbError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
 
   // -- mocks
   val paymentMock: Payment = mock[Payment]
   val enrichedPaymentMock: EnrichedPaypalPayment = mock[EnrichedPaypalPayment]
-  val amount = mock[Amount]
-  val payer = mock[Payer]
-  val payerInfo = mock[PayerInfo]
-  val transaction = mock[com.paypal.api.payments.Transaction]
-  val transactions = List(transaction).asJava
+  val amount: Amount = mock[Amount]
+  val payer: Payer = mock[Payer]
+  val payerInfo: PayerInfo = mock[PayerInfo]
+  val transaction: Transaction = mock[com.paypal.api.payments.Transaction]
+  val transactions: ju.List[Transaction] = List(transaction).asJava
 
   // -- service responses
   val paypalSwitchFailResponse: EitherT[Future, PaypalApiError, Payment] =
@@ -180,7 +182,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
+  val clientBrowserInfo: ClientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
 
   "Paypal Backend" when {
 

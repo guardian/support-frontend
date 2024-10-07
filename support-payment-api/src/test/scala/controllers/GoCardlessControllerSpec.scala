@@ -90,7 +90,7 @@ class GoCardlessControllerSpec extends AnyWordSpec with Status with Matchers {
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val context = ApplicationLoader.Context.create(Environment.simple())
+  val context: ApplicationLoader.Context = ApplicationLoader.Context.create(Environment.simple())
 
   "GoCardless Controller" when {
 

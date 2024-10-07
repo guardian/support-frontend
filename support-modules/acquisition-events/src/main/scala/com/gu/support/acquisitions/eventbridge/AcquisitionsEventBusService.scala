@@ -14,11 +14,12 @@ import software.amazon.awssdk.services.eventbridge.model.{PutEventsRequest, PutE
 import java.time.Instant
 import scala.concurrent.Promise
 import scala.jdk.CollectionConverters.SeqHasAsJava
+import scala.concurrent.Future
 
 class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBridgeClient) extends SafeLogging {
-  val eventBusName = s"acquisitions-bus-${stage.toString}"
+  val eventBusName: String = s"acquisitions-bus-${stage.toString}"
   val detailType = "AcquisitionsEvent"
-  def putAcquisitionEvent(acquisition: AcquisitionDataRow) = {
+  def putAcquisitionEvent(acquisition: AcquisitionDataRow): Future[Either[String, Unit]] = {
     val acquisitionJson = acquisition.asJson
     logger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
     val entry = PutEventsRequestEntry

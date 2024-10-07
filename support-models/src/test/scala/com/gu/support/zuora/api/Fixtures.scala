@@ -15,7 +15,7 @@ object Fixtures {
   val accountNumber = "A00071408"
   val promoCode = "TEST_CODE"
 
-  val soldToContact = s"""{
+  val soldToContact: String = s"""{
     "address1" : "Test",
     "address2" : "Test",
     "city" : "Test",
@@ -38,7 +38,7 @@ object Fixtures {
     "SpecialDeliveryInstructions__c" : "Stick it in the shed"
     }"""
 
-  val getAccountResponse =
+  val getAccountResponse: String =
     s"""
        {
          "basicInfo" : {
@@ -135,7 +135,7 @@ object Fixtures {
   )
 
   val deliveryInstructions = "Leave behind the dustbin"
-  val contactDetails =
+  val contactDetails: ContactDetails =
     ContactDetails(
       "Test-FirstName",
       "Test-LastName",
@@ -143,7 +143,7 @@ object Fixtures {
       Country.UK,
       deliveryInstructions = Some(deliveryInstructions),
     )
-  val creditCardPaymentMethod = CreditCardReferenceTransaction(
+  val creditCardPaymentMethod: CreditCardReferenceTransaction = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
     cardNumber,
@@ -154,8 +154,8 @@ object Fixtures {
     StripeGatewayDefault,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
-  val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+  val payPalPaymentMethod: PayPalReferenceTransaction = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
+  val directDebitPaymentMethod: DirectDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Barry",
     LastName = "Humphreys",
     BankTransferAccountName = "Barry Humphreys",
@@ -170,8 +170,8 @@ object Fixtures {
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"
 
-  val subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode))
-  val monthlySubscriptionData = SubscriptionData(
+  val subscription: Subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode))
+  val monthlySubscriptionData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(productRatePlanId), // Contribution product
@@ -186,7 +186,7 @@ object Fixtures {
     subscription,
   )
 
-  val dsSubscriptionData = SubscriptionData(
+  val dsSubscriptionData: SubscriptionData = SubscriptionData(
     List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
     Subscription(
       contractEffectiveDate = new LocalDate(2020, 12, 1),
@@ -202,7 +202,7 @@ object Fixtures {
     ),
   )
 
-  val dsGiftSubscriptionData = SubscriptionData(
+  val dsGiftSubscriptionData: SubscriptionData = SubscriptionData(
     List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
     Subscription(
       contractEffectiveDate = new LocalDate(2020, 12, 1),
@@ -235,7 +235,7 @@ object Fixtures {
         "Batch" : "Batch1"
       }
     """
-  val subscriptionJson =
+  val subscriptionJson: String =
     s"""
       {
         "ContractEffectiveDate" : "2018-11-28",
@@ -253,7 +253,7 @@ object Fixtures {
       }
     """
 
-  val subscribeItemJson =
+  val subscribeItemJson: String =
     s"""
       {
         "Account" : $accountJson,
@@ -299,7 +299,7 @@ object Fixtures {
         }
       }
     """
-  val subscribeRequestJson =
+  val subscribeRequestJson: String =
     s"""
       {
         "subscribes": [$subscribeItemJson]
@@ -334,7 +334,7 @@ object Fixtures {
       ),
     )
 
-  val invalidMonthlySubsData = SubscriptionData(
+  val invalidMonthlySubsData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(productRatePlanId),
@@ -348,7 +348,7 @@ object Fixtures {
     ),
     Subscription(date, date, date, "id123", termType = "Invalid term type"),
   )
-  val invalidSubscriptionRequest = SubscribeRequest(
+  val invalidSubscriptionRequest: SubscribeRequest = SubscribeRequest(
     List(
       SubscribeItem(
         account(),
@@ -361,7 +361,7 @@ object Fixtures {
     ),
   )
 
-  val incorrectPaymentMethod = SubscribeRequest(
+  val incorrectPaymentMethod: SubscribeRequest = SubscribeRequest(
     List(
       SubscribeItem(
         account(),
@@ -386,7 +386,7 @@ object Fixtures {
       }
     """
 
-  val subscribeResponseAccount =
+  val subscribeResponseAccount: String =
     s"""
       {
           "SubscriptionId": "2c92c0f86716797001671754520357f2",
@@ -398,7 +398,7 @@ object Fixtures {
           "TotalTcv": 115.387634411
       }
      """
-  val subscribeResponse =
+  val subscribeResponse: String =
     s"""
       [
         $subscribeResponseAccount
@@ -469,7 +469,7 @@ object Fixtures {
       }
     """
 
-  val errorResponse =
+  val errorResponse: String =
     s"""
         [
           {
@@ -484,7 +484,7 @@ object Fixtures {
         ]
      """
 
-  val directDebitPaymentFieldsJson =
+  val directDebitPaymentFieldsJson: String =
     s"""
        {
         "accountHolderName": "Mickey Mouse",

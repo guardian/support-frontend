@@ -67,7 +67,10 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  def downloadResults(result: BatchQueryResponse, service: ZuoraQuerierService) = {
+  def downloadResults(
+      result: BatchQueryResponse,
+      service: ZuoraQuerierService,
+  ): Future[AddSupporterRatePlanItemToQueueState] = {
     val batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response")
     val fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in the job")
     for {
@@ -92,7 +95,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  def sanitizeFieldNames(filename: String) = {
+  def sanitizeFieldNames(filename: String): Boolean = {
     val tempPath = FileSystems.getDefault.getPath(
       System.getProperty("user.dir"),
       "supporter-product-data",

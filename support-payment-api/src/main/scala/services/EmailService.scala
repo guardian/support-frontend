@@ -14,7 +14,7 @@ import scala.concurrent.Future
 class EmailService(sqsClient: AmazonSQSAsync, queueName: String)(implicit pool: DefaultThreadPool)
     extends StrictLogging {
 
-  val thankYouQueueUrl = sqsClient.getQueueUrl(queueName).getQueueUrl
+  val thankYouQueueUrl: String = sqsClient.getQueueUrl(queueName).getQueueUrl
 
   /*
    * No need to provide an AsyncHandler as the process is fire and forget and it's not required any action if the message

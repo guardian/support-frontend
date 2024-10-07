@@ -19,7 +19,7 @@ object Fixtures {
   val state = "CA"
   val allowMail = false
 
-  val newContactUK = NewContact(
+  val newContactUK: NewContact = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
     Salutation = Some(Title.Mrs),
@@ -37,14 +37,14 @@ object Fixtures {
     MailingCountry = None,
     Phone = None,
   )
-  val newContactUKWithBillingAddress = newContactUK.copy(
+  val newContactUKWithBillingAddress: NewContact = newContactUK.copy(
     OtherStreet = Some("123 trash alley"),
     OtherCity = Some("London"),
     OtherState = None,
     OtherPostalCode = Some("n1 9gu"),
     OtherCountry = uk,
   )
-  val newContactUKWithBothAddressesAndTelephone = newContactUKWithBillingAddress.copy(
+  val newContactUKWithBothAddressesAndTelephone: NewContact = newContactUKWithBillingAddress.copy(
     MailingStreet = Some("123 trash alley"),
     MailingCity = Some("London"),
     MailingState = None,
@@ -52,9 +52,9 @@ object Fixtures {
     MailingCountry = Some(uk),
     Phone = Some(telephoneNumber),
   )
-  val newContactUS = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
+  val newContactUS: NewContact = newContactUK.copy(OtherCountry = us, OtherState = Some(state))
 
-  val giftRecipientUpsert = DeliveryContact(
+  val giftRecipientUpsert: DeliveryContact = DeliveryContact(
     AccountId = salesforceId,
     Email = Some(emailAddress),
     Salutation = Some(Title.Mr),
@@ -67,7 +67,7 @@ object Fixtures {
     MailingCountry = Some(uk),
   )
 
-  val upsertJson =
+  val upsertJson: String =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
@@ -78,7 +78,7 @@ object Fixtures {
         "OtherCountry": "$uk"
        }
       }"""
-  val upsertJsonWithState =
+  val upsertJsonWithState: String =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
@@ -91,7 +91,7 @@ object Fixtures {
        }
       }"""
 
-  val upsertJsonWithTelephoneNumber =
+  val upsertJsonWithTelephoneNumber: String =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
@@ -104,7 +104,7 @@ object Fixtures {
        }
       }"""
 
-  val upsertJsonWithBillingAddress =
+  val upsertJsonWithBillingAddress: String =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
@@ -119,7 +119,7 @@ object Fixtures {
        }
       }"""
 
-  val upsertJsonWithBillingAndDeliveryAddresses =
+  val upsertJsonWithBillingAndDeliveryAddresses: String =
     s"""{
       "newContact": {
         "IdentityID__c": "$idId",
@@ -139,7 +139,7 @@ object Fixtures {
        }
       }"""
 
-  val giftRecipientUpsertJson =
+  val giftRecipientUpsertJson: String =
     s"""{
       "newContact": {
         "AccountId": "$salesforceId",

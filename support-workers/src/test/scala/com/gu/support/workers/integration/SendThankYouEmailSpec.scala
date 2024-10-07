@@ -95,7 +95,7 @@ object SendThankYouEmailManualTest {
   // This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
   val addressToSendTo = "john.duffell@guardian.co.uk"
   val identityIdToSendTo = "200004242"
-  val giftRecipientSFContactIdToSendTo = SfContactId("0039E000018EoTHQA0")
+  val giftRecipientSFContactIdToSendTo: SfContactId = SfContactId("0039E000018EoTHQA0")
 
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
@@ -122,7 +122,7 @@ import com.gu.support.workers.integration.SendThankYouEmailManualTest._
 import com.gu.support.workers.integration.TestData._
 object SendContributionEmail extends App {
 
-  val ef = new ContributionEmailFields(
+  val ef: Future[EmailFields] = new ContributionEmailFields(
     getMandate,
     new DateTime(1999, 12, 31, 11, 59),
   ).build(
@@ -140,7 +140,7 @@ object SendContributionEmail extends App {
 
 object SendSupporterPlusEmail extends App {
 
-  val supporterPlusPaymentSchedule = PaymentSchedule(
+  val supporterPlusPaymentSchedule: PaymentSchedule = PaymentSchedule(
     List(
       Payment(new LocalDate(2024, 1, 8), 10),
       Payment(new LocalDate(2024, 2, 8), 10),
@@ -151,7 +151,7 @@ object SendSupporterPlusEmail extends App {
     ),
   )
 
-  val ef = new SupporterPlusEmailFields(
+  val ef: Future[EmailFields] = new SupporterPlusEmailFields(
     new PaperFieldsGenerator(supporterPlusPromotionService, getMandate),
     getMandate,
     CODE,
@@ -173,7 +173,7 @@ object SendSupporterPlusEmail extends App {
 
 object SendTierThreeEmail extends App {
 
-  val paymentSchedule = PaymentSchedule(
+  val paymentSchedule: PaymentSchedule = PaymentSchedule(
     List(
       Payment(new LocalDate(2024, 1, 8), 10),
       Payment(new LocalDate(2024, 2, 8), 10),
@@ -184,7 +184,7 @@ object SendTierThreeEmail extends App {
     ),
   )
 
-  val ef = new TierThreeEmailFields(
+  val ef: Future[EmailFields] = new TierThreeEmailFields(
     new PaperFieldsGenerator(promotionService, getMandate),
     CODE,
   ).build(
@@ -349,17 +349,17 @@ object SendWeeklySubscriptionGiftEmail extends App {
 
 object TestData {
 
-  val paymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
+  val paymentSchedule: PaymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
   val subno = "A-S00045678"
   val acno = "A123456"
 
-  val countryOnlyAddress =
+  val countryOnlyAddress: Address =
     Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
 
-  val billingOnlyUser =
+  val billingOnlyUser: User =
     User(identityIdToSendTo, addressToSendTo, None, "Mickey", "Mouse", billingAddress = countryOnlyAddress)
 
-  val officeAddress = Address(
+  val officeAddress: Address = Address(
     lineOne = Some("90 York Way"),
     lineTwo = None,
     city = Some("London"),
@@ -368,7 +368,7 @@ object TestData {
     country = UK,
   )
 
-  val officeUser = User(
+  val officeUser: User = User(
     identityIdToSendTo,
     addressToSendTo,
     None,
@@ -378,7 +378,7 @@ object TestData {
     deliveryAddress = Some(officeAddress),
   )
 
-  val getMandate = (_: String) => Future.successful(Some("65HK26E"))
+  val getMandate: String => Future[Some[String]] = (_: String) => Future.successful(Some("65HK26E"))
 
   val supporterPlusPromotionService = new PromotionService(
     PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
@@ -413,7 +413,7 @@ object TestData {
 
   val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
 
-  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+  val directDebitPaymentMethod: DirectDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Mickey",
     LastName = "Mouse",
     BankTransferAccountName = "Mickey Mouse",

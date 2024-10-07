@@ -13,6 +13,7 @@ import io.circe.Decoder
 
 import scala.concurrent.Future
 import scala.reflect.ClassTag
+import com.gu.support.workers.PaymentMethodId
 
 class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl: String = "https://api.stripe.com/v1")
     extends WebServiceHelper[StripeError] {
@@ -61,8 +62,11 @@ class StripeServiceForCurrency(
     List(Some(authorizationHeader), versionHeader).flatten.toMap
   }
 
-  val createCustomerFromPaymentMethod = com.gu.stripe.createCustomerFromPaymentMethod.apply(this) _
+  val createCustomerFromPaymentMethod
+      : PaymentMethodId => Future[com.gu.stripe.createCustomerFromPaymentMethod.Customer] =
+    com.gu.stripe.createCustomerFromPaymentMethod.apply(this) _
 
-  val getPaymentMethod = com.gu.stripe.getPaymentMethod.apply(this) _
+  val getPaymentMethod: PaymentMethodId => Future[com.gu.stripe.getPaymentMethod.StripePaymentMethod] =
+    com.gu.stripe.getPaymentMethod.apply(this) _
 
 }

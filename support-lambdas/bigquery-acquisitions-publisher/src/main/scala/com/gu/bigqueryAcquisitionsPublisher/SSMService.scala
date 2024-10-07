@@ -14,6 +14,7 @@ import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
 import com.gu.aws.ProfileName
 
 import scala.util.Try
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 
 object SSMService {
 
@@ -25,7 +26,7 @@ object SSMService {
     new EC2ContainerCredentialsProviderWrapper(), // for use with lambda snapstart
   )
 
-  val client = AWSSimpleSystemsManagementClientBuilder
+  val client: AWSSimpleSystemsManagement = AWSSimpleSystemsManagementClientBuilder
     .standard()
     .withCredentials(CredentialsProviderDEPRECATEDV1)
     .withRegion(Regions.EU_WEST_1)

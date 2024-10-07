@@ -11,8 +11,8 @@ import org.scalatest.matchers.should.Matchers
 class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
   val NoErrors = Nil
 
-  val thisMorning = DateTime.now().withTimeAtStartOfDay()
-  val tomorrowMorning = thisMorning.plusDays(1)
+  val thisMorning: DateTime = DateTime.now().withTimeAtStartOfDay()
+  val tomorrowMorning: DateTime = thisMorning.plusDays(1)
   val expiredPromotion = promotion(expires = thisMorning)
   val activePromotion = promotion()
   val futurePromotion = promotion(starts = tomorrowMorning, expires = tomorrowMorning.plusDays(1))

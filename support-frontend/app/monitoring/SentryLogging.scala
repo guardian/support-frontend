@@ -43,7 +43,7 @@ object SentryLogging extends SafeLogging {
 
 object SentryFilters {
 
-  val errorLevelFilter = new ThresholdFilter { setLevel("ERROR") }
+  val errorLevelFilter: ThresholdFilter = new ThresholdFilter { setLevel("ERROR") }
   val piiFilter = new PiiFilter
 
   errorLevelFilter.start()

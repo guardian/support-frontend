@@ -45,7 +45,7 @@ class RedemptionController(
 
   implicit val settings: AllSettings = settingsProvider.getAllSettings()
   val title = "Support the Guardian | Redeem your code"
-  val id = EmptyDiv("subscriptions-redemption-page")
+  val id: EmptyDiv = EmptyDiv("subscriptions-redemption-page")
   val js = "subscriptionsRedemptionPage.js"
   val css = "subscriptionsRedemptionPage.css" // TODO: Don't need this?
 

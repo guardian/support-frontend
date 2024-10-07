@@ -32,7 +32,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     }
   }
 
-  val upsertData = NewContact(
+  val upsertData: NewContact = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
     Salutation = Some(Title.Ms),

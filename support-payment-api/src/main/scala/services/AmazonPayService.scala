@@ -13,6 +13,7 @@ import conf.AmazonPayConfig
 import model.amazonpay._
 import model.{Currency, DefaultThreadPool}
 import services.AmazonPayService.CurrencyNotFoundException
+import com.amazon.pay.response.parser.CancelOrderReferenceResponseData
 
 /*
 Based on the sample implementation found here
@@ -26,7 +27,7 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
 
   val storeName = "The Guardian"
 
-  val clientConfig = new PayConfig()
+  val clientConfig: PayConfig = new PayConfig()
     .withSellerId(config.merchantId)
     .withAccessKey(config.accessKey)
     .withSecretKey(config.secretKey)
@@ -37,7 +38,7 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
 
   val client = new PayClient(clientConfig)
 
-  def getOrderReference(orderReferenceId: String) = {
+  def getOrderReference(orderReferenceId: String): Either[AmazonPayApiError, OrderReferenceDetails] = {
     Either
       .catchNonFatal {
         client.getOrderReferenceDetails(new GetOrderReferenceDetailsRequest(orderReferenceId)).getDetails
@@ -47,7 +48,9 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
       }
   }
 
-  def cancelOrderReference(orderRef: OrderReferenceDetails) = {
+  def cancelOrderReference(
+      orderRef: OrderReferenceDetails,
+  ): Either[AmazonPayApiError, CancelOrderReferenceResponseData] = {
     Either
       .catchNonFatal {
         client.cancelOrderReference(new CancelOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))

@@ -22,7 +22,7 @@ case class PromoTestData(
     currency: Currency,
 )
 object PromoTestData {
-  val t3Promos = List(
+  val t3Promos: List[PromoTestData] = List(
     PromoTestData("TIER3_UK_MONTHLY", UK, Monthly, GBP),
     PromoTestData("TIER3_UK_ANNUAL", UK, Annual, GBP),
     PromoTestData("TIER3_US_MONTHLY", US, Monthly, USD),
@@ -42,7 +42,7 @@ object PromoTestData {
 
 @IntegrationTest
 class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers with LazyLogging {
-  val actorSystem = ActorSystem("test")
+  val actorSystem: ActorSystem = ActorSystem("test")
   val defaultPromotionsService = new DefaultPromotionServiceS3(AwsS3Client, Stages.DEV, actorSystem)
   val service =
     new PriceSummaryService(

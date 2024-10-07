@@ -14,10 +14,10 @@ import services.stepfunctions.StepFunctionExecutionStatus._
 import scala.util.{Failure, Success}
 
 object StatusResults {
-  val success = StatusResponse(Status.Success, "tracking123", None)
+  val success: StatusResponse = StatusResponse(Status.Success, "tracking123", None)
   def failure(reason: CheckoutFailureReason): StatusResponse =
     StatusResponse(Status.Failure, "tracking123", Some(reason))
-  val pending = StatusResponse(Status.Pending, "tracking123", None)
+  val pending: StatusResponse = StatusResponse(Status.Pending, "tracking123", None)
 }
 
 class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSugar {
@@ -26,7 +26,7 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
 
   val fillerState = new StateExitedEventDetails
   fillerState.setName("CreatePaymentMethodLambda")
-  val failure = Failure(new AmazonServiceException("test"))
+  val failure: Failure[Nothing] = Failure(new AmazonServiceException("test"))
 
   "checkoutStatus" should "detect a successful execution correctly" in {
     val checkoutSuccessState = new StateExitedEventDetails

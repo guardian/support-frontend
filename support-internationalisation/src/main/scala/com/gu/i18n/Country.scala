@@ -11,7 +11,7 @@ case class Country(alpha2: String, name: String, statesByCode: Map[String, Strin
 
 object Country {
 
-  val US = Country(
+  val US: Country = Country(
     alpha2 = "US",
     name = "United States",
     statesByCode = Seq(
@@ -75,7 +75,7 @@ object Country {
     ).toMap,
   )
 
-  val Canada = Country(
+  val Canada: Country = Country(
     alpha2 = "CA",
     name = "Canada",
     statesByCode = Seq(
@@ -95,9 +95,9 @@ object Country {
     ).toMap,
   )
 
-  val UK = Country("GB", "United Kingdom")
+  val UK: Country = Country("GB", "United Kingdom")
 
-  val Australia = Country(
+  val Australia: Country = Country(
     alpha2 = "AU",
     name = "Australia",
     statesByCode = Seq(
@@ -112,7 +112,7 @@ object Country {
     ).toMap,
   )
 
-  val NewZealand = Country("NZ", "New Zealand")
+  val NewZealand: Country = Country("NZ", "New Zealand")
 
-  val Ireland = Country("IE", "Ireland")
+  val Ireland: Country = Country("IE", "Ireland")
 }

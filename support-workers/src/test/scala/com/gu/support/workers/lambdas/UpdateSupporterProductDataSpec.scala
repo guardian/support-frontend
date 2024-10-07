@@ -18,6 +18,7 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import org.scalatest.OptionValues._
 
 import scala.io.Source
+import scala.io.BufferedSource
 
 class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
 
@@ -204,7 +205,7 @@ object UpdateSupporterProductDataSpec {
       "productType": "DigitalSubscriptionGiftPurchase"
     }
   """
-  lazy val catalogSource = Source.fromURL(getClass.getResource("/catalog.json"))
+  lazy val catalogSource: BufferedSource = Source.fromURL(getClass.getResource("/catalog.json"))
   lazy val catalog: String = {
     val catalogString = catalogSource.mkString
     catalogSource.close()

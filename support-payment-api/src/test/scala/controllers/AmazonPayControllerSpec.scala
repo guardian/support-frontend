@@ -34,7 +34,8 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
 
   val mockAmazonPayBackend: AmazonPayBackend = mock[AmazonPayBackend]
 
-  val mockNotificationFactory = mock[(Map[String, String], String) => Notification]
+  val mockNotificationFactory: (Map[String, String], String) => Notification =
+    mock[(Map[String, String], String) => Notification]
 
   val mockAmazonPayRequestBasedProvider: RequestBasedProvider[AmazonPayBackend] =
     mock[RequestBasedProvider[AmazonPayBackend]]
@@ -64,7 +65,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
   val goCardlessBackendProvider: RequestBasedProvider[GoCardlessBackend] =
     mock[RequestBasedProvider[GoCardlessBackend]]
 
-  val mockStripeController = mock[StripeController]
+  val mockStripeController: StripeController = mock[StripeController]
 
   override def router: Router = new Routes(
     httpErrorHandler,
@@ -84,7 +85,7 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val context = ApplicationLoader.Context.create(Environment.simple())
+  val context: ApplicationLoader.Context = ApplicationLoader.Context.create(Environment.simple())
 
   "AmazonPayController" when {
 

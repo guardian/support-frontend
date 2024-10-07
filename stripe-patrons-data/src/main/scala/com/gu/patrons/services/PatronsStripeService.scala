@@ -38,7 +38,7 @@ class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpCl
     )
   }
 
-  def getCustomer(account: PatronsStripeAccount, customerId: String) =
+  def getCustomer(account: PatronsStripeAccount, customerId: String): Future[ExpandedStripeCustomer] =
     get[ExpandedStripeCustomer](
       s"customers/$customerId",
       authHeader(account),

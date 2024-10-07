@@ -11,9 +11,10 @@ import com.typesafe.scalalogging.StrictLogging
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
+import com.amazonaws.services.simplesystemsmanagement.model.PutParameterResult
 
 class ConfigService(stage: Stage) extends StrictLogging {
-  val parameterStoreService = ParameterStoreService(stage)
+  val parameterStoreService: ParameterStoreService = ParameterStoreService(stage)
 
   def load(implicit ec: ExecutionContext): ZuoraQuerierConfig = {
     val params = parameterStoreService.getParametersByPath(zuoraConfigPath)
@@ -83,7 +84,7 @@ class ConfigService(stage: Stage) extends StrictLogging {
       .find(_.getName.split('/').last == name)
       .map(_.getValue)
 
-  def putLastSuccessfulQueryTime(time: ZonedDateTime) = {
+  def putLastSuccessfulQueryTime(time: ZonedDateTime): Future[PutParameterResult] = {
     val timeAsString = time.format(DateTimeFormatter.ISO_DATE_TIME)
     val fullPath = s"$zuoraConfigPath/$lastSuccessfulQueryTime"
 

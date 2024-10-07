@@ -14,18 +14,27 @@ import java.time.{ZoneOffset, ZonedDateTime}
 import java.time.format.DateTimeFormatter
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
+import com.gu.conf.ZuoraQuerierConfig
+import scala.concurrent.Future
 
 class FetchResultsLambda extends Handler[FetchResultsState, AddSupporterRatePlanItemToQueueState] {
-  override protected def handlerFuture(input: FetchResultsState, context: Context) =
+  override protected def handlerFuture(
+      input: FetchResultsState,
+      context: Context,
+  ): Future[AddSupporterRatePlanItemToQueueState] =
     fetchResults(StageConstructors.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
 
 object FetchResultsLambda extends StrictLogging {
   val stage = StageConstructors.fromEnvironment
-  val config = ConfigService(stage).load
+  val config: ZuoraQuerierConfig = ConfigService(stage).load
   val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
-  def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
+  def fetchResults(
+      stage: Stage,
+      jobId: String,
+      attemptedQueryTime: ZonedDateTime,
+  ): Future[AddSupporterRatePlanItemToQueueState] = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
       result <- service.getResults(jobId)
@@ -57,7 +66,7 @@ object FetchResultsLambda extends StrictLogging {
     }
   }
 
-  def getValueOrThrow[T](maybeValue: Option[T], errorMessage: String) =
+  def getValueOrThrow[T](maybeValue: Option[T], errorMessage: String): T =
     maybeValue match {
       case Some(value) => value
       case None => throw new RuntimeException(errorMessage)

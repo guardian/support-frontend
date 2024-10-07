@@ -74,7 +74,7 @@ class PaperFieldsGenerator(
 
   }
 
-  protected def getAddressFields(user: User) = {
+  protected def getAddressFields(user: User): List[(String, String)] = {
     val address = user.deliveryAddress.getOrElse(user.billingAddress)
 
     List(

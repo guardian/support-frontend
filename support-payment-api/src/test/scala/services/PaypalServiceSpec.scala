@@ -13,18 +13,24 @@ import org.scalatestplus.mockito.MockitoSugar
 
 import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
+import java.{util => ju}
 
 class PaypalServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures {
 
   trait PaypalServiceTestFixture {
-    val paypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", "hookId", PaypalMode.Sandbox)
+    val paypalConfig: PaypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", "hookId", PaypalMode.Sandbox)
     implicit val executionContextTest: PaypalThreadPool = PaypalThreadPool(ExecutionContext.global)
-    val buildPaypalTransactions = PrivateMethod[java.util.List[Transaction]]('buildPaypalTransactions)
-    val buildCaptureByTransaction = PrivateMethod[Capture]('buildCaptureByTransaction)
-    val getTransaction = PrivateMethod[Either[PaypalApiError, Transaction]]('getTransaction)
-    val getRelatedResources = PrivateMethod[Either[PaypalApiError, RelatedResources]]('getRelatedResources)
-    val validateCapture = PrivateMethod[Either[PaypalApiError, Capture]]('validateCapture)
-    val validatePayment = PrivateMethod[Either[PaypalApiError, Payment]]('validatePayment)
+    val buildPaypalTransactions: PrivateMethod[ju.List[Transaction]] =
+      PrivateMethod[java.util.List[Transaction]]('buildPaypalTransactions)
+    val buildCaptureByTransaction: PrivateMethod[Capture] = PrivateMethod[Capture]('buildCaptureByTransaction)
+    val getTransaction: PrivateMethod[Either[PaypalApiError, Transaction]] =
+      PrivateMethod[Either[PaypalApiError, Transaction]]('getTransaction)
+    val getRelatedResources: PrivateMethod[Either[PaypalApiError, RelatedResources]] =
+      PrivateMethod[Either[PaypalApiError, RelatedResources]]('getRelatedResources)
+    val validateCapture: PrivateMethod[Either[PaypalApiError, Capture]] =
+      PrivateMethod[Either[PaypalApiError, Capture]]('validateCapture)
+    val validatePayment: PrivateMethod[Either[PaypalApiError, Payment]] =
+      PrivateMethod[Either[PaypalApiError, Payment]]('validatePayment)
     val paypalService = new PaypalService(paypalConfig)
   }
 

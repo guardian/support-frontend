@@ -17,13 +17,14 @@ import services._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import play.api.mvc.AnyContentAsEmpty
 
 class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {
 
   val path = "/test-path"
-  val fakeRequest = FakeRequest("GET", path)
+  val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", path)
   val stage = Stages.DEV
-  val featureSwitches =
+  val featureSwitches: FeatureSwitches =
     FeatureSwitches(
       enableQuantumMetric = Some(On),
       usStripeAccountForSingle = Some(On),
@@ -31,9 +32,10 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
     )
 
   trait Mocks {
-    val asyncAuthenticationService = mock[AsyncAuthenticationService]
-    val userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder]
-    val userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder]
+    val asyncAuthenticationService: AsyncAuthenticationService = mock[AsyncAuthenticationService]
+    val userFromAuthCookiesOrAuthServerActionBuilder: UserFromAuthCookiesOrAuthServerActionBuilder =
+      mock[UserFromAuthCookiesOrAuthServerActionBuilder]
+    val userFromAuthCookiesActionBuilder: UserFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder]
   }
 
   "PrivateAction" should {

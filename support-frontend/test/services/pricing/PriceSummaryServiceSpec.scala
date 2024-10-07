@@ -19,7 +19,7 @@ import org.scalatest.matchers.should.Matchers
 
 class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
-  val defaultPromotionsService = new DefaultPromotionService {
+  val defaultPromotionsService: DefaultPromotionService = new DefaultPromotionService {
     def getPromoCodes(product: Product): List[String] = Nil
   }
 

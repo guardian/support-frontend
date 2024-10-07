@@ -21,6 +21,7 @@ import org.scalatest.Inside.inside
 
 import java.io.ByteArrayOutputStream
 import scala.concurrent.duration._
+import com.gu.services.ServiceProvider
 
 @IntegrationTest
 class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
@@ -52,14 +53,14 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
   }
 
-  val realConfig = Configuration.load()
+  val realConfig: Configuration = Configuration.load()
 
   val realZuoraService =
     new ZuoraService(realConfig.zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get(false))
 
-  val mockZuoraService = {
+  val mockZuoraService: ZuoraService = {
     val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
@@ -76,7 +77,7 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
     mockZuora
   }
 
-  lazy val mockServiceProvider = mockServices[Any](
+  lazy val mockServiceProvider: ServiceProvider = mockServices[Any](
     (s => s.zuoraService, mockZuoraService),
     (s => s.promotionService, realPromotionService),
   )

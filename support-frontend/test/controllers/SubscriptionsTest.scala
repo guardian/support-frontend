@@ -27,35 +27,36 @@ import play.api.test.Helpers.{contentAsString, status, stubControllerComponents,
 import services.{CachedProductCatalogService, CachedProductCatalogServiceProvider, TestUserService}
 
 import scala.concurrent.Future
+import com.typesafe.config.Config
 
 class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
-  val appConf = ConfigFactory.load("DEV.public.conf")
+  val appConf: Config = ConfigFactory.load("DEV.public.conf")
 
   trait DigitalSubscriptionsDisplayForm extends DisplayFormMocks {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
     val amount = 25
-    val selection = AmountsSelection(
+    val selection: AmountsSelection = AmountsSelection(
       amounts = List(amount),
       defaultAmount = 25,
       hideChooseYourAmount = Option(false),
     )
-    val amountsCardData = ContributionAmounts(
+    val amountsCardData: ContributionAmounts = ContributionAmounts(
       ONE_OFF = selection,
       MONTHLY = selection,
       ANNUAL = selection,
     )
 
-    val amountsVariant = AmountsVariant(
+    val amountsVariant: AmountsVariant = AmountsVariant(
       variantName = "subscriptions-test-variant",
       defaultContributionType = "MONTHLY",
       displayContributionType = List("ONE_OFF", "MONTHLY", "ANNUAL"),
       amountsCardData = amountsCardData,
     )
 
-    val amountsTest = AmountsTest(
+    val amountsTest: AmountsTest = AmountsTest(
       testName = "subscriptions-default-test",
       liveTestName = Option("subscriptions-AB-test"),
       testLabel = Option("Subscription AB Test"),
@@ -66,15 +67,15 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       variants = List(amountsVariant),
     )
 
-    val amountsTests = List(amountsTest)
+    val amountsTests: List[AmountsTest] = List(amountsTest)
 
-    val contributionTypesSettings = List(
+    val contributionTypesSettings: List[ContributionTypeSetting] = List(
       ContributionTypeSetting(
         contributionType = ONE_OFF,
         isDefault = Some(true),
       ),
     )
-    val contributionTypes = ContributionTypes(
+    val contributionTypes: ContributionTypes = ContributionTypes(
       GBPCountries = contributionTypesSettings,
       UnitedStates = contributionTypesSettings,
       EURCountries = contributionTypesSettings,
@@ -84,7 +85,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       Canada = contributionTypesSettings,
     )
 
-    val allSettings = AllSettings(
+    val allSettings: AllSettings = AllSettings(
       Switches(
         oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         recurringPaymentMethods = RecurringPaymentMethodSwitches(

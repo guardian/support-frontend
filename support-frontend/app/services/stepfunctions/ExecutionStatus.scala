@@ -11,7 +11,7 @@ object ExecutionStatus {
   object Started extends ExecutionStatus { override def unsuccessful: Boolean = false }
   object Succeeded extends ExecutionStatus { override def unsuccessful: Boolean = false }
 
-  val all = Map(
+  val all: Map[String, ExecutionStatus] = Map(
     "ExecutionAborted" -> Aborted,
     "ExecutionFailed" -> Failed,
     "ExecutionStarted" -> Started,

@@ -184,7 +184,7 @@ class ZuoraErrorsITSpec
     assertion
   }
 
-  val realConfig = Configuration.load()
+  val realConfig: Configuration = Configuration.load()
 
   private val timeoutServices = errorServices(None, 1.milliseconds)
 

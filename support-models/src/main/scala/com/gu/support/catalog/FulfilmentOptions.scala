@@ -17,7 +17,7 @@ case object RestOfWorld extends FulfilmentOptions
 case object NoFulfilmentOptions extends FulfilmentOptions
 
 object FulfilmentOptions {
-  lazy val allFulfilmentOptions =
+  lazy val allFulfilmentOptions: List[FulfilmentOptions] =
     List(HomeDelivery, NationalDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
 
   def fromString(code: String): Option[FulfilmentOptions] =

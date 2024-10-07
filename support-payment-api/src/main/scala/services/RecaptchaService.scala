@@ -41,7 +41,9 @@ class RecaptchaService(wsClient: WSClient, config: RecaptchaConfig)(implicit ec:
 }
 
 object RecaptchaService {
-  def fromRecaptchaConfig(config: RecaptchaConfig)(implicit ws: WSClient, pool: DefaultThreadPool) =
+  def fromRecaptchaConfig(
+      config: RecaptchaConfig,
+  )(implicit ws: WSClient, pool: DefaultThreadPool): Validated[InitializationError, RecaptchaService] =
     Validated
       .catchNonFatal {
         new RecaptchaService(ws, config)

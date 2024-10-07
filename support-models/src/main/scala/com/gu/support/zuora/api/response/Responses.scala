@@ -202,7 +202,7 @@ object ZuoraSuccessOrFailureResponse {
 }
 
 case class ZuoraSuccessOrFailureResponse(success: Boolean, reasons: Option[List[ZuoraErrorReason]]) {
-  def errorMessage = reasons.flatMap(_.headOption).map(_.message)
+  def errorMessage: Option[String] = reasons.flatMap(_.headOption).map(_.message)
 }
 
 object ZuoraErrorReason {

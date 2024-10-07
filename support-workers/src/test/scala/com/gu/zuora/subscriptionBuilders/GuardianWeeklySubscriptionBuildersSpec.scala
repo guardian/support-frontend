@@ -133,10 +133,10 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     nonGiftPatron.subscription.readerType shouldBe Patron
   }
 
-  lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
-  lazy val promotionService = mock[PromotionService]
+  lazy val weekly: GuardianWeekly = GuardianWeekly(GBP, Quarterly, Domestic)
+  lazy val promotionService: PromotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
-  lazy val firstDeliveryDate = saleDate.plusDays(3)
+  lazy val firstDeliveryDate: LocalDate = saleDate.plusDays(3)
 
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     UUID.randomUUID(),
@@ -181,7 +181,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
-  val nonGiftState = GuardianWeeklyState(
+  val nonGiftState: GuardianWeeklyState = GuardianWeeklyState(
     User(
       "1234",
       "hi@thegulocal.com",
@@ -199,7 +199,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
   );
 
-  lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
+  lazy val nonGift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     CODE,
     DateGenerator(saleDate),
@@ -212,7 +212,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
-  lazy val csrSubscription = new GuardianWeeklySubscriptionBuilder(
+  lazy val csrSubscription: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     CODE,
     DateGenerator(saleDate),
@@ -241,7 +241,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
-  lazy val nonGiftPatron = new GuardianWeeklySubscriptionBuilder(
+  lazy val nonGiftPatron: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     CODE,
     DateGenerator(saleDate),
@@ -254,7 +254,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     .get
     .subscriptionData
 
-  lazy val nonGiftPromo = new GuardianWeeklySubscriptionBuilder(
+  lazy val nonGiftPromo: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
     CODE,
     DateGenerator(saleDate),

@@ -16,25 +16,25 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 trait DisplayFormMocks extends TestCSRFComponents {
 
-  val authenticatedIdUser = User("testuser@thegulocal.com", "123")
+  val authenticatedIdUser: User = User("testuser@thegulocal.com", "123")
 
-  val testUsers = new TestUserService("test") {
+  val testUsers: TestUserService = new TestUserService("test") {
     override def isTestUser(testUserName: Option[String]): Boolean = testUserName.exists(_.startsWith("test"))
   }
 
-  val assetResolver = new AssetsResolver("", "", mock[Environment]) {
+  val assetResolver: AssetsResolver = new AssetsResolver("", "", mock[Environment]) {
     override def apply(path: String): String = path
     override def apply(path: RefPath): String = path.value
     override protected def loadSsrHtmlCache: Map[String, Html] = Map()
   }
 
-  val idUser = User(
+  val idUser: User = User(
     id = "123",
     primaryEmailAddress = "test@thegulocal.com",
     publicFields = PublicFields(displayName = Some("test-user")),
   )
 
-  val asyncAuthenticationService = mock[AsyncAuthenticationService]
+  val asyncAuthenticationService: AsyncAuthenticationService = mock[AsyncAuthenticationService]
 
   val stage = Stages.DEV
 

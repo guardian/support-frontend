@@ -21,6 +21,7 @@ import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import com.gu.supporterdata.model.Stage
 
 trait ServiceProvider {
   private lazy val config = Configuration.load()
@@ -44,16 +45,19 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val zuoraGiftService =
     new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
-  lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
-  lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
+  lazy val goCardlessService: GoCardlessWorkersService = GoCardlessWorkersService(
+    goCardlessConfigProvider.get(isTestUser),
+  )
+  lazy val catalogService: CatalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val acquisitionsEventBusService = AcquisitionsEventBusService(Sources.supportWorkers, stage, isTestUser)
+  lazy val acquisitionsEventBusService: AcquisitionsEventBusService =
+    AcquisitionsEventBusService(Sources.supportWorkers, stage, isTestUser)
   lazy val paperRoundService =
     new PaperRoundService(paperRoundConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
 
-  val supporterDynamoStage = (Configuration.stage, isTestUser) match {
+  val supporterDynamoStage: Stage = (Configuration.stage, isTestUser) match {
     case (PROD, false) => DynamoStagePROD
     case _ => DynamoStageCODE
   }
-  lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
+  lazy val supporterDataDynamoService: SupporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }

@@ -22,7 +22,7 @@ object StripeBrand {
   case object Visa extends StripeBrand("Visa", "visa", Some("Visa"))
   case object Unknown extends StripeBrand("Unknown", "unknown", None)
 
-  val all = Seq(Amex, Diners, Discover, Jcb, Mastercard, Unionpay, Visa, Unknown)
+  val all: Seq[StripeBrand] = Seq(Amex, Diners, Discover, Jcb, Mastercard, Unionpay, Visa, Unknown)
 
   def decoder(field: StripeBrand => String): Decoder[StripeBrand] = Decoder.decodeString.emap { str =>
     all.find(field(_) == str).toRight("StripeBrand")

@@ -8,8 +8,8 @@ import io.circe.{Decoder, Encoder}
 object RedemptionCode {
   val length = 13
   // make sure no one can inject anything bad
-  val validChars = List('a' -> 'z', '0' -> '9', '-' -> '-')
-  val validCharsSet = validChars.flatMap { case (from, to) => (from to to) }.toSet
+  val validChars: List[(Char, Char)] = List('a' -> 'z', '0' -> '9', '-' -> '-')
+  val validCharsSet: Set[Char] = validChars.flatMap { case (from, to) => (from to to) }.toSet
 
   def apply(value: String): Either[String, RedemptionCode] = {
     val lower = value.toLowerCase(Locale.UK)

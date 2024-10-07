@@ -18,7 +18,7 @@ object Fixtures {
           "name": "double"
       }
     """
-  val discountPromotion =
+  val discountPromotion: String =
     s"""
     {
       "codes": {
@@ -54,7 +54,7 @@ object Fixtures {
     }
   """
 
-  val freeTrialPromotion =
+  val freeTrialPromotion: String =
     s"""
        {
             "codes": {
@@ -107,7 +107,7 @@ object Fixtures {
         }
      """
 
-  val doublePromotion =
+  val doublePromotion: String =
     s"""
     {
       "codes": {
@@ -382,7 +382,7 @@ object Fixtures {
         }
     """
 
-  val introductoryPricePromotion =
+  val introductoryPricePromotion: String =
     s"""
     {
       "codes": {

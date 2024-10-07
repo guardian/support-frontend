@@ -113,7 +113,7 @@ object JsonFixtures {
         }
     """
 
-  val userJsonWithDeliveryAddress =
+  val userJsonWithDeliveryAddress: User =
     User(
       idId,
       emailAddress,
@@ -141,7 +141,7 @@ object JsonFixtures {
       deliveryInstructions = Some("Leave with neighbour"),
     )
 
-  val userJsonWithDeliveryAddressOutsideLondon =
+  val userJsonWithDeliveryAddressOutsideLondon: User =
     User(
       idId,
       emailAddress,
@@ -171,7 +171,7 @@ object JsonFixtures {
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
-  val payPalPaymentMethod =
+  val payPalPaymentMethod: String =
     s"""
         {
               "PaypalBaid": "$validBaid",
@@ -182,7 +182,7 @@ object JsonFixtures {
          }
        """
 
-  val stripePaymentMethodObj =
+  val stripePaymentMethodObj: CreditCardReferenceTransaction =
     CreditCardReferenceTransaction(
       "card_E0zitFfsO2wTEn",
       "cus_E0zic0cedDT5MZ",
@@ -194,7 +194,7 @@ object JsonFixtures {
       StripeGatewayDefault,
       StripePaymentType = None,
     )
-  val stripePaymentMethod = // test env card and cus token, not prod ones
+  val stripePaymentMethod: String = // test env card and cus token, not prod ones
     s"""
         {
            "TokenId": "card_E0zitFfsO2wTEn",
@@ -250,21 +250,21 @@ object JsonFixtures {
       }
     """
 
-  val weeklyJson = GuardianWeekly(GBP, Monthly, Domestic).asJson.spaces2
+  val weeklyJson: String = GuardianWeekly(GBP, Monthly, Domestic).asJson.spaces2
 
-  val digitalPackProductJson =
+  val digitalPackProductJson: String =
     s"""
       "product": $digitalPackJson
     """
 
-  val payPalJson =
+  val payPalJson: String =
     s"""
       {
         "baid": "$validBaid"
       }
     """
 
-  val acquisitionData =
+  val acquisitionData: String =
     s"""
       {
         "ophanIds":{
@@ -292,7 +292,7 @@ object JsonFixtures {
     """
 
   val mickeyMouse = "Mickey Mouse"
-  val directDebitJson =
+  val directDebitJson: String =
     s"""
       {
         "accountHolderName": "$mickeyMouse",
@@ -301,10 +301,10 @@ object JsonFixtures {
       }
     """
 
-  val stripeToken = PaymentMethodId("pm_card_visa").get
-  val stripePublicKey = StripePublicKey.get("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
+  val stripeToken: PaymentMethodId = PaymentMethodId("pm_card_visa").get
+  val stripePublicKey: StripePublicKey = StripePublicKey.get("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
 
-  val stripeJson =
+  val stripeJson: String =
     s"""
       {
         "paymentMethod": "${stripeToken.value}",
@@ -348,7 +348,7 @@ object JsonFixtures {
           "userAgent": "Test"
         }"""
 
-  val createPayPalPaymentMethodDigitalPackJson =
+  val createPayPalPaymentMethodDigitalPackJson: String =
     s"""{
           $requestIdJson,
           ${userJson()},
@@ -362,7 +362,7 @@ object JsonFixtures {
           "userAgent": "Test"
         }"""
 
-  val createDirectDebitDigitalPackJson =
+  val createDirectDebitDigitalPackJson: String =
     s"""{
           $requestIdJson,
           ${userJson()},
@@ -374,7 +374,7 @@ object JsonFixtures {
           "paymentFields": $directDebitJson
         }"""
 
-  val createSalesForceContactJson =
+  val createSalesForceContactJson: String =
     s"""
           {
             $requestIdJson,
@@ -388,7 +388,7 @@ object JsonFixtures {
           }
         """
 
-  val createSalesForceGiftContactJson =
+  val createSalesForceGiftContactJson: String =
     s"""
           {
             $requestIdJson,
@@ -410,12 +410,12 @@ object JsonFixtures {
           }
         """
 
-  val salesforceContact =
+  val salesforceContact: SalesforceContactRecord =
     SalesforceContactRecord(
       "0033E00001Cq8D2QAJ",
       "0013E00001AU6xcQAD",
     )
-  val salesforceContacts = {
+  val salesforceContacts: SalesforceContactRecords = {
     SalesforceContactRecords(
       SalesforceContactRecord(
         "0033E00001Cq8D2QAJ",
@@ -520,7 +520,7 @@ object JsonFixtures {
       acquisitionData = None,
     ).asJson.spaces2
 
-  val createDigiPackZuoraSubscriptionJson =
+  val createDigiPackZuoraSubscriptionJson: String =
     CreateZuoraSubscriptionState(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
@@ -574,7 +574,7 @@ object JsonFixtures {
       RedemptionData(RedemptionCode(code).toOption.get),
     ): CreateZuoraSubscriptionProductState).asJson.spaces2
 
-  val createDigiPackSubscriptionWithPromoJson =
+  val createDigiPackSubscriptionWithPromoJson: String =
     CreateZuoraSubscriptionState(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
@@ -594,7 +594,7 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val createEverydayPaperSubscriptionJson =
+  val createEverydayPaperSubscriptionJson: String =
     CreateZuoraSubscriptionState(
       PaperState(
         userJsonWithDeliveryAddress,
@@ -615,7 +615,7 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val createEverydayNationalDeliveryPaperSubscriptionJson = {
+  val createEverydayNationalDeliveryPaperSubscriptionJson: String = {
     val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(AgentId(deliveryAgentId)))
     CreateZuoraSubscriptionState(
       PaperState(
@@ -663,7 +663,7 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val guardianWeeklyGiftJson =
+  val guardianWeeklyGiftJson: String =
     CreateZuoraSubscriptionState(
       GuardianWeeklyState(
         userJsonWithDeliveryAddress,
@@ -794,7 +794,7 @@ object JsonFixtures {
       }
     """
 
-  val sendAcquisitionEventJson =
+  val sendAcquisitionEventJson: String =
     s"""{
           $requestIdJson,
           "analyticsInfo": {
@@ -815,7 +815,7 @@ object JsonFixtures {
           },
           "acquisitionData": $acquisitionData
         }"""
-  val sendAcquisitionEventPrintJson =
+  val sendAcquisitionEventPrintJson: String =
     s"""
     {
       "requestId": "1a94c891-e98a-13ae-0000-0000000038a3",
@@ -970,7 +970,7 @@ object JsonFixtures {
       }
     }
     """
-  val digipackSubscriptionWithDiscountAndFreeTrialJson =
+  val digipackSubscriptionWithDiscountAndFreeTrialJson: String =
     CreateZuoraSubscriptionState(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,

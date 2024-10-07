@@ -17,7 +17,7 @@ import scala.concurrent.ExecutionContext
 
 class LambdaSpec extends AnyFlatSpec with Matchers {
 
-  val mockGBPService = new GBPConversionService {
+  val mockGBPService: GBPConversionService = new GBPConversionService {
     override def convert(currency: Currency, amount: Double, dateTime: DateTime): Either[String, Double] = Right(
       amount * 1.2,
     )

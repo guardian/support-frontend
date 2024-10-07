@@ -24,11 +24,12 @@ import util.FutureEitherValues
 
 import javax.xml.datatype.DatatypeFactory
 import scala.concurrent.{ExecutionContext, Future}
+import scala.xml.Elem
 
 class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   // -- entities
-  val acquisitionData =
+  val acquisitionData: AcquisitionData =
     AcquisitionData(
       Some("platform"),
       None,
@@ -45,18 +46,18 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
       None,
       Some("N1 9GU"),
     )
-  val countrySubdivisionCode = Some("NY")
-  val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
-  val identityError = IdentityClient.ContextualError(
+  val countrySubdivisionCode: Some[String] = Some("NY")
+  val dbError: ContributionsStoreService.Error = ContributionsStoreService.Error(new Exception("DB error response"))
+  val identityError: IdentityClient.ContextualError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
-  val expectedGuestToken = Some("guest-token")
+  val expectedGuestToken: Some[String] = Some("guest-token")
 
-  val paymentError = AmazonPayApiError.fromString("Error response")
-  val amazonPaySwitchError = AmazonPayApiError.fromString("Amazon Pay Switch not enabled")
+  val paymentError: AmazonPayApiError = AmazonPayApiError.fromString("Error response")
+  val amazonPaySwitchError: AmazonPayApiError = AmazonPayApiError.fromString("Amazon Pay Switch not enabled")
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
-  val responseXml =
+  val responseXml: Elem =
     <RefundNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
       <RefundDetails>
         <AmazonRefundId>P01-0000000-0000000-000000</AmazonRefundId> <RefundReferenceId>P01-0000000-0000000-Ref</RefundReferenceId> <RefundType>SellerInitiated</RefundType>
@@ -79,16 +80,16 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
   val paymentServiceResponseError: Either[AmazonPayApiError, OrderReferenceDetails] =
     Either.left(paymentError)
-  val mockOrderRef = mock[OrderReferenceDetails]
+  val mockOrderRef: OrderReferenceDetails = mock[OrderReferenceDetails]
 
-  val mockConfirmOrderResponse = mock[ConfirmOrderReferenceResponse]
-  val mockOrderTotal = mock[OrderTotal]
+  val mockConfirmOrderResponse: ConfirmOrderReferenceResponse = mock[ConfirmOrderReferenceResponse]
+  val mockOrderTotal: OrderTotal = mock[OrderTotal]
   val responseData = new ResponseData(200, responseXml.toString)
   val confirmOrderData = new ConfirmOrderReferenceResponseData(mockConfirmOrderResponse, responseData)
-  val mockAuthorizationDetails = mock[AuthorizationDetails]
-  val mockCloseResponseDetails = mock[CloseOrderReferenceResponse]
-  val mockOrderReferenceStatus = mock[OrderReferenceStatus]
-  val mockAuthStatus = mock[Status]
+  val mockAuthorizationDetails: AuthorizationDetails = mock[AuthorizationDetails]
+  val mockCloseResponseDetails: CloseOrderReferenceResponse = mock[CloseOrderReferenceResponse]
+  val mockOrderReferenceStatus: OrderReferenceStatus = mock[OrderReferenceStatus]
+  val mockAuthStatus: Status = mock[Status]
 
   val setOrderRefRes: Either[AmazonPayApiError, OrderReferenceDetails] = Either.right(mockOrderRef)
   val getOrderRefRes: Either[AmazonPayApiError, OrderReferenceDetails] = Either.right(mockOrderRef)
@@ -165,8 +166,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockSwitchService,
   )(DefaultThreadPool(ec))
 
-  val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
-  val amazonPayRequest = AmazonPayRequest(paymentdata, Some(acquisitionData))
+  val paymentdata: AmazonPaymentData = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
+  val amazonPayRequest: AmazonPayRequest = AmazonPayRequest(paymentdata, Some(acquisitionData))
 
 }
 
@@ -174,7 +175,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
+  val clientBrowserInfo: ClientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
 
   "Amazon Pay Backend" when {
     "A request is made to create a charge/payment " should {

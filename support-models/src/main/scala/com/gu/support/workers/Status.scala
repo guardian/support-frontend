@@ -7,7 +7,7 @@ sealed trait Status {
 }
 
 object Status {
-  val all = List(Success, Failure, Pending)
+  val all: List[Status] = List(Success, Failure, Pending)
 
   def fromString(s: String): Option[Status] = all.find(_.asString == s)
 

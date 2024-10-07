@@ -4,15 +4,16 @@ import java.time.Duration.ofDays
 import actions.CustomActionBuilders
 import com.gu.identity.testing.usernames.TestUsernames
 import play.api.mvc.RequestHeader
+import java.time.Duration
 
 object TestUserService {
   def apply(secret: String): TestUserService = new TestUserService(secret)
 }
 class TestUserService(secret: String) {
 
-  val ValidityPeriod = ofDays(2)
+  val ValidityPeriod: Duration = ofDays(2)
 
-  lazy val testUsers = TestUsernames(
+  lazy val testUsers: TestUsernames = TestUsernames(
     com.gu.identity.testing.usernames.Encoder.withSecret(secret),
     recency = ValidityPeriod,
   )

@@ -6,7 +6,7 @@ import scala.PartialFunction.condOpt
 
 object CheckoutFailureReasons {
 
-  val all = List(
+  val all: List[CheckoutFailureReason] = List(
     InsufficientFunds,
     PaymentMethodDetailsIncorrect,
     PaymentMethodTemporarilyDeclined,

@@ -9,6 +9,7 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.Future
 
 @IntegrationTest
 class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
@@ -28,7 +29,7 @@ class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
   }
 
   class LoggingSubscriptionProcessor(identityService: PatronsIdentityService) extends SubscriptionProcessor {
-    override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]) =
+    override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]): Future[Unit] =
       identityService
         .getUserIdFromEmail(subscription.customer.email)
         .map(maybeIdentityId =>

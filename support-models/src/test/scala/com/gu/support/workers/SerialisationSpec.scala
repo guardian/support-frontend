@@ -72,7 +72,7 @@ object StatesTestData {
     promoCode = None,
   )
 
-  val createPaymentMethodState = CreatePaymentMethodState(
+  val createPaymentMethodState: CreatePaymentMethodState = CreatePaymentMethodState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
@@ -88,7 +88,7 @@ object StatesTestData {
     userAgent = "TestAgent",
   )
 
-  val createSalesforceContactState = CreateSalesforceContactState(
+  val createSalesforceContactState: CreateSalesforceContactState = CreateSalesforceContactState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
@@ -131,7 +131,7 @@ object StatesTestData {
     acquisitionData = None,
   )
 
-  val preparePaymentMethodForReuseState = PreparePaymentMethodForReuseState(
+  val preparePaymentMethodForReuseState: PreparePaymentMethodForReuseState = PreparePaymentMethodForReuseState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,

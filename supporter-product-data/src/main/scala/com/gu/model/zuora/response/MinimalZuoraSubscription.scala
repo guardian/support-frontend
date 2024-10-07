@@ -5,7 +5,7 @@ import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 
 case class MinimalZuoraSubscription(ratePlans: List[RatePlan]) {
-  def contributionAmount = for {
+  def contributionAmount: Option[ContributionAmount] = for {
     ratePlans <- ratePlans.headOption
     charges <- ratePlans.ratePlanCharges.headOption
   } yield ContributionAmount(charges.price, charges.currency)

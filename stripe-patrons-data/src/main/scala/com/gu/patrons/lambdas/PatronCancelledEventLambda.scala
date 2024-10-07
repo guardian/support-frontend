@@ -39,9 +39,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.{Failure, Success, Try}
+import okhttp3.{Request, Response}
 
 class PatronCancelledEventLambda extends StrictLogging {
-  val runner = configurableFutureRunner(60.seconds)
+  val runner: Request => Future[Response] = configurableFutureRunner(60.seconds)
 
   implicit val stage: Stage = StageConstructors.fromEnvironment
   private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
@@ -76,7 +77,7 @@ class PatronCancelledEventLambda extends StrictLogging {
 
   def cancelSubscriptionForEmail(email: String, subscriptionId: String, identityConfig: PatronsIdentityConfig)(implicit
       stage: Stage,
-  ) = for {
+  ): EitherT[Future, CancelError, Unit] = for {
     identityId <- getIdentityId(identityConfig, email)
     _ <- cancelSubscription(stage, identityId, subscriptionId)
   } yield ()
@@ -96,7 +97,7 @@ class PatronCancelledEventLambda extends StrictLogging {
         EitherT.pure(())
     }
 
-  def getAPIGatewayResult(result: Either[CancelError, Unit]) = {
+  def getAPIGatewayResult(result: Either[CancelError, Unit]): APIGatewayProxyResponseEvent = {
     val response = new APIGatewayProxyResponseEvent()
     result match {
       case Left(error @ (ConfigLoadingError(_) | DynamoDbError(_))) =>

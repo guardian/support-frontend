@@ -160,7 +160,8 @@ object Salesforce {
 
     def errorMessage: Option[String] = List(buyer.ErrorString, giftRecipient.flatMap(_.ErrorString)).flatten.headOption
 
-    def contactRecords = SalesforceContactRecords(buyer.ContactRecord, giftRecipient.map(_.ContactRecord))
+    def contactRecords: SalesforceContactRecords =
+      SalesforceContactRecords(buyer.ContactRecord, giftRecipient.map(_.ContactRecord))
   }
 
   object SalesforceErrorResponse {
@@ -175,7 +176,7 @@ object Salesforce {
       errorCode: String,
   ) extends Throwable {
 
-    val errorsToRetryUnlimited = List(
+    val errorsToRetryUnlimited: List[String] = List(
       SalesforceErrorResponse.expiredAuthenticationCode,
       SalesforceErrorResponse.rateLimitExceeded,
       SalesforceErrorResponse.readOnlyMaintenance,

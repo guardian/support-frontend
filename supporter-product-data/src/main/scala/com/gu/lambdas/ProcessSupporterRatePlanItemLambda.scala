@@ -21,7 +21,7 @@ import scala.util.{Failure, Success}
 
 class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
 
-  override protected def handlerFuture(input: SqsEvent, context: Context) = {
+  override protected def handlerFuture(input: SqsEvent, context: Context): Future[Unit] = {
     logger.info(s"Received ${input.Records.length} records from the queue")
     Future
       .sequence(input.Records.map { record =>
@@ -39,12 +39,12 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
 
 object ProcessSupporterRatePlanItemLambda extends SafeLogging {
   val stage = StageConstructors.fromEnvironment
-  val config = ConfigService(stage).load
-  val dynamoService = SupporterDataDynamoService(stage)
-  val contributionIds = ContributionIds.forStage(stage)
-  val discountIds = DiscountService(stage).getDiscountProductRatePlanIds.get
+  val config: ZuoraQuerierConfig = ConfigService(stage).load
+  val dynamoService: SupporterDataDynamoService = SupporterDataDynamoService(stage)
+  val contributionIds: List[String] = ContributionIds.forStage(stage)
+  val discountIds: List[String] = DiscountService(stage).getDiscountProductRatePlanIds.get
   lazy val contributionAmountFetcher = new ContributionAmountFetcher(config)
-  lazy val alarmService = AlarmService(stage)
+  lazy val alarmService: AlarmService = AlarmService(stage)
 
   private def isRecurringContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     contributionIds.contains(supporterRatePlanItem.productRatePlanId)
@@ -59,7 +59,7 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
   private def itemIsDiscount(supporterRatePlanItem: SupporterRatePlanItem) =
     discountIds.contains(supporterRatePlanItem.productRatePlanId)
 
-  def processItem(supporterRatePlanItem: SupporterRatePlanItem) = {
+  def processItem(supporterRatePlanItem: SupporterRatePlanItem): Future[Any] = {
     if (itemIsDiscount(supporterRatePlanItem)) {
       logger.info(s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount")
       Future.successful(())
@@ -91,7 +91,7 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
 class ContributionAmountFetcher(config: ZuoraQuerierConfig) extends SafeLogging {
   lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
 
-  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem) =
+  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem): Future[SupporterRatePlanItem] =
     zuoraService
       .getSubscription(supporterRatePlanItem.subscriptionName)
       .map { sub =>
@@ -104,7 +104,7 @@ class ContributionAmountFetcher(config: ZuoraQuerierConfig) extends SafeLogging 
 }
 
 object ContributionIds {
-  def forStage(stage: Stage) = stage match {
+  def forStage(stage: Stage): List[String] = stage match {
     case PROD => List("2c92a0fc5aacfadd015ad24db4ff5e97", "2c92a0fc5e1dc084015e37f58c200eea")
     case CODE => List("2c92c0f85a6b134e015a7fcd9f0c7855", "2c92c0f85e2d19af015e3896e824092c")
   }

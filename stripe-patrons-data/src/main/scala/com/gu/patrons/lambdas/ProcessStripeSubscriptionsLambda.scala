@@ -19,6 +19,7 @@ import com.gu.supporterdata.services.SupporterDataDynamoService
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, DurationInt, MILLISECONDS}
+import scala.concurrent.Future
 
 class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
 
@@ -26,7 +27,7 @@ class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
   private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
   private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
 
-  override def handleRequest(input: Unit, context: Context) = {
+  override def handleRequest(input: Unit, context: Context): Unit = {
     val account = GnmPatronScheme // TODO: allow this to be set by the caller
     Await.result(
       processSubscriptions(account, stage, stripeConfig, identityConfig),
@@ -42,7 +43,7 @@ object ProcessStripeSubscriptionsLambda {
       stage: Stage,
       stripeConfig: PatronsStripeConfig,
       identityConfig: PatronsIdentityConfig,
-  ) = {
+  ): Future[Unit] = {
     val runner = configurableFutureRunner(60.seconds)
     val stripeService = new PatronsStripeService(stripeConfig, runner)
     val identityService = new PatronsIdentityService(identityConfig, runner)

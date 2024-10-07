@@ -21,7 +21,7 @@ case object NoSuchCode extends PromoError {
 }
 
 case class DuplicateCode(debug: String) extends PromoError {
-  override val msg = s"Duplicate promo codes: $debug"
+  override val msg: String = s"Duplicate promo codes: $debug"
 }
 
 case object ExpiredPromotion extends PromoError {

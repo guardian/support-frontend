@@ -28,7 +28,7 @@ class AppController(
     Ok("Acquisition received")
   }
 
-  def corsOptions() = CorsAction { request =>
+  def corsOptions(): Action[AnyContent] = CorsAction { request =>
     NoContent.withHeaders("Vary" -> "Origin")
   }
 

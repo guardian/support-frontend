@@ -7,7 +7,7 @@ import com.gu.supporterdata.model.Stage
 case class PatronsIdentityConfig(apiUrl: String, apiClientToken: String)
 
 object PatronsIdentityConfig extends ConfigService {
-  def fromParameterStoreSync(stage: Stage) = {
+  def fromParameterStoreSync(stage: Stage): PatronsIdentityConfig = {
     logger.info(s"Loading Identity config")
     val params = ParameterStoreService(stage).getParametersByPathSync("identity-config")
     PatronsIdentityConfig(

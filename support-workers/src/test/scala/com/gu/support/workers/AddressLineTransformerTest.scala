@@ -10,12 +10,12 @@ import org.scalatestplus.mockito.MockitoSugar
 
 class AddressLineTransformerTest extends AnyFlatSpec with Matchers with MockitoSugar {
 
-  val digitalPackProduct = DigitalPack(
+  val digitalPackProduct: DigitalPack = DigitalPack(
     currency = Currency.USD,
     billingPeriod = Monthly,
   )
 
-  val directDebitPaymentFieldsFromClient = DirectDebitPaymentFields(
+  val directDebitPaymentFieldsFromClient: DirectDebitPaymentFields = DirectDebitPaymentFields(
     accountHolderName = "oscar the grouch",
     sortCode = "200000",
     accountNumber = "55779911",

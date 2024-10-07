@@ -10,27 +10,27 @@ import com.typesafe.config.{Config => TypesafeConfig}
 
 class Configuration(config: TypesafeConfig) {
 
-  lazy val stage = Stage.fromString(config.getString("stage")).get
+  lazy val stage: Stage = Stage.fromString(config.getString("stage")).get
 
-  lazy val sentryDsn = config.getOptionalString("sentry.dsn")
+  lazy val sentryDsn: Option[String] = config.getOptionalString("sentry.dsn")
 
   lazy val identity = new Identity(config.getConfig("identity"))
 
   lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
-  lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
+  lazy val getAddressIOConfig: GetAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
   lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
-  lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
+  lazy val guardianDomain: GuardianDomain = GuardianDomain(config.getString("guardianDomain"))
 
-  lazy val supportUrl = config.getString("support.url")
+  lazy val supportUrl: String = config.getString("support.url")
 
-  lazy val paymentApiUrl = config.getString("paymentApi.url")
+  lazy val paymentApiUrl: String = config.getString("paymentApi.url")
 
-  lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
+  lazy val membersDataServiceApiUrl: String = config.getString("membersDataService.api.url")
 
-  lazy val metricUrl = MetricUrl(config.getString("metric.url"))
+  lazy val metricUrl: MetricUrl = MetricUrl(config.getString("metric.url"))
 
   lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
@@ -42,7 +42,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val amazonPayConfigProvider = new AmazonPayConfigProvider(config, stage)
 
-  lazy val stepFunctionArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
+  lazy val stepFunctionArn: StateMachineArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
   lazy val settingsSources: SettingsSources = SettingsSources.fromConfig(config, stage).valueOr(throw _)
 
@@ -54,7 +54,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 
-  lazy val capiKey = config.getString("capi-key")
+  lazy val capiKey: String = config.getString("capi-key")
 
   lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }

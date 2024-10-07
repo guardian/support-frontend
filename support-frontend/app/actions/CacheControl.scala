@@ -7,7 +7,7 @@ import HttpHeaders._
 
 object CacheControl {
 
-  val defaultStaleIfErrors = 10.days
+  val defaultStaleIfErrors: FiniteDuration = 10.days
 
   def browser(maxAge: FiniteDuration): (String, String) = {
     "Cache-Control" -> standardDirectives(maxAge, 1.second max (maxAge / 10), defaultStaleIfErrors)

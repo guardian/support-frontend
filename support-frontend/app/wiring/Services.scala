@@ -27,11 +27,11 @@ trait Services {
 
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
-  lazy val identityService = IdentityService(appConfig.identity)
+  lazy val identityService: IdentityService = IdentityService(appConfig.identity)
 
   lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
-  lazy val supportWorkersClient = {
+  lazy val supportWorkersClient: SupportWorkersClient = {
     val stateWrapper = new StateWrapper()
     SupportWorkersClient(
       appConfig.stepFunctionArn,
@@ -43,18 +43,20 @@ trait Services {
 
   lazy val capiService = new CapiService(wsClient, appConfig.capiKey)
 
-  lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
+  lazy val testUsers: TestUserService = TestUserService(appConfig.identity.testUserSecret)
 
-  lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
+  lazy val asyncAuthenticationService: AsyncAuthenticationService =
+    AsyncAuthenticationService(appConfig.identity, wsClient)
 
-  lazy val oktaAuthService = OktaAuthService[DefaultAccessClaims, UserClaims](
-    config = OktaTokenValidationConfig(
-      issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
-      audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
-      clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
-    ),
-    defaultIdentityClaimsParser = UserClaims.parser,
-  )
+  lazy val oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims] =
+    OktaAuthService[DefaultAccessClaims, UserClaims](
+      config = OktaTokenValidationConfig(
+        issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
+        audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
+        clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
+      ),
+      defaultIdentityClaimsParser = UserClaims.parser,
+    )
 
   lazy val userFromAuthCookiesOrAuthServerActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
     controllerComponents.parsers.defaultBodyParser,

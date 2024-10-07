@@ -9,6 +9,7 @@ import com.gu.support.promotions.ServicesFixtures.{freeTrialPromoCode, _}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import com.gu.support.config.PromotionsConfig
 
 //noinspection NameBooleanParameters
 class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
@@ -131,7 +132,7 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
 }
 
 object PromotionServiceSpec {
-  val config = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
+  val config: PromotionsConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
   val serviceWithFixtures = new PromotionService(
     config,
     Some(

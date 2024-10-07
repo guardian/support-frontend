@@ -19,7 +19,7 @@ object Configuration extends SafeLogging {
   )
     .getOrElse(true) // Should we load config from S3
 
-  val stage = Stage
+  val stage: Stage = Stage
     .fromString(
       Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
         .getOrElse("DEV"),
@@ -33,7 +33,7 @@ object Configuration extends SafeLogging {
     .forEnvironment(Configuration.loadFromS3)
     .load(Configuration.stage, ConfigFactory.load(this.getClass.getClassLoader))
 
-  lazy val emailQueueName = System.getenv("EMAIL_QUEUE_NAME")
+  lazy val emailQueueName: String = System.getenv("EMAIL_QUEUE_NAME")
 }
 
 case class Configuration(config: Config) {
@@ -48,5 +48,5 @@ case class Configuration(config: Config) {
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
   val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
-  val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
+  val acquisitionsKinesisStreamName: String = config.getString("kinesis.streamName")
 }

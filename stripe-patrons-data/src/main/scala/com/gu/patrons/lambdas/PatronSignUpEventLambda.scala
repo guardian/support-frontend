@@ -39,9 +39,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.{Failure, Success, Try}
+import okhttp3.{Request, Response}
 
 class PatronSignUpEventLambda extends StrictLogging {
-  val runner = configurableFutureRunner(60.seconds)
+  val runner: Request => Future[Response] = configurableFutureRunner(60.seconds)
 
   implicit val stage: Stage = StageConstructors.fromEnvironment
   private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
@@ -77,7 +78,7 @@ class PatronSignUpEventLambda extends StrictLogging {
     } yield unit).value.map(getAPIGatewayResult(_))
   }
 
-  def getAPIGatewayResult(result: Either[SignUpError, Unit]) = {
+  def getAPIGatewayResult(result: Either[SignUpError, Unit]): APIGatewayProxyResponseEvent = {
     val response = new APIGatewayProxyResponseEvent()
     result match {
       case Left(error @ (ConfigLoadingError(_) | SubscriptionProcessingError(_) | StripeGetCustomerFailedError(_))) =>

@@ -7,6 +7,7 @@ import com.gu.support.workers.Annual
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.support.zuora.api.{RatePlan, RatePlanData, Subscription, SubscriptionData}
 import org.joda.time.{DateTime, Days, LocalDate, Months}
+import com.gu.support.catalog.ProductRatePlanId
 
 /** Promotions are quite laborious to construct So these are helper methods for unit tests
   */
@@ -22,23 +23,23 @@ object ServicesFixtures {
   val tenAnnual = "10ANNUAL"
   val sixForSix = "6FOR6"
 
-  val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
+  val validProductRatePlanIds: List[ProductRatePlanId] = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head
   val secondValidProductRatePlanId = validProductRatePlanIds.tail.head
   val invalidProductRatePlanId = "67890"
 
-  val freeTrialBenefit = Some(FreeTrialBenefit(Days.days(5)))
-  val discountBenefit = Some(DiscountBenefit(30, Some(Months.months(3))))
+  val freeTrialBenefit: Some[FreeTrialBenefit] = Some(FreeTrialBenefit(Days.days(5)))
+  val discountBenefit: Some[DiscountBenefit] = Some(DiscountBenefit(30, Some(Months.months(3))))
 
   val freeTrial = promotion(validProductRatePlanIds, freeTrialPromoCode, freeTrial = freeTrialBenefit)
-  val freeTrialWithCode = PromotionWithCode(freeTrialPromoCode, freeTrial)
+  val freeTrialWithCode: PromotionWithCode = PromotionWithCode(freeTrialPromoCode, freeTrial)
   val discount = promotion(validProductRatePlanIds, discountPromoCode, discountBenefit)
-  val discountWithCode = PromotionWithCode(discountPromoCode, discount)
+  val discountWithCode: PromotionWithCode = PromotionWithCode(discountPromoCode, discount)
   val double = promotion(validProductRatePlanIds, doublePromoCode, discountBenefit, freeTrialBenefit)
-  val doubleWithCode = PromotionWithCode(doublePromoCode, double)
-  val tracking =
+  val doubleWithCode: PromotionWithCode = PromotionWithCode(doublePromoCode, double)
+  val tracking: PromotionWithCode =
     PromotionWithCode(trackingPromoCode, promotion(validProductRatePlanIds, trackingPromoCode, tracking = true))
-  val renewal = PromotionWithCode(
+  val renewal: PromotionWithCode = PromotionWithCode(
     renewalPromoCode,
     promotion(validProductRatePlanIds, renewalPromoCode, discountBenefit, renewal = true),
   )
@@ -59,12 +60,12 @@ object ServicesFixtures {
         .toSet,
     ),
   )
-  val guardianWeeklyWithCode = PromotionWithCode(tenAnnual, guardianWeeklyAnnual)
+  val guardianWeeklyWithCode: PromotionWithCode = PromotionWithCode(tenAnnual, guardianWeeklyAnnual)
   val duplicate1 = promotion(validProductRatePlanIds, duplicatedPromoCode, discountBenefit)
   val duplicate2 = promotion(validProductRatePlanIds, duplicatedPromoCode, freeTrial = freeTrialBenefit)
 
-  val now = LocalDate.now()
-  val subscriptionData = SubscriptionData(
+  val now: LocalDate = LocalDate.now()
+  val subscriptionData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(RatePlan(validProductRatePlanId), Nil, Nil),
     ),

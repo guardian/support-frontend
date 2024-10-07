@@ -13,13 +13,14 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
 import scala.collection.immutable.Map.empty
 import scala.concurrent.{ExecutionContext, Future}
+import okhttp3.Response
 
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[BatchQueryErrorResponse] {
 
   override val wsUrl = config.url
   override val httpClient: FutureHttpClient = client
-  val authHeaders = Map(
+  val authHeaders: Map[String, String] = Map(
     "apiSecretAccessKey" -> config.password,
     "apiAccessKeyId" -> config.username,
     "Accept-Encoding" -> "identity", // Required to ensure that response content-length header is available. We need this when we transfer results to S3. See https://github.com/square/okhttp/issues/1542 for details
@@ -51,7 +52,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   def getResults(id: String): Future[BatchQueryResponse] =
     get[BatchQueryResponse](s"batch-query/jobs/$id", authHeaders)
 
-  def getResultFileResponse(fileId: String) = {
+  def getResultFileResponse(fileId: String): Future[Response] = {
     val endpoint = s"/batch-query/file/$fileId"
     getResponse(buildRequest(endpoint, authHeaders, empty))
   }

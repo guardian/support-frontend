@@ -11,10 +11,11 @@ import utils.FastlyGEOIP
 
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.ControllerComponents
 
 class CachedActionTest extends AnyWordSpec with Matchers {
 
-  val cc = stubControllerComponents()
+  val cc: ControllerComponents = stubControllerComponents()
   val cachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
   val geoCachedAction = new CachedAction(

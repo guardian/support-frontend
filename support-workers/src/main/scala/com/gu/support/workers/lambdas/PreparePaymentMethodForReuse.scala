@@ -29,7 +29,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       requestInfo: RequestInfo,
       context: Context,
       services: Services,
-  ) = {
+  ): Future[HandlerResult[CreateZuoraSubscriptionState]] = {
 
     import com.gu.WithLoggingSugar._
 

@@ -12,20 +12,22 @@ import com.typesafe.scalalogging.StrictLogging
 import java.time.{ZoneId, ZonedDateTime}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import com.gu.conf.ZuoraQuerierConfig
+import scala.concurrent.Future
 
 class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 
-  override protected def handlerFuture(input: QueryZuoraState, context: Context) =
+  override protected def handlerFuture(input: QueryZuoraState, context: Context): Future[FetchResultsState] =
     queryZuora(StageConstructors.fromEnvironment, input.queryType)
 
 }
 
 object QueryZuoraLambda extends StrictLogging {
   val stage = StageConstructors.fromEnvironment
-  val config = ConfigService(stage).load
+  val config: ZuoraQuerierConfig = ConfigService(stage).load
   val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
-  def queryZuora(stage: Stage, queryType: QueryType) = {
+  def queryZuora(stage: Stage, queryType: QueryType): Future[FetchResultsState] = {
     logger.info(s"Attempting to submit ${queryType.value} query to Zuora")
 
     // Get the time we started the query. Docs for why we need to do this are here:

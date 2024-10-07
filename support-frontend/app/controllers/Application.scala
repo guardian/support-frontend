@@ -430,7 +430,7 @@ class Application(
       countryGroupId: String,
       productCatalog: JsonObject,
       queryString: Map[String, Seq[String]],
-  ) = {
+  ): (String, String, Option[Int]) = {
     val maybeSelectedContributionType = queryString
       .get("selected-contribution-type")
       .flatMap(_.headOption)
@@ -469,37 +469,38 @@ class Application(
     }
   }
 
-  def redirectContributionsCheckout(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+  def redirectContributionsCheckout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction {
+    implicit request =>
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-    val isTestUser = testUserService.isTestUser(request)
-    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+      val isTestUser = testUserService.isTestUser(request)
+      val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
-    val (product, ratePlan, maybeSelectedAmount) =
-      getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
+      val (product, ratePlan, maybeSelectedAmount) =
+        getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
-    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
-      * should remove this.
-      */
-    if (product == "OneOff") {
-      Ok(
-        contributionsHtml(countryGroupId, None),
-      ).withSettingsSurrogateKey
-    } else {
-      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
-        "product" -> Seq(product),
-        "ratePlan" -> Seq(ratePlan),
-      )
+      /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
+        * should remove this.
+        */
+      if (product == "OneOff") {
+        Ok(
+          contributionsHtml(countryGroupId, None),
+        ).withSettingsSurrogateKey
+      } else {
+        val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+          "product" -> Seq(product),
+          "ratePlan" -> Seq(ratePlan),
+        )
 
-      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(queryString)
+        val queryStringMaybeWithContributionAmount = maybeSelectedAmount
+          .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
+          .getOrElse(queryString)
 
-      Redirect(s"/$countryGroupId/checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
-    }
+        Redirect(s"/$countryGroupId/checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
+      }
   }
 
-  def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
+  def productCheckoutRouter(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
@@ -544,13 +545,14 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
-  def eventsRouter(countryGroupId: String, eventId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(
-      views.html.eventsRouter(
-        user = request.user,
-      ),
-    ).withSettingsSurrogateKey
+  def eventsRouter(countryGroupId: String, eventId: String): Action[AnyContent] = MaybeAuthenticatedAction {
+    implicit request =>
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
+      Ok(
+        views.html.eventsRouter(
+          user = request.user,
+        ),
+      ).withSettingsSurrogateKey
   }
 
   def appConfigJson: Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>

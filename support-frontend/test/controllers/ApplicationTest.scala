@@ -25,6 +25,7 @@ import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummarySe
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import io.circe.JsonObject
 
 class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents with EitherValues {
 
@@ -43,7 +44,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On)),
   )
 
-  val priceSummaryServiceProvider = {
+  val priceSummaryServiceProvider: PriceSummaryServiceProvider = {
     val priceSummaryService = mock[PriceSummaryService]
     when(
       priceSummaryService
@@ -96,7 +97,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   }
 
-  val productCatalogJson = io.circe.parser
+  val productCatalogJson: JsonObject = io.circe.parser
     .parse("""
   {
     "SupporterPlus": {

@@ -14,7 +14,7 @@ import scala.util.Try
 
 class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService with SafeLogging {
 
-  val defaultNVPParams = Map(
+  val defaultNVPParams: Map[String, String] = Map(
     "USER" -> apiConfig.user,
     "PWD" -> apiConfig.password,
     "SIGNATURE" -> apiConfig.signature,
