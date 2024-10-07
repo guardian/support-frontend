@@ -1,9 +1,7 @@
 package admin.settings
 
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicReference
+import admin.settings.AmountsTests.AmountsTests
 import admin.settings.SettingsProvider.SettingsUpdate
-import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import com.gu.aws.AwsS3Client
@@ -11,13 +9,15 @@ import com.gu.monitoring.SafeLogging
 import config.Configuration.MetricUrl
 import config.{Configuration, FastlyConfig}
 import io.circe.Decoder
+import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import services.fastly.FastlyService
 
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
-import admin.settings.AmountsTests.AmountsTests
 
 abstract class SettingsProvider[T] {
 
@@ -34,7 +34,7 @@ class AllSettingsProvider private (
     metricUrl: MetricUrl,
 ) {
 
-  def getAllSettings(): AllSettings = {
+  def getAllSettings: AllSettings = {
     AllSettings(
       switchesProvider.settings(),
       amountsProvider.settings(),
@@ -45,8 +45,8 @@ class AllSettingsProvider private (
 }
 
 object AllSettingsProvider {
-  import admin.settings.AmountsTests.amountsTestsDecoder
-  import admin.settings.ContributionTypes.contributionTypesDecoder
+  import admin.settings.AmountsTests.amountsTestsCodec
+  import admin.settings.ContributionTypes.contributionTypesCodec
 
   def fromConfig(
       config: Configuration,

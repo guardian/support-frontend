@@ -1,8 +1,8 @@
 package admin.settings
 
+import com.gu.support.encoding.Codec
+import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.{Decoder, Encoder}
 
 case class AmountsSelection(
     amounts: List[Int],
@@ -29,11 +29,9 @@ object AmountsTestTargeting {
   case class Region(targetingType: String = "Region", region: String) extends AmountsTestTargeting
   case class Country(targetingType: String = "Country", countries: List[String]) extends AmountsTestTargeting
 
-  import io.circe.generic.extras.auto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
 
-  implicit val amountsTestTargetingDecoder: Decoder[AmountsTestTargeting] = Decoder[AmountsTestTargeting]
-  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingCodec: Codec[AmountsTestTargeting] = deriveCodec[AmountsTestTargeting]
 }
 
 case class AmountsTest(
@@ -50,8 +48,9 @@ case class AmountsTest(
 object AmountsTests {
   type AmountsTests = List[AmountsTest]
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val amountsTestDecoder: Decoder[AmountsTest] = Decoder[AmountsTest]
-  implicit val amountsTestEncoder = Encoder[AmountsTest]
-  implicit val amountsTestsDecoder: Decoder[AmountsTests] = Decoder[AmountsTests]
-  implicit val amountsTestsEncoder = Encoder[AmountsTests]
+  implicit val amountsSelectionCodec: Codec[AmountsSelection] = deriveCodec[AmountsSelection]
+  implicit val contributionAmountsCodec: Codec[ContributionAmounts] = deriveCodec[ContributionAmounts]
+  implicit val amountsVariantCodec: Codec[AmountsVariant] = deriveCodec[AmountsVariant]
+  implicit val amountsTestCodec: Codec[AmountsTest] = deriveCodec[AmountsTest]
+  implicit val amountsTestsCodec: Codec[AmountsTests] = deriveCodec[AmountsTests]
 }
