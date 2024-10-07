@@ -34,7 +34,7 @@ class AllSettingsProvider private (
     metricUrl: MetricUrl,
 ) {
 
-  def getAllSettings: AllSettings = {
+  def getAllSettings(): AllSettings = {
     AllSettings(
       switchesProvider.settings(),
       amountsProvider.settings(),
