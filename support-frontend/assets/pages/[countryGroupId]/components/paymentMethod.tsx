@@ -3,12 +3,18 @@ import { palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 const paymentMethodRadioWithImage = css`
-	display: inline-flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
 	padding: ${space[2]}px ${space[3]}px;
-	font-weight: bold;
+
+	div label {
+		width: 100%;
+	}
+
+	div label > div {
+		display: inline-flex;
+		justify-content: space-between;
+		align-items: center;
+		font-weight: bold;
+	}
 `;
 
 const paymentMethodRadioWithImageSelected = css`
