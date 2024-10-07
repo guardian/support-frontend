@@ -457,6 +457,12 @@ function OneTimeCheckoutComponent({
 		setIsProcessingPayment(false);
 	};
 
+	const paymentButtonText = finalAmount
+		? paymentMethod === 'PayPal'
+			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
+			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
+		: 'Pay now';
+
 	return (
 		<CheckoutLayout>
 			<Box>
@@ -745,14 +751,7 @@ function OneTimeCheckoutComponent({
 							`}
 						>
 							<DefaultPaymentButton
-								buttonText={
-									finalAmount
-										? `Support us with ${simpleFormatAmount(
-												currency,
-												finalAmount,
-										  )}`
-										: 'Pay now'
-								}
+								buttonText={paymentButtonText}
 								onClick={() => {
 									// no-op
 									// This isn't needed because we are now using the form onSubmit handler
