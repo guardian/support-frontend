@@ -1561,7 +1561,12 @@ function CheckoutComponent({
 										<PaymentMethodSelector selected={selected}>
 											<PaymentMethodRadio selected={selected}>
 												<Radio
-													label={label}
+													label={
+														<>
+															{label}
+															<div>{icon}</div>
+														</>
+													}
 													name="paymentMethod"
 													value={validPaymentMethod}
 													css={
@@ -1573,7 +1578,6 @@ function CheckoutComponent({
 														setPaymentMethod(validPaymentMethod);
 													}}
 												/>
-												<div>{icon}</div>
 											</PaymentMethodRadio>
 											{validPaymentMethod === 'Stripe' && selected && (
 												<div css={paymentMethodBody}>
