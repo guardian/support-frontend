@@ -94,9 +94,9 @@ class RetrySpec extends AnyFlatSpec with Matchers {
     }
   }
 
-  def countTries[A, B](f: Int => EitherT[Future, A, B]): AnyRef = {
+  def countTries[A, B](f: Int => EitherT[Future, A, B]) = {
     class Wrapped(var tries: Int = 0) {
-      def apply() = {
+      def apply(): EitherT[Future, A, B] = {
         tries += 1
         f(tries)
       }

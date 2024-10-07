@@ -3,6 +3,7 @@ package admin.settings
 import com.gu.support.encoding.Codec
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder, Json}
 import io.circe.optics.JsonPath._
 
@@ -99,8 +100,8 @@ object Switches {
 
   implicit private val customConfig: Configuration = Configuration.default.withDefaults
 
-  private val switchesEncoder = Encoder[Switches]
-  private val switchesDecoder = Decoder[Switches].prepare(_.withFocus(flattenAllSwitches))
+  private val switchesEncoder: Encoder[Switches] = deriveEncoder
+  private val switchesDecoder: Decoder[Switches] = deriveDecoder[Switches].prepare(_.withFocus(flattenAllSwitches))
 
   implicit val switchesCodec: Codec[Switches] = new Codec(switchesEncoder, switchesDecoder)
 }
