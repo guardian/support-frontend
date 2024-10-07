@@ -93,8 +93,8 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
 object SendThankYouEmailManualTest {
 
   // This test will send a thank you email to the address/SF contact below - useful for quickly testing changes
-  val addressToSendTo = "john.duffell@guardian.co.uk"
-  val identityIdToSendTo = "200004242"
+  val addressToSendTo: String = "john.duffell@guardian.co.uk"
+  val identityIdToSendTo: String = "200004242"
   val giftRecipientSFContactIdToSendTo: SfContactId = SfContactId("0039E000018EoTHQA0")
 
   def main(args: Array[String]): Unit = {
@@ -350,8 +350,8 @@ object SendWeeklySubscriptionGiftEmail extends App {
 object TestData {
 
   val paymentSchedule: PaymentSchedule = PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 37.50)))
-  val subno = "A-S00045678"
-  val acno = "A123456"
+  val subno: String = "A-S00045678"
+  val acno: String = "A123456"
 
   val countryOnlyAddress: Address =
     Address(lineOne = None, lineTwo = None, city = None, state = None, postCode = None, country = UK)
@@ -380,7 +380,7 @@ object TestData {
 
   val getMandate: String => Future[Some[String]] = (_: String) => Future.successful(Some("65HK26E"))
 
-  val supporterPlusPromotionService = new PromotionService(
+  val supporterPlusPromotionService: PromotionService = new PromotionService(
     PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
     Some(
       new SimplePromotionCollection(
@@ -406,12 +406,12 @@ object TestData {
     ),
   )
 
-  val promotionService = new PromotionService(
+  val promotionService: PromotionService = new PromotionService(
     PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
     Some(new SimplePromotionCollection(Nil)),
   )
 
-  val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
+  val paperFieldsGenerator: PaperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
 
   val directDebitPaymentMethod: DirectDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Mickey",
@@ -427,7 +427,7 @@ object TestData {
     StreetNumber = Some("123"),
   )
 
-  val digitalPackEmailFields = new DigitalPackEmailFields(
+  val digitalPackEmailFields: DigitalPackEmailFields = new DigitalPackEmailFields(
     new PaperFieldsGenerator(
       promotionService,
       getMandate,

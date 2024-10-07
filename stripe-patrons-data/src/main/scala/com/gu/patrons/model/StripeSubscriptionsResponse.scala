@@ -27,8 +27,8 @@ sealed trait StripeCustomer
 @ConfiguredJsonCodec
 case class ExpandedStripeCustomer(id: String, name: Option[String], email: String, metadata: Metadata)
     extends StripeCustomer {
-  val jointPatronEmail = metadata.jointPatronEmail
-  val jointPatronName = metadata.jointPatronName
+  val jointPatronEmail: Option[String] = metadata.jointPatronEmail
+  val jointPatronName: Option[String] = metadata.jointPatronName
 }
 
 case class UnexpandedStripeCustomer(id: String) extends StripeCustomer

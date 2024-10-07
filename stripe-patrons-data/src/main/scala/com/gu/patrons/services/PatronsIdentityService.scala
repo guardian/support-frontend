@@ -11,8 +11,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHttpClient)
     extends WebServiceHelper[IdentityErrorResponse] {
-  override val wsUrl = config.apiUrl
-  override val httpClient = client
+  override val wsUrl: String = config.apiUrl
+  override val httpClient: FutureHttpClient = client
   val authHeader: Map[String, String] = Map(
     "Authorization" -> s"Bearer ${config.apiClientToken}",
   )

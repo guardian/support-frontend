@@ -16,9 +16,9 @@ import play.api.mvc.ControllerComponents
 class CachedActionTest extends AnyWordSpec with Matchers {
 
   val cc: ControllerComponents = stubControllerComponents()
-  val cachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
+  val cachedAction: CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
-  val geoCachedAction = new CachedAction(
+  val geoCachedAction: CachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
     List("Vary" -> FastlyGEOIP.fastlyCountryHeader),

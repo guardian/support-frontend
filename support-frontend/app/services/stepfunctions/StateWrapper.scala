@@ -7,6 +7,7 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
 import scala.util.Try
+import java.nio.charset.Charset
 
 class StateWrapper() {
   implicit private val executionErrorEncoder: Encoder.AsObject[ExecutionError] = deriveEncoder[ExecutionError]
@@ -18,7 +19,7 @@ class StateWrapper() {
   implicit private val wrapperEncoder: Encoder.AsObject[JsonWrapper] = deriveEncoder[JsonWrapper]
   implicit private val wrapperDecoder: Decoder[JsonWrapper] = deriveDecoder[JsonWrapper]
 
-  val utf8 = java.nio.charset.StandardCharsets.UTF_8
+  val utf8: Charset = java.nio.charset.StandardCharsets.UTF_8
 
   def wrap[T](state: T, isTestUser: Boolean, isExistingAccount: Boolean)(implicit encoder: Encoder[T]): String = {
     JsonWrapper(state.asJson, None, RequestInfo(isTestUser, failed = false, Nil, isExistingAccount)).asJson.noSpaces

@@ -8,6 +8,7 @@ import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.core.DefaultWebCommands
 import play.filters.csrf.CSRFComponents
+import play.filters.csrf.{CSRFAddToken, CSRFCheck, CSRFConfig}
 
 trait TestCSRFComponents {
 
@@ -21,7 +22,7 @@ trait TestCSRFComponents {
     }
   }
 
-  lazy val csrfConfig = appComponents.csrfConfig
-  lazy val csrfAddToken = appComponents.csrfAddToken
-  lazy val csrfCheck = appComponents.csrfCheck
+  lazy val csrfConfig: CSRFConfig = appComponents.csrfConfig
+  lazy val csrfAddToken: CSRFAddToken = appComponents.csrfAddToken
+  lazy val csrfCheck: CSRFCheck = appComponents.csrfCheck
 }

@@ -19,7 +19,7 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
     extends WebServiceHelper[StripeError] {
 
   // Stripe URL is the same in all environments
-  val wsUrl = baseUrl
+  val wsUrl: String = baseUrl
   val httpClient: FutureHttpClient = client
 
   def withCurrency(currency: Currency): StripeServiceForCurrency = {

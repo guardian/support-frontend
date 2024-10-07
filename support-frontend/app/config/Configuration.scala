@@ -14,13 +14,13 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val sentryDsn: Option[String] = config.getOptionalString("sentry.dsn")
 
-  lazy val identity = new Identity(config.getConfig("identity"))
+  lazy val identity: Identity = new Identity(config.getConfig("identity"))
 
-  lazy val googleAuth = new GoogleAuth(config.getConfig("googleAuth"))
+  lazy val googleAuth: GoogleAuth = new GoogleAuth(config.getConfig("googleAuth"))
 
   lazy val getAddressIOConfig: GetAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
-  lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
+  lazy val paperRoundConfigProvider: PaperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   lazy val guardianDomain: GuardianDomain = GuardianDomain(config.getString("guardianDomain"))
 
@@ -32,15 +32,16 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val metricUrl: MetricUrl = MetricUrl(config.getString("metric.url"))
 
-  lazy val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
+  lazy val goCardlessConfigProvider: GoCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
 
-  lazy val regularPayPalConfigProvider = new PayPalConfigProvider(config, stage)
+  lazy val regularPayPalConfigProvider: PayPalConfigProvider = new PayPalConfigProvider(config, stage)
 
-  lazy val regularStripeConfigProvider = new StripePublicConfigProvider(config, stage)
+  lazy val regularStripeConfigProvider: StripePublicConfigProvider = new StripePublicConfigProvider(config, stage)
 
-  lazy val oneOffStripeConfigProvider = new StripePublicConfigProvider(config, stage, "oneOffStripe")
+  lazy val oneOffStripeConfigProvider: StripePublicConfigProvider =
+    new StripePublicConfigProvider(config, stage, "oneOffStripe")
 
-  lazy val amazonPayConfigProvider = new AmazonPayConfigProvider(config, stage)
+  lazy val amazonPayConfigProvider: AmazonPayConfigProvider = new AmazonPayConfigProvider(config, stage)
 
   lazy val stepFunctionArn: StateMachineArn = StateMachineArn.fromString(config.getString("supportWorkers.arn")).get
 
@@ -48,15 +49,15 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val fastlyConfig: Option[FastlyConfig] = FastlyConfig.fromConfig(config).valueOr(throw _)
 
-  lazy val priceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
+  lazy val priceSummaryConfigProvider: PriceSummaryConfigProvider = new PriceSummaryConfigProvider(config, stage)
 
-  lazy val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
+  lazy val promotionsConfigProvider: PromotionsConfigProvider = new PromotionsConfigProvider(config, stage)
 
-  lazy val recaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
+  lazy val recaptchaConfigProvider: RecaptchaConfigProvider = new RecaptchaConfigProvider(config, stage)
 
   lazy val capiKey: String = config.getString("capi-key")
 
-  lazy val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
+  lazy val zuoraConfigProvider: ZuoraConfigProvider = new ZuoraConfigProvider(config, stage)
 }
 
 object Configuration {

@@ -102,5 +102,5 @@ object Switches {
   private val switchesEncoder = Encoder[Switches]
   private val switchesDecoder = Decoder[Switches].prepare(_.withFocus(flattenAllSwitches))
 
-  implicit val switchesCodec = new Codec(switchesEncoder, switchesDecoder)
+  implicit val switchesCodec: Codec[Switches] = new Codec(switchesEncoder, switchesDecoder)
 }

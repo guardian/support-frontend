@@ -18,7 +18,7 @@ import okhttp3.Response
 class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[BatchQueryErrorResponse] {
 
-  override val wsUrl = config.url
+  override val wsUrl: String = config.url
   override val httpClient: FutureHttpClient = client
   val authHeaders: Map[String, String] = Map(
     "apiSecretAccessKey" -> config.password,

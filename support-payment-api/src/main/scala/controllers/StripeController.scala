@@ -30,7 +30,7 @@ class StripeController(
   import model.stripe.StripeJsonDecoder._
   import util.RequestTypeDecoder.instances._
 
-  private val RateLimitingAction = new RateLimitingAction(
+  private val RateLimitingAction: RateLimitingAction = new RateLimitingAction(
     cc.parsers,
     cc.executionContext,
     cloudWatchService,
@@ -39,7 +39,7 @@ class StripeController(
     stage = RequestEnvironments.stage,
   )
 
-  lazy val CorsAndRateLimitAction: ActionBuilder[Request[A], AnyContent] = CorsAction andThen RateLimitingAction
+  lazy val CorsAndRateLimitAction: ActionBuilder[Request, AnyContent] = CorsAction andThen RateLimitingAction
 
   // Stripe Checkout handler, still required for mobile apps payments
   def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction

@@ -19,7 +19,7 @@ trait TimeOutCheck {
 }
 
 class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
-  override def timeRemainingMillis = context.getRemainingTimeInMillis
+  override def timeRemainingMillis: Int = context.getRemainingTimeInMillis
 }
 
 class AddSupporterRatePlanItemToQueueLambda
@@ -33,7 +33,7 @@ class AddSupporterRatePlanItemToQueueLambda
 }
 
 object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
-  val maxBatchSize = 5
+  val maxBatchSize: Int = 5
   val timeoutBufferInMillis: Int = maxBatchSize * 5 * 1000
 
   def addToQueue(

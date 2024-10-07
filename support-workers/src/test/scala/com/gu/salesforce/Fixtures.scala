@@ -4,20 +4,20 @@ import com.gu.i18n.Title
 import com.gu.salesforce.Salesforce.{DeliveryContact, NewContact}
 
 object Fixtures {
-  val idId = "9999999"
-  val salesforceId = "0039E000017tZVkQAM"
-  val salesforceAccountId = "0019E00001JJ9ZMQA1"
-  val emailAddress = "integration-test@thegulocal.com"
-  val telephoneNumber = "0123456789"
-  val title = Title.Mrs
-  val name = "integration-test"
-  val street = "123 trash alley"
-  val city = "London"
-  val postCode = "n1 9gu"
-  val uk = "UK"
-  val us = "US"
-  val state = "CA"
-  val allowMail = false
+  val idId: String = "9999999"
+  val salesforceId: String = "0039E000017tZVkQAM"
+  val salesforceAccountId: String = "0019E00001JJ9ZMQA1"
+  val emailAddress: String = "integration-test@thegulocal.com"
+  val telephoneNumber: String = "0123456789"
+  val title: Title = Title.Mrs
+  val name: String = "integration-test"
+  val street: String = "123 trash alley"
+  val city: String = "London"
+  val postCode: String = "n1 9gu"
+  val uk: String = "UK"
+  val us: String = "US"
+  val state: String = "CA"
+  val allowMail: Boolean = false
 
   val newContactUK: NewContact = NewContact(
     IdentityID__c = idId,
@@ -155,7 +155,7 @@ object Fixtures {
        }
       }"""
 
-  val authJson =
+  val authJson: String =
     """
       {
         "access_token": "00Dg0000006RDAM!AREAQKDFKQ.ZPdIxWp4Z55tyVgs0D_kPhaiCMndEOk7WVB8yRffLVNK9TFbtZk34cWAfaaeojHL2ndURQounCzhRfBE_nMct",
@@ -167,12 +167,12 @@ object Fixtures {
       }
     """
 
-  val expiredTokenResponse =
+  val expiredTokenResponse: String =
     """
       [{"message":"Session expired or invalid","errorCode":"INVALID_SESSION_ID"}]
     """
 
-  val authenticationErrorResponse =
+  val authenticationErrorResponse: String =
     """
       400: {"error":"invalid_client_id","error_description":"client identifier invalid"}
     """

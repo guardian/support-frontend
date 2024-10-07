@@ -55,10 +55,10 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
 
   val realConfig: Configuration = Configuration.load()
 
-  val realZuoraService =
+  val realZuoraService: ZuoraService =
     new ZuoraService(realConfig.zuoraConfigProvider.get(false), configurableFutureRunner(60.seconds))
 
-  val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get(false))
+  val realPromotionService: PromotionService = new PromotionService(realConfig.promotionsConfigProvider.get(false))
 
   val mockZuoraService: ZuoraService = {
     val mockZuora = mock[ZuoraService]

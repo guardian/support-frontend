@@ -40,13 +40,13 @@ case class Configuration(config: Config) {
 
   import Configuration.stage
 
-  val stripeConfigProvider = new StripeConfigProvider(config, stage)
-  val payPalConfigProvider = new PayPalConfigProvider(config, stage)
-  val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
-  val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
-  val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
-  val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
-  val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
+  val stripeConfigProvider: StripeConfigProvider = new StripeConfigProvider(config, stage)
+  val payPalConfigProvider: PayPalConfigProvider = new PayPalConfigProvider(config, stage)
+  val salesforceConfigProvider: SalesforceConfigProvider = new SalesforceConfigProvider(config, stage)
+  val zuoraConfigProvider: ZuoraConfigProvider = new ZuoraConfigProvider(config, stage)
+  val promotionsConfigProvider: PromotionsConfigProvider = new PromotionsConfigProvider(config, stage)
+  val goCardlessConfigProvider: GoCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
+  val paperRoundConfigProvider: PaperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   val acquisitionsKinesisStreamName: String = config.getString("kinesis.streamName")
 }

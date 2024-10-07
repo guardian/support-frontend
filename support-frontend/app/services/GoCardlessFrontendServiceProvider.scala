@@ -8,5 +8,6 @@ import scala.concurrent.ExecutionContext
 class GoCardlessFrontendServiceProvider(configProvider: GoCardlessConfigProvider)(implicit
     executionContext: ExecutionContext,
 ) extends TouchpointServiceProvider[GoCardlessFrontendService, GoCardlessConfig](configProvider) {
-  override protected def createService(config: GoCardlessConfig) = new GoCardlessFrontendService(config)
+  override protected def createService(config: GoCardlessConfig): GoCardlessFrontendService =
+    new GoCardlessFrontendService(config)
 }

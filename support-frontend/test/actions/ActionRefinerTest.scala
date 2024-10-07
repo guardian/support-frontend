@@ -21,9 +21,9 @@ import play.api.mvc.AnyContentAsEmpty
 
 class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {
 
-  val path = "/test-path"
+  val path: String = "/test-path"
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", path)
-  val stage = Stages.DEV
+  val stage: Stages.DEV.type = Stages.DEV
   val featureSwitches: FeatureSwitches =
     FeatureSwitches(
       enableQuantumMetric = Some(On),

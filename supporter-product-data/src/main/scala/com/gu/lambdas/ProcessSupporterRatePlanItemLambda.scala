@@ -38,12 +38,12 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
 }
 
 object ProcessSupporterRatePlanItemLambda extends SafeLogging {
-  val stage = StageConstructors.fromEnvironment
+  val stage: Stage = StageConstructors.fromEnvironment
   val config: ZuoraQuerierConfig = ConfigService(stage).load
   val dynamoService: SupporterDataDynamoService = SupporterDataDynamoService(stage)
   val contributionIds: List[String] = ContributionIds.forStage(stage)
   val discountIds: List[String] = DiscountService(stage).getDiscountProductRatePlanIds.get
-  lazy val contributionAmountFetcher = new ContributionAmountFetcher(config)
+  lazy val contributionAmountFetcher: ContributionAmountFetcher = new ContributionAmountFetcher(config)
   lazy val alarmService: AlarmService = AlarmService(stage)
 
   private def isRecurringContribution(supporterRatePlanItem: SupporterRatePlanItem) =
@@ -89,7 +89,8 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
 }
 
 class ContributionAmountFetcher(config: ZuoraQuerierConfig) extends SafeLogging {
-  lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
+  lazy val zuoraService: ZuoraSubscriptionService =
+    new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
 
   def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem): Future[SupporterRatePlanItem] =
     zuoraService

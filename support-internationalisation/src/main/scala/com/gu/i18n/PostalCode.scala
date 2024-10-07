@@ -13,9 +13,9 @@ sealed trait PostalCode {
 }
 
 case object PostCode extends PostalCode {
-  override val name = "Postcode"
+  override val name: String = "Postcode"
 }
 
 case object ZipCode extends PostalCode {
-  override val name = "Zip code"
+  override val name: String = "Zip code"
 }

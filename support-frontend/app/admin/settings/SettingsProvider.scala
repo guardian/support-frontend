@@ -176,7 +176,7 @@ object SettingsProvider extends SafeLogging {
 // the routes that need to be purged (so that changes in settings propagate to the user) can be efficiently targeted.
 // See https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230 for more details.
 object SettingsSurrogateKey {
-  val settingsSurrogateKey = "settings"
+  val settingsSurrogateKey: String = "settings"
   // Codacy prefers this over a fully qualified method name
   def addTo(result: Result): Result = result.withHeaders("Surrogate-Key" -> settingsSurrogateKey)
 }

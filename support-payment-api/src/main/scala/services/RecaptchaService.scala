@@ -19,7 +19,7 @@ object RecaptchaResponse {
 }
 
 class RecaptchaService(wsClient: WSClient, config: RecaptchaConfig)(implicit ec: ExecutionContext) {
-  val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
+  val recaptchaEndpoint: String = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String): EitherT[Future, StripeApiError, RecaptchaResponse] =
     wsClient

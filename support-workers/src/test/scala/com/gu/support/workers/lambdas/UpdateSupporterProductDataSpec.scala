@@ -49,7 +49,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
 
 object UpdateSupporterProductDataSpec {
 
-  val supporterPlusState =
+  val supporterPlusState: String =
     """
       {
           "user": {
@@ -104,7 +104,7 @@ object UpdateSupporterProductDataSpec {
         }
     """
 
-  val digitalSubscriptionGiftRedemptionState = """
+  val digitalSubscriptionGiftRedemptionState: String = """
     {
       "user": {
         "id": "102803446",
@@ -141,7 +141,7 @@ object UpdateSupporterProductDataSpec {
     }
   """
 
-  val digitalSusbcriptionGiftPurchaseState = """
+  val digitalSusbcriptionGiftPurchaseState: String = """
     {
       "user": {
         "id": "100569339",
@@ -214,5 +214,5 @@ object UpdateSupporterProductDataSpec {
 
   private val json = parse(catalog).toOption.get
   private val jsonProvider = new SimpleJsonProvider(json)
-  val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
+  val serviceWithFixtures: CatalogService = new CatalogService(PROD, jsonProvider)
 }

@@ -14,7 +14,7 @@ import scala.util.Try
 
 class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends SafeLogging {
 
-  val config = apiConfig
+  val config: PayPalConfig = apiConfig
   // The parameters sent with every NVP request.
   val defaultNVPParams: Map[String, String] = Map(
     "USER" -> config.user,

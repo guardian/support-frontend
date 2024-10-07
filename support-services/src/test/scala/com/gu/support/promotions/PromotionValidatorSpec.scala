@@ -9,16 +9,16 @@ import org.scalatest.matchers.should.Matchers
 
 //noinspection NameBooleanParameters
 class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
-  val NoErrors = Nil
+  val NoErrors: Nil.type = Nil
 
   val thisMorning: DateTime = DateTime.now().withTimeAtStartOfDay()
   val tomorrowMorning: DateTime = thisMorning.plusDays(1)
-  val expiredPromotion = promotion(expires = thisMorning)
-  val activePromotion = promotion()
-  val futurePromotion = promotion(starts = tomorrowMorning, expires = tomorrowMorning.plusDays(1))
+  val expiredPromotion: Promotion = promotion(expires = thisMorning)
+  val activePromotion: Promotion = promotion()
+  val futurePromotion: Promotion = promotion(starts = tomorrowMorning, expires = tomorrowMorning.plusDays(1))
 
-  val providedStarts = futurePromotion.starts
-  val providedExpires = futurePromotion.expires.get
+  val providedStarts: DateTime = futurePromotion.starts
+  val providedExpires: DateTime = futurePromotion.expires.get
 
   "PromotionValidator" should "validate correctly" in {
 

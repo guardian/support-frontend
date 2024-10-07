@@ -29,7 +29,7 @@ class CustomActionBuilders(
     featureSwitches: => FeatureSwitches,
 )(implicit private val ec: ExecutionContext) {
 
-  val PrivateAction =
+  val PrivateAction: PrivateActionBuilder =
     new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   /** This is the action builder that should be used for all actions requiring authentication that are triggered by a
@@ -109,11 +109,11 @@ class CustomActionBuilders(
 
   }
 
-  val CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
+  val CachedAction: CachedAction = new CachedAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
-  val NoCacheAction = new NoCacheAction(cc.parsers.defaultBodyParser, cc.executionContext)
+  val NoCacheAction: NoCacheAction = new NoCacheAction(cc.parsers.defaultBodyParser, cc.executionContext)
 
-  val GeoTargetedCachedAction = new CachedAction(
+  val GeoTargetedCachedAction: CachedAction = new CachedAction(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
     List("Vary" -> FastlyGEOIP.fastlyCountryHeader),

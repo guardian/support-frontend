@@ -76,7 +76,7 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
 object ParameterStoreService {
 
   // please update to AWS SDK 2 and use com.gu.aws.CredentialsProvider
-  lazy val CredentialsProviderDEPRECATEDV1 = new AWSCredentialsProviderChain(
+  lazy val CredentialsProviderDEPRECATEDV1: AWSCredentialsProviderChain = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
     new EnvironmentVariableCredentialsProvider(),
@@ -89,5 +89,5 @@ object ParameterStoreService {
     .withCredentials(CredentialsProviderDEPRECATEDV1)
     .build()
 
-  def apply(stage: Stage) = new ParameterStoreService(client, stage)
+  def apply(stage: Stage): ParameterStoreService = new ParameterStoreService(client, stage)
 }

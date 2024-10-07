@@ -67,7 +67,7 @@ class MyComponents(context: Context)
   implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client()
   private implicit val system: ActorSystem = ActorSystem()
 
-  override lazy val httpErrorHandler =
+  override lazy val httpErrorHandler: ErrorHandler =
     new ErrorHandler(environment, configuration, devContext.map(_.sourceMapper), Some(router))
 
   private val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
@@ -101,7 +101,7 @@ class MyComponents(context: Context)
   def parseNotification(headers: Map[String, String], body: String): Notification =
     NotificationFactory.parseNotification(headers.asJava, body)
 
-  override val router =
+  override val router: Routes =
     new Routes(
       httpErrorHandler,
       new AppController(controllerComponents),

@@ -19,7 +19,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 object SSMService {
 
   // please update to AWS SDK 2 and use com.gu.aws.CredentialsProvider
-  lazy val CredentialsProviderDEPRECATEDV1 = new AWSCredentialsProviderChain(
+  lazy val CredentialsProviderDEPRECATEDV1: AWSCredentialsProviderChain = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
     new EnvironmentVariableCredentialsProvider(),

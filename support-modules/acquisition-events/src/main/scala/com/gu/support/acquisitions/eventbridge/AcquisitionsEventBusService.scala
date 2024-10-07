@@ -18,7 +18,7 @@ import scala.concurrent.Future
 
 class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBridgeClient) extends SafeLogging {
   val eventBusName: String = s"acquisitions-bus-${stage.toString}"
-  val detailType = "AcquisitionsEvent"
+  val detailType: String = "AcquisitionsEvent"
   def putAcquisitionEvent(acquisition: AcquisitionDataRow): Future[Either[String, Unit]] = {
     val acquisitionJson = acquisition.asJson
     logger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
@@ -61,8 +61,8 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
 object AcquisitionsEventBusService {
 
   object Sources {
-    val paymentApi = "payment-api.1"
-    val supportWorkers = "support-workers.1"
+    val paymentApi: String = "payment-api.1"
+    val supportWorkers: String = "support-workers.1"
   }
 
   private lazy val eventBridgeClient = EventBridgeClient
@@ -79,7 +79,7 @@ object AcquisitionsEventBusService {
     *   \- Whether the current user is a test user
     * @return
     */
-  def apply(source: String, stage: Stage, isTestUser: Boolean = false) =
+  def apply(source: String, stage: Stage, isTestUser: Boolean = false): AcquisitionsEventBusService =
     new AcquisitionsEventBusService(source, if (isTestUser) CODE else stage, eventBridgeClient)
 
 }

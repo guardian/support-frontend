@@ -44,10 +44,10 @@ class RedemptionController(
   implicit val a: AssetsResolver = assets
 
   implicit val settings: AllSettings = settingsProvider.getAllSettings()
-  val title = "Support the Guardian | Redeem your code"
+  val title: String = "Support the Guardian | Redeem your code"
   val id: EmptyDiv = EmptyDiv("subscriptions-redemption-page")
-  val js = "subscriptionsRedemptionPage.js"
-  val css = "subscriptionsRedemptionPage.css" // TODO: Don't need this?
+  val js: String = "subscriptionsRedemptionPage.js"
+  val css: String = "subscriptionsRedemptionPage.css" // TODO: Don't need this?
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = MaybeAuthenticatedAction.async {
     implicit request =>

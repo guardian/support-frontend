@@ -19,7 +19,7 @@ object CountryGroup {
 
   import Currency._
 
-  val C = Country
+  val C: Country.type = Country
   val Canada: CountryGroup = CountryGroup("Canada", "ca", Some(C.Canada), List(C.Canada), CAD, ZipCode)
 
   val US: CountryGroup = CountryGroup("United States", "us", Some(C.US), List(C.US), USD, ZipCode)

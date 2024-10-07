@@ -31,7 +31,7 @@ class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with 
     val getQueueUrlResult: GetQueueUrlResult = mock[GetQueueUrlResult]
     when(getQueueUrlResult.getQueueUrl).thenReturn("test-queue-name")
     when(sqsClient.getQueueUrl("test-queue-name")).thenReturn(getQueueUrlResult)
-    val emailService = new EmailService(sqsClient, "test-queue-name")
+    val emailService: EmailService = new EmailService(sqsClient, "test-queue-name")
   }
 
   it should "send an email" in new EmailServiceTestFixture {

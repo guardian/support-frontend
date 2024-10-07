@@ -5,19 +5,19 @@ sealed trait PromoError {
 }
 
 case object InvalidCountry extends PromoError {
-  override val msg = "The promo code you supplied is not applicable in this country"
+  override val msg: String = "The promo code you supplied is not applicable in this country"
 }
 
 case object InvalidProductRatePlan extends PromoError {
-  override val msg = "The promo code you supplied is not applicable for this product"
+  override val msg: String = "The promo code you supplied is not applicable for this product"
 }
 
 case object NotApplicable extends PromoError {
-  override val msg = "This promotion is not applicable"
+  override val msg: String = "This promotion is not applicable"
 }
 
 case object NoSuchCode extends PromoError {
-  override val msg = "Unknown or expired promo code"
+  override val msg: String = "Unknown or expired promo code"
 }
 
 case class DuplicateCode(debug: String) extends PromoError {
@@ -25,9 +25,9 @@ case class DuplicateCode(debug: String) extends PromoError {
 }
 
 case object ExpiredPromotion extends PromoError {
-  override val msg = "The promo code you supplied has expired"
+  override val msg: String = "The promo code you supplied has expired"
 }
 
 case object PromotionNotActiveYet extends PromoError {
-  override val msg = "The promo code you supplied is not active yet"
+  override val msg: String = "The promo code you supplied is not active yet"
 }

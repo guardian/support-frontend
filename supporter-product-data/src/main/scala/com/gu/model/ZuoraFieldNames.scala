@@ -2,20 +2,20 @@ package com.gu.model
 
 object ZuoraFieldNames {
 
-  val subscriptionName = "Subscription.Name"
+  val subscriptionName: String = "Subscription.Name"
 
-  val identityId = "Account.IdentityId__c"
+  val identityId: String = "Account.IdentityId__c"
 
-  val gifteeIdentityId = "Subscription.GifteeIdentityId__c"
+  val gifteeIdentityId: String = "Subscription.GifteeIdentityId__c"
 
-  val productRatePlanName = "ProductRatePlan.Name"
+  val productRatePlanName: String = "ProductRatePlan.Name"
 
-  val productRatePlanId = "ProductRatePlan.Id"
+  val productRatePlanId: String = "ProductRatePlan.Id"
 
-  val termEndDate = "Subscription.TermEndDate"
+  val termEndDate: String = "Subscription.TermEndDate"
 
-  val contractEffectiveDate = "Subscription.ContractEffectiveDate"
+  val contractEffectiveDate: String = "Subscription.ContractEffectiveDate"
 
-  val subscriptionStatus = "Subscription.Status"
+  val subscriptionStatus: String = "Subscription.Status"
 
 }

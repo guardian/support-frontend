@@ -32,7 +32,7 @@ object GiftRecipient {
       deliveryDate: LocalDate,
   ) extends GiftRecipient
 
-  val discriminatedType = new DiscriminatedType[GiftRecipient]("giftRecipientType")
+  val discriminatedType: DiscriminatedType[GiftRecipient] = new DiscriminatedType[GiftRecipient]("giftRecipientType")
   implicit val weeklyCodec: discriminatedType.VariantCodec[WeeklyGiftRecipient] =
     discriminatedType.variant[WeeklyGiftRecipient]("Weekly")
   implicit val dsCodec: discriminatedType.VariantCodec[DigitalSubscriptionGiftRecipient] =

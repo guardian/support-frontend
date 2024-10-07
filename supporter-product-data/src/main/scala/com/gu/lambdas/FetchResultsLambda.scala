@@ -26,9 +26,9 @@ class FetchResultsLambda extends Handler[FetchResultsState, AddSupporterRatePlan
 }
 
 object FetchResultsLambda extends StrictLogging {
-  val stage = StageConstructors.fromEnvironment
+  val stage: Stage = StageConstructors.fromEnvironment
   val config: ZuoraQuerierConfig = ConfigService(stage).load
-  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+  val service: ZuoraQuerierService = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
   def fetchResults(
       stage: Stage,

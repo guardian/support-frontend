@@ -17,11 +17,12 @@ trait Controllers {
     with PlayComponents
     with GoogleAuth =>
 
-  lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
-  lazy val faviconController = new controllers.Favicon(actionBuilders, appConfig.stage)(fileMimeTypes, implicitly)
+  lazy val assetController: Assets = new controllers.Assets(httpErrorHandler, assetsMetadata)
+  lazy val faviconController: Favicon =
+    new controllers.Favicon(actionBuilders, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
 
-  lazy val applicationController = new Application(
+  lazy val applicationController: Application = new Application(
     actionBuilders,
     assetsResolver,
     testUsers,
@@ -41,17 +42,17 @@ trait Controllers {
     appConfig.supportUrl,
   )
 
-  lazy val diagnosticsController = new DiagnosticsController(
+  lazy val diagnosticsController: DiagnosticsController = new DiagnosticsController(
     actionBuilders,
   )
 
-  lazy val articleShareController = new ArticleShare(
+  lazy val articleShareController: ArticleShare = new ArticleShare(
     actionBuilders,
     controllerComponents,
     capiService,
   )
 
-  lazy val subscriptionsController = new SubscriptionsController(
+  lazy val subscriptionsController: SubscriptionsController = new SubscriptionsController(
     actionBuilders,
     priceSummaryServiceProvider,
     assetsResolver,
@@ -61,7 +62,7 @@ trait Controllers {
     appConfig.supportUrl,
   )
 
-  lazy val redemptionController = new RedemptionController(
+  lazy val redemptionController: RedemptionController = new RedemptionController(
     actionBuilders,
     assetsResolver,
     allSettingsProvider,
@@ -75,7 +76,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val digitalPackController = new DigitalSubscriptionController(
+  lazy val digitalPackController: DigitalSubscriptionController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -92,18 +93,7 @@ trait Controllers {
     appConfig.supportUrl,
   )
 
-  lazy val paperController = new PaperSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
-    assetsResolver,
-    actionBuilders,
-    controllerComponents,
-    stringsConfig,
-    allSettingsProvider,
-    appConfig.supportUrl,
-  )
-
-  lazy val weeklyController = new WeeklySubscriptionController(
+  lazy val paperController: PaperSubscriptionController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
@@ -114,7 +104,18 @@ trait Controllers {
     appConfig.supportUrl,
   )
 
-  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
+  lazy val weeklyController: WeeklySubscriptionController = new WeeklySubscriptionController(
+    priceSummaryServiceProvider,
+    landingCopyProvider,
+    assetsResolver,
+    actionBuilders,
+    controllerComponents,
+    stringsConfig,
+    allSettingsProvider,
+    appConfig.supportUrl,
+  )
+
+  lazy val digitalPackFormController: DigitalSubscriptionFormController = new DigitalSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionBuilders,
@@ -128,7 +129,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val paperFormController = new PaperSubscriptionFormController(
+  lazy val paperFormController: PaperSubscriptionFormController = new PaperSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionBuilders,
@@ -142,7 +143,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val weeklyFormController = new WeeklySubscriptionFormController(
+  lazy val weeklyFormController: WeeklySubscriptionFormController = new WeeklySubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
     actionBuilders,
@@ -156,7 +157,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val createSubscriptionController = new CreateSubscriptionController(
+  lazy val createSubscriptionController: CreateSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
     actionBuilders,
     identityService,
@@ -169,13 +170,13 @@ trait Controllers {
     paperRoundServiceProvider,
   )
 
-  lazy val supportWorkersStatusController = new SupportWorkersStatus(
+  lazy val supportWorkersStatusController: SupportWorkersStatus = new SupportWorkersStatus(
     supportWorkersClient,
     controllerComponents,
     actionBuilders,
   )
 
-  lazy val stripeController = new StripeController(
+  lazy val stripeController: StripeController = new StripeController(
     components = controllerComponents,
     actionRefiners = actionBuilders,
     recaptchaService = recaptchaService,
@@ -185,7 +186,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val payPalRegularController = new PayPalRegular(
+  lazy val payPalRegularController: PayPalRegular = new PayPalRegular(
     actionBuilders,
     assetsResolver,
     payPalNvpServiceProvider,
@@ -194,7 +195,7 @@ trait Controllers {
     allSettingsProvider,
   )
 
-  lazy val payPalOneOffController = new PayPalOneOff(
+  lazy val payPalOneOffController: PayPalOneOff = new PayPalOneOff(
     actionBuilders,
     assetsResolver,
     testUsers,
@@ -203,7 +204,7 @@ trait Controllers {
     allSettingsProvider,
   )
 
-  lazy val testUsersController = new TestUsersManagement(
+  lazy val testUsersController: TestUsersManagement = new TestUsersManagement(
     authAction,
     controllerComponents,
     testUsers,
@@ -211,15 +212,15 @@ trait Controllers {
     appConfig.guardianDomain,
   )
 
-  lazy val authCodeFlowController =
+  lazy val authCodeFlowController: AuthCodeFlowController =
     new AuthCodeFlowController(controllerComponents, asyncAuthenticationService, appConfig.identity)
 
-  lazy val siteMapController = new SiteMap(
+  lazy val siteMapController: SiteMap = new SiteMap(
     actionBuilders,
     controllerComponents,
   )
 
-  lazy val identityController = new IdentityController(
+  lazy val identityController: IdentityController = new IdentityController(
     identityService,
     controllerComponents,
     actionBuilders,
@@ -227,20 +228,20 @@ trait Controllers {
     () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage)),
   )
 
-  lazy val directDebitController = new DirectDebit(
+  lazy val directDebitController: DirectDebit = new DirectDebit(
     actionBuilders,
     controllerComponents,
     goCardlessServiceProvider,
     testUsers,
   )
 
-  lazy val getAddressController = new GetAddress(
+  lazy val getAddressController: GetAddress = new GetAddress(
     controllerComponents,
     getAddressIOService,
     actionBuilders,
   )
 
-  lazy val paperRoundController = new PaperRound(
+  lazy val paperRoundController: PaperRound = new PaperRound(
     controllerComponents,
     paperRoundServiceProvider,
     actionBuilders,
@@ -248,7 +249,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val promotionsController = new Promotions(
+  lazy val promotionsController: Promotions = new Promotions(
     promotionServiceProvider,
     priceSummaryServiceProvider,
     assetsResolver,
@@ -259,7 +260,7 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val pricesController = new PricesController(
+  lazy val pricesController: PricesController = new PricesController(
     priceSummaryServiceProvider,
     actionBuilders,
     controllerComponents,

@@ -35,7 +35,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   // -- entities
   val email: NonEmptyString = Json.fromString("email@email.com").as[NonEmptyString].toOption.get
   val token: NonEmptyString = Json.fromString("token").as[NonEmptyString].toOption.get
-  val recaptchaToken = "recaptchaToken"
+  val recaptchaToken: String = "recaptchaToken"
   val acquisitionData: AcquisitionData =
     AcquisitionData(
       Some("platform"),
@@ -80,7 +80,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
-  val stripeDisabledErrorText = "Stripe payments are currently disabled"
+  val stripeDisabledErrorText: String = "Stripe payments are currently disabled"
   val paymentError: PaypalApiError = PaypalApiError.fromString("Error response")
   val stripeApiError: StripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
   val backendError: BackendError = BackendError.fromStripeApiError(stripeApiError)
@@ -120,7 +120,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val acquisitionsEventBusResponse: Future[Either[String, Unit]] =
     Future.successful(Right(()))
-  val acquisitionsEventBusErrorMessage = "an event bus error"
+  val acquisitionsEventBusErrorMessage: String = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -195,7 +195,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
   // -- test obj
-  val stripeBackend = new StripeBackend(
+  val stripeBackend: StripeBackend = new StripeBackend(
     mockStripeService,
     mockDatabaseService,
     mockIdentityService,

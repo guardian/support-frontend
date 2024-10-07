@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters._
   * determine how they process HTTP requests
   */
 object RequestRunners extends LazyLogging {
-  lazy val client = new OkHttpClient()
+  lazy val client: OkHttpClient = new OkHttpClient()
   type FutureHttpClient = Request => Future[OkResponse]
 
   /** Standard no frills run this request and return a response asynchronously A solid choice for the beginner

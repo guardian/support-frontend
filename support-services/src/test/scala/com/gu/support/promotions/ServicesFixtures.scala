@@ -13,20 +13,20 @@ import com.gu.support.catalog.ProductRatePlanId
   */
 object ServicesFixtures {
 
-  val freeTrialPromoCode = "FREE_TRIAL_CODE"
-  val discountPromoCode = "DISCOUNT_CODE"
-  val doublePromoCode = "DOUBLE_CODE"
-  val invalidPromoCode = "INVALID_CODE"
-  val renewalPromoCode = "RENEWAL_CODE"
-  val trackingPromoCode = "TRACKING_CODE"
-  val duplicatedPromoCode = "DUPLICATED_CODE"
-  val tenAnnual = "10ANNUAL"
-  val sixForSix = "6FOR6"
+  val freeTrialPromoCode: String = "FREE_TRIAL_CODE"
+  val discountPromoCode: String = "DISCOUNT_CODE"
+  val doublePromoCode: String = "DOUBLE_CODE"
+  val invalidPromoCode: String = "INVALID_CODE"
+  val renewalPromoCode: String = "RENEWAL_CODE"
+  val trackingPromoCode: String = "TRACKING_CODE"
+  val duplicatedPromoCode: String = "DUPLICATED_CODE"
+  val tenAnnual: String = "10ANNUAL"
+  val sixForSix: String = "6FOR6"
 
   val validProductRatePlanIds: List[ProductRatePlanId] = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
-  val validProductRatePlanId = validProductRatePlanIds.head
-  val secondValidProductRatePlanId = validProductRatePlanIds.tail.head
-  val invalidProductRatePlanId = "67890"
+  val validProductRatePlanId: ProductRatePlanId = validProductRatePlanIds.head
+  val secondValidProductRatePlanId: ProductRatePlanId = validProductRatePlanIds.tail.head
+  val invalidProductRatePlanId: String = "67890"
 
   val freeTrialBenefit: Some[FreeTrialBenefit] = Some(FreeTrialBenefit(Days.days(5)))
   val discountBenefit: Some[DiscountBenefit] = Some(DiscountBenefit(30, Some(Months.months(3))))

@@ -45,5 +45,5 @@ class AlarmService(stage: Stage) {
 }
 
 object AlarmService {
-  def apply(stage: Stage) = new AlarmService(stage)
+  def apply(stage: Stage): AlarmService = new AlarmService(stage)
 }

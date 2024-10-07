@@ -20,10 +20,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceErrorResponse] {
-  val sfConfig = config
-  val wsUrl = sfConfig.url
+  val sfConfig: SalesforceConfig = config
+  val wsUrl: String = sfConfig.url
   val httpClient: FutureHttpClient = client
-  val upsertEndpoint = "services/apexrest/RegisterCustomer/v1/"
+  val upsertEndpoint: String = "services/apexrest/RegisterCustomer/v1/"
 
   override def wsPreExecute(req: Request.Builder): Future[Request.Builder] = {
     logger.info(s"Issuing request to wsPreExecute: $config")
@@ -208,8 +208,8 @@ object AuthService extends SafeLogging {
 
 class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
     extends WebServiceHelper[SalesforceAuthenticationErrorResponse] {
-  val sfConfig = config
-  val wsUrl = sfConfig.url
+  val sfConfig: SalesforceConfig = config
+  val wsUrl: String = sfConfig.url
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
   def authorize: Future[Authentication] = {

@@ -36,5 +36,5 @@ class S3CatalogLoader(stage: Stage) extends CatalogLoader with LazyLogging {
 }
 
 object DiscountService extends LazyLogging {
-  def apply(stage: Stage) = new DiscountService(new S3CatalogLoader(stage))
+  def apply(stage: Stage): DiscountService = new DiscountService(new S3CatalogLoader(stage))
 }

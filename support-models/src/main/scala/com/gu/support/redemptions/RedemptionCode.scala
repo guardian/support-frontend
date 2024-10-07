@@ -6,7 +6,7 @@ import com.gu.support.encoding.Codec
 import io.circe.{Decoder, Encoder}
 
 object RedemptionCode {
-  val length = 13
+  val length: Int = 13
   // make sure no one can inject anything bad
   val validChars: List[(Char, Char)] = List('a' -> 'z', '0' -> '9', '-' -> '-')
   val validCharsSet: Set[Char] = validChars.flatMap { case (from, to) => (from to to) }.toSet

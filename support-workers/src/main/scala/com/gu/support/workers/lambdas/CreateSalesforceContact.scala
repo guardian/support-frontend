@@ -49,7 +49,7 @@ class NextState(state: CreateSalesforceContactState) {
 
   import state._
 
-  val Purchase = Left
+  val Purchase: Left.type = Left
   type Redemption = Right[PaymentMethod, RedemptionData]
 
   // scalastyle:off cyclomatic.complexity

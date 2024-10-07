@@ -12,8 +12,8 @@ import org.joda.time.LocalDate
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val accountNumber = "A00071408"
-  val promoCode = "TEST_CODE"
+  val accountNumber: String = "A00071408"
+  val promoCode: String = "TEST_CODE"
 
   val soldToContact: String = s"""{
     "address1" : "Test",
@@ -97,16 +97,16 @@ object Fixtures {
        }
     """
 
-  val salesforceAccountId = "0013E00001ASmI6QAL"
-  val salesforceId = "0033E00001CpBZaQAN"
-  val identityId = "30000311"
-  val paymentGateway = "Stripe Gateway 1"
-  val tokenId = "card_Aaynm1dIeDH1zp"
-  val secondTokenId = "cus_AaynKIp19IIGDz"
-  val cardNumber = "4242"
-  val payPalBaid = "B-23637766K5365543J"
+  val salesforceAccountId: String = "0013E00001ASmI6QAL"
+  val salesforceId: String = "0033E00001CpBZaQAN"
+  val identityId: String = "30000311"
+  val paymentGateway: String = "Stripe Gateway 1"
+  val tokenId: String = "card_Aaynm1dIeDH1zp"
+  val secondTokenId: String = "cus_AaynKIp19IIGDz"
+  val cardNumber: String = "4242"
+  val payPalBaid: String = "B-23637766K5365543J"
 
-  val date = new LocalDate(2017, 5, 4)
+  val date: LocalDate = new LocalDate(2017, 5, 4)
 
   def account(
       currency: Currency = GBP,
@@ -134,7 +134,7 @@ object Fixtures {
     createdRequestId__c = "createdreqid_hi",
   )
 
-  val deliveryInstructions = "Leave behind the dustbin"
+  val deliveryInstructions: String = "Leave behind the dustbin"
   val contactDetails: ContactDetails =
     ContactDetails(
       "Test-FirstName",
@@ -167,8 +167,8 @@ object Fixtures {
     StreetName = Some("easy street"),
     StreetNumber = None,
   )
-  val productRatePlanId = "12345"
-  val productRatePlanChargeId = "67890"
+  val productRatePlanId: String = "12345"
+  val productRatePlanChargeId: String = "67890"
 
   val subscription: Subscription = Subscription(date, date, date, "id123", promoCode = Some(promoCode))
   val monthlySubscriptionData: SubscriptionData = SubscriptionData(
@@ -218,7 +218,7 @@ object Fixtures {
     ),
   )
 
-  val accountJson =
+  val accountJson: String =
     """
       {
         "Name" : "0013E00001AU6xcQAD",
@@ -374,7 +374,7 @@ object Fixtures {
     ),
   )
 
-  val invoiceResult =
+  val invoiceResult: String =
     """
       {
         "Invoice": [
@@ -404,7 +404,7 @@ object Fixtures {
         $subscribeResponseAccount
       ]
     """
-  val subscribeResponseAnnual =
+  val subscribeResponseAnnual: String =
     """
      [
         {
@@ -433,14 +433,14 @@ object Fixtures {
       ]
    """
 
-  val previewSubscribeResponseNoInvoice =
+  val previewSubscribeResponseNoInvoice: String =
     """
       [
         {"Success":true,"TotalMrr":0,"TotalTcv":37.5}
       ]
    """
 
-  val previewSubscribeResponseJson =
+  val previewSubscribeResponseJson: String =
     """
       [
         {
@@ -461,7 +461,7 @@ object Fixtures {
     ]
     """
 
-  val error =
+  val error: String =
     """
       {
         "Code": "53100320",
@@ -494,7 +494,7 @@ object Fixtures {
        }
      """
 
-  val contributionRatePlanCharge =
+  val contributionRatePlanCharge: String =
     """
     {
       "ProductRatePlanChargeId" : "12345",

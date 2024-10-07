@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 
 @IntegrationTest
 class GetAddressIOServiceSpec extends AsyncFlatSpec with Matchers {
-  val service =
+  val service: GetAddressIOService =
     new GetAddressIOService(GetAddressIOConfig.fromConfig(ConfigFactory.load()), RequestRunners.futureRunner)
   // This test is ignored because the test key is only valid for a few requests a day
   "GetAddressService" should "be able to find a postcode" ignore {

@@ -133,7 +133,7 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
 
 object PromotionServiceSpec {
   val config: PromotionsConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
-  val serviceWithFixtures = new PromotionService(
+  val serviceWithFixtures: PromotionService = new PromotionService(
     config,
     Some(
       new SimplePromotionCollection(
@@ -151,7 +151,7 @@ object PromotionServiceSpec {
     ),
   )
 
-  val serviceWithDynamo = new PromotionService(
+  val serviceWithDynamo: PromotionService = new PromotionService(
     config,
     None,
   )

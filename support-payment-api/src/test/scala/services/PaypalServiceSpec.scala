@@ -31,7 +31,7 @@ class PaypalServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with
       PrivateMethod[Either[PaypalApiError, Capture]]('validateCapture)
     val validatePayment: PrivateMethod[Either[PaypalApiError, Payment]] =
       PrivateMethod[Either[PaypalApiError, Payment]]('validatePayment)
-    val paypalService = new PaypalService(paypalConfig)
+    val paypalService: PaypalService = new PaypalService(paypalConfig)
   }
 
   behavior of "Paypal Service"

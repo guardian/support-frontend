@@ -171,5 +171,6 @@ object SupporterDataDynamoService {
     .region(Region.EU_WEST_1)
     .build
 
-  def apply(stage: Stage) = new SupporterDataDynamoService(dynamoDBClient, s"SupporterProductData-${stage.value}")
+  def apply(stage: Stage): SupporterDataDynamoService =
+    new SupporterDataDynamoService(dynamoDBClient, s"SupporterProductData-${stage.value}")
 }

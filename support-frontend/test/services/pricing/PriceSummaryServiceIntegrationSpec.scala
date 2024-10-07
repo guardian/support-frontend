@@ -43,8 +43,9 @@ object PromoTestData {
 @IntegrationTest
 class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val actorSystem: ActorSystem = ActorSystem("test")
-  val defaultPromotionsService = new DefaultPromotionServiceS3(AwsS3Client, Stages.DEV, actorSystem)
-  val service =
+  val defaultPromotionsService: DefaultPromotionServiceS3 =
+    new DefaultPromotionServiceS3(AwsS3Client, Stages.DEV, actorSystem)
+  val service: PriceSummaryService =
     new PriceSummaryService(
       PromotionServiceSpec.serviceWithDynamo,
       defaultPromotionsService,

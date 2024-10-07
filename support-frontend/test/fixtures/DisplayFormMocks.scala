@@ -36,9 +36,9 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val asyncAuthenticationService: AsyncAuthenticationService = mock[AsyncAuthenticationService]
 
-  val stage = Stages.DEV
+  val stage: Stages.DEV.type = Stages.DEV
 
-  val loggedInActionRefiner = new CustomActionBuilders(
+  val loggedInActionRefiner: CustomActionBuilders = new CustomActionBuilders(
     asyncAuthenticationService,
     userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
     userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],

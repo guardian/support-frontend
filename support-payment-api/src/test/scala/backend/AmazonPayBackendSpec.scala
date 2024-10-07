@@ -84,8 +84,9 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
   val mockConfirmOrderResponse: ConfirmOrderReferenceResponse = mock[ConfirmOrderReferenceResponse]
   val mockOrderTotal: OrderTotal = mock[OrderTotal]
-  val responseData = new ResponseData(200, responseXml.toString)
-  val confirmOrderData = new ConfirmOrderReferenceResponseData(mockConfirmOrderResponse, responseData)
+  val responseData: ResponseData = new ResponseData(200, responseXml.toString)
+  val confirmOrderData: ConfirmOrderReferenceResponseData =
+    new ConfirmOrderReferenceResponseData(mockConfirmOrderResponse, responseData)
   val mockAuthorizationDetails: AuthorizationDetails = mock[AuthorizationDetails]
   val mockCloseResponseDetails: CloseOrderReferenceResponse = mock[CloseOrderReferenceResponse]
   val mockOrderReferenceStatus: OrderReferenceStatus = mock[OrderReferenceStatus]
@@ -154,7 +155,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
-  val amazonPayBackend = new AmazonPayBackend(
+  val amazonPayBackend: AmazonPayBackend = new AmazonPayBackend(
     mockCloudWatchService,
     mockAmazonPayService,
     mockIdentityService,

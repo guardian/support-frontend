@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 class RedemptionCodeSpec extends AnyFlatSpec with Matchers {
 
-  val codePrefix = "code-123456-"
+  val codePrefix: String = "code-123456-"
 
   "RedemptionCode" should "disallow invalid chars" in {
     val badCodes = """ !"#$%&'()*+,./:;<=>?@[\]^_`{|}~"""

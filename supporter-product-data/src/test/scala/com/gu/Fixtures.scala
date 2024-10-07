@@ -6,7 +6,7 @@ import scala.io.Source
 object Fixtures {
   def loadQueryResults: String = Source.fromURL(getClass.getResource("/query-results.csv")).mkString
 
-  def sqsEventJson = """
+  def sqsEventJson: String = """
   {
     "Records": [
         {

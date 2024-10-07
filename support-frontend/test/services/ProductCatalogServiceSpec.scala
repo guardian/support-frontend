@@ -11,10 +11,10 @@ import org.scalatest.matchers.should.Matchers
   */
 @IntegrationTest
 class ProductCatalogServiceSpec extends AsyncFlatSpec with Matchers {
-  val prodService =
+  val prodService: ProdProductCatalogService =
     new ProdProductCatalogService(RequestRunners.futureRunner)
 
-  val codeService =
+  val codeService: CodeProductCatalogService =
     new CodeProductCatalogService(RequestRunners.futureRunner)
 
   "ProdProductCatalogServiceSpec" should "get" in {

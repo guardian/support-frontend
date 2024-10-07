@@ -29,7 +29,7 @@ object RunITTests {
   }
   var logger: String => Unit = null
 
-  val tempJar = "/tmp/support-workers-it.jar"
+  val tempJar: String = "/tmp/support-workers-it.jar"
 
   def apply(log: String => Unit): String = {
     logger = log
@@ -83,7 +83,7 @@ class ITTestReporter extends Reporter {
     ),
   )
 
-  val log = RunITTests.logger
+  val log: String => Unit = RunITTests.logger
 
   override def apply(event: Event): Unit = {
     event match {

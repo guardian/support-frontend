@@ -34,9 +34,9 @@ object IdentityErrorResponse {
 
 object IdentityError {
   object InvalidEmailAddress {
-    val message = "Registration Error"
-    val description = "Please sign up using an email address from a different provider"
-    val errorReasonCode = "invalid_email_address"
+    val message: String = "Registration Error"
+    val description: String = "Please sign up using an email address from a different provider"
+    val errorReasonCode: String = "invalid_email_address"
   }
 
   def isDisallowedEmailError(identityError: IdentityError): Boolean =

@@ -105,7 +105,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
   val acquisitionsEventBusResponse: Future[Either[String, Unit]] =
     Future.successful(Right(()))
-  val acquisitionsEventBusErrorMessage = "an event bus error"
+  val acquisitionsEventBusErrorMessage: String = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
@@ -148,7 +148,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
-  val paypalBackend = new PaypalBackend(
+  val paypalBackend: PaypalBackend = new PaypalBackend(
     mockPaypalService,
     mockDatabaseService,
     mockIdentityService,

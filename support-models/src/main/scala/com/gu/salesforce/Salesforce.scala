@@ -166,9 +166,9 @@ object Salesforce {
 
   object SalesforceErrorResponse {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
-    val expiredAuthenticationCode = "INVALID_SESSION_ID"
-    val rateLimitExceeded = "REQUEST_LIMIT_EXCEEDED"
-    val readOnlyMaintenance = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE"
+    val expiredAuthenticationCode: String = "INVALID_SESSION_ID"
+    val rateLimitExceeded: String = "REQUEST_LIMIT_EXCEEDED"
+    val readOnlyMaintenance: String = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE"
   }
 
   case class SalesforceErrorResponse(

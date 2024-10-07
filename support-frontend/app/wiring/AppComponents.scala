@@ -38,8 +38,8 @@ class AppComponents(context: Context)
     assetsResolver,
     allSettingsProvider,
   )
-  override lazy val httpErrorHandler = customHandler
-  override lazy val errorController = new ErrorController(actionBuilders, customHandler)
+  override lazy val httpErrorHandler: CustomHttpErrorHandler = customHandler
+  override lazy val errorController: ErrorController = new ErrorController(actionBuilders, customHandler)
 
   final override lazy val corsConfig: CORSConfig = CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl)
 

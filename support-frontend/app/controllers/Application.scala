@@ -381,7 +381,7 @@ class Application(
     )
   }
 
-  val ausMomentMapSocialImageUrl =
+  val ausMomentMapSocialImageUrl: String =
     "https://i.guim.co.uk/img/media/3c2c30cccd48c91f55217bd0d961dbd20cf07274/0_0_1000_525/1000.png?quality=85&s=b1394cf888724cd40646850b807659f0"
 
   def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>

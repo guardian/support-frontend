@@ -39,20 +39,21 @@ class Services(isTestUser: Boolean, val config: Configuration) {
     new StripeService(stripeConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val payPalService: PayPalService =
     new PayPalService(payPalConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
-  lazy val salesforceService =
+  lazy val salesforceService: SalesforceService =
     new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
-  lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
-  lazy val zuoraGiftService =
+  lazy val zuoraService: ZuoraService =
+    new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
+  lazy val zuoraGiftService: ZuoraGiftService =
     new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
-  lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
+  lazy val promotionService: PromotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService: GoCardlessWorkersService = GoCardlessWorkersService(
     goCardlessConfigProvider.get(isTestUser),
   )
   lazy val catalogService: CatalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
-  lazy val giftCodeGenerator = new GiftCodeGeneratorService
+  lazy val giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService
   lazy val acquisitionsEventBusService: AcquisitionsEventBusService =
     AcquisitionsEventBusService(Sources.supportWorkers, stage, isTestUser)
-  lazy val paperRoundService =
+  lazy val paperRoundService: PaperRoundService =
     new PaperRoundService(paperRoundConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
 
   val supporterDynamoStage: Stage = (Configuration.stage, isTestUser) match {

@@ -19,7 +19,7 @@ trait IdentityClientErrorMatchers {
     }
   }
 
-  val beANotFoundApiError = new IsAnApiError("Not found", _.isNotFound)
+  val beANotFoundApiError: IsAnApiError = new IsAnApiError("Not found", _.isNotFound)
 
-  val beAnEmailInUseApiError = new IsAnApiError("Email in use", _.isEmailInUse)
+  val beAnEmailInUseApiError: IsAnApiError = new IsAnApiError("Email in use", _.isEmailInUse)
 }

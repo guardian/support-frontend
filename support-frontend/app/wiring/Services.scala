@@ -25,11 +25,14 @@ trait Services {
   implicit val implicitWs: WSClient = wsClient
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
-  lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
+  lazy val payPalNvpServiceProvider: PayPalNvpServiceProvider =
+    new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
 
   lazy val identityService: IdentityService = IdentityService(appConfig.identity)
 
-  lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
+  lazy val goCardlessServiceProvider: GoCardlessFrontendServiceProvider = new GoCardlessFrontendServiceProvider(
+    appConfig.goCardlessConfigProvider,
+  )
 
   lazy val supportWorkersClient: SupportWorkersClient = {
     val stateWrapper = new StateWrapper()
@@ -41,7 +44,7 @@ trait Services {
     )
   }
 
-  lazy val capiService = new CapiService(wsClient, appConfig.capiKey)
+  lazy val capiService: CapiService = new CapiService(wsClient, appConfig.capiKey)
 
   lazy val testUsers: TestUserService = TestUserService(appConfig.identity.testUserSecret)
 
@@ -58,28 +61,30 @@ trait Services {
       defaultIdentityClaimsParser = UserClaims.parser,
     )
 
-  lazy val userFromAuthCookiesOrAuthServerActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
+  lazy val userFromAuthCookiesOrAuthServerActionBuilder: UserFromAuthCookiesOrAuthServerActionBuilder =
+    new UserFromAuthCookiesOrAuthServerActionBuilder(
+      controllerComponents.parsers.defaultBodyParser,
+      oktaAuthService,
+      appConfig.identity,
+      isAuthServerUp = asyncAuthenticationService.isAuthServerUp,
+    )
+
+  lazy val userFromAuthCookiesActionBuilder: UserFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(
     controllerComponents.parsers.defaultBodyParser,
     oktaAuthService,
     appConfig.identity,
-    isAuthServerUp = asyncAuthenticationService.isAuthServerUp,
   )
 
-  lazy val userFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(
-    controllerComponents.parsers.defaultBodyParser,
-    oktaAuthService,
-    appConfig.identity,
-  )
+  lazy val paymentAPIService: PaymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 
-  lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
+  lazy val recaptchaService: RecaptchaService = new RecaptchaService(wsClient)
 
-  lazy val recaptchaService = new RecaptchaService(wsClient)
-
-  lazy val stripeService = new StripeSetupIntentService(appConfig.stage)
+  lazy val stripeService: StripeSetupIntentService = new StripeSetupIntentService(appConfig.stage)
 
   lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
 
-  lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
+  lazy val defaultPromotionService: DefaultPromotionServiceS3 =
+    new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 
   lazy val priceSummaryServiceProvider: PriceSummaryServiceProvider =
     new PriceSummaryServiceProvider(appConfig.priceSummaryConfigProvider, defaultPromotionService)
@@ -90,7 +95,9 @@ trait Services {
   lazy val paperRoundServiceProvider: PaperRoundServiceProvider =
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
 
-  lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
+  lazy val promotionServiceProvider: PromotionServiceProvider = new PromotionServiceProvider(
+    appConfig.promotionsConfigProvider,
+  )
 
   lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
     new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)

@@ -212,8 +212,8 @@ class PatronCancelledEventLambda extends StrictLogging {
 }
 
 case class PatronCancelledEvent(data: PatronCancelledData, `type`: String) {
-  def customerId = data.`object`.customer
-  def subscriptionId = data.`object`.id
+  def customerId: String = data.`object`.customer
+  def subscriptionId: String = data.`object`.id
 }
 object PatronCancelledEvent {
   implicit val decoder: Decoder[PatronCancelledEvent] = deriveDecoder

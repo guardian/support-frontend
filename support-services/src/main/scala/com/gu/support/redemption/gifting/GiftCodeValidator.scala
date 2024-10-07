@@ -17,7 +17,7 @@ import org.joda.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 object GiftCodeValidator {
-  val expirationTimeInMonths = 12
+  val expirationTimeInMonths: Int = 12
 
   def getSubscriptionState(existingSub: SubscriptionRedemptionQueryResponse, requestId: Option[String]): CodeStatus =
     existingSub.records match {

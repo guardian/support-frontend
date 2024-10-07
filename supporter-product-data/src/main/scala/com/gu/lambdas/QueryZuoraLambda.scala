@@ -23,9 +23,9 @@ class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 }
 
 object QueryZuoraLambda extends StrictLogging {
-  val stage = StageConstructors.fromEnvironment
+  val stage: Stage = StageConstructors.fromEnvironment
   val config: ZuoraQuerierConfig = ConfigService(stage).load
-  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+  val service: ZuoraQuerierService = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
   def queryZuora(stage: Stage, queryType: QueryType): Future[FetchResultsState] = {
     logger.info(s"Attempting to submit ${queryType.value} query to Zuora")

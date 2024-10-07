@@ -37,7 +37,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    val amount = 25
+    val amount: Int = 25
     val selection: AmountsSelection = AmountsSelection(
       amounts = List(amount),
       defaultAmount = 25,

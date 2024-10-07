@@ -190,32 +190,34 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   }
 
   lazy val promotionService: PromotionService = mock[PromotionService]
-  lazy val saleDate = new LocalDate(2020, 6, 5)
-  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
+  lazy val saleDate: LocalDate = new LocalDate(2020, 6, 5)
+  lazy val giftCodeGeneratorService: GiftCodeGeneratorService = new GiftCodeGeneratorService
 
-  lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
-    ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
-    promotionService,
-    DateGenerator(saleDate),
-    CODE,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-    ),
-  )
+  lazy val subscriptionDirectPurchaseBuilder: DigitalSubscriptionDirectPurchaseBuilder =
+    new DigitalSubscriptionDirectPurchaseBuilder(
+      ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
+      promotionService,
+      DateGenerator(saleDate),
+      CODE,
+      new SubscribeItemBuilder(
+        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        GBP,
+      ),
+    )
 
-  lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
-    promotionService,
-    DateGenerator(saleDate),
-    new GiftCodeGeneratorService,
-    CODE,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-    ),
-  )
+  lazy val subscriptionGiftPurchaseBuilder: DigitalSubscriptionGiftPurchaseBuilder =
+    new DigitalSubscriptionGiftPurchaseBuilder(
+      promotionService,
+      DateGenerator(saleDate),
+      new GiftCodeGeneratorService,
+      CODE,
+      new SubscribeItemBuilder(
+        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        GBP,
+      ),
+    )
 
   lazy val monthly: SubscribeItem =
     subscriptionDirectPurchaseBuilder

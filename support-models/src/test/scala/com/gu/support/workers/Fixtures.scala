@@ -5,8 +5,8 @@ import com.gu.i18n.Currency.GBP
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val idId = "12345"
-  val email = "test@thegulocal.com"
+  val idId: String = "12345"
+  val email: String = "test@thegulocal.com"
   val userJson: String =
     s"""
       "user":{
@@ -22,9 +22,9 @@ object Fixtures {
           "isTestUser": false
         }
     """
-  val requestIdJson = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
-  val validBaid = "B-23637766K5365543J"
-  val payPalEmail = "test@paypal.com"
+  val requestIdJson: String = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
+  val validBaid: String = "B-23637766K5365543J"
+  val payPalEmail: String = "test@paypal.com"
   val payPalPaymentMethod: String =
     s"""
         {
@@ -61,7 +61,7 @@ object Fixtures {
       }
     """
 
-  val digitalPackJson =
+  val digitalPackJson: String =
     """
       {
         "productType": "DigitalPack",
@@ -121,7 +121,7 @@ object Fixtures {
       }
     """
 
-  val mickeyMouse = "Mickey Mouse"
+  val mickeyMouse: String = "Mickey Mouse"
   val directDebitJson: String =
     s"""
       {
@@ -132,7 +132,7 @@ object Fixtures {
       }
     """
 
-  val stripePM = "pm_AXY4M16p60c2sg"
+  val stripePM: String = "pm_AXY4M16p60c2sg"
   val stripeJson: String =
     s"""
       {
@@ -234,7 +234,7 @@ object Fixtures {
           }
         """
 
-  val salesforceContactJson =
+  val salesforceContactJson: String =
     """
         {
           "Id": "0033E00001Cq8D2QAJ",
@@ -242,7 +242,7 @@ object Fixtures {
         }
       """
 
-  val salesforceContactsJson =
+  val salesforceContactsJson: String =
     """{
           "buyer": {
               "Id": "0033E00001Cq8D2QAJ",
@@ -277,7 +277,7 @@ object Fixtures {
             }
         """
 
-  val zuoraErrorResponse =
+  val zuoraErrorResponse: String =
     """[{"Code": "TRANSACTION_FAILED","Message": "Transaction declined.do_not_honor - Your card was declined."}]"""
 
 }

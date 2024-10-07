@@ -24,10 +24,10 @@ import scala.io.Source
 
 @IntegrationTest
 class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
-  val stage = PROD
-  val queryType = Full
-  val sanitizeFieldNamesAfterDownload = false
-  val updateLastSuccessfulQueryTime = false
+  val stage: PROD.type = PROD
+  val queryType: Full.type = Full
+  val sanitizeFieldNamesAfterDownload: Boolean = false
+  val updateLastSuccessfulQueryTime: Boolean = false
 
   "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" ignore {
     val attemptedQueryTime =

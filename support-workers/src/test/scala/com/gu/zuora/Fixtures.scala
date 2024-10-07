@@ -17,18 +17,18 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraConfig}
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val accountNumber = "A00084679"
+  val accountNumber: String = "A00084679"
 
-  val salesforceAccountId = "0013E00001ASmI6QAL"
-  val salesforceId = "0033E00001CpBZaQAN"
-  val identityId = "30000311"
-  val tokenId = "card_Aaynm1dIeDH1zp"
-  val secondTokenId = "cus_AaynKIp19IIGDz"
-  val cardNumber = "4242"
-  val payPalBaid = "B-23637766K5365543J"
-  val deliveryAgentId = 2532
+  val salesforceAccountId: String = "0013E00001ASmI6QAL"
+  val salesforceId: String = "0033E00001CpBZaQAN"
+  val identityId: String = "30000311"
+  val tokenId: String = "card_Aaynm1dIeDH1zp"
+  val secondTokenId: String = "cus_AaynKIp19IIGDz"
+  val cardNumber: String = "4242"
+  val payPalBaid: String = "B-23637766K5365543J"
+  val deliveryAgentId: Int = 2532
 
-  val date = new LocalDate(2017, 5, 4)
+  val date: LocalDate = new LocalDate(2017, 5, 4)
 
   def account(
       currency: Currency = GBP,

@@ -19,7 +19,7 @@ class CachedDynamoPromotionCollection(config: PromotionsTablesConfig)
     extends DynamoPromotionCollection(config)
     with PromotionCollection {
 
-  val cache = new PromotionCache
+  val cache: PromotionCache = new PromotionCache
   override def all: Iterator[Promotion] = cache.get.getOrElse(fetchAndCache).toIterator
 
   private def fetchAndCache = {

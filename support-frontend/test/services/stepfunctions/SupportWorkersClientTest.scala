@@ -24,7 +24,7 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
 
   val mockStateWrapper: StateWrapper = mock[StateWrapper]
 
-  val fillerState = new StateExitedEventDetails
+  val fillerState: StateExitedEventDetails = new StateExitedEventDetails
   fillerState.setName("CreatePaymentMethodLambda")
   val failure: Failure[Nothing] = Failure(new AmazonServiceException("test"))
 

@@ -169,8 +169,8 @@ object JsonFixtures {
       deliveryInstructions = Some("Leave with neighbour - support-frontend"),
     )
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
-  val validBaid = "B-23637766K5365543J"
-  val payPalEmail = "test@paypal.com"
+  val validBaid: String = "B-23637766K5365543J"
+  val payPalEmail: String = "test@paypal.com"
   val payPalPaymentMethod: String =
     s"""
         {
@@ -219,7 +219,7 @@ object JsonFixtures {
       }
     """
 
-  val digitalPackJson =
+  val digitalPackJson: String =
     """
       {
         "productType": "DigitalPack",
@@ -229,7 +229,7 @@ object JsonFixtures {
       }
     """
 
-  val digitalPackGiftJson =
+  val digitalPackGiftJson: String =
     """
       {
         "productType": "DigitalPack",
@@ -239,7 +239,7 @@ object JsonFixtures {
       }
     """
 
-  val everydayPaperJson =
+  val everydayPaperJson: String =
     """
       {
         "productType": "Paper",
@@ -291,7 +291,7 @@ object JsonFixtures {
       }
     """
 
-  val mickeyMouse = "Mickey Mouse"
+  val mickeyMouse: String = "Mickey Mouse"
   val directDebitJson: String =
     s"""
       {
@@ -429,7 +429,7 @@ object JsonFixtures {
       ),
     )
   }
-  val salesforceContactJson =
+  val salesforceContactJson: String =
     """
         {
           "Id": "0033E00001Cq8D2QAJ",
@@ -437,7 +437,7 @@ object JsonFixtures {
         }
       """
 
-  val salesforceContactsJson =
+  val salesforceContactsJson: String =
     """
        "salesforceContacts": {
           "buyer": {
@@ -692,7 +692,7 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val failureJson =
+  val failureJson: String =
     """{
           "state": {"requestId":"e18f6418-45f2-11e7-8bfa-8faac2182601","user":{"id":"12345","primaryEmailAddress":"test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Annual"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"TokenId":"card_E0zitFfsO2wTEn","SecondTokenId":"cus_E0zic0cedDT5MZ","CreditCardNumber":"4242","CreditCardCountry":"US","CreditCardExpirationMonth":2,"CreditCardExpirationYear":2029,"CreditCardType":"Visa","Type":"CreditCardReferenceTransaction","PaymentGateway":"Stripe Gateway 1"},"salesForceContact":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"salesforceContacts":{"buyer":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"giftRecipient":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"}}},
           "error": {
@@ -709,7 +709,7 @@ object JsonFixtures {
      """
 
   // This Json uses a test Stripe token which causes Stripe to return a card_declined response, but the product is a digital pack
-  val digipackCardDeclinedStripeJson =
+  val digipackCardDeclinedStripeJson: String =
     """
     {
       "state": {"requestId":"299f0204-8f82-f479-0000-00000000e33d","user":{"id":"30001643","primaryEmailAddress":"test@thegulocal.com","firstName":"FygxilMxB5QMoAkmuIc","lastName":"FygxilMxB5QMoAkmuIc","billingAddress":{"country":"GB"},"country":"GB","state":null,"isTestUser":false},"product":{"productType":"DigitalPack","currency":"GBP","billingPeriod":"Annual","readerType":"Direct"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentFields":{"userId":"30001643","stripeToken":"tok_chargeDeclined"},"acquisitionData":{"ophanIds":{"pageviewId":"jaignx8mlwazhhpaq9tk","browserId":null},"referrerAcquisitionData":{"campaignCode":null,"referrerPageviewId":null,"referrerUrl":null,"componentId":null,"componentType":null,"source":null,"abTest":null},"supportAbTests":[{"name":"usRecurringCopyTest","variant":"notintest"},{"name":"ukRecurringAmountsTest","variant":"lower"},{"name":"usRecurringAmountsTest","variant":"notintest"}]}},
@@ -726,10 +726,10 @@ object JsonFixtures {
     }
   """
 
-  val zuoraErrorResponse =
+  val zuoraErrorResponse: String =
     """[{"Code": "TRANSACTION_FAILED","Message": "Transaction declined.do_not_honor - Your card was declined."}]"""
 
-  val cardDeclinedJsonZuora =
+  val cardDeclinedJsonZuora: String =
     """
       {
         "state": {"requestId":"e18f6418-45f2-11e7-8bfa-8faac2182601","user":{"id":"12345","primaryEmailAddress":"test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Annual"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"TokenId":"card_E0zitFfsO2wTEn","SecondTokenId":"cus_E0zic0cedDT5MZ","CreditCardNumber":"4242","CreditCardCountry":"US","CreditCardExpirationMonth":2,"CreditCardExpirationYear":2029,"CreditCardType":"Visa","Type":"CreditCardReferenceTransaction","PaymentGateway":"Stripe Gateway 1"},"salesForceContact":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"salesforceContacts":{"buyer":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"giftRecipient":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"}}},
@@ -745,7 +745,7 @@ object JsonFixtures {
         }
       }
      """
-  val cardDeclinedJsonStripe =
+  val cardDeclinedJsonStripe: String =
     """
       {
         "state": {"requestId":"299f0204-8f82-f479-0000-00000000e33d","user":{"id":"30001643","primaryEmailAddress":"fygxilmxb5qmoakmuic@thegulocal.com","firstName":"FygxilMxB5QMoAkmuIc","lastName":"FygxilMxB5QMoAkmuIc","country":"GB","billingAddress":{"country":"GB"},"state":null,"isTestUser":false},"product":{"productType":"Contribution","currency":"GBP","billingPeriod":"Monthly","amount":5,"type":"Contribution"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentFields":{"userId":"30001643","stripeToken":"tok_chargeDeclined"},"acquisitionData":{"ophanIds":{"pageviewId":"jaignx8mlwazhhpaq9tk","browserId":null},"referrerAcquisitionData":{"campaignCode":null,"referrerPageviewId":null,"referrerUrl":null,"componentId":null,"componentType":null,"source":null,"abTest":null},"supportAbTests":[{"name":"usRecurringCopyTest","variant":"notintest"},{"name":"ukRecurringAmountsTest","variant":"lower"},{"name":"usRecurringAmountsTest","variant":"notintest"}]}},
@@ -761,7 +761,7 @@ object JsonFixtures {
         }
       }
     """
-  val testTokenInProdJsonStripe =
+  val testTokenInProdJsonStripe: String =
     """
       {
         "state": {"requestId":"299f0204-8f82-f479-0000-00000000e33d","user":{"id":"30001643","primaryEmailAddress":"fygxilmxb5qmoakmuic@thegulocal.com","firstName":"FygxilMxB5QMoAkmuIc","lastName":"FygxilMxB5QMoAkmuIc","country":"GB","billingAddress":{"country":"GB"},"state":null,"isTestUser":false},"product":{"productType":"Contribution","currency":"GBP","billingPeriod":"Monthly","amount":5,"type":"Contribution"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentFields":{"userId":"30001643","stripeToken":"tok_chargeDeclined"},"acquisitionData":{"ophanIds":{"pageviewId":"jaignx8mlwazhhpaq9tk","browserId":null},"referrerAcquisitionData":{"campaignCode":null,"referrerPageviewId":null,"referrerUrl":null,"componentId":null,"componentType":null,"source":null,"abTest":null},"supportAbTests":[{"name":"usRecurringCopyTest","variant":"notintest"},{"name":"ukRecurringAmountsTest","variant":"lower"},{"name":"usRecurringAmountsTest","variant":"notintest"}]}},
@@ -778,7 +778,7 @@ object JsonFixtures {
       }
     """
 
-  val wrapperWithMessages =
+  val wrapperWithMessages: String =
     """
       {
         "state": {"requestId":"a64ad98e-5d39-4ffc-a4a9-217357dc2b19","user":{"id":"9999999","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Monthly"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"PaypalBaid":"B-23637766K5365543J","PaypalEmail":"test@paypal.com","PaypalType":"ExpressCheckout","Type":"PayPal","PaymentGateway":"PayPal Express"},"giftRecipient":{"title":"Mr","firstName":"Gifty","lastName":"McRecipent","email":"gift.recipient@thegulocal.com","giftRecipientType":"Weekly"}},
@@ -883,7 +883,7 @@ object JsonFixtures {
     }
     """
 
-  val sendAcquisitionEventGWJson =
+  val sendAcquisitionEventGWJson: String =
     """
     {
       "requestId": "1a94c891-e98a-13ae-0000-000000003f18",
@@ -1004,7 +1004,7 @@ object JsonFixtures {
             }
         """
 
-  val previewSubscribeResponseJson = """
+  val previewSubscribeResponseJson: String = """
     {
       "Success": true,
       "InvoiceData": [

@@ -98,8 +98,8 @@ class ConfigService(stage: Stage) extends StrictLogging {
 }
 
 object ConfigService {
-  val zuoraConfigPath = "zuora-config"
-  val lastSuccessfulQueryTime = "lastSuccessfulQueryTime"
+  val zuoraConfigPath: String = "zuora-config"
+  val lastSuccessfulQueryTime: String = "lastSuccessfulQueryTime"
 
-  def apply(stage: Stage) = new ConfigService(stage)
+  def apply(stage: Stage): ConfigService = new ConfigService(stage)
 }

@@ -22,10 +22,10 @@ https://github.com/amzn/amazon-pay-sdk-java#one-time-transaction-api-flow
  */
 class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  val copyForEmail =
+  val copyForEmail: String =
     "Thank you for making a contribution. Your support helps protect the Guardian’s independence and means we can keep delivering quality journalism that’s open for all."
 
-  val storeName = "The Guardian"
+  val storeName: String = "The Guardian"
 
   val clientConfig: PayConfig = new PayConfig()
     .withSellerId(config.merchantId)
@@ -36,7 +36,7 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
 
   import com.amazon.pay.impl.PayClient
 
-  val client = new PayClient(clientConfig)
+  val client: PayClient = new PayClient(clientConfig)
 
   def getOrderReference(orderReferenceId: String): Either[AmazonPayApiError, OrderReferenceDetails] = {
     Either

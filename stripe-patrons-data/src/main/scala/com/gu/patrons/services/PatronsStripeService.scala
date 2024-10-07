@@ -10,8 +10,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpClient)(implicit
     ec: ExecutionContext,
 ) extends WebServiceHelper[StripeError] {
-  override val wsUrl = "https://api.stripe.com/v1"
-  override val httpClient = client
+  override val wsUrl: String = "https://api.stripe.com/v1"
+  override val httpClient: FutureHttpClient = client
 
   def authHeader(account: PatronsStripeAccount): Map[String, String] = Map(
     "Authorization" -> s"Bearer ${account match {
