@@ -24,6 +24,11 @@ export function PayPalButtonOneOffContainer({
 	);
 
 	const payOneOffWithPayPal = useFormValidation(function oneOffPaypalPayment() {
+		console.log(
+			'TEST DefaultButtonContainer.payOneOffWithPayPal START',
+			payPalReturnUrl(countryGroupId, email),
+			payPalCancelUrl(countryGroupId),
+		);
 		dispatch(paymentWaiting(true));
 
 		dispatch(
@@ -34,6 +39,7 @@ export function PayPalButtonOneOffContainer({
 				cancelURL: payPalCancelUrl(countryGroupId),
 			}),
 		);
+		console.log('TEST DefaultButtonContainer.payOneOffWithPayPal END');
 	});
 
 	return (

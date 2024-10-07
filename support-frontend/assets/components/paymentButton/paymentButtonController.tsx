@@ -22,7 +22,7 @@ interface PaymentButtonControllerProps extends CSSOverridable {
 	defaultContainer?: typeof DefaultPaymentButtonContainer;
 }
 
-export function PaymentButtonController({
+export function z({
 	paymentButtons,
 	defaultContainer = DefaultPaymentButtonContainer,
 	cssOverrides,

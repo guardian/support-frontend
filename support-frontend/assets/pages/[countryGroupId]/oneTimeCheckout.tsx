@@ -60,13 +60,14 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation';
-import { productCatalogDescription } from 'helpers/productCatalog';
+// import { productCatalogDescription } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -219,8 +220,8 @@ function OneTimeCheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
-	const productDescription = productCatalogDescription['Contribution'];
-	const ratePlanDescription = productDescription.ratePlans['ONE_OFF'];
+	//const productDescription = productCatalogDescription['Contribution'];
+	//const ratePlanDescription = productDescription.ratePlans['ONE_OFF'];
 
 	const settings = getSettings();
 	const { selectedAmountsVariant } = getAmountsTestVariant(
@@ -782,7 +783,10 @@ function OneTimeCheckoutComponent({
 											} else {
 												disable();
 											}
-
+											console.log(
+												'TEST oneTimeCheckout.validate valid => ',
+												valid,
+											);
 											/** And then run it on form change */
 											formRef.current?.addEventListener('change', (event) => {
 												const valid =
@@ -801,28 +805,41 @@ function OneTimeCheckoutComponent({
 											disallowed: [window.paypal.FUNDING.CREDIT],
 										}}
 										onClick={() => {
+											console.log('TEST oneTimeCheckout.onClick');
 											// TODO
 										}}
 										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 										payment={(resolve, reject) => {
 											const requestBody = {
-												amount: finalAmount,
-												billingPeriod: ratePlanDescription.billingPeriod,
 												currency: currencyKey,
-												requireShippingAddress: false,
+												amount: finalAmount ?? 0,
+												returnUrl: payPalReturnUrl(countryGroupId, email),
+												cancelURL: payPalCancelUrl(countryGroupId),
 											};
-											void fetch('/paypal/setup-payment', {
-												credentials: 'include',
+											console.log(
+												'TEST oneTimeCheckout.payment requestBody / paymentApiPayPalEndpoint => ',
+												requestBody,
+												window.guardian.paymentApiPayPalEndpoint,
+											);
+											void fetch(window.guardian.paymentApiPayPalEndpoint, {
+												credentials: 'omit',
 												method: 'POST',
 												headers: {
 													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
 												},
 												body: JSON.stringify(requestBody),
 											})
 												.then((response) => response.json())
 												.then((json) => {
-													resolve((json as { token: string }).token);
+													resolve(
+														(json as { approvalUrl: string }).approvalUrl,
+													);
+												})
+												.then((approvalUrl) => {
+													console.log(
+														'TEST oneTimeCheckout.payment approvalUrl => ',
+														approvalUrl,
+													);
 												})
 												.catch((error) => {
 													console.error(error);
@@ -833,6 +850,10 @@ function OneTimeCheckoutComponent({
 											const body = {
 												token: payPalData.paymentToken,
 											};
+											console.log(
+												'TEST oneTimeCheckout.onAuthorise body => ',
+												body,
+											);
 											void fetch('/paypal/one-click-checkout', {
 												credentials: 'include',
 												method: 'POST',
@@ -846,6 +867,12 @@ function OneTimeCheckoutComponent({
 												.then((json) => {
 													// The state below has a useEffect that submits the form
 													setPayPalBAID((json as { baid: string }).baid);
+												})
+												.then((baid) => {
+													console.log(
+														'TEST oneTimeCheckout.onAuthorise baid => ',
+														baid,
+													);
 												});
 										}}
 									/>

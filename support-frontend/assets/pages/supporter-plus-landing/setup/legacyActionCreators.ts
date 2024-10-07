@@ -383,9 +383,11 @@ const onCreateOneOffPayPalPaymentResponse =
 const createOneOffPayPalPayment =
 	(data: CreatePaypalPaymentData) =>
 	(dispatch: Dispatch<Action>, getState: () => ContributionsState): void => {
+		console.log('TEST createOneOffPayPalPayment START', data);
 		onCreateOneOffPayPalPaymentResponse(
 			postOneOffPayPalCreatePaymentRequest(data),
 		)(dispatch, getState);
+		console.log('TEST createOneOffPayPalPayment END', dispatch, getState);
 	};
 
 const makeCreateStripePaymentIntentRequest =

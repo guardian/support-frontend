@@ -1772,6 +1772,10 @@ function CheckoutComponent({
 												currency: currencyKey,
 												requireShippingAddress: false,
 											};
+											console.log(
+												'TEST checkout payment.requestBody => ',
+												requestBody,
+											);
 											void fetch('/paypal/setup-payment', {
 												credentials: 'include',
 												method: 'POST',
@@ -1785,6 +1789,9 @@ function CheckoutComponent({
 												.then((json) => {
 													resolve((json as { token: string }).token);
 												})
+												.then((token) => {
+													console.log('TEST checkout token => ', token);
+												})
 												.catch((error) => {
 													console.error(error);
 													reject(error as Error);
@@ -1794,6 +1801,7 @@ function CheckoutComponent({
 											const body = {
 												token: payPalData.paymentToken,
 											};
+											console.log('TEST checkout onAuthorise.body => ', body);
 											void fetch('/paypal/one-click-checkout', {
 												credentials: 'include',
 												method: 'POST',
@@ -1807,6 +1815,9 @@ function CheckoutComponent({
 												.then((json) => {
 													// The state below has a useEffect that submits the form
 													setPayPalBAID((json as { baid: string }).baid);
+												})
+												.then((baid) => {
+													console.log('TEST checkout baid => ', baid);
 												});
 										}}
 									/>
