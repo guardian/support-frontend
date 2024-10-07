@@ -80,7 +80,7 @@ class PaypalRefundWebHookBodySpec extends AnyWordSpec with Matchers with EitherV
         val paymentId = testPaymentId()
         val event = buildEvent("PAYMENT.SALE.REFUNDED", paymentId)
 
-        val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).right.value
+        val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).value
 
         body.parentPaymentId mustEqual paymentId
         body.rawBody mustEqual compressEvent(event)
@@ -94,7 +94,7 @@ class PaypalRefundWebHookBodySpec extends AnyWordSpec with Matchers with EitherV
         val paymentId = testPaymentId()
         val event = buildEvent("PAYMENT.CAPTURE.REFUNDED", paymentId)
 
-        val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).right.value
+        val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).value
 
         body.parentPaymentId mustEqual paymentId
         body.rawBody mustEqual compressEvent(event)

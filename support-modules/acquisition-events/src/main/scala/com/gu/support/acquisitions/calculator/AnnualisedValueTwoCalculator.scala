@@ -28,7 +28,6 @@ import com.gu.support.acquisitions.models.PrintProduct.{
   VoucherWeekendPlus,
 }
 import com.gu.support.acquisitions.models.{AcquisitionProduct, PaymentFrequency}
-import com.gu.support.catalog.NationalDelivery
 
 object AnnualisedValueTwoCalculator {
 
@@ -153,7 +152,7 @@ object AnnualisedValueTwoCalculator {
       })
       .getOrElse(Left("No print options supplied"))
 
-  def getMargin(a: AcquisitionModel) =
+  private def getMargin(a: AcquisitionModel) =
     a.product match {
       case AcquisitionProduct.Contribution => getContributionMargin(a)
       case AcquisitionProduct.RecurringContribution => getRecurringMargin(a)

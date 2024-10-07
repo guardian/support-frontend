@@ -1,15 +1,12 @@
 package services
 
-import cats.Monad
 import cats.data.EitherT
 import cats.instances.future._
-import com.gu.retry.EitherTRetry
 import com.gu.retry.EitherTRetry.retry
 import com.typesafe.scalalogging.StrictLogging
 import conf.IdentityConfig
 import model.DefaultThreadPool
 import play.api.libs.ws.WSClient
-import services.IdentityClient.{ApiError, ContextualError}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt

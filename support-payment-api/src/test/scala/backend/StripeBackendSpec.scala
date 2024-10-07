@@ -33,10 +33,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   // -- entities
-  val email = Json.fromString("email@email.com").as[NonEmptyString].toOption.get
-  val token = Json.fromString("token").as[NonEmptyString].toOption.get
+  val email: NonEmptyString = Json.fromString("email@email.com").as[NonEmptyString].toOption.get
+  val token: NonEmptyString = Json.fromString("token").as[NonEmptyString].toOption.get
   val recaptchaToken = "recaptchaToken"
-  val acquisitionData =
+  val acquisitionData: AcquisitionData =
     AcquisitionData(
       Some("platform"),
       None,
@@ -53,11 +53,12 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       Some("N1 9GU"),
     )
-  val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
-  val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
-  val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
-  val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
-  val createPaymentIntent =
+  val stripePaymentData: StripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
+  val legacyStripePaymentData: LegacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
+  val stripePublicKey: StripePublicKey = StripePublicKey("pk_test_FOOBAR")
+  val stripeChargeRequest: LegacyStripeChargeRequest =
+    LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
+  val createPaymentIntent: CreatePaymentIntent =
     CreatePaymentIntent(
       "payment-method-id",
       stripePaymentData,
@@ -65,30 +66,30 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       Some(stripePublicKey),
       recaptchaToken,
     )
-  val confirmPaymentIntent =
+  val confirmPaymentIntent: ConfirmPaymentIntent =
     ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
-  val countrySubdivisionCode = Some("NY")
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
-  val stripeHookObject = StripeHookObject("id", "GBP")
-  val stripeHookData = StripeHookData(stripeHookObject)
-  val stripeHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
-  val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
+  val countrySubdivisionCode: Option[String] = Some("NY")
+  val clientBrowserInfo: ClientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
+  val stripeHookObject: StripeHookObject = StripeHookObject("id", "GBP")
+  val stripeHookData: StripeHookData = StripeHookData(stripeHookObject)
+  val stripeHook: StripeRefundHook = StripeRefundHook("id", PaymentStatus.Paid, stripeHookData)
+  val dbError: ContributionsStoreService.Error = ContributionsStoreService.Error(new Exception("DB error response"))
 
-  val identityError = IdentityClient.ContextualError(
+  val identityError: IdentityClient.ContextualError = IdentityClient.ContextualError(
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
   val stripeDisabledErrorText = "Stripe payments are currently disabled"
-  val paymentError = PaypalApiError.fromString("Error response")
-  val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
-  val backendError = BackendError.fromStripeApiError(stripeApiError)
+  val paymentError: PaypalApiError = PaypalApiError.fromString("Error response")
+  val stripeApiError: StripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
+  val backendError: BackendError = BackendError.fromStripeApiError(stripeApiError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
 
   // -- mocks
   val chargeMock: Charge = mock[Charge]
-  val eventMock = mock[Event]
-  val paymentIntentMock = mock[PaymentIntent]
+  val eventMock: Event = mock[Event]
+  val paymentIntentMock: PaymentIntent = mock[PaymentIntent]
 
   // -- service responses
   val paymentServiceResponse: EitherT[Future, StripeApiError, Charge] =
@@ -246,14 +247,13 @@ class StripeBackendSpec
 
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
-
   "Stripe Backend" when {
 
     "a request is made to create a Payment Intent" should {
       "return Stripe payments are currently disabled response  if stripe checkout switch is off in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithStripe = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
-        val createPaymentIntentWithStripeCheckout =
+        val stripePaymentDataWithStripe: StripePaymentData =
+          StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripe,
@@ -268,8 +268,9 @@ class StripeBackendSpec
       }
 
       "return Stripe payments are currently disabled response  if stripe Apple Pay switch is off in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithApplePay = StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
-        val createPaymentIntentWithStripeApplePay =
+        val stripePaymentDataWithApplePay: StripePaymentData =
+          StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
+        val createPaymentIntentWithStripeApplePay: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithApplePay,
@@ -283,9 +284,9 @@ class StripeBackendSpec
           StripeApiError.fromString(stripeDisabledErrorText, None)
       }
       "return Stripe payments are currently disabled response  if stripe payment request button switch is off in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithStripePaymentRequest =
+        val stripePaymentDataWithStripePaymentRequest: StripePaymentData =
           StripePaymentData(email, Currency.USD, 12, Some(StripePaymentRequestButton))
-        val createPaymentIntentWithStripePaymentRequest =
+        val createPaymentIntentWithStripePaymentRequest: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
@@ -301,8 +302,9 @@ class StripeBackendSpec
           StripeApiError.fromString(stripeDisabledErrorText, None)
       }
       "return Success if stripe checkout switch is On in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithStripe = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
-        val createPaymentIntentWithStripeCheckout =
+        val stripePaymentDataWithStripe: StripePaymentData =
+          StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripe,
@@ -333,8 +335,9 @@ class StripeBackendSpec
       }
 
       "return Success if stripe apple pay switch is On in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithStripeApplePay = StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
-        val createPaymentIntentWithStripeApplePay =
+        val stripePaymentDataWithStripeApplePay: StripePaymentData =
+          StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
+        val createPaymentIntentWithStripeApplePay: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripeApplePay,
@@ -363,9 +366,9 @@ class StripeBackendSpec
           StripePaymentIntentsApiResponse.Success()
       }
       "return Success if stripe payment request button  switch is On in support-admin-console" in new StripeBackendFixture {
-        val stripePaymentDataWithStripePaymentRequest =
+        val stripePaymentDataWithStripePaymentRequest: StripePaymentData =
           StripePaymentData(email, Currency.USD, 12, Some(StripePaymentRequestButton))
-        val createPaymentIntentWithStripePaymentRequest =
+        val createPaymentIntentWithStripePaymentRequest: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
@@ -400,9 +403,10 @@ class StripeBackendSpec
     "a request is made to create a charge/payment" should {
 
       "return error if the email address is invalid due to a comma in it" in new StripeBackendFixture {
-        val emailWithComma = Json.fromString("email,address@email.com").as[NonEmptyString].toOption.get
-        val stripePaymentDataWithStripe = StripePaymentData(emailWithComma, Currency.USD, 12, Some(StripeCheckout))
-        val createPaymentIntentWithStripeCheckout =
+        val emailWithComma: NonEmptyString = Json.fromString("email,address@email.com").as[NonEmptyString].toOption.get
+        val stripePaymentDataWithStripe: StripePaymentData =
+          StripePaymentData(emailWithComma, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout: CreatePaymentIntent =
           CreatePaymentIntent(
             "payment-method-id",
             stripePaymentDataWithStripe,
@@ -493,8 +497,9 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
-        val result =
+        val trackContribution: PrivateMethod[Future[List[BackendError]]] =
+          PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
+        val result: Future[List[BackendError]] =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         result.futureValue mustBe List(BackendError.Database(dbError))
 
@@ -510,10 +515,11 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponseError)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
-        val result =
+        val trackContribution: PrivateMethod[Future[List[BackendError]]] =
+          PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
+        val result: Future[List[BackendError]] =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        val error = List(
+        val error: List[BackendError] = List(
           BackendError.AcquisitionsEventBusError(acquisitionsEventBusErrorMessage),
           BackendError.Database(dbError),
         )

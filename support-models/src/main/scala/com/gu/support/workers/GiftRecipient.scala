@@ -1,9 +1,10 @@
 package com.gu.support.workers
 
 import com.gu.i18n.Title
+import com.gu.support.encoding
 import com.gu.support.encoding.DiscriminatedType
 import com.gu.support.encoding.CustomCodecs._
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
+import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient, discriminatedType}
 import io.circe._
 import org.joda.time.LocalDate
 
@@ -32,9 +33,11 @@ object GiftRecipient {
   ) extends GiftRecipient
 
   val discriminatedType = new DiscriminatedType[GiftRecipient]("giftRecipientType")
-  implicit val weeklyCodec = discriminatedType.variant[WeeklyGiftRecipient]("Weekly")
-  implicit val dsCodec = discriminatedType.variant[DigitalSubscriptionGiftRecipient]("DigitalSubscription")
-  implicit val codec = discriminatedType.codec(List(weeklyCodec, dsCodec))
+  implicit val weeklyCodec: discriminatedType.VariantCodec[WeeklyGiftRecipient] =
+    discriminatedType.variant[WeeklyGiftRecipient]("Weekly")
+  implicit val dsCodec: discriminatedType.VariantCodec[DigitalSubscriptionGiftRecipient] =
+    discriminatedType.variant[DigitalSubscriptionGiftRecipient]("DigitalSubscription")
+  implicit val codec: encoding.Codec[GiftRecipient] = discriminatedType.codec(List(weeklyCodec, dsCodec))
 
 }
 
@@ -47,7 +50,8 @@ object GeneratedGiftCode {
       .filter(_.matches(raw"""gd(03|06|12)-[a-km-z02-9]{8}"""))
       .map(new GeneratedGiftCode(_))
 
-  implicit val e1 = Encoder.encodeString.contramap[GeneratedGiftCode](_.value)
-  implicit val d1 = Decoder.decodeString.emap(GeneratedGiftCode(_).toRight("invalid gift code"))
+  implicit val e1: Encoder[GeneratedGiftCode] = Encoder.encodeString.contramap[GeneratedGiftCode](_.value)
+  implicit val d1: Decoder[GeneratedGiftCode] =
+    Decoder.decodeString.emap(GeneratedGiftCode(_).toRight("invalid gift code"))
 
 }

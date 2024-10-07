@@ -32,7 +32,7 @@ object DefaultPromotionService {
       tierThree: List[String],
   )
 
-  implicit val decoder = Decoder[DefaultPromotions]
+  implicit val decoder: Decoder[DefaultPromotions] = Decoder[DefaultPromotions]
 }
 
 class DefaultPromotionServiceS3(

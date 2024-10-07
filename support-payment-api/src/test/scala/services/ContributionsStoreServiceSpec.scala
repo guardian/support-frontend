@@ -1,8 +1,9 @@
 package services
 
+import io.circe.Json
+
 import java.time.LocalDateTime
 import java.util.UUID
-
 import model.{Currency, PaymentProvider, PaymentStatus}
 import model.db.ContributionData
 import services.ContributionsStoreQueueService.NewContributionData
@@ -12,9 +13,9 @@ import org.scalatest.matchers.must.Matchers
 
 class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
 
-  val uuid = UUID.randomUUID()
+  val uuid: UUID = UUID.randomUUID()
 
-  val contributionData = ContributionData(
+  val contributionData: ContributionData = ContributionData(
     paymentProvider = PaymentProvider.Paypal,
     paymentStatus = PaymentStatus.Paid,
     paymentId = "paymentId",
@@ -29,7 +30,7 @@ class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
     postalCode = Some("N1 9GU"),
   )
 
-  val expectedJson = parse(
+  val expectedJson: Json = parse(
     s"""|{
       |  "newContributionData" : {
       |    "paymentProvider" : "Paypal",
@@ -46,7 +47,7 @@ class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
       |    "postalCode" : "N1 9GU"
       |  }
       |}""".stripMargin,
-  ).right.get
+  ).toOption.get
 
   it should "serialize ContributionData" in {
     ContributionsStoreQueueService.Message.toJson(NewContributionData(contributionData)) must be(expectedJson)

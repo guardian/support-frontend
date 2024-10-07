@@ -1,5 +1,6 @@
 package model.stripe
 
+import io.circe.Encoder
 import io.circe.generic.semiauto._
 
 sealed trait StripePaymentIntentsApiResponse
@@ -9,6 +10,6 @@ object StripePaymentIntentsApiResponse {
 
   case class RequiresAction(clientSecret: String) extends StripePaymentIntentsApiResponse
 
-  implicit val successEncoder = deriveEncoder[Success]
-  implicit val requiresActionEncoder = deriveEncoder[RequiresAction]
+  implicit val successEncoder: Encoder.AsObject[Success] = deriveEncoder[Success]
+  implicit val requiresActionEncoder: Encoder.AsObject[RequiresAction] = deriveEncoder[RequiresAction]
 }

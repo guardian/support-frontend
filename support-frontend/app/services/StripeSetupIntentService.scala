@@ -1,7 +1,5 @@
 package services
 
-import java.nio.charset.StandardCharsets
-
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.regions.Regions
@@ -9,22 +7,22 @@ import com.amazonaws.services.lambda.AWSLambdaClientBuilder
 import com.amazonaws.services.lambda.model.InvokeRequest
 import com.gu.support.config.{Stage, Stages}
 import com.typesafe.scalalogging.StrictLogging
-import io.circe.{Decoder, Encoder, Json}
 import io.circe.parser.decode
+import io.circe.{Decoder, Encoder, Json}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 case class LambdaResponse(body: String)
 object LambdaResponse {
   import io.circe.generic.auto._
-  implicit val decoder = Decoder[LambdaResponse]
+  implicit val decoder: Decoder[LambdaResponse] = Decoder[LambdaResponse]
 }
 
 case class SetupIntent(client_secret: String)
 object SetupIntent {
   import io.circe.generic.auto._
-  implicit val decoder = Decoder[SetupIntent]
-  implicit val encoder = Encoder[SetupIntent]
+  implicit val decoder: Decoder[SetupIntent] = Decoder[SetupIntent]
+  implicit val encoder: Encoder[SetupIntent] = Encoder[SetupIntent]
 }
 
 class StripeSetupIntentService(stage: Stage)(implicit ec: ExecutionContext) extends StrictLogging {

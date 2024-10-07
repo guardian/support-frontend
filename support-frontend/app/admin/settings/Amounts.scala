@@ -33,8 +33,8 @@ object AmountsTestTargeting {
   import io.circe.generic.extras.auto._
   implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
 
-  implicit val amountsTestTargetingDecoder = Decoder[AmountsTestTargeting]
-  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingDecoder: Decoder[AmountsTestTargeting] = Decoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingEncoder: Encoder[AmountsTestTargeting] = Encoder[AmountsTestTargeting]
 }
 
 case class AmountsTest(
@@ -51,8 +51,8 @@ case class AmountsTest(
 object AmountsTests {
   type AmountsTests = List[AmountsTest]
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val amountsTestDecoder = Decoder[AmountsTest]
-  implicit val amountsTestEncoder = Encoder[AmountsTest]
-  implicit val amountsTestsDecoder = Decoder[AmountsTests]
-  implicit val amountsTestsEncoder = Encoder[AmountsTests]
+  implicit val amountsTestDecoder: Decoder[AmountsTest] = Decoder[AmountsTest]
+  implicit val amountsTestEncoder: Encoder[AmountsTest] = Encoder[AmountsTest]
+  implicit val amountsTestsDecoder: Decoder[AmountsTests] = Decoder[AmountsTests]
+  implicit val amountsTestsEncoder: Encoder[AmountsTests] = Encoder[AmountsTests]
 }

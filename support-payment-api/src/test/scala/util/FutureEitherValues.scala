@@ -10,6 +10,6 @@ trait FutureEitherValues extends ScalaFutures with EitherValues {
 
   implicit class FutureEitherOps[A, B](data: EitherT[Future, A, B]) {
     def futureLeft: A = data.value.futureValue.left.value
-    def futureRight: B = data.value.futureValue.right.value
+    def futureRight: B = data.value.futureValue.value
   }
 }

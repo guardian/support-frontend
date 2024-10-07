@@ -1,5 +1,4 @@
 import _root_.controllers._
-import org.apache.pekko.actor.ActorSystem
 import aws.AWSClientBuilder
 import backend._
 import com.amazon.pay.impl.ipn.NotificationFactory
@@ -10,6 +9,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
+import org.apache.pekko.actor.ActorSystem
 import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.db.{DBComponents, HikariCPComponents}
@@ -30,10 +30,9 @@ class MyApplicationLoader extends ApplicationLoader with StrictLogging {
     try {
       new MyComponents(context).application
     } catch {
-      case err: Throwable => {
+      case err: Throwable =>
         logger.error("Could not start application", err)
         throw err
-      }
     }
   }
 }
@@ -49,12 +48,12 @@ class MyComponents(context: Context)
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
   // This will determine, later on, whether passing the "?mode=test" param has any effect
-  val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
+  private val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
 
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
 
   val configLoader: ConfigLoader = new ConfigLoader(ssm)
-  val playConfigUpdater = new PlayConfigUpdater(configLoader)
+  private val playConfigUpdater = new PlayConfigUpdater(configLoader)
 
   // I guess it could be nice if a given config knew whether it was
   // request-environment-dependent or app-mode-dependent
@@ -68,9 +67,10 @@ class MyComponents(context: Context)
   implicit val s3Client: AmazonS3 = AWSClientBuilder.buildS3Client()
   private implicit val system: ActorSystem = ActorSystem()
 
-  override lazy val httpErrorHandler = new ErrorHandler(environment, configuration, sourceMapper, Some(router))
+  override lazy val httpErrorHandler =
+    new ErrorHandler(environment, configuration, devContext.map(_.sourceMapper), Some(router))
 
-  val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
+  private val cloudWatchClient: AmazonCloudWatchAsync = AWSClientBuilder.buildCloudWatchAsyncClient()
 
   val stripeBackendProvider: RequestBasedProvider[StripeBackend] =
     new StripeBackend.Builder(configLoader, cloudWatchClient)
@@ -87,16 +87,16 @@ class MyComponents(context: Context)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
-  val amazonPayBackendProvider: RequestBasedProvider[AmazonPayBackend] =
+  private val amazonPayBackendProvider: RequestBasedProvider[AmazonPayBackend] =
     new AmazonPayBackend.Builder(configLoader, cloudWatchClient)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
-  implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
+  implicit val allowedCorsUrl: List[String] = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
   // we may not know the environment, so we just use live. Note - in DEV/CODE, there is no difference between test/live
-  val liveCloudWatchService = new CloudWatchService(cloudWatchClient, requestEnvironments.live)
+  private val liveCloudWatchService = new CloudWatchService(cloudWatchClient, requestEnvironments.live)
 
   def parseNotification(headers: Map[String, String], body: String): Notification =
     NotificationFactory.parseNotification(headers.asJava, body)
