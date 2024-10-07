@@ -43,6 +43,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
 	type CreateStripePaymentIntentRequest,
+	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -64,6 +65,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -354,6 +356,35 @@ function OneTimeCheckoutComponent({
 					},
 				},
 			});
+		}
+
+		if (paymentMethod === 'PayPal') {
+			const paymentResult = await postOneOffPayPalCreatePaymentRequest({
+				currency: currencyKey,
+				amount: finalAmount ?? 0,
+				returnURL: payPalReturnUrl(countryGroupId, email),
+				cancelURL: payPalCancelUrl(countryGroupId),
+			});
+			const acquisitionData = derivePaymentApiAcquisitionData(
+				getReferrerAcquisitionData(),
+				abParticipations,
+				billingPostcode,
+			);
+			// We've only created a payment at this point, and the user has to get through
+			// the PayPal flow on their site before we can actually try and execute the payment.
+			// So we drop a cookie which will be used by the /paypal/rest/return endpoint
+			// that the user returns to from PayPal, if payment is successful.
+			cookie.set(
+				'acquisition_data',
+				encodeURIComponent(JSON.stringify(acquisitionData)),
+			);
+
+			if (paymentResult.type === 'success') {
+				// setContributionAmount(finalAmount?.toString() ?? '');
+				window.location.href = paymentResult.data.approvalUrl;
+			} else {
+				setErrorMessage('Sorry, something went wrong.');
+			}
 		}
 
 		if (paymentMethodResult && stripe) {
@@ -713,23 +744,21 @@ function OneTimeCheckoutComponent({
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText={
-										finalAmount
-											? `Support us with ${simpleFormatAmount(
-													currency,
-													finalAmount,
-											  )}`
-											: 'Pay now'
-									}
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
+							<DefaultPaymentButton
+								buttonText={
+									finalAmount
+										? `Support us with ${simpleFormatAmount(
+												currency,
+												finalAmount,
+										  )}`
+										: 'Pay now'
+								}
+								onClick={() => {
+									// no-op
+									// This isn't needed because we are now using the form onSubmit handler
+								}}
+								type="submit"
+							/>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
