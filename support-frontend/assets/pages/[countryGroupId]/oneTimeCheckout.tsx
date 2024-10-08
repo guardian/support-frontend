@@ -333,84 +333,84 @@ function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async () => {
-		setIsProcessingPayment(true);
+		if (finalAmount) {
+			setIsProcessingPayment(true);
 
-		let paymentMethodResult;
-		if (
-			paymentMethod === 'StripeExpressCheckoutElement' &&
-			stripe &&
-			elements
-		) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				elements,
-			});
-		}
-
-		if (paymentMethod === 'Stripe' && stripe && cardElement) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				type: 'card',
-				card: cardElement,
-				billing_details: {
-					address: {
-						postal_code: billingPostcode,
-					},
-				},
-			});
-		}
-
-		if (paymentMethod === 'PayPal') {
-			const paymentResult = await postOneOffPayPalCreatePaymentRequest({
-				currency: currencyKey,
-				amount: finalAmount ?? 0,
-				returnURL: payPalReturnUrl(countryGroupId, email),
-				cancelURL: payPalCancelUrl(countryGroupId),
-			});
-			const acquisitionData = derivePaymentApiAcquisitionData(
-				getReferrerAcquisitionData(),
-				abParticipations,
-				billingPostcode,
-			);
-			// We've only created a payment at this point, and the user has to get through
-			// the PayPal flow on their site before we can actually try and execute the payment.
-			// So we drop a cookie which will be used by the /paypal/rest/return endpoint
-			// that the user returns to from PayPal, if payment is successful.
-			cookie.set(
-				'acquisition_data',
-				encodeURIComponent(JSON.stringify(acquisitionData)),
-			);
-
-			if (paymentResult.type === 'success') {
-				window.location.href = paymentResult.data.approvalUrl;
-			} else {
-				setErrorMessage('Sorry, something went wrong.');
-			}
-		}
-
-		if (paymentMethodResult && stripe) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
-
-			if (paymentMethodResult.error) {
-				logException(
-					`Error creating Payment Method: ${JSON.stringify(
-						paymentMethodResult.error,
-					)}`,
+			if (paymentMethod === 'PayPal') {
+				const paymentResult = await postOneOffPayPalCreatePaymentRequest({
+					currency: currencyKey,
+					amount: finalAmount,
+					returnURL: payPalReturnUrl(countryGroupId, email),
+					cancelURL: payPalCancelUrl(countryGroupId),
+				});
+				const acquisitionData = derivePaymentApiAcquisitionData(
+					getReferrerAcquisitionData(),
+					abParticipations,
+					billingPostcode,
+				);
+				// We've only created a payment at this point, and the user has to get through
+				// the PayPal flow on their site before we can actually try and execute the payment.
+				// So we drop a cookie which will be used by the /paypal/rest/return endpoint
+				// that the user returns to from PayPal, if payment is successful.
+				cookie.set(
+					'acquisition_data',
+					encodeURIComponent(JSON.stringify(acquisitionData)),
 				);
 
-				if (paymentMethodResult.error.type === 'validation_error') {
-					setErrorMessage('There was an issue with your card details.');
-					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
+				if (paymentResult.type === 'success') {
+					window.location.href = paymentResult.data.approvalUrl;
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(
-						appropriateErrorMessage('payment_provider_unavailable'),
-					);
 				}
-			} else {
-				if (finalAmount) {
+			}
+
+			let paymentMethodResult;
+			if (
+				paymentMethod === 'StripeExpressCheckoutElement' &&
+				stripe &&
+				elements
+			) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+				});
+			}
+			if (paymentMethod === 'Stripe' && stripe && cardElement) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: billingPostcode,
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe) {
+				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+				const handle3DS = (clientSecret: string) => {
+					trackComponentLoad('stripe-3ds');
+					return stripe.handleCardAction(clientSecret);
+				};
+
+				if (paymentMethodResult.error) {
+					logException(
+						`Error creating Payment Method: ${JSON.stringify(
+							paymentMethodResult.error,
+						)}`,
+					);
+
+					if (paymentMethodResult.error.type === 'validation_error') {
+						setErrorMessage('There was an issue with your card details.');
+						setErrorContext(
+							appropriateErrorMessage('payment_details_incorrect'),
+						);
+					} else {
+						setErrorMessage('Sorry, something went wrong.');
+						setErrorContext(
+							appropriateErrorMessage('payment_provider_unavailable'),
+						);
+					}
+				} else {
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,
@@ -450,10 +450,9 @@ function OneTimeCheckoutComponent({
 						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 					}
 				}
+				setIsProcessingPayment(false);
 			}
 		}
-
-		setIsProcessingPayment(false);
 	};
 
 	const paymentButtonText = finalAmount
