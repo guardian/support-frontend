@@ -15,5 +15,5 @@ jobs:
           node-version: 20.11.0
       - name: run Lighthouse CI
         run: |
-          yarn install -g @lhci/cli@0.14.x
+          yarn global add @lhci/cli@0.14.x
           lhci autorun
