@@ -340,7 +340,11 @@ function OneTimeCheckoutComponent({
 				const paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
 					amount: finalAmount,
-					returnURL: payPalReturnUrl(countryGroupId, email),
+					returnURL: payPalReturnUrl(
+						countryGroupId,
+						email,
+						'/paypal/rest/returnOneTime',
+					),
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
 				const acquisitionData = derivePaymentApiAcquisitionData(
@@ -356,8 +360,13 @@ function OneTimeCheckoutComponent({
 					'acquisition_data',
 					encodeURIComponent(JSON.stringify(acquisitionData)),
 				);
-
 				if (paymentResult.type === 'success') {
+					const order = {
+						firstName: '',
+						paymentMethod: paymentMethod,
+					};
+					setThankYouOrder(order);
+
 					window.location.href = paymentResult.data.approvalUrl;
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
