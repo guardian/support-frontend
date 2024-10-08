@@ -6,6 +6,7 @@ module.exports = {
     collect: {
       url: "https://support.theguardian.com/uk/contribute",
       method: "psi",
+      psiApiKey: "",
     },
   },
 };
