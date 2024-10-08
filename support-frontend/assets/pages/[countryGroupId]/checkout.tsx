@@ -146,12 +146,14 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
  */
+type ProcessPaymentResponse =
+	| { status: 'success' }
+	| { status: 'failure'; failureReason?: ErrorReason };
+
 const processPayment = async (
 	statusResponse: StatusResponse,
 	geoId: GeoId,
-): Promise<
-	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
-> => {
+): Promise<ProcessPaymentResponse> => {
 	return new Promise((resolve) => {
 		const { trackingUri, status, failureReason } = statusResponse;
 		if (status === 'success') {
@@ -190,6 +192,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		productParam && isProductKey(productParam) ? productParam : undefined;
 	const product = productKey && productCatalog[productKey];
 	if (!product) {
+		logException('Product not found');
 		return <div>Product not found</div>;
 	}
 
@@ -207,6 +210,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
+		logException('Rate plan not found');
 		return <div>Rate plan not found</div>;
 	}
 
@@ -243,6 +247,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 		 * @see https://support.gutools.co.uk/amounts
 		 */
 		if (!contributionAmount) {
+			logException('Contribution not specified');
 			return <div>Contribution not specified</div>;
 		}
 
@@ -258,6 +263,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				: undefined;
 
 		if (!productPrice) {
+			logException('Price not found in product catalog');
 			return <div>Price not found in product catalog</div>;
 		}
 
@@ -912,20 +918,27 @@ function CheckoutComponent({
 			};
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
-			const createSubscriptionResult = await fetch('/subscribe/create', {
+			const createResponse = await fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			})
-				.then((response) => response.json())
-				.then((json) => json as StatusResponse);
+			});
 
-			const processPaymentResponse = await processPayment(
-				createSubscriptionResult,
-				geoId,
-			);
+			let processPaymentResponse: ProcessPaymentResponse;
+
+			if (createResponse.ok) {
+				const statusResponse = (await createResponse.json()) as StatusResponse;
+				processPaymentResponse = await processPayment(statusResponse, geoId);
+			} else {
+				const errorReason = (await createResponse.text()) as ErrorReason;
+				processPaymentResponse = {
+					status: 'failure',
+					failureReason: errorReason,
+				};
+			}
+
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
@@ -1548,7 +1561,12 @@ function CheckoutComponent({
 										<PaymentMethodSelector selected={selected}>
 											<PaymentMethodRadio selected={selected}>
 												<Radio
-													label={label}
+													label={
+														<>
+															{label}
+															<div>{icon}</div>
+														</>
+													}
 													name="paymentMethod"
 													value={validPaymentMethod}
 													cssOverrides={
@@ -1560,7 +1578,6 @@ function CheckoutComponent({
 														setPaymentMethod(validPaymentMethod);
 													}}
 												/>
-												<div>{icon}</div>
 											</PaymentMethodRadio>
 											{validPaymentMethod === 'Stripe' && selected && (
 												<div css={paymentMethodBody}>
@@ -1737,11 +1754,14 @@ function CheckoutComponent({
 
 											/** And then run it on form change */
 											formRef.current?.addEventListener('change', (event) => {
-												const valid =
-													// TODO - we shouldn't have to type infer here
-													(
-														event.currentTarget as HTMLFormElement
-													).checkValidity();
+												const element = event.currentTarget as HTMLFormElement;
+												/* We call this twice because the first time does not
+                           not give us an accurate state of the form.
+                           This seems to be because we use `setCustomValidity` on the elements
+                        */
+												element.checkValidity();
+												const valid = element.checkValidity();
+
 												if (valid) {
 													enable();
 												} else {
@@ -1753,7 +1773,7 @@ function CheckoutComponent({
 											disallowed: [window.paypal.FUNDING.CREDIT],
 										}}
 										onClick={() => {
-											// TODO
+											// TODO - add tracking
 										}}
 										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 										payment={(resolve, reject) => {

@@ -10,10 +10,11 @@ import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class RecaptchaResponse(success: Boolean, score: Option[BigDecimal])
+case class RecaptchaResponse(success: Boolean, `error-codes`: Option[List[String]])
 object RecaptchaResponse {
   implicit val readsGetUserTypeResponse: Reads[RecaptchaResponse] = Json.reads[RecaptchaResponse]
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
+  val recaptchaFailedCode = "recaptcha_validation_failed"
 }
 
 class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) extends SafeLogging {
@@ -31,5 +32,8 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) extend
         logger.error(scrub"Recaptcha failed on ${err.toString}")
         err.toString
       }
-      .subflatMap(resp => (resp.json).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
+      .subflatMap(resp => {
+        logger.info(s"Recaptcha response: ${resp.json}")
+        resp.json.validate[RecaptchaResponse].asEither.leftMap(_.mkString(","))
+      })
 }

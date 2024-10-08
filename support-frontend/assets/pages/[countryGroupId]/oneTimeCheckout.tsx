@@ -43,6 +43,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
 	type CreateStripePaymentIntentRequest,
+	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -64,6 +65,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -136,6 +138,34 @@ function paymentMethodIsActive(paymentMethod: PaymentMethod) {
 	);
 }
 
+function getPreSelectedAmount(
+	preSelectedAmountParam: string | null,
+	amountChoices: number[],
+): {
+	preSelectedOtherAmount?: string;
+	preSelectedPriceCard?: number | 'other';
+} {
+	const preSelectedAmount = preSelectedAmountParam
+		? parseInt(preSelectedAmountParam, 10)
+		: undefined;
+
+	if (preSelectedAmount === undefined) {
+		return {
+			preSelectedOtherAmount: undefined,
+			preSelectedPriceCard: undefined,
+		};
+	}
+
+	const preSelectedPriceCard = amountChoices.includes(preSelectedAmount)
+		? preSelectedAmount
+		: 'other';
+
+	return {
+		preSelectedOtherAmount: preSelectedAmount.toString(),
+		preSelectedPriceCard,
+	};
+}
+
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
@@ -180,6 +210,9 @@ function OneTimeCheckoutComponent({
 	stripePublicKey,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const urlSearchParams = new URLSearchParams(window.location.search);
+
+	const preSelectedAmountParam = urlSearchParams.get('contribution');
 
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -197,17 +230,28 @@ function OneTimeCheckoutComponent({
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		amountsCardData['ONE_OFF'];
 
+	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
+		preSelectedAmountParam,
+		amounts,
+	);
+
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
 
-	const [amount, setAmount] = useState<number | 'other'>(defaultAmount);
-	const [otherAmount, setOtherAmount] = useState<string>('');
+	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
+		preSelectedPriceCard ?? defaultAmount,
+	);
+
+	const [otherAmount, setOtherAmount] = useState<string>(
+		preSelectedOtherAmount ?? '',
+	);
+
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 	const finalAmount =
-		amount === 'other'
+		selectedPriceCard === 'other'
 			? Number.isNaN(parseFloat(otherAmount))
 				? undefined
 				: parseFloat(otherAmount)
-			: amount;
+			: selectedPriceCard;
 
 	useEffect(() => {
 		if (finalAmount) {
@@ -289,56 +333,84 @@ function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async () => {
-		setIsProcessingPayment(true);
+		if (finalAmount) {
+			setIsProcessingPayment(true);
 
-		let paymentMethodResult;
-		if (
-			paymentMethod === 'StripeExpressCheckoutElement' &&
-			stripe &&
-			elements
-		) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				elements,
-			});
-		}
-
-		if (paymentMethod === 'Stripe' && stripe && cardElement) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				type: 'card',
-				card: cardElement,
-				billing_details: {
-					address: {
-						postal_code: billingPostcode,
-					},
-				},
-			});
-		}
-
-		if (paymentMethodResult && stripe) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
-
-			if (paymentMethodResult.error) {
-				logException(
-					`Error creating Payment Method: ${JSON.stringify(
-						paymentMethodResult.error,
-					)}`,
+			if (paymentMethod === 'PayPal') {
+				const paymentResult = await postOneOffPayPalCreatePaymentRequest({
+					currency: currencyKey,
+					amount: finalAmount,
+					returnURL: payPalReturnUrl(countryGroupId, email),
+					cancelURL: payPalCancelUrl(countryGroupId),
+				});
+				const acquisitionData = derivePaymentApiAcquisitionData(
+					getReferrerAcquisitionData(),
+					abParticipations,
+					billingPostcode,
+				);
+				// We've only created a payment at this point, and the user has to get through
+				// the PayPal flow on their site before we can actually try and execute the payment.
+				// So we drop a cookie which will be used by the /paypal/rest/return endpoint
+				// that the user returns to from PayPal, if payment is successful.
+				cookie.set(
+					'acquisition_data',
+					encodeURIComponent(JSON.stringify(acquisitionData)),
 				);
 
-				if (paymentMethodResult.error.type === 'validation_error') {
-					setErrorMessage('There was an issue with your card details.');
-					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
+				if (paymentResult.type === 'success') {
+					window.location.href = paymentResult.data.approvalUrl;
 				} else {
 					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(
-						appropriateErrorMessage('payment_provider_unavailable'),
-					);
 				}
-			} else {
-				if (finalAmount) {
+			}
+
+			let paymentMethodResult;
+			if (
+				paymentMethod === 'StripeExpressCheckoutElement' &&
+				stripe &&
+				elements
+			) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+				});
+			}
+			if (paymentMethod === 'Stripe' && stripe && cardElement) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: billingPostcode,
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe) {
+				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+				const handle3DS = (clientSecret: string) => {
+					trackComponentLoad('stripe-3ds');
+					return stripe.handleCardAction(clientSecret);
+				};
+
+				if (paymentMethodResult.error) {
+					logException(
+						`Error creating Payment Method: ${JSON.stringify(
+							paymentMethodResult.error,
+						)}`,
+					);
+
+					if (paymentMethodResult.error.type === 'validation_error') {
+						setErrorMessage('There was an issue with your card details.');
+						setErrorContext(
+							appropriateErrorMessage('payment_details_incorrect'),
+						);
+					} else {
+						setErrorMessage('Sorry, something went wrong.');
+						setErrorContext(
+							appropriateErrorMessage('payment_provider_unavailable'),
+						);
+					}
+				} else {
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,
@@ -375,14 +447,19 @@ function OneTimeCheckoutComponent({
 						setThankYouOrder(order);
 						const thankYouUrlSearchParams = new URLSearchParams();
 						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-						window.location.href = `/${geoId}/one-time-thank-you?${thankYouUrlSearchParams.toString()}`;
+						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 					}
 				}
+				setIsProcessingPayment(false);
 			}
 		}
-
-		setIsProcessingPayment(false);
 	};
+
+	const paymentButtonText = finalAmount
+		? paymentMethod === 'PayPal'
+			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
+			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
+		: 'Pay now';
 
 	return (
 		<CheckoutLayout>
@@ -400,10 +477,10 @@ function OneTimeCheckoutComponent({
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
 							amounts={amounts}
-							selectedAmount={amount}
+							selectedAmount={selectedPriceCard}
 							currency={currencyKey}
 							onAmountChange={(amount: string) => {
-								setAmount(
+								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
 							}}
@@ -412,7 +489,7 @@ function OneTimeCheckoutComponent({
 								<OtherAmount
 									currency={currencyKey}
 									minAmount={minAmount}
-									selectedAmount={amount}
+									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
 									onBlur={(event) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
@@ -616,7 +693,11 @@ function OneTimeCheckoutComponent({
 										<PaymentMethodSelector selected={selected}>
 											<PaymentMethodRadio selected={selected}>
 												<Radio
-													label={label}
+													label={
+														<>
+															{label} <div>{icon}</div>
+														</>
+													}
 													name="paymentMethod"
 													value={validPaymentMethod}
 													cssOverrides={
@@ -628,7 +709,6 @@ function OneTimeCheckoutComponent({
 														setPaymentMethod(validPaymentMethod);
 													}}
 												/>
-												<div>{icon}</div>
 											</PaymentMethodRadio>
 											{validPaymentMethod === 'Stripe' && selected && (
 												<div css={paymentMethodBody}>
@@ -671,23 +751,14 @@ function OneTimeCheckoutComponent({
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText={
-										finalAmount
-											? `Support us with ${simpleFormatAmount(
-													currency,
-													finalAmount,
-											  )}`
-											: 'Pay now'
-									}
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
+							<DefaultPaymentButton
+								buttonText={paymentButtonText}
+								onClick={() => {
+									// no-op
+									// This isn't needed because we are now using the form onSubmit handler
+								}}
+								type="submit"
+							/>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>

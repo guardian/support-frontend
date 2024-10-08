@@ -114,15 +114,16 @@ class CreateSubscriptionController(
     val v2RecaptchaSecretKey = recaptchaConfigProvider.get(isTestUser).v2SecretKey
 
     if (recaptchaEnabled) {
+      logDetailedMessage("validating recaptcha")
       recaptchaService
         .verify(token, v2RecaptchaSecretKey)
         .leftMap(err => RequestValidationError(err))
         .subflatMap {
           case RecaptchaResponse(true, _) => Right(())
 
-          case RecaptchaResponse(false, _) =>
-            logErrorDetailedMessage("recaptcha failed")
-            Left(RequestValidationError("Recaptcha validation failed"))
+          case RecaptchaResponse(false, errorCodes) =>
+            logErrorDetailedMessage(s"recaptcha failed with error codes: ${errorCodes.getOrElse(Nil).mkString(", ")}")
+            Left(RequestValidationError(RecaptchaResponse.recaptchaFailedCode))
         }
     } else {
       EitherT.rightT(())
@@ -159,9 +160,9 @@ class CreateSubscriptionController(
       case InvalidEmailAddress(_) => RequestValidationError(invalidEmailAddressCode)
       case OtherIdentityError(message, description, endpoint) =>
         endpoint match {
-          case Some(GuestEndpoint) => ServerError(s"Error calling /guest: $message; $description")
-          case Some(UserEndpoint) => ServerError(s"Error calling /user: $message; $description")
-          case None => ServerError(s"$message: $description")
+          case Some(GuestEndpoint) => ServerError(s"Identity error calling /guest: $message; $description")
+          case Some(UserEndpoint) => ServerError(s"Identity error calling /user: $message; $description")
+          case None => ServerError(s"Error calling Identity: $message: $description")
         }
     }
 
