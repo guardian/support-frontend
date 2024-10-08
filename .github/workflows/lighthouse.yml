@@ -14,5 +14,5 @@ jobs:
         with:
           urls: |
             https://support.theguardian.com/uk/contribute
-          # budgetPath: ./budget.json
+          budgetPath: ./budget.json
           uploadArtifacts: true # save results as an action artifacts
