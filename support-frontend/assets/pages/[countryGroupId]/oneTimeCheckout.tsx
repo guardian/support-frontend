@@ -380,7 +380,6 @@ function OneTimeCheckoutComponent({
 			);
 
 			if (paymentResult.type === 'success') {
-				// setContributionAmount(finalAmount?.toString() ?? '');
 				window.location.href = paymentResult.data.approvalUrl;
 			} else {
 				setErrorMessage('Sorry, something went wrong.');
