@@ -9,7 +9,6 @@ import { checkRecaptcha } from '../utils/recaptcha';
 type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
-	paymentFrequency: string;
 };
 
 export const testOneTimeCheckout = (testDetails: TestDetails) => {

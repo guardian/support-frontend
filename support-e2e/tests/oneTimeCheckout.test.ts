@@ -12,12 +12,10 @@ const testDetails = [
 	{
 		paymentType: 'PayPal',
 		internationalisationId: 'uk',
-		paymentFrequency: 'ONE_OFF',
 	},
 	{
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'us',
-		paymentFrequency: 'ONE_OFF',
 	},
 ] as const;
 

@@ -9,7 +9,6 @@ test.describe('One-Time Checkout', () => {
 		{
 			paymentType: 'PayPal',
 			internationalisationId: 'au',
-			paymentFrequency: 'ONE_OFF',
 		},
 	].forEach((testDetails) => {
 		testOneTimeCheckout(testDetails);
