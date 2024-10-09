@@ -22,9 +22,9 @@ export const setTestUserDetails = async (
 ) => {
 	await setTestUserRequiredDetails(
 		page,
+		testDetails.fields.email,
 		testDetails.fields.firstName,
 		testDetails.fields.lastName,
-		testDetails.fields.email,
 	);
 
 	if (testDetails.fields.addresses && testDetails.fields.addresses.length > 1) {
