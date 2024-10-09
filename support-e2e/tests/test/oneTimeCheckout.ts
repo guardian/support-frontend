@@ -23,9 +23,6 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		await setupPage(page, context, baseURL, url);
 
 		await setTestUserRequiredDetails(page, testEmail);
-		if (internationalisationId === 'us') {
-			await page.getByLabel('State').selectOption({ label: 'New York' });
-		}
 		await page.getByRole('radio', { name: paymentType }).check();
 		switch (paymentType) {
 			case 'PayPal':
