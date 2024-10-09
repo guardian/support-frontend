@@ -19,17 +19,10 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 	}) => {
 		const url = `/${internationalisationId}/one-time-checkout`;
 		const page = await context.newPage();
-		const testFirstName = firstName();
-		const testLastName = lastName();
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
 
-		await setTestUserRequiredDetails(
-			page,
-			testFirstName,
-			testLastName,
-			testEmail,
-		);
+		await setTestUserRequiredDetails(page, testEmail);
 		if (internationalisationId === 'us') {
 			await page.getByLabel('State').selectOption({ label: 'New York' });
 		}

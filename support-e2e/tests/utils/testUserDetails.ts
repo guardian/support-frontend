@@ -3,13 +3,17 @@ import { TestDetails } from '../tieredCheckout.test';
 
 export const setTestUserRequiredDetails = async (
 	page: Page,
-	firstName: string,
-	lastName: string,
 	email: string,
+	firstName?: string,
+	lastName?: string,
 ) => {
 	await page.getByLabel('Email address').fill(email);
-	await page.getByLabel('First name').fill(firstName);
-	await page.getByLabel('Last name').fill(lastName);
+	if (firstName) {
+		await page.getByLabel('First name').fill(firstName);
+	}
+	if (lastName) {
+		await page.getByLabel('Last name').fill(lastName);
+	}
 };
 
 export const setTestUserDetails = async (
