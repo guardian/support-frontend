@@ -21,37 +21,23 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		const page = await context.newPage();
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
-
 		await setTestUserRequiredDetails(page, testEmail);
 		await page.getByRole('radio', { name: paymentType }).check();
-		switch (paymentType) {
-			case 'PayPal':
-				const popupPagePromise = page.waitForEvent('popup');
-				await page
-					.locator("iframe[name^='xcomponent__ppbutton']")
-					.scrollIntoViewIfNeeded();
-				await page
-					.frameLocator("iframe[name^='xcomponent__ppbutton']")
-					// this class gets added to the iframe body after the JavaScript has finished executing
-					.locator('body.dom-ready')
-					.locator('[role="button"]:has-text("with PayPal")')
-					.click({ delay: 2000 });
-				const popupPage = await popupPagePromise;
-				fillInPayPalDetails(popupPage);
-				break;
-			case 'Credit/Debit card':
-			default:
-				await fillInCardDetails(page);
-				break;
-		}
 
 		if (paymentType === 'Credit/Debit card') {
+			await fillInCardDetails(page);
 			await checkRecaptcha(page);
-			await page
-				.getByRole('button', {
-					name: `Support`,
-				})
-				.click();
+		}
+
+		await page
+			.getByRole('button', {
+				name: ` with `,
+			})
+			.click();
+
+		if (paymentType === 'PayPal') {
+			await expect(page).toHaveURL(/.*paypal.com/, { timeout: 600000 });
+			fillInPayPalDetails(page);
 		}
 
 		await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
