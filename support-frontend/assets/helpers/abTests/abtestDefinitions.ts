@@ -13,6 +13,7 @@ export const pageUrlRegexes = {
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
+		nonGenericCheckout: '/contribute/checkout',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -168,7 +169,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	amazonPay: {
+	amazonPayV2: {
 		variants: [
 			{
 				id: 'control',
@@ -197,7 +198,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		targetPage: pageUrlRegexes.contributions.nonGenericCheckout,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 };
