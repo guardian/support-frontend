@@ -449,14 +449,14 @@ function OneTimeCheckoutComponent({
 			});
 			const thankYouUrlSearchParams = new URLSearchParams();
 			thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-			const thankYouHref = paymentResultThankyouRoute(
+			const nextStepRoute = paymentResultThankyouRoute(
 				paymentResult,
 				geoId,
 				thankYouUrlSearchParams,
 			);
 			setIsProcessingPayment(false);
-			if (thankYouHref) {
-				window.location.href = thankYouHref;
+			if (nextStepRoute) {
+				window.location.href = nextStepRoute;
 			} else {
 				setErrorMessage('Sorry, something went wrong.');
 				if (
