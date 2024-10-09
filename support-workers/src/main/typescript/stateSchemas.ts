@@ -143,6 +143,10 @@ const directDebitPaymentFieldsSchema = z.object({
   recaptchaToken: z.string(),
 });
 
+export type DirectDebitPaymentFields = z.infer<
+  typeof directDebitPaymentFieldsSchema
+>;
+
 const sepaPaymentFieldsSchema = z.object({
   accountHolderName: z.string(),
   iban: z.string(),
@@ -207,23 +211,94 @@ const acquisitionDataSchema = z.object({
   supportAbTests: z.array(abTestSchema),
 });
 
-export const createPaymentMethodStateSchema = z.object({
+const baseStateSchema = z.object({
   requestId: z.string(),
   user: userSchema,
   //giftRecipient: Option[GiftRecipient], TODO: I think we can remove this
   product: productTypeSchema,
   analyticsInfo: analyticsInfoSchema,
-  paymentFields: paymentFieldsSchema, //TODO scala model is an either with redemption data
-  firstDeliveryDate: z.date().nullable(),
+  firstDeliveryDate: z.coerce.date().nullable(),
   promoCode: z.string().nullable(),
   csrUsername: z.string().nullable(),
   salesforceCaseId: z.string().nullable(),
   acquisitionData: acquisitionDataSchema.nullable(),
-  // TODO: Are these used?
-  ipAddress: z.string(),
-  userAgent: z.string(),
 });
+
+export const createPaymentMethodStateSchema = baseStateSchema.merge(
+  z.object({
+    paymentFields: paymentFieldsSchema, //TODO scala model is an either with redemption data
+    ipAddress: z.string(),
+    userAgent: z.string(),
+  })
+);
 
 export type CreatePaymentMethodState = z.infer<
   typeof createPaymentMethodStateSchema
 >;
+
+const stripePaymentGatewaySchema = z.union([
+  z.literal("Stripe Gateway 1"), //TODO: are all of these still used?
+  z.literal("Stripe Gateway GNM Membership AUS"),
+  z.literal("Stripe PaymentIntents GNM Membership"),
+  z.literal("Stripe PaymentIntents GNM Membership AUS"),
+  z.literal("Stripe Bank Transfer - GNM Membership"),
+]);
+const directDebitPaymentGatewaySchema = z.literal("GoCardless");
+export const paymentGatewaySchema = z
+  .union([
+    z.literal("PayPal Express"),
+    directDebitPaymentGatewaySchema,
+    // z.literal("GoCardless - Zuora Instance"), TODO: I think we can delete this
+    z.literal("Amazon Pay - Contributions USA"),
+  ])
+  .or(stripePaymentGatewaySchema);
+
+const payPalPaymentPaymentMethodSchema = z.object({
+  PaypalBaid: z.string(),
+  PaypalEmail: z.string(),
+  PaypalType: z.literal("ExpressCheckout"),
+  Type: z.literal("PayPal"),
+  PaymentGateway: z.literal("PayPal Express"),
+});
+
+const stripePaymentMethodSchema = z.object({
+  TokenId: z.string(), // Stripe Card id
+  SecondTokenId: z.string(), // Stripe Customer Id
+  CreditCardNumber: z.string(),
+  CreditCardCountry: z.string(), //TODO: build a schema for this
+  CreditCardExpirationMonth: z.number(),
+  CreditCardExpirationYear: z.number(),
+  CreditCardType: z.string().optional(),
+  PaymentGateway: stripePaymentGatewaySchema,
+  Type: z.literal("CreditCardReferenceTransaction"),
+  StripePaymentType: stripePaymentTypeSchema, //TODO: this is optional in the scala model
+});
+
+const directDebitPaymentMethodSchema = z.object({
+  FirstName: z.string(),
+  LastName: z.string(),
+  BankTransferAccountName: z.string(),
+  BankCode: z.string(),
+  BankTransferAccountNumber: z.string(),
+  Country: z.string(), //TODO: build a schema for this
+  City: z.string().optional(),
+  PostalCode: z.string().optional(),
+  State: z.string().optional(),
+  StreetName: z.string().optional(),
+  StreetNumber: z.string().optional(),
+  BankTransferType: z.literal("DirectDebitUK"),
+  Type: z.literal("BankTransfer"),
+  PaymentGateway: directDebitPaymentGatewaySchema,
+});
+
+const paymentMethodSchema = z.discriminatedUnion("Type", [
+  payPalPaymentPaymentMethodSchema,
+  stripePaymentMethodSchema,
+  directDebitPaymentMethodSchema,
+]);
+
+export const createSalesforceContactStateSchema = baseStateSchema.merge(
+  z.object({
+    paymentMethod: paymentMethodSchema,
+  })
+);
