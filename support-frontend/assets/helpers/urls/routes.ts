@@ -121,10 +121,14 @@ function payPalCancelUrl(cgId: CountryGroupId): string {
 	return `${getOrigin()}/${countryPath(cgId)}/contribute`;
 }
 
-function payPalReturnUrl(cgId: CountryGroupId, email: string): string {
+function payPalReturnUrl(
+	cgId: CountryGroupId,
+	email: string,
+	route: string = '/paypal/rest/return',
+): string {
 	return `${getOrigin()}/${countryPath(
 		cgId,
-	)}/paypal/rest/return?email=${encodeURIComponent(email)}`;
+	)}${route}?email=${encodeURIComponent(email)}`;
 }
 
 // ----- Exports ----- //

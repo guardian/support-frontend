@@ -42,11 +42,17 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
-	type CreateStripePaymentIntentRequest,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type {
+	CreatePayPalPaymentResponse,
+	CreateStripePaymentIntentRequest,
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import type {
+	PaymentResult,
+	StripePaymentMethod,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -336,11 +342,16 @@ function OneTimeCheckoutComponent({
 		if (finalAmount) {
 			setIsProcessingPayment(true);
 
+			let paymentResult;
 			if (paymentMethod === 'PayPal') {
-				const paymentResult = await postOneOffPayPalCreatePaymentRequest({
+				paymentResult = await postOneOffPayPalCreatePaymentRequest({
 					currency: currencyKey,
 					amount: finalAmount,
-					returnURL: payPalReturnUrl(countryGroupId, email),
+					returnURL: payPalReturnUrl(
+						countryGroupId,
+						email,
+						'/paypal/rest/returnOneTime',
+					),
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
 				const acquisitionData = derivePaymentApiAcquisitionData(
@@ -356,12 +367,6 @@ function OneTimeCheckoutComponent({
 					'acquisition_data',
 					encodeURIComponent(JSON.stringify(acquisitionData)),
 				);
-
-				if (paymentResult.type === 'success') {
-					window.location.href = paymentResult.data.approvalUrl;
-				} else {
-					setErrorMessage('Sorry, something went wrong.');
-				}
 			}
 
 			let paymentMethodResult;
@@ -431,29 +436,56 @@ function OneTimeCheckoutComponent({
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
-					const paymentResult = await processStripePaymentIntentRequest(
+					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
 						handle3DS,
 					);
-					if (paymentResult.paymentStatus === 'failure') {
-						setErrorMessage('Sorry, something went wrong.');
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
-					}
-					if (paymentResult.paymentStatus === 'success') {
-						const order = {
-							firstName: '',
-							paymentMethod: paymentMethod,
-						};
-						setThankYouOrder(order);
-						const thankYouUrlSearchParams = new URLSearchParams();
-						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-					}
 				}
-				setIsProcessingPayment(false);
+			}
+
+			setThankYouOrder({
+				firstName: '',
+				paymentMethod: paymentMethod,
+			});
+			const thankYouUrlSearchParams = new URLSearchParams();
+			thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+			const nextStepRoute = paymentResultThankyouRoute(
+				paymentResult,
+				geoId,
+				thankYouUrlSearchParams,
+			);
+			setIsProcessingPayment(false);
+			if (nextStepRoute) {
+				window.location.href = nextStepRoute;
+			} else {
+				setErrorMessage('Sorry, something went wrong.');
+				if (
+					paymentResult &&
+					'paymentStatus' in paymentResult &&
+					paymentResult.paymentStatus === 'failure'
+				) {
+					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+				}
 			}
 		}
 	};
+
+	function paymentResultThankyouRoute(
+		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		geoId: GeoId,
+		thankYouUrlSearchParams: URLSearchParams,
+	): string | undefined {
+		if (paymentResult) {
+			if ('type' in paymentResult && paymentResult.type === 'success') {
+				return paymentResult.data.approvalUrl;
+			} else if (
+				'paymentStatus' in paymentResult &&
+				paymentResult.paymentStatus === 'success'
+			) {
+				return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+			}
+		}
+	}
 
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
