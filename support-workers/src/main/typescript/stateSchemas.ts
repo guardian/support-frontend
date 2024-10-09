@@ -12,25 +12,25 @@ export const titleSchema = z.union([
 ]);
 
 export const addressSchema = z.object({
-  lineOne: z.string().optional(),
-  lineTwo: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  postCode: z.string().optional(),
+  lineOne: z.string().nullable(),
+  lineTwo: z.string().nullable(),
+  city: z.string().nullable(),
+  state: z.string().nullable(),
+  postCode: z.string().nullable(),
   country: z.string(), //TODO: build a schema for this
 });
 
 export const userSchema = z.object({
   id: z.string(),
   primaryEmailAddress: z.string(),
-  title: titleSchema,
+  title: titleSchema.nullable(),
   firstName: z.string(),
   lastName: z.string(),
   billingAddress: addressSchema,
-  deliveryAddress: addressSchema.optional(),
-  telephoneNumber: z.string().optional(),
+  deliveryAddress: addressSchema.nullable(),
+  telephoneNumber: z.string().nullable(),
   isTestUser: z.boolean().default(false),
-  deliveryInstructions: z.string().optional(),
+  deliveryInstructions: z.string().nullable(),
 });
 
 export const currencySchema = z.union([
@@ -134,6 +134,8 @@ const stripePaymentFieldsSchema = z.object({
   stripePublicKey: z.string(), //TODO: this has more validation in scala model
 });
 
+export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
+
 const directDebitPaymentFieldsSchema = z.object({
   accountHolderName: z.string(),
   sortCode: z.string(),
@@ -144,8 +146,8 @@ const directDebitPaymentFieldsSchema = z.object({
 const sepaPaymentFieldsSchema = z.object({
   accountHolderName: z.string(),
   iban: z.string(),
-  country: z.string().optional(),
-  streetName: z.string().optional(),
+  country: z.string().nullable(),
+  streetName: z.string().nullable(),
 });
 
 const existingPaymentFieldsSchema = z.object({
@@ -156,6 +158,7 @@ const amazonPayPaymentFieldsSchema = z.object({
   amazonPayBillingAgreementId: z.string(),
 });
 
+//TODO: this needs to be a discriminated union to be useful
 const paymentFieldsSchema = z.union([
   payPalPaymentFieldsSchema,
   stripePaymentFieldsSchema,
@@ -165,9 +168,11 @@ const paymentFieldsSchema = z.union([
   amazonPayPaymentFieldsSchema,
 ]);
 
+export type PaymentFields = z.infer<typeof paymentFieldsSchema>;
+
 const ophanIdsSchema = z.object({
-  pageviewId: z.string().optional(),
-  browserId: z.string().optional(),
+  pageviewId: z.string().nullable(),
+  browserId: z.string().nullable(),
 });
 
 const abTestSchema = z.object({
@@ -181,25 +186,25 @@ const queryParamSchema = z.object({
 });
 
 const referrerAcquisitionDataSchema = z.object({
-  campaignCode: z.string().optional(),
-  referrerPageviewId: z.string().optional(),
-  referrerUrl: z.string().optional(),
-  componentId: z.string().optional(),
-  componentType: z.string().optional(),
-  source: z.string().optional(),
-  abTests: z.set(abTestSchema).optional(),
-  queryParameters: z.set(queryParamSchema).optional(),
-  hostname: z.string().optional(),
-  gaClientId: z.string().optional(),
-  userAgent: z.string().optional(),
-  ipAddress: z.string().optional(),
-  labels: z.set(z.string()).optional(),
+  campaignCode: z.string().nullable(),
+  referrerPageviewId: z.string().nullable(),
+  referrerUrl: z.string().nullable(),
+  componentId: z.string().nullable(),
+  componentType: z.string().nullable(),
+  source: z.string().nullable(),
+  abTests: z.array(abTestSchema).nullable(),
+  queryParameters: z.array(queryParamSchema).nullable(),
+  hostname: z.string().nullable(),
+  gaClientId: z.string().nullable(),
+  userAgent: z.string().nullable(),
+  ipAddress: z.string().nullable(),
+  labels: z.array(z.string()).nullable(),
 });
 
 const acquisitionDataSchema = z.object({
   ophanIds: ophanIdsSchema,
   referrerAcquisitionData: referrerAcquisitionDataSchema,
-  supportAbTests: z.set(abTestSchema),
+  supportAbTests: z.array(abTestSchema),
 });
 
 export const createPaymentMethodStateSchema = z.object({
@@ -209,11 +214,11 @@ export const createPaymentMethodStateSchema = z.object({
   product: productTypeSchema,
   analyticsInfo: analyticsInfoSchema,
   paymentFields: paymentFieldsSchema, //TODO scala model is an either with redemption data
-  firstDeliveryDate: z.date().optional(),
-  promoCode: z.string().optional(),
-  csrUsername: z.string().optional(),
-  salesforceCaseId: z.string().optional(),
-  acquisitionData: acquisitionDataSchema.optional(),
+  firstDeliveryDate: z.date().nullable(),
+  promoCode: z.string().nullable(),
+  csrUsername: z.string().nullable(),
+  salesforceCaseId: z.string().nullable(),
+  acquisitionData: acquisitionDataSchema.nullable(),
   // TODO: Are these used?
   ipAddress: z.string(),
   userAgent: z.string(),
