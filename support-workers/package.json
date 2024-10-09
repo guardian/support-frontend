@@ -1,0 +1,24 @@
+{
+  "name": "support-workers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guardian/support-frontend.git"
+  },
+  "packageManager": "yarn@1.22.22",
+  "private": true,
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@guardian/prettier": "^2.1.5",
+    "prettier": "^2.8.8",
+    "prettier-eslint": "^16.3.0",
+    "pretty-format": "^29.7.0"
+  }
+}
