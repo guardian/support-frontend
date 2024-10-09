@@ -172,11 +172,6 @@ function getParticipations(
 			return;
 		}
 
-		console.log(
-			'***',
-			targetPageMatches(window.location.pathname, test.targetPage),
-		);
-
 		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
 			return;
 		}
