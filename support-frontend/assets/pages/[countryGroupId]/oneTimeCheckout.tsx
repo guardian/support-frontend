@@ -699,6 +699,7 @@ function OneTimeCheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
+										optional
 										onInvalid={(event) => {
 											validate(
 												event,
@@ -787,7 +788,7 @@ function OneTimeCheckoutComponent({
 								buttonText={paymentButtonText}
 								onClick={() => {
 									// no-op
-									// This isn't needed because we are now using the form onSubmit handler
+									// This isn't needed because we are now using the formOnSubmit handler
 								}}
 								type="submit"
 							/>
