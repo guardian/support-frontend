@@ -11,16 +11,14 @@ import com.typesafe.scalalogging.LazyLogging
 class PromotionService(config: PromotionsConfig, maybeCollection: Option[PromotionCollection] = None)
     extends TouchpointService
     with LazyLogging {
-  val promotionCollection = maybeCollection.getOrElse(new CachedDynamoPromotionCollection(config.tables))
-
-  // This is a small hack to allow us to start using promotions to handle 6 for 6 without having to build the tooling
-  private def allWith6For6 = promotionCollection.all.toList :+ Promotions.SixForSixPromotion
+  private val promotionCollection = maybeCollection.getOrElse(new CachedDynamoPromotionCollection(config.tables))
+  private def allPromotions = promotionCollection.all.toList
 
   def environment = if (config.tables.promotions.contains("PROD")) { "PROD" }
   else { "CODE" }
 
   def findPromotion(promoCode: PromoCode): Either[PromoError, PromotionWithCode] =
-    allWith6For6
+    promotionCollection.all.toList
       .filter(_.promoCodes.exists(_ == promoCode))
       .map(PromotionWithCode(promoCode, _)) match {
       case Nil => Left(NoSuchCode)
@@ -31,7 +29,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
   // promoCodes here is expected to be a small list of default promos plus one from the querystring
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] = {
     val promosByCode: Map[PromoCode, List[Promotion]] =
-      allWith6For6
+      allPromotions
         .flatMap(promo => promo.promoCodes.map(code => code -> promo))
         .groupMap(_._1)(_._2)
 

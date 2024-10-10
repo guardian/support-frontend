@@ -1,9 +1,7 @@
 package com.gu.support.catalog
 
-import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.workers.{Annual, BillingPeriod, Quarterly, SixWeekly}
+import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.typesafe.scalalogging.LazyLogging
@@ -39,32 +37,13 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     )
   }
 
-  def adjustSixWeeklyPriceList(c: Catalog): Catalog = {
-    // The price stored for the 6 weekly billing period in Zuora is £6 - the price of the
-    // promotion. It is much more use from the point of view of the site to have the subscription
-    // price, ie. the quarterly price as the £6 is available through the introductory promotion object
-    val ratePlanIdsToSwap = Map(
-      getGWRatePlanId(SixWeekly, Domestic) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, Domestic),
-      getGWRatePlanId(SixWeekly, RestOfWorld) -> getGWRatePlanId(postIntroductorySixForSixBillingPeriod, RestOfWorld),
-    )
-
-    Catalog(
-      c.prices.map(priceList =>
-        ratePlanIdsToSwap
-          .get(priceList.productRatePlanId)
-          .map(fetchQuarterlyPrice(_, priceList, c.prices))
-          .getOrElse(priceList),
-      ),
-    )
-  }
-
   private lazy val catalog: Catalog = {
 
     val attempt = for {
       json <- jsonProvider.get
       decoded <- json.as[ZuoraCatalog].toTry
     } yield {
-      adjustSixWeeklyPriceList(Catalog.convert(decoded))
+      Catalog.convert(decoded)
     }
 
     attempt.get
