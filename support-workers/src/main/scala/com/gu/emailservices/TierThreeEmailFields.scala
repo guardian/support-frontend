@@ -23,7 +23,7 @@ class TierThreeEmailFields(
     )
 
     val subscription_details = SubscriptionEmailFieldHelpers
-      .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion)
+      .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
 
     val additionalFields = List(
       ("billing_period", state.product.billingPeriod.toString.toLowerCase),

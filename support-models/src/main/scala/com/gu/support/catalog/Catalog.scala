@@ -42,13 +42,12 @@ object Catalog {
 
     // filter rate plans
     val filteredProductRatePlans = zuoraCatalog.products
-      .map { _.productRatePlans }
-      .flatten
-      .filter(ratePlan => productRatePlansWithPrices.exists(_ == ratePlan.id))
+      .flatMap(_.productRatePlans)
+      .filter(ratePlan => productRatePlansWithPrices.contains(ratePlan.id))
 
     // create list of priceList
     val priceList: List[Pricelist] = filteredProductRatePlans.map { productRatePlan =>
-      val ratePlanCharges = productRatePlan.productRatePlanCharges.map { _.pricing }.flatten
+      val ratePlanCharges = productRatePlan.productRatePlanCharges.flatMap(_.pricing)
       val priceListSum = sumPriceLists(ratePlanCharges)
       val id = productRatePlan.id
       val saving = productRatePlan.Saving__c.map(_.toInt)

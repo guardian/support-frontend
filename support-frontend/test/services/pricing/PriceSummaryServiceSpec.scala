@@ -1,21 +1,18 @@
 package services.pricing
 
-import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup.{Europe, UK, US}
 import com.gu.i18n.Currency.{EUR, GBP, USD}
 import com.gu.support.catalog._
-import com.gu.support.encoding.CustomCodecs._
-import services.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
-import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.{discountPromoCode, tenAnnual}
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
 import com.gu.support.zuora.api.ReaderType.Gift
 import org.joda.time.Months
-import org.scalatest.OptionValues._
 import org.scalatest.Assertion
+import org.scalatest.OptionValues._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import services.pricing.PriceSummaryService.getNumberOfDiscountedPeriods
 
 class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
 
@@ -77,7 +74,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
       )
 
     val guardianWeekly =
-      service.getPrices(GuardianWeekly, List(discountPromoCode, tenAnnual, NonGift.sixForSix))
+      service.getPrices(GuardianWeekly, List(discountPromoCode, tenAnnual))
 
     // Quarterly should have the discount promotion only
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Quarterly)(GBP).promotions.size shouldBe 1
@@ -102,15 +99,6 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
       .find(_.promoCode == tenAnnual)
       .value
       .discountedPrice shouldBe Some(162.00)
-
-    // SixWeekly should have the 6 for 6 promotion and the discount
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions.size shouldBe 2
-    guardianWeekly(UK)(Domestic)(NoProductOptions)(SixWeekly)(GBP).promotions
-      .find(_.promoCode == NonGift.sixForSix)
-      .value
-      .introductoryPrice
-      .value
-      .price shouldBe 6
 
   }
 

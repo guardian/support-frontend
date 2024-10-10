@@ -82,18 +82,6 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     )
   }
 
-  it should "be able to decode an introductory price Promotion" in {
-    testDecoding[Promotion](
-      Fixtures.introductoryPricePromotion,
-      promotion => {
-        promotion.introductoryPrice shouldBe defined
-        promotion.introductoryPrice.get.price shouldBe 6
-        promotion.introductoryPrice.get.periodType shouldBe Issue
-        promotion.introductoryPrice.get.periodLength shouldBe 6
-      },
-    )
-  }
-
   it should "be able to decode a double benefit Promotion containing an incentive" in {
     testDecoding[Promotion](
       Fixtures.doubleWithIncentive,
@@ -120,15 +108,15 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     val discountBenefit = new DiscountBenefit(12, None)
     testRoundTripSerialisation(discountBenefit)
     val promotion = Promotion(
-      "test",
-      "test",
-      appliesTo,
-      "",
-      Map[Channel, Set[PromoCode]]("" -> Set()),
-      DateTime.now(ISOChronology.getInstanceUTC),
-      None,
-      None,
-      None,
+      name = "test",
+      description = "test",
+      appliesTo = appliesTo,
+      campaignCode = "",
+      channelCodes = Map[Channel, Set[PromoCode]]("" -> Set()),
+      starts = DateTime.now(ISOChronology.getInstanceUTC),
+      expires = None,
+      discount = None,
+      freeTrial = None,
     )
     import com.gu.support.encoding.CustomCodecs.ISODate.encodeDateTime
     implicit val e: Encoder[Promotion] = deriveEncoder

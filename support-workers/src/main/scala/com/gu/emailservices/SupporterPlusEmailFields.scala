@@ -29,7 +29,7 @@ class SupporterPlusEmailFields(
         ProductTypeRatePlans.supporterPlusRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
       )
       val subscription_details = SubscriptionEmailFieldHelpers
-        .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion)
+        .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
       val fields = List(
         "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,

@@ -396,7 +396,6 @@ object TestData {
             discount = Some(DiscountBenefit(80d, Some(Months.months(3)))),
             freeTrial = None,
             incentive = None,
-            introductoryPrice = None,
             renewalOnly = false,
             tracking = false,
             landingPage = None,
