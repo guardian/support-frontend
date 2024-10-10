@@ -1,10 +1,10 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-	headline,
+	headlineBold24,
 	palette,
 	space,
-	textSans,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import {
@@ -12,15 +12,14 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
-import { config, type SelectedAmountsVariant } from 'helpers/contributions';
-import {
-	type CountryGroupId,
-	countryGroups,
-} from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
+import type { SelectedAmountsVariant } from '../../../helpers/contributions';
+import { config } from '../../../helpers/contributions';
+import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
+import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
+import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 import { PaymentCards } from './PaymentIcons';
 
 const sectionStyle = css`
@@ -36,7 +35,7 @@ const sectionStyle = css`
 const titleStyle = css`
 	margin: 0 0 ${space[2]}px;
 	text-align: center;
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headlineBold24}
 	${from.tablet} {
 		font-size: 28px;
 	}
@@ -85,7 +84,7 @@ export function OneOffCard({
 		<section css={sectionStyle}>
 			<div
 				css={css`
-					${textSans.small()}
+					${textSans15}
 				`}
 			>
 				<h2 css={titleStyle}>Support just once</h2>

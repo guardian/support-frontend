@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-	headline,
+	headlineBold24,
 	palette,
 	space,
-	textSans,
+	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
 import {
@@ -20,9 +20,7 @@ const container = css`
 
 const heading = css`
 	color: ${palette.neutral[7]};
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})}
+	${headlineBold24}
 	${between.tablet.and.desktop} {
 		margin: 0 auto;
 		max-width: 340px;
@@ -34,7 +32,7 @@ const heading = css`
 
 const standFirst = css`
 	color: ${palette.neutral[10]};
-	${textSans.medium()};
+	${textSans17};
 	line-height: 1.35;
 	padding-top: ${space[1]}px;
 	${from.tablet} {

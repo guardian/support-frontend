@@ -2,12 +2,13 @@
 
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	body,
 	brandAlt,
 	from,
-	headline,
+	headlineBold28,
+	headlineBold42,
 	palette,
 	space,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
 	buttonThemeDefault,
@@ -48,9 +49,7 @@ const styles = {
 		color: ${palette.neutral[7]};
 	`,
 	weeklyHeroTitle: css`
-		${headline.small({
-			fontWeight: 'bold',
-		})};
+		${headlineBold28};
 		margin-bottom: ${space[3]}px;
 
 		${from.mobileLandscape} {
@@ -58,9 +57,7 @@ const styles = {
 		}
 
 		${from.tablet} {
-			${headline.large({
-				fontWeight: 'bold',
-			})};
+			${headlineBold42};
 			width: 100%;
 		}
 	`,
@@ -68,9 +65,7 @@ const styles = {
 		width: 100%;
 	`,
 	weeklyHeroParagraph: css`
-		${body.medium({
-			lineHeight: 'loose',
-		})}
+		${textEgyptian17};
 		margin-bottom: ${space[9]}px;
 
 		/* apply the same margin to paragraphs parsed from markdown from promo codes */

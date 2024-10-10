@@ -3,7 +3,8 @@ import type { SerializedStyles } from '@emotion/react';
 import {
 	brandAlt,
 	from,
-	headline,
+	headlineBold20,
+	headlineBold28,
 	neutral,
 	space,
 } from '@guardian/source/foundations';
@@ -26,9 +27,7 @@ const heroRoundelStyles = css`
 	width: calc(100% + ${space[1]}px);
 	padding: ${space[1]}px;
 	border-radius: 50%;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold20};
 
 	${from.mobileMedium} {
 		max-width: ${roundelSize}px;
@@ -37,9 +36,7 @@ const heroRoundelStyles = css`
 	${from.desktop} {
 		width: calc(100% + ${space[6]}px);
 		transform: translateY(-50%);
-		${headline.small({
-			fontWeight: 'bold',
-		})};
+		${headlineBold28};
 	}
 
 	/* Combined with float on the main element, this makes the height match the content width for a perfect circle

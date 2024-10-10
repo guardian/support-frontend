@@ -1,6 +1,17 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSans12,
+	textSans14,
+	textSans15,
+	textSansBold12,
+	textSansBold14,
+	textSansBold17,
+	textSansBold24,
+} from '@guardian/source/foundations';
 
 export const container = (customMargin?: string): SerializedStyles => css`
 	background-color: #f0f6fe;
@@ -10,12 +21,12 @@ export const container = (customMargin?: string): SerializedStyles => css`
 `;
 
 export const title = css`
-	${textSans.medium({ fontWeight: 'bold' })}
+	${textSansBold17};
 	color: ${palette.neutral[7]};
 `;
 
 export const standfirst = css`
-	${textSans.xsmall()}
+	${textSans14};
 	color: ${palette.neutral[7]};
 `;
 
@@ -29,7 +40,7 @@ export const hrCss = css`
 export const supportTotalContainer = css`
 	display: flex;
 	justify-content: space-between;
-	${textSans.small()}
+	${textSans15}
 `;
 
 export const amountsAndNavigationContainer = css`
@@ -102,7 +113,7 @@ export const amountOption = (
 };
 
 export const amountOptionValue = (isSelected: boolean): SerializedStyles => css`
-	${textSans.xlarge({ fontWeight: 'bold' })};
+	${textSansBold24};
 	line-height: 1;
 	${from.tablet} {
 		line-height: 1.25;
@@ -119,9 +130,9 @@ export const amountOptionValue = (isSelected: boolean): SerializedStyles => css`
 export const amountOptionAction = (
 	isSelected: boolean,
 ): SerializedStyles => css`
-	${textSans.xxsmall({ fontWeight: isSelected ? 'bold' : 'regular' })};
+	${isSelected ? textSansBold12 : textSans12}
 	${from.mobileMedium} {
-		${textSans.xsmall({ fontWeight: isSelected ? 'bold' : 'regular' })};
+		${isSelected ? textSansBold14 : textSans14}
 	}
 	color: ${isSelected ? palette.brand[400] : palette.neutral[46]};
 	align-self: start;

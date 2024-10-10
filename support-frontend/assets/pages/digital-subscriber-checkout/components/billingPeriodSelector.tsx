@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import {
-	brand,
 	from,
-	headline,
+	headlineBold28,
+	palette,
 	space,
-	textSans,
+	textSans12,
+	textSans17,
+	textSansBold14,
 	until,
 } from '@guardian/source/foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source/react-components';
@@ -46,11 +48,11 @@ const headingContainer = css`
 `;
 
 const heading = css`
-	${headline.small({ fontWeight: 'bold' })}
+	${headlineBold28}
 `;
 
 const subheading = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 
 const choiceCardContainer = css`
@@ -69,12 +71,12 @@ const choiceCardWrapper = css`
 `;
 
 const offerText = css`
-	${textSans.xsmall({ fontWeight: 'bold' })}
-	color: ${brand[500]};
+	${textSansBold14};
+	color: ${palette.brand[500]};
 `;
 
 const offerDetails = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	color: #606060;
 	width: 90%;
 `;

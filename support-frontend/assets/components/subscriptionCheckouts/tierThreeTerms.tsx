@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { textSans } from '@guardian/source/foundations';
+import { textSans12 } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
@@ -9,7 +9,7 @@ import { privacyLink, tierThreeTermsLink } from 'helpers/legal';
 import { ManageMyAccountLink } from '../../pages/supporter-plus-landing/components/manageMyAccountLink';
 
 const tierThreeTerms = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	color: #606060;
 	p {
 		margin-top: 10px;

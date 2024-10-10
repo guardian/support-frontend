@@ -4,7 +4,7 @@ import {
 	from,
 	neutral,
 	space,
-	textSans,
+	textSansBold20,
 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
 import { Container } from 'components/layout/container';
@@ -27,7 +27,7 @@ const headingContainerStyle = css`
 
 const headingContainerContent = css`
 	padding-top: ${space[2]}px;
-	${textSans.large({ fontWeight: 'bold' })}
+	${textSansBold20}
 	${from.tablet} {
 		margin: auto;
 		max-width: 456px;

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source/foundations';
+import { neutral, textSansBold14 } from '@guardian/source/foundations';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import SecurePadlock from './securePadlock.svg';
 import SecurePadlockCircle from './securePadlockCircle.svg';
@@ -35,7 +35,7 @@ const padlock = css`
 `;
 
 const text = css`
-	${textSans.xsmall({ fontWeight: 'bold' })};
+	${textSansBold14};
 	letter-spacing: 0.01em;
 	opacity: inherit;
 `;

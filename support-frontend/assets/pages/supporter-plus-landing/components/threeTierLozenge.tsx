@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space, textSans } from '@guardian/source/foundations';
+import { palette, space, textSansBold15 } from '@guardian/source/foundations';
 
 interface ThreeTierLozengeProps {
 	title: string;
@@ -17,7 +17,7 @@ const container = (isSubdued?: boolean) => css`
 	background-color: ${isSubdued ? palette.neutral[100] : palette.brand[500]};
 	color: ${isSubdued ? '#606060' : palette.neutral[100]};
 	border: 1px solid ${isSubdued ? palette.neutral[60] : palette.brand[500]};
-	${textSans.small({ fontWeight: 'bold' })};
+	${textSansBold15};
 `;
 
 export function ThreeTierLozenge({

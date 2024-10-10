@@ -51,7 +51,7 @@ export function CheckoutErrorSummary({
 			aria-live="polite"
 		>
 			<ErrorSummary
-				css={errorContainerStyles}
+				cssOverrides={errorContainerStyles}
 				message="Some information is missing"
 				context={
 					<ul css={errorListStyles}>

@@ -4,7 +4,8 @@ import {
 	palette,
 	pxToRem,
 	space,
-	textSans,
+	textSans15,
+	textSansBold17,
 } from '@guardian/source/foundations';
 
 export const topUpToggleContainer = css`
@@ -18,9 +19,7 @@ export const topUpToggleContainer = css`
 `;
 
 export const title = css`
-	${textSans.medium({
-		fontWeight: 'bold',
-	})}
+	${textSansBold17};
 	font-size: ${pxToRem(17)};
 	display: flex;
 	align-items: center;
@@ -36,7 +35,7 @@ export const title = css`
 `;
 
 export const standfirst = css`
-	${textSans.small()}
+	${textSans15};
 	color: ${palette.neutral[7]};
 `;
 

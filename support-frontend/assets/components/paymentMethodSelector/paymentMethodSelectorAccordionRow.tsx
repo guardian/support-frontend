@@ -54,7 +54,7 @@ const accordionBodyPadding = css`
 const expandedBody = css`
 	/*
 	Hardcoded max-height to exceed existing max content height
-	Otherwise, there will be a temporary scrollbar visible as 
+	Otherwise, there will be a temporary scrollbar visible as
 	the row height transitions
 	*/
 	max-height: 1200px;

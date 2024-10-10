@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headline,
+	headlineBold24,
 	palette,
 	space,
-	textSans,
+	textSans12,
+	textSans14,
+	textSans17,
 	visuallyHidden,
 } from '@guardian/source/foundations';
 import {
@@ -21,7 +23,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const componentStyles = css`
-	${textSans.medium()}
+	${textSans17}
 `;
 
 const summaryRow = css`
@@ -62,7 +64,7 @@ const totalRow = (hasTsAncCs: boolean) => css`
 `;
 
 const headingCss = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headlineBold24}
 	${from.tablet} {
 		font-size: 28px;
 	}
@@ -79,7 +81,7 @@ const buttonOverrides = css`
 	min-height: unset;
 	height: unset;
 	text-decoration: none;
-	${textSans.xsmall()};
+	${textSans14};
 	color: ${palette.neutral[20]};
 
 	.src-button-space {
@@ -116,7 +118,7 @@ const detailsSection = css`
 `;
 
 const termsAndConditions = css`
-	${textSans.xxsmall()}
+	${textSans12};
 	color: #606060;
 
 	p {
@@ -126,7 +128,7 @@ const termsAndConditions = css`
 
 const productStartDates = css`
 	display: block;
-	${textSans.xsmall()};
+	${textSans14};
 	color: #606060;
 	background-color: ${palette.neutral[97]};
 	border-radius: ${space[3]}px;

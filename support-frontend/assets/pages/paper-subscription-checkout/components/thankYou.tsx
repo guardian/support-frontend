@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	space,
+	textSans17,
+} from '@guardian/source/foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
@@ -41,23 +46,17 @@ type PropTypes = ConnectedProps<typeof connector> & {
 
 // ----- Component ----- //
 const subHeading = css`
-	${headline.xxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'loose',
-	})};
+	${headlineBold20};
+	line-height: 1.4;
 	&:not(:last-of-type) {
 		margin-bottom: ${space[2]}px;
 	}
 `;
 
 const sansText = css`
-	${textSans.medium({
-		lineHeight: 'regular',
-	})};
+	${textSans17};
 	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})};
+		line-height: 1.4;
 	}
 `;
 
@@ -84,13 +83,9 @@ const listStyle = css`
 		font-weight: 700;
 		content: counter(step-counter) '.';
 	}
-	${textSans.medium({
-		lineHeight: 'regular',
-	})}
+	${textSans17}
 	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})}
+		line-height: 1.4;
 	}
 `;
 

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { body, from, space } from '@guardian/source/foundations';
+import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import {
 	ButtonLink,
 	LinkButton,
@@ -19,7 +19,7 @@ import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 
 const bodyText = css`
-	${body.small()};
+	${textEgyptian15};
 `;
 
 const expandableContainer = css`
@@ -89,7 +89,7 @@ export function SignInBodyCopy({
 							unnecessary messages asking for financial support.{' '}
 							{!isExpanded && (
 								<ButtonLink
-									css={bodyText}
+									cssOverrides={bodyText}
 									priority="secondary"
 									onClick={onReadMoreClick}
 								>

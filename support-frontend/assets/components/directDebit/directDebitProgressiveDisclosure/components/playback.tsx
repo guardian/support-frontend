@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import {
+	space,
+	textSans15,
+	textSans17,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
@@ -20,22 +25,20 @@ const directDebitForm = css`
 
 const fieldLabel = css`
 	display: block;
-	${textSans.medium({
-		fontWeight: 'bold',
-	})};
+	${textSansBold17};
 	margin: 8px 0 6px;
 `;
 
 const fieldData = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 
 const fieldInfo = css`
-	${textSans.small()};
+	${textSans15};
 `;
 
 const fieldInfoWithMargin = css`
-	${textSans.small()};
+	${textSans15};
 	margin: ${space[2]}px 0 ${space[5]}px;
 `;
 

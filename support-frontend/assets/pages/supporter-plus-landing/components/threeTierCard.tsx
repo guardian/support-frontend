@@ -3,7 +3,9 @@ import {
 	from,
 	palette,
 	space,
-	textSans,
+	textSans15,
+	textSansBold15,
+	textSansBold24,
 	until,
 } from '@guardian/source/foundations';
 import {
@@ -75,12 +77,12 @@ const container = (
 };
 
 const titleCss = css`
-	${textSans.small({ fontWeight: 'bold' })};
+	${textSansBold15};
 	color: #606060;
 `;
 
 const priceCss = (hasPromotion: boolean) => css`
-	${textSans.xlarge({ fontWeight: 'bold' })};
+	${textSansBold24};
 	position: relative;
 	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
 
@@ -132,7 +134,7 @@ const checkmarkOfferList = css`
 `;
 
 const benefitsPrefixCss = css`
-	${textSans.small()};
+	${textSans15};
 	color: ${palette.neutral[7]};
 	text-align: left;
 
@@ -142,7 +144,7 @@ const benefitsPrefixCss = css`
 `;
 
 const benefitsPrefixPlus = css`
-	${textSans.small()};
+	${textSans15};
 	color: #545454; // neutral[38] unavailable
 	display: flex;
 	align-items: center;

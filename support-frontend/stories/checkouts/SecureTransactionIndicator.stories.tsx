@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source/foundations';
+import {palette} from '@guardian/source/foundations';
 import React from 'react';
 import type { SecureTransactionIndicatorProps } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { SecureTransactionIndicator as SecureTransactionIndicatorComponent } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -46,7 +46,7 @@ LightTheme.decorators = [
 			css={[
 				maxWidth,
 				css`
-					background-color: ${brand[400]};
+					background-color: ${palette.brand[400]};
 				`,
 			]}
 		>

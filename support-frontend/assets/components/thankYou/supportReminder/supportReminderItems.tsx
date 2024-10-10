@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source/foundations';
+import { from, neutral, space, textSans15 } from '@guardian/source/foundations';
 import {
 	Button,
 	Link,
@@ -36,7 +36,7 @@ const hideBeforeTablet = css`
 
 const privacyText = css`
 	${hideBeforeTablet}
-	${textSans.small()}
+	${textSans15}
   font-family: GuardianTextSans,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif !important;
 	font-size: 15px !important;
 
@@ -44,8 +44,7 @@ const privacyText = css`
 	margin-top: ${space[3]}px;
 `;
 const privacyTextLink = css`
-	${textSans.small()}
-
+	${textSans15};
 	color: ${neutral[20]};
 `;
 interface RecurringReminderChoice {
@@ -243,7 +242,7 @@ export function SupportReminderCTAandPrivacy({
 				To find out what personal data we collect and how we use it, please
 				visit our{' '}
 				<Link
-					css={privacyTextLink}
+					cssOverrides={privacyTextLink}
 					href={privacyLink}
 					target="_blank"
 					rel="noopener noreferrer"

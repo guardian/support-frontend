@@ -128,7 +128,7 @@ function ProductOption(props: Product): JSX.Element {
 			<div css={buttonDiv}>
 				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
-						css={button}
+						cssOverrides={button}
 						href={props.href}
 						onClick={props.onClick}
 						aria-label={`${props.title}- ${props.buttonCopy}`}

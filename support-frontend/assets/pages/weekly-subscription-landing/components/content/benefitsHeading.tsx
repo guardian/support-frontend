@@ -1,10 +1,8 @@
 import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source/foundations';
+import { headlineBold24, space } from '@guardian/source/foundations';
 
 const heading = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})}
+	${headlineBold24};
 	overflow-wrap: break-word;
 	margin-bottom: ${space[3]}px;
 `;

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 import type { IconSize } from '@guardian/source/react-components';
 import { SvgCreditCard } from '@guardian/source/react-components';
 
@@ -19,7 +19,7 @@ const brandedIcons = css`
 `;
 
 export function SvgCreditCardWithTheme({
-	color = brand[400],
+	color = palette.brand[400],
 	size = 'medium',
 }: {
 	color?: string;

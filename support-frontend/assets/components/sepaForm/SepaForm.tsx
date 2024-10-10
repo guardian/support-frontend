@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import { space, textSans12 } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -13,7 +13,7 @@ import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
 const legalCopy = css`
-	${textSans.xxsmall({})};
+	${textSans12};
 	font-size: 11px;
 	margin-top: ${space[4]}px;
 `;

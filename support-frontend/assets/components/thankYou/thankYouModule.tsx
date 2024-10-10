@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import {
 	between,
-	body,
 	from,
 	neutral,
 	space,
+	textEgyptian15,
+	textEgyptian17,
+	textEgyptianBold17,
 	until,
 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
@@ -86,7 +88,7 @@ const iconContainer = css`
 
 const headerContainer = css`
 	grid-area: header;
-	${body.medium({ fontWeight: 'bold' })}
+	${textEgyptianBold17};
 	align-self: center;
 
 	${from.desktop} {
@@ -118,10 +120,10 @@ const bodyStyle = css`
 `;
 
 const bodyCopyStyle = css`
-	${body.small()};
+	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
-		font-size: 17px;
+		${textEgyptian17};
 	}
 `;
 const bodyCopyMarginTop = css`

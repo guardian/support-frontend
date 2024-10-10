@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headline,
+	headlineBold24,
 	space,
 	visuallyHidden,
 } from '@guardian/source/foundations';
@@ -11,7 +11,7 @@ import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 
 const header = css`
-	${headline.xsmall({ fontWeight: 'bold' })};
+	${headlineBold24};
 	margin-top: ${space[2]}px;
 	margin-bottom: ${space[4]}px;
 	${from.tablet} {

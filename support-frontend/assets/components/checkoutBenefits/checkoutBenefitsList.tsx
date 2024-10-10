@@ -2,17 +2,19 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-	headline,
+	headlineBold24,
+	headlineBold28,
 	palette,
 	space,
-	textSans,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 import type { BenefitsCheckListData } from './benefitsCheckList';
 import { BenefitsCheckList } from './benefitsCheckList';
 
 const containerCss = css`
-	${textSans.medium({ lineHeight: 'tight' })};
+	${textSans17};
+	line-height: 1.15;
 `;
 
 const containerWithBackgroundCss = css`
@@ -38,9 +40,10 @@ const maxWidth = css`
 `;
 
 const headingCss = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headlineBold24}
 	${from.tablet} {
-		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })}
+		${headlineBold28};
+		line-height: 1.15;
 	}
 `;
 

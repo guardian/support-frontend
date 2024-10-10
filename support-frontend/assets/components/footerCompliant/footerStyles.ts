@@ -7,7 +7,9 @@ import {
 	from,
 	neutral,
 	space,
-	textSans,
+	textSans14,
+	textSans15,
+	textSansBold15,
 	until,
 } from '@guardian/source/foundations';
 
@@ -20,7 +22,7 @@ export const componentFooter = css`
 	}
 
 	background-color: ${brandBackground.primary};
-	${textSans.small()};
+	${textSans15};
 	font-weight: 400;
 	color: ${neutral[100]};
 
@@ -38,7 +40,7 @@ export const componentFooter = css`
 	}
 `;
 export const copyright = css`
-	font-size: ${textSans.xsmall()};
+	font-size: ${textSans14};
 	${until.tablet} {
 		padding-top: 28px;
 	}
@@ -103,7 +105,5 @@ export const backToTopLink = css`
 	}
 `;
 export const footerTextHeading = css`
-	${textSans.small({
-		fontWeight: 'bold',
-	})};
+	${textSansBold15};
 `;

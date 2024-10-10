@@ -1,7 +1,13 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	space,
+	textSans17,
+	textSansItalic15,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeBrandAlt,
@@ -20,28 +26,22 @@ import { logException } from 'helpers/utilities/logger';
 
 const subHeading = css`
 	margin-bottom: ${space[1]}px;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'tight',
-	})};
+	${headlineBold20};
+	line-height: 1.15;
 	${from.desktop} {
 		line-height: normal;
 	}
 `;
 const sansText = css`
-	${textSans.medium({
-		lineHeight: 'regular',
-	})}
-	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})}
-	}
+  ${textSans17};
+  line-height: 1.15;
+  ${from.desktop} {
+    line-height: 1.4;
+    }
+  }
 `;
 const tinyText = css`
-	${textSans.small({
-		fontStyle: 'italic',
-	})};
+	${textSansItalic15};
 	margin-bottom: ${space[5]}px;
 `;
 const maxWidth = css`
@@ -104,7 +104,7 @@ function MarketingButton(props: ButtonPropTypes) {
 		return (
 			<ThemeProvider theme={buttonThemeBrandAlt}>
 				<Button
-					css={marginForButton}
+					cssOverrides={marginForButton}
 					iconSide="right"
 					icon={<SvgEnvelope />}
 					disabled
@@ -118,7 +118,7 @@ function MarketingButton(props: ButtonPropTypes) {
 	return (
 		<ThemeProvider theme={buttonThemeBrandAlt}>
 			<Button
-				css={marginForButton}
+				cssOverrides={marginForButton}
 				iconSide="right"
 				aria-label="Sign me up to news and offers from the Guardian"
 				onClick={() => props.onClick(props.email, props.csrf)}
