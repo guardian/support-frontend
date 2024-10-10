@@ -63,9 +63,11 @@ class PayPalOneOff(
     }
   }
 
-  def resultFromPaypalSuccess(success: PayPalSuccess, country: String)(implicit request: RequestHeader): Result = {
+  def resultFromPaypalSuccess(success: PayPalSuccess, country: String, thankyou: String)(implicit
+      request: RequestHeader,
+  ): Result = {
     logger.info(s"One-off contribution for Paypal payment is successful")
-    val redirect = Redirect(s"/$country/thankyou")
+    val redirect = Redirect(s"/$country/$thankyou")
     success.guestAccountCreationToken.fold {
       logger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect
@@ -75,7 +77,13 @@ class PayPalOneOff(
     }
   }
 
-  def returnURL(paymentId: String, PayerID: String, email: String, country: String): Action[AnyContent] =
+  def returnURL(
+      paymentId: String,
+      PayerID: String,
+      email: String,
+      country: String,
+      thankyou: String,
+  ): Action[AnyContent] =
     MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
       val acquisitionData = (for {
         cookie <- request.cookies.get("acquisition_data")
@@ -99,6 +107,6 @@ class PayPalOneOff(
 
       paymentAPIService
         .executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
-        .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country))
+        .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, thankyou))
     }
 }

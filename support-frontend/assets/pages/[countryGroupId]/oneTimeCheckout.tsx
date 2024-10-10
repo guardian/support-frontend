@@ -42,10 +42,17 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
-	type CreateStripePaymentIntentRequest,
+	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type {
+	CreatePayPalPaymentResponse,
+	CreateStripePaymentIntentRequest,
+} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import type {
+	PaymentResult,
+	StripePaymentMethod,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -64,6 +71,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -331,56 +339,83 @@ function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async () => {
-		setIsProcessingPayment(true);
+		if (finalAmount) {
+			setIsProcessingPayment(true);
 
-		let paymentMethodResult;
-		if (
-			paymentMethod === 'StripeExpressCheckoutElement' &&
-			stripe &&
-			elements
-		) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				elements,
-			});
-		}
-
-		if (paymentMethod === 'Stripe' && stripe && cardElement) {
-			paymentMethodResult = await stripe.createPaymentMethod({
-				type: 'card',
-				card: cardElement,
-				billing_details: {
-					address: {
-						postal_code: billingPostcode,
-					},
-				},
-			});
-		}
-
-		if (paymentMethodResult && stripe) {
-			// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-			const handle3DS = (clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			};
-
-			if (paymentMethodResult.error) {
-				logException(
-					`Error creating Payment Method: ${JSON.stringify(
-						paymentMethodResult.error,
-					)}`,
+			let paymentResult;
+			if (paymentMethod === 'PayPal') {
+				paymentResult = await postOneOffPayPalCreatePaymentRequest({
+					currency: currencyKey,
+					amount: finalAmount,
+					returnURL: payPalReturnUrl(
+						countryGroupId,
+						email,
+						'/paypal/rest/returnOneTime',
+					),
+					cancelURL: payPalCancelUrl(countryGroupId),
+				});
+				const acquisitionData = derivePaymentApiAcquisitionData(
+					getReferrerAcquisitionData(),
+					abParticipations,
+					billingPostcode,
 				);
+				// We've only created a payment at this point, and the user has to get through
+				// the PayPal flow on their site before we can actually try and execute the payment.
+				// So we drop a cookie which will be used by the /paypal/rest/return endpoint
+				// that the user returns to from PayPal, if payment is successful.
+				cookie.set(
+					'acquisition_data',
+					encodeURIComponent(JSON.stringify(acquisitionData)),
+				);
+			}
 
-				if (paymentMethodResult.error.type === 'validation_error') {
-					setErrorMessage('There was an issue with your card details.');
-					setErrorContext(appropriateErrorMessage('payment_details_incorrect'));
-				} else {
-					setErrorMessage('Sorry, something went wrong.');
-					setErrorContext(
-						appropriateErrorMessage('payment_provider_unavailable'),
+			let paymentMethodResult;
+			if (
+				paymentMethod === 'StripeExpressCheckoutElement' &&
+				stripe &&
+				elements
+			) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					elements,
+				});
+			}
+			if (paymentMethod === 'Stripe' && stripe && cardElement) {
+				paymentMethodResult = await stripe.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: billingPostcode,
+						},
+					},
+				});
+			}
+			if (paymentMethodResult && stripe) {
+				// Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
+				const handle3DS = (clientSecret: string) => {
+					trackComponentLoad('stripe-3ds');
+					return stripe.handleCardAction(clientSecret);
+				};
+
+				if (paymentMethodResult.error) {
+					logException(
+						`Error creating Payment Method: ${JSON.stringify(
+							paymentMethodResult.error,
+						)}`,
 					);
-				}
-			} else {
-				if (finalAmount) {
+
+					if (paymentMethodResult.error.type === 'validation_error') {
+						setErrorMessage('There was an issue with your card details.');
+						setErrorContext(
+							appropriateErrorMessage('payment_details_incorrect'),
+						);
+					} else {
+						setErrorMessage('Sorry, something went wrong.');
+						setErrorContext(
+							appropriateErrorMessage('payment_provider_unavailable'),
+						);
+					}
+				} else {
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,
@@ -401,30 +436,62 @@ function OneTimeCheckoutComponent({
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
-					const paymentResult = await processStripePaymentIntentRequest(
+					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
 						handle3DS,
 					);
-					if (paymentResult.paymentStatus === 'failure') {
-						setErrorMessage('Sorry, something went wrong.');
-						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
-					}
-					if (paymentResult.paymentStatus === 'success') {
-						const order = {
-							firstName: '',
-							paymentMethod: paymentMethod,
-						};
-						setThankYouOrder(order);
-						const thankYouUrlSearchParams = new URLSearchParams();
-						thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-						window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-					}
+				}
+			}
+
+			setThankYouOrder({
+				firstName: '',
+				paymentMethod: paymentMethod,
+			});
+			const thankYouUrlSearchParams = new URLSearchParams();
+			thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+			const nextStepRoute = paymentResultThankyouRoute(
+				paymentResult,
+				geoId,
+				thankYouUrlSearchParams,
+			);
+			setIsProcessingPayment(false);
+			if (nextStepRoute) {
+				window.location.href = nextStepRoute;
+			} else {
+				setErrorMessage('Sorry, something went wrong.');
+				if (
+					paymentResult &&
+					'paymentStatus' in paymentResult &&
+					paymentResult.paymentStatus === 'failure'
+				) {
+					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
 				}
 			}
 		}
-
-		setIsProcessingPayment(false);
 	};
+
+	function paymentResultThankyouRoute(
+		paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+		geoId: GeoId,
+		thankYouUrlSearchParams: URLSearchParams,
+	): string | undefined {
+		if (paymentResult) {
+			if ('type' in paymentResult && paymentResult.type === 'success') {
+				return paymentResult.data.approvalUrl;
+			} else if (
+				'paymentStatus' in paymentResult &&
+				paymentResult.paymentStatus === 'success'
+			) {
+				return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
+			}
+		}
+	}
+
+	const paymentButtonText = finalAmount
+		? paymentMethod === 'PayPal'
+			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
+			: `Support us with ${simpleFormatAmount(currency, finalAmount)}`
+		: 'Pay now';
 
 	return (
 		<CheckoutLayout>
@@ -632,6 +699,7 @@ function OneTimeCheckoutComponent({
 										value={billingPostcode}
 										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
+										optional
 										onInvalid={(event) => {
 											validate(
 												event,
@@ -716,23 +784,14 @@ function OneTimeCheckoutComponent({
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText={
-										finalAmount
-											? `Support us with ${simpleFormatAmount(
-													currency,
-													finalAmount,
-											  )}`
-											: 'Pay now'
-									}
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
+							<DefaultPaymentButton
+								buttonText={paymentButtonText}
+								onClick={() => {
+									// no-op
+									// This isn't needed because we are now using the formOnSubmit handler
+								}}
+								type="submit"
+							/>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
