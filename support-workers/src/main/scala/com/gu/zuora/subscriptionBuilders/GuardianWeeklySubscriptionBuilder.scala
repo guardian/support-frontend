@@ -2,11 +2,10 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.promotions.{DefaultPromotions, PromoCode, PromoError, PromotionService}
+import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
-import com.gu.support.workers.{BillingPeriod, SixWeekly}
-import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.GuardianWeeklySubscriptionBuilder.initialTermInDays
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -31,10 +30,6 @@ class GuardianWeeklySubscriptionBuilder(
 
     val recurringProductRatePlanId =
       validateRatePlan(weeklyRatePlan(state.product, environment, readerType), state.product.describe)
-
-    val promotionProductRatePlanId = if (isIntroductoryPromotion(state.product.billingPeriod, state.promoCode)) {
-      weeklyIntroductoryRatePlan(state.product, environment).map(_.id).getOrElse(recurringProductRatePlanId)
-    } else recurringProductRatePlanId
 
     val (initialTerm, autoRenew, initialTermPeriodType) =
       if (readerType == Gift)
@@ -62,7 +57,7 @@ class GuardianWeeklySubscriptionBuilder(
       promotionService,
       state.promoCode,
       state.user.deliveryAddress.getOrElse(state.user.billingAddress).country,
-      promotionProductRatePlanId,
+      recurringProductRatePlanId,
       subscriptionData,
     ).map { subscriptionData =>
       val soldToContact = state.giftRecipient match {
@@ -91,10 +86,6 @@ class GuardianWeeklySubscriptionBuilder(
       )
     }
   }
-
-  private[this] def isIntroductoryPromotion(billingPeriod: BillingPeriod, maybePromoCode: Option[PromoCode]) =
-    maybePromoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix) && billingPeriod == SixWeekly
-
 }
 object GuardianWeeklySubscriptionBuilder {
   def initialTermInDays(

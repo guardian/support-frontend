@@ -232,7 +232,7 @@ class DigitalPackEmailFields(
             gift_code = giftCode.value,
             gift_delivery_date = formatDate(giftRecipient.deliveryDate),
             subscription_details = SubscriptionEmailFieldHelpers
-              .describe(paymentSchedule, product.billingPeriod, product.currency, promotion, true),
+              .describe(paymentSchedule, product.billingPeriod, product.currency, true),
             date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
             paymentAttributes = paymentFieldsAttributes,
             last_redemption_date = formatDate(lastRedemptionDate),
@@ -293,7 +293,7 @@ class DigitalPackEmailFields(
           DirectDSAttributes(
             directOrCorpFields(
               SubscriptionEmailFieldHelpers
-                .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion),
+                .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency),
               state.subscriptionNumber,
               state.user,
             ),
