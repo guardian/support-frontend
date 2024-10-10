@@ -1,7 +1,9 @@
 package admin.settings
 
-import admin.settings.AmountsTests.AmountsTests
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicReference
 import admin.settings.SettingsProvider.SettingsUpdate
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import com.gu.aws.AwsS3Client
@@ -9,15 +11,13 @@ import com.gu.monitoring.SafeLogging
 import config.Configuration.MetricUrl
 import config.{Configuration, FastlyConfig}
 import io.circe.Decoder
-import org.apache.pekko.actor.ActorSystem
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import services.fastly.FastlyService
 
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
+import admin.settings.AmountsTests.AmountsTests
 
 abstract class SettingsProvider[T] {
 
@@ -45,8 +45,8 @@ class AllSettingsProvider private (
 }
 
 object AllSettingsProvider {
-  import admin.settings.AmountsTests.amountsTestsCodec
-  import admin.settings.ContributionTypes.contributionTypesCodec
+  import admin.settings.AmountsTests.amountsTestsDecoder
+  import admin.settings.ContributionTypes.contributionTypesDecoder
 
   def fromConfig(
       config: Configuration,
@@ -176,7 +176,7 @@ object SettingsProvider extends SafeLogging {
 // the routes that need to be purged (so that changes in settings propagate to the user) can be efficiently targeted.
 // See https://docs.fastly.com/api/purge#purge_d8b8e8be84c350dd92492453a3df3230 for more details.
 object SettingsSurrogateKey {
-  val settingsSurrogateKey: String = "settings"
+  val settingsSurrogateKey = "settings"
   // Codacy prefers this over a fully qualified method name
   def addTo(result: Result): Result = result.withHeaders("Surrogate-Key" -> settingsSurrogateKey)
 }
