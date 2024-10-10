@@ -148,7 +148,35 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards paymentFrequency={contributionType} />
+						<>
+							<ContributionsPriceCards paymentFrequency={contributionType} />
+							{showCoverTransactionCost && (
+								<div
+									css={[
+										paymentButtonSpacing,
+										coverTransactionCheckboxContainer,
+									]}
+								>
+									<Checkbox
+										checked={coverTransactionCost}
+										onChange={(e) => {
+											if (e.target.checked) {
+												sendTrackingEventsOnClick({
+													id: 'cover-transaction-cost-checkbox',
+													componentType: 'ACQUISITIONS_BUTTON',
+												})();
+											}
+											dispatch(setCoverTransactionCost(e.target.checked));
+										}}
+										label={`I’ll generously add ${
+											Number.isNaN(transactionCoverCost)
+												? '4% of my contribution'
+												: simpleFormatAmount(currency, transactionCoverCost)
+										} to cover transaction fees so 100% of my amount goes to the Guardian`}
+									/>
+								</div>
+							)}
+						</>
 					) : (
 						<ContributionsOrderSummaryContainer
 							renderOrderSummary={(orderSummaryProps) => (
@@ -191,29 +219,6 @@ export function SupporterPlusCheckout({
 								amount={amount}
 								productKey={product}
 							/>
-						)}
-						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
-							<div
-								css={[paymentButtonSpacing, coverTransactionCheckboxContainer]}
-							>
-								<Checkbox
-									checked={coverTransactionCost}
-									onChange={(e) => {
-										if (e.target.checked) {
-											sendTrackingEventsOnClick({
-												id: 'cover-transaction-cost-checkbox',
-												componentType: 'ACQUISITIONS_BUTTON',
-											})();
-										}
-										dispatch(setCoverTransactionCost(e.target.checked));
-									}}
-									label={`I’ll generously add ${
-										Number.isNaN(transactionCoverCost)
-											? '4% of my contribution'
-											: simpleFormatAmount(currency, transactionCoverCost)
-									} to cover transaction fees so 100% of my amount goes to the Guardian`}
-								/>
-							</div>
 						)}
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}
