@@ -17,6 +17,7 @@ type StateSelectProps = {
 	onBlur?: FormEventHandler<HTMLSelectElement>;
 	onInvalid?: FormEventHandler<HTMLSelectElement>;
 	error?: string;
+	optional?: boolean;
 };
 
 const stateDescriptors: Partial<Record<CountryGroupId, string>> = {
@@ -38,6 +39,7 @@ export function StateSelect({
 	onBlur,
 	onInvalid,
 	error,
+	optional,
 }: StateSelectProps): JSX.Element | null {
 	const countryGroupId = CountryGroup.fromCountry(countryId);
 	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
@@ -55,7 +57,7 @@ export function StateSelect({
 				onInvalid={onInvalid}
 				error={error}
 				name={'billing-state'}
-				required
+				required={!optional}
 				cssOverrides={
 					/**
 					 * Source applies a red border initially unlike textInput's
