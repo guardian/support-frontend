@@ -14,6 +14,7 @@ case class CreateSalesforceContactState(
     user: User,
     giftRecipient: Option[GiftRecipient],
     product: ProductType,
+    supportInternationalisationId: String,
     analyticsInfo: AnalyticsInfo,
     paymentMethod: Either[PaymentMethod, RedemptionData],
     firstDeliveryDate: Option[LocalDate],

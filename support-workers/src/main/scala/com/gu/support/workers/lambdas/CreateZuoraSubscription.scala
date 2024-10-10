@@ -33,12 +33,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case state: SupporterPlusState =>
         zuoraSupporterPlusHandler.subscribe(
           state,
+          zuoraSubscriptionState.supportInternationalisationId,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
       case state: TierThreeState =>
         zuoraTierThreeHandler.subscribe(
           state,
+          zuoraSubscriptionState.supportInternationalisationId,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
@@ -60,10 +62,16 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       case state: ContributionState =>
         zuoraContributionHandler.subscribe(state)
       case state: PaperState =>
-        zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
+        zuoraPaperHandler.subscribe(
+          state,
+          zuoraSubscriptionState.supportInternationalisationId,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
       case state: GuardianWeeklyState =>
         zuoraGuardianWeeklyHandler.subscribe(
           state,
+          zuoraSubscriptionState.supportInternationalisationId,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )

@@ -18,6 +18,7 @@ class ZuoraTierThreeHandler(
 
   def subscribe(
       state: TierThreeState,
+      supportInternationalisationId: String,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Future[SendThankYouEmailState] =

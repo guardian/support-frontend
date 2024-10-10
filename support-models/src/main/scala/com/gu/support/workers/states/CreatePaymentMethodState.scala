@@ -14,6 +14,7 @@ case class CreatePaymentMethodState(
     user: User,
     giftRecipient: Option[GiftRecipient],
     product: ProductType,
+    supportInternationalisationId: String,
     analyticsInfo: AnalyticsInfo,
     paymentFields: Either[PaymentFields, RedemptionData],
     firstDeliveryDate: Option[LocalDate],

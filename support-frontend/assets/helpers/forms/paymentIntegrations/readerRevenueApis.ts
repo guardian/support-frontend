@@ -33,6 +33,7 @@ import type {
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
+import type { SupportInternationalisationId } from '../../internationalisation/countryGroup';
 
 // ----- Types ----- //
 export type StripePaymentMethod =
@@ -154,6 +155,7 @@ export type RegularPaymentRequest = {
 	lastName: string;
 	billingAddress: RegularPaymentRequestAddress;
 	deliveryAddress?: RegularPaymentRequestAddress;
+	supportInternationalisationId: SupportInternationalisationId;
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;

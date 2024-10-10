@@ -907,6 +907,7 @@ function CheckoutComponent({
 				...personalData,
 				billingAddress,
 				deliveryAddress,
+				supportInternationalisationId: geoId,
 				firstDeliveryDate,
 				paymentFields,
 				promoCode,

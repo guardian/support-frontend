@@ -3,7 +3,7 @@ package services.stepfunctions
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
-import com.gu.i18n.Title
+import com.gu.i18n.{CountryGroup, Title}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
@@ -48,6 +48,7 @@ case class CreateSupportWorkersRequest(
     deliveryAddress: Option[Address],
     giftRecipient: Option[GiftRecipientRequest],
     product: ProductType,
+    supportInternationalisationId: String, // This maps to CountryGroup.id
     firstDeliveryDate: Option[LocalDate],
     paymentFields: Either[PaymentFields, RedemptionData],
     promoCode: Option[PromoCode],
@@ -153,6 +154,7 @@ class SupportWorkersClient(
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
+        supportInternationalisationId = request.body.supportInternationalisationId,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
           PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),

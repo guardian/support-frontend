@@ -17,6 +17,7 @@ class ZuoraSupporterPlusHandler(
 ) {
   def subscribe(
       state: SupporterPlusState,
+      supportInternationalisationId: String,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Future[SendThankYouEmailSupporterPlusState] =

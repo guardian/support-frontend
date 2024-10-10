@@ -18,6 +18,7 @@ class ZuoraPaperHandler(
 
   def subscribe(
       state: PaperState,
+      supportInternationalisationId: String,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Future[SendThankYouEmailState] =
