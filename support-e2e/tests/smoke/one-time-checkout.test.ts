@@ -8,7 +8,7 @@ test.describe('One-Time Checkout', () => {
 	[
 		{
 			paymentType: 'Credit/Debit card',
-			internationalisationId: 'us',
+			internationalisationId: 'uk',
 		},
 	].forEach((testDetails) => {
 		testOneTimeCheckout(testDetails);

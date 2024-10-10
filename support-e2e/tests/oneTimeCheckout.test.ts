@@ -6,11 +6,11 @@ import { testOneTimeCheckout } from './test/oneTimeCheckout';
 const testDetails = [
 	{
 		paymentType: 'PayPal',
-		internationalisationId: 'uk',
+		internationalisationId: 'au',
 	},
 	{
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'us',
+		internationalisationId: 'uk',
 	},
 ] as const;
 
