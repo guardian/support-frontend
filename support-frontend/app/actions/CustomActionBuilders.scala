@@ -73,7 +73,7 @@ class CustomActionBuilders(
       val ignoreList = Set(
         emailProviderRejectedCode,
         invalidEmailAddressCode,
-        // recaptchaFailedCode, We want to be notified about recaptcha failures so we can check the logs
+        recaptchaFailedCode,
       )
       if (isNon200Result(result)) {
         if (!ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {
