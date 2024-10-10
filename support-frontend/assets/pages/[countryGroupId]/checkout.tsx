@@ -1352,7 +1352,7 @@ function CheckoutComponent({
 											}
 										}}
 										error={billingStateError}
-										optional={paymentMethod === 'StripeExpressCheckoutElement'}
+										optional={stripeExpressCheckoutPaymentType === 'google_pay'}
 									/>
 								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
