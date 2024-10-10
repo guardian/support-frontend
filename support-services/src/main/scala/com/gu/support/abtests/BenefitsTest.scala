@@ -6,16 +6,16 @@ import com.gu.support.acquisitions.AbTest
 import com.gu.support.workers.{Annual, BillingPeriod, DigitalPack, Monthly}
 
 object BenefitsTest {
-  def isValidBenefitsTestPurchase(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
+  def isValidBenefitsTestPurchase(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]): Boolean =
     isUserInBenefitsTestVariants(maybeAbTests) &&
       product.amount.exists(amount => priceIsHighEnough(amount, product.billingPeriod, product.currency))
 
-  def isUserInBenefitsTestVariants(maybeAbTests: Option[Set[AbTest]]) =
+  def isUserInBenefitsTestVariants(maybeAbTests: Option[Set[AbTest]]): Boolean =
     maybeAbTests.exists(
       _.toList.exists(test => test.name == "PP_V3" && (test.variant == "V2_BULLET" || test.variant == "V1_PARAGRAPH")),
     )
 
-  def priceIsHighEnough(amount: BigDecimal, billingPeriod: BillingPeriod, currency: Currency) = {
+  def priceIsHighEnough(amount: BigDecimal, billingPeriod: BillingPeriod, currency: Currency): Boolean = {
     val requiredAmount = (billingPeriod, currency) match {
       case (Monthly, GBP) => 12
       case (Annual, GBP) => 119

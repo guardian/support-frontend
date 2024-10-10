@@ -5,7 +5,7 @@ import com.gu.support.touchpoint.TouchpointServiceProvider
 
 class PromotionServiceProvider(configProvider: PromotionsConfigProvider)
     extends TouchpointServiceProvider[PromotionService, PromotionsConfig](configProvider) {
-  override protected def createService(config: PromotionsConfig) = {
+  override protected def createService(config: PromotionsConfig): PromotionService = {
     new PromotionService(config)
   }
 }

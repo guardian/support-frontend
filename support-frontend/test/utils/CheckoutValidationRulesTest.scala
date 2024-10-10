@@ -32,6 +32,7 @@ import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.TestData.monthlyDirectUSDProduct
 
 import scala.concurrent.Future
+import com.gu.support.paperround.{AgentsEndpoint, ChargeBandsEndpoint}
 
 class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
 
@@ -582,8 +583,9 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
   import TestData.validPaperRequest
 
   case class TestPaperRound(agentMap: Map[String, List[BigInt]]) extends PaperRoundAPI {
-    def toResponse(coverage: PostcodeCoverage) = CoverageEndpoint.Response(200, coverage)
-    def toAgentsCoverage(agentId: AgentId) = CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", AgentId(0), "")
+    def toResponse(coverage: PostcodeCoverage): CoverageEndpoint.Response = CoverageEndpoint.Response(200, coverage)
+    def toAgentsCoverage(agentId: AgentId): CoverageEndpoint.AgentsCoverage =
+      CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", AgentId(0), "")
     def coverage(body: CoverageEndpoint.RequestBody): Future[CoverageEndpoint.Response] =
       Future {
         agentMap
@@ -592,8 +594,8 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
             toResponse(PostcodeCoverage(List(), "", NC)),
           )(xs => toResponse(PostcodeCoverage(xs.map(x => toAgentsCoverage(AgentId(x))), "", CO)))
       }
-    def agents() = Future.failed(new NotImplementedError("Not used"))
-    def chargebands() = Future.failed(new NotImplementedError("Not used"))
+    def agents(): Future[AgentsEndpoint.Response] = Future.failed(new NotImplementedError("Not used"))
+    def chargebands(): Future[ChargeBandsEndpoint.Response] = Future.failed(new NotImplementedError("Not used"))
   }
 
   "PaperValidation.passes" should "fail if the delivery country is US" in {
@@ -792,13 +794,13 @@ object TestData {
     RecaptchaSwitches(Some(On), Some(On)),
   )
 
-  val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
+  val monthlyDirectUSDProduct: DigitalPack = DigitalPack(Currency.USD, Monthly)
   private val stripePaymentFields: StripePaymentFields = StripePaymentFields(
     paymentMethod = PaymentMethodId("test_token").get,
     stripePaymentType = Some(StripePaymentType.StripeCheckout),
     stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
   )
-  val validDigitalPackRequest = CreateSupportWorkersRequest(
+  val validDigitalPackRequest: CreateSupportWorkersRequest = CreateSupportWorkersRequest(
     title = None,
     firstName = "grace",
     lastName = "hopper",
@@ -828,8 +830,8 @@ object TestData {
     debugInfo = None,
   )
 
-  val someDateNextMonth = new LocalDate().plusMonths(1)
-  val paperAddress = Address(
+  val someDateNextMonth: LocalDate = new LocalDate().plusMonths(1)
+  val paperAddress: Address = Address(
     lineOne = Some("Address Line 1"),
     lineTwo = Some("Address Line 2"),
     city = Some("Address Town"),
@@ -837,7 +839,7 @@ object TestData {
     postCode = Some("N1 9AG"),
     country = Country.UK,
   )
-  val validPaperRequest = CreateSupportWorkersRequest(
+  val validPaperRequest: CreateSupportWorkersRequest = CreateSupportWorkersRequest(
     title = None,
     firstName = "grace",
     lastName = "hopper",
@@ -860,7 +862,7 @@ object TestData {
     debugInfo = None,
   )
 
-  val validWeeklyRequest = CreateSupportWorkersRequest(
+  val validWeeklyRequest: CreateSupportWorkersRequest = CreateSupportWorkersRequest(
     title = None,
     firstName = "grace",
     lastName = "hopper",

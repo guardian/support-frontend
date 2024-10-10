@@ -22,9 +22,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class ZuoraSubscriptionService(val config: ZuoraQuerierConfig, client: FutureHttpClient)(implicit ec: ExecutionContext)
     extends WebServiceHelper[MinimalZuoraError] {
 
-  override val wsUrl = config.url
+  override val wsUrl: String = config.url
   override val httpClient: FutureHttpClient = client
-  val authHeaders = Map(
+  val authHeaders: Map[String, String] = Map(
     "apiSecretAccessKey" -> config.password,
     "apiAccessKeyId" -> config.username,
   )

@@ -1,24 +1,24 @@
 package com.gu.supporterdata.model
 
 object FieldNames {
-  val subscriptionNameField = "subscriptionName"
+  val subscriptionNameField: String = "subscriptionName"
 
-  val identityIdField = "identityId"
+  val identityIdField: String = "identityId"
 
-  val productRatePlanNameField = "productRatePlanName"
+  val productRatePlanNameField: String = "productRatePlanName"
 
-  val productRatePlanIdField = "productRatePlanId"
+  val productRatePlanIdField: String = "productRatePlanId"
 
-  val termEndDateField = "termEndDate"
+  val termEndDateField: String = "termEndDate"
 
-  val contractEffectiveDateField = "contractEffectiveDate"
+  val contractEffectiveDateField: String = "contractEffectiveDate"
 
-  val cancellationDateField = "cancellationDate"
+  val cancellationDateField: String = "cancellationDate"
 
-  val expiryDateNameField = "expiryDate"
+  val expiryDateNameField: String = "expiryDate"
 
-  val contributionAmountField = "contributionAmount"
+  val contributionAmountField: String = "contributionAmount"
 
-  val contributionCurrencyField = "contributionCurrency"
+  val contributionCurrencyField: String = "contributionCurrency"
 
 }

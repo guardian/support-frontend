@@ -2,15 +2,15 @@ package com.gu.support.workers.states
 
 object ExecutionTypeDiscriminators {
 
-  val fieldName = "productType"
+  val fieldName: String = "productType"
 
-  val contribution = "Contribution"
-  val supporterPlus = "SupporterPlus"
-  val tierThree = "TierThree"
-  val digitalSubscriptionDirectPurchase = "DigitalSubscriptionDirectPurchase"
-  val digitalSubscriptionGiftPurchase = "DigitalSubscriptionGiftPurchase"
-  val digitalSubscriptionGiftRedemption = "DigitalSubscriptionGiftRedemption"
-  val paper = "Paper"
-  val guardianWeekly = "GuardianWeekly"
+  val contribution: String = "Contribution"
+  val supporterPlus: String = "SupporterPlus"
+  val tierThree: String = "TierThree"
+  val digitalSubscriptionDirectPurchase: String = "DigitalSubscriptionDirectPurchase"
+  val digitalSubscriptionGiftPurchase: String = "DigitalSubscriptionGiftPurchase"
+  val digitalSubscriptionGiftRedemption: String = "DigitalSubscriptionGiftRedemption"
+  val paper: String = "Paper"
+  val guardianWeekly: String = "GuardianWeekly"
 
 }

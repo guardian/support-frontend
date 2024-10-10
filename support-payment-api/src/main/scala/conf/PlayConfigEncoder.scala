@@ -18,6 +18,6 @@ class PlayConfigUpdater(configLoader: ConfigLoader) {
       environments: RequestEnvironments,
       mode: Mode,
   ): InitializationResult[Configuration] = {
-    configLoader.loadConfig[Mode, AppConfig](mode).map(appMode => configuration ++ appMode.asPlayConfig)
+    configLoader.loadConfig[Mode, AppConfig](mode).map(appMode => configuration.withFallback(appMode.asPlayConfig))
   }
 }

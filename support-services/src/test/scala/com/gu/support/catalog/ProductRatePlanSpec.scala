@@ -6,6 +6,7 @@ import com.gu.support.workers.{Annual, BillingPeriod, Monthly, Quarterly}
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.Assertion
 
 case class TestData(
     product: Product,
@@ -16,7 +17,7 @@ case class TestData(
 
 class ProductRatePlanSpec extends AnyFlatSpec with Matchers {
 
-  val testData = List(
+  val testData: List[TestData] = List(
     TestData(
       DigitalPack,
       List(Monthly, Annual),
@@ -60,7 +61,7 @@ class ProductRatePlanSpec extends AnyFlatSpec with Matchers {
     succeed
   }
 
-  def testProduct(environment: TouchPointEnvironment, testDatum: TestData) = {
+  def testProduct(environment: TouchPointEnvironment, testDatum: TestData): List[Assertion] = {
     for {
       billingPeriod <- testDatum.billingPeriods
       fulfilmentOption <- testDatum.fulfilmentOptions

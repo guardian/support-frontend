@@ -33,7 +33,7 @@ case object Everyday extends PaperProductOptions(false)
 case object NewspaperArchive extends ProductOptions
 
 object ProductOptions {
-  val allProductOptions =
+  val allProductOptions: List[ProductOptions] =
     NoProductOptions :: NewspaperArchive :: PaperProductOptions.productOptions
 
   def fromString[T](code: String, productOptions: List[T]): Option[T] =

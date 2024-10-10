@@ -24,10 +24,10 @@ import scala.io.Source
 
 @IntegrationTest
 class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
-  val stage = PROD
-  val queryType = Full
-  val sanitizeFieldNamesAfterDownload = false
-  val updateLastSuccessfulQueryTime = false
+  val stage: PROD.type = PROD
+  val queryType: Full.type = Full
+  val sanitizeFieldNamesAfterDownload: Boolean = false
+  val updateLastSuccessfulQueryTime: Boolean = false
 
   "This test is just an easy way to run an aqua query. It" should "save the results to a csv in supporter-product-data/data-extracts" ignore {
     val attemptedQueryTime =
@@ -67,7 +67,10 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  def downloadResults(result: BatchQueryResponse, service: ZuoraQuerierService) = {
+  def downloadResults(
+      result: BatchQueryResponse,
+      service: ZuoraQuerierService,
+  ): Future[AddSupporterRatePlanItemToQueueState] = {
     val batch = getValueOrThrow(result.batches.headOption, s"No batches were returned in the batch query response")
     val fileId = getValueOrThrow(batch.fileId, s"Batch.fileId was missing in the job")
     for {
@@ -92,7 +95,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  def sanitizeFieldNames(filename: String) = {
+  def sanitizeFieldNames(filename: String): Boolean = {
     val tempPath = FileSystems.getDefault.getPath(
       System.getProperty("user.dir"),
       "supporter-product-data",

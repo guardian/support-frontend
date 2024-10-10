@@ -18,7 +18,7 @@ object ServersideAbTest {
   case object Variant extends Participation
 
   object Participation {
-    implicit val encoder = Encoder.encodeString.contramap[Participation] {
+    implicit val encoder: Encoder[Participation] = Encoder.encodeString.contramap[Participation] {
       case Control => "Control"
       case Variant => "Variant"
     }

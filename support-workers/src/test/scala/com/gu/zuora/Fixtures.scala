@@ -12,21 +12,23 @@ import com.gu.support.paperround.AgentId
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
+import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.config.{TouchPointEnvironment, ZuoraConfig}
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val accountNumber = "A00084679"
+  val accountNumber: String = "A00084679"
 
-  val salesforceAccountId = "0013E00001ASmI6QAL"
-  val salesforceId = "0033E00001CpBZaQAN"
-  val identityId = "30000311"
-  val tokenId = "card_Aaynm1dIeDH1zp"
-  val secondTokenId = "cus_AaynKIp19IIGDz"
-  val cardNumber = "4242"
-  val payPalBaid = "B-23637766K5365543J"
-  val deliveryAgentId = 2532
+  val salesforceAccountId: String = "0013E00001ASmI6QAL"
+  val salesforceId: String = "0033E00001CpBZaQAN"
+  val identityId: String = "30000311"
+  val tokenId: String = "card_Aaynm1dIeDH1zp"
+  val secondTokenId: String = "cus_AaynKIp19IIGDz"
+  val cardNumber: String = "4242"
+  val payPalBaid: String = "B-23637766K5365543J"
+  val deliveryAgentId: Int = 2532
 
-  val date = new LocalDate(2017, 5, 4)
+  val date: LocalDate = new LocalDate(2017, 5, 4)
 
   def account(
       currency: Currency = GBP,
@@ -41,8 +43,9 @@ object Fixtures {
     createdRequestId__c = "createdreqid_hi",
   )
 
-  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)
-  val differentContactDetails = ContactDetails(
+  val contactDetails: ContactDetails =
+    ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)
+  val differentContactDetails: ContactDetails = ContactDetails(
     "Test-FirstName",
     "from support-frontend integration tests",
     Some("test@thegulocal.com"),
@@ -54,7 +57,7 @@ object Fixtures {
     None,
     Some("Leave with neighbour - support-frontend"),
   )
-  val differentContactDetailsOutsideLondon = ContactDetails(
+  val differentContactDetailsOutsideLondon: ContactDetails = ContactDetails(
     "Test-FirstName",
     "from support-frontend integration tests",
     Some("test@thegulocal.com"),
@@ -66,7 +69,7 @@ object Fixtures {
     None,
     Some("Leave with neighbour - support-frontend"),
   )
-  val creditCardPaymentMethod = CreditCardReferenceTransaction(
+  val creditCardPaymentMethod: PaymentGateway => CreditCardReferenceTransaction = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
     cardNumber,
@@ -77,8 +80,8 @@ object Fixtures {
     _: PaymentGateway,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
-  val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod(
+  val payPalPaymentMethod: PayPalReferenceTransaction = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
+  val directDebitPaymentMethod: DirectDebitPaymentMethod = DirectDebitPaymentMethod(
     "Barry",
     "Humphreys",
     "Barry Humphreys",
@@ -91,8 +94,8 @@ object Fixtures {
     StreetNumber = Some("123"),
   )
 
-  val config = Configuration.load().zuoraConfigProvider.get()
-  val monthlySubscriptionData = SubscriptionData(
+  val config: ZuoraConfig = Configuration.load().zuoraConfigProvider.get()
+  val monthlySubscriptionData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(config.monthlyContribution.productRatePlanId), // Contribution product
@@ -106,16 +109,16 @@ object Fixtures {
     ),
     Subscription(date, date, date, "id123"),
   )
-  val blankReferrerAcquisitionData =
+  val blankReferrerAcquisitionData: ReferrerAcquisitionData =
     ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None)
 
-  val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
-  val everydayHomeDeliveryProductRatePlanId =
+  val touchpointEnvironment: TouchPointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
+  val everydayHomeDeliveryProductRatePlanId: Option[ProductRatePlanId] =
     catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, HomeDelivery, Everyday) map (_.id)
-  val everydayNationalDeliveryProductRatePlanId =
+  val everydayNationalDeliveryProductRatePlanId: Option[ProductRatePlanId] =
     catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, NationalDelivery, Everyday) map (_.id)
 
-  val everydayPaperSubscriptionData = SubscriptionData(
+  val everydayPaperSubscriptionData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(everydayHomeDeliveryProductRatePlanId.get),
@@ -126,7 +129,7 @@ object Fixtures {
     Subscription(date, date, date, "id123"),
   )
 
-  val everydayNationalDeliveryPaperSubscriptionData = SubscriptionData(
+  val everydayNationalDeliveryPaperSubscriptionData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(everydayNationalDeliveryProductRatePlanId.get),
@@ -196,7 +199,7 @@ object Fixtures {
       ),
     )
 
-  val invalidMonthlySubsData = SubscriptionData(
+  val invalidMonthlySubsData: SubscriptionData = SubscriptionData(
     List(
       RatePlanData(
         RatePlan(config.monthlyContribution.productRatePlanId),
@@ -210,7 +213,7 @@ object Fixtures {
     ),
     Subscription(date, date, date, "id123", termType = "Invalid term type"),
   )
-  val invalidSubscriptionRequest = SubscribeRequest(
+  val invalidSubscriptionRequest: SubscribeRequest = SubscribeRequest(
     List(
       SubscribeItem(
         account(),
@@ -223,7 +226,7 @@ object Fixtures {
     ),
   )
 
-  val incorrectPaymentMethod = SubscribeRequest(
+  val incorrectPaymentMethod: SubscribeRequest = SubscribeRequest(
     List(
       SubscribeItem(
         account(),

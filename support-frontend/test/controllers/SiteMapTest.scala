@@ -18,10 +18,10 @@ import scala.concurrent.duration._
 
 class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
-  implicit val timeout = Timeout(2.seconds)
-  val stage = Stages.DEV
+  implicit val timeout: Timeout = Timeout(2.seconds)
+  val stage: Stages.DEV.type = Stages.DEV
 
-  val actionRefiner = new CustomActionBuilders(
+  val actionRefiner: CustomActionBuilders = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
     userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
     userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],

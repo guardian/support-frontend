@@ -38,7 +38,7 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
 
   override val wsUrl: String = baseUrl.getOrElse(config.url)
   override val httpClient: FutureHttpClient = client
-  val authHeaders = Map(
+  val authHeaders: Map[String, String] = Map(
     "apiSecretAccessKey" -> config.password,
     "apiAccessKeyId" -> config.username,
   )

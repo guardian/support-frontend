@@ -23,21 +23,21 @@ object BillingPeriod {
 }
 
 case object Monthly extends BillingPeriod {
-  override val noun = "month"
-  override val monthsInPeriod = 1
+  override val noun: String = "month"
+  override val monthsInPeriod: Int = 1
 }
 
 case object Quarterly extends BillingPeriod {
-  override val noun = "quarter"
-  override val monthsInPeriod = 3
+  override val noun: String = "quarter"
+  override val monthsInPeriod: Int = 3
 }
 
 case object Annual extends BillingPeriod {
-  override val noun = "year"
-  override val monthsInPeriod = 12
+  override val noun: String = "year"
+  override val monthsInPeriod: Int = 12
 }
 
 case object SixWeekly extends BillingPeriod {
-  override val noun = "six weeks"
-  override val monthsInPeriod = 1
+  override val noun: String = "six weeks"
+  override val monthsInPeriod: Int = 1
 }

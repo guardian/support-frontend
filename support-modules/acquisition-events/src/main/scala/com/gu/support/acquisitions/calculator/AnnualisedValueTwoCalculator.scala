@@ -28,19 +28,18 @@ import com.gu.support.acquisitions.models.PrintProduct.{
   VoucherWeekendPlus,
 }
 import com.gu.support.acquisitions.models.{AcquisitionProduct, PaymentFrequency}
-import com.gu.support.catalog.NationalDelivery
 
 object AnnualisedValueTwoCalculator {
 
   // Currencies - All other currencies are treated as ROW
-  val GBP = "GBP"
-  val USD = "USD"
-  val AUD = "AUD"
+  val GBP: String = "GBP"
+  val USD: String = "USD"
+  val AUD: String = "AUD"
 
   // Country codes - All other countries are treated as ROW
-  val GB = "GB"
-  val US = "US"
-  val AU = "AU"
+  val GB: String = "GB"
+  val US: String = "US"
+  val AU: String = "AU"
 
   def getPaymentFrequencyMultiplyer(paymentFrequency: PaymentFrequency): Either[String, Double] =
     paymentFrequency match {
@@ -153,7 +152,7 @@ object AnnualisedValueTwoCalculator {
       })
       .getOrElse(Left("No print options supplied"))
 
-  def getMargin(a: AcquisitionModel) =
+  private def getMargin(a: AcquisitionModel) =
     a.product match {
       case AcquisitionProduct.Contribution => getContributionMargin(a)
       case AcquisitionProduct.RecurringContribution => getRecurringMargin(a)

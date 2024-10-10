@@ -13,11 +13,11 @@ class PrivateActionBuilder(
     val executionContext: ExecutionContext,
 ) extends ActionBuilder[Request, AnyContent] {
 
-  private implicit val ec = executionContext
+  private implicit val ec: ExecutionContext = executionContext
 
   override def composeAction[A](action: Action[A]): Action[A] =
     new CSRFAction(action, csrfConfig, addToken, checkToken)
 
-  override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] =
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
     block(request).map(_.withHeaders(CacheControl.noCache))
 }

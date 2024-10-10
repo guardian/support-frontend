@@ -25,13 +25,14 @@ import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummarySe
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import io.circe.JsonObject
 
 class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents with EitherValues {
 
-  implicit val timeout = Timeout(2.seconds)
-  val stage = Stages.DEV
+  implicit val timeout: Timeout = Timeout(2.seconds)
+  val stage: Stages.DEV.type = Stages.DEV
 
-  val actionRefiner = new CustomActionBuilders(
+  val actionRefiner: CustomActionBuilders = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
     userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
     userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
@@ -43,7 +44,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     featureSwitches = FeatureSwitches(Some(On), Some(On), Some(On)),
   )
 
-  val priceSummaryServiceProvider = {
+  val priceSummaryServiceProvider: PriceSummaryServiceProvider = {
     val priceSummaryService = mock[PriceSummaryService]
     when(
       priceSummaryService
@@ -55,7 +56,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     priceSummaryServiceProvider
   }
 
-  val applicationMock = new Application(
+  val applicationMock: Application = new Application(
     actionRefiner,
     mock[AssetsResolver],
     mock[TestUserService],
@@ -96,7 +97,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   }
 
-  val productCatalogJson = io.circe.parser
+  val productCatalogJson: JsonObject = io.circe.parser
     .parse("""
   {
     "SupporterPlus": {

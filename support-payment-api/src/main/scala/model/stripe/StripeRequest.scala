@@ -82,7 +82,7 @@ object StripeJsonDecoder {
 
 // Private because it should only be constructed using the accompanying Decoder
 class NonEmptyString private (val value: String) extends AnyVal {
-  override def toString(): String = value
+  override def toString: String = value
 }
 
 object NonEmptyString {
@@ -169,6 +169,6 @@ object StripePaymentIntentRequest {
   ) extends StripeRequest
 
   import controllers.JsonReadableOps._
-  implicit val createPaymentIntentDecoder = deriveDecoder[CreatePaymentIntent]
-  implicit val confirmPaymentIntent = deriveDecoder[ConfirmPaymentIntent]
+  implicit val createPaymentIntentDecoder: Decoder[CreatePaymentIntent] = deriveDecoder[CreatePaymentIntent]
+  implicit val confirmPaymentIntent: Decoder[ConfirmPaymentIntent] = deriveDecoder[ConfirmPaymentIntent]
 }

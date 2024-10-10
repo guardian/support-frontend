@@ -46,7 +46,7 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
       state: SendThankYouEmailState,
       catalogService: CatalogService,
       supporterDataDynamoService: SupporterDataDynamoService,
-  ) = {
+  ): Future[Unit] = {
     logger.info(s"Attempting to update user ${state.user.id}")
     getSupporterRatePlanItemFromState(state, catalogService) match {
       case Right(Some(supporterRatePlanItem)) =>

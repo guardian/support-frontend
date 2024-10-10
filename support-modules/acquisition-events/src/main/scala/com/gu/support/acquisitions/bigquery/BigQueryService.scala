@@ -20,11 +20,12 @@ import java.io.ByteArrayInputStream
 import java.util.concurrent.Executors
 import scala.concurrent.{Future, Promise}
 import scala.jdk.CollectionConverters._
+import java.util.concurrent.ExecutorService
 
 class BigQueryService(stage: Stage, credentials: Credentials) extends SafeLogging {
   private val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
 
-  lazy val bigQueryWriteSettings =
+  lazy val bigQueryWriteSettings: BigQueryWriteSettings =
     BigQueryWriteSettings
       .newBuilder()
       .setQuotaProjectId(projectId)
@@ -32,9 +33,9 @@ class BigQueryService(stage: Stage, credentials: Credentials) extends SafeLoggin
         FixedCredentialsProvider.create(credentials),
       )
       .build()
-  lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
-  lazy val tableId = TableName.of(projectId, datasetName, tableName)
-  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString, bigQueryWriteClient).build()
+  lazy val bigQueryWriteClient: BigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
+  lazy val tableId: TableName = TableName.of(projectId, datasetName, tableName)
+  lazy val streamWriter: JsonStreamWriter = JsonStreamWriter.newBuilder(tableId.toString, bigQueryWriteClient).build()
 
   def sendAcquisition(acquisitionDataRow: AcquisitionDataRow): EitherT[Future, String, Unit] =
     EitherT(
@@ -84,7 +85,7 @@ object BigQueryService {
   case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
       extends ApiFutureCallback[AppendRowsResponse]
       with SafeLogging {
-    val executor = Executors.newSingleThreadExecutor()
+    val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     def onSuccess(response: AppendRowsResponse): Unit = {
       logger.info(s"Rows successfully inserted into table $tableName")

@@ -38,7 +38,7 @@ object CheckoutValidationRules {
   def checkSubscriptionPaymentMethodEnabled(
       switches: SubscriptionsPaymentMethodSwitches,
       paymentFields: Either[PaymentFields, RedemptionData],
-  ) = paymentFields match {
+  ): Result = paymentFields match {
     case Left(_: PayPalPaymentFields) =>
       if (switches.paypal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
@@ -52,7 +52,7 @@ object CheckoutValidationRules {
   def checkContributionPaymentMethodEnabled(
       switches: RecurringPaymentMethodSwitches,
       paymentFields: Either[PaymentFields, RedemptionData],
-  ) = paymentFields match {
+  ): Result = paymentFields match {
     case Left(_: PayPalPaymentFields) =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
@@ -82,7 +82,7 @@ object CheckoutValidationRules {
       product: ProductType,
       paymentFields: Either[PaymentFields, RedemptionData],
       switches: Switches,
-  ) =
+  ): Result =
     product match {
       case _: Contribution | _: SupporterPlus =>
         checkContributionPaymentMethodEnabled(
@@ -436,7 +436,7 @@ object PaperValidation extends SafeLogging {
   def postcodeIsWithinHomeDeliveryArea(postcode: String): Result =
     M25_POSTCODE_PREFIXES.contains(getPrefix(postcode)).otherwise(s"postcode $postcode is not within M25")
 
-  val M25_POSTCODE_OLD_PREFIXES = List(
+  val M25_POSTCODE_OLD_PREFIXES: List[String] = List(
     "BR1",
     "BR2",
     "BR3",
@@ -759,7 +759,7 @@ object PaperValidation extends SafeLogging {
     "TN16",
   )
 
-  val M25_NEW_PREFIXES = List(
+  val M25_NEW_PREFIXES: List[String] = List(
     "AL2",
     "BR12",
     "BR13",
@@ -1752,6 +1752,6 @@ object PaperValidation extends SafeLogging {
     "WD79",
   )
 
-  val M25_POSTCODE_PREFIXES = M25_POSTCODE_OLD_PREFIXES ++ M25_NEW_PREFIXES
+  val M25_POSTCODE_PREFIXES: List[String] = M25_POSTCODE_OLD_PREFIXES ++ M25_NEW_PREFIXES
 
 }

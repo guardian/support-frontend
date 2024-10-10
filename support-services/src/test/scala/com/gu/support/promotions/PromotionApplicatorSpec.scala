@@ -4,10 +4,11 @@ import com.gu.support.config.PromotionsDiscountConfig
 import com.gu.support.promotions.ServicesFixtures._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.joda.time.LocalDate
 
 class PromotionApplicatorSpec extends AsyncFlatSpec with Matchers {
-  val config = PromotionsDiscountConfig(validProductRatePlanId, "112233")
-  val correctDate =
+  val config: PromotionsDiscountConfig = PromotionsDiscountConfig(validProductRatePlanId, "112233")
+  val correctDate: LocalDate =
     subscriptionData.subscription.contractEffectiveDate.plusDays(freeTrial.freeTrial.get.duration.getDays)
 
   "PromotionApplicator" should "add a discount rate plan" in {

@@ -142,7 +142,7 @@ class DigitalPackEmailFields(
 
   import DigitalSubscriptionEmailAttributes._
 
-  val digitalPackPaymentEmailFields = new DigitalPackPaymentEmailFields(getMandate)
+  val digitalPackPaymentEmailFields: DigitalPackPaymentEmailFields = new DigitalPackPaymentEmailFields(getMandate)
 
   private def directOrCorpFields(details: String, subscriptionNumber: String, user: User) = BasicDSAttributes(
     zuorasubscriberid = subscriptionNumber,

@@ -20,7 +20,7 @@ abstract class ServicesHandler[IN <: StepFunctionUserState, OUT](servicesProvide
       error: Option[ExecutionError],
       requestInfo: RequestInfo,
       context: Context,
-  ) = {
+  ): FutureHandlerResult = {
     servicesHandler(input, requestInfo, context, servicesProvider.forUser(input.user.isTestUser))
   }
 
@@ -42,7 +42,12 @@ abstract class SubsetServicesHandler[IN <: StepFunctionUserState, OUT, SUBSET](
     ec: ExecutionContext,
 ) extends ServicesHandler[IN, OUT](servicesProvider) {
 
-  override protected def servicesHandler(input: IN, requestInfo: RequestInfo, context: Context, services: Services) = {
+  override protected def servicesHandler(
+      input: IN,
+      requestInfo: RequestInfo,
+      context: Context,
+      services: Services,
+  ): FutureHandlerResult = {
     subsetHandler(makeSubset(input), requestInfo, context, services)
   }
 

@@ -30,7 +30,7 @@ object Client {
     new Client(client, arn)
   }
 
-  def generateExecutionName(name: String, l: Long = System.nanoTime()) = {
+  def generateExecutionName(name: String, l: Long = System.nanoTime()): String = {
     val uniq = {
       val bytes = ByteBuffer.allocate(8).putLong(l).array()
       val encodedString = Base64.getEncoder.encodeToString(bytes)

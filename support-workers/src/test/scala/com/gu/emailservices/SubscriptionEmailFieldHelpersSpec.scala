@@ -16,7 +16,7 @@ class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
     List(original) ++ subsequentPayments
   }
 
-  val referenceDate = new LocalDate(2019, 1, 14)
+  val referenceDate: LocalDate = new LocalDate(2019, 1, 14)
 
   "describe" should "explain a simple annual payment schedule correctly" in {
     val standardDigitalPackPayment = Payment(referenceDate, 119.90)

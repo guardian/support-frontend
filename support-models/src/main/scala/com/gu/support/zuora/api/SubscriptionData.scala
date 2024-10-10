@@ -15,12 +15,12 @@ import io.circe.{Decoder, Encoder, Json, parser}
 import org.joda.time.{LocalDate, Months}
 
 object RatePlanCharge {
-  val fixedPeriod = "FixedPeriod"
-  val subscriptionEnd = "SubscriptionEnd"
-  val endDateCondition = "EndDateCondition"
-  val upToPeriods = "UpToPeriods"
-  val triggerEvent = "TriggerEvent"
-  val specificEvent = "SpecificDate"
+  val fixedPeriod: String = "FixedPeriod"
+  val subscriptionEnd: String = "SubscriptionEnd"
+  val endDateCondition: String = "EndDateCondition"
+  val upToPeriods: String = "UpToPeriods"
+  val triggerEvent: String = "TriggerEvent"
+  val specificEvent: String = "SpecificDate"
 
   implicit val discountEncoder: Encoder[DiscountRatePlanCharge] = capitalizingEncoder[DiscountRatePlanCharge]
     .mapJsonObject { jo =>
@@ -111,19 +111,19 @@ object PeriodType {
 object ReaderType {
 
   case object Direct extends ReaderType {
-    val value = "Direct"
+    val value: String = "Direct"
   }
   case object Gift extends ReaderType {
-    val value = "Gift"
+    val value: String = "Gift"
   }
   case object Agent extends ReaderType {
-    val value = "Agent"
+    val value: String = "Agent"
   }
   case object Patron extends ReaderType {
-    val value = "Patron"
+    val value: String = "Patron"
   }
   case object Unknown extends ReaderType {
-    val value = "Unknown"
+    val value: String = "Unknown"
   }
 
   def impliedByPromoCode(promoCode: PromoCode): Option[ReaderType] = Option.when(promoCode.endsWith("PATRON"))(Patron)
@@ -150,11 +150,11 @@ sealed trait ReaderType {
 object AcquisitionSource {
 
   case object CSR extends AcquisitionSource {
-    val value = "CSR"
+    val value: String = "CSR"
   }
 
   case object Unknown extends AcquisitionSource {
-    val value = "Unknown"
+    val value: String = "Unknown"
   }
 
   def fromString(s: String): AcquisitionSource =

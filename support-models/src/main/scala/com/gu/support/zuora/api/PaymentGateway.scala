@@ -40,38 +40,38 @@ object PaymentGateway {
 //Gateway names need to match to those set in Zuora
 //See: https://apisandbox.zuora.com/apps/NewGatewaySetting.do?method=list
 case object StripeGatewayDefault extends PaymentGateway {
-  val name = "Stripe Gateway 1"
+  val name: String = "Stripe Gateway 1"
 }
 
 case object StripeGatewayAUD extends PaymentGateway {
-  val name = "Stripe Gateway GNM Membership AUS"
+  val name: String = "Stripe Gateway GNM Membership AUS"
 }
 
 case object StripeGatewayPaymentIntentsDefault extends PaymentGateway {
-  val name = "Stripe PaymentIntents GNM Membership"
+  val name: String = "Stripe PaymentIntents GNM Membership"
 }
 
 case object StripeGatewayPaymentIntentsAUD extends PaymentGateway {
-  val name = "Stripe PaymentIntents GNM Membership AUS"
+  val name: String = "Stripe PaymentIntents GNM Membership AUS"
 }
 
 case object PayPalGateway extends PaymentGateway {
-  val name = "PayPal Express"
+  val name: String = "PayPal Express"
 }
 
 case object DirectDebitGateway extends PaymentGateway {
-  val name = "GoCardless"
+  val name: String = "GoCardless"
 }
 
 case object SepaGateway extends PaymentGateway {
-  val name = "Stripe Bank Transfer - GNM Membership"
+  val name: String = "Stripe Bank Transfer - GNM Membership"
 }
 
 case object ZuoraInstanceDirectDebitGateway extends PaymentGateway {
   // not sure why there are two GoCardless gateways in Zuora - but having it declared here allows it be re-used
-  val name = "GoCardless - Zuora Instance"
+  val name: String = "GoCardless - Zuora Instance"
 }
 
 case object AmazonPayGatewayUSA extends PaymentGateway {
-  val name = "Amazon Pay - Contributions USA"
+  val name: String = "Amazon Pay - Contributions USA"
 }

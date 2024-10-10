@@ -9,7 +9,7 @@ import scala.util.{Failure, Success}
 
 class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem) extends SafeLogging {
 
-  val cloudwatchMetricsPattern = "regular-contributions-state-machine-unavailable"
+  val cloudwatchMetricsPattern: String = "regular-contributions-state-machine-unavailable"
 
   def start(): Unit = {
     implicit val ec = actorSystem.dispatcher

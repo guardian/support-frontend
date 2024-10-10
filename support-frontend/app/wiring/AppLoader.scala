@@ -13,7 +13,7 @@ import scala.util.{Success, Try}
 
 class AppLoader extends ApplicationLoader with StrictLogging {
 
-  lazy val CredentialsProvider = AwsCredentialsProviderChain.builder
+  lazy val CredentialsProvider: AwsCredentialsProviderChain = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
       InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,

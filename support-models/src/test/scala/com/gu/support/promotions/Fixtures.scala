@@ -1,9 +1,9 @@
 package com.gu.support.promotions
 
 object Fixtures {
-  val startDate = "2018-10-03T00:00:00.000+01:00"
+  val startDate: String = "2018-10-03T00:00:00.000+01:00"
 
-  val doublePromotionType =
+  val doublePromotionType: String =
     """
       {
           "a": {
@@ -18,7 +18,7 @@ object Fixtures {
           "name": "double"
       }
     """
-  val discountPromotion =
+  val discountPromotion: String =
     s"""
     {
       "codes": {
@@ -54,7 +54,7 @@ object Fixtures {
     }
   """
 
-  val freeTrialPromotion =
+  val freeTrialPromotion: String =
     s"""
        {
             "codes": {
@@ -107,7 +107,7 @@ object Fixtures {
         }
      """
 
-  val doublePromotion =
+  val doublePromotion: String =
     s"""
     {
       "codes": {
@@ -183,7 +183,7 @@ object Fixtures {
   }
     """
 
-  val renewal =
+  val renewal: String =
     """
       {
             "codes": {
@@ -224,7 +224,7 @@ object Fixtures {
         }
     """
 
-  val doubleWithRenewal =
+  val doubleWithRenewal: String =
     """
       {
             "codes": {
@@ -264,7 +264,7 @@ object Fixtures {
         }
     """
 
-  val incentivePromotion =
+  val incentivePromotion: String =
     """
       {
             "codes": {
@@ -301,7 +301,7 @@ object Fixtures {
         }
     """
 
-  val doubleWithIncentive =
+  val doubleWithIncentive: String =
     """
       {
             "codes": {
@@ -382,7 +382,7 @@ object Fixtures {
         }
     """
 
-  val introductoryPricePromotion =
+  val introductoryPricePromotion: String =
     s"""
     {
       "codes": {

@@ -160,14 +160,15 @@ object Salesforce {
 
     def errorMessage: Option[String] = List(buyer.ErrorString, giftRecipient.flatMap(_.ErrorString)).flatten.headOption
 
-    def contactRecords = SalesforceContactRecords(buyer.ContactRecord, giftRecipient.map(_.ContactRecord))
+    def contactRecords: SalesforceContactRecords =
+      SalesforceContactRecords(buyer.ContactRecord, giftRecipient.map(_.ContactRecord))
   }
 
   object SalesforceErrorResponse {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
-    val expiredAuthenticationCode = "INVALID_SESSION_ID"
-    val rateLimitExceeded = "REQUEST_LIMIT_EXCEEDED"
-    val readOnlyMaintenance = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE"
+    val expiredAuthenticationCode: String = "INVALID_SESSION_ID"
+    val rateLimitExceeded: String = "REQUEST_LIMIT_EXCEEDED"
+    val readOnlyMaintenance: String = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE"
   }
 
   case class SalesforceErrorResponse(
@@ -175,7 +176,7 @@ object Salesforce {
       errorCode: String,
   ) extends Throwable {
 
-    val errorsToRetryUnlimited = List(
+    val errorsToRetryUnlimited: List[String] = List(
       SalesforceErrorResponse.expiredAuthenticationCode,
       SalesforceErrorResponse.rateLimitExceeded,
       SalesforceErrorResponse.readOnlyMaintenance,

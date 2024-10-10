@@ -21,7 +21,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
       fulfilmentOptions: FulfilmentOptions,
       productOptions: ProductOptions,
       readerType: ReaderType = Direct,
-  ) =
+  ): Option[ProductRatePlan[Product]] =
     product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
 
   private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions) =

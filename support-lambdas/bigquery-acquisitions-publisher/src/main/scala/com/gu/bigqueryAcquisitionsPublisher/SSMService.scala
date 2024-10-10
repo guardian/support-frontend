@@ -14,18 +14,19 @@ import com.amazonaws.services.simplesystemsmanagement.model.GetParameterRequest
 import com.gu.aws.ProfileName
 
 import scala.util.Try
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 
 object SSMService {
 
   // please update to AWS SDK 2 and use com.gu.aws.CredentialsProvider
-  lazy val CredentialsProviderDEPRECATEDV1 = new AWSCredentialsProviderChain(
+  lazy val CredentialsProviderDEPRECATEDV1: AWSCredentialsProviderChain = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
     new EnvironmentVariableCredentialsProvider(),
     new EC2ContainerCredentialsProviderWrapper(), // for use with lambda snapstart
   )
 
-  val client = AWSSimpleSystemsManagementClientBuilder
+  val client: AWSSimpleSystemsManagement = AWSSimpleSystemsManagementClientBuilder
     .standard()
     .withCredentials(CredentialsProviderDEPRECATEDV1)
     .withRegion(Regions.EU_WEST_1)

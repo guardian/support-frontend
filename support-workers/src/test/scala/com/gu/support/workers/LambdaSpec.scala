@@ -10,6 +10,6 @@ abstract class LambdaSpec extends AnyFlatSpec with Matchers with MockContext
 abstract class AsyncLambdaSpec extends AsyncFlatSpec with Matchers
 
 trait MockContext extends MockitoSugar {
-  val context = mock[Context]
+  val context: Context = mock[Context]
   when(context.getRemainingTimeInMillis).thenReturn(60000)
 }

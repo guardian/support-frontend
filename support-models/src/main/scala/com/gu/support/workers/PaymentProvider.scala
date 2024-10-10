@@ -24,7 +24,7 @@ case object AmazonPay extends PaymentProvider("AmazonPay")
 
 object PaymentProvider {
 
-  val all = List(
+  val all: List[PaymentProvider] = List(
     Stripe,
     StripeApplePay,
     PayPal,

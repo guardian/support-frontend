@@ -22,7 +22,7 @@ object SafeLogger {
   val sanitizedLogMessage: Marker = MarkerFactory.getMarker("SENTRY")
 
   case class LogMessage(withPersonalData: String, withoutPersonalData: String) {
-    override val toString = withoutPersonalData
+    override val toString: String = withoutPersonalData
   }
 
 }

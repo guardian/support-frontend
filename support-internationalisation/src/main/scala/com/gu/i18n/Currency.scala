@@ -10,7 +10,7 @@ sealed trait Currency {
 case class OtherCurrency(iso: String, glyph: String) extends Currency
 
 object Currency {
-  val websiteSupportedCurrencies = List(
+  val websiteSupportedCurrencies: List[Currency] = List(
     GBP,
     USD,
     AUD,
@@ -19,7 +19,7 @@ object Currency {
     NZD,
   )
 
-  val otherCurrencies = Map(
+  val otherCurrencies: Map[String, String] = Map(
     "SEK" -> "kr",
     "CHF" -> "fr.",
     "NOK" -> "kr",

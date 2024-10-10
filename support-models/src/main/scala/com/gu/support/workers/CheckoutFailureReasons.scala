@@ -6,7 +6,7 @@ import scala.PartialFunction.condOpt
 
 object CheckoutFailureReasons {
 
-  val all = List(
+  val all: List[CheckoutFailureReason] = List(
     InsufficientFunds,
     PaymentMethodDetailsIncorrect,
     PaymentMethodTemporarilyDeclined,
@@ -56,7 +56,7 @@ object CheckoutFailureReasons {
   }
 
   case object AccountMismatch extends CheckoutFailureReason {
-    override def asString = "production_test_account_mismatch"
+    override def asString: String = "production_test_account_mismatch"
   }
 
   case object AmazonPayTryAnotherCard extends CheckoutFailureReason {

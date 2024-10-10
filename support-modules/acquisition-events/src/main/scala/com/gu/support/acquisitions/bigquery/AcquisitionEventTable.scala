@@ -1,6 +1,6 @@
 package com.gu.support.acquisitions
 
 object AcquisitionEventTable {
-  val datasetName = "datalake"
-  val tableName = "fact_acquisition_event"
+  val datasetName: String = "datalake"
+  val tableName: String = "fact_acquisition_event"
 }

@@ -9,7 +9,7 @@ import JsonFixtures.previewSubscribeResponseJson
 
 class PreviewPaymentScheduleSpec extends AnyFlatSpec with Matchers {
 
-  val firstPaymentDate = new LocalDate(2019, 1, 14)
+  val firstPaymentDate: LocalDate = new LocalDate(2019, 1, 14)
 
   "paymentSchedule" should "calculate a payment schedule correctly for products without tax" in {
     val taxExclusiveCharge = Charge(firstPaymentDate, firstPaymentDate.plusMonths(1), 0, 5.00)

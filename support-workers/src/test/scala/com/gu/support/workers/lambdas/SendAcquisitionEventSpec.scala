@@ -45,7 +45,7 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
 object MockAcquisitionHelper extends MockitoSugar {
 
-  lazy val mockServices = {
+  lazy val mockServices: ServiceProvider = {
     val configuration = Configuration.load()
     // Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]

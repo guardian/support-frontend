@@ -27,7 +27,7 @@ import scala.util.{Failure, Success}
 @IntegrationTest
 class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
-  val customer = NewContact(
+  val customer: NewContact = NewContact(
     IdentityID__c = idId,
     Email = emailAddress,
     Salutation = Some(Title.Mr),

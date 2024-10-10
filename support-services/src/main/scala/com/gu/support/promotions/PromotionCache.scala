@@ -6,13 +6,13 @@ import org.joda.time.{DateTime, Minutes}
 import scala.concurrent.stm.{Ref, atomic}
 
 case class PromotionCacheResponse(fetched: DateTime, promotions: Iterable[Promotion]) {
-  val maxAge = Minutes.ONE.toStandardDuration.getMillis
+  val maxAge: Long = Minutes.ONE.toStandardDuration.getMillis
   def isFresh: Boolean = DateTime.now.getMillis - fetched.getMillis < maxAge
 }
 
 class PromotionCache {
   // this val contains the mutable cache contents
-  val promotionsRef = Ref[Option[PromotionCacheResponse]](None)
+  val promotionsRef: Ref[Option[PromotionCacheResponse]] = Ref[Option[PromotionCacheResponse]](None)
 
   def get: Option[Iterable[Promotion]] = promotionsRef.single().filter(_.isFresh).map(_.promotions)
 

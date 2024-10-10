@@ -84,5 +84,5 @@ class SimpleJsonProvider(json: Json) extends CatalogJsonProvider {
 object CatalogServiceSpec {
   private val json = parse(ServiceFixtures.loadCatalog).right.get
   private val jsonProvider = new SimpleJsonProvider(json)
-  val serviceWithFixtures = new CatalogService(PROD, jsonProvider)
+  val serviceWithFixtures: CatalogService = new CatalogService(PROD, jsonProvider)
 }

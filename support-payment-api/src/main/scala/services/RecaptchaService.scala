@@ -19,7 +19,7 @@ object RecaptchaResponse {
 }
 
 class RecaptchaService(wsClient: WSClient, config: RecaptchaConfig)(implicit ec: ExecutionContext) {
-  val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
+  val recaptchaEndpoint: String = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String): EitherT[Future, StripeApiError, RecaptchaResponse] =
     wsClient
@@ -41,7 +41,9 @@ class RecaptchaService(wsClient: WSClient, config: RecaptchaConfig)(implicit ec:
 }
 
 object RecaptchaService {
-  def fromRecaptchaConfig(config: RecaptchaConfig)(implicit ws: WSClient, pool: DefaultThreadPool) =
+  def fromRecaptchaConfig(
+      config: RecaptchaConfig,
+  )(implicit ws: WSClient, pool: DefaultThreadPool): Validated[InitializationError, RecaptchaService] =
     Validated
       .catchNonFatal {
         new RecaptchaService(ws, config)

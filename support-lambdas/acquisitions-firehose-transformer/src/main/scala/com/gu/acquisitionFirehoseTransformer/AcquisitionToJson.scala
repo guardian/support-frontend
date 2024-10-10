@@ -7,10 +7,11 @@ import io.circe.generic.auto._
 import io.circe.syntax._
 
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 object AcquisitionToJson {
 
-  val dtFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+  val dtFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 
   private case class AcquisitionOutput(
       paymentFrequency: String,

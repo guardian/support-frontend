@@ -35,7 +35,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     )
 
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
-  val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
+  val earlyDate: DateTime = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
 
   "ZuoraService" should "retrieve an account" in {
     codeService.getAccount(Fixtures.accountNumber).map { response =>

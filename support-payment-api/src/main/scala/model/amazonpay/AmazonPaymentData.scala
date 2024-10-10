@@ -1,5 +1,6 @@
 package model.amazonpay
 
+import io.circe.Decoder
 import io.circe.generic.JsonCodec
 import io.circe.generic.semiauto._
 import model.{AcquisitionData, Currency}
@@ -10,5 +11,5 @@ object BundledAmazonPayRequest {
   case class AmazonPayRequest(paymentData: AmazonPaymentData, acquisitionData: Option[AcquisitionData])
 
   import controllers.JsonReadableOps._
-  implicit val bundledAmazonPayRequestDecoder = deriveDecoder[AmazonPayRequest]
+  implicit val bundledAmazonPayRequestDecoder: Decoder[AmazonPayRequest] = deriveDecoder[AmazonPayRequest]
 }

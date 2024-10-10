@@ -10,5 +10,5 @@ object StateMachineArn {
 }
 
 case class StateMachineArn(region: String, accountId: String, id: String) {
-  val asString = s"arn:aws:states:$region:$accountId:stateMachine:$id"
+  val asString: String = s"arn:aws:states:$region:$accountId:stateMachine:$id"
 }

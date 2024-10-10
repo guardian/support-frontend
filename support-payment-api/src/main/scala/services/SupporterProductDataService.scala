@@ -13,7 +13,7 @@ import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupporterProductDataService(environment: Environment) extends StrictLogging {
-  val dynamoService = SupporterDataDynamoService(environment match {
+  val dynamoService: SupporterDataDynamoService = SupporterDataDynamoService(environment match {
     case Live => PROD
     case _ => CODE
   })

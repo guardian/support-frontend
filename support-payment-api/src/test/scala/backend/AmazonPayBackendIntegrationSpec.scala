@@ -85,10 +85,10 @@ class AmazonPayBackendIntegrationSpec
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
-  val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
-  val amazonPayRequest = AmazonPayRequest(paymentdata, None)
-  val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
-  val paymentError = AmazonPayApiError.fromString("Error response")
+  val paymentdata: AmazonPaymentData = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
+  val amazonPayRequest: AmazonPayRequest = AmazonPayRequest(paymentdata, None)
+  val clientBrowserInfo: ClientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
+  val paymentError: AmazonPayApiError = AmazonPayApiError.fromString("Error response")
 
   "AmazonPayBackend.makePayment" should "not returning an XML marshalling error" in {
     lazy val config: AmazonPayConfig = configForTestEnvironment[AmazonPayConfig]()

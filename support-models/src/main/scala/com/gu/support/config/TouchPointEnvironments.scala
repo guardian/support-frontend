@@ -8,7 +8,7 @@ import com.gu.support.config.TouchPointEnvironments.{PROD, CODE}
   * and CODE for test users
   */
 sealed trait TouchPointEnvironment {
-  val envValue = this match {
+  val envValue: String = this match {
     case CODE => "CODE"
     case PROD => "PROD"
   }

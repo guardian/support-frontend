@@ -7,10 +7,11 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Random
+import pprint.PPrinter
 
 object ActionOps {
 
-  val formatter =
+  val formatter: PPrinter =
     pprint.copy(
       additionalHandlers = { case value: ByteString =>
         pprint.Tree.Literal(s"""ByteString("${value.utf8String}")""")

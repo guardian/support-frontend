@@ -14,11 +14,11 @@ case class RecaptchaResponse(success: Boolean, `error-codes`: Option[List[String
 object RecaptchaResponse {
   implicit val readsGetUserTypeResponse: Reads[RecaptchaResponse] = Json.reads[RecaptchaResponse]
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
-  val recaptchaFailedCode = "recaptcha_validation_failed"
+  val recaptchaFailedCode: String = "recaptcha_validation_failed"
 }
 
 class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) extends SafeLogging {
-  val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
+  val recaptchaEndpoint: String = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String, secretKey: String): EitherT[Future, String, RecaptchaResponse] =
     wsClient

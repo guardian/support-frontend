@@ -5,9 +5,9 @@ import com.gu.i18n.Currency.GBP
 
 //noinspection TypeAnnotation
 object Fixtures {
-  val idId = "12345"
-  val email = "test@thegulocal.com"
-  val userJson =
+  val idId: String = "12345"
+  val email: String = "test@thegulocal.com"
+  val userJson: String =
     s"""
       "user":{
           "id": "$idId",
@@ -22,10 +22,10 @@ object Fixtures {
           "isTestUser": false
         }
     """
-  val requestIdJson = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
-  val validBaid = "B-23637766K5365543J"
-  val payPalEmail = "test@paypal.com"
-  val payPalPaymentMethod =
+  val requestIdJson: String = "\"requestId\": \"e18f6418-45f2-11e7-8bfa-8faac2182601\""
+  val validBaid: String = "B-23637766K5365543J"
+  val payPalEmail: String = "test@paypal.com"
+  val payPalPaymentMethod: String =
     s"""
         {
               "PaypalBaid": "$validBaid",
@@ -36,7 +36,7 @@ object Fixtures {
          }
        """
 
-  val stripePaymentMethod = // test env card and cus token, not prod ones
+  val stripePaymentMethod: String = // test env card and cus token, not prod ones
     s"""
         {
            "TokenId": "card_E0zitFfsO2wTEn",
@@ -61,7 +61,7 @@ object Fixtures {
       }
     """
 
-  val digitalPackJson =
+  val digitalPackJson: String =
     """
       {
         "productType": "DigitalPack",
@@ -72,12 +72,12 @@ object Fixtures {
       }
     """
 
-  val digitalPackProductJson =
+  val digitalPackProductJson: String =
     s"""
       "product": $digitalPackJson
     """
 
-  val guardianWeeklyJson =
+  val guardianWeeklyJson: String =
     s"""
        "product": {
          "productType": "GuardianWeekly",
@@ -86,14 +86,14 @@ object Fixtures {
          "fulfilmentOptions": "RestOfWorld"
       }
      """
-  val payPalJson =
+  val payPalJson: String =
     s"""
       {
         "baid": "$validBaid"
       }
     """
 
-  val acquisitionData =
+  val acquisitionData: String =
     s"""
       {
         "ophanIds":{
@@ -121,8 +121,8 @@ object Fixtures {
       }
     """
 
-  val mickeyMouse = "Mickey Mouse"
-  val directDebitJson =
+  val mickeyMouse: String = "Mickey Mouse"
+  val directDebitJson: String =
     s"""
       {
         "accountHolderName": "$mickeyMouse",
@@ -132,8 +132,8 @@ object Fixtures {
       }
     """
 
-  val stripePM = "pm_AXY4M16p60c2sg"
-  val stripeJson =
+  val stripePM: String = "pm_AXY4M16p60c2sg"
+  val stripeJson: String =
     s"""
       {
         "paymentMethod": "$stripePM"
@@ -174,7 +174,7 @@ object Fixtures {
           "userAgent": "TestAgent"
         }"""
 
-  val createPayPalPaymentMethodDigitalPackJson =
+  val createPayPalPaymentMethodDigitalPackJson: String =
     s"""{
           $requestIdJson,
           $userJson,
@@ -189,7 +189,7 @@ object Fixtures {
           "userAgent": "TestAgent"
         }"""
 
-  val createDirectDebitDigitalPackJson =
+  val createDirectDebitDigitalPackJson: String =
     s"""{
           $requestIdJson,
           $userJson,
@@ -204,7 +204,7 @@ object Fixtures {
           "userAgent": "TestAgent"
         }"""
 
-  val createDirectDebitGuardianWeeklyJson =
+  val createDirectDebitGuardianWeeklyJson: String =
     s"""{
           $requestIdJson,
           $userJson,
@@ -219,7 +219,7 @@ object Fixtures {
           "userAgent": "TestAgent"
         }"""
 
-  val createSalesforceContactJson =
+  val createSalesforceContactJson: String =
     s"""
           {
             $requestIdJson,
@@ -234,7 +234,7 @@ object Fixtures {
           }
         """
 
-  val salesforceContactJson =
+  val salesforceContactJson: String =
     """
         {
           "Id": "0033E00001Cq8D2QAJ",
@@ -242,7 +242,7 @@ object Fixtures {
         }
       """
 
-  val salesforceContactsJson =
+  val salesforceContactsJson: String =
     """{
           "buyer": {
               "Id": "0033E00001Cq8D2QAJ",
@@ -277,7 +277,7 @@ object Fixtures {
             }
         """
 
-  val zuoraErrorResponse =
+  val zuoraErrorResponse: String =
     """[{"Code": "TRANSACTION_FAILED","Message": "Transaction declined.do_not_honor - Your card was declined."}]"""
 
 }

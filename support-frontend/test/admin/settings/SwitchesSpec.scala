@@ -152,7 +152,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |}
           |""".stripMargin
 
-      decode[Switches](json) mustBe (Right(
+      decode[Switches](json) mustBe Right(
         Switches(
           oneOffPaymentMethods =
             OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -172,7 +172,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),
-      ))
+      )
     }
   }
 }

@@ -13,7 +13,7 @@ import model.{InitializationError, InitializationResult, SQSThreadPool}
 import services.ContributionsStoreQueueService.Message
 
 import java.time.LocalDateTime
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
 import scala.util.control.NonFatal
 
@@ -55,7 +55,7 @@ object ContributionsStoreQueueService {
   case class RefundedPaymentId(paymentId: String) extends Message
 
   object Message {
-    private implicit val messageEncoder = Encoder[Message] { message =>
+    private implicit val messageEncoder: Encoder[Message] = Encoder[Message] { message =>
       import io.circe.generic.auto._
 
       // copied from earlier version of circe-core to prevent seconds appearing in the serialised form
@@ -86,7 +86,7 @@ object ContributionsStoreQueueService {
     )
 }
 
-class ContributionsStoreQueueService(queueUrl: String, keyId: String, region: String = "eu-west-1")(implicit
+class ContributionsStoreQueueService(queueUrl: String, keyId: String)(implicit
     pool: SQSThreadPool,
 ) extends ContributionsStoreService
     with StrictLogging {

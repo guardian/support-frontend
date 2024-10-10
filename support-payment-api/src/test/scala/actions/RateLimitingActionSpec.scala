@@ -13,9 +13,10 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.ControllerComponents
 
 class RateLimitingActionSpec extends AnyWordSpec with Matchers with Results with MockitoSugar {
-  val cc = stubControllerComponents()
+  val cc: ControllerComponents = stubControllerComponents()
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
   private def newAction(maxRequests: Int, interval: FiniteDuration) =

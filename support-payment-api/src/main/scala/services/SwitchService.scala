@@ -24,9 +24,9 @@ sealed trait SwitchState {
 object SwitchState {
   def fromString(s: String): SwitchState = if (s.toLowerCase == "on") On else Off
 
-  case object On extends SwitchState { val isOn = true }
+  case object On extends SwitchState { val isOn: Boolean = true }
 
-  case object Off extends SwitchState { val isOn = false }
+  case object Off extends SwitchState { val isOn: Boolean = false }
 
   implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
   implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)

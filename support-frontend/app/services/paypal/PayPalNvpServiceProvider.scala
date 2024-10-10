@@ -10,6 +10,6 @@ import scala.concurrent.ExecutionContext
 class PayPalNvpServiceProvider(configProvider: PayPalConfigProvider, wsClient: WSClient)(implicit
     executionContext: ExecutionContext,
 ) extends TouchpointServiceProvider[PayPalNvpService, PayPalConfig](configProvider) {
-  override protected def createService(config: PayPalConfig) =
+  override protected def createService(config: PayPalConfig): PayPalNvpService =
     new PayPalNvpService(config, wsClient)
 }

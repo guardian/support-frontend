@@ -84,7 +84,7 @@ case class GuardianWeekly(
 object ProductType {
   import com.gu.support.encoding.CustomCodecs._
 
-  val discriminatedType = new DiscriminatedType[ProductType]("productType")
+  val discriminatedType: DiscriminatedType[ProductType] = new DiscriminatedType[ProductType]("productType")
 
   implicit val codecContribution: discriminatedType.VariantCodec[Contribution] =
     discriminatedType.variant[Contribution]("Contribution")

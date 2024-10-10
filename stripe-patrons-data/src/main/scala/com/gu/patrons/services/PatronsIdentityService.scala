@@ -11,9 +11,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHttpClient)
     extends WebServiceHelper[IdentityErrorResponse] {
-  override val wsUrl = config.apiUrl
-  override val httpClient = client
-  val authHeader = Map(
+  override val wsUrl: String = config.apiUrl
+  override val httpClient: FutureHttpClient = client
+  val authHeader: Map[String, String] = Map(
     "Authorization" -> s"Bearer ${config.apiClientToken}",
   )
 
@@ -45,7 +45,7 @@ class PatronsIdentityService(val config: PatronsIdentityConfig, client: FutureHt
   def createUserIdFromEmailUser(
       email: String,
       firstName: Option[String],
-  )(implicit ec: ExecutionContext) = {
+  )(implicit ec: ExecutionContext): Future[String] = {
     logger.info(s"Attempting to create guest identity account for user $email")
     val body = CreateGuestAccountRequestBody(
       email,

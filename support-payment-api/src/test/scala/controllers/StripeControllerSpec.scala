@@ -1,7 +1,5 @@
 package controllers
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.{ActorMaterializer, Materializer}
 import backend._
 import cats.data.EitherT
 import cats.implicits._
@@ -9,21 +7,21 @@ import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
 import model.DefaultThreadPool
 import model.stripe.{StripeApiError, StripeCreateChargeResponse}
-import org.mockito.Mockito._
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.{ActorMaterializer, Materializer}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
-import play.api.inject.DefaultApplicationLifecycle
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
 import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.Helpers._
 import play.api.test._
-import play.core.DefaultWebCommands
 import router.Routes
 import services.CloudWatchService
 import util.RequestBasedProvider
@@ -103,11 +101,11 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
 class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
-  implicit val actorSystem = ActorSystem("rest-server")
+  implicit val actorSystem: ActorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val context = ApplicationLoader.Context.create(Environment.simple())
+  val context: ApplicationLoader.Context = ApplicationLoader.Context.create(Environment.simple())
 
   "StripeController" when {
 

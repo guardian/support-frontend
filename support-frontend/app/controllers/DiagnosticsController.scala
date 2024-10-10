@@ -8,7 +8,7 @@ class DiagnosticsController(
     actionRefiners: CustomActionBuilders,
 ) {
 
-  val relevantCookies = List(
+  val relevantCookies: List[String] = List(
     "gu_user_features_expiry",
     "gu_paying_member",
     "GU_AF1",

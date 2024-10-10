@@ -19,8 +19,8 @@ trait GoogleAuth {
     antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration),
   )
 
-  val authAction =
+  val authAction: AuthAction[AnyContent] =
     new AuthAction[AnyContent](googleAuthConfig, routes.Login.loginAction(), controllerComponents.parsers.default)
 
-  val loginController = new Login(googleAuthConfig, wsClient, controllerComponents)
+  val loginController: Login = new Login(googleAuthConfig, wsClient, controllerComponents)
 }

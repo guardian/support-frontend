@@ -19,7 +19,7 @@ object Configuration extends SafeLogging {
   )
     .getOrElse(true) // Should we load config from S3
 
-  val stage = Stage
+  val stage: Stage = Stage
     .fromString(
       Option(System.getenv("GU_SUPPORT_WORKERS_STAGE"))
         .getOrElse("DEV"),
@@ -33,20 +33,20 @@ object Configuration extends SafeLogging {
     .forEnvironment(Configuration.loadFromS3)
     .load(Configuration.stage, ConfigFactory.load(this.getClass.getClassLoader))
 
-  lazy val emailQueueName = System.getenv("EMAIL_QUEUE_NAME")
+  lazy val emailQueueName: String = System.getenv("EMAIL_QUEUE_NAME")
 }
 
 case class Configuration(config: Config) {
 
   import Configuration.stage
 
-  val stripeConfigProvider = new StripeConfigProvider(config, stage)
-  val payPalConfigProvider = new PayPalConfigProvider(config, stage)
-  val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
-  val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
-  val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
-  val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
-  val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
+  val stripeConfigProvider: StripeConfigProvider = new StripeConfigProvider(config, stage)
+  val payPalConfigProvider: PayPalConfigProvider = new PayPalConfigProvider(config, stage)
+  val salesforceConfigProvider: SalesforceConfigProvider = new SalesforceConfigProvider(config, stage)
+  val zuoraConfigProvider: ZuoraConfigProvider = new ZuoraConfigProvider(config, stage)
+  val promotionsConfigProvider: PromotionsConfigProvider = new PromotionsConfigProvider(config, stage)
+  val goCardlessConfigProvider: GoCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
+  val paperRoundConfigProvider: PaperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
-  val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
+  val acquisitionsKinesisStreamName: String = config.getString("kinesis.streamName")
 }

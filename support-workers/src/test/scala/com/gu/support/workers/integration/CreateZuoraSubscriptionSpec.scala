@@ -35,7 +35,7 @@ import com.gu.support.catalog.Domestic
 
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
-  val createZuoraHelper = new CreateZuoraSubscriptionHelper()
+  val createZuoraHelper: CreateZuoraSubscriptionHelper = new CreateZuoraSubscriptionHelper()
 
   "CreateZuoraSubscription lambda" should "create a monthly contribution" in {
     createZuoraHelper
@@ -198,19 +198,20 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     }
   }
 
-  val realConfig = Configuration.load()
+  val realConfig: Configuration = Configuration.load()
 
-  val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
+  val realZuoraService: ZuoraService =
+    new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
 
-  val realZuoraGiftService =
+  val realZuoraGiftService: ZuoraGiftService =
     new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), Stages.DEV, configurableFutureRunner(60.seconds))
 
-  val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
+  val realPromotionService: PromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
   private val jsonProvider = new S3CatalogProvider(TouchPointEnvironments.CODE)
-  lazy val realCatalogService = new CatalogService(TouchPointEnvironments.CODE, jsonProvider)
+  lazy val realCatalogService: CatalogService = new CatalogService(TouchPointEnvironments.CODE, jsonProvider)
 
-  lazy val mockZuoraService = {
+  lazy val mockZuoraService: ZuoraService = {
     val mockZuora = mock[ZuoraService]
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped

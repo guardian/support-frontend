@@ -14,7 +14,7 @@ import scala.concurrent.Future
 
 class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessService(config) with SafeLogging {
 
-  lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
+  lazy val client: GoCardlessClient = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 
   /** @return
     *   true if either the bank details are correct, or the rate limit for this endpoint is reached. In the latter case

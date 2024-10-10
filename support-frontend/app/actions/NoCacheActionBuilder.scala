@@ -9,9 +9,9 @@ class NoCacheActionBuilder(
     val executionContext: ExecutionContext,
     val headers: List[(String, String)],
 ) extends ActionBuilder[Request, AnyContent] {
-  implicit private val ec = executionContext
+  implicit private val ec: ExecutionContext = executionContext
 
-  override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] =
+  override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
     block(request).map(_.withHeaders(mergeHeader("Vary", List(CacheControl.noCache) ++ headers): _*))
 
 }

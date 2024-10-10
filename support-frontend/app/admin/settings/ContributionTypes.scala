@@ -33,7 +33,6 @@ case class ContributionTypes(
 
 object ContributionTypes {
   import io.circe.generic.auto._
-  import ContributionType._
 
   implicit val contributionTypesDecoder = Decoder[ContributionTypes]
   implicit val contributionTypesEncoder = Encoder[ContributionTypes]

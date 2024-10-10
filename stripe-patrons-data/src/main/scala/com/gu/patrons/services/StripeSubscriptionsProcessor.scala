@@ -15,7 +15,7 @@ class StripeSubscriptionsProcessor(
     executionContext: ExecutionContext,
 ) extends SafeLogging {
 
-  def processSubscriptions(account: PatronsStripeAccount, pageSize: Int) =
+  def processSubscriptions(account: PatronsStripeAccount, pageSize: Int): Future[Unit] =
     processFutureResponse(account, pageSize, None)
 
   final def processFutureResponse(
@@ -33,7 +33,7 @@ class StripeSubscriptionsProcessor(
           Future.successful(())
     } yield result
 
-  def processSubs(list: List[StripeSubscription[ExpandedStripeCustomer]]) = {
+  def processSubs(list: List[StripeSubscription[ExpandedStripeCustomer]]): Future[List[Unit]] = {
     val unknownEmailViaCSR = "patrons@theguardian.com"
     Future.sequence(
       list
@@ -56,7 +56,7 @@ abstract class DynamoProcessor(
     with SafeLogging {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def writeToDynamo(identityId: String, sub: StripeSubscription[ExpandedStripeCustomer]) = {
+  def writeToDynamo(identityId: String, sub: StripeSubscription[ExpandedStripeCustomer]): Future[UpdateItemResponse] = {
     logger.info(
       s"Attempting to write subscription (${sub.customer.email}, $identityId) to Dynamo",
     )
@@ -75,7 +75,7 @@ abstract class DynamoProcessor(
       )
   }
 
-  def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse) =
+  def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse): Unit =
     if (addSubscriptionsToQueueState.sdkHttpResponse().statusCode() == 200)
       logger.info(s"Dynamo record successfully written for $email")
     else
@@ -90,7 +90,7 @@ class CreateMissingIdentityProcessor(
 ) extends DynamoProcessor(supporterDataDynamoService) {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]) =
+  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]): Future[Unit] =
     for {
       _ <- processCustomerEmail(subscription.customer.email, subscription.customer.name, subscription)
       _ <- maybeAddJointPatron(subscription)
@@ -110,7 +110,7 @@ class CreateMissingIdentityProcessor(
     ()
   }
 
-  def maybeAddJointPatron(subscription: StripeSubscription[ExpandedStripeCustomer]) =
+  def maybeAddJointPatron(subscription: StripeSubscription[ExpandedStripeCustomer]): Future[Unit] =
     subscription.customer.jointPatronEmail match {
       case Some(email) =>
         logger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
@@ -127,7 +127,7 @@ class SkipMissingIdentityProcessor(
 ) extends DynamoProcessor(supporterDataDynamoService) {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]) =
+  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]): Future[Unit] =
     identityService.getUserIdFromEmail(subscription.customer.email).map {
       case Some(identityId) =>
         writeToDynamo(identityId, subscription).map(response => logDynamoResult(subscription.customer.email, response))

@@ -38,7 +38,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[PaperRound.Error](s"$errorJson")
   }
 
-  val agentsSuccessJson =
+  val agentsSuccessJson: String =
     """
       {
           "status_code": 200,
@@ -92,7 +92,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val chargeBandsSuccessJson =
+  val chargeBandsSuccessJson: String =
     """
       {
           "status_code": 200,
@@ -1050,7 +1050,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val coverageSuccessNotCoveredJson =
+  val coverageSuccessNotCoveredJson: String =
     """
       {
           "status_code": 200,
@@ -1063,7 +1063,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val coverageSuccessInputProblemJson =
+  val coverageSuccessInputProblemJson: String =
     """
       {
           "status_code": 200,
@@ -1076,7 +1076,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val coverageSuccessMissingPostcodeJson =
+  val coverageSuccessMissingPostcodeJson: String =
     """
       {
           "status_code": 200,
@@ -1089,7 +1089,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val coverageSuccessCoveredJson =
+  val coverageSuccessCoveredJson: String =
     """
       {
           "status_code": 200,
@@ -1121,7 +1121,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       }
     """
 
-  val errorJson =
+  val errorJson: String =
     """
       {
         "error_code": "2023-07-25T10:21:41.754Z",

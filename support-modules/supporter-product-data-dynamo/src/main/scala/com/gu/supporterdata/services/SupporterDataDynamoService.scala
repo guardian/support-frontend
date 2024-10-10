@@ -25,7 +25,9 @@ import scala.util.{Failure, Success, Try}
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {
 
-  def subscriptionExists(identityId: String, subscriptionId: String)(implicit executionContext: ExecutionContext) = {
+  def subscriptionExists(identityId: String, subscriptionId: String)(implicit
+      executionContext: ExecutionContext,
+  ): Future[Either[String, Boolean]] = {
     val key = Map(
       identityIdField -> AttributeValue.builder.s(identityId).build,
       subscriptionNameField -> AttributeValue.builder.s(subscriptionId).build,
@@ -125,18 +127,18 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
     client.updateItem(updateItemRequest).toScala
   }
 
-  def asEpochSecond(date: LocalDate) =
+  def asEpochSecond(date: LocalDate): String =
     date.atStartOfDay
       .toEpochSecond(ZoneOffset.UTC)
       .toString
 
-  def asIso(date: LocalDate) =
+  def asIso(date: LocalDate): String =
     date.format(DateTimeFormatter.ISO_LOCAL_DATE)
 }
 
 object SupporterDataDynamoService {
   private val ProfileName = "membership"
-  lazy val CredentialsProvider = AwsCredentialsProviderChain.builder
+  lazy val CredentialsProvider: AwsCredentialsProviderChain = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
       InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
@@ -145,7 +147,7 @@ object SupporterDataDynamoService {
     )
     .build
 
-  val clientOverrideConfiguration = ClientOverrideConfiguration.builder
+  val clientOverrideConfiguration: ClientOverrideConfiguration = ClientOverrideConfiguration.builder
     .retryPolicy(
       RetryPolicy
         .defaultRetryPolicy()
@@ -161,7 +163,7 @@ object SupporterDataDynamoService {
     )
     .build
 
-  val dynamoDBClient = DynamoDbAsyncClient.builder
+  val dynamoDBClient: DynamoDbAsyncClient = DynamoDbAsyncClient.builder
     .overrideConfiguration(
       clientOverrideConfiguration,
     )
@@ -169,5 +171,6 @@ object SupporterDataDynamoService {
     .region(Region.EU_WEST_1)
     .build
 
-  def apply(stage: Stage) = new SupporterDataDynamoService(dynamoDBClient, s"SupporterProductData-${stage.value}")
+  def apply(stage: Stage): SupporterDataDynamoService =
+    new SupporterDataDynamoService(dynamoDBClient, s"SupporterProductData-${stage.value}")
 }

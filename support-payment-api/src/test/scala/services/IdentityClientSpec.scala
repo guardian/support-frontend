@@ -75,7 +75,7 @@ object IdentityClientSpec {
   case class PreExistingIdentityAccount(emailAddress: String, identityId: String)
 
   // An account for this email address has been created on the identity CODE environment.
-  val preExistingIdentityAccount = PreExistingIdentityAccount(
+  val preExistingIdentityAccount: PreExistingIdentityAccount = PreExistingIdentityAccount(
     emailAddress = "test.user@payment-api.gu.com",
     identityId = "100000253",
   )

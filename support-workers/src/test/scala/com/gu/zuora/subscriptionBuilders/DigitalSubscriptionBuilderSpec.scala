@@ -189,35 +189,37 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     )
   }
 
-  lazy val promotionService = mock[PromotionService]
-  lazy val saleDate = new LocalDate(2020, 6, 5)
-  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
+  lazy val promotionService: PromotionService = mock[PromotionService]
+  lazy val saleDate: LocalDate = new LocalDate(2020, 6, 5)
+  lazy val giftCodeGeneratorService: GiftCodeGeneratorService = new GiftCodeGeneratorService
 
-  lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
-    ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
-    promotionService,
-    DateGenerator(saleDate),
-    CODE,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-    ),
-  )
+  lazy val subscriptionDirectPurchaseBuilder: DigitalSubscriptionDirectPurchaseBuilder =
+    new DigitalSubscriptionDirectPurchaseBuilder(
+      ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
+      promotionService,
+      DateGenerator(saleDate),
+      CODE,
+      new SubscribeItemBuilder(
+        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        GBP,
+      ),
+    )
 
-  lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
-    promotionService,
-    DateGenerator(saleDate),
-    new GiftCodeGeneratorService,
-    CODE,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-    ),
-  )
+  lazy val subscriptionGiftPurchaseBuilder: DigitalSubscriptionGiftPurchaseBuilder =
+    new DigitalSubscriptionGiftPurchaseBuilder(
+      promotionService,
+      DateGenerator(saleDate),
+      new GiftCodeGeneratorService,
+      CODE,
+      new SubscribeItemBuilder(
+        UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
+        User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+        GBP,
+      ),
+    )
 
-  lazy val monthly =
+  lazy val monthly: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(
@@ -234,7 +236,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val validMonthlyBenefitsTest =
+  lazy val validMonthlyBenefitsTest: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(
@@ -253,7 +255,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val lowAmountMonthlyBenefitsTest =
+  lazy val lowAmountMonthlyBenefitsTest: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(
@@ -272,7 +274,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val monthlyNotInBenefitsTest =
+  lazy val monthlyNotInBenefitsTest: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(
@@ -289,7 +291,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val threeMonthGiftPurchase =
+  lazy val threeMonthGiftPurchase: (SubscribeItem, GeneratedGiftCode) =
     subscriptionGiftPurchaseBuilder
       .build(
         DigitalSubscriptionGiftPurchaseState(
@@ -306,7 +308,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val csrSubscription = subscriptionDirectPurchaseBuilder
+  lazy val csrSubscription: SubscriptionData = subscriptionDirectPurchaseBuilder
     .build(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
@@ -323,7 +325,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     .get
     .subscriptionData
 
-  lazy val monthlyWithPromo =
+  lazy val monthlyWithPromo: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(
@@ -340,7 +342,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val monthlyPatron =
+  lazy val monthlyPatron: SubscribeItem =
     subscriptionDirectPurchaseBuilder
       .build(
         DigitalSubscriptionDirectPurchaseState(

@@ -6,9 +6,9 @@ import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder
 import com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest
 
 package object aws {
-  val ProfileName = "membership"
+  val ProfileName: String = "membership"
 
-  lazy val CredentialsProvider = new AWSCredentialsProviderChain(
+  lazy val CredentialsProvider: AWSCredentialsProviderChain = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
   )

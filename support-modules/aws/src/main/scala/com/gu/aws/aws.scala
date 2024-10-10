@@ -4,7 +4,7 @@ import software.amazon.awssdk.auth.credentials
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain
 
 package object aws {
-  val ProfileName = "membership"
+  val ProfileName: String = "membership"
 
   lazy val CredentialsProvider: AwsCredentialsProviderChain =
     credentials.AwsCredentialsProviderChain

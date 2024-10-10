@@ -7,6 +7,7 @@ import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import io.circe.{Decoder, Encoder}
+import com.gu.support.catalog.ProductRatePlanId
 
 sealed trait Product {
   val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Product]]]
@@ -32,9 +33,10 @@ sealed trait Product {
         )
     }
 
-  def getProductRatePlans(environment: TouchPointEnvironment) = ratePlans(environment)
+  def getProductRatePlans(environment: TouchPointEnvironment): List[ProductRatePlan[Product]] = ratePlans(environment)
 
-  def getProductRatePlanIds(environment: TouchPointEnvironment) = ratePlans(environment).map(_.id)
+  def getProductRatePlanIds(environment: TouchPointEnvironment): List[ProductRatePlanId] =
+    ratePlans(environment).map(_.id)
 
   def supportedCountries(environment: TouchPointEnvironment): List[CountryGroup] =
     ratePlans(environment)

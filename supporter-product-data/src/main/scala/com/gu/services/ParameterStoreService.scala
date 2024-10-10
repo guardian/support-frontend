@@ -24,11 +24,13 @@ import com.gu.supporterdata.model.Stage
 
 import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
+import com.amazonaws.services.simplesystemsmanagement.model.{Parameter, PutParameterResult}
+import scala.concurrent.Future
 
 class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stage) {
-  val configRoot = s"/supporter-product-data/${stage.value}"
+  val configRoot: String = s"/supporter-product-data/${stage.value}"
 
-  def getParametersByPath(path: String)(implicit executionContext: ExecutionContext) = {
+  def getParametersByPath(path: String)(implicit executionContext: ExecutionContext): List[Parameter] = {
     val request: GetParametersByPathRequest = new GetParametersByPathRequest()
       .withPath(s"$configRoot/$path/")
       .withRecursive(false)
@@ -36,7 +38,7 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
     client.getParametersByPath(request).getParameters.asScala.toList
   }
 
-  def getParameter(name: String)(implicit executionContext: ExecutionContext) = {
+  def getParameter(name: String)(implicit executionContext: ExecutionContext): Future[String] = {
     val request = new GetParameterRequest()
       .withName(s"$configRoot/$name")
       .withWithDecryption(true)
@@ -44,7 +46,11 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
     AwsAsync(client.getParameterAsync, request).map(_.getParameter.getValue)
   }
 
-  def putParameter(name: String, value: String, parameterType: ParameterType = ParameterType.String) = {
+  def putParameter(
+      name: String,
+      value: String,
+      parameterType: ParameterType = ParameterType.String,
+  ): Future[PutParameterResult] = {
 
     val putParameterRequest = new PutParameterRequest()
       .withName(s"$configRoot/$name")
@@ -59,18 +65,18 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
 
 object ParameterStoreService {
   // please update to AWS SDK 2 and use com.gu.aws.CredentialsProvider
-  lazy val CredentialsProviderDEPRECATEDV1 = new AWSCredentialsProviderChain(
+  lazy val CredentialsProviderDEPRECATEDV1: AWSCredentialsProviderChain = new AWSCredentialsProviderChain(
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
     new EnvironmentVariableCredentialsProvider(),
     new EC2ContainerCredentialsProviderWrapper(), // for use with lambda snapstart
   )
 
-  lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder
+  lazy val client: AWSSimpleSystemsManagementAsync = AWSSimpleSystemsManagementAsyncClientBuilder
     .standard()
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProviderDEPRECATEDV1)
     .build()
 
-  def apply(stage: Stage) = new ParameterStoreService(client, stage)
+  def apply(stage: Stage): ParameterStoreService = new ParameterStoreService(client, stage)
 }

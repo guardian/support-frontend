@@ -15,16 +15,16 @@ GET      /acquisition/a.gif                                   controllers.AppCon
 
 # Execute a pre-authorised Stripe payment
 POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
-OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.AppController.corsOptions()
 
 # This endpoint is called by Stripe via a webhook to notify us of refunds
 POST     /contribute/one-off/stripe/refund                    controllers.StripeController.processRefund
 
 POST     /contribute/one-off/stripe/create-payment            controllers.StripeController.createPayment
-OPTIONS  /contribute/one-off/stripe/create-payment            controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/stripe/create-payment            controllers.AppController.corsOptions()
 
 POST     /contribute/one-off/stripe/confirm-payment           controllers.StripeController.confirmPayment
-OPTIONS  /contribute/one-off/stripe/confirm-payment           controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/stripe/confirm-payment           controllers.AppController.corsOptions()
 
 #############################################
 # PAYPAL
@@ -32,17 +32,17 @@ OPTIONS  /contribute/one-off/stripe/confirm-payment           controllers.AppCon
 
 # Create a payment which can then be authorised via the PayPal web interface
 POST     /contribute/one-off/paypal/create-payment            controllers.PaypalController.createPayment
-OPTIONS  /contribute/one-off/paypal/create-payment            controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/paypal/create-payment            controllers.AppController.corsOptions()
 
 # Execute a payment created with /contribute/one-off/paypal/create-payment
 # and authorised via the PayPal web interface
 POST     /contribute/one-off/paypal/execute-payment           controllers.PaypalController.executePayment
-OPTIONS  /contribute/one-off/paypal/execute-payment           controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/paypal/execute-payment           controllers.AppController.corsOptions()
 
 # Captures the funds from a payment which has been created & authorised directly via
 # the PayPal API (not via /contribute/one-off/paypal/create-payment in this API).
 # This is only used by the mobile app.
-POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment
+POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment()
 
 # This endpoint is called by PayPal via a webhook to notify us of refunds
 POST     /contribute/one-off/paypal/refund                    controllers.PaypalController.processRefund
@@ -53,13 +53,13 @@ POST     /contribute/one-off/paypal/refund                    controllers.Paypal
 
 # Performs a bank details validation check against GoCardless
 POST     /direct-debit/check-account                          controllers.GoCardlessController.checkBankAccount
-OPTIONS  /direct-debit/check-account                          controllers.AppController.corsOptions
+OPTIONS  /direct-debit/check-account                          controllers.AppController.corsOptions()
 
 #############################################
 # Amazon Pay
 #############################################
 POST     /contribute/one-off/amazon-pay/execute-payment            controllers.AmazonPayController.executePayment
-OPTIONS  /contribute/one-off/amazon-pay/execute-payment            controllers.AppController.corsOptions
+OPTIONS  /contribute/one-off/amazon-pay/execute-payment            controllers.AppController.corsOptions()
 
-POST        /contribute/one-off/amazon-pay/notifications            controllers.AmazonPayController.notification
-OPTIONS     /contribute/one-off/amazon-pay/notifications            controllers.AppController.corsOptions
+POST        /contribute/one-off/amazon-pay/notifications            controllers.AmazonPayController.notification()
+OPTIONS     /contribute/one-off/amazon-pay/notifications            controllers.AppController.corsOptions()

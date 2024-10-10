@@ -85,41 +85,44 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 
 class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
 
-  lazy val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
-    services.zuoraGiftService,
-    services.catalogService,
-    state.user,
-    state.requestId,
-  )
-  lazy val subscribeItemBuilder = new SubscribeItemBuilder(
+  lazy val zuoraDigitalSubscriptionGiftRedemptionHandler: ZuoraDigitalSubscriptionGiftRedemptionHandler =
+    new ZuoraDigitalSubscriptionGiftRedemptionHandler(
+      services.zuoraGiftService,
+      services.catalogService,
+      state.user,
+      state.requestId,
+    )
+  lazy val subscribeItemBuilder: SubscribeItemBuilder = new SubscribeItemBuilder(
     state.requestId,
     state.user,
     state.product.currency,
   )
-  lazy val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
-    zuoraSubscriptionCreator,
-    dateGenerator,
-    new DigitalSubscriptionGiftPurchaseBuilder(
-      services.promotionService,
+  lazy val zuoraDigitalSubscriptionGiftPurchaseHandler: ZuoraDigitalSubscriptionGiftPurchaseHandler =
+    new ZuoraDigitalSubscriptionGiftPurchaseHandler(
+      zuoraSubscriptionCreator,
       dateGenerator,
-      services.giftCodeGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
-  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
-    zuoraSubscriptionCreator,
-    new DigitalSubscriptionDirectPurchaseBuilder(
-      services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
-      services.promotionService,
-      dateGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
-  lazy val zuoraContributionHandler = new ZuoraContributionHandler(
+      new DigitalSubscriptionGiftPurchaseBuilder(
+        services.promotionService,
+        dateGenerator,
+        services.giftCodeGenerator,
+        touchPointEnvironment,
+        subscribeItemBuilder,
+      ),
+      state.user,
+    )
+  lazy val zuoraDigitalSubscriptionDirectHandler: ZuoraDigitalSubscriptionDirectHandler =
+    new ZuoraDigitalSubscriptionDirectHandler(
+      zuoraSubscriptionCreator,
+      new DigitalSubscriptionDirectPurchaseBuilder(
+        services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
+        services.promotionService,
+        dateGenerator,
+        touchPointEnvironment,
+        subscribeItemBuilder,
+      ),
+      state.user,
+    )
+  lazy val zuoraContributionHandler: ZuoraContributionHandler = new ZuoraContributionHandler(
     zuoraSubscriptionCreator,
     new ContributionSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
@@ -127,7 +130,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     ),
     state.user,
   )
-  lazy val zuoraSupporterPlusHandler = new ZuoraSupporterPlusHandler(
+  lazy val zuoraSupporterPlusHandler: ZuoraSupporterPlusHandler = new ZuoraSupporterPlusHandler(
     zuoraSubscriptionCreator,
     new SupporterPlusSubcriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).supporterPlusConfig,
@@ -139,7 +142,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     ),
     state.user,
   )
-  lazy val zuoraTierThreeHandler = new ZuoraTierThreeHandler(
+  lazy val zuoraTierThreeHandler: ZuoraTierThreeHandler = new ZuoraTierThreeHandler(
     zuoraSubscriptionCreator,
     new TierThreeSubscriptionBuilder(
       services.promotionService,
@@ -148,11 +151,11 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       subscribeItemBuilder,
     ),
   )
-  lazy val zuoraPaperHandler = new ZuoraPaperHandler(
+  lazy val zuoraPaperHandler: ZuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,
     new PaperSubscriptionBuilder(services.promotionService, touchPointEnvironment, subscribeItemBuilder),
   )
-  lazy val zuoraGuardianWeeklyHandler = new ZuoraGuardianWeeklyHandler(
+  lazy val zuoraGuardianWeeklyHandler: ZuoraGuardianWeeklyHandler = new ZuoraGuardianWeeklyHandler(
     zuoraSubscriptionCreator,
     new GuardianWeeklySubscriptionBuilder(
       services.promotionService,

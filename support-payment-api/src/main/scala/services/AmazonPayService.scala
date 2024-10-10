@@ -13,6 +13,7 @@ import conf.AmazonPayConfig
 import model.amazonpay._
 import model.{Currency, DefaultThreadPool}
 import services.AmazonPayService.CurrencyNotFoundException
+import com.amazon.pay.response.parser.CancelOrderReferenceResponseData
 
 /*
 Based on the sample implementation found here
@@ -21,12 +22,12 @@ https://github.com/amzn/amazon-pay-sdk-java#one-time-transaction-api-flow
  */
 class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool) extends StrictLogging {
 
-  val copyForEmail =
+  val copyForEmail: String =
     "Thank you for making a contribution. Your support helps protect the Guardian’s independence and means we can keep delivering quality journalism that’s open for all."
 
-  val storeName = "The Guardian"
+  val storeName: String = "The Guardian"
 
-  val clientConfig = new PayConfig()
+  val clientConfig: PayConfig = new PayConfig()
     .withSellerId(config.merchantId)
     .withAccessKey(config.accessKey)
     .withSecretKey(config.secretKey)
@@ -35,9 +36,9 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
 
   import com.amazon.pay.impl.PayClient
 
-  val client = new PayClient(clientConfig)
+  val client: PayClient = new PayClient(clientConfig)
 
-  def getOrderReference(orderReferenceId: String) = {
+  def getOrderReference(orderReferenceId: String): Either[AmazonPayApiError, OrderReferenceDetails] = {
     Either
       .catchNonFatal {
         client.getOrderReferenceDetails(new GetOrderReferenceDetailsRequest(orderReferenceId)).getDetails
@@ -47,7 +48,9 @@ class AmazonPayService(config: AmazonPayConfig)(implicit pool: DefaultThreadPool
       }
   }
 
-  def cancelOrderReference(orderRef: OrderReferenceDetails) = {
+  def cancelOrderReference(
+      orderRef: OrderReferenceDetails,
+  ): Either[AmazonPayApiError, CancelOrderReferenceResponseData] = {
     Either
       .catchNonFatal {
         client.cancelOrderReference(new CancelOrderReferenceRequest(orderRef.getAmazonOrderReferenceId))

@@ -92,17 +92,17 @@ class PaypalControllerFixture(implicit ec: ExecutionContext, context: Applicatio
 
 class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
 
-  implicit val actorSystem = ActorSystem("rest-server")
+  implicit val actorSystem: ActorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
-  val context = ApplicationLoader.Context.create(Environment.simple())
+  val context: ApplicationLoader.Context = ApplicationLoader.Context.create(Environment.simple())
 
   "Paypal Controller" when {
 
     "a request is made to create a payment" should {
 
-      val fixtureFor200Response = new PaypalControllerFixture()(executionContext, context) {
+      val fixtureFor200Response: PaypalControllerFixture = new PaypalControllerFixture()(executionContext, context) {
         val link = new Links("http://return-url.com", "approval_url")
         val links: java.util.List[Links] = List(link).asJava
         when(enrichedPaymentMock.payment)
@@ -188,7 +188,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
       }
 
       "return a 500 response if the response contains an invalid return url" in {
-        val fixture = new PaypalControllerFixture()(executionContext, context) {
+        val fixture: PaypalControllerFixture = new PaypalControllerFixture()(executionContext, context) {
 
           import scala.jdk.CollectionConverters._
 
@@ -283,7 +283,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
           """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(200)
       }
@@ -308,7 +308,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
           """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(200)
       }
@@ -352,7 +352,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
           """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(200)
       }
@@ -376,7 +376,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
           """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(400)
       }
@@ -414,7 +414,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(400)
       }
@@ -454,7 +454,7 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             """.stripMargin))
 
         val paypalControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.payPalController.capturePayment, capturePaymentRequest)
+          Helpers.call(fixture.payPalController.capturePayment(), capturePaymentRequest)
 
         status(paypalControllerResult).mustBe(500)
       }

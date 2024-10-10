@@ -13,7 +13,7 @@ sealed trait Benefit
 case class DiscountBenefit(amount: Double, durationMonths: Option[Months]) extends Benefit
 
 object DiscountBenefit {
-  val jsonName = "percent_discount"
+  val jsonName: String = "percent_discount"
 
   implicit val discountCodec: Codec[DiscountBenefit] = deriveCodec
 }
@@ -21,7 +21,7 @@ object DiscountBenefit {
 case class FreeTrialBenefit(duration: Days) extends Benefit
 
 object FreeTrialBenefit {
-  val jsonName = "free_trial"
+  val jsonName: String = "free_trial"
 
   implicit val freeTrialCodec: Codec[FreeTrialBenefit] = deriveCodec
 }
@@ -33,7 +33,7 @@ case class IncentiveBenefit(
 ) extends Benefit
 
 object IncentiveBenefit {
-  val jsonName = "incentive"
+  val jsonName: String = "incentive"
 
   implicit val incentiveCodec: Codec[IncentiveBenefit] = deriveCodec
 }
@@ -58,7 +58,7 @@ case class IntroductoryPriceBenefit(price: Double, periodLength: Int, periodType
     extends Benefit
 
 object IntroductoryPriceBenefit {
-  val jsonName = "introductory_price"
+  val jsonName: String = "introductory_price"
 
   implicit val incentiveCodec: Codec[IntroductoryPriceBenefit] = deriveCodec
 }

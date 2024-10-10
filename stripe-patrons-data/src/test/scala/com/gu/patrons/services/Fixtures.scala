@@ -1,7 +1,7 @@
 package com.gu.patrons.services
 
 object Fixtures {
-  val subscriptionJson = """
+  val subscriptionJson: String = """
     {
       "id": "sub_HHdivtqWAZRZLT",
       "object": "subscription",
@@ -363,7 +363,7 @@ object Fixtures {
     }
     """
 
-  val patronCancelledEventJson =
+  val patronCancelledEventJson: String =
     """
       {
         "id": "evt_1LudpBJETvkRwpwqmTN4BiHf",
@@ -492,7 +492,7 @@ object Fixtures {
     }
     """
 
-  val patronSignUpEventJson = """
+  val patronSignUpEventJson: String = """
 {
   "id": "evt_1MX3M1JETvkRwpwqAQ6JAXKW",
   "object": "event",

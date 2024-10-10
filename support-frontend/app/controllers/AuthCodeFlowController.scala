@@ -175,21 +175,21 @@ object AuthCodeFlow {
 
   object SessionKey {
     // URL from which the auth flow was triggered, and where the flow should end up
-    val originUrl = "oauth.originUrl"
+    val originUrl: String = "oauth.originUrl"
 
     // Referring URL of the origin URL
-    val referringUrl = "oauth.referrerUrl"
+    val referringUrl: String = "oauth.referrerUrl"
 
     // To be compared with state param in callback request to avoid CSRF
-    val state = "oauth.state"
+    val state: String = "oauth.state"
 
     // Verifier for PKCE. Used to generate code challenge
-    val codeVerifier = "oauth.codeVerifier"
+    val codeVerifier: String = "oauth.codeVerifier"
   }
 
   object FlashKey {
     // Stops an infinite loop by telling authenticated actions that authentication has been tried
-    val authTried = "oauth.authTried"
+    val authTried: String = "oauth.authTried"
   }
 
   def urlEncode(s: String): String = URLEncoder.encode(s, UTF_8.name())

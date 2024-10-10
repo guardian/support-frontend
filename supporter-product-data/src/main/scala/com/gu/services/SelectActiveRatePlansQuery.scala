@@ -9,13 +9,13 @@ import java.time.format.DateTimeFormatter
 
 object SelectActiveRatePlansQuery {
 
-  val name = "select-active-rate-plans"
+  val name: String = "select-active-rate-plans"
 
-  val isNotDSGift = "(Subscription.RedemptionCode__c = '' OR Subscription.RedemptionCode__c is null)"
+  val isNotDSGift: String = "(Subscription.RedemptionCode__c = '' OR Subscription.RedemptionCode__c is null)"
   // _% in a like clause checks that the field has at least one character ie. not '' or null
-  val isRedeemedDSGift = s"(Subscription.RedemptionCode__c like '_%' AND $gifteeIdentityId like '_%')"
+  val isRedeemedDSGift: String = s"(Subscription.RedemptionCode__c like '_%' AND $gifteeIdentityId like '_%')"
 
-  def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]) =
+  def excludeDiscountProductRatePlans(discountProductRatePlanIds: List[String]): String =
     discountProductRatePlanIds
       .map(id => s"$productRatePlanId != '$id'")
       .mkString(" AND\n")

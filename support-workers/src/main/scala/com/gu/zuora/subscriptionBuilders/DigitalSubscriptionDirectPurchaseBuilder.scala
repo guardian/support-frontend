@@ -55,7 +55,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
   }
 
-  def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
+  def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]): List[RatePlanChargeData] =
     if (isValidBenefitsTestPurchase(product, maybeAbTests)) {
       product.amount
         .map { amount =>

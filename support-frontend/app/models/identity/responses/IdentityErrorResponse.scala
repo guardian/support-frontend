@@ -26,8 +26,8 @@ case class IdentityErrorResponse(
 
 object IdentityErrorResponse {
   implicit val reads: Reads[IdentityErrorResponse] = Json.reads[IdentityErrorResponse]
-  val emailProviderRejectedCode = "email_provider_rejected"
-  val invalidEmailAddressCode = "invalid_email_address"
+  val emailProviderRejectedCode: String = "email_provider_rejected"
+  val invalidEmailAddressCode: String = "invalid_email_address"
 
   sealed trait IdentityError {
     def endpoint: Option[IdentityEndpoint]
