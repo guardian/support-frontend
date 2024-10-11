@@ -1722,7 +1722,7 @@ function CheckoutComponent({
 									}
 									onClick={() => {
 										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
+										// This isn't needed because we are now using the formOnSubmit handler
 									}}
 									type="submit"
 									disabled={stripeClientSecretInProgress}

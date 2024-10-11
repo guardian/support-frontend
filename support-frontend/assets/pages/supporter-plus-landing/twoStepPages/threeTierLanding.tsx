@@ -28,7 +28,6 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import CountryHelper from 'helpers/internationalisation/classes/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -257,10 +256,6 @@ function getPlanCost(
 	};
 }
 
-const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
-	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
-};
-
 type ThreeTierLandingProps = {
 	geoId: GeoId;
 };
@@ -391,7 +386,7 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(recurringAmount),
 		isRecommended: false,
-		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
+		ctaCopy: 'Support',
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -426,7 +421,7 @@ export function ThreeTierLanding({
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
-		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
+		ctaCopy: 'Support',
 	};
 
 	/**
@@ -490,7 +485,7 @@ export function ThreeTierLanding({
 		isUserSelected:
 			urlSearchParamsProduct === 'TierThree' ||
 			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
-		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
+		ctaCopy: 'Support',
 	};
 
 	const showNewspaperArchiveBanner =
