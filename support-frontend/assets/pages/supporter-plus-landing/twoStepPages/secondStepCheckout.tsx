@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, until } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
 import { Checkbox } from 'components/checkbox/Checkbox';
@@ -63,6 +69,13 @@ const paymentButtonSpacing = css`
 	${from.tablet} {
 		margin-top: ${space[5]}px;
 	}
+`;
+
+const coverTransactionSummary = css`
+	${textSans.large({ fontWeight: 'bold' })};
+	display: flex;
+	justify-content: space-between;
+	padding: ${space[4]}px;
 `;
 
 export function SupporterPlusCheckout({
@@ -152,31 +165,37 @@ export function SupporterPlusCheckout({
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
 							{showCoverTransactionCost && !hideTransactionCoverCost && (
-								<div
-									css={[
-										paymentButtonSpacing,
-										coverTransactionCheckboxContainer,
-									]}
-								>
-									<Checkbox
-										checked={coverTransactionCost}
-										onChange={(e) => {
-											if (e.target.checked) {
-												sendTrackingEventsOnClick({
-													id: 'cover-transaction-cost-checkbox',
-													componentType: 'ACQUISITIONS_BUTTON',
-												})();
-											}
-											dispatch(setCoverTransactionCost(e.target.checked));
-										}}
-										// I’d like to add a further £2.4 to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.
-										label={`I’d like to add a further ${
-											Number.isNaN(transactionCoverCost)
-												? '4% of my contribution'
-												: simpleFormatAmount(currency, transactionCoverCost)
-										} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
-									/>
-								</div>
+								<>
+									<div
+										css={[
+											paymentButtonSpacing,
+											coverTransactionCheckboxContainer,
+										]}
+									>
+										<Checkbox
+											checked={coverTransactionCost}
+											onChange={(e) => {
+												if (e.target.checked) {
+													sendTrackingEventsOnClick({
+														id: 'cover-transaction-cost-checkbox',
+														componentType: 'ACQUISITIONS_BUTTON',
+													})();
+												}
+												dispatch(setCoverTransactionCost(e.target.checked));
+											}}
+											// I’d like to add a further £2.4 to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.
+											label={`I’d like to add a further ${
+												Number.isNaN(transactionCoverCost)
+													? '4% of my contribution'
+													: simpleFormatAmount(currency, transactionCoverCost)
+											} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
+										/>
+									</div>
+									<div css={coverTransactionSummary}>
+										Total amount
+										<div>{simpleFormatAmount(currency, amount)}</div>
+									</div>
+								</>
 							)}
 						</>
 					) : (
