@@ -20,7 +20,6 @@ object ServicesFixtures {
   val trackingPromoCode = "TRACKING_CODE"
   val duplicatedPromoCode = "DUPLICATED_CODE"
   val tenAnnual = "10ANNUAL"
-  val sixForSix = "6FOR6"
 
   val validProductRatePlanIds = Product.allProducts.flatMap(_.ratePlans(PROD).map(_.id))
   val validProductRatePlanId = validProductRatePlanIds.head

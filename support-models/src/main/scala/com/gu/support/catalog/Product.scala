@@ -273,7 +273,6 @@ case object GuardianWeekly extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      productRatePlanChargeId: Option[String] = None,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
@@ -281,7 +280,6 @@ case object GuardianWeekly extends Product {
     Domestic,
     NoProductOptions,
     description,
-    productRatePlanChargeId = productRatePlanChargeId,
     readerType = readerType,
   )
 
@@ -289,7 +287,6 @@ case object GuardianWeekly extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      productRatePlanChargeId: Option[String] = None,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
@@ -297,7 +294,6 @@ case object GuardianWeekly extends Product {
     RestOfWorld,
     NoProductOptions,
     description,
-    productRatePlanChargeId = productRatePlanChargeId,
     readerType = readerType,
   )
 

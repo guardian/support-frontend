@@ -22,21 +22,6 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
   ) =
     product.getProductRatePlan(environment, billingPeriod, fulfilmentOptions, productOptions, readerType)
 
-  private[this] def getGWRatePlanId(billingPeriod: BillingPeriod, fulfilmentOptions: FulfilmentOptions) =
-    getProductRatePlan(GuardianWeekly, billingPeriod, fulfilmentOptions, NoProductOptions).map(_.id).getOrElse("")
-
-  private[this] def fetchQuarterlyPrice(
-      quarterlyId: ProductRatePlanId,
-      sixWeeklyPriceList: Pricelist,
-      catalogPrices: List[Pricelist],
-  ) = {
-    Pricelist(
-      sixWeeklyPriceList.productRatePlanId,
-      sixWeeklyPriceList.savingVsRetail,
-      catalogPrices.find(_.productRatePlanId == quarterlyId).map(_.prices).getOrElse(sixWeeklyPriceList.prices),
-    )
-  }
-
   private lazy val catalog: Catalog = {
 
     val attempt = for {
