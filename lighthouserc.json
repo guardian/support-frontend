@@ -1,0 +1,19 @@
+{
+  "ci": {
+    "assert": {
+      "assertions": {
+        "first-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 6000 }],
+        "interactive": ["error", { "maxNumericValue": 8000 }],
+        "resource-summary:document:size": [
+          "error",
+          { "maxNumericValue": 20000 }
+        ],
+        "resource-summary:third-party:count": [
+          "error",
+          { "maxNumericValue": 30 }
+        ]
+      }
+    }
+  }
+}
