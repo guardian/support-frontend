@@ -70,9 +70,9 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 		).toBeVisible();
 		await setTestUserRequiredDetails(
 			page,
-			testEmail,
 			testFirstName,
 			testLastName,
+			testEmail,
 		);
 		await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 		await fillInCardDetails(page);

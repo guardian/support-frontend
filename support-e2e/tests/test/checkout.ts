@@ -31,9 +31,9 @@ export const testCheckout = (testDetails: TestDetails) => {
 
 		await setTestUserRequiredDetails(
 			page,
-			testEmail,
 			testFirstName,
 			testLastName,
+			testEmail,
 		);
 
 		if (internationalisationId === 'au') {

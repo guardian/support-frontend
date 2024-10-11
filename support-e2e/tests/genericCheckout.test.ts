@@ -46,9 +46,9 @@ test.describe('Generic Checkout', () => {
 
 			await setTestUserRequiredDetails(
 				page,
-				testEmail,
 				testFirstName,
 				testLastName,
+				testEmail,
 			);
 			if (internationalisationId === 'au') {
 				await page
