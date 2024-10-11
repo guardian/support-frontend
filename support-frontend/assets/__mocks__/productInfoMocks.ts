@@ -550,25 +550,6 @@ export const weeklyProducts: ProductPrices = {
 						promotions: [],
 					},
 				},
-				SixWeekly: {
-					NZD: {
-						price: 41,
-						currency: 'NZD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Annual: {
 					NZD: {
 						price: 492,
@@ -649,25 +630,6 @@ export const weeklyProducts: ProductPrices = {
 						promotions: [],
 					},
 				},
-				SixWeekly: {
-					GBP: {
-						price: 12.5,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Annual: {
 					GBP: {
 						price: 150,
@@ -726,25 +688,6 @@ export const weeklyProducts: ProductPrices = {
 						],
 					},
 				},
-				SixWeekly: {
-					GBP: {
-						price: 12.5,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Monthly: {
 					GBP: {
 						price: 12.5,
@@ -773,25 +716,6 @@ export const weeklyProducts: ProductPrices = {
 						currency: 'AUD',
 						fixedTerm: false,
 						promotions: [],
-					},
-				},
-				SixWeekly: {
-					AUD: {
-						price: 32.5,
-						currency: 'AUD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
 					},
 				},
 				Annual: {
@@ -874,25 +798,6 @@ export const weeklyProducts: ProductPrices = {
 						promotions: [],
 					},
 				},
-				SixWeekly: {
-					CAD: {
-						price: 27,
-						currency: 'CAD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Annual: {
 					CAD: {
 						price: 320,
@@ -973,25 +878,6 @@ export const weeklyProducts: ProductPrices = {
 						promotions: [],
 					},
 				},
-				SixWeekly: {
-					USD: {
-						price: 25,
-						currency: 'USD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Annual: {
 					USD: {
 						price: 300,
@@ -1050,25 +936,6 @@ export const weeklyProducts: ProductPrices = {
 						],
 					},
 				},
-				SixWeekly: {
-					USD: {
-						price: 27.5,
-						currency: 'USD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Monthly: {
 					USD: {
 						price: 27.5,
@@ -1097,25 +964,6 @@ export const weeklyProducts: ProductPrices = {
 						currency: 'EUR',
 						fixedTerm: false,
 						promotions: [],
-					},
-				},
-				SixWeekly: {
-					EUR: {
-						price: 21,
-						currency: 'EUR',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
 					},
 				},
 				Annual: {
@@ -1210,42 +1058,6 @@ export const weeklyProducts: ProductPrices = {
 						promotions: [],
 					},
 				},
-				SixWeekly: {
-					GBP: {
-						price: 12.5,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-					USD: {
-						price: 25,
-						currency: 'USD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-				},
 				Annual: {
 					GBP: {
 						price: 150,
@@ -1347,42 +1159,6 @@ export const weeklyProducts: ProductPrices = {
 								},
 								landingPage: {
 									roundel: 'Subscribe for 12 months and save 10%',
-								},
-							},
-						],
-					},
-				},
-				SixWeekly: {
-					GBP: {
-						price: 12.5,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
-								},
-							},
-						],
-					},
-					USD: {
-						price: 27.5,
-						currency: 'USD',
-						fixedTerm: false,
-						promotions: [
-							{
-								name: 'Six For Six',
-								description: 'Introductory offer',
-								promoCode: '6FOR6',
-								introductoryPrice: {
-									price: 6,
-									periodLength: 6,
-									periodType: 'issue',
 								},
 							},
 						],

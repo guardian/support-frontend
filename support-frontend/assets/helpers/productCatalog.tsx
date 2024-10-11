@@ -233,9 +233,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				Annual: {
 					billingPeriod: 'Annual',
 				},
-				SixWeekly: {
-					billingPeriod: 'Monthly',
-				},
 				Quarterly: {
 					billingPeriod: 'Quarterly',
 				},
@@ -257,9 +254,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				},
 				Annual: {
 					billingPeriod: 'Annual',
-				},
-				SixWeekly: {
-					billingPeriod: 'Monthly',
 				},
 				Quarterly: {
 					billingPeriod: 'Quarterly',

@@ -74,12 +74,7 @@ const getMainDisplayPrice = (
 	promotion?: Promotion | null,
 ): number => {
 	if (promotion) {
-		const introductoryPrice = promotion.introductoryPrice?.price;
-		return getFirstValidPrice(
-			promotion.discountedPrice,
-			introductoryPrice,
-			productPrice.price,
-		);
+		return getFirstValidPrice(promotion.discountedPrice, productPrice.price);
 	}
 
 	return productPrice.price;
