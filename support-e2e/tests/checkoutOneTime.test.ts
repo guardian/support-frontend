@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { afterEachTasks } from './utils/afterEachTest';
-import { testOneTimeCheckout } from './test/oneTimeCheckout';
+import { testOneTimeCheckout } from './test/checkoutOneTime';
 
 /** These have been covered in smoke/cron tests */
 const testDetails = [
