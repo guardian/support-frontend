@@ -95,6 +95,8 @@ export function SupporterPlusCheckout({
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
+	const hideTransactionCoverCost = amount === 0 && otherAmount === 'other';
+
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const coverTransactionCost = useContributionsSelector(
@@ -150,7 +152,7 @@ export function SupporterPlusCheckout({
 					{showPriceCards ? (
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
-							{showCoverTransactionCost && (
+							{showCoverTransactionCost && !hideTransactionCoverCost && (
 								<div
 									css={[
 										paymentButtonSpacing,
