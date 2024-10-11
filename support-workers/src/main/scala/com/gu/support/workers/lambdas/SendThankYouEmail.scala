@@ -63,7 +63,7 @@ class EmailBuilder(
     promotionService: PromotionService,
     stage: Stage,
 ) {
-  val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
+  val paperFieldsGenerator = new PaperFieldsGenerator(getMandate)
 
   def buildEmail(state: SendThankYouEmailState): Future[List[EmailFields]] = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(stage, state.user.isTestUser)

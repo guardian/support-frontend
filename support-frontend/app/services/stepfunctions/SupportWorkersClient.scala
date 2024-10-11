@@ -48,10 +48,10 @@ case class CreateSupportWorkersRequest(
     deliveryAddress: Option[Address],
     giftRecipient: Option[GiftRecipientRequest],
     product: ProductType,
-    supportInternationalisationId: String, // This maps to CountryGroup.id
     firstDeliveryDate: Option[LocalDate],
     paymentFields: Either[PaymentFields, RedemptionData],
     promoCode: Option[PromoCode],
+    appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     ophanIds: OphanIds,
@@ -154,7 +154,6 @@ class SupportWorkersClient(
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
-        supportInternationalisationId = request.body.supportInternationalisationId,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
           PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
@@ -168,6 +167,7 @@ class SupportWorkersClient(
           ),
         ),
         promoCode = request.body.promoCode,
+        appliedPromotion = request.body.appliedPromotion,
         csrUsername = request.body.csrUsername,
         salesforceCaseId = request.body.salesforceCaseId,
         firstDeliveryDate = request.body.firstDeliveryDate,

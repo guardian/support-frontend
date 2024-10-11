@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup.UK
 import com.gu.support.promotions.PromotionServiceSpec.serviceWithDynamo
 import com.gu.support.promotions.ServicesFixtures.subscriptionData
 import com.gu.test.tags.annotations.IntegrationTest

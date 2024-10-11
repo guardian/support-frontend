@@ -47,6 +47,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       promotionService,
       state.promoCode,
       state.billingCountry,
+      state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
     ).map { subscriptionData =>

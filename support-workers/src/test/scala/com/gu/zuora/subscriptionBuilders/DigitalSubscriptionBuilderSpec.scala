@@ -3,6 +3,7 @@ package com.gu.zuora.subscriptionBuilders
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.Country.Australia
+import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
@@ -116,7 +117,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     when(
       promotionService.applyPromotion(
         ArgumentMatchers.eq(pwc),
-        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq(UK),
         ArgumentMatchers.eq("2c92c0f84bbfec8b014bc655f4852d9d"),
         any(),
         ArgumentMatchers.eq(false),
@@ -157,7 +158,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     when(
       promotionService.applyPromotion(
         ArgumentMatchers.eq(pwc),
-        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq(UK),
         ArgumentMatchers.eq("2c92c0f84bbfec8b014bc655f4852d9d"),
         any(),
         ArgumentMatchers.eq(false),
@@ -225,6 +226,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           None,
+          None,
           SalesforceContactRecord("", ""),
         ),
         None,
@@ -241,6 +243,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(12)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          None,
           None,
           SalesforceContactRecord("", ""),
         ),
@@ -261,6 +264,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Monthly, amount = Some(1)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           None,
+          None,
           SalesforceContactRecord("", ""),
         ),
         None,
@@ -280,6 +284,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Monthly, amount = Some(12)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           None,
+          None,
           SalesforceContactRecord("", ""),
         ),
         None,
@@ -298,6 +303,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Quarterly, Gift),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           None,
+          None,
           SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
         ),
         None,
@@ -312,6 +318,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         Country.UK,
         DigitalPack(GBP, Monthly),
         PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+        None,
         None,
         SalesforceContactRecord("", ""),
       ),
@@ -331,6 +338,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           Some("NOTAPATRONPROMO"),
+          Some(AppliedPromotion("NOTAPATRONPROMO", UK.id)),
           SalesforceContactRecord("", ""),
         ),
         None,
@@ -348,6 +356,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
           Some("FOOPATRON"),
+          Some(AppliedPromotion("FOOPATRON", UK.id)),
           SalesforceContactRecord("", ""),
         ),
         None,

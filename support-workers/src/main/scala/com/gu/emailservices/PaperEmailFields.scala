@@ -41,12 +41,10 @@ class PaperEmailFields(
       .fieldsFor(
         paper.paymentMethod,
         paper.paymentSchedule,
-        paper.promoCode,
         paper.accountNumber,
         paper.subscriptionNumber,
         paper.product,
         paper.user,
-        paperRatePlan(paper.product, touchPointEnvironment).map(_.id),
         fixedTerm = false,
         paper.firstDeliveryDate,
       )

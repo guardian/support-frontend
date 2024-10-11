@@ -152,7 +152,7 @@ object SendSupporterPlusEmail extends App {
   )
 
   val ef = new SupporterPlusEmailFields(
-    new PaperFieldsGenerator(supporterPlusPromotionService, getMandate),
+    new PaperFieldsGenerator(getMandate),
     getMandate,
     CODE,
     new DateTime(1999, 12, 31, 11, 59),
@@ -185,7 +185,7 @@ object SendTierThreeEmail extends App {
   )
 
   val ef = new TierThreeEmailFields(
-    new PaperFieldsGenerator(promotionService, getMandate),
+    new PaperFieldsGenerator(getMandate),
     CODE,
   ).build(
     SendThankYouEmailTierThreeState(
@@ -410,7 +410,7 @@ object TestData {
     Some(new SimplePromotionCollection(Nil)),
   )
 
-  val paperFieldsGenerator = new PaperFieldsGenerator(promotionService, getMandate)
+  val paperFieldsGenerator = new PaperFieldsGenerator(getMandate)
 
   val directDebitPaymentMethod = DirectDebitPaymentMethod(
     FirstName = "Mickey",
@@ -428,7 +428,6 @@ object TestData {
 
   val digitalPackEmailFields = new DigitalPackEmailFields(
     new PaperFieldsGenerator(
-      promotionService,
       getMandate,
     ),
     getMandate,

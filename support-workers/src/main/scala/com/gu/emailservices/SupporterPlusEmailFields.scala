@@ -23,11 +23,6 @@ class SupporterPlusEmailFields(
       state.accountNumber,
       created,
     ).map { paymentFields =>
-      val promotion = paperFieldsGenerator.getAppliedPromotion(
-        state.promoCode,
-        state.user.billingAddress.country,
-        ProductTypeRatePlans.supporterPlusRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
-      )
       val subscription_details = SubscriptionEmailFieldHelpers
         .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
       val fields = List(

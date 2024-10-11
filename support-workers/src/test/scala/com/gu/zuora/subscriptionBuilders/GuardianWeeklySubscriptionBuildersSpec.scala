@@ -2,7 +2,7 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
-import com.gu.i18n.Country.Australia
+import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
@@ -92,7 +92,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     when(
       promotionService.applyPromotion(
         ArgumentMatchers.eq(pwc),
-        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq(UK),
         ArgumentMatchers.eq("2c92c0f965dc30640165f150c0956859"),
         any(),
         ArgumentMatchers.eq(false),
@@ -117,7 +117,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     when(
       promotionService.applyPromotion(
         ArgumentMatchers.eq(pwc),
-        ArgumentMatchers.eq(Country.UK),
+        ArgumentMatchers.eq(UK),
         ArgumentMatchers.eq("2c92c0f965dc30640165f150c0956859"),
         any(),
         ArgumentMatchers.eq(false),
@@ -173,6 +173,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
+      None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),
     None,
@@ -195,6 +196,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     weekly,
     PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
     firstDeliveryDate,
+    None,
     None,
     SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
   );
@@ -232,6 +234,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       weekly,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
+      None,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),

@@ -33,14 +33,10 @@ class GuardianWeeklyEmailFields(
       .fieldsFor(
         gw.paymentMethod,
         gw.paymentSchedule,
-        gw.promoCode,
         gw.accountNumber,
         gw.subscriptionNumber,
         gw.product,
         gw.user,
-        ProductTypeRatePlans
-          .weeklyRatePlan(gw.product, touchPointEnvironment, if (gw.giftRecipient.isDefined) Gift else Direct)
-          .map(_.id),
         fixedTerm = gw.giftRecipient.isDefined,
         gw.firstDeliveryDate,
       )

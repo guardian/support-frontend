@@ -1,54 +1,27 @@
 package com.gu.emailservices
 
-import com.gu.i18n.Country
-import com.gu.support.catalog.ProductRatePlanId
-import com.gu.support.promotions.{PromoCode, Promotion, PromotionService}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaperFieldsGenerator(
-    promotionService: PromotionService,
     getMandate: String => Future[Option[String]],
 ) {
-
-  def getAppliedPromotion(
-      maybePromoCode: Option[PromoCode],
-      country: Country,
-      productRatePlanId: ProductRatePlanId,
-  ): Option[Promotion] =
-    for {
-      promoCode <- maybePromoCode
-      promotionWithCode <- promotionService.findPromotion(promoCode).toOption
-      validPromotion <- promotionService
-        .validatePromotion(promotionWithCode, country, productRatePlanId, isRenewal = false)
-        .toOption
-    } yield validPromotion.promotion
 
   def fieldsFor(
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
-      promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
       product: ProductType,
       user: User,
-      productRatePlanId: Option[ProductRatePlanId],
       fixedTerm: Boolean,
       firstDeliveryDate: LocalDate,
   )(implicit ec: ExecutionContext): Future[List[(String, String)]] = {
 
-    val promotion = getAppliedPromotion(
-      promoCode,
-      user.billingAddress.country,
-      productRatePlanId.getOrElse(""),
-    )
-
     val firstPaymentDate = SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date
-
     val deliveryAddressFields = getAddressFields(user)
-
     val paymentDescription = SubscriptionEmailFieldHelpers.describe(
       paymentSchedule,
       product.billingPeriod,

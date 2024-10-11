@@ -77,11 +77,10 @@ class PriceSummaryService(
 
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions
-      country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)
       validPromotion <- promotionService
         .validatePromotion(
           promotion,
-          country,
+          countryGroup,
           productRatePlan.id,
           isRenewal = false,
         )

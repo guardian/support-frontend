@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Country
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.PromotionsConfig
 import com.gu.support.promotions.PromotionValidator.PromotionExtensions
@@ -40,24 +40,24 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
 
   def validatePromotion(
       promotion: PromotionWithCode,
-      country: Country,
+      countryGroup: CountryGroup,
       productRatePlanId: ProductRatePlanId,
       isRenewal: Boolean,
   ): Either[PromoError, PromotionWithCode] =
     promotion.promotion
-      .validateFor(productRatePlanId, country, isRenewal)
+      .validateFor(productRatePlanId, countryGroup, isRenewal)
       .headOption
       .map(err => Left(err))
       .getOrElse(Right(promotion))
 
   def applyPromotion(
       promotion: PromotionWithCode,
-      country: Country,
+      countryGroup: CountryGroup,
       productRatePlanId: ProductRatePlanId,
       subscriptionData: SubscriptionData,
       isRenewal: Boolean,
   ): Either[PromoError, SubscriptionData] =
-    validatePromotion(promotion, country, productRatePlanId, isRenewal)
+    validatePromotion(promotion, countryGroup, productRatePlanId, isRenewal)
       .map(PromotionApplicator(_, config.discount).applyTo(subscriptionData))
 
 }

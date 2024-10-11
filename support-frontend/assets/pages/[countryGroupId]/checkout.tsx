@@ -901,16 +901,24 @@ function CheckoutComponent({
 				productKey === 'TierThree'
 					? formatMachineDate(getTierThreeDeliveryDate())
 					: null;
+
 			const promoCode = promotion?.promoCode;
+			const appliedPromotion =
+				promoCode !== undefined
+					? {
+							promoCode,
+							countryGroupId: geoId,
+					  }
+					: undefined;
 
 			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
 				billingAddress,
 				deliveryAddress,
-				supportInternationalisationId: geoId,
 				firstDeliveryDate,
 				paymentFields,
 				promoCode,
+				appliedPromotion,
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,

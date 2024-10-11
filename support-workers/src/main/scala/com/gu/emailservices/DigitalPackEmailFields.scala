@@ -211,12 +211,6 @@ class DigitalPackEmailFields(
       state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState,
   )(implicit ec: ExecutionContext) = {
     import state._
-
-    val promotion = paperFieldsGenerator.getAppliedPromotion(
-      state.promoCode,
-      state.user.billingAddress.country,
-      ProductTypeRatePlans.digitalRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
-    )
     digitalPackPaymentEmailFields
       .paymentFields(paymentMethod, accountNumber)
       .map(paymentFieldsAttributes =>
@@ -276,12 +270,6 @@ class DigitalPackEmailFields(
   private def directThankYou(
       state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState,
   )(implicit ec: ExecutionContext) = {
-
-    val promotion = paperFieldsGenerator.getAppliedPromotion(
-      state.promoCode,
-      state.user.billingAddress.country,
-      ProductTypeRatePlans.digitalRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
-    )
     digitalPackPaymentEmailFields
       .paymentFields(
         state.paymentMethod,

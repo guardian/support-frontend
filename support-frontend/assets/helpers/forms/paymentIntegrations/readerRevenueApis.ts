@@ -148,6 +148,10 @@ type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
+export type AppliedPromotion = {
+	promoCode: string;
+	countryGroupId: SupportInternationalisationId; // There is a bit of naming mismatch between the front and back end
+};
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
 	title?: Title;
@@ -155,7 +159,6 @@ export type RegularPaymentRequest = {
 	lastName: string;
 	billingAddress: RegularPaymentRequestAddress;
 	deliveryAddress?: RegularPaymentRequestAddress;
-	supportInternationalisationId: SupportInternationalisationId;
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;
@@ -166,6 +169,7 @@ export type RegularPaymentRequest = {
 	supportAbTests: AcquisitionABTest[];
 	telephoneNumber?: string;
 	promoCode?: Option<string>;
+	appliedPromotion?: AppliedPromotion;
 	deliveryInstructions?: string;
 	csrUsername?: string;
 	salesforceCaseId?: string;

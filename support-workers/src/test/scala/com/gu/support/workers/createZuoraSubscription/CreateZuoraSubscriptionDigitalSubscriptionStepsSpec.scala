@@ -29,6 +29,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = None,
+      appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     )
 

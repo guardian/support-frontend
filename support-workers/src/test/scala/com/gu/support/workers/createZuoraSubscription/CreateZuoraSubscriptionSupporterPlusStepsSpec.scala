@@ -1,6 +1,7 @@
 package com.gu.support.workers.createZuoraSubscription
 
 import com.gu.helpers.DateGenerator
+import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.{CatalogServiceSpec, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraSupporterPlusConfig}
@@ -38,6 +39,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
       product = SupporterPlus(20, Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = Some("SUPPORTER_PLUS_PROMO"),
+      appliedPromotion = Some(AppliedPromotion("SUPPORTER_PLUS_PROMO", UK.id)),
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     )
 

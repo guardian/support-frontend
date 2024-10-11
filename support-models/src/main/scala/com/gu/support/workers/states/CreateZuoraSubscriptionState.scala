@@ -22,10 +22,10 @@ case class CreateZuoraSubscriptionState(
     requestId: UUID,
     user: User,
     product: ProductType,
-    supportInternationalisationId: String,
     analyticsInfo: AnalyticsInfo,
     firstDeliveryDate: Option[LocalDate],
     promoCode: Option[PromoCode],
+    appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
@@ -50,6 +50,7 @@ object CreateZuoraSubscriptionProductState {
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
@@ -59,6 +60,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
@@ -67,6 +69,7 @@ object CreateZuoraSubscriptionProductState {
       product: DigitalPack,
       paymentMethod: PaymentMethod,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
@@ -76,6 +79,7 @@ object CreateZuoraSubscriptionProductState {
       product: DigitalPack,
       paymentMethod: PaymentMethod,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
   ) extends CreateZuoraSubscriptionProductState
 
@@ -91,6 +95,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
@@ -101,6 +106,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       promoCode: Option[PromoCode],
+      appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
   ) extends CreateZuoraSubscriptionProductState
 

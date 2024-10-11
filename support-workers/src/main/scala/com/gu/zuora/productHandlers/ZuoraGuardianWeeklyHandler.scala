@@ -18,7 +18,6 @@ class ZuoraGuardianWeeklyHandler(
 
   def subscribe(
       state: GuardianWeeklyState,
-      supportInternationalisationId: String,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Future[SendThankYouEmailState] =
