@@ -43,6 +43,6 @@ test('Ticket Tailor iframe loads correctly', async ({
 	if (frame) {
 		await frame.waitForSelector('body');
 		const content = await frame.content();
-		expect(content).toContain('Next');
+		expect(content).toContain('Westminster');
 	}
 });
