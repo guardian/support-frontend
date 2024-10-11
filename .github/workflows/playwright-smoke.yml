@@ -8,7 +8,6 @@ concurrency:
   cancel-in-progress: true
 jobs:
   test:
-    if: ${{ (github.event.label.name != 'Seen-on-PROD') }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
