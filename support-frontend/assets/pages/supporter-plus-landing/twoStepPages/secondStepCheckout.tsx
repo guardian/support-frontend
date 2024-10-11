@@ -60,9 +60,8 @@ const coverTransactionCheckboxContainer = css`
 `;
 
 const paymentButtonSpacing = css`
-	margin-top: ${space[6]}px;
 	${from.tablet} {
-		margin-top: ${space[8]}px;
+		margin-top: ${space[5]}px;
 	}
 `;
 
