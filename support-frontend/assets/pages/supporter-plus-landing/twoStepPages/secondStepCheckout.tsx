@@ -183,12 +183,10 @@ export function SupporterPlusCheckout({
 												}
 												dispatch(setCoverTransactionCost(e.target.checked));
 											}}
-											// I’d like to add a further £2.4 to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.
-											label={`I’d like to add a further ${
-												Number.isNaN(transactionCoverCost)
-													? '4% of my contribution'
-													: simpleFormatAmount(currency, transactionCoverCost)
-											} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
+											label={`I’d like to add a further ${simpleFormatAmount(
+												currency,
+												transactionCoverCost,
+											)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
 										/>
 									</div>
 									<div css={coverTransactionSummary}>
