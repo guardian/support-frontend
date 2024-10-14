@@ -238,14 +238,12 @@ export function SupporterPlusCheckout({
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
 							{showCoverTransactionCostB && (
-								<>
-									<CoverTransactionCost
-										transactionCost={coverTransactionCost}
-										transactionCostCopy={transactionCostCopy}
-										transactionCostAmount={simpleFormatAmount(currency, amount)}
-										showTransactionCostSummary={true}
-									/>
-								</>
+								<CoverTransactionCost
+									transactionCost={coverTransactionCost}
+									transactionCostCopy={transactionCostCopy}
+									transactionCostAmount={simpleFormatAmount(currency, amount)}
+									showTransactionCostSummary={true}
+								/>
 							)}
 						</>
 					) : (
