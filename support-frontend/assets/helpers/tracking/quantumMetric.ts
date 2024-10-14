@@ -336,7 +336,7 @@ function sendEventContributionCartValue(
 }
 
 function sendEventPaymentMethodSelected(
-	paymentMethod: PaymentMethod | null,
+	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | null,
 ): void {
 	if (paymentMethod) {
 		void ifQmPermitted(() => {

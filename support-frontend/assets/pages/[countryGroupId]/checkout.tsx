@@ -1120,6 +1120,12 @@ function CheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
+
+										// Track payment method selection with QM
+										sendEventPaymentMethodSelected(
+											'StripeExpressCheckoutElement',
+										);
+
 										resolve(options);
 									}}
 									onConfirm={async (event) => {
@@ -1578,7 +1584,7 @@ function CheckoutComponent({
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
 
-														// Track payment method update with QM
+														// Track payment method selection with QM
 														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
 												/>
