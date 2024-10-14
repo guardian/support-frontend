@@ -117,7 +117,8 @@ export function SupporterPlusCheckout({
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const hideTransactionCoverCost = amount === 0 && otherAmount === 'other';
-
+	const hideTransactionCostSummary =
+		amount === amountBeforeTransactionCostCovered;
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const coverTransactionCost = useContributionsSelector(
@@ -200,11 +201,15 @@ export function SupporterPlusCheckout({
 											)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
 										/>
 									</div>
-									<CheckoutDivider spacing="tight" />
-									<div css={coverTransactionSummary}>
-										Total amount
-										<div>{simpleFormatAmount(currency, amount)}</div>
-									</div>
+									{!hideTransactionCostSummary && (
+										<>
+											<CheckoutDivider spacing="tight" />
+											<div css={coverTransactionSummary}>
+												Total amount
+												<div>{simpleFormatAmount(currency, amount)}</div>
+											</div>
+										</>
+									)}
 								</div>
 							)}
 						</>
