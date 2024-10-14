@@ -37,6 +37,8 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
+      - uses: sbt/setup-sbt@v1
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
