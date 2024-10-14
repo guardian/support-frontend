@@ -175,7 +175,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -658,7 +658,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -953,7 +953,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1023,7 +1023,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1080,7 +1080,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-24-7",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1138,7 +1138,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1195,7 +1195,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-24-7",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1312,7 +1312,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1369,7 +1369,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1603,7 +1603,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -1660,7 +1660,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
