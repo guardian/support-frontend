@@ -30,7 +30,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - uses: sbt/setup-sbt@v1
       - name: Setup Node for CDK
         uses: actions/setup-node@v4
         with:
@@ -48,6 +47,8 @@ jobs:
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
+
+      - uses: sbt/setup-sbt@v1
 
       - name: Setup Java
         uses: actions/setup-java@v4
