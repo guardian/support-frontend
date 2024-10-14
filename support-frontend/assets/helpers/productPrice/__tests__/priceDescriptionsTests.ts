@@ -3,7 +3,6 @@ import {
 	Annual,
 	Monthly,
 	Quarterly,
-	SixWeekly,
 } from 'helpers/productPrice/billingPeriods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
@@ -93,28 +92,6 @@ describe('getPriceDescription', () => {
 		expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly)).toEqual(
 			"You'll pay £31.87 for 1 quarter, then £37.50 per quarter",
 		);
-
-		const gwSixWeekly: ProductPrice = {
-			price: 27.5,
-			currency: 'USD',
-			promotions: [
-				{
-					name: 'Six For Six',
-					description: 'Introductory offer',
-					promoCode: '6FOR6',
-					introductoryPrice: {
-						price: 6,
-						periodLength: 6,
-						periodType: 'issue',
-					},
-				},
-			],
-			fixedTerm: false,
-		};
-
-		expect(getPriceDescription(gwSixWeekly, SixWeekly)).toEqual(
-			'US$6 for the first 6 issues (then US$27.50 per month)',
-		);
 	});
 });
 
@@ -183,38 +160,6 @@ describe('getSimplifiedPriceDescription', () => {
 				monthlyBillingPeriod,
 			),
 		).toEqual('per month, then £11.99 per month');
-	});
-
-	const productPriceWithIntroductoryPrice: ProductPrice = {
-		price: 11.99,
-		currency: 'GBP',
-		fixedTerm: false,
-		promotions: [
-			{
-				name: 'Sept 2021 Discount',
-				description: '50% off for 3 months',
-				promoCode: 'DK0NT24WG',
-				introductoryPrice: {
-					price: 5.99,
-					periodLength: 6,
-					periodType: 'issue',
-				},
-				numberOfDiscountedPeriods: 3,
-				discount: {
-					amount: 50,
-					durationMonths: 3,
-				},
-			},
-		],
-	};
-
-	it('should return an introductory price description', () => {
-		expect(
-			getSimplifiedPriceDescription(
-				productPriceWithIntroductoryPrice,
-				monthlyBillingPeriod,
-			),
-		).toEqual('for 6 issues (then £11.99 per month)');
 	});
 });
 

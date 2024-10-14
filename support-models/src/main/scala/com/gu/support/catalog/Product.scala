@@ -269,14 +269,10 @@ case object Paper extends Product {
 }
 
 case object GuardianWeekly extends Product {
-  // The value for six for six billing period here must match
-  // the value in support-frontend/assets/helpers/productPrice/billingPeriods.js
-  val postIntroductorySixForSixBillingPeriod: BillingPeriod = Monthly
   private def domestic(
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      productRatePlanChargeId: Option[String] = None,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
@@ -284,7 +280,6 @@ case object GuardianWeekly extends Product {
     Domestic,
     NoProductOptions,
     description,
-    productRatePlanChargeId = productRatePlanChargeId,
     readerType = readerType,
   )
 
@@ -292,7 +287,6 @@ case object GuardianWeekly extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      productRatePlanChargeId: Option[String] = None,
       readerType: ReaderType = Direct,
   ) = ProductRatePlan(
     id,
@@ -300,19 +294,12 @@ case object GuardianWeekly extends Product {
     RestOfWorld,
     NoProductOptions,
     description,
-    productRatePlanChargeId = productRatePlanChargeId,
     readerType = readerType,
   )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianWeekly.type]]] =
     Map(
       PROD -> List(
-        restOfWorld(
-          "2c92a0086619bf8901661ab545f51b21",
-          SixWeekly,
-          "Guardian Weekly 6 for 6, rest of world delivery",
-          productRatePlanChargeId = Some("2c92a0086619bf8901661ab546091b23"),
-        ),
         restOfWorld("2c92a0fe6619b4b601661ab300222651", Annual, "Guardian Weekly annual, rest of world delivery"),
         restOfWorld(
           "2c92a0ff67cebd140167f0a2f66a12eb",
@@ -327,12 +314,6 @@ case object GuardianWeekly extends Product {
           Quarterly,
           "Guardian Weekly three month, rest of world delivery",
           readerType = Gift,
-        ),
-        domestic(
-          "2c92a0086619bf8901661aaac94257fe",
-          SixWeekly,
-          "Guardian Weekly 6 for 6, domestic delivery",
-          productRatePlanChargeId = Some("2c92a0086619bf8901661aaac95d5800"),
         ),
         domestic("2c92a0fe6619b4b901661aa8e66c1692", Annual, "Guardian Weekly annual, domestic delivery"),
         domestic(
@@ -351,12 +332,6 @@ case object GuardianWeekly extends Product {
         ),
       ),
       CODE -> List(
-        restOfWorld(
-          "2c92c0f965f2122101660fbc75a16c38",
-          SixWeekly,
-          "Guardian Weekly 6 for 6, rest of world delivery",
-          productRatePlanChargeId = Some("2c92c0f965f2122101660fbc75ba6c3c"),
-        ),
         restOfWorld("2c92c0f965f2122101660fb33ed24a45", Annual, "Guardian Weekly annual, rest of world delivery"),
         restOfWorld(
           "2c92c0f967caee410167eff78e7b5244",
@@ -371,12 +346,6 @@ case object GuardianWeekly extends Product {
           Quarterly,
           "Guardian Weekly three months, rest of world delivery",
           readerType = Gift,
-        ),
-        domestic(
-          "2c92c0f965f212210165f69b94c92d66",
-          SixWeekly,
-          "Guardian Weekly 6 for 6, domestic delivery",
-          productRatePlanChargeId = Some("2c92c0f865f204440165f69f407d66f1"),
         ),
         domestic("2c92c0f965d280590165f16b1b9946c2", Annual, "Guardian Weekly annual, domestic delivery"),
         domestic(

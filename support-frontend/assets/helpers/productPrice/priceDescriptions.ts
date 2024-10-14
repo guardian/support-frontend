@@ -5,19 +5,11 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodAdverb,
-	postIntroductorySixForSixBillingPeriod,
 	billingPeriodNoun as upperCaseNoun,
 } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import type {
-	IntroductoryPriceBenefit,
-	Promotion,
-} from 'helpers/productPrice/promotions';
-import {
-	getAppliedPromo,
-	hasDiscount,
-	hasIntroductoryPrice,
-} from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
 const displayPrice = (glyph: string, price: number): string =>
@@ -103,47 +95,14 @@ function getDiscountDescription(
 	return '';
 }
 
-const pluralizePeriodType = (numberOfPeriods: number, periodType: string) =>
-	numberOfPeriods > 1 ? `${periodType}s` : periodType;
-
-const getIntroductoryPriceDescription = (
-	glyph: string,
-	introPrice: IntroductoryPriceBenefit,
-	productPrice: ProductPrice,
-	compact: boolean,
-) => {
-	const standardCopy = standardRate(
-		glyph,
-		productPrice.price,
-		postIntroductorySixForSixBillingPeriod,
-		productPrice.fixedTerm,
-	);
-	const separator = compact ? '/' : ' for the first ';
-	const periodType = pluralizePeriodType(
-		introPrice.periodLength,
-		introPrice.periodType,
-	);
-	return `${glyph}${introPrice.price}${separator}${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
-};
-
 function getPriceDescription(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
-	compact = false,
 	useExtendedGlyph = true,
 ): string {
 	const glyphFn = useExtendedGlyph ? extendedGlyph : shortGlyph;
 	const glyph = glyphFn(productPrice.currency);
 	const promotion = getAppliedPromo(productPrice.promotions);
-
-	if (hasIntroductoryPrice(promotion)) {
-		return getIntroductoryPriceDescription(
-			glyph, // $FlowIgnore -- We have checked this in hasIntroductoryPrice
-			promotion.introductoryPrice,
-			productPrice,
-			compact,
-		);
-	}
 
 	if (hasDiscount(promotion)) {
 		return getDiscountDescription(
@@ -176,21 +135,6 @@ function getSimplifiedPriceDescription(
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
 
-	if (hasIntroductoryPrice(promotion)) {
-		const introPrice = promotion.introductoryPrice;
-		const standardCopy = standardRate(
-			glyph,
-			productPrice.price,
-			postIntroductorySixForSixBillingPeriod,
-			productPrice.fixedTerm,
-		);
-		const periodType = pluralizePeriodType(
-			introPrice.periodLength,
-			introPrice.periodType,
-		);
-		return `for ${introPrice.periodLength} ${periodType} (then ${standardCopy})`;
-	}
-
 	if (hasDiscount(promotion)) {
 		const standardCopy = getStandardRateCopy(
 			glyph,
@@ -214,10 +158,6 @@ function getPriceForDescription(
 	productPrice: ProductPrice,
 	promotion: Promotion | undefined,
 ) {
-	if (hasIntroductoryPrice(promotion)) {
-		return promotion.introductoryPrice.price;
-	}
-
 	if (hasDiscount(promotion)) {
 		return promotion.discountedPrice;
 	}
