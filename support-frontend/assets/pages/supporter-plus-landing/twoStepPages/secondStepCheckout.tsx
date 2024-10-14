@@ -81,11 +81,39 @@ const paymentButtonSpacing = css`
 `;
 
 const coverTransactionSummary = css`
-	${textSans.large({ fontWeight: 'bold' })};
+	${textSans.medium({ fontWeight: 'bold' })};
 	display: flex;
 	justify-content: space-between;
 	padding: 0px 0px ${space[2]}px;
 `;
+
+type TransactionCostProps = {
+	transactionCost: boolean;
+	transactionCostCopy: string;
+};
+
+export function TransactionCost(
+	transactionCostProps: TransactionCostProps,
+): JSX.Element {
+	const dispatch = useContributionsDispatch();
+	return (
+		<div css={[paymentButtonSpacing, coverTransactionCheckboxContainer]}>
+			<Checkbox
+				checked={transactionCostProps.transactionCost}
+				onChange={(e) => {
+					if (e.target.checked) {
+						sendTrackingEventsOnClick({
+							id: 'cover-transaction-cost-checkbox',
+							componentType: 'ACQUISITIONS_BUTTON',
+						})();
+					}
+					dispatch(setCoverTransactionCost(e.target.checked));
+				}}
+				label={transactionCostProps.transactionCostCopy}
+			/>
+		</div>
+	);
+}
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
@@ -121,9 +149,14 @@ export function SupporterPlusCheckout({
 		amount === amountBeforeTransactionCostCovered;
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
-	const coverTransactionCost = useContributionsSelector(
-		(state) => state.page.checkoutForm.product.coverTransactionCost,
-	);
+	const coverTransactionCost =
+		useContributionsSelector(
+			(state) => state.page.checkoutForm.product.coverTransactionCost,
+		) ?? false;
+	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
+		currency,
+		transactionCoverCost,
+	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	const navigate = useNavigate();
 	const { abParticipations, amounts } = useContributionsSelector(
@@ -177,40 +210,21 @@ export function SupporterPlusCheckout({
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
 							{showCoverTransactionCostB && !hideTransactionCoverCost && (
-								<div css={shortenDivider}>
-									<div
-										css={[
-											paymentButtonSpacing,
-											coverTransactionCheckboxContainer,
-										]}
-									>
-										<Checkbox
-											checked={coverTransactionCost}
-											onChange={(e) => {
-												if (e.target.checked) {
-													sendTrackingEventsOnClick({
-														id: 'cover-transaction-cost-checkbox',
-														componentType: 'ACQUISITIONS_BUTTON',
-													})();
-												}
-												dispatch(setCoverTransactionCost(e.target.checked));
-											}}
-											label={`I’d like to add a further ${simpleFormatAmount(
-												currency,
-												transactionCoverCost,
-											)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
-										/>
-									</div>
+								<>
+									<TransactionCost
+										transactionCost={coverTransactionCost}
+										transactionCostCopy={transactionCostCopy}
+									/>
 									{!hideTransactionCostSummary && (
-										<>
+										<div css={shortenDivider}>
 											<CheckoutDivider spacing="tight" />
 											<div css={coverTransactionSummary}>
 												Total amount
 												<div>{simpleFormatAmount(currency, amount)}</div>
 											</div>
-										</>
+										</div>
 									)}
-								</div>
+								</>
 							)}
 						</>
 					) : (
@@ -257,31 +271,10 @@ export function SupporterPlusCheckout({
 							/>
 						)}
 						{showCoverTransactionCostA && !hideTransactionCoverCost && (
-							<div css={shortenDivider}>
-								<div
-									css={[
-										paymentButtonSpacing,
-										coverTransactionCheckboxContainer,
-									]}
-								>
-									<Checkbox
-										checked={coverTransactionCost}
-										onChange={(e) => {
-											if (e.target.checked) {
-												sendTrackingEventsOnClick({
-													id: 'cover-transaction-cost-checkbox',
-													componentType: 'ACQUISITIONS_BUTTON',
-												})();
-											}
-											dispatch(setCoverTransactionCost(e.target.checked));
-										}}
-										label={`I’d like to add a further ${simpleFormatAmount(
-											currency,
-											transactionCoverCost,
-										)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
-									/>
-								</div>
-							</div>
+							<TransactionCost
+								transactionCost={coverTransactionCost}
+								transactionCostCopy={transactionCostCopy}
+							/>
 						)}
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}
