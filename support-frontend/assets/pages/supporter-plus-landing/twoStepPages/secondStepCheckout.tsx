@@ -84,8 +84,8 @@ const coverTransactionCheckboxContainer = css`
 	${from.tablet} {
 		margin-top: ${space[5]}px 0px 0px;
 	}
-	div {
-		padding: 0px;
+	> div > input {
+		background-color: ${neutral[100]};
 	}
 `;
 
