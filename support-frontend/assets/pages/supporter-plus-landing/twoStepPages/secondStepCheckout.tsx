@@ -162,7 +162,6 @@ export function SupporterPlusCheckout({
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
-	const hideTransactionCoverCost = amount === 0 && otherAmount === 'other';
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const coverTransactionCost =
@@ -214,9 +213,9 @@ export function SupporterPlusCheckout({
 	);
 
 	const showCoverTransactionCostA =
-		abParticipations.coverTransactionCost === 'variantA';
+		abParticipations.coverTransactionCost === 'variantA' && amount > 0;
 	const showCoverTransactionCostB =
-		abParticipations.coverTransactionCost === 'variantB';
+		abParticipations.coverTransactionCost === 'variantB' && amount > 0;
 
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
@@ -225,7 +224,7 @@ export function SupporterPlusCheckout({
 					{showPriceCards ? (
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
-							{showCoverTransactionCostB && !hideTransactionCoverCost && (
+							{showCoverTransactionCostB && (
 								<>
 									<TransactionCost
 										transactionCost={coverTransactionCost}
@@ -289,7 +288,7 @@ export function SupporterPlusCheckout({
 								productKey={product}
 							/>
 						)}
-						{showCoverTransactionCostA && !hideTransactionCoverCost && (
+						{showCoverTransactionCostA && (
 							<TransactionCost
 								transactionCost={coverTransactionCost}
 								transactionCostCopy={transactionCostCopy}
