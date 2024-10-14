@@ -60,7 +60,14 @@ const shorterBoxMargin = css`
 	}
 `;
 
-const shortenDivider = css`
+const paymentButtonSpacing = css`
+	margin-top: ${space[6]}px;
+	${from.tablet} {
+		margin-top: ${space[8]}px;
+	}
+`;
+
+const coverTransactionDivider = css`
 	hr {
 		margin: ${space[4]}px 0px ${space[3]}px;
 		${from.tablet} {
@@ -82,14 +89,7 @@ const coverTransactionCheckboxContainer = css`
 	}
 `;
 
-const paymentButtonSpacing = css`
-	margin-top: ${space[6]}px;
-	${from.tablet} {
-		margin-top: ${space[8]}px;
-	}
-`;
-
-const coverTransactionSummary = css`
+const coverTransactionSummaryContainer = css`
 	${textSans.medium({ fontWeight: 'bold' })};
 	display: flex;
 	justify-content: space-between;
@@ -99,34 +99,51 @@ const coverTransactionSummary = css`
 type TransactionCostProps = {
 	transactionCost: boolean;
 	transactionCostCopy: string;
-	showTransactionCostSummary?: () => void;
+	transactionCostAmount: string;
+	showTransactionCostSummary?: boolean;
 };
 
 export function TransactionCost({
 	transactionCost,
 	transactionCostCopy,
+	transactionCostAmount,
 	showTransactionCostSummary,
 }: TransactionCostProps): JSX.Element {
+	const [displayTransactionCostSummary, setDisplayTransactionCostSummary] =
+		useState<boolean>(false);
+
 	const dispatch = useContributionsDispatch();
+
 	return (
-		<div css={coverTransactionCheckboxContainer}>
-			<Checkbox
-				checked={transactionCost}
-				onChange={(e) => {
-					if (e.target.checked) {
-						sendTrackingEventsOnClick({
-							id: 'cover-transaction-cost-checkbox',
-							componentType: 'ACQUISITIONS_BUTTON',
-						})();
-					}
-					dispatch(setCoverTransactionCost(e.target.checked));
-					if (showTransactionCostSummary) {
-						showTransactionCostSummary();
-					}
-				}}
-				label={transactionCostCopy}
-			/>
-		</div>
+		<>
+			<div css={coverTransactionCheckboxContainer}>
+				<Checkbox
+					checked={transactionCost}
+					onChange={(e) => {
+						if (e.target.checked) {
+							sendTrackingEventsOnClick({
+								id: 'cover-transaction-cost-checkbox',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})();
+						}
+						dispatch(setCoverTransactionCost(e.target.checked));
+						if (showTransactionCostSummary) {
+							setDisplayTransactionCostSummary(true);
+						}
+					}}
+					label={transactionCostCopy}
+				/>
+			</div>
+			{displayTransactionCostSummary && (
+				<div css={coverTransactionDivider}>
+					<CheckoutDivider spacing="tight" />
+					<div css={coverTransactionSummaryContainer}>
+						Total amount
+						<div>{transactionCostAmount}</div>
+					</div>
+				</div>
+			)}
+		</>
 	);
 }
 
@@ -135,9 +152,6 @@ export function SupporterPlusCheckout({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const [showTransactionCostSummary, setShowTransactionCostSummary] =
-		useState<boolean>(false);
-
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -229,19 +243,9 @@ export function SupporterPlusCheckout({
 									<TransactionCost
 										transactionCost={coverTransactionCost}
 										transactionCostCopy={transactionCostCopy}
-										showTransactionCostSummary={() =>
-											setShowTransactionCostSummary(true)
-										}
+										transactionCostAmount={simpleFormatAmount(currency, amount)}
+										showTransactionCostSummary={true}
 									/>
-									{showTransactionCostSummary && (
-										<div css={shortenDivider}>
-											<CheckoutDivider spacing="tight" />
-											<div css={coverTransactionSummary}>
-												Total amount
-												<div>{simpleFormatAmount(currency, amount)}</div>
-											</div>
-										</div>
-									)}
 								</>
 							)}
 						</>
@@ -292,6 +296,7 @@ export function SupporterPlusCheckout({
 							<TransactionCost
 								transactionCost={coverTransactionCost}
 								transactionCostCopy={transactionCostCopy}
+								transactionCostAmount={simpleFormatAmount(currency, amount)}
 							/>
 						)}
 						<PaymentButtonController
