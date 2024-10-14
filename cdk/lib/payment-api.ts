@@ -248,7 +248,7 @@ export class PaymentApi extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "High5XXRateAlarm", {
@@ -268,7 +268,7 @@ export class PaymentApi extends GuStack {
         statistic: "Sum",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoPaypalPaymentsInTwoHours247Alarm", {
@@ -290,7 +290,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(600),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "reader-revenue-24-7",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoStripePaymentsInThreeHours247Alarm", {
@@ -312,7 +312,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(900),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "reader-revenue-24-7",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoPaypalPaymentsInOneHourAlarm", {
@@ -332,7 +332,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(300),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoStripePaymentsInOneHourAlarm", {
@@ -352,7 +352,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(300),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "PaypalPaymentError", {
@@ -372,7 +372,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "StripePaymentError", {
@@ -392,7 +392,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "AmazonPayPaymentError", {
@@ -412,7 +412,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "PostPaymentError", {
@@ -429,7 +429,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "StripeRateLimitingAlarm", {
@@ -449,7 +449,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(900),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
   }
 }
