@@ -115,7 +115,6 @@ export function OfferTsAndCs({
 		<div css={container}>
 			<p>
 				{' '}
-				{/*check this UI*/}
 				<sup style={{ fontSize: '14px', fontWeight: 'lighter' }}>**</sup> Free
 				books are only available for qualified new recurring supporters
 				(monthly: {currency}
