@@ -69,14 +69,17 @@ const shortenDivider = css`
 `;
 
 const coverTransactionCheckboxContainer = css`
-	padding: ${space[3]}px;
+	padding: ${space[4]}px;
 	background-color: ${neutral[97]};
 	border-radius: 12px;
+	div {
+		padding: 0px;
+	}
 `;
 
 const paymentButtonSpacing = css`
 	${from.tablet} {
-		margin-top: ${space[5]}px;
+		margin-top: ${space[3]}px;
 	}
 `;
 
