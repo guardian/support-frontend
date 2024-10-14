@@ -30,6 +30,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - uses: sbt/setup-sbt@v1
       - name: Setup Node for CDK
         uses: actions/setup-node@v4
         with:
