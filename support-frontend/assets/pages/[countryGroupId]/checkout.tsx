@@ -96,6 +96,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -1577,7 +1578,8 @@ function CheckoutComponent({
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
 
-														console.log('sendEvent?', validPaymentMethod);
+														// Track payment method update with QM
+														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
 												/>
 											</PaymentMethodRadio>
