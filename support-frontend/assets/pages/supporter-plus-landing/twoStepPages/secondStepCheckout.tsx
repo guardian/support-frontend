@@ -163,8 +163,10 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
-	const showCoverTransactionCost =
-		abParticipations.coverTransactionCost === 'variant';
+	const showCoverTransactionCostA =
+		abParticipations.coverTransactionCost === 'variantA';
+	const showCoverTransactionCostB =
+		abParticipations.coverTransactionCost === 'variantB';
 
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
@@ -173,7 +175,7 @@ export function SupporterPlusCheckout({
 					{showPriceCards ? (
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
-							{showCoverTransactionCost && !hideTransactionCoverCost && (
+							{showCoverTransactionCostB && !hideTransactionCoverCost && (
 								<div css={shortenDivider}>
 									<div
 										css={[
@@ -248,6 +250,33 @@ export function SupporterPlusCheckout({
 								amount={amount}
 								productKey={product}
 							/>
+						)}
+						{showCoverTransactionCostA && !hideTransactionCoverCost && (
+							<div css={shortenDivider}>
+								<div
+									css={[
+										paymentButtonSpacing,
+										coverTransactionCheckboxContainer,
+									]}
+								>
+									<Checkbox
+										checked={coverTransactionCost}
+										onChange={(e) => {
+											if (e.target.checked) {
+												sendTrackingEventsOnClick({
+													id: 'cover-transaction-cost-checkbox',
+													componentType: 'ACQUISITIONS_BUTTON',
+												})();
+											}
+											dispatch(setCoverTransactionCost(e.target.checked));
+										}}
+										label={`I’d like to add a further ${simpleFormatAmount(
+											currency,
+											transactionCoverCost,
+										)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
+									/>
+								</div>
+							</div>
 						)}
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}
