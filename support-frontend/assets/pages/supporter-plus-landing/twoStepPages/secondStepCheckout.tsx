@@ -96,19 +96,19 @@ const coverTransactionSummaryContainer = css`
 	padding: 0px 0px ${space[2]}px;
 `;
 
-type TransactionCostProps = {
+type CoverTransactionCostProps = {
 	transactionCost: boolean;
 	transactionCostCopy: string;
 	transactionCostAmount: string;
 	showTransactionCostSummary?: boolean;
 };
 
-export function TransactionCost({
+export function CoverTransactionCost({
 	transactionCost,
 	transactionCostCopy,
 	transactionCostAmount,
 	showTransactionCostSummary,
-}: TransactionCostProps): JSX.Element {
+}: CoverTransactionCostProps): JSX.Element {
 	const [displayTransactionCostSummary, setDisplayTransactionCostSummary] =
 		useState<boolean>(false);
 
@@ -230,7 +230,6 @@ export function SupporterPlusCheckout({
 		abParticipations.coverTransactionCost === 'variantA' && amount > 0;
 	const showCoverTransactionCostB =
 		abParticipations.coverTransactionCost === 'variantB' && amount > 0;
-
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -240,7 +239,7 @@ export function SupporterPlusCheckout({
 							<ContributionsPriceCards paymentFrequency={contributionType} />
 							{showCoverTransactionCostB && (
 								<>
-									<TransactionCost
+									<CoverTransactionCost
 										transactionCost={coverTransactionCost}
 										transactionCostCopy={transactionCostCopy}
 										transactionCostAmount={simpleFormatAmount(currency, amount)}
@@ -293,7 +292,7 @@ export function SupporterPlusCheckout({
 							/>
 						)}
 						{showCoverTransactionCostA && (
-							<TransactionCost
+							<CoverTransactionCost
 								transactionCost={coverTransactionCost}
 								transactionCostCopy={transactionCostCopy}
 								transactionCostAmount={simpleFormatAmount(currency, amount)}
