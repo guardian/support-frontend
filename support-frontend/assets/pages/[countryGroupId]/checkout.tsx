@@ -96,6 +96,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -601,6 +602,7 @@ function CheckoutComponent({
 		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
@@ -771,6 +773,10 @@ function CheckoutComponent({
 				country: formData.get('billing-country') as IsoCountry,
 			};
 			deliveryAddress = undefined;
+		}
+
+		if (paymentMethod === undefined) {
+			setPaymentMethodError('Please select a payment method');
 		}
 
 		/** FormData: `paymentFields` */
@@ -1080,8 +1086,6 @@ function CheckoutComponent({
 			</Box>
 			<form
 				ref={formRef}
-				action="/contribute/recurring/create"
-				method="POST"
 				onSubmit={(event) => {
 					event.preventDefault();
 					const form = event.currentTarget;
@@ -1119,6 +1123,12 @@ function CheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
+
+										// Track payment method selection with QM
+										sendEventPaymentMethodSelected(
+											'StripeExpressCheckoutElement',
+										);
+
 										resolve(options);
 									}}
 									onConfirm={async (event) => {
@@ -1553,7 +1563,12 @@ function CheckoutComponent({
 								/>
 							</Legend>
 
-							<RadioGroup>
+							<RadioGroup
+								role="radiogroup"
+								label="Select payment method"
+								hideLabel
+								error={paymentMethodError}
+							>
 								{validPaymentMethods.map((validPaymentMethod) => {
 									const selected = paymentMethod === validPaymentMethod;
 									const { label, icon } = paymentMethodData[validPaymentMethod];
@@ -1576,6 +1591,9 @@ function CheckoutComponent({
 													}
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
+														setPaymentMethodError(undefined);
+														// Track payment method selection with QM
+														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
 												/>
 											</PaymentMethodRadio>

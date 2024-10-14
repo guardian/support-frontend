@@ -334,8 +334,8 @@ function sendEventContributionCartValue(
 	});
 }
 
-function sendEventContributionPaymentMethod(
-	paymentMethod: PaymentMethod | null,
+function sendEventPaymentMethodSelected(
+	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | null,
 ): void {
 	if (paymentMethod) {
 		void ifQmPermitted(() => {
@@ -446,7 +446,7 @@ export {
 	sendEventSubscriptionCheckoutConversion,
 	sendEventContributionCheckoutConversion,
 	sendEventContributionCartValue,
-	sendEventContributionPaymentMethod,
+	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,
 };

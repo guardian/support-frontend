@@ -6,15 +6,11 @@ import {
 	getPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import {
-	getAppliedPromo,
-	hasDiscount,
-	hasIntroductoryPrice,
-} from 'helpers/productPrice/promotions';
+import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 
 function hasDiscountOrPromotion(productPrice: ProductPrice): boolean {
 	const promotion = getAppliedPromo(productPrice.promotions);
-	return hasDiscount(promotion) || hasIntroductoryPrice(promotion);
+	return hasDiscount(promotion);
 }
 
 function getBillingDescription(

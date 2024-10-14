@@ -12,7 +12,7 @@ import {
 	trackComponentClick,
 	trackComponentInsert,
 } from 'helpers/tracking/behaviour';
-import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
 type PaymentMethodSelectorContainerProps = {
@@ -38,23 +38,11 @@ function PaymentMethodSelectorContainer({
 		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
-
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		countryId,
 		countryGroupId,
 	);
-
-	if (abParticipations.amazonPay === 'variant') {
-		const index = availablePaymentMethods.indexOf('AmazonPay');
-		if (index > -1) {
-			// Only splice availablePaymentMethods when AmazonPay is found
-			availablePaymentMethods.splice(index, 1);
-		}
-	}
 
 	function onPaymentMethodEvent(
 		event: 'select' | 'render',
@@ -64,7 +52,7 @@ function PaymentMethodSelectorContainer({
 
 		if (event === 'select') {
 			trackComponentClick(trackingId);
-			sendEventContributionPaymentMethod(paymentMethod);
+			sendEventPaymentMethodSelected(paymentMethod);
 			dispatch(setPaymentMethod({ paymentMethod }));
 		} else {
 			trackComponentInsert(trackingId);

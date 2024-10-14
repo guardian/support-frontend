@@ -53,7 +53,6 @@ class PaperFieldsGenerator(
       paymentSchedule,
       product.billingPeriod,
       product.currency,
-      promotion,
       fixedTerm,
     )
 

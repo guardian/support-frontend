@@ -140,10 +140,10 @@ describe('finalPrice', () => {
 									name: 'examplePromo',
 									description: 'an example promotion',
 									promoCode: 1234,
-									introductoryPrice: {
-										price: 6.99,
-										periodLength: 3,
-										periodType: 'issue',
+									discountedPrice: 7.99,
+									discount: {
+										amount: 50,
+										durationMonths: 3,
 									},
 								},
 							],
@@ -160,17 +160,17 @@ describe('finalPrice', () => {
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
-			price: 6.99,
+			price: 7.99,
 			promotions: [
 				{
-					description: 'an example promotion',
-					introductoryPrice: {
-						periodLength: 3,
-						periodType: 'issue',
-						price: 6.99,
-					},
 					name: 'examplePromo',
+					description: 'an example promotion',
 					promoCode: 1234,
+					discountedPrice: 7.99,
+					discount: {
+						amount: 50,
+						durationMonths: 3,
+					},
 				},
 			],
 		});

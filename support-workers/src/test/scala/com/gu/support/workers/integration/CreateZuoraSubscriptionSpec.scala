@@ -147,17 +147,6 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
-  it should "create a 6 for 6 Guardian Weekly subscription" in {
-    createZuoraHelper
-      .createSubscription(
-        createGuardianWeeklySubscriptionJson(SixWeekly, Some(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)),
-      )
-      .map(_ should matchPattern {
-        case s: SendThankYouEmailGuardianWeeklyState
-            if s.paymentSchedule.payments.headOption.map(_.amount).contains(6) =>
-      })
-  }
-
   it should "create an Guardian Weekly gift subscription" in {
     createZuoraHelper
       .createSubscription(guardianWeeklyGiftJson)

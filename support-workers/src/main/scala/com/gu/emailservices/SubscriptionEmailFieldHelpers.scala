@@ -30,29 +30,10 @@ object SubscriptionEmailFieldHelpers {
       paymentSchedule: PaymentSchedule,
       billingPeriod: BillingPeriod,
       currency: Currency,
-      promotion: Option[Promotion],
       fixedTerm: Boolean = false,
   ): String = {
-    promotion
-      .flatMap(_.introductoryPrice)
-      .map(introductoryPrice =>
-        introductoryPriceDescription(paymentSchedule, billingPeriod, currency, introductoryPrice),
-      )
-      .getOrElse(standardDescription(paymentSchedule, billingPeriod, currency, fixedTerm))
+    standardDescription(paymentSchedule, billingPeriod, currency, fixedTerm)
   }
-
-  def introductoryPriceDescription(
-      paymentSchedule: PaymentSchedule,
-      billingPeriod: BillingPeriod,
-      currency: Currency,
-      benefit: IntroductoryPriceBenefit,
-  ): String =
-    Try(paymentSchedule.payments.tail.head).fold(
-      _ => "",
-      payment =>
-        s"${priceWithCurrency(currency, benefit.price)} for ${pluralise(benefit.periodLength, benefit.periodType.toString.toLowerCase)}, " +
-          s"then ${priceWithCurrency(currency, payment.amount)} every ${billingPeriod.noun}",
-    )
 
   def giftNoun(billingPeriod: BillingPeriod): String = billingPeriod match {
     case Quarterly => "3 months"
@@ -89,7 +70,6 @@ object SubscriptionEmailFieldHelpers {
           case Annual => introductoryPeriod(monthsAtIntroductoryPrice / 12, billingPeriod)
           case Quarterly => introductoryPeriod(monthsAtIntroductoryPrice / 3, billingPeriod)
           case Monthly => introductoryPeriod(monthsAtIntroductoryPrice, billingPeriod)
-          case SixWeekly => throw new RuntimeException("Six for six is currently unsupported")
         }
       }
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun} for $introductoryTimespan, " +
