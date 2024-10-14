@@ -59,8 +59,17 @@ const shorterBoxMargin = css`
 	}
 `;
 
+const shortenDivider = css`
+	hr {
+		margin: ${space[4]}px 0px ${space[3]}px;
+		${from.tablet} {
+			margin: ${space[5]}px 0px ${space[3]}px;
+		}
+	}
+`;
+
 const coverTransactionCheckboxContainer = css`
-	padding: ${space[4]}px;
+	padding: ${space[3]}px;
 	background-color: ${neutral[97]};
 	border-radius: 12px;
 `;
@@ -75,7 +84,7 @@ const coverTransactionSummary = css`
 	${textSans.large({ fontWeight: 'bold' })};
 	display: flex;
 	justify-content: space-between;
-	padding: ${space[4]}px;
+	padding: 0px 0px ${space[2]}px;
 `;
 
 export function SupporterPlusCheckout({
@@ -165,7 +174,7 @@ export function SupporterPlusCheckout({
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
 							{showCoverTransactionCost && !hideTransactionCoverCost && (
-								<>
+								<div css={shortenDivider}>
 									<div
 										css={[
 											paymentButtonSpacing,
@@ -189,11 +198,12 @@ export function SupporterPlusCheckout({
 											)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`}
 										/>
 									</div>
+									<CheckoutDivider spacing="tight" />
 									<div css={coverTransactionSummary}>
 										Total amount
 										<div>{simpleFormatAmount(currency, amount)}</div>
 									</div>
-								</>
+								</div>
 							)}
 						</>
 					) : (
