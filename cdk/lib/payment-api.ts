@@ -282,7 +282,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Paypal",
         },
@@ -304,7 +304,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Stripe",
         },
@@ -324,7 +324,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Paypal",
         },
@@ -344,7 +344,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Stripe",
         },
@@ -364,7 +364,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
         metricName: "payment-error",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Paypal",
         },
@@ -384,7 +384,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
         metricName: "payment-error",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Stripe",
         },
@@ -404,7 +404,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
         metricName: "payment-error",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "AmazonPay",
         },
@@ -441,7 +441,7 @@ export class PaymentApi extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: new Metric({
         metricName: "stripe-rate-limit-exceeded",
-        namespace: "support-payment-api-PROD",
+        namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Stripe",
         },
