@@ -64,6 +64,7 @@ import { sendEventConversionPaymentMethod } from 'helpers/tracking/quantumMetric
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 
 export type Action =
 	| {
@@ -156,11 +157,23 @@ function getBillingCountryAndState(state: ContributionsState): {
 function getPromoCode(state: ContributionsState) {
 	const promotion = getSubscriptionPromotionForBillingPeriod(state);
 	if (promotion) {
-		return {
-			promoCode: promotion.promoCode,
-		};
+		return promotion.promoCode;
 	}
-	return {};
+	return undefined;
+}
+
+function getAppliedPromotion(
+	promoCode: string | undefined,
+	state: ContributionsState,
+) {
+	return promoCode !== undefined
+		? {
+				promoCode,
+				countryGroupId:
+					countryGroups[state.common.internationalisation.countryGroupId]
+						.supportInternationalisationId,
+		  }
+		: undefined;
 }
 
 function getProductFields(
@@ -205,6 +218,8 @@ function regularPaymentRequestFromAuthorisation(
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
+	const promoCode = getPromoCode(state);
+	const appliedPromotion = getAppliedPromotion(promoCode, state);
 
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
@@ -237,7 +252,9 @@ function regularPaymentRequestFromAuthorisation(
 			),
 			recaptchaToken,
 		},
-		...getPromoCode(state),
+		promoCode,
+		appliedPromotion,
+
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: {
 			...state.common.referrerAcquisitionData,

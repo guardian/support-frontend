@@ -126,10 +126,6 @@ export default class CountryGroupHelper {
 		);
 	}
 
-	static stringToCountryGroupId(countryGroupId: string): CountryGroupId {
-		return this.fromString(countryGroupId) ?? GBPCountries;
-	}
-
 	static fromCountryGroupName(name: CountryGroupName): CountryGroup {
 		const groupId = (Object.keys(countryGroups) as CountryGroupId[]).find(
 			(key) => countryGroups[key].name === name,

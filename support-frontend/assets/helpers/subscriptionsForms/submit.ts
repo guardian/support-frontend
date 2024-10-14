@@ -22,11 +22,11 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	getCurrency,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
@@ -57,6 +57,8 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import type { SupportInternationalisationId } from '../internationalisation/countryGroup';
+import { countryGroups } from '../internationalisation/countryGroup';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -139,6 +141,17 @@ const getPromoCode = (promotions?: Promotion[]) => {
 	return promotion ? promotion.promoCode : null;
 };
 
+const getAppliedPromotion = (
+	promoCode: string | null,
+	supportInternationalisationId: SupportInternationalisationId,
+) =>
+	promoCode !== null
+		? {
+				promoCode,
+				countryGroupId: supportInternationalisationId,
+		  }
+		: undefined;
+
 function getGiftRecipient(giftingState: GiftingState) {
 	const { title, firstName, lastName, email, giftMessage, giftDeliveryDate } =
 		giftingState;
@@ -196,6 +209,11 @@ function buildRegularPaymentRequest(
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
+	const appliedPromotion = getAppliedPromotion(
+		promoCode,
+		countryGroups[state.common.internationalisation.countryGroupId]
+			.supportInternationalisationId,
+	);
 
 	return {
 		title,
@@ -215,6 +233,7 @@ function buildRegularPaymentRequest(
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
 		promoCode,
+		appliedPromotion,
 		deliveryInstructions,
 		csrUsername,
 		salesforceCaseId,
