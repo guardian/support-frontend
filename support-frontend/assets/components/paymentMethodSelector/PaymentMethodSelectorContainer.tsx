@@ -38,23 +38,11 @@ function PaymentMethodSelectorContainer({
 		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
-
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		countryId,
 		countryGroupId,
 	);
-
-	if (abParticipations.amazonPay === 'variant') {
-		const index = availablePaymentMethods.indexOf('AmazonPay');
-		if (index > -1) {
-			// Only splice availablePaymentMethods when AmazonPay is found
-			availablePaymentMethods.splice(index, 1);
-		}
-	}
 
 	function onPaymentMethodEvent(
 		event: 'select' | 'render',
