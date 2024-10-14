@@ -12,7 +12,7 @@ import {
 	trackComponentClick,
 	trackComponentInsert,
 } from 'helpers/tracking/behaviour';
-import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
 type PaymentMethodSelectorContainerProps = {
@@ -64,7 +64,7 @@ function PaymentMethodSelectorContainer({
 
 		if (event === 'select') {
 			trackComponentClick(trackingId);
-			sendEventContributionPaymentMethod(paymentMethod);
+			sendEventPaymentMethodSelected(paymentMethod);
 			dispatch(setPaymentMethod({ paymentMethod }));
 		} else {
 			trackComponentInsert(trackingId);

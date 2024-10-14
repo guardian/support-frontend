@@ -1576,6 +1576,8 @@ function CheckoutComponent({
 													}
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
+
+														console.log('sendEvent?', validPaymentMethod);
 													}}
 												/>
 											</PaymentMethodRadio>

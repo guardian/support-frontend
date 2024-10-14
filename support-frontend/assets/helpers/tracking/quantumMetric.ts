@@ -119,6 +119,7 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
+		console.log('sendEvent --->', id, qmCartValueEventId, value);
 		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
 }
@@ -334,7 +335,7 @@ function sendEventContributionCartValue(
 	});
 }
 
-function sendEventContributionPaymentMethod(
+function sendEventPaymentMethodSelected(
 	paymentMethod: PaymentMethod | null,
 ): void {
 	if (paymentMethod) {
@@ -446,7 +447,7 @@ export {
 	sendEventSubscriptionCheckoutConversion,
 	sendEventContributionCheckoutConversion,
 	sendEventContributionCartValue,
-	sendEventContributionPaymentMethod,
+	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,
 };
