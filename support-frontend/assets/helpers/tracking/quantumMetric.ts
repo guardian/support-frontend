@@ -119,7 +119,6 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
-		console.log('sendEvent --->', id, qmCartValueEventId, value);
 		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
 }

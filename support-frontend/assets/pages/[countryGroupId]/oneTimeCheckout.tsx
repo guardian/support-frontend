@@ -71,6 +71,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -582,6 +583,12 @@ function OneTimeCheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
+
+										// Track payment method selection with QM
+										sendEventPaymentMethodSelected(
+											'StripeExpressCheckoutElement',
+										);
+
 										resolve(options);
 									}
 								}}
@@ -740,6 +747,9 @@ function OneTimeCheckoutComponent({
 													}
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
+
+														// Track payment method selection with QM
+														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
 												/>
 											</PaymentMethodRadio>
