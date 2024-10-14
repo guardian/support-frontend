@@ -72,14 +72,19 @@ const coverTransactionCheckboxContainer = css`
 	padding: ${space[4]}px;
 	background-color: ${neutral[97]};
 	border-radius: 12px;
+	margin: ${space[4]}px 0px ${space[2]}px;
+	${from.tablet} {
+		margin-top: ${space[5]}px 0px 0px;
+	}
 	div {
 		padding: 0px;
 	}
 `;
 
 const paymentButtonSpacing = css`
+	margin-top: ${space[6]}px;
 	${from.tablet} {
-		margin-top: ${space[3]}px;
+		margin-top: ${space[8]}px;
 	}
 `;
 
@@ -100,7 +105,7 @@ export function TransactionCost(
 ): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	return (
-		<div css={[paymentButtonSpacing, coverTransactionCheckboxContainer]}>
+		<div css={coverTransactionCheckboxContainer}>
 			<Checkbox
 				checked={transactionCostProps.transactionCost}
 				onChange={(e) => {
