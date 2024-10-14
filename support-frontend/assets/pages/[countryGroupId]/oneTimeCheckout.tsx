@@ -317,6 +317,7 @@ function OneTimeCheckoutComponent({
 		.filter(paymentMethodIsActive);
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
+	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -342,6 +343,10 @@ function OneTimeCheckoutComponent({
 	const formOnSubmit = async () => {
 		if (finalAmount) {
 			setIsProcessingPayment(true);
+
+			if (paymentMethod === 'None') {
+				setPaymentMethodError('Please select a payment method');
+			}
 
 			let paymentResult;
 			if (paymentMethod === 'PayPal') {
@@ -546,12 +551,8 @@ function OneTimeCheckoutComponent({
 			</Box>
 			<form
 				ref={formRef}
-				action="todo"
-				method="POST"
 				onSubmit={(event) => {
 					event.preventDefault();
-					// const form = event.currentTarget;
-					// const formData = new FormData(form);
 					/** we defer this to an external function as a lot of the payment methods use async */
 					void formOnSubmit();
 
@@ -726,7 +727,12 @@ function OneTimeCheckoutComponent({
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
 							</Legend>
-							<RadioGroup>
+							<RadioGroup
+								role="radiogroup"
+								label="Select payment method"
+								hideLabel
+								error={paymentMethodError}
+							>
 								{validPaymentMethods.map((validPaymentMethod) => {
 									const selected = paymentMethod === validPaymentMethod;
 									const { label, icon } = paymentMethodData[validPaymentMethod];
