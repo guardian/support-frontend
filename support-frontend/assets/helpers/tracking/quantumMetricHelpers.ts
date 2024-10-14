@@ -69,6 +69,8 @@ export function getContributionAnnualValue(
 			);
 		return convertedValue;
 	}
+
+	return;
 }
 
 export function waitForQuantumMetricAPi(onReady: () => void): void {

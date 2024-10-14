@@ -179,6 +179,8 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 					return result.setupIntent.payment_method ?? undefined;
 				});
 		}
+
+		return;
 	};
 
 	const fetchPaymentIntent = (token: string) =>

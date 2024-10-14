@@ -168,6 +168,8 @@ function TestimonialsForTerritory(props: TestimonialsForTerritoryProps) {
 			document.addEventListener('scroll', onScroll);
 			return () => document.removeEventListener('scroll', onScroll);
 		}
+
+		return;
 	}, [ref.current]);
 
 	React.useEffect(() => {
@@ -193,6 +195,8 @@ function TestimonialsForTerritory(props: TestimonialsForTerritoryProps) {
 					testimonialsContainer.removeEventListener('scroll', onScroll);
 			}
 		}
+
+		return;
 	}, [ref.current]);
 
 	React.useEffect(() => {
@@ -304,6 +308,8 @@ function TestimonialsContainerHeader() {
 			document.addEventListener('scroll', handleScroll);
 			return () => document.removeEventListener('scroll', handleScroll);
 		}
+
+		return;
 	}, [self.current]);
 
 	return (

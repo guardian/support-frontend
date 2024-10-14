@@ -62,6 +62,7 @@ export function usePaymentRequestCompletion(
 					.then((result) => {
 						if (result.error) {
 							errorHandler('card_authentication_error');
+							return;
 						} else {
 							return dispatch(
 								onPaymentAuthorised(

@@ -174,6 +174,8 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 								message: errorMessages[field][possibleValidityStateError] ?? '',
 							};
 						}
+
+						return;
 					})
 					.filter(isNonNullable),
 			];

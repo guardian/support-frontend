@@ -79,6 +79,8 @@ export function getAmountFromSessionStorage(): number | undefined {
 	if (amount) {
 		return parseFloat(amount);
 	}
+
+	return;
 }
 
 export const largeDonations: Record<ContributionType, number> = {

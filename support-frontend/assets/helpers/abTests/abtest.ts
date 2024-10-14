@@ -233,6 +233,8 @@ function getParticipationsFromUrl(): Participations | undefined {
 			return { [testId]: variant };
 		}
 	}
+
+	return;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
@@ -286,6 +288,8 @@ function getAmountsTestVariant(
 				[testName]: variantName,
 			};
 		}
+
+		return;
 	};
 
 	const contribOnlyAmounts = amounts.find((t) => {

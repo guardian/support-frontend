@@ -45,7 +45,10 @@ const container = css`
 	}
 `;
 
-const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
+const discountSummaryCopy = (
+	currency: string,
+	planCost: TierPlanCosts,
+): string | undefined => {
 	// EXAMPLE: £16/month for the first 12 months, then £25/month
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
@@ -61,6 +64,8 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		}`;
 	}
+
+	return;
 };
 
 export function ThreeTierTsAndCs({
@@ -100,6 +105,8 @@ export function ThreeTierTsAndCs({
 						</div>
 					);
 				}
+
+				return;
 			})}
 		</>
 	);
