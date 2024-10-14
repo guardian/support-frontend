@@ -7,6 +7,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Checkbox } from 'components/checkbox/Checkbox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -98,16 +99,19 @@ const coverTransactionSummary = css`
 type TransactionCostProps = {
 	transactionCost: boolean;
 	transactionCostCopy: string;
+	showTransactionCostSummary?: () => void;
 };
 
-export function TransactionCost(
-	transactionCostProps: TransactionCostProps,
-): JSX.Element {
+export function TransactionCost({
+	transactionCost,
+	transactionCostCopy,
+	showTransactionCostSummary,
+}: TransactionCostProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	return (
 		<div css={coverTransactionCheckboxContainer}>
 			<Checkbox
-				checked={transactionCostProps.transactionCost}
+				checked={transactionCost}
 				onChange={(e) => {
 					if (e.target.checked) {
 						sendTrackingEventsOnClick({
@@ -116,8 +120,11 @@ export function TransactionCost(
 						})();
 					}
 					dispatch(setCoverTransactionCost(e.target.checked));
+					if (showTransactionCostSummary) {
+						showTransactionCostSummary();
+					}
 				}}
-				label={transactionCostProps.transactionCostCopy}
+				label={transactionCostCopy}
 			/>
 		</div>
 	);
@@ -128,6 +135,9 @@ export function SupporterPlusCheckout({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
+	const [showTransactionCostSummary, setShowTransactionCostSummary] =
+		useState<boolean>(false);
+
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -153,8 +163,6 @@ export function SupporterPlusCheckout({
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const hideTransactionCoverCost = amount === 0 && otherAmount === 'other';
-	const hideTransactionCostSummary =
-		amount === amountBeforeTransactionCostCovered;
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const coverTransactionCost =
@@ -222,8 +230,11 @@ export function SupporterPlusCheckout({
 									<TransactionCost
 										transactionCost={coverTransactionCost}
 										transactionCostCopy={transactionCostCopy}
+										showTransactionCostSummary={() =>
+											setShowTransactionCostSummary(true)
+										}
 									/>
-									{!hideTransactionCostSummary && (
+									{showTransactionCostSummary && (
 										<div css={shortenDivider}>
 											<CheckoutDivider spacing="tight" />
 											<div css={coverTransactionSummary}>
