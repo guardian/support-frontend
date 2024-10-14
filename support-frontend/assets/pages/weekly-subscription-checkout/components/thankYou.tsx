@@ -49,9 +49,6 @@ const getPackageTitle = (billingPeriod: BillingPeriod) => {
 		case 'Annual':
 			return ' / annual package ';
 
-		case 'SixWeekly':
-			return ' / six for six package ';
-
 		default:
 			return '';
 	}
