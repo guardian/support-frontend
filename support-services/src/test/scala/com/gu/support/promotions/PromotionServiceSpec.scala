@@ -45,10 +45,9 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
       serviceWithFixtures.findPromotions(
         List(
           tenAnnual,
-          sixForSix,
         ),
       )
-    promotions.length shouldBe 2
+    promotions.length shouldBe 1
   }
 
   it should "validate a PromoCode" in {

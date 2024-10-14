@@ -3,7 +3,7 @@ package com.gu.acquisitions
 import com.gu.i18n.Country
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, QueryParameter}
 import com.gu.support.catalog._
-import com.gu.support.promotions.{DefaultPromotions, PromoCode}
+import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers.{
@@ -24,7 +24,6 @@ import com.gu.support.workers.{
   Quarterly,
   RequestInfo,
   SepaPaymentMethod,
-  SixWeekly,
   StripePaymentType,
   SupporterPlus,
   TierThree,
@@ -51,7 +50,6 @@ import com.gu.support.acquisitions.models.{
   PrintOptions,
   PrintProduct,
 }
-import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
 import com.gu.support.zuora.api.ReaderType
 
 object AcquisitionDataRowBuilder {
@@ -100,8 +98,6 @@ object AcquisitionDataRowBuilder {
     billingPeriod match {
       case Monthly => PaymentFrequency.Monthly
       case Quarterly => PaymentFrequency.Quarterly
-      case SixWeekly if postIntroductorySixForSixBillingPeriod == Quarterly => PaymentFrequency.Quarterly
-      case SixWeekly => PaymentFrequency.Monthly
       case Annual => PaymentFrequency.Annually
     }
 
@@ -268,17 +264,9 @@ object AcquisitionDataRowBuilder {
 
     Set(
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
-      if (isSixForSix(state)) Some("GUARDIAN_WEEKLY_SIX_FOR_SIX") else None,
       if (state.analyticsInfo.isGiftPurchase) Some("GIFT_SUBSCRIPTION") else None,
     ).flatten.union(referrerLabels).toList
   }
-
-  private def isSixForSix(state: SendAcquisitionEventState) =
-    state.sendThankYouEmailState match {
-      case s: SendThankYouEmailGuardianWeeklyState =>
-        s.product.billingPeriod == SixWeekly && s.promoCode.contains(DefaultPromotions.GuardianWeekly.NonGift.sixForSix)
-      case _ => false
-    }
 
   private def getQueryParameters(data: AcquisitionData): List[QueryParameter] =
     data.referrerAcquisitionData.queryParameters.getOrElse(Set()).toList

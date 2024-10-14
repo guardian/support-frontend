@@ -5,7 +5,6 @@ import {
 	getAppliedPromo,
 	getPromotionCopy,
 	hasDiscount,
-	hasIntroductoryPrice,
 	promotionHTML,
 } from '../promotions';
 
@@ -67,28 +66,14 @@ describe('getAppliedPromo', () => {
 			promoCode: 1234,
 			discountedPrice: 5.99,
 		},
-		{
-			name: 'examplePromo2',
-			description: 'example promotion2',
-			promoCode: 5678,
-			introductoryPrice: {
-				price: 6.99,
-				periodLength: 3,
-				periodType: 'issue',
-			},
-		},
 	] as unknown as Promotion[];
 
 	it('should return the applied promotion based on inputs', () => {
 		expect(getAppliedPromo(promotions)).toEqual({
-			description: 'example promotion2',
-			introductoryPrice: {
-				periodLength: 3,
-				periodType: 'issue',
-				price: 6.99,
-			},
-			name: 'examplePromo2',
-			promoCode: 5678,
+			name: 'examplePromo1',
+			description: 'example promotion1',
+			promoCode: 1234,
+			discountedPrice: 5.99,
 		});
 
 		expect(getAppliedPromo()).toEqual(undefined);
@@ -96,24 +81,6 @@ describe('getAppliedPromo', () => {
 });
 
 describe('applyDiscount', () => {
-	const productWithIntroductoryPrice = {
-		price: 12.99,
-		currency: 'EUR',
-		fixedTerm: false,
-		promotions: [
-			{
-				name: 'Sept 2019 Discount',
-				description: '50% off for 3 months',
-				promoCode: 'GH86H9J',
-				introductoryPrice: {
-					price: 6.99,
-					periodLength: 6,
-					periodType: 'issue',
-				},
-			},
-		],
-	};
-
 	const productWithDiscountedPrice = {
 		price: 12.99,
 		currency: 'EUR',
@@ -129,29 +96,6 @@ describe('applyDiscount', () => {
 	};
 
 	it('should return an updated price with a discount applied', () => {
-		expect(
-			applyDiscount(
-				productWithIntroductoryPrice as ProductPrice,
-				productWithIntroductoryPrice.promotions[0] as Promotion,
-			),
-		).toEqual({
-			currency: 'EUR',
-			fixedTerm: false,
-			price: 6.99,
-			promotions: [
-				{
-					name: 'Sept 2019 Discount',
-					description: '50% off for 3 months',
-					promoCode: 'GH86H9J',
-					introductoryPrice: {
-						price: 6.99,
-						periodLength: 6,
-						periodType: 'issue',
-					},
-				},
-			],
-		});
-
 		expect(
 			applyDiscount(
 				productWithDiscountedPrice as ProductPrice,
@@ -170,33 +114,6 @@ describe('applyDiscount', () => {
 				},
 			],
 		});
-	});
-});
-
-describe('hasIntroductoryPrice', () => {
-	const promotionWithIntroductoryPrice = {
-		name: 'Sept 2019 Discount',
-		description: '50% off for 3 months',
-		promoCode: 'GH86H9J',
-		introductoryPrice: {
-			price: 6.99,
-			periodLength: 6,
-			periodType: 'issue',
-		},
-	} as Promotion;
-
-	const promotionWithoutIntroductoryPrice = {
-		name: 'Sept 2019 Discount',
-		description: '50% off for 3 months',
-		promoCode: 'GH86H9J',
-	} as Promotion;
-
-	it('should return true if there is an introductory price', () => {
-		expect(hasIntroductoryPrice(promotionWithIntroductoryPrice)).toEqual(true);
-		expect(hasIntroductoryPrice(promotionWithoutIntroductoryPrice)).toEqual(
-			false,
-		);
-		expect(hasIntroductoryPrice()).toEqual(false);
 	});
 });
 

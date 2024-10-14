@@ -1,24 +1,14 @@
 const Annual = 'Annual';
 const Monthly = 'Monthly';
 const Quarterly = 'Quarterly';
-const SixWeekly = 'SixWeekly';
 
-// The value for six for six billing period here must match
-// the value in support-models/src/main/scala/com/gu/support/catalog/Product.scala
-const postIntroductorySixForSixBillingPeriod = 'Monthly';
-
-export type BillingPeriod =
-	| typeof SixWeekly
-	| typeof Annual
-	| typeof Monthly
-	| typeof Quarterly;
+export type BillingPeriod = typeof Annual | typeof Monthly | typeof Quarterly;
 
 export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
 
 export type DigitalGiftBillingPeriod = typeof Annual | typeof Quarterly;
 
 export type WeeklyBillingPeriod =
-	| typeof SixWeekly
 	| typeof Monthly
 	| typeof Quarterly
 	| typeof Annual;
@@ -41,9 +31,6 @@ function billingPeriodNoun(
 
 		case Quarterly:
 			return fixedTerm ? '3 months' : 'Quarter';
-
-		case SixWeekly:
-			return 'Six issues';
 
 		default:
 			return 'Month';
@@ -74,9 +61,6 @@ function billingPeriodTitle(
 		case Quarterly:
 			return fixedTerm ? '3 months' : billingPeriod;
 
-		case SixWeekly:
-			return '6 for 6';
-
 		default:
 			return billingPeriod;
 	}
@@ -86,8 +70,6 @@ export {
 	Annual,
 	Monthly,
 	Quarterly,
-	SixWeekly,
-	postIntroductorySixForSixBillingPeriod,
 	billingPeriodNoun,
 	billingPeriodAdverb,
 	billingPeriodTitle,

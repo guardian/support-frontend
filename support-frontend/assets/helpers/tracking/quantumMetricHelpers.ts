@@ -17,7 +17,6 @@ export function getSubscriptionAnnualValue(
 		Annual: 1,
 		Monthly: 12,
 		Quarterly: 4,
-		SixWeekly: 0,
 	};
 
 	const periodMultiplier = periodMultipliers[billingPeriod];

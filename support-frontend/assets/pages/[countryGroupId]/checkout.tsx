@@ -96,6 +96,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -1122,6 +1123,12 @@ function CheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
+
+										// Track payment method selection with QM
+										sendEventPaymentMethodSelected(
+											'StripeExpressCheckoutElement',
+										);
+
 										resolve(options);
 									}}
 									onConfirm={async (event) => {
@@ -1585,6 +1592,8 @@ function CheckoutComponent({
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
 														setPaymentMethodError(undefined);
+														// Track payment method selection with QM
+														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
 												/>
 											</PaymentMethodRadio>

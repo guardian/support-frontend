@@ -19,12 +19,6 @@ export type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
-export type IntroductoryPeriodType = 'issue';
-export type IntroductoryPriceBenefit = {
-	price: number;
-	periodLength: number;
-	periodType: IntroductoryPeriodType;
-};
 export type PromotionCopy = {
 	title?: string;
 	description?: string;
@@ -47,7 +41,6 @@ export type Promotion = {
 	discountedPrice?: number;
 	numberOfDiscountedPeriods?: number;
 	discount?: DiscountBenefit;
-	introductoryPrice?: IntroductoryPriceBenefit;
 	landingPage?: PromotionCopy;
 	starts?: string;
 	expires?: string;
@@ -59,41 +52,23 @@ const hasDiscount = (
 ): promotion is Promotion & Required<Pick<Promotion, 'discountedPrice'>> =>
 	isNumeric(promotion?.discountedPrice);
 
-const hasIntroductoryPrice = (
-	promotion?: Promotion,
-): promotion is Promotion & Required<Pick<Promotion, 'introductoryPrice'>> =>
-	!!promotion?.introductoryPrice;
-
 function applyDiscount(
 	price: ProductPrice,
 	promotion?: Promotion,
 ): ProductPrice {
 	if (hasDiscount(promotion)) {
 		return { ...price, price: promotion.discountedPrice };
-	} else if (hasIntroductoryPrice(promotion)) {
-		return {
-			...price,
-			price: promotion.introductoryPrice.price,
-		};
 	}
-
 	return price;
 }
 
 const matchesQueryParam = (promotion: Promotion) =>
 	getQueryParameter(promoQueryParam) === promotion.promoCode;
 
-const introductoryPrice = (promotion: Promotion) =>
-	promotion.introductoryPrice !== undefined;
-
 function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 	if (promotions && promotions.length > 0) {
 		if (promotions.length > 1) {
-			return (
-				promotions.find(introductoryPrice) ??
-				promotions.find(matchesQueryParam) ??
-				promotions[0]
-			);
+			return promotions.find(matchesQueryParam) ?? promotions[0];
 		}
 
 		return promotions[0];
@@ -204,7 +179,6 @@ export {
 	getPromotion,
 	getAppliedPromo,
 	applyDiscount,
-	hasIntroductoryPrice,
 	hasDiscount,
 	promoQueryParam,
 	getPromotionCopy,
