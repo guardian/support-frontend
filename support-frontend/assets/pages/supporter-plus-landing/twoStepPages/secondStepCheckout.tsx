@@ -18,7 +18,10 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setCoverTransactionCost,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -56,7 +59,7 @@ const paymentButtonSpacing = css`
 	}
 `;
 
-export default function SupporterPlusCheckout({
+export function SupporterPlusCheckout({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
@@ -151,6 +154,9 @@ export default function SupporterPlusCheckout({
 									transactionCost={coverTransactionCost}
 									transactionCostCopy={transactionCostCopy}
 									transactionCostAmount={simpleFormatAmount(currency, amount)}
+									onChecked={(check) => {
+										dispatch(setCoverTransactionCost(check));
+									}}
 									showTransactionCostSummary={true}
 								/>
 							)}
@@ -202,6 +208,9 @@ export default function SupporterPlusCheckout({
 							<CoverTransactionCost
 								transactionCost={coverTransactionCost}
 								transactionCostCopy={transactionCostCopy}
+								onChecked={(check) => {
+									dispatch(setCoverTransactionCost(check));
+								}}
 								transactionCostAmount={simpleFormatAmount(currency, amount)}
 							/>
 						)}

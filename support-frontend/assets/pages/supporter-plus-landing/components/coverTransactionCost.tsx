@@ -3,8 +3,6 @@ import { from, neutral, space, textSans } from '@guardian/source/foundations';
 import { useState } from 'react';
 import { Checkbox } from 'components/checkbox/Checkbox';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { setCoverTransactionCost } from 'helpers/redux/checkout/product/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 
 const coverTransactionDivider = css`
@@ -40,6 +38,7 @@ export type CoverTransactionCostProps = {
 	transactionCost: boolean;
 	transactionCostCopy: string;
 	transactionCostAmount: string;
+	onChecked: (check: boolean) => void;
 	showTransactionCostSummary?: boolean;
 };
 
@@ -48,11 +47,10 @@ export function CoverTransactionCost({
 	transactionCostCopy,
 	transactionCostAmount,
 	showTransactionCostSummary,
+	onChecked,
 }: CoverTransactionCostProps): JSX.Element {
 	const [displayTransactionCostSummary, setDisplayTransactionCostSummary] =
 		useState<boolean>(false);
-
-	const dispatch = useContributionsDispatch();
 
 	return (
 		<>
@@ -66,7 +64,7 @@ export function CoverTransactionCost({
 								componentType: 'ACQUISITIONS_BUTTON',
 							})();
 						}
-						dispatch(setCoverTransactionCost(e.target.checked));
+						onChecked(e.target.checked);
 						if (showTransactionCostSummary) {
 							setDisplayTransactionCostSummary(true);
 						}
