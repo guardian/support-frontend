@@ -54,8 +54,6 @@ class DigitalSubscriptionGiftPurchaseBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      state.promoCode,
-      state.billingCountry,
       state.appliedPromotion,
       productRatePlanId,
       subscriptionData,

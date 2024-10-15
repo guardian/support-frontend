@@ -5,7 +5,6 @@ import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.{Codec, DiscriminatedType}
-import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, encodeCountryAsAlpha2, encodeLocalTime}
@@ -24,7 +23,6 @@ case class CreateZuoraSubscriptionState(
     product: ProductType,
     analyticsInfo: AnalyticsInfo,
     firstDeliveryDate: Option[LocalDate],
-    promoCode: Option[PromoCode],
     appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
@@ -49,7 +47,6 @@ object CreateZuoraSubscriptionProductState {
       billingCountry: Country,
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -59,7 +56,6 @@ object CreateZuoraSubscriptionProductState {
       product: TierThree,
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -68,7 +64,6 @@ object CreateZuoraSubscriptionProductState {
       billingCountry: Country,
       product: DigitalPack,
       paymentMethod: PaymentMethod,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -78,7 +73,6 @@ object CreateZuoraSubscriptionProductState {
       giftRecipient: DigitalSubscriptionGiftRecipient,
       product: DigitalPack,
       paymentMethod: PaymentMethod,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
   ) extends CreateZuoraSubscriptionProductState
@@ -94,7 +88,6 @@ object CreateZuoraSubscriptionProductState {
       product: Paper,
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -105,7 +98,6 @@ object CreateZuoraSubscriptionProductState {
       product: GuardianWeekly,
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
-      promoCode: Option[PromoCode],
       appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
   ) extends CreateZuoraSubscriptionProductState

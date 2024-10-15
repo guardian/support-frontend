@@ -45,7 +45,7 @@ class GuardianWeeklySubscriptionBuilder(
       recurringProductRatePlanId,
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
-      readerType = ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse readerType,
+      readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse readerType,
       autoRenew = autoRenew,
       initialTerm = initialTerm,
       initialTermPeriodType = initialTermPeriodType,
@@ -55,8 +55,6 @@ class GuardianWeeklySubscriptionBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      state.promoCode,
-      state.user.deliveryAddress.getOrElse(state.user.billingAddress).country,
       state.appliedPromotion,
       recurringProductRatePlanId,
       subscriptionData,
