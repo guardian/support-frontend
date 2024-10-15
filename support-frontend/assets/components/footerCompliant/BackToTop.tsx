@@ -1,9 +1,8 @@
 import { css } from '@emotion/react';
 import {
 	brandAlt,
-	brandBackground,
-	brandText,
-	textSans,
+	palette,
+	textSansBold15,
 } from '@guardian/source/foundations';
 
 const iconHeight = '42px';
@@ -11,7 +10,7 @@ const iconContainer = css`
 	position: relative;
 	float: right;
 	border-radius: 100%;
-	background-color: ${brandBackground.ctaPrimary};
+	background-color: ${palette.neutral[100]};
 	cursor: pointer;
 	height: ${iconHeight};
 	min-width: ${iconHeight};
@@ -24,7 +23,7 @@ const icon = css`
 		left: 0;
 		right: 0;
 		margin: auto;
-		border: 2px solid ${brandText.ctaPrimary};
+		border: 2px solid ${palette.brand[400]};
 		border-bottom: 0;
 		border-right: 0;
 		content: '';
@@ -35,7 +34,7 @@ const icon = css`
 `;
 const link = css`
 	text-decoration: none;
-	color: ${brandText.anchorPrimary};
+	color: ${palette.brand[100]};
 	font-weight: bold;
 	line-height: ${iconHeight};
 	:hover {
@@ -47,9 +46,7 @@ const link = css`
 	}
 `;
 const textStyles = css`
-	${textSans.small({
-		fontWeight: 'bold',
-	})};
+	${textSansBold15};
 	padding-right: 5px;
 `;
 export function BackToTop(): JSX.Element {

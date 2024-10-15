@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import {
-	brand,
 	from,
 	neutral,
+	palette,
 	space,
 	visuallyHidden,
 } from '@guardian/source/foundations';
@@ -38,7 +38,7 @@ type HeaderProps = {
 export function Header({ children }: HeaderProps): JSX.Element {
 	return (
 		<header>
-			<Container backgroundColor={brand[400]}>
+			<Container backgroundColor={palette.brand[400]}>
 				<Columns>
 					<Column>{children}</Column>
 					<Column span={[2, 3, 4]}>

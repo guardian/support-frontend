@@ -342,7 +342,7 @@ function PaperCheckoutForm(props: PropTypes) {
 				>
 					<FormSection title="Your details">
 						<Select
-							css={marginBottom}
+							cssOverrides={marginBottom}
 							id="title"
 							data-qm-masking="blocklist"
 							label="Title"
@@ -389,7 +389,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}
-								css={controlTextAreaResizing}
+								cssOverrides={controlTextAreaResizing}
 								id="delivery-instructions"
 								data-qm-masking="blocklist"
 								label="Delivery instructions"

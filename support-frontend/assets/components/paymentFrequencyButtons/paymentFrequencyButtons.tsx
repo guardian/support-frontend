@@ -1,6 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import { useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 
@@ -29,9 +34,7 @@ const container = (numberOfChildren: number) => css`
 const button = (isSelected: boolean) => css`
 	background-color: ${isSelected ? palette.neutral[100] : '#A2B2CB'};
 	transition: background-color 0.3s;
-	${textSans.medium({
-		fontWeight: 'bold',
-	})}
+	${textSansBold17};
 	border: 0;
 
 	padding: ${space[3]}px 0;

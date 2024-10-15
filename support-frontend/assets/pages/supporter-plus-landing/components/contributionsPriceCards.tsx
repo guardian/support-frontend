@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	space,
+	textSans17,
+	textSansBold14,
+} from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
@@ -25,7 +30,7 @@ const titleAndButtonContainer = css`
 `;
 
 const title = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${textSansBold14}
 	${from.tablet} {
 		font-size: 28px;
 	}
@@ -71,7 +76,7 @@ export function ContributionsPriceCards({
 	return (
 		<div
 			css={css`
-				${textSans.medium()}
+				${textSans17}
 			`}
 		>
 			<div css={titleAndButtonContainer}>

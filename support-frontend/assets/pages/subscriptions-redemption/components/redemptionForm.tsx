@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, headline, line, space } from '@guardian/source/foundations';
+import {
+	from,
+	headlineMedium24,
+	palette,
+	space,
+} from '@guardian/source/foundations';
 import {
 	Button,
 	SvgArrowRightStraight,
@@ -87,7 +92,7 @@ const instructionsDivCss = css`
 	}
 	hr {
 		border: 0;
-		border-top: solid 1px ${line.primary};
+		border-top: solid 1px ${palette.neutral[86]};
 	}
 `;
 
@@ -95,7 +100,7 @@ const hrCss = css`
 	margin-bottom: 16px;
 `;
 const headingCss = css`
-	${headline.xsmall()};
+	${headlineMedium24};
 	font-weight: bold;
 	margin-bottom: 16px;
 `;

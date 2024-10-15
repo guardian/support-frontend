@@ -4,7 +4,7 @@ import {
 	RadioGroup,
 	SvgCreditCard,
 	SvgDirectDebit,
-	SvgPayPal,
+	SvgPayPalBrand,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
@@ -72,7 +72,7 @@ const paymentMethodData = {
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
-		icon: <SvgPayPal />,
+		icon: <SvgPayPalBrand />,
 	},
 	DirectDebit: {
 		id: 'qa-direct-debit',

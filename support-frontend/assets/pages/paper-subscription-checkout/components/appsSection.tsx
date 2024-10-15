@@ -1,6 +1,13 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	headlineBold20,
+	headlineBold28,
+	headlineBold34,
+	space,
+	textSans17,
+} from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
@@ -38,37 +45,26 @@ const marginForButton = css`
 	margin: ${space[5]}px 0;
 `;
 const mainHeading = css`
-	${headline.small({
-		fontWeight: 'bold',
-		lineHeight: 'tight',
-	})};
+	${headlineBold28};
+	line-height: 1.15;
 	${from.phablet} {
-		${headline.medium({
-			fontWeight: 'bold',
-			lineHeight: 'regular',
-		})};
+		${headlineBold34};
 	}
 `;
 const subHeading = css`
 	margin: ${space[6]}px 0 ${space[1]}px;
-	${headline.xxsmall({
-		fontWeight: 'bold',
-		lineHeight: 'tight',
-	})};
+	${headlineBold20};
+	line-height: 1.15;
 	${from.desktop} {
 		margin: ${space[9]}px 0 ${space[1]}px;
 		line-height: normal;
 	}
 `;
 const sansText = css`
-	${textSans.medium({
-		lineHeight: 'regular',
-	})}
-	${from.desktop} {
-		${textSans.medium({
-			lineHeight: 'loose',
-		})}
-	}
+	${textSans17}
+  ${from.desktop} {
+    line-height: 1.4;
+  }}
 `;
 const maxWidth = css`
 	${from.tablet} {
@@ -219,7 +215,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 				</p>
 				<ThemeProvider theme={buttonThemeReaderRevenue}>
 					<LinkButton
-						css={marginForButton}
+						cssOverrides={marginForButton}
 						priority="tertiary"
 						size="default"
 						icon={<SvgArrowRightStraight />}

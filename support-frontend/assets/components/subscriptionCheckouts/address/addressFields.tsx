@@ -184,7 +184,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 	return (
 		<div data-component={`${scope}AddressFields`}>
 			<Select
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-country`}
 				data-qm-masking="blocklist"
 				label="Country"
@@ -267,7 +267,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				/>
 			) : null}
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-lineOne`}
 				data-qm-masking="blocklist"
 				label="Address Line 1"
@@ -286,7 +286,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				}}
 			/>
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-lineTwo`}
 				data-qm-masking="blocklist"
 				label="Address Line 2"
@@ -306,7 +306,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				}}
 			/>
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-city`}
 				data-qm-masking="blocklist"
 				label="Town/City"
@@ -325,7 +325,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				}}
 			/>
 			<MaybeSelect
-				css={[marginBottom, selectStateStyles]}
+				cssOverrides={[marginBottom, selectStateStyles]}
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
@@ -350,7 +350,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				</>
 			</MaybeSelect>
 			<MaybeInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label="State"
@@ -369,7 +369,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				}}
 			/>
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id={`${scope}-postcode`}
 				data-qm-masking="blocklist"
 				label={props.country === 'US' ? 'ZIP code' : 'Postcode'}

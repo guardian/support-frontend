@@ -2,12 +2,11 @@ import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { css, Global } from '@emotion/react';
 import {
-	brand,
 	from,
 	neutral,
 	palette,
 	space,
-	textSans,
+  textSans17,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
@@ -16,19 +15,20 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { renderToString } from 'react-dom/server';
-import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
-import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { Container } from 'components/layout/container';
-import { SkipLink } from 'components/skipLink/skipLink';
-import AnimatedDots from 'components/spinners/animatedDots';
-import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
-import { guardianFonts } from 'stylesheets/emotion/fonts';
-import { reset } from 'stylesheets/emotion/reset';
+import {reset} from "../assets/stylesheets/emotion/reset";
+import {guardianFonts} from "../assets/stylesheets/emotion/fonts";
+import {SkipLink} from "../assets/components/skipLink/skipLink";
+import {Header} from "../assets/components/headers/simpleHeader/simpleHeader";
+import {PrerenderGlobalStyles} from "../assets/helpers/rendering/prerenderGlobalStyles";
+import {CheckoutHeading} from "../assets/components/checkoutHeading/checkoutHeading";
+import {Container} from "../assets/components/layout/container";
+import AnimatedDots from "../assets/components/spinners/animatedDots";
+
 
 const checkoutContainer = css`
 	position: relative;
 	color: ${neutral[7]};
-	${textSans.medium()};
+	${textSans17};
 
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;
@@ -56,7 +56,7 @@ const container = css`
 	min-height: 100vh;
 	max-width: 100%;
 	overflow-x: hidden;
-	background-color: ${brand[400]};
+	background-color: ${palette.brand[400]};
 
 	& main {
 		flex: 1;

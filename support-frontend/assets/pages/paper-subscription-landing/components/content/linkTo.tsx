@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { body, from, neutral, space } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	textEgyptianBold15,
+} from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -15,9 +20,7 @@ const linkStyles = (
 	activeTab?: PaperFulfilmentOptions | null,
 ) => css`
 	color: ${neutral[100]};
-	${body.small({
-		fontWeight: 'bold',
-	})};
+	${textEgyptianBold15};
 	text-decoration: none;
 	padding: ${space[3]}px ${space[3]}px ${space[2]}px;
 	border-bottom: ${space[1]}px solid
@@ -43,7 +46,7 @@ function LinkTo({
 }): JSX.Element {
 	return (
 		<Link
-			css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
+			cssOverrides={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
 			href={paperSubsUrl(activeTab)}
 			aria-current={tab === activeTab}
 			onClick={(ev) => {

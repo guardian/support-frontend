@@ -1,17 +1,17 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	body,
 	from,
-	headline,
+	headlineBold24,
 	neutral,
 	space,
-	textSans,
+	textEgyptian17,
+	textSans12,
 } from '@guardian/source/foundations';
 import {
 	Link,
-	linkThemeBrand,
 	SvgGift,
-	SvgInfo,
+	SvgInfoRound,
+	themeLinkBrand,
 } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
@@ -66,9 +66,7 @@ const productOverrideWithLabel = css`
 `;
 
 const pricesHeadline = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 
 	${from.tablet} {
 		font-size: 34px;
@@ -76,7 +74,7 @@ const pricesHeadline = css`
 `;
 
 const pricesSubHeadline = css`
-	${body.medium()}
+	${textEgyptian17};
 	padding-bottom: ${space[2]}px;
 `;
 
@@ -85,7 +83,7 @@ const pricesInfo = css`
 `;
 
 const termsLink = css`
-	${textSans.xxsmall()};
+	${textSans12};
 	margin-left: ${space[9]}px;
 	margin-top: -12px;
 `;
@@ -125,12 +123,12 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						Gifting is available
 					</ProductInfoChip>
 				)}
-				<ProductInfoChip icon={<SvgInfo />}>
+				<ProductInfoChip icon={<SvgInfoRound />}>
 					Delivery cost included.{' '}
 					{!orderIsAGift && 'You can cancel your subscription at any time'}
 				</ProductInfoChip>
 				<ProductInfoChip>
-					<ThemeProvider theme={linkThemeBrand}>
+					<ThemeProvider theme={themeLinkBrand}>
 						<Link href={termsConditionsLink} cssOverrides={termsLink}>
 							Click here to see full Terms and Conditions
 						</Link>

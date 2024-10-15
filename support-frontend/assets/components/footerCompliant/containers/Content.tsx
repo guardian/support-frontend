@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { brand, from, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 type PropTypes = {
@@ -24,7 +24,7 @@ const contentStyle = css`
 	/* padding-bottom: ${space[4]}px; */
 
 	.component-left-margin-section:not(:last-of-type) & {
-		border-bottom: 1px solid ${brand[600]};
+		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
 
@@ -32,8 +32,8 @@ function getBorderStyling(centred = false) {
 	const breakpoint = centred ? from.wide : from.tablet;
 	return css`
 		${breakpoint} {
-			border-left: 1px solid ${brand[600]};
-			border-right: 1px solid ${brand[600]};
+			border-left: 1px solid ${palette.brand[600]};
+			border-right: 1px solid ${palette.brand[600]};
 		}
 	`;
 }

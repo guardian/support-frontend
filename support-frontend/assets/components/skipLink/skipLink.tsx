@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
-import { focus, neutral, textSans } from '@guardian/source/foundations';
+import { focus, neutral, textSans17 } from '@guardian/source/foundations';
 
 const skipLinkStyles = css`
-	${textSans.medium()}
+	${textSans17};
 	display: block;
 	position: absolute;
 	height: 40px;

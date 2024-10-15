@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { border, from, space } from '@guardian/source/foundations';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
@@ -13,12 +13,12 @@ const directDebitSection = css`
 	border: none;
 
 	${from.desktop} {
-		border-top: 1px solid ${border.secondary};
+		border-top: 1px solid ${palette.neutral[86]};
 	}
 `;
 const borderTop = css`
 	display: block;
-	border-top: 1px solid ${border.secondary};
+	border-top: 1px solid ${palette.neutral[86]};
 
 	${from.desktop} {
 		border-top: none;

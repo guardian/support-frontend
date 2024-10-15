@@ -1,12 +1,13 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	body,
 	brandAlt,
 	from,
-	headline,
+	headlineBold34,
+	headlineBold42,
+	palette,
 	space,
-	text,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
@@ -46,24 +47,19 @@ const heroCopy = css`
 	}
 `;
 const heroTitle = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})};
+	${headlineBold34};
 	margin-bottom: ${space[3]}px;
 
 	${from.tablet} {
-		${headline.large({
-			fontWeight: 'bold',
-		})};
+		${headlineBold42};
 	}
 `;
 const heroTitleHighlight = css`
 	color: ${brandAlt[400]};
 `;
 const heroParagraph = css`
-	${body.medium({
-		lineHeight: 'loose',
-	})}
+	${textEgyptian17};
+	line-height: 1.4;
 	margin-bottom: ${space[6]}px;
 
 	/* apply the same margin to paragraphs parsed from markdown from promo codes */
@@ -120,7 +116,7 @@ export function PaperHero({
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.primary}
+					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
 					copy={roundelText}
 				/>
@@ -177,7 +173,7 @@ export function PriceCardsPaperHero({
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.primary}
+					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
 					copy={roundelText}
 				/>

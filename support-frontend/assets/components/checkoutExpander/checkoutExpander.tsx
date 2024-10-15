@@ -1,6 +1,10 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import {
+	space,
+	textSans17,
+	textSansBold17,
+} from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 const expander = css`
@@ -14,13 +18,11 @@ const summary = css`
 	margin: ${space[1]}px 0;
 `;
 const copyStyleLabel = css`
-	${textSans.medium({
-		fontWeight: 'bold',
-	})};
+	${textSansBold17};
 	text-decoration: underline;
 `;
 const copyStyle = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 
 // ----- Types ----- //

@@ -1,5 +1,5 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source/foundations';
+import { space, textSans17 } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrandAlt,
@@ -16,11 +16,11 @@ const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 const sansText = css`
-	${textSans.medium()};
+	${textSans17};
 `;
 const paragraphWithButton = css`
 	margin-top: ${space[2]}px;
-	${textSans.medium()};
+	${textSans17};
 `;
 
 export type PropTypes = {
@@ -118,7 +118,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 	return (
 		<div id="qa-personal-details">
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id="first-name"
 				data-testid="first-name"
 				data-qm-masking="blocklist"
@@ -129,7 +129,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 				error={firstError('firstName', props.formErrors)}
 			/>
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id="last-name"
 				data-testid="last-name"
 				data-qm-masking="blocklist"
@@ -140,7 +140,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 				error={firstError('lastName', props.formErrors)}
 			/>
 			<TextInput
-				css={marginBottom}
+				cssOverrides={marginBottom}
 				id="email"
 				data-testid="email"
 				data-qm-masking="blocklist"

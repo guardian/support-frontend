@@ -28,7 +28,7 @@ function ReturnSection(props: PropTypes) {
 				<div className="thank-you-stage__ctas">
 					<ThemeProvider theme={buttonThemeReaderRevenue}>
 						<LinkButton
-							css={buttonStyles}
+							cssOverrides={buttonStyles}
 							priority="tertiary"
 							aria-label="Return to the Guardian home page"
 							href="https://theguardian.com"

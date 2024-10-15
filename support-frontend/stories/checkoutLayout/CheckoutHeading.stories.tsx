@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source/foundations';
+import {palette} from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
@@ -73,15 +73,15 @@ WithMenu.decorators = [
 	(Story: React.FC): JSX.Element => (
 		<div
 			style={{
-				backgroundColor: brand[400],
+				backgroundColor: palette.brand[400],
 				paddingTop: '1rem',
 			}}
 		>
 			<Container
 				topBorder={true}
 				sideBorders={true}
-				borderColor={brand[600]}
-				backgroundColor={brand[400]}
+				borderColor={palette.brand[600]}
+				backgroundColor={palette.brand[400]}
 			>
 				<div style={{ color: 'white', paddingTop: '1rem' }}>
 					[Menu component]

@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import {
-	headline,
+	headlineBold24,
 	neutral,
 	space,
-	textSans,
+	textSans17,
 } from '@guardian/source/foundations';
 import type { ListItemText } from 'components/list/list';
 import { ListWithSubText } from 'components/list/list';
@@ -14,16 +14,14 @@ const container = css`
 	}
 `;
 const title = css`
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
+	${headlineBold24};
 	background-color: ${neutral[97]};
 	padding: ${space[2]}px;
 `;
 const list = css`
 	padding-top: ${space[2]}px;
 	padding-left: ${space[2]}px;
-	${textSans.medium()};
+	${textSans17};
 `;
 type OrderSummaryProductProps = {
 	productName: string;

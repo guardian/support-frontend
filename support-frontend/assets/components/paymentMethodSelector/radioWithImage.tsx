@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { brand, neutral } from '@guardian/source/foundations';
+import { neutral, palette } from '@guardian/source/foundations';
 import { Radio } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
@@ -22,7 +22,7 @@ const defaultRadioLabelColour = css`
 `;
 
 const checkedRadioLabelColour = css`
-	color: ${brand[400]};
+	color: ${palette.brand[400]};
 	font-weight: bold;
 `;
 

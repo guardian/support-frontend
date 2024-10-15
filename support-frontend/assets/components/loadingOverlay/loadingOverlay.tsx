@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source/foundations';
+import { neutral, textSans20 } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 
@@ -19,7 +19,7 @@ const loadingBackground = css`
 `;
 
 const loadingMessage = css`
-	${textSans.large()}
+	${textSans20};
 	color: ${neutral[100]};
 	text-align: center;
 `;

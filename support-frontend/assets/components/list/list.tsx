@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
 import {
-	body,
-	brand,
 	brandAlt,
 	from,
+	palette,
 	space,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import * as React from 'react';
 
@@ -27,7 +27,7 @@ type ListItemProps = {
 	colour: ListBulletColour;
 };
 const list = css`
-	${body.medium()};
+	${textEgyptian17};
 	margin: 0 0 20px;
 
 	${from.desktop} {
@@ -67,7 +67,7 @@ const listItemBulletLight = css`
 	background-color: ${brandAlt[400]};
 `;
 const listItemBulletDark = css`
-	background-color: ${brand[400]};
+	background-color: ${palette.brand[400]};
 `;
 const listItemContent = css`
 	margin-left: ${space[2]}px;

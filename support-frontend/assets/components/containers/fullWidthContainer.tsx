@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { brand, neutral, palette } from '@guardian/source/foundations';
+import { neutral, palette } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';
@@ -17,7 +17,7 @@ const containerThemes: Record<Theme, SerializedStyles> = {
 		color: ${neutral[7]};
 	`,
 	dark: css`
-		background-color: ${brand[300]};
+		background-color: ${palette.brand[300]};
 		color: ${neutral[100]};
 	`,
 	white: css`

@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import {
 	error as errorColour,
 	space,
-	textSans,
+	textSans15,
 } from '@guardian/source/foundations';
 import { InlineError } from '@guardian/source/react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -16,7 +16,7 @@ const errorContainer = css`
 	margin-top: ${space[6]}px;
 `;
 const errorMessage = css`
-	${textSans.small()}
+	${textSans15};
 	display: list-item;
 	list-style-position: outside;
 	list-style-type: disc;
@@ -35,7 +35,9 @@ type PropTypes = {
 export function ErrorSummary(props: PropTypes): JSX.Element {
 	return (
 		<div role="status" aria-live="assertive" css={errorContainer}>
-			<InlineError css={boldText}>Some information is missing</InlineError>
+			<InlineError cssOverrides={boldText}>
+				Some information is missing
+			</InlineError>
 			<ul>
 				{props.errors.map((error) => (
 					<li key={error.message} css={errorMessage}>

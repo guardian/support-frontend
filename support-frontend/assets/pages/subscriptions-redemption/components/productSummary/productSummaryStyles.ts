@@ -1,18 +1,17 @@
 import { css } from '@emotion/react';
 import {
-	background,
-	border,
 	from,
-	headline,
+	headlineMedium20,
+	palette,
 	space,
-	text,
-	textSans,
+	textSans15,
+	textSansBold17,
 	until,
 } from '@guardian/source/foundations';
 
 export const wrapper = css`
-	background-color: ${background.primary};
-	color: ${text.primary};
+	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
 `;
 export const contentBlock = css`
 	display: block;
@@ -23,7 +22,7 @@ export const imageContainer = css`
 	align-items: flex-start;
 	width: calc(100% - 30px);
 	padding: ${space[4]}px ${space[4]}px 0;
-	background-color: ${background.secondary};
+	background-color: ${palette.neutral[97]};
 
 	img {
 		width: 100%;
@@ -51,14 +50,14 @@ export const fromTablet = css`
 `;
 export const textBlock = css`
 	h3 {
-		${headline.xxsmall()};
+		${headlineMedium20};
 		font-weight: bold;
 		margin: ${space[2]}px ${space[2]}px 2px;
 	}
 `;
 export const list = css`
-	color: ${text.primary};
-	border-top: 1px solid ${border.secondary};
+	color: ${palette.neutral[7]};
+	border-top: 1px solid ${palette.neutral[86]};
 	margin: ${space[3]}px;
 	padding-top: ${space[3]}px;
 	${from.desktop} {
@@ -70,16 +69,14 @@ export const list = css`
 	}
 `;
 export const listMain = css`
-	${textSans.medium({
-		fontWeight: 'bold',
-	})};
+	${textSansBold17};
 	margin-left: ${space[3]}px;
 	display: inline-block;
 	max-width: 90%;
 `;
 export const subText = css`
 	display: block;
-	${textSans.small()};
+	${textSans15};
 	margin-left: ${space[5]}px;
 	line-height: 135%;
 `;
@@ -88,7 +85,7 @@ export const dot = css`
 	height: 9px;
 	width: 9px;
 	border-radius: 50%;
-	background-color: ${background.ctaPrimary};
+	background-color: ${palette.brand[400]};
 	vertical-align: top;
 	margin-top: ${space[2]}px;
 `;

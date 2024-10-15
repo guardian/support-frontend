@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { body, space } from '@guardian/source/foundations';
+import { space, textEgyptian17 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 type PropTypes = {
@@ -8,7 +8,7 @@ type PropTypes = {
 };
 const infoChip = css`
 	display: flex;
-	${body.medium()}
+	${textEgyptian17}
 
 	&:not(:last-of-type) {
 		margin-bottom: ${space[4]}px;

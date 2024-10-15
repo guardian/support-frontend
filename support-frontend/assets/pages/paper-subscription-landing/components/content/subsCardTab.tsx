@@ -4,7 +4,7 @@ import {
 	from,
 	neutral,
 	space,
-	textSans,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';
@@ -39,7 +39,7 @@ export const accordionContainer = css`
 
 	p,
 	a {
-		${textSans.small()};
+		${textSans15};
 		margin-bottom: ${space[3]}px;
 	}
 

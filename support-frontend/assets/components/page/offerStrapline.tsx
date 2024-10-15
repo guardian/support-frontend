@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, textSans } from '@guardian/source/foundations';
+import {
+	from,
+	textSansBold17,
+	textSansBold20,
+	textSansBold24,
+} from '@guardian/source/foundations';
 import type { ReactElement } from 'react';
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
@@ -8,9 +13,7 @@ const offerStraplineStyles = (
 	bgCol: string,
 	fgCol: string,
 ) => css`
-	${textSans.medium({
-		fontWeight: 'bold',
-	})};
+	${textSansBold17};
 	padding: 4px 10px 8px;
 	margin-bottom: 0;
 	background-color: ${bgCol};
@@ -32,16 +35,12 @@ const offerStraplineStyles = (
 			: ''}
 	}
 	${from.tablet} {
-		${textSans.large({
-			fontWeight: 'bold',
-		})};
+		${textSansBold20};
 		padding: 4px 20px 12px;
 		max-width: 50%;
 	}
 	${from.desktop} {
-		${textSans.xlarge({
-			fontWeight: 'bold',
-		})};
+		${textSansBold24};
 	}
 `;
 
