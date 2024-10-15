@@ -1,15 +1,7 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	space,
-	textSans,
-	until,
-} from '@guardian/source/foundations';
+import { from, space, until } from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Checkbox } from 'components/checkbox/Checkbox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
@@ -25,12 +17,8 @@ import { getAmount } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setCoverTransactionCost,
-	setSelectedAmount,
-} from 'helpers/redux/checkout/product/actions';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -46,6 +34,7 @@ import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies
 import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
+import { CoverTransactionCost } from '../components/coverTransactionCost';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs, SummaryTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
@@ -67,87 +56,7 @@ const paymentButtonSpacing = css`
 	}
 `;
 
-const coverTransactionDivider = css`
-	hr {
-		margin: ${space[4]}px 0px ${space[3]}px;
-		${from.tablet} {
-			margin: ${space[5]}px 0px ${space[3]}px;
-		}
-	}
-`;
-
-const coverTransactionCheckboxContainer = css`
-	padding: ${space[4]}px;
-	background-color: ${neutral[97]};
-	border-radius: 12px;
-	margin: ${space[4]}px 0px ${space[2]}px;
-	${from.tablet} {
-		margin-top: ${space[5]}px 0px 0px;
-	}
-	> div > input {
-		background-color: ${neutral[100]};
-	}
-`;
-
-const coverTransactionSummaryContainer = css`
-	${textSans.medium({ fontWeight: 'bold' })};
-	display: flex;
-	justify-content: space-between;
-	padding: 0px 0px ${space[2]}px;
-`;
-
-type CoverTransactionCostProps = {
-	transactionCost: boolean;
-	transactionCostCopy: string;
-	transactionCostAmount: string;
-	showTransactionCostSummary?: boolean;
-};
-
-export function CoverTransactionCost({
-	transactionCost,
-	transactionCostCopy,
-	transactionCostAmount,
-	showTransactionCostSummary,
-}: CoverTransactionCostProps): JSX.Element {
-	const [displayTransactionCostSummary, setDisplayTransactionCostSummary] =
-		useState<boolean>(false);
-
-	const dispatch = useContributionsDispatch();
-
-	return (
-		<>
-			<div css={coverTransactionCheckboxContainer}>
-				<Checkbox
-					checked={transactionCost}
-					onChange={(e) => {
-						if (e.target.checked) {
-							sendTrackingEventsOnClick({
-								id: 'cover-transaction-cost-checkbox',
-								componentType: 'ACQUISITIONS_BUTTON',
-							})();
-						}
-						dispatch(setCoverTransactionCost(e.target.checked));
-						if (showTransactionCostSummary) {
-							setDisplayTransactionCostSummary(true);
-						}
-					}}
-					label={transactionCostCopy}
-				/>
-			</div>
-			{displayTransactionCostSummary && (
-				<div css={coverTransactionDivider}>
-					<CheckoutDivider spacing="tight" />
-					<div css={coverTransactionSummaryContainer}>
-						Total amount
-						<div>{transactionCostAmount}</div>
-					</div>
-				</div>
-			)}
-		</>
-	);
-}
-
-export function SupporterPlusCheckout({
+export default function SupporterPlusCheckout({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;

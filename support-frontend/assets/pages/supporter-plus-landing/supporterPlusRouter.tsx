@@ -14,7 +14,7 @@ import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterP
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+import SupporterPlusCheckout from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
