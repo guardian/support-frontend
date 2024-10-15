@@ -87,6 +87,8 @@ export function getRecaptchaError(
 	if (recaptchaRequiredPaymentMethods.includes(paymentMethod.name)) {
 		return state.page.checkoutForm.recaptcha.errors;
 	}
+
+	return;
 }
 
 export function getPaymentRequestButtonErrors(

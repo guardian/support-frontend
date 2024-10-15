@@ -370,6 +370,8 @@ export default function Summary({
 				}
 			}
 		}
+
+		return;
 	};
 
 	const toggleDetails = () => {

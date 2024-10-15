@@ -20,7 +20,6 @@
 		// These override @guardian/tsconfig as they have introduced a lot of errors.
 		// The number of errors indicated below is at the time of writing to give an idea of the scale of the fix needed.
 		// We should look at removing these as soon as we can.
-		"noImplicitReturns": false, // Found 16 errors in 14 files.
 		"noUncheckedIndexedAccess": false // 209 errors in 63 files.
 	},
 	"include": [

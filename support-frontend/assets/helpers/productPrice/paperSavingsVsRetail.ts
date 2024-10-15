@@ -32,6 +32,8 @@ function getMaxSavingVsRetail(
 
 		return Math.max(...allSavings);
 	}
+
+	return;
 }
 
 export { getMaxSavingVsRetail };

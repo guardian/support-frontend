@@ -96,4 +96,6 @@ export function getThresholdPrice(
 	if (isRecurring(contributionType)) {
 		return getLowerBenefitsThreshold(state);
 	}
+
+	return;
 }

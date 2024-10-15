@@ -491,6 +491,8 @@ function OneTimeCheckoutComponent({
 				return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			}
 		}
+
+		return;
 	}
 
 	const paymentButtonText = finalAmount

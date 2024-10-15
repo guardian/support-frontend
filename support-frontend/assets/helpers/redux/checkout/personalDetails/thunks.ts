@@ -41,6 +41,8 @@ export const getUserTypeFromIdentity = createAsyncThunk<
 			if (isSignedIn || emailInvalid || requestInFlight || isStorybookUser) {
 				return false;
 			}
+
+			return;
 		},
 	},
 );

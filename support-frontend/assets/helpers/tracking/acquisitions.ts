@@ -298,6 +298,8 @@ function getAcquisitionDataFromUtmParams():
 			queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
 		};
 	}
+
+	return;
 }
 
 // Reads the acquisition data from the &acquistionData param containing a serialised JSON string.

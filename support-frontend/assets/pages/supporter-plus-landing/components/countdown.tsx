@@ -142,6 +142,8 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			setHours(ensureRoundedDoubleDigits(0));
 			setDays(ensureRoundedDoubleDigits(0));
 		}
+
+		return;
 	}, [campaign]);
 
 	return (

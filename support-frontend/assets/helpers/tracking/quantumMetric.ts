@@ -206,7 +206,12 @@ function sendEventSubscriptionCheckoutEvent(
 function productToCheckoutEvents(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
-) {
+):
+	| {
+			start: SendEventSubscriptionCheckoutStart;
+			conversion: SendEventSubscriptionCheckoutConversion;
+	  }
+	| undefined {
 	switch (product) {
 		case 'DigitalPack':
 			return orderIsAGift
@@ -234,6 +239,8 @@ function productToCheckoutEvents(
 				SendEventSubscriptionCheckoutStart.PaperSub,
 				SendEventSubscriptionCheckoutConversion.PaperSub,
 			);
+		default:
+			return;
 	}
 }
 

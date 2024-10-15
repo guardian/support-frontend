@@ -118,6 +118,8 @@ export function getSubscriptionPromotionForBillingPeriod(
 			).promotions,
 		);
 	}
+
+	return;
 }
 
 export function getSubscriptionPriceForBillingPeriod(

@@ -14,4 +14,6 @@ export function getOtherAmountErrors(
 	if (errors.otherAmount?.length) {
 		return errors.otherAmount;
 	}
+
+	return;
 }
