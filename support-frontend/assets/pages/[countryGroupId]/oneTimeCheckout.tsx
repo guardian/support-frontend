@@ -76,8 +76,10 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './components/form';
@@ -799,7 +801,7 @@ function OneTimeCheckoutComponent({
 						</FormSection>
 						<div
 							css={css`
-								margin: ${space[8]}px 0;
+								margin: ${space[8]}px 0 ${space[6]}px;
 							`}
 						>
 							<DefaultPaymentButton
@@ -811,6 +813,9 @@ function OneTimeCheckoutComponent({
 								type="submit"
 							/>
 						</div>
+						<FinePrint mobileTheme={'dark'}>
+							<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+						</FinePrint>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
 								<ErrorSummary

@@ -97,12 +97,12 @@ function TsAndCsRenewal({
 	return <>on the {getDateWithOrdinal(today)} day of every month</>;
 }
 
-function TsAndCsFooterLinks({
+export function TsAndCsFooterLinks({
 	countryGroupId,
 	amountIsAboveThreshold,
 }: {
 	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold: boolean;
+	amountIsAboveThreshold?: boolean;
 }) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
