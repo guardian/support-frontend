@@ -23,11 +23,8 @@ class GuardianWeeklySubscriptionBuilder(
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Either[PromoError, SubscribeItem] = {
-
     val contractEffectiveDate = dateGenerator.today
-
     val readerType = if (state.giftRecipient.isDefined) ReaderType.Gift else ReaderType.Direct
-
     val recurringProductRatePlanId =
       validateRatePlan(weeklyRatePlan(state.product, environment, readerType), state.product.describe)
 

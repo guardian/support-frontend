@@ -106,7 +106,6 @@ object StatesTestData {
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
-      promoCode = None,
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     ),
@@ -114,7 +113,6 @@ object StatesTestData {
     User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(Currency.GBP, Monthly),
     AnalyticsInfo(false, StripeApplePay),
-    None,
     None,
     None,
     csrUsername = None,
@@ -140,7 +138,6 @@ object StatesTestData {
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None,
-    promoCode = None,
     appliedPromotion = None,
   )
 }
