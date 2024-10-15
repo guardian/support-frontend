@@ -1,5 +1,10 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSansBold12 } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	textSansBold12,
+} from '@guardian/source/foundations';
 import { useState } from 'react';
 import { Checkbox } from 'components/checkbox/Checkbox';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
