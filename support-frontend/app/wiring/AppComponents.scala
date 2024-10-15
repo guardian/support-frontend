@@ -83,6 +83,7 @@ class AppComponents(context: Context)
     directDebitController,
     promotionsController,
     pricesController,
+    newspaperArchiveController,
     assetController,
     faviconController,
   )

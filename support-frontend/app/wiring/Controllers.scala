@@ -21,6 +21,8 @@ trait Controllers {
   lazy val faviconController = new controllers.Favicon(actionBuilders, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
 
+  lazy val newspaperArchiveController = new NewspaperArchiveController(actionBuilders)
+
   lazy val applicationController = new Application(
     actionBuilders,
     assetsResolver,

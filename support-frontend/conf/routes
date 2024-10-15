@@ -185,6 +185,9 @@ GET /p/:promoCode                                                 controllers.Pr
 # ----- Prices API ----- #
 GET /prices                                                       controllers.PricesController.getPrices()
 
+# ----- Newspaper Archive ----- #
+GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader()
+
 # ----- Verification ----- #
 # This has to be here to work in PROD
 # Not 100% sure why as it works locally via the /*path route
