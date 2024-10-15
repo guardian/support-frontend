@@ -1,9 +1,9 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, textSans14, until } from '@guardian/source/foundations';
+import { neutral, textSans12, until } from '@guardian/source/foundations';
 
 const textStyles = (theme: FinePrintTheme) => css`
-	${textSans14};
+	${textSans12};
 	color: #606060;
 
 	${until.tablet} {

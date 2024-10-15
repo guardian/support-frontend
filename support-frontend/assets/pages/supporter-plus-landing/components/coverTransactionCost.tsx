@@ -3,7 +3,7 @@ import {
 	from,
 	neutral,
 	space,
-	textSansBold12,
+	textSansBold17,
 } from '@guardian/source/foundations';
 import { useState } from 'react';
 import { Checkbox } from 'components/checkbox/Checkbox';
@@ -33,7 +33,7 @@ const coverTransactionCheckboxContainer = css`
 `;
 
 const coverTransactionSummaryContainer = css`
-	${textSansBold12};
+	${textSansBold17};
 	display: flex;
 	justify-content: space-between;
 	padding: 0px 0px ${space[2]}px;
