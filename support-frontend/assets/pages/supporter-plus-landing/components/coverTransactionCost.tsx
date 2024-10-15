@@ -5,8 +5,8 @@ import {
 	space,
 	textSansBold17,
 } from '@guardian/source/foundations';
+import { Checkbox } from '@guardian/source/react-components';
 import { useState } from 'react';
-import { Checkbox } from 'components/checkbox/Checkbox';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 
