@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
+	neutral,
 	space,
 	textSans17,
 } from '@guardian/source/foundations';
@@ -126,6 +127,13 @@ const standFirst = css`
 	margin-bottom: ${space[2]}px;
 	${from.desktop} {
 		margin-bottom: ${space[3]}px;
+	}
+`;
+
+const tcContainer = css`
+	color: ${neutral[20]};
+	& a {
+		color: ${neutral[20]};
 	}
 `;
 
@@ -813,9 +821,11 @@ function OneTimeCheckoutComponent({
 								type="submit"
 							/>
 						</div>
-						<FinePrint mobileTheme={'dark'}>
-							<TsAndCsFooterLinks countryGroupId={countryGroupId} />
-						</FinePrint>
+						<div css={tcContainer}>
+							<FinePrint mobileTheme={'dark'}>
+								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+							</FinePrint>
+						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
 								<ErrorSummary
