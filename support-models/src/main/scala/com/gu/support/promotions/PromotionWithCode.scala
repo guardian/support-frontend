@@ -1,3 +1,3 @@
 package com.gu.support.promotions
 
-case class PromotionWithCode(promoCode: String, promotion: Promotion)
+case class PromotionWithCode(promoCode: PromoCode, promotion: Promotion)
