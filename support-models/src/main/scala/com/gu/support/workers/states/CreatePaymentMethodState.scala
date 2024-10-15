@@ -18,6 +18,7 @@ case class CreatePaymentMethodState(
     paymentFields: Either[PaymentFields, RedemptionData],
     firstDeliveryDate: Option[LocalDate],
     promoCode: Option[PromoCode],
+    appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],

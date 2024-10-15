@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Country
+import com.gu.i18n.{Country, CountryGroup}
 import com.gu.support.catalog.ProductRatePlanId
 import org.joda.time.DateTime
 
@@ -9,22 +9,22 @@ object PromotionValidator {
   implicit class PromotionExtensions(promotion: Promotion) {
     def validateFor(
         productRatePlanId: ProductRatePlanId,
-        country: Country,
+        countryGroup: CountryGroup,
         isRenewal: Boolean,
         now: DateTime = DateTime.now(),
     ): Seq[PromoError] =
-      validateAll(Some(productRatePlanId), country, isRenewal, now)
+      validateAll(Some(productRatePlanId), countryGroup, isRenewal, now)
 
     private def validateAll(
         maybeProductRatePlanId: Option[ProductRatePlanId] = None,
-        country: Country,
+        countryGroup: CountryGroup,
         isRenewal: Boolean,
         now: DateTime = DateTime.now(),
     ): List[PromoError] = {
       val errors = List(
         maybeProductRatePlanId.flatMap(validateProductRatePlan),
         validateRenewal(isRenewal),
-        validateCountry(country),
+        validateCountryGroup(countryGroup),
         validateDate(now),
       )
       errors.flatten
@@ -42,11 +42,11 @@ object PromotionValidator {
       else
         None
 
-    def validateCountry(country: Country): Option[PromoError] =
-      if (promotion.appliesTo.countries.contains(country))
-        None
+    def validateCountryGroup(countryGroup: CountryGroup): Option[PromoError] =
+      if (promotion.appliesTo.countries.intersect(countryGroup.countries.toSet).isEmpty)
+        Some(InvalidCountryGroup)
       else
-        Some(InvalidCountry)
+        None
 
     def validateDate(now: DateTime): Option[PromoError] =
       if (promotion.starts.isAfter(now))
@@ -58,11 +58,12 @@ object PromotionValidator {
 
     def validForAnyProductRatePlan(
         productRatePlanIds: List[ProductRatePlanId],
-        country: Country,
+        countryGroup: CountryGroup,
         isRenewal: Boolean,
         now: DateTime = DateTime.now(),
     ): List[ProductRatePlanId] = {
-      val errors = productRatePlanIds.map(productRatePlanId => validateAll(Some(productRatePlanId), country, isRenewal))
+      val errors =
+        productRatePlanIds.map(productRatePlanId => validateAll(Some(productRatePlanId), countryGroup, isRenewal))
 
       productRatePlanIds
         .zip(errors)

@@ -60,8 +60,9 @@ class SupporterPlusSubcriptionBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      state.promoCode,
-      state.billingCountry,
+      state.promoCode, // Remove after deploy of appliedPromotion logic
+      state.billingCountry, // Remove after deploy of appliedPromotion logic
+      state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
     ).map { subscriptionData =>

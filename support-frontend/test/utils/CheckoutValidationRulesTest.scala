@@ -812,6 +812,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    appliedPromotion = None,
     csrUsername = None,
     salesforceCaseId = None,
     billingAddress = Address(
@@ -851,6 +852,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    appliedPromotion = None,
     csrUsername = None,
     salesforceCaseId = None,
     billingAddress = paperAddress,
@@ -874,6 +876,7 @@ object TestData {
     email = "grace@gracehopper.com",
     telephoneNumber = None,
     promoCode = None,
+    appliedPromotion = None,
     csrUsername = None,
     salesforceCaseId = None,
     billingAddress = paperAddress,

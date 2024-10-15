@@ -1,7 +1,6 @@
 package com.gu.emailservices
 
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailTierThreeState
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,12 +15,6 @@ class TierThreeEmailFields(
     val firstPaymentDate =
       SubscriptionEmailFieldHelpers.formatDate(SubscriptionEmailFieldHelpers.firstPayment(state.paymentSchedule).date)
 
-    val promotion = paperFieldsGenerator.getAppliedPromotion(
-      state.promoCode,
-      state.user.billingAddress.country,
-      ProductTypeRatePlans.tierThreeRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
-    )
-
     val subscription_details = SubscriptionEmailFieldHelpers
       .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
 
@@ -35,14 +28,10 @@ class TierThreeEmailFields(
       .fieldsFor(
         state.paymentMethod,
         state.paymentSchedule,
-        state.promoCode,
         state.accountNumber,
         state.subscriptionNumber,
         state.product,
         state.user,
-        ProductTypeRatePlans
-          .tierThreeRatePlan(state.product, touchPointEnvironment)
-          .map(_.id),
         fixedTerm = false,
         state.firstDeliveryDate,
       )

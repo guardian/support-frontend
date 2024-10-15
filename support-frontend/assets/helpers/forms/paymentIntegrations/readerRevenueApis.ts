@@ -33,6 +33,7 @@ import type {
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
+import type { SupportInternationalisationId } from '../../internationalisation/countryGroup';
 
 // ----- Types ----- //
 export type StripePaymentMethod =
@@ -147,6 +148,10 @@ type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
+export type AppliedPromotion = {
+	promoCode: string;
+	countryGroupId: SupportInternationalisationId; // There is a bit of naming mismatch between the front and back end
+};
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
 	title?: Title;
@@ -164,6 +169,7 @@ export type RegularPaymentRequest = {
 	supportAbTests: AcquisitionABTest[];
 	telephoneNumber?: string;
 	promoCode?: Option<string>;
+	appliedPromotion?: AppliedPromotion;
 	deliveryInstructions?: string;
 	csrUsername?: string;
 	salesforceCaseId?: string;

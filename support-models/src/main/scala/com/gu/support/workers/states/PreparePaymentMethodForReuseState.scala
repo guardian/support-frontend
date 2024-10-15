@@ -17,6 +17,7 @@ case class PreparePaymentMethodForReuseState(
     giftRecipient: Option[GiftRecipient],
     acquisitionData: Option[AcquisitionData],
     promoCode: Option[PromoCode],
+    appliedPromotion: Option[AppliedPromotion],
 ) extends MinimalFailureHandlerState
 
 import com.gu.support.encoding.Codec

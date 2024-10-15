@@ -56,6 +56,7 @@ class DigitalSubscriptionGiftPurchaseBuilder(
       promotionService,
       state.promoCode,
       state.billingCountry,
+      state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
     ).map { subscriptionData =>

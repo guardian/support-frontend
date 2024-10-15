@@ -1,7 +1,7 @@
 package com.gu.support.promotions
 
 import com.gu.i18n.Country
-import com.gu.i18n.Country.UK
+import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog.GuardianWeekly
 import com.gu.support.config.{PromotionsConfigProvider, Stages}
 import com.gu.support.promotions.PromotionServiceSpec._
@@ -60,8 +60,8 @@ class PromotionServiceSpec extends AsyncFlatSpec with Matchers {
     serviceWithFixtures.validatePromotion(freeTrialWithCode, UK, invalidProductRatePlanId, false) should be(
       Left(InvalidProductRatePlan),
     )
-    serviceWithFixtures.validatePromotion(freeTrialWithCode, Country.US, validProductRatePlanId, false) should be(
-      Left(InvalidCountry),
+    serviceWithFixtures.validatePromotion(freeTrialWithCode, US, validProductRatePlanId, false) should be(
+      Left(InvalidCountryGroup),
     )
     serviceWithFixtures.validatePromotion(renewal, UK, validProductRatePlanId, false) should be(Left(NotApplicable))
   }

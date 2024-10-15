@@ -24,8 +24,7 @@ class LandingCopyProvider(
     for {
       countryGroup <- CountryGroup.byId(countryCode)
       productRatePlanIds = getProductRatePlanIdsForCountryGroup(product1, countryGroup, isGift)
-      country <- countryGroup.countries.headOption
-      promoCopy <- promotionCopyForPrimaryCountry(queryPromos, productRatePlanIds, country)
+      promoCopy <- promotionCopyForCountryGroup(queryPromos, productRatePlanIds, countryGroup)
     } yield promoCopy
 
   def getProductRatePlanIdsForCountryGroup(product: Product, countryGroup: CountryGroup, isGift: Boolean) = {
@@ -50,14 +49,14 @@ class LandingCopyProvider(
     }
   }
 
-  def promotionCopyForPrimaryCountry(
+  def promotionCopyForCountryGroup(
       queryPromos: List[String],
       productRatePlanIds: List[ProductRatePlanId],
-      country: Country,
+      countryGroup: CountryGroup,
   ): Option[PromotionCopy] = {
     queryPromos
       .to(LazyList) // For efficiency - only call getCopyForPromoCode until we find a valid promo
-      .map(promoCode => promoCopyService.getCopyForPromoCode(promoCode, productRatePlanIds, country))
+      .map(promoCode => promoCopyService.getCopyForPromoCode(promoCode, productRatePlanIds, countryGroup))
       .collectFirst { case Some(promoCopy) => promoCopy }
   }
 }

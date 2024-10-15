@@ -4,8 +4,8 @@ sealed trait PromoError {
   def msg: String
 }
 
-case object InvalidCountry extends PromoError {
-  override val msg = "The promo code you supplied is not applicable in this country"
+case object InvalidCountryGroup extends PromoError {
+  override val msg = "The promo code you supplied is not applicable in this region"
 }
 
 case object InvalidProductRatePlan extends PromoError {

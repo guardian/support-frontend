@@ -3,7 +3,7 @@ package services.stepfunctions
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
-import com.gu.i18n.Title
+import com.gu.i18n.{CountryGroup, Title}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
@@ -51,6 +51,7 @@ case class CreateSupportWorkersRequest(
     firstDeliveryDate: Option[LocalDate],
     paymentFields: Either[PaymentFields, RedemptionData],
     promoCode: Option[PromoCode],
+    appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     ophanIds: OphanIds,
@@ -166,6 +167,7 @@ class SupportWorkersClient(
           ),
         ),
         promoCode = request.body.promoCode,
+        appliedPromotion = request.body.appliedPromotion,
         csrUsername = request.body.csrUsername,
         salesforceCaseId = request.body.salesforceCaseId,
         firstDeliveryDate = request.body.firstDeliveryDate,

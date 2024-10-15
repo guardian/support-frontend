@@ -1,6 +1,6 @@
 package com.gu.support.promotions
 
-import com.gu.i18n.Country.{UK, US}
+import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.promotions.PromotionValidator.PromotionExtensions
 import com.gu.support.promotions.ServicesFixtures.{promotion, _}
 import org.joda.time.DateTime
@@ -24,11 +24,11 @@ class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
 
     // check invalid exceptions take precedence over time/status-based exceptions
     expiredPromotion.validateFor(invalidProductRatePlanId, UK, false) should contain(InvalidProductRatePlan)
-    expiredPromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountry)
+    expiredPromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountryGroup)
     activePromotion.validateFor(invalidProductRatePlanId, UK, false) should contain(InvalidProductRatePlan)
-    activePromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountry)
+    activePromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountryGroup)
     futurePromotion.validateFor(invalidProductRatePlanId, UK, false) should contain(InvalidProductRatePlan)
-    futurePromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountry)
+    futurePromotion.validateFor(validProductRatePlanId, US, false) should contain(InvalidCountryGroup)
 
     // check valid promotions adhere to their time/status.
     expiredPromotion.validateFor(validProductRatePlanId, UK, false).head shouldBe ExpiredPromotion
@@ -47,7 +47,10 @@ class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
     // check Tracking promotions don't check against the rate plan InvalidProductRatePlan
     activePromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, UK, false) shouldBe NoErrors
     activePromotion.copy(tracking = true).validateFor(validProductRatePlanId, UK, false) shouldBe NoErrors
-    expiredPromotion.copy(tracking = true).validateFor(invalidProductRatePlanId, US, false).head shouldBe InvalidCountry
+    expiredPromotion
+      .copy(tracking = true)
+      .validateFor(invalidProductRatePlanId, US, false)
+      .head shouldBe InvalidCountryGroup
 
     // Check a promotion can validate against a list of productRatePlans
     activePromotion
@@ -65,7 +68,10 @@ class PromotionValidatorSpec extends AsyncFlatSpec with Matchers {
       .copy(renewalOnly = true)
       .validateFor(invalidProductRatePlanId, UK, true)
       .head shouldBe InvalidProductRatePlan
-    expiredPromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, US, true).head shouldBe InvalidCountry
+    expiredPromotion
+      .copy(renewalOnly = true)
+      .validateFor(validProductRatePlanId, US, true)
+      .head shouldBe InvalidCountryGroup
 
     // check Renewal promotions are invalid for new subscriptions and vice versa
     activePromotion.copy(renewalOnly = true).validateFor(validProductRatePlanId, UK, false).head shouldBe NotApplicable

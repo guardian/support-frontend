@@ -89,7 +89,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
-      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      new PaperFieldsGenerator(TestData.getMandate),
       TestData.getMandate,
       CODE,
     ).build(
@@ -132,7 +132,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         |}
         |""".stripMargin)
     val actual = new DigitalPackEmailFields(
-      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      new PaperFieldsGenerator(TestData.getMandate),
       TestData.getMandate,
       CODE,
     ).build(
@@ -205,7 +205,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
     )
 
     val actual = new SupporterPlusEmailFields(
-      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      new PaperFieldsGenerator(TestData.getMandate),
       TestData.getMandate,
       CODE,
       created,
@@ -276,7 +276,7 @@ class TierThreeEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
     )
 
     val actual = new TierThreeEmailFields(
-      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
+      new PaperFieldsGenerator(TestData.getMandate),
       CODE,
     ).build(state).map(fields => parse(fields.payload))
 
