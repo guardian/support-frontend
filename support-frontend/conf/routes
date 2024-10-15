@@ -186,7 +186,7 @@ GET /p/:promoCode                                                 controllers.Pr
 GET /prices                                                       controllers.PricesController.getPrices()
 
 # ----- Newspaper Archive ----- #
-GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader()
+GET /newspaper-archive-header                                      controllers.NewspaperArchiveController.getHeader
 
 # ----- Verification ----- #
 # This has to be here to work in PROD
