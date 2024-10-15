@@ -44,7 +44,7 @@ export function OtherAmount({
 					prefixText={prefix}
 					suffixText={suffix}
 					error={errors?.[0]}
-					value={otherAmount}
+					value={otherAmount === '0' ? '' : otherAmount}
 					type="number"
 					onBlur={onBlur}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

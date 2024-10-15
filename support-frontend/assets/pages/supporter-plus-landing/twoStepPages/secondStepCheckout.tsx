@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, until } from '@guardian/source/foundations';
+import { from, space, until } from '@guardian/source/foundations';
 import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
-import { Checkbox } from 'components/checkbox/Checkbox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
@@ -18,7 +17,6 @@ import { getAmount } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setCoverTransactionCost,
@@ -39,6 +37,7 @@ import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies
 import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
+import { CoverTransactionCost } from '../components/coverTransactionCost';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs, SummaryTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
@@ -51,12 +50,6 @@ const shorterBoxMargin = css`
 			margin-bottom: ${space[2]}px;
 		}
 	}
-`;
-
-const coverTransactionCheckboxContainer = css`
-	padding: ${space[4]}px;
-	background-color: ${neutral[97]};
-	border-radius: 12px;
 `;
 
 const paymentButtonSpacing = css`
@@ -97,9 +90,14 @@ export function SupporterPlusCheckout({
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
-	const coverTransactionCost = useContributionsSelector(
-		(state) => state.page.checkoutForm.product.coverTransactionCost,
-	);
+	const coverTransactionCost =
+		useContributionsSelector(
+			(state) => state.page.checkoutForm.product.coverTransactionCost,
+		) ?? false;
+	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
+		currency,
+		transactionCoverCost,
+	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	const navigate = useNavigate();
 	const { abParticipations, amounts } = useContributionsSelector(
@@ -140,15 +138,29 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
-	const showCoverTransactionCost =
-		abParticipations.coverTransactionCost === 'variant';
-
+	const showCoverTransactionCostA =
+		abParticipations.coverTransactionCost === 'variantA' && amount > 0;
+	const showCoverTransactionCostB =
+		abParticipations.coverTransactionCost === 'variantB' && amount > 0;
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards paymentFrequency={contributionType} />
+						<>
+							<ContributionsPriceCards paymentFrequency={contributionType} />
+							{showCoverTransactionCostB && (
+								<CoverTransactionCost
+									transactionCost={coverTransactionCost}
+									transactionCostCopy={transactionCostCopy}
+									transactionCostAmount={simpleFormatAmount(currency, amount)}
+									onChecked={(check) => {
+										dispatch(setCoverTransactionCost(check));
+									}}
+									showTransactionCostSummary={true}
+								/>
+							)}
+						</>
 					) : (
 						<ContributionsOrderSummaryContainer
 							renderOrderSummary={(orderSummaryProps) => (
@@ -192,28 +204,15 @@ export function SupporterPlusCheckout({
 								productKey={product}
 							/>
 						)}
-						{showCoverTransactionCost && contributionType === 'ONE_OFF' && (
-							<div
-								css={[paymentButtonSpacing, coverTransactionCheckboxContainer]}
-							>
-								<Checkbox
-									checked={coverTransactionCost}
-									onChange={(e) => {
-										if (e.target.checked) {
-											sendTrackingEventsOnClick({
-												id: 'cover-transaction-cost-checkbox',
-												componentType: 'ACQUISITIONS_BUTTON',
-											})();
-										}
-										dispatch(setCoverTransactionCost(e.target.checked));
-									}}
-									label={`I’ll generously add ${
-										Number.isNaN(transactionCoverCost)
-											? '4% of my contribution'
-											: simpleFormatAmount(currency, transactionCoverCost)
-									} to cover transaction fees so 100% of my amount goes to the Guardian`}
-								/>
-							</div>
+						{showCoverTransactionCostA && (
+							<CoverTransactionCost
+								transactionCost={coverTransactionCost}
+								transactionCostCopy={transactionCostCopy}
+								onChecked={(check) => {
+									dispatch(setCoverTransactionCost(check));
+								}}
+								transactionCostAmount={simpleFormatAmount(currency, amount)}
+							/>
 						)}
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}

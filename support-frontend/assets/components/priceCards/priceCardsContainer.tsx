@@ -77,19 +77,22 @@ export function PriceCardsContainer({
 	}
 
 	function onOtherAmountChange(newAmount: string) {
+		/*  Avoids NaN appearing when otherAmount field set to empty string
+        Causes redux failure in secondStepCheckout when user deletes the value */
+		const otherAmountNaNSafe = newAmount === '' ? '0' : newAmount;
 		dispatch(
 			setOtherAmount({
 				contributionType: paymentFrequency,
-				amount: newAmount,
+				amount: otherAmountNaNSafe,
 			}),
 		);
 		dispatch(
 			setOtherAmountBeforeAmendment({
 				contributionType: paymentFrequency,
-				amount: newAmount,
+				amount: otherAmountNaNSafe,
 			}),
 		);
-		updateAbandonedBasketCookie(newAmount);
+		updateAbandonedBasketCookie(otherAmountNaNSafe);
 	}
 
 	return renderPriceCards({
