@@ -8,6 +8,7 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
+import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	AmountsTest,
@@ -109,6 +110,7 @@ function init({
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 }: ABtestInitalizerData): Participations {
+	const sessionParticipations = getParticipationsFromSession();
 	const participations = getParticipations(
 		abTests,
 		mvt,
@@ -120,6 +122,7 @@ function init({
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
+		...sessionParticipations,
 		...participations,
 		...serverSideParticipations,
 		...urlParticipations,
@@ -235,6 +238,21 @@ function getParticipationsFromUrl(): Participations | undefined {
 	}
 
 	return;
+}
+
+function getParticipationsFromSession(): Participations | undefined {
+	const participations = storage.getSession('abParticipations');
+	if (participations) {
+		try {
+			return JSON.parse(participations) as Participations;
+		} catch (error) {
+			console.error(
+				'Failed to parse abParticipations from session storage',
+				error,
+			);
+			return undefined;
+		}
+	}
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
