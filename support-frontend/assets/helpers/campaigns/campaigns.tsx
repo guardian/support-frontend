@@ -1,5 +1,11 @@
+import type {
+	TickerData,
+	TickerSettings,
+} from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
+import { fetchJson } from '../async/fetch';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { UnitedStates } from '../internationalisation/countryGroup';
+import { isCodeOrProd } from '../urls/url';
 
 export type CountdownSetting = {
 	label: string;
@@ -23,8 +29,25 @@ export type CampaignSettings = {
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
+	tickerSettings: TickerSettings;
 };
 
+// Function to fetch ticker data from the correct endpoint
+function getTickerUrl(tickerId: string) {
+	return isCodeOrProd() ? `/ticker/${tickerId}.json` : '/ticker.json';
+}
+
+async function getInitialTickerValues(tickerId: string): Promise<TickerData> {
+	const data = await fetchJson<TickerData>(getTickerUrl(tickerId), {});
+	const total = Math.floor(data.total);
+	const goal = Math.floor(data.goal);
+	return {
+		total,
+		goal,
+	};
+}
+
+// Campaign settings including ticker configuration
 const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
@@ -46,21 +69,32 @@ const campaigns: Record<string, CampaignSettings> = {
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 			},
-			// {
-			// 	label: 'testing', // adjust this one as needed
-			// 	countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
-			// 	countdownDeadlineInMillis: Date.parse('Sep 06, 2024 00:00:00'),
-			// },
 		],
 		copy: {
-			subheading: (
-				<>
-					We're not owned by a billionaire or shareholders - our readers support
-					us. Can you help us reach our goal? Regular giving is most valuable to
-					us. <strong>You can cancel anytime.</strong>
-				</>
-			),
-			oneTimeHeading: <>Choose your gift amount</>,
+      subheading: (
+        <>
+          We're not owned by a billionaire or shareholders - our readers support
+          us. Can you help us reach our goal? Regular giving is most valuable to
+          us. <strong>You can cancel anytime.</strong>
+        </>
+      ),
+      oneTimeHeading: <>Choose your gift amount</>,
+    },
+		// Ticker settings for the US End of Year 2024 campaign
+		tickerSettings: {
+			currencySymbol: '$',
+			copy: {
+				headline: ' ',
+			},
+			tickerData: await getInitialTickerValues('US.json'),
+			tickerStylingSettings: {
+				headlineColour: '#000000',
+				totalColour: '#64B7C4',
+				goalColour: '#FFFFFF',
+				filledProgressColour: '#64B7C4',
+				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
+			},
+			size: 'large',
 		},
 	},
 };
