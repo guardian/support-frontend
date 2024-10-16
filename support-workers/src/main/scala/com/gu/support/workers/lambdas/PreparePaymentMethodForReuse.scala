@@ -84,7 +84,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
               SupporterPlusState(
                 product = sp,
                 paymentMethod = paymentMethod,
-                promoCode = state.promoCode,
                 appliedPromotion = state.appliedPromotion,
                 salesForceContact = sfContact,
                 billingCountry = state.user.billingAddress.country,
@@ -107,7 +106,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         product = productType,
         analyticsInfo = state.analyticsInfo,
         firstDeliveryDate = None,
-        promoCode = state.promoCode,
         appliedPromotion = state.appliedPromotion,
         csrUsername = None,
         salesforceCaseId = None,

@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
+	neutral,
 	space,
 	textSans17,
 } from '@guardian/source/foundations';
@@ -76,8 +77,10 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { BackButton } from './components/backButton';
 import { CheckoutLayout } from './components/checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './components/form';
@@ -124,6 +127,13 @@ const standFirst = css`
 	margin-bottom: ${space[2]}px;
 	${from.desktop} {
 		margin-bottom: ${space[3]}px;
+	}
+`;
+
+const tcContainer = css`
+	color: ${neutral[20]};
+	& a {
+		color: ${neutral[20]};
 	}
 `;
 
@@ -799,7 +809,7 @@ function OneTimeCheckoutComponent({
 						</FormSection>
 						<div
 							css={css`
-								margin: ${space[8]}px 0;
+								margin: ${space[8]}px 0 ${space[6]}px;
 							`}
 						>
 							<DefaultPaymentButton
@@ -810,6 +820,11 @@ function OneTimeCheckoutComponent({
 								}}
 								type="submit"
 							/>
+						</div>
+						<div css={tcContainer}>
+							<FinePrint mobileTheme={'dark'}>
+								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+							</FinePrint>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>

@@ -69,7 +69,6 @@ object StatesTestData {
     product = DigitalPack(Currency.GBP, Monthly),
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     firstDeliveryDate = None,
-    promoCode = None,
   )
 
   val createPaymentMethodState = CreatePaymentMethodState(
@@ -80,7 +79,6 @@ object StatesTestData {
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = Left(PayPalPaymentFields("baid")),
     firstDeliveryDate = None,
-    promoCode = None,
     appliedPromotion = None,
     csrUsername = None,
     salesforceCaseId = None,
@@ -97,7 +95,6 @@ object StatesTestData {
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentMethod = Left(PayPalReferenceTransaction("baid", "me@somewhere.com")),
     firstDeliveryDate = None,
-    promoCode = None,
     appliedPromotion = None,
     csrUsername = None,
     salesforceCaseId = None,
@@ -109,7 +106,6 @@ object StatesTestData {
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
-      promoCode = None,
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
     ),
@@ -117,7 +113,6 @@ object StatesTestData {
     User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(Currency.GBP, Monthly),
     AnalyticsInfo(false, StripeApplePay),
-    None,
     None,
     None,
     csrUsername = None,
@@ -143,7 +138,6 @@ object StatesTestData {
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None,
-    promoCode = None,
     appliedPromotion = None,
   )
 }

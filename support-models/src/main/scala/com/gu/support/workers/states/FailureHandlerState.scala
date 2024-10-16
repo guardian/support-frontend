@@ -2,8 +2,6 @@ package com.gu.support.workers.states
 
 import java.util.UUID
 
-import com.gu.support.promotions.PromoCode
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{User, _}
 import io.circe.Decoder
 import org.joda.time.LocalDate
@@ -15,12 +13,10 @@ case class FailureHandlerStateImpl(
     product: ProductType,
     analyticsInfo: AnalyticsInfo,
     firstDeliveryDate: Option[LocalDate],
-    promoCode: Option[PromoCode],
 ) extends FailureHandlerState
 
 trait FailureHandlerState extends MinimalFailureHandlerState {
   def firstDeliveryDate: Option[LocalDate]
-  def promoCode: Option[PromoCode]
 }
 
 trait MinimalFailureHandlerState extends StepFunctionUserState {

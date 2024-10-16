@@ -34,7 +34,7 @@ class ZuoraPaperHandler(
       state.product,
       state.paymentMethod,
       paymentSchedule,
-      state.promoCode,
+      state.appliedPromotion.map(_.promoCode),
       account.value,
       sub.value,
       state.firstDeliveryDate,

@@ -37,8 +37,6 @@ class TierThreeSubscriptionBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      state.promoCode,
-      state.user.deliveryAddress.getOrElse(state.user.billingAddress).country,
       state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
