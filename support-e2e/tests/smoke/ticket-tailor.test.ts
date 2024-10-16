@@ -15,6 +15,13 @@ test('Ticket Tailor iframe loads correctly', async ({
 		},
 	]);
 
+	// Remove test user cookie
+	await context.clearCookies({
+		name: '_test_username',
+		domain: baseURL ? new URL(baseURL).hostname : undefined,
+		path: '/',
+	});
+
 	// Navigate to the page containing the iframe
 	await page.goto('https://support.theguardian.com/uk/events/1428771');
 
