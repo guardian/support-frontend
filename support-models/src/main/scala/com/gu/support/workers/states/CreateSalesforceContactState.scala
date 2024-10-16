@@ -3,7 +3,6 @@ package com.gu.support.workers.states
 import com.gu.support.acquisitions.AcquisitionData
 
 import java.util.UUID
-import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
@@ -17,7 +16,6 @@ case class CreateSalesforceContactState(
     analyticsInfo: AnalyticsInfo,
     paymentMethod: Either[PaymentMethod, RedemptionData],
     firstDeliveryDate: Option[LocalDate],
-    promoCode: Option[PromoCode],
     appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],

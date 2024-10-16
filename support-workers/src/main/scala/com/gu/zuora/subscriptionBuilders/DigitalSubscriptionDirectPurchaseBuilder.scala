@@ -37,7 +37,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
       ratePlanCharges = overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
-      readerType = ReaderType.impliedBySomePromoCode(state.promoCode) getOrElse state.product.readerType,
+      readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse state.product.readerType,
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
@@ -45,8 +45,6 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      state.promoCode,
-      state.billingCountry,
       state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
@@ -56,7 +54,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 
   }
 
-  def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
+  private def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
     if (isValidBenefitsTestPurchase(product, maybeAbTests)) {
       product.amount
         .map { amount =>

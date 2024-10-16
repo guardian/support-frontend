@@ -467,7 +467,6 @@ object JsonFixtures {
       None,
       None,
       None,
-      None,
     ).asJson.spaces2
 
   def createSupporterPlusZuoraSubscriptionJson(
@@ -482,14 +481,12 @@ object JsonFixtures {
         SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         None,
-        None,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user("9999998", country),
       SupporterPlus(amount, currency, Monthly),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -510,7 +507,6 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        None,
         salesforceContact,
       ),
       requestId = UUID.randomUUID(),
@@ -518,7 +514,6 @@ object JsonFixtures {
       product = TierThree(currency, Monthly, fulfilmentOptions),
       analyticsInfo = AnalyticsInfo(isGiftPurchase = false, Stripe),
       firstDeliveryDate = None,
-      promoCode = None,
       appliedPromotion = None,
       csrUsername = None,
       salesforceCaseId = None,
@@ -532,14 +527,12 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        None,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -561,14 +554,12 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        None,
         salesforceContacts,
       ),
       requestId,
       user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -589,7 +580,6 @@ object JsonFixtures {
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
-        Some("DJP8L27FY"),
         Some(AppliedPromotion("DJP8L27FY", CountryGroup.UK.id)),
         salesforceContact,
       ),
@@ -597,7 +587,6 @@ object JsonFixtures {
       user(),
       DigitalPack(GBP, Annual),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -613,14 +602,12 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
-        None,
         salesforceContact,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
       Paper(GBP, Monthly, HomeDelivery, Everyday, None),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -637,14 +624,12 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
-        None,
         salesforceContact,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddressOutsideLondon,
       paper,
       AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
       None,
       None,
       None,
@@ -664,7 +649,6 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        None,
         salesforceContacts,
       ),
       UUID.randomUUID(),
@@ -672,7 +656,6 @@ object JsonFixtures {
       GuardianWeekly(GBP, billingPeriod, RestOfWorld),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
-      None,
       None,
       None,
       None,
@@ -695,7 +678,6 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        None,
         salesforceContacts,
       ),
       UUID.randomUUID(),
@@ -703,7 +685,6 @@ object JsonFixtures {
       GuardianWeekly(GBP, Quarterly, RestOfWorld),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
-      None,
       None,
       None,
       None,
@@ -901,13 +882,99 @@ object JsonFixtures {
     }
     """
 
+  val sendAcquisitionEventGWJson =
+    """
+    {
+      "requestId": "1a94c891-e98a-13ae-0000-000000003f18",
+      "sendThankYouEmailState": {
+        "user": {
+          "id": "200004237",
+          "primaryEmailAddress": "rupert.bates+test-mma2@theguardian.com",
+          "title": null,
+          "firstName": "rupert",
+          "lastName": "bates",
+          "billingAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "deliveryAddress": {
+            "lineOne": "Kings Place",
+            "lineTwo": "York Way",
+            "city": "London",
+            "state": null,
+            "postCode": "N1 9GU",
+            "country": "GB"
+          },
+          "telephoneNumber": null,
+
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "currency": "GBP",
+          "billingPeriod": "Quarterly",
+          "fulfilmentOptions": "Domestic",
+          "productType": "GuardianWeekly"
+        },
+        "giftRecipient": null,
+        "paymentMethod": {
+          "PaypalBaid": "B-8JT45264A2787164W",
+          "PaypalEmail": "membership.paypal-buyer@theguardian.com",
+          "PaypalType": "ExpressCheckout",
+          "Type": "PayPal",
+          "PaymentGateway": "PayPal Express"
+        },
+        "paymentSchedule": {
+          "payments": [
+            {
+              "date": "2021-01-08",
+              "amount": 6
+            }
+          ]
+        },
+        "promoCode": null,
+        "accountNumber": "A00102401",
+        "subscriptionNumber": "A-S00125354",
+        "firstDeliveryDate": "2021-01-08",
+        "productType": "GuardianWeekly"
+      },
+      "analyticsInfo": {
+        "isGiftPurchase": false,
+        "paymentProvider": "PayPal"
+      },
+      "acquisitionData": {
+        "ophanIds": {
+          "pageviewId": "kirefisckm7vh76bd1w8",
+          "browserId": null
+        },
+        "referrerAcquisitionData": {
+          "campaignCode": null,
+          "referrerPageviewId": null,
+          "referrerUrl": null,
+          "componentId": null,
+          "componentType": null,
+          "source": null,
+          "abTests": null,
+          "queryParameters": [],
+          "hostname": "support.code.dev-theguardian.com",
+          "gaClientId": "GA1.2.1846757665.1596457717",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+          "ipAddress": "10.248.135.37"
+        },
+        "supportAbTests": []
+      }
+    }
+    """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     CreateZuoraSubscriptionState(
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
-        Some("DJRHYMDS8"),
         Some(AppliedPromotion("DJRHYMDS8", CountryGroup.UK.id)),
         salesforceContact,
       ),
@@ -916,7 +983,6 @@ object JsonFixtures {
       DigitalPack(GBP, Annual),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
-      Some("DJRHYMDS8"),
       Some(AppliedPromotion("DJRHYMDS8", CountryGroup.UK.id)),
       None,
       None,

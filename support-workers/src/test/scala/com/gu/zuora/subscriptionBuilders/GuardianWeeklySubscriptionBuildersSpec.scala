@@ -173,7 +173,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),
     None,
@@ -196,7 +195,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     weekly,
     PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
     firstDeliveryDate,
-    None,
     None,
     SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
   );
@@ -235,7 +233,6 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
     ),
     Some("Dan Csr"),
@@ -250,7 +247,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(promoCode = Some("FOOPATRON")),
+    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("FOOPATRON", "uk"))),
     None,
     None,
   ).toOption
@@ -263,7 +260,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(promoCode = Some("NOTAPATRONPROMO")),
+    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", "uk"))),
     None,
     None,
   ).toOption
