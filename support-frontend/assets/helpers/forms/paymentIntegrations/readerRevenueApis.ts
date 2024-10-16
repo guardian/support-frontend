@@ -168,7 +168,6 @@ export type RegularPaymentRequest = {
 	referrerAcquisitionData: ReferrerAcquisitionData;
 	supportAbTests: AcquisitionABTest[];
 	telephoneNumber?: string;
-	promoCode?: Option<string>;
 	appliedPromotion?: AppliedPromotion;
 	deliveryInstructions?: string;
 	csrUsername?: string;
