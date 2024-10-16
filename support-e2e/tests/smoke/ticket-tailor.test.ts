@@ -16,7 +16,7 @@ test('Ticket Tailor iframe loads correctly', async ({
 	]);
 
 	// Navigate to the page containing the iframe
-	await page.goto('https://support.theguardian.com/uk/events/1347872');
+	await page.goto('https://support.theguardian.com/uk/events/1428771');
 
 	// Wait for the iframe to be present in the DOM
 	const iframe = await page.waitForSelector(
@@ -36,6 +36,6 @@ test('Ticket Tailor iframe loads correctly', async ({
 	if (frame) {
 		await frame.waitForSelector('body');
 		const content = await frame.content();
-		expect(content).toContain('Next');
+		expect(content).toContain('EndToEnd Test Event');
 	}
 });
