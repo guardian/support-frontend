@@ -19,6 +19,7 @@ import {
 } from '../../internationalisation/countryGroup';
 import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../abtest';
+import {storage} from "@guardian/libs";
 
 const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
@@ -51,6 +52,7 @@ describe('init', () => {
 
 	afterEach(() => {
 		window.localStorage.clear();
+    window.sessionStorage.clear();
 	});
 
 	it('assigns a user to a variant', () => {
@@ -400,6 +402,111 @@ describe('init', () => {
 			expect(participations).toEqual({ t1: 'variant' });
 		});
 	});
+
+  describe('path matching', () => {
+    beforeEach(() => {
+      window.sessionStorage.clear();
+      delete window.location;
+      Object.defineProperty(window, 'location', {
+        value: {
+          // href: 'https://support.theguardian.com/uk/contribute',
+          // pathname: '/uk/contribute'
+        },
+      });
+    });
+
+    it('does not assign to test if targetPage does not match', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'https://support.theguardian.com/uk/contribute',
+          pathname: '/uk/contribute'
+        },
+      });
+
+      const abTests = {
+        t1: buildTest({
+          targetPage: '/us/contribute$',
+        }),
+      };
+
+      const participations: Participations = abInit({
+        ...abtestInitalizerData,
+        abTests,
+      });
+
+      expect(participations).toEqual({});
+    });
+
+    it('assign to test if targetPage matches', () => {
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'https://support.theguardian.com/uk/contribute',
+          pathname: '/uk/contribute'
+        },
+      });
+
+      const abTests = {
+        t1: buildTest({
+          targetPage: '/uk/contribute$',
+        }),
+      };
+
+      const participations: Participations = abInit({
+        ...abtestInitalizerData,
+        abTests,
+      });
+
+      expect(participations).toEqual({ t1: 'control' });
+    });
+
+    it('assign to test if persistPage matches and test is in session storage', () => {
+      window.sessionStorage.setItem('abParticipations', JSON.stringify({t1: 'control'}));
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'https://support.theguardian.com/uk/checkout',
+          pathname: '/uk/checkout'
+        },
+      });
+
+      const abTests = {
+        t1: buildTest({
+          targetPage: '/uk/contribute$',
+          persistPage: '/uk/checkout$',
+        }),
+      };
+
+      const participations: Participations = abInit({
+        ...abtestInitalizerData,
+        abTests,
+      });
+
+      expect(participations).toEqual({ t1: 'control' });
+    });
+
+    it('does not assign to test if persistPage does not match and test is in session storage', () => {
+      window.sessionStorage.setItem('abParticipations', JSON.stringify({t1: 'control'}));
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'https://support.theguardian.com/uk/blah',
+          pathname: '/uk/blah'
+        },
+      });
+
+      const abTests = {
+        t1: buildTest({
+          targetPage: '/uk/contribute$',
+          persistPage: '/uk/checkout$',
+        }),
+      };
+
+      const participations: Participations = abInit({
+        ...abtestInitalizerData,
+        abTests,
+      });
+
+      expect(participations).toEqual({ });
+    });
+  });
 });
 
 it('targetPage matching', () => {
@@ -805,6 +912,8 @@ function buildTest({
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
 	excludeCountriesSubjectToContributionsOnlyAmounts = true,
+  targetPage = undefined,
+  persistPage = undefined,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -814,6 +923,8 @@ function buildTest({
 		seed,
 		excludeIfInReferrerControlledTest,
 		excludeCountriesSubjectToContributionsOnlyAmounts,
+    targetPage,
+    persistPage,
 	};
 }
 

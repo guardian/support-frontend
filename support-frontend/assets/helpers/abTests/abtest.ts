@@ -82,6 +82,8 @@ export type Test = {
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
+	// Persist this test participation across more pages using this regex
+	persistPage?: string | RegExp;
 	omitCountries?: IsoCountry[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
@@ -118,11 +120,12 @@ function init({
 		countryGroupId,
 		acquisitionDataTests,
 		selectedAmountsVariant,
+		sessionParticipations,
 	);
+
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
-		...sessionParticipations,
 		...participations,
 		...serverSideParticipations,
 		...urlParticipations,
@@ -159,6 +162,7 @@ function getParticipations(
 	countryGroupId: CountryGroupId,
 	acquisitionDataTests?: AcquisitionABTest[],
 	selectedAmountsVariant?: SelectedAmountsVariant,
+	sessionParticipations: Participations = {},
 ): Participations {
 	const participations: Participations = {};
 
@@ -172,6 +176,19 @@ function getParticipations(
 		}
 
 		if (test.omitCountries?.includes(country)) {
+			return;
+		}
+
+		// Is the user already in this test in the current browser session?
+    console.log('pathname', window.location.pathname)
+    console.log('target', test.targetPage)
+    console.log('persist', test.persistPage)
+    console.log('window.sessionStorage', window.sessionStorage.getItem('abParticipations'))
+		if (
+			!!sessionParticipations[testId] &&
+			targetPageMatches(window.location.pathname, test.persistPage)
+		) {
+			participations[testId] = sessionParticipations[testId];
 			return;
 		}
 
