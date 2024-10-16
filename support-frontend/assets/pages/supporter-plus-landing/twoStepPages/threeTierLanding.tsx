@@ -296,6 +296,8 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
+  const enableTicker = campaignSettings?.tickerSettings;
+
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
@@ -523,7 +525,7 @@ export function ThreeTierLanding({
 			>
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
-					{campaignSettings?.tickerSettings && (
+					{enableTicker && (
 						<div css={tickerContainer}>
 							<Ticker
 								currencySymbol={campaignSettings.tickerSettings.currencySymbol}
