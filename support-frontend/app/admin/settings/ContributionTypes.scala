@@ -1,6 +1,8 @@
 package admin.settings
 
+import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.JsonHelpers
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
 sealed trait ContributionType
@@ -21,6 +23,10 @@ case object ContributionType {
 
 case class ContributionTypeSetting(contributionType: ContributionType, isDefault: Option[Boolean])
 
+object ContributionTypeSetting {
+  implicit val codec = deriveCodec[ContributionTypeSetting]
+}
+
 case class ContributionTypes(
     GBPCountries: Seq[ContributionTypeSetting],
     UnitedStates: Seq[ContributionTypeSetting],
@@ -32,9 +38,8 @@ case class ContributionTypes(
 )
 
 object ContributionTypes {
-  import io.circe.generic.auto._
   import ContributionType._
 
-  implicit val contributionTypesDecoder = Decoder[ContributionTypes]
-  implicit val contributionTypesEncoder = Encoder[ContributionTypes]
+  implicit val contributionTypesDecoder: Decoder[ContributionTypes] = deriveDecoder
+  implicit val contributionTypesEncoder: Encoder[ContributionTypes] = deriveEncoder
 }

@@ -6,6 +6,7 @@ import com.typesafe.config.{ConfigFactory, ConfigValue, ConfigValueFactory}
 import com.typesafe.scalalogging.StrictLogging
 import config.Configuration
 import org.apache.pekko.actor.ActorSystem
+import org.mockito.ArgumentMatchers.matches
 import org.mockito.Mockito.spy
 import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
@@ -33,7 +34,12 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
       allSettings = allSettingsProvider.getAllSettings()
     } yield allSettings
 
-    maybeAllSettings.right.get shouldBe 11
+    maybeAllSettings match {
+      case Left(e) => fail(e.getMessage)
+      case Right(_) => succeed
+    }
+
+    maybeAllSettings.right.get.amounts.length shouldBe 10
 
   }
 }

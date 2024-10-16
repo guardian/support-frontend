@@ -1,60 +1,5 @@
 [
   {
-    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__CA_REGION",
-    "liveTestName" : "2023-08-08_BENEFITS_GONE__CA",
-    "testLabel" : "CANADA DOLLAR REGION",
-    "isLive" : false,
-    "targeting" : {
-      "targetingType" : "Region",
-      "region" : "Canada"
-    },
-    "order" : 99999,
-    "seed" : 871429,
-    "variants" : [
-      {
-        "variantName" : "CONTROL",
-        "defaultContributionType" : "MONTHLY",
-        "displayContributionType" : [
-          "ONE_OFF",
-          "MONTHLY",
-          "ANNUAL"
-        ],
-        "amountsCardData" : {
-          "ONE_OFF" : {
-            "amounts" : [
-              25,
-              50,
-              100,
-              250
-            ],
-            "defaultAmount" : 50,
-            "hideChooseYourAmount" : false
-          },
-          "MONTHLY" : {
-            "amounts" : [
-              3,
-              7,
-              13,
-              20
-            ],
-            "defaultAmount" : 13,
-            "hideChooseYourAmount" : false
-          },
-          "ANNUAL" : {
-            "amounts" : [
-              30,
-              60,
-              120,
-              150
-            ],
-            "defaultAmount" : 120,
-            "hideChooseYourAmount" : false
-          }
-        }
-      }
-    ]
-  },
-  {
     "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__ROW_REGION",
     "liveTestName" : "2023-08-08_BENEFITS_GONE__ROW",
     "testLabel" : "INTERNATIONAL REGION",
@@ -110,120 +55,10 @@
     ]
   },
   {
-    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__NZ_REGION",
-    "liveTestName" : "2023-08-08_BENEFITS_GONE__NZ",
-    "testLabel" : "NEW ZEALAND DOLLAR REGION",
-    "isLive" : false,
-    "targeting" : {
-      "targetingType" : "Region",
-      "region" : "NZDCountries"
-    },
-    "order" : 99999,
-    "seed" : 811350,
-    "variants" : [
-      {
-        "variantName" : "CONTROL",
-        "defaultContributionType" : "MONTHLY",
-        "displayContributionType" : [
-          "ONE_OFF",
-          "MONTHLY",
-          "ANNUAL"
-        ],
-        "amountsCardData" : {
-          "ONE_OFF" : {
-            "amounts" : [
-              50,
-              100,
-              250,
-              500
-            ],
-            "defaultAmount" : 100,
-            "hideChooseYourAmount" : false
-          },
-          "MONTHLY" : {
-            "amounts" : [
-              15,
-              20,
-              30,
-              50
-            ],
-            "defaultAmount" : 20,
-            "hideChooseYourAmount" : false
-          },
-          "ANNUAL" : {
-            "amounts" : [
-              75,
-              160,
-              250,
-              500
-            ],
-            "defaultAmount" : 160,
-            "hideChooseYourAmount" : false
-          }
-        }
-      }
-    ]
-  },
-  {
-    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__EU_REGION",
-    "liveTestName" : "2023-08-08_BENEFITS_GONE__EU",
-    "testLabel" : "EURO REGION",
-    "isLive" : false,
-    "targeting" : {
-      "targetingType" : "Region",
-      "region" : "EURCountries"
-    },
-    "order" : 99999,
-    "seed" : 591000,
-    "variants" : [
-      {
-        "variantName" : "CONTROL",
-        "defaultContributionType" : "MONTHLY",
-        "displayContributionType" : [
-          "ONE_OFF",
-          "MONTHLY",
-          "ANNUAL"
-        ],
-        "amountsCardData" : {
-          "ONE_OFF" : {
-            "amounts" : [
-              25,
-              50,
-              100,
-              250
-            ],
-            "defaultAmount" : 50,
-            "hideChooseYourAmount" : false
-          },
-          "MONTHLY" : {
-            "amounts" : [
-              2,
-              4,
-              10,
-              15
-            ],
-            "defaultAmount" : 10,
-            "hideChooseYourAmount" : false
-          },
-          "ANNUAL" : {
-            "amounts" : [
-              15,
-              50,
-              95,
-              120
-            ],
-            "defaultAmount" : 95,
-            "hideChooseYourAmount" : false
-          }
-        }
-      }
-    ]
-  },
-  {
     "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__US_REGION",
     "liveTestName" : "2023-08-08_BENEFITS_GONE__US",
     "testLabel" : "US DOLLAR REGION",
-    "isLive" : false,
+    "isLive" : true,
     "targeting" : {
       "targetingType" : "Region",
       "region" : "UnitedStates"
@@ -287,6 +122,58 @@
           },
           "MONTHLY" : {
             "amounts" : [
+              10,
+              13,
+              35
+            ],
+            "defaultAmount" : 13,
+            "hideChooseYourAmount" : false
+          },
+          "ANNUAL" : {
+            "amounts" : [
+              75,
+              120,
+              378
+            ],
+            "defaultAmount" : 120,
+            "hideChooseYourAmount" : false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "testName" : "TOM_TEST",
+    "liveTestName" : "TOM_TES",
+    "testLabel" : "TOM",
+    "isLive" : false,
+    "targeting" : {
+      "targetingType" : "Country",
+      "countries" : [
+        "AD"
+      ]
+    },
+    "order" : 0,
+    "seed" : 817554,
+    "variants" : [
+      {
+        "variantName" : "CONTROL",
+        "defaultContributionType" : "MONTHLY",
+        "displayContributionType" : [
+          "ONE_OFF",
+          "MONTHLY",
+          "ANNUAL"
+        ],
+        "amountsCardData" : {
+          "ONE_OFF" : {
+            "amounts" : [
+              1
+            ],
+            "defaultAmount" : 1,
+            "hideChooseYourAmount" : false
+          },
+          "MONTHLY" : {
+            "amounts" : [
               10
             ],
             "defaultAmount" : 10,
@@ -300,64 +187,9 @@
             "hideChooseYourAmount" : false
           }
         }
-      }
-    ]
-  },
-  {
-    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__AU_REGION",
-    "liveTestName" : "2023-08-08_BENEFITS_GONE__AU",
-    "testLabel" : "AUSTRALIA DOLLAR REGION",
-    "isLive" : false,
-    "targeting" : {
-      "targetingType" : "Region",
-      "region" : "AUDCountries"
-    },
-    "order" : 99999,
-    "seed" : 749469,
-    "variants" : [
-      {
-        "variantName" : "CONTROL",
-        "defaultContributionType" : "MONTHLY",
-        "displayContributionType" : [
-          "ONE_OFF",
-          "MONTHLY",
-          "ANNUAL"
-        ],
-        "amountsCardData" : {
-          "ONE_OFF" : {
-            "amounts" : [
-              60,
-              100,
-              250,
-              500
-            ],
-            "defaultAmount" : 100,
-            "hideChooseYourAmount" : false
-          },
-          "MONTHLY" : {
-            "amounts" : [
-              15,
-              20,
-              30,
-              50
-            ],
-            "defaultAmount" : 20,
-            "hideChooseYourAmount" : false
-          },
-          "ANNUAL" : {
-            "amounts" : [
-              75,
-              160,
-              300,
-              500
-            ],
-            "defaultAmount" : 160,
-            "hideChooseYourAmount" : false
-          }
-        }
       },
       {
-        "variantName" : "TIER2",
+        "variantName" : "V1",
         "defaultContributionType" : "MONTHLY",
         "displayContributionType" : [
           "ONE_OFF",
@@ -370,21 +202,21 @@
               1
             ],
             "defaultAmount" : 1,
-            "hideChooseYourAmount" : true
+            "hideChooseYourAmount" : false
           },
           "MONTHLY" : {
             "amounts" : [
               10
             ],
             "defaultAmount" : 10,
-            "hideChooseYourAmount" : true
+            "hideChooseYourAmount" : false
           },
           "ANNUAL" : {
             "amounts" : [
-              95
+              100
             ],
-            "defaultAmount" : 95,
-            "hideChooseYourAmount" : true
+            "defaultAmount" : 100,
+            "hideChooseYourAmount" : false
           }
         }
       }
@@ -473,18 +305,16 @@
     ]
   },
   {
-    "testName" : "TOM_TEST",
-    "liveTestName" : "TOM_TES",
-    "testLabel" : "TOM",
+    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__EU_REGION",
+    "liveTestName" : "2023-08-08_BENEFITS_GONE__EU",
+    "testLabel" : "EURO REGION",
     "isLive" : false,
     "targeting" : {
-      "targetingType" : "Country",
-      "countries" : [
-        "AD"
-      ]
+      "targetingType" : "Region",
+      "region" : "EURCountries"
     },
-    "order" : 0,
-    "seed" : 817554,
+    "order" : 99999,
+    "seed" : 591000,
     "variants" : [
       {
         "variantName" : "CONTROL",
@@ -497,29 +327,199 @@
         "amountsCardData" : {
           "ONE_OFF" : {
             "amounts" : [
-              1
+              25,
+              50,
+              100,
+              250
             ],
-            "defaultAmount" : 1,
+            "defaultAmount" : 50,
             "hideChooseYourAmount" : false
           },
           "MONTHLY" : {
             "amounts" : [
-              10
+              4,
+              10,
+              15
             ],
             "defaultAmount" : 10,
             "hideChooseYourAmount" : false
           },
           "ANNUAL" : {
             "amounts" : [
-              100
+              50,
+              95,
+              120
+            ],
+            "defaultAmount" : 95,
+            "hideChooseYourAmount" : false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__NZ_REGION",
+    "liveTestName" : "2023-08-08_BENEFITS_GONE__NZ",
+    "testLabel" : "NEW ZEALAND DOLLAR REGION",
+    "isLive" : false,
+    "targeting" : {
+      "targetingType" : "Region",
+      "region" : "NZDCountries"
+    },
+    "order" : 99999,
+    "seed" : 811350,
+    "variants" : [
+      {
+        "variantName" : "CONTROL",
+        "defaultContributionType" : "MONTHLY",
+        "displayContributionType" : [
+          "ONE_OFF",
+          "MONTHLY",
+          "ANNUAL"
+        ],
+        "amountsCardData" : {
+          "ONE_OFF" : {
+            "amounts" : [
+              50,
+              100,
+              250,
+              500
             ],
             "defaultAmount" : 100,
+            "hideChooseYourAmount" : false
+          },
+          "MONTHLY" : {
+            "amounts" : [
+              10,
+              20,
+              30,
+              50
+            ],
+            "defaultAmount" : 20,
+            "hideChooseYourAmount" : false
+          },
+          "ANNUAL" : {
+            "amounts" : [
+              80,
+              160,
+              250,
+              500
+            ],
+            "defaultAmount" : 160,
+            "hideChooseYourAmount" : false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__CA_REGION",
+    "liveTestName" : "2023-08-08_BENEFITS_GONE__CA",
+    "testLabel" : "CANADA DOLLAR REGION",
+    "isLive" : false,
+    "targeting" : {
+      "targetingType" : "Region",
+      "region" : "Canada"
+    },
+    "order" : 99999,
+    "seed" : 871429,
+    "variants" : [
+      {
+        "variantName" : "CONTROL",
+        "defaultContributionType" : "MONTHLY",
+        "displayContributionType" : [
+          "ONE_OFF",
+          "MONTHLY",
+          "ANNUAL"
+        ],
+        "amountsCardData" : {
+          "ONE_OFF" : {
+            "amounts" : [
+              25,
+              50,
+              100,
+              250
+            ],
+            "defaultAmount" : 50,
+            "hideChooseYourAmount" : false
+          },
+          "MONTHLY" : {
+            "amounts" : [
+              5,
+              13,
+              20
+            ],
+            "defaultAmount" : 13,
+            "hideChooseYourAmount" : false
+          },
+          "ANNUAL" : {
+            "amounts" : [
+              60,
+              120,
+              150
+            ],
+            "defaultAmount" : 120,
+            "hideChooseYourAmount" : false
+          }
+        }
+      }
+    ]
+  },
+  {
+    "testName" : "SUPPORTER_AMOUNTS_EVERGREEN__AU_REGION",
+    "liveTestName" : "2023-08-08_BENEFITS_GONE__AU",
+    "testLabel" : "AUSTRALIA DOLLAR REGION",
+    "isLive" : false,
+    "targeting" : {
+      "targetingType" : "Region",
+      "region" : "AUDCountries"
+    },
+    "order" : 99999,
+    "seed" : 749469,
+    "variants" : [
+      {
+        "variantName" : "CONTROL",
+        "defaultContributionType" : "MONTHLY",
+        "displayContributionType" : [
+          "ONE_OFF",
+          "MONTHLY",
+          "ANNUAL"
+        ],
+        "amountsCardData" : {
+          "ONE_OFF" : {
+            "amounts" : [
+              60,
+              100,
+              250,
+              500
+            ],
+            "defaultAmount" : 100,
+            "hideChooseYourAmount" : false
+          },
+          "MONTHLY" : {
+            "amounts" : [
+              10,
+              20,
+              30,
+              50
+            ],
+            "defaultAmount" : 20,
+            "hideChooseYourAmount" : false
+          },
+          "ANNUAL" : {
+            "amounts" : [
+              80,
+              160,
+              300,
+              500
+            ],
+            "defaultAmount" : 160,
             "hideChooseYourAmount" : false
           }
         }
       },
       {
-        "variantName" : "V1",
+        "variantName" : "TIER2",
         "defaultContributionType" : "MONTHLY",
         "displayContributionType" : [
           "ONE_OFF",
@@ -532,21 +532,21 @@
               1
             ],
             "defaultAmount" : 1,
-            "hideChooseYourAmount" : false
+            "hideChooseYourAmount" : true
           },
           "MONTHLY" : {
             "amounts" : [
               10
             ],
             "defaultAmount" : 10,
-            "hideChooseYourAmount" : false
+            "hideChooseYourAmount" : true
           },
           "ANNUAL" : {
             "amounts" : [
-              100
+              95
             ],
-            "defaultAmount" : 100,
-            "hideChooseYourAmount" : false
+            "defaultAmount" : 95,
+            "hideChooseYourAmount" : true
           }
         }
       }
@@ -589,7 +589,7 @@
               10
             ],
             "defaultAmount" : 2,
-            "hideChooseYourAmount" : false
+            "hideChooseYourAmount" : true
           },
           "MONTHLY" : {
             "amounts" : [
@@ -645,13 +645,12 @@
               120,
               240
             ],
-            "defaultAmount" : 60,
+            "defaultAmount" : 30,
             "hideChooseYourAmount" : false
           },
           "MONTHLY" : {
             "amounts" : [
-              3,
-              4,
+              8,
               10,
               16
             ],
@@ -660,7 +659,6 @@
           },
           "ANNUAL" : {
             "amounts" : [
-              30,
               50,
               95,
               173

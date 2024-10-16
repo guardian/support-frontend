@@ -2,8 +2,6 @@ package admin.settings
 
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.{Codec, DiscriminatedType}
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class AmountsSelection(
     amounts: List[Int],
@@ -62,10 +60,11 @@ case class AmountsTest(
     variants: List[AmountsVariant],
 )
 
+object AmountsTest {
+  implicit val codec: Codec[AmountsTest] = deriveCodec
+}
+
 object AmountsTests {
   type AmountsTests = List[AmountsTest]
-  implicit val amountsTestDecoder: Decoder[AmountsTest] = deriveDecoder[AmountsTest]
-  implicit val amountsTestEncoder: Encoder.AsObject[AmountsTest] = deriveEncoder[AmountsTest]
-  implicit val amountsTestsDecoder: Decoder[AmountsTests] = deriveDecoder[AmountsTests]
-  implicit val amountsTestsEncoder: Encoder.AsObject[AmountsTests] = deriveEncoder[AmountsTests]
+  implicit val codec: Codec[AmountsTests] = deriveCodec
 }

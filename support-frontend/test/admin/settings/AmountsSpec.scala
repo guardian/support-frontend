@@ -5,7 +5,6 @@ import io.circe
 import io.circe.parser.{decode, parse}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import admin.settings.AmountsTests.{amountsTestDecoder, amountsTestEncoder}
 import io.circe.syntax.EncoderOps
 
 import scala.io.Source
