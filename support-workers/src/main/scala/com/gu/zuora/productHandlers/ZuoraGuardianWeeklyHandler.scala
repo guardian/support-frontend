@@ -38,7 +38,7 @@ class ZuoraGuardianWeeklyHandler(
       state.giftRecipient,
       state.paymentMethod,
       paymentSchedule,
-      state.promoCode,
+      state.appliedPromotion.map(_.promoCode),
       account.value,
       sub.value,
       state.firstDeliveryDate,

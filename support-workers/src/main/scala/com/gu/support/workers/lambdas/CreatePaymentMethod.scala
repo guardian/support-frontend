@@ -94,7 +94,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.analyticsInfo,
       paymentMethod,
       state.firstDeliveryDate,
-      state.promoCode,
       state.appliedPromotion,
       state.csrUsername,
       state.salesforceCaseId,

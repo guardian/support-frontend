@@ -39,8 +39,6 @@ class PaperSubscriptionBuilder(
 
     applyPromoCodeIfPresent(
       promotionService,
-      promoCode,
-      user.billingAddress.country,
       state.appliedPromotion,
       productRatePlanId,
       subscriptionData,

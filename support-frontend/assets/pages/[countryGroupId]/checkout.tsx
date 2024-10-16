@@ -923,7 +923,6 @@ function CheckoutComponent({
 				deliveryAddress,
 				firstDeliveryDate,
 				paymentFields,
-				promoCode,
 				appliedPromotion,
 				ophanIds,
 				referrerAcquisitionData,

@@ -51,7 +51,7 @@ class ZuoraDigitalSubscriptionGiftPurchaseHandler(
         lastRedemptionDate,
         state.paymentMethod,
         paymentSchedule,
-        state.promoCode,
+        state.appliedPromotion.map(_.promoCode),
         account.value,
         sub.value,
       )

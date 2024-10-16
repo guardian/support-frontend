@@ -265,7 +265,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
-	const enableSingleContributionsTab = urlSearchParams.has('enableOneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = CountryHelper.detect();
@@ -286,6 +285,12 @@ export function ThreeTierLanding({
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 
+	const campaignSettings = getCampaignSettings(countryGroupId);
+
+	const enableSingleContributionsTab =
+		campaignSettings?.enableSingleContributions ??
+		urlSearchParams.has('enableOneTime');
+
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
@@ -300,11 +305,6 @@ export function ThreeTierLanding({
 	const tierPlanPeriod = contributionType.toLowerCase();
 	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
-
-	/*
-	 * US EOY 2024 Campaign
-	 */
-	const campaignSettings = getCampaignSettings(countryGroupId);
 
 	// Handle which countdown to show (if any).
 	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
