@@ -6,7 +6,6 @@ import com.gu.support.workers.JsonFixtures.{contribution, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CreateSalesforceContactState
-import io.circe.generic.auto._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

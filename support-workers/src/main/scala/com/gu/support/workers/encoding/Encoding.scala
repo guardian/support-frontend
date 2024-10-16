@@ -5,7 +5,6 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.encoding.Wrapper._
 import com.gu.support.workers.lambdas.HandlerResult
 import com.gu.support.workers.{ExecutionError, JsonWrapper, RequestInfo}
-import io.circe.generic.auto._
 
 import scala.util.Try
 

@@ -2,17 +2,16 @@ package com.gu.acquisitionFirehoseTransformer
 
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.acquisitions.AbTest
-import io.circe.Json
-import io.circe.generic.auto._
+import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
-
 import org.joda.time.format.DateTimeFormat
 
 object AcquisitionToJson {
 
   val dtFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 
-  private case class AcquisitionOutput(
+  case class AcquisitionOutput(
       paymentFrequency: String,
       countryCode: String,
       amount: BigDecimal,
@@ -52,4 +51,6 @@ object AcquisitionToJson {
       acquisition.abTests,
     ).asJson
   }
+
+  implicit val encoder: Encoder[AcquisitionOutput] = deriveEncoder
 }
