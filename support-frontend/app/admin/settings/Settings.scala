@@ -18,7 +18,6 @@ import io.circe.{Decoder, Encoder}
 import scala.io.Source
 import scala.util.Try
 
-//import AmountsTests. // intellij doesn't think this is needed, but it is
 import com.gu.aws.AwsS3Client.S3Location
 
 case class AllSettings(

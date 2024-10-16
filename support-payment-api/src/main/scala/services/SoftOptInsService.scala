@@ -7,6 +7,8 @@ import cats.implicits._
 import com.amazonaws.services.sqs.AmazonSQSAsync
 import com.amazonaws.services.sqs.model.{GetQueueUrlRequest, SendMessageRequest}
 import com.typesafe.scalalogging.StrictLogging
+import io.circe.Encoder
+import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax.EncoderOps
 import model.Environment
 import model.Environment.Live
@@ -105,6 +107,6 @@ object SoftOptInsService extends StrictLogging {
   )
 
   object Message {
-    implicit val encoder: io.circe.Encoder[Message] = io.circe.generic.semiauto.deriveEncoder
+    implicit val encoder: Encoder[Message] = deriveEncoder
   }
 }

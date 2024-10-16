@@ -18,7 +18,6 @@ import services.fastly.FastlyService
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import admin.settings.AmountsTests.AmountsTests
-import com.typesafe.scalalogging.LazyLogging
 
 abstract class SettingsProvider[T] {
 
@@ -36,31 +35,24 @@ class AllSettingsProvider private (
 ) {
 
   def getAllSettings(): AllSettings = {
-    val switches = switchesProvider.settings()
-    val amounts = amountsProvider.settings()
-    val contributionTypes = contributionTypesProvider.settings()
     AllSettings(
-      switches,
-      amounts,
-      contributionTypes,
+      switchesProvider.settings(),
+      amountsProvider.settings(),
+      contributionTypesProvider.settings(),
       metricUrl,
     )
   }
 }
 
-object AllSettingsProvider extends LazyLogging {
+object AllSettingsProvider {
   def fromConfig(
       config: Configuration,
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
-
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
-      _ = logger.info("loaded switches")
+      amountsProvider <- SettingsProvider.fromAppConfig[AmountsTests](config.settingsSources.amounts, config)
       contributionTypesProvider <- SettingsProvider
         .fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
-      _ = logger.info("loaded contribution types")
-      amountsProvider <- SettingsProvider.fromAppConfig[AmountsTests](config.settingsSources.amounts, config)
-      _ = logger.info("loaded amounts")
     } yield new AllSettingsProvider(
       switchesProvider,
       amountsProvider,
