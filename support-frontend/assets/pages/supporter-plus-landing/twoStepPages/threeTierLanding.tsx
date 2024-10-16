@@ -12,6 +12,7 @@ import { Container } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
+	Ticker,
 } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -94,6 +95,10 @@ const innerContentContainer = css`
 	max-width: 940px;
 	margin: 0 auto;
 	text-align: center;
+`;
+
+const tickerContainer = css`
+	margin-top: ${space[5]}px;
 `;
 
 const heading = css`
@@ -518,6 +523,38 @@ export function ThreeTierLanding({
 			>
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
+					{campaignSettings?.tickerSettings && (
+						<div css={tickerContainer}>
+							<Ticker
+								currencySymbol={campaignSettings.tickerSettings.currencySymbol}
+								copy={{
+									headline: campaignSettings.tickerSettings.copy.headline,
+								}}
+								tickerData={{
+									total: campaignSettings.tickerSettings.tickerData.total,
+									goal: campaignSettings.tickerSettings.tickerData.goal,
+								}}
+								tickerStylingSettings={{
+									headlineColour:
+										campaignSettings.tickerSettings.tickerStylingSettings
+											.headlineColour,
+									totalColour:
+										campaignSettings.tickerSettings.tickerStylingSettings
+											.totalColour,
+									goalColour:
+										campaignSettings.tickerSettings.tickerStylingSettings
+											.goalColour,
+									filledProgressColour:
+										campaignSettings.tickerSettings.tickerStylingSettings
+											.filledProgressColour,
+									progressBarBackgroundColour:
+										campaignSettings.tickerSettings.tickerStylingSettings
+											.progressBarBackgroundColour,
+								}}
+								size={campaignSettings.tickerSettings.size}
+							/>
+						</div>
+					)}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
