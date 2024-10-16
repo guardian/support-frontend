@@ -154,21 +154,11 @@ function getBillingCountryAndState(state: ContributionsState): {
 }
 
 // This exists *only* to support the purchase of digi subs
-function getPromoCode(state: ContributionsState) {
+function getAppliedPromotion(state: ContributionsState) {
 	const promotion = getSubscriptionPromotionForBillingPeriod(state);
-	if (promotion) {
-		return promotion.promoCode;
-	}
-	return undefined;
-}
-
-function getAppliedPromotion(
-	promoCode: string | undefined,
-	state: ContributionsState,
-) {
-	return promoCode !== undefined
+	return promotion !== undefined
 		? {
-				promoCode,
+				promoCode: promotion.promoCode,
 				countryGroupId:
 					countryGroups[state.common.internationalisation.countryGroupId]
 						.supportInternationalisationId,
@@ -218,8 +208,7 @@ function regularPaymentRequestFromAuthorisation(
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
-	const promoCode = getPromoCode(state);
-	const appliedPromotion = getAppliedPromotion(promoCode, state);
+	const appliedPromotion = getAppliedPromotion(state);
 
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
@@ -252,7 +241,6 @@ function regularPaymentRequestFromAuthorisation(
 			),
 			recaptchaToken,
 		},
-		promoCode,
 		appliedPromotion,
 
 		ophanIds: getOphanIds(),
