@@ -1,3 +1,4 @@
+import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { UnitedStates } from '../internationalisation/countryGroup';
 
@@ -13,12 +14,18 @@ export type CountdownSetting = {
 	//};
 };
 
+export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
+	id: string;
+};
+
 export type CampaignSettings = {
 	isEligible: (countryGroupId: CountryGroupId) => boolean;
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
+	tickerSettings: CampaignTickerSettings;
 };
 
+// Campaign settings including ticker configuration
 const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
@@ -40,12 +47,20 @@ const campaigns: Record<string, CampaignSettings> = {
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 			},
-			// {
-			// 	label: 'testing', // adjust this one as needed
-			// 	countdownStartInMillis: Date.parse('Sept 05, 2024 00:00:00'),
-			// 	countdownDeadlineInMillis: Date.parse('Sep 06, 2024 00:00:00'),
-			// },
 		],
+		tickerSettings: {
+			currencySymbol: '$',
+			copy: {},
+			tickerStylingSettings: {
+				headlineColour: '#000000',
+				totalColour: '#64B7C4',
+				goalColour: '#FFFFFF',
+				filledProgressColour: '#64B7C4',
+				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
+			},
+			size: 'large',
+			id: 'US',
+		},
 	},
 };
 

@@ -57,6 +57,7 @@ import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -290,6 +291,7 @@ export function ThreeTierLanding({
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
+	console.log({ campaignSettings });
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
@@ -527,6 +529,9 @@ export function ThreeTierLanding({
 						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
+					{campaignSettings?.tickerSettings && (
+						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
+					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
