@@ -1370,6 +1370,7 @@ function CheckoutComponent({
 											}
 										}}
 										error={billingStateError}
+										optional={stripeExpressCheckoutPaymentType === 'google_pay'}
 									/>
 								)}
 							{countryId === 'US' && !productDescription.deliverableTo && (
