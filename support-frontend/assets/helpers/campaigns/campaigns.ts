@@ -48,11 +48,9 @@ const campaigns: Record<string, CampaignSettings> = {
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 			},
 		],
-		// Ticker settings for the US End of Year 2024 campaign
 		tickerSettings: {
 			currencySymbol: '$',
 			copy: {},
-			// tickerData: await getInitialTickerValues('US.json'),
 			tickerStylingSettings: {
 				headlineColour: '#000000',
 				totalColour: '#64B7C4',
