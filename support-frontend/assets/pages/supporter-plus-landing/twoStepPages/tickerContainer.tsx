@@ -8,7 +8,8 @@ import type { CampaignTickerSettings } from '../../../helpers/campaigns/campaign
 import { isCodeOrProd } from '../../../helpers/urls/url';
 
 const containerStyle = css`
-	margin-top: ${space[5]}px;
+	max-width: 600px;
+	margin: ${space[6]}px auto;
 `;
 
 function getTickerUrl(tickerId: string) {
