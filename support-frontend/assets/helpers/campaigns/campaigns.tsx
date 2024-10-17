@@ -55,20 +55,18 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 		],
 		copy: {
-      subheading: (
-        <>
-          We're not owned by a billionaire or shareholders - our readers support
-          us. Can you help us reach our goal? Regular giving is most valuable to
-          us. <strong>You can cancel anytime.</strong>
-        </>
-      ),
-      oneTimeHeading: <>Choose your gift amount</>,
-    },
-		// Ticker settings for the US End of Year 2024 campaign
+			subheading: (
+				<>
+					We're not owned by a billionaire or shareholders - our readers support
+					us. Can you help us reach our goal? Regular giving is most valuable to
+					us. <strong>You can cancel anytime.</strong>
+				</>
+			),
+			oneTimeHeading: <>Choose your gift amount</>,
+		},
 		tickerSettings: {
 			currencySymbol: '$',
 			copy: {},
-			// tickerData: await getInitialTickerValues('US.json'),
 			tickerStylingSettings: {
 				headlineColour: '#000000',
 				totalColour: '#64B7C4',
