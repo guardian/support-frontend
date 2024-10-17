@@ -10,7 +10,7 @@ case class AmountsSelection(
 )
 
 object AmountsSelection {
-  implicit val codec: Codec[AmountsSelection] = deriveCodec[AmountsSelection]
+  implicit val codec: Codec[AmountsSelection] = deriveCodec
 }
 
 case class ContributionAmounts(
@@ -20,7 +20,7 @@ case class ContributionAmounts(
 )
 
 object ContributionAmounts {
-  implicit val codec: Codec[ContributionAmounts] = deriveCodec[ContributionAmounts]
+  implicit val codec: Codec[ContributionAmounts] = deriveCodec
 }
 
 case class AmountsVariant(
@@ -31,7 +31,7 @@ case class AmountsVariant(
 )
 
 object AmountsVariant {
-  implicit val codec: Codec[AmountsVariant] = deriveCodec[AmountsVariant]
+  implicit val codec: Codec[AmountsVariant] = deriveCodec
 }
 
 sealed trait AmountsTestTargeting

@@ -26,7 +26,7 @@ case class FeatureSwitches(
 )
 
 object FeatureSwitches {
-  implicit val featureSwitchesCodec = deriveCodec[FeatureSwitches]
+  implicit val featureSwitchesCodec: Codec[FeatureSwitches] = deriveCodec
 }
 
 case class CampaignSwitches(
@@ -36,7 +36,7 @@ case class CampaignSwitches(
 )
 
 object CampaignSwitches {
-  implicit val campaignSwitchesCodec = deriveCodec[CampaignSwitches]
+  implicit val campaignSwitchesCodec: Codec[CampaignSwitches] = deriveCodec
 }
 
 case class SubscriptionsSwitches(
@@ -46,7 +46,7 @@ case class SubscriptionsSwitches(
 )
 
 object SubscriptionsSwitches {
-  implicit val subscriptionsSwitchesCodec = deriveCodec[SubscriptionsSwitches]
+  implicit val subscriptionsSwitchesCodec: Codec[SubscriptionsSwitches] = deriveCodec
 }
 
 case class RecaptchaSwitches(
@@ -55,7 +55,7 @@ case class RecaptchaSwitches(
 )
 
 object RecaptchaSwitches {
-  implicit val recaptchaSwitchesCodec = deriveCodec[RecaptchaSwitches]
+  implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
 }
 
 case class OneOffPaymentMethodSwitches(
@@ -69,7 +69,7 @@ case class OneOffPaymentMethodSwitches(
 )
 
 object OneOffPaymentMethodSwitches {
-  implicit val oneOffPaymentMethodSwitchesCodec = deriveCodec[OneOffPaymentMethodSwitches]
+  implicit val oneOffPaymentMethodSwitchesCodec: Codec[OneOffPaymentMethodSwitches] = deriveCodec
 }
 
 case class RecurringPaymentMethodSwitches(
@@ -85,7 +85,7 @@ case class RecurringPaymentMethodSwitches(
 )
 
 object RecurringPaymentMethodSwitches {
-  implicit val recurringPaymentMethodSwitchesCodec = deriveCodec[RecurringPaymentMethodSwitches]
+  implicit val recurringPaymentMethodSwitchesCodec: Codec[RecurringPaymentMethodSwitches] = deriveCodec
 }
 
 case class SubscriptionsPaymentMethodSwitches(
@@ -95,7 +95,7 @@ case class SubscriptionsPaymentMethodSwitches(
 )
 
 object SubscriptionsPaymentMethodSwitches {
-  implicit val subscriptionsPaymentMethodSwitchesCodec = deriveCodec[SubscriptionsPaymentMethodSwitches]
+  implicit val subscriptionsPaymentMethodSwitchesCodec: Codec[SubscriptionsPaymentMethodSwitches] = deriveCodec
 }
 
 case class Switches(
@@ -131,5 +131,5 @@ object Switches {
   private val switchesEncoder: Encoder[Switches] = deriveEncoder
   private val switchesDecoder: Decoder[Switches] = deriveDecoder[Switches].prepare(_.withFocus(flattenAllSwitches))
 
-  implicit val switchesCodec = new Codec(switchesEncoder, switchesDecoder)
+  implicit val switchesCodec: Codec[Switches] = new Codec(switchesEncoder, switchesDecoder)
 }

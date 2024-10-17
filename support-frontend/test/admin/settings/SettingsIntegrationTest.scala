@@ -8,6 +8,7 @@ import config.Configuration
 import org.apache.pekko.actor.ActorSystem
 import org.mockito.ArgumentMatchers.matches
 import org.mockito.Mockito.spy
+import org.scalatest.EitherValues
 import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -16,7 +17,7 @@ import play.api.libs.ws.WSClient
 import java.nio.file.{Files, Paths}
 import java.io.File
 @IntegrationTest
-class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLogging {
+class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLogging with EitherValues {
   "Settings" should "load successfully" in {
     implicit val s3Client: AwsS3Client = AwsS3Client
     implicit val actorSystem = ActorSystem("test")
@@ -39,7 +40,7 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
       case Right(_) => succeed
     }
 
-    maybeAllSettings.right.get.amounts.length shouldBe 10
+    maybeAllSettings.value.amounts.length shouldBe 10
 
   }
 }
