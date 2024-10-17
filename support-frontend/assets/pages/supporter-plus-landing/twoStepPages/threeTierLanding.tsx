@@ -520,9 +520,6 @@ export function ThreeTierLanding({
 			>
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
-					{campaignSettings?.tickerSettings && (
-						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
-					)}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
 						independent journalism
@@ -536,6 +533,9 @@ export function ThreeTierLanding({
 							</>
 						)}
 					</p>
+					{campaignSettings?.tickerSettings && (
+						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
+					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
