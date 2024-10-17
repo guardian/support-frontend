@@ -7,7 +7,6 @@ import com.gu.support.workers._
 import com.gu.support.workers.states.CreatePaymentMethodState
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
-import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.flatspec.AnyFlatSpec

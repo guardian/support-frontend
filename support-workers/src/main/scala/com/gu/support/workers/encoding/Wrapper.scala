@@ -6,7 +6,6 @@ import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.JsonWrapper
 import com.gu.support.workers.lambdas.HandlerResult
 import io.circe.Encoder
-import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 

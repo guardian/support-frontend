@@ -45,9 +45,6 @@ class AllSettingsProvider private (
 }
 
 object AllSettingsProvider {
-  import admin.settings.AmountsTests.amountsTestsDecoder
-  import admin.settings.ContributionTypes.contributionTypesDecoder
-
   def fromConfig(
       config: Configuration,
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
