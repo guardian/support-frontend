@@ -1,11 +1,6 @@
-import type {
-	TickerData,
-	TickerSettings,
-} from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
-import { fetchJson } from '../async/fetch';
+import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { UnitedStates } from '../internationalisation/countryGroup';
-import { isCodeOrProd } from '../urls/url';
 
 export type CountdownSetting = {
 	label: string;
@@ -24,28 +19,17 @@ interface CampaignCopy {
 	oneTimeHeading?: JSX.Element;
 }
 
+export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
+	id: string;
+};
+
 export type CampaignSettings = {
 	isEligible: (countryGroupId: CountryGroupId) => boolean;
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
-	tickerSettings: TickerSettings;
+	tickerSettings: CampaignTickerSettings;
 };
-
-// Function to fetch ticker data from the correct endpoint
-function getTickerUrl(tickerId: string) {
-	return isCodeOrProd() ? `/ticker/${tickerId}.json` : '/ticker.json';
-}
-
-async function getInitialTickerValues(tickerId: string): Promise<TickerData> {
-	const data = await fetchJson<TickerData>(getTickerUrl(tickerId), {});
-	const total = Math.floor(data.total);
-	const goal = Math.floor(data.goal);
-	return {
-		total,
-		goal,
-	};
-}
 
 // Campaign settings including ticker configuration
 const campaigns: Record<string, CampaignSettings> = {
@@ -83,9 +67,8 @@ const campaigns: Record<string, CampaignSettings> = {
 		// Ticker settings for the US End of Year 2024 campaign
 		tickerSettings: {
 			currencySymbol: '$',
-			copy: {
-			},
-			tickerData: await getInitialTickerValues('US.json'),
+			copy: {},
+			// tickerData: await getInitialTickerValues('US.json'),
 			tickerStylingSettings: {
 				headlineColour: '#000000',
 				totalColour: '#64B7C4',
@@ -94,6 +77,7 @@ const campaigns: Record<string, CampaignSettings> = {
 				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
 			},
 			size: 'large',
+			id: 'US',
 		},
 	},
 };
