@@ -84,7 +84,6 @@ const campaigns: Record<string, CampaignSettings> = {
 		tickerSettings: {
 			currencySymbol: '$',
 			copy: {
-				headline: ' ',
 			},
 			tickerData: await getInitialTickerValues('US.json'),
 			tickerStylingSettings: {
