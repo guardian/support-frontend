@@ -4,6 +4,7 @@ import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.JsonHelpers
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
+import com.gu.support.encoding.Codec
 
 sealed trait ContributionType
 case object ONE_OFF extends ContributionType
@@ -24,7 +25,7 @@ case object ContributionType {
 case class ContributionTypeSetting(contributionType: ContributionType, isDefault: Option[Boolean])
 
 object ContributionTypeSetting {
-  implicit val codec = deriveCodec[ContributionTypeSetting]
+  implicit val codec: Codec[ContributionTypeSetting] = deriveCodec[ContributionTypeSetting]
 }
 
 case class ContributionTypes(

@@ -24,7 +24,7 @@ class EmailServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with 
   behavior of "Email Service"
 
   trait EmailServiceTestFixture {
-    implicit val executionContextTest = DefaultThreadPool(ExecutionContext.global)
+    implicit val executionContextTest: DefaultThreadPool = DefaultThreadPool(ExecutionContext.global)
     val sqsClient = mock[AmazonSQSAsync]
     val getQueueUrlResult = mock[GetQueueUrlResult]
     when(getQueueUrlResult.getQueueUrl()).thenReturn("test-queue-name")

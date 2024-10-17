@@ -18,7 +18,7 @@ class PaypalServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with
 
   trait PaypalServiceTestFixture {
     val paypalConfig = PaypalConfig("clientIdTest", "clientSecretTest", "hookId", PaypalMode.Sandbox)
-    implicit val executionContextTest = PaypalThreadPool(ExecutionContext.global)
+    implicit val executionContextTest: PaypalThreadPool = PaypalThreadPool(ExecutionContext.global)
     val buildPaypalTransactions = PrivateMethod[java.util.List[Transaction]]('buildPaypalTransactions)
     val buildCaptureByTransaction = PrivateMethod[Capture]('buildCaptureByTransaction)
     val getTransaction = PrivateMethod[Either[PaypalApiError, Transaction]]('getTransaction)

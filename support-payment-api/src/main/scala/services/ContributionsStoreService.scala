@@ -55,7 +55,7 @@ object ContributionsStoreQueueService {
   case class RefundedPaymentId(paymentId: String) extends Message
 
   object Message {
-    private implicit val messageEncoder = Encoder[Message] { message =>
+    private implicit val messageEncoder: Encoder[Message] = Encoder[Message] { message =>
       Json.obj {
         message match {
           case NewContributionData(contributionData) =>

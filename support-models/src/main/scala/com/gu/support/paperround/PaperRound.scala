@@ -41,11 +41,11 @@ object AgentsEndpoint {
       email: String,
   )
   object AgentDetails {
-    implicit val config = DecoderConfiguration.lowercase
+    implicit val config: Configuration = DecoderConfiguration.lowercase
     implicit val agentDetailsDecoder: Decoder[AgentDetails] = deriveConfiguredDecoder
   }
 
-  implicit val config = DecoderConfiguration.snakeCase
+  implicit val config: Configuration = DecoderConfiguration.snakeCase
   implicit val responseDecoder: Decoder[Response] = deriveConfiguredDecoder
   implicit val agentsListDecoder: Decoder[AgentsList] = deriveConfiguredDecoder
 }
@@ -66,7 +66,7 @@ object ChargeBandsEndpoint {
       sunday: Double,
   )
 
-  implicit val config = DecoderConfiguration.snakeCase
+  implicit val config: Configuration = DecoderConfiguration.snakeCase
   implicit val responseDecoder: Decoder[Response] = deriveConfiguredDecoder
   implicit val deliveryChargeProfilesDecoder: Decoder[DeliveryChargeProfiles] = deriveConfiguredDecoder
   implicit val deliveryChargeProfileDecoder: Decoder[DeliveryChargeProfile] = Decoder.forProduct9(
@@ -121,7 +121,7 @@ object CoverageEndpoint {
       summary: String,
   )
   object AgentsCoverage {
-    implicit val config = DecoderConfiguration.lowercase
+    implicit val config: Configuration = DecoderConfiguration.lowercase
     implicit val decoder: Decoder[AgentsCoverage] = deriveConfiguredDecoder
   }
 
@@ -142,7 +142,7 @@ object CoverageEndpoint {
   /** Internal PaperRound system error. */
   case object IE extends CoverageStatus
 
-  implicit val config = DecoderConfiguration.snakeCase
+  implicit val config: Configuration = DecoderConfiguration.snakeCase
   implicit val responseDecoder: Decoder[Response] = deriveConfiguredDecoder
   implicit val postcodeCoverageDecoder: Decoder[PostcodeCoverage] = deriveConfiguredDecoder
   implicit val coverageStatusDecoder: Decoder[CoverageStatus] = deriveEnumerationDecoder
@@ -153,7 +153,7 @@ object ServerStatusEndpoint {
 
   case class Server(status: String)
 
-  implicit val config = DecoderConfiguration.snakeCase
+  implicit val config: Configuration = DecoderConfiguration.snakeCase
   implicit val responseDecoder: Decoder[Response] = deriveConfiguredDecoder
   implicit val serverDecoder: Decoder[Server] = deriveConfiguredDecoder
 }
@@ -162,7 +162,7 @@ object PaperRound {
   case class Error(statusCode: Integer, message: String, errorCode: ZonedDateTime)
       extends Throwable(s"Error(statusCode = $statusCode, message = $message, errorCode = $errorCode)")
   object Error {
-    implicit val config = DecoderConfiguration.snakeCase
+    implicit val config: Configuration = DecoderConfiguration.snakeCase
     implicit val errorDecoder: Decoder[Error] = deriveConfiguredDecoder
   }
 }
