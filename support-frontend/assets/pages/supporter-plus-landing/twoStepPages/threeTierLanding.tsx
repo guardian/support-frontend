@@ -12,7 +12,6 @@ import { Container } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-	Ticker,
 } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -58,6 +57,7 @@ import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -95,10 +95,6 @@ const innerContentContainer = css`
 	max-width: 940px;
 	margin: 0 auto;
 	text-align: center;
-`;
-
-const tickerContainer = css`
-	margin-top: ${space[5]}px;
 `;
 
 const heading = css`
@@ -295,8 +291,7 @@ export function ThreeTierLanding({
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
-
-  const enableTicker = campaignSettings?.tickerSettings;
+	console.log({ campaignSettings });
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
@@ -525,37 +520,8 @@ export function ThreeTierLanding({
 			>
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
-					{enableTicker && (
-						<div css={tickerContainer}>
-							<Ticker
-								currencySymbol={campaignSettings.tickerSettings.currencySymbol}
-								copy={{
-									headline: campaignSettings.tickerSettings.copy.headline,
-								}}
-								tickerData={{
-									total: campaignSettings.tickerSettings.tickerData.total,
-									goal: campaignSettings.tickerSettings.tickerData.goal,
-								}}
-								tickerStylingSettings={{
-									headlineColour:
-										campaignSettings.tickerSettings.tickerStylingSettings
-											.headlineColour,
-									totalColour:
-										campaignSettings.tickerSettings.tickerStylingSettings
-											.totalColour,
-									goalColour:
-										campaignSettings.tickerSettings.tickerStylingSettings
-											.goalColour,
-									filledProgressColour:
-										campaignSettings.tickerSettings.tickerStylingSettings
-											.filledProgressColour,
-									progressBarBackgroundColour:
-										campaignSettings.tickerSettings.tickerStylingSettings
-											.progressBarBackgroundColour,
-								}}
-								size={campaignSettings.tickerSettings.size}
-							/>
-						</div>
+					{campaignSettings?.tickerSettings && (
+						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
 					)}
 					<h1 css={heading}>
 						Support fearless, <br css={tabletLineBreak} />
