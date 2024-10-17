@@ -580,7 +580,9 @@ export function ThreeTierLanding({
 					<div css={supportAnotherWay}>
 						<h4>Support another way</h4>
 						<p>
-						If you are interested in contributing through a donor-advised fund, foundation or retirement account, or by mailing a check, <br />
+							If you are interested in contributing through a donor-advised
+							fund, foundation or retirement account, or by mailing a check,{' '}
+							<br />
 							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
