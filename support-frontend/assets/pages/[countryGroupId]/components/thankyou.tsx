@@ -154,6 +154,7 @@ export function ThankYouComponent({
 			contributionType,
 			currencyKey,
 			paymentMethod,
+			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
