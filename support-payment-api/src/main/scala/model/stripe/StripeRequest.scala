@@ -169,6 +169,6 @@ object StripePaymentIntentRequest {
   ) extends StripeRequest
 
   import controllers.JsonReadableOps._
-  implicit val createPaymentIntentDecoder = deriveDecoder[CreatePaymentIntent]
-  implicit val confirmPaymentIntent = deriveDecoder[ConfirmPaymentIntent]
+  implicit val createPaymentIntentDecoder: Decoder[CreatePaymentIntent] = deriveDecoder[CreatePaymentIntent]
+  implicit val confirmPaymentIntent: Decoder[ConfirmPaymentIntent] = deriveDecoder[ConfirmPaymentIntent]
 }
