@@ -31,7 +31,6 @@ export type CampaignSettings = {
 	tickerSettings: CampaignTickerSettings;
 };
 
-// Campaign settings including ticker configuration
 const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>

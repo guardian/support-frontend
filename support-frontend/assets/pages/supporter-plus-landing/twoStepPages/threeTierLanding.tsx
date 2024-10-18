@@ -291,7 +291,6 @@ export function ThreeTierLanding({
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
-	console.log({ campaignSettings });
 
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
