@@ -56,7 +56,7 @@ object AcquisitionDataRow {
   implicit val encodeDateTime: Encoder[DateTime] =
     Encoder.encodeString.contramap[DateTime](dt => ISODateTimeFormat.dateTime().print(dt))
 
-  implicit val codec = deriveCodec[AcquisitionDataRow]
+  implicit val codec: Codec[AcquisitionDataRow] = deriveCodec[AcquisitionDataRow]
 }
 
 case class PrintOptions(

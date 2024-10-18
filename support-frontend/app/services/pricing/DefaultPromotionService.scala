@@ -4,7 +4,6 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
 import com.gu.support.config.{Stage, Stages}
 import io.circe._
 import io.circe.parser._
-import io.circe.generic.auto._
 import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
@@ -12,6 +11,7 @@ import com.gu.aws.AwsS3Client.S3Location
 import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus, TierThree}
 import com.gu.support.config.Stages.CODE
 import com.typesafe.scalalogging.LazyLogging
+import io.circe.generic.semiauto.deriveDecoder
 import services.pricing.DefaultPromotionService.DefaultPromotions
 
 import java.util.concurrent.atomic.AtomicReference
@@ -32,7 +32,7 @@ object DefaultPromotionService {
       tierThree: List[String],
   )
 
-  implicit val decoder = Decoder[DefaultPromotions]
+  implicit val decoder: Decoder[DefaultPromotions] = deriveDecoder
 }
 
 class DefaultPromotionServiceS3(

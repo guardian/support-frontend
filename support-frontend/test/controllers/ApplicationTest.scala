@@ -28,7 +28,7 @@ import scala.concurrent.duration._
 
 class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents with EitherValues {
 
-  implicit val timeout = Timeout(2.seconds)
+  implicit val timeout: Timeout = Timeout(2.seconds)
   val stage = Stages.DEV
 
   val actionRefiner = new CustomActionBuilders(

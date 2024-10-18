@@ -136,21 +136,18 @@ const getPaperFulfilmentOption = (
 		: fulfilmentOption;
 };
 
-const getPromoCode = (promotions?: Promotion[]) => {
-	const promotion = getAppliedPromo(promotions);
-	return promotion ? promotion.promoCode : null;
-};
-
 const getAppliedPromotion = (
-	promoCode: string | null,
 	supportInternationalisationId: SupportInternationalisationId,
-) =>
-	promoCode !== null
+	promotions?: Promotion[],
+) => {
+	const promotion = getAppliedPromo(promotions);
+	return promotion?.promoCode !== undefined
 		? {
-				promoCode,
+				promoCode: promotion.promoCode,
 				countryGroupId: supportInternationalisationId,
 		  }
 		: undefined;
+};
 
 function getGiftRecipient(giftingState: GiftingState) {
 	const { title, firstName, lastName, email, giftMessage, giftDeliveryDate } =
@@ -207,12 +204,11 @@ function buildRegularPaymentRequest(
 		state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
-	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	const appliedPromotion = getAppliedPromotion(
-		promoCode,
 		countryGroups[state.common.internationalisation.countryGroupId]
 			.supportInternationalisationId,
+		promotions,
 	);
 
 	return {
@@ -232,7 +228,6 @@ function buildRegularPaymentRequest(
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
-		promoCode,
 		appliedPromotion,
 		deliveryInstructions,
 		csrUsername,
@@ -285,7 +280,7 @@ function onPaymentAuthorised(
 
 			const printPriceDiscounted = getPrintDiscountedPrice(
 				productPrice,
-				data.promoCode,
+				data.appliedPromotion?.promoCode,
 			);
 			const { currencyId } = state.common.internationalisation;
 

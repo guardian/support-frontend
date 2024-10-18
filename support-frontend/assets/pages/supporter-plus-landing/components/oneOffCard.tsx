@@ -65,6 +65,7 @@ interface Props {
 	currencyGlyph: string;
 	countryGroupId: CountryGroupId;
 	currencyId: IsoCurrency;
+	heading: JSX.Element | undefined;
 }
 
 export function OneOffCard({
@@ -72,6 +73,7 @@ export function OneOffCard({
 	countryGroupId,
 	amounts,
 	currencyId,
+	heading,
 }: Props) {
 	const oneOffAmounts = amounts.amountsCardData.ONE_OFF;
 	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
@@ -87,7 +89,7 @@ export function OneOffCard({
 					${textSans15}
 				`}
 			>
-				<h2 css={titleStyle}>Support just once</h2>
+				<h2 css={titleStyle}>{heading ?? 'Support just once'}</h2>
 				<p css={standFirst}>
 					We welcome support of any size, any time, whether you choose to give{' '}
 					{currencyGlyph}1 or much more.
