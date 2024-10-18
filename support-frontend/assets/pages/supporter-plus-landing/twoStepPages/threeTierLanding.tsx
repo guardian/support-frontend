@@ -57,6 +57,7 @@ import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -531,6 +532,9 @@ export function ThreeTierLanding({
 							</>
 						)}
 					</p>
+					{campaignSettings?.tickerSettings && (
+						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
+					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
