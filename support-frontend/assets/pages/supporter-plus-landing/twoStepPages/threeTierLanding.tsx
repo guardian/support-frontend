@@ -523,9 +523,13 @@ export function ThreeTierLanding({
 						independent journalism
 					</h1>
 					<p css={standFirst}>
-						We're not owned by a billionaire or shareholders - our readers
-						support us. Choose to join with one of the options below.{' '}
-						<strong>Cancel anytime.</strong>
+						{campaignSettings?.copy.subheading ?? (
+							<>
+								We're not owned by a billionaire or shareholders - our readers
+								support us. Choose to join with one of the options below.{' '}
+								<strong>Cancel anytime.</strong>
+							</>
+						)}
 					</p>
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
@@ -544,6 +548,7 @@ export function ThreeTierLanding({
 							currencyGlyph={currencies[currencyId].glyph}
 							countryGroupId={countryGroupId}
 							currencyId={currencyId}
+							heading={campaignSettings?.copy.oneTimeHeading}
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (

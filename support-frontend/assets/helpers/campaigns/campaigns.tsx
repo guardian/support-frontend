@@ -13,10 +13,16 @@ export type CountdownSetting = {
 	//};
 };
 
+interface CampaignCopy {
+	subheading?: JSX.Element;
+	oneTimeHeading?: JSX.Element;
+}
+
 export type CampaignSettings = {
 	isEligible: (countryGroupId: CountryGroupId) => boolean;
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
+	copy: CampaignCopy;
 };
 
 const campaigns: Record<string, CampaignSettings> = {
@@ -46,6 +52,16 @@ const campaigns: Record<string, CampaignSettings> = {
 			// 	countdownDeadlineInMillis: Date.parse('Sep 06, 2024 00:00:00'),
 			// },
 		],
+		copy: {
+			subheading: (
+				<>
+					We're not owned by a billionaire or shareholders - our readers support
+					us. Can you help us reach our goal? Regular giving is most valuable to
+					us. <strong>You can cancel anytime.</strong>
+				</>
+			),
+			oneTimeHeading: <>Choose your gift amount</>,
+		},
 	},
 };
 
