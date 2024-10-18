@@ -150,7 +150,7 @@ export function ThankYouComponent({
 				: order.paymentMethod;
 
 		successfulContributionConversion(
-			payment.originalAmount,
+			payment.finalAmount, // This is the final amount after discounts
 			contributionType,
 			currencyKey,
 			paymentMethod,
@@ -158,7 +158,7 @@ export function ThankYouComponent({
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
-			payment.originalAmount,
+			payment.originalAmount, // This is the amount before discounts
 			contributionType,
 			currencyKey,
 		);
