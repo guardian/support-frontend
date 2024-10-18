@@ -23,7 +23,7 @@ object SetGuestPasswordResponseCookie {
 case class SetGuestPasswordResponseCookies(expiresAt: DateTime, values: List[SetGuestPasswordResponseCookie])
 
 object SetGuestPasswordResponseCookies {
-  implicit val jodaDateReads =
+  implicit val jodaDateReads: Reads[DateTime] =
     Reads[DateTime](js => js.validate[String].map[DateTime](dtString => DateTime.parse(dtString)))
   implicit val readsCookieResponse: Reads[SetGuestPasswordResponseCookie] = Json.reads[SetGuestPasswordResponseCookie]
   implicit val readsCookiesResponse: Reads[SetGuestPasswordResponseCookies] =

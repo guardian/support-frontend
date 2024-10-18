@@ -55,12 +55,7 @@ object ContributionsStoreQueueService {
   case class RefundedPaymentId(paymentId: String) extends Message
 
   object Message {
-    private implicit val messageEncoder = Encoder[Message] { message =>
-      import io.circe.generic.auto._
-
-      // copied from earlier version of circe-core to prevent seconds appearing in the serialised form
-      implicit val encodeLocalDateTime: Encoder[LocalDateTime] = (a: LocalDateTime) => Json.fromString(a.toString)
-
+    private implicit val messageEncoder: Encoder[Message] = Encoder[Message] { message =>
       Json.obj {
         message match {
           case NewContributionData(contributionData) =>

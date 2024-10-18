@@ -1,0 +1,86 @@
+{
+  "GBPCountries" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "UnitedStates" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "EURCountries" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "International" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "Canada" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "AUDCountries" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ],
+  "NZDCountries" : [
+    {
+      "contributionType" : "ONE_OFF"
+    },
+    {
+      "contributionType" : "MONTHLY",
+      "isDefault" : true
+    },
+    {
+      "contributionType" : "ANNUAL"
+    }
+  ]
+}

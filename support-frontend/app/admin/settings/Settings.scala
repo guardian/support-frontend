@@ -1,5 +1,7 @@
 package admin.settings
 
+import admin.settings.AmountsTests.AmountsTests
+
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 import cats.implicits._
@@ -16,7 +18,6 @@ import io.circe.{Decoder, Encoder}
 import scala.io.Source
 import scala.util.Try
 
-import AmountsTests._ // intellij doesn't think this is needed, but it is
 import com.gu.aws.AwsS3Client.S3Location
 
 case class AllSettings(
@@ -27,8 +28,6 @@ case class AllSettings(
 )
 
 object AllSettings {
-  import ContributionTypes._
-
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
   implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)
   implicit val allSettingsCodec: Codec[AllSettings] = deriveCodec[AllSettings]

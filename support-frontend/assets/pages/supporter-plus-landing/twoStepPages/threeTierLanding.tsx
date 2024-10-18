@@ -57,6 +57,7 @@ import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { TickerContainer } from './tickerContainer';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -523,10 +524,17 @@ export function ThreeTierLanding({
 						independent journalism
 					</h1>
 					<p css={standFirst}>
-						We're not owned by a billionaire or shareholders - our readers
-						support us. Choose to join with one of the options below.{' '}
-						<strong>Cancel anytime.</strong>
+						{campaignSettings?.copy.subheading ?? (
+							<>
+								We're not owned by a billionaire or shareholders - our readers
+								support us. Choose to join with one of the options below.{' '}
+								<strong>Cancel anytime.</strong>
+							</>
+						)}
 					</p>
+					{campaignSettings?.tickerSettings && (
+						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
+					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
@@ -544,6 +552,7 @@ export function ThreeTierLanding({
 							currencyGlyph={currencies[currencyId].glyph}
 							countryGroupId={countryGroupId}
 							currencyId={currencyId}
+							heading={campaignSettings?.copy.oneTimeHeading}
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (
@@ -580,13 +589,14 @@ export function ThreeTierLanding({
 					<div css={supportAnotherWay}>
 						<h4>Support another way</h4>
 						<p>
-							To learn more about other ways to support the Guardian, including
-							checks and tax-exempt options, <br />
+							If you are interested in contributing through a donor-advised
+							fund, foundation or retirement account, or by mailing a check,{' '}
+							<br />
 							please visit our{' '}
 							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
 								help page
 							</a>{' '}
-							on this topic.
+							to learn how.
 						</p>
 					</div>
 				</Container>
