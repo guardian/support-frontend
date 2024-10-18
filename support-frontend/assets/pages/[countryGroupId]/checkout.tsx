@@ -719,6 +719,9 @@ function CheckoutComponent({
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const supportAbTests = getSupportAbTests(abParticipations);
 
+	const useLinkExpressCheckout =
+		abParticipations.linkExpressCheckout === 'variant';
+
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -1196,7 +1199,7 @@ function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: 'auto',
+											link: useLinkExpressCheckout ? 'auto' : 'never',
 										},
 									}}
 								/>
