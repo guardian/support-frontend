@@ -1,8 +1,9 @@
-@import admin.settings.AllSettings
-@import assets.AssetsResolver
+@import views.{EmptyDiv, ReactDiv, SSRContent}
+
 @(
   title: String,
-)(body: Html = Html(""))()
+  mainElement: ReactDiv,
+)()
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +17,20 @@
 
   </head>
   <body class="header-tweaks">
-    @body
+    @emptyDiv(id: EmptyDiv) = {
+      <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
+    }
+
+    @withContent(ssrContent: SSRContent) = {
+      <div
+      class="gu-render-to"
+      data-not-hydrated="true"
+      id="@ssrContent.value"
+      >
+      @ssrContent.content
+      </div>
+    }
+    @mainElement.fold(emptyDiv, withContent)
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
   </body>
 </html>

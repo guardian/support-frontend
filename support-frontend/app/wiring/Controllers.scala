@@ -22,7 +22,7 @@ trait Controllers {
   def errorController: ErrorController
 
   lazy val newspaperArchiveController =
-    new NewspaperArchiveController(actionBuilders)
+    new NewspaperArchiveController(actionBuilders, assetsResolver)
 
   lazy val applicationController = new Application(
     actionBuilders,
