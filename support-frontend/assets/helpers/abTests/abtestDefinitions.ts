@@ -13,8 +13,6 @@ export const pageUrlRegexes = {
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
-		landingPageOnly: '/(uk|us|au|eu|int|nz|ca)/contribute$',
-		ukCheckout: '/uk/checkout$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -172,25 +170,5 @@ export const tests: Tests = {
 		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
-	},
-	landingPageOnlyTest: {
-		variants: [
-			// not really an AB test
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 6,
-		targetPage: pageUrlRegexes.contributions.landingPageOnly,
-		persistPage: pageUrlRegexes.contributions.ukCheckout,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 };
