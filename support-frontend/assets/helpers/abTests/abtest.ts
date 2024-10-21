@@ -102,6 +102,7 @@ type ABtestInitalizerData = {
 	abTests?: Tests;
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
+	path?: string;
 };
 
 function init({
@@ -111,6 +112,7 @@ function init({
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
+	path = window.location.pathname,
 }: ABtestInitalizerData): Participations {
 	const sessionParticipations = getParticipationsFromSession();
 	const participations = getParticipations(
@@ -118,6 +120,7 @@ function init({
 		mvt,
 		countryId,
 		countryGroupId,
+		path,
 		acquisitionDataTests,
 		selectedAmountsVariant,
 		sessionParticipations,
@@ -160,6 +163,7 @@ function getParticipations(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
+	path: string,
 	acquisitionDataTests?: AcquisitionABTest[],
 	selectedAmountsVariant?: SelectedAmountsVariant,
 	sessionParticipations: Participations = {},
@@ -180,19 +184,15 @@ function getParticipations(
 		}
 
 		// Is the user already in this test in the current browser session?
-    console.log('pathname', window.location.pathname)
-    console.log('target', test.targetPage)
-    console.log('persist', test.persistPage)
-    console.log('window.sessionStorage', window.sessionStorage.getItem('abParticipations'))
 		if (
 			!!sessionParticipations[testId] &&
-			targetPageMatches(window.location.pathname, test.persistPage)
+			targetPageMatches(path, test.persistPage)
 		) {
 			participations[testId] = sessionParticipations[testId];
 			return;
 		}
 
-		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
+		if (!targetPageMatches(path, test.targetPage)) {
 			return;
 		}
 
