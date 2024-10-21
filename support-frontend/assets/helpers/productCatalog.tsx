@@ -354,8 +354,9 @@ export const productCatalogDescriptionNewBenefits: Record<
 		benefits: [
 			...productCatalogDescription.TierThree.benefits,
 			{
-				copy: 'Newspaper archive',
+				copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
 				isNew: true,
+				tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
 			},
 		],
 	},
