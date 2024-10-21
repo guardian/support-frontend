@@ -270,6 +270,7 @@ function getParticipationsFromSession(): Participations | undefined {
 			return undefined;
 		}
 	}
+	return undefined;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
