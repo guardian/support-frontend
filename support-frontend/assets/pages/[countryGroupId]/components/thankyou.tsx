@@ -214,7 +214,10 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
+		...maybeThankYouModule(
+			isNewAccount && !showNewspaperArchiveBenefit,
+			'signUp',
+		), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
