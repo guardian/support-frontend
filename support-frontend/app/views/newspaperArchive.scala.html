@@ -2,7 +2,7 @@
 
 @(
   title: String,
-  mainElement: ReactDiv,
+  html: Html,
 )()
 
 <!DOCTYPE html>
@@ -17,20 +17,7 @@
 
   </head>
   <body class="header-tweaks">
-    @emptyDiv(id: EmptyDiv) = {
-      <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
-    }
-
-    @withContent(ssrContent: SSRContent) = {
-      <div
-      class="gu-render-to"
-      data-not-hydrated="true"
-      id="@ssrContent.value"
-      >
-      @ssrContent.content
-      </div>
-    }
-    @mainElement.fold(emptyDiv, withContent)
+    @html
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
   </body>
 </html>
