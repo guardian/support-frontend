@@ -9,10 +9,7 @@ export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages:
 			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
-		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
-		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
-		auLandingPage: '/au/contribute(/.*)?$',
-		usLandingPage: '/us/contribute(/.*)?$',
+		usLandingPageOnly: '/us/contribute$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -169,6 +166,29 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+	},
+	landingPageOneTimeTab2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'oneTimeTab',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
+		// Track this landing page test through to the checkout
+		persistPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
 };
