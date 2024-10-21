@@ -80,7 +80,7 @@ class AmazonPayControllerFixture(implicit ec: ExecutionContext, context: Applica
 
 class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
 
-  implicit val actorSystem = ActorSystem("rest-server")
+  implicit val actorSystem: ActorSystem = ActorSystem("rest-server")
   implicit val materializer: Materializer = ActorMaterializer()
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 

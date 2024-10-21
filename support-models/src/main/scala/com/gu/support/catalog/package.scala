@@ -1,7 +1,5 @@
 package com.gu.support
 
-import io.circe.generic.auto._
-
 package object catalog {
 
   // The rate plan for a particular product

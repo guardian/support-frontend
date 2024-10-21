@@ -6,7 +6,7 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stages.CODE
-import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventPrintJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventGWJson, sendAcquisitionEventPrintJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
@@ -20,8 +20,12 @@ import scala.concurrent.Future
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
-  "SendAcquisitionEvent" should "work with print input" taggedAs IntegrationTest in {
+  "SendAcquisitionEvent" should "work with print Stripe input" taggedAs IntegrationTest in {
     sendEvent(sendAcquisitionEventPrintJson)
+  }
+
+  "SendAcquisitionEvent" should "work with GW PayPal input" taggedAs IntegrationTest in {
+    sendEvent(sendAcquisitionEventGWJson)
   }
 
   private def sendEvent(json: String) = {

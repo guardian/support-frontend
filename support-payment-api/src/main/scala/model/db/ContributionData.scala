@@ -3,12 +3,13 @@ package model.db
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId, ZoneOffset}
 import java.util.UUID
-
 import cats.implicits._
 import com.amazon.pay.response.model.AuthorizationDetails
 import com.paypal.api.payments.Payment
 import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
+import io.circe.{Encoder, Json}
+import io.circe.generic.semiauto.deriveEncoder
 import model.PaymentProvider.AmazonPay
 import model.acquisition.StripeCharge
 import model.paypal.PaypalApiError
@@ -34,6 +35,9 @@ case class ContributionData private (
 )
 
 object ContributionData extends StrictLogging {
+  // copied from earlier version of circe-core to prevent seconds appearing in the serialised form
+  implicit val encodeLocalDateTime: Encoder[LocalDateTime] = (a: LocalDateTime) => Json.fromString(a.toString)
+  implicit val encoder: Encoder[ContributionData] = deriveEncoder
 
   private def paypalDateToLocalDateTime(dateTime: String): LocalDateTime = {
     // -- paypal date example 2018-02-22T11:51:00Z -> DateTimeFormatter.ISO_INSTANT

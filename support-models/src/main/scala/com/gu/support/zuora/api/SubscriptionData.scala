@@ -9,6 +9,7 @@ import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
+import com.gu.support.workers.AppliedPromotion
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json, parser}
@@ -126,9 +127,11 @@ object ReaderType {
     val value = "Unknown"
   }
 
-  def impliedByPromoCode(promoCode: PromoCode): Option[ReaderType] = Option.when(promoCode.endsWith("PATRON"))(Patron)
+  def impliedByAppliedPromotion(promotion: AppliedPromotion): Option[ReaderType] =
+    Option.when(promotion.promoCode.endsWith("PATRON"))(Patron)
 
-  def impliedBySomePromoCode(promoCode: Option[PromoCode]): Option[ReaderType] = promoCode.flatMap(impliedByPromoCode)
+  def impliedBySomeAppliedPromotion(maybePromotion: Option[AppliedPromotion]): Option[ReaderType] =
+    maybePromotion.flatMap(impliedByAppliedPromotion)
 
   def fromString(s: String): ReaderType =
     s match {

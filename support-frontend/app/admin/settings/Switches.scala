@@ -1,19 +1,22 @@
 package admin.settings
 
 import com.gu.support.encoding.Codec
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
+import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.optics.JsonPath.root
 import io.circe.{Decoder, Encoder, Json}
-import io.circe.optics.JsonPath._
 
 sealed abstract class SwitchState(val isOn: Boolean)
 case object On extends SwitchState(true)
 case object Off extends SwitchState(false)
 
 object SwitchState {
-  import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
-  implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
-  implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
+  implicit val encodeSwitch: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState] { state =>
+    if (state.isOn) "On" else "Off"
+  }
+  implicit val decodeSwitch: Decoder[SwitchState] = Decoder.decodeString.emap { value =>
+    if (value == "On") Right(On) else Right(Off)
+  }
 }
 
 case class FeatureSwitches(
@@ -22,11 +25,19 @@ case class FeatureSwitches(
     authenticateWithOkta: Option[SwitchState],
 )
 
+object FeatureSwitches {
+  implicit val featureSwitchesCodec: Codec[FeatureSwitches] = deriveCodec
+}
+
 case class CampaignSwitches(
     enableContributionsCampaign: Option[SwitchState],
     forceContributionsCampaign: Option[SwitchState],
     usEoy2024: Option[SwitchState] = None,
 )
+
+object CampaignSwitches {
+  implicit val campaignSwitchesCodec: Codec[CampaignSwitches] = deriveCodec
+}
 
 case class SubscriptionsSwitches(
     enableDigitalSubGifting: Option[SwitchState],
@@ -34,10 +45,18 @@ case class SubscriptionsSwitches(
     checkoutPostcodeLookup: Option[SwitchState],
 )
 
+object SubscriptionsSwitches {
+  implicit val subscriptionsSwitchesCodec: Codec[SubscriptionsSwitches] = deriveCodec
+}
+
 case class RecaptchaSwitches(
     enableRecaptchaBackend: Option[SwitchState],
     enableRecaptchaFrontend: Option[SwitchState],
 )
+
+object RecaptchaSwitches {
+  implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
+}
 
 case class OneOffPaymentMethodSwitches(
     stripe: Option[SwitchState],
@@ -48,6 +67,10 @@ case class OneOffPaymentMethodSwitches(
     payPal: Option[SwitchState],
     amazonPay: Option[SwitchState],
 )
+
+object OneOffPaymentMethodSwitches {
+  implicit val oneOffPaymentMethodSwitchesCodec: Codec[OneOffPaymentMethodSwitches] = deriveCodec
+}
 
 case class RecurringPaymentMethodSwitches(
     stripe: Option[SwitchState],
@@ -61,11 +84,19 @@ case class RecurringPaymentMethodSwitches(
     sepa: Option[SwitchState],
 )
 
+object RecurringPaymentMethodSwitches {
+  implicit val recurringPaymentMethodSwitchesCodec: Codec[RecurringPaymentMethodSwitches] = deriveCodec
+}
+
 case class SubscriptionsPaymentMethodSwitches(
     directDebit: Option[SwitchState],
     creditCard: Option[SwitchState],
     paypal: Option[SwitchState],
 )
+
+object SubscriptionsPaymentMethodSwitches {
+  implicit val subscriptionsPaymentMethodSwitchesCodec: Codec[SubscriptionsPaymentMethodSwitches] = deriveCodec
+}
 
 case class Switches(
     oneOffPaymentMethods: OneOffPaymentMethodSwitches,
@@ -97,10 +128,8 @@ object Switches {
         .getOrElse(switchGroup)
     }
 
-  implicit private val customConfig: Configuration = Configuration.default.withDefaults
+  private val switchesEncoder: Encoder[Switches] = deriveEncoder
+  private val switchesDecoder: Decoder[Switches] = deriveDecoder[Switches].prepare(_.withFocus(flattenAllSwitches))
 
-  private val switchesEncoder = Encoder[Switches]
-  private val switchesDecoder = Decoder[Switches].prepare(_.withFocus(flattenAllSwitches))
-
-  implicit val switchesCodec = new Codec(switchesEncoder, switchesDecoder)
+  implicit val switchesCodec: Codec[Switches] = new Codec(switchesEncoder, switchesDecoder)
 }

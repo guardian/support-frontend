@@ -88,7 +88,17 @@ case class ClonedDirectDebitPaymentMethod(
 ) extends PaymentMethod
 
 case class GatewayOption(name: String, value: String)
+
+object GatewayOption {
+  implicit val codec: Codec[GatewayOption] = deriveCodec
+}
+
 case class GatewayOptionData(GatewayOption: List[GatewayOption])
+
+object GatewayOptionData {
+  implicit val codec: Codec[GatewayOptionData] = deriveCodec
+}
+
 case class SepaPaymentMethod(
     BankTransferAccountName: String,
     BankTransferAccountNumber: String,
@@ -109,7 +119,6 @@ case class AmazonPayPaymentMethod(
 ) extends PaymentMethod
 
 object PaymentMethod {
-  import io.circe.generic.auto._
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
   implicit val creditCardReferenceTransactionCodec: Codec[CreditCardReferenceTransaction] = deriveCodec

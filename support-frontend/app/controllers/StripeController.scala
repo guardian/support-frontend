@@ -42,7 +42,6 @@ class StripeController(
   import cats.data.EitherT
   import cats.implicits._
   import io.circe.syntax._
-  import services.SetupIntent.encoder
 
   def createSetupIntentRecaptcha: Action[SetupIntentRequestRecaptcha] =
     PrivateAction.async(circe.json[SetupIntentRequestRecaptcha]) { implicit request =>
