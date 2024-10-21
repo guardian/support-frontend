@@ -344,36 +344,39 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		},
 	};
 
-export const productCatalogDescriptionNewBenefits: Record<
-	ProductKey,
-	ProductDescription
-> = {
-	...productCatalogDescription,
-	TierThree: {
-		...productCatalogDescription.TierThree,
-		benefits: [
-			...productCatalogDescription.TierThree.benefits,
-			{
-				copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-				isNew: true,
-				tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
-			},
-		],
-	},
-	SupporterPlus: {
-		...productCatalogDescription.SupporterPlus,
-		benefits: [
-			...productCatalogDescription.SupporterPlus.benefits,
-			{
-				copy: 'Unlimited access to the Guardian Feast App',
-				isNew: true,
-				tooltip:
-					'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
-			},
-		],
-		offers: [],
-	},
-};
+export function productCatalogDescriptionNewBenefits(
+	countryGroupId: CountryGroupId,
+): Record<ProductKey, ProductDescription> {
+	return {
+		...productCatalogDescription,
+		TierThree: {
+			...productCatalogDescription.TierThree,
+			benefits: [
+				...productCatalogDescription.TierThree.benefits,
+				{
+					copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+					isNew: true,
+					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed ${
+						countryGroupId === 'GBPCountries' ? '' : ' in the UK'
+					}, since 1821.`,
+				},
+			],
+		},
+		SupporterPlus: {
+			...productCatalogDescription.SupporterPlus,
+			benefits: [
+				...productCatalogDescription.SupporterPlus.benefits,
+				{
+					copy: 'Unlimited access to the Guardian Feast App',
+					isNew: true,
+					tooltip:
+						'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+				},
+			],
+			offers: [],
+		},
+	};
+}
 
 /**
  * This method is to help us determine which product and rateplan to

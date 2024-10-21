@@ -352,7 +352,7 @@ export function ThreeTierLanding({
 	const productCatalogDescription = ['v1', 'v2'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	)
-		? productCatalogDescriptionNewBenefits
+		? productCatalogDescriptionNewBenefits(countryGroupId)
 		: canonicalProductCatalogDescription;
 
 	/**
