@@ -190,7 +190,7 @@ export function SupporterPlusThankYou({
 				contributionType,
 				currencyId,
 				paymentMethod,
-				isSupporterPlus ? 'SupporterPlus' : 'Contribution',
+				'SupporterPlus',
 			);
 			// track conversion with QM
 			sendEventContributionCheckoutConversion(
