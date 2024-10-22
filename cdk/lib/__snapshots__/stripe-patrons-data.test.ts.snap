@@ -63,7 +63,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -113,24 +113,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
               "Stat": "SampleCount",
             },
             "ReturnData": false,
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
           },
         ],
         "Threshold": 1,
@@ -595,9 +577,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionName": "stripe-patrons-data-PROD",
         "Handler": "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
-        "LoggingConfig": {
-          "LogFormat": "JSON",
-        },
         "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
@@ -642,7 +621,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "StripePatronsDataPRODCurrentVersion700541B4b1d2d8a58d99ba71fb5ad59d50569516",
+            "StripePatronsDataPRODCurrentVersion700541B465621c82ee6833a6ab679e7e10d9ad5e",
             "Version",
           ],
         },
@@ -650,7 +629,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "StripePatronsDataPRODCurrentVersion700541B4b1d2d8a58d99ba71fb5ad59d50569516": {
+    "StripePatronsDataPRODCurrentVersion700541B465621c82ee6833a6ab679e7e10d9ad5e": {
       "Properties": {
         "FunctionName": {
           "Ref": "StripePatronsDataPROD61F45521",
@@ -674,7 +653,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -738,24 +717,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
               "Stat": "Sum",
             },
             "ReturnData": false,
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
           },
         ],
         "Threshold": 1,
@@ -1000,9 +961,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionName": "stripe-patrons-data-cancelled-PROD",
         "Handler": "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
-        "LoggingConfig": {
-          "LogFormat": "JSON",
-        },
         "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
@@ -1047,7 +1005,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatacancelledCurrentVersion23EC801Ebaa302193dd1e54115b09f3ea1a6bcc7",
+            "stripepatronsdatacancelledCurrentVersion23EC801Eb15ada947f2b1c050fce4ce19ae71fa6",
             "Version",
           ],
         },
@@ -1055,7 +1013,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatacancelledCurrentVersion23EC801Ebaa302193dd1e54115b09f3ea1a6bcc7": {
+    "stripepatronsdatacancelledCurrentVersion23EC801Eb15ada947f2b1c050fce4ce19ae71fa6": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatacancelled2E3CED96",
@@ -1269,9 +1227,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionName": "stripe-patrons-data-sign-up-PROD",
         "Handler": "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
-        "LoggingConfig": {
-          "LogFormat": "JSON",
-        },
         "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
@@ -1316,7 +1271,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatasignupCurrentVersionCB0F0BAAc41971ff7e0c47681d13f4df990e0037",
+            "stripepatronsdatasignupCurrentVersionCB0F0BAAed955197ca6426d2357b69ebab143a5f",
             "Version",
           ],
         },
@@ -1324,7 +1279,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatasignupCurrentVersionCB0F0BAAc41971ff7e0c47681d13f4df990e0037": {
+    "stripepatronsdatasignupCurrentVersionCB0F0BAAed955197ca6426d2357b69ebab143a5f": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatasignup4E7F0A3F",

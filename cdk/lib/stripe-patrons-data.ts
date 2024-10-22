@@ -73,7 +73,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
         return {
           alarmName: `${appName}-${stage}-ErrorAlarm`,
           alarmDescription: `Triggers if there are errors from ${appName} on ${stage}`,
-          snsTopicName: "reader-revenue-dev",
+          snsTopicName: `alarms-handler-topic-${stage}`,
           toleratedErrorPercentage: 1,
           lengthOfEvaluationPeriod: Duration.minutes(1),
           numberOfEvaluationPeriodsAboveThresholdBeforeAlarm: 46,
@@ -185,7 +185,7 @@ export class StripePatronsData extends GuStack {
       ],
       // Create an alarm
       monitoringConfiguration: {
-        snsTopicName: "reader-revenue-dev",
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
         http5xxAlarm: {
           tolerated5xxPercentage: 1,
         },
