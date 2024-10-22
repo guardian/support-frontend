@@ -150,14 +150,15 @@ export function ThankYouComponent({
 				: order.paymentMethod;
 
 		successfulContributionConversion(
-			payment.originalAmount,
+			payment.finalAmount, // This is the final amount after discounts
 			contributionType,
 			currencyKey,
 			paymentMethod,
+			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
 		);
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
-			payment.originalAmount,
+			payment.originalAmount, // This is the amount before discounts
 			contributionType,
 			currencyKey,
 		);
