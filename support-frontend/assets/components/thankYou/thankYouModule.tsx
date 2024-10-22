@@ -15,6 +15,7 @@ import AppImageFeast from 'components/svgs/appImageFeast';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
+import NewspaperArchiveImage from './newspaperArchive/newspaperArchiveImage';
 
 const container = css`
 	background: white;
@@ -251,6 +252,7 @@ function ThankYouModule({
 	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
 		moduleType,
 	);
+	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
 
 	const gridContainer =
 		hasImagery || hasQrCodes
@@ -297,7 +299,11 @@ function ThankYouModule({
 
 				{hasImagery ? (
 					<div css={[imgContainer]}>
-						<AppDownloadImage />
+						{isNewspaperArchiveBenefit ? (
+							<NewspaperArchiveImage />
+						) : (
+							<AppDownloadImage />
+						)}
 					</div>
 				) : null}
 
