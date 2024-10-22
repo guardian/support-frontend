@@ -1,6 +1,6 @@
 name: Playwright Cron Tests
 on:
-  workflow_dispatch:  
+  workflow_dispatch:
   schedule:
     # every hour, 9-17:00, Mon - Fri
     - cron: "0 9-17 * * 1-5"
@@ -36,4 +36,4 @@ jobs:
       run: |
         failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
         prTrigger="https://github.com/guardian/support-frontend/pull/${{ github.event.number }}"
-        curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright cron tests for support-frontend have failed 🚨\n\n- <'"$failedWorkflowRun"'|You can see the reason for this failure on GitHub>. \n- <'"$prTrigger"'|PR that triggered this>.\n\n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
+        curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright cron tests for support-frontend have failed 🚨\n\n- <'"$failedWorkflowRun"'|You can see the reason for this failure on GitHub>. \n\n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
