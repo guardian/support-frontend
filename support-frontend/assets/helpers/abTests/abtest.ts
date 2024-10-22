@@ -8,6 +8,7 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
+import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	AmountsTest,
@@ -81,6 +82,8 @@ export type Test = {
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
+	// Persist this test participation across more pages using this regex
+	persistPage?: string | RegExp;
 	omitCountries?: IsoCountry[];
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
@@ -99,6 +102,7 @@ type ABtestInitalizerData = {
 	abTests?: Tests;
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
+	path?: string;
 };
 
 function init({
@@ -108,15 +112,20 @@ function init({
 	abTests = tests,
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
+	path = window.location.pathname,
 }: ABtestInitalizerData): Participations {
+	const sessionParticipations = getParticipationsFromSession();
 	const participations = getParticipations(
 		abTests,
 		mvt,
 		countryId,
 		countryGroupId,
+		path,
 		acquisitionDataTests,
 		selectedAmountsVariant,
+		sessionParticipations,
 	);
+
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
@@ -154,8 +163,10 @@ function getParticipations(
 	mvtId: number,
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
+	path: string,
 	acquisitionDataTests?: AcquisitionABTest[],
 	selectedAmountsVariant?: SelectedAmountsVariant,
+	sessionParticipations: Participations = {},
 ): Participations {
 	const participations: Participations = {};
 
@@ -172,7 +183,16 @@ function getParticipations(
 			return;
 		}
 
-		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
+		// Is the user already in this test in the current browser session?
+		if (
+			!!sessionParticipations[testId] &&
+			targetPageMatches(path, test.persistPage)
+		) {
+			participations[testId] = sessionParticipations[testId];
+			return;
+		}
+
+		if (!targetPageMatches(path, test.targetPage)) {
 			return;
 		}
 
@@ -235,6 +255,22 @@ function getParticipationsFromUrl(): Participations | undefined {
 	}
 
 	return;
+}
+
+function getParticipationsFromSession(): Participations | undefined {
+	const participations = storage.getSession('abParticipations');
+	if (participations) {
+		try {
+			return JSON.parse(participations) as Participations;
+		} catch (error) {
+			console.error(
+				'Failed to parse abParticipations from session storage',
+				error,
+			);
+			return undefined;
+		}
+	}
+	return undefined;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {

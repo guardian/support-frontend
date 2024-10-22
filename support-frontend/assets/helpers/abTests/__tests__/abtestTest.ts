@@ -51,6 +51,7 @@ describe('init', () => {
 
 	afterEach(() => {
 		window.localStorage.clear();
+		window.sessionStorage.clear();
 	});
 
 	it('assigns a user to a variant', () => {
@@ -398,6 +399,88 @@ describe('init', () => {
 			});
 
 			expect(participations).toEqual({ t1: 'variant' });
+		});
+	});
+
+	describe('path matching', () => {
+		beforeEach(() => {
+			window.sessionStorage.clear();
+		});
+
+		it('does not assign to test if targetPage does not match', () => {
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/us/contribute$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/contribute',
+			});
+
+			expect(participations).toEqual({});
+		});
+
+		it('assign to test if targetPage matches', () => {
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/contribute',
+			});
+
+			expect(participations).toEqual({ t1: 'control' });
+		});
+
+		it('assign to test if persistPage matches and test is in session storage', () => {
+			window.sessionStorage.setItem(
+				'abParticipations',
+				JSON.stringify({ t1: 'control' }),
+			);
+
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+					persistPage: '/uk/checkout$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/checkout',
+			});
+
+			expect(participations).toEqual({ t1: 'control' });
+		});
+
+		it('does not assign to test if persistPage does not match and test is in session storage', () => {
+			window.sessionStorage.setItem(
+				'abParticipations',
+				JSON.stringify({ t1: 'control' }),
+			);
+
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+					persistPage: '/uk/checkout$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/blah',
+			});
+
+			expect(participations).toEqual({});
 		});
 	});
 });
@@ -805,6 +888,8 @@ function buildTest({
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
 	excludeCountriesSubjectToContributionsOnlyAmounts = true,
+	targetPage = undefined,
+	persistPage = undefined,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -814,6 +899,8 @@ function buildTest({
 		seed,
 		excludeIfInReferrerControlledTest,
 		excludeCountriesSubjectToContributionsOnlyAmounts,
+		targetPage,
+		persistPage,
 	};
 }
 
