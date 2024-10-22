@@ -136,7 +136,7 @@ import {
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
-const countryGroupIdsRequiringBillingState = ['US', 'CA', 'AU'];
+const countryIdsRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
@@ -1175,7 +1175,7 @@ function CheckoutComponent({
 
 										if (
 											!event.billingDetails?.address.state &&
-											countryGroupIdsRequiringBillingState.includes(countryId)
+											countryIdsRequiringBillingState.includes(countryId)
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
@@ -1351,7 +1351,7 @@ function CheckoutComponent({
 							 * We require state for non-deliverable products as we use different taxes within those regions upstream
 							 * For deliverable products we take the state and zip code with the delivery address
 							 */}
-							{countryGroupIdsRequiringBillingState.includes(countryId) &&
+							{countryIdsRequiringBillingState.includes(countryId) &&
 								!productDescription.deliverableTo && (
 									<StateSelect
 										countryId={countryId}
