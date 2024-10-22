@@ -29,7 +29,7 @@ const mobileImg = css`
 
 const desktopImg = css`
 	display: none;
-	max-width: 220px;
+	//max-width: 220px;
 	height: auto;
 	margin-left: auto;
 
@@ -50,18 +50,18 @@ const desktopImg = css`
 // will need to tweak the offset margins here if the image or copy is updated
 // to ensure this image lines up correctly with the app download badges
 const container = css`
-	${from.tablet} {
+	/* ${from.tablet} {
 		margin-top: -${space[9]}px;
-	}
+	} */
 
-	${between.leftCol.and.wide} {
+	/* ${between.leftCol.and.wide} {
 		margin-top: 0;
 		margin-left: ${space[5]}px;
-	}
+	} */
 
-	${from.wide} {
+	/* ${from.wide} {
 		margin-top: -32px;
-	}
+	} */
 `;
 
 function NewspaperArchiveImage(): JSX.Element {
@@ -73,7 +73,7 @@ function NewspaperArchiveImage(): JSX.Element {
 					/////////////////////////
 					// PLACEHOLDER GRID ID //
 					/////////////////////////
-					gridId={'benefitsPackshotParaMobAndDesktopUK'}
+					gridId={'newspaperArchivesPackshotMobile'}
 					srcSizes={[500, 140]}
 					sizes="(min-width: 1140px) 100%,
                   500px"
@@ -86,7 +86,7 @@ function NewspaperArchiveImage(): JSX.Element {
 					/////////////////////////
 					// PLACEHOLDER GRID ID //
 					/////////////////////////
-					gridId={'benefitsPackshotBulletsDesktopUK'}
+					gridId={'newspaperArchivesPackshotDesktop'}
 					srcSizes={[500, 140]}
 					sizes="(min-width: 1140px) 100%,
           500px"
