@@ -168,7 +168,28 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
-	landingPageOneTimeTab2: {
+	linkExpressCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
+  landingPageOneTimeTab2: {
 		variants: [
 			{
 				id: 'control',
@@ -185,7 +206,7 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false,
-		seed: 5,
+		seed: 6,
 		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
 		// Track this landing page test through to the checkout
 		persistPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,

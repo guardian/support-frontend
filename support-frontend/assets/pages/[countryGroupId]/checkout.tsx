@@ -719,6 +719,9 @@ function CheckoutComponent({
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const supportAbTests = getSupportAbTests(abParticipations);
 
+	const useLinkExpressCheckout =
+		abParticipations.linkExpressCheckout === 'variant';
+
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -1119,10 +1122,7 @@ function CheckoutComponent({
 										 * This is use to show UI needed besides this Element
 										 * i.e. The "or" divider
 										 */
-										if (
-											!!availablePaymentMethods?.applePay ||
-											!!availablePaymentMethods?.googlePay
-										) {
+										if (availablePaymentMethods) {
 											setStripeExpressCheckoutReady(true);
 										}
 									}}
@@ -1198,7 +1198,7 @@ function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: 'never',
+											link: useLinkExpressCheckout ? 'auto' : 'never',
 										},
 									}}
 								/>
