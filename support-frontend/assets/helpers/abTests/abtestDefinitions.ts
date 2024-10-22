@@ -189,7 +189,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-  landingPageOneTimeTab2: {
+	landingPageOneTimeTab2: {
 		variants: [
 			{
 				id: 'control',
