@@ -178,10 +178,21 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			UnitedStates: {
 				offset: 0,
 				size: 1,
 			},
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+			EURCountries: {
+				offset: 0,
+				size: 1,
+			},
+			Canada: { offset: 0, size: 1 },
+			NZDCountries: { offset: 0, size: 1 },
+			International: { offset: 0, size: 1 },
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
