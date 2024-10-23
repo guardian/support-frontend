@@ -82,14 +82,14 @@ export function NewspaperArchiveBanner() {
 						<NewBenefitPill />
 					</div>
 					<span css={headlineText}>
-						The Guardian archives: discover 200 years of journalism
+						The Guardian newspaper archive: explore more than 200 years of
+						journalism
 					</span>
 				</h2>
 				<p css={paragraph}>
-					Lorem Ipsum, sometimes referred to as 'lipsum', is the placeholder
-					text used in design when creating content. It helps designers plan out
-					where the content will sit, without needing to wait for the content to
-					be written and approved
+					Since 1821, the world’s major events have been documented in the pages
+					of the Guardian’s UK newspaper. Today, you can journey through the
+					archive and search records of world history from wherever you are
 				</p>
 			</div>
 			<Hide from="desktop">
