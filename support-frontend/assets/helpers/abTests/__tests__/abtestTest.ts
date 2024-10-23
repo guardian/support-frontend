@@ -24,7 +24,8 @@ const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
-const { allLandingPagesAndThankyouPages } = pageUrlRegexes.contributions;
+const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
+	pageUrlRegexes.contributions;
 
 jest.mock('ophan', () => ({
 	record: () => null,
@@ -568,6 +569,13 @@ it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/thankyou', allLandingPagesAndThankyouPages),
 	).toEqual(true);
+	// Generic checkout only targeting
+	expect(
+		targetPageMatches('/uk/contribute/checkout', genericCheckoutOnly),
+	).toEqual(false);
+	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
+	expect(targetPageMatches('/uk/thank-you', genericCheckoutOnly)).toEqual(true);
+	expect(targetPageMatches('/uk/thankyou', genericCheckoutOnly)).toEqual(false);
 });
 
 describe('getAmountsTestVariant', () => {
