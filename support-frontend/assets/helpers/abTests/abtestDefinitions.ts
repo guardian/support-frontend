@@ -10,6 +10,7 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
+		genericCheckoutOnly: '/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -197,7 +198,7 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	landingPageOneTimeTab2: {
