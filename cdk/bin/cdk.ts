@@ -5,6 +5,7 @@ import { BigqueryAcquisitionsPublisher } from "../lib/bigquery-acquisitions-publ
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
+import { SupportWorkers } from "../lib/support-workers";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -101,4 +102,48 @@ new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-CODE", {
 new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-PROD", {
   stack: "support",
   stage: "PROD",
+});
+
+new SupportWorkers(app, "SupportWorkers-CODE", {
+  stack: "support",
+  stage: "CODE",
+  promotionsDynamoTables: [
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+  ],
+  s3Files: [
+    "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",
+    "arn:aws:s3:::support-workers-private/*",
+  ],
+  supporterProductDataTables: [
+    "supporter-product-data-tables-CODE-SupporterProductDataTable",
+  ],
+  kinesisStreamArn:
+    "arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE",
+  eventBusArns: [
+    "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
+  ],
+});
+
+new SupportWorkers(app, "SupportWorkers-PROD", {
+  stack: "support",
+  stage: "PROD",
+  promotionsDynamoTables: [
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+  ],
+  s3Files: [
+    "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json",
+    "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
+    "arn:aws:s3:::support-workers-private/*",
+  ],
+  supporterProductDataTables: [
+    "supporter-product-data-tables-CODE-SupporterProductDataTable",
+    "supporter-product-data-tables-PROD-SupporterProductDataTable",
+  ],
+  kinesisStreamArn:
+    "arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD",
+  eventBusArns: [
+    "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
+    "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
+  ],
 });
