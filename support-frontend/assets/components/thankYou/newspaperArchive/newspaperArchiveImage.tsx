@@ -26,8 +26,8 @@ const desktopImg = css`
 	display: none;
 	height: auto;
 	margin-left: auto;
-	margin-top: -${space[4]}px;
-	margin-bottom: -${space[5]}px;
+	margin-top: -${space[2]}px; // padding-top over-run
+	margin-bottom: -${space[5]}px; // padding-bottom over-run
 
 	& img {
 		width: 100%;

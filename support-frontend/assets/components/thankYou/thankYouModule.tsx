@@ -102,7 +102,6 @@ const bodyContainer = css`
 `;
 const sizeContainer = css`
 	z-index: 1;
-	width: 100%;
 	${between.tablet.and.desktop} {
 		width: 330px;
 	}
@@ -156,9 +155,9 @@ const appContainer = css`
 const imgContainer = css`
 	grid-area: img;
 	align-self: flex-end;
-	margin-top: ${space[2]}px;
 `;
 const sizeImgContainer = css`
+	margin-top: ${space[2]}px;
 	${until.tablet} {
 		margin-top: ${space[4]}px;
 	}
