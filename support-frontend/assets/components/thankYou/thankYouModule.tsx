@@ -97,9 +97,21 @@ const headerContainer = css`
 		margin-top: 2px;
 	}
 `;
-
 const bodyContainer = css`
 	grid-area: body;
+`;
+const sizeContainer = css`
+	z-index: 1;
+	width: 100%;
+	${between.tablet.and.desktop} {
+		width: 330px;
+	}
+	${between.leftCol.and.wide} {
+		width: 330px;
+	}
+	${from.wide} {
+		width: 350px;
+	}
 `;
 
 const bodyApps = css`
@@ -145,7 +157,8 @@ const imgContainer = css`
 	grid-area: img;
 	align-self: flex-end;
 	margin-top: ${space[2]}px;
-
+`;
+const sizeImgContainer = css`
 	${until.tablet} {
 		margin-top: ${space[4]}px;
 	}
@@ -184,10 +197,6 @@ const hideBelowTablet = css`
 	${from.tablet} {
 		display: block;
 	}
-`;
-
-const marginTop = css`
-	margin-top: ${space[6]}px;
 `;
 
 const ctaContainerApps = css`
@@ -252,7 +261,6 @@ function ThankYouModule({
 	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
 		moduleType,
 	);
-	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
 
 	const gridContainer =
 		hasImagery || hasQrCodes
@@ -262,12 +270,23 @@ function ThankYouModule({
 	const maybePaddingRight =
 		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);
 
+	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
+	const resizeContainer = isNewspaperArchiveBenefit ? sizeContainer : css``;
+	const resizeImgContainer = !isNewspaperArchiveBenefit
+		? sizeImgContainer
+		: css``;
+	const resizeMarginTop = !isNewspaperArchiveBenefit
+		? css`
+				margin-top: ${space[6]}px;
+		  `
+		: css``;
+
 	return (
 		<section css={[container, maybePaddingRight, hasImagery && imageryPadding]}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
-				<div css={headerContainer}>{header}</div>
-				<div css={bodyContainer}>
+				<div css={[headerContainer, resizeContainer]}>{header}</div>
+				<div css={[bodyContainer, resizeContainer]}>
 					{isDownloadModules ? (
 						<>
 							<div css={[bodyApps, bodyAppsTop]}>
@@ -292,13 +311,13 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={marginTop}>{ctas}</div>
+							<div css={resizeMarginTop}>{ctas}</div>
 						</>
 					)}
 				</div>
 
 				{hasImagery ? (
-					<div css={[imgContainer]}>
+					<div css={[imgContainer, resizeImgContainer]}>
 						{isNewspaperArchiveBenefit ? (
 							<NewspaperArchiveImage />
 						) : (
