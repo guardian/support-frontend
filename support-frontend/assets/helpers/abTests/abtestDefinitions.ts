@@ -10,7 +10,7 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
-		genericCheckoutOnly: '(uk|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
+		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
