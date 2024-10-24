@@ -462,9 +462,7 @@ function CheckoutComponent({
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const supportAbTests = getSupportAbTests(abParticipations);
 
-	const productDescription = ['v1', 'v2'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	)
+	const productDescription = abParticipations.newspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
