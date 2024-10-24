@@ -292,7 +292,7 @@ function OneTimeCheckoutComponent({
 	const stripePaymentMethod: StripePaymentMethod =
 		stripeExpressCheckoutPaymentType === 'apple_pay'
 			? 'StripeApplePay'
-			: 'StripeCheckout';
+			: 'StripePaymentRequestButton';
 
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
