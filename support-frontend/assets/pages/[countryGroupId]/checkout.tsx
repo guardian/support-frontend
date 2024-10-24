@@ -77,6 +77,7 @@ import {
 	isProductKey,
 	productCatalog,
 	productCatalogDescription,
+	productCatalogDescriptionNewBenefits,
 	type ProductKey,
 } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -458,7 +459,14 @@ function CheckoutComponent({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	const productDescription = productCatalogDescription[productKey];
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const supportAbTests = getSupportAbTests(abParticipations);
+
+	const productDescription = ['v1', 'v2'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	)
+		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
+		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
 	/**
@@ -716,9 +724,6 @@ function CheckoutComponent({
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
-
-	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const supportAbTests = getSupportAbTests(abParticipations);
 
 	const useLinkExpressCheckout =
 		abParticipations.linkExpressCheckout === 'variant';
