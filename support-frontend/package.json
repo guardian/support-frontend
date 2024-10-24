@@ -9,7 +9,7 @@
     "lint:check": "eslint ./assets --ext .ts --ext .tsx",
     "lint:fix": "yarn lint:check --fix",
     "build-dev": "webpack --config webpack.dev.js",
-    "build-ssr": "tsx ./scripts/build-ssr-holding-content.tsx",
+    "build-ssr": "tsx ./scripts/build-ssr-holding-content.tsx && tsx ./scripts/build-ssr-newspaper-archive-header.tsx",
     "build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
     "build-prod": "npm-run-all clean test 'webpack --config webpack.prod.js'",
     "build-github-action": "npm-run-all clean 'webpack --config webpack.prod.js --env ci=github'",
