@@ -5,10 +5,15 @@ import {
   GuLambdaFunction,
 } from "@guardian/cdk/lib/constructs/lambda";
 import { type App, Duration, Fn } from "aws-cdk-lib";
-import { Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { Bucket } from "aws-cdk-lib/aws-s3";
-import { DefinitionBody, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
+import {
+  Choice,
+  Condition,
+  Parallel,
+  Pass,
+  StateMachine,
+} from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
 interface SupportWorkersProps extends GuStackProps {
@@ -23,12 +28,6 @@ export class SupportWorkers extends GuStack {
     super(scope, id, props);
 
     const app = "support-workers";
-
-    const bucket = new Bucket(this, "Bucket", {
-      bucketName: `${app}-${this.stage.toLowerCase()}`,
-    });
-
-    const snsTopicArn = `arn:aws:sns:${this.region}:${this.account}:alarms-handler-topic-${this.stage}`;
 
     const lambdaDefaultConfig: Pick<
       GuFunctionProps,
@@ -76,10 +75,11 @@ export class SupportWorkers extends GuStack {
       ],
       resources: ["*"],
     });
-    const kinesisPolicy = new PolicyStatement({
-      actions: ["kinesis:*"],
-      resources: [props.kinesisStreamArn],
-    });
+    // TODO: I think this could be removed now we have the event bus?
+    // const kinesisPolicy = new PolicyStatement({
+    //   actions: ["kinesis:*"],
+    //   resources: [props.kinesisStreamArn],
+    // });
     const promotionsDynamoTablePolicy = new PolicyStatement({
       actions: [
         "dynamodb:GetItem",
@@ -94,74 +94,87 @@ export class SupportWorkers extends GuStack {
       resources: props.supporterProductDataTables,
     });
 
-    const preparePaymentMethodForReuse = new LambdaInvoke(
-      this,
-      "PreparePaymentMethodForReuseLambdaInvoke",
-      {
-        lambdaFunction: new GuLambdaFunction(
-          this,
-          "PreparePaymentMethodForReuseLambda",
-          {
-            ...lambdaDefaultConfig,
-            handler:
-              "com.gu.support.workers.lambdas.PreparePaymentMethodForReuse::handleRequest",
-            functionName: `${this.stack}-PreparePaymentMethodForReuseLambda-${this.stage}`,
-            environment: {
-              ...lambdaDefaultConfig.environment,
-            },
-            initialPolicy: [s3Policy, cloudWatchLoggingPolicy],
-          }
-        ),
-      }
-    );
-
-    const stateMachine = new StateMachine(this, "SupportWorkers", {
-      stateMachineName: `${app}-${this.stage}`,
-      definitionBody: DefinitionBody.fromChainable(
-        preparePaymentMethodForReuse
-      ),
-    });
-
-    stateMachine.role.attachInlinePolicy(
-      new Policy(
-        this,
-        "SalesforceDisasterRecoveryStateMachineRoleAdditionalPolicy",
-        {
-          statements: [
-            new PolicyStatement({
-              actions: [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:DescribeSecret",
-              ],
-              resources: [
-                `arn:aws:secretsmanager:${this.region}:${this.account}:secret:events!connection/${app}-${this.stage}-salesforce-api/*`,
-              ],
-            }),
-            new PolicyStatement({
-              actions: ["s3:GetObject", "s3:PutObject"],
-              resources: [bucket.arnForObjects("*")],
-            }),
-            new PolicyStatement({
-              actions: ["states:StartExecution"],
-              resources: [stateMachine.stateMachineArn],
-            }),
-            new PolicyStatement({
-              actions: [
-                "states:RedriveExecution",
-                "states:DescribeExecution",
-                "states:StopExecution",
-              ],
-              resources: [
-                `arn:aws:states:${this.region}:${this.account}:execution:${stateMachine.stateMachineName}/*`,
-              ],
-            }),
-            new PolicyStatement({
-              actions: ["sns:Publish"],
-              resources: [snsTopicArn],
-            }),
+    const createLambda = (
+      lambdaName: string,
+      additionalPolicies: PolicyStatement[] = []
+    ) =>
+      new LambdaInvoke(this, lambdaName, {
+        lambdaFunction: new GuLambdaFunction(this, `${lambdaName}Lambda`, {
+          ...lambdaDefaultConfig,
+          handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
+          functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
+          environment: {
+            ...lambdaDefaultConfig.environment,
+          },
+          initialPolicy: [
+            s3Policy,
+            cloudWatchLoggingPolicy,
+            ...additionalPolicies,
           ],
-        }
-      )
+        }),
+      });
+
+    const failureHandler = createLambda("FailureHandler");
+    const catchProps = {
+      resultPath: "$.error",
+      errors: ["States.TaskFailed"],
+    };
+
+    const preparePaymentMethodForReuse = createLambda(
+      "PreparePaymentMethodForReuse"
+    ).addCatch(failureHandler, catchProps);
+
+    const createPaymentMethodLambda = createLambda(
+      "CreatePaymentMethod"
+    ).addCatch(failureHandler, catchProps);
+
+    const createSalesforceContactLambda = createLambda(
+      "CreateSalesforceContact"
+    ).addCatch(failureHandler, catchProps);
+
+    const createZuoraSubscription = createLambda("CreateZuoraSubscription", [
+      promotionsDynamoTablePolicy,
+    ]).addCatch(failureHandler, catchProps);
+
+    const sendThankYouEmail = createLambda("SendThankYouEmail", [sqsPolicy]);
+    const updateSupporterProductData = createLambda(
+      "UpdateSupporterProductData",
+      [supporterProductDataTablePolicy]
     );
+    const sendAcquisitionEvent = createLambda("SendAcquisitionEvent", [
+      eventBusPolicy,
+    ]);
+
+    const shouldClonePaymentMethodChoice = new Choice(
+      this,
+      "ShouldClonePaymentMethodChoice"
+    );
+    const condition = Condition.booleanEquals(
+      "$.requestInfo.accountExists",
+      true
+    );
+    const checkoutSuccess = new Pass(this, "CheckoutSuccess");
+    const parallelSteps = new Parallel(this, "Parallel")
+      .branch(sendThankYouEmail)
+      .branch(updateSupporterProductData)
+      .branch(sendAcquisitionEvent)
+      .branch(checkoutSuccess);
+
+    const definitionWithExistingAccount = preparePaymentMethodForReuse
+      .next(createZuoraSubscription)
+      .next(parallelSteps);
+
+    const definitionWithNewAccount = createPaymentMethodLambda
+      .next(createSalesforceContactLambda)
+      .next(definitionWithExistingAccount);
+
+    const definition = shouldClonePaymentMethodChoice
+      .when(condition, definitionWithExistingAccount)
+      .otherwise(definitionWithNewAccount);
+
+    new StateMachine(this, "SupportWorkers", {
+      stateMachineName: `${app}-${this.stage}`,
+      definition: definition,
+    });
   }
 }
