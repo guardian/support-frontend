@@ -903,6 +903,10 @@ function CheckoutComponent({
 			labels: ['generic-checkout'],
 		};
 
+		if (stripeExpressCheckoutPaymentType === 'link') {
+			referrerAcquisitionData.labels.push('express-checkout-link');
+		}
+
 		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add debugInfo

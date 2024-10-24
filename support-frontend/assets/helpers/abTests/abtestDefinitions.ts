@@ -10,6 +10,7 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
+		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -178,15 +179,26 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
 			GBPCountries: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
+			EURCountries: {
+				offset: 0,
+				size: 1,
+			},
+			Canada: { offset: 0, size: 1 },
+			NZDCountries: { offset: 0, size: 1 },
+			International: { offset: 0, size: 1 },
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	landingPageOneTimeTab2: {
