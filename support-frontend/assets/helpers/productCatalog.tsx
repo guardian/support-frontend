@@ -356,7 +356,7 @@ export const productCatalogDescriptionNewBenefits: Record<
 			{
 				copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
 				isNew: true,
-				tooltip: `Look back on more than 200 years of world history with the Guardian archive. Get digital access to every front page, article and advertisement printed in the newspaper from 1981.`,
+				tooltip: `Look back on more than 200 years of world history with the Guardian archive. Get digital access to every front page, article and advertisement printed in the newspaper from 1821.`,
 			},
 		],
 	},
