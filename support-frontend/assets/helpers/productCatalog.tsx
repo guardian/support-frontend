@@ -302,7 +302,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 				},
 				{
-					copy: 'Unlimited access to the Guardian Feast App',
+					copy: 'Unlimited access to the Guardian Feast app',
 				},
 				{
 					copy: 'Exclusive access to partner offers',
@@ -367,7 +367,7 @@ export function productCatalogDescriptionNewBenefits(
 			benefits: [
 				...productCatalogDescription.SupporterPlus.benefits,
 				{
-					copy: 'Unlimited access to the Guardian Feast App',
+					copy: 'Unlimited access to the Guardian Feast app',
 					isNew: true,
 					tooltip:
 						'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',

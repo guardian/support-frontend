@@ -28,9 +28,9 @@ export function AppDownloadEditionsBodyCopy(): JSX.Element {
 	);
 }
 
-export const appsDownloadHeader = 'Explore your subscriber’s App';
+export const appsDownloadHeader = 'Explore your subscriber’s app';
 
-export const appNewsDownloadHeader = 'The Guardian News App';
+export const appNewsDownloadHeader = 'The Guardian News app';
 
 export function AppNewsDownloadBodyCopy(): JSX.Element {
 	return (
@@ -40,12 +40,12 @@ export function AppNewsDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const appFeastDownloadHeader = 'The Guardian Feast App';
+export const appFeastDownloadHeader = 'The Guardian Feast app';
 
 export function AppFeastDownloadBodyCopy(): JSX.Element {
 	return (
 		<span css={downloadCopy}>
-			Make a feast out of anything with the Guardian’s new recipe app – Feast.
+			Make a feast out of anything with the Guardian’s new recipe app : Feast.
 		</span>
 	);
 }
