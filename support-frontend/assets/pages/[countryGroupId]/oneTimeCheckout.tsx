@@ -767,7 +767,7 @@ function OneTimeCheckoutComponent({
 													}
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
-
+														setPaymentMethodError(undefined);
 														// Track payment method selection with QM
 														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
