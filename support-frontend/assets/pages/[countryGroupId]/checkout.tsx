@@ -136,6 +136,7 @@ import {
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countryId: IsoCountry = CountryHelper.detect();
+const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
@@ -719,6 +720,9 @@ function CheckoutComponent({
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const supportAbTests = getSupportAbTests(abParticipations);
 
+	const useLinkExpressCheckout =
+		abParticipations.linkExpressCheckout === 'variant';
+
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -898,6 +902,10 @@ function CheckoutComponent({
 			...getReferrerAcquisitionData(),
 			labels: ['generic-checkout'],
 		};
+
+		if (stripeExpressCheckoutPaymentType === 'link') {
+			referrerAcquisitionData.labels.push('express-checkout-link');
+		}
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
@@ -1119,10 +1127,7 @@ function CheckoutComponent({
 										 * This is use to show UI needed besides this Element
 										 * i.e. The "or" divider
 										 */
-										if (
-											!!availablePaymentMethods?.applePay ||
-											!!availablePaymentMethods?.googlePay
-										) {
+										if (availablePaymentMethods) {
 											setStripeExpressCheckoutReady(true);
 										}
 									}}
@@ -1172,7 +1177,10 @@ function CheckoutComponent({
 												event.billingDetails.address.postal_code,
 											);
 
-										if (!event.billingDetails?.address.state) {
+										if (
+											!event.billingDetails?.address.state &&
+											countriesRequiringBillingState.includes(countryId)
+										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
 												{ geoId, countryGroupId, countryId },
@@ -1198,7 +1206,7 @@ function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: 'never',
+											link: useLinkExpressCheckout ? 'auto' : 'never',
 										},
 									}}
 								/>
@@ -1347,7 +1355,7 @@ function CheckoutComponent({
 							 * We require state for non-deliverable products as we use different taxes within those regions upstream
 							 * For deliverable products we take the state and zip code with the delivery address
 							 */}
-							{['US', 'CA', 'AU'].includes(countryId) &&
+							{countriesRequiringBillingState.includes(countryId) &&
 								!productDescription.deliverableTo && (
 									<StateSelect
 										countryId={countryId}

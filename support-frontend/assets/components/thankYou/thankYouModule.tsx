@@ -15,6 +15,7 @@ import AppImageFeast from 'components/svgs/appImageFeast';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
+import NewspaperArchiveImage from './newspaperArchive/newspaperArchiveImage';
 
 const container = css`
 	background: white;
@@ -96,9 +97,20 @@ const headerContainer = css`
 		margin-top: 2px;
 	}
 `;
-
 const bodyContainer = css`
 	grid-area: body;
+`;
+const sizeContainer = css`
+	z-index: 1;
+	${between.tablet.and.desktop} {
+		width: 330px;
+	}
+	${between.leftCol.and.wide} {
+		width: 330px;
+	}
+	${from.wide} {
+		width: 350px;
+	}
 `;
 
 const bodyApps = css`
@@ -143,8 +155,9 @@ const appContainer = css`
 const imgContainer = css`
 	grid-area: img;
 	align-self: flex-end;
+`;
+const sizeImgContainer = css`
 	margin-top: ${space[2]}px;
-
 	${until.tablet} {
 		margin-top: ${space[4]}px;
 	}
@@ -183,10 +196,6 @@ const hideBelowTablet = css`
 	${from.tablet} {
 		display: block;
 	}
-`;
-
-const marginTop = css`
-	margin-top: ${space[6]}px;
 `;
 
 const ctaContainerApps = css`
@@ -260,12 +269,23 @@ function ThankYouModule({
 	const maybePaddingRight =
 		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);
 
+	const isNewspaperArchiveBenefit = moduleType === 'newspaperArchiveBenefit';
+	const resizeContainer = isNewspaperArchiveBenefit ? sizeContainer : css``;
+	const resizeImgContainer = !isNewspaperArchiveBenefit
+		? sizeImgContainer
+		: css``;
+	const resizeMarginTop = !isNewspaperArchiveBenefit
+		? css`
+				margin-top: ${space[6]}px;
+		  `
+		: css``;
+
 	return (
 		<section css={[container, maybePaddingRight, hasImagery && imageryPadding]}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
-				<div css={headerContainer}>{header}</div>
-				<div css={bodyContainer}>
+				<div css={[headerContainer, resizeContainer]}>{header}</div>
+				<div css={[bodyContainer, resizeContainer]}>
 					{isDownloadModules ? (
 						<>
 							<div css={[bodyApps, bodyAppsTop]}>
@@ -290,14 +310,18 @@ function ThankYouModule({
 					) : (
 						<>
 							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
-							<div css={marginTop}>{ctas}</div>
+							<div css={resizeMarginTop}>{ctas}</div>
 						</>
 					)}
 				</div>
 
 				{hasImagery ? (
-					<div css={[imgContainer]}>
-						<AppDownloadImage />
+					<div css={[imgContainer, resizeImgContainer]}>
+						{isNewspaperArchiveBenefit ? (
+							<NewspaperArchiveImage />
+						) : (
+							<AppDownloadImage />
+						)}
 					</div>
 				) : null}
 

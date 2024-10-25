@@ -24,7 +24,8 @@ const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
-const { allLandingPagesAndThankyouPages } = pageUrlRegexes.contributions;
+const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
+	pageUrlRegexes.contributions;
 
 jest.mock('ophan', () => ({
 	record: () => null,
@@ -51,6 +52,7 @@ describe('init', () => {
 
 	afterEach(() => {
 		window.localStorage.clear();
+		window.sessionStorage.clear();
 	});
 
 	it('assigns a user to a variant', () => {
@@ -400,6 +402,88 @@ describe('init', () => {
 			expect(participations).toEqual({ t1: 'variant' });
 		});
 	});
+
+	describe('path matching', () => {
+		beforeEach(() => {
+			window.sessionStorage.clear();
+		});
+
+		it('does not assign to test if targetPage does not match', () => {
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/us/contribute$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/contribute',
+			});
+
+			expect(participations).toEqual({});
+		});
+
+		it('assign to test if targetPage matches', () => {
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/contribute',
+			});
+
+			expect(participations).toEqual({ t1: 'control' });
+		});
+
+		it('assign to test if persistPage matches and test is in session storage', () => {
+			window.sessionStorage.setItem(
+				'abParticipations',
+				JSON.stringify({ t1: 'control' }),
+			);
+
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+					persistPage: '/uk/checkout$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/checkout',
+			});
+
+			expect(participations).toEqual({ t1: 'control' });
+		});
+
+		it('does not assign to test if persistPage does not match and test is in session storage', () => {
+			window.sessionStorage.setItem(
+				'abParticipations',
+				JSON.stringify({ t1: 'control' }),
+			);
+
+			const abTests = {
+				t1: buildTest({
+					targetPage: '/uk/contribute$',
+					persistPage: '/uk/checkout$',
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				path: '/uk/blah',
+			});
+
+			expect(participations).toEqual({});
+		});
+	});
 });
 
 it('targetPage matching', () => {
@@ -485,6 +569,13 @@ it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/thankyou', allLandingPagesAndThankyouPages),
 	).toEqual(true);
+	// Generic checkout only targeting
+	expect(
+		targetPageMatches('/uk/contribute/checkout', genericCheckoutOnly),
+	).toEqual(false);
+	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
+	expect(targetPageMatches('/uk/thank-you', genericCheckoutOnly)).toEqual(true);
+	expect(targetPageMatches('/uk/thankyou', genericCheckoutOnly)).toEqual(false);
 });
 
 describe('getAmountsTestVariant', () => {
@@ -805,6 +896,8 @@ function buildTest({
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
 	excludeCountriesSubjectToContributionsOnlyAmounts = true,
+	targetPage = undefined,
+	persistPage = undefined,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -814,6 +907,8 @@ function buildTest({
 		seed,
 		excludeIfInReferrerControlledTest,
 		excludeCountriesSubjectToContributionsOnlyAmounts,
+		targetPage,
+		persistPage,
 	};
 }
 

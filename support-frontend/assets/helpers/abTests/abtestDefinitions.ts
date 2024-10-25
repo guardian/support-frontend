@@ -9,10 +9,8 @@ export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages:
 			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
-		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
-		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
-		auLandingPage: '/au/contribute(/.*)?$',
-		usLandingPage: '/us/contribute(/.*)?$',
+		usLandingPageOnly: '/us/contribute$',
+		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -169,6 +167,61 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+	},
+	linkExpressCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+			EURCountries: {
+				offset: 0,
+				size: 1,
+			},
+			Canada: { offset: 0, size: 1 },
+			NZDCountries: { offset: 0, size: 1 },
+			International: { offset: 0, size: 1 },
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
+	landingPageOneTimeTab2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'oneTimeTab',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 6,
+		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
+		// Track this landing page test through to the checkout
+		persistPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
 };

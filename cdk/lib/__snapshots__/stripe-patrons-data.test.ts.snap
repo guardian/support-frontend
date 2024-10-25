@@ -63,7 +63,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -674,7 +674,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
