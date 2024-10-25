@@ -246,6 +246,17 @@ export function Checkout({ geoId, appConfig }: Props) {
 		? parseInt(contributionParam, 10)
 		: undefined;
 
+	/**
+	 * This is some annoying transformation we need from
+	 * Product API => Contributions work we need to do
+	 */
+	const billingPeriod =
+		ratePlan.billingPeriod === 'Quarter'
+			? 'Quarterly'
+			: ratePlan.billingPeriod === 'Month'
+			? 'Monthly'
+			: 'Annual';
+
 	let promotion;
 	if (productKey === 'Contribution') {
 		/**
@@ -281,24 +292,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 			productKey === 'SupporterPlus' || productKey === 'TierThree'
 				? appConfig.allProductPrices[productKey]
 				: undefined;
-
-		/**
-		 * This is some annoying transformation we need from
-		 * Product API => Contributions work we need to do
-		 */
-		const billingPeriod =
-			ratePlan.billingPeriod === 'Quarter'
-				? 'Quarterly'
-				: ratePlan.billingPeriod === 'Month'
-				? 'Monthly'
-				: 'Annual';
-
-		sendEventCheckoutValue(
-			productPrice,
-			productKey,
-			billingPeriod,
-			currencyKey,
-		);
 
 		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 			switch (productKey) {
@@ -408,6 +401,17 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * a country that doesn't correspond to the countryGroup a product is in.
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
+
+	/**
+	 * Notify QM of checkout value
+	 */
+	sendEventCheckoutValue(
+		payment.finalAmount,
+		productKey,
+		billingPeriod,
+		currencyKey,
+	);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
