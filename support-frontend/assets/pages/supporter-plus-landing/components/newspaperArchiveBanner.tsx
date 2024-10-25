@@ -87,9 +87,9 @@ export function NewspaperArchiveBanner() {
 					</span>
 				</h2>
 				<p css={paragraph}>
-					Since 1821, the world’s major events have been documented in the pages
-					of the Guardian’s UK newspaper. Today, you can journey through the
-					archive and search records of world history from wherever you are
+					Since 1821, the world's major events have been documented in the pages
+					of the Guardian. Today, you can search through and view that record of
+					history with access to the Guardian archives.
 				</p>
 			</div>
 			<Hide from="desktop">

@@ -226,13 +226,12 @@ export const getThankYouModuleData = (
 		},
 		newspaperArchiveBenefit: {
 			icon: getThankYouModuleIcon('newspaperArchiveBenefit'),
-			header: 'The Guardian newspapers archive',
+			header: 'The Guardian newspaper archive',
 			bodyCopy: (
 				<>
 					Sign in to start exploring more than 200 years of world history with
 					our newspaper archive. View digital reproductions of every front page,
-					article and advertisement as it was printed in the
-					{countryGroupId === 'GBPCountries' ? ' Guardian' : ' UK,'} from 1821
+					article and advertisement as it was printed in the Guardian from 1821.
 				</>
 			),
 			ctas: null,
