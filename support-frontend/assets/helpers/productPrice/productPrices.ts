@@ -61,6 +61,10 @@ function getProductPrice(
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
 
+	console.log(
+		'TEST productPrices[countryGroup.name]?.[fulfilmentOption]',
+		productPrices[countryGroup.name]?.[fulfilmentOption],
+	);
 	const productPrice =
 		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
 			billingPeriod

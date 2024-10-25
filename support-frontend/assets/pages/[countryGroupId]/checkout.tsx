@@ -327,6 +327,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 					productOptions,
 			  )
 			: undefined;
+
+		console.log('TEST promotion->', promotion);
 		const discountedPrice = promotion?.discountedPrice
 			? promotion.discountedPrice
 			: undefined;

@@ -45,6 +45,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
@@ -472,11 +473,12 @@ export function ThreeTierLanding({
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
-
-		abParticipations.newspaperArchiveBenefit === undefined
-			? 'NoProductOptions'
-			: 'NewspaperArchive',
+		// abParticipations.newspaperArchiveBenefit === undefined
+		// 	? 'NoProductOptions'
+		// 	: 'NewspaperArchive',
+		NoProductOptions,
 	);
+	console.log('TEST promotionTier3', promotionTier3);
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
