@@ -395,7 +395,12 @@ function OneTimeCheckoutComponent({
 					elements,
 				});
 			}
-			if (paymentMethod === 'Stripe' && stripe && cardElement) {
+			if (
+				paymentMethod === 'Stripe' &&
+				stripe &&
+				cardElement &&
+				recaptchaToken
+			) {
 				paymentMethodResult = await stripe.createPaymentMethod({
 					type: 'card',
 					card: cardElement,
@@ -448,7 +453,6 @@ function OneTimeCheckoutComponent({
 							billingPostcode,
 						),
 						publicKey: stripePublicKey,
-						// ToDo: validate recaptchaToken for card payments
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
