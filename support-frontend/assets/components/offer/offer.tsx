@@ -31,7 +31,7 @@ export function OfferFeast(): JSX.Element {
 	return (
 		<div css={containerStyle}>
 			<p css={paragraphStyle}>
-				Unlimited access to the Guardian Feast App{' '}
+				Unlimited access to the Guardian Feast app{' '}
 				<span css={tooltipOfferStyle}>
 					<Tooltip
 						children={
