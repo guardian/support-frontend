@@ -11,16 +11,19 @@ import { logException } from 'helpers/utilities/logger';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
-	getContributionAnnualValue,
+	getCheckoutAnnualValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
+import { ProductKey } from 'helpers/productCatalog';
 
 // ---- Types ---- //
 
 type SendEventTestParticipationId = 30;
 
 type SendEventPageViewId = 181;
+
+type SendEventCheckoutValueId = 182;
 
 enum SendEventAcquisitionDataFromQueryParam {
 	Source = 94,
@@ -70,7 +73,8 @@ type SendEventId =
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
 	| SendEventAcquisitionDataFromQueryParam
-	| SendEventPageViewId;
+	| SendEventPageViewId
+	| SendEventCheckoutValueId;
 
 // ---- sendEvent logic ---- //
 
@@ -107,6 +111,7 @@ function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
 	value: string,
+	payload?: Record<string, unknown>,
 ): void {
 	/**
 	 * A cart value event is indicated by 64 in QM.
@@ -119,7 +124,12 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
-		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
+		console.log('*** sendEvent ***', id, qmCartValueEventId, value, payload);
+		if (payload) {
+			window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value, payload);
+		} else {
+			window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
+		}
 	}
 }
 
@@ -287,6 +297,44 @@ function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
+function sendEventCheckoutValue(
+	amount: number,
+	product: ProductKey,
+	billingPeriod: BillingPeriod,
+	sourceCurrency: IsoCurrency,
+): void {
+	console.log(
+		'*** sendEventCheckoutValue ***',
+		amount,
+		product,
+		billingPeriod,
+		sourceCurrency,
+	);
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId = 182;
+			const convertedValue = getCheckoutAnnualValue(
+				billingPeriod,
+				amount,
+				sourceCurrency,
+			);
+			const payload = {
+				product,
+				billingPeriod,
+			};
+			if (convertedValue) {
+				sendEvent(
+					sendEventId,
+					false,
+					Math.round(convertedValue).toString(),
+					payload,
+				);
+			}
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
+
 function sendEventContributionCheckoutConversion(
 	amount: number,
 	contributionType: ContributionType,
@@ -298,7 +346,7 @@ function sendEventContributionCheckoutConversion(
 				contributionType === 'ONE_OFF'
 					? SendEventContributionCheckoutConversion.SingleContribution
 					: SendEventContributionCheckoutConversion.RecurringContribution;
-			const convertedValue = getContributionAnnualValue(
+			const convertedValue = getCheckoutAnnualValue(
 				contributionType,
 				amount,
 				sourceCurrency,
@@ -327,7 +375,7 @@ function sendEventContributionCartValue(
 				contributionType === 'ONE_OFF'
 					? SendEventContributionAmountUpdate.SingleContribution
 					: SendEventContributionAmountUpdate.RecurringContribution;
-			const convertedValue = getContributionAnnualValue(
+			const convertedValue = getCheckoutAnnualValue(
 				contributionType,
 				parseInt(amount),
 				sourceCurrency,
@@ -456,4 +504,5 @@ export {
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,
+	sendEventCheckoutValue,
 };

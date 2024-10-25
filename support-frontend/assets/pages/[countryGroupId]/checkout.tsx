@@ -97,7 +97,10 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
+import {
+	sendEventPaymentMethodSelected,
+	sendEventCheckoutValue,
+} from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -289,6 +292,13 @@ export function Checkout({ geoId, appConfig }: Props) {
 				: ratePlan.billingPeriod === 'Month'
 				? 'Monthly'
 				: 'Annual';
+
+		sendEventCheckoutValue(
+			productPrice,
+			productKey,
+			billingPeriod,
+			currencyKey,
+		);
 
 		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 			switch (productKey) {

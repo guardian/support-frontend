@@ -49,15 +49,18 @@ export function getSubscriptionAnnualValue(
 	return discountedAnnualPrice;
 }
 
-export function getContributionAnnualValue(
-	contributionType: ContributionType,
+export function getCheckoutAnnualValue(
+	billingPeriod: BillingPeriod,
 	amount: number,
 	sourceCurrency: IsoCurrency,
 ): number | undefined {
-	const valueInPence =
-		contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
-			? amount * 100
-			: amount * 100 * 12;
+	const billingMultiplier = {
+		// Single: 1,
+		Annual: 1,
+		Monthly: 12,
+		Quarterly: 4,
+	} as const satisfies Record<BillingPeriod, number>;
+	const valueInPence = amount * billingMultiplier[billingPeriod] * 100;
 	const targetCurrency: IsoCurrency = 'GBP';
 
 	if (window.QuantumMetricAPI?.isOn()) {

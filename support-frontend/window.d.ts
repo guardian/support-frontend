@@ -80,6 +80,7 @@ declare global {
 				id: SendEventId,
 				isConversion: 0 | 1 | 64,
 				value: string,
+				payload?: Record<string, unknown>,
 			) => void;
 			currencyConvertFromToValue: (
 				value: number,
