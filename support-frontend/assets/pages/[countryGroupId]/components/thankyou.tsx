@@ -198,13 +198,14 @@ export function ThankYouComponent({
 
 	/* display if either:-
     ab-newspaperArchiveBenefit.isActive = true
-    url contains '#ab-newspaperArchiveBenefit' for testing purposes
+    url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
   */
-	const showNewspaperArchiveBenefit =
-		typeof abTestInit({
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abTestInit({
 			countryId,
 			countryGroupId,
-		}).newspaperArchiveBenefit === 'string';
+		}).newspaperArchiveBenefit ?? '',
+	);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,

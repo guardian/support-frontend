@@ -462,7 +462,13 @@ function CheckoutComponent({
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const supportAbTests = getSupportAbTests(abParticipations);
 
-	const productDescription = abParticipations.newspaperArchiveBenefit
+	/* display if either:-
+    ab-newspaperArchiveBenefit.isActive = true
+    url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
+  */
+	const productDescription = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	)
 		? productCatalogDescriptionNewBenefits[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
