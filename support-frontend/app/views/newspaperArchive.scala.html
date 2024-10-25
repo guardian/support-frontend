@@ -1,0 +1,23 @@
+@import views.{EmptyDiv, ReactDiv, SSRContent}
+
+@(
+  title: String,
+  html: Html,
+)()
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="robots" content="noindex">
+
+    <title>@title</title>
+
+  </head>
+  <body class="header-tweaks">
+    @html
+    <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
+  </body>
+</html>
