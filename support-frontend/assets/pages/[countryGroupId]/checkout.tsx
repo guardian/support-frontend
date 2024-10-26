@@ -44,8 +44,8 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import {
 	init as abTestInit,
 	getAmountsTestVariant,
+	IsVariantIdInAbTest,
 } from 'helpers/abTests/abtest';
-import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -460,18 +460,19 @@ function CheckoutComponent({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const supportAbTests = getSupportAbTests(abParticipations);
-
 	/* display if either:-
     ab-newspaperArchiveBenefit.isActive = true
     url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
   */
-	const productDescription = abTests.newspaperArchiveBenefit.variants.some(
-		({ id }) => id === (abParticipations.newspaperArchiveBenefit ?? ''),
-	)
-		? productCatalogDescription[productKey]
-		: productCatalogDescriptionNewBenefits[productKey];
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const showNewspaperArchiveBenefit = IsVariantIdInAbTest(
+		abParticipations.newspaperArchiveBenefit ?? '',
+		'newspaperArchiveBenefit',
+	);
+
+	const productDescription = showNewspaperArchiveBenefit
+		? productCatalogDescriptionNewBenefits[productKey]
+		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
 	/**
@@ -934,7 +935,7 @@ function CheckoutComponent({
 							countryGroupId: geoId,
 					  }
 					: undefined;
-
+			const supportAbTests = getSupportAbTests(abParticipations);
 			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
 				billingAddress,
