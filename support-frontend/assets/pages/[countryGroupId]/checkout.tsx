@@ -45,6 +45,7 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
+import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -466,11 +467,11 @@ function CheckoutComponent({
     ab-newspaperArchiveBenefit.isActive = true
     url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
   */
-	const productDescription = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
+	const productDescription = abTests.newspaperArchiveBenefit.variants.some(
+		({ id }) => id === (abParticipations.newspaperArchiveBenefit ?? ''),
 	)
-		? productCatalogDescriptionNewBenefits[productKey]
-		: productCatalogDescription[productKey];
+		? productCatalogDescription[productKey]
+		: productCatalogDescriptionNewBenefits[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
 	/**

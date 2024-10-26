@@ -10,6 +10,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
+import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
@@ -198,14 +199,17 @@ export function ThankYouComponent({
 
 	/* display if either:-
     ab-newspaperArchiveBenefit.isActive = true
-    url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
+    url contains '#ab-newspaperArchiveBenefit=<v1/v2/control>' for testing purposes
   */
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abTestInit({
-			countryId,
-			countryGroupId,
-		}).newspaperArchiveBenefit ?? '',
-	);
+	const showNewspaperArchiveBenefit =
+		abTests.newspaperArchiveBenefit.variants.some(
+			({ id }) =>
+				id ===
+				(abTestInit({
+					countryId,
+					countryGroupId,
+				}).newspaperArchiveBenefit ?? ''),
+		);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
