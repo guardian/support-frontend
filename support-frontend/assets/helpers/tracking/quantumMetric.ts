@@ -376,7 +376,7 @@ function sendEventContributionCartValue(
 				contributionType === 'ONE_OFF'
 					? SendEventContributionAmountUpdate.SingleContribution
 					: SendEventContributionAmountUpdate.RecurringContribution;
-			const convertedValue = getCheckoutAnnualValue(
+			const convertedValue = getContributionAnnualValue(
 				contributionType,
 				parseInt(amount),
 				sourceCurrency,
