@@ -395,7 +395,12 @@ function OneTimeCheckoutComponent({
 					elements,
 				});
 			}
-			if (paymentMethod === 'Stripe' && stripe && cardElement) {
+			if (
+				paymentMethod === 'Stripe' &&
+				stripe &&
+				cardElement &&
+				recaptchaToken
+			) {
 				paymentMethodResult = await stripe.createPaymentMethod({
 					type: 'card',
 					card: cardElement,
@@ -448,7 +453,6 @@ function OneTimeCheckoutComponent({
 							billingPostcode,
 						),
 						publicKey: stripePublicKey,
-						// ToDo: validate recaptchaToken for card payments
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
 					};
@@ -459,29 +463,31 @@ function OneTimeCheckoutComponent({
 				}
 			}
 
-			setThankYouOrder({
-				firstName: '',
-				paymentMethod: paymentMethod,
-			});
-			const thankYouUrlSearchParams = new URLSearchParams();
-			thankYouUrlSearchParams.set('contribution', finalAmount.toString());
-			const nextStepRoute = paymentResultThankyouRoute(
-				paymentResult,
-				geoId,
-				thankYouUrlSearchParams,
-			);
-			setIsProcessingPayment(false);
-			if (nextStepRoute) {
-				window.location.href = nextStepRoute;
-			} else {
-				setErrorMessage('Sorry, something went wrong.');
-				if (
-					paymentResult &&
-					'paymentStatus' in paymentResult &&
-					paymentResult.paymentStatus === 'failure'
-				) {
-					setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+			if (paymentResult) {
+				setThankYouOrder({
+					firstName: '',
+					paymentMethod: paymentMethod,
+				});
+				const thankYouUrlSearchParams = new URLSearchParams();
+				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+				const nextStepRoute = paymentResultThankyouRoute(
+					paymentResult,
+					geoId,
+					thankYouUrlSearchParams,
+				);
+				if (nextStepRoute) {
+					window.location.href = nextStepRoute;
+				} else {
+					setErrorMessage('Sorry, something went wrong.');
+					if (
+						'paymentStatus' in paymentResult &&
+						paymentResult.paymentStatus === 'failure'
+					) {
+						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+					}
 				}
+			} else {
+				setIsProcessingPayment(false);
 			}
 		}
 	};
@@ -765,7 +771,7 @@ function OneTimeCheckoutComponent({
 													}
 													onChange={() => {
 														setPaymentMethod(validPaymentMethod);
-
+														setPaymentMethodError(undefined);
 														// Track payment method selection with QM
 														sendEventPaymentMethodSelected(validPaymentMethod);
 													}}
@@ -821,11 +827,6 @@ function OneTimeCheckoutComponent({
 								type="submit"
 							/>
 						</div>
-						<div css={tcContainer}>
-							<FinePrint mobileTheme={'dark'}>
-								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
-							</FinePrint>
-						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
 								<ErrorSummary
@@ -837,6 +838,11 @@ function OneTimeCheckoutComponent({
 								/>
 							</div>
 						)}
+						<div css={tcContainer}>
+							<FinePrint mobileTheme={'dark'}>
+								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+							</FinePrint>
+						</div>
 					</BoxContents>
 				</Box>
 			</form>
