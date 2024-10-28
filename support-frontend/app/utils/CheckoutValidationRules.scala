@@ -515,6 +515,7 @@ object PaperValidation extends SafeLogging {
     "EN5",
     "GU1",
     "GU2",
+    "GU21",
     "GU22",
     "HA0",
     "HA1",
