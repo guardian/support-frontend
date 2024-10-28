@@ -654,11 +654,7 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-function IsVariantIdInAbTest(variantId: string, abTestName: string): boolean {
-	return tests[abTestName].variants.some(({ id }) => id === variantId);
-}
-
-export { init, getAmountsTestVariant, IsVariantIdInAbTest };
+export { init, getAmountsTestVariant };
 
 // Exported for testing only
 export const _ = {

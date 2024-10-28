@@ -9,10 +9,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import {
-	init as abTestInit,
-	IsVariantIdInAbTest,
-} from 'helpers/abTests/abtest';
+import { init as abTestInit } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
@@ -204,9 +201,8 @@ export function ThankYouComponent({
     url contains '#ab-newspaperArchiveBenefit=<v1/v2/control>' for testing purposes
   */
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = IsVariantIdInAbTest(
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
-		'newspaperArchiveBenefit',
 	);
 
 	const thankYouModuleData = getThankYouModuleData(

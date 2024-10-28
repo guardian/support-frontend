@@ -44,7 +44,6 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import {
 	init as abTestInit,
 	getAmountsTestVariant,
-	IsVariantIdInAbTest,
 } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -465,9 +464,8 @@ function CheckoutComponent({
     url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
   */
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = IsVariantIdInAbTest(
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
-		'newspaperArchiveBenefit',
 	);
 
 	const productDescription = showNewspaperArchiveBenefit
