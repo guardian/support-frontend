@@ -8,7 +8,9 @@ deployments:
     type: cloud-formation
     app: workers
     parameters:
-      templatePath: cfn.yaml
+      templateStagePaths:
+        CODE: SupportWorkers-CODE.template.json
+        PROD: SupportWorkers-API-PROD.template.json
   support-workers:
     type: aws-lambda
     parameters:
