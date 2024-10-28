@@ -23,7 +23,7 @@ import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+// import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
@@ -157,11 +157,11 @@ export function ThankYouComponent({
 			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
 		);
 		// track conversion with QM
-		sendEventContributionCheckoutConversion(
-			payment.originalAmount, // This is the amount before discounts
-			contributionType,
-			currencyKey,
-		);
+		// sendEventContributionCheckoutConversion(
+		// 	payment.originalAmount, // This is the amount before discounts
+		// 	contributionType,
+		// 	currencyKey,
+		// );
 	}
 	if (!contributionType) {
 		return <div>Unable to find contribution type {contributionType}</div>;

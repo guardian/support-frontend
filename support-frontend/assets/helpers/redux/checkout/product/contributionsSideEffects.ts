@@ -4,7 +4,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+// import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { validateForm } from '../checkoutActions';
 import {
@@ -35,8 +35,11 @@ export function addProductSideEffects(
 	startListening({
 		matcher: shouldSendEventContributionCartValue,
 		effect(_, listenerApi) {
-			const { contributionAmount, contributionType, contributionCurrency } =
-				getContributionCartValueData(listenerApi.getState());
+			const {
+				contributionAmount,
+				contributionType,
+				// contributionCurrency
+			} = getContributionCartValueData(listenerApi.getState());
 
 			if (!contributionAmount) {
 				return;
@@ -58,11 +61,11 @@ export function addProductSideEffects(
 				return;
 			}
 
-			sendEventContributionCartValue(
-				contributionAmount.toString(),
-				contributionType,
-				contributionCurrency,
-			);
+			// sendEventContributionCartValue(
+			// 	contributionAmount.toString(),
+			// 	contributionType,
+			// 	contributionCurrency,
+			// );
 		},
 	});
 

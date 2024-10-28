@@ -1,9 +1,10 @@
 import { loadScript } from '@guardian/libs';
 import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { ContributionType } from 'helpers/contributions';
+// import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ProductKey } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -15,7 +16,6 @@ import {
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
-import { ProductKey } from 'helpers/productCatalog';
 
 // ---- Types ---- //
 
@@ -50,10 +50,10 @@ enum SendEventSubscriptionCheckoutConversion {
 	GuardianWeeklySubGift = 70,
 }
 
-enum SendEventContributionAmountUpdate {
-	SingleContribution = 71,
-	RecurringContribution = 72,
-}
+// enum SendEventContributionAmountUpdate {
+// 	SingleContribution = 71,
+// 	RecurringContribution = 72,
+// }
 
 enum SendEventContributionPaymentMethodUpdate {
 	PaymentMethod = 103,
@@ -69,7 +69,7 @@ type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventSubscriptionCheckoutStart
 	| SendEventSubscriptionCheckoutConversion
-	| SendEventContributionAmountUpdate
+	// | SendEventContributionAmountUpdate
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
 	| SendEventAcquisitionDataFromQueryParam
@@ -86,8 +86,8 @@ const {
 	GuardianWeeklySubGift,
 } = SendEventSubscriptionCheckoutStart;
 
-const { SingleContribution, RecurringContribution } =
-	SendEventContributionAmountUpdate;
+// const { SingleContribution, RecurringContribution } =
+// 	SendEventContributionAmountUpdate;
 
 const cartValueEventIds: SendEventId[] = [
 	DigiSub,
@@ -95,8 +95,8 @@ const cartValueEventIds: SendEventId[] = [
 	GuardianWeeklySub,
 	DigiSubGift,
 	GuardianWeeklySubGift,
-	SingleContribution,
-	RecurringContribution,
+	// SingleContribution,
+	// RecurringContribution,
 ];
 
 async function ifQmPermitted(callback: () => void) {
@@ -335,59 +335,56 @@ function sendEventCheckoutValue(
 	});
 }
 
-function sendEventContributionCheckoutConversion(
-	amount: number,
-	contributionType: ContributionType,
-	sourceCurrency: IsoCurrency,
-): void {
-	void ifQmPermitted(() => {
-		const sendEventWhenReady = () => {
-			const sendEventId =
-				contributionType === 'ONE_OFF'
-					? SendEventContributionCheckoutConversion.SingleContribution
-					: SendEventContributionCheckoutConversion.RecurringContribution;
-			const convertedValue = getCheckoutAnnualValue(
-				contributionType,
-				amount,
-				sourceCurrency,
-			);
-			if (convertedValue) {
-				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
-			}
-		};
+// function sendEventContributionCheckoutConversion(
+// 	amount: number,
+// 	contributionType: ContributionType,
+// 	sourceCurrency: IsoCurrency,
+// ): void {
+// 	void ifQmPermitted(() => {
+// 		const sendEventWhenReady = () => {
+// 			const sendEventId =
+// 				contributionType === 'ONE_OFF'
+// 					? SendEventContributionCheckoutConversion.SingleContribution
+// 					: SendEventContributionCheckoutConversion.RecurringContribution;
+// 			const convertedValue = getCheckoutAnnualValue(
+// 				contributionType,
+// 				amount,
+// 				sourceCurrency,
+// 			);
+// 			if (convertedValue) {
+// 				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
+// 			}
+// 		};
+// 		sendEventWhenReadyTrigger(sendEventWhenReady);
+// 	});
+// }
 
-		sendEventWhenReadyTrigger(sendEventWhenReady);
-	});
-}
-
-function sendEventContributionCartValue(
-	amount: string,
-	contributionType: ContributionType,
-	sourceCurrency: IsoCurrency,
-): void {
-	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
-		return;
-	}
-
-	void ifQmPermitted(() => {
-		const sendEventWhenReady = () => {
-			const sendEventId =
-				contributionType === 'ONE_OFF'
-					? SendEventContributionAmountUpdate.SingleContribution
-					: SendEventContributionAmountUpdate.RecurringContribution;
-			const convertedValue = getCheckoutAnnualValue(
-				contributionType,
-				parseInt(amount),
-				sourceCurrency,
-			);
-			if (convertedValue) {
-				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
-			}
-		};
-
-		sendEventWhenReadyTrigger(sendEventWhenReady);
-	});
-}
+// function sendEventContributionCartValue(
+// 	amount: string,
+// 	contributionType: ContributionType,
+// 	sourceCurrency: IsoCurrency,
+// ): void {
+// 	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
+// 		return;
+// 	}
+// 	void ifQmPermitted(() => {
+// 		const sendEventWhenReady = () => {
+// 			const sendEventId =
+// 				contributionType === 'ONE_OFF'
+// 					? SendEventContributionAmountUpdate.SingleContribution
+// 					: SendEventContributionAmountUpdate.RecurringContribution;
+// 			const convertedValue = getCheckoutAnnualValue(
+// 				contributionType,
+// 				parseInt(amount),
+// 				sourceCurrency,
+// 			);
+// 			if (convertedValue) {
+// 				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
+// 			}
+// 		};
+// 		sendEventWhenReadyTrigger(sendEventWhenReady);
+// 	});
+// }
 
 function sendEventPaymentMethodSelected(
 	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | null,
@@ -499,8 +496,8 @@ export {
 	init,
 	sendEventSubscriptionCheckoutStart,
 	sendEventSubscriptionCheckoutConversion,
-	sendEventContributionCheckoutConversion,
-	sendEventContributionCartValue,
+	// sendEventContributionCheckoutConversion,
+	// sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,

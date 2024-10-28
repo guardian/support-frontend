@@ -98,8 +98,8 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
-	sendEventPaymentMethodSelected,
 	sendEventCheckoutValue,
+	sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';

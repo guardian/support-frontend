@@ -1,5 +1,5 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import type { ContributionType } from 'helpers/contributions';
+// import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -55,7 +55,6 @@ export function getCheckoutAnnualValue(
 	sourceCurrency: IsoCurrency,
 ): number | undefined {
 	const billingMultiplier = {
-		// Single: 1,
 		Annual: 1,
 		Monthly: 12,
 		Quarterly: 4,
