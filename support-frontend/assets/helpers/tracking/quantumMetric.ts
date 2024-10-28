@@ -51,10 +51,10 @@ enum SendEventSubscriptionCheckoutConversion {
 	GuardianWeeklySubGift = 70,
 }
 
-// enum SendEventContributionAmountUpdate {
-// 	SingleContribution = 71,
-// 	RecurringContribution = 72,
-// }
+enum SendEventContributionAmountUpdate {
+	SingleContribution = 71,
+	RecurringContribution = 72,
+}
 
 enum SendEventContributionPaymentMethodUpdate {
 	PaymentMethod = 103,
@@ -70,7 +70,7 @@ type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventSubscriptionCheckoutStart
 	| SendEventSubscriptionCheckoutConversion
-	// | SendEventContributionAmountUpdate
+	| SendEventContributionAmountUpdate
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
 	| SendEventAcquisitionDataFromQueryParam
@@ -87,8 +87,8 @@ const {
 	GuardianWeeklySubGift,
 } = SendEventSubscriptionCheckoutStart;
 
-// const { SingleContribution, RecurringContribution } =
-// 	SendEventContributionAmountUpdate;
+const { SingleContribution, RecurringContribution } =
+	SendEventContributionAmountUpdate;
 
 const cartValueEventIds: SendEventId[] = [
 	DigiSub,
@@ -96,8 +96,8 @@ const cartValueEventIds: SendEventId[] = [
 	GuardianWeeklySub,
 	DigiSubGift,
 	GuardianWeeklySubGift,
-	// SingleContribution,
-	// RecurringContribution,
+	SingleContribution,
+	RecurringContribution,
 ];
 
 async function ifQmPermitted(callback: () => void) {
@@ -361,32 +361,33 @@ function sendEventContributionCheckoutConversion(
 	});
 }
 
-// function sendEventContributionCartValue(
-// 	amount: string,
-// 	contributionType: ContributionType,
-// 	sourceCurrency: IsoCurrency,
-// ): void {
-// 	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
-// 		return;
-// 	}
-// 	void ifQmPermitted(() => {
-// 		const sendEventWhenReady = () => {
-// 			const sendEventId =
-// 				contributionType === 'ONE_OFF'
-// 					? SendEventContributionAmountUpdate.SingleContribution
-// 					: SendEventContributionAmountUpdate.RecurringContribution;
-// 			const convertedValue = getCheckoutAnnualValue(
-// 				contributionType,
-// 				parseInt(amount),
-// 				sourceCurrency,
-// 			);
-// 			if (convertedValue) {
-// 				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
-// 			}
-// 		};
-// 		sendEventWhenReadyTrigger(sendEventWhenReady);
-// 	});
-// }
+// TODO: To be deleted with the 2-step checkout
+function sendEventContributionCartValue(
+	amount: string,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
+		return;
+	}
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId =
+				contributionType === 'ONE_OFF'
+					? SendEventContributionAmountUpdate.SingleContribution
+					: SendEventContributionAmountUpdate.RecurringContribution;
+			const convertedValue = getCheckoutAnnualValue(
+				contributionType,
+				parseInt(amount),
+				sourceCurrency,
+			);
+			if (convertedValue) {
+				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
+			}
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
 
 function sendEventPaymentMethodSelected(
 	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | null,
@@ -499,7 +500,7 @@ export {
 	sendEventSubscriptionCheckoutStart,
 	sendEventSubscriptionCheckoutConversion,
 	sendEventContributionCheckoutConversion,
-	// sendEventContributionCartValue,
+	sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,

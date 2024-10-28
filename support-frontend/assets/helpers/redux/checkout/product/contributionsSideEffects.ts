@@ -4,11 +4,11 @@ import { currencies } from 'helpers/internationalisation/currency';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-// import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
-// import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { validateForm } from '../checkoutActions';
 import {
-	// setAllAmounts,
+	setAllAmounts,
 	setOtherAmountError,
 	setProductType,
 	setSelectedAmount,
@@ -21,53 +21,50 @@ import {
 	isContribution,
 } from './selectors/productType';
 
-// const shouldSendEventContributionCartValue = isAnyOf(
-// 	setAllAmounts,
-// 	setProductType,
-// 	setSelectedAmount,
-// );
+const shouldSendEventContributionCartValue = isAnyOf(
+	setAllAmounts,
+	setProductType,
+	setSelectedAmount,
+);
 
 const validatesOtherAmountField = isAnyOf(validateForm, validateOtherAmount);
 
 export function addProductSideEffects(
 	startListening: ContributionsStartListening,
 ): void {
-	// startListening({
-	// 	matcher: shouldSendEventContributionCartValue,
-	// 	effect(_, listenerApi) {
-	// 		const {
-	// 			contributionAmount,
-	// 			contributionType,
-	// 			// contributionCurrency
-	// 		} = getContributionCartValueData(listenerApi.getState());
+	startListening({
+		matcher: shouldSendEventContributionCartValue,
+		effect(_, listenerApi) {
+			const { contributionAmount, contributionType, contributionCurrency } =
+				getContributionCartValueData(listenerApi.getState());
 
-	// 		if (!contributionAmount) {
-	// 			return;
-	// 		}
+			if (!contributionAmount) {
+				return;
+			}
 
-	// 		const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
-	// 			contributionType,
-	// 		);
+			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
+				contributionType,
+			);
 
-	// 		const commonState = listenerApi.getState().common;
+			const commonState = listenerApi.getState().common;
 
-	// 		if (
-	// 			threeTierCheckoutEnabled(
-	// 				commonState.abParticipations,
-	// 				commonState.amounts,
-	// 			) &&
-	// 			isMonthlyOrAnnual
-	// 		) {
-	// 			return;
-	// 		}
+			if (
+				threeTierCheckoutEnabled(
+					commonState.abParticipations,
+					commonState.amounts,
+				) &&
+				isMonthlyOrAnnual
+			) {
+				return;
+			}
 
-	// 		sendEventContributionCartValue(
-	// 			contributionAmount.toString(),
-	// 			contributionType,
-	// 			contributionCurrency,
-	// 		);
-	// 	},
-	// });
+			sendEventContributionCartValue(
+				contributionAmount.toString(),
+				contributionType,
+				contributionCurrency,
+			);
+		},
+	});
 
 	startListening({
 		actionCreator: setProductType,
