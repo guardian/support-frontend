@@ -1,7 +1,7 @@
 import { loadScript } from '@guardian/libs';
 import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
-// import type { ContributionType } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductKey } from 'helpers/productCatalog';
@@ -13,6 +13,7 @@ import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
 	getCheckoutAnnualValue,
+	getContributionAnnualValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
@@ -335,29 +336,30 @@ function sendEventCheckoutValue(
 	});
 }
 
-// function sendEventContributionCheckoutConversion(
-// 	amount: number,
-// 	contributionType: ContributionType,
-// 	sourceCurrency: IsoCurrency,
-// ): void {
-// 	void ifQmPermitted(() => {
-// 		const sendEventWhenReady = () => {
-// 			const sendEventId =
-// 				contributionType === 'ONE_OFF'
-// 					? SendEventContributionCheckoutConversion.SingleContribution
-// 					: SendEventContributionCheckoutConversion.RecurringContribution;
-// 			const convertedValue = getCheckoutAnnualValue(
-// 				contributionType,
-// 				amount,
-// 				sourceCurrency,
-// 			);
-// 			if (convertedValue) {
-// 				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
-// 			}
-// 		};
-// 		sendEventWhenReadyTrigger(sendEventWhenReady);
-// 	});
-// }
+// TODO: To be deleted with the 2-step checkout
+function sendEventContributionCheckoutConversion(
+	amount: number,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId =
+				contributionType === 'ONE_OFF'
+					? SendEventContributionCheckoutConversion.SingleContribution
+					: SendEventContributionCheckoutConversion.RecurringContribution;
+			const convertedValue = getContributionAnnualValue(
+				contributionType,
+				amount,
+				sourceCurrency,
+			);
+			if (convertedValue) {
+				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
+			}
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
 
 // function sendEventContributionCartValue(
 // 	amount: string,
@@ -496,7 +498,7 @@ export {
 	init,
 	sendEventSubscriptionCheckoutStart,
 	sendEventSubscriptionCheckoutConversion,
-	// sendEventContributionCheckoutConversion,
+	sendEventContributionCheckoutConversion,
 	// sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,

@@ -31,7 +31,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
-// import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -193,11 +193,11 @@ export function SupporterPlusThankYou({
 				'SupporterPlus',
 			);
 			// track conversion with QM
-			// sendEventContributionCheckoutConversion(
-			// 	amount,
-			// 	contributionType,
-			// 	currencyId,
-			// );
+			sendEventContributionCheckoutConversion(
+				amount,
+				contributionType,
+				currencyId,
+			);
 		}
 
 		trackUserData(

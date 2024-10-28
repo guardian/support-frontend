@@ -1,5 +1,5 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-// import type { ContributionType } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -60,6 +60,31 @@ export function getCheckoutAnnualValue(
 		Quarterly: 4,
 	} as const satisfies Record<BillingPeriod, number>;
 	const valueInPence = amount * billingMultiplier[billingPeriod] * 100;
+	const targetCurrency: IsoCurrency = 'GBP';
+
+	if (window.QuantumMetricAPI?.isOn()) {
+		const convertedValue: number =
+			window.QuantumMetricAPI.currencyConvertFromToValue(
+				valueInPence,
+				sourceCurrency,
+				targetCurrency,
+			);
+		return convertedValue;
+	}
+
+	return;
+}
+
+// TODO: To be deleted with the 2-step checkout
+export function getContributionAnnualValue(
+	contributionType: ContributionType,
+	amount: number,
+	sourceCurrency: IsoCurrency,
+): number | undefined {
+	const valueInPence =
+		contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
+			? amount * 100
+			: amount * 100 * 12;
 	const targetCurrency: IsoCurrency = 'GBP';
 
 	if (window.QuantumMetricAPI?.isOn()) {
