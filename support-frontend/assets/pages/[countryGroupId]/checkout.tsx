@@ -402,15 +402,17 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 
-	/**
-	 * Notify QM of checkout value
-	 */
-	sendEventCheckoutValue(
-		payment.finalAmount,
-		productKey,
-		billingPeriod,
-		currencyKey,
-	);
+	useEffect(() => {
+		/**
+		 * Notify QM of checkout value
+		 */
+		sendEventCheckoutValue(
+			payment.finalAmount,
+			productKey,
+			billingPeriod,
+			currencyKey,
+		);
+	}, []);
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
