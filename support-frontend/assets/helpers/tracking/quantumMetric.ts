@@ -12,8 +12,9 @@ import { logException } from 'helpers/utilities/logger';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
-	getCheckoutAnnualValue,
 	getContributionAnnualValue,
+	getConvertedAnnualValue,
+	getConvertedValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
@@ -298,6 +299,33 @@ function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
+function sendEventOneTimeCheckoutValue(
+	amount: number,
+	sourceCurrency: IsoCurrency,
+): void {
+	console.log('*** sendEventOneTimeCheckoutValue ***', amount, sourceCurrency);
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId = 182;
+			const convertedValue = getConvertedValue(amount, sourceCurrency);
+
+			const payload = {
+				product: 'ONE-OFF',
+			};
+
+			if (convertedValue) {
+				sendEvent(
+					sendEventId,
+					false,
+					Math.round(convertedValue).toString(),
+					payload,
+				);
+			}
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
+
 function sendEventCheckoutValue(
 	amount: number,
 	product: ProductKey,
@@ -314,7 +342,7 @@ function sendEventCheckoutValue(
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId = 182;
-			const convertedValue = getCheckoutAnnualValue(
+			const convertedValue = getConvertedAnnualValue(
 				billingPeriod,
 				amount,
 				sourceCurrency,
@@ -505,4 +533,5 @@ export {
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,
 	sendEventCheckoutValue,
+	sendEventOneTimeCheckoutValue,
 };
