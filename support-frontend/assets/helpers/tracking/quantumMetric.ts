@@ -12,7 +12,6 @@ import { logException } from 'helpers/utilities/logger';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
-	getCheckoutAnnualValue,
 	getContributionAnnualValue,
 	getConvertedAnnualValue,
 	getConvertedValue,
@@ -335,7 +334,7 @@ function sendEventCheckoutValue(
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId = 182;
-			const convertedValue = getCheckoutAnnualValue(
+			const convertedValue = getConvertedAnnualValue(
 				billingPeriod,
 				amount,
 				sourceCurrency,

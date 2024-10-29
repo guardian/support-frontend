@@ -78,7 +78,6 @@ export function getConvertedValue(
 			);
 		return convertedValue;
 	}
-
 	return;
 }
 
