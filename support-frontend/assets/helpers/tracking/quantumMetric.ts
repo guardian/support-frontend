@@ -126,11 +126,12 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
-		if (payload) {
-			window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value, payload);
-		} else {
-			window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
-		}
+		window.QuantumMetricAPI.sendEvent(
+			id,
+			qmCartValueEventId,
+			value,
+			payload ?? {},
+		);
 	}
 }
 
@@ -302,7 +303,6 @@ function sendEventOneTimeCheckoutValue(
 	amount: number,
 	sourceCurrency: IsoCurrency,
 ): void {
-	console.log('*** sendEventOneTimeCheckoutValue ***', amount, sourceCurrency);
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId = 182;
