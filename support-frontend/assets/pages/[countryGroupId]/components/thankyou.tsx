@@ -221,6 +221,10 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(
+			isTier3 && showNewspaperArchiveBenefit,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
@@ -230,10 +234,6 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3, 'socialShare'),
-		...maybeThankYouModule(
-			isTier3 && showNewspaperArchiveBenefit,
-			'newspaperArchiveBenefit',
-		),
 	];
 
 	return (
@@ -266,6 +266,7 @@ export function ThankYouComponent({
 
 					<ThankYouModules
 						isSignedIn={isSignedIn}
+						showNewspaperArchiveBenefit={showNewspaperArchiveBenefit}
 						thankYouModules={thankYouModules}
 						thankYouModulesData={thankYouModuleData}
 					/>
