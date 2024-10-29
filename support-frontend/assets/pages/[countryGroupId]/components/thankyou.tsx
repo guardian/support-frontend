@@ -17,6 +17,7 @@ import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	productCatalogDescription,
+	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { get } from 'helpers/storage/cookie';
@@ -177,9 +178,16 @@ export function ThankYouComponent({
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = !isNewAccount && isSignedIn;
 
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	);
+
 	let benefitsChecklist;
 	if (isTier) {
-		const productDescription = productCatalogDescription[productKey];
+		const productDescription = showNewspaperArchiveBenefit
+			? productCatalogDescriptionNewBenefits[productKey]
+			: productCatalogDescription[productKey];
 		benefitsChecklist = [
 			...productDescription.benefits
 				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
@@ -195,11 +203,6 @@ export function ThankYouComponent({
 				})),
 		];
 	}
-
-	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
