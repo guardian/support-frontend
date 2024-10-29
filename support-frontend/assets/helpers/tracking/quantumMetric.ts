@@ -122,7 +122,6 @@ function sendEvent(
 	 * A non cart value event is indicated by 0 in QM.
 	 * And a conversion event is indicated by 1 in QM.
 	 */
-	console.log('*** sendEvent ***', id, isConversion, value, payload);
 	const qmCartValueEventId = isConversion
 		? 1
 		: cartValueEventIds.includes(id)
