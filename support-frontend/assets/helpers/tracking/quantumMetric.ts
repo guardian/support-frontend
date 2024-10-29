@@ -304,13 +304,6 @@ function sendEventCheckoutValue(
 	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
 ): void {
-	console.log(
-		'*** sendEventCheckoutValue ***',
-		amount,
-		product,
-		billingPeriod,
-		sourceCurrency,
-	);
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId = 182;
