@@ -459,10 +459,6 @@ function CheckoutComponent({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	/* display if either:-
-    ab-newspaperArchiveBenefit.isActive = true
-    url contains '#ab-newspaperArchiveBenefit=v1/v2/control' for testing purposes
-  */
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
