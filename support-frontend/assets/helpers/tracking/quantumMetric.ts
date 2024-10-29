@@ -12,6 +12,7 @@ import { logException } from 'helpers/utilities/logger';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
+	getCheckoutAnnualValue,
 	getContributionAnnualValue,
 	getConvertedAnnualValue,
 	getConvertedValue,
@@ -126,7 +127,6 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
-		console.log('*** sendEvent ***', id, qmCartValueEventId, value, payload);
 		if (payload) {
 			window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value, payload);
 		} else {
@@ -332,17 +332,10 @@ function sendEventCheckoutValue(
 	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
 ): void {
-	console.log(
-		'*** sendEventCheckoutValue ***',
-		amount,
-		product,
-		billingPeriod,
-		sourceCurrency,
-	);
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId = 182;
-			const convertedValue = getConvertedAnnualValue(
+			const convertedValue = getCheckoutAnnualValue(
 				billingPeriod,
 				amount,
 				sourceCurrency,

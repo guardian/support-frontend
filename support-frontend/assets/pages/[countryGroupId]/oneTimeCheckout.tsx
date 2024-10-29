@@ -186,6 +186,22 @@ function getPreSelectedAmount(
 	};
 }
 
+function getFinalAmount(
+	selectedPriceCard: number | 'other',
+	otherAmount: string,
+	minAmount: number,
+): number | undefined {
+	if (selectedPriceCard === 'other') {
+		const parsedAmount = parseFloat(otherAmount);
+
+		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
+			? undefined
+			: parsedAmount;
+	}
+
+	return selectedPriceCard;
+}
+
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
@@ -266,12 +282,7 @@ function OneTimeCheckoutComponent({
 	);
 
 	const [otherAmountError, setOtherAmountError] = useState<string>();
-	const finalAmount =
-		selectedPriceCard === 'other'
-			? Number.isNaN(parseFloat(otherAmount))
-				? undefined
-				: parseFloat(otherAmount)
-			: selectedPriceCard;
+	const finalAmount = getFinalAmount(selectedPriceCard, otherAmount, minAmount);
 
 	useEffect(() => {
 		if (finalAmount) {
