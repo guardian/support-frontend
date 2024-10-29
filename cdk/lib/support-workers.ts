@@ -60,7 +60,7 @@ export class SupportWorkers extends GuStack {
     });
     const sqsPolicy = new PolicyStatement({
       actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
-      resources: [`comms-${this.stage}-EmailQueueArn`],
+      resources: [Fn.importValue(`comms-${this.stage}-EmailQueueArn`)],
     });
     const eventBusPolicy = new PolicyStatement({
       actions: ["events:PutEvents"],
@@ -91,28 +91,37 @@ export class SupportWorkers extends GuStack {
     });
     const supporterProductDataTablePolicy = new PolicyStatement({
       actions: ["dynamodb:PutItem", "dynamodb:UpdateItem"],
-      resources: props.supporterProductDataTables,
+      resources: props.supporterProductDataTables.map((table) =>
+        Fn.importValue(table)
+      ),
     });
 
     const createLambda = (
       lambdaName: string,
       additionalPolicies: PolicyStatement[] = []
-    ) =>
-      new LambdaInvoke(this, lambdaName, {
-        lambdaFunction: new GuLambdaFunction(this, `${lambdaName}Lambda`, {
-          ...lambdaDefaultConfig,
-          handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
-          functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-          environment: {
-            ...lambdaDefaultConfig.environment,
-          },
-          initialPolicy: [
-            s3Policy,
-            cloudWatchLoggingPolicy,
-            ...additionalPolicies,
-          ],
-        }),
+    ) => {
+      const lambdaId = `${lambdaName}Lambda`;
+      const lambda = new GuLambdaFunction(this, lambdaId, {
+        ...lambdaDefaultConfig,
+        handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
+        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
+        environment: {
+          ...lambdaDefaultConfig.environment,
+        },
+        initialPolicy: [
+          s3Policy,
+          cloudWatchLoggingPolicy,
+          ...additionalPolicies,
+        ],
       });
+      this.overrideLogicalId(lambda, {
+        logicalId: lambdaId,
+        reason: "Moving existing lambda to CDK",
+      });
+      return new LambdaInvoke(this, lambdaName, {
+        lambdaFunction: lambda,
+      });
+    };
 
     const failureHandler = createLambda("FailureHandler");
     const catchProps = {
