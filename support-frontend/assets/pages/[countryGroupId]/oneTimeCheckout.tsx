@@ -72,7 +72,10 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
+import {
+	sendEventOneTimeCheckoutValue,
+	sendEventPaymentMethodSelected,
+} from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -286,6 +289,9 @@ function OneTimeCheckoutComponent({
 			// valid final amount, set amount, enable Express checkout
 			elements?.update({ amount: finalAmount * 100 });
 			setStripeExpressCheckoutEnable(true);
+
+			// Track amount selection with QM
+			sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
 		} else {
 			// invalid final amount, disable Express checkout
 			setStripeExpressCheckoutEnable(false);
