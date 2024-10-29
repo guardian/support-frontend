@@ -460,9 +460,11 @@ function CheckoutComponent({
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const supportAbTests = getSupportAbTests(abParticipations);
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	);
 
-	const productDescription = abParticipations.newspaperArchiveBenefit
+	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
@@ -927,7 +929,7 @@ function CheckoutComponent({
 							countryGroupId: geoId,
 					  }
 					: undefined;
-
+			const supportAbTests = getSupportAbTests(abParticipations);
 			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
 				billingAddress,

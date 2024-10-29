@@ -9,7 +9,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import { tests as abTests } from 'helpers/abTests/abtestDefinitions';
+import { init as abTestInit } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
@@ -196,7 +196,10 @@ export function ThankYouComponent({
 		];
 	}
 
-	const showNewspaperArchiveBenefit = abTests.newspaperArchiveBenefit.isActive;
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
