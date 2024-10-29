@@ -4,6 +4,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ProductKey } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -11,6 +12,7 @@ import { logException } from 'helpers/utilities/logger';
 import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
+	getCheckoutAnnualValue,
 	getContributionAnnualValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
@@ -21,6 +23,8 @@ import {
 type SendEventTestParticipationId = 30;
 
 type SendEventPageViewId = 181;
+
+type SendEventCheckoutValueId = 182;
 
 enum SendEventAcquisitionDataFromQueryParam {
 	Source = 94,
@@ -70,7 +74,8 @@ type SendEventId =
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
 	| SendEventAcquisitionDataFromQueryParam
-	| SendEventPageViewId;
+	| SendEventPageViewId
+	| SendEventCheckoutValueId;
 
 // ---- sendEvent logic ---- //
 
@@ -107,6 +112,7 @@ function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
 	value: string,
+	payload?: Record<string, unknown>,
 ): void {
 	/**
 	 * A cart value event is indicated by 64 in QM.
@@ -119,7 +125,12 @@ function sendEvent(
 		? 64
 		: 0;
 	if (window.QuantumMetricAPI?.isOn()) {
-		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
+		window.QuantumMetricAPI.sendEvent(
+			id,
+			qmCartValueEventId,
+			value,
+			payload ?? {},
+		);
 	}
 }
 
@@ -287,6 +298,38 @@ function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
+function sendEventCheckoutValue(
+	amount: number,
+	product: ProductKey,
+	billingPeriod: BillingPeriod,
+	sourceCurrency: IsoCurrency,
+): void {
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId = 182;
+			const convertedValue = getCheckoutAnnualValue(
+				billingPeriod,
+				amount,
+				sourceCurrency,
+			);
+			const payload = {
+				product,
+				billingPeriod,
+			};
+			if (convertedValue) {
+				sendEvent(
+					sendEventId,
+					false,
+					Math.round(convertedValue).toString(),
+					payload,
+				);
+			}
+		};
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
+}
+
+// TODO: To be deleted with the 2-step checkout
 function sendEventContributionCheckoutConversion(
 	amount: number,
 	contributionType: ContributionType,
@@ -307,11 +350,11 @@ function sendEventContributionCheckoutConversion(
 				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
 			}
 		};
-
 		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
 }
 
+// TODO: To be deleted with the 2-step checkout
 function sendEventContributionCartValue(
 	amount: string,
 	contributionType: ContributionType,
@@ -320,7 +363,6 @@ function sendEventContributionCartValue(
 	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
 		return;
 	}
-
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId =
@@ -336,7 +378,6 @@ function sendEventContributionCartValue(
 				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
 			}
 		};
-
 		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
 }
@@ -456,4 +497,5 @@ export {
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
 	sendEventAcquisitionDataFromQueryParamEvent,
+	sendEventCheckoutValue,
 };

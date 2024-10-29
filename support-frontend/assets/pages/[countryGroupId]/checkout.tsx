@@ -97,7 +97,10 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
+import {
+	sendEventCheckoutValue,
+	sendEventPaymentMethodSelected,
+} from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -243,6 +246,17 @@ export function Checkout({ geoId, appConfig }: Props) {
 		? parseInt(contributionParam, 10)
 		: undefined;
 
+	/**
+	 * This is some annoying transformation we need from
+	 * Product API => Contributions work we need to do
+	 */
+	const billingPeriod =
+		ratePlan.billingPeriod === 'Quarter'
+			? 'Quarterly'
+			: ratePlan.billingPeriod === 'Month'
+			? 'Monthly'
+			: 'Annual';
+
 	let promotion;
 	if (productKey === 'Contribution') {
 		/**
@@ -278,17 +292,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 			productKey === 'SupporterPlus' || productKey === 'TierThree'
 				? appConfig.allProductPrices[productKey]
 				: undefined;
-
-		/**
-		 * This is some annoying transformation we need from
-		 * Product API => Contributions work we need to do
-		 */
-		const billingPeriod =
-			ratePlan.billingPeriod === 'Quarter'
-				? 'Quarterly'
-				: ratePlan.billingPeriod === 'Month'
-				? 'Monthly'
-				: 'Annual';
 
 		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 			switch (productKey) {
@@ -398,6 +401,19 @@ export function Checkout({ geoId, appConfig }: Props) {
 	 * a country that doesn't correspond to the countryGroup a product is in.
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
+
+	useEffect(() => {
+		/**
+		 * Notify QM of checkout value
+		 */
+		sendEventCheckoutValue(
+			payment.finalAmount,
+			productKey,
+			billingPeriod,
+			currencyKey,
+		);
+	}, []);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent

@@ -49,6 +49,33 @@ export function getSubscriptionAnnualValue(
 	return discountedAnnualPrice;
 }
 
+export function getCheckoutAnnualValue(
+	billingPeriod: BillingPeriod,
+	amount: number,
+	sourceCurrency: IsoCurrency,
+): number | undefined {
+	const billingMultiplier = {
+		Annual: 1,
+		Monthly: 12,
+		Quarterly: 4,
+	} as const satisfies Record<BillingPeriod, number>;
+	const valueInPence = amount * billingMultiplier[billingPeriod] * 100;
+	const targetCurrency: IsoCurrency = 'GBP';
+
+	if (window.QuantumMetricAPI?.isOn()) {
+		const convertedValue: number =
+			window.QuantumMetricAPI.currencyConvertFromToValue(
+				valueInPence,
+				sourceCurrency,
+				targetCurrency,
+			);
+		return convertedValue;
+	}
+
+	return;
+}
+
+// TODO: To be deleted with the 2-step checkout
 export function getContributionAnnualValue(
 	contributionType: ContributionType,
 	amount: number,
