@@ -10,9 +10,12 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
   Condition,
+  Errors,
+  Fail,
   Parallel,
   Pass,
   StateMachine,
+  Succeed,
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
@@ -120,10 +123,46 @@ export class SupportWorkers extends GuStack {
       });
       return new LambdaInvoke(this, lambdaName, {
         lambdaFunction: lambda,
-      });
+        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
+      })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryNone"],
+          maxAttempts: 0,
+        })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryLimited"],
+          maxAttempts: 5,
+          interval: Duration.seconds(1),
+          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
+        })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryUnlimited"],
+          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
+          interval: Duration.seconds(1),
+          backoffRate: 2,
+        })
+        .addRetry({
+          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
+          maxAttempts: 999999,
+          interval: Duration.seconds(3),
+          backoffRate: 2,
+        });
     };
 
-    const failureHandler = createLambda("FailureHandler");
+    const checkoutFailure = new Pass(this, "CheckoutFailure"); // This is a failed execution we don't want to alert on
+    const failState = new Fail(this, "FailState"); // This is a failed execution we do want to alert on
+
+    const succeedOrFailChoice = new Choice(this, "SucceedOrFailChoice")
+      .when(
+        Condition.booleanEquals("$.requestInfo.testUser", true),
+        checkoutFailure
+      )
+      .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
+      .otherwise(checkoutFailure);
+
+    const failureHandler =
+      createLambda("FailureHandler").next(succeedOrFailChoice);
+
     const catchProps = {
       resultPath: "$.error",
       errors: ["States.TaskFailed"],
@@ -162,28 +201,35 @@ export class SupportWorkers extends GuStack {
       "$.requestInfo.accountExists",
       true
     );
-    const checkoutSuccess = new Pass(this, "CheckoutSuccess");
+    const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
+
     const parallelSteps = new Parallel(this, "Parallel")
       .branch(sendThankYouEmail)
       .branch(updateSupporterProductData)
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    const definitionWithExistingAccount = preparePaymentMethodForReuse
-      .next(createZuoraSubscription)
-      .next(parallelSteps);
+    const commonDefinition = createZuoraSubscription.next(parallelSteps);
+
+    const definitionWithExistingAccount =
+      preparePaymentMethodForReuse.next(commonDefinition);
 
     const definitionWithNewAccount = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(definitionWithExistingAccount);
+      .next(commonDefinition);
 
     const definition = shouldClonePaymentMethodChoice
       .when(condition, definitionWithExistingAccount)
       .otherwise(definitionWithNewAccount);
 
-    new StateMachine(this, "SupportWorkers", {
+    const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`,
       definition: definition,
+    });
+
+    this.overrideLogicalId(stateMachine, {
+      logicalId: `SupportWorkers${this.stage}`,
+      reason: "Moving existing step function to CDK",
     });
   }
 }
