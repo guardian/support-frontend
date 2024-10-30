@@ -26,6 +26,7 @@ type SendEventTestParticipationId = 30;
 type SendEventPageViewId = 181;
 
 type SendEventCheckoutValueId = 182;
+type SendEventCheckoutConversionId = 183;
 
 enum SendEventAcquisitionDataFromQueryParam {
 	Source = 94,
@@ -76,7 +77,8 @@ type SendEventId =
 	| SendEventContributionPaymentMethodUpdate
 	| SendEventAcquisitionDataFromQueryParam
 	| SendEventPageViewId
-	| SendEventCheckoutValueId;
+	| SendEventCheckoutValueId
+	| SendEventCheckoutConversionId;
 
 // ---- sendEvent logic ---- //
 
@@ -302,10 +304,11 @@ function sendEventSubscriptionCheckoutConversion(
 function sendEventOneTimeCheckoutValue(
 	amount: number,
 	sourceCurrency: IsoCurrency,
+	isConversion?: boolean,
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
-			const sendEventId = 182;
+			const sendEventId = isConversion ? 183 : 182;
 			const convertedValue = getConvertedValue(amount, sourceCurrency);
 
 			const payload = {
@@ -315,7 +318,7 @@ function sendEventOneTimeCheckoutValue(
 			if (convertedValue) {
 				sendEvent(
 					sendEventId,
-					false,
+					!!isConversion,
 					Math.round(convertedValue).toString(),
 					payload,
 				);
@@ -330,10 +333,11 @@ function sendEventCheckoutValue(
 	product: ProductKey,
 	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
+	isConversion?: boolean,
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
-			const sendEventId = 182;
+			const sendEventId = isConversion ? 183 : 182;
 			const convertedValue = getConvertedAnnualValue(
 				billingPeriod,
 				amount,
@@ -346,7 +350,7 @@ function sendEventCheckoutValue(
 			if (convertedValue) {
 				sendEvent(
 					sendEventId,
-					false,
+					!!isConversion,
 					Math.round(convertedValue).toString(),
 					payload,
 				);

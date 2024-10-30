@@ -24,7 +24,11 @@ import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+import {
+	sendEventCheckoutValue,
+	sendEventContributionCheckoutConversion,
+	sendEventOneTimeCheckoutValue,
+} from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
@@ -143,6 +147,8 @@ export function ThankYouComponent({
 			break;
 	}
 
+	const isOneOff = contributionType === 'ONE_OFF';
+
 	if (contributionType) {
 		// track conversion with GTM
 		const paymentMethod =
@@ -157,6 +163,30 @@ export function ThankYouComponent({
 			paymentMethod,
 			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
 		);
+
+		/**
+		 * This is some annoying transformation we need from
+		 * Product API => Contributions work we need to do
+		 */
+		const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+		if (isOneOff) {
+			// track conversion with QM
+			sendEventOneTimeCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				currencyKey,
+				true,
+			);
+		} else if (productKey) {
+			// track conversion with QM
+			sendEventCheckoutValue(
+				payment.originalAmount, // This is the amount before discounts
+				productKey,
+				billingPeriod,
+				currencyKey,
+				true,
+			);
+		}
+
 		// track conversion with QM
 		sendEventContributionCheckoutConversion(
 			payment.originalAmount, // This is the amount before discounts
@@ -168,7 +198,6 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isOneOff = contributionType === 'ONE_OFF';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
