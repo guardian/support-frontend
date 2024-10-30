@@ -25,14 +25,14 @@ const firstColumnContainer = css`
 
 export interface ThankYouModulesProps {
 	isSignedIn?: boolean;
-	showNewspaperArchiveBenefit?: boolean;
+	showNewspaperArchiveBenefit: boolean;
 	thankYouModules: ThankYouModuleType[];
 	thankYouModulesData: Record<ThankYouModuleType, ThankYouModuleData>;
 }
 
 export function ThankYouModules({
 	isSignedIn,
-	showNewspaperArchiveBenefit,
+	showNewspaperArchiveBenefit = false,
 	thankYouModules,
 	thankYouModulesData,
 }: ThankYouModulesProps): JSX.Element {
