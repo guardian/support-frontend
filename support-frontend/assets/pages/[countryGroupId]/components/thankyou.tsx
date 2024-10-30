@@ -17,6 +17,7 @@ import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	productCatalogDescription,
+	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { get } from 'helpers/storage/cookie';
@@ -206,9 +207,16 @@ export function ThankYouComponent({
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const emailExists = !isNewAccount && isSignedIn;
 
+	const abParticipations = abTestInit({ countryId, countryGroupId });
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	);
+
 	let benefitsChecklist;
 	if (isTier) {
-		const productDescription = productCatalogDescription[productKey];
+		const productDescription = showNewspaperArchiveBenefit
+			? productCatalogDescriptionNewBenefits[productKey]
+			: productCatalogDescription[productKey];
 		benefitsChecklist = [
 			...productDescription.benefits
 				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
@@ -224,11 +232,6 @@ export function ThankYouComponent({
 				})),
 		];
 	}
-
-	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -250,6 +253,10 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
 		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(
+			isTier3 && showNewspaperArchiveBenefit,
+			'newspaperArchiveBenefit',
+		),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
@@ -259,10 +266,6 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3, 'socialShare'),
-		...maybeThankYouModule(
-			isTier3 && showNewspaperArchiveBenefit,
-			'newspaperArchiveBenefit',
-		),
 	];
 
 	return (
@@ -295,6 +298,7 @@ export function ThankYouComponent({
 
 					<ThankYouModules
 						isSignedIn={isSignedIn}
+						showNewspaperArchiveBenefit={showNewspaperArchiveBenefit}
 						thankYouModules={thankYouModules}
 						thankYouModulesData={thankYouModuleData}
 					/>

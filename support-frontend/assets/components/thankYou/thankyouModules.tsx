@@ -25,16 +25,20 @@ const firstColumnContainer = css`
 
 export interface ThankYouModulesProps {
 	isSignedIn?: boolean;
+	showNewspaperArchiveBenefit: boolean;
 	thankYouModules: ThankYouModuleType[];
 	thankYouModulesData: Record<ThankYouModuleType, ThankYouModuleData>;
 }
 
 export function ThankYouModules({
 	isSignedIn,
+	showNewspaperArchiveBenefit = false,
 	thankYouModules,
 	thankYouModulesData,
 }: ThankYouModulesProps): JSX.Element {
-	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
+	const maxModules = showNewspaperArchiveBenefit ? 5 : 6;
+	const numberOfModulesInFirstColumn =
+		thankYouModules.length >= maxModules ? 3 : 2;
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
