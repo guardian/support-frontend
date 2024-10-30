@@ -2,9 +2,9 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineMedium28,
 	neutral,
 	space,
+	textSans15,
 	until,
 } from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';
@@ -42,7 +42,7 @@ export const accordionContainer = css`
 
 	p,
 	a {
-		${headlineMedium28};
+		${textSans15};
 		margin-bottom: ${space[3]}px;
 	}
 
@@ -52,6 +52,7 @@ export const accordionContainer = css`
 		padding-left: ${space[2]}px;
 	}
 `;
+
 // ----- Content ----- //
 const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 export function ContentDeliveryFaqBlock(): JSX.Element {
