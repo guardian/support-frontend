@@ -14,7 +14,7 @@ deployments:
   support-workers:
     type: aws-lambda
     parameters:
-      bucket: support-workers-dist
+      bucketSSMKey: /account/services/support-workers.artifact.bucket
       functionNames:
         - "-CreatePaymentMethodLambda-"
         - "-CreateSalesforceContactLambda-"
@@ -29,6 +29,6 @@ deployments:
   it-tests:
     type: aws-s3
     parameters:
-      bucket: support-workers-dist
+      bucketSSMKey: /account/services/support-workers.artifact.bucket
       cacheControl: private
       publicReadAcl: false
