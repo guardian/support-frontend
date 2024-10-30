@@ -7,6 +7,7 @@ import {
 	palette,
 	space,
 	textEgyptian17,
+	until,
 } from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
@@ -68,21 +69,18 @@ const heroParagraph = css`
 		margin-bottom: ${space[9]}px;
 	}
 `;
-const mobileLineBreak = css`
-	${from.tablet} {
+const desktopToWideLineBreak = css`
+	${until.desktop} {
 		display: none;
 	}
-`;
-const tabletLineBreak = css`
-	${from.desktop} {
+	${from.wide} {
 		display: none;
 	}
 `;
 const defaultTitle = (
 	<>
-		Guardian <br css={mobileLineBreak} />
-		and&nbsp;Observer <br css={mobileLineBreak} />
-		newspapers <br css={tabletLineBreak} />
+		Guardian and <br css={desktopToWideLineBreak} />
+		Observer newspapers
 	</>
 );
 const defaultCopy = (

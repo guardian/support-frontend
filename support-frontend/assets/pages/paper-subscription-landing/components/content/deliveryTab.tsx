@@ -52,7 +52,6 @@ export const accordionContainer = css`
 		padding-left: ${space[2]}px;
 	}
 `;
-
 // ----- Content ----- //
 const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 export function ContentDeliveryFaqBlock(): JSX.Element {
