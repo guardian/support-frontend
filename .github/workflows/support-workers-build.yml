@@ -80,13 +80,13 @@ jobs:
                 type: cloud-formation
                 app: workers
                 parameters:
+                  bucketSSMKey: /account/services/support-workers.artifact.bucket
                   templateStagePaths:
                     CODE: SupportWorkers-CODE.template.json
                     PROD: SupportWorkers-API-PROD.template.json
               support-workers:
                 type: aws-lambda
                 parameters:
-                  bucketSSMKey: /account/services/support-workers.artifact.bucket
                   functionNames:
                     - "-CreatePaymentMethodLambda-"
                     - "-CreateSalesforceContactLambda-"
