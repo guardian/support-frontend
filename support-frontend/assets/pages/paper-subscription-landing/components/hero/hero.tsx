@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	brandAlt,
 	from,
 	headlineBold34,
 	headlineBold42,
@@ -54,9 +53,6 @@ const heroTitle = css`
 		${headlineBold42};
 	}
 `;
-const heroTitleHighlight = css`
-	color: ${brandAlt[400]};
-`;
 const heroParagraph = css`
 	${textEgyptian17};
 	line-height: 1.4;
@@ -86,15 +82,14 @@ const defaultTitle = (
 	<>
 		Guardian <br css={mobileLineBreak} />
 		and&nbsp;Observer <br css={mobileLineBreak} />
-		newspaper subscriptions <br css={tabletLineBreak} />
-		<span css={heroTitleHighlight}>to suit every reader</span>
+		newspapers <br css={tabletLineBreak} />
 	</>
 );
 const defaultCopy = (
 	<>
-		We offer a range of packages from every day to weekend, and different
-		subscription types depending on whether you want to collect your newspaper
-		in a shop or get it delivered.
+		Whether you’re looking to keep up to date with the headlines or pore over
+		our irresistible recipes, you can enjoy our award-winning journalism for
+		less.
 	</>
 );
 

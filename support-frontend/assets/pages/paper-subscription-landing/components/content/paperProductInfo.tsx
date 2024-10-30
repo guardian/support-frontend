@@ -66,7 +66,7 @@ const defaultTitle = (
 		Guardian <br css={mobileLineBreak} />
 		and&nbsp;Observer <br css={mobileLineBreak} />
 		newspaper subscriptions <br css={tabletLineBreak} />
-		<span css={heroTitleHighlight}>to suit every reader</span>
+		<span css={heroTitleHighlight}>to suit every reader PAPERPRODUCTINFO</span>
 	</>
 );
 const defaultCopy = (
