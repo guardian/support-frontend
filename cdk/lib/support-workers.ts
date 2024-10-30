@@ -61,7 +61,7 @@ export class SupportWorkers extends GuStack {
       actions: ["s3:GetObject"],
       resources: props.s3Files,
     });
-    const sqsPolicy = new PolicyStatement({
+    const emailSqsPolicy = new PolicyStatement({
       actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
       resources: [Fn.importValue(`comms-${this.stage}-EmailQueueArn`)],
     });
@@ -160,8 +160,9 @@ export class SupportWorkers extends GuStack {
       .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
       .otherwise(checkoutFailure);
 
-    const failureHandler =
-      createLambda("FailureHandler").next(succeedOrFailChoice);
+    const failureHandler = createLambda("FailureHandler", [
+      emailSqsPolicy,
+    ]).next(succeedOrFailChoice);
 
     const catchProps = {
       resultPath: "$.error",
@@ -184,7 +185,9 @@ export class SupportWorkers extends GuStack {
       promotionsDynamoTablePolicy,
     ]).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createLambda("SendThankYouEmail", [sqsPolicy]);
+    const sendThankYouEmail = createLambda("SendThankYouEmail", [
+      emailSqsPolicy,
+    ]);
     const updateSupporterProductData = createLambda(
       "UpdateSupporterProductData",
       [supporterProductDataTablePolicy]
