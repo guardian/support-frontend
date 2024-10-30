@@ -23,7 +23,6 @@ interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
   supporterProductDataTables: string[];
-  kinesisStreamArn: string;
   eventBusArns: string[];
 }
 export class SupportWorkers extends GuStack {
@@ -53,10 +52,6 @@ export class SupportWorkers extends GuStack {
       },
     };
 
-    // const lambdaExecutionRole = new Role(this, "LambdaExecutionRole", {
-    //   assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
-    //
-    // });
     const s3Policy = new PolicyStatement({
       actions: ["s3:GetObject"],
       resources: props.s3Files,
@@ -78,11 +73,6 @@ export class SupportWorkers extends GuStack {
       ],
       resources: ["*"],
     });
-    // TODO: I think this could be removed now we have the event bus?
-    // const kinesisPolicy = new PolicyStatement({
-    //   actions: ["kinesis:*"],
-    //   resources: [props.kinesisStreamArn],
-    // });
     const promotionsDynamoTablePolicy = new PolicyStatement({
       actions: [
         "dynamodb:GetItem",

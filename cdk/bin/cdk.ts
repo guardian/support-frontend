@@ -117,8 +117,6 @@ new SupportWorkers(app, "SupportWorkers-CODE", {
   supporterProductDataTables: [
     "supporter-product-data-tables-CODE-SupporterProductDataTable",
   ],
-  kinesisStreamArn:
-    "arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE",
   eventBusArns: [
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
   ],
@@ -140,8 +138,6 @@ new SupportWorkers(app, "SupportWorkers-PROD", {
     "supporter-product-data-tables-CODE-SupporterProductDataTable",
     "supporter-product-data-tables-PROD-SupporterProductDataTable",
   ],
-  kinesisStreamArn:
-    "arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD",
   eventBusArns: [
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
     "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
