@@ -17,7 +17,7 @@ class NewspaperArchiveController(
   def getHeader: Action[AnyContent] = CachedAction() { implicit request =>
     assetsResolver.getSsrCacheContentsAsHtml(divId = "content", file = "ssr-newspaper-archive-header.html") match {
       case EmptyDiv(_) => InternalServerError("Failed to load newspaper archive content")
-      case SSRContent(_, htmlElement, _) => Ok(newspaperArchive(htmlElement))
+      case SSRContent(_, htmlElement, _) => Ok(newspaperArchive(htmlElement)())
     }
 
   }
