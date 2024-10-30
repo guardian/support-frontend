@@ -1,12 +1,10 @@
-import { writeFileSync } from 'fs';
-import { resolve } from 'path';
 import { css, Global } from '@emotion/react';
 import {
 	from,
 	neutral,
 	palette,
 	space,
-  textSans17,
+	textSans17,
 	until,
 } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
@@ -14,16 +12,14 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { renderToString } from 'react-dom/server';
-import {reset} from "../assets/stylesheets/emotion/reset";
-import {guardianFonts} from "../assets/stylesheets/emotion/fonts";
-import {SkipLink} from "../assets/components/skipLink/skipLink";
-import {Header} from "../assets/components/headers/simpleHeader/simpleHeader";
-import {PrerenderGlobalStyles} from "../assets/helpers/rendering/prerenderGlobalStyles";
-import {CheckoutHeading} from "../assets/components/checkoutHeading/checkoutHeading";
-import {Container} from "../assets/components/layout/container";
-import AnimatedDots from "../assets/components/spinners/animatedDots";
-
+import { PrerenderGlobalStyles } from '../../helpers/rendering/prerenderGlobalStyles';
+import { guardianFonts } from '../../stylesheets/emotion/fonts';
+import { reset } from '../../stylesheets/emotion/reset';
+import { CheckoutHeading } from '../checkoutHeading/checkoutHeading';
+import { Header } from '../headers/simpleHeader/simpleHeader';
+import { Container } from '../layout/container';
+import { SkipLink } from '../skipLink/skipLink';
+import AnimatedDots from '../spinners/animatedDots';
 
 const checkoutContainer = css`
 	position: relative;
@@ -68,7 +64,7 @@ const container = css`
 	}
 `;
 
-function Loading() {
+export function HoldingContent() {
 	return (
 		<div css={container}>
 			<Global styles={[reset, guardianFonts]} />
@@ -98,10 +94,3 @@ function Loading() {
 		</div>
 	);
 }
-
-const html = renderToString(<Loading />);
-writeFileSync(
-	resolve(__dirname, '../conf/ssr-cache/', `ssr-holding-content.html`),
-	html,
-	'utf8',
-);
