@@ -38,13 +38,9 @@ jobs:
           cache: "yarn"
           cache-dependency-path: support-workers/cloud-formation/src/yarn.lock
 
-      - name: Install
-        run: yarn
-        working-directory: support-workers/cloud-formation/src
-
-      - name: Build the cloudformation
-        run: yarn run build-cfn
-        working-directory: support-workers/cloud-formation/src
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
 
       - uses: sbt/setup-sbt@v1
 
@@ -84,7 +80,9 @@ jobs:
                 type: cloud-formation
                 app: workers
                 parameters:
-                  templatePath: cfn.yaml
+                  templateStagePaths:
+                    CODE: SupportWorkers-CODE.template.json
+                    PROD: SupportWorkers-API-PROD.template.json
               support-workers:
                 type: aws-lambda
                 parameters:
@@ -108,7 +106,8 @@ jobs:
                   publicReadAcl: false
           contentDirectories: |
               cfn:
-                - support-workers/cloud-formation/target/cfn.yaml
+                - cdk/cdk.out/SupportWorkers-CODE.template.json
+                - cdk/cdk.out/SupportWorkers-PROD.template.json
               support-workers:
                 - support-workers/target/scala-2.13/support-workers.jar
               it-tests:
