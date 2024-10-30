@@ -30,6 +30,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "CreatePaymentMethodLambdaServiceRole2642162E",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -54,7 +57,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "CreatePaymentMethodLambdaServiceRole2642162E",
@@ -266,6 +269,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "CreateSalesforceContactLambdaServiceRole68D44BEC",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -290,7 +296,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "CreateSalesforceContactLambdaServiceRole68D44BEC",
@@ -502,6 +508,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "CreateZuoraSubscriptionLambdaServiceRole56164E38",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -526,7 +535,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "CreateZuoraSubscriptionLambdaServiceRole56164E38",
@@ -751,6 +760,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "FailureHandlerLambdaServiceRole6F65E37D",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -775,7 +787,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "FailureHandlerLambdaServiceRole6F65E37D",
@@ -997,6 +1009,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "PreparePaymentMethodForReuseLambdaServiceRoleC402A494",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -1021,7 +1036,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "PreparePaymentMethodForReuseLambdaServiceRoleC402A494",
@@ -1233,6 +1248,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "SendAcquisitionEventLambdaServiceRole9BF3677F",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -1257,7 +1275,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "SendAcquisitionEventLambdaServiceRole9BF3677F",
@@ -1477,6 +1495,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "SendThankYouEmailLambdaServiceRoleE8E08BFF",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -1501,7 +1522,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "SendThankYouEmailLambdaServiceRoleE8E08BFF",
@@ -2114,6 +2135,9 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "UpdateSupporterProductDataLambdaServiceRole6A1FC129",
       ],
       "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
@@ -2138,7 +2162,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "UpdateSupporterProductDataLambdaServiceRole6A1FC129",
