@@ -101,7 +101,6 @@ jobs:
               it-tests:
                 type: aws-s3
                 parameters:
-                  bucketSSMKey: /account/services/support-workers.artifact.bucket
                   cacheControl: private
                   publicReadAcl: false
           contentDirectories: |
