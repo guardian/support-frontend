@@ -10,6 +10,7 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
   Condition,
+  DefinitionBody,
   Errors,
   Fail,
   Parallel,
@@ -190,7 +191,7 @@ export class SupportWorkers extends GuStack {
       this,
       "ShouldClonePaymentMethodChoice"
     );
-    const condition = Condition.booleanEquals(
+    const accountExists = Condition.booleanEquals(
       "$.requestInfo.accountExists",
       true
     );
@@ -202,22 +203,22 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    const commonDefinition = createZuoraSubscription.next(parallelSteps);
+    const commonSteps = createZuoraSubscription.next(parallelSteps);
 
-    const definitionWithExistingAccount =
-      preparePaymentMethodForReuse.next(commonDefinition);
+    const stepsWithExistingAccount =
+      preparePaymentMethodForReuse.next(commonSteps);
 
-    const definitionWithNewAccount = createPaymentMethodLambda
+    const stepsForNewAccount = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(commonDefinition);
+      .next(commonSteps);
 
-    const definition = shouldClonePaymentMethodChoice
-      .when(condition, definitionWithExistingAccount)
-      .otherwise(definitionWithNewAccount);
+    const startPoint = shouldClonePaymentMethodChoice
+      .when(accountExists, stepsWithExistingAccount)
+      .otherwise(stepsForNewAccount);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`,
-      definition: definition,
+      definitionBody: DefinitionBody.fromChainable(startPoint),
     });
 
     this.overrideLogicalId(stateMachine, {
