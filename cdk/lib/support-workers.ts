@@ -6,7 +6,7 @@ import {
 } from "@guardian/cdk/lib/constructs/lambda";
 import { type App, Duration, Fn } from "aws-cdk-lib";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
   Condition,
@@ -34,13 +34,20 @@ export class SupportWorkers extends GuStack {
 
     const lambdaDefaultConfig: Pick<
       GuFunctionProps,
-      "app" | "memorySize" | "fileName" | "runtime" | "timeout" | "environment"
+      | "app"
+      | "memorySize"
+      | "fileName"
+      | "runtime"
+      | "timeout"
+      | "environment"
+      | "architecture"
     > = {
       app,
-      memorySize: 1024,
+      memorySize: 1536,
       fileName: `support-workers.jar`,
       runtime: Runtime.JAVA_21,
       timeout: Duration.seconds(300),
+      architecture: Architecture.ARM_64,
       environment: {
         APP: app,
         STACK: this.stack,
