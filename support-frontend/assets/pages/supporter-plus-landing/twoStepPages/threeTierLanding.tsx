@@ -180,7 +180,6 @@ const disclaimerContainer = css`
 const sideBySide = css`
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 `;
 
 const links = [
