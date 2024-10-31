@@ -36,7 +36,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: "yarn"
-          cache-dependency-path: support-workers/cloud-formation/src/yarn.lock
+          cache-dependency-path: cdk/yarn.lock
 
       - name: Build CFN from CDK
         run: ./script/ci
