@@ -53,6 +53,7 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
+import { FeastBanner } from '../components/feastBanner';
 import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
@@ -174,6 +175,12 @@ const disclaimerContainer = css`
 			padding: ${space[5]}px ${space[5]}px;
 		}
 	}
+`;
+
+const sideBySide = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 `;
 
 const links = [
@@ -567,7 +574,12 @@ export function ThreeTierLanding({
 							abParticipations={abParticipations}
 						/>
 					)}
-					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
+					{showNewspaperArchiveBanner && (
+						<div css={sideBySide}>
+							<FeastBanner />
+							<NewspaperArchiveBanner />
+						</div>
+					)}
 				</div>
 			</Container>
 			{!enableSingleContributionsTab && (
