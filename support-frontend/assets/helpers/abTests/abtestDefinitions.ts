@@ -177,4 +177,27 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
+	landingPageOneTimeTab2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'oneTimeTab',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 6,
+		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
+		// Track this landing page test through to the checkout
+		persistPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+	},
 };
