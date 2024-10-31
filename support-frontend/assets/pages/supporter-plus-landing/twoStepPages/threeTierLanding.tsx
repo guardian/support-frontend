@@ -524,7 +524,8 @@ export function ThreeTierLanding({
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
 					<h1 css={heading}>
-						Support fearless, <br css={tabletLineBreak} />
+						{campaignSettings?.copy.headingFragment ?? <>Support </>}
+						fearless, <br css={tabletLineBreak} />
 						independent journalism
 					</h1>
 					<p css={standFirst}>
