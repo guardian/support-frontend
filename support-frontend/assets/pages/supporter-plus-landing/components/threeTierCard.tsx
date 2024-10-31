@@ -227,7 +227,7 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge
 					subdue={isRecommendedSubdued}
-					title={promotion?.landingPage?.roundel ?? 'Recommended'}
+					title={promotion?.landingPage?.roundel ?? 'Highest impact'}
 				/>
 			)}
 			<h2 css={titleCss}>{label}</h2>
