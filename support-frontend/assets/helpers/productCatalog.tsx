@@ -71,12 +71,12 @@ export function isProductKey(val: unknown): val is ProductKey {
 }
 
 const appBenefit = {
-	copy: 'Unlimited access to the Guardian app',
+	copy: 'Free access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
 const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
 const newsletterBenefit = {
-	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -90,10 +90,10 @@ const partnerOffersBenefit = {
 	specificToAbTest: [{ name: 'auPartnerBenefit', variants: ['control'] }],
 };
 const supporterPlusBenefits = [
-	appBenefit,
-	addFreeBenefit,
-	newsletterBenefit,
 	fewerAsksBenefit,
+	newsletterBenefit,
+	addFreeBenefit,
+	appBenefit,
 	partnerOffersBenefit,
 ];
 
