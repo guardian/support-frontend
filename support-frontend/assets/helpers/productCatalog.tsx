@@ -70,6 +70,33 @@ export function isProductKey(val: unknown): val is ProductKey {
 	return productKeys.includes(val as ProductKey);
 }
 
+const appBenefit = {
+	copy: 'Unlimited access to the Guardian app',
+	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+};
+const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
+const newsletterBenefit = {
+	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+};
+const fewerAsksBenefit = {
+	copy: 'Far fewer asks for support',
+	tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
+};
+const partnerOffersBenefit = {
+	copy: 'Exclusive access to partner offers',
+	tooltip:
+		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
+	specificToRegions: ['AUDCountries'],
+	specificToAbTest: [{ name: 'auPartnerBenefit', variants: ['control'] }],
+};
+const supporterPlusBenefits = [
+	appBenefit,
+	addFreeBenefit,
+	newsletterBenefit,
+	fewerAsksBenefit,
+	partnerOffersBenefit,
+];
+
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		TierThree: {
@@ -85,29 +112,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				},
 			],
 			/** These are just the SupporterPlus benefits */
-			benefitsAdditional: [
-				{
-					copy: 'Unlimited access to the Guardian app',
-					tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
-				},
-				{ copy: 'Ad-free reading on all your devices' },
-				{
-					copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-				},
-				{
-					copy: 'Far fewer asks for support',
-					tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
-				},
-				{
-					copy: 'Exclusive access to partner offers',
-					tooltip:
-						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-					specificToRegions: ['AUDCountries'],
-					specificToAbTest: [
-						{ name: 'auPartnerBenefit', variants: ['control'] },
-					],
-				},
-			],
+			benefitsAdditional: supporterPlusBenefits,
 			deliverableTo: gwDeliverableCountries,
 			ratePlans: {
 				DomesticMonthly: {
@@ -182,29 +187,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		SupporterPlus: {
 			label: 'All-access digital',
 			/** These are duplicated in the TierThree benefitsAdditional */
-			benefits: [
-				{
-					copy: 'Unlimited access to the Guardian app',
-					tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
-				},
-				{ copy: 'Ad-free reading on all your devices' },
-				{
-					copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-				},
-				{
-					copy: 'Far fewer asks for support',
-					tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
-				},
-				{
-					copy: 'Exclusive access to partner offers',
-					tooltip:
-						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-					specificToRegions: ['AUDCountries'],
-					specificToAbTest: [
-						{ name: 'auPartnerBenefit', variants: ['control'] },
-					],
-				},
-			],
+			benefits: supporterPlusBenefits,
 			offers: [
 				{
 					copy: <OfferFeast></OfferFeast>,
@@ -286,30 +269,15 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		},
 		Contribution: {
 			label: 'Support',
-			benefits: [
-				{
-					copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-				},
-			],
+			benefits: [newsletterBenefit],
 			benefitsMissing: [
-				{
-					copy: 'Unlimited access to the Guardian app',
-					tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
-				},
-				{ copy: 'Ad-free reading on all your devices' },
-				{
-					copy: 'Far fewer asks for support',
-					tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
-				},
+				appBenefit,
+				addFreeBenefit,
+				fewerAsksBenefit,
 				{
 					copy: 'Unlimited access to the Guardian Feast app',
 				},
-				{
-					copy: 'Exclusive access to partner offers',
-					tooltip:
-						'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
-					specificToRegions: ['AUDCountries'],
-				},
+				partnerOffersBenefit,
 			],
 			ratePlans: {
 				Monthly: {
