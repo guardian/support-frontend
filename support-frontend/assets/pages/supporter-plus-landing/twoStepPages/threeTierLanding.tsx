@@ -7,7 +7,6 @@ import {
 	space,
 	textSans17,
 	textSansBold20,
-	until,
 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import {
@@ -54,10 +53,7 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
-import {
-	FeastBanner,
-	NewspaperArchiveBanner,
-} from '../components/landingPageBanners';
+import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -177,31 +173,6 @@ const disclaimerContainer = css`
 		> div {
 			padding: ${space[5]}px ${space[5]}px;
 		}
-	}
-`;
-
-const bannersContainer = css`
-	display: flex;
-	flex: 1 1;
-	background-color: #1e3e72;
-	background-image: linear-gradient(
-		to bottom,
-		#1e3e72 0%,
-		#1e3e72 5%,
-		${palette.neutral[60]} 5%,
-		${palette.neutral[60]} 95%,
-		#1e3e72 95%,
-		#1e3e72 5%
-	); /* creates a partial border line with gap */
-	gap: 1px;
-
-	${until.desktop} {
-		margin: ${space[9]}px -10px 0;
-		padding-bottom: 0;
-	}
-	${from.desktop} {
-		margin-top: ${space[8]}px;
-		border-radius: ${space[3]}px;
 	}
 `;
 
@@ -598,12 +569,7 @@ export function ThreeTierLanding({
 							abParticipations={abParticipations}
 						/>
 					)}
-					{showNewspaperArchiveBanner && (
-						<div css={bannersContainer}>
-							<FeastBanner />
-							<NewspaperArchiveBanner />
-						</div>
-					)}
+					{showNewspaperArchiveBanner && <LandingPageBanners />}
 				</div>
 			</Container>
 			{!enableSingleContributionsTab && (

@@ -4,9 +4,11 @@ import {
 	headlineBold20,
 	headlineBold24,
 	neutral,
+	palette,
 	space,
 	textSans15,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
@@ -72,6 +74,31 @@ type LandingPageBannerProps = {
 	orientation: RowLocation;
 };
 
+const bannersContainer = css`
+	display: flex;
+	flex: 1 1;
+	background-color: #1e3e72;
+	background-image: linear-gradient(
+		to bottom,
+		#1e3e72 0%,
+		#1e3e72 5%,
+		${palette.neutral[60]} 5%,
+		${palette.neutral[60]} 95%,
+		#1e3e72 95%,
+		#1e3e72 5%
+	); /* creates a partial border line with gap */
+	gap: 1px;
+
+	${until.desktop} {
+		margin: ${space[9]}px -10px 0;
+		padding-bottom: 0;
+	}
+	${from.desktop} {
+		margin-top: ${space[8]}px;
+		border-radius: ${space[3]}px;
+	}
+`;
+
 function LandingPageBanner({
 	header,
 	paragraph,
@@ -94,7 +121,7 @@ function LandingPageBanner({
 	);
 }
 
-export function NewspaperArchiveBanner() {
+function NewspaperArchiveBanner() {
 	return (
 		<LandingPageBanner
 			header="The Guardian newspaper archive: explore more than 200 years of journalism"
@@ -105,7 +132,7 @@ export function NewspaperArchiveBanner() {
 	);
 }
 
-export function FeastBanner() {
+function FeastBanner() {
 	return (
 		<LandingPageBanner
 			header="Unlimited access to the Guardian Feast App"
@@ -116,5 +143,14 @@ export function FeastBanner() {
 			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1000.png?width=1000&quality=75&s=d2881465ddca62054b9b8ba65682fff6"
 			orientation="left"
 		/>
+	);
+}
+
+export function LandingPageBanners() {
+	return (
+		<div css={bannersContainer}>
+			<FeastBanner />
+			<NewspaperArchiveBanner />
+		</div>
 	);
 }
