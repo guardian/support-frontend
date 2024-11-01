@@ -54,8 +54,10 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
-import { FeastBanner } from '../components/feastBanner';
-import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
+import {
+	FeastBanner,
+	NewspaperArchiveBanner,
+} from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -600,8 +602,6 @@ export function ThreeTierLanding({
 						<div css={bannersContainer}>
 							<FeastBanner />
 							<NewspaperArchiveBanner />
-							{/* <div>One</div>
-							<div>Two</div> */}
 						</div>
 					)}
 				</div>
