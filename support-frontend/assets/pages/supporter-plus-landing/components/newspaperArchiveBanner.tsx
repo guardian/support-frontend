@@ -12,6 +12,7 @@ import {
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
 const containerNewspaperArchive = css`
+	flex-basis: 100%; /* Share width & height of the banner with other components */
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;

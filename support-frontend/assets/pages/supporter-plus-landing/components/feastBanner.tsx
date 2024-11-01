@@ -12,6 +12,7 @@ import {
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
 const containerFeast = css`
+	flex-basis: 100%; /* Share width & height of the banner with other components */
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
@@ -28,8 +29,6 @@ const containerFeast = css`
 		margin-top: ${space[8]}px;
 		border-radius: ${space[3]}px 0 0 ${space[3]}px;
 	}
-	/* border-right-color: ${neutral[7]};
-	border-right-width: 1px; */
 	border-right: 1px solid ${neutral[97]};
 `;
 
@@ -89,7 +88,7 @@ export function FeastBanner() {
 			<img
 				css={image}
 				alt=""
-				src="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1529.png?width=1529&quality=75&s=dcb502948c599ee684146c798ab25200"
+				src="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1000.png?width=1000&quality=75&s=d2881465ddca62054b9b8ba65682fff6"
 			/>
 		</div>
 	);

@@ -177,9 +177,9 @@ const disclaimerContainer = css`
 	}
 `;
 
-const sideBySide = css`
+const bannersContainer = css`
 	display: flex;
-	flex-direction: row;
+	flex: 1 1;
 `;
 
 const links = [
@@ -500,6 +500,10 @@ export function ThreeTierLanding({
 
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
+	console.log(
+		'TEST showNewspaperArchiveBanner -> ',
+		showNewspaperArchiveBanner,
+	);
 
 	const useNewOneTimeCheckout =
 		abParticipations.newOneTimeCheckout === 'variant';
@@ -576,7 +580,7 @@ export function ThreeTierLanding({
 						/>
 					)}
 					{showNewspaperArchiveBanner && (
-						<div css={sideBySide}>
+						<div css={bannersContainer}>
 							<FeastBanner />
 							<NewspaperArchiveBanner />
 						</div>
