@@ -2,7 +2,6 @@ import { css, Global } from '@emotion/react';
 import {
 	palette,
 	space,
-	textSans14,
 	textSansBold14,
 	until,
 	visuallyHidden,
@@ -11,6 +10,10 @@ import { Link, SvgGuardianLogo } from '@guardian/source/react-components';
 import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
 import { guardianFonts } from 'stylesheets/emotion/fonts';
 import { reset } from 'stylesheets/emotion/reset';
+
+// The newspapers.com site has a layout change at this breakpoint
+const from991px = '@media (min-width: 991px)';
+const until990px = '@media (max-width: 990px)';
 
 const heading = css`
 	background-color: ${palette.neutral[100]};
@@ -24,7 +27,7 @@ const heading = css`
 const body = css`
 	background-color: #4a4a4a;
 	color: ${palette.neutral[100]};
-	${textSans14};
+	${textSansBold14};
 	display: flex;
 	justify-content: space-between;
 
@@ -36,11 +39,20 @@ const body = css`
 `;
 
 const description = css`
-	background-image: url(https://i.guim.co.uk/img/media/28125ed36669d6e27356d28044ba5db19cde11d1/0_0_3747_1007/2000.png?width=1300&quality=75&s=4d14643a2ebe76812931d8028f2e2150);
+	${until990px} {
+		background-image: url(https://i.guim.co.uk/img/media/849eaf0c96852fe2586f78366bc8051e48bf69e2/0_0_852_329/852.png?width=800&quality=75&s=84b59cfb5a7148052d694c1d6cd915df);
+		background-position: left;
+	}
+
+	background-image: url(https://i.guim.co.uk/img/media/a6e09a646e9514f725510026ecd9ebef3b360233/0_0_1104_372/1104.png?width=1000&quality=75&s=1caac3a22068b049c03ffed7248906c4);
 	background-size: contain;
 	background-position: right;
 	background-repeat: no-repeat;
 	min-width: 213px;
+
+	${from991px} {
+		min-width: 500px;
+	}
 
 	${until.tablet} {
 		display: none;
@@ -48,11 +60,52 @@ const description = css`
 `;
 
 const paragraph = css`
-	max-width: 273px;
+	max-width: 320px;
 
-	${until.desktop} {
+	${until990px} {
 		display: none;
 	}
+
+	padding-left: ${space[4]}px;
+`;
+
+const logos = css`
+	display: flex;
+	align-items: flex-end;
+	${until.mobileMedium} {
+		padding: ${space[3]}px ${space[4]}px;
+	}
+
+	${until.mobileLandscape} {
+		padding: ${space[3]}px ${space[4]}px ${space[4]}px ${space[4]}px;
+	}
+
+	${until.tablet} {
+		padding: ${space[3]}px ${space[6]}px ${space[4]}px 0;
+		margin-left: auto;
+	}
+
+	padding: 0 ${space[8]}px ${space[5]}px 0;
+	svg {
+		display: block;
+		height: 100%;
+	}
+`;
+
+const guardianLogo = css`
+	padding-right: 1px;
+
+	${until.mobileMedium} {
+		height: 48px;
+	}
+	height: 56px;
+`;
+
+const archivesLogo = css`
+	${until.mobileMedium} {
+		height: 27px;
+	}
+	height: 32px;
 `;
 
 export function NewspaperArchiveHeader() {
@@ -79,50 +132,11 @@ export function NewspaperArchiveHeader() {
 							and search through every page printed in our newspapers.
 						</p>
 					</div>
-					<div
-						css={css`
-							display: flex;
-							align-items: flex-end;
-							${until.mobileMedium} {
-								padding: ${space[3]}px ${space[4]}px;
-							}
-
-							${until.mobileLandscape} {
-								padding: ${space[3]}px ${space[4]}px ${space[4]}px ${space[4]}px;
-							}
-
-							${until.tablet} {
-								padding: ${space[3]}px ${space[6]}px ${space[4]}px 0;
-								margin-left: auto;
-							}
-
-							padding: 0 ${space[8]}px ${space[5]}px 0;
-							svg {
-								display: block;
-								height: 100%;
-							}
-						`}
-					>
-						<div
-							css={css`
-								padding-right: 1px;
-
-								${until.mobileMedium} {
-									height: 48px;
-								}
-								height: 56px;
-							`}
-						>
+					<div css={logos}>
+						<div css={guardianLogo}>
 							<SvgGuardianLogo textColor={palette.neutral[100]} />
 						</div>
-						<div
-							css={css`
-								${until.mobileMedium} {
-									height: 27px;
-								}
-								height: 32px;
-							`}
-						>
+						<div css={archivesLogo}>
 							<ArchivesLogo />
 						</div>
 					</div>
