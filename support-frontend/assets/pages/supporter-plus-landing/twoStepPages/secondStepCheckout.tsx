@@ -138,10 +138,6 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
-	const showCoverTransactionCostA =
-		abParticipations.coverTransactionCost === 'variantA' && amount > 0;
-	const showCoverTransactionCostB =
-		abParticipations.coverTransactionCost === 'variantB' && amount > 0;
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -149,17 +145,6 @@ export function SupporterPlusCheckout({
 					{showPriceCards ? (
 						<>
 							<ContributionsPriceCards paymentFrequency={contributionType} />
-							{showCoverTransactionCostB && (
-								<CoverTransactionCost
-									transactionCost={coverTransactionCost}
-									transactionCostCopy={transactionCostCopy}
-									transactionCostAmount={simpleFormatAmount(currency, amount)}
-									onChecked={(check) => {
-										dispatch(setCoverTransactionCost(check));
-									}}
-									showTransactionCostSummary={true}
-								/>
-							)}
 						</>
 					) : (
 						<ContributionsOrderSummaryContainer
@@ -204,16 +189,14 @@ export function SupporterPlusCheckout({
 								productKey={product}
 							/>
 						)}
-						{showCoverTransactionCostA && (
-							<CoverTransactionCost
-								transactionCost={coverTransactionCost}
-								transactionCostCopy={transactionCostCopy}
-								onChecked={(check) => {
-									dispatch(setCoverTransactionCost(check));
-								}}
-								transactionCostAmount={simpleFormatAmount(currency, amount)}
-							/>
-						)}
+						<CoverTransactionCost
+							transactionCost={coverTransactionCost}
+							transactionCostCopy={transactionCostCopy}
+							onChecked={(check) => {
+								dispatch(setCoverTransactionCost(check));
+							}}
+							transactionCostAmount={simpleFormatAmount(currency, amount)}
+						/>
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}
 							paymentButtons={getPaymentMethodButtons(

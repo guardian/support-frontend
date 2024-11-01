@@ -15,6 +15,7 @@ export type CountdownSetting = {
 };
 
 interface CampaignCopy {
+	headingFragment?: JSX.Element;
 	subheading?: JSX.Element;
 	oneTimeHeading?: JSX.Element;
 }
@@ -54,10 +55,11 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 		],
 		copy: {
+			headingFragment: <>Protect </>,
 			subheading: (
 				<>
 					We're not owned by a billionaire or shareholders - our readers support
-					us. Can you help us reach our goal? Regular giving is most valuable to
+					us. Can you help us reach our goal? Monthly giving is most valuable to
 					us. <strong>You can cancel anytime.</strong>
 				</>
 			),
