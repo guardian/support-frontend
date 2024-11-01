@@ -7,6 +7,7 @@ import {
 	space,
 	textSans17,
 	textSansBold20,
+	until,
 } from '@guardian/source/foundations';
 import { Container } from '@guardian/source/react-components';
 import {
@@ -180,6 +181,26 @@ const disclaimerContainer = css`
 const bannersContainer = css`
 	display: flex;
 	flex: 1 1;
+	background-color: #1e3e72;
+	background-image: linear-gradient(
+		to bottom,
+		#1e3e72 0%,
+		#1e3e72 5%,
+		${palette.neutral[60]} 5%,
+		${palette.neutral[60]} 95%,
+		#1e3e72 95%,
+		#1e3e72 5%
+	); /* creates a partial border line with gap */
+	gap: 1px;
+
+	${until.desktop} {
+		margin: ${space[9]}px -10px 0;
+		padding-bottom: 0;
+	}
+	${from.desktop} {
+		margin-top: ${space[8]}px;
+		border-radius: ${space[3]}px;
+	}
 `;
 
 const links = [
@@ -500,10 +521,6 @@ export function ThreeTierLanding({
 
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
-	console.log(
-		'TEST showNewspaperArchiveBanner -> ',
-		showNewspaperArchiveBanner,
-	);
 
 	const useNewOneTimeCheckout =
 		abParticipations.newOneTimeCheckout === 'variant';
@@ -583,6 +600,8 @@ export function ThreeTierLanding({
 						<div css={bannersContainer}>
 							<FeastBanner />
 							<NewspaperArchiveBanner />
+							{/* <div>One</div>
+							<div>Two</div> */}
 						</div>
 					)}
 				</div>

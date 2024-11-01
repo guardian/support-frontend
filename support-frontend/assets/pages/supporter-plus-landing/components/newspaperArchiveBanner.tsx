@@ -7,7 +7,6 @@ import {
 	space,
 	textSans15,
 	textSans17,
-	until,
 } from '@guardian/source/foundations';
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
@@ -21,12 +20,7 @@ const containerNewspaperArchive = css`
 	padding: ${space[4]}px ${space[4]}px 0px ${space[4]}px;
 	text-align: left;
 
-	${until.desktop} {
-		margin: ${space[9]}px -10px 0;
-		padding-bottom: 0;
-	}
 	${from.desktop} {
-		margin-top: ${space[8]}px;
 		border-radius: 0 ${space[3]}px ${space[3]}px 0;
 	}
 `;
