@@ -12,7 +12,32 @@ import {
 } from '@guardian/source/foundations';
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
-const containerNewspaperArchive = (orientation: RowLocation) => css`
+const container = css`
+	display: flex;
+	flex: 1 1;
+	background-color: #1e3e72;
+	background-image: linear-gradient(
+		to bottom,
+		#1e3e72 0%,
+		#1e3e72 5%,
+		${palette.neutral[60]} 5%,
+		${palette.neutral[60]} 95%,
+		#1e3e72 95%,
+		#1e3e72 5%
+	); /* creates a partial border line with gap */
+	gap: 1px;
+
+	${until.desktop} {
+		margin: ${space[9]}px -10px 0;
+		padding-bottom: 0;
+	}
+	${from.desktop} {
+		margin-top: ${space[8]}px;
+		border-radius: ${space[3]}px;
+	}
+`;
+
+const containerLandingPageBanner = (orientation: RowLocation) => css`
 	flex-basis: 100%; /* Share width & height of the banner with other components */
 	display: flex;
 	flex-direction: column;
@@ -74,31 +99,6 @@ type LandingPageBannerProps = {
 	orientation: RowLocation;
 };
 
-const bannersContainer = css`
-	display: flex;
-	flex: 1 1;
-	background-color: #1e3e72;
-	background-image: linear-gradient(
-		to bottom,
-		#1e3e72 0%,
-		#1e3e72 5%,
-		${palette.neutral[60]} 5%,
-		${palette.neutral[60]} 95%,
-		#1e3e72 95%,
-		#1e3e72 5%
-	); /* creates a partial border line with gap */
-	gap: 1px;
-
-	${until.desktop} {
-		margin: ${space[9]}px -10px 0;
-		padding-bottom: 0;
-	}
-	${from.desktop} {
-		margin-top: ${space[8]}px;
-		border-radius: ${space[3]}px;
-	}
-`;
-
 function LandingPageBanner({
 	header,
 	paragraph,
@@ -106,7 +106,7 @@ function LandingPageBanner({
 	orientation,
 }: LandingPageBannerProps): JSX.Element {
 	return (
-		<div css={containerNewspaperArchive(orientation)}>
+		<div css={containerLandingPageBanner(orientation)}>
 			<div css={headlineAndParagraph}>
 				<h2 css={headlineText}>
 					<>
@@ -148,7 +148,7 @@ function FeastBanner() {
 
 export function LandingPageBanners() {
 	return (
-		<div css={bannersContainer}>
+		<div css={container}>
 			<FeastBanner />
 			<NewspaperArchiveBanner />
 		</div>
