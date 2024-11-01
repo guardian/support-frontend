@@ -13,6 +13,16 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "GuLambdaFunction",
       "GuLambdaFunction",
       "GuLambdaFunction",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -754,6 +764,65 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "ExecutionFailureAlarm65D8EF83": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-PROD?statusFilter=FAILED",
+        "AlarmName": "Support Workers Execution Failure in PROD (Recurring Contributions or Subscriptions Checkout)",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "StateMachineArn",
+            "Value": {
+              "Ref": "SupportWorkersPROD",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ExecutionsFailed",
+        "Namespace": "AWS/States",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "FailureHandlerLambda": {
       "DependsOn": [
         "FailureHandlerLambdaServiceRoleDefaultPolicyC42C7F6D",
@@ -1002,6 +1071,678 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "NoGocardlessContributionsAlarmD9872C48": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring gocardless contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "DirectDebit",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 16,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoGocardlessSupporterPlusAlarm93796A8F": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring gocardless supporter plus contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "DirectDebit",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 14,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoPaperAcquisitionInOneDayAlarmA727AD91": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful paper checkouts in 24h",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 288,
+        "Metrics": [
+          {
+            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Id": "expr_1",
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "Stripe",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "DirectDebit",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoPaypalContributionsAlarm79AF8B4B": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring paypal contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "PayPal",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 4,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoPaypalSupporterPlusAlarmFA5D91A9": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring paypal supporter plus contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "PayPal",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 6,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripeContributionsAlarm26D25B46": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring stripe contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "Stripe",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripeSupporterPlusAlarm731126BB": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring stripe supporter plus contributions recently",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "Stripe",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoWeeklyAcquisitionInOneDayAlarm69C071FE": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful guardian weekly checkouts in 8h",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 96,
+        "Metrics": [
+          {
+            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Id": "expr_1",
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "Stripe",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "DirectDebit",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "PreparePaymentMethodForReuseLambda": {
       "DependsOn": [
@@ -2128,6 +2869,65 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "TimeoutAlarm4022815E": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "There was a timeout whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-PROD?statusFilter=TIMED_OUT",
+        "AlarmName": "Support Workers Timeout in PROD (Recurring Contributions or Subscriptions Checkout)",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "StateMachineArn",
+            "Value": {
+              "Ref": "SupportWorkersPROD",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ExecutionsTimedOut",
+        "Namespace": "AWS/States",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "UpdateSupporterProductDataLambda": {
       "DependsOn": [
