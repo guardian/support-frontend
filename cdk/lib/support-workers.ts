@@ -451,6 +451,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h`,
       metric: new MathExpression({
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+        label: "AllPaperConversions",
         usingMetrics: {
           m1: new Metric({
             metricName: "PaymentSuccess",
@@ -499,6 +500,7 @@ export class SupportWorkers extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h`,
       metric: new MathExpression({
+        label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: new Metric({
