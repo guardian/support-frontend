@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, textSansBold14 } from '@guardian/source/foundations';
+import SecurePadlock from 'components/svgs/securePadlock';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
-import SecurePadlock from './securePadlock.svg';
 import SecurePadlockCircle from './securePadlockCircle.svg';
 
 export interface SecureTransactionIndicatorProps extends CSSOverridable {
@@ -28,10 +28,13 @@ const secureTransactionIcon = css`
 
 const padlock = css`
 	margin-right: 5px;
-	opacity: inherit;
-	path {
-		fill: currentColor;
-	}
+  svg {
+    opacity: inherit;
+
+    path {
+      fill: currentColor;
+    }
+  }
 `;
 
 const text = css`
@@ -54,7 +57,9 @@ export function SecureTransactionIndicator({
 			{hideText ? (
 				<SecurePadlockCircle css={padlock} />
 			) : (
-				<SecurePadlock css={padlock} />
+        <div css={padlock}>
+           <SecurePadlock />
+        </div>
 			)}
 			{!hideText && <div css={text}>Secure transaction</div>}
 		</div>
