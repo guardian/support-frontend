@@ -1,8 +1,8 @@
-import { NewspaperArchiveBanner } from 'pages/supporter-plus-landing/components/newspaperArchiveBanner';
+import { LandingPageBanners } from 'pages/supporter-plus-landing/components/landingPageBanners';
 
 export default {
-	title: 'LandingPage/Newspaper Archive Banner',
-	component: NewspaperArchiveBanner,
+	title: 'LandingPage/Banners',
+	component: LandingPageBanners,
 	// decorators: [withCenterAlignment, withSourceReset],
 	parameters: {
 		docs: {
@@ -14,7 +14,7 @@ export default {
 };
 
 function Template() {
-	return <NewspaperArchiveBanner />;
+	return <LandingPageBanners />;
 }
 
 export const Default = Template.bind({});
