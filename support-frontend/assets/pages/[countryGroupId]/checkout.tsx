@@ -476,7 +476,7 @@ function CheckoutComponent({
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
+	const showNewspaperArchiveBenefit = ['variant', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
