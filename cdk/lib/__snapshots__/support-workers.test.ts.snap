@@ -2580,7 +2580,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   "Arn",
                 ],
               },
-              "","Payload.$":"$"}}}},{"StartAt":"CheckoutSuccess","States":{"CheckoutSuccess":{"Type":"Succeed"}}}]}}}",
+              "","Payload.$":"$"}}}},{"StartAt":"CheckoutSuccess","States":{"CheckoutSuccess":{"Type":"Succeed"}}}]}},"TimeoutSeconds":86400}",
             ],
           ],
         },

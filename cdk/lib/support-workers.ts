@@ -229,13 +229,14 @@ export class SupportWorkers extends GuStack {
       .next(createSalesforceContactLambda)
       .next(commonSteps);
 
-    const startPoint = shouldClonePaymentMethodChoice
+    const initialState = shouldClonePaymentMethodChoice
       .when(accountExists, stepsWithExistingAccount)
       .otherwise(stepsForNewAccount);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
-      stateMachineName: `${app}-${this.stage}`,
-      definitionBody: DefinitionBody.fromChainable(startPoint),
+      stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
+      timeout: Duration.hours(24),
+      definitionBody: DefinitionBody.fromChainable(initialState),
     });
 
     this.overrideLogicalId(stateMachine, {
@@ -286,30 +287,32 @@ export class SupportWorkers extends GuStack {
       threshold: 1,
     });
 
-    // This query is useful to check what a reasonable interval is for each product if you
-    // want the alarm to go off less than once a month.  Update the date range to get more current figures.
-    //
-    //  with timegaps as(
-    //  select
-    //  product,
-    //  if (print_options.product is null, null, if(print_options.product = 'GUARDIAN_WEEKLY', 'WEEKLY', 'NEWSPAPER')) print_product,
-    //  payment_provider,
-    //  e.event_timestamp,
-    //  (lag(e.event_timestamp) over (partition by payment_provider, product order by event_timestamp)) as last_acquisition,
-    //  from `datalake.fact_acquisition_event` e
-    //  where 1=1
-    //  and date(e.event_timestamp) >= date'2024-03-01' -- keep it after 1st March 2024 as the outage caused a S+ gap
-    //  and payment_provider in ('STRIPE', 'GOCARDLESS', 'PAYPAL')
-    //  and product in ('RECURRING_CONTRIBUTION', 'PRINT_SUBSCRIPTION', 'SUPPORTER_PLUS')
-    //  )
-    //  select
-    //  product,
-    //  print_product,
-    //  payment_provider,
-    //  max(timestamp_diff(event_timestamp, last_acquisition, HOUR)) max_diff,
-    //  from timegaps
-    //  group by 1,2,3
-    //  order by 1,2,3
+    /*
+     This query is useful to check what a reasonable interval is for each product if you
+     want the alarm to go off less than once a month.  Update the date range to get more current figures.
+
+      with timegaps as(
+      select
+      product,
+      if (print_options.product is null, null, if(print_options.product = 'GUARDIAN_WEEKLY', 'WEEKLY', 'NEWSPAPER')) print_product,
+      payment_provider,
+      e.event_timestamp,
+      (lag(e.event_timestamp) over (partition by payment_provider, product order by event_timestamp)) as last_acquisition,
+      from `datalake.fact_acquisition_event` e
+      where 1=1
+      and date(e.event_timestamp) >= date'2024-03-01' -- keep it after 1st March 2024 as the outage caused a S+ gap
+      and payment_provider in ('STRIPE', 'GOCARDLESS', 'PAYPAL')
+      and product in ('RECURRING_CONTRIBUTION', 'PRINT_SUBSCRIPTION', 'SUPPORTER_PLUS')
+      )
+      select
+      product,
+      print_product,
+      payment_provider,
+      max(timestamp_diff(event_timestamp, last_acquisition, HOUR)) max_diff,
+      from timegaps
+      group by 1,2,3
+      order by 1,2,3
+    */
     new GuAlarm(this, "NoPaypalContributionsAlarm", {
       app,
       actionsEnabled: isProd,
