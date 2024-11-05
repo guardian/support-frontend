@@ -3,10 +3,7 @@ type Props = {
 	opacity?: number;
 };
 
-export default function SecurePadlock({
-	colour,
-	opacity = 1,
-}: Props): JSX.Element {
+export function SecurePadlock({ colour, opacity = 1 }: Props): JSX.Element {
 	return (
 		<svg
 			width="10"

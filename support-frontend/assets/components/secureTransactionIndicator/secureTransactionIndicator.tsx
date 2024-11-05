@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, textSansBold14 } from '@guardian/source/foundations';
-import SecurePadlock from 'components/svgs/securePadlock';
-import SecurePadlockCircle from 'components/svgs/securePadlockCircle';
+import { SecurePadlock } from 'components/svgs/securePadlock';
+import { SecurePadlockCircle } from 'components/svgs/securePadlockCircle';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 export interface SecureTransactionIndicatorProps extends CSSOverridable {

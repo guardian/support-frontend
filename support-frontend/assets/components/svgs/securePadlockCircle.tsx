@@ -4,7 +4,7 @@ type Props = {
 	opacity?: number;
 };
 
-export default function SecurePadlockCircle({
+export function SecurePadlockCircle({
 	colour,
 	borderColour = '#DCDCDC',
 	opacity = 1,
