@@ -204,23 +204,23 @@
 }
 
 .defaultState {
-  display: inline-block;
+	display: inline-block;
 	transition: transform 300ms;
 	transform-origin: center;
 	transform: rotate(180deg);
 
-  svg {
-    display: block;
-  }
+	svg {
+		display: block;
+	}
 }
 
 .openState {
-  display: inline-block;
+	display: inline-block;
 	transform: rotate(0);
 
-  svg {
-    display: block;
-  }
+	svg {
+		display: block;
+	}
 }
 
 .promo {
