@@ -1,4 +1,4 @@
-export default function Padlock(): JSX.Element {
+export function Padlock(): JSX.Element {
 	return (
 		<svg
 			width="11"
