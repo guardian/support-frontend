@@ -29,6 +29,7 @@ const secureTransactionIcon = css`
 const padlock = css`
 	margin-right: 5px;
 	svg {
+		display: block;
 		opacity: inherit;
 
 		path {
