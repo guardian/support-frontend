@@ -25,22 +25,25 @@ const container = css`
 		#1e3e72 95%,
 		#1e3e72 5%
 	); /* creates a partial border line with gap */
-	gap: 1px;
 
 	${until.desktop} {
+		flex-direction: column;
 		margin: ${space[9]}px -10px 0;
 		padding-bottom: 0;
+		gap: 0px;
 	}
 	${from.desktop} {
+		flex-direction: row;
 		margin-top: ${space[8]}px;
 		border-radius: ${space[3]}px;
+		gap: 1px;
 	}
 `;
 
 const containerLandingPageBanner = (orientation: RowLocation) => css`
 	flex-basis: 100%; /* Share width & height of the banner with other components */
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: flex-end;
 	align-items: center;
 	background-color: #1e3e72;
@@ -49,7 +52,6 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	border-radius: 0px;
 
 	${from.desktop} {
-		flex-direction: column;
 		border-radius: ${orientation === 'right'
 			? `0 ${space[3]}px ${space[3]}px 0`
 			: `${space[3]}px 0 0 ${space[3]}px`};
@@ -57,7 +59,7 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 `;
 
 const headlineAndParagraph = css`
-	margin-bottom: auto;
+	margin-bottom: ${space[4]}px;
 `;
 
 const headlineText = css`
@@ -128,7 +130,7 @@ function NewspaperArchiveBanner() {
 		<LandingPageBanner
 			header="The Guardian newspaper archive: explore more than 200 years of journalism"
 			paragraph="Since 1821, the world's major events have been documented in the pages of the Guardian. Today, you can search through and view that record of history with access to the Guardian archives."
-			imageUrl="https://i.guim.co.uk/img/media/6a10c564d225dc23d3a24098a033464769740f01/0_0_1781_868/1000.png?width=1000&quality=75&s=16aec938fdd59f7a23f14fa7131fe554"
+			imageUrl="https://i.guim.co.uk/img/media/2da23eb25095975a62497d19ef9b59dc9fb90eed/0_148_1715_721/1715.png?width=1000&quality=75&s=a435f6c543dbadd3b0bd12ae196a6c7c"
 			orientation="right"
 		/>
 	);
