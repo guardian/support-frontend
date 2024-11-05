@@ -13,7 +13,7 @@ import createPaymentSupporterPlus from './fixtures/createPaymentMethod/supporter
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
 import createSalesforceContactPaper from './fixtures/createSalesforceContact/paperDirectDebit.json';
 
-test('createPaymentMethodSchema works with real inputs', async () => {
+test('createPaymentMethodSchema works with real inputs', () => {
 	const supporterPlus = createPaymentMethodStateSchema.parse(
 		createPaymentSupporterPlus,
 	);
