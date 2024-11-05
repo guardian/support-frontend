@@ -47,7 +47,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers/support-workers.zip",
         },
         "Environment": {
           "Variables": {
@@ -63,7 +63,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         },
         "FunctionName": "support-CreatePaymentMethodLambda-PROD",
-        "Handler": "com.gu.support.workers.lambdas.CreatePaymentMethod::handleRequest",
+        "Handler": "createPaymentMethodLambda.handler",
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
@@ -74,7 +74,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java21",
+        "Runtime": "nodejs20.x",
         "Tags": [
           {
             "Key": "App",
@@ -212,7 +212,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers/support-workers.zip",
                     ],
                   ],
                 },
