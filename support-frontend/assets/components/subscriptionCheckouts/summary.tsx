@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
-import DropdownArrowUp from 'components/svgs/dropDownArrowUp';
+import { DropdownArrowUp } from 'components/svgs/dropDownArrowUp';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'components/gridImage/gridImage';

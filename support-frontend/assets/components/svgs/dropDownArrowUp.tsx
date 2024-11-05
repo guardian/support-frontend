@@ -1,4 +1,4 @@
-export default function DropdownArrowUp() {
+export function DropdownArrowUp() {
 	return (
 		<svg
 			width="13"
