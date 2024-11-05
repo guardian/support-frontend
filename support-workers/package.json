@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "eslint src/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
-    "package": "yarn check-formatting && yarn lint && yarn build && cd target && zip -qr discount-api.zip ../src/typescript/*.js"
+    "package": "yarn check-formatting && yarn lint && yarn test && yarn build && cd target && zip -qr discount-api.zip ../src/typescript/*.js"
   },
   "repository": {
     "type": "git",
