@@ -43,7 +43,9 @@ jobs:
         working-directory: cdk
 
       - name: Build TypeScript lambdas
-        run: yarn package
+        run: |
+          yarn install --frozen-lockfile
+          yarn package
         working-directory: support-workers
 
       - uses: sbt/setup-sbt@v1
