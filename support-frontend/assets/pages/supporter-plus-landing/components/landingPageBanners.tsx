@@ -8,12 +8,12 @@ import {
 	space,
 	textSans15,
 	textSans17,
-	until,
 } from '@guardian/source/foundations';
 import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
 
 const container = css`
 	display: flex;
+	flex-direction: column;
 	flex: 1 1;
 	background-color: #1e3e72;
 	background-image: linear-gradient(
@@ -25,13 +25,9 @@ const container = css`
 		#1e3e72 95%,
 		#1e3e72 5%
 	); /* creates a partial border line with gap */
-
-	${until.desktop} {
-		flex-direction: column;
-		margin: ${space[9]}px -10px 0;
-		padding-bottom: 0;
-		gap: 0px;
-	}
+	border-radius: 0px;
+	margin: ${space[9]}px -10px 0;
+	gap: 0px;
 	${from.desktop} {
 		flex-direction: row;
 		margin-top: ${space[8]}px;
@@ -50,7 +46,6 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	padding: ${space[4]}px ${space[4]}px 0px ${space[4]}px;
 	text-align: left;
 	border-radius: 0px;
-
 	${from.desktop} {
 		border-radius: ${orientation === 'right'
 			? `0 ${space[3]}px ${space[3]}px 0`
