@@ -100,20 +100,9 @@ export class SupportWorkers extends GuStack {
     });
 
     // Lambdas
-    const lambdaDefaultConfig: Pick<
-      GuFunctionProps,
-      | "app"
-      | "memorySize"
-      | "fileName"
-      | "runtime"
-      | "timeout"
-      | "environment"
-      | "architecture"
-    > = {
+    const lambdaDefaultConfig = {
       app,
       memorySize: 1536,
-      fileName: `support-workers.jar`,
-      runtime: Runtime.JAVA_21,
       timeout: Duration.seconds(300),
       architecture: Architecture.ARM_64,
       environment: {
@@ -128,18 +117,67 @@ export class SupportWorkers extends GuStack {
       },
     };
 
-    const createLambda = (
+    const createScalaLambda = (
       lambdaName: string,
       additionalPolicies: PolicyStatement[] = []
     ) => {
       const lambdaId = `${lambdaName}Lambda`;
       const lambda = new GuLambdaFunction(this, lambdaId, {
         ...lambdaDefaultConfig,
+        fileName: `support-workers.jar`,
+        runtime: Runtime.JAVA_21,
         handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-        environment: {
-          ...lambdaDefaultConfig.environment,
-        },
+        initialPolicy: [
+          s3Policy,
+          cloudWatchLoggingPolicy,
+          ...additionalPolicies,
+        ],
+      });
+      this.overrideLogicalId(lambda, {
+        logicalId: lambdaId,
+        reason: "Moving existing lambda to CDK",
+      });
+      return new LambdaInvoke(this, lambdaName, {
+        lambdaFunction: lambda,
+        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
+      })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryNone"],
+          maxAttempts: 0,
+        })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryLimited"],
+          maxAttempts: 5,
+          interval: Duration.seconds(1),
+          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
+        })
+        .addRetry({
+          errors: ["com.gu.support.workers.exceptions.RetryUnlimited"],
+          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
+          interval: Duration.seconds(1),
+          backoffRate: 2,
+        })
+        .addRetry({
+          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
+          maxAttempts: 999999,
+          interval: Duration.seconds(3),
+          backoffRate: 2,
+        });
+    };
+
+    const createTypescriptLambda = (
+      lambdaName: string,
+      additionalPolicies: PolicyStatement[] = []
+    ) => {
+      const lambdaId = `${lambdaName}Lambda`;
+      const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
+      const lambda = new GuLambdaFunction(this, lambdaId, {
+        ...lambdaDefaultConfig,
+        fileName: `support-workers.zip`,
+        runtime: Runtime.NODEJS_20_X,
+        handler: `${lambdaTSFile}.handler`,
+        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
           s3Policy,
           cloudWatchLoggingPolicy,
@@ -190,7 +228,7 @@ export class SupportWorkers extends GuStack {
       .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
       .otherwise(checkoutFailure);
 
-    const failureHandler = createLambda("FailureHandler", [
+    const failureHandler = createScalaLambda("FailureHandler", [
       emailSqsPolicy,
     ]).next(succeedOrFailChoice);
 
@@ -199,30 +237,31 @@ export class SupportWorkers extends GuStack {
       errors: ["States.TaskFailed"],
     };
 
-    const preparePaymentMethodForReuse = createLambda(
+    const preparePaymentMethodForReuse = createScalaLambda(
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createLambda(
+    const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
-    const createSalesforceContactLambda = createLambda(
+    const createSalesforceContactLambda = createScalaLambda(
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscription = createLambda("CreateZuoraSubscription", [
-      promotionsDynamoTablePolicy,
-    ]).addCatch(failureHandler, catchProps);
+    const createZuoraSubscription = createScalaLambda(
+      "CreateZuoraSubscription",
+      [promotionsDynamoTablePolicy]
+    ).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createLambda("SendThankYouEmail", [
+    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
       emailSqsPolicy,
     ]);
-    const updateSupporterProductData = createLambda(
+    const updateSupporterProductData = createScalaLambda(
       "UpdateSupporterProductData",
       [supporterProductDataTablePolicy]
     );
-    const sendAcquisitionEvent = createLambda("SendAcquisitionEvent", [
+    const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
     ]);
 
