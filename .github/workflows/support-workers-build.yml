@@ -42,6 +42,10 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
+      - name: Build TypeScript lambdas
+        run: yarn package
+        working-directory: support-workers
+
       - uses: sbt/setup-sbt@v1
 
       - name: Setup Java
@@ -108,5 +112,6 @@ jobs:
                 - cdk/cdk.out/SupportWorkers-PROD.template.json
               support-workers:
                 - support-workers/target/scala-2.13/support-workers.jar
+                - support-workers/target/support-workers.zip
               it-tests:
                 - support-workers/target/scala-2.13/support-workers-it.jar
