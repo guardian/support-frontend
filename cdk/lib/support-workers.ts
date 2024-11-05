@@ -1,10 +1,7 @@
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
-import {
-  type GuFunctionProps,
-  GuLambdaFunction,
-} from "@guardian/cdk/lib/constructs/lambda";
+import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import { type App, Duration, Fn } from "aws-cdk-lib";
 import {
   ComparisonOperator,
