@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import 'helpers/productPrice/productPrices';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
+import DropdownArrowUp from 'components/svgs/dropDownArrowUp';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'components/gridImage/gridImage';
@@ -8,7 +9,6 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import SvgDropdownArrowUp from './dropDownArrowUp.svg';
 import moduleStyles from './summary.module.scss';
 
 // Type declarations
@@ -162,9 +162,11 @@ function DropDownButton(props: {
 			<span className={styles.spaceRight}>
 				{props.showDropDown ? 'Hide details' : 'Show all details'}
 			</span>
-			<SvgDropdownArrowUp
+			<div
 				className={props.showDropDown ? styles.openState : styles.defaultState}
-			/>
+			>
+				<DropdownArrowUp />
+			</div>
 		</button>
 	);
 }
