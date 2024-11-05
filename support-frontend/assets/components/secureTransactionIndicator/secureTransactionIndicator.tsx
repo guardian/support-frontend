@@ -10,9 +10,13 @@ export interface SecureTransactionIndicatorProps extends CSSOverridable {
 	hideText?: boolean;
 }
 
+const darkColour = neutral[46];
+const lightColour = neutral[100];
+const darkColourOpacity = 1;
+const lightColourOpacity = 0.9;
 const theming = (theme: 'dark' | 'light') => css`
-	color: ${theme === 'dark' ? neutral[46] : neutral[100]};
-	opacity: ${theme === 'dark' ? 1 : 0.9};
+	color: ${theme === 'dark' ? darkColour : lightColour};
+	opacity: ${theme === 'dark' ? darkColourOpacity : lightColourOpacity};
 `;
 
 const secureTransactionWithText = (align: 'left' | 'right' | 'center') => css`
@@ -31,10 +35,6 @@ const padlock = css`
 	svg {
 		display: block;
 		opacity: inherit;
-
-		path {
-			fill: currentColor;
-		}
 	}
 `;
 
@@ -56,7 +56,17 @@ export function SecureTransactionIndicator({
 	return (
 		<div css={[mainCss, theming(theme), cssOverrides]}>
 			<div css={padlock}>
-				{hideText ? <SecurePadlockCircle /> : <SecurePadlock />}
+				{hideText ? (
+					<SecurePadlockCircle
+						colour={theme === 'dark' ? darkColour : lightColour}
+						opacity={theme === 'dark' ? darkColourOpacity : lightColourOpacity}
+					/>
+				) : (
+					<SecurePadlock
+						colour={theme === 'dark' ? darkColour : lightColour}
+						opacity={theme === 'dark' ? darkColourOpacity : lightColourOpacity}
+					/>
+				)}
 			</div>
 			{!hideText && <div css={text}>Secure transaction</div>}
 		</div>
