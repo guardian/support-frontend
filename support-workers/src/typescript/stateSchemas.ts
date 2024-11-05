@@ -302,3 +302,7 @@ export const createSalesforceContactStateSchema = baseStateSchema.merge(
     paymentMethod: paymentMethodSchema,
   })
 );
+
+export type CreateSalesforceContactState = z.infer<
+  typeof createSalesforceContactStateSchema
+>;
