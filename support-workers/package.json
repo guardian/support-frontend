@@ -8,7 +8,7 @@
     "lint": "eslint src/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
-    "package": "yarn check-formatting && yarn lint && yarn test && yarn build && mkdir target && cd target && zip -qr support-workers.zip ../src/typescript/*.js"
+    "package": "yarn check-formatting && yarn lint && yarn test && yarn build && mkdir -p target && cd target && zip -qr support-workers.zip ./*.js"
   },
   "repository": {
     "type": "git",
