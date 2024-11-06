@@ -1,5 +1,4 @@
-import { expect } from '@storybook/test';
-import { userEvent, waitFor, within } from '@storybook/test';
+import { expect, fn, userEvent, waitFor, within } from '@storybook/test';
 import type { TabProps } from 'components/tabs/tabs';
 import TabsComponent from 'components/tabs/tabs';
 
@@ -64,6 +63,9 @@ const tabInteraction = async ({
 export default {
 	title: 'Content/Tabs',
 	component: TabsComponent,
+	args: {
+		onTabChange: fn(),
+	},
 	argTypes: { onTabChange: { action: 'tab changed' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
