@@ -146,12 +146,12 @@ export class SupportWorkers extends GuStack {
       additionalPolicies: PolicyStatement[] = []
     ) => {
       const lambdaId = `${lambdaName}Lambda`;
-      const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
+      //const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
       const lambda = new GuLambdaFunction(this, lambdaId, {
         ...lambdaDefaultConfig,
         fileName: `support-workers.zip`,
         runtime: Runtime.NODEJS_20_X,
-        handler: `${lambdaTSFile}.handler`,
+        handler: `index.handler`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
           s3Policy,
