@@ -115,6 +115,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				},
 			},
 			benefits: [],
+			benefitsAdditional: [{ copy: 'Lorem ipsum' }],
 		},
 		TierThree: {
 			label: 'Digital + print',
