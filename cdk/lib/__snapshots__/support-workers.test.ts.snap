@@ -71,7 +71,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         },
         "FunctionName": "support-CreatePaymentMethodLambda-PROD",
-        "Handler": "createPaymentMethodLambda.handler",
+        "Handler": "index.handler",
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
