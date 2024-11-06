@@ -496,6 +496,14 @@ function CheckoutComponent({
 	 */
 	let productFields: RegularPaymentRequest['product'];
 	switch (productKey) {
+		case 'GuardianLight':
+			productFields = {
+				productType: 'GuardianLight',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+			break;
+
 		case 'TierThree':
 			productFields = {
 				productType: 'TierThree',

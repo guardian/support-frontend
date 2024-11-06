@@ -107,6 +107,15 @@ const supporterPlusBenefits = [
 
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
+		GuardianLight: {
+			label: 'Guardian Light',
+			ratePlans: {
+				Monthly: {
+					billingPeriod: 'Monthly',
+				},
+			},
+			benefits: [],
+		},
 		TierThree: {
 			label: 'Digital + print',
 			benefitsSummary: [
