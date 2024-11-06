@@ -89,13 +89,6 @@ Resources:
               - cloudwatch:putMetricData
               Resource: "*"
               Effect: Allow
-        - PolicyName: AssumeOphanRole
-          PolicyDocument:
-            Statement:
-            - Effect: Allow
-              Action: sts:AssumeRole
-              Resource:
-                Ref: OphanRole
         - PolicyName: Kinesis
           PolicyDocument:
             Statement:
