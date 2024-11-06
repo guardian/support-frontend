@@ -116,7 +116,7 @@ case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields
 
 object PaymentFields {
-  val discriminatedType = new DiscriminatedType[PaymentFields]("PaymentType")
+  val discriminatedType = new DiscriminatedType[PaymentFields]("paymentType")
 
   // Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: discriminatedType.VariantCodec[PayPalPaymentFields] =
