@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { usePayPal } from 'helpers/customHooks/usePayPal';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
