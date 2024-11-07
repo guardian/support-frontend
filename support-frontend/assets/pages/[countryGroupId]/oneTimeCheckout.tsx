@@ -483,6 +483,7 @@ function OneTimeCheckoutComponent({
 			if (paymentResult) {
 				setThankYouOrder({
 					firstName: '',
+					email: email,
 					paymentMethod: paymentMethod,
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();

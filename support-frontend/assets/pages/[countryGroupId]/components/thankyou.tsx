@@ -58,6 +58,7 @@ const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
+	email: string(),
 	paymentMethod: picklist([
 		'Stripe',
 		'StripeExpressCheckoutElement',
@@ -205,7 +206,7 @@ export function ThankYouComponent({
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const emailExists = !isNewAccount && isSignedIn;
+	const validEmail = order.email !== '';
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
@@ -259,9 +260,9 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
-		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
+		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && emailExists),
+			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && isSignedIn),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
