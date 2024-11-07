@@ -191,24 +191,16 @@ function getFinalAmount(
 	selectedPriceCard: number | 'other',
 	otherAmount: string,
 	minAmount: number,
-	coverTransactionCostSelected?: boolean,
+	coverTransactionCostSelected: boolean,
 ): number | undefined {
+	const transactionMultiplier: number = coverTransactionCostSelected ? 1.04 : 1;
 	if (selectedPriceCard === 'other') {
 		const parsedAmount = parseFloat(otherAmount);
-
-		const finalAmount =
-			Number.isNaN(parsedAmount) || parsedAmount < minAmount
-				? undefined
-				: parsedAmount;
-
-		return finalAmount
-			? coverTransactionCostSelected
-				? finalAmount * 1.04
-				: finalAmount
-			: undefined;
+		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
+			? undefined
+			: parsedAmount * transactionMultiplier;
 	}
-
-	return selectedPriceCard;
+	return selectedPriceCard * transactionMultiplier;
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
@@ -291,11 +283,14 @@ function OneTimeCheckoutComponent({
 	);
 
 	const [otherAmountError, setOtherAmountError] = useState<string>();
-	const finalAmount = getFinalAmount(selectedPriceCard, otherAmount, minAmount);
-	console.log('TEST finalAmount', finalAmount);
-
 	const [coverTransactionCost, setCoverTransactionCost] =
 		useState<boolean>(false);
+	const finalAmount = getFinalAmount(
+		selectedPriceCard,
+		otherAmount,
+		minAmount,
+		coverTransactionCost,
+	);
 	const transactionCoverCost = finalAmount ? finalAmount * 0.04 : 0;
 	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
 		currency,
