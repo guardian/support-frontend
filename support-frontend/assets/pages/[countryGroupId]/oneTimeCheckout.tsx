@@ -191,13 +191,21 @@ function getFinalAmount(
 	selectedPriceCard: number | 'other',
 	otherAmount: string,
 	minAmount: number,
+	coverTransactionCostSelected?: boolean,
 ): number | undefined {
 	if (selectedPriceCard === 'other') {
 		const parsedAmount = parseFloat(otherAmount);
 
-		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
-			? undefined
-			: parsedAmount;
+		const finalAmount =
+			Number.isNaN(parsedAmount) || parsedAmount < minAmount
+				? undefined
+				: parsedAmount;
+
+		return finalAmount
+			? coverTransactionCostSelected
+				? finalAmount * 1.04
+				: finalAmount
+			: undefined;
 	}
 
 	return selectedPriceCard;
@@ -284,6 +292,7 @@ function OneTimeCheckoutComponent({
 
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 	const finalAmount = getFinalAmount(selectedPriceCard, otherAmount, minAmount);
+	console.log('TEST finalAmount', finalAmount);
 
 	const [coverTransactionCost, setCoverTransactionCost] =
 		useState<boolean>(false);
