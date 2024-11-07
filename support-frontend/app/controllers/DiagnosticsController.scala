@@ -35,16 +35,11 @@ class DiagnosticsController(
         " immediately before sending the information from this page" ::
         request.cookies.collect {
           case cookie if relevantCookies.contains(cookie.name) =>
-            getShareableCookieData(cookie) + " = " + cookie.value
+            "* " + cookie.name + "\n  " + cookie.value
           case cookie if privateCookies.contains(cookie.name) =>
-            getShareableCookieData(cookie) + " = (private - length: " + cookie.value.length + ")"
+            "* " + cookie.name + "\n  (private - length: " + cookie.value.length + ")"
         }.toList
     Ok(humanReadableCookies.mkString("\n\n"))
   }
 
-  private def getShareableCookieData(cookie: Cookie) = {
-    "* " + cookie.name + "\n" +
-      " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
-      cookie.sameSite + ", secure: " + cookie.secure + " )\n"
-  }
 }
