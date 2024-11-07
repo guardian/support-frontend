@@ -3,6 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import play.api.mvc._
 import Results.Ok
+import play.twirl.api.Html
 
 class DiagnosticsController(
     actionRefiners: CustomActionBuilders,
@@ -39,7 +40,15 @@ class DiagnosticsController(
           case cookie if privateCookies.contains(cookie.name) =>
             "* " + cookie.name + "\n  (private - length: " + cookie.value.length + ")"
         }.toList
-    Ok(humanReadableCookies.mkString("\n\n"))
+    Ok(withHtml(humanReadableCookies.mkString("\n\n")))
+  }
+
+  def withHtml(body: String): Html = {
+    val cookiesJS =
+      "<pre><script>document.write(document.cookie.split('; ').map((a) => a.split('=')).map((a) => a[0] + ' ' + a[1]?.length).join('\\n'))</script></pre>"
+    Html(
+      s"<html><body><h2>HTTP cookies</h2><pre>$body</pre><h2>JS cookie keys and lengths</h2>$cookiesJS</body></html>",
+    )
   }
 
 }
