@@ -208,7 +208,7 @@ export function ThankYouComponent({
 	const emailExists = !isNewAccount && isSignedIn;
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
-	const showNewspaperArchiveBenefit = ['variant', 'control'].includes(
+	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 

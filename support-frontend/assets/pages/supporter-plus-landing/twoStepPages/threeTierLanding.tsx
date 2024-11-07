@@ -353,10 +353,11 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	const productCatalogDescription =
-		abParticipations.newspaperArchiveBenefit === 'variant'
-			? productCatalogDescriptionNewBenefits
-			: canonicalProductCatalogDescription;
+	const productCatalogDescription = ['v1', 'v2'].includes(
+		abParticipations.newspaperArchiveBenefit ?? '',
+	)
+		? productCatalogDescriptionNewBenefits
+		: canonicalProductCatalogDescription;
 
 	/**
 	 * Tier 1: Contributions
@@ -492,7 +493,7 @@ export function ThreeTierLanding({
 	};
 
 	const showNewspaperArchiveBanner =
-		abParticipations.newspaperArchiveBenefit === 'variant';
+		abParticipations.newspaperArchiveBenefit === 'v2';
 
 	const useNewOneTimeCheckout =
 		abParticipations.newOneTimeCheckout === 'variant';
