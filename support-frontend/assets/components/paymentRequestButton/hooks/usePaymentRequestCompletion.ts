@@ -2,7 +2,7 @@ import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
