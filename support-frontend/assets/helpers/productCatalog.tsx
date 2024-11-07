@@ -1,6 +1,5 @@
 import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
-import { OfferFeast } from 'components/offer/offer';
 import type { Participations } from './abTests/abtest';
 import { newspaperCountries } from './internationalisation/country';
 import type {
@@ -71,7 +70,7 @@ export function isProductKey(val: unknown): val is ProductKey {
 }
 
 const appBenefit = {
-	copy: 'Free access to the Guardian app',
+	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
 const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
@@ -89,12 +88,21 @@ const partnerOffersBenefit = {
 	specificToRegions: ['AUDCountries'],
 	specificToAbTest: [{ name: 'auPartnerBenefit', variants: ['control'] }],
 };
+
+const feastBenefit = {
+	copy: 'Unlimited access to the Guardian Feast app',
+	isNew: true,
+	tooltip:
+		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+};
+
 const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	newsletterBenefit,
 	addFreeBenefit,
 	appBenefit,
 	partnerOffersBenefit,
+	feastBenefit,
 ];
 
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
@@ -188,11 +196,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 			label: 'All-access digital',
 			/** These are duplicated in the TierThree benefitsAdditional */
 			benefits: supporterPlusBenefits,
-			offers: [
-				{
-					copy: <OfferFeast></OfferFeast>,
-				},
-			],
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
@@ -327,19 +330,6 @@ export const productCatalogDescriptionNewBenefits: Record<
 				tooltip: `Look back on more than 200 years of world history with the Guardian archive. Get digital access to every front page, article and advertisement printed in the newspaper from 1821.`,
 			},
 		],
-	},
-	SupporterPlus: {
-		...productCatalogDescription.SupporterPlus,
-		benefits: [
-			...productCatalogDescription.SupporterPlus.benefits,
-			{
-				copy: 'Unlimited access to the Guardian Feast app',
-				isNew: true,
-				tooltip:
-					'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
-			},
-		],
-		offers: [],
 	},
 };
 

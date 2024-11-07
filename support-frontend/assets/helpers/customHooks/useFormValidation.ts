@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
 import { validateOtherAmount } from 'helpers/redux/checkout/product/actions';
-import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,

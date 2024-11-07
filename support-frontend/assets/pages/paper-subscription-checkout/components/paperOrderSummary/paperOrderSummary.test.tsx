@@ -2,8 +2,8 @@ import { screen } from '@testing-library/react';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
 import GridImage from 'components/gridImage/gridImage';
-import type { OrderSummaryProps } from './orderSummary';
-import PaperOrderSummary from './orderSummary';
+import type { OrderSummaryProps } from './paperOrderSummary';
+import PaperOrderSummary from './paperOrderSummary';
 
 function findTextAcrossElements(searchText: string) {
 	return (_: unknown, node: Element | null) => {
