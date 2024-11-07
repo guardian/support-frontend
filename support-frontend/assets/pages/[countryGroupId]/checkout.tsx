@@ -985,6 +985,7 @@ function CheckoutComponent({
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
+					email: personalData.email,
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);

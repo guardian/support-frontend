@@ -4,7 +4,7 @@ import AnimatedDots from 'components/spinners/animatedDots';
 import { usePayPal } from 'helpers/customHooks/usePayPal';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
