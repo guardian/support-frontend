@@ -80,6 +80,7 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -283,6 +284,14 @@ function OneTimeCheckoutComponent({
 
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 	const finalAmount = getFinalAmount(selectedPriceCard, otherAmount, minAmount);
+
+	const [coverTransactionCost, setCoverTransactionCost] =
+		useState<boolean>(false);
+	const transactionCoverCost = finalAmount ? finalAmount * 0.04 : 0;
+	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
+		currency,
+		transactionCoverCost,
+	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	useEffect(() => {
 		if (finalAmount) {
@@ -830,6 +839,17 @@ function OneTimeCheckoutComponent({
 								})}
 							</RadioGroup>
 						</FormSection>
+						<CoverTransactionCost
+							transactionCost={coverTransactionCost}
+							transactionCostCopy={transactionCostCopy}
+							onChecked={(check) => {
+								setCoverTransactionCost(check);
+							}}
+							transactionCostAmount={simpleFormatAmount(
+								currency,
+								finalAmount ? finalAmount : 0,
+							)}
+						/>
 						<div
 							css={css`
 								margin: ${space[8]}px 0 ${space[6]}px;
