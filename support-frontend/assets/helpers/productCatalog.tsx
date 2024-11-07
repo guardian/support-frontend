@@ -71,7 +71,7 @@ export function isProductKey(val: unknown): val is ProductKey {
 }
 
 const appBenefit = {
-	copy: 'Free access to the Guardian app',
+	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
 const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
