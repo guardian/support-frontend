@@ -5,7 +5,7 @@ import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRec
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getContributionType } from '../../product/selectors/productType';
