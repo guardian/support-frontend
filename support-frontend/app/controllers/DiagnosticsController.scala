@@ -21,24 +21,30 @@ class DiagnosticsController(
     "gu.contributions.recurring.contrib-timestamp.Annual",
     "gu.contributions.contrib-timestamp",
     "gu_article_count_opt_out",
+    "GO_SO",
+  )
+  val privateCookies = List(
+    "GU_U",
+    "SC_GU_U",
   )
 
   import actionRefiners._
   def cookies(): Action[AnyContent] = NoCacheAction() { request =>
-    val cookies = request.cookies.filter { cookie =>
-      relevantCookies.contains(cookie.name)
-    }
     val humanReadableCookies =
       "Please make sure you are logged in and have visited https://www.theguardian.com and seen the issue," +
         " immediately before sending the information from this page" ::
-        s"you have ${cookies.size} cookie(s)." ::
-        cookies.map { cookie =>
-          "* " + cookie.name + "\n" +
-            " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
-            cookie.sameSite + ", secure: " + cookie.secure + " )\n" +
-            " = " + cookie.value
+        request.cookies.collect {
+          case cookie if relevantCookies.contains(cookie.name) =>
+            getShareableCookieData(cookie) + " = " + cookie.value
+          case cookie if privateCookies.contains(cookie.name) =>
+            getShareableCookieData(cookie) + " = (private - length: " + cookie.value.length + ")"
         }.toList
     Ok(humanReadableCookies.mkString("\n\n"))
   }
 
+  private def getShareableCookieData(cookie: Cookie) = {
+    "* " + cookie.name + "\n" +
+      " ( domain: " + cookie.domain + ", httpOnly: " + cookie.httpOnly + ", path: " + cookie.path + ", maxAge: " + cookie.maxAge + ", sameSite: " +
+      cookie.sameSite + ", secure: " + cookie.secure + " )\n"
+  }
 }
