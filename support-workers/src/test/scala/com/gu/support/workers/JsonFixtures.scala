@@ -260,6 +260,7 @@ object JsonFixtures {
   val payPalJson =
     s"""
       {
+        "paymentType": "PayPal",
         "baid": "$validBaid"
       }
     """
@@ -295,6 +296,7 @@ object JsonFixtures {
   val directDebitJson =
     s"""
       {
+        "paymentType": "DirectDebit",
         "accountHolderName": "$mickeyMouse",
         "sortCode": "111111",
         "accountNumber": "99999999"
@@ -307,6 +309,7 @@ object JsonFixtures {
   val stripeJson =
     s"""
       {
+        "paymentType": "Stripe",
         "paymentMethod": "${stripeToken.value}",
         "stripePaymentType": "StripeCheckout",
         "stripePublicKey": "${stripePublicKey.rawPublicKey}"

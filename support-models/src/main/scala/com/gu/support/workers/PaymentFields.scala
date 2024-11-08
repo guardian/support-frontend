@@ -2,8 +2,9 @@ package com.gu.support.workers
 
 import cats.syntax.functor._
 import com.gu.i18n.Country
-import com.gu.support.encoding.{Codec, CodecHelpers}
+import com.gu.support.encoding.{Codec, CodecHelpers, DiscriminatedType}
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.workers.PaymentFields.discriminatedType
 import io.circe.syntax._
 import io.circe.{Encoder, _}
 
@@ -115,33 +116,30 @@ case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends PaymentFields
 
 object PaymentFields {
+  val discriminatedType = new DiscriminatedType[PaymentFields]("paymentType")
+
   // Payment fields are input from support-frontend
-  implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
-  implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
-  implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
-  implicit val sepaPaymentFieldsCodec: Codec[SepaPaymentFields] = deriveCodec
-  implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
-  implicit val amazonPayPaymentFieldsCodec: Codec[AmazonPayPaymentFields] = deriveCodec
+  implicit val payPalPaymentFieldsCodec: discriminatedType.VariantCodec[PayPalPaymentFields] =
+    discriminatedType.variant[PayPalPaymentFields]("PayPal")
+  implicit val stripePaymentMethodPaymentFieldsCodec: discriminatedType.VariantCodec[StripePaymentFields] =
+    discriminatedType.variant[StripePaymentFields]("Stripe")
+  implicit val directDebitPaymentFieldsCodec: discriminatedType.VariantCodec[DirectDebitPaymentFields] =
+    discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
+  implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
+    discriminatedType.variant[SepaPaymentFields]("Sepa")
+  implicit val existingPaymentFieldsCodec: discriminatedType.VariantCodec[ExistingPaymentFields] =
+    discriminatedType.variant[ExistingPaymentFields]("Existing")
+  implicit val amazonPayPaymentFieldsCodec: discriminatedType.VariantCodec[AmazonPayPaymentFields] =
+    discriminatedType.variant[AmazonPayPaymentFields]("AmazonPay")
 
-  implicit val encodePaymentFields: Encoder[PaymentFields] = Encoder.instance {
-    case p: PayPalPaymentFields => p.asJson
-    case s: StripePaymentFields => s.asJson
-    case d: DirectDebitPaymentFields => d.asJson
-    case s: SepaPaymentFields => s.asJson.deepDropNullValues
-    case e: ExistingPaymentFields => e.asJson
-    case a: AmazonPayPaymentFields => a.asJson
-  }
-
-  implicit val decodePaymentFields: Decoder[PaymentFields] = {
-    import CodecHelpers.withClue
-    List[Decoder[PaymentFields]](
-      withClue(Decoder[PayPalPaymentFields].widen, "PayPalPaymentFields"),
-      withClue(Decoder[StripePaymentFields].widen, "StripePaymentFields"),
-      withClue(Decoder[DirectDebitPaymentFields].widen, "DirectDebitPaymentFields"),
-      withClue(Decoder[SepaPaymentFields].widen, "SepaPaymentFields"),
-      withClue(Decoder[ExistingPaymentFields].widen, "ExistingPaymentFields"),
-      withClue(Decoder[AmazonPayPaymentFields].widen, "AmazonPayPaymentFields"),
-    ).reduceLeft(CodecHelpers.or(_, _))
-  }
-
+  implicit val paymentFieldsCodec: Codec[PaymentFields] = discriminatedType.codec(
+    List(
+      payPalPaymentFieldsCodec,
+      stripePaymentMethodPaymentFieldsCodec,
+      directDebitPaymentFieldsCodec,
+      sepapaymentFieldsCodec,
+      existingPaymentFieldsCodec,
+      amazonPayPaymentFieldsCodec,
+    ),
+  )
 }

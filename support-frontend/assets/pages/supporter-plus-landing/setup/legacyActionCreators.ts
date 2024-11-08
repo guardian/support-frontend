@@ -238,8 +238,8 @@ function regularPaymentRequestFromAuthorisation(
 			...regularPaymentFieldsFromAuthorisation(
 				authorisation,
 				state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+				recaptchaToken,
 			),
-			recaptchaToken,
 		},
 		appliedPromotion,
 

@@ -53,6 +53,7 @@ import {
 } from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
+	RegularPaymentFields,
 	RegularPaymentRequest,
 	StatusResponse,
 	StripePaymentMethod,
@@ -805,7 +806,7 @@ function CheckoutComponent({
 		}
 
 		/** FormData: `paymentFields` */
-		let paymentFields;
+		let paymentFields: RegularPaymentFields | undefined = undefined;
 		if (
 			paymentMethod === 'Stripe' &&
 			stripe &&
@@ -829,8 +830,8 @@ function CheckoutComponent({
 				console.error(stripeIntentResult.error);
 			} else if (stripeIntentResult.setupIntent.payment_method) {
 				paymentFields = {
+					paymentType: Stripe,
 					stripePublicKey,
-					recaptchaToken: recaptchaToken,
 					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
 					paymentMethod: stripeIntentResult.setupIntent
 						.payment_method as string,
@@ -894,6 +895,7 @@ function CheckoutComponent({
 
 			/** 4. Pass the setupIntent through to the paymentFields sent to our /create endpoint */
 			paymentFields = {
+				paymentType: Stripe,
 				paymentMethod: setupIntent.payment_method as string,
 				stripePaymentType,
 				stripePublicKey,
@@ -902,14 +904,14 @@ function CheckoutComponent({
 
 		if (paymentMethod === 'PayPal') {
 			paymentFields = {
-				recaptchaToken: '',
-				paymentMethod: 'PayPal',
+				paymentType: PayPal,
 				baid: formData.get('payPalBAID') as string,
 			};
 		}
 
 		if (paymentMethod === 'DirectDebit' && recaptchaToken !== undefined) {
 			paymentFields = {
+				paymentType: DirectDebit,
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
