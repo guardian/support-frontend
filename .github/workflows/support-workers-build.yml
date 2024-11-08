@@ -86,7 +86,6 @@ jobs:
               support-workers:
                 type: aws-lambda
                 parameters:
-                  bucket: support-workers-dist
                   functionNames:
                     - "-CreatePaymentMethodLambda-"
                     - "-CreateSalesforceContactLambda-"
@@ -101,7 +100,6 @@ jobs:
               it-tests:
                 type: aws-s3
                 parameters:
-                  bucket: support-workers-dist
                   cacheControl: private
                   publicReadAcl: false
           contentDirectories: |
