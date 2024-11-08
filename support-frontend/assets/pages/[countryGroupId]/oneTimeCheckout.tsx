@@ -40,7 +40,7 @@ import {
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
-import { round, simpleFormatAmount } from 'helpers/forms/checkouts';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
 	postOneOffPayPalCreatePaymentRequest,
@@ -78,6 +78,7 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
@@ -198,9 +199,9 @@ function getFinalAmount(
 		const parsedAmount = parseFloat(otherAmount);
 		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
 			? undefined
-			: round(parsedAmount * transactionMultiplier);
+			: roundToDecimalPlaces(parsedAmount * transactionMultiplier);
 	}
-	return round(selectedPriceCard * transactionMultiplier);
+	return roundToDecimalPlaces(selectedPriceCard * transactionMultiplier);
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {

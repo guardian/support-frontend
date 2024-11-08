@@ -341,7 +341,6 @@ function getAvailablePaymentRequestButtonPaymentMethod(
 
 // ----- Exports ----- //
 export {
-	round,
 	getContributeButtonCopy,
 	getContributeButtonCopyWithPaymentType,
 	simpleFormatAmount,
