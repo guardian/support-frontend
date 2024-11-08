@@ -101,16 +101,20 @@ export const productTypeSchema = z.discriminatedUnion('productType', [
 	digitalPackProductSchema,
 ]);
 
+const stripePaymentProviderSchema = z.literal('Stripe');
+const payPalPaymentProviderSchema = z.literal('PayPal');
+const directDebitPaymentProviderSchema = z.literal('DirectDebit');
+const sepapaymentProviderSchema = z.literal('Sepa');
+const existingPaymentProviderSchema = z.literal('Existing');
+
 const paymentProviderSchema = z.union([
-	z.literal('Stripe'),
+	stripePaymentProviderSchema,
 	z.literal('StripeApplePay'),
 	z.literal('StripePaymentRequestButton'),
-	z.literal('PayPal'),
-	z.literal('DirectDebit'),
-	z.literal('Sepa'),
-	z.literal('Existing'),
-	z.literal('Redemption'),
-	z.literal('AmazonPay'),
+	payPalPaymentProviderSchema,
+	directDebitPaymentProviderSchema,
+	sepapaymentProviderSchema,
+	existingPaymentProviderSchema,
 ]);
 
 export const analyticsInfoSchema = z.object({
@@ -119,6 +123,7 @@ export const analyticsInfoSchema = z.object({
 });
 
 const payPalPaymentFieldsSchema = z.object({
+	paymentType: payPalPaymentProviderSchema,
 	baid: z.string(),
 });
 
@@ -129,6 +134,7 @@ const stripePaymentTypeSchema = z.union([
 ]);
 
 const stripePaymentFieldsSchema = z.object({
+	paymentType: stripePaymentProviderSchema,
 	paymentMethod: z.string(),
 	stripePaymentType: stripePaymentTypeSchema, //TODO: this was optional in scala model
 	stripePublicKey: z.string(), //TODO: this has more validation in scala model
@@ -137,6 +143,7 @@ const stripePaymentFieldsSchema = z.object({
 export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
 
 const directDebitPaymentFieldsSchema = z.object({
+	paymentType: directDebitPaymentProviderSchema,
 	accountHolderName: z.string(),
 	sortCode: z.string(),
 	accountNumber: z.string(),
@@ -148,6 +155,7 @@ export type DirectDebitPaymentFields = z.infer<
 >;
 
 const sepaPaymentFieldsSchema = z.object({
+	paymentType: sepapaymentProviderSchema,
 	accountHolderName: z.string(),
 	iban: z.string(),
 	country: z.string().nullable(),
@@ -155,21 +163,17 @@ const sepaPaymentFieldsSchema = z.object({
 });
 
 const existingPaymentFieldsSchema = z.object({
+	paymentType: existingPaymentProviderSchema,
 	billingAccountId: z.string(),
 });
 
-const amazonPayPaymentFieldsSchema = z.object({
-	amazonPayBillingAgreementId: z.string(),
-});
-
 //TODO: this needs to be a discriminated union to be useful
-const paymentFieldsSchema = z.union([
+const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
 	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,
 	sepaPaymentFieldsSchema,
 	existingPaymentFieldsSchema,
-	amazonPayPaymentFieldsSchema,
 ]);
 
 export type PaymentFields = z.infer<typeof paymentFieldsSchema>;
