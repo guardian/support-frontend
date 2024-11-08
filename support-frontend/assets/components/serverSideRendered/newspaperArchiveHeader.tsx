@@ -128,8 +128,8 @@ export function NewspaperArchiveHeader() {
 				<div css={body}>
 					<div css={description}>
 						<p css={paragraph}>
-							Journey through more than 200 years of the Guardian and Observer
-							and search through every page printed in our newspapers.
+							Journey through more than 200 years of the&nbsp;Guardian and
+							Observer and search through every page printed in our newspapers.
 						</p>
 					</div>
 					<div css={logos}>
