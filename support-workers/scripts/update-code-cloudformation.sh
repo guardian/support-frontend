@@ -1,8 +1,13 @@
 #!/bin/bash
 
+cd ../../cdk
+yarn synth
+
 # We need to upload the template to S3 because it is too big to inline
 aws --region eu-west-1 --profile membership \
-  s3 cp ../../cdk/cdk.out/SupportWorkers-CODE.template.json s3://support-workers-dist/support/CODE/cloudformation/
+  s3 cp ./cdk.out/SupportWorkers-CODE.template.json s3://support-workers-dist/support/CODE/cloudformation/
+
+cd -
 
 aws --region eu-west-1 --profile membership \
   cloudformation update-stack \
