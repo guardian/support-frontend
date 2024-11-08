@@ -765,6 +765,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "ExecutionFailureAlarm65D8EF83": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -1073,6 +1078,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "NoGocardlessContributionsAlarmD9872C48": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -1138,6 +1148,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::CloudWatch::Alarm",
     },
     "NoGocardlessSupporterPlusAlarm93796A8F": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -1410,6 +1425,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::CloudWatch::Alarm",
     },
     "NoPaypalSupporterPlusAlarmFA5D91A9": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -1545,6 +1565,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::CloudWatch::Alarm",
     },
     "NoStripeSupporterPlusAlarm731126BB": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -2873,6 +2898,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "TimeoutAlarm4022815E": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [

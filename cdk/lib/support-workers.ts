@@ -265,7 +265,7 @@ export class SupportWorkers extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 1,
       threshold: 1,
-    });
+    }).node.addDependency(stateMachine);
 
     new GuAlarm(this, "TimeoutAlarm", {
       app,
@@ -285,7 +285,7 @@ export class SupportWorkers extends GuStack {
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 1,
       threshold: 1,
-    });
+    }).node.addDependency(stateMachine);
 
     /*
      This query is useful to check what a reasonable interval is for each product if you
@@ -377,7 +377,7 @@ export class SupportWorkers extends GuStack {
       evaluationPeriods: 16,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
-    });
+    }).node.addDependency(stateMachine);
 
     new GuAlarm(this, "NoPaypalSupporterPlusAlarm", {
       app,
@@ -399,7 +399,7 @@ export class SupportWorkers extends GuStack {
       evaluationPeriods: 6,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
-    });
+    }).node.addDependency(stateMachine);
 
     new GuAlarm(this, "NoStripeSupporterPlusAlarm", {
       app,
@@ -421,7 +421,7 @@ export class SupportWorkers extends GuStack {
       evaluationPeriods: 3,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
-    });
+    }).node.addDependency(stateMachine);
 
     new GuAlarm(this, "NoGocardlessSupporterPlusAlarm", {
       app,
@@ -443,7 +443,7 @@ export class SupportWorkers extends GuStack {
       evaluationPeriods: 14,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
-    });
+    }).node.addDependency(stateMachine);
 
     // This alarm is for the PaymentSuccess metric where
     // ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
