@@ -41,22 +41,22 @@ const coverTransactionSummaryContainer = css`
 
 export type CoverTransactionCostProps = {
 	transactionCost: boolean;
-	transactionCostCopy: string;
 	transactionCostAmount: string;
+	transactionCostTotal: string;
 	onChecked: (check: boolean) => void;
 	showTransactionCostSummary?: boolean;
 };
 
 export function CoverTransactionCost({
 	transactionCost,
-	transactionCostCopy,
 	transactionCostAmount,
+	transactionCostTotal,
 	showTransactionCostSummary,
 	onChecked,
 }: CoverTransactionCostProps): JSX.Element {
 	const [displayTransactionCostSummary, setDisplayTransactionCostSummary] =
 		useState<boolean>(false);
-
+	const transactionCostCopy = `I’d like to add a further ${transactionCostAmount} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 	return (
 		<>
 			<div css={coverTransactionCheckboxContainer}>
@@ -82,7 +82,7 @@ export function CoverTransactionCost({
 					<CheckoutDivider spacing="tight" />
 					<div css={coverTransactionSummaryContainer}>
 						Total amount
-						<div>{transactionCostAmount}</div>
+						<div>{transactionCostTotal}</div>
 					</div>
 				</div>
 			)}

@@ -289,10 +289,6 @@ function OneTimeCheckoutComponent({
 	const amountWithoutCoverCost =
 		getFinalAmount(selectedPriceCard, otherAmount, minAmount, false) ?? 0;
 	const transactionCoverCost = amountWithoutCoverCost * 0.04;
-	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
-		currency,
-		transactionCoverCost,
-	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	const finalAmount = getFinalAmount(
 		selectedPriceCard,
@@ -850,11 +846,14 @@ function OneTimeCheckoutComponent({
 						</FormSection>
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}
-							transactionCostCopy={transactionCostCopy}
+							transactionCostAmount={simpleFormatAmount(
+								currency,
+								transactionCoverCost,
+							)}
 							onChecked={(check) => {
 								setCoverTransactionCost(check);
 							}}
-							transactionCostAmount={simpleFormatAmount(
+							transactionCostTotal={simpleFormatAmount(
 								currency,
 								finalAmount ? finalAmount : 0,
 							)}
