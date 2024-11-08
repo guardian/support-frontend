@@ -1128,7 +1128,9 @@ function CheckoutComponent({
 							productFields.productType,
 							promotion,
 						)}
-						headerButton={<BackButton geoId={geoId} buttonText="Change" />}
+						headerButton={
+							<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
+						}
 					/>
 				</BoxContents>
 			</Box>

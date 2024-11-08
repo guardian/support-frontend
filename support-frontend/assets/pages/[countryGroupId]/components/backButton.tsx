@@ -1,14 +1,13 @@
 import { Button } from '@guardian/source/react-components';
-import type { GeoId } from 'pages/geoIdConfig';
 
 type BackButtonProps = {
-	geoId: GeoId;
+	path: string;
 	buttonText: string;
 };
 
-export function BackButton({ geoId, buttonText }: BackButtonProps) {
+export function BackButton({ path, buttonText }: BackButtonProps) {
 	return (
-		<a href={`/${geoId}/contribute`}>
+		<a href={path}>
 			<Button priority="tertiary" size="xsmall" role="link">
 				{buttonText}
 			</Button>
