@@ -40,7 +40,7 @@ import {
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { round, simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
 	postOneOffPayPalCreatePaymentRequest,
@@ -198,9 +198,9 @@ function getFinalAmount(
 		const parsedAmount = parseFloat(otherAmount);
 		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
 			? undefined
-			: parsedAmount * transactionMultiplier;
+			: round(parsedAmount * transactionMultiplier);
 	}
-	return selectedPriceCard * transactionMultiplier;
+	return round(selectedPriceCard * transactionMultiplier);
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
@@ -285,17 +285,21 @@ function OneTimeCheckoutComponent({
 	const [otherAmountError, setOtherAmountError] = useState<string>();
 	const [coverTransactionCost, setCoverTransactionCost] =
 		useState<boolean>(false);
+
+	const amountWithoutCoverCost =
+		getFinalAmount(selectedPriceCard, otherAmount, minAmount, false) ?? 0;
+	const transactionCoverCost = amountWithoutCoverCost * 0.04;
+	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
+		currency,
+		transactionCoverCost,
+	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
+
 	const finalAmount = getFinalAmount(
 		selectedPriceCard,
 		otherAmount,
 		minAmount,
 		coverTransactionCost,
 	);
-	const transactionCoverCost = finalAmount ? finalAmount * 0.04 : 0;
-	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
-		currency,
-		transactionCoverCost,
-	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	useEffect(() => {
 		if (finalAmount) {
