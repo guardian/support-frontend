@@ -487,6 +487,7 @@ object Fixtures {
   val directDebitPaymentFieldsJson =
     s"""
        {
+        "paymentType": "DirectDebit",
         "accountHolderName": "Mickey Mouse",
         "sortCode": "204532",
         "accountNumber": "37462947",
