@@ -1129,7 +1129,14 @@ function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
+							productKey === 'GuardianLight' ? (
+								<BackButton
+									path={`/${geoId}/guardianlight`}
+									buttonText="Back"
+								/>
+							) : (
+								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
+							)
 						}
 					/>
 				</BoxContents>
