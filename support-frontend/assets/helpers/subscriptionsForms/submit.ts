@@ -199,11 +199,12 @@ function buildRegularPaymentRequest(
 	} = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId, chosenDeliveryAgent);
+	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const paymentFields = regularPaymentFieldsFromAuthorisation(
 		paymentAuthorisation,
 		state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+		recaptchaToken,
 	);
-	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	const appliedPromotion = getAppliedPromotion(
 		countryGroups[state.common.internationalisation.countryGroupId]
@@ -221,10 +222,7 @@ function buildRegularPaymentRequest(
 		telephoneNumber: telephone,
 		product,
 		firstDeliveryDate: state.page.checkoutForm.product.startDate,
-		paymentFields: {
-			...paymentFields,
-			recaptchaToken,
-		},
+		paymentFields,
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),

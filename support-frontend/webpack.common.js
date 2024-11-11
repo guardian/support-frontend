@@ -147,24 +147,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				},
 			},
 			{
-				test: /\.svg$/,
-				use: [
-					{
-						loader: 'babel-loader',
-					},
-					{
-						loader: 'react-svg-loader',
-						options: {
-							svgo: {
-								plugins: [{ removeTitle: true }],
-								floatPrecision: 2,
-							},
-							jsx: true,
-						},
-					},
-				],
-			},
-			{
 				test: /\.(ttf|woff|woff2)$/,
 				loader: 'file-loader',
 				options: {
