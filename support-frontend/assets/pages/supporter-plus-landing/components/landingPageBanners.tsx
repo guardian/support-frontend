@@ -40,7 +40,7 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	flex-basis: 100%; /* Share width & height of the banner with other components */
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
+	justify-content: space-between;
 	align-items: center;
 	background-color: #1e3e72;
 	padding: ${space[4]}px ${space[4]}px 0px ${space[4]}px;
