@@ -34,3 +34,4 @@ export const argTypes = {
 
 /** This avoids having false positives when the date changes */
 MockDate.set('Sat Jan 1 2024 12:00:00 GMT+0000 (Greenwich Mean Time)');
+export const tags = ['autodocs'];
