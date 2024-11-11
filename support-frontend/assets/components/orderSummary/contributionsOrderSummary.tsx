@@ -155,9 +155,6 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
 	heading?: string;
-	showTopUpAmounts?: boolean;
-	topUpToggleChecked?: boolean;
-	topUpToggleOnChange?: () => void;
 	productDescription?: { description: string; frequency: string };
 };
 
