@@ -216,7 +216,7 @@ export function ThankYouComponent({
 	let benefitsChecklist;
 	if (isTier) {
 		const productDescription = showNewspaperArchiveBenefit
-			? productCatalogDescriptionNewBenefits[productKey]
+			? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 			: productCatalogDescription[productKey];
 		benefitsChecklist = [
 			...productDescription.benefits
