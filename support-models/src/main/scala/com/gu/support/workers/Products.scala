@@ -81,6 +81,14 @@ case class GuardianWeekly(
   override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
 }
 
+case class GuardianLight(
+    amount: BigDecimal,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+) extends ProductType {
+  override def describe: String = s"$billingPeriod-GuardianLight-$currency-$amount"
+}
+
 object ProductType {
   import com.gu.support.encoding.CustomCodecs._
 
@@ -97,6 +105,8 @@ object ProductType {
     discriminatedType.variant[GuardianWeekly]("GuardianWeekly")
   implicit val codecDigital: discriminatedType.VariantCodec[DigitalPack] =
     discriminatedType.variant[DigitalPack]("DigitalPack")
+  implicit val codecGuardianLight: discriminatedType.VariantCodec[GuardianLight] =
+    discriminatedType.variant[GuardianLight]("GuardianLight")
 
   implicit val codec: Codec[ProductType] =
     discriminatedType.codec(
