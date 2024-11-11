@@ -65,7 +65,7 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { Country } from 'helpers/internationalisation';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	derivePaymentApiAcquisitionData,
@@ -106,7 +106,7 @@ import {
  * a lot of extra unused code to those coupled areas.
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
-const countryId = Country.detect();
+const countryId = CountryHelper.detect();
 
 const titleAndButtonContainer = css`
 	display: flex;

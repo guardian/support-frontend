@@ -3,7 +3,8 @@ import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import { Country, CountryGroup } from 'helpers/internationalisation';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -49,8 +50,8 @@ function buildInitialState(
 }
 
 export function getInitialState(): CommonState {
-	const countryId: IsoCountry = Country.detect();
-	const countryGroupId: CountryGroupId = CountryGroup.detect();
+	const countryId: IsoCountry = CountryHelper.detect();
+	const countryGroupId: CountryGroupId = CountryGroupHelper.detect();
 	const currencyId: IsoCurrency = detectCurrency(countryGroupId);
 	const settings = getSettings();
 	const { selectedAmountsVariant, amountsParticipation } =

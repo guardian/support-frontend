@@ -28,7 +28,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
 	Canada,

@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/urls/url';
+import { CountryGroupHelper } from './classes/countryGroup';
 import type { IsoCountry } from './country';
 import type { CountryGroupId } from './countryGroup';
 import { countryGroups } from './countryGroup';
-import { CountryGroup } from '.';
 
 // ----- Types ----- //
 
@@ -122,7 +122,7 @@ function fromString(s: string): IsoCurrency | null | undefined {
 function currencyFromCountryCode(
 	countryCode: IsoCountry,
 ): IsoCurrency | null | undefined {
-	const countryGroupId = CountryGroup.fromCountry(countryCode);
+	const countryGroupId = CountryGroupHelper.fromCountry(countryCode);
 	return countryGroupId ? fromCountryGroupId(countryGroupId) : null;
 }
 

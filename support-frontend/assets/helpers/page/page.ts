@@ -2,7 +2,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
-import { Country, CountryGroup } from 'helpers/internationalisation';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -14,8 +15,8 @@ import { getSettings } from '../globalsAndSwitches/globals';
 
 function setUpTrackingAndConsents(): void {
 	const settings = getSettings();
-	const countryId: IsoCountry = Country.detect();
-	const countryGroupId: CountryGroupId = CountryGroup.detect();
+	const countryId: IsoCountry = CountryHelper.detect();
+	const countryGroupId: CountryGroupId = CountryGroupHelper.detect();
 	const abtestInitalizerData = {
 		countryId,
 		countryGroupId,

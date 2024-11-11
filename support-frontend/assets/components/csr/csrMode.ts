@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Country } from 'helpers/internationalisation';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 
 // ---- Example JSON ----
@@ -64,7 +64,9 @@ const isSalesforceDomain = (domain: string): boolean =>
 
 const parseCustomerData = (data: string): CsrCustomerData => {
 	const salesforceData: SalesforceData = JSON.parse(data) as SalesforceData;
-	const isoCountry = Country.findIsoCountry(salesforceData.customer.country);
+	const isoCountry = CountryHelper.findIsoCountry(
+		salesforceData.customer.country,
+	);
 	const { salutation, ...otherData } = salesforceData.customer;
 	const customer = {
 		...otherData,

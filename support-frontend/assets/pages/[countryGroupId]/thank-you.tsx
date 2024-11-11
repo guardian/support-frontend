@@ -1,5 +1,5 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';

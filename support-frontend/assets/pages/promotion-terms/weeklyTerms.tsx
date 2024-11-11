@@ -1,5 +1,5 @@
 import { SansParagraph } from 'components/text/text';
-import { CountryGroup } from 'helpers/internationalisation';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import { International } from 'helpers/internationalisation/countryGroup';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
@@ -55,7 +55,8 @@ function getCountryPrice(
 	countryGroupName: CountryGroupName,
 	prices: CountryGroupPrices,
 ) {
-	const { currency } = CountryGroup.fromCountryGroupName(countryGroupName);
+	const { currency } =
+		CountryGroupHelper.fromCountryGroupName(countryGroupName);
 	const currencyGlyph = extendedGlyph(currency);
 	const fulfilmentOption =
 		countryGroupName === International ? RestOfWorld : Domestic;

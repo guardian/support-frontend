@@ -16,9 +16,9 @@ import type {
 	CountryGroupId,
 	CountryGroupName,
 } from '../countryGroup';
-import CountryHelper from './country';
+import { CountryHelper } from './country';
 
-export default class CountryGroupHelper {
+export class CountryGroupHelper {
 	static fromPath(
 		path: string = window.location.pathname,
 	): CountryGroupId | null | undefined {

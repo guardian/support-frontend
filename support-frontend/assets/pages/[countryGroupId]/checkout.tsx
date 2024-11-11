@@ -69,7 +69,7 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {

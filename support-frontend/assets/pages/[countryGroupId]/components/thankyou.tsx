@@ -12,7 +12,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,

@@ -1,4 +1,4 @@
-import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,

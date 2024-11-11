@@ -2,7 +2,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import type { CountryGroup } from 'helpers/internationalisation';
+import type { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
@@ -37,7 +37,7 @@ export function getLowerBenefitThreshold(
 export function getLowerProductBenefitThreshold(
 	contributionType: ContributionType,
 	currencyId: IsoCurrency,
-	countryGroupId: CountryGroup,
+	countryGroupId: CountryGroupHelper,
 	product: ProductKey,
 ): number {
 	const ratePlanTier3 =

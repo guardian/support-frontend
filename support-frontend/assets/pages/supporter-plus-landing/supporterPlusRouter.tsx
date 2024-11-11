@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
-import { CountryGroup } from 'helpers/internationalisation';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
@@ -27,7 +27,7 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const countryGroupId: CountryGroupId = CountryGroup.detect();
+const countryGroupId: CountryGroupId = CountryGroupHelper.detect();
 const store = initReduxForContributions();
 
 setUpRedux(store);

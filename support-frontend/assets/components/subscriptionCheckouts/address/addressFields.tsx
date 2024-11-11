@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import { Country } from 'helpers/internationalisation';
+import { CountryHelper } from 'helpers/internationalisation/classes/country';
 import {
 	auStates,
 	caStates,
@@ -192,7 +192,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				label="Country"
 				value={props.country}
 				onChange={(event) => {
-					const selectedCountry = Country.fromString(event.target.value);
+					const selectedCountry = CountryHelper.fromString(event.target.value);
 
 					if (selectedCountry && countryGroupId) {
 						const selectedCountryGroup = Object.entries(countryGroups).find(

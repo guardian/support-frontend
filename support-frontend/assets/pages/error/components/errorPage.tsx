@@ -8,7 +8,7 @@ import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
-import { CountryGroup } from 'helpers/internationalisation';
+import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 
 // ----- Types ----- //
@@ -25,7 +25,7 @@ type PropTypes = {
 export default function ErrorPage(props: PropTypes): JSX.Element {
 	return (
 		<Page
-			header={<Header countryGroupId={CountryGroup.detect()} />}
+			header={<Header countryGroupId={CountryGroupHelper.detect()} />}
 			footer={<Footer />}
 		>
 			<SquaresIntroduction
