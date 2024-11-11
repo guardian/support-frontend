@@ -2,9 +2,7 @@ import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import type { ContributionType } from 'helpers/contributions';
 import {
 	setOtherAmount,
-	setOtherAmountBeforeAmendment,
 	setSelectedAmount,
-	setSelectedAmountBeforeAmendment,
 } from 'helpers/redux/checkout/product/actions';
 import {
 	getMinimumContributionAmount,
@@ -67,12 +65,6 @@ export function PriceCardsContainer({
 				amount: newAmount,
 			}),
 		);
-		dispatch(
-			setSelectedAmountBeforeAmendment({
-				contributionType: paymentFrequency,
-				amount: newAmount,
-			}),
-		);
 		updateAbandonedBasketCookie(newAmount);
 	}
 
@@ -82,12 +74,6 @@ export function PriceCardsContainer({
 		const otherAmountNaNSafe = newAmount === '' ? '0' : newAmount;
 		dispatch(
 			setOtherAmount({
-				contributionType: paymentFrequency,
-				amount: otherAmountNaNSafe,
-			}),
-		);
-		dispatch(
-			setOtherAmountBeforeAmendment({
 				contributionType: paymentFrequency,
 				amount: otherAmountNaNSafe,
 			}),

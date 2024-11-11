@@ -26,7 +26,6 @@ import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selecto
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	getUserSelectedAmount,
-	getUserSelectedAmountBeforeAmendment,
 	getUserSelectedOtherAmount,
 } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
@@ -84,9 +83,6 @@ export function SupporterPlusCheckout({
 	);
 	const transactionCoverCost = amountBeforeTransactionCostCovered * 0.04;
 
-	const amountBeforeAmendments = useContributionsSelector(
-		getUserSelectedAmountBeforeAmendment,
-	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
@@ -117,8 +113,7 @@ export function SupporterPlusCheckout({
 			priority="tertiary"
 			size="xsmall"
 			onClick={() => {
-				const amountToBePassed =
-					otherAmount === 'other' ? 'other' : amountBeforeAmendments;
+				const amountToBePassed = otherAmount === 'other' ? 'other' : amount;
 				dispatch(
 					setSelectedAmount({
 						contributionType: contributionType,

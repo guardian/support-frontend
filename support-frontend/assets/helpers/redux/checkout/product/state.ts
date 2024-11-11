@@ -53,8 +53,6 @@ export type ProductState = {
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
 	coverTransactionCost?: boolean;
-	selectedAmountsBeforeAmendment: SelectedAmounts;
-	otherAmountsBeforeAmendment: OtherAmounts;
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
 	startDate: DateYMDString;
@@ -76,22 +74,6 @@ export const initialProductState: ProductState = {
 		ANNUAL: 0,
 	},
 	otherAmounts: {
-		ONE_OFF: {
-			amount: null,
-		},
-		MONTHLY: {
-			amount: null,
-		},
-		ANNUAL: {
-			amount: null,
-		},
-	},
-	selectedAmountsBeforeAmendment: {
-		ONE_OFF: 0,
-		MONTHLY: 0,
-		ANNUAL: 0,
-	},
-	otherAmountsBeforeAmendment: {
 		ONE_OFF: {
 			amount: null,
 		},

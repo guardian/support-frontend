@@ -24,25 +24,3 @@ export function getUserSelectedOtherAmount(
 
 	return priceCardAmountSelected;
 }
-
-export function getUserSelectedAmountBeforeAmendment(
-	state: ContributionsState,
-): number {
-	const contributionType = getContributionType(state);
-	const { selectedAmountsBeforeAmendment, otherAmountsBeforeAmendment } =
-		state.page.checkoutForm.product;
-	const priceCardAmountSelected =
-		selectedAmountsBeforeAmendment[contributionType];
-
-	if (priceCardAmountSelected === 'other') {
-		const customAmount = otherAmountsBeforeAmendment[contributionType];
-		const amount = parseFloat(customAmount.amount ?? '');
-		if (!isNaN(amount)) {
-			return amount;
-		} else {
-			return 0;
-		}
-	}
-
-	return priceCardAmountSelected;
-}

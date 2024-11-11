@@ -11,8 +11,6 @@ export const {
 	setSelectedAmount,
 	setCoverTransactionCost,
 	setOtherAmount,
-	setSelectedAmountBeforeAmendment,
-	setOtherAmountBeforeAmendment,
 	setCurrency,
 	setOrderIsAGift,
 	setStartDate,
