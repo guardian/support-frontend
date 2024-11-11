@@ -93,7 +93,7 @@ const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
 	tooltip:
-		'With smart features such as cook mode, the ability to search by ingredient, dietary requirement and your favourite Feast cook, the Guardian’s new Feast app makes inspiring mealtimes easy.',
+		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
 };
 
 const supporterPlusBenefits = [
