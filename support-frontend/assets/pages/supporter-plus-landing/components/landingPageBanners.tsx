@@ -123,7 +123,7 @@ function LandingPageBanner({
 function NewspaperArchiveBanner() {
 	return (
 		<LandingPageBanner
-			header="The Guardian newspaper archive: explore more than 200 years of journalism"
+			header="The Guardian archives: discover 200 years of journalism"
 			paragraph="Since 1821, the world's major events have been documented in the pages of the Guardian. Today, you can search through and view that record of history with access to the Guardian archives."
 			imageUrl="https://i.guim.co.uk/img/media/2da23eb25095975a62497d19ef9b59dc9fb90eed/0_148_1715_721/1715.png?width=1000&quality=75&s=a435f6c543dbadd3b0bd12ae196a6c7c"
 			orientation="right"
@@ -134,11 +134,8 @@ function NewspaperArchiveBanner() {
 function FeastBanner() {
 	return (
 		<LandingPageBanner
-			header="Unlimited access to the Guardian Feast App"
-			paragraph="Make a feast out of anything with the Guardian’s new recipe app. Feast
-					has thousands of recipes including quick and budget-friendly weeknight
-					dinners, and showstopping weekend dishes – plus smart app features to
-					make mealtimes inspiring."
+			header="The Guardian Feast app: make a feast out of anything"
+			paragraph="With smart features such as cook mode, the ability to search by ingredient, dietary requirement and your favourite Feast cook, the Guardian’s new Feast app makes inspiring mealtimes easy."
 			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1000.png?width=1000&quality=75&s=d2881465ddca62054b9b8ba65682fff6"
 			orientation="left"
 		/>
