@@ -123,7 +123,7 @@ function LandingPageBanner({
 function NewspaperArchiveBanner() {
 	return (
 		<LandingPageBanner
-			header="The Guardian archives: discover 200 years of journalism"
+			header="The Guardian newspaper archive: explore more than 200 years of journalism"
 			paragraph="Since 1821, the world's major events have been documented in the pages of the Guardian. Today, you can search through and view that record of history with access to the Guardian archives."
 			imageUrl="https://i.guim.co.uk/img/media/2da23eb25095975a62497d19ef9b59dc9fb90eed/0_148_1715_721/1715.png?width=1000&quality=75&s=a435f6c543dbadd3b0bd12ae196a6c7c"
 			orientation="right"
