@@ -27,6 +27,7 @@ import com.gu.support.workers.{
   StripePaymentType,
   SupporterPlus,
   TierThree,
+  GuardianLight,
 }
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -126,6 +127,7 @@ object AcquisitionDataRowBuilder {
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
+    case _: GuardianLight => (AcquisitionProduct.GuardianLight, None)
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
