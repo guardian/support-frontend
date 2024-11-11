@@ -78,8 +78,10 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -190,16 +192,16 @@ function getFinalAmount(
 	selectedPriceCard: number | 'other',
 	otherAmount: string,
 	minAmount: number,
+	coverTransactionCostSelected: boolean,
 ): number | undefined {
+	const transactionMultiplier: number = coverTransactionCostSelected ? 1.04 : 1;
 	if (selectedPriceCard === 'other') {
 		const parsedAmount = parseFloat(otherAmount);
-
 		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
 			? undefined
-			: parsedAmount;
+			: roundToDecimalPlaces(parsedAmount * transactionMultiplier);
 	}
-
-	return selectedPriceCard;
+	return roundToDecimalPlaces(selectedPriceCard * transactionMultiplier);
 }
 
 export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
@@ -282,7 +284,19 @@ function OneTimeCheckoutComponent({
 	);
 
 	const [otherAmountError, setOtherAmountError] = useState<string>();
-	const finalAmount = getFinalAmount(selectedPriceCard, otherAmount, minAmount);
+	const [coverTransactionCost, setCoverTransactionCost] =
+		useState<boolean>(false);
+
+	const amountWithoutCoverCost =
+		getFinalAmount(selectedPriceCard, otherAmount, minAmount, false) ?? 0;
+	const transactionCoverCost = amountWithoutCoverCost * 0.04;
+
+	const finalAmount = getFinalAmount(
+		selectedPriceCard,
+		otherAmount,
+		minAmount,
+		coverTransactionCost,
+	);
 
 	useEffect(() => {
 		if (finalAmount) {
@@ -831,6 +845,20 @@ function OneTimeCheckoutComponent({
 								})}
 							</RadioGroup>
 						</FormSection>
+						<CoverTransactionCost
+							transactionCost={coverTransactionCost}
+							transactionCostAmount={simpleFormatAmount(
+								currency,
+								transactionCoverCost,
+							)}
+							onChecked={(check) => {
+								setCoverTransactionCost(check);
+							}}
+							transactionCostTotal={simpleFormatAmount(
+								currency,
+								finalAmount ? finalAmount : 0,
+							)}
+						/>
 						<div
 							css={css`
 								margin: ${space[8]}px 0 ${space[6]}px;

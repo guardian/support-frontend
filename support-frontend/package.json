@@ -193,7 +193,6 @@
 		"pretty-format": "^29.7.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-svg-loader": "^3.0.3",
 		"rimraf": "^5.0.1",
 		"sass": "^1.69.5",
 		"sass-mq": "^5.0.1",

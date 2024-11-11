@@ -5,6 +5,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { logException } from 'helpers/utilities/logger';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ThankYouComponent } from './components/thankyou';
 
@@ -34,7 +35,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	// contributionAmount
 	const contributionParam = searchParams.get('contribution');
 	const contributionAmount = contributionParam
-		? parseInt(contributionParam, 10)
+		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
 
 	let payment: {
