@@ -1,7 +1,7 @@
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
@@ -31,7 +31,7 @@ function getTermsConditionsLink({ product }: PromotionTerms) {
 function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	return (
 		<Page
-			header={<Header countryGroupId={CountryGroupHelper.detect()} />}
+			header={<Header countryGroupId={CountryGroup.detect()} />}
 			footer={
 				<Footer
 					termsConditionsLink={getTermsConditionsLink(props.promotionTerms)}

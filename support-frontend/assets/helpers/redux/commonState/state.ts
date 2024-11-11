@@ -3,8 +3,8 @@ import { getFallbackAmounts } from 'helpers/abTests/helpers';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import { CountryHelper } from 'helpers/internationalisation/classes/country';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { Country } from 'helpers/internationalisation/classes/country';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -42,7 +42,7 @@ export type CommonStateSetupData = {
 	amounts: SelectedAmountsVariant;
 };
 
-const countryGroupId = CountryGroupHelper.detect();
+const countryGroupId = CountryGroup.detect();
 
 export const initialCommonState: CommonState = {
 	campaign: null,
@@ -54,7 +54,7 @@ export const initialCommonState: CommonState = {
 	internationalisation: {
 		currencyId: detectCurrency(countryGroupId),
 		countryGroupId,
-		countryId: CountryHelper.detect(),
+		countryId: Country.detect(),
 		useLocalCurrency: false,
 		defaultCurrency: 'USD',
 	},

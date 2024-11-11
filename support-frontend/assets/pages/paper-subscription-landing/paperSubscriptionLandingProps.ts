@@ -4,8 +4,8 @@ import {
 	getProductPrices,
 	getPromotionCopy,
 } from 'helpers/globalsAndSwitches/globals';
-import { CountryHelper } from 'helpers/internationalisation/classes/country';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { Country } from 'helpers/internationalisation/classes/country';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
@@ -20,10 +20,10 @@ export type PaperLandingPropTypes = {
 	participations: Participations;
 };
 
-const countryGroupId = CountryGroupHelper.detect();
+const countryGroupId = CountryGroup.detect();
 
 const abtestInitalizerData = {
-	countryId: CountryHelper.detect(),
+	countryId: Country.detect(),
 	countryGroupId,
 };
 

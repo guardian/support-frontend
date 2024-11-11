@@ -1,8 +1,8 @@
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
-	CountryGroup,
 	CountryGroupName,
+	CountryGroup as CountryGroupType,
 } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
@@ -48,8 +48,8 @@ function getFirstValidPrice(
 	return prices.find(isNumeric) ?? 0;
 }
 
-function getCountryGroup(country: IsoCountry): CountryGroup {
-	return countryGroups[CountryGroupHelper.fromCountry(country) ?? GBPCountries];
+function getCountryGroup(country: IsoCountry): CountryGroupType {
+	return countryGroups[CountryGroup.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(

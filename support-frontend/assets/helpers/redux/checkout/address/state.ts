@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { isEmpty, isValidZipCode } from 'helpers/forms/formValidation';
-import { CountryHelper } from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import { isoCountries } from 'helpers/internationalisation/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -51,7 +51,7 @@ export type AddressFieldsState = AddressFields & {
 };
 
 export function getInitialAddressFieldsState(): AddressFieldsState {
-	const country = CountryHelper.detect();
+	const country = Country.detect();
 	return {
 		country,
 		state: '',

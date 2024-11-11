@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { ContributionTypes } from 'helpers/contributions';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import type { CommonStateSetupData, Internationalisation } from './state';
@@ -12,8 +12,7 @@ function getInternationalisationFromCountry(
 	internationalisation: Internationalisation,
 ) {
 	const countryGroupId =
-		CountryGroupHelper.fromCountry(countryId) ??
-		internationalisation.countryGroupId;
+		CountryGroup.fromCountry(countryId) ?? internationalisation.countryGroupId;
 	const currencyId = fromCountryGroupId(countryGroupId);
 	return {
 		countryGroupId,

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Option, Select } from '@guardian/source/react-components';
 import type { FormEventHandler } from 'react';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
@@ -39,7 +39,7 @@ export function StateSelect({
 	onInvalid,
 	error,
 }: StateSelectProps): JSX.Element | null {
-	const countryGroupId = CountryGroupHelper.fromCountry(countryId);
+	const countryGroupId = CountryGroup.fromCountry(countryId);
 	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
 	const stateDescriptor =
 		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';

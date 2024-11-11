@@ -20,7 +20,7 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -139,7 +139,7 @@ export function WeeklyHero({
 	const defaultRoundelText = 'Save up to 35% a year';
 	const defaultTitle = orderIsAGift
 		? null
-		: getRegionalCopyFor(CountryGroupHelper.detect());
+		: getRegionalCopyFor(CountryGroup.detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;

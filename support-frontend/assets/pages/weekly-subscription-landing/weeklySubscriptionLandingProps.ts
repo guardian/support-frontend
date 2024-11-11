@@ -5,8 +5,8 @@ import {
 	getProductPrices,
 	getPromotionCopy,
 } from 'helpers/globalsAndSwitches/globals';
-import { CountryHelper } from 'helpers/internationalisation/classes/country';
-import { CountryGroupHelper } from 'helpers/internationalisation/classes/countryGroup';
+import { Country } from 'helpers/internationalisation/classes/country';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -33,15 +33,15 @@ export type WeeklyLPContentPropTypes = {
 	giftNonGiftLink: string;
 };
 
-const countryGroupId = CountryGroupHelper.detect();
+const countryGroupId = CountryGroup.detect();
 const abtestInitalizerData = {
-	countryId: CountryHelper.detect(),
+	countryId: Country.detect(),
 	countryGroupId,
 };
 
 export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	countryGroupId,
-	countryId: CountryHelper.detect(),
+	countryId: Country.detect(),
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
 	orderIsAGift: getGlobal('orderIsAGift'),

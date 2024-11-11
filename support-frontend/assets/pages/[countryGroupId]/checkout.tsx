@@ -69,7 +69,7 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { CountryHelper } from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
@@ -140,7 +140,7 @@ import {
  * a lot of extra unused code to those coupled areas.
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
-const countryId: IsoCountry = CountryHelper.detect();
+const countryId: IsoCountry = Country.detect();
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
