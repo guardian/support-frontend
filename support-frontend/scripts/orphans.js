@@ -22,9 +22,15 @@ const config = {
 	],
 };
 
+const exceptionPaths = [
+	'__tests__',
+	'.test.',
+	'__mocks__',
+	'serverSideRendered',
+];
+
 madge(baseDir, config)
 	.then((result) => {
-		const testDirectoryName = '__tests__';
 		const warningColour = chalk.rgb(245, 123, 66);
 		const noWarningColour = chalk.keyword('green');
 		const jsOrphans = result
@@ -40,8 +46,7 @@ madge(baseDir, config)
 		const jsOrphansFiltered = jsOrphans.filter(
 			(orphanPath) =>
 				!entryPointPaths.includes(orphanPath) &&
-				path.basename(path.dirname(orphanPath)) !== testDirectoryName &&
-        !orphanPath.includes('.test.'),
+				!exceptionPaths.some((path) => orphanPath.includes(path)),
 		);
 		// filter out entryPointPaths from scssOrphans
 		const scssOrphansFiltered = scssOrphans.filter(

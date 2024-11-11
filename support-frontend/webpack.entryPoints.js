@@ -33,6 +33,6 @@ module.exports = {
 		ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
 	},
 	ssr: {
-		ssrPages: 'helpers/rendering/ssrPages.ts',
+		ssrPages: 'scripts/build-ssr-content.tsx',
 	},
 };
