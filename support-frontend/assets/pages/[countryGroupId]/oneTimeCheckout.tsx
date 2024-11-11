@@ -65,7 +65,7 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { Country } from 'helpers/internationalisation';
+import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	derivePaymentApiAcquisitionData,

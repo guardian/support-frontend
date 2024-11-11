@@ -34,7 +34,7 @@ type TargetCountryGroups =
 	| typeof GBPCountries
 	| typeof AUDCountries;
 
-export default class CountryHelper {
+export class Country {
 	static stateProvinceFromMap(
 		search: string,
 		states: Record<string, string>,

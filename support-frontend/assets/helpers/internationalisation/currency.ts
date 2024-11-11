@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 
 import { getQueryParameter } from 'helpers/urls/url';
+import { CountryGroup } from './classes/countryGroup';
 import type { IsoCountry } from './country';
 import type { CountryGroupId } from './countryGroup';
 import { countryGroups } from './countryGroup';
-import { CountryGroup } from '.';
 
 // ----- Types ----- //
 

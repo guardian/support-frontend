@@ -2,7 +2,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import { init as initAbTests } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { Country, CountryGroup } from 'helpers/internationalisation';
+import { Country } from 'helpers/internationalisation/classes/country';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';

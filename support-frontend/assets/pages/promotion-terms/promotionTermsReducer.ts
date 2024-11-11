@@ -3,7 +3,7 @@ import {
 	getGlobal,
 	getProductPrices,
 } from 'helpers/globalsAndSwitches/globals';
-import { CountryGroup } from 'helpers/internationalisation';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';

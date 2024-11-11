@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import { Country } from 'helpers/internationalisation';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	auStates,
 	caStates,

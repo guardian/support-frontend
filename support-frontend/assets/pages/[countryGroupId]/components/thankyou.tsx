@@ -12,7 +12,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
@@ -97,7 +97,7 @@ export function ThankYouComponent({
 	ratePlanKey,
 	promotion,
 }: CheckoutComponentProps) {
-	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
 	const csrf = { token: window.guardian.csrf.token };

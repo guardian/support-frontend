@@ -12,13 +12,13 @@ import {
 	UnitedStates,
 } from '../countryGroup';
 import type {
-	CountryGroup,
 	CountryGroupId,
 	CountryGroupName,
+	CountryGroup as CountryGroupType,
 } from '../countryGroup';
-import CountryHelper from './country';
+import { Country } from './country';
 
-export default class CountryGroupHelper {
+export class CountryGroup {
 	static fromPath(
 		path: string = window.location.pathname,
 	): CountryGroupId | null | undefined {
@@ -94,7 +94,7 @@ export default class CountryGroupHelper {
 		const country = cookie.get('GU_country');
 
 		if (country) {
-			const isoCountry = CountryHelper.fromString(country);
+			const isoCountry = Country.fromString(country);
 			if (isoCountry) {
 				return this.fromCountry(isoCountry);
 			}
@@ -107,7 +107,7 @@ export default class CountryGroupHelper {
 		const country = cookie.get('GU_geo_country');
 
 		if (country) {
-			const isoCountry = CountryHelper.fromString(country);
+			const isoCountry = Country.fromString(country);
 			if (isoCountry) {
 				return this.fromCountry(isoCountry);
 			}
@@ -126,7 +126,7 @@ export default class CountryGroupHelper {
 		);
 	}
 
-	static fromCountryGroupName(name: CountryGroupName): CountryGroup {
+	static fromCountryGroupName(name: CountryGroupName): CountryGroupType {
 		const groupId = (Object.keys(countryGroups) as CountryGroupId[]).find(
 			(key) => countryGroups[key].name === name,
 		);

@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import type { JSDOM } from 'jsdom';
-import { CountryGroup } from '..';
+import { CountryGroup } from '../classes/countryGroup';
 import {
 	AUDCountries,
 	EURCountries,

@@ -28,7 +28,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
 	Canada,
@@ -269,7 +269,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
-	const countryId = CountryHelper.detect();
+	const countryId = Country.detect();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
