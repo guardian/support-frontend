@@ -315,23 +315,26 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		},
 	};
 
-export const productCatalogDescriptionNewBenefits: Record<
-	ProductKey,
-	ProductDescription
-> = {
-	...productCatalogDescription,
-	TierThree: {
-		...productCatalogDescription.TierThree,
-		benefits: [
-			...productCatalogDescription.TierThree.benefits,
-			{
-				copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-				isNew: true,
-				tooltip: `Look back on more than 200 years of world history with the Guardian archive. Get digital access to every front page, article and advertisement printed in the newspaper from 1821.`,
-			},
-		],
-	},
-};
+export function productCatalogDescriptionNewBenefits(
+	countryGroupId: CountryGroupId,
+) {
+	return {
+		...productCatalogDescription,
+		TierThree: {
+			...productCatalogDescription.TierThree,
+			benefits: [
+				...productCatalogDescription.TierThree.benefits,
+				{
+					copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+					isNew: true,
+					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
+						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
+					}, since 1821.`,
+				},
+			],
+		},
+	};
+}
 
 /**
  * This method is to help us determine which product and rateplan to
