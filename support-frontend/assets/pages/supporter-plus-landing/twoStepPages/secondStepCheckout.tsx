@@ -94,10 +94,6 @@ export function SupporterPlusCheckout({
 		useContributionsSelector(
 			(state) => state.page.checkoutForm.product.coverTransactionCost,
 		) ?? false;
-	const transactionCostCopy = `I’d like to add a further ${simpleFormatAmount(
-		currency,
-		transactionCoverCost,
-	)} to cover the cost of this transaction, so that all of my support goes to powering independent, high quality journalism.`;
 
 	const navigate = useNavigate();
 	const { abParticipations, amounts } = useContributionsSelector(
@@ -191,11 +187,14 @@ export function SupporterPlusCheckout({
 						)}
 						<CoverTransactionCost
 							transactionCost={coverTransactionCost}
-							transactionCostCopy={transactionCostCopy}
+							transactionCostAmount={simpleFormatAmount(
+								currency,
+								transactionCoverCost,
+							)}
 							onChecked={(check) => {
 								dispatch(setCoverTransactionCost(check));
 							}}
-							transactionCostAmount={simpleFormatAmount(currency, amount)}
+							transactionCostTotal={simpleFormatAmount(currency, amount)}
 						/>
 						<PaymentButtonController
 							cssOverrides={paymentButtonSpacing}
