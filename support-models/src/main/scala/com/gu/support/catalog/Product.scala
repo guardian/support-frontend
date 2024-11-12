@@ -109,6 +109,31 @@ case object SupporterPlus extends Product {
     )
 }
 
+case object GuardianLight extends Product {
+  private def productRatePlan(
+      id: String,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
+  ) =
+    ProductRatePlan(
+      id,
+      billingPeriod,
+      fulfilmentOptions,
+      NoProductOptions,
+      s"Guardian Light ${billingPeriod.getClass.getSimpleName}",
+    )
+
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianLight.type]]] =
+    Map(
+      PROD -> List(
+        productRatePlan("8a12831492c341730192dd1c39207038", Monthly),
+      ),
+      CODE -> List(
+        productRatePlan("", Monthly),
+      ),
+    )
+}
+
 case object DigitalPack extends Product {
   private def productRatePlan(
       id: String,

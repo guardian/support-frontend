@@ -60,6 +60,13 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
+  case class GuardianLightState(
+      user: User,
+      product: GuardianLight,
+      paymentMethod: PaymentMethod,
+      salesForceContact: SalesforceContactRecord,
+  ) extends CreateZuoraSubscriptionProductState
+
   case class DigitalSubscriptionDirectPurchaseState(
       billingCountry: Country,
       product: DigitalPack,

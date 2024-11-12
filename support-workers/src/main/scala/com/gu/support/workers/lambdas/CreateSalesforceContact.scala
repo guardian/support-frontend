@@ -10,6 +10,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
+  GuardianLightState,
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
@@ -63,6 +64,8 @@ class NextState(state: CreateSalesforceContactState) {
         toNextSupporterPlus(salesforceContactRecords, product, purchase)
       case (product: TierThree, Purchase(purchase)) =>
         toNextTierThree(salesforceContactRecords, product, purchase)
+      case (product: GuardianLight, Purchase(purchase)) =>
+        toNextGuardianLight(salesforceContactRecords, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -135,6 +138,29 @@ class NextState(state: CreateSalesforceContactState) {
         purchase,
         firstDeliveryDate.get,
         appliedPromotion,
+        salesforceContactRecords.buyer,
+      ),
+      requestId,
+      user,
+      product,
+      analyticsInfo,
+      firstDeliveryDate,
+      appliedPromotion,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
+
+  def toNextGuardianLight(
+      salesforceContactRecords: SalesforceContactRecords,
+      product: GuardianLight,
+      purchase: PaymentMethod,
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(
+      GuardianLightState(
+        user,
+        product,
+        purchase,
         salesforceContactRecords.buyer,
       ),
       requestId,
