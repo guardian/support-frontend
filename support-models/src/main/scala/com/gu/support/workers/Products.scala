@@ -109,7 +109,15 @@ object ProductType {
 
   implicit val codec: Codec[ProductType] =
     discriminatedType.codec(
-      List(codecContribution, codecSupporterPlus, codecTierThree, codecPaper, codecGuardianWeekly, codecDigital),
+      List(
+        codecContribution,
+        codecSupporterPlus,
+        codecTierThree,
+        codecPaper,
+        codecGuardianWeekly,
+        codecDigital,
+        codecGuardianLight,
+      ),
     )
 
 }
