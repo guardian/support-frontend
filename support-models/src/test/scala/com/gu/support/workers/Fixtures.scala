@@ -89,6 +89,7 @@ object Fixtures {
   val payPalJson =
     s"""
       {
+        "paymentType": "PayPal",
         "baid": "$validBaid"
       }
     """
@@ -125,6 +126,7 @@ object Fixtures {
   val directDebitJson =
     s"""
       {
+        "paymentType": "DirectDebit",
         "accountHolderName": "$mickeyMouse",
         "sortCode": "111111",
         "accountNumber": "99999999",
@@ -136,6 +138,7 @@ object Fixtures {
   val stripeJson =
     s"""
       {
+        "paymentType": "Stripe",
         "paymentMethod": "$stripePM"
       }
     """

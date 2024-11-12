@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import type { JSDOM } from 'jsdom';
-import { Country } from '..';
+import { Country } from '../classes/country';
 import type { IsoCountry } from '../country';
 import {
 	AUDCountries,

@@ -12,7 +12,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import type { ProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
@@ -58,6 +58,7 @@ const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
+	email: string(),
 	paymentMethod: picklist([
 		'Stripe',
 		'StripeExpressCheckoutElement',
@@ -96,7 +97,7 @@ export function ThankYouComponent({
 	ratePlanKey,
 	promotion,
 }: CheckoutComponentProps) {
-	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
 	const csrf = { token: window.guardian.csrf.token };
@@ -205,7 +206,7 @@ export function ThankYouComponent({
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const emailExists = !isNewAccount && isSignedIn;
+	const validEmail = order.email !== '';
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
@@ -215,7 +216,7 @@ export function ThankYouComponent({
 	let benefitsChecklist;
 	if (isTier) {
 		const productDescription = showNewspaperArchiveBenefit
-			? productCatalogDescriptionNewBenefits[productKey]
+			? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 			: productCatalogDescription[productKey];
 		benefitsChecklist = [
 			...productDescription.benefits
@@ -259,9 +260,9 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isTier3, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
-		...maybeThankYouModule(isOneOff && emailExists, 'supportReminder'),
+		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && emailExists),
+			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && isSignedIn),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),

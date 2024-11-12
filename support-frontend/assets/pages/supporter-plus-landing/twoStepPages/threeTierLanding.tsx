@@ -28,7 +28,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
 	Canada,
@@ -53,7 +53,7 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
 import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
-import { NewspaperArchiveBanner } from '../components/newspaperArchiveBanner';
+import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -269,7 +269,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
-	const countryId = CountryHelper.detect();
+	const countryId = Country.detect();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -356,7 +356,7 @@ export function ThreeTierLanding({
 	const productCatalogDescription = ['v1', 'v2'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	)
-		? productCatalogDescriptionNewBenefits
+		? productCatalogDescriptionNewBenefits(countryGroupId)
 		: canonicalProductCatalogDescription;
 
 	/**
@@ -569,7 +569,7 @@ export function ThreeTierLanding({
 							abParticipations={abParticipations}
 						/>
 					)}
-					{showNewspaperArchiveBanner && <NewspaperArchiveBanner />}
+					{showNewspaperArchiveBanner && <LandingPageBanners />}
 				</div>
 			</Container>
 			{!enableSingleContributionsTab && (

@@ -65,7 +65,6 @@ export const productSlice = createSlice({
 		},
 		setAllAmounts(state, action: PayloadAction<SelectedAmounts>) {
 			state.selectedAmounts = action.payload;
-			state.selectedAmountsBeforeAmendment = action.payload;
 		},
 		setSelectedAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
@@ -76,18 +75,6 @@ export const productSlice = createSlice({
 			const { contributionType, amount } = action.payload;
 			state.otherAmounts[contributionType].amount = amount;
 			state.errors.otherAmount = [];
-		},
-		setSelectedAmountBeforeAmendment(
-			state,
-			action: PayloadAction<AmountChange>,
-		) {
-			const { contributionType, amount } = action.payload;
-			const newAmount = amount === 'other' ? amount : Number.parseFloat(amount);
-			state.selectedAmountsBeforeAmendment[contributionType] = newAmount;
-		},
-		setOtherAmountBeforeAmendment(state, action: PayloadAction<AmountChange>) {
-			const { contributionType, amount } = action.payload;
-			state.otherAmountsBeforeAmendment[contributionType].amount = amount;
 		},
 		setCoverTransactionCost(state, action: PayloadAction<boolean>) {
 			/* Add 4% to their contribution amount */

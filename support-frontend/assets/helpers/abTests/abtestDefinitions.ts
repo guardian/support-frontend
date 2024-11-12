@@ -89,7 +89,9 @@ export const tests: Tests = {
 			{
 				id: 'v1',
 			},
-			{ id: 'v2' },
+			{
+				id: 'v2',
+			},
 		],
 		audiences: {
 			ALL: {
@@ -171,7 +173,7 @@ export const tests: Tests = {
 			NZDCountries: { offset: 0, size: 1 },
 			International: { offset: 0, size: 1 },
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,

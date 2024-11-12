@@ -86,7 +86,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { logException } from 'helpers/utilities/logger';
-import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
+import PaperOrderSummary from 'pages/paper-subscription-checkout/components/paperOrderSummary/paperOrderSummary';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import {
 	getPriceSummary,

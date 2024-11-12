@@ -2,7 +2,7 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import type { CountryGroup } from 'helpers/internationalisation';
+import type { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';

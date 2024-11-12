@@ -99,21 +99,25 @@ export type SubscriptionProductFields =
 	| TierThree;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
+	paymentType: typeof PayPal;
 	baid: string;
 };
 type RegularStripePaymentIntentFields = {
+	paymentType: typeof Stripe;
 	paymentMethod: string | PaymentMethod;
 	// The ID of the Stripe Payment Method
 	stripePaymentType: StripePaymentMethod; // The type of Stripe payment, e.g. Apple Pay
 	stripePublicKey: string;
 };
 type RegularDirectDebitPaymentFields = {
+	paymentType: typeof DirectDebit;
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
 	recaptchaToken?: string;
 };
 type RegularSepaPaymentFields = {
+	paymentType: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
 	country?: Option<Country>;
@@ -123,6 +127,7 @@ type GiftRedemption = {
 	redemptionCode: string;
 };
 type RegularAmazonPayPaymentFields = {
+	paymentType: typeof AmazonPay;
 	amazonPayBillingAgreementId: string;
 };
 export type RegularPaymentFields =
@@ -244,11 +249,13 @@ const MAX_POLLS = 10;
 function regularPaymentFieldsFromAuthorisation(
 	authorisation: PaymentAuthorisation,
 	stripePublicKey: string,
+	recaptchaToken: string,
 ): RegularPaymentFields {
 	switch (authorisation.paymentMethod) {
 		case Stripe:
 			if (authorisation.paymentMethodId) {
 				return {
+					paymentType: Stripe,
 					paymentMethod: authorisation.paymentMethodId,
 					stripePaymentType: authorisation.stripePaymentMethod,
 					stripePublicKey: stripePublicKey,
@@ -261,19 +268,23 @@ function regularPaymentFieldsFromAuthorisation(
 
 		case PayPal:
 			return {
+				paymentType: PayPal,
 				baid: authorisation.token,
 			};
 
 		case DirectDebit:
 			return {
+				paymentType: DirectDebit,
 				accountHolderName: authorisation.accountHolderName,
 				sortCode: authorisation.sortCode,
 				accountNumber: authorisation.accountNumber,
+				recaptchaToken,
 			};
 
 		case Sepa:
 			if (authorisation.country && authorisation.streetName) {
 				return {
+					paymentType: Sepa,
 					accountHolderName: authorisation.accountHolderName,
 					iban: authorisation.iban.replace(/ /g, ''),
 					country: authorisation.country,
@@ -281,6 +292,7 @@ function regularPaymentFieldsFromAuthorisation(
 				};
 			} else {
 				return {
+					paymentType: Sepa,
 					accountHolderName: authorisation.accountHolderName,
 					iban: authorisation.iban.replace(/ /g, ''),
 				};
@@ -289,6 +301,7 @@ function regularPaymentFieldsFromAuthorisation(
 		case AmazonPay:
 			if (authorisation.amazonPayBillingAgreementId) {
 				return {
+					paymentType: AmazonPay,
 					amazonPayBillingAgreementId:
 						authorisation.amazonPayBillingAgreementId,
 				};

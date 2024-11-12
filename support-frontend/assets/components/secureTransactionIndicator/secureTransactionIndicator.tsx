@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { neutral, textSansBold14 } from '@guardian/source/foundations';
+import { SecurePadlock } from 'components/svgs/securePadlock';
+import { SecurePadlockCircle } from 'components/svgs/securePadlockCircle';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
-import SecurePadlock from './securePadlock.svg';
-import SecurePadlockCircle from './securePadlockCircle.svg';
 
 export interface SecureTransactionIndicatorProps extends CSSOverridable {
 	align?: 'left' | 'right' | 'center';
@@ -10,9 +10,13 @@ export interface SecureTransactionIndicatorProps extends CSSOverridable {
 	hideText?: boolean;
 }
 
+const darkColour = neutral[46];
+const lightColour = neutral[100];
+const darkColourOpacity = 1;
+const lightColourOpacity = 0.9;
 const theming = (theme: 'dark' | 'light') => css`
-	color: ${theme === 'dark' ? neutral[46] : neutral[100]};
-	opacity: ${theme === 'dark' ? 1 : 0.9};
+	color: ${theme === 'dark' ? darkColour : lightColour};
+	opacity: ${theme === 'dark' ? darkColourOpacity : lightColourOpacity};
 `;
 
 const secureTransactionWithText = (align: 'left' | 'right' | 'center') => css`
@@ -28,9 +32,9 @@ const secureTransactionIcon = css`
 
 const padlock = css`
 	margin-right: 5px;
-	opacity: inherit;
-	path {
-		fill: currentColor;
+	svg {
+		display: block;
+		opacity: inherit;
 	}
 `;
 
@@ -51,11 +55,19 @@ export function SecureTransactionIndicator({
 		: secureTransactionWithText(align);
 	return (
 		<div css={[mainCss, theming(theme), cssOverrides]}>
-			{hideText ? (
-				<SecurePadlockCircle css={padlock} />
-			) : (
-				<SecurePadlock css={padlock} />
-			)}
+			<div css={padlock}>
+				{hideText ? (
+					<SecurePadlockCircle
+						colour={theme === 'dark' ? darkColour : lightColour}
+						opacity={theme === 'dark' ? darkColourOpacity : lightColourOpacity}
+					/>
+				) : (
+					<SecurePadlock
+						colour={theme === 'dark' ? darkColour : lightColour}
+						opacity={theme === 'dark' ? darkColourOpacity : lightColourOpacity}
+					/>
+				)}
+			</div>
 			{!hideText && <div css={text}>Secure transaction</div>}
 		</div>
 	);

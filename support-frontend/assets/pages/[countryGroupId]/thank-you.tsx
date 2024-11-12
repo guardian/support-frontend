@@ -1,10 +1,11 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import CountryHelper from 'helpers/internationalisation/classes/country';
+import { Country } from 'helpers/internationalisation/classes/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { logException } from 'helpers/utilities/logger';
+import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ThankYouComponent } from './components/thankyou';
 
@@ -14,7 +15,7 @@ export type ThankYouProps = {
 };
 
 export function ThankYou({ geoId, appConfig }: ThankYouProps) {
-	const countryId = CountryHelper.detect();
+	const countryId = Country.detect();
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const searchParams = new URLSearchParams(window.location.search);
@@ -34,7 +35,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	// contributionAmount
 	const contributionParam = searchParams.get('contribution');
 	const contributionAmount = contributionParam
-		? parseInt(contributionParam, 10)
+		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
 
 	let payment: {

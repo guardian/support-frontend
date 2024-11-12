@@ -1,24 +1,22 @@
 #!/bin/bash
 
-./build-cloudformation.sh
+cd ../../cdk
+yarn synth
 
+# We need to upload the template to S3 because it is too big to inline
 aws --region eu-west-1 --profile membership \
-  s3 cp ../cloud-formation/target/cfn.yaml s3://support-workers-dist/support/CODE/cloudformation/
+  s3 cp ./cdk.out/SupportWorkers-CODE.template.json s3://support-workers-dist/support/CODE/cloudformation/
 
-aws --region eu-west-1 --profile membership \
-  cloudformation validate-template --template-url https://s3.amazonaws.com/support-workers-dist/support/CODE/cloudformation/cfn.yaml
-  # --template-body file://../cloud-formation/target/cfn.yaml
+cd -
 
 aws --region eu-west-1 --profile membership \
   cloudformation update-stack \
   --capabilities CAPABILITY_IAM  \
   --stack-name support-CODE-workers \
-  --parameters  ParameterKey=Stage,ParameterValue=CODE ParameterKey=OphanRole,UsePreviousValue=true ParameterKey=KinesisStreamArn,UsePreviousValue=true \
-  --template-url https://s3.amazonaws.com/support-workers-dist/support/CODE/cloudformation/cfn.yaml
-  # --template-body file://../cloud-formation/target/cfn.yaml
+  --template-url https://s3.amazonaws.com/support-workers-dist/support/CODE/cloudformation/SupportWorkers-CODE.template.json
 
 aws --region eu-west-1 --profile membership \
-  s3 rm s3://support-workers-dist/support/CODE/cloudformation/cfn.yaml
+  s3 rm s3://support-workers-dist/support/CODE/cloudformation/SupportWorkers-CODE.template.json
 
 if [[ $? == 0 ]]; then
   echo -e "\nStack update has been started, check progress in the AWS console.";
