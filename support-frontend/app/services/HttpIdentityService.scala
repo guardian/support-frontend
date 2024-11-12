@@ -53,12 +53,20 @@ object GetUserTypeResponse {
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
 }
 
-sealed trait GetUserTypeError
+sealed trait GetUserTypeError {
+  def describeError: String
+}
 
 object GetUserTypeError {
-  case class CallFailed(error: Throwable) extends GetUserTypeError
-  case class GotErrorResponse(response: WSResponse) extends GetUserTypeError
-  case class DecodeFailed(decodeErrors: Seq[(JsPath, Seq[JsonValidationError])]) extends GetUserTypeError
+  case class CallFailed(error: Throwable) extends GetUserTypeError {
+    override def describeError: String = s"Call failed with error: ${error.getMessage}"
+  }
+  case class GotErrorResponse(response: WSResponse) extends GetUserTypeError {
+    override def describeError: String = s"Got error response: ${response.status} ${response.body}"
+  }
+  case class DecodeFailed(decodeErrors: Seq[(JsPath, Seq[JsonValidationError])]) extends GetUserTypeError {
+    override def describeError: String = s"Failed to decode response: ${decodeErrors.mkString(",")}"
+  }
 }
 
 case class CreateSignInTokenResponse(encryptedEmail: String)
