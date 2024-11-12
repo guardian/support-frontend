@@ -251,7 +251,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `Support Workers Execution Failure in ${this.stage} (Recurring Contributions or Subscriptions Checkout)`,
+      alarmName: `Support Workers Execution Failure in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
       alarmDescription: `There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=FAILED`,
       metric: new Metric({
         metricName: "ExecutionsFailed",
@@ -271,7 +271,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `Support Workers Timeout in ${this.stage} (Recurring Contributions or Subscriptions Checkout)`,
+      alarmName: `Support Workers Timeout in ${this.stage} (Recurring Contributions or Subscriptions Checkout).`,
       alarmDescription: `There was a timeout whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${this.stage}?statusFilter=TIMED_OUT`,
       metric: new Metric({
         metricName: "ExecutionsTimedOut",
@@ -317,7 +317,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring paypal contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -339,7 +339,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring stripe contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -361,7 +361,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -383,7 +383,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -405,7 +405,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -427,7 +427,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently`,
+      alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
       metric: new Metric({
         metricName: "PaymentSuccess",
         namespace: "support-frontend",
@@ -451,7 +451,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful paper checkouts in 24h.`,
       metric: new MathExpression({
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         label: "AllPaperConversions",
@@ -501,7 +501,7 @@ export class SupportWorkers extends GuStack {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful guardian weekly checkouts in 8h.`,
       metric: new MathExpression({
         label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",

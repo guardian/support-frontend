@@ -791,7 +791,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-PROD?statusFilter=FAILED",
-        "AlarmName": "Support Workers Execution Failure in PROD (Recurring Contributions or Subscriptions Checkout)",
+        "AlarmName": "Support Workers Execution Failure in PROD (Recurring Contributions or Subscriptions Checkout).",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1103,7 +1103,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring gocardless contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring gocardless contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1173,7 +1173,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring gocardless supporter plus contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring gocardless supporter plus contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1243,7 +1243,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "URGENT 9-5 - PROD support-workers No successful paper checkouts in 24h",
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful paper checkouts in 24h.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "EvaluationPeriods": 288,
         "Metrics": [
@@ -1380,7 +1380,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring paypal contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring paypal contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1450,7 +1450,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring paypal supporter plus contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring paypal supporter plus contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1520,7 +1520,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring stripe contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring stripe contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1590,7 +1590,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring stripe supporter plus contributions recently",
+        "AlarmName": "support-workers PROD No successful recurring stripe supporter plus contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1660,7 +1660,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "URGENT 9-5 - PROD support-workers No successful guardian weekly checkouts in 8h",
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful guardian weekly checkouts in 8h.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "EvaluationPeriods": 96,
         "Metrics": [
@@ -2924,7 +2924,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "There was a timeout whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-PROD?statusFilter=TIMED_OUT",
-        "AlarmName": "Support Workers Timeout in PROD (Recurring Contributions or Subscriptions Checkout)",
+        "AlarmName": "Support Workers Timeout in PROD (Recurring Contributions or Subscriptions Checkout).",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {
