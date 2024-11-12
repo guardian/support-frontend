@@ -299,6 +299,18 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
+  def guardianLightLanding(
+      countryCode: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(
+      guardianLightHtml(countryCode, campaignCodeOption),
+    ).withSettingsSurrogateKey
+  }
+
   def downForMaintenance(): Action[AnyContent] = NoCacheAction() { implicit request =>
     Ok(
       views.html.main(
@@ -313,6 +325,72 @@ class Application(
   private def shareImageUrl(settings: AllSettings): String = {
     // Autumn 2021 generic image
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
+  }
+
+  private def guardianLightHtml(
+      countryCode: String,
+      campaignCode: Option[String],
+  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
+    val geoData = request.geoData
+    val idUser = request.user
+
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+
+    val classes = "gu-content--contribution-form--placeholder" +
+      campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
+
+    val mainElement = assets.getSsrCacheContentsAsHtml(
+      divId = s"supporter-plus-landing-page-$countryCode",
+      file = "ssr-holding-content.html",
+      classes = Some(classes),
+    )
+
+    val serversideTests = generateParticipations(Nil)
+    val isTestUser = testUserService.isTestUser(request)
+
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+
+    val supporterPlusProductPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val tierThreeProductPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
+
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+    views.html.contributions(
+      title = "GuardianLight",
+      id = s"guardianlight-landing-page-$countryCode",
+      mainElement = mainElement,
+      js = RefPath("supporterPlusLandingPage.js"),
+      css = Some(RefPath("supporterPlusLandingPage.css")),
+      description = stringsConfig.contributionsLandingDescription,
+      paymentMethodConfigs = PaymentMethodConfigs(
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularTestStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularTestPayPalConfig = payPalConfigProvider.get(true),
+        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+        testAmazonPayConfig = amazonPayConfigProvider.get(true),
+      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      membersDataApiUrl = membersDataApiUrl,
+      idUser = idUser,
+      guestAccountCreationToken = guestAccountCreationToken,
+      geoData = geoData,
+      shareImageUrl = shareImageUrl(settings),
+      shareUrl = "https://support.theguardian.com/guardianlight",
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+      serversideTests = serversideTests,
+      allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      productCatalog = productCatalog,
+    )
   }
 
   private def contributionsHtml(

@@ -8,6 +8,8 @@ module.exports = {
 			'pages/subscriptions-landing/subscriptionsLanding.tsx',
 		supporterPlusLandingPage:
 			'pages/supporter-plus-landing/supporterPlusRouter.tsx',
+		guardianLightLandingPage:
+			'pages/supporter-plus-landing/guardianLightRouter.tsx',
 		paperSubscriptionLandingPage:
 			'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
 		paperSubscriptionCheckoutPage:
