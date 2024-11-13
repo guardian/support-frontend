@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold20,
-	headlineBold24,
 	neutral,
 	space,
 	textSans15,
@@ -59,11 +58,7 @@ const headlineAndParagraph = css`
 const headlineText = css`
 	color: ${neutral[100]};
 	margin-bottom: ${space[3]}px;
-
 	${headlineBold20};
-	${from.desktop} {
-		${headlineBold24};
-	}
 
 	& div {
 		display: none;
