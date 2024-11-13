@@ -259,6 +259,15 @@ object AcquisitionDataRowBuilder {
           None, // TODO: if we rework digital gift modelling in Zuora we should include the relevant ids here
           None,
         )
+      case s: SendThankYouEmailGuardianLightState =>
+        AcquisitionTypeDetails(
+          paymentMethod = Some(s.paymentMethod),
+          promoCode = None,
+          readerType = Direct,
+          acquisitionType = Purchase,
+          zuoraAccountNumber = Some(s.accountNumber),
+          zuoraSubscriptionNumber = Some(s.subscriptionNumber),
+        )
     }
 
   private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) = {

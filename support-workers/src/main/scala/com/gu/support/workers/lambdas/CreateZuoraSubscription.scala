@@ -161,11 +161,13 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
   lazy val zuoraGuardianLightHandler = new ZuoraGuardianLightHandler(
     zuoraSubscriptionCreator,
     new GuardianLightSubscriptionBuilder(
-      services.promotionService,
-      touchPointEnvironment,
+      services.config.zuoraConfigProvider.get(isTestUser).guardianLight,
+      services.catalogService,
       dateGenerator,
+      touchPointEnvironment,
       subscribeItemBuilder,
     ),
+    state.user,
   )
   lazy val zuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,
