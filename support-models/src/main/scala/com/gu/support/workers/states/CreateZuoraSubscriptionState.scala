@@ -122,6 +122,7 @@ object CreateZuoraSubscriptionProductState {
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[TierThreeState](tierThree),
+      discriminatedType.variant[GuardianLightState](guardianLight),
     ),
   )
 
