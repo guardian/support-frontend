@@ -24,7 +24,7 @@ const container = css`
 		#1e3e72 5%
 	); /* creates a partial border line with gap */
 	border-radius: 0px;
-	margin: ${space[9]}px -10px 0;
+	margin: ${space[9]}px 0px 0px;
 	gap: 0px;
 	${from.desktop} {
 		flex-direction: row;
