@@ -43,6 +43,10 @@ libraryDependencies ++= Seq(
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
+excludeDependencies ++= Seq(
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+)
+
 ThisBuild / libraryDependencySchemes ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 )
