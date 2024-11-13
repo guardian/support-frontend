@@ -215,7 +215,7 @@ export function CheckoutComponent({
 	);
 
 	const productDescription = showNewspaperArchiveBenefit
-		? productCatalogDescriptionNewBenefits[productKey]
+		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
