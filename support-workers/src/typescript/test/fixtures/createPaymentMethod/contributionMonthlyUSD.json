@@ -31,12 +31,13 @@
     "paymentProvider": "Stripe"
   },
   "paymentFields": {
+    "paymentType": "Stripe",
     "paymentMethod": "pm_9999999999999",
     "stripePaymentType": "StripePaymentRequestButton",
     "stripePublicKey": "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z"
   },
   "firstDeliveryDate": null,
-  "promoCode": null,
+  "appliedPromotion": null,
   "csrUsername": null,
   "salesforceCaseId": null,
   "acquisitionData": {
