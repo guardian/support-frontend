@@ -23,13 +23,12 @@ const container = css`
 		#1e3e72 95%,
 		#1e3e72 5%
 	); /* creates a partial border line with gap */
-	border-radius: 0px;
+	border-radius: ${space[3]}px;
 	margin: ${space[9]}px 0px 0px;
 	gap: 0px;
 	${from.desktop} {
 		flex-direction: row;
 		margin-top: ${space[8]}px;
-		border-radius: ${space[3]}px;
 		gap: 1px;
 	}
 `;
@@ -42,11 +41,16 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	align-items: center;
 	background-color: #1e3e72;
 	padding: ${orientation === 'right'
-		? `${space[6]}px ${space[6]}px 0px ${space[8]}px`
-		: `${space[6]}px ${space[8]}px 0px ${space[6]}px`};
+		? `${space[6]}px ${space[3]}px 0px ${space[3]}px`
+		: `${space[4]}px ${space[3]}px 0px ${space[3]}px`};
+	border-radius: ${orientation === 'right'
+		? `0px 0px ${space[3]}px ${space[3]}px`
+		: `${space[3]}px ${space[3]}px 0px 0px`};
 	text-align: left;
-	border-radius: 0px;
 	${from.desktop} {
+		padding: ${orientation === 'right'
+			? `${space[6]}px ${space[6]}px 0px ${space[8]}px`
+			: `${space[6]}px ${space[8]}px 0px ${space[6]}px`};
 		border-radius: ${orientation === 'right'
 			? `0 ${space[3]}px ${space[3]}px 0`
 			: `${space[3]}px 0 0 ${space[3]}px`};
@@ -59,8 +63,11 @@ const headlineAndParagraph = css`
 
 const headlineText = css`
 	color: ${neutral[100]};
-	margin-bottom: ${space[3]}px;
+	margin-bottom: ${space[2]}px;
 	${headlineBold20};
+	${from.desktop} {
+		margin-bottom: ${space[3]}px;
+	}
 
 	& div {
 		display: none;
