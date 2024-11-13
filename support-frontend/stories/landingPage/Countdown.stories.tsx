@@ -42,6 +42,10 @@ Default.args = { campaign:
 		label: 'default',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
 		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
+		theme: {
+			backgroundColor: '#1e3e72',
+			foregroundColor: '#ffffff',
+		},
 	}
 };
 
@@ -51,6 +55,10 @@ DeadlineNear.args = { campaign:
 		label: 'deadline near',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInSecond)),
+		theme: {
+			backgroundColor: '#1e3e72',
+			foregroundColor: '#ffffff',
+		},
 	}
 };
 
@@ -60,6 +68,10 @@ DeadlinePassedHidden.args = { campaign:
 		label: 'deadline passed',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() - (5 * millisecondsInSecond)),
+		theme: {
+			backgroundColor: '#1e3e72',
+			foregroundColor: '#ffffff',
+		},
 	}
 };
 
@@ -69,5 +81,22 @@ NotYetAvailableHidden.args = { campaign:
 		label: 'start date well in future',
 		countdownStartInMillis: (Date.now() + (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInDay)),
+		theme: {
+			backgroundColor: '#1e3e72',
+			foregroundColor: '#ffffff',
+		},
+	}
+};
+
+export const ThemedSubCampaign = Template.bind({});
+ThemedSubCampaign.args = { campaign: 
+	{
+		label: 'change colour theme',
+		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
+		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
+		theme: {
+			backgroundColor: '#f36161',
+			foregroundColor: '#060e08',
+		},
 	}
 };
