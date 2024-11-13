@@ -167,7 +167,6 @@ const existingPaymentFieldsSchema = z.object({
 	billingAccountId: z.string(),
 });
 
-//TODO: this needs to be a discriminated union to be useful
 const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
 	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
@@ -222,7 +221,12 @@ const baseStateSchema = z.object({
 	product: productTypeSchema,
 	analyticsInfo: analyticsInfoSchema,
 	firstDeliveryDate: z.coerce.date().nullable(),
-	promoCode: z.string().nullable(),
+	appliedPromotion: z
+		.object({
+			promoCode: z.string(),
+			countryGroupId: z.string(), //TODO: build a schema for this
+		})
+		.nullable(),
 	csrUsername: z.string().nullable(),
 	salesforceCaseId: z.string().nullable(),
 	acquisitionData: acquisitionDataSchema.nullable(),

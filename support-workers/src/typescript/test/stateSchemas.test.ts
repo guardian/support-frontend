@@ -8,6 +8,7 @@ import {
 	createSalesforceContactStateSchema,
 } from '../stateSchemas';
 import createPaymentContribution from './fixtures/createPaymentMethod/contributionMonthlyUSD.json';
+import contributionWithPayPal from './fixtures/createPaymentMethod/contributionWithPayPal.json';
 import createPaymentPaper from './fixtures/createPaymentMethod/paperDirectDebit.json';
 import createPaymentSupporterPlus from './fixtures/createPaymentMethod/supporterPlusAnnualEUR.json';
 import createSalesforceContactContribution from './fixtures/createSalesforceContact/contributionMonthlyUSD.json';
@@ -29,10 +30,23 @@ test('createPaymentMethodSchema works with real inputs', () => {
 	if (contribution.product.productType === 'Contribution') {
 		expect(contribution.product.amount).toBe(5);
 	}
-	const stripePaymentFields = contribution.paymentFields as StripePaymentFields; //TODO should be a discriminated union
+	expect(contribution.paymentFields.paymentType).toBe('Stripe');
+	const stripePaymentFields = contribution.paymentFields as StripePaymentFields;
 	expect(stripePaymentFields.stripePaymentType).toBe(
 		'StripePaymentRequestButton',
 	);
+
+	const payPalContribution: CreatePaymentMethodState =
+		createPaymentMethodStateSchema.parse(contributionWithPayPal);
+	expect(payPalContribution.product.currency).toBe('GBP');
+	expect(payPalContribution.product.productType).toBe('Contribution');
+	if (payPalContribution.product.productType === 'Contribution') {
+		expect(payPalContribution.product.amount).toBe(4);
+	}
+	expect(payPalContribution.paymentFields.paymentType).toBe('PayPal');
+	if (payPalContribution.paymentFields.paymentType === 'PayPal') {
+		expect(payPalContribution.paymentFields.baid).toBe('BA-1234');
+	}
 
 	const paper = createPaymentMethodStateSchema.parse(createPaymentPaper);
 	expect(paper.product.productType).toBe('Paper');
