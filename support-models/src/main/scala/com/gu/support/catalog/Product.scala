@@ -129,7 +129,7 @@ case object GuardianLight extends Product {
         productRatePlan("8a12831492c341730192dd1c39207038", Monthly),
       ),
       CODE -> List(
-        productRatePlan("TODO: fill this in", Monthly),
+        productRatePlan("71a1c43a1e192b28f702b3b47113000a", Monthly),
       ),
     )
 }
