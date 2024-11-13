@@ -560,7 +560,7 @@ function OneTimeCheckoutComponent({
 					>
 						<div css={titleAndButtonContainer}>
 							<h2 css={title}>Support just once</h2>
-							<BackButton geoId={geoId} buttonText="back" />
+							<BackButton path={`/${geoId}/contribute`} buttonText="back" />
 						</div>
 						<p css={standFirst}>Support us with the amount of your choice.</p>
 						<PriceCards
