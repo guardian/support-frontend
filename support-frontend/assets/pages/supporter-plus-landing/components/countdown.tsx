@@ -7,16 +7,17 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
  * Beware that this is only accurate to less than a second and is locale specific.
  */
 
-// TODO: colours will change with sub-campaigns and design not yet confirmed...
 const outer = css`
 	width: 272px;
 	margin: auto;
+	margin-top: 0px; // TODO: check with Sasha
+	margin-bottom: 10px;  // TODO: check with Sasha
 `;
 
-const container = css`
+const container = (colours?: CountdownSetting) => css`
 	width: 100%;
-	background-color: #1e3e72;
-	color: ${palette.neutral[100]};
+	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'} ;
+	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
 	padding: 12px 40px;
 	border-radius: 8px;
 
@@ -150,7 +151,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		<>
 			{showCountdown && (
 				<div id="timer" role="timer" css={outer}>
-					<div css={container}>
+					<div css={container(campaign)}>
 						<TimePart timePart={days} label={'days'} />
 						<div css={[flexItem, colon]}>:</div>
 						<TimePart timePart={hours} label={'hrs'} />

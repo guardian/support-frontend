@@ -315,6 +315,10 @@ export function ThreeTierLanding({
 		label: 'testing',
 		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
+		theme: {
+			backgroundColor: '#1e3e72',
+			foregroundColor: '#ffffff',
+		},
 	});
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
