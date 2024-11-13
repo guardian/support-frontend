@@ -41,7 +41,9 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	justify-content: space-between;
 	align-items: center;
 	background-color: #1e3e72;
-	padding: ${space[4]}px ${space[4]}px 0px ${space[4]}px;
+	padding: ${orientation === 'right'
+		? `${space[6]}px ${space[6]}px 0px ${space[8]}px`
+		: `${space[6]}px ${space[8]}px 0px ${space[6]}px`};
 	text-align: left;
 	border-radius: 0px;
 	${from.desktop} {
@@ -52,7 +54,7 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 `;
 
 const headlineAndParagraph = css`
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${space[5]}px;
 `;
 
 const headlineText = css`
