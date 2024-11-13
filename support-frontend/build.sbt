@@ -44,6 +44,9 @@ libraryDependencies ++= Seq(
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 excludeDependencies ++= Seq(
+  // Exclude htmlunit due to a vulnerability. Brought in via org.scalatestplus.play:scalatestplus-play but we don't need
+  // it. The vulnerability is fixed in v3 onwards, but the lib was renamed so I don't think we can force a newer version
+  // by specifying is in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
 )
 
