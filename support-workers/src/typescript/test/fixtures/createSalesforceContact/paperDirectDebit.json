@@ -56,7 +56,10 @@
     "PaymentGateway": "GoCardless"
   },
   "firstDeliveryDate": "2024-10-17",
-  "promoCode": "PRINT_EVERYDAY",
+  "appliedPromotion": {
+    "promoCode": "PRINT_EVERYDAY",
+    "countryGroupId": "uk"
+  },
   "csrUsername": null,
   "salesforceCaseId": null,
   "acquisitionData": {
