@@ -36,7 +36,7 @@ const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
 			countryGroupId === UnitedStates,
-		enableSingleContributions: true,
+		enableSingleContributions: false,
 		countdownSettings: [
 			{
 				label: 'Giving Tuesday',
