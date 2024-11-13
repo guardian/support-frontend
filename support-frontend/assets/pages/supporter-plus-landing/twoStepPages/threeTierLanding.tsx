@@ -292,8 +292,7 @@ export function ThreeTierLanding({
 	const campaignSettings = getCampaignSettings(countryGroupId);
 
 	const enableSingleContributionsTab =
-		(abParticipations.landingPageOneTimeTab2 === 'oneTimeTab' &&
-			campaignSettings?.enableSingleContributions) ??
+		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
 	const getInitialContributionType = () => {

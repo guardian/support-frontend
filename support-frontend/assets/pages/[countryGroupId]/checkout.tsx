@@ -501,6 +501,14 @@ function CheckoutComponent({
 	 */
 	let productFields: RegularPaymentRequest['product'];
 	switch (productKey) {
+		case 'GuardianLight':
+			productFields = {
+				productType: 'GuardianLight',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+			break;
+
 		case 'TierThree':
 			productFields = {
 				productType: 'TierThree',
@@ -1129,7 +1137,16 @@ function CheckoutComponent({
 							productFields.productType,
 							promotion,
 						)}
-						headerButton={<BackButton geoId={geoId} buttonText="Change" />}
+						headerButton={
+							productKey === 'GuardianLight' ? (
+								<BackButton
+									path={`/${geoId}/guardianlight`}
+									buttonText="Back"
+								/>
+							) : (
+								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
+							)
+						}
 					/>
 				</BoxContents>
 			</Box>
