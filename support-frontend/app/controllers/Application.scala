@@ -322,6 +322,9 @@ class Application(
     val geoData = request.geoData
     val idUser = request.user
 
+    Console.println("Application.scala-contributionsHtml.geoData=", geoData)
+    println("Application.scala-contributionsHtml.geoData=", geoData)
+
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
