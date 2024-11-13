@@ -32,7 +32,4 @@ module.exports = {
 		promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
 		ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
 	},
-	ssr: {
-		ssrPages: 'helpers/rendering/ssrPages.ts',
-	},
 };
