@@ -90,6 +90,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -156,6 +157,10 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 type ProcessPaymentResponse =
 	| { status: 'success' }
 	| { status: 'failure'; failureReason?: ErrorReason };
+
+type CreateSubscriptionResponse = StatusResponse & {
+	userType: UserType;
+};
 
 const processPayment = async (
 	statusResponse: StatusResponse,
@@ -972,9 +977,12 @@ function CheckoutComponent({
 			});
 
 			let processPaymentResponse: ProcessPaymentResponse;
+			let userType: UserType | undefined = undefined;
 
 			if (createResponse.ok) {
-				const statusResponse = (await createResponse.json()) as StatusResponse;
+				const statusResponse =
+					(await createResponse.json()) as CreateSubscriptionResponse;
+				userType = statusResponse.userType;
 				processPaymentResponse = await processPayment(statusResponse, geoId);
 			} else {
 				const errorReason = (await createResponse.text()) as ErrorReason;
@@ -994,6 +1002,7 @@ function CheckoutComponent({
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('product', productKey);
 				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
+				userType && thankYouUrlSearchParams.set('userType', userType);
 				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
 				contributionAmount &&
 					thankYouUrlSearchParams.set(
