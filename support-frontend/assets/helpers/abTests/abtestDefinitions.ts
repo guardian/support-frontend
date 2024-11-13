@@ -138,7 +138,7 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 1,
+				size: 0.05, // 5% initially before ramping up
 			},
 		},
 		isActive: true,
