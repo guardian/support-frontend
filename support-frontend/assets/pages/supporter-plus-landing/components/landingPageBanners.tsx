@@ -4,7 +4,6 @@ import {
 	headlineBold20,
 	headlineBold24,
 	neutral,
-	palette,
 	space,
 	textSans15,
 	textSans17,
@@ -20,8 +19,8 @@ const container = css`
 		to bottom,
 		#1e3e72 0%,
 		#1e3e72 5%,
-		${palette.neutral[60]} 5%,
-		${palette.neutral[60]} 95%,
+		#798baa 5%,
+		#798baa 95%,
 		#1e3e72 95%,
 		#1e3e72 5%
 	); /* creates a partial border line with gap */
