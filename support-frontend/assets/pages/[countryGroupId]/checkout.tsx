@@ -21,7 +21,7 @@ type Props = {
 	appConfig: AppConfig;
 };
 
-const countryId: IsoCountry = CountryHelper.detect();
+const countryId: IsoCountry = Country.detect();
 
 export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
