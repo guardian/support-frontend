@@ -31,12 +31,16 @@
     "paymentProvider": "Stripe"
   },
   "paymentFields": {
+    "paymentType": "Stripe",
     "paymentMethod": "pm_0Q7xUdItVxyc3Q6nIU3tUxbm",
     "stripePaymentType": "StripeCheckout",
     "stripePublicKey": "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z"
   },
   "firstDeliveryDate": null,
-  "promoCode": "OCT_DISCOUNT_50_3_MONTHS",
+  "appliedPromotion": {
+    "promoCode": "OCT_DISCOUNT_50_3_MONTHS",
+    "countryGroupId": "eu"
+  },
   "csrUsername": null,
   "salesforceCaseId": null,
   "acquisitionData": {
