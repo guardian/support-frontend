@@ -11,12 +11,12 @@ const outer = css`
 	width: 272px;
 	margin: auto;
 	margin-top: 0px; // TODO: check with Sasha
-	margin-bottom: 10px;  // TODO: check with Sasha
+	margin-bottom: 10px; // TODO: check with Sasha
 `;
 
 const container = (colours?: CountdownSetting) => css`
 	width: 100%;
-	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'} ;
+	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'};
 	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
 	padding: 12px 40px;
 	border-radius: 8px;
