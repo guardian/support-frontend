@@ -25,7 +25,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService}
+import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService, UserDetails}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -146,25 +146,20 @@ class CreateSubscriptionController(
       settings: AllSettings,
       request: CreateRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse] = {
-    val maybeLoggedInIdentityIdAndEmail =
-      request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
 
+    val maybeLoggedInUserDetails =
+      request.user.map(authIdUser => UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"))
     logDetailedMessage("createSubscription")
 
     for {
       _ <- validate(request, settings.switches)
-      userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
-        case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
+      userDetails <- maybeLoggedInUserDetails match {
+        case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
-      supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
-      userType <- identityService
-        .getUserType(userAndEmail.primaryEmailAddress)
-        .leftMap(err => OtherIdentityError("Error retrieving user type", err.describeError, None))
-        .leftMap[CreateSubscriptionError](mapIdentityErrorToCreateSubscriptionError(_))
-        .map(_.userType)
+      supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
@@ -172,7 +167,7 @@ class CreateSubscriptionController(
 
     } yield CreateSubscriptionResponse(
       statusResponse.status,
-      userType,
+      userDetails.userType,
       statusResponse.trackingUri,
       statusResponse.failureReason,
     )
@@ -219,17 +214,15 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
-  ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
+  ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
-    val identityId = identityService.getOrCreateUserFromEmail(
+    identityService.getOrCreateUserFromEmail(
       body.email,
       body.firstName,
       body.lastName,
       body.ophanIds.pageviewId,
       referer,
     )
-
-    identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 
   private def validate(
@@ -402,13 +395,13 @@ class CreateSubscriptionController(
   }
 
   private def buildSupportWorkersUser(
-      identityIdAndEmail: IdentityIdAndEmail,
+      userDetails: UserDetails,
       request: CreateSupportWorkersRequest,
       isTestUser: Boolean,
   ) = {
     User(
-      id = identityIdAndEmail.id,
-      primaryEmailAddress = identityIdAndEmail.primaryEmailAddress,
+      id = userDetails.identityId,
+      primaryEmailAddress = userDetails.email,
       title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,
