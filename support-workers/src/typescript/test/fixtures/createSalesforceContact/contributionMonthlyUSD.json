@@ -31,6 +31,7 @@
     "paymentProvider": "Stripe"
   },
   "paymentMethod": {
+    "PaymentType": "Stripe",
     "TokenId": "pm_9999999999999",
     "SecondTokenId": "cus_9999999999999",
     "CreditCardNumber": "4242",
@@ -43,7 +44,7 @@
     "StripePaymentType": "StripePaymentRequestButton"
   },
   "firstDeliveryDate": null,
-  "promoCode": null,
+  "appliedPromotion": null,
   "csrUsername": null,
   "salesforceCaseId": null,
   "acquisitionData": {
