@@ -85,7 +85,7 @@
 		"@emotion/serialize": "^1.1.2",
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.19.2",
-		"@guardian/libs": "16.1.0",
+		"@guardian/libs": "^19.1.0",
 		"@guardian/pasteup": "1.0.0-alpha.7",
 		"@guardian/source": "8.0.0",
 		"@guardian/source-development-kitchen": "13.0.0",
