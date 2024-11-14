@@ -139,7 +139,7 @@ function FeastBanner() {
 		<LandingPageBanner
 			header="The Guardian Feast app: make a feast out of anything"
 			paragraph="With smart features such as cook mode, the ability to search by ingredient, dietary requirement and your favourite Feast cook, the Guardian’s new Feast app makes inspiring mealtimes easy."
-			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1000.png?width=1000&quality=75&s=d2881465ddca62054b9b8ba65682fff6"
+			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1454_645/1454.png?width=1000&quality=75&s=a4561f38ab0c025d16efaba8a309d35b"
 			orientation="left"
 		/>
 	);
