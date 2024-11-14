@@ -13,23 +13,22 @@ const container = css`
 	display: flex;
 	flex-direction: column;
 	flex: 1 1;
-	background-color: #1e3e72;
-	background-image: linear-gradient(
-		to bottom,
-		#1e3e72 0%,
-		#1e3e72 5%,
-		#798baa 5%,
-		#798baa 95%,
-		#1e3e72 95%,
-		#1e3e72 5%
-	); /* creates a partial border line with gap */
+	background-color: #798baa;
 	border-radius: ${space[3]}px;
 	margin: ${space[9]}px 0px 0px;
-	gap: 0px;
+	gap: 1px;
 	${from.desktop} {
+		background-image: linear-gradient(
+			to bottom,
+			#1e3e72 0%,
+			#1e3e72 5%,
+			#798baa 5%,
+			#798baa 95%,
+			#1e3e72 95%,
+			#1e3e72 5%
+		); /* creates a partial border line with gap */
 		flex-direction: row;
 		margin-top: ${space[8]}px;
-		gap: 1px;
 	}
 `;
 
