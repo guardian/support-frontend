@@ -34,10 +34,9 @@ function analyticsInitialisation(
 }
 
 function consentInitialisation(country: IsoCountry): void {
-
 	if (shouldInitCmp()) {
 		try {
-	    const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
+			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
 			cmp.init({
 				pubData: {
 					pageViewId: ophan.viewId,
