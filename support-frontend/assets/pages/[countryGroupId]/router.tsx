@@ -3,6 +3,7 @@ import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
+import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
 import { Checkout } from './checkout';
 import { GuardianLightLanding } from './guardianLightLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
@@ -27,7 +28,12 @@ const router = createBrowserRouter(
 		},
 		{
 			path: `/${geoId}/guardian-light`,
-			element: <GuardianLightLanding geoId={geoId} />,
+			element:
+				geoId === 'uk' ? (
+					<GuardianLightLanding geoId={geoId} />
+				) : (
+					<ThreeTierLanding geoId={geoId} />
+				),
 		},
 	]),
 );

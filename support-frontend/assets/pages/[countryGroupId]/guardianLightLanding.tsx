@@ -4,9 +4,10 @@ type GuardianLightLandingProps = {
 	geoId: GeoId;
 };
 
-export function GuardianLightLanding({ geoId }: GuardianLightLandingProps) {
+export function GuardianLightLanding({
+	geoId,
+}: GuardianLightLandingProps): JSX.Element {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-
 	return (
 		<div>
 			GuardianLightLanding ${currencyKey} ${countryGroupId}
