@@ -86,7 +86,6 @@ const partnerOffersBenefit = {
 	tooltip:
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
-	specificToAbTest: [{ name: 'auPartnerBenefit', variants: ['control'] }],
 };
 
 const feastBenefit = {
