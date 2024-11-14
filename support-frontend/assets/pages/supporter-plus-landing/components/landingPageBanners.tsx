@@ -33,6 +33,7 @@ const container = css`
 		); /* creates a partial border line with gap */
 		flex-direction: row;
 		margin-bottom: 0px;
+		margin-right: -1px; /* hides rhs gap */
 	}
 `;
 
