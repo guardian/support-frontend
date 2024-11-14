@@ -63,15 +63,6 @@ const campaigns: Record<string, CampaignSettings> = {
 					foregroundColor: '#ffffff',
 				},
 			},
-			// {
-			// 	label: 'Testing',
-			// 	countdownStartInMillis: Date.parse('Nov 13, 2024 00:00:00'),
-			// 	countdownDeadlineInMillis: Date.parse('Nov 13, 2024 13:00:00'),
-			// 	theme: {
-			// 		backgroundColor: '#1e3e72',
-			// 		foregroundColor: '#ffffff',
-			// 	},
-			// },
 		],
 		copy: {
 			headingFragment: <>Protect </>,
