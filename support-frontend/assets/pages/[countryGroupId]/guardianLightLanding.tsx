@@ -1,4 +1,7 @@
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { Box } from 'components/checkoutBox/checkoutBox';
+import type { GeoId } from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { CheckoutLayout } from './components/checkoutLayout';
 
 type GuardianLightLandingProps = {
 	geoId: GeoId;
@@ -9,8 +12,12 @@ export function GuardianLightLanding({
 }: GuardianLightLandingProps): JSX.Element {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	return (
-		<div>
-			GuardianLightLanding ${currencyKey} ${countryGroupId}
-		</div>
+		<CheckoutLayout>
+			<Box>
+				<div>
+					GuardianLightLanding ${currencyKey} ${countryGroupId}
+				</div>
+			</Box>
+		</CheckoutLayout>
 	);
 }
