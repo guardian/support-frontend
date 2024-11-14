@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	between,
 	from,
 	headlineBold20,
 	neutral,
@@ -15,8 +16,11 @@ const container = css`
 	flex: 1 1;
 	background-color: #798baa;
 	border-radius: ${space[3]}px;
-	margin: ${space[9]}px 0px 0px;
+	margin: ${space[8]}px auto ${space[4]}px;
 	gap: 1px;
+	${between.tablet.and.desktop} {
+		max-width: 340px;
+	}
 	${from.desktop} {
 		background-image: linear-gradient(
 			to bottom,
@@ -28,7 +32,7 @@ const container = css`
 			#1e3e72 5%
 		); /* creates a partial border line with gap */
 		flex-direction: row;
-		margin-top: ${space[8]}px;
+		margin-bottom: 0px;
 	}
 `;
 
