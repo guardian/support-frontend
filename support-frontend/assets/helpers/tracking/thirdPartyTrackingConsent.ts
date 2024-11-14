@@ -1,20 +1,6 @@
 import { onConsentChange } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
 import { logException } from 'helpers/utilities/logger';
-
-type ConsentVector = Record<string, boolean>;
-type ConsentState = {
-	tcfv2?: {
-		consents: ConsentVector;
-		eventStatus: 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
-		vendorConsents: ConsentVector;
-	};
-	ccpa?: {
-		doNotSell: boolean;
-	};
-	aus?: {
-		personalisedAdvertising: boolean;
-	};
-};
 
 const onConsentChangeEvent = async (
 	onConsentChangeCallback: (
@@ -37,11 +23,11 @@ const onConsentChangeEvent = async (
 	 */
 	try {
 		onConsentChange((state: ConsentState) => {
-			if (state.ccpa) {
+			if (state.usnat) {
 				consentGranted = Object.keys(vendorIds).reduce(
 					(accumulator, vendorKey) => ({
 						...accumulator,
-						[vendorKey]: state.ccpa ? !state.ccpa.doNotSell : false,
+						[vendorKey]: state.usnat ? !state.usnat.doNotSell : false,
 					}),
 					{},
 				);

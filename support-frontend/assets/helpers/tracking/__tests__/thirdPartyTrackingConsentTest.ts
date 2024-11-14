@@ -40,12 +40,12 @@ describe('thirdPartyTrackingConsent', () => {
 		});
 	});
 
-	describe('CCPA mode', () => {
+	describe('USNAT mode', () => {
 		it('calls dummyCallback with false if CCPA doNotSell is true', async () => {
 			onConsentChange.mockImplementation(
 				(callback: (callback: ConsentState) => void) =>
 					callback({
-						ccpa: {
+						usnat: {
 							doNotSell: true,
 						},
 					} as ConsentState),
@@ -61,11 +61,11 @@ describe('thirdPartyTrackingConsent', () => {
 			});
 		});
 
-		it('calls dummyCallback with true if CCPA doNotSell is false', async () => {
+		it('calls dummyCallback with true if USNAT doNotSell is false', async () => {
 			onConsentChange.mockImplementation(
 				(callback: (callback: ConsentState) => void) =>
 					callback({
-						ccpa: {
+						usnat: {
 							doNotSell: false,
 						},
 					} as ConsentState),
