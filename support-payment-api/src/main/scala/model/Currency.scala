@@ -29,6 +29,6 @@ object Currency extends Enum[Currency] with CirceEnum[Currency] {
       case USD => 10000
       case _ => 2000
     }
-    amount > maxAmount
+    amount > maxAmount * 1.04
   }
 }
