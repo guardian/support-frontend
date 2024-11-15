@@ -62,6 +62,7 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.A
 # Checkout
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout-embed   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
