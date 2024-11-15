@@ -29,6 +29,7 @@ import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
+import com.gu.support.workers.StripePublicKey.get
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
@@ -271,6 +272,14 @@ class Application(
     List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
+  }
+
+  def oneTimeGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "one-time-checkout"))
+      .filter(_.nonEmpty)
+      .mkString("/")
+
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
