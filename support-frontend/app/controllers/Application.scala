@@ -262,10 +262,9 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def guardianLightGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() {
-    implicit request =>
-      val url = getGeoPath(request, campaignCode, "guardian-light")
-      RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  def guardianLightGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", "guardian-light")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
