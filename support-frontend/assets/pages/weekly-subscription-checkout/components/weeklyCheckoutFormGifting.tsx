@@ -47,7 +47,6 @@ import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverab
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
-import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectDiscountedPrice,
 	selectPriceForProduct,
@@ -119,7 +118,6 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() => (_: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
@@ -329,7 +327,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							setEmail={props.setEmail}
 							setConfirmEmail={props.setConfirmEmail}
 							isSignedIn={props.isSignedIn}
-							fetchAndStoreUserType={props.fetchAndStoreUserType}
 							telephone={props.telephone}
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}

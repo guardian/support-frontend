@@ -36,7 +36,6 @@ const OPHAN_EVENT_ID_PAYMENT_METHOD = 'contributions-thankyou-payment-method';
 const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
 	'contributions-thankyou-contribution-type';
 const OPHAN_EVENT_ID_SIGNED_IN = 'contributions-thankyou-signed-in';
-const OPHAN_EVENT_ID_KNOWN_EMAIL = 'contributions-thankyou-known-email';
 const OPHAN_EVENT_ID_LARGE_DONATION = 'contributions-thankyou-large-donation';
 
 const trackPaymentMethod = (paymentMethod: PaymentMethod) => {
@@ -72,17 +71,6 @@ const trackSignedIn = (isSignedIn: boolean) => {
 	});
 };
 
-const trackKnownEmail = (isKnownEmail: boolean) => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'VIEW',
-		id: OPHAN_EVENT_ID_KNOWN_EMAIL,
-		value: isKnownEmail.toString(),
-	});
-};
-
 const trackLargeDonation = (isLargeUsDonation: boolean) => {
 	trackComponentEvents({
 		component: {
@@ -98,12 +86,10 @@ export const trackUserData = (
 	paymentMethod: PaymentMethod,
 	contributionType: ContributionType,
 	isSignedIn: boolean,
-	isKnownEmail: boolean,
 	isLargeDonation: boolean,
 ): void => {
 	trackPaymentMethod(paymentMethod);
 	trackContributionType(contributionType);
 	trackSignedIn(isSignedIn);
-	trackKnownEmail(isKnownEmail);
 	trackLargeDonation(isLargeDonation);
 };

@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
-import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
 	contributionType: ContributionType;
 	amountIsAboveThreshold: boolean;
 	isTier3: boolean;
 	isSignedIn: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	identityUserType: UserType;
 }
 
 function MarketingCopy({
@@ -34,7 +34,7 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isTier3: boolean,
 	isSignedIn: boolean,
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse,
+	identityUserType: UserType,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
@@ -72,7 +72,7 @@ const getSubHeadingCopy = (
 	return (
 		contributionType !== 'ONE_OFF' &&
 		recurringCopy(amountIsAboveThreshold)[
-			userTypeFromIdentityResponse === 'current' || isSignedIn
+			identityUserType === 'current' || isSignedIn
 				? 'isSignedIn'
 				: 'notSignedIn'
 		]
@@ -84,21 +84,21 @@ function Subheading({
 	amountIsAboveThreshold,
 	isTier3,
 	isSignedIn,
-	userTypeFromIdentityResponse,
+	identityUserType,
 }: SubheadingProps): JSX.Element {
 	const subheadingCopy = getSubHeadingCopy(
 		amountIsAboveThreshold,
 		contributionType,
 		isTier3,
 		isSignedIn,
-		userTypeFromIdentityResponse,
+		identityUserType,
 	);
 
 	return (
 		<>
 			{subheadingCopy}
 			<MarketingCopy contributionType={contributionType} isTier3={isTier3} />
-			{userTypeFromIdentityResponse !== 'current' &&
+			{identityUserType !== 'current' &&
 				!isTier3 &&
 				contributionType !== 'ONE_OFF' && (
 					<span
