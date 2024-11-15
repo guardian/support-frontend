@@ -71,6 +71,7 @@ GET /eu/guardian-light                                             controllers.A
 GET /int/guardian-light                                            controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET /nz/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET /ca/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /guardian-light                                                controllers.Application.guardianLightGeoRedirect(campaignCode = "")
 
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
