@@ -64,7 +64,13 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/guardian-light      controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk)>/guardian-light                         controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET /us/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /au/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /eu/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /int/guardian-light                                            controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /nz/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET /ca/guardian-light                                             controllers.Application.contributeGeoRedirect(campaignCode = "")
 
 GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
 GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
