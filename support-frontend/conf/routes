@@ -98,7 +98,6 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
 
 # ------ Identity ------ #
-GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
 POST /identity/signin-url                                          controllers.IdentityController.createSignInURL()
 
 # ----- Subscriptions ----- #
