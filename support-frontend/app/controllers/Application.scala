@@ -258,11 +258,19 @@ class Application(
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "contribute"), campaignCode)
+    val url = getGeoPath(request, campaignCode, "contribute")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def guardianLightGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", "guardian-light")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
+    List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
-
-    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
