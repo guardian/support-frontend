@@ -34,6 +34,11 @@ function Template(args: CountdownProps) {
     );
 };
 
+function dummy(b: boolean){
+	if (b) // just to get around TS error 6133 (variable declared but its value is never read) 
+	return;
+}
+
 Template.args = {} as CountdownProps;
 
 export const Default = Template.bind({});
@@ -42,7 +47,9 @@ Default.args = { campaign:
 		label: 'default',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
 		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
-	}
+	},
+	show: true,
+	setShow: dummy
 };
 
 export const DeadlineNear = Template.bind({});
@@ -51,7 +58,9 @@ DeadlineNear.args = { campaign:
 		label: 'deadline near',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInSecond)),
-	}
+	},
+	show: true,
+	setShow: dummy
 };
 
 export const DeadlinePassedHidden = Template.bind({});
@@ -60,7 +69,9 @@ DeadlinePassedHidden.args = { campaign:
 		label: 'deadline passed',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() - (5 * millisecondsInSecond)),
-	}
+	},
+	show: false,
+	setShow: dummy
 };
 
 export const NotYetAvailableHidden = Template.bind({});
@@ -69,5 +80,7 @@ NotYetAvailableHidden.args = { campaign:
 		label: 'start date well in future',
 		countdownStartInMillis: (Date.now() + (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInDay)),
-	}
+	},
+	show: false,
+	setShow: dummy
 };
