@@ -8,7 +8,6 @@ describe('Personal Details', () => {
 	const setLastName = jest.fn();
 	const setEmail = jest.fn();
 	const setConfirmEmail = jest.fn();
-	const fetchAndStoreUserType = jest.fn();
 	const setTelephone = jest.fn();
 	const signOut = jest.fn();
 	const defaultProps = {
@@ -47,7 +46,6 @@ describe('Personal Details', () => {
 				setLastName={setLastName}
 				setEmail={setEmail}
 				setConfirmEmail={setConfirmEmail}
-				fetchAndStoreUserType={fetchAndStoreUserType}
 				setTelephone={setTelephone}
 				signOut={signOut}
 			/>,

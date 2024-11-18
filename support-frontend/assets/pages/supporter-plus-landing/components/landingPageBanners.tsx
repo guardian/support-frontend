@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import {
+	between,
 	from,
 	headlineBold20,
-	headlineBold24,
 	neutral,
-	palette,
 	space,
 	textSans15,
 	textSans17,
@@ -15,24 +14,26 @@ const container = css`
 	display: flex;
 	flex-direction: column;
 	flex: 1 1;
-	background-color: #1e3e72;
-	background-image: linear-gradient(
-		to bottom,
-		#1e3e72 0%,
-		#1e3e72 5%,
-		${palette.neutral[60]} 5%,
-		${palette.neutral[60]} 95%,
-		#1e3e72 95%,
-		#1e3e72 5%
-	); /* creates a partial border line with gap */
-	border-radius: 0px;
-	margin: ${space[9]}px -10px 0;
-	gap: 0px;
+	background-color: #798baa;
+	border-radius: ${space[3]}px;
+	margin: ${space[8]}px auto ${space[4]}px;
+	gap: 1px;
+	${between.tablet.and.desktop} {
+		max-width: 340px;
+	}
 	${from.desktop} {
+		background-image: linear-gradient(
+			to bottom,
+			#1e3e72 0%,
+			#1e3e72 5%,
+			#798baa 5%,
+			#798baa 95%,
+			#1e3e72 95%,
+			#1e3e72 5%
+		); /* creates a partial border line with gap */
 		flex-direction: row;
-		margin-top: ${space[8]}px;
-		border-radius: ${space[3]}px;
-		gap: 1px;
+		margin-bottom: 0px;
+		margin-right: -1px; /* hides rhs gap */
 	}
 `;
 
@@ -43,10 +44,17 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 	justify-content: space-between;
 	align-items: center;
 	background-color: #1e3e72;
-	padding: ${space[4]}px ${space[4]}px 0px ${space[4]}px;
+	padding: ${orientation === 'right'
+		? `${space[6]}px ${space[3]}px 0px ${space[3]}px`
+		: `${space[4]}px ${space[3]}px 0px ${space[3]}px`};
+	border-radius: ${orientation === 'right'
+		? `0px 0px ${space[3]}px ${space[3]}px`
+		: `${space[3]}px ${space[3]}px 0px 0px`};
 	text-align: left;
-	border-radius: 0px;
 	${from.desktop} {
+		padding: ${orientation === 'right'
+			? `${space[6]}px ${space[6]}px 0px ${space[8]}px`
+			: `${space[6]}px ${space[8]}px 0px ${space[6]}px`};
 		border-radius: ${orientation === 'right'
 			? `0 ${space[3]}px ${space[3]}px 0`
 			: `${space[3]}px 0 0 ${space[3]}px`};
@@ -54,16 +62,15 @@ const containerLandingPageBanner = (orientation: RowLocation) => css`
 `;
 
 const headlineAndParagraph = css`
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${space[5]}px;
 `;
 
 const headlineText = css`
 	color: ${neutral[100]};
-	margin-bottom: ${space[3]}px;
-
+	margin-bottom: ${space[2]}px;
 	${headlineBold20};
 	${from.desktop} {
-		${headlineBold24};
+		margin-bottom: ${space[3]}px;
 	}
 
 	& div {
@@ -136,7 +143,7 @@ function FeastBanner() {
 		<LandingPageBanner
 			header="The Guardian Feast app: make a feast out of anything"
 			paragraph="With smart features such as cook mode, the ability to search by ingredient, dietary requirement and your favourite Feast cook, the Guardian’s new Feast app makes inspiring mealtimes easy."
-			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1529_645/1000.png?width=1000&quality=75&s=d2881465ddca62054b9b8ba65682fff6"
+			imageUrl="https://i.guim.co.uk/img/media/0229069c0c821b8be5675ab7d28e145732a85d8d/0_0_1454_645/1454.png?width=1000&quality=75&s=a4561f38ab0c025d16efaba8a309d35b"
 			orientation="left"
 		/>
 	);
