@@ -262,8 +262,8 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def guardianLightGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = getGeoPath(request, "", "guardian-light")
+  def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", path)
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
