@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import {css, ThemeProvider} from '@emotion/react';
 import {
   from,
   neutral,
@@ -6,11 +6,14 @@ import {
   textSans17,
 } from '@guardian/source/foundations';
 import {
+  buttonThemeReaderRevenueBrand,
+  LinkButton,
+} from '@guardian/source/react-components';
+import {
   Divider,
   ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import {
-  CardNumberElement,
   Elements,
   ExpressCheckoutElement,
   useElements,
@@ -22,7 +25,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
-import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PriceCards } from 'components/priceCards/priceCards';
 import {
   init as abTestInit,
@@ -32,7 +34,6 @@ import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import {
-  postOneOffPayPalCreatePaymentRequest,
   processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
@@ -43,7 +44,6 @@ import type {
   PaymentResult,
   StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
@@ -53,12 +53,11 @@ import {
   derivePaymentApiAcquisitionData,
   getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
 import {
   sendEventOneTimeCheckoutValue,
   sendEventPaymentMethodSelected,
 } from 'helpers/tracking/quantumMetric';
-import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -66,19 +65,15 @@ import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { CheckoutLayout } from './components/checkoutLayout';
+import {countryGroups} from "../../helpers/internationalisation/countryGroup";
+import {EmbedCheckoutLayout} from "./components/embedCheckoutLayout";
 import { shorterBoxMargin } from './components/form';
 import { setThankYouOrder } from './components/thankyou';
 import {
   preventDefaultValidityMessage,
 } from './validation';
 
-/**
- * We have not added StripeExpressCheckoutElement to the old PaymentMethod
- * as it is heavily coupled through the code base and would require adding
- * a lot of extra unused code to those coupled areas.
- */
-type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
+type PaymentMethod = 'StripeExpressCheckoutElement';
 const countryId = Country.detect();
 
 const standFirst = css`
@@ -87,6 +82,12 @@ const standFirst = css`
 	${from.desktop} {
 		margin-bottom: ${space[3]}px;
 	}
+`;
+
+const btnStyleOverrides = css`
+	width: 100%;
+	justify-content: center;
+	margin-bottom: ${space[3]}px;
 `;
 
 const tcContainer = css`
@@ -251,7 +252,6 @@ function OneTimeCheckoutEmbedComponent({
   /** Payment methods: Stripe */
   const stripe = useStripe();
   const elements = useElements();
-  const cardElement = elements?.getElement(CardNumberElement);
   const [
     stripeExpressCheckoutPaymentType,
     setStripeExpressCheckoutPaymentType,
@@ -316,64 +316,11 @@ function OneTimeCheckoutEmbedComponent({
       setIsProcessingPayment(true);
 
       let paymentResult;
-      if (paymentMethod === 'PayPal') {
-        paymentResult = await postOneOffPayPalCreatePaymentRequest({
-          currency: currencyKey,
-          amount: finalAmount,
-          returnURL: payPalReturnUrl(
-            countryGroupId,
-            email,
-            '/paypal/rest/returnOneTime',
-          ),
-          cancelURL: payPalCancelUrl(countryGroupId),
-        });
-        const acquisitionData = derivePaymentApiAcquisitionData(
-          getReferrerAcquisitionData(),
-          abParticipations,
-          billingPostcode,
-        );
-        // We've only created a payment at this point, and the user has to get through
-        // the PayPal flow on their site before we can actually try and execute the payment.
-        // So we drop a cookie which will be used by the /paypal/rest/return endpoint
-        // that the user returns to from PayPal, if payment is successful.
-        cookie.set(
-          'acquisition_data',
-          encodeURIComponent(JSON.stringify(acquisitionData)),
-        );
-      }
 
-      let paymentMethodResult;
-      if (
-        paymentMethod === 'StripeExpressCheckoutElement' &&
-        stripe &&
-        elements
-      ) {
-        paymentMethodResult = await stripe.createPaymentMethod({
+
+        const paymentMethodResult = await stripe.createPaymentMethod({
           elements,
         });
-      }
-      if (
-        paymentMethod === 'Stripe' &&
-        stripe &&
-        cardElement &&
-        recaptchaToken
-      ) {
-        paymentMethodResult = await stripe.createPaymentMethod({
-          type: 'card',
-          card: cardElement,
-          billing_details: {
-            address: {
-              postal_code: billingPostcode,
-            },
-          },
-        });
-      }
-      if (paymentMethodResult && stripe) {
-        // Based on file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
-        const handle3DS = (clientSecret: string) => {
-          trackComponentLoad('stripe-3ds');
-          return stripe.handleCardAction(clientSecret);
-        };
 
         if (paymentMethodResult.error) {
           logException(
@@ -415,9 +362,11 @@ function OneTimeCheckoutEmbedComponent({
           };
           paymentResult = await processStripePaymentIntentRequest(
             stripeData,
-            handle3DS,
+            (clientSecret: string) => {
+              trackComponentLoad('stripe-3ds');
+              return stripe.handleCardAction(clientSecret);
+            },
           );
-        }
       }
 
       if (paymentResult) {
@@ -468,15 +417,11 @@ function OneTimeCheckoutEmbedComponent({
 
     return;
   }
-
-  const paymentButtonText = finalAmount
-    ? paymentMethod === 'PayPal'
-      ? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
-      : `Support us with ${simpleFormatAmount(currency, finalAmount)}`
-    : 'Pay now';
+  const paymentButtonText =
+     `Support us with ${simpleFormatAmount(currency, finalAmount)}`
 
   return (
-    <CheckoutLayout>
+    <EmbedCheckoutLayout>
       <Box>
         <BoxContents>
           <div
@@ -566,7 +511,8 @@ function OneTimeCheckoutEmbedComponent({
                   }
                 }}
                 onConfirm={async (event) => {
-                  if (!(stripe && elements)) {
+
+                  if (!stripe || !elements) {
                     console.error('Stripe not loaded');
                     return;
                   }
@@ -628,20 +574,27 @@ function OneTimeCheckoutEmbedComponent({
                 />
               )}
             </div>
-            <div
-              css={css`
-								margin: ${space[8]}px 0 ${space[6]}px;
-							`}
-            >
-              <DefaultPaymentButton
-                buttonText={paymentButtonText}
-                onClick={() => {
-                  // no-op
-                  // This isn't needed because we are now using the formOnSubmit handler
-                }}
-                type="submit"
-              />
-            </div>
+
+              <ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+                <LinkButton
+                  cssOverrides={btnStyleOverrides}
+                  onClick={() => {
+                    const url = `/${
+                      countryGroups[countryGroupId].supportInternationalisationId
+                    }/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
+                      selectedPriceCard === 'other' ? otherAmount : selectedPriceCard
+                    }`;
+
+                    trackComponentClick(
+                      `npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+                    );
+                    window.open(url, '_blank');
+                  }}
+                >
+                  {paymentButtonText}
+                </LinkButton>
+              </ThemeProvider>
+
             {errorMessage && (
               <div role="alert" data-qm-error>
                 <ErrorSummary
@@ -669,6 +622,6 @@ function OneTimeCheckoutEmbedComponent({
           <p>Please wait</p>
         </LoadingOverlay>
       )}
-    </CheckoutLayout>
+    </EmbedCheckoutLayout>
   );
 }
