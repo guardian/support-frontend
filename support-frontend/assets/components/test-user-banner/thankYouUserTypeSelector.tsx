@@ -5,13 +5,7 @@ import {
 	radioThemeBrand,
 } from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
-import { setUserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/actions';
-import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
-import { setIsSignedIn } from 'helpers/redux/user/actions';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 const selectorStyles = css`
 	display: flex;
@@ -22,38 +16,10 @@ const selectorStyles = css`
 `;
 
 export function ThankYouUserTypeSelector(): JSX.Element {
-	const [selectedUserType, setSelectedUserType] =
-		useState<UserTypeFromIdentityResponse>('guest');
-
-	const dispatch = useContributionsDispatch();
-	const { userTypeFromIdentityResponse } = useContributionsSelector(
-		(state) => state.page.checkoutForm.personalDetails,
-	);
+	const [selectedUserType, setSelectedUserType] = useState<UserType>('guest');
 
 	useEffect(() => {
-		if (userTypeFromIdentityResponse === selectedUserType) {
-			return;
-		}
-
-		switch (selectedUserType) {
-			case 'guest':
-				dispatch(setUserTypeFromIdentityResponse('guest'));
-				dispatch(setIsSignedIn(false));
-				return;
-
-			case 'new':
-				dispatch(setUserTypeFromIdentityResponse('new'));
-				dispatch(setIsSignedIn(false));
-				return;
-
-			case 'current':
-				dispatch(setUserTypeFromIdentityResponse('current'));
-				dispatch(setIsSignedIn(true));
-				return;
-
-			default:
-				return;
-		}
+		// ToDo: refactor this to use the query param instead of redux
 	}, [selectedUserType]);
 
 	return (
