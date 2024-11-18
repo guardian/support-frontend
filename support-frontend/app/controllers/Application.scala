@@ -29,7 +29,6 @@ import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-import com.gu.support.workers.StripePublicKey.get
 
 case class AppConfig private (
     geoip: AppConfig.Geoip,
