@@ -998,12 +998,15 @@ object JsonFixtures {
             $requestIdJson,
             ${userJson(userId)},
             "product": ${contribution()},
-          "analyticsInfo": {
-            "paymentProvider": "Existing",
-            "isGiftPurchase": false
-          },
-            "paymentFields" : {"billingAccountId" : "$billingAccountId"}
+            "analyticsInfo": {
+              "paymentProvider": "Existing",
+              "isGiftPurchase": false
+            },
+            "paymentFields" : {
+              "billingAccountId": "$billingAccountId",
+              "paymentType": "Existing"
             }
+          }
         """
 
   val previewSubscribeResponseJson = """
