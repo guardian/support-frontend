@@ -1195,7 +1195,7 @@ export function CheckoutComponent({
 											}
 										}}
 										// We have seen this field be filled in with an email address
-										autoComplete={'postal-code'}
+										autoComplete={'off'}
 									/>
 								</div>
 							)}
