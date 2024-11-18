@@ -417,8 +417,9 @@ function OneTimeCheckoutEmbedComponent({
 
     return;
   }
-  const paymentButtonText =
-     `Support us with ${simpleFormatAmount(currency, finalAmount)}`
+  const paymentButtonText = finalAmount === undefined
+    ? 'Support us'
+    : `Support us with ${simpleFormatAmount(currency, finalAmount)}`;
 
   return (
     <EmbedCheckoutLayout>
