@@ -263,8 +263,8 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def guardianLightGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = getGeoPath(request, "", "guardian-light")
+  def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", path)
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
@@ -272,14 +272,6 @@ class Application(
     List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
-  }
-
-  def oneTimeGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "one-time-checkout"))
-      .filter(_.nonEmpty)
-      .mkString("/")
-
-    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
