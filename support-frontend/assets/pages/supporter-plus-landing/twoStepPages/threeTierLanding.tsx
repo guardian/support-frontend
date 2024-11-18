@@ -51,7 +51,7 @@ import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
+import type { CampaignSettings, CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -337,6 +337,18 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCampaign]);
 
+	const getHeadline = (showCountdown: boolean, campaign: CountdownSetting, campaignSettings: CampaignSettings | null) => {
+
+		if (showCountdown) {
+			return campaign.label
+		}
+		else {
+			return <>{campaignSettings?.copy.headingFragment ?? <>Support </>}
+			fearless, <br css={tabletLineBreak} />
+			independent journalism</>
+		}
+	}
+
 	/*
 	 * /////////////// END US EOY 2024 Campaign
 	 */
@@ -523,9 +535,8 @@ export function ThreeTierLanding({
 				<div css={innerContentContainer}>
 					{showCountdown && <Countdown campaign={currentCampaign} />}
 					<h1 css={heading}>
-						{campaignSettings?.copy.headingFragment ?? <>Support </>}
-						fearless, <br css={tabletLineBreak} />
-						independent journalism
+						{ getHeadline(showCountdown, currentCampaign, campaignSettings) }
+
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (
