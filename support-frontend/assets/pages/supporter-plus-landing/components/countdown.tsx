@@ -77,24 +77,27 @@ const millisecondsInMinute = 60 * millisecondsInSecond;
 const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
-
 const ensureRoundedDoubleDigits = (timeSection: number): string => {
 	return timeSection < 0
-	? String(0).padStart(2, '0')
-	: String(Math.floor(timeSection)).padStart(2, '0');
+		? String(0).padStart(2, '0')
+		: String(Math.floor(timeSection)).padStart(2, '0');
 };
 
 // return the countdown component
-export default function Countdown({ campaign, show, setShow }: CountdownProps): JSX.Element {
+export default function Countdown({
+	campaign,
+	show,
+	setShow,
+}: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	
+
 	const hideMyself = () => {
 		setShow(false);
-	} 
+	};
 
 	useEffect(() => {
 		const getTotalMillisRemaining = (targetDate: number) => {

@@ -51,7 +51,10 @@ import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type { CampaignSettings, CountdownSetting } from '../../../helpers/campaigns/campaigns';
+import type {
+	CampaignSettings,
+	CountdownSetting,
+} from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -338,20 +341,26 @@ export function ThreeTierLanding({
 	}, [memoizedCurrentCampaign]);
 
 	useEffect(() => {
-		getHeadline(showCountdown, currentCampaign, campaignSettings)
-	},[showCountdown]); // hide both the countdown and switch out the headline.
+		getHeadline(showCountdown, currentCampaign, campaignSettings);
+	}, [showCountdown]); // hide both the countdown and switch out the headline.
 
-	const getHeadline = (showCountdown: boolean, countdownCampaign: CountdownSetting, campaignSettings: CampaignSettings | null) => {
-
+	const getHeadline = (
+		showCountdown: boolean,
+		countdownCampaign: CountdownSetting,
+		campaignSettings: CampaignSettings | null,
+	) => {
 		if (showCountdown) {
-			return countdownCampaign.label
+			return countdownCampaign.label;
+		} else {
+			return (
+				<>
+					{campaignSettings?.copy.headingFragment ?? <>Support </>}
+					fearless, <br css={tabletLineBreak} />
+					independent journalism
+				</>
+			);
 		}
-		else {
-			return <>{campaignSettings?.copy.headingFragment ?? <>Support </>}
-			fearless, <br css={tabletLineBreak} />
-			independent journalism</>
-		}
-	}
+	};
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
@@ -537,10 +546,15 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && <Countdown campaign={currentCampaign} show={showCountdown} setShow={setShowCountdown} />}
+					{showCountdown && (
+						<Countdown
+							campaign={currentCampaign}
+							show={showCountdown}
+							setShow={setShowCountdown}
+						/>
+					)}
 					<h1 css={heading}>
-						{ getHeadline(showCountdown, currentCampaign, campaignSettings) }
-
+						{getHeadline(showCountdown, currentCampaign, campaignSettings)}
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (
