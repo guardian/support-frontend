@@ -66,6 +66,8 @@ const timeLabelStyle = css`
 // props
 export type CountdownProps = {
 	campaign: CountdownSetting;
+	show: boolean;
+	setShow: (b: boolean) => void;
 };
 
 // create countdown logic
@@ -75,20 +77,24 @@ const millisecondsInMinute = 60 * millisecondsInSecond;
 const millisecondsInHour = 60 * millisecondsInMinute;
 const millisecondsInDay = 24 * millisecondsInHour;
 
+
 const ensureRoundedDoubleDigits = (timeSection: number): string => {
 	return timeSection < 0
-		? String(0).padStart(2, '0')
-		: String(Math.floor(timeSection)).padStart(2, '0');
+	? String(0).padStart(2, '0')
+	: String(Math.floor(timeSection)).padStart(2, '0');
 };
 
 // return the countdown component
-export default function Countdown({ campaign }: CountdownProps): JSX.Element {
+export default function Countdown({ campaign, show, setShow }: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+	
+	const hideMyself = () => {
+		setShow(false);
+	} 
 
 	useEffect(() => {
 		const getTotalMillisRemaining = (targetDate: number) => {
@@ -99,7 +105,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const isActive =
 				campaign.countdownStartInMillis < now &&
 				campaign.countdownDeadlineInMillis > now;
-			setShowCountdown(isActive);
+			setShow(isActive);
 			return isActive;
 		};
 
@@ -107,7 +113,9 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-
+			if (timeRemaining < -1) {
+				hideMyself();
+			}
 			setDays(
 				ensureRoundedDoubleDigits(
 					Math.floor(timeRemaining / millisecondsInDay),
@@ -133,7 +141,6 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		if (canDisplayCountdown()) {
 			updateTimeParts(); // called first
 			const id = setInterval(updateTimeParts, 1000); // run once per second
-			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
@@ -148,7 +155,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 	return (
 		<>
-			{showCountdown && (
+			{show && (
 				<div id="timer" role="timer" css={outer}>
 					<div css={container}>
 						<TimePart timePart={days} label={'days'} />

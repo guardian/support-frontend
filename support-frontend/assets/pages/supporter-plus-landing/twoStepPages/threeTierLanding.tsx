@@ -337,10 +337,14 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCampaign]);
 
-	const getHeadline = (showCountdown: boolean, campaign: CountdownSetting, campaignSettings: CampaignSettings | null) => {
+	useEffect(() => {
+		getHeadline(showCountdown, currentCampaign, campaignSettings)
+	},[showCountdown]); // hide both the countdown and switch out the headline.
+
+	const getHeadline = (showCountdown: boolean, countdownCampaign: CountdownSetting, campaignSettings: CampaignSettings | null) => {
 
 		if (showCountdown) {
-			return campaign.label
+			return countdownCampaign.label
 		}
 		else {
 			return <>{campaignSettings?.copy.headingFragment ?? <>Support </>}
@@ -533,7 +537,7 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && <Countdown campaign={currentCampaign} />}
+					{showCountdown && <Countdown campaign={currentCampaign} show={showCountdown} setShow={setShowCountdown} />}
 					<h1 css={heading}>
 						{ getHeadline(showCountdown, currentCampaign, campaignSettings) }
 
