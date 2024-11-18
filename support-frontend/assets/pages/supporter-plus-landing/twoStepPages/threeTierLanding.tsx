@@ -349,7 +349,7 @@ export function ThreeTierLanding({
 		countdownCampaign: CountdownSetting,
 		campaignSettings: CampaignSettings | null,
 	) => {
-		if (showCountdown) {
+		if (showCountdown && countdownCampaign.label.trim()) {
 			return countdownCampaign.label;
 		} else {
 			return (
