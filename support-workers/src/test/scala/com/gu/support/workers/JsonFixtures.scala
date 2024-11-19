@@ -17,6 +17,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
+  GuardianLightState,
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
@@ -688,6 +689,25 @@ object JsonFixtures {
       GuardianWeekly(GBP, Quarterly, RestOfWorld),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
+      None,
+      None,
+      None,
+      None,
+    ).asJson.spaces2
+
+  val createGuardianLightZuoraSubscriptionJson =
+    CreateZuoraSubscriptionState(
+      GuardianLightState(
+        userJsonWithDeliveryAddress,
+        GuardianLight(GBP, Monthly),
+        stripePaymentMethodObj,
+        salesforceContact,
+      ),
+      UUID.randomUUID(),
+      user(),
+      GuardianLight(GBP, Monthly),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
+      None,
       None,
       None,
       None,

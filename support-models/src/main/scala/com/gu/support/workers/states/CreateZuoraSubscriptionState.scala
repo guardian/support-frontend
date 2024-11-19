@@ -61,7 +61,7 @@ object CreateZuoraSubscriptionProductState {
   ) extends CreateZuoraSubscriptionProductState
 
   case class GuardianLightState(
-      user: User,
+      user: User, // Is this user property needed?
       product: GuardianLight,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
