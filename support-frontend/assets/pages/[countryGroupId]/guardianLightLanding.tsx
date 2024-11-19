@@ -6,7 +6,7 @@ import {
 	Container,
 } from '@guardian/source/react-components';
 import { Box } from 'components/checkoutBox/checkoutBox';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import { productCatalogGuardianLight } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutLayout } from './components/checkoutLayout';
@@ -53,15 +53,15 @@ export function GuardianLightLanding({
 	const card1Link = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: card1Link,
-		productDescription: productCatalogDescription.GuardianLight,
-		ctaCopy: '1',
+		productDescription: productCatalogGuardianLight().GuardianLight,
+		ctaCopy: 'Get Guardian Light for £X/month',
 		price: 1,
 	};
 
 	const card2 = {
 		link: card1Link,
-		productDescription: productCatalogDescription.GuardianLight,
-		ctaCopy: '2',
+		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+		ctaCopy: 'Go back to "accept all"',
 		price: 2,
 	};
 

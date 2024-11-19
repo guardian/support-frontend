@@ -1,0 +1,219 @@
+import { css, ThemeProvider } from '@emotion/react';
+import {
+	from,
+	palette,
+	space,
+	textSans15,
+	textSansBold15,
+	textSansBold24,
+	until,
+} from '@guardian/source/foundations';
+import {
+	buttonThemeReaderRevenueBrand,
+	LinkButton,
+} from '@guardian/source/react-components';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
+import type { RegularContributionType } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import {
+	filterBenefitByRegion,
+	type ProductDescription,
+} from 'helpers/productCatalog';
+import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+
+export type CardPosition = 1 | 2;
+
+export type GuardianLightProps = {
+	cardPosition: CardPosition;
+	currencyId: IsoCurrency;
+	countryGroupId: CountryGroupId;
+	paymentFrequency: RegularContributionType;
+	link: string;
+	productDescription: ProductDescription;
+	price: number;
+	ctaCopy: string;
+};
+
+const container = () => {
+	const cardOrder = 2;
+	return css`
+		position: 'static';
+		background-color: ${palette.neutral[100]};
+		border-radius: ${space[3]}px;
+		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
+
+		${until.desktop} {
+			order: ${cardOrder};
+			padding-top: ${space[6]}px;
+			margin-top: ${'0'}px;
+		}
+	`;
+};
+
+const titleCss = css`
+	${textSansBold15};
+	color: #606060;
+`;
+
+const priceCss = css`
+	${textSansBold24};
+	position: relative;
+	margin-bottom: ${`${space[4]}px`};
+
+	${from.desktop} {
+		margin-bottom: ${space[6]}px;
+	}
+`;
+
+const btnStyleOverrides = css`
+	width: 100%;
+	justify-content: center;
+	margin-bottom: ${space[6]}px;
+`;
+
+const checkmarkBenefitList = css`
+	width: 100%;
+	text-align: left;
+
+	${from.desktop} {
+		width: 90%;
+	}
+`;
+
+const checkmarkOfferList = css`
+	width: 100%;
+	text-align: left;
+`;
+
+const benefitsPrefixCss = css`
+	${textSans15};
+	color: ${palette.neutral[7]};
+	text-align: left;
+
+	strong {
+		font-weight: bold;
+	}
+`;
+
+const benefitsPrefixPlus = css`
+	${textSans15};
+	color: #545454; // neutral[38] unavailable
+	display: flex;
+	align-items: center;
+	margin: ${space[3]}px 0;
+
+	:before,
+	:after {
+		content: '';
+		height: 1px;
+		background-color: ${palette.neutral[86]};
+		flex-grow: 2;
+	}
+
+	:before {
+		margin-right: ${space[2]}px;
+	}
+
+	:after {
+		margin-left: ${space[2]}px;
+	}
+`;
+
+export function GuardianLightCard({
+	cardPosition,
+	currencyId,
+	countryGroupId,
+	paymentFrequency,
+	link,
+	productDescription,
+	price,
+	ctaCopy,
+}: GuardianLightProps): JSX.Element {
+	const currency = currencies[currencyId];
+	const period = recurringContributionPeriodMap[paymentFrequency];
+	const formattedPrice = simpleFormatAmount(currency, price);
+	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
+	const { label, benefits, benefitsSummary, offers, offersSummary } =
+		productDescription;
+
+	return (
+		<section css={container}>
+			<h2 css={titleCss}>{label}</h2>
+			<p css={priceCss}>{`${formattedPrice}/${period}`}</p>
+			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+				<LinkButton
+					href={link}
+					cssOverrides={btnStyleOverrides}
+					data-qm-trackable={quantumMetricButtonRef}
+				>
+					{ctaCopy}
+				</LinkButton>
+			</ThemeProvider>
+
+			{benefitsSummary && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{benefitsSummary.map((stringPart) => {
+							if (typeof stringPart !== 'string') {
+								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{offersSummary && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{offersSummary.map((stringPart) => {
+							if (typeof stringPart !== 'string') {
+								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{(benefitsSummary ?? offersSummary) && (
+				<span css={benefitsPrefixPlus}>plus</span>
+			)}
+			<BenefitsCheckList
+				benefitsCheckListData={benefits
+					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+					.map((benefit) => {
+						return {
+							text: benefit.copy,
+							isChecked: true,
+							toolTip: benefit.tooltip,
+							isNew: benefit.isNew,
+						};
+					})}
+				style={'compact'}
+				iconColor={palette.brand[500]}
+				cssOverrides={checkmarkBenefitList}
+			/>
+			{offers && offers.length > 0 && (
+				<>
+					<span css={benefitsPrefixPlus}>new</span>
+					<BenefitsCheckList
+						benefitsCheckListData={offers.map((offer) => {
+							return {
+								text: offer.copy,
+								isChecked: true,
+								toolTip: offer.tooltip,
+							};
+						})}
+						style={'hidden'}
+						iconColor={palette.brand[500]}
+						cssOverrides={checkmarkOfferList}
+					/>
+				</>
+			)}
+		</section>
+	);
+}

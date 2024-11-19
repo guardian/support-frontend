@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { ProductDescription } from 'helpers/productCatalog';
-import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
+import type { CardPosition } from './guardianLightCard';
+import { GuardianLightCard } from './guardianLightCard';
 
 export type GuardianLightCardsProps = {
 	cardsContent: Array<{
@@ -32,7 +33,7 @@ const container = (cardCount: number) => css`
 	}
 `;
 
-const cardIndexToTier = (index: number): 1 | 2 => {
+const cardIndexToTier = (index: number): CardPosition => {
 	switch (index) {
 		case 1:
 			return 2;
@@ -54,18 +55,13 @@ export function GuardianLightCards({
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
 				return (
-					<ThreeTierCard
-						isRecommended={false}
-						isUserSelected={false}
-						cardTier={cardIndexToTier(cardIndex)}
+					<GuardianLightCard
+						cardPosition={cardIndexToTier(cardIndex)}
 						key={`guardianLightCard${cardIndex}`}
-						promoCount={0}
-						{...cardContent}
-						isRecommendedSubdued={false}
 						currencyId={'GBP'}
 						countryGroupId={'GBPCountries'}
 						paymentFrequency={'MONTHLY'}
-						ctaCopy={cardContent.ctaCopy}
+						{...cardContent}
 					/>
 				);
 			})}
