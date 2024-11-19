@@ -16,11 +16,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import {
-	setEmail,
-	setUserTypeFromIdentityResponse,
-} from 'helpers/redux/checkout/personalDetails/actions';
-import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
+import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setAllAmounts,
 	setOtherAmount,
@@ -192,18 +188,6 @@ export function setUpRedux(store: ContributionsStore): void {
 		contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
-
-	// For PayPal one-off we need to get userType from session after the thankyou page redirect
-	const userType = storage.getSession('userTypeFromIdentityResponse');
-
-	if (
-		userType &&
-		(userType === 'new' || userType === 'guest' || userType === 'current')
-	) {
-		dispatch(setUserTypeFromIdentityResponse(userType));
-	} else if (sessionStorageEmail) {
-		void dispatch(getUserTypeFromIdentity(sessionStorageEmail));
-	}
 
 	const stateField = getUserStateField();
 	if (stateField) {

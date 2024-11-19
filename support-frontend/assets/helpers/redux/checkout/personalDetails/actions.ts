@@ -6,6 +6,5 @@ export const {
 	setLastName,
 	setEmail,
 	setConfirmEmail,
-	setUserTypeFromIdentityResponse,
 	setTelephone,
 } = personalDetailsSlice.actions;
