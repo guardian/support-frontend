@@ -118,7 +118,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder, unsetThankYouOrder } from './thankyou';
+import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
