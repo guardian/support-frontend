@@ -197,7 +197,7 @@ object UpdateSupporterProductData {
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
       case SendThankYouEmailGuardianLightState(user, product, _, _, _, subscriptionNumber) =>
         catalogService
-          .getProductRatePlan(Paper, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(GuardianLight, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(
