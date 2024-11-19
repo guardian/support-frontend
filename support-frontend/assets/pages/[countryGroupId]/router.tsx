@@ -6,7 +6,7 @@ import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
 import { GuardianLightLanding } from './guardianLightLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
-import { ThankYou } from './thank-you';
+import { ThankYou } from './thankYou';
 
 setUpTrackingAndConsents();
 const appConfig = parseAppConfig(window.guardian);

@@ -8,7 +8,7 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { ThankYouComponent } from './components/thankyou';
+import { ThankYouComponent } from './components/thankYouComponent';
 
 export type ThankYouProps = {
 	geoId: GeoId;
