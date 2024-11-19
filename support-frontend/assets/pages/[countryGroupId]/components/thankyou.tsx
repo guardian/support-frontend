@@ -293,7 +293,7 @@ export function ThankYouComponent({
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							userTypeFromIdentityResponse={identityUserType}
+							identityUserType={identityUserType}
 						/>
 					</div>
 

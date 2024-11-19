@@ -50,41 +50,6 @@ class IdentityController(
       }
   }
 
-  def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
-    maybeEmail.fold {
-      logger.error(scrub"No email provided")
-      Future.successful(BadRequest("No email provided"))
-    } { email =>
-      identityService
-        .getUserType(email)
-        .fold(
-          _ match {
-            case GotErrorResponse(response) =>
-              if (response.status >= 400 && response.status < 500) {
-                logger.warn(s"4xx error when retrieving user type for $email: ${response.body}")
-                BadRequest(response.body)
-              } else {
-                logger.error(scrub"Failed to retrieve user type for $email: ${response.body}")
-                InternalServerError
-              }
-            case CallFailed(err) => {
-              logger.error(scrub"Failed to retrieve user type for $email: $err")
-              InternalServerError
-            }
-            case DecodeFailed(decodeErrors) => {
-              logger.error(scrub"Failed to retrieve user type for $email: ${decodeErrors.mkString(",")}")
-              InternalServerError
-            }
-          },
-          response => {
-            logger.info(s"Successfully retrieved user type for $email")
-            logger.info(s"USERTYPE: $response")
-            Ok(response.asJson)
-          },
-        )
-    }
-  }
-
   def createSignInURL(): Action[CreateSignInTokenRequest] = PrivateAction.async(circe.json[CreateSignInTokenRequest]) {
     implicit request =>
       identityService

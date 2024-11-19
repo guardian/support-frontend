@@ -32,7 +32,6 @@ export type PropTypes = {
 	setEmail: (email: string) => void;
 	confirmEmail?: string;
 	setConfirmEmail?: (confirmEmail: string) => void;
-	fetchAndStoreUserType?: (email: string) => Promise<unknown>;
 	isSignedIn: boolean;
 	telephone?: string;
 	setTelephone: (telephone: string) => void;
@@ -81,14 +80,6 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 	const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		props.signOut();
-	};
-
-	const maybeFetchAndStoreUsertype = (
-		e: React.FocusEvent<HTMLInputElement>,
-	) => {
-		if (props.fetchAndStoreUserType) {
-			void props.fetchAndStoreUserType(e.target.value);
-		}
 	};
 
 	const maybeSetConfirmEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +139,6 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 				type="email"
 				value={props.email}
 				onChange={(e) => props.setEmail(e.target.value)}
-				onBlur={maybeFetchAndStoreUsertype}
 				error={firstError('email', props.formErrors)}
 				pattern={emailRegexPattern}
 				disabled={props.isSignedIn}
@@ -174,5 +164,4 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 PersonalDetails.defaultProps = {
 	confirmEmail: null,
 	setConfirmEmail: null,
-	fetchAndStoreUserType: null,
 };

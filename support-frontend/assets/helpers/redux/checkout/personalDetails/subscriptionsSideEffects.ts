@@ -16,7 +16,6 @@ import {
 	setEmail,
 	setFirstName,
 	setLastName,
-	setUserTypeFromIdentityResponse,
 } from './actions';
 
 export function removeErrorsForField(
@@ -34,39 +33,18 @@ const shouldCheckFormEnabled = isAnyOf(
 	setEmail,
 	setFirstName,
 	setLastName,
-	setUserTypeFromIdentityResponse,
 	setFirstNameGift,
 	setLastNameGift,
 	setEmailGift,
 	setGiftDeliveryDate,
 );
 
-const actionCreatorFieldNames: Record<string, FormField> = {
-	[setConfirmEmail.type]: 'confirmEmail',
-	[setEmail.type]: 'email',
-	[setFirstName.type]: 'firstName',
-	[setLastName.type]: 'lastName',
-	[setFirstNameGift.type]: 'firstNameGiftRecipient',
-	[setLastNameGift.type]: 'lastNameGiftRecipient',
-	[setEmailGift.type]: 'emailGiftRecipient',
-	[setGiftDeliveryDate.type]: 'giftDeliveryDate',
-};
-
 export function addPersonalDetailsSideEffects(
 	startListening: SubscriptionsStartListening,
 ): void {
 	startListening({
 		matcher: shouldCheckFormEnabled,
-		effect(action, listenerApi) {
-			if (!setUserTypeFromIdentityResponse.match(action)) {
-				listenerApi.dispatch(
-					removeErrorsForField(
-						actionCreatorFieldNames[action.type],
-						listenerApi.getState(),
-					),
-				);
-			}
-
+		effect(_, listenerApi) {
 			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
