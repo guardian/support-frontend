@@ -105,7 +105,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	auPartnerBenefit: {
+	newOneTimeCheckout: {
 		variants: [
 			{
 				id: 'control',
@@ -122,30 +122,9 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 8,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	newOneTimeCheckout: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 4,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	linkExpressCheckout: {
 		variants: [
@@ -178,28 +157,5 @@ export const tests: Tests = {
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	landingPageOneTimeTab2: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'oneTimeTab',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		seed: 6,
-		targetPage: pageUrlRegexes.contributions.usLandingPageOnly,
-		// Track this landing page test through to the checkout
-		persistPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: false,
 	},
 };

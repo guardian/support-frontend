@@ -86,7 +86,6 @@ const partnerOffersBenefit = {
 	tooltip:
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
-	specificToAbTest: [{ name: 'auPartnerBenefit', variants: ['control'] }],
 };
 
 const feastBenefit = {
@@ -107,6 +106,16 @@ const supporterPlusBenefits = [
 
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
+		GuardianLight: {
+			label: 'Guardian Light',
+			ratePlans: {
+				Monthly: {
+					billingPeriod: 'Monthly',
+				},
+			},
+			benefits: [],
+			benefitsAdditional: [{ copy: 'Lorem ipsum' }],
+		},
 		TierThree: {
 			label: 'Digital + print',
 			benefitsSummary: [

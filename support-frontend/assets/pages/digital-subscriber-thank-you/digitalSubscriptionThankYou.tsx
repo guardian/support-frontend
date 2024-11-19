@@ -26,10 +26,9 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
-	const { firstName, email, userTypeFromIdentityResponse } =
-		useContributionsSelector(
-			(state) => state.page.checkoutForm.personalDetails,
-		);
+	const { firstName, email } = useContributionsSelector(
+		(state) => state.page.checkoutForm.personalDetails,
+	);
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
@@ -38,7 +37,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		isSupporterPlusFromState,
 	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
-	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -54,11 +52,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'),
-		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && email.length > 0,
-			'signIn',
-		),
+		...maybeThankYouModule(!isSignedIn && email.length > 0, 'signIn'),
 		'appDownloadEditions',
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',

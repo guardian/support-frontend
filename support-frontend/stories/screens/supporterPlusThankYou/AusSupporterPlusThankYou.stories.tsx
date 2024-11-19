@@ -17,7 +17,6 @@ import {
 	setEmail,
 	setFirstName,
 	setLastName,
-	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setProductType,
@@ -204,7 +203,6 @@ OneOffSignUp.decorators = [
 		store.dispatch(setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		// is a new account
-		store.dispatch(setUserTypeFromIdentityResponse('new'));
 		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
@@ -262,7 +260,6 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType(contributionType));
-		store.dispatch(setUserTypeFromIdentityResponse('guest'));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),
 		);
@@ -314,7 +311,6 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setIsSignedIn(true));
-		store.dispatch(setUserTypeFromIdentityResponse('current'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),
@@ -366,8 +362,6 @@ RecurringSignUp.decorators = [
 
 		store.dispatch(setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
-		// is a new account
-		store.dispatch(setUserTypeFromIdentityResponse('new'));
 		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(

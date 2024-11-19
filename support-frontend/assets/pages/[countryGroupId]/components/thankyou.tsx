@@ -20,6 +20,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -88,6 +89,7 @@ export type CheckoutComponentProps = {
 	productKey?: ProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
+	identityUserType: UserType;
 };
 
 export function ThankYouComponent({
@@ -96,6 +98,7 @@ export function ThankYouComponent({
 	productKey,
 	ratePlanKey,
 	promotion,
+	identityUserType,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
@@ -203,9 +206,7 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
 
-	// TODO - get this from the /identity/get-user-type endpoint
-	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
-	const isNewAccount = userTypeFromIdentityResponse === 'new';
+	const isNewAccount = identityUserType === 'new';
 	const validEmail = order.email !== '';
 
 	const abParticipations = abTestInit({ countryId, countryGroupId });
@@ -292,8 +293,7 @@ export function ThankYouComponent({
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							// TODO - get this from the /identity/get-user-type endpoint
-							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+							identityUserType={identityUserType}
 						/>
 					</div>
 

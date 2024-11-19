@@ -4,9 +4,7 @@ import { setIsSignedIn } from 'helpers/redux/user/actions';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
 import { resetValidation, validateForm } from '../checkoutActions';
-import type { UserTypeFromIdentityResponse } from './state';
 import { initialPersonalDetailsState, personalDetailsSchema } from './state';
-import { getUserTypeFromIdentity } from './thunks';
 
 export const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
@@ -34,12 +32,6 @@ export const personalDetailsSlice = createSlice({
 			state.confirmEmail = action.payload;
 			delete state.errors?.confirmEmail;
 		},
-		setUserTypeFromIdentityResponse(
-			state,
-			action: PayloadAction<UserTypeFromIdentityResponse>,
-		) {
-			state.userTypeFromIdentityResponse = action.payload;
-		},
 		setTelephone(state, action: PayloadAction<string>) {
 			state.telephone = action.payload;
 			delete state.errors?.telephone;
@@ -53,18 +45,6 @@ export const personalDetailsSlice = createSlice({
 
 		builder.addCase(resetValidation, (state) => {
 			state.errors = {};
-		});
-
-		builder.addCase(getUserTypeFromIdentity.pending, (state) => {
-			state.userTypeFromIdentityResponse = 'requestPending';
-		});
-
-		builder.addCase(getUserTypeFromIdentity.fulfilled, (state, action) => {
-			state.userTypeFromIdentityResponse = action.payload;
-		});
-
-		builder.addCase(getUserTypeFromIdentity.rejected, (state) => {
-			state.userTypeFromIdentityResponse = 'requestFailed';
 		});
 
 		builder.addCase(setIsSignedIn, (state, action) => {
