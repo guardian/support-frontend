@@ -141,6 +141,7 @@ object SendThankYouEmailState {
       ),
       discriminatedType.variant[SendThankYouEmailPaperState](paper),
       discriminatedType.variant[SendThankYouEmailGuardianWeeklyState](guardianWeekly),
+      discriminatedType.variant[SendThankYouEmailGuardianLightState](guardianLight),
     ),
   )
 
