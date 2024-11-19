@@ -114,10 +114,9 @@ export function SupporterPlusThankYou({
 		(state) => state.common.internationalisation,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
-	const { firstName, email, userTypeFromIdentityResponse } =
-		useContributionsSelector(
-			(state) => state.page.checkoutForm.personalDetails,
-		);
+	const { firstName, email } = useContributionsSelector(
+		(state) => state.page.checkoutForm.personalDetails,
+	);
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
@@ -131,7 +130,6 @@ export function SupporterPlusThankYou({
 	} = useContributionsSelector((state) => state.page.checkoutForm.product);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const contributionType = useContributionsSelector(getContributionType);
-	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 	const isOneOff = contributionType === 'ONE_OFF';
@@ -204,7 +202,6 @@ export function SupporterPlusThankYou({
 			paymentMethod,
 			contributionType,
 			isSignedIn,
-			!isNewAccount,
 			isAmountLargeDonation,
 		);
 
@@ -230,11 +227,7 @@ export function SupporterPlusThankYou({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'),
-		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && email.length > 0,
-			'signIn',
-		),
+		...maybeThankYouModule(!isSignedIn && email.length > 0, 'signIn'),
 		...maybeThankYouModule(isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
@@ -271,7 +264,7 @@ export function SupporterPlusThankYou({
 							amountIsAboveThreshold={isSupporterPlus}
 							isTier3={false}
 							isSignedIn={isSignedIn}
-							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+							identityUserType={'current'}
 							promotion={promotion}
 						/>
 					</div>

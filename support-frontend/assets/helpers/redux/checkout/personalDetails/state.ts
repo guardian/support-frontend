@@ -8,12 +8,6 @@ import { getUser } from 'helpers/user/user';
 
 export type UserType = 'new' | 'guest' | 'current';
 
-export type UserTypeFromIdentityResponse =
-	| UserType
-	| 'noRequestSent'
-	| 'requestPending'
-	| 'requestFailed';
-
 export const emailRules = zuoraCompatibleString(
 	z
 		.string()
@@ -60,7 +54,6 @@ export const personalDetailsSchema = z
 type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	errors?: SliceErrors<PersonalDetailsValidatedFields>;
 };
 
@@ -72,6 +65,5 @@ export const initialPersonalDetailsState: PersonalDetailsState = {
 	email: user.email ?? '',
 	confirmEmail: '',
 	isSignedIn: user.isSignedIn,
-	userTypeFromIdentityResponse: 'noRequestSent',
 	errors: {},
 };

@@ -25,7 +25,6 @@ import {
 	setLastName,
 	setTelephone,
 } from 'helpers/redux/checkout/personalDetails/actions';
-import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
@@ -71,7 +70,6 @@ function mapDispatchToProps() {
 		setEmail,
 		setTelephone,
 		setConfirmEmail,
-		fetchAndStoreUserType: getUserTypeFromIdentity,
 		signOut,
 	};
 }
@@ -143,7 +141,6 @@ function RedemptionForm(props: PropTypes) {
 									confirmEmail={props.confirmEmail}
 									setConfirmEmail={props.setConfirmEmail}
 									isSignedIn={props.isSignedIn}
-									fetchAndStoreUserType={props.fetchAndStoreUserType}
 									telephone={props.telephone}
 									setTelephone={props.setTelephone}
 									formErrors={props.formErrors}
