@@ -379,8 +379,11 @@ class CreateSubscriptionController(
         )
       case _: Paper => List.empty
       case _: GuardianWeekly => List.empty
-      // TODO: Revisit this
-      case _: GuardianLight => List.empty
+      // TODO: Confirm this
+      case _: GuardianLight =>
+        List(
+          "gu_guardian_light" -> true.toString,
+        )
     }
 
     val standardAndProductCookies = (standardCookies ++ productCookies).map { case (name, value) =>
