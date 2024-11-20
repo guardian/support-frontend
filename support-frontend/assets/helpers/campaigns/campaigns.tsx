@@ -39,9 +39,9 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label: 'Giving Tuesday',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
+				label: 'This Giving Tuesday, give to the Guardian',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:01:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
 			},
 			{
 				label: 'Discount',
