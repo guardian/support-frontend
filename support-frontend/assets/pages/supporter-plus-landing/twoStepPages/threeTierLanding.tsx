@@ -557,7 +557,6 @@ export function ThreeTierLanding({
 							countryGroupId={countryGroupId}
 							currencyId={currencyId}
 							heading={campaignSettings?.copy.oneTimeHeading}
-							checkouts-contributions-order-summary--default
 						/>
 					)}
 					{contributionType !== 'ONE_OFF' && (

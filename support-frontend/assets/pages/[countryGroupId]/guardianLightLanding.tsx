@@ -66,7 +66,6 @@ export function GuardianLightLanding({
 		link: checkoutLink,
 		productDescription: productCatalogGuardianLight().GuardianLight,
 		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
-		price: price,
 	};
 
 	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
@@ -74,7 +73,6 @@ export function GuardianLightLanding({
 		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
 		ctaCopy: 'Return to privacy options',
-		price: price,
 	};
 
 	return (

@@ -8,7 +8,6 @@ export type GuardianLightCardsProps = {
 	cardsContent: Array<{
 		link: string;
 		productDescription: ProductDescription;
-		price: number;
 		ctaCopy: string;
 	}>;
 };
@@ -58,9 +57,6 @@ export function GuardianLightCards({
 					<GuardianLightCard
 						cardPosition={cardIndexToTier(cardIndex)}
 						key={`guardianLightCard${cardIndex}`}
-						currencyId={'GBP'}
-						countryGroupId={'GBPCountries'}
-						paymentFrequency={'MONTHLY'}
 						{...cardContent}
 					/>
 				);
