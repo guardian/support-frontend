@@ -24,6 +24,8 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
+import { defaultInitialCampaign, getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -50,8 +52,6 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -311,15 +311,7 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
-		label: 'testing',
-		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		theme: {
-			backgroundColor: '#1e3e72',
-			foregroundColor: '#ffffff',
-		},
-	});
+	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>(defaultInitialCampaign);
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	const memoizedCurrentCampaign = useMemo(() => {
