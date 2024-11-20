@@ -1,7 +1,7 @@
 package backend
 
 import org.apache.pekko.actor.ActorSystem
-import cats.data.EitherT
+import cats.data.{EitherT, OptionT}
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.either._
@@ -97,25 +97,32 @@ class PaypalBackend(
   ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
     paypalService
       .capturePayment(capturePaymentData)
-      .bimap(
+      .biflatMap(
         err => {
           cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-          err
+          EitherT.leftT(err)
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
+          val maybeEnrichedPayPalPayment = for {
+            email <- OptionT.fromOption(
+              capturePaymentData.signedInUserEmail.orElse(
+                Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
+              ),
+            )
+            identityUserDetails <- OptionT(getOrCreateIdentityIdFromEmail(email))
+            _ = postPaymentTasks(
+              payment,
+              email,
+              Some(identityUserDetails.userType),
+              capturePaymentData.acquisitionData,
+              clientBrowserInfo,
+            )
+          } yield EnrichedPaypalPayment(payment, Some(email), Some(identityUserDetails.userType))
 
-          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
-            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
+          maybeEnrichedPayPalPayment.toRight(
+            PaypalApiError.fromString("Unable to get email address"),
           )
-
-          maybeEmail.foreach { email =>
-            getOrCreateIdentityIdFromEmail(email).foreach { identityId =>
-              postPaymentTasks(payment, email, identityId, capturePaymentData.acquisitionData, clientBrowserInfo)
-            }
-          }
-
-          EnrichedPaypalPayment(payment, maybeEmail)
         },
       )
 
@@ -133,16 +140,16 @@ class PaypalBackend(
         .semiflatMap { payment =>
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
 
-          getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityId =>
+          getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityUserDetails =>
             postPaymentTasks(
               payment,
               executePaymentData.email,
-              identityId,
+              identityUserDetails.map(_.id),
               executePaymentData.acquisitionData,
               clientBrowserInfo,
             )
 
-            EnrichedPaypalPayment(payment, Some(executePaymentData.email))
+            EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityUserDetails.map(_.userType))
           }
         }
     else
@@ -215,7 +222,7 @@ class PaypalBackend(
     }
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[String]] =
+  private def getOrCreateIdentityIdFromEmail(email: String) =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .fold(
