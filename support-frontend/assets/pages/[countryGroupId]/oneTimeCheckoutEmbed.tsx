@@ -10,8 +10,7 @@ import {
   LinkButton,
 } from '@guardian/source/react-components';
 import {
-  Divider,
-  ErrorSummary,
+  Divider
 } from '@guardian/source-development-kitchen/react-components';
 import {
   Elements,
@@ -37,7 +36,6 @@ import {
   processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
-  CreatePayPalPaymentResponse,
   CreateStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
@@ -53,7 +51,6 @@ import {
   derivePaymentApiAcquisitionData,
   getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import {trackComponentClick, trackComponentLoad} from 'helpers/tracking/behaviour';
 import {
   sendEventOneTimeCheckoutValue,
   sendEventPaymentMethodSelected,
@@ -72,8 +69,8 @@ import { setThankYouOrder } from './components/thankyou';
 import {
   preventDefaultValidityMessage,
 } from './validation';
+import {trackComponentLoad} from "../../helpers/tracking/behaviour";
 
-type PaymentMethod = 'StripeExpressCheckoutElement';
 const countryId = Country.detect();
 
 const standFirst = css`
@@ -153,6 +150,7 @@ export function OneTimeCheckoutEmbed({ geoId, appConfig }: OneTimeCheckoutProps)
   const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
   const isTestUser = !!cookie.get('_test_username');
 
+  //Stripe logic and config is the same as we are using in the on oneTimeCheckout.tsx
   const stripePublicKey = getStripeKey(
     'ONE_OFF',
     countryId,
@@ -236,15 +234,11 @@ function OneTimeCheckoutEmbedComponent({
   );
 
   useEffect(() => {
-    if (finalAmount) {
-      // valid final amount, set amount, enable Express checkout
-      elements?.update({ amount: finalAmount * 100 });
+    if (finalAmount && elements) { // Add a null check for elements
+      elements.update({ amount: finalAmount * 100 });
       setStripeExpressCheckoutEnable(true);
-
-      // Track amount selection with QM
       sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
     } else {
-      // invalid final amount, disable Express checkout
       setStripeExpressCheckoutEnable(false);
     }
   }, [finalAmount]);
@@ -281,14 +275,11 @@ function OneTimeCheckoutEmbedComponent({
 
   const [billingPostcode] = useState('');
 
-
   /** General error that can occur via fetch validations */
   const [errorMessage, setErrorMessage] = useState<string>();
   const [errorContext, setErrorContext] = useState<string>();
 
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -312,69 +303,62 @@ function OneTimeCheckoutEmbedComponent({
   };
 
   const formOnSubmit = async () => {
-    if (finalAmount) {
-      setIsProcessingPayment(true);
+    if (!finalAmount) {return;}
 
-      let paymentResult;
+    setIsProcessingPayment(true);
 
+    // Check Stripe and Elements are ready
+    if (!stripe || !elements) {
+      setErrorMessage('Payment system is unavailable.');
+      setErrorContext(appropriateErrorMessage('payment_provider_unavailable'));
+      setIsProcessingPayment(false);
+      return;
+    }
 
-        const paymentMethodResult = await stripe.createPaymentMethod({
-          elements,
-        });
+    try {
+      // Create a Payment Method using the Stripe Express Checkout Element
+      const paymentMethodResult = await stripe.createPaymentMethod({
+        elements,
+      });
 
-        if (paymentMethodResult.error) {
-          logException(
-            `Error creating Payment Method: ${JSON.stringify(
-              paymentMethodResult.error,
-            )}`,
-          );
+     //Add in error handling
 
-          if (paymentMethodResult.error.type === 'validation_error') {
-            setErrorMessage('There was an issue with your card details.');
-            setErrorContext(
-              appropriateErrorMessage('payment_details_incorrect'),
-            );
-          } else {
-            setErrorMessage('Sorry, something went wrong.');
-            setErrorContext(
-              appropriateErrorMessage('payment_provider_unavailable'),
-            );
-          }
-        } else {
-          const stripeData: CreateStripePaymentIntentRequest = {
-            paymentData: {
-              currency: currencyKey,
-              amount: finalAmount,
-              email,
-              stripePaymentMethod: stripePaymentMethod,
-            },
-            acquisitionData: derivePaymentApiAcquisitionData(
-              {
-                ...getReferrerAcquisitionData(),
-                labels: ['one-time-checkout'],
-              },
-              abParticipations,
-              billingPostcode,
-            ),
-            publicKey: stripePublicKey,
-            recaptchaToken: recaptchaToken ?? '',
-            paymentMethodId: paymentMethodResult.paymentMethod.id,
-          };
-          paymentResult = await processStripePaymentIntentRequest(
-            stripeData,
-            (clientSecret: string) => {
-              trackComponentLoad('stripe-3ds');
-              return stripe.handleCardAction(clientSecret);
-            },
-          );
-      }
+      // Process the payment using the PaymentIntent API
+      const stripeData: CreateStripePaymentIntentRequest = {
+        paymentData: {
+          currency: currencyKey,
+          amount: finalAmount,
+          email,
+          stripePaymentMethod,
+        },
+        acquisitionData: derivePaymentApiAcquisitionData(
+          {
+            ...getReferrerAcquisitionData(),
+            labels: ['one-time-checkout'],
+          },
+          abParticipations,
+          billingPostcode,
+        ),
+        publicKey: stripePublicKey,
+        recaptchaToken: recaptchaToken ?? '',
+        paymentMethodId: paymentMethodResult.paymentMethod.id,
+      };
+
+      const paymentResult = await processStripePaymentIntentRequest(
+        stripeData,
+        (clientSecret: string) => {
+          trackComponentLoad('stripe-3ds');
+          return stripe.handleCardAction(clientSecret);
+        },
+      );
 
       if (paymentResult) {
         setThankYouOrder({
           firstName: '',
-          email: email,
-          paymentMethod: paymentMethod,
+          email,
+          paymentMethod: 'StripeExpressCheckoutElement',
         });
+
         const thankYouUrlSearchParams = new URLSearchParams();
         thankYouUrlSearchParams.set('contribution', finalAmount.toString());
         const nextStepRoute = paymentResultThankyouRoute(
@@ -382,6 +366,7 @@ function OneTimeCheckoutEmbedComponent({
           geoId,
           thankYouUrlSearchParams,
         );
+
         if (nextStepRoute) {
           window.location.href = nextStepRoute;
         } else {
@@ -390,33 +375,38 @@ function OneTimeCheckoutEmbedComponent({
             'paymentStatus' in paymentResult &&
             paymentResult.paymentStatus === 'failure'
           ) {
-            setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
+            setErrorContext(
+              appropriateErrorMessage(String(paymentResult.error ?? ''))
+            );
           }
         }
-      } else {
-        setIsProcessingPayment(false);
       }
+    } catch (error) {
+      logException(`Unexpected error during payment: ${error}`);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+      setErrorContext(appropriateErrorMessage('unexpected_error'));
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
 
+// Thank You Journey Logic
   function paymentResultThankyouRoute(
-    paymentResult: PaymentResult | CreatePayPalPaymentResponse | undefined,
+    paymentResult: PaymentResult | undefined,
     geoId: GeoId,
     thankYouUrlSearchParams: URLSearchParams,
   ): string | undefined {
     if (paymentResult) {
-      if ('type' in paymentResult && paymentResult.type === 'success') {
-        return paymentResult.data.approvalUrl;
-      } else if (
+       if (
         'paymentStatus' in paymentResult &&
         paymentResult.paymentStatus === 'success'
       ) {
         return `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
       }
     }
-
     return;
   }
+
   const paymentButtonText = finalAmount === undefined
     ? 'Support us'
     : `Support us with ${simpleFormatAmount(currency, finalAmount)}`;
@@ -527,7 +517,6 @@ function OneTimeCheckoutEmbedComponent({
 
                   // ->
 
-                  setPaymentMethod('StripeExpressCheckoutElement');
                   setStripeExpressCheckoutPaymentType(event.expressPaymentType);
                   event.billingDetails?.email &&
                   setEmail(event.billingDetails.email);
@@ -585,28 +574,12 @@ function OneTimeCheckoutEmbedComponent({
                     }/contribute/checkout?selected-contribution-type=one_off&selected-amount=${
                       selectedPriceCard === 'other' ? otherAmount : selectedPriceCard
                     }`;
-
-                    trackComponentClick(
-                      `npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
-                    );
                     window.open(url, '_blank');
                   }}
                 >
                   {paymentButtonText}
                 </LinkButton>
               </ThemeProvider>
-
-            {errorMessage && (
-              <div role="alert" data-qm-error>
-                <ErrorSummary
-                  cssOverrides={css`
-										margin-bottom: ${space[6]}px;
-									`}
-                  message={errorMessage}
-                  context={errorContext}
-                />
-              </div>
-            )}
             <div css={tcContainer}>
               <FinePrint mobileTheme={'dark'}>
                 <TsAndCsFooterLinks countryGroupId={countryGroupId} />
