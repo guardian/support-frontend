@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source/foundations';
+import { from, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
@@ -10,8 +10,12 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 const outer = css`
 	width: 272px;
 	margin: auto;
-	margin-top: 0px; // TODO: check with Sasha
-	margin-bottom: 10px; // TODO: check with Sasha
+	margin-bottom: 16px; // mobile
+	margin-top: 0px;
+	${from.mobileLandscape} {
+		margin-bottom: 24px;
+		margin-top: 0px;
+	}
 `;
 
 const container = (colours?: CountdownSetting) => css`
