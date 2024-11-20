@@ -79,7 +79,7 @@ export type BenefitsCheckListData = {
 	isNew?: boolean;
 };
 
-type CheckListStyle = 'standard' | 'compact' | 'hidden';
+type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'noIcon';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
@@ -88,6 +88,20 @@ export type BenefitsCheckListProps = {
 	cssOverrides?: SerializedStyles;
 };
 
+function SvgBullet() {
+	return (
+		<svg
+			width="16"
+			height="16"
+			viewBox="0 0 16 16"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<circle cx="8" cy="8" r="4" fill={`${palette.brand[500]}`} />
+		</svg>
+	);
+}
+
 function ChecklistItemIcon({
 	checked,
 	style,
@@ -95,16 +109,13 @@ function ChecklistItemIcon({
 	checked: boolean;
 	style: CheckListStyle;
 }): JSX.Element {
-	return checked ? (
-		<SvgTickRound
-			isAnnouncedByScreenReader
-			size={style === 'standard' ? 'small' : 'xsmall'}
-		/>
+	const styleSize = style === 'standard' ? 'small' : 'xsmall';
+	return style === 'noIcon' ? (
+		<SvgBullet />
+	) : checked ? (
+		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
-		<SvgCrossRoundFilled
-			isAnnouncedByScreenReader
-			size={style === 'standard' ? 'small' : 'xsmall'}
-		/>
+		<SvgCrossRoundFilled isAnnouncedByScreenReader size={styleSize} />
 	);
 }
 

@@ -1,5 +1,7 @@
 import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
+import SvgGuardianLightGoBack from 'components/svgs/guardianLightGoBack';
+import SvgGuardianLightPurchase from 'components/svgs/guardianLightPurchase';
 import type { Participations } from './abTests/abtest';
 import { newspaperCountries } from './internationalisation/country';
 import type {
@@ -23,6 +25,7 @@ type ProductBenefit = {
 export type ProductDescription = {
 	label: string;
 	summary?: string;
+	icon?: JSX.Element;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
 	benefitsMissing?: ProductBenefit[];
@@ -362,10 +365,15 @@ export function productCatalogGuardianLight(): Record<
 > {
 	return {
 		...productCatalogDescription,
+		GuardianLight: {
+			...productCatalogDescription.GuardianLight,
+			icon: <SvgGuardianLightPurchase />,
+		},
 		GuardianLightGoBack: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Continue without a subscription',
 			summary: 'Read the Guardian with personalised ads',
+			icon: <SvgGuardianLightGoBack />,
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',

@@ -5,8 +5,12 @@ import {
 	AccordionRow,
 	Container,
 } from '@guardian/source/react-components';
-import { Box } from 'components/checkoutBox/checkoutBox';
-import { productCatalogGuardianLight } from 'helpers/productCatalog';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import {
+	productCatalog,
+	productCatalogGuardianLight,
+} from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutLayout } from './components/checkoutLayout';
@@ -43,35 +47,38 @@ const recurringContainer = css`
 export function GuardianLightLanding({
 	geoId,
 }: GuardianLightLandingProps): JSX.Element {
-	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const contributionType = 'Monthly';
+	const { currencyKey } = getGeoIdConfig(geoId);
+	const currency = currencies[currencyKey];
+	const price =
+		productCatalog.GuardianLight.ratePlans[contributionType].pricing[
+			currencyKey
+		];
+	const formattedPrice = simpleFormatAmount(currency, price);
 
 	const card1UrlParams = new URLSearchParams({
 		product: 'GuardianLight',
-		ratePlan: 'Monthly',
-		contribution: '1',
+		ratePlan: contributionType,
+		contribution: price.toString(),
 	});
-	const card1Link = `checkout?${card1UrlParams.toString()}`;
+	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
-		link: card1Link,
+		link: checkoutLink,
 		productDescription: productCatalogGuardianLight().GuardianLight,
-		ctaCopy: 'Get Guardian Light for £X/month',
-		price: 1,
+		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
+		price: price,
 	};
 
+	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
 	const card2 = {
-		link: card1Link,
+		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
 		ctaCopy: 'Go back to "accept all"',
-		price: 2,
+		price: price,
 	};
 
 	return (
 		<CheckoutLayout>
-			<Box>
-				<div>
-					GuardianLightLanding ${currencyKey} ${countryGroupId}
-				</div>
-			</Box>
 			<Container
 				sideBorders
 				topBorder

@@ -1,11 +1,13 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
+	brand,
 	from,
+	headlineBold24,
+	headlineLight17,
+	neutral,
 	palette,
 	space,
 	textSans15,
-	textSansBold15,
-	textSansBold24,
 	until,
 } from '@guardian/source/foundations';
 import {
@@ -14,15 +16,12 @@ import {
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { RegularContributionType } from 'helpers/contributions';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	filterBenefitByRegion,
 	type ProductDescription,
 } from 'helpers/productCatalog';
-import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 
 export type CardPosition = 1 | 2;
 
@@ -53,25 +52,33 @@ const container = () => {
 	`;
 };
 
-const titleCss = css`
-	${textSansBold15};
-	color: #606060;
-`;
+const titleSummaryCss = css`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	align-items: center;
 
-const priceCss = css`
-	${textSansBold24};
-	position: relative;
 	margin-bottom: ${`${space[4]}px`};
-
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
 	}
+`;
+
+const titleCss = css`
+	${headlineBold24};
+	color: ${neutral[7]};
+`;
+
+const summaryCss = css`
+	${headlineLight17};
 `;
 
 const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
 	margin-bottom: ${space[6]}px;
+	background-color: ${brand[400]};
+	color: ${neutral[100]};
 `;
 
 const checkmarkBenefitList = css`
@@ -124,25 +131,22 @@ const benefitsPrefixPlus = css`
 
 export function GuardianLightCard({
 	cardPosition,
-	currencyId,
 	countryGroupId,
-	paymentFrequency,
 	link,
 	productDescription,
-	price,
 	ctaCopy,
 }: GuardianLightProps): JSX.Element {
-	const currency = currencies[currencyId];
-	const period = recurringContributionPeriodMap[paymentFrequency];
-	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
 	const { label, benefits, benefitsSummary, offers, offersSummary } =
 		productDescription;
 
 	return (
 		<section css={container}>
-			<h2 css={titleCss}>{label}</h2>
-			<p css={priceCss}>{`${formattedPrice}/${period}`}</p>
+			<div css={titleSummaryCss}>
+				{productDescription.icon}
+				<h2 css={titleCss}>{label}</h2>
+				<p css={summaryCss}>{productDescription.summary}</p>
+			</div>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
 					href={link}
@@ -193,7 +197,7 @@ export function GuardianLightCard({
 							isNew: benefit.isNew,
 						};
 					})}
-				style={'compact'}
+				style={'noIcon'}
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkBenefitList}
 			/>
@@ -204,7 +208,7 @@ export function GuardianLightCard({
 						benefitsCheckListData={offers.map((offer) => {
 							return {
 								text: offer.copy,
-								isChecked: true,
+								isChecked: false,
 								toolTip: offer.tooltip,
 							};
 						})}
