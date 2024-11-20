@@ -95,8 +95,8 @@ ThemedSubCampaign.args = { campaign:
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
 		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
 		theme: {
-			backgroundColor: '#f36161',
-			foregroundColor: '#060e08',
+			backgroundColor: '#ab0613',
+			foregroundColor: '#ffffff',
 		},
 	}
 };
