@@ -49,6 +49,7 @@ inThisBuild(
       case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
       case x if x.endsWith("git.properties") => MergeStrategy.discard
       case x if x.endsWith("module-info.class") => MergeStrategy.discard
+      case x if x.endsWith("FastDoubleParser-NOTICE") => MergeStrategy.concat
       case "mime.types" => MergeStrategy.first
       case str if str.contains("simulacrum") => MergeStrategy.first
       case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
