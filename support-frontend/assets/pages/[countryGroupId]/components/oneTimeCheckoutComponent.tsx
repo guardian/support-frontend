@@ -275,10 +275,6 @@ export function OneTimeCheckoutComponent({
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
 	] = useState<ExpressPaymentType>();
-	const stripePaymentMethod: StripePaymentMethod =
-		stripeExpressCheckoutPaymentType === 'apple_pay'
-			? 'StripeApplePay'
-			: 'StripePaymentRequestButton';
 
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
@@ -423,6 +419,13 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
+					const stripePaymentMethod: StripePaymentMethod =
+						paymentMethod === 'StripeExpressCheckoutElement'
+							? stripeExpressCheckoutPaymentType === 'apple_pay'
+								? 'StripeApplePay'
+								: 'StripePaymentRequestButton'
+							: 'StripeCheckout';
+
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,
