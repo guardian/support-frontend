@@ -41,7 +41,7 @@ const campaigns: Record<string, CampaignSettings> = {
 				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
 				theme: {
-					backgroundColor: '#1e3e72',
+					backgroundColor: '#ab0613',
 					foregroundColor: '#ffffff',
 				},
 			},
