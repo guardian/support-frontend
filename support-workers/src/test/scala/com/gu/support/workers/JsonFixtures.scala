@@ -699,13 +699,13 @@ object JsonFixtures {
     CreateZuoraSubscriptionState(
       GuardianLightState(
         userJsonWithDeliveryAddress,
-        GuardianLight(GBP, Monthly),
+        GuardianLight(GBP),
         stripePaymentMethodObj,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
-      GuardianLight(GBP, Monthly),
+      GuardianLight(GBP),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,

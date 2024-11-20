@@ -83,9 +83,10 @@ case class GuardianWeekly(
 
 case class GuardianLight(
     currency: Currency,
-    billingPeriod: BillingPeriod,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-GuardianLight-$currency"
+
+  override def billingPeriod: BillingPeriod = Monthly
 }
 
 object ProductType {
