@@ -158,7 +158,6 @@ class NextState(state: CreateSalesforceContactState) {
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
       GuardianLightState(
-        user,
         product,
         purchase,
         salesforceContactRecords.buyer,

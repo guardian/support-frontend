@@ -698,7 +698,6 @@ object JsonFixtures {
   val createGuardianLightZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(
       GuardianLightState(
-        userJsonWithDeliveryAddress,
         GuardianLight(GBP),
         stripePaymentMethodObj,
         salesforceContact,
