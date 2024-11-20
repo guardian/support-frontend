@@ -12,14 +12,14 @@ export type CountdownSetting = {
 	};
 };
 
-export const defaultInitialCampaign:CountdownSetting = {
+export const defaultInitialCampaign: CountdownSetting = {
 	label: 'initial',
 	countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 	countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
 	theme: {
 		backgroundColor: '#1e3e72',
 		foregroundColor: '#ffffff',
-	}
+	},
 };
 
 interface CampaignCopy {
@@ -72,7 +72,7 @@ const campaigns: Record<string, CampaignSettings> = {
 					backgroundColor: '#1e3e72',
 					foregroundColor: '#ffffff',
 				},
-			}
+			},
 		],
 		copy: {
 			headingFragment: <>Protect </>,

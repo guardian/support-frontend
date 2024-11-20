@@ -24,7 +24,10 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
-import { defaultInitialCampaign, getCampaignSettings } from 'helpers/campaigns/campaigns';
+import {
+	defaultInitialCampaign,
+	getCampaignSettings,
+} from 'helpers/campaigns/campaigns';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
@@ -311,7 +314,9 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>(defaultInitialCampaign);
+	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>(
+		defaultInitialCampaign,
+	);
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
 	const memoizedCurrentCampaign = useMemo(() => {
