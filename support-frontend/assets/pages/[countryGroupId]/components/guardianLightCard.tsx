@@ -2,7 +2,9 @@ import { css, ThemeProvider } from '@emotion/react';
 import {
 	brand,
 	from,
+	headlineBold17,
 	headlineBold24,
+	headlineLight14,
 	headlineLight17,
 	neutral,
 	palette,
@@ -14,6 +16,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
+import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -37,16 +40,15 @@ export type GuardianLightProps = {
 };
 
 const container = () => {
-	const cardOrder = 2;
 	return css`
 		position: 'static';
 		background-color: ${palette.neutral[100]};
 		border-radius: ${space[3]}px;
-		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
+		padding: ${space[6]}px ${space[5]}px ${space[6]}px ${space[5]}px;
 
 		${until.desktop} {
-			order: ${cardOrder};
-			padding-top: ${space[6]}px;
+			order: ${2};
+			padding: ${space[4]}px ${space[3]}px ${space[4]}px ${space[3]}px;
 			margin-top: ${'0'}px;
 		}
 	`;
@@ -63,20 +65,34 @@ const titleSummaryCss = css`
 		margin-bottom: ${space[6]}px;
 	}
 `;
+const svgCss = css`
+	margin-bottom: ${`${space[2]}px`};
+	${from.desktop} {
+		margin-bottom: ${space[4]}px;
+	}
+`;
 
 const titleCss = css`
-	${headlineBold24};
+	text-align: center;
+	${headlineBold17};
 	color: ${neutral[7]};
+	${from.desktop} {
+		${headlineBold24};
+	}
 `;
 
 const summaryCss = css`
-	${headlineLight17};
+	text-align: center;
+	${headlineLight14};
+	${from.desktop} {
+		${headlineLight17};
+	}
 `;
 
 const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
-	margin-bottom: ${space[6]}px;
+	margin-bottom: ${space[1]}px;
 	background-color: ${brand[400]};
 	color: ${neutral[100]};
 `;
@@ -129,6 +145,14 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
+const dividerCss = css`
+	width: 100%;
+	margin: ${space[4]}px 0;
+	${from.desktop} {
+		margin: ${space[6]}px 0;
+	}
+`;
+
 export function GuardianLightCard({
 	cardPosition,
 	countryGroupId,
@@ -137,15 +161,15 @@ export function GuardianLightCard({
 	ctaCopy,
 }: GuardianLightProps): JSX.Element {
 	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
-	const { label, benefits, benefitsSummary, offers, offersSummary } =
+	const { label, summary, benefits, benefitsSummary, offers, offersSummary } =
 		productDescription;
 
 	return (
 		<section css={container}>
 			<div css={titleSummaryCss}>
-				{productDescription.icon}
+				<div css={svgCss}>{productDescription.icon}</div>
 				<h2 css={titleCss}>{label}</h2>
-				<p css={summaryCss}>{productDescription.summary}</p>
+				<p css={summaryCss}>{summary}</p>
 			</div>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
@@ -186,6 +210,7 @@ export function GuardianLightCard({
 			{(benefitsSummary ?? offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
+			<Divider cssOverrides={dividerCss} />
 			<BenefitsCheckList
 				benefitsCheckListData={benefits
 					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))

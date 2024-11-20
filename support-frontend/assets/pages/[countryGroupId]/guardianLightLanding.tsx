@@ -73,7 +73,7 @@ export function GuardianLightLanding({
 	const card2 = {
 		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
-		ctaCopy: 'Go back to "accept all"',
+		ctaCopy: 'Return to privacy options',
 		price: price,
 	};
 

@@ -372,7 +372,7 @@ export function productCatalogGuardianLight(): Record<
 		GuardianLightGoBack: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Continue without a subscription',
-			summary: 'Read the Guardian with personalised ads',
+			summary: 'Read the Guardian with personalised advertising',
 			icon: <SvgGuardianLightGoBack />,
 			ratePlans: {
 				Monthly: {
