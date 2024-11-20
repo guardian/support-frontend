@@ -79,6 +79,7 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import {
 	getOphanIds,
@@ -104,7 +105,7 @@ import {
 } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import {
-	doesNotContainEmojiPattern,
+	doesNotContainEmojiOrWhitespacePattern,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -117,7 +118,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder, unsetThankYouOrder } from './thankyou';
+import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -140,6 +141,10 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 type ProcessPaymentResponse =
 	| { status: 'success' }
 	| { status: 'failure'; failureReason?: ErrorReason };
+
+type CreateSubscriptionResponse = StatusResponse & {
+	userType: UserType;
+};
 
 const processPayment = async (
 	statusResponse: StatusResponse,
@@ -713,9 +718,12 @@ export function CheckoutComponent({
 			});
 
 			let processPaymentResponse: ProcessPaymentResponse;
+			let userType: UserType | undefined;
 
 			if (createResponse.ok) {
-				const statusResponse = (await createResponse.json()) as StatusResponse;
+				const statusResponse =
+					(await createResponse.json()) as CreateSubscriptionResponse;
+				userType = statusResponse.userType;
 				processPaymentResponse = await processPayment(statusResponse, geoId);
 			} else {
 				const errorReason = (await createResponse.text()) as ErrorReason;
@@ -736,6 +744,8 @@ export function CheckoutComponent({
 				thankYouUrlSearchParams.set('product', productKey);
 				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
 				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
+				userType && thankYouUrlSearchParams.set('userType', userType);
+
 				contributionAmount &&
 					thankYouUrlSearchParams.set(
 						'contribution',
@@ -1073,7 +1083,7 @@ export function CheckoutComponent({
 										required
 										maxLength={40}
 										error={firstNameError}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainEmojiOrWhitespacePattern}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
@@ -1107,7 +1117,7 @@ export function CheckoutComponent({
 										required
 										maxLength={40}
 										error={lastNameError}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainEmojiOrWhitespacePattern}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
@@ -1168,7 +1178,7 @@ export function CheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainEmojiOrWhitespacePattern}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {
@@ -1184,6 +1194,8 @@ export function CheckoutComponent({
 												}
 											}
 										}}
+										// We have seen this field be filled in with an email address
+										autoComplete={'off'}
 									/>
 								</div>
 							)}

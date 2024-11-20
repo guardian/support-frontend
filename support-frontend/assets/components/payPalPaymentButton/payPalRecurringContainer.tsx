@@ -4,12 +4,10 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
@@ -35,11 +33,7 @@ export function PayPalButtonRecurringContainer({
 
 	const dispatch = useContributionsDispatch();
 
-	const contributionType = useContributionsSelector(getContributionType);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
-	const { userTypeFromIdentityResponse } = useContributionsSelector(
-		(state) => state.page.checkoutForm.personalDetails,
-	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
 
 	function onCompletion(payPalCheckoutDetails: PayPalCheckoutDetails) {
@@ -61,11 +55,7 @@ export function PayPalButtonRecurringContainer({
 		csrf,
 		isTestUser,
 		setValidationControls,
-		onClick: () =>
-			trackCheckoutSubmitAttempt(
-				`PayPal-${contributionType}-submit`,
-				`npf-allowed-for-user-type-${userTypeFromIdentityResponse}`,
-			),
+		onClick: () => {},
 		onWindowOpen,
 		onCompletion,
 	});

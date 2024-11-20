@@ -12,6 +12,7 @@ const newBenefitPill = css`
 	${textSansBold14};
 	border-radius: 4px;
 	padding: 0 ${space[1]}px;
+	vertical-align: middle;
 `;
 
 export function NewBenefitPill() {

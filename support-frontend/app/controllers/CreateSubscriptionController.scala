@@ -8,6 +8,7 @@ import cats.implicits._
 import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.NationalDelivery
 import com.gu.support.paperround.PaperRoundServiceProvider
+import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import config.RecaptchaConfigProvider
@@ -16,15 +17,15 @@ import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
-import models.identity.responses.IdentityErrorResponse.{IdentityError, _}
+import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
-import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService}
+import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
+import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService, UserDetails}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -38,6 +39,17 @@ object CreateSubscriptionController {
   private case class ServerError(message: String) extends CreateSubscriptionError
   private case class RequestValidationError(message: String) extends CreateSubscriptionError
 
+}
+
+case class CreateSubscriptionResponse(
+    status: Status,
+    userType: String,
+    trackingUri: String,
+    failureReason: Option[CheckoutFailureReason] = None,
+)
+
+object CreateSubscriptionResponse {
+  implicit val encoder: Encoder[CreateSubscriptionResponse] = deriveEncoder
 }
 
 class CreateSubscriptionController(
@@ -133,25 +145,32 @@ class CreateSubscriptionController(
   private def createSubscription(implicit
       settings: AllSettings,
       request: CreateRequest,
-  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
-    val maybeLoggedInIdentityIdAndEmail =
-      request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+  ): EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse] = {
 
+    val maybeLoggedInUserDetails =
+      request.user.map(authIdUser => UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"))
     logDetailedMessage("createSubscription")
 
     for {
-      userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
-        case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
+      _ <- validate(request, settings.switches)
+      userDetails <- maybeLoggedInUserDetails match {
+        case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
-      _ <- validate(request, settings.switches)
-      supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
+      supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
+
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
         .leftMap[CreateSubscriptionError](ServerError)
-    } yield statusResponse
+
+    } yield CreateSubscriptionResponse(
+      statusResponse.status,
+      userDetails.userType,
+      statusResponse.trackingUri,
+      statusResponse.failureReason,
+    )
   }
 
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
@@ -195,17 +214,15 @@ class CreateSubscriptionController(
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
       referer: Option[String],
-  ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
+  ): EitherT[Future, IdentityError, UserDetails] = {
     implicit val scheduler: Scheduler = system.scheduler
-    val identityId = identityService.getOrCreateUserFromEmail(
+    identityService.getOrCreateUserFromEmail(
       body.email,
       body.firstName,
       body.lastName,
       body.ophanIds.pageviewId,
       referer,
     )
-
-    identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 
   private def validate(
@@ -249,7 +266,7 @@ class CreateSubscriptionController(
     DiscardingCookie(name = "GU_CO_INCOMPLETE", domain = Some(guardianDomain.value))
 
   private def toHttpResponse(
-      result: EitherT[Future, CreateSubscriptionError, StatusResponse],
+      result: EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse],
       product: ProductType,
       userEmail: String,
   )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
@@ -273,11 +290,11 @@ class CreateSubscriptionController(
           }
           Future.successful(errResult)
         },
-        { statusResponse =>
+        { createSubscriptionResponse =>
           logDetailedMessage("create succeeded")
           cookies(product, userEmail)
             .map(cookies =>
-              Accepted(statusResponse.asJson)
+              Accepted(createSubscriptionResponse.asJson)
                 .withCookies(cookies: _*)
                 .discardingCookies(discardIncompleteCheckoutCookie),
             )
@@ -378,13 +395,13 @@ class CreateSubscriptionController(
   }
 
   private def buildSupportWorkersUser(
-      identityIdAndEmail: IdentityIdAndEmail,
+      userDetails: UserDetails,
       request: CreateSupportWorkersRequest,
       isTestUser: Boolean,
   ) = {
     User(
-      id = identityIdAndEmail.id,
-      primaryEmailAddress = identityIdAndEmail.primaryEmailAddress,
+      id = userDetails.identityId,
+      primaryEmailAddress = userDetails.email,
       title = request.title,
       firstName = request.firstName,
       lastName = request.lastName,

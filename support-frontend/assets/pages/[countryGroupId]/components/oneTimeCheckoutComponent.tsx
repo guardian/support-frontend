@@ -84,7 +84,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
-	doesNotContainEmojiPattern,
+	doesNotContainEmojiOrWhitespacePattern,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -97,7 +97,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder } from './thankyou';
+import { setThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -275,10 +275,6 @@ export function OneTimeCheckoutComponent({
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
 	] = useState<ExpressPaymentType>();
-	const stripePaymentMethod: StripePaymentMethod =
-		stripeExpressCheckoutPaymentType === 'apple_pay'
-			? 'StripeApplePay'
-			: 'StripePaymentRequestButton';
 
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
@@ -423,6 +419,13 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
+					const stripePaymentMethod: StripePaymentMethod =
+						paymentMethod === 'StripeExpressCheckoutElement'
+							? stripeExpressCheckoutPaymentType === 'apple_pay'
+								? 'StripeApplePay'
+								: 'StripePaymentRequestButton'
+							: 'StripeCheckout';
+
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,
@@ -710,7 +713,7 @@ export function OneTimeCheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainEmojiOrWhitespacePattern}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {

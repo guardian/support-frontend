@@ -48,7 +48,6 @@ import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
-import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectDiscountedPrice,
 	selectPriceForProduct,
@@ -121,7 +120,6 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() =>
 			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
@@ -249,7 +247,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							confirmEmail={props.confirmEmail}
 							setConfirmEmail={props.setConfirmEmail}
 							isSignedIn={props.isSignedIn}
-							fetchAndStoreUserType={props.fetchAndStoreUserType}
 							telephone={props.telephone}
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}

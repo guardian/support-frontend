@@ -3,7 +3,7 @@ import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import Subheading, { OfferHeading } from './subheading';
@@ -37,7 +37,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isTier3: boolean;
 	isSignedIn: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	identityUserType: UserType;
 	promotion?: Promotion;
 	showOffer?: boolean;
 };
@@ -51,7 +51,7 @@ function ThankYouHeader({
 	currency,
 	amountIsAboveThreshold,
 	isSignedIn,
-	userTypeFromIdentityResponse,
+	identityUserType,
 	showOffer,
 	promotion,
 	isTier3,
@@ -75,7 +75,7 @@ function ThankYouHeader({
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isTier3={isTier3}
 					isSignedIn={isSignedIn}
-					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+					identityUserType={identityUserType}
 				/>
 			</p>
 			{showOffer && (
