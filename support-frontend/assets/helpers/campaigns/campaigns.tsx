@@ -126,12 +126,6 @@ export function getCampaignSettings(
 		const isEligible =
 			isCampaignEnabled(campaignId) &&
 			campaigns[campaignId].isEligible(countryGroupId);
-		console.log(
-			'isEligible: ',
-			isEligible,
-			isCampaignEnabled(campaignId),
-			countryGroupId,
-		);
 		if (isEligible || forceCampaign(campaignId)) {
 			return campaigns[campaignId];
 		}
