@@ -17,6 +17,11 @@ source_nvm() {
 source_nvm
 
 nvm use
-yarn devrun &
-yarn storybook &
-cd ..; sbt -mem 2048 "project support-frontend" devrun
+
+yarn concurrently \
+  --prefix-colors auto \
+  --names webpack,storybook,sbt \
+  --pad-prefix \
+  "yarn devrun" \
+  "yarn storybook" \
+  "cd .. && sbt -mem 2048 'project support-frontend' devrun"
