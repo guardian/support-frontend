@@ -97,9 +97,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(stripeApiError))
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
-    EitherT.right(Future.successful("1"))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
+    EitherT.right(Future.successful(IdentityUserDetails("1", "current")))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -433,6 +433,7 @@ class StripeBackendSpec
             .createCharge(stripeChargeRequest, clientBrowserInfo)
             .futureRight mustBe StripeCreateChargeResponse.fromCharge(
             chargeMock,
+            None,
           )
 
           verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
@@ -452,6 +453,7 @@ class StripeBackendSpec
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
           .fromCharge(
             chargeMock,
+            Some("current"),
           )
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())

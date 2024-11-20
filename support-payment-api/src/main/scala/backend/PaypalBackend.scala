@@ -104,27 +104,59 @@ class PaypalBackend(
         },
         payment => {
           cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
+
+          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
+            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
+          )
           val maybeEnrichedPayPalPayment = for {
-            email <- OptionT.fromOption(
-              capturePaymentData.signedInUserEmail.orElse(
-                Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
-              ),
-            )
+            email <- OptionT.fromOption(maybeEmail)
             identityUserDetails <- OptionT(getOrCreateIdentityIdFromEmail(email))
-            _ = postPaymentTasks(
+          } yield {
+            postPaymentTasks(
               payment,
               email,
               Some(identityUserDetails.userType),
               capturePaymentData.acquisitionData,
               clientBrowserInfo,
             )
-          } yield EnrichedPaypalPayment(payment, Some(email), Some(identityUserDetails.userType))
+            EnrichedPaypalPayment(payment, Some(email), Some(identityUserDetails.userType))
+          }
 
-          maybeEnrichedPayPalPayment.toRight(
-            PaypalApiError.fromString("Unable to get email address"),
-          )
+          maybeEnrichedPayPalPayment
+            .toRight(
+              PaypalApiError.fromString("Unable to get email address"),
+            )
+            .recover { case _ => EnrichedPaypalPayment(payment, maybeEmail, None) }
         },
       )
+
+//  def capturePaymentOld(
+//      capturePaymentData: CapturePaypalPaymentData,
+//      clientBrowserInfo: ClientBrowserInfo,
+//  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+//    paypalService
+//      .capturePayment(capturePaymentData)
+//      .bimap(
+//        err => {
+//          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
+//          err
+//        },
+//        payment => {
+//          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
+//
+//          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
+//            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
+//          )
+//
+//          maybeEmail.foreach { email =>
+//            getOrCreateIdentityIdFromEmail(email).foreach { identityId =>
+//              postPaymentTasks(payment, email, identityId, capturePaymentData.acquisitionData, clientBrowserInfo)
+//            }
+//          }
+//
+//          EnrichedPaypalPayment(payment, maybeEmail)
+//        },
+//      )
 
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,
