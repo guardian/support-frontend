@@ -63,7 +63,6 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[StripePublicConfigProvider],
     mock[StripePublicConfigProvider],
     mock[PayPalConfigProvider],
-    mock[AmazonPayConfigProvider],
     mock[RecaptchaConfigProvider],
     mock[PaymentAPIService],
     "",

@@ -1,13 +1,12 @@
 package backend
 
 import cats.data.EitherT
+import cats.implicits._
 import cats.kernel.Semigroup
 import model.DefaultThreadPool
-import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
-import cats.implicits._
-import model.amazonpay.{AmazonPayApiError => AmazonPayError}
 import model.stripe.{StripeApiError => StripeError}
+import services.{ContributionsStoreService, EmailService, IdentityClient}
 
 import scala.concurrent.Future
 
@@ -21,7 +20,6 @@ sealed abstract class BackendError extends Exception {
     case BackendError.GoogleAnalyticsError(err) => err
     case BackendError.StripeApiError(err) => err.getMessage
     case BackendError.PaypalApiError(err) => err.message
-    case BackendError.AmazonPayApiError(err) => err.message
     case BackendError.Email(err) => err.getMessage
     case BackendError.TrackingError(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
@@ -41,7 +39,6 @@ object BackendError {
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
-  final case class AmazonPayApiError(err: AmazonPayError) extends BackendError
   final case class Email(error: EmailService.Error) extends BackendError
   final case class TrackingError(err: Throwable) extends BackendError
   final case class MultipleErrors(errors: List[BackendError]) extends BackendError

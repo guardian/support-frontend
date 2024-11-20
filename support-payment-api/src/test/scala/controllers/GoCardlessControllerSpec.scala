@@ -67,8 +67,6 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
 
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
 
-  val mockAmazonPayController: AmazonPayController = mock[AmazonPayController]
-
   override def router: Router = new Routes(
     httpErrorHandler,
     new AppController(controllerComponents)(DefaultThreadPool(ec), List.empty),
@@ -78,7 +76,6 @@ class GoCardlessControllerFixture(implicit ec: ExecutionContext, context: Applic
     ),
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     goCardlessController,
-    mockAmazonPayController,
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty
