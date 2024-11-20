@@ -82,7 +82,7 @@ const campaigns: Record<string, CampaignSettings> = {
 			id: 'US',
 		},
 	},
-	ausTicker2024: {
+  ausEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
 			countryGroupId === AUDCountries,
 		enableSingleContributions: false,

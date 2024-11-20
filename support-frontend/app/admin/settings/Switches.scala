@@ -33,7 +33,7 @@ case class CampaignSwitches(
     enableContributionsCampaign: Option[SwitchState],
     forceContributionsCampaign: Option[SwitchState],
     usEoy2024: Option[SwitchState] = None,
-    ausTicker2024: Option[SwitchState] = None,
+    ausEoy2024: Option[SwitchState] = None,
 )
 
 object CampaignSwitches {
