@@ -12,16 +12,6 @@ export type CountdownSetting = {
 	};
 };
 
-export const defaultInitialCampaign: CountdownSetting = {
-	label: 'initial',
-	countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-	countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-	theme: {
-		backgroundColor: '#1e3e72',
-		foregroundColor: '#ffffff',
-	},
-};
-
 interface CampaignCopy {
 	headingFragment?: JSX.Element;
 	subheading?: JSX.Element;
@@ -70,15 +60,6 @@ const campaigns: Record<string, CampaignSettings> = {
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				theme: {
 					backgroundColor: '#1e3e72',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
-				label: 'Testing Giving Tuesday',
-				countdownStartInMillis: Date.parse('Nov 21, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Nov 22, 2024 00:00:00'),
-				theme: {
-					backgroundColor: '#ab0613',
 					foregroundColor: '#ffffff',
 				},
 			},
