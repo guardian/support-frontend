@@ -25,7 +25,10 @@ import {
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type { CampaignSettings, CountdownSetting } from 'helpers/campaigns/campaigns';
+import type {
+	CampaignSettings,
+	CountdownSetting,
+} from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -545,9 +548,14 @@ export function ThreeTierLanding({
 							countdownCampaign={currentCountdownSettings}
 							show={showCountdown}
 							setShow={setShowCountdown}
-						/>)}
+						/>
+					)}
 					<h1 css={heading}>
-						{getHeadline(showCountdown, currentCountdownSettings, campaignSettings)}
+						{getHeadline(
+							showCountdown,
+							currentCountdownSettings,
+							campaignSettings,
+						)}
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (
