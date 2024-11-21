@@ -5,13 +5,14 @@ import cats.instances.future._
 import com.gu.retry.EitherTRetry.retry
 import com.typesafe.scalalogging.StrictLogging
 import conf.IdentityConfig
-import model.DefaultThreadPool
+import model.{DefaultThreadPool, UserType}
+import model.UserType.UserType
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
-case class IdentityUserDetails(id: String, userType: String)
+case class IdentityUserDetails(id: String, userType: UserType)
 
 trait IdentityService extends StrictLogging {
 
@@ -31,13 +32,13 @@ trait IdentityService extends StrictLogging {
 class GuardianIdentityService(client: IdentityClient)(implicit pool: DefaultThreadPool) extends IdentityService {
 
   override def getIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityUserDetails] =
-    client.getUser(email).map(response => IdentityUserDetails(response.user.id, "current"))
+    client.getUser(email).map(response => IdentityUserDetails(response.user.id, UserType.Current))
 
   override def createGuestAccount(email: String): EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     client.createGuestAccount(email).map { response =>
       // Logs are only retained for 14 days so we're OK to log email address
       logger.info(s"guest account created for email address: $email")
-      IdentityUserDetails(response.guestRegistrationRequest.userId, "new")
+      IdentityUserDetails(response.guestRegistrationRequest.userId, UserType.New)
     }
 
   override def getOrCreateIdentityIdFromEmail(

@@ -253,9 +253,10 @@ class StripeBackend(
             PaymentProvider.Stripe,
             s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request",
           )
+          identityUserDetails
       }
 
-      StripePaymentIntentsApiResponse.Success()
+      StripePaymentIntentsApiResponse.Success(identityUserDetails.map(_.userType))
     }
   }
 

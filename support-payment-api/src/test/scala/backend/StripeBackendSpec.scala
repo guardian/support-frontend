@@ -11,6 +11,7 @@ import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
 import model.Environment.Live
+import model.UserType.Current
 import model._
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
@@ -98,7 +99,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
-    EitherT.right(Future.successful(IdentityUserDetails("1", "current")))
+    EitherT.right(Future.successful(IdentityUserDetails("1", Current)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
@@ -453,7 +454,7 @@ class StripeBackendSpec
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
           .fromCharge(
             chargeMock,
-            Some("current"),
+            Some(Current),
           )
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
