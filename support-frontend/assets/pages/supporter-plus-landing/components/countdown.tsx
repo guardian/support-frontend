@@ -70,7 +70,7 @@ const timeLabelStyle = css`
 
 // props
 export type CountdownProps = {
-	campaign: CountdownSetting;
+	countdownCampaign: CountdownSetting;
 };
 
 // create countdown logic
@@ -87,7 +87,9 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 };
 
 // return the countdown component
-export default function Countdown({ campaign }: CountdownProps): JSX.Element {
+export default function Countdown({
+	countdownCampaign: campaign,
+}: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);

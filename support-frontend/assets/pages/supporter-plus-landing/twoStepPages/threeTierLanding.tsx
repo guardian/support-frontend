@@ -25,7 +25,6 @@ import {
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
 import {
-	defaultInitialCampaign,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
@@ -314,12 +313,11 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>(
-		defaultInitialCampaign,
-	);
+	const [currentCountdownSettings, setCurrentCountdownSettings] =
+		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const memoizedCurrentCampaign = useMemo(() => {
+	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
 		}
@@ -332,11 +330,11 @@ export function ThreeTierLanding({
 	}, [campaignSettings?.countdownSettings]);
 
 	useEffect(() => {
-		if (memoizedCurrentCampaign) {
-			setCurrentCampaign(memoizedCurrentCampaign);
+		if (memoizedCurrentCountdownCampaign) {
+			setCurrentCountdownSettings(memoizedCurrentCountdownCampaign);
 			setShowCountdown(true);
 		}
-	}, [memoizedCurrentCampaign]);
+	}, [memoizedCurrentCountdownCampaign]);
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
@@ -522,7 +520,9 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && <Countdown campaign={currentCampaign} />}
+					{showCountdown && currentCountdownSettings && (
+						<Countdown countdownCampaign={currentCountdownSettings} />
+					)}
 					<h1 css={heading}>
 						{campaignSettings?.copy.headingFragment ?? <>Support </>}
 						fearless, <br css={tabletLineBreak} />
