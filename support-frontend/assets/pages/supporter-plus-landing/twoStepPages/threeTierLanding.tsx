@@ -24,6 +24,8 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -314,14 +316,11 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
-		label: 'testing',
-		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-	});
+	const [currentCountdownSettings, setCurrentCountdownSettings] =
+		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const memoizedCurrentCampaign = useMemo(() => {
+	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
 		}
@@ -334,11 +333,11 @@ export function ThreeTierLanding({
 	}, [campaignSettings?.countdownSettings]);
 
 	useEffect(() => {
-		if (memoizedCurrentCampaign) {
-			setCurrentCampaign(memoizedCurrentCampaign);
+		if (memoizedCurrentCountdownCampaign) {
+			setCurrentCountdownSettings(memoizedCurrentCountdownCampaign);
 			setShowCountdown(true);
 		}
-	}, [memoizedCurrentCampaign]);
+	}, [memoizedCurrentCountdownCampaign]);
 
 	useEffect(() => {
 		getHeadline(showCountdown, currentCampaign, campaignSettings);
@@ -546,13 +545,12 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && (
+					{showCountdown && currentCountdownSettings && (
 						<Countdown
-							campaign={currentCampaign}
+							countdownCampaign={currentCountdownSettings}
 							show={showCountdown}
 							setShow={setShowCountdown}
 						/>
-					)}
 					<h1 css={heading}>
 						{getHeadline(showCountdown, currentCampaign, campaignSettings)}
 					</h1>
