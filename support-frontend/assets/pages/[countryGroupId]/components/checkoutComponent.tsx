@@ -873,10 +873,7 @@ export function CheckoutComponent({
 						)}
 						headerButton={
 							productKey === 'GuardianLight' ? (
-								<BackButton
-									path={`/${geoId}/guardianlight`}
-									buttonText="Back"
-								/>
+								<BackButton path={`/guardian-light`} buttonText="Back" />
 							) : (
 								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
 							)
