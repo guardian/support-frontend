@@ -24,9 +24,7 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
-import {
-	getCampaignSettings,
-} from 'helpers/campaigns/campaigns';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
