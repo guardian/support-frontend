@@ -118,6 +118,6 @@ ThemedSubCampaign.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
-	show: false,
+	show: true,
 	setShow: dummy
 };
