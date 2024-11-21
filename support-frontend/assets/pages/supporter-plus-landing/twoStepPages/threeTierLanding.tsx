@@ -25,7 +25,7 @@ import {
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
+import type { CampaignSettings, CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -52,11 +52,6 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type {
-	CampaignSettings,
-	CountdownSetting,
-} from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -340,16 +335,16 @@ export function ThreeTierLanding({
 	}, [memoizedCurrentCountdownCampaign]);
 
 	useEffect(() => {
-		getHeadline(showCountdown, currentCampaign, campaignSettings);
+		getHeadline(showCountdown, currentCountdownSettings, campaignSettings);
 	}, [showCountdown]); // hide both the countdown and switch out the headline.
 
 	const getHeadline = (
 		showCountdown: boolean,
-		countdownCampaign: CountdownSetting,
-		campaignSettings: CampaignSettings | null,
+		currentCountdownSettings?: CountdownSetting,
+		campaignSettings?: CampaignSettings | null,
 	) => {
-		if (showCountdown && countdownCampaign.label.trim()) {
-			return countdownCampaign.label;
+		if (showCountdown && currentCountdownSettings?.label.trim()) {
+			return currentCountdownSettings.label;
 		} else {
 			return (
 				<>
@@ -550,9 +545,9 @@ export function ThreeTierLanding({
 							countdownCampaign={currentCountdownSettings}
 							show={showCountdown}
 							setShow={setShowCountdown}
-						/>
+						/>)}
 					<h1 css={heading}>
-						{getHeadline(showCountdown, currentCampaign, campaignSettings)}
+						{getHeadline(showCountdown, currentCountdownSettings, campaignSettings)}
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (
