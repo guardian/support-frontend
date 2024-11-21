@@ -32,7 +32,6 @@ trait Controllers {
     appConfig.oneOffStripeConfigProvider,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
-    appConfig.amazonPayConfigProvider,
     appConfig.recaptchaConfigProvider,
     paymentAPIService,
     appConfig.membersDataServiceApiUrl,

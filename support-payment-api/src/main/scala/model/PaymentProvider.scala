@@ -19,7 +19,6 @@ object PaymentProvider extends Enum[PaymentProvider] with CirceEnum[PaymentProvi
 
   override val values: IndexedSeq[PaymentProvider] = findValues
   case object Paypal extends PaymentProvider
-  case object AmazonPay extends PaymentProvider
   case object Stripe extends PaymentProvider
   case object StripeApplePay extends PaymentProvider
   case object StripePaymentRequestButton extends PaymentProvider

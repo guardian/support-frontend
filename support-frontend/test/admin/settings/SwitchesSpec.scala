@@ -32,10 +32,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
-          |      },
-          |      "amazonPay" : {
-          |        "description" : "Amazon Pay",
-          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -61,10 +57,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
-          |      },
-          |      "amazonPay" : {
-          |        "description" : "Amazon Pay",
-          |        "state" : "Off"
           |      },
           |      "directDebit" : {
           |        "description" : "Direct Debit",
@@ -154,8 +146,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods =
-            OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+          oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
           recurringPaymentMethods = RecurringPaymentMethodSwitches(
             Some(On),
             Some(On),
@@ -163,7 +154,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(On),
-            Some(Off),
             Some(Off),
           ),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
