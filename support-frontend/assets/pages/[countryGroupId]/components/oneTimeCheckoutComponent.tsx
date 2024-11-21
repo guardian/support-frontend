@@ -353,7 +353,10 @@ export function OneTimeCheckoutComponent({
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
 				const acquisitionData = derivePaymentApiAcquisitionData(
-					getReferrerAcquisitionData(),
+					{
+						...getReferrerAcquisitionData(),
+						labels: ['one-time-checkout'],
+					},
 					abParticipations,
 					billingPostcode,
 				);
