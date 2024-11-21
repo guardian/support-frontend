@@ -35,7 +35,7 @@ function Template(args: CountdownProps) {
 }
 
 function dummy(b: boolean){
-	if (b) // just to get around TS error 6133 (variable declared but its value is never read) 
+	b
 	return;
 }
 
@@ -47,13 +47,13 @@ Default.args = {
 		label: 'default',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay) + (1 * millisecondsInHour)),
 		countdownDeadlineInMillis: (Date.now() + ((2 * millisecondsInDay) + (1 * millisecondsInHour) + (45 * millisecondsInMinute) + (30 * millisecondsInSecond))),
-	show: true,
-	setShow: dummy
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
+	show: true,
+	setShow: dummy
 };
 
 export const DeadlineNear = Template.bind({});
@@ -62,13 +62,13 @@ DeadlineNear.args = {
 		label: 'deadline near',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInSecond)),
-	show: true,
-	setShow: dummy
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
+	show: true,
+	setShow: dummy
 };
 
 export const DeadlinePassedHidden = Template.bind({});
@@ -77,13 +77,13 @@ DeadlinePassedHidden.args = {
 		label: 'deadline passed',
 		countdownStartInMillis: (Date.now() - (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() - (5 * millisecondsInSecond)),
-	show: false,
-	setShow: dummy
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
+	show: false,
+	setShow: dummy
 };
 
 export const NotYetAvailableHidden = Template.bind({});
@@ -92,13 +92,13 @@ NotYetAvailableHidden.args = {
 		label: 'start date well in future',
 		countdownStartInMillis: (Date.now() + (1 * millisecondsInDay)),
 		countdownDeadlineInMillis: (Date.now() + (5 * millisecondsInDay)),
-	show: false,
-	setShow: dummy
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
 		},
 	},
+	show: false,
+	setShow: dummy
 };
 
 export const ThemedSubCampaign = Template.bind({});
@@ -106,16 +106,18 @@ ThemedSubCampaign.args = {
 	countdownCampaign: {
 		label: 'change colour theme',
 		countdownStartInMillis:
-			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
+		Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
 		countdownDeadlineInMillis:
-			Date.now() +
-			(2 * millisecondsInDay +
-				1 * millisecondsInHour +
-				45 * millisecondsInMinute +
-				30 * millisecondsInSecond),
+		Date.now() +
+		(2 * millisecondsInDay +
+			1 * millisecondsInHour +
+			45 * millisecondsInMinute +
+			30 * millisecondsInSecond),
 		theme: {
 			backgroundColor: '#ab0613',
 			foregroundColor: '#ffffff',
 		},
 	},
+	show: false,
+	setShow: dummy
 };
