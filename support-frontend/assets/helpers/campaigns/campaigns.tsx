@@ -46,6 +46,15 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
+				label: 'It\'s not too late',
+				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
+				theme: {
+					backgroundColor: '#ab0613',
+					foregroundColor: '#ffffff',
+				},
+			},
+			{
 				label: 'Discount',
 				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 13, 2024 00:00:00'),
