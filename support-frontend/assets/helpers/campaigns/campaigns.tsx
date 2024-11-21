@@ -73,6 +73,15 @@ const campaigns: Record<string, CampaignSettings> = {
 					foregroundColor: '#ffffff',
 				},
 			},
+			{
+				label: 'Testing Giving Tuesday',
+				countdownStartInMillis: Date.parse('Nov 21, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Nov 22, 2024 00:00:00'),
+				theme: {
+					backgroundColor: '#ab0613',
+					foregroundColor: '#ffffff',
+				},
+			},
 		],
 		copy: {
 			headingFragment: <>Protect </>,
