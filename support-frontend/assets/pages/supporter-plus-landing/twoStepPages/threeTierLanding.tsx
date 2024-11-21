@@ -24,6 +24,8 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -50,8 +52,6 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -311,14 +311,11 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
-		label: 'testing',
-		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-	});
+	const [currentCountdownSettings, setCurrentCountdownSettings] =
+		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const memoizedCurrentCampaign = useMemo(() => {
+	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
 		}
@@ -331,11 +328,11 @@ export function ThreeTierLanding({
 	}, [campaignSettings?.countdownSettings]);
 
 	useEffect(() => {
-		if (memoizedCurrentCampaign) {
-			setCurrentCampaign(memoizedCurrentCampaign);
+		if (memoizedCurrentCountdownCampaign) {
+			setCurrentCountdownSettings(memoizedCurrentCountdownCampaign);
 			setShowCountdown(true);
 		}
-	}, [memoizedCurrentCampaign]);
+	}, [memoizedCurrentCountdownCampaign]);
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
@@ -521,7 +518,9 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && <Countdown campaign={currentCampaign} />}
+					{showCountdown && currentCountdownSettings && (
+						<Countdown countdownCampaign={currentCountdownSettings} />
+					)}
 					<h1 css={heading}>
 						{campaignSettings?.copy.headingFragment ?? <>Support </>}
 						fearless, <br css={tabletLineBreak} />
