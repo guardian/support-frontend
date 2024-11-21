@@ -46,7 +46,7 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
-				label: 'It\'s not too late',
+				label: "It's not too late",
 				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
 				theme: {
