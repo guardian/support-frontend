@@ -21,7 +21,7 @@ const container = css`
 	> div {
 		display: flex;
 		flex-direction: column;
-		padding: ${space[5]}px 12px;
+		padding: ${space[5]}px ${space[3]}px;
 		${from.tablet} {
 			max-width: 720px;
 		}
@@ -31,10 +31,13 @@ const container = css`
 	}
 `;
 const heading = css`
-	text-align: center;
 	color: ${palette.neutral[7]};
-	margin-bottom: ${space[6]}px;
+	text-align: left;
 	${headlineBold24}
+	margin-bottom: ${space[6]}px;
+	${from.tablet} {
+		text-align: center;
+	}
 	${from.desktop} {
 		${headlineBold34}
 	}
