@@ -3,6 +3,7 @@ import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import 'helpers/tracking/acquisitions';
@@ -147,7 +148,10 @@ function paymentResultFromObject(
 		});
 	}
 
-	return Promise.resolve(PaymentSuccess);
+	const response = json as { data?: { userType: UserType } };
+	const maybeUserType = response.data?.userType;
+
+	return Promise.resolve({ ...PaymentSuccess, userType: maybeUserType });
 }
 
 const postToPaymentApi = (

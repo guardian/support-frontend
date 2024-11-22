@@ -463,6 +463,9 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+				'paymentStatus' in paymentResult &&
+					paymentResult.userType &&
+					thankYouUrlSearchParams.set('userType', paymentResult.userType);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					geoId,
