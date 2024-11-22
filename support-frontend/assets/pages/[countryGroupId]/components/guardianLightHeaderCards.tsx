@@ -106,7 +106,7 @@ export function GuardianLightHeaderCards({
 	const card2 = {
 		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
-		ctaCopy: 'Return to privacy options',
+		ctaCopy: 'Go back to "accept all"',
 	};
 	return (
 		<Container

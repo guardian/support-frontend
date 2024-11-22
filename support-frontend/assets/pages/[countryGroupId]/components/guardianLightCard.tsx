@@ -4,8 +4,6 @@ import {
 	from,
 	headlineBold17,
 	headlineBold24,
-	headlineLight14,
-	headlineLight17,
 	neutral,
 	palette,
 	space,
@@ -62,13 +60,6 @@ const titleCss = css`
 		${headlineBold24};
 	}
 `;
-const summaryCss = css`
-	text-align: center;
-	${headlineLight14};
-	${from.desktop} {
-		${headlineLight17};
-	}
-`;
 const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
@@ -98,13 +89,12 @@ export function GuardianLightCard({
 	ctaCopy,
 }: GuardianLightProps): JSX.Element {
 	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
-	const { label, summary, benefits } = productDescription;
+	const { label, benefits } = productDescription;
 	return (
 		<section css={container}>
 			<div css={titleSummarySvgCss}>
 				<div css={svgCss}>{productDescription.icon}</div>
 				<h2 css={titleCss}>{label}</h2>
-				<p css={summaryCss}>{summary}</p>
 			</div>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton

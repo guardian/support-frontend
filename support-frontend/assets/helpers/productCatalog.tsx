@@ -24,7 +24,6 @@ type ProductBenefit = {
 
 export type ProductDescription = {
 	label: string;
-	summary?: string;
 	icon?: JSX.Element;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
@@ -122,7 +121,6 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
 			label: 'Purchase Guardian Light',
-			summary: 'Read the Guardian with non-personalised advertising',
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
@@ -371,8 +369,7 @@ export function productCatalogGuardianLight(): Record<
 		},
 		GuardianLightGoBack: {
 			...productCatalogDescription.GuardianLight,
-			label: 'Continue without a subscription',
-			summary: 'Read the Guardian with personalised advertising',
+			label: 'Read with personalised advertising',
 			icon: <SvgGuardianLightGoBack />,
 			ratePlans: {
 				Monthly: {
