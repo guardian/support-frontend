@@ -1,10 +1,14 @@
 import { css } from '@emotion/react';
 import {
 	from,
+	headlineBold17,
+	headlineBold20,
 	headlineBold24,
 	headlineBold34,
 	palette,
 	space,
+	textSans17,
+	textSans20,
 } from '@guardian/source/foundations';
 import {
 	Accordion,
@@ -16,28 +20,60 @@ const container = css`
 	background-color: ${palette.neutral[100]};
 	> div {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		padding: ${space[5]}px 12px;
+		${from.tablet} {
+			max-width: 720px;
+		}
+		${from.desktop} {
+			max-width: 940px;
+		}
 	}
-`;
-const innerContainer = css`
-	max-width: 940px;
-	text-align: center;
 `;
 const heading = css`
 	text-align: center;
 	color: ${palette.neutral[7]};
-	${headlineBold24}
 	margin-bottom: ${space[6]}px;
+	${headlineBold24}
 	${from.desktop} {
 		${headlineBold34}
 	}
 `;
 const accordian = css`
-	${from.desktop} {
-		width: 940px;
-	}
+	justify-content: space-between;
+	border-bottom: 0px;
 `;
+const accordianRow = css`
+	text-align: left;
+	> button > * {
+		${headlineBold17}
+		${from.desktop} {
+			${headlineBold20}
+		}
+	} // title
+	> div > * {
+		${textSans17}
+		${from.desktop} {
+			${textSans20}
+		}
+	} // body
+	> button > div > span {
+		display: none;
+	} // toggle label
+`;
+
+const contents = [
+	{
+		title: 'What is included in my Guardian Light subscription?',
+		body: 'tbc',
+	},
+	{
+		title: 'Will my Guardian Light subscription work across all devices?',
+		body: 'tbc',
+	},
+	{ title: 'How do I cancel my Guardian Light subscription?', body: 'tbc' },
+	{ title: 'How do I contact customer services?', body: 'tbc' },
+];
 
 export function GuardianLightAccordian(): JSX.Element {
 	return (
@@ -46,25 +82,18 @@ export function GuardianLightAccordian(): JSX.Element {
 			borderColor={palette.neutral[100]}
 			cssOverrides={container}
 		>
-			<div css={innerContainer}>
-				<h2 css={heading}>Any questions?</h2>
-				<div css={accordian}>
-					<Accordion>
-						<AccordionRow label="What is included in my Guardian Light subscription?">
-							test
-						</AccordionRow>
-						<AccordionRow label="Will my Guardian Light subscription work across all devices?">
-							test
-						</AccordionRow>
-						<AccordionRow label="How do I cancel my Guardian Light subscription?">
-							test
-						</AccordionRow>
-						<AccordionRow label="How do I contact customer services?">
-							test
-						</AccordionRow>
-					</Accordion>
-				</div>
-			</div>
+			<h2 css={heading}>Any questions?</h2>
+			<Accordion cssOverrides={accordian}>
+				{contents.map((content) => (
+					<AccordionRow
+						label={content.title}
+						hideToggleLabel={true}
+						cssOverrides={accordianRow}
+					>
+						{content.body}
+					</AccordionRow>
+				))}
+			</Accordion>
 		</Container>
 	);
 }
