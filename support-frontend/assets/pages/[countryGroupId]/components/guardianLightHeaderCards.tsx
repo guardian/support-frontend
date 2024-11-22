@@ -61,18 +61,6 @@ const heading = css`
 		margin-bottom: ${space[10]}px;
 	}
 `;
-const headingAboveMobile = css`
-	display: none;
-	${from.tablet} {
-		display: block;
-	}
-`;
-const headingBelowMobile = css`
-	display: block;
-	${from.tablet} {
-		display: none;
-	}
-`;
 
 type GuardianLightHeaderCardsProps = {
 	geoId: GeoId;
@@ -116,10 +104,7 @@ export function GuardianLightHeaderCards({
 			cssOverrides={container}
 		>
 			<div css={innerContainer}>
-				<h1 css={[heading, headingAboveMobile]}>
-					Choose how to read the Guardian
-				</h1>
-				<h1 css={[heading, headingBelowMobile]}>Choose one option</h1>
+				<h1 css={heading}>Choose how to read the Guardian</h1>
 				<GuardianLightCards cardsContent={[card1, card2]} />
 			</div>
 		</Container>
