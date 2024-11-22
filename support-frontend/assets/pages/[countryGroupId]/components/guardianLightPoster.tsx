@@ -14,9 +14,10 @@ import { Divider } from '@guardian/source-development-kitchen/react-components';
 import GridImage from 'components/gridImage/gridImage';
 
 const container = css`
-	display: flex;
 	background-color: #f6f6f6;
 	> div {
+		display: flex;
+		justify-content: center;
 		padding: ${space[5]}px 10px;
 	}
 `;
@@ -24,48 +25,49 @@ const innerContainer = css`
 	max-width: 940px;
 	text-align: center;
 `;
-const divider = css`
-	width: 100%;
-	margin: ${space[4]}px 0;
-	${from.desktop} {
-		margin: ${space[6]}px 0;
-	}
-`;
 const headingContainer = css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 `;
-
 const heading = css`
 	max-width: 540px;
 	color: ${palette.neutral[7]};
 	${headlineBold24}
 	${between.tablet.and.desktop} {
-		margin: 0 auto;
 		max-width: 340px;
 	}
 	${from.desktop} {
 		${headlineBold34}
 	}
 `;
-
+const divider = css`
+	display: none;
+	${from.tablet} {
+		display: block;
+		width: 100%;
+		margin: ${space[4]}px 0;
+	}
+	${from.desktop} {
+		margin: ${space[6]}px 0 ${space[3]}px;
+	}
+`;
 const bodyContainer = css`
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+	justify-content: center;
+	flex-direction: column;
+	${from.tablet} {
+		justify-content: space-between;
+		flex-direction: row;
+	}
 `;
-
-const copyContainer = css`
-	flex-grow: 2;
+const copy = css`
 	text-align: left;
 	color: ${palette.neutral[10]};
-	${textSans17};
-	line-height: 1.35;
 	padding-top: ${space[1]}px;
+	${textSans17};
 	${from.tablet} {
 		padding-top: ${space[2]}px;
-		margin: 0 auto;
 	}
 	${from.desktop} {
 		${textSans20};
@@ -74,9 +76,10 @@ const copyContainer = css`
 const paragraph = css`
 	margin-bottom: ${space[3]}px;
 `;
-const imgContainer = css`
-	flex-grow: 1;
-	max-width: 200px;
+const image = css`
+	${from.tablet} {
+		max-width: 200px;
+	}
 `;
 
 export function GuardianLightPoster(): JSX.Element {
@@ -88,7 +91,7 @@ export function GuardianLightPoster(): JSX.Element {
 					<Divider cssOverrides={divider} />
 				</div>
 				<div css={bodyContainer}>
-					<div css={copyContainer}>
+					<div css={copy}>
 						<p css={paragraph}>
 							The Guardian relies on advertising, alongside other revenue
 							streams, to fund our journalism. In recent years, our ability to
@@ -101,7 +104,7 @@ export function GuardianLightPoster(): JSX.Element {
 							personalised advertising..
 						</p>
 					</div>
-					<div css={imgContainer}>
+					<div css={image}>
 						<GridImage
 							classModifiers={['']}
 							gridId={'guardianLightPackshot'}
