@@ -16,16 +16,13 @@ const container = (cardCount: number) => css`
 	display: flex;
 	flex-direction: column;
 	gap: ${space[3]}px;
-
 	> * {
 		flex-basis: ${100 / cardCount}%;
 	}
-
 	${between.tablet.and.desktop} {
 		margin: 0 auto;
 		max-width: 340px;
 	}
-
 	${from.desktop} {
 		gap: ${space[5]}px;
 		flex-direction: row;

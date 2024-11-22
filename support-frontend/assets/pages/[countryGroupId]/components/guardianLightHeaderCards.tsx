@@ -20,39 +20,23 @@ const container = css`
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 	> div {
-		padding: ${space[2]}px 10px ${space[4]}px;
-	}
-	${from.mobileLandscape} {
-		> div {
-			padding: ${space[2]}px ${space[5]}px ${space[4]}px;
+		padding: ${space[5]}px 10px ${space[4]}px;
+		${from.mobileLandscape} {
+			padding-left: ${space[5]}px;
+			padding-right: ${space[5]}px;
 		}
-	}
-	${from.tablet} {
-		border-bottom: none;
-		> div {
-			padding: ${space[2]}px 10px ${space[4]}px;
-		}
-	}
-	${from.desktop} {
-		> div {
-			padding: 40px 10px 72px;
+		${from.desktop} {
+			max-width: 940px;
+			padding-top: ${space[10]}px;
+			padding-bottom: ${space[18]}px;
 		}
 	}
 `;
-const innerContainer = css`
-	max-width: 940px;
-	margin: ${space[2]}px auto;
-	text-align: center;
-	${from.desktop} {
-		margin: 0px auto;
-	}
-`;
-
 const heading = css`
-	text-align: left;
 	color: ${palette.neutral[100]};
+	text-align: left;
 	${headlineBold24}
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		text-align: center;
 	}
@@ -103,10 +87,8 @@ export function GuardianLightHeaderCards({
 			borderColor="rgba(170, 170, 180, 0.5)"
 			cssOverrides={container}
 		>
-			<div css={innerContainer}>
-				<h1 css={heading}>Choose how to read the Guardian</h1>
-				<GuardianLightCards cardsContent={[card1, card2]} />
-			</div>
+			<h1 css={heading}>Choose how to read the Guardian</h1>
+			<GuardianLightCards cardsContent={[card1, card2]} />
 		</Container>
 	);
 }

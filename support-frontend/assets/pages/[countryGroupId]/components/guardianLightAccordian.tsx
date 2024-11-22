@@ -21,9 +21,13 @@ const container = css`
 	> div {
 		display: flex;
 		flex-direction: column;
-		padding: ${space[5]}px ${space[3]}px;
+		padding: ${space[5]}px 10px;
+		${from.mobileLandscape} {
+			padding-left: ${space[5]}px;
+			padding-right: ${space[5]}px;
+		}
 		${from.tablet} {
-			max-width: 720px;
+			max-width: 740px;
 		}
 		${from.desktop} {
 			max-width: 940px;
