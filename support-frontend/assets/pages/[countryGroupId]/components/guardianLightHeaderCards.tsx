@@ -4,6 +4,8 @@ import {
 	headlineBold24,
 	palette,
 	space,
+	textSans15,
+	textSans17,
 } from '@guardian/source/foundations';
 import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
@@ -27,8 +29,6 @@ const container = css`
 		}
 		${from.desktop} {
 			max-width: 940px;
-			padding-top: ${space[10]}px;
-			padding-bottom: ${space[18]}px;
 		}
 	}
 `;
@@ -45,10 +45,29 @@ const heading = css`
 		margin-bottom: ${space[10]}px;
 	}
 `;
+const signIn = css`
+	color: ${palette.neutral[100]};
+	text-align: left;
+	${textSans15}
+	margin: ${space[5]}px 0px;
+	${from.tablet} {
+		text-align: center;
+	}
+	${from.desktop} {
+		${textSans17}
+	}
+	> a {
+		color: ${palette.neutral[100]};
+		font-weight: bold;
+	}
+`;
 
 type GuardianLightHeaderCardsProps = {
 	geoId: GeoId;
 };
+
+const SignInUrl = 'https://manage.theguardian.com/signin';
+const SignInLink = <a href={SignInUrl}>Sign In</a>;
 
 export function GuardianLightHeaderCards({
 	geoId,
@@ -89,6 +108,10 @@ export function GuardianLightHeaderCards({
 		>
 			<h1 css={heading}>Choose how to read the Guardian</h1>
 			<GuardianLightCards cardsContent={[card1, card2]} />
+			<div css={signIn}>
+				If you already have Guardian Light or read the Guardian ad-free,{' '}
+				{SignInLink}
+			</div>
 		</Container>
 	);
 }

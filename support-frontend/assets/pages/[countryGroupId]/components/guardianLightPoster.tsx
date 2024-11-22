@@ -114,7 +114,7 @@ export function GuardianLightPoster(): JSX.Element {
 					</p>
 					<p css={paragraph}>
 						As a result, we are now asking readers to pay to reject personalised
-						advertising..
+						advertising.
 					</p>
 				</div>
 				<div css={image}>
