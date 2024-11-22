@@ -105,7 +105,7 @@ import {
 } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import {
-	doesNotContainEmojiOrWhitespacePattern,
+	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -1080,7 +1080,7 @@ export function CheckoutComponent({
 										required
 										maxLength={40}
 										error={firstNameError}
-										pattern={doesNotContainEmojiOrWhitespacePattern}
+										pattern={doesNotContainEmojiPattern}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
@@ -1114,7 +1114,7 @@ export function CheckoutComponent({
 										required
 										maxLength={40}
 										error={lastNameError}
-										pattern={doesNotContainEmojiOrWhitespacePattern}
+										pattern={doesNotContainEmojiPattern}
 										onInvalid={(event) => {
 											preventDefaultValidityMessage(event.currentTarget);
 											const validityState = event.currentTarget.validity;
@@ -1175,7 +1175,7 @@ export function CheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiOrWhitespacePattern}
+										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {

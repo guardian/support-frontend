@@ -18,5 +18,4 @@ export function preventDefaultValidityMessage(
  * This uses a Unicode character class escape
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
  */
-export const doesNotContainEmojiOrWhitespacePattern =
-	'^(?!.*[\\p{Extended_Pictographic}\\s]).*$';
+export const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
