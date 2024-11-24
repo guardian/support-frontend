@@ -1,6 +1,5 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	brand,
 	from,
 	headlineBold17,
 	headlineBold24,
@@ -9,10 +8,7 @@ import {
 	space,
 	until,
 } from '@guardian/source/foundations';
-import {
-	buttonThemeReaderRevenueBrand,
-	LinkButton,
-} from '@guardian/source/react-components';
+import { LinkButton, themeLinkBrand } from '@guardian/source/react-components';
 import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { type ProductDescription } from 'helpers/productCatalog';
@@ -64,8 +60,6 @@ const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
 	margin-bottom: ${space[1]}px;
-	background-color: ${brand[400]};
-	color: ${neutral[100]};
 `;
 const dividerCss = css`
 	width: 100%;
@@ -96,7 +90,7 @@ export function GuardianLightCard({
 				<div css={svgCss}>{productDescription.icon}</div>
 				<h2 css={titleCss}>{label}</h2>
 			</div>
-			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+			<ThemeProvider theme={themeLinkBrand}>
 				<LinkButton
 					href={link}
 					cssOverrides={btnStyleOverrides}
