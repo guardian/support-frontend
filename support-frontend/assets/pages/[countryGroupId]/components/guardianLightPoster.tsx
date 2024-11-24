@@ -8,25 +8,15 @@ import {
 	textSans17,
 	textSans20,
 } from '@guardian/source/foundations';
-import { Container } from '@guardian/source/react-components';
 import { Divider } from '@guardian/source-development-kitchen/react-components';
 import GridImage from 'components/gridImage/gridImage';
+import { GuardianLightContainer } from './guardianLightContainer';
 
 const container = css`
 	background-color: ${palette.neutral[97]};
 	> div {
-		display: flex;
-		flex-direction: column;
-		padding: ${space[5]}px 10px;
-		${from.mobileLandscape} {
-			padding-left: ${space[5]}px;
-			padding-right: ${space[5]}px;
-		}
 		${from.tablet} {
 			max-width: 740px;
-		}
-		${from.desktop} {
-			max-width: 940px;
 		}
 	}
 `;
@@ -95,11 +85,7 @@ const image = css`
 
 export function GuardianLightPoster(): JSX.Element {
 	return (
-		<Container
-			sideBorders
-			borderColor={palette.neutral[97]}
-			cssOverrides={container}
-		>
+		<GuardianLightContainer cssOverrides={container}>
 			<div css={headingContainer}>
 				<h2 css={heading}>Advertising revenue funds Guardian journalism</h2>
 				<Divider cssOverrides={divider} />
@@ -127,6 +113,6 @@ export function GuardianLightPoster(): JSX.Element {
 					/>
 				</div>
 			</div>
-		</Container>
+		</GuardianLightContainer>
 	);
 }

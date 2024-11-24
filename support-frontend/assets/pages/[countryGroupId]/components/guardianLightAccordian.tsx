@@ -10,27 +10,14 @@ import {
 	textSans17,
 	textSans20,
 } from '@guardian/source/foundations';
-import {
-	Accordion,
-	AccordionRow,
-	Container,
-} from '@guardian/source/react-components';
+import { Accordion, AccordionRow } from '@guardian/source/react-components';
+import { GuardianLightContainer } from './guardianLightContainer';
 
 const container = css`
 	background-color: ${palette.neutral[100]};
 	> div {
-		display: flex;
-		flex-direction: column;
-		padding: ${space[5]}px 10px;
-		${from.mobileLandscape} {
-			padding-left: ${space[5]}px;
-			padding-right: ${space[5]}px;
-		}
 		${from.tablet} {
 			max-width: 740px;
-		}
-		${from.desktop} {
-			max-width: 940px;
 		}
 	}
 `;
@@ -84,11 +71,7 @@ const contents = [
 
 export function GuardianLightAccordian(): JSX.Element {
 	return (
-		<Container
-			sideBorders
-			borderColor={palette.neutral[100]}
-			cssOverrides={container}
-		>
+		<GuardianLightContainer cssOverrides={container}>
 			<h2 css={heading}>Any questions?</h2>
 			<Accordion cssOverrides={accordian}>
 				{contents.map((content) => (
@@ -101,6 +84,6 @@ export function GuardianLightAccordian(): JSX.Element {
 					</AccordionRow>
 				))}
 			</Accordion>
-		</Container>
+		</GuardianLightContainer>
 	);
 }

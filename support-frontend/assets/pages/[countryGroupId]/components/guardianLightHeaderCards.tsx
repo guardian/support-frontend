@@ -7,7 +7,6 @@ import {
 	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
-import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
@@ -17,21 +16,16 @@ import {
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianLightCards } from './guardianLightCards';
+import { GuardianLightContainer } from './guardianLightContainer';
 
 const container = css`
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 	> div {
 		padding: ${space[5]}px 10px ${space[4]}px;
-		${from.mobileLandscape} {
-			padding-left: ${space[5]}px;
-			padding-right: ${space[5]}px;
-		}
-		${from.desktop} {
-			max-width: 940px;
-		}
 	}
 `;
+
 const heading = css`
 	color: ${palette.neutral[100]};
 	text-align: left;
@@ -62,12 +56,12 @@ const signIn = css`
 	}
 `;
 
+const SignInUrl = 'https://manage.theguardian.com/signin';
+const SignInLink = <a href={SignInUrl}>Sign In</a>;
+
 type GuardianLightHeaderCardsProps = {
 	geoId: GeoId;
 };
-
-const SignInUrl = 'https://manage.theguardian.com/signin';
-const SignInLink = <a href={SignInUrl}>Sign In</a>;
 
 export function GuardianLightHeaderCards({
 	geoId,
@@ -100,7 +94,7 @@ export function GuardianLightHeaderCards({
 		ctaCopy: 'Go back to "accept all"',
 	};
 	return (
-		<Container
+		<GuardianLightContainer
 			sideBorders
 			topBorder
 			borderColor="rgba(170, 170, 180, 0.5)"
@@ -112,6 +106,6 @@ export function GuardianLightHeaderCards({
 				If you already have Guardian Light or read the Guardian ad-free,{' '}
 				{SignInLink}
 			</div>
-		</Container>
+		</GuardianLightContainer>
 	);
 }
