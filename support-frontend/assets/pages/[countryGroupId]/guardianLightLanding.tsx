@@ -19,7 +19,7 @@ export function GuardianLightLanding({
 		countryGroupIds: [GBPCountries],
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-light',
-	};
+	}; // hidden initially, will display with more regions
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<GuardianLightHeaderCards geoId={geoId} />

@@ -371,11 +371,6 @@ export function productCatalogGuardianLight(): Record<
 			...productCatalogDescription.GuardianLight,
 			label: 'Read with personalised advertising',
 			icon: <SvgGuardianLightGoBack />,
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-			},
 			benefits: [
 				{
 					copy: `Click ‘Go Back to Accept all’ if you do not want to purchase a Guardian Light subscription`,
