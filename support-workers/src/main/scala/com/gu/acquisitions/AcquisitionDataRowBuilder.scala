@@ -7,7 +7,6 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.workers.{
-  AmazonPayPaymentMethod,
   Annual,
   BillingPeriod,
   ClonedDirectDebitPaymentMethod,
@@ -32,7 +31,6 @@ import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.acquisitions.models.AcquisitionType.{Purchase, Redemption}
 import com.gu.support.acquisitions.models.PaymentProvider.{
-  AmazonPay,
   DirectDebit,
   PayPal,
   Stripe,
@@ -112,7 +110,6 @@ object AcquisitionDataRowBuilder {
       case _: PayPalReferenceTransaction => PayPal
       case _: DirectDebitPaymentMethod | _: ClonedDirectDebitPaymentMethod => DirectDebit
       case _: SepaPaymentMethod => StripeSepa
-      case _: AmazonPayPaymentMethod => AmazonPay
     }
 
   private def getAbTests(data: AcquisitionData): List[AbTest] =

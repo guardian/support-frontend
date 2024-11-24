@@ -97,7 +97,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder } from './thankyou';
+import { setThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -275,10 +275,6 @@ export function OneTimeCheckoutComponent({
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
 	] = useState<ExpressPaymentType>();
-	const stripePaymentMethod: StripePaymentMethod =
-		stripeExpressCheckoutPaymentType === 'apple_pay'
-			? 'StripeApplePay'
-			: 'StripePaymentRequestButton';
 
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
@@ -357,7 +353,10 @@ export function OneTimeCheckoutComponent({
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
 				const acquisitionData = derivePaymentApiAcquisitionData(
-					getReferrerAcquisitionData(),
+					{
+						...getReferrerAcquisitionData(),
+						labels: ['one-time-checkout'],
+					},
 					abParticipations,
 					billingPostcode,
 				);
@@ -423,6 +422,13 @@ export function OneTimeCheckoutComponent({
 						);
 					}
 				} else {
+					const stripePaymentMethod: StripePaymentMethod =
+						paymentMethod === 'StripeExpressCheckoutElement'
+							? stripeExpressCheckoutPaymentType === 'apple_pay'
+								? 'StripeApplePay'
+								: 'StripePaymentRequestButton'
+							: 'StripeCheckout';
+
 					const stripeData: CreateStripePaymentIntentRequest = {
 						paymentData: {
 							currency: currencyKey,

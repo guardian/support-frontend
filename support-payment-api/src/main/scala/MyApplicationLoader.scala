@@ -87,11 +87,6 @@ class MyComponents(context: Context)
       .buildRequestBasedProvider(requestEnvironments)
       .valueOr(throw _)
 
-  val amazonPayBackendProvider: RequestBasedProvider[AmazonPayBackend] =
-    new AmazonPayBackend.Builder(configLoader, cloudWatchClient)
-      .buildRequestBasedProvider(requestEnvironments)
-      .valueOr(throw _)
-
   implicit val allowedCorsUrl: List[String] = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
 
   // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
@@ -108,6 +103,5 @@ class MyComponents(context: Context)
       new StripeController(controllerComponents, stripeBackendProvider, liveCloudWatchService),
       new PaypalController(controllerComponents, paypalBackendProvider),
       new GoCardlessController(controllerComponents, goCardlessBackendProvider),
-      new AmazonPayController(controllerComponents, amazonPayBackendProvider, parseNotification),
     )
 }

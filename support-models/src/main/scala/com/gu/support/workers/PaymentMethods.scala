@@ -112,12 +112,6 @@ case class SepaPaymentMethod(
     StreetName: Option[String] = None,
 ) extends PaymentMethod
 
-case class AmazonPayPaymentMethod(
-    TokenId: String,
-    Type: String = "CreditCardReferenceTransaction", // This is how amazon pay works in zuora - as a credit card
-    PaymentGateway: PaymentGateway,
-) extends PaymentMethod
-
 object PaymentMethod {
   import com.gu.support.encoding.CustomCodecs.{decodeCountry, encodeCountryAsAlpha2}
   implicit val payPalReferenceTransactionCodec: Codec[PayPalReferenceTransaction] = deriveCodec
@@ -125,7 +119,6 @@ object PaymentMethod {
   implicit val directDebitPaymentMethodCodec: Codec[DirectDebitPaymentMethod] = deriveCodec
   implicit val sepaPaymentMethodCodec: Codec[SepaPaymentMethod] = deriveCodec
   implicit val clonedDirectDebitPaymentMethodCodec: Codec[ClonedDirectDebitPaymentMethod] = deriveCodec
-  implicit val amazonPayPaymentMethodCodec: Codec[AmazonPayPaymentMethod] = deriveCodec
 
   // Payment Methods are details from the payment provider
   implicit val encodePaymentMethod: Encoder[PaymentMethod] = Encoder.instance {
@@ -134,7 +127,6 @@ object PaymentMethod {
     case dd: DirectDebitPaymentMethod => dd.asJson
     case sepa: SepaPaymentMethod => sepa.asJson.deepDropNullValues
     case clonedDD: ClonedDirectDebitPaymentMethod => clonedDD.asJson
-    case amazonPayPaymentMethod: AmazonPayPaymentMethod => amazonPayPaymentMethod.asJson
   }
 
   implicit val decodePaymentMethod: Decoder[PaymentMethod] =
@@ -144,6 +136,5 @@ object PaymentMethod {
       Decoder[ClonedDirectDebitPaymentMethod].widen, // ordering is significant (at least between direct debit variants)
       Decoder[DirectDebitPaymentMethod].widen,
       Decoder[SepaPaymentMethod].widen,
-      Decoder[AmazonPayPaymentMethod].widen,
     ).reduceLeft(_ or _)
 }

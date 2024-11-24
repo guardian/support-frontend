@@ -118,7 +118,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder, unsetThankYouOrder } from './thankyou';
+import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -873,10 +873,7 @@ export function CheckoutComponent({
 						)}
 						headerButton={
 							productKey === 'GuardianLight' ? (
-								<BackButton
-									path={`/${geoId}/guardianlight`}
-									buttonText="Back"
-								/>
+								<BackButton path={`/guardian-light`} buttonText="Back" />
 							) : (
 								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
 							)
@@ -1194,6 +1191,8 @@ export function CheckoutComponent({
 												}
 											}
 										}}
+										// We have seen this field be filled in with an email address
+										autoComplete={'off'}
 									/>
 								</div>
 							)}

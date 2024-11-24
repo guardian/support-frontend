@@ -1,17 +1,18 @@
 import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
-import { UnitedStates } from '../internationalisation/countryGroup';
+import {
+	AUDCountries,
+	UnitedStates,
+} from '../internationalisation/countryGroup';
 
 export type CountdownSetting = {
 	label: string;
 	countdownStartInMillis: number;
 	countdownDeadlineInMillis: number;
-	// TODO: when design agreed add theme
-	//theme: {
-	//	backgroundColor: string;
-	// 	primaryColor: string;
-	//  secondaryColor: string;
-	//};
+	theme: {
+		backgroundColor: string;
+		foregroundColor: string;
+	};
 };
 
 interface CampaignCopy {
@@ -42,16 +43,28 @@ const campaigns: Record<string, CampaignSettings> = {
 				label: 'Giving Tuesday',
 				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
+				theme: {
+					backgroundColor: '#ab0613',
+					foregroundColor: '#ffffff',
+				},
 			},
 			{
 				label: 'Discount',
 				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 13, 2024 00:00:00'),
+				theme: {
+					backgroundColor: '#1e3e72',
+					foregroundColor: '#ffffff',
+				},
 			},
 			{
 				label: 'Final Countdown',
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
+				theme: {
+					backgroundColor: '#1e3e72',
+					foregroundColor: '#ffffff',
+				},
 			},
 		],
 		copy: {
@@ -77,6 +90,36 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 			size: 'large',
 			id: 'US',
+		},
+	},
+	ausEoy2024: {
+		isEligible: (countryGroupId: CountryGroupId) =>
+			countryGroupId === AUDCountries,
+		enableSingleContributions: false,
+		countdownSettings: [],
+		copy: {
+			headingFragment: <>Support </>,
+			subheading: (
+				<>
+					We're not owned by a billionaire or shareholders - our readers support
+					us. Choose to join with one of the options below.
+					<strong>Cancel anytime.</strong>
+				</>
+			),
+			oneTimeHeading: <>Choose your gift amount</>,
+		},
+		tickerSettings: {
+			currencySymbol: '$',
+			copy: {},
+			tickerStylingSettings: {
+				headlineColour: '#000000',
+				totalColour: '#FBBCC7',
+				goalColour: '#FFFFFF',
+				filledProgressColour: '#FBBCC7',
+				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
+			},
+			size: 'large',
+			id: 'AU',
 		},
 	},
 };

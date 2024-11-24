@@ -24,6 +24,14 @@ class TestUsersManagement(
     val testUser = testUsers.testUsers.generateEmail(Some(request.user.email))
     Ok(testUsersView(testUser))
       .withHeaders(CacheControl.noCache)
-      .withCookies(Cookie("_test_username", testUser.token, httpOnly = false, domain = Some(cookieDomain.value)))
+      .withCookies(
+        Cookie(
+          "_test_username",
+          testUser.token,
+          maxAge = Some(24 * 60 * 2),
+          httpOnly = false,
+          domain = Some(cookieDomain.value),
+        ),
+      )
   }
 }

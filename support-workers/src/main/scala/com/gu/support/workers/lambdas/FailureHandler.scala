@@ -116,7 +116,6 @@ object FailureHandler {
     // Just get the decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
     val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
     paymentProvider match {
-      case AmazonPay => convertAmazonPayDeclineCode(trimmedError)
       case _ => convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
     }
   }

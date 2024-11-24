@@ -237,12 +237,10 @@ object PaymentProvider {
 
   case object DirectDebit extends PaymentProvider("GOCARDLESS")
 
-  case object AmazonPay extends PaymentProvider("AMAZON_PAY")
-
   case object InAppPurchase extends PaymentProvider("IN_APP_PURCHASE")
 
   def fromString(code: String): Option[PaymentProvider] = {
-    List(Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, PayPal, DirectDebit, AmazonPay, InAppPurchase)
+    List(Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, PayPal, DirectDebit, InAppPurchase)
       .find(_.value == code)
   }
 

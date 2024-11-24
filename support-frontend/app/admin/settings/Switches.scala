@@ -33,6 +33,7 @@ case class CampaignSwitches(
     enableContributionsCampaign: Option[SwitchState],
     forceContributionsCampaign: Option[SwitchState],
     usEoy2024: Option[SwitchState] = None,
+    ausEoy2024: Option[SwitchState] = None,
 )
 
 object CampaignSwitches {
@@ -65,7 +66,6 @@ case class OneOffPaymentMethodSwitches(
     // @see https://docs.stripe.com/elements/express-checkout-element
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
-    amazonPay: Option[SwitchState],
 )
 
 object OneOffPaymentMethodSwitches {
@@ -80,7 +80,6 @@ case class RecurringPaymentMethodSwitches(
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
     directDebit: Option[SwitchState],
-    amazonPay: Option[SwitchState],
     sepa: Option[SwitchState],
 )
 

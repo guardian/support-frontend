@@ -1,12 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.gu.emailservices._
-import com.gu.support.workers.CheckoutFailureReasons.{
-  AccountMismatch,
-  AmazonPayTryAnotherCard,
-  PaymentMethodUnacceptable,
-  Unknown,
-}
+import com.gu.support.workers.CheckoutFailureReasons.{AccountMismatch, PaymentMethodUnacceptable, Unknown}
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
@@ -153,14 +148,6 @@ class FailureHandlerSpec extends AsyncLambdaSpec with MockContext {
       Stripe,
     )
     reason should be(PaymentMethodUnacceptable)
-  }
-
-  it should "convert an Amazon Pay transaction declined error from Zuora to an appropriate CheckoutFailureReason" in {
-    val reason = FailureHandler.toCheckoutFailureReason(
-      ZuoraError("TRANSACTION_FAILED", "Transaction declined.InvalidPaymentMethod - Declined"),
-      AmazonPay,
-    )
-    reason should be(AmazonPayTryAnotherCard)
   }
 
 }
