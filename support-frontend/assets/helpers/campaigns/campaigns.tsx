@@ -17,8 +17,8 @@ export type CountdownSetting = {
 };
 
 export function countdownSwitchOn(): boolean {
-    const isOn = isSwitchOn('featureSwitches.enableCampaignCountdown');
-    return isOn;
+	const isOn = isSwitchOn('featureSwitches.enableCampaignCountdown');
+	return isOn;
 }
 
 interface CampaignCopy {

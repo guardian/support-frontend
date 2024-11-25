@@ -24,7 +24,10 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
-import { countdownSwitchOn, getCampaignSettings } from 'helpers/campaigns/campaigns';
+import {
+	countdownSwitchOn,
+	getCampaignSettings,
+} from 'helpers/campaigns/campaigns';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
