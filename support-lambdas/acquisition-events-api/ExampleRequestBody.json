@@ -35,5 +35,8 @@
       "value": "value2"
     }
   ],
-  "platform": null
+  "platform": null,
+  "postalCode": null,
+  "state": null,
+  "email": null
 }
