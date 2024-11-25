@@ -636,6 +636,12 @@ export function ThreeTierLanding({
 								contributionType,
 								promotionTier3,
 							),
+							starts: promotionTier3?.starts
+								? new Date(promotionTier3.starts)
+								: undefined,
+							expires: promotionTier3?.expires
+								? new Date(promotionTier3.expires)
+								: undefined,
 						},
 					]}
 					currency={currencies[currencyId].glyph}
