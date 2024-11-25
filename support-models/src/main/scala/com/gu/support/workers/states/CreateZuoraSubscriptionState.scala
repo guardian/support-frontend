@@ -60,6 +60,12 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
+  case class GuardianLightState(
+      product: GuardianLight,
+      paymentMethod: PaymentMethod,
+      salesForceContact: SalesforceContactRecord,
+  ) extends CreateZuoraSubscriptionProductState
+
   case class DigitalSubscriptionDirectPurchaseState(
       billingCountry: Country,
       product: DigitalPack,
@@ -115,6 +121,7 @@ object CreateZuoraSubscriptionProductState {
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[TierThreeState](tierThree),
+      discriminatedType.variant[GuardianLightState](guardianLight),
     ),
   )
 
