@@ -28,7 +28,10 @@ import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
+import type {
+	CampaignSettings,
+	CountdownSetting,
+} from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -337,6 +340,24 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCountdownCampaign]);
 
+	const getHeadline = (
+		showCountdown: boolean,
+		currentCountdownSettings?: CountdownSetting,
+		campaignSettings?: CampaignSettings | null,
+	) => {
+		if (showCountdown && currentCountdownSettings?.label.trim()) {
+			return currentCountdownSettings.label;
+		} else {
+			return (
+				<>
+					{campaignSettings?.copy.headingFragment ?? <>Support </>}
+					fearless, <br css={tabletLineBreak} />
+					independent journalism
+				</>
+			);
+		}
+	};
+
 	/*
 	 * /////////////// END US EOY 2024 Campaign
 	 */
@@ -522,12 +543,18 @@ export function ThreeTierLanding({
 			>
 				<div css={innerContentContainer}>
 					{countdownSwitchOn() && showCountdown && currentCountdownSettings && (
-						<Countdown countdownCampaign={currentCountdownSettings} />
+						<Countdown
+							countdownCampaign={currentCountdownSettings}
+							showCountdown={showCountdown}
+							setShowCountdown={setShowCountdown}
+						/>
 					)}
 					<h1 css={heading}>
-						{campaignSettings?.copy.headingFragment ?? <>Support </>}
-						fearless, <br css={tabletLineBreak} />
-						independent journalism
+						{getHeadline(
+							showCountdown,
+							currentCountdownSettings,
+							campaignSettings,
+						)}
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (

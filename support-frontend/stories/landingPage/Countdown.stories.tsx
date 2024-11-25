@@ -53,6 +53,8 @@ Default.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
+	showCountdown: true,
+	setShowCountdown: () => {return true},
 };
 
 export const DeadlineNear = Template.bind({});
@@ -66,6 +68,8 @@ DeadlineNear.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
+	showCountdown: true,
+	setShowCountdown: () => {return true},
 };
 
 export const DeadlinePassedHidden = Template.bind({});
@@ -79,6 +83,8 @@ DeadlinePassedHidden.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
+	showCountdown: false,
+	setShowCountdown: () => {return true},
 };
 
 export const NotYetAvailableHidden = Template.bind({});
@@ -92,6 +98,8 @@ NotYetAvailableHidden.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
+	showCountdown: false,
+	setShowCountdown: () => {return true},
 };
 
 export const ThemedSubCampaign = Template.bind({});
@@ -111,4 +119,6 @@ ThemedSubCampaign.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
+	showCountdown: true,
+	setShowCountdown: () => {return true},
 };
