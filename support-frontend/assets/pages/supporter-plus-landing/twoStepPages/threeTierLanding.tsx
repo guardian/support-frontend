@@ -337,10 +337,6 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCountdownCampaign]);
 
-	useEffect(() => {
-		getHeadline(showCountdown, currentCountdownSettings, campaignSettings);
-	}, [showCountdown]); // hide both the countdown and switch out the headline.
-
 	const getHeadline = (
 		showCountdown: boolean,
 		currentCountdownSettings?: CountdownSetting,
