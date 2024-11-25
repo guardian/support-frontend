@@ -34,6 +34,7 @@ case class CampaignSwitches(
     forceContributionsCampaign: Option[SwitchState],
     usEoy2024: Option[SwitchState] = None,
     ausEoy2024: Option[SwitchState] = None,
+    ukBlackFriday2024: Option[SwitchState] = None,
 )
 
 object CampaignSwitches {
