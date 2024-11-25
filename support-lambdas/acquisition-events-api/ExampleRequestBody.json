@@ -23,7 +23,6 @@
   "readerType": "Direct",
   "acquisitionType": "Purchase",
   "zuoraSubscriptionNumber": null,
-  "zuoraAccountNumber": null,
   "contributionId": null,
   "paymentId": null,
   "queryParameters": [
@@ -36,5 +35,8 @@
       "value": "value2"
     }
   ],
-  "platform": null
+  "platform": null,
+  "postalCode": null,
+  "state": null,
+  "email": null
 }
