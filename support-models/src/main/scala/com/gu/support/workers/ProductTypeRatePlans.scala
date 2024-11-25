@@ -39,6 +39,14 @@ object ProductTypeRatePlans {
       .getOrElse(environment, Nil)
       .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
 
+  def guardianLightRatePlan(
+      product: GuardianLight,
+      environment: TouchPointEnvironment,
+  ): Option[ProductRatePlan[catalog.GuardianLight.type]] =
+    catalog.GuardianLight.ratePlans
+      .getOrElse(environment, Nil)
+      .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
+
   def tierThreeRatePlan(
       product: TierThree,
       environment: TouchPointEnvironment,

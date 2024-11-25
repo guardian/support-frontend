@@ -19,7 +19,7 @@ Mappings:
       S3Bucket: supporter-product-data-export-code
       CatalogBucket: arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
       # Run once at 6am Mon-Fri
-      scheduleRate: "cron(0 6 ? * 1-5 *)"
+      scheduleRate: "cron(0 6 ? * MON-FRI *)"
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod

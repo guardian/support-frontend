@@ -71,6 +71,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
+      case state: GuardianLightState =>
+        zuoraGuardianLightHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
     }
 
     eventualSendThankYouEmailState.map { nextState =>
@@ -151,6 +157,15 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       dateGenerator,
       subscribeItemBuilder,
     ),
+  )
+  lazy val zuoraGuardianLightHandler = new ZuoraGuardianLightHandler(
+    zuoraSubscriptionCreator,
+    new GuardianLightSubscriptionBuilder(
+      dateGenerator,
+      touchPointEnvironment,
+      subscribeItemBuilder,
+    ),
+    state.user,
   )
   lazy val zuoraPaperHandler = new ZuoraPaperHandler(
     zuoraSubscriptionCreator,
