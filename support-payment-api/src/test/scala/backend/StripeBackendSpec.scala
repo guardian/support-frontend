@@ -326,7 +326,7 @@ class StripeBackendSpec
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
@@ -359,7 +359,7 @@ class StripeBackendSpec
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeApplePay, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
       }
       "return Success if stripe payment request button  switch is On in support-admin-console" in new StripeBackendFixture {
         val stripePaymentDataWithStripePaymentRequest =
@@ -392,7 +392,7 @@ class StripeBackendSpec
         stripeBackend
           .createPaymentIntent(createPaymentIntentWithStripePaymentRequest, clientBrowserInfo)
           .futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
       }
     }
 
@@ -542,7 +542,7 @@ class StripeBackendSpec
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
@@ -619,7 +619,7 @@ class StripeBackendSpec
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
         stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
