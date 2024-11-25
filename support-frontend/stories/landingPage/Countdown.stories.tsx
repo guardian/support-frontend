@@ -34,11 +34,6 @@ function Template(args: CountdownProps) {
 	);
 }
 
-function dummy(b: boolean) {
-	b;
-	return;
-}
-
 Template.args = {} as CountdownProps;
 
 export const Default = Template.bind({});
@@ -59,7 +54,7 @@ Default.args = {
 		},
 	},
 	showCountdown: true,
-	setShowCountdown: dummy,
+	setShowCountdown: () => {return true},
 };
 
 export const DeadlineNear = Template.bind({});
@@ -74,7 +69,7 @@ DeadlineNear.args = {
 		},
 	},
 	showCountdown: true,
-	setShowCountdown: dummy,
+	setShowCountdown: () => {return true},
 };
 
 export const DeadlinePassedHidden = Template.bind({});
@@ -89,7 +84,7 @@ DeadlinePassedHidden.args = {
 		},
 	},
 	showCountdown: false,
-	setShowCountdown: dummy,
+	setShowCountdown: () => {return true},
 };
 
 export const NotYetAvailableHidden = Template.bind({});
@@ -104,7 +99,7 @@ NotYetAvailableHidden.args = {
 		},
 	},
 	showCountdown: false,
-	setShowCountdown: dummy,
+	setShowCountdown: () => {return true},
 };
 
 export const ThemedSubCampaign = Template.bind({});
@@ -125,5 +120,5 @@ ThemedSubCampaign.args = {
 		},
 	},
 	showCountdown: true,
-	setShowCountdown: dummy,
+	setShowCountdown: () => {return true},
 };
