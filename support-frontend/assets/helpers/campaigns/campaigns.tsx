@@ -2,6 +2,7 @@ import type { TickerSettings } from '@guardian/source-development-kitchen/dist/r
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import {
 	AUDCountries,
+	GBPCountries,
 	UnitedStates,
 } from '../internationalisation/countryGroup';
 
@@ -30,7 +31,7 @@ export type CampaignSettings = {
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
-	tickerSettings: CampaignTickerSettings;
+	tickerSettings?: CampaignTickerSettings;
 };
 
 const campaigns: Record<string, CampaignSettings> = {
@@ -120,6 +121,42 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 			size: 'large',
 			id: 'AU',
+		},
+	},
+	ukBlackFriday2024: {
+		isEligible: (countryGroupId: CountryGroupId) =>
+			countryGroupId === GBPCountries,
+		enableSingleContributions: false,
+		countdownSettings: [
+			// {
+			// 	label: 'This Black Friday, why not support fearless, independent journalism?',
+			// 	countdownStartInMillis: Date.parse('Nov 25, 2024 00:00:00'),
+			// 	countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
+			// 	theme: {
+			// 		backgroundColor: '#1e3e72',
+			// 		foregroundColor: '#ffffff',
+			// 	},
+			// }, // TODO: change the label on the 29th to: 'Just a few days left'
+			{
+				label: 'Test',
+				countdownStartInMillis: Date.parse('Nov 25, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Nov 25, 2024 17:00:00'),
+				theme: {
+					backgroundColor: '#1e3e72',
+					foregroundColor: '#ffffff',
+				},
+			},
+		],
+		copy: {
+			headingFragment: <>Support </>,
+			subheading: (
+				<>
+					We're not owned by a billionaire or shareholders - our readers support
+					us. Choose to join with one of the options below.
+					<strong>Cancel anytime.</strong>
+				</>
+			),
+			oneTimeHeading: <>Choose your gift amount</>,
 		},
 	},
 };
