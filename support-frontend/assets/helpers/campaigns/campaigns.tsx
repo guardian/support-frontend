@@ -138,8 +138,7 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label:
-					'Just a few days left',
+				label: 'Just a few days left',
 				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
 				theme: {
