@@ -12,5 +12,6 @@ object ExecutionTypeDiscriminators {
   val digitalSubscriptionGiftRedemption = "DigitalSubscriptionGiftRedemption"
   val paper = "Paper"
   val guardianWeekly = "GuardianWeekly"
+  val guardianLight = "GuardianLight"
 
 }

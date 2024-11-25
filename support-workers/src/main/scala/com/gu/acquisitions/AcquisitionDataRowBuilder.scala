@@ -26,6 +26,7 @@ import com.gu.support.workers.{
   StripePaymentType,
   SupporterPlus,
   TierThree,
+  GuardianLight,
 }
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -123,6 +124,7 @@ object AcquisitionDataRowBuilder {
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
+    case _: GuardianLight => (AcquisitionProduct.GuardianLight, None)
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
@@ -253,6 +255,15 @@ object AcquisitionDataRowBuilder {
           Redemption,
           None, // TODO: if we rework digital gift modelling in Zuora we should include the relevant ids here
           None,
+        )
+      case s: SendThankYouEmailGuardianLightState =>
+        AcquisitionTypeDetails(
+          paymentMethod = Some(s.paymentMethod),
+          promoCode = None,
+          readerType = Direct,
+          acquisitionType = Purchase,
+          zuoraAccountNumber = Some(s.accountNumber),
+          zuoraSubscriptionNumber = Some(s.subscriptionNumber),
         )
     }
 
