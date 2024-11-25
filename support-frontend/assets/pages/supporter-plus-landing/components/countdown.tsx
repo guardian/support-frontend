@@ -70,6 +70,8 @@ const timeLabelStyle = css`
 
 // props
 export type CountdownProps = {
+	showCountdown: boolean;
+	setShowCountdown: (b: boolean) => void;
 	countdownCampaign: CountdownSetting;
 };
 
@@ -88,6 +90,8 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 
 // return the countdown component
 export default function Countdown({
+	showCountdown: show,
+	setShowCountdown: setShow,
 	countdownCampaign: campaign,
 }: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
@@ -95,7 +99,10 @@ export default function Countdown({
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+
+	const hideCountdown = () => {
+		setShow(false);
+	};
 
 	useEffect(() => {
 		const getTotalMillisRemaining = (targetDate: number) => {
@@ -106,7 +113,7 @@ export default function Countdown({
 			const isActive =
 				campaign.countdownStartInMillis < now &&
 				campaign.countdownDeadlineInMillis > now;
-			setShowCountdown(isActive);
+			setShow(isActive);
 			return isActive;
 		};
 
@@ -114,7 +121,9 @@ export default function Countdown({
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-
+			if (timeRemaining < -1) {
+				hideCountdown();
+			}
 			setDays(
 				ensureRoundedDoubleDigits(
 					Math.floor(timeRemaining / millisecondsInDay),
@@ -140,7 +149,6 @@ export default function Countdown({
 		if (canDisplayCountdown()) {
 			updateTimeParts(); // called first
 			const id = setInterval(updateTimeParts, 1000); // run once per second
-			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
@@ -155,7 +163,7 @@ export default function Countdown({
 
 	return (
 		<>
-			{showCountdown && (
+			{show && (
 				<div id="timer" role="timer" css={outer}>
 					<div css={container(campaign)}>
 						<TimePart timePart={days} label={'days'} />
