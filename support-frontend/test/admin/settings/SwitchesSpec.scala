@@ -112,6 +112,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "authenticateWithOkta" : {
           |        "description" : "Auth is by Okta tokens rather than legacy Identity cookies",
           |        "state" : "Off"
+          |      },
+          |      "enableCampaignCountdown" : {
+          |        "description" : "Enable Campaign Countdown",
+          |        "state" : "On"
           |      }
           |    }
           |  },
