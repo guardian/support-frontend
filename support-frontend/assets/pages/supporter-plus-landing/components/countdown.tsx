@@ -70,8 +70,8 @@ const timeLabelStyle = css`
 
 // props
 export type CountdownProps = {
-	show: boolean;
-	setShow: (b: boolean) => void;
+	showCountdown: boolean;
+	setShowCountdown: (b: boolean) => void;
 	countdownCampaign: CountdownSetting;
 };
 
@@ -90,8 +90,8 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 
 // return the countdown component
 export default function Countdown({
-	show,
-	setShow,
+	showCountdown: show,
+	setShowCountdown: setShow,
 	countdownCampaign: campaign,
 }: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
@@ -100,7 +100,7 @@ export default function Countdown({
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
 
-	const hideMyself = () => {
+	const hideCountdown = () => {
 		setShow(false);
 	};
 
@@ -122,7 +122,7 @@ export default function Countdown({
 				campaign.countdownDeadlineInMillis,
 			);
 			if (timeRemaining < -1) {
-				hideMyself();
+				hideCountdown();
 			}
 			setDays(
 				ensureRoundedDoubleDigits(

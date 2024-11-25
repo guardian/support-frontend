@@ -546,8 +546,8 @@ export function ThreeTierLanding({
 					{showCountdown && currentCountdownSettings && (
 						<Countdown
 							countdownCampaign={currentCountdownSettings}
-							show={showCountdown}
-							setShow={setShowCountdown}
+							showCountdown={showCountdown}
+							setShowCountdown={setShowCountdown}
 						/>
 					)}
 					<h1 css={heading}>
