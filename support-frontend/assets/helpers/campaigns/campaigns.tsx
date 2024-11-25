@@ -129,7 +129,8 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label: 'This Black Friday, why not support fearless, independent journalism?',
+				label:
+					'This Black Friday, why not support fearless, independent journalism?',
 				countdownStartInMillis: Date.parse('Nov 25, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
 				theme: {
