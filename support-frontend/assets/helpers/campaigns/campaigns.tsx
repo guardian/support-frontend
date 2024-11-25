@@ -139,17 +139,17 @@ const campaigns: Record<string, CampaignSettings> = {
 		countdownSettings: [
 			{
 				label:
-					'This Black Friday, why not support fearless, independent journalism?',
-				countdownStartInMillis: Date.parse('Nov 25, 2024 00:00:00'),
+					'Just a few days left',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
 				theme: {
 					backgroundColor: '#1e3e72',
 					foregroundColor: '#ffffff',
 				},
-			}, // TODO: change the label on the 29th to: 'Just a few days left'
+			},
 		],
 		copy: {
-			headingFragment: <>Support </>,
+			headingFragment: <>This Black Friday, why not support </>,
 			subheading: (
 				<>
 					We're not owned by a billionaire or shareholders - our readers support
