@@ -130,34 +130,6 @@ class PaypalBackend(
         },
       )
 
-//  def capturePaymentOld(
-//      capturePaymentData: CapturePaypalPaymentData,
-//      clientBrowserInfo: ClientBrowserInfo,
-//  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
-//    paypalService
-//      .capturePayment(capturePaymentData)
-//      .bimap(
-//        err => {
-//          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-//          err
-//        },
-//        payment => {
-//          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-//
-//          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
-//            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
-//          )
-//
-//          maybeEmail.foreach { email =>
-//            getOrCreateIdentityIdFromEmail(email).foreach { identityId =>
-//              postPaymentTasks(payment, email, identityId, capturePaymentData.acquisitionData, clientBrowserInfo)
-//            }
-//          }
-//
-//          EnrichedPaypalPayment(payment, maybeEmail)
-//        },
-//      )
-
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,
       clientBrowserInfo: ClientBrowserInfo,
@@ -254,7 +226,7 @@ class PaypalBackend(
     }
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String) =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[IdentityUserDetails]] =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .fold(
