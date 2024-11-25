@@ -41,9 +41,18 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label: 'Giving Tuesday',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 04, 2024 00:00:00'),
+				label: 'This Giving Tuesday, give to the Guardian',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:01:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
+				theme: {
+					backgroundColor: '#ab0613',
+					foregroundColor: '#ffffff',
+				},
+			},
+			{
+				label: "It's not too late",
+				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
 				theme: {
 					backgroundColor: '#ab0613',
 					foregroundColor: '#ffffff',
@@ -83,11 +92,11 @@ const campaigns: Record<string, CampaignSettings> = {
 			currencySymbol: '$',
 			copy: {},
 			tickerStylingSettings: {
-				headlineColour: '#000000',
-				totalColour: '#64B7C4',
-				goalColour: '#FFFFFF',
-				filledProgressColour: '#64B7C4',
-				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
+				headlineColour: '#ffffff',
+				totalColour: '#ffffff',
+				goalColour: '#ffffff',
+				filledProgressColour: '#ffffff',
+				progressBarBackgroundColour: 'rgba(250, 250, 250, 0.3)',
 			},
 			size: 'large',
 			id: 'US',
