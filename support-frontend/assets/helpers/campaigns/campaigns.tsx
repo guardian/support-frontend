@@ -3,6 +3,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import {
 	AUDCountries,
+	GBPCountries,
 	UnitedStates,
 } from '../internationalisation/countryGroup';
 
@@ -25,6 +26,7 @@ interface CampaignCopy {
 	headingFragment?: JSX.Element;
 	subheading?: JSX.Element;
 	oneTimeHeading?: JSX.Element;
+	punctuation?: JSX.Element;
 }
 
 export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
@@ -36,7 +38,7 @@ export type CampaignSettings = {
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
-	tickerSettings: CampaignTickerSettings;
+	tickerSettings?: CampaignTickerSettings;
 };
 
 const campaigns: Record<string, CampaignSettings> = {
@@ -135,6 +137,34 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 			size: 'large',
 			id: 'AU',
+		},
+	},
+	ukBlackFriday2024: {
+		isEligible: (countryGroupId: CountryGroupId) =>
+			countryGroupId === GBPCountries,
+		enableSingleContributions: false,
+		countdownSettings: [
+			{
+				label: 'Just a few days left',
+				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
+				theme: {
+					backgroundColor: '#1e3e72',
+					foregroundColor: '#ffffff',
+				},
+			},
+		],
+		copy: {
+			headingFragment: <>This Black Friday, why not support </>,
+			subheading: (
+				<>
+					We're not owned by a billionaire or shareholders - our readers support
+					us. Choose to join with one of the options below.
+					<strong>Cancel anytime.</strong>
+				</>
+			),
+			oneTimeHeading: <>Choose your gift amount</>,
+			punctuation: <>?</>,
 		},
 	},
 };
