@@ -349,7 +349,7 @@ export function ThreeTierLanding({
 				<>
 					{campaignSettings?.copy.headingFragment ?? <>Support </>}
 					fearless, <br css={tabletLineBreak} />
-					independent journalism
+					independent journalism{campaignSettings?.copy.punctuation ?? campaignSettings?.copy.punctuation}
 				</>
 			);
 		}

@@ -20,6 +20,7 @@ interface CampaignCopy {
 	headingFragment?: JSX.Element;
 	subheading?: JSX.Element;
 	oneTimeHeading?: JSX.Element;
+	punctuation?: JSX.Element;
 }
 
 export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
@@ -157,6 +158,7 @@ const campaigns: Record<string, CampaignSettings> = {
 				</>
 			),
 			oneTimeHeading: <>Choose your gift amount</>,
+			punctuation: <>?</>,
 		},
 	},
 };
