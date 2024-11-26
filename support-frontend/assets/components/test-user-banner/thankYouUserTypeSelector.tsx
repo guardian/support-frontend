@@ -16,7 +16,7 @@ const selectorStyles = css`
 `;
 
 export function ThankYouUserTypeSelector(): JSX.Element {
-	const [selectedUserType, setSelectedUserType] = useState<UserType>('guest');
+	const [selectedUserType, setSelectedUserType] = useState<UserType>('new');
 
 	useEffect(() => {
 		// ToDo: refactor this to use the query param instead of redux
@@ -32,13 +32,8 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 				cssOverrides={selectorStyles}
 			>
 				<Radio
-					// the default user type response from identity as a test user is "guest"
+					// the default user type response from identity as a test user is "new"
 					defaultChecked
-					label="Guest"
-					value="guest"
-					onChange={() => setSelectedUserType('guest')}
-				/>
-				<Radio
 					label="New"
 					value="new"
 					onChange={() => setSelectedUserType('new')}
