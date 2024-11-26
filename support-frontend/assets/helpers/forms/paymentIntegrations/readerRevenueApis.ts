@@ -25,6 +25,7 @@ import type {
 	Paper,
 } from 'helpers/productPrice/subscriptions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type {
 	AcquisitionABTest,
 	OphanIds,
@@ -236,6 +237,7 @@ export type PaymentResult = {
 	paymentStatus: Status;
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
+	userType?: UserType;
 };
 
 export type StatusResponse = {

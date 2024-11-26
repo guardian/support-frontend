@@ -15,7 +15,7 @@ class StripeChargeSuccessSpec extends AnyWordSpec with Matchers with MockitoSuga
         val chargeMock: Charge = mock[Charge]
         when(chargeMock.getCurrency).thenReturn("GBP")
         when(chargeMock.getAmount).thenReturn(123L)
-        val stripeChargeSuccess = StripeCreateChargeResponse.fromCharge(chargeMock)
+        val stripeChargeSuccess = StripeCreateChargeResponse.fromCharge(chargeMock, None)
         stripeChargeSuccess.amount mustBe 1.23
       }
 
