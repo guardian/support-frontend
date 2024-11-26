@@ -331,8 +331,8 @@ export function ThreeTierLanding({
 		return campaignSettings.countdownSettings.find(
 			(c) =>
 				c.countdownStartInMillis < now &&
-				c.countdownDeadlineInMillis > now && 
-				(c.requiresPromoCode ? urlSearchParamsPromoCode : true)
+				c.countdownDeadlineInMillis > now &&
+				(c.requiresPromoCode ? urlSearchParamsPromoCode : true),
 		);
 	}, [campaignSettings?.countdownSettings]);
 
