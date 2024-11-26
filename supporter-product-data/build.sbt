@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.2",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.7.0",
   "com.nrinaudo" %% "kantan.csv-java8" % "0.7.0",
-  "com.jayway.jsonpath" % "json-path" % "2.8.0",
+  "com.jayway.jsonpath" % "json-path" % "2.9.0",
 )
 
 riffRaffPackageType := assembly.value
