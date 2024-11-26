@@ -94,10 +94,16 @@ class StripeBackend(
       .semiflatMap { charge =>
         cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityId =>
-          postPaymentTasks(chargeData.paymentData.email.value, chargeData, charge, clientBrowserInfo, identityId)
+        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityUserDetails =>
+          postPaymentTasks(
+            chargeData.paymentData.email.value,
+            chargeData,
+            charge,
+            clientBrowserInfo,
+            identityUserDetails.map(_.id),
+          )
 
-          StripeCreateChargeResponse.fromCharge(charge)
+          StripeCreateChargeResponse.fromCharge(charge, identityUserDetails.map(_.userType))
         }
       }
 
@@ -228,10 +234,16 @@ class StripeBackend(
 
     cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
 
-    getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityId =>
+    getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityUserDetails =>
       paymentIntent.getCharges.getData.asScala.toList.headOption match {
         case Some(charge) =>
-          postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityId)
+          postPaymentTasks(
+            request.paymentData.email.value,
+            request,
+            charge,
+            clientBrowserInfo,
+            identityUserDetails.map(_.id),
+          )
         case None =>
           /** This should never happen, but in case it does we still return success to the client because the payment
             * was reported as successful by Stripe. It does however prevent us from executing post-payment tasks and so
@@ -241,9 +253,10 @@ class StripeBackend(
             PaymentProvider.Stripe,
             s"No charge found on completed Stripe Payment Intent, cannot do post-payment tasks. Request was $request",
           )
+          identityUserDetails
       }
 
-      StripePaymentIntentsApiResponse.Success()
+      StripePaymentIntentsApiResponse.Success(identityUserDetails.map(_.userType))
     }
   }
 
@@ -294,7 +307,7 @@ class StripeBackend(
     )
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[String]] =
+  private def getOrCreateIdentityIdFromEmail(email: String) =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .fold(
