@@ -1,5 +1,7 @@
 import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
+import SvgGuardianLightGoBack from 'components/svgs/guardianLightGoBack';
+import SvgGuardianLightPurchase from 'components/svgs/guardianLightPurchase';
 import type { Participations } from './abTests/abtest';
 import { newspaperCountries } from './internationalisation/country';
 import type {
@@ -22,6 +24,7 @@ type ProductBenefit = {
 
 export type ProductDescription = {
 	label: string;
+	icon?: JSX.Element;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
 	benefitsMissing?: ProductBenefit[];
@@ -104,17 +107,26 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
+const guardianLightBenefits = [
+	{
+		copy: 'A Guardian Light subscription enables you to read the Guardian without personalised advertising.',
+	},
+	{
+		copy: 'Guardian Light is a distinct product that is separate to other paid subscriptions. Readers with valid ad-free subscriptions should sign in to read the Guardian without advertising.',
+	},
+	{ copy: 'You can cancel anytime' },
+];
+
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
-			label: 'Guardian Light',
+			label: 'Purchase Guardian Light',
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
 				},
 			},
-			benefits: [],
-			benefitsAdditional: [{ copy: 'Lorem ipsum' }],
+			benefits: guardianLightBenefits,
 		},
 		TierThree: {
 			label: 'Digital + print',
@@ -339,6 +351,29 @@ export function productCatalogDescriptionNewBenefits(
 					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
 						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
 					}, since 1821.`,
+				},
+			],
+		},
+	};
+}
+
+export function productCatalogGuardianLight(): Record<
+	ProductKey | 'GuardianLightGoBack',
+	ProductDescription
+> {
+	return {
+		...productCatalogDescription,
+		GuardianLight: {
+			...productCatalogDescription.GuardianLight,
+			icon: <SvgGuardianLightPurchase />,
+		},
+		GuardianLightGoBack: {
+			...productCatalogDescription.GuardianLight,
+			label: 'Read with personalised advertising',
+			icon: <SvgGuardianLightGoBack />,
+			benefits: [
+				{
+					copy: `Click ‘Go Back to Accept all’ if you do not want to purchase a Guardian Light subscription`,
 				},
 			],
 		},
