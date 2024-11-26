@@ -23,7 +23,7 @@ const errorReasons = [
 	'recaptcha_validation_failed',
 	'unknown',
 ] as const;
-function isErrorReason(value: string): value is ErrorReason {
+export function isErrorReason(value: string): value is ErrorReason {
 	return errorReasons.includes(value as ErrorReason);
 }
 export type ErrorReason = (typeof errorReasons)[number];

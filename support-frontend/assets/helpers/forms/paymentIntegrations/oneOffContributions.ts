@@ -1,17 +1,19 @@
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
+import { z } from 'zod';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { isErrorReason } from 'helpers/forms/errorReasons';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import { userTypeSchema } from 'helpers/redux/checkout/personalDetails/state';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import { PaymentSuccess } from './readerRevenueApis';
 import type { PaymentResult, StripePaymentMethod } from './readerRevenueApis';
+import { PaymentSuccess } from './readerRevenueApis';
 
 // ----- Types ----- //
 type UnexpectedError = {
@@ -102,11 +104,6 @@ export type CreatePaypalPaymentData = {
 	cancelURL: string;
 };
 
-type PaymentError = {
-	type: 'error';
-	error: { failureReason?: ErrorReason };
-};
-
 type CreateIntentResponse = {
 	type: string;
 	data: { clientSecret: string };
@@ -130,16 +127,34 @@ function paymentApiEndpointWithMode(url: string) {
 	return url;
 }
 
-// Object is expected to have structure:
-// { type: "error", error: { failureReason: string } }, or
-// { type: "success", data: { currency: string, amount: number } }
+const errorResponseSchema = z.object({
+	type: z.literal('error'),
+	error: z.object({
+		failureReason: z.string(),
+	}),
+});
+const successResponseSchema = z.object({
+	type: z.literal('success'),
+	data: z.object({
+		currency: z.string(),
+		amount: z.number(),
+		userType: userTypeSchema.optional(),
+	}),
+});
+const responseSchema = z.discriminatedUnion('type', [
+	successResponseSchema,
+	errorResponseSchema,
+]);
+
 function paymentResultFromObject(
 	json: Record<string, unknown>,
 ): Promise<PaymentResult> {
-	if (json.error) {
-		const paymentError: PaymentError = json as PaymentError;
-		const failureReason: ErrorReason = paymentError.error.failureReason
-			? paymentError.error.failureReason
+	const response = responseSchema.parse(json);
+	if (response.type === 'error') {
+		const failureReason: ErrorReason = isErrorReason(
+			response.error.failureReason,
+		)
+			? response.error.failureReason
 			: 'unknown';
 
 		return Promise.resolve({
@@ -148,10 +163,10 @@ function paymentResultFromObject(
 		});
 	}
 
-	const response = json as { data?: { userType: UserType } };
-	const maybeUserType = response.data?.userType;
-
-	return Promise.resolve({ ...PaymentSuccess, userType: maybeUserType });
+	return Promise.resolve({
+		...PaymentSuccess,
+		userType: response.data.userType,
+	});
 }
 
 const postToPaymentApi = (
