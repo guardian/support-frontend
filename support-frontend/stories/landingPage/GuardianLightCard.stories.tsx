@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import type { GuardianLightCardProps } from 'pages/[countryGroupId]/components/guardianLightCard';
 import { GuardianLightCard } from 'pages/[countryGroupId]/components/guardianLightCard';
@@ -16,7 +16,7 @@ function Template(args: GuardianLightCardProps) {
 		margin: 0 auto;
 		text-align: center;
 		background-color: ${palette.brand[400]};
-		padding: 25px;
+		padding: ${space[6]}px;
 	`;
 	return (
 		<div css={innerContentContainer}>
