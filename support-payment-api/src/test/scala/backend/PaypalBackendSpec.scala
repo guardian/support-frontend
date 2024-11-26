@@ -6,6 +6,7 @@ import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
+import model.UserType.Current
 import model._
 import model.paypal._
 import org.mockito.ArgumentMatchers.any
@@ -106,9 +107,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val acquisitionsEventBusErrorMessage = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
-    EitherT.right(Future.successful("1"))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
+    EitherT.right(Future.successful(IdentityUserDetails("1", Current)))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
@@ -275,7 +276,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         "databaseService and emailService fail" in new PaypalBackendFixture {
           populatePaymentMock()
           val enrichedPaypalPaymentMock =
-            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
           when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
@@ -301,7 +302,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         "databaseService and emailService fail" in new PaypalBackendFixture {
           populatePaymentMock()
           val enrichedPaypalPaymentMock =
-            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
           when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockSupporterProductDataService.insertContributionData(any())(any()))
@@ -323,7 +324,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
         populatePaymentMock()
         val enrichedPaypalPaymentMock =
-          EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+          EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), Some(Current))
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
