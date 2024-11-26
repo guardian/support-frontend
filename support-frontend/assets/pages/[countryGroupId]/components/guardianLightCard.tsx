@@ -14,7 +14,7 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import { type ProductDescription } from 'helpers/productCatalog';
 
 export type CardPosition = 1 | 2;
-export type GuardianLightProps = {
+export type GuardianLightCardProps = {
 	cardPosition: CardPosition;
 	link: string;
 	productDescription: ProductDescription;
@@ -81,7 +81,7 @@ export function GuardianLightCard({
 	link,
 	productDescription,
 	ctaCopy,
-}: GuardianLightProps): JSX.Element {
+}: GuardianLightCardProps): JSX.Element {
 	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
 	const { label, benefits } = productDescription;
 	return (
