@@ -136,8 +136,6 @@ const errorResponseSchema = z.object({
 const successResponseSchema = z.object({
 	type: z.literal('success'),
 	data: z.object({
-		currency: z.string(),
-		amount: z.number(),
 		userType: userTypeSchema.optional(),
 	}),
 });
