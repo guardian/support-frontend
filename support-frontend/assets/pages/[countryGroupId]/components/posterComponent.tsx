@@ -9,7 +9,6 @@ import {
 	textSans20,
 } from '@guardian/source/foundations';
 import { Divider } from '@guardian/source-development-kitchen/react-components';
-import GridImage from 'components/gridImage/gridImage';
 import { ComponentContainer } from './componentContainer';
 
 const container = css`
@@ -75,15 +74,16 @@ const paragraph = css`
 	margin-bottom: ${space[3]}px;
 `;
 const image = css`
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	width: 100%;
+	object-fit: contain;
 	${from.tablet} {
 		max-width: 200px;
 	}
 `;
 
-export function Poster(): JSX.Element {
+const posterImageUrl = `https://i.guim.co.uk/img/media/a3e6d39656007bf310093a2a934155abbfe10a49/0_0_794_794/794.png?width=500&quality=75&s=e74bca9368c32efdf60855a9ac714f17`;
+
+export function PosterComponent(): JSX.Element {
 	return (
 		<ComponentContainer cssOverrides={container}>
 			<div css={headingContainer}>
@@ -103,15 +103,7 @@ export function Poster(): JSX.Element {
 						advertising.
 					</p>
 				</div>
-				<div css={image}>
-					<GridImage
-						classModifiers={['']}
-						gridId={'guardianLightPackshot'}
-						srcSizes={[500, 140]}
-						sizes="200px"
-						imgType="png"
-					/>
-				</div>
+				<img css={image} alt="" src={posterImageUrl} />
 			</div>
 		</ComponentContainer>
 	);
