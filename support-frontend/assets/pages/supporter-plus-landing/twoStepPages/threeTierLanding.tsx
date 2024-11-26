@@ -273,6 +273,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+	const urlSearchParamsPromoCode = urlSearchParams.has('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
@@ -321,6 +322,16 @@ export function ThreeTierLanding({
 		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
+	const checkForPromoCode = (
+		requiresPromoCode: boolean | undefined,
+		hasPromoCode: boolean,
+	) => {
+		if (requiresPromoCode) {
+			return hasPromoCode;
+		}
+		return true;
+	};
+
 	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
@@ -329,7 +340,9 @@ export function ThreeTierLanding({
 		const now = Date.now();
 		return campaignSettings.countdownSettings.find(
 			(c) =>
-				c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
+				c.countdownStartInMillis < now &&
+				c.countdownDeadlineInMillis > now &&
+				checkForPromoCode(c.requiresPromoCode, urlSearchParamsPromoCode),
 		);
 	}, [campaignSettings?.countdownSettings]);
 

@@ -15,6 +15,7 @@ export type CountdownSetting = {
 		backgroundColor: string;
 		foregroundColor: string;
 	};
+	requiresPromoCode?: boolean;
 };
 
 export function countdownSwitchOn(): boolean {
@@ -152,6 +153,7 @@ const campaigns: Record<string, CampaignSettings> = {
 					backgroundColor: '#1e3e72',
 					foregroundColor: '#ffffff',
 				},
+				requiresPromoCode: true,
 			},
 		],
 		copy: {
