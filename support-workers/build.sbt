@@ -5,7 +5,7 @@ version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
-  "org.joda" % "joda-convert" % "2.2.3",
+  "org.joda" % "joda-convert" % "2.2.4",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
