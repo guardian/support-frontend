@@ -15,7 +15,7 @@ import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 // import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 // import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
-import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
+// import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
 
@@ -57,10 +57,12 @@ export const inThreeTier = threeTierCheckoutEnabled(
 );
 
 // Lazy load your components
-// const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
+const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
+
 const SupporterPlusCheckout = lazy(
 	() => import('./twoStepPages/secondStepCheckout'),
 );
+
 const SupporterPlusThankYou = lazy(
 	() => import('pages/supporter-plus-thank-you/supporterPlusThankYou'),
 );

@@ -266,9 +266,8 @@ function getPlanCost(
 type ThreeTierLandingProps = {
 	geoId: GeoId;
 };
-export function ThreeTierLanding({
-	geoId,
-}: ThreeTierLandingProps): JSX.Element {
+
+function ThreeTierLanding({ geoId }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
@@ -682,3 +681,5 @@ export function ThreeTierLanding({
 		</PageScaffold>
 	);
 }
+
+export default ThreeTierLanding;
