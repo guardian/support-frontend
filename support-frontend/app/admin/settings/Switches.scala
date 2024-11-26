@@ -23,6 +23,7 @@ case class FeatureSwitches(
     enableQuantumMetric: Option[SwitchState],
     usStripeAccountForSingle: Option[SwitchState],
     authenticateWithOkta: Option[SwitchState],
+    enableCampaignCountdown: Option[SwitchState],
 )
 
 object FeatureSwitches {
