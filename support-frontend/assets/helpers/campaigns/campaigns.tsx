@@ -1,4 +1,5 @@
 import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -14,6 +15,11 @@ export type CountdownSetting = {
 		foregroundColor: string;
 	};
 };
+
+export function countdownSwitchOn(): boolean {
+	const isOn = isSwitchOn('featureSwitches.enableCampaignCountdown');
+	return isOn;
+}
 
 interface CampaignCopy {
 	headingFragment?: JSX.Element;

@@ -24,7 +24,10 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import {
+	countdownSwitchOn,
+	getCampaignSettings,
+} from 'helpers/campaigns/campaigns';
 import type {
 	CampaignSettings,
 	CountdownSetting,
@@ -539,7 +542,7 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && currentCountdownSettings && (
+					{countdownSwitchOn() && showCountdown && currentCountdownSettings && (
 						<Countdown
 							countdownCampaign={currentCountdownSettings}
 							showCountdown={showCountdown}
