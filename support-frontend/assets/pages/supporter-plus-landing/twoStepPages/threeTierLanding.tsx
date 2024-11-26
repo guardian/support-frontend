@@ -322,16 +322,6 @@ export function ThreeTierLanding({
 		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const checkForPromoCode = (
-		requiresPromoCode: boolean | undefined,
-		hasPromoCode: boolean,
-	) => {
-		if (requiresPromoCode) {
-			return hasPromoCode;
-		}
-		return true;
-	};
-
 	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
@@ -341,8 +331,8 @@ export function ThreeTierLanding({
 		return campaignSettings.countdownSettings.find(
 			(c) =>
 				c.countdownStartInMillis < now &&
-				c.countdownDeadlineInMillis > now &&
-				checkForPromoCode(c.requiresPromoCode, urlSearchParamsPromoCode),
+				c.countdownDeadlineInMillis > now && 
+				(c.requiresPromoCode ? urlSearchParamsPromoCode : true)
 		);
 	}, [campaignSettings?.countdownSettings]);
 
