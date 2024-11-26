@@ -86,7 +86,7 @@ const cancelAnytimeDescription = css`
 	}
 `;
 
-export function SupporterPlusInitialLandingPage({
+function SupporterPlusInitialLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
@@ -188,3 +188,5 @@ export function SupporterPlusInitialLandingPage({
 		</SupporterPlusCheckoutScaffold>
 	);
 }
+
+export default SupporterPlusInitialLandingPage;

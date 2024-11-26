@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
@@ -10,11 +10,11 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+// import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
-import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+// import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
+// import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
@@ -56,6 +56,17 @@ export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.amounts,
 );
 
+// Lazy load your components
+// const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
+const SupporterPlusCheckout = lazy(
+	() => import('./twoStepPages/secondStepCheckout'),
+);
+const SupporterPlusThankYou = lazy(
+	() => import('pages/supporter-plus-thank-you/supporterPlusThankYou'),
+);
+
+console.log('****');
+
 // ----- Render ----- //
 
 const router = () => {
@@ -63,34 +74,28 @@ const router = () => {
 		<BrowserRouter>
 			<ScrollToTop />
 			<Provider store={store}>
-				<Routes>
-					{countryIds.map((countryId) => (
-						<>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode?`}
-								element={
-									inThreeTier ? (
-										<ThreeTierLanding geoId={countryId} />
-									) : (
-										<SupporterPlusInitialLandingPage
-											thankYouRoute={thankYouRoute}
-										/>
-									)
-								}
-							/>
-							<Route
-								path={`/${countryId}/contribute/checkout`}
-								element={
-									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
-								}
-							/>
-							<Route
-								path={`/${countryId}/thankyou`}
-								element={<SupporterPlusThankYou />}
-							/>
-						</>
-					))}
-				</Routes>
+				<Suspense>
+					<Routes>
+						{countryIds.map((countryId) => (
+							<>
+								<Route
+									path={`/${countryId}/contribute/:campaignCode?`}
+									element={<ThreeTierLanding geoId={countryId} />}
+								/>
+								<Route
+									path={`/${countryId}/contribute/checkout`}
+									element={
+										<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
+									}
+								/>
+								<Route
+									path={`/${countryId}/thankyou`}
+									element={<SupporterPlusThankYou />}
+								/>
+							</>
+						))}
+					</Routes>
+				</Suspense>
 			</Provider>
 		</BrowserRouter>
 	);

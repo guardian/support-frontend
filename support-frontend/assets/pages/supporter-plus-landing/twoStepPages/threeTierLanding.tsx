@@ -525,9 +525,9 @@ export function ThreeTierLanding({
 			header={
 				<>
 					<Header>
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
+						{/* <CountrySwitcherContainer> */}
+						{/* <CountryGroupSwitcher {...countrySwitcherProps} /> */}
+						{/* </CountrySwitcherContainer> */}
 					</Header>
 				</>
 			}
