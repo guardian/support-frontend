@@ -108,9 +108,10 @@ export function GuardianLightCard({
 						isChecked: true,
 						toolTip: benefit.tooltip,
 						isNew: benefit.isNew,
+						hideBullet: benefit.hideBullet,
 					};
 				})}
-				style={'noIcon'}
+				style={'bullet'}
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkBenefitList}
 			/>

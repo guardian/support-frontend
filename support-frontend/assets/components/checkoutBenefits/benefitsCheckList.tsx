@@ -77,9 +77,10 @@ export type BenefitsCheckListData = {
 	toolTip?: string;
 	strong?: boolean;
 	isNew?: boolean;
+	hideBullet?: boolean;
 };
 
-type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'noIcon';
+type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
@@ -88,7 +89,10 @@ export type BenefitsCheckListProps = {
 	cssOverrides?: SerializedStyles;
 };
 
-function SvgBullet() {
+type SvgBulletProps = {
+	opacity?: number;
+};
+function SvgBullet({ opacity = 1 }: SvgBulletProps): JSX.Element {
 	return (
 		<svg
 			width="16"
@@ -97,7 +101,13 @@ function SvgBullet() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="8" cy="8" r="4" fill={`${palette.brand[500]}`} />
+			<circle
+				cx="8"
+				cy="8"
+				r="4"
+				fill={`${palette.neutral[60]}`}
+				fill-opacity={opacity}
+			/>
 		</svg>
 	);
 }
@@ -105,13 +115,15 @@ function SvgBullet() {
 function ChecklistItemIcon({
 	checked,
 	style,
+	hideBullet,
 }: {
 	checked: boolean;
 	style: CheckListStyle;
+	hideBullet?: boolean;
 }): JSX.Element {
 	const styleSize = style === 'standard' ? 'small' : 'xsmall';
-	return style === 'noIcon' ? (
-		<SvgBullet />
+	return style === 'bullet' ? (
+		<SvgBullet opacity={hideBullet ? 0 : 1} />
 	) : checked ? (
 		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
@@ -138,7 +150,11 @@ export function BenefitsCheckList({
 							]}
 						>
 							<div css={style === 'standard' ? iconContainerCss : css``}>
-								<ChecklistItemIcon checked={item.isChecked} style={style} />
+								<ChecklistItemIcon
+									checked={item.isChecked}
+									style={style}
+									hideBullet={item.hideBullet}
+								/>
 							</div>
 						</td>
 					)}
