@@ -3,7 +3,6 @@ import {
 	from,
 	headlineBold17,
 	headlineBold24,
-	neutral,
 	palette,
 	space,
 	until,
@@ -51,7 +50,7 @@ const svgCss = css`
 const titleCss = css`
 	text-align: center;
 	${headlineBold17};
-	color: ${neutral[7]};
+	color: ${palette.brand[100]};
 	${from.desktop} {
 		${headlineBold24};
 	}
