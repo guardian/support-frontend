@@ -67,8 +67,6 @@ const SupporterPlusThankYou = lazy(
 	() => import('pages/supporter-plus-thank-you/supporterPlusThankYou'),
 );
 
-console.log('****');
-
 // ----- Render ----- //
 
 const router = () => {

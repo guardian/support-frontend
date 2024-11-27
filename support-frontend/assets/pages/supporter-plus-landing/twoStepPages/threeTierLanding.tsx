@@ -524,9 +524,9 @@ function ThreeTierLanding({ geoId }: ThreeTierLandingProps): JSX.Element {
 			header={
 				<>
 					<Header>
-						{/* <CountrySwitcherContainer> */}
-						{/* <CountryGroupSwitcher {...countrySwitcherProps} /> */}
-						{/* </CountrySwitcherContainer> */}
+						<CountrySwitcherContainer>
+							<CountryGroupSwitcher {...countrySwitcherProps} />
+						</CountrySwitcherContainer>
 					</Header>
 				</>
 			}
