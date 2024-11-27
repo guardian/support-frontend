@@ -106,7 +106,7 @@ export type SupporterPlusThankYouProps = {
 	overideThresholdPrice?: number;
 };
 
-function SupporterPlusThankYou({
+export function SupporterPlusThankYou({
 	overideThresholdPrice,
 }: SupporterPlusThankYouProps): JSX.Element {
 	const { amounts } = useContributionsSelector((state) => state.common);
