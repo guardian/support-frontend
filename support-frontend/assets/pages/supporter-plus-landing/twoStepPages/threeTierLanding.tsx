@@ -296,7 +296,10 @@ export function ThreeTierLanding({
 	// Persist any tests for tracking in the checkout page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
-	const campaignSettings = getCampaignSettings(countryGroupId, urlSearchParamsPromoCode);
+	const campaignSettings = getCampaignSettings(
+		countryGroupId,
+		urlSearchParamsPromoCode,
+	);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??

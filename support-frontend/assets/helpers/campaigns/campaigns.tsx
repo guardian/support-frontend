@@ -34,7 +34,10 @@ export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
 };
 
 export type CampaignSettings = {
-	isEligible: (countryGroupId: CountryGroupId, promoCode?: string | null) => boolean;
+	isEligible: (
+		countryGroupId: CountryGroupId,
+		promoCode?: string | null,
+	) => boolean;
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
@@ -140,8 +143,9 @@ const campaigns: Record<string, CampaignSettings> = {
 		},
 	},
 	ukBlackFriday2024: {
-		isEligible: (countryGroupId: CountryGroupId, promoCode?: string | null) => 
-			countryGroupId === GBPCountries && promoCode === 'BLACK_FRIDAY_DISCOUNT_2024',
+		isEligible: (countryGroupId: CountryGroupId, promoCode?: string | null) =>
+			countryGroupId === GBPCountries &&
+			promoCode === 'BLACK_FRIDAY_DISCOUNT_2024',
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
@@ -176,7 +180,7 @@ const forceCampaign = (campaignId: string): boolean => {
 
 export function getCampaignSettings(
 	countryGroupId: CountryGroupId,
-	promoCode?: string | null
+	promoCode?: string | null,
 ): CampaignSettings | null {
 	for (const campaignId in campaigns) {
 		const isEligible =
