@@ -67,6 +67,10 @@ const SupporterPlusThankYou = lazy(
 	() => import('pages/supporter-plus-thank-you/supporterPlusThankYou'),
 );
 
+const SupporterPlusInitialLandingPage = lazy(
+	() => import('./twoStepPages/firstStepLanding'),
+);
+
 // ----- Render ----- //
 
 const router = () => {
@@ -80,7 +84,15 @@ const router = () => {
 							<>
 								<Route
 									path={`/${countryId}/contribute/:campaignCode?`}
-									element={<ThreeTierLanding geoId={countryId} />}
+									element={
+										inThreeTier ? (
+											<ThreeTierLanding geoId={countryId} />
+										) : (
+											<SupporterPlusInitialLandingPage
+												thankYouRoute={thankYouRoute}
+											/>
+										)
+									}
 								/>
 								<Route
 									path={`/${countryId}/contribute/checkout`}
