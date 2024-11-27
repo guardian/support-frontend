@@ -117,7 +117,7 @@ const guardianLightBenefits = [
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
-			label: 'Purchase Guardian Light',
+			label: 'Guardian Light',
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
@@ -362,6 +362,7 @@ export function productCatalogGuardianLight(): Record<
 		...productCatalogDescription,
 		GuardianLight: {
 			...productCatalogDescription.GuardianLight,
+			label: 'Purchase Guardian Light',
 		},
 		GuardianLightGoBack: {
 			...productCatalogDescription.GuardianLight,
