@@ -60,17 +60,13 @@ const btnStyleOverrides = css`
 interface SupportOnceProps {
 	currency: string;
 	countryGroupId: CountryGroupId;
-	useNewOneTimeCheckout: boolean;
 }
 
 export function SupportOnce({
 	currency,
 	countryGroupId,
-	useNewOneTimeCheckout,
 }: SupportOnceProps): JSX.Element {
-	const checkoutUrlFragment = useNewOneTimeCheckout
-		? 'one-time-checkout'
-		: 'contribute/checkout?selected-contribution-type=one_off';
+	const checkoutUrlFragment = 'one-time-checkout';
 
 	return (
 		<div css={container}>
