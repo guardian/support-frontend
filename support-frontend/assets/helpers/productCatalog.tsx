@@ -162,10 +162,11 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 			label: 'The Guardian Digital Edition',
 			benefits: [
 				{
-					copy: 'The Editions app. Enjoy the Guardian and Observer newspaper, reimagined for mobile and tablet',
+					copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 				},
-				{ copy: 'Full access to our news app. Read our reporting on the go' },
-				{ copy: 'Ad-free reading. Avoid ads on all your devices' },
+				{
+					copy: 'Full access to the Guardian app. Read our reporting on the go',
+				},
 				{
 					copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
 				},
