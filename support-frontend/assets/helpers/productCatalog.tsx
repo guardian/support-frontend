@@ -104,6 +104,16 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
+const guardianLightBenefits = [
+	{
+		copy: 'A Guardian Light subscription enables you to read the Guardian without personalised advertising.',
+	},
+	{
+		copy: 'Guardian Light is a distinct product that is separate to other paid subscriptions. Readers with valid ad-free subscriptions should sign in to read the Guardian without advertising.',
+	},
+	{ copy: 'You can cancel anytime' },
+];
+
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
@@ -113,8 +123,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					billingPeriod: 'Monthly',
 				},
 			},
-			benefits: [],
-			benefitsAdditional: [{ copy: 'Lorem ipsum' }],
+			benefits: guardianLightBenefits,
 		},
 		TierThree: {
 			label: 'Digital + print',
@@ -339,6 +348,28 @@ export function productCatalogDescriptionNewBenefits(
 					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
 						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
 					}, since 1821.`,
+				},
+			],
+		},
+	};
+}
+
+export function productCatalogGuardianLight(): Record<
+	ProductKey | 'GuardianLightGoBack',
+	ProductDescription
+> {
+	return {
+		...productCatalogDescription,
+		GuardianLight: {
+			...productCatalogDescription.GuardianLight,
+			label: 'Purchase Guardian Light',
+		},
+		GuardianLightGoBack: {
+			...productCatalogDescription.GuardianLight,
+			label: 'Read with personalised advertising',
+			benefits: [
+				{
+					copy: `Click ‘Go Back to Accept all’ if you do not want to purchase a Guardian Light subscription`,
 				},
 			],
 		},
