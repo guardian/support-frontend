@@ -2,6 +2,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { HoldingContent } from 'components/serverSideRendered/holdingContent';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -78,7 +79,7 @@ const router = () => {
 		<BrowserRouter>
 			<ScrollToTop />
 			<Provider store={store}>
-				<Suspense>
+				<Suspense fallback={<HoldingContent />}>
 					<Routes>
 						{countryIds.map((countryId) => (
 							<>
