@@ -1,49 +1,52 @@
 package services
 
-import cats.Monad
 import cats.data.EitherT
 import cats.instances.future._
-import com.gu.retry.EitherTRetry
 import com.gu.retry.EitherTRetry.retry
 import com.typesafe.scalalogging.StrictLogging
 import conf.IdentityConfig
-import model.DefaultThreadPool
+import model.{DefaultThreadPool, UserType}
+import model.UserType.{Current, New, UserType}
 import play.api.libs.ws.WSClient
-import services.IdentityClient.{ApiError, ContextualError}
 
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
+case class IdentityUserDetails(id: String, userType: UserType)
+
 trait IdentityService extends StrictLogging {
 
   // Should return the identity id associated with the email, or an error if there isn't one.
-  def getIdentityIdFromEmail(email: String): IdentityClient.Result[String]
+  def getIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityUserDetails]
 
   // Should return the identity id of the created account along with an optional guest account token.
-  def createGuestAccount(email: String): IdentityClient.Result[String]
+  def createGuestAccount(email: String): IdentityClient.Result[IdentityUserDetails]
 
   // Look up the identity id for the given email address.
   // If one exists then return it, otherwise create a guest account and return the associated identity id.
-  def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[String]
+  def getOrCreateIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityUserDetails]
 
 }
 
 // Default implementation of the IdentityService trait using the client to the Guardian identity API.
 class GuardianIdentityService(client: IdentityClient)(implicit pool: DefaultThreadPool) extends IdentityService {
 
-  override def getIdentityIdFromEmail(email: String): IdentityClient.Result[String] =
-    client.getUser(email).map(response => response.user.id)
+  override def getIdentityIdFromEmail(email: String): IdentityClient.Result[IdentityUserDetails] =
+    client.getUser(email).map {
+      logger.info(s"Identity account found for email address: $email, UserType is current")
+      response => IdentityUserDetails(response.user.id, Current)
+    }
 
-  override def createGuestAccount(email: String): EitherT[Future, IdentityClient.ContextualError, String] =
+  override def createGuestAccount(email: String): EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     client.createGuestAccount(email).map { response =>
       // Logs are only retained for 14 days so we're OK to log email address
-      logger.info(s"guest account created for email address: $email")
-      response.guestRegistrationRequest.userId
+      logger.info(s"Guest account created for email address: $email, UserType is new")
+      IdentityUserDetails(response.guestRegistrationRequest.userId, New)
     }
 
   override def getOrCreateIdentityIdFromEmail(
       email: String,
-  ): EitherT[Future, IdentityClient.ContextualError, String] = {
+  ): EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
     // each attempt.
