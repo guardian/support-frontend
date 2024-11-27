@@ -66,8 +66,6 @@ export function SupportOnce({
 	currency,
 	countryGroupId,
 }: SupportOnceProps): JSX.Element {
-	const checkoutUrlFragment = 'one-time-checkout';
-
 	return (
 		<div css={container}>
 			<h2 css={heading}>Support us just once</h2>
@@ -77,7 +75,7 @@ export function SupportOnce({
 				{currency}1 or more.
 			</p>
 			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/${checkoutUrlFragment}`}
+				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/one-time-checkout`}
 				iconSide="left"
 				priority="primary"
 				size="default"
