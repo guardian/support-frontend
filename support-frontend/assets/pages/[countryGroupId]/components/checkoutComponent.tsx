@@ -134,6 +134,39 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
+// ----- Setup ----- //
+const POLLING_INTERVAL = 3000;
+const MAX_POLLS = 10;
+
+// retry mechanism for polling based upon
+// https://bpaulino.com/entries/retrying-api-calls-with-exponential-backoff
+function timeOut(milliseconds: number | undefined): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+function retry(
+	promise: Promise<Response>,
+	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
+): Promise<Response> {
+	async function retryPollAndPromise(polls: number): Promise<Response> {
+		try {
+			if (polls > 0) {
+				await timeOut(POLLING_INTERVAL); // retry
+			}
+			return await promise; // success, exit
+		} catch (error) {
+			if (polls < MAX_POLLS) {
+				if (onRetry) {
+					onRetry(polls + 1, (polls + 1) * POLLING_INTERVAL); // optional retry notification
+				}
+				return retryPollAndPromise(polls + 1);
+			} else {
+				throw error; // poll limit reached
+			}
+		}
+	}
+	return retryPollAndPromise(0);
+}
+
 /**
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
@@ -709,13 +742,23 @@ export function CheckoutComponent({
 			};
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
-			const createResponse = await fetch('/subscribe/create', {
+
+			const fetchCreateSupportWorker = fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
+
+			const createResponse = await retry(
+				fetchCreateSupportWorker,
+				(pollCount, pollTimeTotal) => {
+					console.log(
+						`POST /subscribe/create : attempt ${pollCount} (${pollTimeTotal}ms)`,
+					);
+				},
+			);
 
 			let processPaymentResponse: ProcessPaymentResponse;
 			let userType: UserType | undefined;
