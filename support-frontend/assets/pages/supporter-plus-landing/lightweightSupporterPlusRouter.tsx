@@ -1,12 +1,17 @@
 // ----- Imports ----- //
-import { lazy, Suspense, useEffect } from 'react';
+import {
+	// lazy,
+	// Suspense,
+	useEffect,
+} from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import { HoldingContent } from 'components/serverSideRendered/holdingContent';
+// import { HoldingContent } from 'components/serverSideRendered/holdingContent';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { renderPage } from 'helpers/rendering/render';
+import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
 
@@ -34,7 +39,7 @@ function ScrollToTop(): null {
 }
 
 // Lazy load your components
-const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
+// const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
 
 console.log('*** lightweight ***');
 
@@ -44,18 +49,18 @@ const router = () => {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-			<Suspense fallback={<HoldingContent />}>
-				<Routes>
-					{countryIds.map((countryId) => (
-						<>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode?`}
-								element={<ThreeTierLanding geoId={countryId} />}
-							/>
-						</>
-					))}
-				</Routes>
-			</Suspense>
+			{/* <Suspense fallback={<HoldingContent />}> */}
+			<Routes>
+				{countryIds.map((countryId) => (
+					<>
+						<Route
+							path={`/${countryId}/contribute/:campaignCode?`}
+							element={<ThreeTierLanding geoId={countryId} />}
+						/>
+					</>
+				))}
+			</Routes>
+			{/* </Suspense> */}
 		</BrowserRouter>
 	);
 };

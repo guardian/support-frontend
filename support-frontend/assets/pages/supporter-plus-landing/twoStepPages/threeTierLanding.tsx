@@ -267,7 +267,9 @@ type ThreeTierLandingProps = {
 	geoId: GeoId;
 };
 
-function ThreeTierLanding({ geoId }: ThreeTierLandingProps): JSX.Element {
+export function ThreeTierLanding({
+	geoId,
+}: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
