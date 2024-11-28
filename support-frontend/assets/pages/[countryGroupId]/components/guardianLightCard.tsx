@@ -129,7 +129,7 @@ const leftSvgIcon = (
 		<rect y="0.734375" width="58" height="58" rx="28.9248" fill="#FFE500" />
 		<mask
 			id="mask0_1729_29710"
-			style="mask-type:alpha"
+			mask-type="alpha"
 			maskUnits="userSpaceOnUse"
 			x="13"
 			y="14"
@@ -187,7 +187,7 @@ const rightSvgIcon = (
 		/>
 		<mask
 			id="mask0_1729_29750"
-			style="mask-type:alpha"
+			mask-type="alpha"
 			maskUnits="userSpaceOnUse"
 			x="14"
 			y="15"
