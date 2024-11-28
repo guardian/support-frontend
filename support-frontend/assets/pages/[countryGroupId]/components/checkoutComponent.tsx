@@ -168,7 +168,8 @@ function retry(
 }
 
 /**
- * This method removes the `pending` state by retrying,
+ * This method retry's `pending` a maximum number of polls
+ * then resolves to success (Zuora job queued for processing).
  * resolving on success or failure only.
  */
 type ProcessPaymentResponse =
@@ -182,14 +183,16 @@ type CreateSubscriptionResponse = StatusResponse & {
 const processPayment = async (
 	statusResponse: StatusResponse,
 	geoId: GeoId,
+	poll: number = 0,
 ): Promise<ProcessPaymentResponse> => {
 	return new Promise((resolve) => {
 		const { trackingUri, status, failureReason } = statusResponse;
-		if (status === 'success') {
+		if (status === 'success' || poll >= MAX_POLLS) {
 			resolve({ status: 'success' });
 		} else if (status === 'failure') {
 			resolve({ status, failureReason });
 		} else {
+			// status pending, retry until max polls reached
 			setTimeout(() => {
 				void fetch(trackingUri, {
 					headers: {
@@ -198,9 +201,9 @@ const processPayment = async (
 				})
 					.then((response) => response.json())
 					.then((json) => {
-						resolve(processPayment(json as StatusResponse, geoId));
+						resolve(processPayment(json as StatusResponse, geoId, poll + 1));
 					});
-			}, 1000);
+			}, POLLING_INTERVAL);
 		}
 	});
 };
