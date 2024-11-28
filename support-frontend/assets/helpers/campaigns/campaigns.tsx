@@ -52,7 +52,7 @@ const campaigns: Record<string, CampaignSettings> = {
 		countdownSettings: [
 			{
 				label: 'This Giving Tuesday, give to the Guardian',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:01:00'),
+				countdownStartInMillis: Date.parse('Nov 27, 2024 00:01:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
 				theme: {
 					backgroundColor: '#ab0613',
