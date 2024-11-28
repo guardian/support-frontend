@@ -18,6 +18,7 @@ type ProductBenefit = {
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{ name: string; variants: string[] }>;
 	isNew?: boolean;
+	hideBullet?: boolean;
 };
 
 export type ProductDescription = {
@@ -370,6 +371,7 @@ export function productCatalogGuardianLight(): Record<
 			benefits: [
 				{
 					copy: `Click ‘Go Back to Accept all’ if you do not want to purchase a Guardian Light subscription`,
+					hideBullet: true,
 				},
 			],
 		},
