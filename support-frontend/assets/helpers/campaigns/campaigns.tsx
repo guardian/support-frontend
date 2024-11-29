@@ -122,8 +122,7 @@ const campaigns: Record<string, CampaignSettings> = {
 			subheading: (
 				<>
 					We're not owned by a billionaire or shareholders - our readers support
-					us. Choose to join with one of the options below.
-					<strong>Cancel anytime.</strong>
+					us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>
 				</>
 			),
 			oneTimeHeading: <>Choose your gift amount</>,
@@ -163,8 +162,7 @@ const campaigns: Record<string, CampaignSettings> = {
 			subheading: (
 				<>
 					We're not owned by a billionaire or shareholders - our readers support
-					us. Choose to join with one of the options below.
-					<strong>Cancel anytime.</strong>
+					us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>
 				</>
 			),
 			oneTimeHeading: <>Choose your gift amount</>,
