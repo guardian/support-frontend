@@ -15,6 +15,8 @@ import { ComponentContainer } from './componentContainer';
 
 const container = css`
 	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
+	border-radius: ${space[3]}px;
 	> div {
 		${from.tablet} {
 			max-width: 740px;
@@ -22,13 +24,9 @@ const container = css`
 	}
 `;
 const heading = css`
-	color: ${palette.neutral[7]};
 	text-align: left;
 	${headlineBold24}
 	margin-bottom: ${space[6]}px;
-	${from.tablet} {
-		text-align: center;
-	}
 	${from.desktop} {
 		${headlineBold34}
 	}
@@ -38,6 +36,7 @@ const accordian = css`
 	border-bottom: 0px;
 `;
 const accordianRow = css`
+	border-top: 1px solid ${palette.neutral[73]};
 	text-align: left;
 	> button > * {
 		${headlineBold17}
