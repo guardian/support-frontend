@@ -34,7 +34,10 @@ export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
 };
 
 export type CampaignSettings = {
-	isEligible: (countryGroupId: CountryGroupId) => boolean;
+	isEligible: (
+		countryGroupId: CountryGroupId,
+		promoCode?: string | null,
+	) => boolean;
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
@@ -49,7 +52,7 @@ const campaigns: Record<string, CampaignSettings> = {
 		countdownSettings: [
 			{
 				label: 'This Giving Tuesday, give to the Guardian',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:01:00'),
+				countdownStartInMillis: Date.parse('Nov 27, 2024 00:01:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
 				theme: {
 					backgroundColor: '#ab0613',
@@ -57,7 +60,7 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
-				label: "It's not too late",
+				label: "It's not too late to give to the Guardian",
 				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
 				theme: {
@@ -140,8 +143,9 @@ const campaigns: Record<string, CampaignSettings> = {
 		},
 	},
 	ukBlackFriday2024: {
-		isEligible: (countryGroupId: CountryGroupId) =>
-			countryGroupId === GBPCountries,
+		isEligible: (countryGroupId: CountryGroupId, promoCode?: string | null) =>
+			countryGroupId === GBPCountries &&
+			promoCode === 'BLACK_FRIDAY_DISCOUNT_2024',
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
@@ -176,11 +180,12 @@ const forceCampaign = (campaignId: string): boolean => {
 
 export function getCampaignSettings(
 	countryGroupId: CountryGroupId,
+	promoCode?: string | null,
 ): CampaignSettings | null {
 	for (const campaignId in campaigns) {
 		const isEligible =
 			isCampaignEnabled(campaignId) &&
-			campaigns[campaignId].isEligible(countryGroupId);
+			campaigns[campaignId].isEligible(countryGroupId, promoCode);
 		if (isEligible || forceCampaign(campaignId)) {
 			return campaigns[campaignId];
 		}
