@@ -137,6 +137,7 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 // ----- Setup ----- //
 const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
+class StillPendingError extends Error {}
 
 // retry mechanism for polling based upon
 // https://bpaulino.com/entries/retrying-api-calls-with-exponential-backoff
@@ -144,15 +145,19 @@ function timeOut(milliseconds: number | undefined): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 function retry(
-	promiseFunction: () => Promise<Response>,
+	promiseFunction: () => Promise<StatusResponse>,
 	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
-): Promise<Response> {
-	async function retryPollAndPromise(polls: number): Promise<Response> {
+): Promise<StatusResponse> {
+	async function retryPollAndPromise(polls: number): Promise<StatusResponse> {
 		try {
 			if (polls > 0) {
 				await timeOut(POLLING_INTERVAL); // retry
 			}
-			return await promiseFunction(); // success, exit
+			const result = await promiseFunction();
+			if (result.status === 'pending') {
+				throw new Error('status is pending');
+			}
+			return result; // success or failure, exit
 		} catch (error) {
 			if (polls < MAX_POLLS) {
 				if (onRetry) {
@@ -160,6 +165,9 @@ function retry(
 				}
 				return retryPollAndPromise(polls + 1);
 			} else {
+				if (error instanceof StillPendingError) {
+					return { status: 'pending', trackingUri: '' };
+				}
 				throw error; // poll limit reached
 			}
 		}
@@ -180,32 +188,32 @@ type CreateSubscriptionResponse = StatusResponse & {
 	userType: UserType;
 };
 
-const processPayment = async (
+const processPaymentWithRetries = async (
 	statusResponse: StatusResponse,
-	geoId: GeoId,
-	poll: number = 0,
 ): Promise<ProcessPaymentResponse> => {
-	return new Promise((resolve) => {
-		const { trackingUri, status, failureReason } = statusResponse;
-		if (status === 'success' || poll >= MAX_POLLS) {
-			resolve({ status: 'success' });
-		} else if (status === 'failure') {
-			resolve({ status, failureReason });
-		} else {
-			// status pending, retry until max polls reached
-			setTimeout(() => {
-				void fetch(trackingUri, {
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((json) => {
-						resolve(processPayment(json as StatusResponse, geoId, poll + 1));
-					});
-			}, POLLING_INTERVAL);
-		}
-	});
+	const { trackingUri, status } = statusResponse;
+	if (status === 'success' || status === 'failure') {
+		return processPayment(statusResponse);
+	}
+	const getTrackingStatus = () =>
+		fetch(trackingUri, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}).then((response) => response.json() as unknown as StatusResponse);
+
+	return retry(getTrackingStatus).then((response) => processPayment(response));
+};
+
+const processPayment = (
+	statusResponse: StatusResponse,
+): Promise<ProcessPaymentResponse> => {
+	const { status, failureReason } = statusResponse;
+	if (status === 'failure') {
+		return Promise.resolve({ status, failureReason });
+	} else {
+		return Promise.resolve({ status: 'success' }); // success or pending
+	}
 };
 
 type CheckoutComponentProps = {
@@ -746,24 +754,13 @@ export function CheckoutComponent({
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
 
-			const fetchCreateSupportWorker = () =>
-				fetch('/subscribe/create', {
-					method: 'POST',
-					body: JSON.stringify(createSupportWorkersRequest),
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				});
-
-			const createResponse = await retry(
-				fetchCreateSupportWorker,
-				(pollCount, pollTimeTotal) => {
-					console.log(
-						`POST /subscribe/create : attempt ${pollCount} (${pollTimeTotal}ms)`,
-					);
+			const createResponse = await fetch('/subscribe/create', {
+				method: 'POST',
+				body: JSON.stringify(createSupportWorkersRequest),
+				headers: {
+					'Content-Type': 'application/json',
 				},
-			);
-
+			});
 			let processPaymentResponse: ProcessPaymentResponse;
 			let userType: UserType | undefined;
 
@@ -771,7 +768,9 @@ export function CheckoutComponent({
 				const statusResponse =
 					(await createResponse.json()) as CreateSubscriptionResponse;
 				userType = statusResponse.userType;
-				processPaymentResponse = await processPayment(statusResponse, geoId);
+				processPaymentResponse = await processPaymentWithRetries(
+					statusResponse,
+				);
 			} else {
 				const errorReason = (await createResponse.text()) as ErrorReason;
 				processPaymentResponse = {
