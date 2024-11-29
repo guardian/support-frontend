@@ -30,11 +30,11 @@ case object EverydayPlus extends PaperProductOptions(true)
 
 case object Everyday extends PaperProductOptions(false)
 
-case object NewspaperArchive extends ProductOptions
+case object PrintMagazine extends ProductOptions
 
 object ProductOptions {
   val allProductOptions =
-    NoProductOptions :: NewspaperArchive :: PaperProductOptions.productOptions
+    NoProductOptions :: PrintMagazine :: PaperProductOptions.productOptions
 
   def fromString[T](code: String, productOptions: List[T]): Option[T] =
     productOptions.find(_.getClass.getSimpleName == s"$code$$")

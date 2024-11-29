@@ -135,6 +135,9 @@ export function Checkout({ geoId, appConfig }: Props) {
 				case 'Contribution':
 					return 'NoFulfilmentOptions';
 				case 'TierThree':
+					if (ratePlanKey.endsWith('V2')) {
+						return 'NoFulfilmentOptions';
+					}
 					return countryGroupId === 'International'
 						? 'RestOfWorld'
 						: 'Domestic';
@@ -148,8 +151,8 @@ export function Checkout({ geoId, appConfig }: Props) {
 			switch (productKey) {
 				case 'TierThree':
 					return ratePlanKey.endsWith('V2')
-						? 'NewspaperArchive'
-						: 'NoProductOptions';
+						? 'NoProductOptions'
+						: 'PrintMagazine';
 				// TODO: define for newspaper
 				default:
 					return 'NoProductOptions';
