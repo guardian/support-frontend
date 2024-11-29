@@ -144,7 +144,7 @@ function timeOut(milliseconds: number | undefined): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 function retry(
-	promise: Promise<Response>,
+	promiseFunction: () => Promise<Response>,
 	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
 ): Promise<Response> {
 	async function retryPollAndPromise(polls: number): Promise<Response> {
@@ -152,7 +152,7 @@ function retry(
 			if (polls > 0) {
 				await timeOut(POLLING_INTERVAL); // retry
 			}
-			return await promise; // success, exit
+			return await promiseFunction(); // success, exit
 		} catch (error) {
 			if (polls < MAX_POLLS) {
 				if (onRetry) {
@@ -746,13 +746,14 @@ export function CheckoutComponent({
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
 
-			const fetchCreateSupportWorker = fetch('/subscribe/create', {
-				method: 'POST',
-				body: JSON.stringify(createSupportWorkersRequest),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const fetchCreateSupportWorker = () =>
+				fetch('/subscribe/create', {
+					method: 'POST',
+					body: JSON.stringify(createSupportWorkersRequest),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
 
 			const createResponse = await retry(
 				fetchCreateSupportWorker,
