@@ -36,7 +36,7 @@ function ScrollToTop(): null {
 // Lazy load your components
 const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
 
-console.log('*** lightweight w/ Redux routes ***');
+console.log('*** lazyLightweightSupporterPlusRouter ***');
 
 // ----- Render ----- //
 
@@ -50,7 +50,6 @@ const router = () => {
 						<>
 							<Route
 								path={`/${countryId}/contribute/:campaignCode?`}
-								// element={<ThreeTierLanding geoId={countryId} />}
 								element={<ThreeTierLanding geoId={countryId} />}
 							/>
 						</>

@@ -86,7 +86,7 @@ const cancelAnytimeDescription = css`
 	}
 `;
 
-function SupporterPlusInitialLandingPage({
+export function SupporterPlusInitialLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;

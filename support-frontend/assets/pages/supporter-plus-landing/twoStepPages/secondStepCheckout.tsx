@@ -58,7 +58,7 @@ const paymentButtonSpacing = css`
 	}
 `;
 
-function SupporterPlusCheckout({
+export function SupporterPlusCheckout({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;

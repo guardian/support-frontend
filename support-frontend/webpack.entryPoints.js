@@ -9,7 +9,7 @@ module.exports = {
 		// supporterPlusLandingPage:
 		// 	'pages/supporter-plus-landing/supporterPlusRouter.tsx',
 		supporterPlusLandingPage:
-			'pages/supporter-plus-landing/lightweightSupporterPlusRouter.tsx',
+			'pages/supporter-plus-landing/lazyLightweightSupporterPlusRouter.tsx',
 		paperSubscriptionLandingPage:
 			'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
 		paperSubscriptionCheckoutPage:
