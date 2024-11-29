@@ -9,7 +9,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 1, 1000);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 100);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -23,7 +23,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 1, 1000);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 100);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -43,9 +43,35 @@ describe('retryPaymentStatus', () => {
 			.mockImplementationOnce(() => Promise.resolve(initialStatus))
 			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 2, 1000);
+		const result = await retryPaymentStatus(getPaymentStatus, 2, 100);
 
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
+	});
+
+	it('pending only', async () => {
+		const pendingStatus: StatusResponse = {
+			status: 'pending',
+			trackingUri: 'https://support/status',
+		};
+		const finalStatus: StatusResponse = {
+			status: 'pending',
+			trackingUri: '',
+		};
+		const getPaymentStatus = jest
+			.fn()
+			.mockImplementationOnce(() => Promise.resolve(pendingStatus));
+
+		const result = await retryPaymentStatus(
+			getPaymentStatus,
+			2,
+			100,
+			(pollCount, pollTimeTotal) => {
+				console.log(`pending only : attempt ${pollCount}: ${pollTimeTotal}ms`);
+			},
+		);
+
+		expect(result).toEqual(finalStatus);
+		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
 	});
 });
