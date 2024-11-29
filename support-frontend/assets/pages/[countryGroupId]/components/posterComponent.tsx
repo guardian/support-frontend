@@ -8,46 +8,16 @@ import {
 	textSans17,
 	textSans20,
 } from '@guardian/source/foundations';
-import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { ComponentContainer } from './componentContainer';
 
 const container = css`
-	background-color: ${palette.neutral[97]};
+	color: ${palette.neutral[100]};
+	background-color: ${palette.brand[400]};
+	border-radius: ${space[3]}px;
 	> div {
 		${from.tablet} {
 			max-width: 740px;
 		}
-	}
-`;
-const headingContainer = css`
-	display: flex;
-	flex-direction: column;
-	${from.tablet} {
-		align-items: center;
-	}
-`;
-const heading = css`
-	color: ${palette.neutral[7]};
-	text-align: left;
-	${headlineBold24}
-	${from.tablet} {
-		max-width: 340px;
-		text-align: center;
-	}
-	${from.desktop} {
-		max-width: 540px;
-		${headlineBold34}
-	}
-`;
-const divider = css`
-	display: none;
-	${from.tablet} {
-		display: block;
-		width: 100%;
-		margin: ${space[3]}px 0;
-	}
-	${from.desktop} {
-		margin-top: ${space[6]}px;
 	}
 `;
 const bodyContainer = css`
@@ -58,9 +28,25 @@ const bodyContainer = css`
 		justify-content: space-between;
 	}
 `;
+const heading = css`
+	text-align: left;
+	${headlineBold24}
+	margin-bottom: ${space[3]}px;
+	${from.tablet} {
+		max-width: 340px;
+		margin-bottom: ${space[4]}px;
+	}
+	${from.desktop} {
+		max-width: 540px;
+		${headlineBold34}
+		margin-bottom: ${space[5]}px;
+	}
+`;
+const headingColor = css`
+	color: ${palette.brandAlt[400]};
+`;
 const copy = css`
 	text-align: left;
-	color: ${palette.neutral[10]};
 	padding-top: ${space[1]}px;
 	${textSans17};
 	${from.tablet} {
@@ -77,7 +63,7 @@ const image = css`
 	width: 100%;
 	object-fit: contain;
 	${from.tablet} {
-		max-width: 200px;
+		max-width: 333px;
 	}
 `;
 
@@ -86,17 +72,24 @@ const posterImageUrl = `https://i.guim.co.uk/img/media/a3e6d39656007bf310093a2a9
 export function PosterComponent(): JSX.Element {
 	return (
 		<ComponentContainer cssOverrides={container}>
-			<div css={headingContainer}>
-				<h2 css={heading}>Advertising revenue funds Guardian journalism</h2>
-				<Divider cssOverrides={divider} />
-			</div>
 			<div css={bodyContainer}>
 				<div css={copy}>
+					<h2 css={heading}>
+						This is annoying.
+						<br />
+						<span css={headingColor}>Why are you doing it?</span>
+					</h2>
 					<p css={paragraph}>
-						The Guardian relies on advertising, alongside other revenue streams,
-						to fund our journalism. In recent years, our ability to generate
-						revenue from online advertising has been impacted by an increase in
-						the number of readers who reject personalised advertising.
+						The Guardian is lucky to have a unique ownership structure and a
+						revenue model powered by the direct support of many of our readers.
+						However advertising remains a crucial part of how we fund our
+						journalism.
+					</p>
+					<p css={paragraph}>
+						Readers choosing to reject personalised advertising makes it more
+						difficult for us to generate revenue from online advertising. Put
+						simply, that means that the more people who press “reject”, the less
+						money to pay for quality reporting.
 					</p>
 					<p css={paragraph}>
 						As a result, we are now asking readers to pay to reject personalised
