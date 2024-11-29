@@ -9,7 +9,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 1000);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -23,7 +23,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 1000);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -43,7 +43,7 @@ describe('retryPaymentStatus', () => {
 			.mockImplementationOnce(() => Promise.resolve(initialStatus))
 			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(getPaymentStatus);
+		const result = await retryPaymentStatus(getPaymentStatus, 2, 1000);
 
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);

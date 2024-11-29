@@ -13,12 +13,14 @@ function timeOut(milliseconds: number | undefined): Promise<void> {
 
 export function retryPaymentStatus(
 	promiseFunction: () => Promise<StatusResponse>,
+	pollMax: number = MAX_POLLS,
+	pollInterval: number = POLLING_INTERVAL,
 	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
 ): Promise<StatusResponse> {
 	async function retryPollAndPromise(polls: number): Promise<StatusResponse> {
 		try {
 			if (polls > 0) {
-				await timeOut(POLLING_INTERVAL); // retry
+				await timeOut(pollInterval); // retry
 			}
 			const result = await promiseFunction();
 			if (result.status === 'pending') {
@@ -26,9 +28,9 @@ export function retryPaymentStatus(
 			}
 			return result; // success or failure, exit
 		} catch (error) {
-			if (polls < MAX_POLLS) {
+			if (polls < pollMax) {
 				if (onRetry) {
-					onRetry(polls + 1, (polls + 1) * POLLING_INTERVAL); // optional retry notification
+					onRetry(polls + 1, (polls + 1) * pollInterval); // optional retry notification
 				}
 				return retryPollAndPromise(polls + 1);
 			} else {
