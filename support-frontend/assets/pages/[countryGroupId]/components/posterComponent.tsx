@@ -11,9 +11,7 @@ import {
 import { ComponentContainer } from './componentContainer';
 
 const container = css`
-	color: ${palette.neutral[100]};
-	background-color: ${palette.brand[400]};
-	border-radius: ${space[3]}px;
+	background-color: ${palette.neutral[97]};
 	> div {
 		${from.tablet} {
 			max-width: 740px;
@@ -21,11 +19,16 @@ const container = css`
 	}
 `;
 const bodyContainer = css`
+	color: ${palette.neutral[100]};
+	background-color: ${palette.brand[400]};
+	border-radius: ${space[3]}px;
 	display: flex;
 	flex-direction: column;
+	padding: ${space[3]}px;
 	${from.tablet} {
 		flex-direction: row;
 		justify-content: space-between;
+		padding: ${space[5]}px ${space[6]}px;
 	}
 `;
 const heading = css`
@@ -71,7 +74,7 @@ const posterImageUrl = `https://i.guim.co.uk/img/media/a3e6d39656007bf310093a2a9
 
 export function PosterComponent(): JSX.Element {
 	return (
-		<ComponentContainer cssOverrides={container}>
+		<ComponentContainer cssOverrides={container} sideBorders>
 			<div css={bodyContainer}>
 				<div css={copy}>
 					<h2 css={heading}>
