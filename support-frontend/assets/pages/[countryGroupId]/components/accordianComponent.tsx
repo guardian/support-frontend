@@ -14,13 +14,20 @@ import { Accordion, AccordionRow } from '@guardian/source/react-components';
 import { ComponentContainer } from './componentContainer';
 
 const container = css`
-	background-color: ${palette.neutral[100]};
-	color: ${palette.neutral[7]};
-	border-radius: ${space[3]}px;
+	background-color: ${palette.neutral[97]};
 	> div {
 		${from.tablet} {
 			max-width: 740px;
 		}
+	}
+`;
+const bodyContainer = css`
+	color: ${palette.neutral[7]};
+	background-color: ${palette.neutral[100]};
+	border-radius: ${space[3]}px;
+	padding: ${space[3]}px;
+	${from.tablet} {
+		padding: ${space[5]}px ${space[6]}px;
 	}
 `;
 const heading = css`
@@ -70,19 +77,21 @@ const contents = [
 
 export function AccordianComponent(): JSX.Element {
 	return (
-		<ComponentContainer cssOverrides={container}>
-			<h2 css={heading}>Any questions?</h2>
-			<Accordion cssOverrides={accordian}>
-				{contents.map((content) => (
-					<AccordionRow
-						label={content.title}
-						hideToggleLabel={true}
-						cssOverrides={accordianRow}
-					>
-						{content.body}
-					</AccordionRow>
-				))}
-			</Accordion>
+		<ComponentContainer cssOverrides={container} sideBorders>
+			<div css={bodyContainer}>
+				<h2 css={heading}>Any questions?</h2>
+				<Accordion cssOverrides={accordian}>
+					{contents.map((content) => (
+						<AccordionRow
+							label={content.title}
+							hideToggleLabel={true}
+							cssOverrides={accordianRow}
+						>
+							{content.body}
+						</AccordionRow>
+					))}
+				</Accordion>
+			</div>
 		</ComponentContainer>
 	);
 }
