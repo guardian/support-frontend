@@ -471,15 +471,16 @@ class Application(
     val (product, ratePlan, maybeSelectedAmount) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
+    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+
     if (product == "OneOff") {
-      val queryString = request.queryString - "selected-contribution-type" - "selected-amount"
       val queryStringMaybeWithContributionAmount = maybeSelectedAmount
-        .map(selectedAmount => queryString + ("contribution" -> Seq(selectedAmount.toString)))
-        .getOrElse(queryString)
+        .map(selectedAmount => qsWithoutTypeAndAmount + ("contribution" -> Seq(selectedAmount.toString)))
+        .getOrElse(qsWithoutTypeAndAmount)
 
       Redirect(s"/$countryGroupId/one-time-checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
     } else {
-      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+      val queryString = qsWithoutTypeAndAmount ++ Map(
         "product" -> Seq(product),
         "ratePlan" -> Seq(ratePlan),
       )
