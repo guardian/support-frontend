@@ -18,7 +18,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar._
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
+import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
 import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
 
@@ -195,6 +195,20 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       assert(product === "SupporterPlus")
       assert(ratePlan === "Annual")
       assert(maybeContributionAmount === None)
+    }
+  }
+
+  "redirectContributionsCheckout" should {
+    "redirect the old one time checkout to the new path" in {
+      val geoCode = "uk"
+      val request = FakeRequest(
+        method = "GET",
+        path = s"/$geoCode/contribute/checkout?selected-contribution-type=one_off&selected-amount=30",
+      )
+
+      val result = applicationMock.redirectContributionsCheckout(geoCode).apply(request)
+
+      status(result) mustBe 301
     }
   }
 }
