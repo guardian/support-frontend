@@ -104,6 +104,11 @@ import {
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
+	extractDeliverableAddressDataFromForm,
+	extractNonDeliverableAddressDataFromForm,
+	extractPersonalDataFromForm,
+} from '../formHelpers';
+import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
 } from '../validation';
@@ -403,12 +408,7 @@ export function CheckoutComponent({
 		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 		 */
 
-		/** Form: Personal data */
-		const personalData = {
-			firstName: formData.get('firstName') as string,
-			lastName: formData.get('lastName') as string,
-			email: formData.get('email') as string,
-		};
+		const personalData = extractPersonalDataFromForm(formData);
 
 		/**
 		 * FormData: address
@@ -417,39 +417,9 @@ export function CheckoutComponent({
 		 * For products that have a `deliveryAddress`, we collect that and either copy it in `billingAddress`
 		 * or allow a person to enter it manually.
 		 */
-		let billingAddress;
-		let deliveryAddress;
-		if (productDescription.deliverableTo) {
-			deliveryAddress = {
-				lineOne: formData.get('delivery-lineOne') as string,
-				lineTwo: formData.get('delivery-lineTwo') as string,
-				city: formData.get('delivery-city') as string,
-				state: formData.get('delivery-stateProvince') as string,
-				postCode: formData.get('delivery-postcode') as string,
-				country: formData.get('delivery-country') as IsoCountry,
-			};
-
-			const billingAddressMatchesDelivery =
-				formData.get('billingAddressMatchesDelivery') === 'yes';
-
-			billingAddress = !billingAddressMatchesDelivery
-				? {
-						lineOne: formData.get('billing-lineOne') as string,
-						lineTwo: formData.get('billing-lineTwo') as string,
-						city: formData.get('billing-city') as string,
-						state: formData.get('billing-stateProvince') as string,
-						postCode: formData.get('billing-postcode') as string,
-						country: formData.get('billing-country') as IsoCountry,
-				  }
-				: deliveryAddress;
-		} else {
-			billingAddress = {
-				state: formData.get('billing-state') as string,
-				postCode: formData.get('billing-postcode') as string,
-				country: formData.get('billing-country') as IsoCountry,
-			};
-			deliveryAddress = undefined;
-		}
+		const { billingAddress, deliveryAddress } = productDescription.deliverableTo
+			? extractDeliverableAddressDataFromForm(formData)
+			: extractNonDeliverableAddressDataFromForm(formData);
 
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
