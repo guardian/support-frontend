@@ -1,28 +1,31 @@
 package controllers
 
+import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
 import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
 import com.gu.i18n.CountryGroup
+import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
 import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.zuora.api.ReaderType
-import config.{RecaptchaConfigProvider, StringsConfig}
+import config.{Identity, RecaptchaConfigProvider, StringsConfig}
 import fixtures.TestCSRFComponents
+import io.circe.JsonObject
 import org.mockito.ArgumentMatchers.{any, anyBoolean}
 import org.mockito.Mockito.when
 import org.scalatest.EitherValues
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar._
+import play.api.mvc.{AnyContent, BodyParser}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
+import play.api.test.Helpers.{contentAsString, header, status, stubControllerComponents}
 import services._
 import services.pricing.{CountryGroupPrices, PriceSummaryService, PriceSummaryServiceProvider}
-
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
@@ -31,9 +34,18 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
   implicit val timeout: Timeout = Timeout(2.seconds)
   val stage = Stages.DEV
 
+  val parser = mock[BodyParser[AnyContent]]
+  val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+  val config = mock[Identity]
+  val mockAuthActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
+    parser,
+    authService,
+    config,
+    isAuthServerUp = () => Future.successful(true),
+  )
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
-    userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
+    userFromAuthCookiesOrAuthServerActionBuilder = mockAuthActionBuilder,
     userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
@@ -55,6 +67,11 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     priceSummaryServiceProvider
   }
 
+  val cachedProductCatalogService = mock[CachedProductCatalogService]
+  when(cachedProductCatalogService.get()).thenReturn(JsonObject())
+  val productCatalog = mock[CachedProductCatalogServiceProvider]
+  when(productCatalog.fromStage(any, any)).thenReturn(cachedProductCatalogService)
+
   val applicationMock = new Application(
     actionRefiner,
     mock[AssetsResolver],
@@ -70,7 +87,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
     mock[AllSettingsProvider],
     mock[Stage],
     priceSummaryServiceProvider,
-    mock[CachedProductCatalogServiceProvider],
+    productCatalog,
     "support.thegulocal.com",
   )(mock[ExecutionContext])
 
@@ -195,6 +212,41 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
       assert(product === "SupporterPlus")
       assert(ratePlan === "Annual")
       assert(maybeContributionAmount === None)
+    }
+  }
+
+  "redirectContributionsCheckout" should {
+    "redirect one time contributions from the old checkout to the new path, rewriting the amount and keeping additional params" in {
+      // This means we won't attempt to authenticate the user
+      when(config.signedInCookieName).thenReturn("signed_in_cookie")
+      val geoCode = "uk"
+      val request = FakeRequest(
+        method = "GET",
+        path = s"/$geoCode/contribute/checkout?selected-contribution-type=one_off&selected-amount=30&extra=param",
+      )
+
+      val result = applicationMock.redirectContributionsCheckout(geoCode).apply(request)
+
+      assert(status(result) === 301)
+      assert(header("Location", result) === Some(s"/$geoCode/one-time-checkout?extra=param&contribution=30"))
+    }
+
+    "redirect Supporter+ from the old checkout to the new path, keeping additional params" in {
+      // This means we won't attempt to authenticate the user
+      when(config.signedInCookieName).thenReturn("signed_in_cookie")
+      val geoCode = "uk"
+      val request = FakeRequest(
+        method = "GET",
+        // When the amount is missing, we default to being eligible for S+
+        path = s"/$geoCode/contribute/checkout?selected-contribution-type=recurring&extra=param",
+      )
+
+      val result = applicationMock.redirectContributionsCheckout(geoCode).apply(request)
+
+      assert(status(result) === 301)
+      assert(
+        header("Location", result) === Some(s"/$geoCode/checkout?extra=param&product=SupporterPlus&ratePlan=Monthly"),
+      )
     }
   }
 }
