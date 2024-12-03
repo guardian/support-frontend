@@ -13,6 +13,7 @@ import {
 	productCatalog,
 	productCatalogGuardianLight,
 } from 'helpers/productCatalog';
+import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { ComponentContainer } from './componentContainer';
@@ -63,7 +64,8 @@ const signIn = css`
 	}
 `;
 
-const SignInUrl = 'https://manage.theguardian.com/signin';
+const codeOrProd = isCode() ? 'code.dev-theguardian' : 'theguardian';
+const SignInUrl = `https://manage.${codeOrProd}.com`;
 const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
