@@ -20,6 +20,9 @@ object FailedEmailFields {
   def paper(email: String, identityUserId: IdentityUserId): EmailFields =
     failedEmailFields("paper-failed", email, identityUserId)
 
+  def guardianLight(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("guardian-light-failed", email, identityUserId)
+
   private def failedEmailFields(dataExtensionName: String, email: String, identityUserId: IdentityUserId): EmailFields =
     EmailFields(Nil, Right(identityUserId), email, dataExtensionName, None, None)
 

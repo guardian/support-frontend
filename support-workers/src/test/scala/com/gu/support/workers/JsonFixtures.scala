@@ -17,6 +17,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
+  GuardianLightState,
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
@@ -694,6 +695,24 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
+  val createGuardianLightZuoraSubscriptionJson =
+    CreateZuoraSubscriptionState(
+      GuardianLightState(
+        GuardianLight(GBP),
+        stripePaymentMethodObj,
+        salesforceContact,
+      ),
+      UUID.randomUUID(),
+      user(),
+      GuardianLight(GBP),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
+      None,
+      None,
+      None,
+      None,
+      None,
+    ).asJson.spaces2
+
   val failureJson =
     """{
           "state": {"requestId":"e18f6418-45f2-11e7-8bfa-8faac2182601","user":{"id":"12345","primaryEmailAddress":"test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Annual"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"TokenId":"card_E0zitFfsO2wTEn","SecondTokenId":"cus_E0zic0cedDT5MZ","CreditCardNumber":"4242","CreditCardCountry":"US","CreditCardExpirationMonth":2,"CreditCardExpirationYear":2029,"CreditCardType":"Visa","Type":"CreditCardReferenceTransaction","PaymentGateway":"Stripe Gateway 1"},"salesForceContact":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"salesforceContacts":{"buyer":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"},"giftRecipient":{"Id":"0033E00001Cq8D2QAJ","AccountId":"0013E00001AU6xcQAD"}}},
@@ -998,12 +1017,15 @@ object JsonFixtures {
             $requestIdJson,
             ${userJson(userId)},
             "product": ${contribution()},
-          "analyticsInfo": {
-            "paymentProvider": "Existing",
-            "isGiftPurchase": false
-          },
-            "paymentFields" : {"billingAccountId" : "$billingAccountId"}
+            "analyticsInfo": {
+              "paymentProvider": "Existing",
+              "isGiftPurchase": false
+            },
+            "paymentFields" : {
+              "billingAccountId": "$billingAccountId",
+              "paymentType": "Existing"
             }
+          }
         """
 
   val previewSubscribeResponseJson = """

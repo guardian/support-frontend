@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source/foundations';
+import { from, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
 import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 /**
@@ -7,16 +7,21 @@ import type { CountdownSetting } from 'helpers/campaigns/campaigns';
  * Beware that this is only accurate to less than a second and is locale specific.
  */
 
-// TODO: colours will change with sub-campaigns and design not yet confirmed...
 const outer = css`
 	width: 272px;
 	margin: auto;
+	margin-bottom: 16px; // mobile
+	margin-top: 0px;
+	${from.mobileLandscape} {
+		margin-bottom: 24px;
+		margin-top: 0px;
+	}
 `;
 
-const container = css`
+const container = (colours?: CountdownSetting) => css`
 	width: 100%;
-	background-color: #1e3e72;
-	color: ${palette.neutral[100]};
+	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'};
+	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
 	padding: 12px 40px;
 	border-radius: 8px;
 
@@ -65,7 +70,9 @@ const timeLabelStyle = css`
 
 // props
 export type CountdownProps = {
-	campaign: CountdownSetting;
+	showCountdown: boolean;
+	setShowCountdown: (b: boolean) => void;
+	countdownCampaign: CountdownSetting;
 };
 
 // create countdown logic
@@ -82,13 +89,20 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 };
 
 // return the countdown component
-export default function Countdown({ campaign }: CountdownProps): JSX.Element {
+export default function Countdown({
+	showCountdown: show,
+	setShowCountdown: setShow,
+	countdownCampaign: campaign,
+}: CountdownProps): JSX.Element {
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
-	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+
+	const hideCountdown = () => {
+		setShow(false);
+	};
 
 	useEffect(() => {
 		const getTotalMillisRemaining = (targetDate: number) => {
@@ -99,7 +113,7 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const isActive =
 				campaign.countdownStartInMillis < now &&
 				campaign.countdownDeadlineInMillis > now;
-			setShowCountdown(isActive);
+			setShow(isActive);
 			return isActive;
 		};
 
@@ -107,7 +121,9 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 			const timeRemaining = getTotalMillisRemaining(
 				campaign.countdownDeadlineInMillis,
 			);
-
+			if (timeRemaining < -1) {
+				hideCountdown();
+			}
 			setDays(
 				ensureRoundedDoubleDigits(
 					Math.floor(timeRemaining / millisecondsInDay),
@@ -133,7 +149,6 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 		if (canDisplayCountdown()) {
 			updateTimeParts(); // called first
 			const id = setInterval(updateTimeParts, 1000); // run once per second
-			// console.log(`The timer has been created.`);
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
@@ -148,9 +163,9 @@ export default function Countdown({ campaign }: CountdownProps): JSX.Element {
 
 	return (
 		<>
-			{showCountdown && (
+			{show && (
 				<div id="timer" role="timer" css={outer}>
-					<div css={container}>
+					<div css={container(campaign)}>
 						<TimePart timePart={days} label={'days'} />
 						<div css={[flexItem, colon]}>:</div>
 						<TimePart timePart={hours} label={'hrs'} />

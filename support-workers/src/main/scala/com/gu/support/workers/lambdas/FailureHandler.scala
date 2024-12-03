@@ -49,6 +49,8 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       case _: Paper => FailedEmailFields.paper(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: GuardianWeekly =>
         FailedEmailFields.guardianWeekly(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+      case _: GuardianLight =>
+        FailedEmailFields.guardianLight(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
     }
     logger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)
@@ -116,7 +118,6 @@ object FailureHandler {
     // Just get the decline code (example message from Zuora: "Transaction declined.do_not_honor - Your card was declined.")
     val trimmedError = zuoraError.Message.stripPrefix("Transaction declined.").split(" ")(0)
     paymentProvider match {
-      case AmazonPay => convertAmazonPayDeclineCode(trimmedError)
       case _ => convertStripeDeclineCode(trimmedError).getOrElse(Unknown)
     }
   }

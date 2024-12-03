@@ -4,8 +4,9 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
+import { GuardianLightLanding } from './guardianLightLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
-import {OneTimeCheckoutEmbed} from "./oneTimeCheckoutEmbed";
+import { OneTimeCheckoutEmbed } from './oneTimeCheckoutEmbed';
 import { ThankYou } from './thank-you';
 
 setUpTrackingAndConsents();
@@ -28,6 +29,10 @@ const router = createBrowserRouter(
 		{
 			path: `/${geoId}/thank-you`,
 			element: <ThankYou geoId={geoId} appConfig={appConfig} />,
+		},
+		{
+			path: `/${geoId}/guardian-light`,
+			element: <GuardianLightLanding geoId={geoId} />,
 		},
 	]),
 );

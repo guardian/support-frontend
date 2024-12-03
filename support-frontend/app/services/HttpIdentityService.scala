@@ -53,12 +53,26 @@ object GetUserTypeResponse {
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
 }
 
-sealed trait GetUserTypeError
+case class UserDetails(
+    identityId: String,
+    email: String,
+    userType: String,
+)
+
+sealed trait GetUserTypeError {
+  def describeError: String
+}
 
 object GetUserTypeError {
-  case class CallFailed(error: Throwable) extends GetUserTypeError
-  case class GotErrorResponse(response: WSResponse) extends GetUserTypeError
-  case class DecodeFailed(decodeErrors: Seq[(JsPath, Seq[JsonValidationError])]) extends GetUserTypeError
+  case class CallFailed(error: Throwable) extends GetUserTypeError {
+    override def describeError: String = s"Call failed with error: ${error.getMessage}"
+  }
+  case class GotErrorResponse(response: WSResponse) extends GetUserTypeError {
+    override def describeError: String = s"Got error response: ${response.status} ${response.body}"
+  }
+  case class DecodeFailed(decodeErrors: Seq[(JsPath, Seq[JsonValidationError])]) extends GetUserTypeError {
+    override def describeError: String = s"Failed to decode response: ${decodeErrors.mkString(",")}"
+  }
 }
 
 case class CreateSignInTokenResponse(encryptedEmail: String)
@@ -127,14 +141,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
-  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     // Try to fetch the user's information with their email address and if it does not exist
     // or there is an error try again up to a total of 3 times with a 500 millisecond delay between
     // each attempt.
     // We try to fetch the user information at the start of each attempt in case a previous `createUser`
     // call succeeded but timed out before returning a valid response
     retry(
-      getUserIdFromEmail(email).leftFlatMap(_ =>
+      getUserDetailsFromEmail(email).leftFlatMap(_ =>
         createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer),
       ),
       delay = 500.milliseconds,
@@ -142,9 +156,9 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     )
   }
 
-  def getUserIdFromEmail(
+  def getUserDetailsFromEmail(
       email: String,
-  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] =
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] =
     execute(
       wsClient
         .url(s"$apiUrl/user")
@@ -163,7 +177,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
             endpoint = Some(UserEndpoint),
           ),
         )
-        .map(userResponse => userResponse.user.id)
+        .map(userResponse => UserDetails(userResponse.user.id, email, "current"))
     }.leftMap(e => e.setEndpoint(UserEndpoint))
 
   def createUserIdFromEmailUser(
@@ -172,7 +186,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
       lastName: String,
       pageViewId: Option[String],
       referer: Option[String],
-  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, String] = {
+  )(implicit ec: ExecutionContext, scheduler: Scheduler): EitherT[Future, IdentityError, UserDetails] = {
     val body = CreateGuestAccountRequestBody(
       email,
       PrivateFields(
@@ -210,7 +224,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
             endpoint = Some(GuestEndpoint),
           ),
         )
-        .map(response => response.guestRegistrationRequest.userId)
+        .map(response => UserDetails(response.guestRegistrationRequest.userId, email, "new"))
     }
   }
 

@@ -36,8 +36,6 @@ case class AppConfig private (
     stripeKeyAustralia: AppConfig.StripeKeyConfig,
     stripeKeyUnitedStates: AppConfig.StripeKeyConfig,
     payPalEnvironment: AppConfig.ConfigKeyValues,
-    amazonPaySellerId: AppConfig.ConfigKeyValues,
-    amazonPayClientId: AppConfig.ConfigKeyValues,
     paymentApiUrl: String,
     paymentApiPayPalEndpoint: String,
     mdapiUrl: String,
@@ -133,14 +131,6 @@ object AppConfig extends InternationalisationCodecs {
         default = paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment,
         test = paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment,
       ),
-      amazonPaySellerId = ConfigKeyValues(
-        default = paymentMethodConfigs.defaultAmazonPayConfig.sellerId,
-        test = paymentMethodConfigs.testAmazonPayConfig.sellerId,
-      ),
-      amazonPayClientId = ConfigKeyValues(
-        default = paymentMethodConfigs.defaultAmazonPayConfig.clientId,
-        test = paymentMethodConfigs.testAmazonPayConfig.clientId,
-      ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
       mdapiUrl = membersDataApiUrl,
@@ -177,8 +167,6 @@ case class PaymentMethodConfigs(
     regularTestStripeConfig: StripePublicConfig,
     regularDefaultPayPalConfig: PayPalConfig,
     regularTestPayPalConfig: PayPalConfig,
-    defaultAmazonPayConfig: AmazonPayConfig,
-    testAmazonPayConfig: AmazonPayConfig,
 )
 
 /** This class is only needed because you can't pass more than 22 arguments to a twirl template and passing both types
@@ -203,7 +191,6 @@ class Application(
     oneOffStripeConfigProvider: StripePublicConfigProvider,
     regularStripeConfigProvider: StripePublicConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
-    amazonPayConfigProvider: AmazonPayConfigProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
     paymentAPIService: PaymentAPIService,
     membersDataApiUrl: String,
@@ -258,11 +245,19 @@ class Application(
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "contribute"), campaignCode)
+    val url = getGeoPath(request, campaignCode, "contribute")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, "", path)
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
+  private def getGeoPath(request: Request[AnyContent], campaignCode: String, product: String): String = {
+    List(getGeoRedirectUrl(request.geoData.countryGroup, product), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
-
-    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
@@ -363,8 +358,6 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
-        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        testAmazonPayConfig = amazonPayConfigProvider.get(true),
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -461,7 +454,7 @@ class Application(
 
     val isOneOff = maybeSelectedContributionType.contains("one_off")
     if (isOneOff) {
-      ("OneOff", "OneOff", None)
+      ("OneOff", "OneOff", maybeSelectedAmount)
     } else if (isSupporterPlus) {
       ("SupporterPlus", ratePlan, None)
     } else {
@@ -478,15 +471,16 @@ class Application(
     val (product, ratePlan, maybeSelectedAmount) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
-    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
-      * should remove this.
-      */
+    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+
     if (product == "OneOff") {
-      Ok(
-        contributionsHtml(countryGroupId, None),
-      ).withSettingsSurrogateKey
+      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
+        .map(selectedAmount => qsWithoutTypeAndAmount + ("contribution" -> Seq(selectedAmount.toString)))
+        .getOrElse(qsWithoutTypeAndAmount)
+
+      Redirect(s"/$countryGroupId/one-time-checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
     } else {
-      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+      val queryString = qsWithoutTypeAndAmount ++ Map(
         "product" -> Seq(product),
         "ratePlan" -> Seq(ratePlan),
       )
@@ -528,8 +522,6 @@ class Application(
           regularTestStripeConfig = regularStripeConfigProvider.get(true),
           regularDefaultPayPalConfig = payPalConfigProvider.get(false),
           regularTestPayPalConfig = payPalConfigProvider.get(true),
-          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-          testAmazonPayConfig = amazonPayConfigProvider.get(true),
         ),
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         serversideTests = serversideTests,
@@ -572,8 +564,6 @@ class Application(
         regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
         regularTestPayPalConfig = payPalConfigProvider.get(true),
-        defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        testAmazonPayConfig = amazonPayConfigProvider.get(true),
       ),
       paymentAPIService = paymentAPIService,
       membersDataApiUrl = membersDataApiUrl,

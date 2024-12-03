@@ -25,6 +25,7 @@ import type {
 	Paper,
 } from 'helpers/productPrice/subscriptions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type {
 	AcquisitionABTest,
 	OphanIds,
@@ -70,6 +71,11 @@ export type TierThree = {
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 };
+export type GuardianLight = {
+	productType: 'GuardianLight';
+	currency: string;
+	billingPeriod: BillingPeriod;
+};
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
@@ -96,7 +102,8 @@ export type SubscriptionProductFields =
 	| DigitalSubscription
 	| PaperSubscription
 	| GuardianWeeklySubscription
-	| TierThree;
+	| TierThree
+	| GuardianLight;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;
@@ -230,6 +237,7 @@ export type PaymentResult = {
 	paymentStatus: Status;
 	subscriptionCreationPending?: true;
 	error?: ErrorReason;
+	userType?: UserType;
 };
 
 export type StatusResponse = {

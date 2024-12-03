@@ -6,13 +6,8 @@ import {
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
 
-export type UserType = 'new' | 'guest' | 'current';
-
-export type UserTypeFromIdentityResponse =
-	| UserType
-	| 'noRequestSent'
-	| 'requestPending'
-	| 'requestFailed';
+export const userTypeSchema = z.union([z.literal('new'), z.literal('current')]);
+export type UserType = z.infer<typeof userTypeSchema>;
 
 export const emailRules = zuoraCompatibleString(
 	z
@@ -60,7 +55,6 @@ export const personalDetailsSchema = z
 type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	errors?: SliceErrors<PersonalDetailsValidatedFields>;
 };
 
@@ -72,6 +66,5 @@ export const initialPersonalDetailsState: PersonalDetailsState = {
 	email: user.email ?? '',
 	confirmEmail: '',
 	isSignedIn: user.isSignedIn,
-	userTypeFromIdentityResponse: 'noRequestSent',
 	errors: {},
 };

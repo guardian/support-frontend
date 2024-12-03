@@ -53,15 +53,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 			promo.discount.amount,
 		);
 		if (discount > 0) {
-			/**
-			 * Temporary hack, as WAITROSE_SATSUNHD campaign goes live 31/10/2024
-			 * and we don't have time to dig into why the saving vs retail
-			 * is over reporting 15% saving. to be removed when WAITROSE_SATSUNHD campaign ends.
-			 */
-			if (promo.promoCode === 'WAITROSE_SATSUNHD' && discount === 15) {
-				return 'Save 10% on retail price';
-			}
-
 			return `Save ${discount}% on retail price`;
 		} else {
 			return '';

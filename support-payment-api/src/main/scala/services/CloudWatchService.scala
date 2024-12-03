@@ -5,7 +5,6 @@ import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, PutMetricDataResult}
 import com.typesafe.scalalogging.StrictLogging
-import model.amazonpay.AmazonPayApiError
 import model.paypal.PaypalApiError
 import model.stripe.StripeApiError
 import model.{Environment, PaymentProvider}
@@ -63,7 +62,6 @@ class CloudWatchService(cloudWatchAsyncClient: AmazonCloudWatchAsync, environmen
           case ("PAYMENT_ALREADY_DONE") => false
           case _ => true
         }
-      case AmazonPayApiError(_, _, Some("amazon_pay_try_other_card")) => false
       case _ => true
     }
   }

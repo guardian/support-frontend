@@ -32,10 +32,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
-          |      },
-          |      "amazonPay" : {
-          |        "description" : "Amazon Pay",
-          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -61,10 +57,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "payPal" : {
           |        "description" : "PayPal",
           |        "state" : "On"
-          |      },
-          |      "amazonPay" : {
-          |        "description" : "Amazon Pay",
-          |        "state" : "Off"
           |      },
           |      "directDebit" : {
           |        "description" : "Direct Debit",
@@ -120,6 +112,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "authenticateWithOkta" : {
           |        "description" : "Auth is by Okta tokens rather than legacy Identity cookies",
           |        "state" : "Off"
+          |      },
+          |      "enableCampaignCountdown" : {
+          |        "description" : "Enable Campaign Countdown",
+          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -154,8 +150,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods =
-            OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
+          oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
           recurringPaymentMethods = RecurringPaymentMethodSwitches(
             Some(On),
             Some(On),
@@ -164,11 +159,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(On),
             Some(On),
             Some(Off),
-            Some(Off),
           ),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
-          featureSwitches = FeatureSwitches(None, Some(On), Some(Off)),
+          featureSwitches = FeatureSwitches(None, Some(On), Some(Off), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
         ),

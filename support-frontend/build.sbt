@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "32.1.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v30" % "8.0.1",
-  "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
+  "io.github.bonigarcia" % "webdrivermanager" % "5.9.2" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
@@ -42,6 +42,14 @@ libraryDependencies ++= Seq(
   ws,
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
+dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
+
+excludeDependencies ++= Seq(
+  // Exclude htmlunit due to a vulnerability. Brought in via org.scalatestplus.play:scalatestplus-play but we don't need
+  // it. The vulnerability is fixed in v3 onwards, but the lib was renamed so I don't think we can force a newer version
+  // by specifying is in the dependencies.
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+)
 
 ThisBuild / libraryDependencySchemes ++= Seq(
   "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

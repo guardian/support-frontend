@@ -67,7 +67,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   it should "create an annual Supporter Plus subscription" in {
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(95, GBP, Annual))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(120, GBP, Annual))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -75,7 +75,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription in a country where it is taxed" in {
     val austria = CountryGroup.Europe.countries.find(_.alpha2 == "AT").get // Fail here if we can't find it
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, Monthly, country = austria))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(12, EUR, Monthly, country = austria))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -155,6 +155,12 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
+  it should "create a Guardian Light monthly subscription" in {
+    createZuoraHelper
+      .createSubscription(createGuardianLightZuoraSubscriptionJson)
+      .map(_ should matchPattern { case s: SendThankYouEmailGuardianLightState =>
+      })
+  }
 }
 
 class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)

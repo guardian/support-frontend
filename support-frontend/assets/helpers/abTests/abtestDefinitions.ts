@@ -105,48 +105,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	auPartnerBenefit: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 8,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	newOneTimeCheckout: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 4,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: false,
-	},
 	linkExpressCheckout: {
 		variants: [
 			{

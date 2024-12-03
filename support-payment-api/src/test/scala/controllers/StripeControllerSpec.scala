@@ -46,7 +46,7 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
   val mockStripeRequestBasedProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
-  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge)
+  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None)
 
   val stripeServiceResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
     EitherT.right(Future.successful(stripeChargeSuccessMock))
@@ -95,7 +95,6 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     stripeController,
     new PaypalController(controllerComponents, paypalBackendProvider)(DefaultThreadPool(ec), List.empty),
     new GoCardlessController(controllerComponents, goCardlessBackendProvider)(DefaultThreadPool(ec), List.empty),
-    mock[AmazonPayController],
   )
 
   override def httpFilters: Seq[EssentialFilter] = Seq.empty

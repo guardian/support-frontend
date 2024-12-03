@@ -5,6 +5,7 @@ import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
   digitalSubscriptionGiftRedemptionState,
   digitalSusbcriptionGiftPurchaseState,
+  guardianLightState,
   serviceWithFixtures,
   supporterPlusState,
 }
@@ -43,6 +44,13 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
       UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
     supporterRatePlanItem.value.identityId shouldBe "200092951"
     supporterRatePlanItem.value.contributionAmount shouldBe None // not guaranteed right if discounted, and unused anyway
+  }
+
+  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Guardian Light purchase" in {
+    val state = decode[SendThankYouEmailState](guardianLightState).value
+    val supporterRatePlanItem =
+      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
+    supporterRatePlanItem.value.identityId shouldBe "200092951"
   }
 }
 
@@ -102,6 +110,61 @@ object UpdateSupporterProductDataSpec {
           "productType": "SupporterPlus"
         }
     """
+
+  val guardianLightState =
+    """
+    {
+        "user": {
+          "id": "200092951",
+          "primaryEmailAddress": "test+2343343jj28323@test.com",
+          "title": null,
+          "firstName": "yy",
+          "lastName": "yy",
+          "billingAddress": {
+            "lineOne": null,
+            "lineTwo": null,
+            "city": null,
+            "state": "",
+            "postCode": null,
+            "country": "GB"
+          },
+          "deliveryAddress": null,
+          "telephoneNumber": null,
+          "isTestUser": false,
+          "deliveryInstructions": null
+        },
+        "product": {
+          "amount": 2,
+          "currency": "GBP",
+          "billingPeriod": "Monthly",
+          "fulfilmentOptions": "NoFulfilmentOptions",
+          "productType": "GuardianLight"
+        },
+        "paymentMethod": {
+          "TokenId": "pm_0MZap9ItVxyc3Q6nRNfyJHfO",
+          "SecondTokenId": "cus_NKFK2NAwJc9tH3",
+          "CreditCardNumber": "4242",
+          "CreditCardCountry": "GB",
+          "CreditCardExpirationMonth": 2,
+          "CreditCardExpirationYear": 2029,
+          "CreditCardType": "Visa",
+          "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+          "Type": "CreditCardReferenceTransaction",
+          "StripePaymentType": "StripeCheckout"
+        },
+        "paymentSchedule": {
+          "payments": [
+            {
+              "date": "2024-01-08",
+              "amount": 20
+            }
+          ]
+        },
+        "accountNumber": "A00485141",
+        "subscriptionNumber": "A-S00489451",
+        "productType": "GuardianLight"
+      }
+  """
 
   val digitalSubscriptionGiftRedemptionState = """
     {

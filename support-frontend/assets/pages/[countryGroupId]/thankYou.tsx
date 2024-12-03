@@ -4,10 +4,11 @@ import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
+import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { ThankYouComponent } from './components/thankyou';
+import { ThankYouComponent } from './components/thankYouComponent';
 
 export type ThankYouProps = {
 	geoId: GeoId;
@@ -37,6 +38,9 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
+
+	// userType: default to 'current' since it has the least specific messaging
+	const userType = (searchParams.get('userType') ?? 'current') as UserType;
 
 	let payment: {
 		originalAmount: number;
@@ -155,6 +159,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			productKey={productKey}
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
+			identityUserType={userType}
 		/>
 	);
 }

@@ -14,9 +14,6 @@ object CheckoutFailureReasons {
     PaymentProviderUnavailable,
     PaymentRecentlyTaken,
     AccountMismatch,
-    AmazonPayTryAnotherCard,
-    AmazonPayTryAgain,
-    AmazonPayFatal,
     StripePaymentMethodDisabled,
     Unknown,
   )
@@ -57,18 +54,6 @@ object CheckoutFailureReasons {
 
   case object AccountMismatch extends CheckoutFailureReason {
     override def asString = "production_test_account_mismatch"
-  }
-
-  case object AmazonPayTryAnotherCard extends CheckoutFailureReason {
-    override def asString: String = "amazon_pay_try_other_card"
-  }
-
-  case object AmazonPayTryAgain extends CheckoutFailureReason {
-    override def asString: String = "amazon_pay_try_again"
-  }
-
-  case object AmazonPayFatal extends CheckoutFailureReason {
-    override def asString: String = "amazon_pay_fatal"
   }
 
   case object Unknown extends CheckoutFailureReason {
@@ -119,12 +104,6 @@ object CheckoutFailureReasons {
     case "try_again_later" => PaymentMethodTemporarilyDeclined
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
     case "Stripe payments are currently disabled" => StripePaymentMethodDisabled
-  }
-
-  def convertAmazonPayDeclineCode(declineCode: String): CheckoutFailureReason = declineCode match {
-    case "InvalidPaymentMethod" => AmazonPayTryAnotherCard
-    case "ProcessingFailure" => AmazonPayTryAgain
-    case _ => AmazonPayFatal
   }
 
   implicit val encodeFailureReason: Encoder[CheckoutFailureReason] =

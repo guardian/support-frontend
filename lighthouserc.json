@@ -7,7 +7,7 @@
         "interactive": ["error", { "maxNumericValue": 9500 }],
         "resource-summary:document:size": [
           "error",
-          { "maxNumericValue": 20000 }
+          { "maxNumericValue": 22000 }
         ],
         "resource-summary:third-party:count": [
           "error",

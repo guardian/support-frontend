@@ -66,7 +66,15 @@ libraryDependencies ++= Seq(
   "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
 )
 
+excludeDependencies ++= Seq(
+  // Exclude htmlunit due to a vulnerability. Brought in via play-test via fluentlenium-core and htmlunit-driver but we
+  // don't need it. The vulnerability is fixed in v3 onwards, but the lib was renamed so I don't think we can force a
+  // newer version by specifying it in the dependencies.
+  ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+)
+
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
+dependencyOverrides += "commons-io" % "commons-io" % "2.14.0" % Test
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 

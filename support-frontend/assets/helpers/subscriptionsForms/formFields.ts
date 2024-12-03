@@ -66,8 +66,6 @@ function getFormFields(state: SubscriptionsState): FormFields {
 		email: state.page.checkoutForm.personalDetails.email,
 		confirmEmail: state.page.checkoutForm.personalDetails.confirmEmail,
 		isSignedIn: state.page.user.isSignedIn,
-		userTypeFromIdentityResponse:
-			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 		telephone: state.page.checkoutForm.personalDetails.telephone,
 		titleGiftRecipient: state.page.checkoutForm.gifting.title,
 		firstNameGiftRecipient: state.page.checkoutForm.gifting.firstName,

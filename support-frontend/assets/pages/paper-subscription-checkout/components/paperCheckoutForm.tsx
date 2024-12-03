@@ -50,7 +50,6 @@ import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
-import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectCorrespondingProductOptionPrice,
 	selectDiscountedPrice,
@@ -144,7 +143,6 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
@@ -363,7 +361,6 @@ function PaperCheckoutForm(props: PropTypes) {
 							confirmEmail={props.confirmEmail}
 							setConfirmEmail={props.setConfirmEmail}
 							isSignedIn={props.isSignedIn}
-							fetchAndStoreUserType={props.fetchAndStoreUserType}
 							telephone={props.telephone}
 							setTelephone={props.setTelephone}
 							formErrors={props.formErrors}
