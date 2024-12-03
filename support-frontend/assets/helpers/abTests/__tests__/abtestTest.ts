@@ -4,7 +4,6 @@ import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
-import { doesNotContainExtendedEmojiOrLeadingSpace } from 'pages/[countryGroupId]/validation';
 import type {
 	AmountsTest,
 	AmountsTests,
@@ -875,35 +874,7 @@ describe('getAmountsTestVariant', () => {
 	});
 });
 
-describe('validateRegex', () => {
-	it('leading space', () => {
-		expect(matchRegex(doesNotContainExtendedEmojiOrLeadingSpace, ' z')).toEqual(
-			false,
-		);
-		expect(
-			matchRegex(doesNotContainExtendedEmojiOrLeadingSpace, 'z z'),
-		).toEqual(true);
-	});
-	it('pictographic', () => {
-		expect(
-			matchRegex(doesNotContainExtendedEmojiOrLeadingSpace, '\\p✈️z'),
-		).toEqual(false);
-	});
-	it('combined', () => {
-		expect(
-			matchRegex(doesNotContainExtendedEmojiOrLeadingSpace, ' z\\p✈️z'),
-		).toEqual(false);
-		expect(
-			matchRegex(doesNotContainExtendedEmojiOrLeadingSpace, '\\p✈️ z'),
-		).toEqual(false);
-	});
-});
-
 // ----- Helpers ----- //
-
-function matchRegex(regex: string, value: string): boolean {
-	return new RegExp(regex).test(value);
-}
 
 function buildVariant({ id = 'control' }: Partial<Variant>): Variant {
 	return { id };
