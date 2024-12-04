@@ -2,9 +2,9 @@ import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { LandingPageLayout } from '../components/landingPageLayout';
 import { AccordianComponent } from './components/accordianComponent';
 import { HeaderCards } from './components/headerCards';
-import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
 
 type GuardianLightLandingProps = {
