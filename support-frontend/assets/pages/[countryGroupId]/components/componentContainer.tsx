@@ -38,15 +38,15 @@ export type ComponentContainerProps = {
 export function ComponentContainer({
 	children,
 	borderColor,
-	sideBorders,
-	topBorder,
+	sideBorders = false,
+	topBorder = false,
 	cssOverrides,
 }: ComponentContainerProps): JSX.Element {
 	const cssContainerAndOverride = css([cssOverrides, container]);
 	return (
 		<Container
-			sideBorders={!!sideBorders}
-			topBorder={!!topBorder}
+			sideBorders={sideBorders}
+			topBorder={topBorder}
 			borderColor={borderColor}
 			cssOverrides={cssContainerAndOverride}
 		>
