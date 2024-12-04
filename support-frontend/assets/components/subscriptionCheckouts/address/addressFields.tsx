@@ -32,7 +32,7 @@ import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { canShow } from 'hocs/canShow';
 import {
-	doesNotContainEmojiPattern,
+	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../../../pages/[countryGroupId]/validation';
 import type { PostcodeFinderResult } from './postcodeLookup';
@@ -279,7 +279,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				error={firstError('lineOne', props.errors)}
 				name={`${scope}-lineOne`}
 				maxLength={100}
-				pattern={doesNotContainEmojiPattern}
+				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
@@ -299,7 +299,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				error={firstError('lineTwo', props.errors)}
 				name={`${scope}-lineTwo`}
 				maxLength={100}
-				pattern={doesNotContainEmojiPattern}
+				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
@@ -318,7 +318,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				onChange={(e) => props.setTownCity(e.target.value)}
 				error={firstError('city', props.errors)}
 				name={`${scope}-city`}
-				pattern={doesNotContainEmojiPattern}
+				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
@@ -362,7 +362,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				optional
 				isShown={shouldShowStateInput(props.country)}
 				name={`${scope}-stateProvince`}
-				pattern={doesNotContainEmojiPattern}
+				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
@@ -382,7 +382,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				error={firstError('postCode', props.errors)}
 				name={`${scope}-postcode`}
 				maxLength={20}
-				pattern={doesNotContainEmojiPattern}
+				pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 				onBlur={(event) => {
 					event.target.checkValidity();
 				}}
