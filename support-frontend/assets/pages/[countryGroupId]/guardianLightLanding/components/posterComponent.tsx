@@ -8,14 +8,29 @@ import {
 	textSans17,
 	textSans20,
 } from '@guardian/source/foundations';
-import { ComponentContainer } from './componentContainer';
+import { Container } from 'components/layout/container';
 
 const container = css`
 	background-color: ${palette.neutral[97]};
 	> div {
+		min-height: 480px;
+		padding: ${space[5]}px 10px;
+		${from.mobileLandscape} {
+			padding-left: ${space[5]}px;
+			padding-right: ${space[5]}px;
+		}
 		${from.tablet} {
+			min-height: 432px;
 			max-width: 740px;
 		}
+		${from.desktop} {
+			max-width: 940px;
+		}
+	}
+`;
+const headingContentContainer = css`
+	${from.tablet} {
+		min-height: 450px;
 	}
 `;
 const bodyContainer = css`
@@ -74,33 +89,35 @@ const posterImageUrl = `https://i.guim.co.uk/img/media/a3e6d39656007bf310093a2a9
 
 export function PosterComponent(): JSX.Element {
 	return (
-		<ComponentContainer cssOverrides={container} sideBorders>
-			<div css={bodyContainer}>
-				<div css={copy}>
-					<h2 css={heading}>
-						This is annoying.
-						<br />
-						<span css={headingColor}>Why are you doing it?</span>
-					</h2>
-					<p css={paragraph}>
-						The Guardian is lucky to have a unique ownership structure and a
-						revenue model powered by the direct support of many of our readers.
-						However advertising remains a crucial part of how we fund our
-						journalism.
-					</p>
-					<p css={paragraph}>
-						Readers choosing to reject personalised advertising makes it more
-						difficult for us to generate revenue from online advertising. Put
-						simply, that means that the more people who press “reject”, the less
-						money to pay for quality reporting.
-					</p>
-					<p css={paragraph}>
-						As a result, we are now asking readers to pay to reject personalised
-						advertising.
-					</p>
+		<Container sideBorders cssOverrides={container}>
+			<div css={headingContentContainer}>
+				<div css={bodyContainer}>
+					<div css={copy}>
+						<h2 css={heading}>
+							This is annoying.
+							<br />
+							<span css={headingColor}>Why are you doing it?</span>
+						</h2>
+						<p css={paragraph}>
+							The Guardian is lucky to have a unique ownership structure and a
+							revenue model powered by the direct support of many of our
+							readers. However advertising remains a crucial part of how we fund
+							our journalism.
+						</p>
+						<p css={paragraph}>
+							Readers choosing to reject personalised advertising makes it more
+							difficult for us to generate revenue from online advertising. Put
+							simply, that means that the more people who press “reject”, the
+							less money to pay for quality reporting.
+						</p>
+						<p css={paragraph}>
+							As a result, we are now asking readers to pay to reject
+							personalised advertising.
+						</p>
+					</div>
+					<img css={image} alt="" src={posterImageUrl} />
 				</div>
-				<img css={image} alt="" src={posterImageUrl} />
 			</div>
-		</ComponentContainer>
+		</Container>
 	);
 }
