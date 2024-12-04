@@ -102,7 +102,7 @@ import {
 	formatUserDate,
 } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
-import { getProductFields } from '../getProductFields';
+import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
 	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
