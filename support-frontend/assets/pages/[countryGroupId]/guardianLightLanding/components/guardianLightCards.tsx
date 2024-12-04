@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { ProductDescription } from 'helpers/productCatalog';
-import { type CardPosition, GuardianLightCard } from './guardianLightCard';
+import { GuardianLightCard } from './guardianLightCard';
 
 export type GuardianLightCardsProps = {
 	cardsContent: Array<{
@@ -28,16 +28,6 @@ const container = (cardCount: number) => css`
 	}
 `;
 
-const cardIndexToTier = (index: number): CardPosition => {
-	switch (index) {
-		case 1:
-			return 2;
-		case 0:
-		default:
-			return 1;
-	}
-};
-
 export function GuardianLightCards({
 	cardsContent,
 }: GuardianLightCardsProps): JSX.Element {
@@ -51,7 +41,7 @@ export function GuardianLightCards({
 			{cardsContent.map((cardContent, cardIndex) => {
 				return (
 					<GuardianLightCard
-						cardPosition={cardIndexToTier(cardIndex)}
+						cardIndex={cardIndex}
 						key={`guardianLightCard${cardIndex}`}
 						{...cardContent}
 					/>

@@ -12,9 +12,8 @@ import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { type ProductDescription } from 'helpers/productCatalog';
 
-export type CardPosition = 1 | 2;
 export type GuardianLightCardProps = {
-	cardPosition: CardPosition;
+	cardIndex: number;
 	link: string;
 	productDescription: ProductDescription;
 	ctaCopy: string;
@@ -76,14 +75,14 @@ const checkmarkBenefitList = css`
 `;
 
 export function GuardianLightCard({
-	cardPosition,
+	cardIndex,
 	link,
 	productDescription,
 	ctaCopy,
 }: GuardianLightCardProps): JSX.Element {
-	const quantumMetricButtonRef = `guardianLight-${cardPosition}-button`;
+	const quantumMetricButtonRef = `guardianLight-${cardIndex}-button`;
 	const { label, benefits } = productDescription;
-	const icon = cardPosition === 1 ? leftSvgIcon : rightSvgIcon;
+	const icon = cardIndex === 0 ? leftSvgIcon : rightSvgIcon;
 	return (
 		<section css={container}>
 			<div css={titleSummarySvgCss}>
