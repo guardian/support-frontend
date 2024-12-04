@@ -4,18 +4,8 @@ import { from, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import { Container } from 'components/layout/container';
 
-const headingContentContainer = css`
-	${from.tablet} {
-		min-height: 450px;
-	}
-`;
-
 const container = css`
 	> div {
-		min-height: 480px;
-		${from.tablet} {
-			min-height: 432px;
-		}
 		padding: ${space[5]}px 10px;
 		${from.mobileLandscape} {
 			padding-left: ${space[5]}px;
@@ -50,7 +40,7 @@ export function ComponentContainer({
 			borderColor={borderColor}
 			cssOverrides={cssContainerAndOverride}
 		>
-			<div css={headingContentContainer}>{children}</div>
+			{children}
 		</Container>
 	);
 }
