@@ -92,7 +92,7 @@ describe('extractDeliverableAddressDataFromForm', () => {
 });
 
 describe('extractNonDeliverableAddressDataFromForm', () => {
-	it('uses the delivery address as the billing address when they are the same', () => {
+	it('returns the billing address but the delivery address is null', () => {
 		const formData = new FormData();
 		formData.append('billing-state', 'London');
 		formData.append('billing-postcode', 'N91GU');
