@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { productCatalogGuardianLight } from 'helpers/productCatalog';
-import type { GuardianLightCardProps } from 'pages/[countryGroupId]/components/guardianLightCard';
-import { GuardianLightCard } from 'pages/[countryGroupId]/components/guardianLightCard';
+import type { GuardianLightCardProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
+import { GuardianLightCard } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
 
 export default {
 	title: 'LandingPage/GuardianLight Card',
