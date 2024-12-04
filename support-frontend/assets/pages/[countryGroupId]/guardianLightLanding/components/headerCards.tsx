@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	from,
@@ -7,6 +8,7 @@ import {
 	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
+import { Container } from 'components/layout/container';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
@@ -16,14 +18,25 @@ import {
 import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { ComponentContainer } from './componentContainer';
 import { GuardianLightCards } from './guardianLightCards';
 
-const containerCards = css`
+const container = `
+	> div {
+		padding: ${space[5]}px 10px;
+		${from.mobileLandscape} {
+			padding-left: ${space[5]}px;
+			padding-right: ${space[5]}px;
+		}
+		${from.desktop} {
+			max-width: 940px;
+		}
+	}
+`;
+const containerCards = `
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 `;
-const containerSignIn = css`
+const containerSignIn = `
 	background-color: ${palette.brand[400]};
 	${from.tablet} {
 		background-color: ${palette.neutral[97]};
@@ -63,6 +76,11 @@ const signIn = css`
 		${textSans17}
 	}
 `;
+function concatToCss(combine: string[]): SerializedStyles {
+	return css`
+		${combine.concat()}
+	`;
+}
 
 const codeOrProd = isCode() ? 'code.dev-theguardian' : 'theguardian';
 const SignInUrl = `https://manage.${codeOrProd}.com`;
@@ -102,25 +120,25 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 	};
 	return (
 		<>
-			<ComponentContainer
+			<Container
 				sideBorders
 				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={containerCards}
+				cssOverrides={concatToCss([container, containerCards])}
 			>
 				<h1 css={heading}>Choose how to read the Guardian</h1>
 				<GuardianLightCards cardsContent={[card1, card2]} />
-			</ComponentContainer>
-			<ComponentContainer
+			</Container>
+			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={containerSignIn}
+				cssOverrides={concatToCss([container, containerSignIn])}
 			>
 				<div css={signIn}>
 					If you already have Guardian Light or read the Guardian ad-free,{' '}
 					{SignInLink}
 				</div>
-			</ComponentContainer>
+			</Container>
 		</>
 	);
 }
