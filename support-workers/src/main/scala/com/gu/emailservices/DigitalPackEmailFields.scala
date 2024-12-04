@@ -3,21 +3,18 @@ package com.gu.emailservices
 import cats.implicits._
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes
 import com.gu.emailservices.DigitalSubscriptionEmailAttributes.PaymentFieldsAttributes.{
-  APAttributes,
   CCAttributes,
   DDAttributes,
   PPAttributes,
   SepaAttributes,
 }
 import com.gu.emailservices.SubscriptionEmailFieldHelpers._
-import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax._
-import org.joda.time.LocalDate
 import org.joda.time.format.ISODateTimeFormat
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,14 +44,12 @@ object DigitalSubscriptionEmailAttributes {
     implicit val e1: Encoder.AsObject[DDAttributes] = deriveEncoder
     implicit val e2: Encoder.AsObject[CCAttributes] = deriveEncoder
     implicit val e3: Encoder.AsObject[PPAttributes] = deriveEncoder
-    implicit val e4: Encoder.AsObject[APAttributes] = deriveEncoder
     implicit val e5: Encoder.AsObject[SepaAttributes] = deriveEncoder
 
     implicit val encoder: Encoder.AsObject[PaymentFieldsAttributes] = Encoder.AsObject.instance {
       case v: DDAttributes => v.asJsonObject
       case v: CCAttributes => v.asJsonObject
       case v: PPAttributes => v.asJsonObject
-      case v: APAttributes => v.asJsonObject
       case v: SepaAttributes => v.asJsonObject
     }
 
@@ -77,10 +72,6 @@ object DigitalSubscriptionEmailAttributes {
 
     case class PPAttributes(
         default_payment_method: String = "PayPal",
-    ) extends PaymentFieldsAttributes
-
-    case class APAttributes(
-        default_payment_method: String = "AmazonPay",
     ) extends PaymentFieldsAttributes
 
   }
@@ -324,7 +315,6 @@ class DigitalPackPaymentEmailFields(getMandate: String => Future[Option[String]]
         )
       case _: CreditCardReferenceTransaction => Future.successful(CCAttributes())
       case _: PayPalReferenceTransaction => Future.successful(PPAttributes())
-      case _: AmazonPayPaymentMethod => Future.successful(APAttributes())
       case sepa: SepaPaymentMethod => Future.successful(SepaAttributes(sepa.BankTransferAccountNumber))
     }
 

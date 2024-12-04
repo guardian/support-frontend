@@ -10,7 +10,6 @@ import com.stripe.model.Charge
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Encoder, Json}
 import io.circe.generic.semiauto.deriveEncoder
-import model.PaymentProvider.AmazonPay
 import model.acquisition.StripeCharge
 import model.paypal.PaypalApiError
 import model.{Currency, PaymentProvider, PaymentStatus}
@@ -118,35 +117,6 @@ object ContributionData extends StrictLogging {
       amount = amount,
       countryCode = Some(countryCode),
       countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment),
-      postalCode = postalCode,
-    )
-  }
-
-  def fromAmazonPay(
-      amazonPayment: AuthorizationDetails,
-      identity: Option[String],
-      email: String,
-      countryCode: Option[String],
-      countrySubdivisionCode: Option[String],
-      orderRef: String,
-      postalCode: Option[String],
-  ): ContributionData = {
-    ContributionData(
-      paymentProvider = AmazonPay,
-      paymentStatus = PaymentStatus.Paid,
-      paymentId = orderRef,
-      identityId = identity,
-      email = email,
-      // Time at which the object was created. Measured in seconds since the Unix epoch.
-      created = LocalDateTime
-        .ofInstant(
-          Instant.ofEpochMilli(amazonPayment.getCreationTimestamp.toGregorianCalendar.getTimeInMillis),
-          ZoneOffset.UTC,
-        ),
-      currency = Currency.withNameInsensitive(amazonPayment.getAuthorizationAmount.getCurrencyCode),
-      amount = BigDecimal(amazonPayment.getAuthorizationAmount.getAmount),
-      countryCode = countryCode,
-      countrySubdivisionCode = countrySubdivisionCode,
       postalCode = postalCode,
     )
   }

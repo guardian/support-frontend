@@ -79,6 +79,10 @@ function isProd(): boolean {
 	return getBaseDomain() === 'theguardian.com';
 }
 
+function isCode(): boolean {
+	return getBaseDomain() === 'code.dev-theguardian.com';
+}
+
 function isCodeOrProd(): boolean {
 	return window.location.hostname.includes('theguardian.com');
 }
@@ -92,5 +96,6 @@ export {
 	getBaseDomain,
 	addQueryParamsToURL,
 	isProd,
+	isCode,
 	isCodeOrProd,
 };

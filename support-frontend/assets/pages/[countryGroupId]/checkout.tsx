@@ -190,11 +190,6 @@ export function Checkout({ geoId, appConfig }: Props) {
 		}
 	}
 
-	/**
-	 * TODO: We should probaly send this down from the server as
-	 * this cookie is not always an accurate indicator as to
-	 * whether an account is still valid
-	 */
 	const isTestUser = !!cookie.get('_test_username');
 	const stripePublicKey = getStripeKey(
 		'REGULAR',

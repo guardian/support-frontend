@@ -81,10 +81,6 @@ class SupporterPlusEmailFields(
         Future.successful(
           List("payment method" -> "credit / debit card", "first payment date" -> formatDate(created.toLocalDate)),
         )
-      case _: AmazonPayPaymentMethod =>
-        Future.successful(
-          List("payment method" -> "AmazonPay", "first payment date" -> formatDate(created.toLocalDate)),
-        )
     }
   }
 }

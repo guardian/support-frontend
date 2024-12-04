@@ -56,7 +56,6 @@ case class OneOffPaymentMethodsSwitchesTypes(
     stripePaymentRequestButton: Option[SwitchDetails],
     stripeExpressCheckout: Option[SwitchDetails],
     payPal: Option[SwitchDetails],
-    amazonPay: Option[SwitchDetails],
 )
 
 case class FeatureSwitchesTypes(

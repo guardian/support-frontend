@@ -84,7 +84,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
-	doesNotContainEmojiOrWhitespacePattern,
+	doesNotContainEmojiPattern,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -353,7 +353,10 @@ export function OneTimeCheckoutComponent({
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
 				const acquisitionData = derivePaymentApiAcquisitionData(
-					getReferrerAcquisitionData(),
+					{
+						...getReferrerAcquisitionData(),
+						labels: ['one-time-checkout'],
+					},
 					abParticipations,
 					billingPostcode,
 				);
@@ -460,6 +463,9 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+				'userType' in paymentResult &&
+					paymentResult.userType &&
+					thankYouUrlSearchParams.set('userType', paymentResult.userType);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					geoId,
@@ -713,7 +719,7 @@ export function OneTimeCheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiOrWhitespacePattern}
+										pattern={doesNotContainEmojiPattern}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {

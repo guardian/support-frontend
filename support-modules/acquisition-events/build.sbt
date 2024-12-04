@@ -15,6 +15,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
+  "com.google.protobuf" % "protobuf-java" % "3.25.5",
 )
 
 scalacOptions += "-Xlint:unused"

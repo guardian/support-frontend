@@ -24,6 +24,14 @@ import {
 	init as abTestInit,
 	getAmountsTestVariant,
 } from 'helpers/abTests/abtest';
+import {
+	countdownSwitchOn,
+	getCampaignSettings,
+} from 'helpers/campaigns/campaigns';
+import type {
+	CampaignSettings,
+	CountdownSetting,
+} from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -50,8 +58,6 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getCampaignSettings } from '../../../helpers/campaigns/campaigns';
-import type { CountdownSetting } from '../../../helpers/campaigns/campaigns';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -267,6 +273,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
@@ -289,7 +296,10 @@ export function ThreeTierLanding({
 	// Persist any tests for tracking in the checkout page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
-	const campaignSettings = getCampaignSettings(countryGroupId);
+	const campaignSettings = getCampaignSettings(
+		countryGroupId,
+		urlSearchParamsPromoCode,
+	);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -311,14 +321,11 @@ export function ThreeTierLanding({
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
-	const [currentCampaign, setCurrentCampaign] = useState<CountdownSetting>({
-		label: 'testing',
-		countdownStartInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-		countdownDeadlineInMillis: Date.parse('01 Jan 1970 00:00:00 GMT'),
-	});
+	const [currentCountdownSettings, setCurrentCountdownSettings] =
+		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const memoizedCurrentCampaign = useMemo(() => {
+	const memoizedCurrentCountdownCampaign = useMemo(() => {
 		if (!campaignSettings?.countdownSettings) {
 			return undefined;
 		}
@@ -331,11 +338,31 @@ export function ThreeTierLanding({
 	}, [campaignSettings?.countdownSettings]);
 
 	useEffect(() => {
-		if (memoizedCurrentCampaign) {
-			setCurrentCampaign(memoizedCurrentCampaign);
+		if (memoizedCurrentCountdownCampaign) {
+			setCurrentCountdownSettings(memoizedCurrentCountdownCampaign);
 			setShowCountdown(true);
 		}
-	}, [memoizedCurrentCampaign]);
+	}, [memoizedCurrentCountdownCampaign]);
+
+	const getHeadline = (
+		showCountdown: boolean,
+		currentCountdownSettings?: CountdownSetting,
+		campaignSettings?: CampaignSettings | null,
+	) => {
+		if (showCountdown && currentCountdownSettings?.label.trim()) {
+			return currentCountdownSettings.label;
+		} else {
+			return (
+				<>
+					{campaignSettings?.copy.headingFragment ?? <>Support </>}
+					fearless, <br css={tabletLineBreak} />
+					independent journalism
+					{campaignSettings?.copy.punctuation ??
+						campaignSettings?.copy.punctuation}
+				</>
+			);
+		}
+	};
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
@@ -494,9 +521,6 @@ export function ThreeTierLanding({
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
 
-	const useNewOneTimeCheckout =
-		abParticipations.newOneTimeCheckout === 'variant';
-
 	return (
 		<PageScaffold
 			header={
@@ -521,11 +545,19 @@ export function ThreeTierLanding({
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					{showCountdown && <Countdown campaign={currentCampaign} />}
+					{countdownSwitchOn() && showCountdown && currentCountdownSettings && (
+						<Countdown
+							countdownCampaign={currentCountdownSettings}
+							showCountdown={showCountdown}
+							setShowCountdown={setShowCountdown}
+						/>
+					)}
 					<h1 css={heading}>
-						{campaignSettings?.copy.headingFragment ?? <>Support </>}
-						fearless, <br css={tabletLineBreak} />
-						independent journalism
+						{getHeadline(
+							showCountdown,
+							currentCountdownSettings,
+							campaignSettings,
+						)}
 					</h1>
 					<p css={standFirst}>
 						{campaignSettings?.copy.subheading ?? (
@@ -580,7 +612,6 @@ export function ThreeTierLanding({
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
-						useNewOneTimeCheckout={useNewOneTimeCheckout}
 					/>
 				</Container>
 			)}
@@ -637,6 +668,12 @@ export function ThreeTierLanding({
 								contributionType,
 								promotionTier3,
 							),
+							starts: promotionTier3?.starts
+								? new Date(promotionTier3.starts)
+								: undefined,
+							expires: promotionTier3?.expires
+								? new Date(promotionTier3.expires)
+								: undefined,
 						},
 					]}
 					currency={currencies[currencyId].glyph}

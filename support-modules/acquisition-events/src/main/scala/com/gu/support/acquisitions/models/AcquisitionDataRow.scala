@@ -111,6 +111,10 @@ object AcquisitionProduct {
 
   case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
 
+  case object GuardianLight extends AcquisitionProduct("GUARDIAN_LIGHT")
+
+  case object FeastApp extends AcquisitionProduct("FEAST_APP")
+
   def fromString(code: String): Option[AcquisitionProduct] = {
     List(
       Contribution,
@@ -121,6 +125,8 @@ object AcquisitionProduct {
       GuardianWeekly,
       AppPremiumTier,
       TierThree,
+      GuardianLight,
+      FeastApp
     )
       .find(
         _.value == code,
@@ -131,7 +137,6 @@ object AcquisitionProduct {
     Decoder.decodeString.emap(code => AcquisitionProduct.fromString(code).toRight(s"unrecognised product '$code'"))
 
   implicit val encoder: Encoder[AcquisitionProduct] = Encoder.encodeString.contramap[AcquisitionProduct](_.value)
-
 }
 
 sealed abstract class PrintProduct(val value: String)
@@ -237,12 +242,10 @@ object PaymentProvider {
 
   case object DirectDebit extends PaymentProvider("GOCARDLESS")
 
-  case object AmazonPay extends PaymentProvider("AMAZON_PAY")
-
   case object InAppPurchase extends PaymentProvider("IN_APP_PURCHASE")
 
   def fromString(code: String): Option[PaymentProvider] = {
-    List(Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, PayPal, DirectDebit, AmazonPay, InAppPurchase)
+    List(Stripe, StripeApplePay, StripePaymentRequestButton, StripeSepa, PayPal, DirectDebit, InAppPurchase)
       .find(_.value == code)
   }
 

@@ -28,6 +28,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       enableQuantumMetric = Some(On),
       usStripeAccountForSingle = Some(On),
       authenticateWithOkta = Some(Off),
+      enableCampaignCountdown = Some(On),
     )
 
   trait Mocks {

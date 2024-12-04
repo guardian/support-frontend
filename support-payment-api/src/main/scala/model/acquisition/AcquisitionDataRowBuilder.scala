@@ -2,13 +2,7 @@ package model.acquisition
 
 import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.support.acquisitions.models.PaymentProvider.{
-  AmazonPay,
-  PayPal,
-  Stripe,
-  StripeApplePay,
-  StripePaymentRequestButton,
-}
+import com.gu.support.acquisitions.models.PaymentProvider.{PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.acquisitions.models._
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
@@ -60,45 +54,6 @@ object AcquisitionDataRowBuilder {
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
       platform = acquisitionData.platform,
-      postalCode = contributionData.postalCode,
-      state = contributionData.countrySubdivisionCode,
-      email = Some(contributionData.email),
-    )
-  }
-
-  def buildFromAmazonPay(acquisition: AmazonPayAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
-    val paymentData = acquisition.amazonPayment
-    val acquisitionData = acquisition.acquisitionData
-
-    AcquisitionDataRow(
-      eventTimeStamp = DateTime.now(DateTimeZone.UTC),
-      product = AcquisitionProduct.Contribution,
-      amount = Some(paymentData.amount),
-      country = acquisition.countryCode.flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
-      currency = mapCurrency(paymentData.currency),
-      componentId = acquisitionData.flatMap(_.componentId),
-      componentType = acquisitionData.flatMap(_.componentType),
-      campaignCode = acquisitionData.flatMap(_.campaignCodes.map(_.mkString(", "))),
-      source = acquisitionData.flatMap(_.source),
-      referrerUrl = acquisitionData.flatMap(_.referrerUrl),
-      abTests = acquisitionData.flatMap(_.abTests.map(_.toList)).getOrElse(Nil),
-      paymentFrequency = PaymentFrequency.OneOff,
-      paymentProvider = Some(AmazonPay),
-      printOptions = None,
-      browserId = acquisitionData.flatMap(_.browserId),
-      identityId = acquisition.identityId.map(_.toString),
-      pageViewId = acquisitionData.flatMap(_.pageviewId),
-      referrerPageViewId = acquisitionData.flatMap(_.referrerPageviewId),
-      labels = acquisitionData.flatMap(_.labels.map(_.toList)).getOrElse(Nil),
-      promoCode = None,
-      reusedExistingPaymentMethod = false,
-      readerType = ReaderType.Direct,
-      acquisitionType = AcquisitionType.Purchase,
-      zuoraSubscriptionNumber = None,
-      contributionId = Some(contributionData.contributionId.toString),
-      paymentId = Some(contributionData.paymentId),
-      queryParameters = acquisitionData.flatMap(_.queryParameters.map(_.toList)).getOrElse(Nil),
-      platform = acquisitionData.flatMap(_.platform),
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),

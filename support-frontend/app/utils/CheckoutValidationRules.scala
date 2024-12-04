@@ -5,7 +5,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
-import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus, _}
+import com.gu.support.catalog._
 import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
 import com.gu.support.paperround.{AgentId, PaperRoundAPI}
 import com.gu.support.redemptions.RedemptionData
@@ -69,8 +69,6 @@ object CheckoutValidationRules {
           if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")
       }
-    case Left(_: AmazonPayPaymentFields) =>
-      if (switches.amazonPay.contains(On)) Valid else Invalid("Invalid Payment Method")
     case Left(_: ExistingPaymentFields) =>
       // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
       // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
@@ -107,6 +105,7 @@ object CheckoutValidationRules {
           createSupportWorkersRequest,
         ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
+      case _: GuardianLight => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) =>
         Invalid(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
@@ -223,8 +222,6 @@ object PaidProductValidation {
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case existingDetails: ExistingPaymentFields =>
       existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
-    case AmazonPayPaymentFields(amazonPayBillingAgreementId) =>
-      amazonPayBillingAgreementId.nonEmpty.otherwise("amazonPayBillingAgreementId missing")
     case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
       accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
         iban.nonEmpty.otherwise("sepa iban empty")

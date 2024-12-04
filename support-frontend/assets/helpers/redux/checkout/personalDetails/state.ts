@@ -6,7 +6,8 @@ import {
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
 
-export type UserType = 'new' | 'guest' | 'current';
+export const userTypeSchema = z.union([z.literal('new'), z.literal('current')]);
+export type UserType = z.infer<typeof userTypeSchema>;
 
 export const emailRules = zuoraCompatibleString(
 	z

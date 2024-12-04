@@ -11,7 +11,6 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
-import com.gu.support.zuora.api.AmazonPayGatewayUSA
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -78,8 +77,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
-      case amazonPay: AmazonPayPaymentFields =>
-        createAmazonPayPaymentMethod(amazonPay, user)
     }
 
   private def getCreateSalesforceContactState(
@@ -193,12 +190,4 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       ),
     )
   }
-
-  def createAmazonPayPaymentMethod(amazonPay: AmazonPayPaymentFields, user: User): Future[AmazonPayPaymentMethod] =
-    Future.successful(
-      AmazonPayPaymentMethod(
-        TokenId = amazonPay.amazonPayBillingAgreementId,
-        PaymentGateway = AmazonPayGatewayUSA,
-      ),
-    )
 }
