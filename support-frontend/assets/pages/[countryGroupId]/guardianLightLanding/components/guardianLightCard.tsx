@@ -46,11 +46,15 @@ const svgCss = css`
 		margin-bottom: ${space[4]}px;
 	}
 `;
-const titleCss = css`
+const titleCss = (cardIndex: number) => css`
 	text-align: center;
 	${headlineBold17};
 	color: ${palette.brand[100]};
+	${until.desktop} {
+		max-width: ${cardIndex === 1 ? '85%' : '100%'};
+	}
 	${from.desktop} {
+		max-width: ${cardIndex === 0 ? '50%' : '100%'};
 		${headlineBold24};
 	}
 `;
@@ -87,7 +91,7 @@ export function GuardianLightCard({
 		<section css={container}>
 			<div css={titleSummarySvgCss}>
 				<div css={svgCss}>{icon}</div>
-				<h2 css={titleCss}>{label}</h2>
+				<h2 css={titleCss(cardIndex)}>{label}</h2>
 			</div>
 			<ThemeProvider theme={themeLinkBrand}>
 				<LinkButton

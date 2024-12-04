@@ -116,7 +116,7 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 	const card2 = {
 		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
-		ctaCopy: 'Go back to "accept all"',
+		ctaCopy: `Go back to 'Accept all'`,
 	};
 	return (
 		<>

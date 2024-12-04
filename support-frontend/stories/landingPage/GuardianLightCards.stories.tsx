@@ -42,7 +42,7 @@ Default.args = {
 			cardPosition: 2,
 			link: `https://www.theguardian.com/uk/contribute`,
 			productDescription: productCatalogGuardianLight().GuardianLightGoBack,
-			ctaCopy: 'Go back to "accept all"',
+			ctaCopy: `Go back to 'Accept all'`,
 		},
 	],
 };
