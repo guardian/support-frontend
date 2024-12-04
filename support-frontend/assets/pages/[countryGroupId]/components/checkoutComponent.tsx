@@ -110,6 +110,10 @@ import {
 } from '../checkout/helpers/formDataExtractors';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
+	stripeCreateSetupIntentPrb,
+	stripeCreateSetupIntentRecaptcha,
+} from '../checkout/helpers/stripe';
+import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
@@ -464,20 +468,8 @@ export function CheckoutComponent({
 			elements
 		) {
 			/** 1. Get a clientSecret from our server from the stripePublicKey */
-			const { client_secret: stripeClientSecret } = await fetch(
-				'/stripe/create-setup-intent/prb',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						stripePublicKey,
-					}),
-				},
-			).then(
-				(response) => response.json() as Promise<{ client_secret: string }>,
-			);
+			const { client_secret: stripeClientSecret } =
+				await stripeCreateSetupIntentPrb(stripePublicKey);
 
 			/** 2. Get the Stripe paymentMethod from the Stripe elements */
 			const { paymentMethod: stripePaymentMethod, error: paymentMethodError } =
@@ -1196,33 +1188,19 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and uses await here, but that has
+																// We could change the parents type to Promise and use await here, but that has
 																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
 																	setStripeClientSecretInProgress(true);
 																	setRecaptchaToken(token);
-																	void fetch(
-																		'/stripe/create-setup-intent/recaptcha',
-																		{
-																			method: 'POST',
-																			headers: {
-																				'Content-Type': 'application/json',
-																			},
-																			body: JSON.stringify({
-																				isTestUser,
-																				stripePublicKey,
-																				token,
-																			}),
-																		},
-																	)
-																		.then((resp) => resp.json())
-																		.then((json) => {
-																			setStripeClientSecret(
-																				(json as Record<string, string>)
-																					.client_secret,
-																			);
-																			setStripeClientSecretInProgress(false);
-																		});
+																	void stripeCreateSetupIntentRecaptcha(
+																		isTestUser,
+																		stripePublicKey,
+																		token,
+																	).then((client_secret) => {
+																		setStripeClientSecret(client_secret);
+																		setStripeClientSecretInProgress(false);
+																	});
 																}}
 																onRecaptchaExpired={() => {
 																	setRecaptchaToken(undefined);
