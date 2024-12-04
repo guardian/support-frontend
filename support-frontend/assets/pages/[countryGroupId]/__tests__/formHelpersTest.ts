@@ -2,7 +2,7 @@ import {
 	extractDeliverableAddressDataFromForm,
 	extractNonDeliverableAddressDataFromForm,
 	extractPersonalDataFromForm,
-} from '../formHelpers';
+} from '../checkout/helpers/formDataExtractors';
 
 describe('extractPersonalDataFromForm', () => {
 	it('extracts personal data from the form and returns it as an object', () => {
