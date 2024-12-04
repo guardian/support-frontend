@@ -75,8 +75,6 @@ import {
 	productCatalogDescriptionNewBenefits,
 	type ProductKey,
 } from 'helpers/productCatalog';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -104,6 +102,7 @@ import {
 	formatUserDate,
 } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -224,114 +223,19 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
-	/**
-	 * This is the data structure used by the `/subscribe/create` endpoint.
-	 *
-	 * This must match the types in `CreateSupportWorkersRequest#product`
-	 * and readerRevenueApis - `RegularPaymentRequest#product`.
-	 *
-	 * We might be able to defer this to the backend.
-	 */
-	let productFields: RegularPaymentRequest['product'];
-	switch (productKey) {
-		case 'GuardianLight':
-			productFields = {
-				productType: 'GuardianLight',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'TierThree':
-			productFields = {
-				productType: 'TierThree',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' ||
-					ratePlanKey === 'DomesticAnnual' ||
-					ratePlanKey === 'DomesticMonthlyV2' ||
-					ratePlanKey === 'DomesticAnnualV2'
-						? 'Domestic'
-						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual' ||
-						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
-						  ratePlanKey === 'RestOfWorldAnnualV2'
-						? 'RestOfWorld'
-						: 'Domestic',
-				productOptions: ratePlanKey.endsWith('V2')
-					? 'NewspaperArchive'
-					: 'NoProductOptions',
-			};
-			break;
-
-		case 'Contribution':
-			productFields = {
-				productType: 'Contribution',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: finalAmount,
-			};
-			break;
-
-		case 'SupporterPlus':
-			productFields = {
-				productType: 'SupporterPlus',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				/**
-				 * We shouldn't have to calculate these amounts here.
-				 *
-				 * TODO: remove the amount altogether and send only the contribution amount.
-				 * but they're a legacy of how the support-workers works i.e
-				 * - contribution = thisAmount - original
-				 * - if contribution < 0, fail
-				 * - apply any promo
-				 * @see https://github.com/guardian/support-frontend/blob/51b06f33a0f9f70628154e100374d5933708e38f/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
-				 */
-				amount: originalAmount + (contributionAmount ?? 0),
-			};
-			break;
-
-		case 'GuardianWeeklyDomestic':
-			productFields = {
-				productType: 'GuardianWeekly',
-				currency: currencyKey,
-				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'GuardianWeeklyRestOfWorld':
-			productFields = {
-				productType: 'GuardianWeekly',
-				fulfilmentOptions: 'RestOfWorld',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'DigitalSubscription':
-			productFields = {
-				productType: 'DigitalPack',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				readerType: 'Direct',
-			};
-			break;
-
-		case 'NationalDelivery':
-		case 'SubscriptionCard':
-		case 'HomeDelivery':
-			productFields = {
-				productType: 'Paper',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions: NoFulfilmentOptions,
-				productOptions: NoProductOptions,
-			};
-			break;
-	}
+	const productFields = getProductFields({
+		product: {
+			productKey,
+			productDescription,
+			ratePlanKey,
+		},
+		financial: {
+			currencyKey,
+			finalAmount,
+			originalAmount,
+			contributionAmount,
+		},
+	});
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
