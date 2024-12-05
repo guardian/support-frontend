@@ -1,6 +1,10 @@
+interface StripeResponseData {
+	client_secret: string;
+}
+
 export const stripeCreateSetupIntentPrb = async (
 	stripePublicKey: string,
-): Promise<{ client_secret: string }> => {
+): Promise<string> => {
 	const response = await fetch('/stripe/create-setup-intent/prb', {
 		method: 'POST',
 		headers: {
@@ -11,7 +15,9 @@ export const stripeCreateSetupIntentPrb = async (
 		}),
 	});
 
-	return response.json() as Promise<{ client_secret: string }>;
+	const json = (await response.json()) as StripeResponseData;
+
+	return json.client_secret;
 };
 
 export const stripeCreateSetupIntentRecaptcha = async (
@@ -31,7 +37,7 @@ export const stripeCreateSetupIntentRecaptcha = async (
 		}),
 	});
 
-	const json = (await response.json()) as Record<string, string>;
+	const json = (await response.json()) as StripeResponseData;
 
 	return json.client_secret;
 };

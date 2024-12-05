@@ -472,8 +472,9 @@ export function CheckoutComponent({
 			elements
 		) {
 			/** 1. Get a clientSecret from our server from the stripePublicKey */
-			const { client_secret: stripeClientSecret } =
-				await stripeCreateSetupIntentPrb(stripePublicKey);
+			const stripeClientSecret = await stripeCreateSetupIntentPrb(
+				stripePublicKey,
+			);
 
 			/** 2. Get the Stripe paymentMethod from the Stripe elements */
 			const { paymentMethod: stripePaymentMethod, error: paymentMethodError } =
