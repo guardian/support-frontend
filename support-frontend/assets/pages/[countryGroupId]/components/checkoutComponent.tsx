@@ -110,6 +110,10 @@ import {
 } from '../checkout/helpers/formDataExtractors';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
+	paypalOneClickCheckout,
+	setupPayPalPayment,
+} from '../checkout/helpers/paypal';
+import {
 	stripeCreateSetupIntentPrb,
 	stripeCreateSetupIntentRecaptcha,
 } from '../checkout/helpers/stripe';
@@ -1352,24 +1356,14 @@ export function CheckoutComponent({
 										}}
 										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 										payment={(resolve, reject) => {
-											const requestBody = {
-												amount: finalAmount,
-												billingPeriod: ratePlanDescription.billingPeriod,
-												currency: currencyKey,
-												requireShippingAddress: false,
-											};
-											void fetch('/paypal/setup-payment', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(requestBody),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													resolve((json as { token: string }).token);
+											setupPayPalPayment(
+												finalAmount,
+												currencyKey,
+												ratePlanDescription.billingPeriod,
+												csrf,
+											)
+												.then((token) => {
+													resolve(token);
 												})
 												.catch((error) => {
 													console.error(error);
@@ -1377,23 +1371,13 @@ export function CheckoutComponent({
 												});
 										}}
 										onAuthorize={(payPalData: Record<string, unknown>) => {
-											const body = {
-												token: payPalData.paymentToken,
-											};
-											void fetch('/paypal/one-click-checkout', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(body),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													// The state below has a useEffect that submits the form
-													setPayPalBAID((json as { baid: string }).baid);
-												});
+											void paypalOneClickCheckout(
+												payPalData.paymentToken,
+												csrf,
+											).then((baid) => {
+												// The state below has a useEffect that submits the form
+												setPayPalBAID(baid);
+											});
 										}}
 									/>
 								</>
