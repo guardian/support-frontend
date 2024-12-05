@@ -137,7 +137,7 @@
 		"@guardian/prettier": "^2.1.5",
 		"@storybook/addon-a11y": "^8.4.2",
 		"@storybook/addon-actions": "^8.4.2",
-		"@storybook/addon-essentials": "^8.4.2",
+		"@storybook/addon-essentials": "^8.4.5",
 		"@storybook/addon-interactions": "^8.4.2",
 		"@storybook/addon-links": "^8.4.2",
 		"@storybook/addon-storysource": "^8.4.2",
