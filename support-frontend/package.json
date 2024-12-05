@@ -18,6 +18,7 @@
 		"devrun": "NODE_ENV=DEV npm-run-all clean webpack-dev-server",
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
+    "knip": "knip --include files,exports,nsExports,types,nsTypes",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"paparazzi": "paparazzi && open ./paparazzi",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
@@ -70,6 +71,37 @@
 		"verbose": true,
 		"testEnvironment": "jest-environment-jsdom-global"
 	},
+  "knip": {
+    "entry": [
+     "assets/pages/[countryGroupId]/router.tsx",
+     "assets/pages/[countryGroupId]/events/router.tsx",
+     "assets/images/favicons.ts",
+     "assets/pages/subscriptions-landing/subscriptionsLanding.tsx",
+     "assets/pages/supporter-plus-landing/supporterPlusRouter.tsx",
+     "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
+     "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx",
+     "assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx",
+     "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
+     "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
+     "assets/pages/digital-subscriber-checkout/digitalSubscriptionRouter.tsx",
+     "assets/pages/paypal-error/payPalError.tsx",
+     "assets/pages/paypal-error/payPalError.scss",
+     "assets/pages/error/error404.tsx",
+     "assets/pages/error/error500.tsx",
+     "assets/pages/error/maintenance.tsx",
+     "assets/stylesheets/fallback-pages/unsupportedBrowser.scss",
+     "assets/fallback-pages/contributionsRedirect.scss",
+     "assets/pages/promotion-terms/promotionTerms.tsx",
+     "assets/pages/aus-moment-map/ausMomentMap.tsx"
+    ],
+    "project": ["**/*.{js,jsx,ts,tsx,scss}!"],
+    "ignoreExportsUsedInFile": true,
+    "webpack": {
+      "entry": [
+       "webpack.*.js"
+      ]
+    }
+  },
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/guardian/support-frontend.git"
@@ -152,6 +184,7 @@
 		"@types/jest": "^29.5.14",
 		"@types/jsdom": "^21.1.6",
 		"@types/lodash.debounce": "^4.0.9",
+		"@types/node": "^22.10.1",
 		"@types/react-dom": "^17.0.11",
 		"@types/react-router-dom": "^5.3.3",
 		"autoprefixer": "^10.4.16",
@@ -182,6 +215,7 @@
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-environment-jsdom-global": "^4.0.0",
 		"json-sass-vars": "^3.1.0",
+		"knip": "^5.39.2",
 		"lint-staged": "^15.2.0",
 		"madge": "^6.1.0",
 		"mini-css-extract-plugin": "^2.6.0",
@@ -203,7 +237,7 @@
 		"storybook": "^8.4.5",
 		"ts-loader": "9.4.4",
 		"tsc-files": "^1.1.4",
-		"typescript": "5.1.6",
+		"typescript": "^5.7.2",
 		"web-vitals": "^2.0.0",
 		"webpack": "^5.94.0",
 		"webpack-bundle-analyzer": "^4.5.0",
