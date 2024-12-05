@@ -63,6 +63,7 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/contribute/checkout controllers.A
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /one-time-checkout                                            controllers.Application.geoRedirectToPath(path = "one-time-checkout")
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout   controllers.Application.productCheckoutRouter(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/one-time-checkout-embed   controllers.Application.productCheckoutRouter(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.productCheckoutRouter(countryGroupId: String)
 
 GET  /$countryGroupId<(uk)>/guardian-light                         controllers.Application.productCheckoutRouter(countryGroupId: String)

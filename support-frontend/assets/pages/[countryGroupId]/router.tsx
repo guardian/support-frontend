@@ -6,7 +6,8 @@ import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
 import { GuardianLightLanding } from './guardianLightLanding/guardianLightLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
-import { ThankYou } from './thankYou';
+import { OneTimeCheckoutEmbed } from './oneTimeCheckoutEmbed';
+import { ThankYou } from './thank-you';
 
 setUpTrackingAndConsents();
 const appConfig = parseAppConfig(window.guardian);
@@ -21,6 +22,10 @@ const router = createBrowserRouter(
 			path: `/${geoId}/one-time-checkout`,
 			element: <OneTimeCheckout geoId={geoId} appConfig={appConfig} />,
 		},
+    {
+      path: `/${geoId}/one-time-checkout-embed`,
+      element: <OneTimeCheckoutEmbed geoId={geoId} appConfig={appConfig} />,
+    },
 		{
 			path: `/${geoId}/thank-you`,
 			element: <ThankYou geoId={geoId} appConfig={appConfig} />,
