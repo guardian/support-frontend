@@ -16,26 +16,29 @@ import { Container } from 'components/layout/container';
 const container = css`
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[5]}px 10px;
+		padding: ${space[3]}px 10px ${space[12]}px;
 		${from.mobileLandscape} {
 			padding-left: ${space[5]}px;
 			padding-right: ${space[5]}px;
 		}
-		${from.tablet} {
-			max-width: 740px;
-		}
 		${from.desktop} {
-			max-width: 940px;
+			padding-top: ${space[9]}px;
+			display: flex;
+			justify-content: center;
 		}
 	}
 `;
 const bodyContainer = css`
+	width: 100%;
 	color: ${palette.neutral[7]};
 	background-color: ${palette.neutral[100]};
 	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
+	padding: ${space[4]}px ${space[3]}px ${space[6]}px;
 	${from.tablet} {
-		padding: ${space[5]}px ${space[6]}px;
+		padding: ${space[5]}px ${space[6]}px 28px;
+	}
+	${from.desktop} {
+		max-width: 940px;
 	}
 `;
 const heading = css`
