@@ -12,6 +12,7 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
+import BulletSvg from './bulletSvg';
 import { NewBenefitPill } from './newBenefitPill';
 
 const checkListIconCss = (style: CheckListStyle) => css`
@@ -89,29 +90,6 @@ export type BenefitsCheckListProps = {
 	cssOverrides?: SerializedStyles;
 };
 
-type SvgBulletProps = {
-	opacity?: number;
-};
-function SvgBullet({ opacity = 1 }: SvgBulletProps): JSX.Element {
-	return (
-		<svg
-			width="16"
-			height="16"
-			viewBox="0 0 16 16"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<circle
-				cx="8"
-				cy="8"
-				r="4"
-				fill={`${palette.neutral[60]}`}
-				fill-opacity={opacity}
-			/>
-		</svg>
-	);
-}
-
 function ChecklistItemIcon({
 	checked,
 	style,
@@ -123,7 +101,7 @@ function ChecklistItemIcon({
 }): JSX.Element {
 	const styleSize = style === 'standard' ? 'small' : 'xsmall';
 	return style === 'bullet' ? (
-		<SvgBullet opacity={hideBullet ? 0 : 1} />
+		<BulletSvg opacity={hideBullet ? 0 : 1} />
 	) : checked ? (
 		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
