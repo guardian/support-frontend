@@ -21,7 +21,7 @@ const container = css`
 			padding-left: ${space[5]}px;
 			padding-right: ${space[5]}px;
 		}
-		${from.desktop} {
+		${from.tablet} {
 			padding-top: ${space[9]}px;
 			display: flex;
 			justify-content: center;
