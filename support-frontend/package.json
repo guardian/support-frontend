@@ -71,37 +71,6 @@
 		"verbose": true,
 		"testEnvironment": "jest-environment-jsdom-global"
 	},
-  "knip": {
-    "entry": [
-     "assets/pages/[countryGroupId]/router.tsx",
-     "assets/pages/[countryGroupId]/events/router.tsx",
-     "assets/images/favicons.ts",
-     "assets/pages/subscriptions-landing/subscriptionsLanding.tsx",
-     "assets/pages/supporter-plus-landing/supporterPlusRouter.tsx",
-     "assets/pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx",
-     "assets/pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx",
-     "assets/pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx",
-     "assets/pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx",
-     "assets/pages/subscriptions-redemption/subscriptionsRedemption.tsx",
-     "assets/pages/digital-subscriber-checkout/digitalSubscriptionRouter.tsx",
-     "assets/pages/paypal-error/payPalError.tsx",
-     "assets/pages/paypal-error/payPalError.scss",
-     "assets/pages/error/error404.tsx",
-     "assets/pages/error/error500.tsx",
-     "assets/pages/error/maintenance.tsx",
-     "assets/stylesheets/fallback-pages/unsupportedBrowser.scss",
-     "assets/fallback-pages/contributionsRedirect.scss",
-     "assets/pages/promotion-terms/promotionTerms.tsx",
-     "assets/pages/aus-moment-map/ausMomentMap.tsx"
-    ],
-    "project": ["**/*.{js,jsx,ts,tsx,scss}!"],
-    "ignoreExportsUsedInFile": true,
-    "webpack": {
-      "entry": [
-       "webpack.*.js"
-      ]
-    }
-  },
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/guardian/support-frontend.git"
