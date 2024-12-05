@@ -1,10 +1,10 @@
-import { defineConfig } from '@playwright/test';
-import { baseObject } from './playwright.base.config';
+import { config as baseConfig } from './playwright.config';
 
-export default defineConfig({
-	...baseObject,
+const config = {
+	...baseConfig,
 	use: {
-		...baseObject.use,
 		baseURL: 'https://support.code.dev-theguardian.com',
 	},
-});
+};
+
+export default config;
