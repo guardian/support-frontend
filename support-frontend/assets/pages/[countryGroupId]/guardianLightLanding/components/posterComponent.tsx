@@ -13,24 +13,24 @@ import { Container } from 'components/layout/container';
 const container = css`
 	background-color: ${palette.neutral[97]};
 	> div {
-		min-height: 480px;
-		padding: ${space[5]}px 10px;
+		padding-top: ${space[6]}px;
 		${from.mobileLandscape} {
 			padding-left: ${space[5]}px;
 			padding-right: ${space[5]}px;
 		}
 		${from.tablet} {
-			min-height: 432px;
-			max-width: 740px;
-		}
-		${from.desktop} {
-			max-width: 940px;
+			padding-top: 0px;
+			display: flex;
+			justify-content: center;
 		}
 	}
 `;
 const headingContentContainer = css`
 	${from.tablet} {
-		min-height: 450px;
+		min-height: 418px;
+	}
+	${from.desktop} {
+		max-width: 940px;
 	}
 `;
 const bodyContainer = css`
