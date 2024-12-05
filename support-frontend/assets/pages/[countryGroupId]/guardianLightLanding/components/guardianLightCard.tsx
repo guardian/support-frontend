@@ -29,6 +29,7 @@ const container = css`
 		padding: ${space[4]}px ${space[3]}px ${space[4]}px ${space[3]}px;
 		margin-top: ${'0'}px;
 	}
+	max-width: 460px;
 `;
 const titleSummarySvgCss = css`
 	display: flex;

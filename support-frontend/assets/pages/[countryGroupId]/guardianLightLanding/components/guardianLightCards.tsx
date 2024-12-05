@@ -25,6 +25,7 @@ const container = (cardCount: number) => css`
 	${from.desktop} {
 		gap: ${space[5]}px;
 		flex-direction: row;
+		justify-content: center;
 	}
 `;
 

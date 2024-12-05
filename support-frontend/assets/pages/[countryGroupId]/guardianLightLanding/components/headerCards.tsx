@@ -1,4 +1,3 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	from,
@@ -20,26 +19,20 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { GuardianLightCards } from './guardianLightCards';
 
-const container = `
+const containerCardsAndSignIn = css`
+	background-color: ${palette.brand[400]};
+	${from.tablet} {
+		background-color: ${palette.neutral[97]};
+	}
 	> div {
-		padding: ${space[5]}px 10px;
+		position: relative;
+		display: grid;
+		justify-content: center;
+		padding: 44px 10px 0px;
 		${from.mobileLandscape} {
 			padding-left: ${space[5]}px;
 			padding-right: ${space[5]}px;
 		}
-		${from.desktop} {
-			max-width: 940px;
-		}
-	}
-`;
-const containerCards = `
-	background-color: ${palette.brand[400]};
-	border-bottom: 1px solid ${palette.brand[600]};
-`;
-const containerSignIn = `
-	background-color: ${palette.brand[400]};
-	${from.tablet} {
-		background-color: ${palette.neutral[97]};
 	}
 `;
 const heading = css`
@@ -59,14 +52,14 @@ const signIn = css`
 	color: ${palette.neutral[100]};
 	text-align: left;
 	${textSans15}
-	padding: 0px 0px ${space[1]}px;
+	padding: ${space[5]}px 0px ${space[6]}px;
 	> a {
 		color: ${palette.neutral[100]};
 		font-weight: bold;
 	}
 	${from.tablet} {
 		color: ${palette.neutral[7]};
-		padding: ${space[3]}px 0px ${space[4]}px;
+		padding: ${space[8]}px 0px ${space[9]}px;
 		text-align: center;
 		> a {
 			color: ${palette.brand[500]};
@@ -76,11 +69,6 @@ const signIn = css`
 		${textSans17}
 	}
 `;
-function concatToCss(combine: string[]): SerializedStyles {
-	return css`
-		${combine.concat()}
-	`;
-}
 
 const codeOrProd = isCode() ? 'code.dev-theguardian' : 'theguardian';
 const SignInUrl = `https://manage.${codeOrProd}.com`;
@@ -124,16 +112,10 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 				sideBorders
 				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={concatToCss([container, containerCards])}
+				cssOverrides={containerCardsAndSignIn}
 			>
 				<h1 css={heading}>Choose how to read the Guardian</h1>
 				<GuardianLightCards cardsContent={[card1, card2]} />
-			</Container>
-			<Container
-				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={concatToCss([container, containerSignIn])}
-			>
 				<div css={signIn}>
 					If you already have Guardian Light or read the Guardian ad-free,{' '}
 					{SignInLink}
