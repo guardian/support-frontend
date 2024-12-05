@@ -1,9 +1,9 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
-	brand,
 	from,
 	neutral,
+	palette,
 	space,
 	textSansBold20,
 } from '@guardian/source/foundations';
@@ -19,9 +19,9 @@ const mainStyles = css`
 `;
 
 const headingContentContainer = css`
-	min-height: 480px;
+	height: 480px;
 	${from.tablet} {
-		min-height: 432px;
+		height: 432px;
 	}
 	padding-top: ${space[6]}px;
 	${textSansBold20}
@@ -31,26 +31,34 @@ export interface CheckoutHeadingProps extends CSSOverridable {
 	heading?: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
-	withTopBorder?: true;
+	withTopBorder?: boolean;
+	withSideBorders?: boolean;
 	cssOverrides?: SerializedStyles;
 }
 
-export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
+export function CheckoutHeading({
+	heading,
+	children,
+	image,
+	withTopBorder = true,
+	withSideBorders = true,
+	cssOverrides,
+}: CheckoutHeadingProps): JSX.Element {
 	return (
 		<div css={mainStyles}>
 			<Container
-				sideBorders={true}
-				topBorder={props.withTopBorder}
-				borderColor={brand[600]}
-				backgroundColor={brand[400]}
+				sideBorders={withSideBorders}
+				topBorder={withTopBorder}
+				borderColor={palette.brand[600]}
+				backgroundColor={palette.brand[400]}
 			>
 				<Columns collapseUntil="desktop">
 					<Column span={[1, 2, 5]}>
-						<div css={[headingContentContainer, props.cssOverrides]}>
+						<div css={[cssOverrides, headingContentContainer]}>
 							<Hide until="desktop">
-								{props.heading}
-								{props.children}
-								{props.image}
+								{heading}
+								{children}
+								{image}
 							</Hide>
 						</div>
 					</Column>

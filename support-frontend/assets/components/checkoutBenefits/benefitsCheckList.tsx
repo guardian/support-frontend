@@ -12,6 +12,7 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
+import BulletSvg from './bulletSvg';
 import { NewBenefitPill } from './newBenefitPill';
 
 const checkListIconCss = (style: CheckListStyle) => css`
@@ -77,9 +78,10 @@ export type BenefitsCheckListData = {
 	toolTip?: string;
 	strong?: boolean;
 	isNew?: boolean;
+	hideBullet?: boolean;
 };
 
-type CheckListStyle = 'standard' | 'compact' | 'hidden';
+type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
@@ -91,20 +93,19 @@ export type BenefitsCheckListProps = {
 function ChecklistItemIcon({
 	checked,
 	style,
+	hideBullet,
 }: {
 	checked: boolean;
 	style: CheckListStyle;
+	hideBullet?: boolean;
 }): JSX.Element {
-	return checked ? (
-		<SvgTickRound
-			isAnnouncedByScreenReader
-			size={style === 'standard' ? 'small' : 'xsmall'}
-		/>
+	const styleSize = style === 'standard' ? 'small' : 'xsmall';
+	return style === 'bullet' ? (
+		<BulletSvg opacity={hideBullet ? 0 : 1} />
+	) : checked ? (
+		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
-		<SvgCrossRoundFilled
-			isAnnouncedByScreenReader
-			size={style === 'standard' ? 'small' : 'xsmall'}
-		/>
+		<SvgCrossRoundFilled isAnnouncedByScreenReader size={styleSize} />
 	);
 }
 
@@ -127,7 +128,11 @@ export function BenefitsCheckList({
 							]}
 						>
 							<div css={style === 'standard' ? iconContainerCss : css``}>
-								<ChecklistItemIcon checked={item.isChecked} style={style} />
+								<ChecklistItemIcon
+									checked={item.isChecked}
+									style={style}
+									hideBullet={item.hideBullet}
+								/>
 							</div>
 						</td>
 					)}
