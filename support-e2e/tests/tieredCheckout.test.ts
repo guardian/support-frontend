@@ -199,9 +199,7 @@ afterEachTasks(test);
 
 test.describe('Contribute/Subscribe Tiered Checkout', () => {
 	testsDetails.forEach((testDetails) => {
-		test(`Tier-${testDetails.tier} ${testDetails.ratePlan} with ${
-			testDetails.paymentType
-		} - ${testDetails.internationalisationId ?? 'UK'}`, async ({
+		test(`Tier-${testDetails.tier} ${testDetails.ratePlan} with ${testDetails.paymentType} - ${testDetails.internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {
