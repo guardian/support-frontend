@@ -1,5 +1,6 @@
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { isProd } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordianComponent } from './components/accordianComponent';
@@ -22,9 +23,15 @@ export function GuardianLightLanding({
 	}; // hidden initially, will display with more regions
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<HeaderCards geoId={geoId} />
-			<PosterComponent />
-			<AccordianComponent />
+			{!isProd() ? (
+				<>
+					<HeaderCards geoId={geoId} />
+					<PosterComponent />
+					<AccordianComponent />
+				</>
+			) : (
+				<>Under Construction. Viewable within Code or Dev environments.</>
+			)}
 		</LandingPageLayout>
 	);
 }
