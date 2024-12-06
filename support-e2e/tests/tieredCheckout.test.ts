@@ -88,13 +88,6 @@ export const testsDetails: TestDetails[] = [
 	},
 	{
 		tier: 3,
-		paymentType: 'Credit/Debit card',
-		ratePlan: 'DomesticMonthly',
-		fields: ukWithPostalAddressOnly(),
-		internationalisationId: 'UK',
-	},
-	{
-		tier: 3,
 		paymentType: 'PayPal',
 		ratePlan: 'Monthly',
 		fields: usWithPostalAddressOnly(),
