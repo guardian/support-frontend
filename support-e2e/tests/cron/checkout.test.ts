@@ -11,7 +11,6 @@ test.describe('Checkout', () => {
 			ratePlan: 'Monthly',
 			paymentType: 'PayPal',
 			internationalisationId: 'au',
-			paymentFrequency: 'month',
 		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
