@@ -10,20 +10,16 @@ import {
 	setTestUserDetails,
 	setTestUserRequiredDetails,
 } from './utils/testUserDetails';
-
-interface TestAddress {
-	postCode?: string;
-	state?: string;
-	firstLine?: string;
-	city?: string;
-}
-
-interface TestFields {
-	email: string;
-	firstName: string;
-	lastName: string;
-	addresses?: TestAddress[]; // 1st Delivery, 2nd Billing
-}
+import {
+	ausWithFullAddress,
+	ausWithStateOnly,
+	personalDetailsOnly,
+	TestFields,
+	ukWithBillingAndPostalAddress,
+	ukWithPostalAddressOnly,
+	usWithPostalAddressOnly,
+	usWithPostcodeAndState,
+} from './utils/userFields';
 
 export interface TestDetails {
 	tier: 1 | 2 | 3;
@@ -38,159 +34,70 @@ export const testsDetails: TestDetails[] = [
 		tier: 1,
 		ratePlan: 'Monthly',
 		paymentType: 'Direct debit',
-		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+		fields: personalDetailsOnly(),
 		internationalisationId: 'UK',
 	},
 	{
 		tier: 1,
 		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: '10006',
-					state: 'New York',
-				},
-			],
-		},
+		fields: usWithPostcodeAndState(),
 		internationalisationId: 'US',
 	},
 	{
 		tier: 1,
 		ratePlan: 'Monthly',
 		paymentType: 'PayPal',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					state: 'New South Wales',
-				},
-			],
-		},
+		fields: ausWithStateOnly(),
 		internationalisationId: 'AU',
 	},
 	{
 		tier: 2,
 		ratePlan: 'Annual',
 		paymentType: 'Credit/Debit card',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: '10006',
-					state: 'New York',
-				},
-			],
-		},
+		fields: usWithPostcodeAndState(),
 		internationalisationId: 'US',
 	},
 	{
 		tier: 2,
 		paymentType: 'Direct debit',
 		ratePlan: 'Monthly',
-		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+		fields: personalDetailsOnly(),
 		internationalisationId: 'UK',
 	},
 	{
 		tier: 2,
 		paymentType: 'PayPal',
 		ratePlan: 'Monthly',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					state: 'New South Wales',
-				},
-			],
-		},
+		fields: ausWithStateOnly(),
 		internationalisationId: 'AU',
 	},
 	{
 		tier: 3,
 		paymentType: 'Credit/Debit card',
 		ratePlan: 'Annual',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: '2010',
-					state: 'New South Wales',
-					firstLine: '19 Foster Street',
-					city: 'Sydney',
-				},
-			],
-		},
+		fields: ausWithFullAddress(),
 		internationalisationId: 'AU',
 	},
 	{
 		tier: 3,
 		paymentType: 'Direct debit',
 		ratePlan: 'Monthly',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: 'M1 1PW',
-					firstLine: '3 Cross Street',
-					city: 'Manchester',
-				},
-				{
-					postCode: 'N1 9GU',
-					firstLine: '90 York Way',
-					city: 'London',
-				},
-			],
-		},
+		fields: ukWithBillingAndPostalAddress(),
 		internationalisationId: 'UK',
 	},
 	{
 		tier: 3,
 		paymentType: 'Credit/Debit card',
 		ratePlan: 'DomesticMonthly',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: 'N1 9GU',
-					firstLine: '90 York Way',
-					city: 'London',
-				},
-			],
-		},
+		fields: ukWithPostalAddressOnly(),
 		internationalisationId: 'UK',
 	},
 	{
 		tier: 3,
 		paymentType: 'PayPal',
 		ratePlan: 'Monthly',
-		fields: {
-			email: email(),
-			firstName: firstName(),
-			lastName: lastName(),
-			addresses: [
-				{
-					postCode: '10006',
-					state: 'New York',
-					firstLine: '61 Broadway',
-					city: 'New York',
-				},
-			],
-		},
+		fields: usWithPostalAddressOnly(),
 		internationalisationId: 'US',
 	},
 ];
@@ -224,7 +131,12 @@ test.describe('Contribute/Subscribe Tiered Checkout', () => {
 				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
-			await setTestUserDetails(page, testDetails);
+			await setTestUserDetails(
+				page,
+				testDetails.fields,
+				testDetails.internationalisationId,
+				testDetails.tier,
+			);
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
 				case 'Direct debit':

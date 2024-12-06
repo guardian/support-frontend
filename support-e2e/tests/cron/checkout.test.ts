@@ -12,6 +12,12 @@ test.describe('Checkout', () => {
 			paymentType: 'PayPal',
 			internationalisationId: 'au',
 		},
+		{
+			product: 'TierThree',
+			ratePlan: 'DomesticMonthly',
+			paymentType: 'PayPal',
+			internationalisationId: 'au',
+		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
 	});

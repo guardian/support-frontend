@@ -8,7 +8,7 @@ import {
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
-import { testsDetails } from '../tieredCheckout.test';
+import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
 
 type TestDetails = {
 	product: string;
@@ -18,31 +18,31 @@ type TestDetails = {
 };
 
 const setUserDetailsForProduct = async (
-	page: Page,
-	product: string,
-	ratePlan,
-	paymentType,
+	page,
+	product,
+	internationalisationId,
 ) => {
 	switch (product) {
 		case 'SupporterPlus':
 			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
+
 			break;
 		case 'TierThree':
-			const userDetails = testsDetails.find(
-				(details) =>
-					details.tier === 3 &&
-					details.ratePlan === ratePlan &&
-					details.paymentType === paymentType &&
-					details.internationalisationId === 'UK',
-			);
-			if (!userDetails) {
-				throw new Error("Couldn't find user details for TierThree UK");
+			let userDetails: TestFields | undefined;
+			if (internationalisationId === 'UK') {
+				userDetails = ukWithPostalAddressOnly();
 			}
-			await setTestUserDetails(page, userDetails);
+			if (!userDetails) {
+				throw new Error(
+					`Couldn't find user details for ${product} in ${internationalisationId}`,
+				);
+			}
+			await setTestUserDetails(page, userDetails, internationalisationId, 3);
+
 			break;
 		default:
 			throw new Error(
-				`I don't know how to fill in user details for product: ${product}`,
+				`I don't know how to fill in user details for ${product}`,
 			);
 	}
 };
@@ -55,16 +55,13 @@ export const testCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const url = `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}`;
+		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}`;
 		const page = await context.newPage();
-		const testFirstName = firstName();
-		const testLastName = lastName();
-		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
 
-		await setUserDetailsForProduct(page, product, ratePlan, paymentType);
+		await setUserDetailsForProduct(page, product, internationalisationId);
 
-		if (internationalisationId === 'au') {
+		if (internationalisationId === 'AU') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		}
 
