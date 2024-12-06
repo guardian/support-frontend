@@ -18,7 +18,7 @@
 		"devrun": "NODE_ENV=DEV npm-run-all clean webpack-dev-server",
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
-    "knip": "knip --include files,exports,nsExports,types,nsTypes",
+		"knip": "knip --include files,exports,nsExports,types,nsTypes",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"paparazzi": "paparazzi && open ./paparazzi",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
@@ -85,7 +85,7 @@
 		"@emotion/serialize": "^1.1.2",
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.19.2",
-		"@guardian/libs": "^19.1.0",
+		"@guardian/libs": "0.0.0-canary-20241206091534",
 		"@guardian/pasteup": "1.0.0-alpha.7",
 		"@guardian/source": "8.0.0",
 		"@guardian/source-development-kitchen": "13.1.0",
@@ -216,5 +216,6 @@
 	},
 	"lint-staged": {
 		"./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
-	}
+	},
+	"packageManager": "yarn@1.22.1"
 }
