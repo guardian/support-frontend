@@ -1,10 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import { setTestUserRequiredDetails } from '../utils/testUserDetails';
+import {
+	setTestUserDetails,
+	setTestUserRequiredDetails,
+} from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
+import { testsDetails } from '../tieredCheckout.test';
 
 type TestDetails = {
 	product: string;
@@ -12,6 +16,36 @@ type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
 	paymentFrequency: string;
+};
+
+const setUserDetailsForProduct = async (
+	page: Page,
+	product: string,
+	ratePlan,
+	paymentType,
+) => {
+	switch (product) {
+		case 'SupporterPlus':
+			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
+			break;
+		case 'TierThree':
+			const userDetails = testsDetails.find(
+				(details) =>
+					details.tier === 3 &&
+					details.ratePlan === ratePlan &&
+					details.paymentType === paymentType &&
+					details.internationalisationId === 'UK',
+			);
+			if (!userDetails) {
+				throw new Error("Couldn't find user details for TierThree UK");
+			}
+			await setTestUserDetails(page, userDetails);
+			break;
+		default:
+			throw new Error(
+				`I don't know how to fill in user details for product: ${product}`,
+			);
+	}
 };
 
 export const testCheckout = (testDetails: TestDetails) => {
@@ -29,12 +63,7 @@ export const testCheckout = (testDetails: TestDetails) => {
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
 
-		await setTestUserRequiredDetails(
-			page,
-			testEmail,
-			testFirstName,
-			testLastName,
-		);
+		await setUserDetailsForProduct(page, product, ratePlan, paymentType);
 
 		if (internationalisationId === 'au') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });

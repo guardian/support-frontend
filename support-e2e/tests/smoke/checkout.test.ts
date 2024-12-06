@@ -13,6 +13,13 @@ test.describe('Checkout', () => {
 			internationalisationId: 'eu',
 			paymentFrequency: 'year',
 		},
+		{
+			product: 'TierThree',
+			ratePlan: 'DomesticMonthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'uk',
+			paymentFrequency: 'year',
+		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
 	});
