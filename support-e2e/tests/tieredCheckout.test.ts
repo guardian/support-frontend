@@ -23,10 +23,10 @@ import {
 
 export interface TestDetails {
 	tier: 1 | 2 | 3;
-	ratePlan: 'Monthly' | 'Annual' | 'DomesticMonthly';
+	ratePlan: 'Monthly' | 'Annual';
 	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	fields: TestFields;
-	internationalisationId: 'UK' | 'US' | 'AU' | 'EU';
+	internationalisationId: 'UK' | 'US' | 'AU';
 }
 
 export const testsDetails: TestDetails[] = [
