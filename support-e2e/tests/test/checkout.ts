@@ -10,6 +10,8 @@ import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
 
+// TODO: it'd be great to make the types here more specific, possibly using the
+// shared types from the product catalog.
 type TestDetails = {
 	product: string;
 	ratePlan: string;
