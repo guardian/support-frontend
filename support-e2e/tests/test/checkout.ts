@@ -15,7 +15,6 @@ type TestDetails = {
 	ratePlan: string;
 	paymentType: string;
 	internationalisationId: string;
-	paymentFrequency: string;
 };
 
 const setUserDetailsForProduct = async (
