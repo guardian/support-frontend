@@ -27,10 +27,10 @@ interface TestFields {
 
 export interface TestDetails {
 	tier: 1 | 2 | 3;
-	ratePlan: 'Monthly' | 'Annual';
+	ratePlan: 'Monthly' | 'Annual' | 'DomesticMonthly';
 	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	fields: TestFields;
-	internationalisationId: 'UK' | 'US' | 'AU';
+	internationalisationId: 'UK' | 'US' | 'AU' | 'EU';
 }
 
 export const testsDetails: TestDetails[] = [
@@ -147,6 +147,24 @@ export const testsDetails: TestDetails[] = [
 					firstLine: '3 Cross Street',
 					city: 'Manchester',
 				},
+				{
+					postCode: 'N1 9GU',
+					firstLine: '90 York Way',
+					city: 'London',
+				},
+			],
+		},
+		internationalisationId: 'UK',
+	},
+	{
+		tier: 3,
+		paymentType: 'Credit/Debit card',
+		ratePlan: 'DomesticMonthly',
+		fields: {
+			email: email(),
+			firstName: firstName(),
+			lastName: lastName(),
+			addresses: [
 				{
 					postCode: 'N1 9GU',
 					firstLine: '90 York Way',
