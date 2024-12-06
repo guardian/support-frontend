@@ -10,13 +10,13 @@ test.describe('Checkout', () => {
 			product: 'SupporterPlus',
 			ratePlan: 'Monthly',
 			paymentType: 'PayPal',
-			internationalisationId: 'au',
+			internationalisationId: 'AU',
 		},
 		{
 			product: 'TierThree',
 			ratePlan: 'DomesticMonthly',
 			paymentType: 'PayPal',
-			internationalisationId: 'au',
+			internationalisationId: 'UK',
 		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
