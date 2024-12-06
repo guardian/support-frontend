@@ -30,15 +30,16 @@ export interface TestDetails {
 	ratePlan: 'Monthly' | 'Annual';
 	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	fields: TestFields;
-	internationalisationId?: 'US' | 'AU';
+	internationalisationId: 'UK' | 'US' | 'AU';
 }
 
-const testsDetails: TestDetails[] = [
+export const testsDetails: TestDetails[] = [
 	{
 		tier: 1,
 		ratePlan: 'Monthly',
 		paymentType: 'Direct debit',
 		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+		internationalisationId: 'UK',
 	},
 	{
 		tier: 1,
@@ -95,6 +96,7 @@ const testsDetails: TestDetails[] = [
 		paymentType: 'Direct debit',
 		ratePlan: 'Monthly',
 		fields: { email: email(), firstName: firstName(), lastName: lastName() },
+		internationalisationId: 'UK',
 	},
 	{
 		tier: 2,
@@ -152,6 +154,7 @@ const testsDetails: TestDetails[] = [
 				},
 			],
 		},
+		internationalisationId: 'UK',
 	},
 	{
 		tier: 3,
