@@ -69,15 +69,6 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
-				label: 'Discount',
-				countdownStartInMillis: Date.parse('Dec 09, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 13, 2024 00:00:00'),
-				theme: {
-					backgroundColor: '#1e3e72',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
 				label: 'Final Countdown',
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
@@ -149,7 +140,7 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label: 'Just a few days left',
+				label: 'Last chance to claim your Black Friday offer',
 				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
 				theme: {
