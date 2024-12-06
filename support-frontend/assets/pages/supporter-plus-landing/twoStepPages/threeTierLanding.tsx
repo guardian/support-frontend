@@ -266,6 +266,7 @@ function getPlanCost(
 type ThreeTierLandingProps = {
 	geoId: GeoId;
 };
+
 export function ThreeTierLanding({
 	geoId,
 }: ThreeTierLandingProps): JSX.Element {
@@ -682,3 +683,5 @@ export function ThreeTierLanding({
 		</PageScaffold>
 	);
 }
+
+export default ThreeTierLanding;
