@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { textSans24 } from '@guardian/source/foundations';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
@@ -30,7 +32,16 @@ export function GuardianLightLanding({
 					<AccordianComponent />
 				</>
 			) : (
-				<>Under Construction. Viewable within Code or Dev environments.</>
+				<div
+					css={css`
+						position: relative;
+						${textSans24};
+						color: white;
+						text-align: center;
+					`}
+				>
+					Under Construction. Viewable within Code or Dev environments only.
+				</div>
 			)}
 		</LandingPageLayout>
 	);
