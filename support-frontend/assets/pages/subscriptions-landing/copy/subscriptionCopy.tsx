@@ -69,7 +69,7 @@ const digital = (
 	title: 'The Guardian Digital Edition',
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
 	description:
-		'Enjoy the Guardian and Observer newspaper, reimagined for mobile and tablet',
+		'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
