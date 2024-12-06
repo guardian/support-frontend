@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import { cmp } from '@guardian/libs';
+import { cmp, getCookie } from '@guardian/libs';
 import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -36,7 +36,13 @@ function analyticsInitialisation(
 function consentInitialisation(country: IsoCountry): void {
 	if (shouldInitCmp()) {
 		try {
+			const browserId = getCookie({ name: 'bwid', shouldMemoize: true });
 			cmp.init({
+				pubData: {
+					pageViewId: ophan.viewId,
+					browserId: browserId ?? undefined,
+					platform: 'support',
+				},
 				country,
 			});
 		} catch (e) {
