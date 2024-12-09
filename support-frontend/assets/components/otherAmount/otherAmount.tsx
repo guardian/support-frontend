@@ -13,8 +13,8 @@ export type OtherAmountProps = {
 	selectedAmount: number | 'other';
 	otherAmount: string;
 	currency: IsoCurrency;
-	minAmount: number;
-	maxAmount: number;
+	minAmount?: number;
+	maxAmount?: number;
 	onOtherAmountChange: (newAmount: string) => void;
 	errors?: string[];
 } & HTMLAttributes<HTMLInputElement>;
