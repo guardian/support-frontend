@@ -4,7 +4,7 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
-import { GuardianLightLanding } from './guardianLightLanding';
+import { GuardianLightLanding } from './guardianLightLanding/guardianLightLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
 import { ThankYou } from './thankYou';
 
