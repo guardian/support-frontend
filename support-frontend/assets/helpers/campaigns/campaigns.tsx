@@ -9,6 +9,8 @@ import {
 
 export type CountdownSetting = {
 	label: string;
+	countdownDisplayStartInMillis: number;
+	countdownDisplayEndInMillis: number;
 	countdownStartInMillis: number;
 	countdownDeadlineInMillis: number;
 	theme: {
@@ -52,6 +54,8 @@ const campaigns: Record<string, CampaignSettings> = {
 		countdownSettings: [
 			{
 				label: 'Final week to help us reach our goal',
+				countdownDisplayStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
+				countdownDisplayEndInMillis: Date.parse('Dec 30, 2025 23:59:59'),
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				theme: {
@@ -61,6 +65,8 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 			{
 				label: 'Last chance to help us reach our goal',
+				countdownDisplayStartInMillis: Date.parse('Dec 31, 2024 00:00:00'),
+				countdownDisplayEndInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				countdownStartInMillis: Date.parse('Dec 31, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				theme: {
@@ -129,17 +135,7 @@ const campaigns: Record<string, CampaignSettings> = {
 			countryGroupId === GBPCountries &&
 			promoCode === 'BLACK_FRIDAY_DISCOUNT_2024',
 		enableSingleContributions: false,
-		countdownSettings: [
-			{
-				label: 'Last chance to claim your Black Friday offer',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
-				theme: {
-					backgroundColor: '#1e3e72',
-					foregroundColor: '#ffffff',
-				},
-			},
-		],
+		countdownSettings: [],
 		copy: {
 			headingFragment: <>This Black Friday, why not support </>,
 			subheading: (
