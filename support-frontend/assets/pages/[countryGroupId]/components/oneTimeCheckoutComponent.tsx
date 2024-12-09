@@ -555,7 +555,7 @@ export function OneTimeCheckoutComponent({
 											event,
 											setOtherAmountError,
 											'Please enter an amount.',
-											`Please enter an amount between ${minAmount} and ${maxAmount}`,
+											`Please enter an amount between ${minAmount} and ${maxAmount}.`,
 										);
 									}}
 								/>
