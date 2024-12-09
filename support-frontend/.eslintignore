@@ -2,6 +2,7 @@ public/**/*
 target/**/*
 tools/**/*.js
 coverage/
+flow-typed/
 storybook-static/
 .eslintrc.js
 scripts/*.js
