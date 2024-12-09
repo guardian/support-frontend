@@ -48,7 +48,8 @@ const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
 			countryGroupId === UnitedStates,
-		enableSingleContributions: false,
+		// enableSingleContributions: false,
+		enableSingleContributions: true,
 		countdownSettings: [
 			{
 				label: 'This Giving Tuesday, give to the Guardian',
@@ -173,6 +174,8 @@ export function getCampaignSettings(
 	countryGroupId: CountryGroupId,
 	promoCode?: string | null,
 ): CampaignSettings | null {
+	return campaigns['usEoy2024'];
+
 	for (const campaignId in campaigns) {
 		const isEligible =
 			isCampaignEnabled(campaignId) &&
