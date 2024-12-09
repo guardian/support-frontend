@@ -48,8 +48,7 @@ const campaigns: Record<string, CampaignSettings> = {
 	usEoy2024: {
 		isEligible: (countryGroupId: CountryGroupId) =>
 			countryGroupId === UnitedStates,
-		// enableSingleContributions: false,
-		enableSingleContributions: true,
+		enableSingleContributions: false,
 		countdownSettings: [
 			{
 				label: 'This Giving Tuesday, give to the Guardian',
