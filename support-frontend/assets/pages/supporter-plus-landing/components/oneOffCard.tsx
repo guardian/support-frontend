@@ -15,7 +15,6 @@ import { useState } from 'react';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
-import { config } from '../../../helpers/contributions';
 import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
 import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
@@ -80,8 +79,6 @@ export function OneOffCard({
 		oneOffAmounts.defaultAmount,
 	);
 	const [otherAmount, setOtherAmount] = useState('');
-	const { min: minAmount } = config[countryGroupId].ONE_OFF;
-
 	return (
 		<section css={sectionStyle}>
 			<div
@@ -115,7 +112,6 @@ export function OneOffCard({
 					otherAmountField={
 						<OtherAmount
 							currency={currencyId}
-							minAmount={minAmount}
 							selectedAmount={selectedAmount}
 							otherAmount={otherAmount}
 							onOtherAmountChange={(otherAmount) => {

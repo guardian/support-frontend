@@ -54,7 +54,6 @@ export function PatronsPriceCards(): JSX.Element {
 							otherAmount,
 							currency,
 							onAmountChange,
-							minAmount,
 							onOtherAmountChange,
 							errors,
 						}) => {
@@ -68,7 +67,6 @@ export function PatronsPriceCards(): JSX.Element {
 									otherAmountField={
 										<OtherAmount
 											currency={currency}
-											minAmount={minAmount}
 											selectedAmount={selectedAmount}
 											otherAmount={otherAmount}
 											onOtherAmountChange={onOtherAmountChange}
