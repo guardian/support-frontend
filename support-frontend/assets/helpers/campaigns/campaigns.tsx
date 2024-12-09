@@ -174,8 +174,6 @@ export function getCampaignSettings(
 	countryGroupId: CountryGroupId,
 	promoCode?: string | null,
 ): CampaignSettings | null {
-	return campaigns['usEoy2024'];
-
 	for (const campaignId in campaigns) {
 		const isEligible =
 			isCampaignEnabled(campaignId) &&
