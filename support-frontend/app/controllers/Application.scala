@@ -454,7 +454,7 @@ class Application(
 
     val isOneOff = maybeSelectedContributionType.contains("one_off")
     if (isOneOff) {
-      ("OneOff", "OneOff", None)
+      ("OneOff", "OneOff", maybeSelectedAmount)
     } else if (isSupporterPlus) {
       ("SupporterPlus", ratePlan, None)
     } else {
@@ -471,15 +471,16 @@ class Application(
     val (product, ratePlan, maybeSelectedAmount) =
       getProductParamsFromContributionParams(countryGroupId, productCatalog, request.queryString)
 
-    /** we currently don't support one-time checkout outside of the contribution checkout. Once this is supported we
-      * should remove this.
-      */
+    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+
     if (product == "OneOff") {
-      Ok(
-        contributionsHtml(countryGroupId, None),
-      ).withSettingsSurrogateKey
+      val queryStringMaybeWithContributionAmount = maybeSelectedAmount
+        .map(selectedAmount => qsWithoutTypeAndAmount + ("contribution" -> Seq(selectedAmount.toString)))
+        .getOrElse(qsWithoutTypeAndAmount)
+
+      Redirect(s"/$countryGroupId/one-time-checkout", queryStringMaybeWithContributionAmount, MOVED_PERMANENTLY)
     } else {
-      val queryString = request.queryString - "selected-contribution-type" - "selected-amount" ++ Map(
+      val queryString = qsWithoutTypeAndAmount ++ Map(
         "product" -> Seq(product),
         "ratePlan" -> Seq(ratePlan),
       )

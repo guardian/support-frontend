@@ -11,6 +11,7 @@ import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
 import model.Environment.Live
+import model.UserType.Current
 import model._
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
@@ -97,9 +98,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(stripeApiError))
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
-    EitherT.right(Future.successful("1"))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
+    EitherT.right(Future.successful(IdentityUserDetails("1", Current)))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))
@@ -325,7 +326,7 @@ class StripeBackendSpec
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
@@ -358,7 +359,7 @@ class StripeBackendSpec
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeApplePay, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
       }
       "return Success if stripe payment request button  switch is On in support-admin-console" in new StripeBackendFixture {
         val stripePaymentDataWithStripePaymentRequest =
@@ -391,7 +392,7 @@ class StripeBackendSpec
         stripeBackend
           .createPaymentIntent(createPaymentIntentWithStripePaymentRequest, clientBrowserInfo)
           .futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
       }
     }
 
@@ -433,6 +434,7 @@ class StripeBackendSpec
             .createCharge(stripeChargeRequest, clientBrowserInfo)
             .futureRight mustBe StripeCreateChargeResponse.fromCharge(
             chargeMock,
+            None,
           )
 
           verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
@@ -452,6 +454,7 @@ class StripeBackendSpec
         stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
           .fromCharge(
             chargeMock,
+            Some(Current),
           )
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
@@ -539,7 +542,7 @@ class StripeBackendSpec
         when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
@@ -616,7 +619,7 @@ class StripeBackendSpec
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
 
         stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight mustBe
-          StripePaymentIntentsApiResponse.Success()
+          StripePaymentIntentsApiResponse.Success(Some(Current))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }

@@ -274,6 +274,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
@@ -296,7 +297,10 @@ export function ThreeTierLanding({
 	// Persist any tests for tracking in the checkout page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
-	const campaignSettings = getCampaignSettings(countryGroupId);
+	const campaignSettings = getCampaignSettings(
+		countryGroupId,
+		urlSearchParamsPromoCode,
+	);
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -518,9 +522,6 @@ export function ThreeTierLanding({
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
 
-	const useNewOneTimeCheckout =
-		abParticipations.newOneTimeCheckout === 'variant';
-
 	return (
 		<PageScaffold
 			header={
@@ -612,7 +613,6 @@ export function ThreeTierLanding({
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
 						countryGroupId={countryGroupId}
-						useNewOneTimeCheckout={useNewOneTimeCheckout}
 					/>
 				</Container>
 			)}

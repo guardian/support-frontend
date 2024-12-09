@@ -84,7 +84,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
-	doesNotContainEmojiPattern,
+	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -463,6 +463,9 @@ export function OneTimeCheckoutComponent({
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
+				'userType' in paymentResult &&
+					paymentResult.userType &&
+					thankYouUrlSearchParams.set('userType', paymentResult.userType);
 				const nextStepRoute = paymentResultThankyouRoute(
 					paymentResult,
 					geoId,
@@ -716,7 +719,7 @@ export function OneTimeCheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {
