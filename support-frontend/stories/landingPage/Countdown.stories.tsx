@@ -40,6 +40,14 @@ export const Default = Template.bind({});
 Default.args = {
 	countdownCampaign: {
 		label: 'default',
+		countdownDisplayStartInMillis: 
+			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
+		countdownDisplayEndInMillis: 			
+			Date.now() +
+			(2 * millisecondsInDay +
+				1 * millisecondsInHour +
+				45 * millisecondsInMinute +
+				30 * millisecondsInSecond),
 		countdownStartInMillis:
 			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
 		countdownDeadlineInMillis:
@@ -61,6 +69,8 @@ export const DeadlineNear = Template.bind({});
 DeadlineNear.args = {
 	countdownCampaign: {
 		label: 'deadline near',
+		countdownDisplayStartInMillis: Date.now() - 1 * millisecondsInDay,
+		countdownDisplayEndInMillis: Date.now() + 5 * millisecondsInSecond,
 		countdownStartInMillis: Date.now() - 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() + 5 * millisecondsInSecond,
 		theme: {
@@ -76,6 +86,8 @@ export const DeadlinePassedHidden = Template.bind({});
 DeadlinePassedHidden.args = {
 	countdownCampaign: {
 		label: 'deadline passed',
+		countdownDisplayStartInMillis: Date.now() - 1 * millisecondsInDay,
+		countdownDisplayEndInMillis: Date.now() - 5 * millisecondsInSecond,
 		countdownStartInMillis: Date.now() - 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() - 5 * millisecondsInSecond,
 		theme: {
@@ -91,6 +103,8 @@ export const NotYetAvailableHidden = Template.bind({});
 NotYetAvailableHidden.args = {
 	countdownCampaign: {
 		label: 'start date well in future',
+		countdownDisplayStartInMillis: Date.now() + 1 * millisecondsInDay,
+		countdownDisplayEndInMillis: Date.now() + 5 * millisecondsInSecond,
 		countdownStartInMillis: Date.now() + 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() + 5 * millisecondsInDay,
 		theme: {
@@ -106,6 +120,13 @@ export const ThemedSubCampaign = Template.bind({});
 ThemedSubCampaign.args = {
 	countdownCampaign: {
 		label: 'change colour theme',
+		countdownDisplayStartInMillis: 
+			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
+		countdownDisplayEndInMillis: Date.now() +
+		(2 * millisecondsInDay +
+			1 * millisecondsInHour +
+			45 * millisecondsInMinute +
+			30 * millisecondsInSecond),
 		countdownStartInMillis:
 			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
 		countdownDeadlineInMillis:
