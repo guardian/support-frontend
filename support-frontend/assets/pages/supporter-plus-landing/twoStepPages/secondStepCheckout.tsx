@@ -214,3 +214,5 @@ export function SupporterPlusCheckout({
 		</SupporterPlusCheckoutScaffold>
 	);
 }
+
+export default SupporterPlusCheckout;
