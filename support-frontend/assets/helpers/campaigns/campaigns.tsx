@@ -51,24 +51,6 @@ const campaigns: Record<string, CampaignSettings> = {
 		enableSingleContributions: false,
 		countdownSettings: [
 			{
-				label: 'This Giving Tuesday, give to the Guardian',
-				countdownStartInMillis: Date.parse('Nov 27, 2024 00:01:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
-				theme: {
-					backgroundColor: '#ab0613',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
-				label: "It's not too late to give to the Guardian",
-				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
-				theme: {
-					backgroundColor: '#ab0613',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
 				label: 'Final week to help us reach our goal',
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
