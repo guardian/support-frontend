@@ -69,8 +69,17 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
-				label: 'Final Countdown',
+				label: 'Final week to help us reach our goal',
 				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
+				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
+				theme: {
+					backgroundColor: '#1e3e72',
+					foregroundColor: '#ffffff',
+				},
+			},
+			{
+				label: 'Last chance to help us reach our goal',
+				countdownStartInMillis: Date.parse('Dec 31, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				theme: {
 					backgroundColor: '#1e3e72',
