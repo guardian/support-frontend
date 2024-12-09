@@ -551,7 +551,6 @@ export function OneTimeCheckoutComponent({
 									onOtherAmountChange={setOtherAmount}
 									errors={[otherAmountError ?? '']}
 									onInvalid={(event) => {
-										console.log('event --->', event);
 										validate(
 											event,
 											setOtherAmountError,
