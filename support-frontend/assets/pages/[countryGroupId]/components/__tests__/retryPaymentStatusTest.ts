@@ -29,7 +29,7 @@ describe('retryPaymentStatus', () => {
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
 	});
 
-	it('tries again if the payment is still pending', async () => {
+	it('tries to success when payment is still pending', async () => {
 		const initialStatus: StatusResponse = {
 			status: 'pending',
 			trackingUri: 'https://support/status',
@@ -49,7 +49,7 @@ describe('retryPaymentStatus', () => {
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
 	});
 
-	it('pending only', async () => {
+	it('tries to pending when retry limit reached', async () => {
 		const pendingStatus: StatusResponse = {
 			status: 'pending',
 			trackingUri: 'https://support/status',
@@ -60,18 +60,13 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest
 			.fn()
-			.mockImplementationOnce(() => Promise.resolve(pendingStatus));
+			.mockImplementationOnce(() => Promise.resolve(pendingStatus))
+			.mockImplementationOnce(() => Promise.resolve(pendingStatus))
+			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(
-			getPaymentStatus,
-			2,
-			100,
-			(pollCount, pollTimeTotal) => {
-				console.log(`pending only : attempt ${pollCount}: ${pollTimeTotal}ms`);
-			},
-		);
+		const result = await retryPaymentStatus(getPaymentStatus, 2, 100);
 
 		expect(result).toEqual(finalStatus);
-		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
+		expect(getPaymentStatus).toHaveBeenCalledTimes(3);
 	});
 });
