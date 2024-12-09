@@ -1,7 +1,7 @@
 import type { StatusResponse } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 
 // ----- Setup ----- //
-const POLLING_INTERVAL = 3000;
+const POLLING_INTERVAL_MILLIS = 3000;
 const MAX_POLLS = 10;
 
 // corrects ES5 instanceOf error for retry mechanism
@@ -20,7 +20,7 @@ function timeOut(milliseconds: number | undefined): Promise<void> {
 export function retryPaymentStatus(
 	promiseFunction: () => Promise<StatusResponse>,
 	pollMax: number = MAX_POLLS,
-	pollInterval: number = POLLING_INTERVAL,
+	pollInterval: number = POLLING_INTERVAL_MILLIS,
 	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
 ): Promise<StatusResponse> {
 	async function retryPollAndPromise(polls: number): Promise<StatusResponse> {
