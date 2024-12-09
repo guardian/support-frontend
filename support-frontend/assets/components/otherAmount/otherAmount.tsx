@@ -14,6 +14,7 @@ export type OtherAmountProps = {
 	otherAmount: string;
 	currency: IsoCurrency;
 	minAmount: number;
+	maxAmount: number;
 	onOtherAmountChange: (newAmount: string) => void;
 	errors?: string[];
 } & HTMLAttributes<HTMLInputElement>;
@@ -26,6 +27,8 @@ export function OtherAmount({
 	onBlur,
 	onInvalid,
 	errors,
+	minAmount,
+	maxAmount,
 }: OtherAmountProps): JSX.Element | null {
 	const currencyDetails = currencies[currency];
 	const glyph = currencyDetails.isPaddedGlyph
@@ -47,6 +50,8 @@ export function OtherAmount({
 					value={otherAmount === '0' ? '' : otherAmount}
 					type="number"
 					onBlur={onBlur}
+					min={minAmount}
+					max={maxAmount}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 						onOtherAmountChange(e.target.value)
 					}

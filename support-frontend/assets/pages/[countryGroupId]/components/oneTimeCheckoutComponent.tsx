@@ -229,6 +229,7 @@ export function OneTimeCheckoutComponent({
 	);
 
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+	const maxAmount = config[countryGroupId]['ONE_OFF'].max;
 
 	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
 		preSelectedPriceCard ?? defaultAmount,
@@ -327,7 +328,7 @@ export function OneTimeCheckoutComponent({
 			if (validityState.valueMissing) {
 				setAction(missing); // required
 			} else {
-				setAction(invalid ?? ' '); // pattern mismatch
+				setAction(invalid ?? 'Invalid input'); // pattern mismatch
 			}
 		}
 	};
@@ -541,6 +542,7 @@ export function OneTimeCheckoutComponent({
 								<OtherAmount
 									currency={currencyKey}
 									minAmount={minAmount}
+									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
 									onBlur={(event) => {
@@ -549,10 +551,12 @@ export function OneTimeCheckoutComponent({
 									onOtherAmountChange={setOtherAmount}
 									errors={[otherAmountError ?? '']}
 									onInvalid={(event) => {
+										console.log('event --->', event);
 										validate(
 											event,
 											setOtherAmountError,
 											'Please enter an amount.',
+											`Please enter an amount between ${minAmount} and ${maxAmount}`,
 										);
 									}}
 								/>
