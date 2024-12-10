@@ -1268,7 +1268,6 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							countryGroupId={countryGroupId}
 							contributionType={
 								productFields.billingPeriod === 'Monthly'
 									? 'MONTHLY'
