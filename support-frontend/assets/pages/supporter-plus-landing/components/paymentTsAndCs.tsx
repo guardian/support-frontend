@@ -1,6 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, space, textSans12 } from '@guardian/source/foundations';
+import {
+	neutral,
+	space,
+	textSans12,
+	textSans17,
+} from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
@@ -51,8 +56,8 @@ const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[3]}px;
-	${textSans12};
-	color: ${neutral[7]};
+	${textSans17};
+	color: ${neutral[0]};
 	& a {
 		color: ${neutral[7]};
 	}
@@ -60,12 +65,12 @@ const containerSummaryTsCs = css`
 
 interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
 	amountIsAboveThreshold: boolean;
+	countryGroupId: CountryGroupId;
 }
 
 interface SummaryTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
-	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
 	productKey: ProductKey;
@@ -252,7 +257,6 @@ export function PaymentTsAndCs({
 
 export function SummaryTsAndCs({
 	contributionType,
-	countryGroupId,
 	currency,
 	amount,
 	productKey,
@@ -317,14 +321,10 @@ export function SummaryTsAndCs({
 	};
 
 	return (
-		<>
-			{countryGroupId === 'UnitedStates' && (
-				<div css={[containerSummaryTsCs, cssOverrides]}>
-					{inTier1 && copyTier1(contributionType)}
-					{inTier2 && copyTier2(contributionType, productKey)}
-					{inTier3 && copyTier3(contributionType, productKey)}
-				</div>
-			)}
-		</>
+		<div css={[containerSummaryTsCs, cssOverrides]}>
+			{inTier1 && copyTier1(contributionType)}
+			{inTier2 && copyTier2(contributionType, productKey)}
+			{inTier3 && copyTier3(contributionType, productKey)}
+		</div>
 	);
 }

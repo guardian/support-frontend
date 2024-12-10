@@ -173,7 +173,6 @@ export function SupporterPlusCheckout({
 						/>
 						{contributionType !== 'ONE_OFF' && (
 							<SummaryTsAndCs
-								countryGroupId={countryGroupId}
 								contributionType={contributionType}
 								currency={currencyId}
 								amount={amount}
