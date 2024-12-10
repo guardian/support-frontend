@@ -323,7 +323,9 @@ export function SummaryTsAndCs({
 
 	return (
 		<>
-			{countryGroupId === 'UnitedStates' && (
+			{(countryGroupId === 'UnitedStates' ||
+				countryGroupId === 'GBPCountries' ||
+				countryGroupId === 'EURCountries') && (
 				<div css={[containerSummaryTsCs, cssOverrides]}>
 					{inTier1 && copyTier1(contributionType)}
 					{inTier2 && copyTier2(contributionType, productKey)}
