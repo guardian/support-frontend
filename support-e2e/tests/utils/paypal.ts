@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { Page } from '@playwright/test';
 
 const paypalUsernamePrefixes = [
-	'sb-pxv43g30517058',
+	'sb-uadtx34786338',
 	'sb-8xque30655602',
 	'sb-hk3ov30650585',
 ];
