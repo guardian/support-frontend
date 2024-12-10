@@ -252,12 +252,7 @@ export function ContributionsOrderSummary({
 					)}
 				</p>
 			</div>
-			{!!tsAndCs && (
-				<div css={termsAndConditions}>
-					<hr css={hrCss} />
-					{tsAndCs}
-				</div>
-			)}
+			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
 	);
 }

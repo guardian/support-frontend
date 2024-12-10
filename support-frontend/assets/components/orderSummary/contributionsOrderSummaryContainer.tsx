@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { neutral, space } from '@guardian/source/foundations';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -10,6 +12,12 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
+
+const containerSummaryTsCs = css`
+	border-radius: ${space[2]}px;
+	background-color: ${neutral[97]};
+	padding: ${space[3]}px;
+`;
 
 type ContributionsOrderSummaryContainerProps = {
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
@@ -44,7 +52,7 @@ export function getTermsConditions(
 
 	if (isSupporterPlus || isTier3) {
 		return (
-			<>
+			<div css={containerSummaryTsCs}>
 				{promotion && (
 					<p>
 						You’ll pay{' '}
@@ -70,14 +78,14 @@ export function getTermsConditions(
 					</>
 				)}
 				{isTier3 && <p>Auto renews every {period}. Cancel anytime.</p>}
-			</>
+			</div>
 		);
 	}
 	return (
-		<>
+		<div css={containerSummaryTsCs}>
 			<p>Auto renews every {period} until you cancel.</p>
 			<p>Cancel or change your support anytime.</p>
-		</>
+		</div>
 	);
 }
 

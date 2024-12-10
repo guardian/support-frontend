@@ -321,12 +321,10 @@ export function SummaryTsAndCs({
 	};
 
 	return (
-		<>
-			<div css={[containerSummaryTsCs, cssOverrides]}>
-				{inTier1 && copyTier1(contributionType)}
-				{inTier2 && copyTier2(contributionType, productKey)}
-				{inTier3 && copyTier3(contributionType, productKey)}
-			</div>
-		</>
+		<div css={[containerSummaryTsCs, cssOverrides]}>
+			{inTier1 && copyTier1(contributionType)}
+			{inTier2 && copyTier2(contributionType, productKey)}
+			{inTier3 && copyTier3(contributionType, productKey)}
+		</div>
 	);
 }
