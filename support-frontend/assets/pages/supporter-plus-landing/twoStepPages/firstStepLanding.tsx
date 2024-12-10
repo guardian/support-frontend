@@ -188,3 +188,5 @@ export function SupporterPlusInitialLandingPage({
 		</SupporterPlusCheckoutScaffold>
 	);
 }
+
+export default SupporterPlusInitialLandingPage;

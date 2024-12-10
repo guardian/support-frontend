@@ -306,3 +306,5 @@ export function SupporterPlusThankYou({
 		</PageScaffold>
 	);
 }
+
+export default SupporterPlusThankYou;
