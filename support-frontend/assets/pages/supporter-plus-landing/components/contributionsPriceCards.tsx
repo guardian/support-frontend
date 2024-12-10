@@ -99,7 +99,6 @@ export function ContributionsPriceCards({
 					currency,
 					paymentInterval,
 					onAmountChange,
-					minAmount,
 					onOtherAmountChange,
 					hideChooseYourAmount,
 					errors,
@@ -114,7 +113,6 @@ export function ContributionsPriceCards({
 						otherAmountField={
 							<OtherAmount
 								currency={currency}
-								minAmount={minAmount}
 								selectedAmount={selectedAmount}
 								otherAmount={otherAmount}
 								onOtherAmountChange={onOtherAmountChange}

@@ -166,8 +166,8 @@ export function BillingPeriodSelector(): JSX.Element {
 						isChecked: true,
 						text: (
 							<p>
-								<span css={boldText}>The Editions app. </span>Enjoy the Guardian
-								and Observer newspaper, reimagined for mobile and tablet
+								<span css={boldText}>The Digital Edition app. </span>Enjoy the
+								Guardian and Observer newspaper, available for mobile and tablet
 							</p>
 						),
 					},
@@ -175,17 +175,8 @@ export function BillingPeriodSelector(): JSX.Element {
 						isChecked: true,
 						text: (
 							<p>
-								<span css={boldText}>Full access to our news app. </span>Read
-								our reporting on the go
-							</p>
-						),
-					},
-					{
-						isChecked: true,
-						text: (
-							<p>
-								<span css={boldText}>Ad-free reading. </span>Avoid ads on all
-								your devices
+								<span css={boldText}>Full access to the Guardian app. </span>
+								Read our reporting on the go
 							</p>
 						),
 					},

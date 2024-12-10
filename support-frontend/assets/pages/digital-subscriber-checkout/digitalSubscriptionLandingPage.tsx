@@ -169,8 +169,8 @@ export function DigitalSubscriptionLandingPage({
 				}
 			>
 				<p css={subheading}>
-					Keep informed on the day’s top stories with the Guardian digital
-					edition. Read the headlines, along with your favourite political
+					Keep on top of the stories of the day with the Guardian Digital
+					Edition. Read the headlines, along with your favourite political
 					commentators, lifestyle columnists, sport pundits and more - in a
 					daily, digestible read, across all your devices.
 				</p>

@@ -6,14 +6,14 @@ function DigitalPackshotShotHero(): JSX.Element {
 			<GridPicture
 				sources={[
 					{
-						gridId: 'editionsPackshotMobile',
+						gridId: 'digitalEditionsPackshotMobile',
 						srcSizes: [1000],
 						imgType: 'jpg',
 						sizes: '100vw',
 						media: '(max-width: 739px)',
 					},
 				]}
-				fallback="editionsPackshot"
+				fallback="digitalEditionsPackshot"
 				fallbackSize={1000}
 				altText=""
 				fallbackImgType="jpg"
