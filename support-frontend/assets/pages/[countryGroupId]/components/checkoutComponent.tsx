@@ -131,6 +131,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { retryPaymentStatus } from './retryPaymentStatus';
 import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
@@ -148,7 +149,8 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 }
 
 /**
- * This method removes the `pending` state by retrying,
+ * This method retry's `pending` a maximum number of polls
+ * then resolves to success (Zuora job queued for processing).
  * resolving on success or failure only.
  */
 type ProcessPaymentResponse =
@@ -159,30 +161,34 @@ type CreateSubscriptionResponse = StatusResponse & {
 	userType: UserType;
 };
 
-const processPayment = async (
+const processPaymentWithRetries = async (
 	statusResponse: StatusResponse,
-	geoId: GeoId,
 ): Promise<ProcessPaymentResponse> => {
-	return new Promise((resolve) => {
-		const { trackingUri, status, failureReason } = statusResponse;
-		if (status === 'success') {
-			resolve({ status: 'success' });
-		} else if (status === 'failure') {
-			resolve({ status, failureReason });
-		} else {
-			setTimeout(() => {
-				void fetch(trackingUri, {
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((json) => {
-						resolve(processPayment(json as StatusResponse, geoId));
-					});
-			}, 1000);
-		}
-	});
+	const { trackingUri, status } = statusResponse;
+	if (status === 'success' || status === 'failure') {
+		return processPayment(statusResponse);
+	}
+	const getTrackingStatus = () =>
+		fetch(trackingUri, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}).then((response) => response.json() as unknown as StatusResponse);
+
+	return retryPaymentStatus(getTrackingStatus).then((response) =>
+		processPayment(response),
+	);
+};
+
+const processPayment = (
+	statusResponse: StatusResponse,
+): Promise<ProcessPaymentResponse> => {
+	const { status, failureReason } = statusResponse;
+	if (status === 'failure') {
+		return Promise.resolve({ status, failureReason });
+	} else {
+		return Promise.resolve({ status: 'success' }); // success or pending
+	}
 };
 
 type CheckoutComponentProps = {
@@ -579,6 +585,7 @@ export function CheckoutComponent({
 			};
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
+
 			const createResponse = await fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
@@ -586,7 +593,6 @@ export function CheckoutComponent({
 					'Content-Type': 'application/json',
 				},
 			});
-
 			let processPaymentResponse: ProcessPaymentResponse;
 			let userType: UserType | undefined;
 
@@ -594,7 +600,9 @@ export function CheckoutComponent({
 				const statusResponse =
 					(await createResponse.json()) as CreateSubscriptionResponse;
 				userType = statusResponse.userType;
-				processPaymentResponse = await processPayment(statusResponse, geoId);
+				processPaymentResponse = await processPaymentWithRetries(
+					statusResponse,
+				);
 			} else {
 				const errorReason = (await createResponse.text()) as ErrorReason;
 				processPaymentResponse = {
