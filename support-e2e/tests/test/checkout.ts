@@ -1,17 +1,52 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import { setTestUserRequiredDetails } from '../utils/testUserDetails';
+import {
+	setTestUserDetails,
+	setTestUserRequiredDetails,
+} from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
+import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
 
+// TODO: it'd be great to make the types here more specific, possibly using the
+// shared types from the product catalog.
 type TestDetails = {
 	product: string;
 	ratePlan: string;
 	paymentType: string;
 	internationalisationId: string;
-	paymentFrequency: string;
+};
+
+const setUserDetailsForProduct = async (
+	page,
+	product,
+	internationalisationId,
+) => {
+	switch (product) {
+		case 'SupporterPlus':
+			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
+
+			break;
+		case 'TierThree':
+			let userDetails: TestFields | undefined;
+			if (internationalisationId === 'UK') {
+				userDetails = ukWithPostalAddressOnly();
+			}
+			if (!userDetails) {
+				throw new Error(
+					`Couldn't find user details for ${product} in ${internationalisationId}`,
+				);
+			}
+			await setTestUserDetails(page, userDetails, internationalisationId, 3);
+
+			break;
+		default:
+			throw new Error(
+				`I don't know how to fill in user details for ${product}`,
+			);
+	}
 };
 
 export const testCheckout = (testDetails: TestDetails) => {
@@ -22,21 +57,13 @@ export const testCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const url = `/${internationalisationId}/checkout?product=${product}&ratePlan=${ratePlan}`;
+		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}`;
 		const page = await context.newPage();
-		const testFirstName = firstName();
-		const testLastName = lastName();
-		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
 
-		await setTestUserRequiredDetails(
-			page,
-			testEmail,
-			testFirstName,
-			testLastName,
-		);
+		await setUserDetailsForProduct(page, product, internationalisationId);
 
-		if (internationalisationId === 'au') {
+		if (internationalisationId === 'AU') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		}
 
