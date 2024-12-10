@@ -70,7 +70,7 @@ const campaigns: Record<string, CampaignSettings> = {
 			},
 			{
 				label: 'Last chance to support us this year',
-				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
+				countdownStartInMillis: Date.parse('Dec 20, 2024 00:00:00'),
 				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
 				theme: {
 					backgroundColor: '#ab0613',
