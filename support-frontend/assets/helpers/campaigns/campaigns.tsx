@@ -82,7 +82,9 @@ const campaigns: Record<string, CampaignSettings> = {
 			headingFragment: <>Protect </>,
 			subheading: (
 				<>
-					We're not owned by a billionaire or shareholders: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact. <strong>You can cancel anytime.</strong>
+					We're not owned by a billionaire or shareholders: our fiercely
+					independent journalism is funded by our readers. Monthly giving makes
+					the most impact. <strong>You can cancel anytime.</strong>
 				</>
 			),
 			oneTimeHeading: <>Choose your gift amount</>,
