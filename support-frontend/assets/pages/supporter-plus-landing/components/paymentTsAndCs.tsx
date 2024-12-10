@@ -1,6 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral, space, textSans12 } from '@guardian/source/foundations';
+import {
+	neutral,
+	space,
+	textSans12,
+	textSans17,
+} from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
@@ -51,8 +56,8 @@ const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[3]}px;
-	${textSans12};
-	color: ${neutral[7]};
+	${textSans17};
+	color: ${neutral[0]};
 	& a {
 		color: ${neutral[7]};
 	}

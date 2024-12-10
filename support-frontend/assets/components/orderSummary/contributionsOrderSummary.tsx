@@ -2,9 +2,9 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
+	neutral,
 	palette,
 	space,
-	textSans12,
 	textSans14,
 	textSans17,
 	visuallyHidden,
@@ -118,9 +118,8 @@ const detailsSection = css`
 `;
 
 const termsAndConditions = css`
-	${textSans12};
-	color: #606060;
-
+	${textSans17};
+	color: ${neutral[0]};
 	p {
 		margin-top: ${space[1]}px;
 	}
