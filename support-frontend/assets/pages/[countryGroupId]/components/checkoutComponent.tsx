@@ -75,8 +75,6 @@ import {
 	productCatalogDescriptionNewBenefits,
 	type ProductKey,
 } from 'helpers/productCatalog';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -104,8 +102,23 @@ import {
 	formatUserDate,
 } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import {
-	doesNotContainEmojiPattern,
+	extractDeliverableAddressDataFromForm,
+	extractNonDeliverableAddressDataFromForm,
+	extractPersonalDataFromForm,
+} from '../checkout/helpers/formDataExtractors';
+import { getProductFields } from '../checkout/helpers/getProductFields';
+import {
+	paypalOneClickCheckout,
+	setupPayPalPayment,
+} from '../checkout/helpers/paypal';
+import {
+	stripeCreateSetupIntentPrb,
+	stripeCreateSetupIntentRecaptcha,
+} from '../checkout/helpers/stripe';
+import {
+	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -224,114 +237,19 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
 
-	/**
-	 * This is the data structure used by the `/subscribe/create` endpoint.
-	 *
-	 * This must match the types in `CreateSupportWorkersRequest#product`
-	 * and readerRevenueApis - `RegularPaymentRequest#product`.
-	 *
-	 * We might be able to defer this to the backend.
-	 */
-	let productFields: RegularPaymentRequest['product'];
-	switch (productKey) {
-		case 'GuardianLight':
-			productFields = {
-				productType: 'GuardianLight',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'TierThree':
-			productFields = {
-				productType: 'TierThree',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' ||
-					ratePlanKey === 'DomesticAnnual' ||
-					ratePlanKey === 'DomesticMonthlyV2' ||
-					ratePlanKey === 'DomesticAnnualV2'
-						? 'Domestic'
-						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual' ||
-						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
-						  ratePlanKey === 'RestOfWorldAnnualV2'
-						? 'RestOfWorld'
-						: 'Domestic',
-				productOptions: ratePlanKey.endsWith('V2')
-					? 'NewspaperArchive'
-					: 'NoProductOptions',
-			};
-			break;
-
-		case 'Contribution':
-			productFields = {
-				productType: 'Contribution',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: finalAmount,
-			};
-			break;
-
-		case 'SupporterPlus':
-			productFields = {
-				productType: 'SupporterPlus',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				/**
-				 * We shouldn't have to calculate these amounts here.
-				 *
-				 * TODO: remove the amount altogether and send only the contribution amount.
-				 * but they're a legacy of how the support-workers works i.e
-				 * - contribution = thisAmount - original
-				 * - if contribution < 0, fail
-				 * - apply any promo
-				 * @see https://github.com/guardian/support-frontend/blob/51b06f33a0f9f70628154e100374d5933708e38f/support-workers/src/main/scala/com/gu/zuora/subscriptionBuilders/SupporterPlusSubcriptionBuilder.scala#L38-L42
-				 */
-				amount: originalAmount + (contributionAmount ?? 0),
-			};
-			break;
-
-		case 'GuardianWeeklyDomestic':
-			productFields = {
-				productType: 'GuardianWeekly',
-				currency: currencyKey,
-				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'GuardianWeeklyRestOfWorld':
-			productFields = {
-				productType: 'GuardianWeekly',
-				fulfilmentOptions: 'RestOfWorld',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-			break;
-
-		case 'DigitalSubscription':
-			productFields = {
-				productType: 'DigitalPack',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				readerType: 'Direct',
-			};
-			break;
-
-		case 'NationalDelivery':
-		case 'SubscriptionCard':
-		case 'HomeDelivery':
-			productFields = {
-				productType: 'Paper',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions: NoFulfilmentOptions,
-				productOptions: NoProductOptions,
-			};
-			break;
-	}
+	const productFields = getProductFields({
+		product: {
+			productKey,
+			productDescription,
+			ratePlanKey,
+		},
+		financial: {
+			currencyKey,
+			finalAmount,
+			originalAmount,
+			contributionAmount,
+		},
+	});
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -429,11 +347,9 @@ export function CheckoutComponent({
 
 	/** Personal details */
 	const [firstName, setFirstName] = useState(user?.firstName ?? '');
-	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
-	const [lastNameError, setLastNameError] = useState<string>();
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [emailError, setEmailError] = useState<string>();
+
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
@@ -499,12 +415,7 @@ export function CheckoutComponent({
 		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 		 */
 
-		/** Form: Personal data */
-		const personalData = {
-			firstName: formData.get('firstName') as string,
-			lastName: formData.get('lastName') as string,
-			email: formData.get('email') as string,
-		};
+		const personalData = extractPersonalDataFromForm(formData);
 
 		/**
 		 * FormData: address
@@ -513,39 +424,9 @@ export function CheckoutComponent({
 		 * For products that have a `deliveryAddress`, we collect that and either copy it in `billingAddress`
 		 * or allow a person to enter it manually.
 		 */
-		let billingAddress;
-		let deliveryAddress;
-		if (productDescription.deliverableTo) {
-			deliveryAddress = {
-				lineOne: formData.get('delivery-lineOne') as string,
-				lineTwo: formData.get('delivery-lineTwo') as string,
-				city: formData.get('delivery-city') as string,
-				state: formData.get('delivery-stateProvince') as string,
-				postCode: formData.get('delivery-postcode') as string,
-				country: formData.get('delivery-country') as IsoCountry,
-			};
-
-			const billingAddressMatchesDelivery =
-				formData.get('billingAddressMatchesDelivery') === 'yes';
-
-			billingAddress = !billingAddressMatchesDelivery
-				? {
-						lineOne: formData.get('billing-lineOne') as string,
-						lineTwo: formData.get('billing-lineTwo') as string,
-						city: formData.get('billing-city') as string,
-						state: formData.get('billing-stateProvince') as string,
-						postCode: formData.get('billing-postcode') as string,
-						country: formData.get('billing-country') as IsoCountry,
-				  }
-				: deliveryAddress;
-		} else {
-			billingAddress = {
-				state: formData.get('billing-state') as string,
-				postCode: formData.get('billing-postcode') as string,
-				country: formData.get('billing-country') as IsoCountry,
-			};
-			deliveryAddress = undefined;
-		}
+		const { billingAddress, deliveryAddress } = productDescription.deliverableTo
+			? extractDeliverableAddressDataFromForm(formData)
+			: extractNonDeliverableAddressDataFromForm(formData);
 
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
@@ -591,19 +472,8 @@ export function CheckoutComponent({
 			elements
 		) {
 			/** 1. Get a clientSecret from our server from the stripePublicKey */
-			const { client_secret: stripeClientSecret } = await fetch(
-				'/stripe/create-setup-intent/prb',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						stripePublicKey,
-					}),
-				},
-			).then(
-				(response) => response.json() as Promise<{ client_secret: string }>,
+			const stripeClientSecret = await stripeCreateSetupIntentPrb(
+				stripePublicKey,
 			);
 
 			/** 2. Get the Stripe paymentMethod from the Stripe elements */
@@ -1026,111 +896,18 @@ export function CheckoutComponent({
 						)}
 						<FormSection>
 							<Legend>1. Your details</Legend>
-							<div>
-								<TextInput
-									id="email"
-									data-qm-masking="blocklist"
-									label="Email address"
-									value={email}
-									type="email"
-									autoComplete="email"
-									onChange={(event) => {
-										setEmail(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.target.checkValidity();
-									}}
-									readOnly={isSignedIn}
-									name="email"
-									required
-									maxLength={80}
-									error={emailError}
-									onInvalid={(event) => {
-										preventDefaultValidityMessage(event.currentTarget);
-										const validityState = event.currentTarget.validity;
-										if (validityState.valid) {
-											setEmailError(undefined);
-										} else {
-											if (validityState.valueMissing) {
-												setEmailError('Please enter your email address.');
-											} else {
-												setEmailError('Please enter a valid email address.');
-											}
-										}
-									}}
-								/>
-							</div>
-							<Signout isSignedIn={isSignedIn} />
-							<>
-								<div>
-									<TextInput
-										id="firstName"
-										data-qm-masking="blocklist"
-										label="First name"
-										value={firstName}
-										autoComplete="given-name"
-										autoCapitalize="words"
-										onChange={(event) => {
-											setFirstName(event.target.value);
-										}}
-										onBlur={(event) => {
-											event.target.checkValidity();
-										}}
-										name="firstName"
-										required
-										maxLength={40}
-										error={firstNameError}
-										pattern={doesNotContainEmojiPattern}
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setFirstNameError(undefined);
-											} else {
-												if (validityState.valueMissing) {
-													setFirstNameError('Please enter your first name.');
-												} else {
-													setFirstNameError('Please enter a valid first name.');
-												}
-											}
-										}}
-									/>
-								</div>
-								<div>
-									<TextInput
-										id="lastName"
-										data-qm-masking="blocklist"
-										label="Last name"
-										value={lastName}
-										autoComplete="family-name"
-										autoCapitalize="words"
-										onChange={(event) => {
-											setLastName(event.target.value);
-										}}
-										onBlur={(event) => {
-											event.target.checkValidity();
-										}}
-										name="lastName"
-										required
-										maxLength={40}
-										error={lastNameError}
-										pattern={doesNotContainEmojiPattern}
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setLastNameError(undefined);
-											} else {
-												if (validityState.valueMissing) {
-													setLastNameError('Please enter your last name.');
-												} else {
-													setLastNameError('Please enter a valid last name.');
-												}
-											}
-										}}
-									/>
-								</div>
-							</>
+
+							<PersonalDetailsFields
+								isEmailAddressReadOnly={isSignedIn}
+								firstName={firstName}
+								setFirstName={(firstName) => setFirstName(firstName)}
+								lastName={lastName}
+								setLastName={(lastName) => setLastName(lastName)}
+								email={email}
+								setEmail={(email) => setEmail(email)}
+							>
+								<Signout isSignedIn={isSignedIn} />
+							</PersonalDetailsFields>
 
 							{/**
 							 * We require state for non-deliverable products as we use different taxes within those regions upstream
@@ -1175,7 +952,7 @@ export function CheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {
@@ -1416,33 +1193,19 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and uses await here, but that has
+																// We could change the parents type to Promise and use await here, but that has
 																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
 																	setStripeClientSecretInProgress(true);
 																	setRecaptchaToken(token);
-																	void fetch(
-																		'/stripe/create-setup-intent/recaptcha',
-																		{
-																			method: 'POST',
-																			headers: {
-																				'Content-Type': 'application/json',
-																			},
-																			body: JSON.stringify({
-																				isTestUser,
-																				stripePublicKey,
-																				token,
-																			}),
-																		},
-																	)
-																		.then((resp) => resp.json())
-																		.then((json) => {
-																			setStripeClientSecret(
-																				(json as Record<string, string>)
-																					.client_secret,
-																			);
-																			setStripeClientSecretInProgress(false);
-																		});
+																	void stripeCreateSetupIntentRecaptcha(
+																		isTestUser,
+																		stripePublicKey,
+																		token,
+																	).then((client_secret) => {
+																		setStripeClientSecret(client_secret);
+																		setStripeClientSecretInProgress(false);
+																	});
 																}}
 																onRecaptchaExpired={() => {
 																	setRecaptchaToken(undefined);
@@ -1594,24 +1357,14 @@ export function CheckoutComponent({
 										}}
 										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 										payment={(resolve, reject) => {
-											const requestBody = {
-												amount: finalAmount,
-												billingPeriod: ratePlanDescription.billingPeriod,
-												currency: currencyKey,
-												requireShippingAddress: false,
-											};
-											void fetch('/paypal/setup-payment', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(requestBody),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													resolve((json as { token: string }).token);
+											setupPayPalPayment(
+												finalAmount,
+												currencyKey,
+												ratePlanDescription.billingPeriod,
+												csrf,
+											)
+												.then((token) => {
+													resolve(token);
 												})
 												.catch((error) => {
 													console.error(error);
@@ -1619,23 +1372,13 @@ export function CheckoutComponent({
 												});
 										}}
 										onAuthorize={(payPalData: Record<string, unknown>) => {
-											const body = {
-												token: payPalData.paymentToken,
-											};
-											void fetch('/paypal/one-click-checkout', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(body),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													// The state below has a useEffect that submits the form
-													setPayPalBAID((json as { baid: string }).baid);
-												});
+											void paypalOneClickCheckout(
+												payPalData.paymentToken,
+												csrf,
+											).then((baid) => {
+												// The state below has a useEffect that submits the form
+												setPayPalBAID(baid);
+											});
 										}}
 									/>
 								</>

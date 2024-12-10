@@ -84,7 +84,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {
-	doesNotContainEmojiPattern,
+	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
@@ -229,6 +229,7 @@ export function OneTimeCheckoutComponent({
 	);
 
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+	const maxAmount = config[countryGroupId]['ONE_OFF'].max;
 
 	const [selectedPriceCard, setSelectedPriceCard] = useState<number | 'other'>(
 		preSelectedPriceCard ?? defaultAmount,
@@ -327,7 +328,7 @@ export function OneTimeCheckoutComponent({
 			if (validityState.valueMissing) {
 				setAction(missing); // required
 			} else {
-				setAction(invalid ?? ' '); // pattern mismatch
+				setAction(invalid ?? 'Invalid input'); // pattern mismatch
 			}
 		}
 	};
@@ -541,6 +542,7 @@ export function OneTimeCheckoutComponent({
 								<OtherAmount
 									currency={currencyKey}
 									minAmount={minAmount}
+									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
 									onBlur={(event) => {
@@ -553,6 +555,7 @@ export function OneTimeCheckoutComponent({
 											event,
 											setOtherAmountError,
 											'Please enter an amount.',
+											`Please enter an amount between ${minAmount} and ${maxAmount}.`,
 										);
 									}}
 								/>
@@ -719,7 +722,7 @@ export function OneTimeCheckoutComponent({
 										}}
 										maxLength={20}
 										value={billingPostcode}
-										pattern={doesNotContainEmojiPattern}
+										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 										error={billingPostcodeError}
 										optional
 										onInvalid={(event) => {

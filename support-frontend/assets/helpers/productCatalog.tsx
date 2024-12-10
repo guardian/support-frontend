@@ -18,6 +18,7 @@ type ProductBenefit = {
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{ name: string; variants: string[] }>;
 	isNew?: boolean;
+	hideBullet?: boolean;
 };
 
 export type ProductDescription = {
@@ -104,6 +105,16 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
+const guardianLightBenefits = [
+	{
+		copy: 'A Guardian Light subscription enables you to read the Guardian without personalised advertising.',
+	},
+	{
+		copy: 'If you already read the Guardian ad-free you should sign in.',
+	},
+	{ copy: 'You can cancel anytime.' },
+];
+
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
@@ -113,8 +124,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					billingPeriod: 'Monthly',
 				},
 			},
-			benefits: [],
-			benefitsAdditional: [{ copy: 'Lorem ipsum' }],
+			benefits: guardianLightBenefits,
 		},
 		TierThree: {
 			label: 'Digital + print',
@@ -162,10 +172,11 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 			label: 'The Guardian Digital Edition',
 			benefits: [
 				{
-					copy: 'The Editions app. Enjoy the Guardian and Observer newspaper, reimagined for mobile and tablet',
+					copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 				},
-				{ copy: 'Full access to our news app. Read our reporting on the go' },
-				{ copy: 'Ad-free reading. Avoid ads on all your devices' },
+				{
+					copy: 'Full access to the Guardian app. Read our reporting on the go',
+				},
 				{
 					copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
 				},
@@ -339,6 +350,29 @@ export function productCatalogDescriptionNewBenefits(
 					tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed${
 						countryGroupId !== 'GBPCountries' ? ' in the UK' : ''
 					}, since 1821.`,
+				},
+			],
+		},
+	};
+}
+
+export function productCatalogGuardianLight(): Record<
+	ProductKey | 'GuardianLightGoBack',
+	ProductDescription
+> {
+	return {
+		...productCatalogDescription,
+		GuardianLight: {
+			...productCatalogDescription.GuardianLight,
+			label: 'Purchase Guardian Light',
+		},
+		GuardianLightGoBack: {
+			...productCatalogDescription.GuardianLight,
+			label: 'Read the Guardian with personalised ads',
+			benefits: [
+				{
+					copy: `Click ‘Go back to Accept all’ if you do not want to subscribe to Guardian Light.`,
+					hideBullet: true,
 				},
 			],
 		},
