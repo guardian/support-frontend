@@ -27,6 +27,9 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
+type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
+type ProductType = "Contribution" | "Paper" | "GuardianWeekly" | "SupporterPlus";
+
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
@@ -428,7 +431,7 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
   }
 
-  buildPaymentSuccessMetric = (paymentProvider: string, productType: string, period: Duration) => {
+  buildPaymentSuccessMetric = (paymentProvider: PaymentProvider, productType: ProductType, period: Duration) => {
     return new Metric({
       metricName: "PaymentSuccess",
       namespace: "support-frontend",
