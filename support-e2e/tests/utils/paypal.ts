@@ -2,10 +2,22 @@ import 'dotenv/config';
 import { Page } from '@playwright/test';
 
 const paypalUsernamePrefixes = [
-	'sb-pxv43g30517058',
+	'sb-uadtx34786338',
 	'sb-8xque30655602',
 	'sb-hk3ov30650585',
 ];
+
+const getEnvVarOrThrow = (name: string) => {
+	const envVar = process.env[name];
+
+	if (envVar === undefined) {
+		throw new Error(
+			`Environment variable ${name} not set, I can't continue without it!`,
+		);
+	}
+
+	return envVar;
+};
 
 export const fillInPayPalDetails = async (page: Page) => {
 	const paypalUsernamePrefix =
@@ -31,9 +43,11 @@ export const fillInPayPalDetails = async (page: Page) => {
 
 	const passwordInput = page.locator('#password');
 
-	await passwordInput.fill(
-		`${paypalUsernamePrefix}-${process.env.PAYPAL_TEST_PASSWORD}`,
-	);
+	const password = `${paypalUsernamePrefix}-${getEnvVarOrThrow(
+		'PAYPAL_TEST_PASSWORD',
+	)}`;
+
+	await passwordInput.fill(password);
 
 	const loginButton = page.locator('#btnLogin');
 

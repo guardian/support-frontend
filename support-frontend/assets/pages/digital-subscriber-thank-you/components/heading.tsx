@@ -19,7 +19,7 @@ function Heading({ name }: HeadingProp): JSX.Element {
 		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `, ${name}, ` : ` `;
 	return (
 		<div css={containerCss}>
-			Thank you{maybeNameCommaAndSpacing}for subscribing to the digital edition
+			Thank you{maybeNameCommaAndSpacing}for subscribing to the Digital Edition
 		</div>
 	);
 }
