@@ -144,14 +144,24 @@ class CreateSubscriptionController(
 
   private def validateUserIsEligibleForPurchase(
       request: Request[CreateSupportWorkersRequest],
-      userDetails: UserDetails,
+      userDetails: UserDetailsWithSignedInStatus,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     request.body.product match {
-//      case GuardianLight(_) => EitherT.rightT(())
-      case GuardianLight(_) => EitherT.leftT(RequestValidationError("guardian_light_purchase_not_allowed"))
+      case GuardianLight(_) => {
+        if (userDetails.isSignedIn) {
+          EitherT.rightT(())
+        } else {
+          EitherT.leftT(RequestValidationError("guardian_light_purchase_not_allowed"))
+        }
+      }
       case _ => EitherT.rightT(())
     }
   }
+
+  case class UserDetailsWithSignedInStatus(
+      userDetails: UserDetails,
+      isSignedIn: Boolean,
+  )
 
   private def createSubscription(implicit
       settings: AllSettings,
@@ -159,7 +169,13 @@ class CreateSubscriptionController(
   ): EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse] = {
 
     val maybeLoggedInUserDetails =
-      request.user.map(authIdUser => UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"))
+      request.user.map(authIdUser =>
+        UserDetailsWithSignedInStatus(
+          UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"),
+          isSignedIn = true,
+        ),
+      )
+
     logDetailedMessage("createSubscription")
 
     for {
@@ -168,12 +184,13 @@ class CreateSubscriptionController(
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+            .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
 
       _ <- validateUserIsEligibleForPurchase(request, userDetails)
 
-      supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
+      supportWorkersUser = buildSupportWorkersUser(userDetails.userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
@@ -181,7 +198,7 @@ class CreateSubscriptionController(
 
     } yield CreateSubscriptionResponse(
       statusResponse.status,
-      userDetails.userType,
+      userDetails.userDetails.userType,
       statusResponse.trackingUri,
       statusResponse.failureReason,
     )
