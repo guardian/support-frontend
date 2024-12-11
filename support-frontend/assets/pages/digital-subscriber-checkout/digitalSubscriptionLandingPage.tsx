@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { cmp } from '@guardian/libs';
 import { from, neutral, space, textSans17 } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
 import {
@@ -130,6 +131,13 @@ export function DigitalSubscriptionLandingPage({
 
 	useEffect(() => {
 		if (paymentComplete) {
+      const rejectAll = async (): Promise<void> => {
+        await cmp.rejectAll();
+      }
+
+      rejectAll().catch((e) => {
+        console.error('Error rejecting all', e);
+      });
 			navigate(thankYouRoute, { replace: true });
 		}
 	}, [paymentComplete]);
