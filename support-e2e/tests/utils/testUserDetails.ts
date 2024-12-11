@@ -1,5 +1,4 @@
 import { Page } from '@playwright/test';
-import { TestDetails } from '../tieredCheckout.test';
 import { TestFields } from './userFields';
 
 export const setTestUserRequiredDetails = async (
