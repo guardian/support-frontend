@@ -2,13 +2,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 import { getStripeKey } from 'helpers/forms/stripe';
-import {
-	// type AppConfig,
-	parseAppConfig,
-} from 'helpers/globalsAndSwitches/window';
+import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { type ProductOptions } from 'helpers/productPrice/productOptions';
@@ -22,14 +18,12 @@ import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
 	geoId: GeoId;
+	appConfig: AppConfig;
 };
 
 const countryId: IsoCountry = Country.detect();
 
-export function Checkout({ geoId }: Props) {
-	setUpTrackingAndConsents();
-	const appConfig = parseAppConfig(window.guardian);
-
+export function Checkout({ geoId, appConfig }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
