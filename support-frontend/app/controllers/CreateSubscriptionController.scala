@@ -142,6 +142,17 @@ class CreateSubscriptionController(
     }
   }
 
+  private def validateUserIsEligibleForPurchase(
+      request: Request[CreateSupportWorkersRequest],
+      userDetails: UserDetails,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    request.body.product match {
+//      case GuardianLight(_) => EitherT.rightT(())
+      case GuardianLight(_) => EitherT.leftT(RequestValidationError("guardian_light_purchase_not_allowed"))
+      case _ => EitherT.rightT(())
+    }
+  }
+
   private def createSubscription(implicit
       settings: AllSettings,
       request: CreateRequest,
@@ -159,6 +170,9 @@ class CreateSubscriptionController(
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
+
+      _ <- validateUserIsEligibleForPurchase(request, userDetails)
+
       supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
