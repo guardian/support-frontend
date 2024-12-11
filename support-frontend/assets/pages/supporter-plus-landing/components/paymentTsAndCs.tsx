@@ -207,10 +207,7 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const copyBelowThreshold = (
-		contributionType: ContributionType,
-		countryGroupId: CountryGroupId,
-	) => {
+	const copyBelowThreshold = (countryGroupId: CountryGroupId) => {
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
@@ -229,7 +226,7 @@ export function PaymentTsAndCs({
 				)}
 				{inSupporterPlus &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inSupport && copyBelowThreshold(contributionType, countryGroupId)}
+				{inSupport && copyBelowThreshold(countryGroupId)}
 			</FinePrint>
 		</div>
 	);
