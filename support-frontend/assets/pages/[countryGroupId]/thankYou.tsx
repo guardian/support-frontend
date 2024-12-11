@@ -163,3 +163,4 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 		/>
 	);
 }
+export default ThankYou;
