@@ -1814,10 +1814,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.29.1"
 
-"@guardian/libs@0.0.0-canary-20241206091534":
-  version "0.0.0-canary-20241206091534"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20241206091534.tgz#efa5a0edd533a2a338d46d2cc1212df468bf4d2b"
-  integrity sha512-qwk/k24L+aOFTdT1WAcUCUco5DHHO3edPQGx2U3fQS2Z3/7dVoNT22uhiJjJNomQUMQVQPjgpnLtUrnx8eT8lw==
+"@guardian/libs@0.0.0-canary-20241209135703":
+  version "0.0.0-canary-20241209135703"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20241209135703.tgz#e8c020ddc991962426cfa828649c1c3ee1587f4b"
+  integrity sha512-ankPO4XCDtoiWfXWnUwZt4+5+o3bJnMCzLfj0Om2Q9BkWYnl3fYFvArbKQAweMlbenTk91+5vqITdJEoQGWRVg==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
