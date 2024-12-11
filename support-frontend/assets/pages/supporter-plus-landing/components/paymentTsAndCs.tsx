@@ -137,8 +137,6 @@ export function PaymentTsAndCs({
 	mobileTheme = 'dark',
 	contributionType,
 	countryGroupId,
-	currency,
-	amount,
 	amountIsAboveThreshold,
 	productKey,
 	promotion,
@@ -148,13 +146,6 @@ export function PaymentTsAndCs({
 	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
 		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
-
-	const amountCopy = ` of ${formatAmount(
-		currencies[currency],
-		spokenCurrencies[currency],
-		amount,
-		false,
-	)}`;
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -221,21 +212,10 @@ export function PaymentTsAndCs({
 		countryGroupId: CountryGroupId,
 	) => {
 		return (
-			<>
-				{countryGroupId !== 'UnitedStates' && (
-					<div>
-						We will attempt to take payment{amountCopy},{' '}
-						<TsAndCsRenewal contributionType={contributionType} />, from now
-						until you cancel your payment. Payments may take up to 6 days to be
-						recorded in your bank account. You can change how much you give or
-						cancel your payment at any time.
-					</div>
-				)}
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</>
+			<TsAndCsFooterLinks
+				countryGroupId={countryGroupId}
+				amountIsAboveThreshold={amountIsAboveThreshold}
+			/>
 		);
 	};
 
