@@ -7,9 +7,10 @@ const DEFAULT_MAX_POLLS = 10;
 // corrects ES5 instanceOf error for retry mechanism
 // https://dev.to/dguo/how-to-fix-instanceof-not-working-for-custom-errors-in-typescript-4amp
 class StillPendingError extends Error {
-	constructor(message: string) {
+	constructor(message: string, public trackingUri: string) {
 		super(message);
 		Object.setPrototypeOf(this, StillPendingError.prototype);
+		this.trackingUri = trackingUri;
 	}
 }
 
@@ -30,7 +31,7 @@ export function retryPaymentStatus(
 			}
 			const result = await promiseFunction();
 			if (result.status === 'pending') {
-				throw new StillPendingError(result.trackingUri); // retry on pending
+				throw new StillPendingError('status is pending', result.trackingUri); // retry on pending
 			}
 			return result; // success or failure, exit
 		} catch (error) {
@@ -41,7 +42,7 @@ export function retryPaymentStatus(
 				return retryPollAndPromise(polls + 1);
 			} else {
 				if (error instanceof StillPendingError) {
-					return { status: 'pending', trackingUri: error.message };
+					return { status: 'pending', trackingUri: error.trackingUri };
 				}
 				throw error;
 			}
