@@ -69,4 +69,31 @@ describe('retryPaymentStatus', () => {
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(3);
 	});
+
+	it('retries failed promises until the retry limit is reached', async () => {
+		const getPaymentStatus = jest
+			.fn()
+			.mockImplementation(() => Promise.reject('error'));
+
+		const fn = () => retryPaymentStatus(getPaymentStatus, 2, 1);
+
+		await expect(fn()).rejects.toMatch('error');
+		expect(getPaymentStatus).toHaveBeenCalledTimes(3);
+	});
+
+	it('retries failed promises until it succeeds', async () => {
+		const finalStatus: StatusResponse = {
+			status: 'success',
+			trackingUri: 'https://support/status',
+		};
+		const getPaymentStatus = jest
+			.fn()
+			.mockImplementationOnce(() => Promise.reject('error'))
+			.mockImplementationOnce(() => Promise.resolve(finalStatus));
+
+		const result = await retryPaymentStatus(getPaymentStatus, 2, 1);
+
+		expect(result).toEqual(finalStatus);
+		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
+	});
 });
