@@ -10,8 +10,13 @@ test.describe('Checkout', () => {
 			product: 'SupporterPlus',
 			ratePlan: 'Annual',
 			paymentType: 'Credit/Debit card',
-			internationalisationId: 'eu',
-			paymentFrequency: 'year',
+			internationalisationId: 'EU',
+		},
+		{
+			product: 'TierThree',
+			ratePlan: 'DomesticMonthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
 		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);

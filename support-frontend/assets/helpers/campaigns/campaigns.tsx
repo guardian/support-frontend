@@ -69,11 +69,11 @@ const campaigns: Record<string, CampaignSettings> = {
 				},
 			},
 			{
-				label: 'Final Countdown',
-				countdownStartInMillis: Date.parse('Dec 23, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Jan 01, 2025 00:00:00'),
+				label: 'Last chance to support us this year',
+				countdownStartInMillis: Date.parse('Dec 20, 2024 00:01:00'),
+				countdownDeadlineInMillis: Date.parse('Dec 31, 2024 23:59:59'),
 				theme: {
-					backgroundColor: '#1e3e72',
+					backgroundColor: '#ab0613',
 					foregroundColor: '#ffffff',
 				},
 			},
@@ -82,9 +82,9 @@ const campaigns: Record<string, CampaignSettings> = {
 			headingFragment: <>Protect </>,
 			subheading: (
 				<>
-					We're not owned by a billionaire or shareholders - our readers support
-					us. Can you help us reach our goal? Monthly giving is most valuable to
-					us. <strong>You can cancel anytime.</strong>
+					We're not owned by a billionaire or shareholders: our fiercely
+					independent journalism is funded by our readers. Monthly giving makes
+					the most impact. <strong>You can cancel anytime.</strong>
 				</>
 			),
 			oneTimeHeading: <>Choose your gift amount</>,

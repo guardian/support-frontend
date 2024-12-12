@@ -30,6 +30,12 @@ When the tests are run from the github action these are made available via githu
 
 Once the tests have been run (either via the github action or by yourself locally) you can view the results in the [Browserstack Automate dashboard](https://automate.browserstack.com/dashboard). Note again you will have to log in with your Browserstack account that has Automate access.
 
+### Type checking the tests
+
+```
+$ yarn tsc
+```
+
 ### Possible future work
 
 It would be nice to use Playwright for integration tests as well as E2E tests. Possibly we could split out the `test` directory into `e2e` and `integration` directories and modify the `testDir` config property in the Playwright config files to reflect whether you are running E2E or integration tests.
