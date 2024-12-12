@@ -20,7 +20,7 @@
 	"dependencies": {
 		"@playwright/test": "1.46.1",
 		"browserstack-local": "^1.5.5",
-		"nanoid": "3.1.31"
+		"nanoid": "3.3.8"
 	},
 	"devDependencies": {
 		"@guardian/prettier": "^8.0.0",
