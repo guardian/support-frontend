@@ -22,7 +22,6 @@ export function retryPaymentStatus(
 	promiseFunction: () => Promise<StatusResponse>,
 	pollMax: number = DEFAULT_MAX_POLLS,
 	pollInterval: number = DEFAULT_POLLING_INTERVAL_MILLIS,
-	onRetry?: (pollCount: number, pollTimeTotal: number) => void,
 ): Promise<StatusResponse> {
 	async function retryPollAndPromise(polls: number): Promise<StatusResponse> {
 		try {
@@ -36,9 +35,6 @@ export function retryPaymentStatus(
 			return result; // success or failure, exit
 		} catch (error) {
 			if (polls < pollMax) {
-				if (onRetry) {
-					onRetry(polls + 1, (polls + 1) * pollInterval); // optional retry notification
-				}
 				return retryPollAndPromise(polls + 1);
 			} else {
 				if (error instanceof StillPendingError) {
