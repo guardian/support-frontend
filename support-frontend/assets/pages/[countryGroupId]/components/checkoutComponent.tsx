@@ -182,12 +182,12 @@ const processPaymentWithRetries = async (
 
 const handlePaymentStatus = (
 	statusResponse: StatusResponse,
-): Promise<ProcessPaymentResponse> => {
+): ProcessPaymentResponse => {
 	const { status, failureReason } = statusResponse;
 	if (status === 'failure') {
-		return Promise.resolve({ status, failureReason });
+		return { status, failureReason };
 	} else {
-		return Promise.resolve({ status: 'success' }); // success or pending
+		return { status: 'success' }; // success or pending
 	}
 };
 
