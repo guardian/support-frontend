@@ -28,7 +28,7 @@ import {
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
 type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
-type ProductType = "Contribution" | "Paper" | "GuardianWeekly" | "SupporterPlus";
+type ProductType = "Contribution" | "Paper" | "GuardianWeekly" | "SupporterPlus" | "TierThree";
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -426,6 +426,26 @@ export class SupportWorkers extends GuStack {
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 96,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
+
+    new GuAlarm(this, `NoTierThreeAcquisitionInPeriodAlarm`, {
+      app,
+      actionsEnabled: isProd,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `URGENT 9-5 - ${this.stage} support-workers No successful Tier Three checkouts in 6h.`,
+      metric: new MathExpression({
+        label: "AllTierThreeConversions",
+        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+        usingMetrics: {
+          m1: this.buildPaymentSuccessMetric("Stripe", "TierThree", Duration.minutes(5)),
+          m2: this.buildPaymentSuccessMetric("DirectDebit", "TierThree", Duration.minutes(5)),
+          m3: this.buildPaymentSuccessMetric("PayPal", "TierThree", Duration.minutes(5)),
+        },
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: 72, // The number of 5 minute periods in 6 hours
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
