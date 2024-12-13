@@ -149,7 +149,13 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 }
 
 /**
- * This method retry's `pending` a maximum number of polls
+/**
+ * Attempt to submit a payment to the server. The response will be either `success`, `failure` or `pending`.
+ * If it is pending, we keep polling until we get either a success or failure response, or we reach the 
+ * maximum number of retries. Reaching the maximum number of retries is treated as a success, as we assume 
+ * that the job has been delayed, but will complete successfully in the future and if it doesn't, then the 
+ * user will be emailed.
+ */
  * then resolves to success (Zuora job queued for processing).
  * resolving on success or failure only.
  */
