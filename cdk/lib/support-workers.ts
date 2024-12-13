@@ -27,6 +27,9 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
+type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
+type ProductType = "Contribution" | "Paper" | "GuardianWeekly" | "SupporterPlus";
+
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
   s3Files: string[];
@@ -318,17 +321,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring paypal contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "PayPal",
-          ProductType: "Contribution",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("PayPal", "Contribution", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 4,
       treatMissingData: TreatMissingData.BREACHING,
@@ -340,17 +333,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring stripe contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "Stripe",
-          ProductType: "Contribution",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("Stripe", "Contribution", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 3,
       treatMissingData: TreatMissingData.BREACHING,
@@ -362,17 +345,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "DirectDebit",
-          ProductType: "Contribution",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("DirectDebit", "Contribution", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 16,
       treatMissingData: TreatMissingData.BREACHING,
@@ -384,17 +357,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "PayPal",
-          ProductType: "SupporterPlus",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("PayPal", "SupporterPlus", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 6,
       treatMissingData: TreatMissingData.BREACHING,
@@ -406,17 +369,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "Stripe",
-          ProductType: "SupporterPlus",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("Stripe", "SupporterPlus", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 3,
       treatMissingData: TreatMissingData.BREACHING,
@@ -428,17 +381,7 @@ export class SupportWorkers extends GuStack {
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
-      metric: new Metric({
-        metricName: "PaymentSuccess",
-        namespace: "support-frontend",
-        dimensionsMap: {
-          PaymentProvider: "DirectDebit",
-          ProductType: "SupporterPlus",
-          Stage: this.stage,
-        },
-        statistic: "Sum",
-        period: Duration.seconds(3600),
-      }),
+      metric: this.buildPaymentSuccessMetric("DirectDebit", "SupporterPlus", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 14,
       treatMissingData: TreatMissingData.BREACHING,
@@ -456,39 +399,9 @@ export class SupportWorkers extends GuStack {
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         label: "AllPaperConversions",
         usingMetrics: {
-          m1: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "Stripe",
-              ProductType: "Paper",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
-          m2: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "DirectDebit",
-              ProductType: "Paper",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
-          m3: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "PayPal",
-              ProductType: "Paper",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
+          m1: this.buildPaymentSuccessMetric("Stripe", "Paper", Duration.seconds(300)),
+          m2: this.buildPaymentSuccessMetric("DirectDebit", "Paper", Duration.seconds(300)),
+          m3: this.buildPaymentSuccessMetric("PayPal", "Paper", Duration.seconds(300)),
         },
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -506,39 +419,9 @@ export class SupportWorkers extends GuStack {
         label: "AllWeeklyConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
-          m1: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "Stripe",
-              ProductType: "GuardianWeekly",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
-          m2: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "DirectDebit",
-              ProductType: "GuardianWeekly",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
-          m3: new Metric({
-            metricName: "PaymentSuccess",
-            namespace: "support-frontend",
-            dimensionsMap: {
-              PaymentProvider: "PayPal",
-              ProductType: "GuardianWeekly",
-              Stage: this.stage,
-            },
-            statistic: "Sum",
-            period: Duration.seconds(300),
-          }),
+          m1: this.buildPaymentSuccessMetric("Stripe", "GuardianWeekly", Duration.seconds(300)),
+          m2: this.buildPaymentSuccessMetric("DirectDebit", "GuardianWeekly", Duration.seconds(300)),
+          m3: this.buildPaymentSuccessMetric("PayPal", "GuardianWeekly", Duration.seconds(300)),
         },
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -546,5 +429,19 @@ export class SupportWorkers extends GuStack {
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
+  }
+
+  buildPaymentSuccessMetric = (paymentProvider: PaymentProvider, productType: ProductType, period: Duration) => {
+    return new Metric({
+      metricName: "PaymentSuccess",
+      namespace: "support-frontend",
+      dimensionsMap: {
+        PaymentProvider: paymentProvider,
+        ProductType: productType,
+        Stage: this.stage,
+      },
+      statistic: "Sum",
+      period: period,
+    })
   }
 }
