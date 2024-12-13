@@ -166,7 +166,7 @@ const processPaymentWithRetries = async (
 ): Promise<ProcessPaymentResponse> => {
 	const { trackingUri, status } = statusResponse;
 	if (status === 'success' || status === 'failure') {
-		return processPayment(statusResponse);
+		return handlePaymentStatus(statusResponse);
 	}
 	const getTrackingStatus = () =>
 		fetch(trackingUri, {
@@ -176,11 +176,11 @@ const processPaymentWithRetries = async (
 		}).then((response) => response.json() as unknown as StatusResponse);
 
 	return retryPaymentStatus(getTrackingStatus).then((response) =>
-		processPayment(response),
+		handlePaymentStatus(response),
 	);
 };
 
-const processPayment = (
+const handlePaymentStatus = (
 	statusResponse: StatusResponse,
 ): Promise<ProcessPaymentResponse> => {
 	const { status, failureReason } = statusResponse;
