@@ -9,11 +9,20 @@ import { geoIds } from 'pages/geoIdConfig';
 setUpTrackingAndConsents();
 const appConfig = parseAppConfig(window.guardian);
 
-const Checkout = lazy(() => import('./checkout'));
-const OneTimeCheckout = lazy(() => import('./oneTimeCheckout'));
-const ThankYou = lazy(() => import('./thankYou'));
+const Checkout = lazy(
+	() => import(/* webpackChunkName: "checkout" */ './checkout'),
+);
+const OneTimeCheckout = lazy(
+	() => import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
+);
+const ThankYou = lazy(
+	() => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
+);
 const GuardianLightLanding = lazy(
-	() => import('./guardianLightLanding/guardianLightLanding'),
+	() =>
+		import(
+			/* webpackChunkName: "GuardianLightLanding" */ './guardianLightLanding/guardianLightLanding'
+		),
 );
 console.log('LazyRouter');
 
