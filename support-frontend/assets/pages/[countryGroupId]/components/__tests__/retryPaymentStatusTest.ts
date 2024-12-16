@@ -9,7 +9,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 0, 1);
+		const result = await retryPaymentStatus(getPaymentStatus);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -23,7 +23,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 0, 1);
+		const result = await retryPaymentStatus(getPaymentStatus);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
