@@ -131,6 +131,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { retryPaymentStatus } from './retryPaymentStatus';
 import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
@@ -148,8 +149,12 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 }
 
 /**
- * This method removes the `pending` state by retrying,
- * resolving on success or failure only.
+/**
+ * Attempt to submit a payment to the server. The response will be either `success`, `failure` or `pending`.
+ * If it is pending, we keep polling until we get either a success or failure response, or we reach the
+ * maximum number of retries. Reaching the maximum number of retries is treated as a success, as we assume
+ * that the job has been delayed, but will complete successfully in the future and if it doesn't, then the
+ * user will be emailed.
  */
 type ProcessPaymentResponse =
 	| { status: 'success' }
@@ -159,30 +164,34 @@ type CreateSubscriptionResponse = StatusResponse & {
 	userType: UserType;
 };
 
-const processPayment = async (
+const processPaymentWithRetries = async (
 	statusResponse: StatusResponse,
-	geoId: GeoId,
 ): Promise<ProcessPaymentResponse> => {
-	return new Promise((resolve) => {
-		const { trackingUri, status, failureReason } = statusResponse;
-		if (status === 'success') {
-			resolve({ status: 'success' });
-		} else if (status === 'failure') {
-			resolve({ status, failureReason });
-		} else {
-			setTimeout(() => {
-				void fetch(trackingUri, {
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				})
-					.then((response) => response.json())
-					.then((json) => {
-						resolve(processPayment(json as StatusResponse, geoId));
-					});
-			}, 1000);
-		}
-	});
+	const { trackingUri, status } = statusResponse;
+	if (status === 'success' || status === 'failure') {
+		return handlePaymentStatus(statusResponse);
+	}
+	const getTrackingStatus = () =>
+		fetch(trackingUri, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}).then((response) => response.json() as unknown as StatusResponse);
+
+	return retryPaymentStatus(getTrackingStatus).then((response) =>
+		handlePaymentStatus(response),
+	);
+};
+
+const handlePaymentStatus = (
+	statusResponse: StatusResponse,
+): ProcessPaymentResponse => {
+	const { status, failureReason } = statusResponse;
+	if (status === 'failure') {
+		return { status, failureReason };
+	} else {
+		return { status: 'success' }; // success or pending
+	}
 };
 
 type CheckoutComponentProps = {
@@ -579,6 +588,7 @@ export function CheckoutComponent({
 			};
 			setErrorMessage(undefined);
 			setErrorContext(undefined);
+
 			const createResponse = await fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
@@ -586,7 +596,6 @@ export function CheckoutComponent({
 					'Content-Type': 'application/json',
 				},
 			});
-
 			let processPaymentResponse: ProcessPaymentResponse;
 			let userType: UserType | undefined;
 
@@ -594,7 +603,9 @@ export function CheckoutComponent({
 				const statusResponse =
 					(await createResponse.json()) as CreateSubscriptionResponse;
 				userType = statusResponse.userType;
-				processPaymentResponse = await processPayment(statusResponse, geoId);
+				processPaymentResponse = await processPaymentWithRetries(
+					statusResponse,
+				);
 			} else {
 				const errorReason = (await createResponse.text()) as ErrorReason;
 				processPaymentResponse = {
