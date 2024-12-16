@@ -99,7 +99,6 @@ const feastBenefit = {
 const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	newsletterBenefit,
-	addFreeBenefit,
 	appBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
@@ -133,6 +132,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				{ strong: true, copy: 'All-access digital' },
 			],
 			benefits: [
+				addFreeBenefit,
 				{
 					copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
