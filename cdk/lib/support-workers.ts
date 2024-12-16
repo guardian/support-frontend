@@ -445,7 +445,7 @@ export class SupportWorkers extends GuStack {
         },
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 72, // The number of 5 minute periods in 6 hours
+      evaluationPeriods: 144, // The number of 5 minute periods in 12 hours
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
