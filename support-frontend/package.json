@@ -90,7 +90,7 @@
 		"@guardian/source": "8.0.0",
 		"@guardian/source-development-kitchen": "13.1.0",
 		"@guardian/support-service-lambdas": "guardian/support-service-lambdas#1b8f4f6be8e1e4e7f86572817ccc0ea36fc79a71",
-		"@guardian/tsconfig": "^0.2.0",
+		"@guardian/tsconfig": "^1.0.0",
 		"@reduxjs/toolkit": "^1.9.4",
 		"@sentry/browser": "^8.33.1",
 		"@stripe/react-stripe-js": "^2.7.3",
