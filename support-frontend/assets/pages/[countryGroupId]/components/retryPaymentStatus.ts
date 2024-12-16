@@ -4,16 +4,6 @@ import type { StatusResponse } from 'helpers/forms/paymentIntegrations/readerRev
 const DEFAULT_POLLING_INTERVAL_MILLIS = 3000;
 const DEFAULT_MAX_POLLS = 10;
 
-// corrects ES5 instanceOf error for retry mechanism
-// https://dev.to/dguo/how-to-fix-instanceof-not-working-for-custom-errors-in-typescript-4amp
-class StillPendingError extends Error {
-	constructor(message: string, public trackingUri: string) {
-		super(message);
-		Object.setPrototypeOf(this, StillPendingError.prototype);
-		this.trackingUri = trackingUri;
-	}
-}
-
 function timeOut(milliseconds: number | undefined): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -33,20 +23,15 @@ export function retryPaymentStatus(
 				if (polls < pollMax) {
 					return retryPollAndPromise(polls + 1); // retry on pending
 				} else if (result.status === 'pending') {
-					throw new StillPendingError(
-						'status finished pending',
-						result.trackingUri,
-					);
+					return { status: 'pending', trackingUri: result.trackingUri }; // final pending, exit
 				}
 			}
-			return result; // success, exit
+			return result; // success or final failure, exit
 		} catch (error) {
-			if (error instanceof StillPendingError) {
-				return { status: 'pending', trackingUri: error.trackingUri };
-			} else if (polls < pollMax) {
+			if (polls < pollMax) {
 				return retryPollAndPromise(polls + 1); // promise reject retry
 			}
-			throw error;
+			throw error; // reject, exit
 		}
 	}
 	return retryPollAndPromise(0);
