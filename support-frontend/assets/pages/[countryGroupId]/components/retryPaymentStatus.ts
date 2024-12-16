@@ -19,14 +19,14 @@ export function retryPaymentStatus(
 				await timeOut(pollInterval); // retry
 			}
 			const result = await promiseFunction();
-			if (result.status === 'pending' || result.status === 'failure') {
+			if (result.status === 'pending') {
 				if (polls < pollMax) {
 					return retryPollAndPromise(polls + 1); // retry on pending
-				} else if (result.status === 'pending') {
+				} else {
 					return { status: 'pending', trackingUri: result.trackingUri }; // final pending, exit
 				}
 			}
-			return result; // success or final failure, exit
+			return result; // success or failure, exit
 		} catch (error) {
 			if (polls < pollMax) {
 				return retryPollAndPromise(polls + 1); // promise reject retry

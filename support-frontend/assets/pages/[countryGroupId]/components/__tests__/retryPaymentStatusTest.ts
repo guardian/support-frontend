@@ -70,7 +70,7 @@ describe('retryPaymentStatus', () => {
 		expect(getPaymentStatus).toHaveBeenCalledTimes(3);
 	});
 
-	it('retries failed promises until the retry limit is reached', async () => {
+	it('retries rejected promises until the retry limit is reached', async () => {
 		const getPaymentStatus = jest
 			.fn()
 			.mockImplementation(() => Promise.reject('error'));
@@ -81,7 +81,7 @@ describe('retryPaymentStatus', () => {
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
 	});
 
-	it('retries failed promises until it succeeds', async () => {
+	it('retries rejected promises until it succeeds', async () => {
 		const finalStatus: StatusResponse = {
 			status: 'success',
 			trackingUri: 'https://support/status',
