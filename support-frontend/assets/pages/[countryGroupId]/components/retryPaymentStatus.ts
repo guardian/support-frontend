@@ -23,26 +23,33 @@ export function retryPaymentStatus(
 	pollMax: number = DEFAULT_MAX_POLLS,
 	pollInterval: number = DEFAULT_POLLING_INTERVAL_MILLIS,
 ): Promise<StatusResponse> {
-	async function retryPollAndPromise(polls: number): Promise<StatusResponse> {
+	async function retryPollAndPromiseNew2(
+		polls: number,
+	): Promise<StatusResponse> {
 		try {
 			if (polls > 0) {
 				await timeOut(pollInterval); // retry
 			}
 			const result = await promiseFunction();
-			if (result.status === 'pending') {
-				throw new StillPendingError('status is pending', result.trackingUri); // retry on pending
-			}
-			return result; // success or failure, exit
-		} catch (error) {
-			if (polls < pollMax) {
-				return retryPollAndPromise(polls + 1);
-			} else {
-				if (error instanceof StillPendingError) {
-					return { status: 'pending', trackingUri: error.trackingUri };
+			if (result.status === 'pending' || result.status === 'failure') {
+				if (polls < pollMax - 1) {
+					return retryPollAndPromiseNew2(polls + 1); // retry on pending
+				} else if (result.status === 'pending') {
+					throw new StillPendingError(
+						'status finished pending',
+						result.trackingUri,
+					);
 				}
-				throw error;
 			}
+			return result; // success, exit
+		} catch (error) {
+			if (error instanceof StillPendingError) {
+				return { status: 'pending', trackingUri: error.trackingUri };
+			} else if (polls < pollMax - 1) {
+				return retryPollAndPromiseNew2(polls + 1); // promise reject retry
+			}
+			throw error;
 		}
 	}
-	return retryPollAndPromise(0);
+	return retryPollAndPromiseNew2(0);
 }
