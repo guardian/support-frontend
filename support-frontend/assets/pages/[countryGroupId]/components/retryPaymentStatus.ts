@@ -30,7 +30,7 @@ export function retryPaymentStatus(
 			}
 			const result = await promiseFunction();
 			if (result.status === 'pending' || result.status === 'failure') {
-				if (polls < pollMax - 1) {
+				if (polls < pollMax) {
 					return retryPollAndPromise(polls + 1); // retry on pending
 				} else if (result.status === 'pending') {
 					throw new StillPendingError(
@@ -43,7 +43,7 @@ export function retryPaymentStatus(
 		} catch (error) {
 			if (error instanceof StillPendingError) {
 				return { status: 'pending', trackingUri: error.trackingUri };
-			} else if (polls < pollMax - 1) {
+			} else if (polls < pollMax) {
 				return retryPollAndPromise(polls + 1); // promise reject retry
 			}
 			throw error;

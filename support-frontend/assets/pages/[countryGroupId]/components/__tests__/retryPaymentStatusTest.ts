@@ -9,7 +9,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 1, 1);
+		const result = await retryPaymentStatus(getPaymentStatus, 0, 1);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -23,7 +23,7 @@ describe('retryPaymentStatus', () => {
 		};
 		const getPaymentStatus = jest.fn(() => Promise.resolve(status));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 1, 1);
+		const result = await retryPaymentStatus(getPaymentStatus, 0, 1);
 
 		expect(result).toEqual(status);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(1);
@@ -43,7 +43,7 @@ describe('retryPaymentStatus', () => {
 			.mockImplementationOnce(() => Promise.resolve(initialStatus))
 			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 2, 1);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 1);
 
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
@@ -64,7 +64,7 @@ describe('retryPaymentStatus', () => {
 			.mockImplementationOnce(() => Promise.resolve(pendingStatus))
 			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 3, 1);
+		const result = await retryPaymentStatus(getPaymentStatus, 2, 1);
 
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(3);
@@ -75,7 +75,7 @@ describe('retryPaymentStatus', () => {
 			.fn()
 			.mockImplementation(() => Promise.reject('error'));
 
-		const fn = () => retryPaymentStatus(getPaymentStatus, 2, 1);
+		const fn = () => retryPaymentStatus(getPaymentStatus, 1, 1);
 
 		await expect(fn()).rejects.toMatch('error');
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
@@ -91,7 +91,7 @@ describe('retryPaymentStatus', () => {
 			.mockImplementationOnce(() => Promise.reject('error'))
 			.mockImplementationOnce(() => Promise.resolve(finalStatus));
 
-		const result = await retryPaymentStatus(getPaymentStatus, 2, 1);
+		const result = await retryPaymentStatus(getPaymentStatus, 1, 1);
 
 		expect(result).toEqual(finalStatus);
 		expect(getPaymentStatus).toHaveBeenCalledTimes(2);
