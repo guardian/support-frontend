@@ -431,7 +431,7 @@ export class SupportWorkers extends GuStack {
     }).node.addDependency(stateMachine);
 
     const tierThreeMetricDuration = Duration.minutes(5);
-    const tierThreeEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
+    const tierThreeEvaluationPeriods = 288; // The number of 5 minute periods in 24 hours
     const tierThreeAlarmPeriod = Duration.minutes(
       tierThreeMetricDuration.toMinutes() * tierThreeEvaluationPeriods
     );
