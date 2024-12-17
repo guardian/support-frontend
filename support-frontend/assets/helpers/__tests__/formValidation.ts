@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import {
 	amountOrOtherAmountIsValid,
+	isNotTooFarInTheFuture,
 	maxTwoDecimals,
 	notLongerThan,
 } from '../forms/formValidation';
@@ -104,6 +105,43 @@ describe('formValidation', () => {
 		});
 		it('should return true if string is under max length', () => {
 			expect(notLongerThan('hello world', 20)).toBeTruthy();
+		});
+	});
+
+	describe('isNotTooFarInFuture', () => {
+		it('returns true if the date is less than 89 days from now', () => {
+			const now = new Date(2024, 0, 1); // 1st Jan 2024
+			const oneDayFromNow = new Date(2024, 0, 2); // 2nd Jan 2024
+
+			expect(isNotTooFarInTheFuture(oneDayFromNow, now)).toEqual(true);
+		});
+
+		it('returns true if the date is exactly 89 days from now', () => {
+			const now = new Date(2024, 0, 1); // 1st Jan 2024
+			const eightyNineDaysFromNow = new Date(2024, 2, 30); // 30th Mar 2024
+
+			expect(isNotTooFarInTheFuture(eightyNineDaysFromNow, now)).toEqual(true);
+		});
+
+		it('returns true if the date is exactly 89 days from now, even at a later time in the day', () => {
+			const now = new Date(2024, 0, 1, 0, 0, 0); // 1st Jan 2024
+			const eightyNineDaysFromNow = new Date(2024, 2, 30, 1, 0, 0); // 30th Mar 2024
+
+			expect(isNotTooFarInTheFuture(eightyNineDaysFromNow, now)).toEqual(true);
+		});
+
+		it('returns false if the date is 1 day more than 89 days from now', () => {
+			const now = new Date(2024, 0, 1); // 1st Jan 2024
+			const ninetyDaysFromNow = new Date(2024, 2, 31); // 31st Mar 2024
+
+			expect(isNotTooFarInTheFuture(ninetyDaysFromNow, now)).toEqual(false);
+		});
+
+		it('returns false if the date is many days more than 89 days from now', () => {
+			const now = new Date(2024, 0, 1); // 1st Jan 2024
+			const manyDaysFromNow = new Date(2024, 12, 1); // 1st Dec 2024
+
+			expect(isNotTooFarInTheFuture(manyDaysFromNow, now)).toEqual(false);
 		});
 	});
 });

@@ -23,8 +23,11 @@ export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
-export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
-	const rangeDate = new Date();
+export const isNotTooFarInTheFuture = (
+	date: Date,
+	now: Date = new Date(),
+): boolean => {
+	const rangeDate = new Date(now.getTime());
 	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
 
 	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
