@@ -1661,7 +1661,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "URGENT 9-5 - PROD support-workers No successful Tier Three checkouts in 6h.",
+        "AlarmName": "URGENT 9-5 - PROD support-workers No successful Tier Three checkouts in 12 hours.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "EvaluationPeriods": 144,
         "Metrics": [
