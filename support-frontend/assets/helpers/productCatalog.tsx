@@ -88,7 +88,10 @@ const partnerOffersBenefit = {
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
 };
-
+const guardianWeeklyBenefit = {
+	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+};
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
@@ -131,13 +134,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				'The rewards from ',
 				{ strong: true, copy: 'All-access digital' },
 			],
-			benefits: [
-				addFreeBenefit,
-				{
-					copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-				},
-			],
+			benefits: [addFreeBenefit, guardianWeeklyBenefit],
 			/** These are just the SupporterPlus benefits */
 			benefitsAdditional: supporterPlusBenefits,
 			deliverableTo: gwDeliverableCountries,
