@@ -212,7 +212,9 @@ const ProductCatalogSchema = object({
 							id: string(),
 						}),
 					),
-					billingPeriod: optional(picklist(['Quarter', 'Month', 'Annual'])),
+					billingPeriod: optional(
+						picklist(['Quarter', 'Month', 'Annual', 'OneTime']),
+					),
 				}),
 			),
 		}),
