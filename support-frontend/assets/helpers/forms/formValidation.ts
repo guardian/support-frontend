@@ -1,4 +1,3 @@
-import { DateUtils } from 'react-day-picker';
 import { config } from 'helpers/contributions';
 import type {
 	ContributionType,
@@ -28,10 +27,9 @@ export const isNotTooFarInTheFuture = (
 	now: Date = new Date(),
 ): boolean => {
 	const rangeDate = new Date(now.getTime());
-	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
+	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift + 1);
 
-	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
-	return dateIsInsideRange;
+	return date < rangeDate;
 };
 
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
