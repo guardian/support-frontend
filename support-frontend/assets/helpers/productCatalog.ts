@@ -55,6 +55,12 @@ export function filterBenefitByABTest(
 	benefit: ProductBenefit,
 	participations?: Participations,
 ) {
+	console.log(
+		'TEST filterBenefitByABTest -> benefit=',
+		benefit,
+		' particaption=',
+		participations,
+	);
 	if (participations && benefit.specificToAbTest !== undefined) {
 		return benefit.specificToAbTest.some(({ name, variants }) =>
 			participations[name]
@@ -74,7 +80,14 @@ const appBenefit = {
 	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
-const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
+const addFreeBenefit = {
+	copy: 'Ad-free reading on all your devices',
+	specificToAbTest: [{ name: 'adFreeTierThree', variants: ['control'] }],
+};
+const addFreeBenefitTierThree = {
+	copy: 'Ad-free reading on all your devices',
+	specificToAbTest: [{ name: 'adFreeTierThree', variants: ['variant'] }],
+};
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
@@ -102,6 +115,7 @@ const feastBenefit = {
 const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	newsletterBenefit,
+	addFreeBenefit,
 	appBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
@@ -134,7 +148,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				'The rewards from ',
 				{ strong: true, copy: 'All-access digital' },
 			],
-			benefits: [addFreeBenefit, guardianWeeklyBenefit],
+			benefits: [addFreeBenefitTierThree, guardianWeeklyBenefit],
 			/** These are just the SupporterPlus benefits */
 			benefitsAdditional: supporterPlusBenefits,
 			deliverableTo: gwDeliverableCountries,
