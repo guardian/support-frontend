@@ -6,8 +6,6 @@ import type {
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-const daysFromNowForGift = 89;
-
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
 // src/main/scala/play/api/data/validation/Validation.scala#L81
@@ -21,16 +19,6 @@ export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 
 export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
-
-export const isNotTooFarInTheFuture = (
-	date: Date,
-	now: Date = new Date(),
-): boolean => {
-	const rangeDate = new Date(now.getTime());
-	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift + 1);
-
-	return date < rangeDate;
-};
 
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 	!!input && new RegExp(emailRegexPattern).test(input);
@@ -75,17 +63,6 @@ export const emailAddressesMatch: (
 
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
-
-export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
-	rawDate,
-) => {
-	const date = rawDate ? new Date(rawDate) : null;
-
-	if (isNotEmpty(rawDate) && date) {
-		return isNotTooFarInTheFuture(date);
-	}
-	return false;
-};
 
 export const amountIsValid = (
 	input: string,
