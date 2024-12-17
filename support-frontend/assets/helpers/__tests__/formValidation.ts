@@ -108,7 +108,7 @@ describe('formValidation', () => {
 		});
 	});
 
-	describe('isNotTooFarInFuture', () => {
+	describe('isNotTooFarInTheFuture', () => {
 		it('returns true if the date is less than 89 days from now', () => {
 			const now = new Date(2024, 0, 1); // 1st Jan 2024
 			const oneDayFromNow = new Date(2024, 0, 2); // 2nd Jan 2024
