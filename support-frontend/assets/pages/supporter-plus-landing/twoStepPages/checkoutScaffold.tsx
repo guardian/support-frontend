@@ -43,7 +43,6 @@ import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
-import { PatronsMessage } from '../components/patronsMessage';
 
 const checkoutContainer = (isPaymentPage?: boolean) => {
 	type SpaceRange = 2 | 3 | 6;
@@ -310,12 +309,6 @@ export function SupporterPlusCheckoutScaffold({
 						)}
 						{children}
 
-						{!displayPatronsCheckout && (
-							<PatronsMessage
-								countryGroupId={countryGroupId}
-								mobileTheme={'light'}
-							/>
-						)}
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={displayPatronsCheckout}
