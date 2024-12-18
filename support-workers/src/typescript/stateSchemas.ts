@@ -1,4 +1,11 @@
 import { z } from 'zod';
+import { addressSchema } from './model/address';
+import {
+	paymentFieldsSchema,
+	paymentProviderSchema,
+} from './model/paymentFields';
+import { paymentMethodSchema } from './model/paymentMethod';
+import { productTypeSchema } from './model/productType';
 
 export const titleSchema = z.union([
 	z.literal('Mr'),
@@ -10,15 +17,6 @@ export const titleSchema = z.union([
 	z.literal('Prof'),
 	z.literal('Rev'),
 ]);
-
-export const addressSchema = z.object({
-	lineOne: z.string().nullable(),
-	lineTwo: z.string().nullable(),
-	city: z.string().nullable(),
-	state: z.string().nullable(),
-	postCode: z.string().nullable(),
-	country: z.string(), //TODO: build a schema for this
-});
 
 export const userSchema = z.object({
 	id: z.string(),
@@ -32,150 +30,12 @@ export const userSchema = z.object({
 	isTestUser: z.boolean().default(false),
 	deliveryInstructions: z.string().nullable(),
 });
-
-export const currencySchema = z.union([
-	z.literal('GBP'),
-	z.literal('EUR'),
-	z.literal('USD'),
-	z.literal('CAD'),
-	z.literal('AUD'),
-	z.literal('NZD'),
-]);
-
-export const billingPeriodSchema = z.union([
-	z.literal('Monthly'), //TODO: share this with support-frontend
-	z.literal('Annual'),
-	z.literal('Quarterly'),
-]);
-
-export const contributionProductSchema = z.object({
-	amount: z.number(),
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	productType: z.literal('Contribution'),
-});
-
-export const supporterPlusProductSchema = z.object({
-	amount: z.number(),
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	productType: z.literal('SupporterPlus'),
-});
-
-export const tierThreeProductSchema = z.object({
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	fulfilmentOptions: z.string(), //TODO type this properly
-	productOptions: z.string(), //TODO type this properly
-	productType: z.literal('TierThree'),
-});
-
-export const paperProductSchema = z.object({
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	fulfilmentOptions: z.string(), //TODO type this properly
-	productOptions: z.string(), //TODO type this properly
-	productType: z.literal('Paper'),
-});
-
-export const guardianWeeklyProductSchema = z.object({
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	fulfilmentOptions: z.string(), //TODO type this properly
-	productType: z.literal('GuardianWeekly'),
-});
-
-export const digitalPackProductSchema = z.object({
-	currency: currencySchema,
-	billingPeriod: billingPeriodSchema,
-	readerType: z.string(), //TODO type this properly
-	productType: z.literal('DigitalPack'),
-});
-
-export const productTypeSchema = z.discriminatedUnion('productType', [
-	contributionProductSchema,
-	supporterPlusProductSchema,
-	tierThreeProductSchema,
-	guardianWeeklyProductSchema,
-	paperProductSchema,
-	digitalPackProductSchema,
-]);
-
-const stripePaymentProviderSchema = z.literal('Stripe');
-const payPalPaymentProviderSchema = z.literal('PayPal');
-const directDebitPaymentProviderSchema = z.literal('DirectDebit');
-const sepapaymentProviderSchema = z.literal('Sepa');
-const existingPaymentProviderSchema = z.literal('Existing');
-
-const paymentProviderSchema = z.union([
-	stripePaymentProviderSchema,
-	z.literal('StripeApplePay'),
-	z.literal('StripePaymentRequestButton'),
-	payPalPaymentProviderSchema,
-	directDebitPaymentProviderSchema,
-	sepapaymentProviderSchema,
-	existingPaymentProviderSchema,
-]);
+export type User = z.infer<typeof userSchema>;
 
 export const analyticsInfoSchema = z.object({
 	isGiftPurchase: z.boolean(),
 	paymentProvider: paymentProviderSchema,
 });
-
-const payPalPaymentFieldsSchema = z.object({
-	paymentType: payPalPaymentProviderSchema,
-	baid: z.string(),
-});
-
-const stripePaymentTypeSchema = z.union([
-	z.literal('StripePaymentRequestButton'),
-	z.literal('StripeApplePay'),
-	z.literal('StripeCheckout'),
-]);
-
-const stripePaymentFieldsSchema = z.object({
-	paymentType: stripePaymentProviderSchema,
-	paymentMethod: z.string(),
-	stripePaymentType: stripePaymentTypeSchema, //TODO: this was optional in scala model
-	stripePublicKey: z.string(), //TODO: this has more validation in scala model
-});
-
-export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
-
-const directDebitPaymentFieldsSchema = z.object({
-	paymentType: directDebitPaymentProviderSchema,
-	accountHolderName: z.string(),
-	sortCode: z.string(),
-	accountNumber: z.string(),
-	recaptchaToken: z.string(),
-});
-
-export type DirectDebitPaymentFields = z.infer<
-	typeof directDebitPaymentFieldsSchema
->;
-
-const sepaPaymentFieldsSchema = z.object({
-	paymentType: sepapaymentProviderSchema,
-	accountHolderName: z.string(),
-	iban: z.string(),
-	country: z.string().nullable(),
-	streetName: z.string().nullable(),
-});
-
-const existingPaymentFieldsSchema = z.object({
-	paymentType: existingPaymentProviderSchema,
-	billingAccountId: z.string(),
-});
-
-const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
-	payPalPaymentFieldsSchema,
-	stripePaymentFieldsSchema,
-	directDebitPaymentFieldsSchema,
-	sepaPaymentFieldsSchema,
-	existingPaymentFieldsSchema,
-]);
-
-export type PaymentFields = z.infer<typeof paymentFieldsSchema>;
 
 const ophanIdsSchema = z.object({
 	pageviewId: z.string().nullable(),
@@ -243,67 +103,6 @@ export const createPaymentMethodStateSchema = baseStateSchema.merge(
 export type CreatePaymentMethodState = z.infer<
 	typeof createPaymentMethodStateSchema
 >;
-
-const stripePaymentGatewaySchema = z.union([
-	z.literal('Stripe Gateway 1'), //TODO: are all of these still used?
-	z.literal('Stripe Gateway GNM Membership AUS'),
-	z.literal('Stripe PaymentIntents GNM Membership'),
-	z.literal('Stripe PaymentIntents GNM Membership AUS'),
-	z.literal('Stripe Bank Transfer - GNM Membership'),
-]);
-const directDebitPaymentGatewaySchema = z.literal('GoCardless');
-export const paymentGatewaySchema = z
-	.union([
-		z.literal('PayPal Express'),
-		directDebitPaymentGatewaySchema,
-		// z.literal("GoCardless - Zuora Instance"), TODO: I think we can delete this
-		z.literal('Amazon Pay - Contributions USA'),
-	])
-	.or(stripePaymentGatewaySchema);
-
-const payPalPaymentPaymentMethodSchema = z.object({
-	PaypalBaid: z.string(),
-	PaypalEmail: z.string(),
-	PaypalType: z.literal('ExpressCheckout'),
-	Type: z.literal('PayPal'),
-	PaymentGateway: z.literal('PayPal Express'),
-});
-
-const stripePaymentMethodSchema = z.object({
-	TokenId: z.string(), // Stripe Card id
-	SecondTokenId: z.string(), // Stripe Customer Id
-	CreditCardNumber: z.string(),
-	CreditCardCountry: z.string(), //TODO: build a schema for this
-	CreditCardExpirationMonth: z.number(),
-	CreditCardExpirationYear: z.number(),
-	CreditCardType: z.string().optional(),
-	PaymentGateway: stripePaymentGatewaySchema,
-	Type: z.literal('CreditCardReferenceTransaction'),
-	StripePaymentType: stripePaymentTypeSchema, //TODO: this is optional in the scala model
-});
-
-const directDebitPaymentMethodSchema = z.object({
-	FirstName: z.string(),
-	LastName: z.string(),
-	BankTransferAccountName: z.string(),
-	BankCode: z.string(),
-	BankTransferAccountNumber: z.string(),
-	Country: z.string(), //TODO: build a schema for this
-	City: z.string().optional(),
-	PostalCode: z.string().optional(),
-	State: z.string().optional(),
-	StreetName: z.string().optional(),
-	StreetNumber: z.string().optional(),
-	BankTransferType: z.literal('DirectDebitUK'),
-	Type: z.literal('BankTransfer'),
-	PaymentGateway: directDebitPaymentGatewaySchema,
-});
-
-const paymentMethodSchema = z.discriminatedUnion('Type', [
-	payPalPaymentPaymentMethodSchema,
-	stripePaymentMethodSchema,
-	directDebitPaymentMethodSchema,
-]);
 
 export const createSalesforceContactStateSchema = baseStateSchema.merge(
 	z.object({

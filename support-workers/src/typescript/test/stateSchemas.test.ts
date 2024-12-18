@@ -1,8 +1,8 @@
 import type {
-	CreatePaymentMethodState,
 	DirectDebitPaymentFields,
 	StripePaymentFields,
-} from '../stateSchemas';
+} from '../model/paymentFields';
+import type { CreatePaymentMethodState } from '../stateSchemas';
 import {
 	createPaymentMethodStateSchema,
 	createSalesforceContactStateSchema,
