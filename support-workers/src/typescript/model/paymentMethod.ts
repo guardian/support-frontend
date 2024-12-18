@@ -1,0 +1,99 @@
+import { z } from 'zod';
+import { stripePaymentTypeSchema } from './paymentFields';
+// Payment methods are the activated payment details which are passed into Zuora as opposed to
+// payment fields which are the details entered by the user into the checkout
+
+const stripePaymentGatewaySchema = z.union([
+	z.literal('Stripe Gateway 1'), //TODO: are all of these still used?
+	z.literal('Stripe Gateway GNM Membership AUS'),
+	z.literal('Stripe PaymentIntents GNM Membership'),
+	z.literal('Stripe PaymentIntents GNM Membership AUS'),
+	z.literal('Stripe Bank Transfer - GNM Membership'),
+]);
+
+const directDebitPaymentGatewaySchema = z.literal('GoCardless');
+
+export const paymentGatewaySchema = z
+	.union([
+		z.literal('PayPal Express'),
+		directDebitPaymentGatewaySchema,
+		// z.literal("GoCardless - Zuora Instance"), TODO: I think we can delete this
+		z.literal('Amazon Pay - Contributions USA'),
+	])
+	.or(stripePaymentGatewaySchema);
+
+const payPalPaymentPaymentMethodSchema = z.object({
+	PaypalBaid: z.string(),
+	PaypalEmail: z.string(),
+	PaypalType: z.literal('ExpressCheckout'),
+	Type: z.literal('PayPal'),
+	PaymentGateway: z.literal('PayPal Express'),
+});
+export type PayPalPaymentMethod = z.infer<
+	typeof payPalPaymentPaymentMethodSchema
+>;
+
+const stripePaymentMethodSchema = z.object({
+	TokenId: z.string(), // Stripe Card id
+	SecondTokenId: z.string(), // Stripe Customer Id
+	CreditCardNumber: z.string(),
+	CreditCardCountry: z.string(), //TODO: build a schema for this
+	CreditCardExpirationMonth: z.number(),
+	CreditCardExpirationYear: z.number(),
+	CreditCardType: z.string().optional(),
+	PaymentGateway: stripePaymentGatewaySchema,
+	Type: z.literal('CreditCardReferenceTransaction'),
+	StripePaymentType: stripePaymentTypeSchema, //TODO: this is optional in the scala model
+});
+export type StripePaymentMethod = z.infer<typeof stripePaymentMethodSchema>;
+
+const directDebitPaymentMethodSchema = z.object({
+	FirstName: z.string(),
+	LastName: z.string(),
+	BankTransferAccountName: z.string(),
+	BankCode: z.string(),
+	BankTransferAccountNumber: z.string(),
+	Country: z.string(), //TODO: build a schema for this
+	City: z.string().nullable(),
+	PostalCode: z.string().nullable(),
+	State: z.string().nullable(),
+	StreetName: z.string().nullable(),
+	StreetNumber: z.string().nullable(),
+	BankTransferType: z.literal('DirectDebitUK'),
+	Type: z.literal('BankTransfer'),
+	PaymentGateway: directDebitPaymentGatewaySchema,
+});
+export type DirectDebitPaymentMethod = z.infer<
+	typeof directDebitPaymentMethodSchema
+>;
+
+const gatewayOptionDataSchema = z.object({
+	GatewayOption: z.array(
+		z.object({
+			name: z.literal('UserAgent'),
+			value: z.string().max(255),
+		}),
+	),
+});
+
+export const sepaPaymentMethodSchema = z.object({
+	BankTransferAccountName: z.string(),
+	BankTransferAccountNumber: z.string(),
+	Email: z.string(),
+	IPAddress: z.string(),
+	GatewayOptionData: gatewayOptionDataSchema,
+	BankTransferType: z.literal('SEPA'),
+	Type: z.literal('BankTransfer'),
+	PaymentGateway: z.literal('Stripe Bank Transfer - GNM Membership'),
+	Country: z.string().nullable(),
+	StreetName: z.string().nullable(),
+});
+export type SepaPaymentMethod = z.infer<typeof sepaPaymentMethodSchema>;
+
+export const paymentMethodSchema = z.discriminatedUnion('Type', [
+	payPalPaymentPaymentMethodSchema,
+	stripePaymentMethodSchema,
+	directDebitPaymentMethodSchema,
+	sepaPaymentMethodSchema,
+]);
+export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
