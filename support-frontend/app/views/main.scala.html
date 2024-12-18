@@ -58,6 +58,8 @@
       <meta property="og:url" content="@shareUrl" />
     }
 
+    <link href="@assets(mainJsBundle)" rel="preload" as="script">
+
     @canonicalLink.map { definedCanonicalLink =>
       <link rel="canonical" href="@definedCanonicalLink" />
     }

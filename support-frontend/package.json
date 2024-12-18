@@ -18,7 +18,7 @@
 		"devrun": "NODE_ENV=DEV npm-run-all clean webpack-dev-server",
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
-    "knip": "knip --include files,exports,nsExports,types,nsTypes",
+		"knip": "knip --include files,exports,nsExports,types,nsTypes",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"paparazzi": "paparazzi && open ./paparazzi",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
@@ -26,7 +26,8 @@
 		"prettier:fix": "prettier --write ./assets",
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
-		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+		"update-support-service-lambdas": "rm -rf node_modules && yarn cache clean @guardian/support-service-lambdas && yarn install"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
@@ -182,7 +183,7 @@
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-environment-jsdom-global": "^4.0.0",
 		"json-sass-vars": "^3.1.0",
-		"knip": "^5.39.2",
+		"knip": "^5.40.0",
 		"lint-staged": "^15.2.0",
 		"mini-css-extract-plugin": "^2.6.0",
 		"npm-run-all": "^4.1.3",
