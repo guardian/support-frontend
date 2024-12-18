@@ -55,6 +55,14 @@ export function filterBenefitByRegion(
 	return true;
 }
 
+export function filterBenefitByABTest(
+	benefit: ProductBenefit,
+	participations?: Participations,
+) {
+	return benefit.specificToAbTest
+		? displayBenefitByABTestAndVariant(benefit.specificToAbTest, participations)
+		: true; // no abtests, default display benefit
+}
 function displayBenefitByABTestAndVariant(
 	displayOnAbTest: Array<{
 		name: string;
@@ -66,19 +74,12 @@ function displayBenefitByABTestAndVariant(
 	return displayOnAbTest.some(
 		({ name, variants, display }) =>
 			participations[name]
-				? display
-					? variants.includes(participations[name]) // abtest variant, display show
-					: !variants.includes(participations[name]) // abtest variant, display hide
+				? abTestVariantDisplay(variants.includes(participations[name]), display)
 				: !display, // abtest not found, display opposite
 	);
 }
-export function filterBenefitByABTest(
-	benefit: ProductBenefit,
-	participations?: Participations,
-) {
-	return benefit.specificToAbTest
-		? displayBenefitByABTestAndVariant(benefit.specificToAbTest, participations)
-		: true; // No abtests, default display benefit
+function abTestVariantDisplay(variantFound: boolean, display: boolean) {
+	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
 export const productKeys = Object.keys(typeObject) as ProductKey[];
