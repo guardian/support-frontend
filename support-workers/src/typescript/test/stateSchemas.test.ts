@@ -56,7 +56,7 @@ test('createPaymentMethodSchema works with real inputs', () => {
 	expect(ddPaymentFields.accountNumber).toBe('00000000');
 });
 
-test('createSalesforceContactSchema works with real inputs', async () => {
+test('createSalesforceContactSchema works with real inputs', () => {
 	const contribution = createSalesforceContactStateSchema.parse(
 		createSalesforceContactContribution,
 	);
