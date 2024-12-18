@@ -60,10 +60,10 @@ export function filterBenefitByABTest(
 	participations?: Participations,
 ) {
 	return benefit.specificToAbTest
-		? displayBenefitByABTestAndVariant(benefit.specificToAbTest, participations)
+		? displayBenefitByABTest(benefit.specificToAbTest, participations)
 		: true; // no abtests, default display benefit
 }
-function displayBenefitByABTestAndVariant(
+function displayBenefitByABTest(
 	displayOnAbTest: Array<{
 		name: string;
 		variants: string[];
@@ -74,14 +74,17 @@ function displayBenefitByABTestAndVariant(
 	return displayOnAbTest.some(
 		({ name, variants, display }) =>
 			participations[name]
-				? abTestVariantDisplay(
+				? displayBenefitByABTestVariant(
 						variants.includes(participations[name] ?? ''), // Participations used throughout typed as { string : string | undefined }
 						display,
 				  )
 				: !display, // abtest not found, display opposite
 	);
 }
-function abTestVariantDisplay(variantFound: boolean, display: boolean) {
+function displayBenefitByABTestVariant(
+	variantFound: boolean,
+	display: boolean,
+) {
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
