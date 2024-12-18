@@ -17,6 +17,7 @@ type ProductBenefit = {
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{ name: string; variants: string[] }>;
+	hideOnAbTest?: Array<{ name: string; variants: string[] }>;
 	isNew?: boolean;
 	hideBullet?: boolean;
 };
@@ -51,7 +52,7 @@ export function filterBenefitByRegion(
 	return true;
 }
 
-export function filterBenefitByABTest(
+function includeBenefitByABTest(
 	benefit: ProductBenefit,
 	participations?: Participations,
 ) {
@@ -65,6 +66,29 @@ export function filterBenefitByABTest(
 	return true;
 }
 
+function excludeBenefitByABTest(
+	benefit: ProductBenefit,
+	participations?: Participations,
+) {
+	if (participations && benefit.hideOnAbTest !== undefined) {
+		return benefit.hideOnAbTest.some(({ name, variants }) =>
+			participations[name]
+				? !variants.includes(participations[name] ?? '')
+				: true,
+		);
+	}
+	return true;
+}
+
+export function filterBenefitByABTest(
+	benefit: ProductBenefit,
+	participations?: Participations,
+) {
+	const includeByAbTest = includeBenefitByABTest(benefit, participations);
+	const excludeByABTest = excludeBenefitByABTest(benefit, participations);
+	return includeByAbTest && excludeByABTest;
+}
+
 export const productKeys = Object.keys(typeObject) as ProductKey[];
 export function isProductKey(val: unknown): val is ProductKey {
 	return productKeys.includes(val as ProductKey);
@@ -76,7 +100,7 @@ const appBenefit = {
 };
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [{ name: 'adFreeTierThree', variants: ['control'] }],
+	hideOnAbTest: [{ name: 'adFreeTierThree', variants: ['variant'] }],
 };
 const addFreeBenefitTierThree = {
 	copy: 'Ad-free reading on all your devices',
