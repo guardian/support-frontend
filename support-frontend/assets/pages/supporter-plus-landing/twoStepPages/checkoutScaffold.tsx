@@ -312,6 +312,7 @@ export function SupporterPlusCheckoutScaffold({
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={displayPatronsCheckout}
+							spacing={displayPatronsCheckout ? 'tight' : 'loose'}
 						/>
 					</Column>
 				</Columns>
