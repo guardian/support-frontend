@@ -56,10 +56,14 @@ export function filterBenefitByRegion(
 }
 
 function displayBenefitByABTestAndVariant(
-	showOnAbTest: Array<{ name: string; variants: string[]; display: boolean }>,
+	displayOnAbTest: Array<{
+		name: string;
+		variants: string[];
+		display: boolean;
+	}>,
 	participations: Participations = { '': '' },
 ) {
-	return showOnAbTest.some(
+	return displayOnAbTest.some(
 		({ name, variants, display }) =>
 			participations[name]
 				? display
