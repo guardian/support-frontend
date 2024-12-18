@@ -55,12 +55,6 @@ export function filterBenefitByABTest(
 	benefit: ProductBenefit,
 	participations?: Participations,
 ) {
-	console.log(
-		'TEST filterBenefitByABTest -> benefit=',
-		benefit,
-		' particaption=',
-		participations,
-	);
 	if (participations && benefit.specificToAbTest !== undefined) {
 		return benefit.specificToAbTest.some(({ name, variants }) =>
 			participations[name]
