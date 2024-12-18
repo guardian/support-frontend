@@ -74,7 +74,10 @@ function displayBenefitByABTestAndVariant(
 	return displayOnAbTest.some(
 		({ name, variants, display }) =>
 			participations[name]
-				? abTestVariantDisplay(variants.includes(participations[name]), display)
+				? abTestVariantDisplay(
+						variants.includes(participations[name] ?? ''), // Participations used throughout typed as { string : string | undefined }
+						display,
+				  )
 				: !display, // abtest not found, display opposite
 	);
 }
