@@ -16,8 +16,11 @@ type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
-	specificToAbTest?: Array<{ name: string; variants: string[] }>;
-	hideOnAbTest?: Array<{ name: string; variants: string[] }>;
+	specificToAbTest?: Array<{
+		name: string;
+		variants: string[];
+		display: boolean;
+	}>;
 	isNew?: boolean;
 	hideBullet?: boolean;
 };
@@ -52,41 +55,26 @@ export function filterBenefitByRegion(
 	return true;
 }
 
-function includeBenefitByABTest(
-	benefit: ProductBenefit,
-	participations?: Participations,
+function displayBenefitByABTestAndVariant(
+	showOnAbTest: Array<{ name: string; variants: string[]; display: boolean }>,
+	participations: Participations = { '': '' },
 ) {
-	if (participations && benefit.specificToAbTest !== undefined) {
-		return benefit.specificToAbTest.some(({ name, variants }) =>
+	return showOnAbTest.some(
+		({ name, variants, display }) =>
 			participations[name]
-				? variants.includes(participations[name] ?? '')
-				: false,
-		);
-	}
-	return true;
+				? display
+					? variants.includes(participations[name]) // abtest variant, display show
+					: !variants.includes(participations[name]) // abtest variant, display hide
+				: !display, // abtest not found, display opposite
+	);
 }
-
-function excludeBenefitByABTest(
-	benefit: ProductBenefit,
-	participations?: Participations,
-) {
-	if (participations && benefit.hideOnAbTest !== undefined) {
-		return benefit.hideOnAbTest.some(({ name, variants }) =>
-			participations[name]
-				? !variants.includes(participations[name] ?? '')
-				: true,
-		);
-	}
-	return true;
-}
-
 export function filterBenefitByABTest(
 	benefit: ProductBenefit,
 	participations?: Participations,
 ) {
-	const includeByAbTest = includeBenefitByABTest(benefit, participations);
-	const excludeByABTest = excludeBenefitByABTest(benefit, participations);
-	return includeByAbTest && excludeByABTest;
+	return benefit.specificToAbTest
+		? displayBenefitByABTestAndVariant(benefit.specificToAbTest, participations)
+		: true; // No abtests, default display benefit
 }
 
 export const productKeys = Object.keys(typeObject) as ProductKey[];
@@ -100,11 +88,15 @@ const appBenefit = {
 };
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
-	hideOnAbTest: [{ name: 'adFreeTierThree', variants: ['variant'] }],
+	specificToAbTest: [
+		{ name: 'adFreeTierThree', variants: ['variant'], display: false },
+	],
 };
 const addFreeBenefitTierThree = {
 	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [{ name: 'adFreeTierThree', variants: ['variant'] }],
+	specificToAbTest: [
+		{ name: 'adFreeTierThree', variants: ['variant'], display: true },
+	],
 };
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
