@@ -7,6 +7,12 @@ afterEachTasks(test);
 test.describe('Checkout', () => {
 	[
 		{
+			product: 'GuardianLight',
+			ratePlan: 'Monthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
+		},
+		{
 			product: 'SupporterPlus',
 			ratePlan: 'Annual',
 			paymentType: 'Credit/Debit card',
@@ -15,12 +21,6 @@ test.describe('Checkout', () => {
 		{
 			product: 'TierThree',
 			ratePlan: 'DomesticMonthly',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'UK',
-		},
-		{
-			product: 'GuardianLight',
-			ratePlan: 'Monthly',
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'UK',
 		},
