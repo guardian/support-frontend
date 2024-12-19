@@ -9,6 +9,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	analyticsInitialisation,
 	consentInitialisation,
+	sendConsentToOphan,
 } from 'helpers/page/analyticsAndConsent';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSettings } from '../globalsAndSwitches/globals';
@@ -33,6 +34,7 @@ function setUpTrackingAndConsents(): void {
 	};
 	const acquisitionData = getReferrerAcquisitionData();
 	void consentInitialisation(countryId);
+	sendConsentToOphan();
 	analyticsInitialisation(participationsWithAmountsTest, acquisitionData);
 }
 
