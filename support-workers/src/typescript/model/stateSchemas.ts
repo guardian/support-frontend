@@ -1,0 +1,112 @@
+import { z } from 'zod';
+import { addressSchema } from './address';
+import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
+import { paymentMethodSchema } from './paymentMethod';
+import { productTypeSchema } from './productType';
+
+export const titleSchema = z.union([
+	z.literal('Mr'),
+	z.literal('Mrs'),
+	z.literal('Ms'),
+	z.literal('Miss'),
+	z.literal('Mx'),
+	z.literal('Dr'),
+	z.literal('Prof'),
+	z.literal('Rev'),
+]);
+
+export const userSchema = z.object({
+	id: z.string(),
+	primaryEmailAddress: z.string(),
+	title: titleSchema.nullable(),
+	firstName: z.string(),
+	lastName: z.string(),
+	billingAddress: addressSchema,
+	deliveryAddress: addressSchema.nullable(),
+	telephoneNumber: z.string().nullable(),
+	isTestUser: z.boolean().default(false),
+	deliveryInstructions: z.string().nullable(),
+});
+export type User = z.infer<typeof userSchema>;
+
+export const analyticsInfoSchema = z.object({
+	isGiftPurchase: z.boolean(),
+	paymentProvider: paymentProviderSchema,
+});
+
+const ophanIdsSchema = z.object({
+	pageviewId: z.string().nullable(),
+	browserId: z.string().nullable(),
+});
+
+const abTestSchema = z.object({
+	name: z.string(),
+	variant: z.string(),
+});
+
+const queryParamSchema = z.object({
+	name: z.string(),
+	value: z.string(),
+});
+
+const referrerAcquisitionDataSchema = z.object({
+	campaignCode: z.string().nullable(),
+	referrerPageviewId: z.string().nullable(),
+	referrerUrl: z.string().nullable(),
+	componentId: z.string().nullable(),
+	componentType: z.string().nullable(),
+	source: z.string().nullable(),
+	abTests: z.array(abTestSchema).nullable(),
+	queryParameters: z.array(queryParamSchema).nullable(),
+	hostname: z.string().nullable(),
+	gaClientId: z.string().nullable(),
+	userAgent: z.string().nullable(),
+	ipAddress: z.string().nullable(),
+	labels: z.array(z.string()).nullable(),
+});
+
+const acquisitionDataSchema = z.object({
+	ophanIds: ophanIdsSchema,
+	referrerAcquisitionData: referrerAcquisitionDataSchema,
+	supportAbTests: z.array(abTestSchema),
+});
+
+const baseStateSchema = z.object({
+	requestId: z.string(),
+	user: userSchema,
+	//giftRecipient: Option[GiftRecipient], TODO: I think we can remove this
+	product: productTypeSchema,
+	analyticsInfo: analyticsInfoSchema,
+	firstDeliveryDate: z.coerce.date().nullable(),
+	appliedPromotion: z
+		.object({
+			promoCode: z.string(),
+			countryGroupId: z.string(), //TODO: build a schema for this
+		})
+		.nullable(),
+	csrUsername: z.string().nullable(),
+	salesforceCaseId: z.string().nullable(),
+	acquisitionData: acquisitionDataSchema.nullable(),
+});
+
+export const createPaymentMethodStateSchema = baseStateSchema.merge(
+	z.object({
+		paymentFields: paymentFieldsSchema, //TODO scala model is an either with redemption data
+		ipAddress: z.string(),
+		userAgent: z.string(),
+	}),
+);
+
+export type CreatePaymentMethodState = z.infer<
+	typeof createPaymentMethodStateSchema
+>;
+
+export const createSalesforceContactStateSchema = baseStateSchema.merge(
+	z.object({
+		paymentMethod: paymentMethodSchema,
+	}),
+);
+
+export type CreateSalesforceContactState = z.infer<
+	typeof createSalesforceContactStateSchema
+>;
