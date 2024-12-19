@@ -16,7 +16,11 @@ type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
-	specificToAbTest?: Array<{ name: string; variants: string[] }>;
+	specificToAbTest?: Array<{
+		name: string;
+		variants: string[];
+		display: boolean;
+	}>;
 	isNew?: boolean;
 	hideBullet?: boolean;
 };
@@ -55,14 +59,33 @@ export function filterBenefitByABTest(
 	benefit: ProductBenefit,
 	participations?: Participations,
 ) {
-	if (participations && benefit.specificToAbTest !== undefined) {
-		return benefit.specificToAbTest.some(({ name, variants }) =>
+	return benefit.specificToAbTest
+		? displayBenefitByABTest(benefit.specificToAbTest, participations)
+		: true; // no abtests, default display benefit
+}
+function displayBenefitByABTest(
+	displayOnAbTest: Array<{
+		name: string;
+		variants: string[];
+		display: boolean;
+	}>,
+	participations: Participations = {},
+) {
+	return displayOnAbTest.some(
+		({ name, variants, display }) =>
 			participations[name]
-				? variants.includes(participations[name] ?? '')
-				: false,
-		);
-	}
-	return true;
+				? displayBenefitByABTestVariant(
+						variants.includes(participations[name] ?? ''), // Participations used throughout typed as { string : string | undefined }
+						display,
+				  )
+				: !display, // abtest not found, display opposite
+	);
+}
+function displayBenefitByABTestVariant(
+	variantFound: boolean,
+	display: boolean,
+) {
+	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
 export const productKeys = Object.keys(typeObject) as ProductKey[];
@@ -74,7 +97,18 @@ const appBenefit = {
 	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
-const addFreeBenefit = { copy: 'Ad-free reading on all your devices' };
+const addFreeBenefit = {
+	copy: 'Ad-free reading on all your devices',
+	specificToAbTest: [
+		{ name: 'adFreeTierThree', variants: ['variant'], display: false },
+	],
+};
+const addFreeBenefitTierThree = {
+	copy: 'Ad-free reading on all your devices',
+	specificToAbTest: [
+		{ name: 'adFreeTierThree', variants: ['variant'], display: true },
+	],
+};
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
@@ -88,7 +122,10 @@ const partnerOffersBenefit = {
 		'Access to special offers (such as free and discounted tickets) from our values-aligned partners, including museums, festivals and cultural institutions.',
 	specificToRegions: ['AUDCountries'],
 };
-
+const guardianWeeklyBenefit = {
+	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+};
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
@@ -132,12 +169,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 				'The rewards from ',
 				{ strong: true, copy: 'All-access digital' },
 			],
-			benefits: [
-				{
-					copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-					tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-				},
-			],
+			benefits: [addFreeBenefitTierThree, guardianWeeklyBenefit],
 			/** These are just the SupporterPlus benefits */
 			benefitsAdditional: supporterPlusBenefits,
 			deliverableTo: gwDeliverableCountries,
