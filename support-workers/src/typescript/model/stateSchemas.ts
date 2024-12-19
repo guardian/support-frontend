@@ -1,11 +1,8 @@
 import { z } from 'zod';
-import { addressSchema } from './model/address';
-import {
-	paymentFieldsSchema,
-	paymentProviderSchema,
-} from './model/paymentFields';
-import { paymentMethodSchema } from './model/paymentMethod';
-import { productTypeSchema } from './model/productType';
+import { addressSchema } from './address';
+import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
+import { paymentMethodSchema } from './paymentMethod';
+import { productTypeSchema } from './productType';
 
 export const titleSchema = z.union([
 	z.literal('Mr'),

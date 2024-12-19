@@ -1,7 +1,7 @@
 import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { z } from 'zod';
-import { awsConfig } from '../awsConfig';
 import type { Stage } from '../model/stage';
+import { awsConfig } from '../util/awsConfig';
 
 const payPalConfigSchema = z.object({
 	user: z.string(),
