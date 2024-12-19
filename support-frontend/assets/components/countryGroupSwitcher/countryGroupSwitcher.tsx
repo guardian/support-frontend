@@ -1,6 +1,9 @@
-// ----- Imports ----- //
 import { css } from '@emotion/react';
-import { visuallyHidden } from '@guardian/source/foundations';
+import {
+	palette,
+	textSans17,
+	visuallyHidden,
+} from '@guardian/source/foundations';
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
@@ -11,12 +14,30 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
-import './countryGroupSwitcher.scss';
-import moduleStyles from './countryGroupSwitcher.module.scss';
 
-const styles = moduleStyles as { button: string };
+const countryGroupSwitcherButton = css`
+	appearance: none;
+	border: 0;
+	padding: 0;
+	color: inherit;
+	cursor: pointer;
+	color: ${palette.neutral[100]};
+	${textSans17};
 
-// ----- Props ----- //
+	svg {
+		position: absolute;
+		margin-top: 0.3125rem;
+		margin-left: 0.3125rem;
+		path {
+			fill: currentColor;
+		}
+	}
+
+	&:hover {
+		color: ${palette.brandAlt[400]};
+	}
+`;
+
 export type CountryGroupSwitcherProps = {
 	countryGroupIds: CountryGroupId[];
 	selectedCountryGroup: CountryGroupId;
@@ -24,7 +45,6 @@ export type CountryGroupSwitcherProps = {
 	subPath: string;
 };
 
-// ----- Component ----- //
 function CountryGroupSwitcher({
 	subPath,
 	selectedCountryGroup,
@@ -51,10 +71,14 @@ function CountryGroupSwitcher({
 	}
 
 	return (
-		<div className="component-country-group-switcher">
+		<div
+			css={css`
+				display: inline-flex;
+			`}
+		>
 			<button
 				aria-label="Select a country"
-				className={styles.button}
+				css={countryGroupSwitcherButton}
 				ref={buttonRef}
 				onClick={() => {
 					if (buttonRef.current) {
@@ -125,7 +149,5 @@ function CountryGroupSwitcher({
 CountryGroupSwitcher.defaultProps = {
 	trackProduct: null,
 };
-
-// ----- Exports ----- //
 
 export default CountryGroupSwitcher;
