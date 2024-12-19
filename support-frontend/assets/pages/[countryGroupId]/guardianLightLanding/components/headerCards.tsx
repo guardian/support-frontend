@@ -76,9 +76,13 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
+	returnLink: string;
 };
 
-export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
+export function HeaderCards({
+	geoId,
+	returnLink,
+}: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
@@ -92,6 +96,7 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 		contribution: price.toString(),
+		returnAddress: returnLink,
 	});
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
@@ -99,8 +104,6 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 		productDescription: productCatalogGuardianLight().GuardianLight,
 		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
 	};
-
-	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
 	const card2 = {
 		link: returnLink,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
