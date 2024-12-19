@@ -34,8 +34,8 @@ function setUpTrackingAndConsents(): void {
 	};
 	const acquisitionData = getReferrerAcquisitionData();
 	void consentInitialisation(countryId);
-	sendConsentToOphan();
 	analyticsInitialisation(participationsWithAmountsTest, acquisitionData);
+	sendConsentToOphan();
 }
 
 // ----- Exports ----- //
