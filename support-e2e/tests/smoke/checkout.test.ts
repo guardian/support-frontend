@@ -18,6 +18,12 @@ test.describe('Checkout', () => {
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'UK',
 		},
+		{
+			product: 'GuardianLight',
+			ratePlan: 'Monthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
+		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
 	});
