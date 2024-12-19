@@ -1,24 +1,34 @@
-import { combinedAddressLine } from './model/address';
-import type { Currency } from './model/currency';
+import { combinedAddressLine } from '../model/address';
+import type { Currency } from '../model/currency';
 import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
 	PayPalPaymentFields,
 	SepaPaymentFields,
 	StripePaymentFields,
-} from './model/paymentFields';
+} from '../model/paymentFields';
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
 	PayPalPaymentMethod,
 	SepaPaymentMethod,
 	StripePaymentMethod,
-} from './model/paymentMethod';
+} from '../model/paymentMethod';
+import type { Stage } from '../model/stage';
 import type {
 	CreatePaymentMethodState,
 	CreateSalesforceContactState,
 	User,
-} from './stateSchemas';
+} from '../model/stateSchemas';
+import { getPayPalConfig, PayPalService } from '../services/payPal';
+import { Lazy } from '../util/lazy';
+import { getIfDefined } from '../util/nullAndUndefined';
+
+const stage = process.env.stage as Stage;
+const lazyPayPalService = new Lazy(async () => {
+	const config = await getPayPalConfig(stage);
+	return new PayPalService(config);
+}, 'PayPalConfig');
 
 export const handler = async (
 	state: CreatePaymentMethodState,
@@ -103,13 +113,18 @@ export function createStripePaymentMethod(
 	// 	);
 }
 
-export function createPayPalPaymentMethod(
+async function createPayPalPaymentMethod(
 	payPal: PayPalPaymentFields,
 ): Promise<PayPalPaymentMethod> {
-	// return payPalService.retrieveEmail(payPal.baid).then((email) => ({
-	// 	baid: payPal.baid,
-	// 	email,
-	// }));
+	const payPalService = await lazyPayPalService.get();
+	const email = await payPalService.retrieveEmail(payPal.baid);
+	return {
+		PaypalBaid: payPal.baid,
+		PaypalEmail: getIfDefined(email, 'Could not retrieve email from PayPal'),
+		PaypalType: 'ExpressCheckout',
+		Type: 'PayPal',
+		PaymentGateway: 'PayPal Express',
+	};
 }
 
 export function createDirectDebitPaymentMethod(
