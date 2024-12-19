@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 
-import { cmp, getCookie } from '@guardian/libs';
+import type { ConsentState } from '@guardian/libs';
+import { cmp, getCookie, onConsent } from '@guardian/libs';
 import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -57,6 +58,54 @@ function consentInitialisation(country: IsoCountry): void {
 	}
 }
 
+function sendConsentToOphan(): void {
+	onConsent()
+		.then((consentState) => {
+			return ophan.record(getOphanConsentDetails(consentState));
+		})
+		.catch((error) => {
+			console.error(error);
+		});
+
+	const getOphanConsentDetails = (
+		consentState: ConsentState,
+	): {
+		consentJurisdiction: 'TCF' | 'USNAT' | 'AUS' | 'OTHER';
+		consentUUID: string;
+		consent: string;
+	} => {
+		if (consentState.tcfv2) {
+			return {
+				consentJurisdiction: 'TCF',
+				consentUUID: getCookie({ name: 'consentUUID' }) ?? '',
+				consent: consentState.tcfv2.tcString,
+			};
+		}
+		if (consentState.usnat) {
+			// Users who interacted with the CCPA banner before the migration to usnat will still have a ccpaUUID cookie. The usnatUUID cookie is set when the USNAT banner is interacted with. We need to check both cookies to ensure we have the correct consentUUID.
+			const consentUUID =
+				getCookie({ name: 'usnatUUID' }) ?? getCookie({ name: 'ccpaUUID' });
+			return {
+				consentJurisdiction: 'USNAT',
+				consentUUID: consentUUID ?? '',
+				consent: consentState.usnat.doNotSell ? 'false' : 'true',
+			};
+		}
+		if (consentState.aus) {
+			return {
+				consentJurisdiction: 'AUS',
+				consentUUID: getCookie({ name: 'ccpaUUID' }) ?? '',
+				consent: consentState.aus.personalisedAdvertising ? 'true' : 'false',
+			};
+		}
+		return {
+			consentJurisdiction: 'OTHER',
+			consentUUID: '',
+			consent: '',
+		};
+	};
+}
+
 // ----- Helpers ----- //
 
 function shouldInitCmp(): boolean {
@@ -70,4 +119,4 @@ function shouldInitCmp(): boolean {
 
 // ----- Exports ----- //
 
-export { analyticsInitialisation, consentInitialisation };
+export { analyticsInitialisation, consentInitialisation, sendConsentToOphan };
