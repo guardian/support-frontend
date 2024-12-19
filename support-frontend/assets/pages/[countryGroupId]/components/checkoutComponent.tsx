@@ -634,13 +634,12 @@ export function CheckoutComponent({
 				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
 				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
 				userType && thankYouUrlSearchParams.set('userType', userType);
-
 				contributionAmount &&
 					thankYouUrlSearchParams.set(
 						'contribution',
 						contributionAmount.toString(),
 					);
-
+				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
