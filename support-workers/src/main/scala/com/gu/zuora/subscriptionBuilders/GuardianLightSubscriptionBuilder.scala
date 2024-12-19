@@ -21,14 +21,12 @@ class GuardianLightSubscriptionBuilder(
     val productRatePlanId = {
       validateRatePlan(guardianLightRatePlan(state.product, environment), state.product.describe)
     }
-    // The user isn't charged until day 15
-    val gracePeriodInDays = 15
 
     val todaysDate = dateGenerator.today
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
       contractEffectiveDate = todaysDate,
-      contractAcceptanceDate = todaysDate.plusDays(gracePeriodInDays),
+      contractAcceptanceDate = todaysDate.plusDays(GuardianLightSubscriptionBuilder.gracePeriodInDays),
       readerType = Direct,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
@@ -36,4 +34,9 @@ class GuardianLightSubscriptionBuilder(
 
     subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
   }
+}
+
+object GuardianLightSubscriptionBuilder {
+  // The user isn't charged until day 15
+  val gracePeriodInDays = 15
 }
