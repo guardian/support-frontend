@@ -31,12 +31,13 @@ module.exports = (
 			}),
 		],
 		// See https://webpack.js.org/configuration/optimization/
-		// optimization: {
-		// 	splitChunks: {
-		// 		chunks() {
-		// 			return false;
-		// 		},
-		// 	},
-		// },
+		optimization: {
+			chunkIds: 'named',
+			// 	splitChunks: {
+			// 		chunks() {
+			// 			return false;
+			// 		},
+			// 	},
+		},
 	});
 };

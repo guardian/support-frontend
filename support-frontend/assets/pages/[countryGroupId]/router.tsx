@@ -10,7 +10,7 @@ import { ThankYou } from './thankYou';
 
 setUpTrackingAndConsents();
 const appConfig = parseAppConfig(window.guardian);
-console.log('Router');
+console.log('*** Router ***');
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [

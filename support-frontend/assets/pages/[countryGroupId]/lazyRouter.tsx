@@ -12,19 +12,19 @@ const appConfig = parseAppConfig(window.guardian);
 const Checkout = lazy(
 	() => import(/* webpackChunkName: "checkout" */ './checkout'),
 );
-const OneTimeCheckout = lazy(
-	() => import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
-);
-const ThankYou = lazy(
-	() => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
-);
-const GuardianLightLanding = lazy(
-	() =>
-		import(
-			/* webpackChunkName: "GuardianLightLanding" */ './guardianLightLanding/guardianLightLanding'
-		),
-);
-console.log('LazyRouter');
+// const OneTimeCheckout = lazy(
+// 	() => import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
+// );
+// const ThankYou = lazy(
+// 	() => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
+// );
+// const GuardianLightLanding = lazy(
+// 	() =>
+// 		import(
+// 			/* webpackChunkName: "GuardianLightLanding" */ './guardianLightLanding/guardianLightLanding'
+// 		),
+// );
+console.log('**** LazyRouter ****');
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
@@ -36,30 +36,30 @@ const router = createBrowserRouter(
 				</Suspense>
 			),
 		},
-		{
-			path: `/${geoId}/one-time-checkout`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<OneTimeCheckout geoId={geoId} appConfig={appConfig} />
-				</Suspense>
-			),
-		},
-		{
-			path: `/${geoId}/thank-you`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<ThankYou geoId={geoId} appConfig={appConfig} />
-				</Suspense>
-			),
-		},
-		{
-			path: `/${geoId}/guardian-light`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<GuardianLightLanding geoId={geoId} />
-				</Suspense>
-			),
-		},
+		// {
+		// 	path: `/${geoId}/one-time-checkout`,
+		// 	element: (
+		// 		<Suspense fallback={<HoldingContent />}>
+		// 			<OneTimeCheckout geoId={geoId} appConfig={appConfig} />
+		// 		</Suspense>
+		// 	),
+		// },
+		// {
+		// 	path: `/${geoId}/thank-you`,
+		// 	element: (
+		// 		<Suspense fallback={<HoldingContent />}>
+		// 			<ThankYou geoId={geoId} appConfig={appConfig} />
+		// 		</Suspense>
+		// 	),
+		// },
+		// {
+		// 	path: `/${geoId}/guardian-light`,
+		// 	element: (
+		// 		<Suspense fallback={<HoldingContent />}>
+		// 			<GuardianLightLanding geoId={geoId} />
+		// 		</Suspense>
+		// 	),
+		// },
 	]),
 );
 

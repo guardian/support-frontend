@@ -1,6 +1,6 @@
 module.exports = {
 	common: {
-		//'[countryGroupId]/router': 'pages/[countryGroupId]/router.tsx',
+		// '[countryGroupId]/router': 'pages/[countryGroupId]/router.tsx',
 		'[countryGroupId]/router': 'pages/[countryGroupId]/lazyRouter.tsx',
 		// '[countryGroupId]/router': 'pages/[countryGroupId]/ghLazyRouter.tsx',
 		'[countryGroupId]/events/router':
