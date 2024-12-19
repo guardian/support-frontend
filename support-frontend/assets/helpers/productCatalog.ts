@@ -69,7 +69,7 @@ function displayBenefitByABTest(
 		variants: string[];
 		display: boolean;
 	}>,
-	participations: Participations = { '': '' },
+	participations: Participations = {},
 ) {
 	return displayOnAbTest.some(
 		({ name, variants, display }) =>
