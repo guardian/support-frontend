@@ -266,3 +266,5 @@ export function Checkout({ geoId, appConfig }: Props) {
 		</Elements>
 	);
 }
+
+export default Checkout;

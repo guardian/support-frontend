@@ -52,3 +52,5 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 		</Elements>
 	);
 }
+
+export default OneTimeCheckout;
