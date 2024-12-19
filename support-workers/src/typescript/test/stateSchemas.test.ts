@@ -2,11 +2,11 @@ import type {
 	DirectDebitPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
-import type { CreatePaymentMethodState } from '../stateSchemas';
+import type { CreatePaymentMethodState } from '../model/stateSchemas';
 import {
 	createPaymentMethodStateSchema,
 	createSalesforceContactStateSchema,
-} from '../stateSchemas';
+} from '../model/stateSchemas';
 import createPaymentContribution from './fixtures/createPaymentMethod/contributionMonthlyUSD.json';
 import contributionWithPayPal from './fixtures/createPaymentMethod/contributionWithPayPal.json';
 import createPaymentPaper from './fixtures/createPaymentMethod/paperDirectDebit.json';
