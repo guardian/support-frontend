@@ -9,15 +9,13 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	Button,
 	buttonThemeReaderRevenueBrand,
+	LinkButton,
 } from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
-import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
-import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
@@ -26,7 +24,6 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
-import { navigateWithPageView } from 'helpers/tracking/trackingOphan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -95,7 +92,6 @@ export function SupporterPlusInitialLandingPage({
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const navigate = useNavigate();
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 
@@ -108,11 +104,12 @@ export function SupporterPlusInitialLandingPage({
 	);
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	const proceedToNextStep = useOtherAmountValidation(() => {
-		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
-		navigateWithPageView(navigate, destination, abParticipations);
-	}, false);
+	const checkoutLink =
+		contributionType === 'ONE_OFF'
+			? `one-time-checkout?contribution=${amount}`
+			: `checkout?product=Contribution&ratePlan=${billingPeriod}&contribution=${amount}`;
 
 	const paymentMethodsMarginOneOff = css`
 		margin: ${space[4]}px 0;
@@ -159,15 +156,14 @@ export function SupporterPlusInitialLandingPage({
 
 				<div css={checkoutBtnAndPaymentIconsHolder}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-						<Button
-							iconSide="left"
+						<LinkButton
 							priority="primary"
 							size="default"
 							cssOverrides={checkoutBtnStyleOverrides}
-							onClick={proceedToNextStep}
+							href={checkoutLink}
 						>
 							Continue to checkout
-						</Button>
+						</LinkButton>
 					</ThemeProvider>
 					{contributionType !== 'ONE_OFF' && (
 						<p css={cancelAnytime}>Cancel or change at anytime</p>

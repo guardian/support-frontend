@@ -17,16 +17,18 @@ const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
 export function GuardianTsAndCs({
 	mobileTheme = 'dark',
 	displayPatronsCheckout = true,
+	spacing = 'tight',
 }: {
 	mobileTheme?: FinePrintTheme;
 	displayPatronsCheckout: boolean;
+	spacing?: 'tight' | 'loose';
 }): JSX.Element {
 	return (
 		<FinePrint
 			mobileTheme={mobileTheme}
 			cssOverrides={guardianTsAndCsStyles(displayPatronsCheckout)}
 		>
-			<CheckoutDivider spacing="tight" mobileTheme={'light'} />
+			<CheckoutDivider spacing={spacing} mobileTheme={'light'} />
 			<p>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
 				role it is to secure the editorial and financial independence of the
