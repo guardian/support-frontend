@@ -33,6 +33,15 @@
 	margin-bottom: $gu-v-spacing;
 }
 
+.component-text__callout {
+	@include gu-fontset-heading;
+	& > strong {
+		padding: 0 ($gu-h-spacing * 0.25);
+		background-color: gu-colour(highlight-main);
+		color: gu-colour(neutral-7);
+	}
+}
+
 .component-text__large {
 	@include gu-fontset-heading;
 	font-size: 18px;
