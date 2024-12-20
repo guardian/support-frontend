@@ -27,17 +27,6 @@ const stripeAccountForContributionType: Record<
 	ANNUAL: 'REGULAR',
 };
 
-export interface StripeKey {
-	ONE_OFF: {
-		test: string;
-		default: string;
-	};
-	REGULAR: {
-		test: string;
-		default: string;
-	};
-}
-
 function getStripeKey(
 	stripeAccount: StripeAccount,
 	country: IsoCountry,

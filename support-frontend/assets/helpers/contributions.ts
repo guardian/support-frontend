@@ -31,11 +31,6 @@ export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
-export type VariantData = {
-	variantA: boolean;
-	variantB: boolean;
-};
-
 export const logInvalidCombination = (
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,

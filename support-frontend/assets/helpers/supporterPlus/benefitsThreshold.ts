@@ -10,8 +10,6 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
-export type ThresholdAmounts = Record<RegularContributionType, number>;
-
 export function getLowerBenefitsThreshold(
 	state: ContributionsState,
 	regularContributionType?: RegularContributionType,
