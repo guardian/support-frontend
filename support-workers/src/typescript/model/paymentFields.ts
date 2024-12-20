@@ -5,7 +5,6 @@ import { z } from 'zod';
 const stripePaymentProviderSchema = z.literal('Stripe');
 const payPalPaymentProviderSchema = z.literal('PayPal');
 const directDebitPaymentProviderSchema = z.literal('DirectDebit');
-const sepapaymentProviderSchema = z.literal('Sepa');
 const existingPaymentProviderSchema = z.literal('Existing');
 
 export const paymentProviderSchema = z.union([
@@ -14,7 +13,6 @@ export const paymentProviderSchema = z.union([
 	z.literal('StripePaymentRequestButton'),
 	payPalPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
-	sepapaymentProviderSchema,
 	existingPaymentProviderSchema,
 ]);
 const payPalPaymentFieldsSchema = z.object({
@@ -44,14 +42,6 @@ const directDebitPaymentFieldsSchema = z.object({
 export type DirectDebitPaymentFields = z.infer<
 	typeof directDebitPaymentFieldsSchema
 >;
-const sepaPaymentFieldsSchema = z.object({
-	paymentType: sepapaymentProviderSchema,
-	accountHolderName: z.string(),
-	iban: z.string(),
-	country: z.string().nullable(),
-	streetName: z.string().nullable(),
-});
-export type SepaPaymentFields = z.infer<typeof sepaPaymentFieldsSchema>;
 const existingPaymentFieldsSchema = z.object({
 	paymentType: existingPaymentProviderSchema,
 	billingAccountId: z.string(),
@@ -60,7 +50,6 @@ export const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
 	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,
-	sepaPaymentFieldsSchema,
 	existingPaymentFieldsSchema,
 ]);
 export type PaymentFields = z.infer<typeof paymentFieldsSchema>;

@@ -65,33 +65,9 @@ export type DirectDebitPaymentMethod = z.infer<
 	typeof directDebitPaymentMethodSchema
 >;
 
-// const gatewayOptionDataSchema = z.object({
-// 	GatewayOption: z.array(
-// 		z.object({
-// 			name: z.literal('UserAgent'),
-// 			value: z.string().max(255),
-// 		}),
-// 	),
-// });
-
-// export const sepaPaymentMethodSchema = z.object({
-// 	BankTransferAccountName: z.string(),
-// 	BankTransferAccountNumber: z.string(),
-// 	Email: z.string(),
-// 	IPAddress: z.string(),
-// 	GatewayOptionData: gatewayOptionDataSchema,
-// 	BankTransferType: z.literal('SEPA'),
-// 	Type: z.literal('BankTransfer'),
-// 	PaymentGateway: z.literal('Stripe Bank Transfer - GNM Membership'),
-// 	Country: z.string().nullable(),
-// 	StreetName: z.string().nullable(),
-// });
-// export type SepaPaymentMethod = z.infer<typeof sepaPaymentMethodSchema>;
-
 export const paymentMethodSchema = z.discriminatedUnion('Type', [
 	payPalPaymentPaymentMethodSchema,
 	stripePaymentMethodSchema,
 	directDebitPaymentMethodSchema,
-	//sepaPaymentMethodSchema,
 ]);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
