@@ -55,13 +55,6 @@ export function Title({
 		</Heading>
 	);
 }
-export function Callout({ children }: { children: ReactNode }): JSX.Element {
-	return (
-		<p className="component-text__callout">
-			<strong>{children}</strong>
-		</p>
-	);
-}
 export function LargeParagraph({
 	children,
 }: {

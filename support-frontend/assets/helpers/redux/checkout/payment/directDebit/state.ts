@@ -2,7 +2,6 @@ import { z } from 'zod';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 
 export type Phase = 'entry' | 'confirmation';
-export type SortCodeIndex = 0 | 1 | 2;
 
 const numericStringRegex = /^\d+$/;
 

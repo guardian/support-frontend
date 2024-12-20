@@ -1,10 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
-import {
-	SvgCrossRoundFilled,
-	SvgTickRound,
-} from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { filterBenefitByRegion } from 'helpers/productCatalog';
 
@@ -31,13 +27,6 @@ export type CheckListData = {
 	maybeGreyedOut?: SerializedStyles;
 	specificToRegions?: CountryGroupId[];
 };
-
-export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
-	isUnlocked ? (
-		<SvgTickRound isAnnouncedByScreenReader size="small" />
-	) : (
-		<SvgCrossRoundFilled isAnnouncedByScreenReader size="small" />
-	);
 
 export const checkListData = ({
 	higherTier,

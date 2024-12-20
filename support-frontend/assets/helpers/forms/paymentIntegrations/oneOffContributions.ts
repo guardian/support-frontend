@@ -77,10 +77,6 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	paymentMethodId: string | PaymentMethod;
 };
 
-export type ConfirmStripePaymentIntentRequest = StripeChargeData & {
-	paymentIntentId: string;
-};
-
 export type AmazonPayData = {
 	paymentData: {
 		currency: IsoCurrency;

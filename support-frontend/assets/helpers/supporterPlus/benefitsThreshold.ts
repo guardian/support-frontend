@@ -10,8 +10,6 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
-export type ThresholdAmounts = Record<RegularContributionType, number>;
-
 export function getLowerBenefitsThreshold(
 	state: ContributionsState,
 	regularContributionType?: RegularContributionType,
@@ -54,21 +52,6 @@ export function getLowerProductBenefitThreshold(
 	return productCatalog[product].ratePlans[
 		product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
 	].pricing[currencyId];
-}
-
-export function getLowerBenefitsThresholds(
-	state: ContributionsState,
-): ThresholdAmounts {
-	return {
-		MONTHLY: getLowerBenefitThreshold(
-			'MONTHLY',
-			state.common.internationalisation.currencyId,
-		),
-		ANNUAL: getLowerBenefitThreshold(
-			'ANNUAL',
-			state.common.internationalisation.currencyId,
-		),
-	};
 }
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring

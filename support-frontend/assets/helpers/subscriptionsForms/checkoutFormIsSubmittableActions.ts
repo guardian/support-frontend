@@ -34,10 +34,6 @@ function setFormSubmissionDependentValue(setStateValue: () => Action) {
 	};
 }
 
-export type FormSubmissionDependentValueThunk = ReturnType<
-	typeof setFormSubmissionDependentValue
->;
-
 export {
 	setFormSubmissionDependentValue,
 	enableOrDisableForm,

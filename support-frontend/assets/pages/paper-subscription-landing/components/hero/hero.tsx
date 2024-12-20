@@ -32,11 +32,6 @@ type PaperHeroPropTypes = {
 	promotionCopy: PromotionCopy;
 };
 
-type PriceCardsPaperHeroPropTypes = {
-	productPrices: ProductPrices;
-	promotionCopy: PromotionCopy;
-};
-
 const heroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
 	${from.tablet} {
@@ -148,28 +143,6 @@ export function PaperHero({
 						</ThemeProvider>
 					</section>
 				</Hero>
-			</CentredContainer>
-		</PageTitle>
-	);
-}
-
-export function PriceCardsPaperHero({
-	productPrices,
-	promotionCopy,
-}: PriceCardsPaperHeroPropTypes): JSX.Element | null {
-	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
-	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
-
-	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
-	return (
-		<PageTitle title="Newspaper subscription" theme="paper">
-			<CentredContainer>
-				<OfferStrapline
-					fgCol={palette.neutral[7]}
-					bgCol={offerStraplineBlue}
-					copy={roundelText}
-				/>
 			</CentredContainer>
 		</PageTitle>
 	);

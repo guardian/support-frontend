@@ -2,11 +2,6 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { trackComponentEvents } from './trackingOphan';
 
-export type ProductCheckout =
-	| 'Contribution'
-	| 'SupporterPlus'
-	| SubscriptionProduct;
-
 const trackCheckoutSubmitAttempt = (
 	componentId: string,
 	eventDetails: string,

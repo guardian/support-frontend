@@ -27,8 +27,6 @@ import { getInitialState } from './utils/setup';
 
 const subscriptionsPageReducer = createReducer();
 
-export type SubscriptionsReducer = typeof subscriptionsPageReducer;
-
 const baseReducer = {
 	common: commonReducer,
 	page: subscriptionsPageReducer,
