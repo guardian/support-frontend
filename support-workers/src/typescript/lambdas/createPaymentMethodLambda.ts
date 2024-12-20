@@ -3,14 +3,14 @@ import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
 	PayPalPaymentFields,
-	SepaPaymentFields,
+	// SepaPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
 	PayPalPaymentMethod,
-	SepaPaymentMethod,
+	// SepaPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
 import type { Stage } from '../model/stage';
@@ -22,7 +22,6 @@ import type {
 import { ServiceHandler } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
-import { Lazy } from '../util/lazy';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = process.env.stage as Stage;
@@ -30,10 +29,10 @@ const stripeServiceHandler = new ServiceHandler(stage, async (stage) => {
 	const config = await getStripeConfig(stage);
 	return new StripeService(config);
 });
-const lazyPayPalService = new Lazy(async () => {
+const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
 	const config = await getPayPalConfig(stage);
 	return new PayPalService(config);
-}, 'PayPalConfig');
+});
 
 export const handler = async (
 	state: CreatePaymentMethodState,
@@ -41,39 +40,29 @@ export const handler = async (
 	console.log(`Input is ${JSON.stringify(state)}`);
 	return createSalesforceContactState(
 		state,
-		await createPaymentMethod(
-			state.paymentFields,
-			state.user,
-			state.ipAddress,
-			state.userAgent,
-		),
+		await createPaymentMethod(state.paymentFields, state.user),
 	);
 };
 
 export function createPaymentMethod(
 	paymentFields: PaymentFields,
 	user: User,
-	ipAddress: string,
-	userAgent: string,
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
 			return createStripePaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
-			return createPayPalPaymentMethod(paymentFields);
+			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'DirectDebit':
 			return createDirectDebitPaymentMethod(paymentFields, user);
-		case 'Sepa':
-			return createSepaPaymentMethod(paymentFields, user, ipAddress, userAgent);
 		case 'Existing':
 			return Promise.reject(
 				new Error(
 					'Existing payment methods should never make their way to this lambda',
 				),
 			);
-		default:
-			return Promise.reject(new Error('Unknown payment method type'));
 	}
+	return Promise.reject(new Error('Unknown payment method type'));
 }
 
 export function createSalesforceContactState(
@@ -122,9 +111,12 @@ export async function createStripePaymentMethod(
 }
 
 async function createPayPalPaymentMethod(
+	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
 ): Promise<PayPalPaymentMethod> {
-	const payPalService = await lazyPayPalService.get();
+	const payPalService = await paypalServiceHandler.getServiceForUser(
+		isTestUser,
+	);
 	const email = await payPalService.retrieveEmail(payPal.baid);
 	return {
 		PaypalBaid: payPal.baid,
@@ -159,40 +151,5 @@ export function createDirectDebitPaymentMethod(
 		State: user.billingAddress.state,
 		StreetName: addressLine?.streetName ?? null,
 		StreetNumber: addressLine?.streetNumber ?? null,
-	});
-}
-
-export function createSepaPaymentMethod(
-	sepa: SepaPaymentFields,
-	user: User,
-	ipAddress: string,
-	userAgent: string,
-): Promise<SepaPaymentMethod> {
-	if (ipAddress.length > 15) {
-		console.warn(`IPv6 Address: ${ipAddress} is longer than 15 characters`);
-	}
-	if (userAgent.length > 255) {
-		console.warn(
-			`User Agent: ${userAgent} will be truncated to 255 characters`,
-		);
-	}
-	return Promise.resolve({
-		Type: 'BankTransfer',
-		BankTransferType: 'SEPA',
-		BankTransferAccountName: sepa.accountHolderName,
-		BankTransferAccountNumber: sepa.iban,
-		Country: sepa.country,
-		StreetName: sepa.streetName,
-		Email: user.primaryEmailAddress,
-		IPAddress: ipAddress.slice(0, 15),
-		PaymentGateway: 'Stripe Bank Transfer - GNM Membership',
-		GatewayOptionData: {
-			GatewayOption: [
-				{
-					name: 'UserAgent',
-					value: userAgent.slice(0, 255),
-				},
-			],
-		},
 	});
 }
