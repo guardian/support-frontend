@@ -56,21 +56,6 @@ export function getLowerProductBenefitThreshold(
 	].pricing[currencyId];
 }
 
-export function getLowerBenefitsThresholds(
-	state: ContributionsState,
-): ThresholdAmounts {
-	return {
-		MONTHLY: getLowerBenefitThreshold(
-			'MONTHLY',
-			state.common.internationalisation.currencyId,
-		),
-		ANNUAL: getLowerBenefitThreshold(
-			'ANNUAL',
-			state.common.internationalisation.currencyId,
-		),
-	};
-}
-
 // This is a function overload that means if the caller has already determined that contributionType is recurring
 // they do not have to handle an undefined return type from getThresholdPrice
 // cf. https://www.typescriptlang.org/docs/handbook/2/functions.html#overload-signatures-and-the-implementation-signature

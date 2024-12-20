@@ -63,43 +63,10 @@ function getStripeKey(
 	return isTestUser ? account.test : account.default;
 }
 
-//  this is required as useStripeObjects is used in multiple components
+//  this is required as useStripeAccount is used in multiple components
 //  but we only want to call setLoadParameters once.
 const stripeScriptHasBeenAddedToPage = (): boolean =>
 	!!document.querySelector("script[src^='https://js.stripe.com']");
-
-interface StripeObjects {
-	ONE_OFF: StripeJs | null;
-	REGULAR: StripeJs | null;
-}
-
-export const useStripeObjects = (
-	stripeAccount: StripeAccount,
-	stripeKey: string,
-): StripeObjects => {
-	const [stripeObjects, setStripeObjects] = useState<StripeObjects>({
-		REGULAR: null,
-		ONE_OFF: null,
-	});
-
-	useEffect(() => {
-		if (stripeObjects[stripeAccount] === null) {
-			if (!stripeScriptHasBeenAddedToPage()) {
-				loadStripe.setLoadParameters({
-					advancedFraudSignals: false,
-				});
-			}
-
-			void loadStripe(stripeKey).then((newStripe) => {
-				setStripeObjects((prevData) => ({
-					...prevData,
-					[stripeAccount]: newStripe,
-				}));
-			});
-		}
-	}, [stripeAccount]);
-	return stripeObjects;
-};
 
 export function useStripeAccount(stripeKey: string): StripeJs | null {
 	const [stripeSdk, setStripeSdk] = useState<StripeJs | null>(null);
