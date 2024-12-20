@@ -3,13 +3,11 @@ import { stripePaymentTypeSchema } from './paymentFields';
 // Payment methods are the activated payment details which are passed into Zuora as opposed to
 // payment fields which are the details entered by the user into the checkout
 
-const stripePaymentGatewaySchema = z.union([
-	z.literal('Stripe Gateway 1'), //TODO: are all of these still used?
-	z.literal('Stripe Gateway GNM Membership AUS'),
+export const stripePaymentGatewaySchema = z.union([
 	z.literal('Stripe PaymentIntents GNM Membership'),
 	z.literal('Stripe PaymentIntents GNM Membership AUS'),
-	z.literal('Stripe Bank Transfer - GNM Membership'),
 ]);
+export type StripePaymentGateway = z.infer<typeof stripePaymentGatewaySchema>;
 
 const directDebitPaymentGatewaySchema = z.literal('GoCardless');
 
@@ -37,7 +35,7 @@ const stripePaymentMethodSchema = z.object({
 	TokenId: z.string(), // Stripe Card id
 	SecondTokenId: z.string(), // Stripe Customer Id
 	CreditCardNumber: z.string(),
-	CreditCardCountry: z.string(), //TODO: build a schema for this
+	CreditCardCountry: z.string().nullable(), //TODO: build a schema for this
 	CreditCardExpirationMonth: z.number(),
 	CreditCardExpirationYear: z.number(),
 	CreditCardType: z.string().optional(),
@@ -67,33 +65,33 @@ export type DirectDebitPaymentMethod = z.infer<
 	typeof directDebitPaymentMethodSchema
 >;
 
-const gatewayOptionDataSchema = z.object({
-	GatewayOption: z.array(
-		z.object({
-			name: z.literal('UserAgent'),
-			value: z.string().max(255),
-		}),
-	),
-});
+// const gatewayOptionDataSchema = z.object({
+// 	GatewayOption: z.array(
+// 		z.object({
+// 			name: z.literal('UserAgent'),
+// 			value: z.string().max(255),
+// 		}),
+// 	),
+// });
 
-export const sepaPaymentMethodSchema = z.object({
-	BankTransferAccountName: z.string(),
-	BankTransferAccountNumber: z.string(),
-	Email: z.string(),
-	IPAddress: z.string(),
-	GatewayOptionData: gatewayOptionDataSchema,
-	BankTransferType: z.literal('SEPA'),
-	Type: z.literal('BankTransfer'),
-	PaymentGateway: z.literal('Stripe Bank Transfer - GNM Membership'),
-	Country: z.string().nullable(),
-	StreetName: z.string().nullable(),
-});
-export type SepaPaymentMethod = z.infer<typeof sepaPaymentMethodSchema>;
+// export const sepaPaymentMethodSchema = z.object({
+// 	BankTransferAccountName: z.string(),
+// 	BankTransferAccountNumber: z.string(),
+// 	Email: z.string(),
+// 	IPAddress: z.string(),
+// 	GatewayOptionData: gatewayOptionDataSchema,
+// 	BankTransferType: z.literal('SEPA'),
+// 	Type: z.literal('BankTransfer'),
+// 	PaymentGateway: z.literal('Stripe Bank Transfer - GNM Membership'),
+// 	Country: z.string().nullable(),
+// 	StreetName: z.string().nullable(),
+// });
+// export type SepaPaymentMethod = z.infer<typeof sepaPaymentMethodSchema>;
 
 export const paymentMethodSchema = z.discriminatedUnion('Type', [
 	payPalPaymentPaymentMethodSchema,
 	stripePaymentMethodSchema,
 	directDebitPaymentMethodSchema,
-	sepaPaymentMethodSchema,
+	//sepaPaymentMethodSchema,
 ]);
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
