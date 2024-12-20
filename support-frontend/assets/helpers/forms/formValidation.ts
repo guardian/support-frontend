@@ -65,21 +65,6 @@ export const notLongerThan = (
 	return value.length < maxLength;
 };
 
-export const checkFirstName: (firstName: string | null) => boolean = (
-	firstName,
-) =>
-	isNotEmpty(firstName) &&
-	!containsEmoji(firstName) &&
-	notLongerThan(firstName, 40);
-
-export const checkLastName: (lastName: string | null) => boolean = (lastName) =>
-	isNotEmpty(lastName) &&
-	!containsEmoji(lastName) &&
-	notLongerThan(lastName, 40);
-
-export const checkBillingState: (arg0: string | null) => boolean = (s) =>
-	typeof s === 'string' && isNotEmpty(s);
-
 export const checkEmail: (arg0: string | null) => boolean = (input) =>
 	isNotEmpty(input) && isValidEmail(input) && notLongerThan(input, 80);
 
@@ -144,12 +129,6 @@ export const amountOrOtherAmountIsValid = (
 
 	return amountIsValid(amt, countryGroupId, contributionType);
 };
-// ignores all spaces
-export const isValidIban = (iban?: string): boolean =>
-	!!iban &&
-	/[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/.test(
-		iban.replace(/ /g, ''),
-	);
 
 // regex from: https://gist.github.com/simonwhitaker/5748487?permalink_comment_id=4648104#gistcomment-4648104
 // based on UK Gov logic: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/488478/Bulk_Data_Transfer_-_additional_validation_valid_from_12_November_2015.pdf

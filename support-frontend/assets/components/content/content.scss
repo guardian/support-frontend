@@ -16,14 +16,6 @@
 	@if ($text) {
 		color: $text;
 	}
-	@if ($bg) {
-		&,
-		.component-content-bg {
-			background-color: $bg;
-		}
-	}
-	&,
-	.component-content-bg,
 	& .component-left-margin-section__content,
 	& .component-product-page-features .component-product-page-features__item {
 		border-color: $border;

@@ -36,10 +36,6 @@ export type VariantData = {
 	variantB: boolean;
 };
 
-export const contributionTypeIsRecurring = (
-	contributionType: ContributionType,
-): boolean => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
-
 export const logInvalidCombination = (
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,
