@@ -1,5 +1,4 @@
 import { combinedAddressLine } from '../model/address';
-import type { Currency } from '../model/currency';
 import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
@@ -20,11 +19,17 @@ import type {
 	CreateSalesforceContactState,
 	User,
 } from '../model/stateSchemas';
+import { ServiceHandler } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
+import { getStripeConfig, StripeService } from '../services/stripe';
 import { Lazy } from '../util/lazy';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = process.env.stage as Stage;
+const stripeServiceHandler = new ServiceHandler(stage, async (stage) => {
+	const config = await getStripeConfig(stage);
+	return new StripeService(config);
+});
 const lazyPayPalService = new Lazy(async () => {
 	const config = await getPayPalConfig(stage);
 	return new PayPalService(config);
@@ -34,28 +39,26 @@ export const handler = async (
 	state: CreatePaymentMethodState,
 ): Promise<CreateSalesforceContactState> => {
 	console.log(`Input is ${JSON.stringify(state)}`);
-	return Promise.resolve({
-		...state,
-		paymentMethod: {
-			Type: 'PayPal',
-			PaypalBaid: '123',
-			PaypalEmail: 'test@test.com',
-			PaypalType: 'ExpressCheckout',
-			PaymentGateway: 'PayPal Express',
-		},
-	});
+	return createSalesforceContactState(
+		state,
+		await createPaymentMethod(
+			state.paymentFields,
+			state.user,
+			state.ipAddress,
+			state.userAgent,
+		),
+	);
 };
 
 export function createPaymentMethod(
 	paymentFields: PaymentFields,
 	user: User,
-	currency: Currency,
 	ipAddress: string,
 	userAgent: string,
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
-			return createStripePaymentMethod(paymentFields, currency);
+			return createStripePaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
 			return createPayPalPaymentMethod(paymentFields);
 		case 'DirectDebit':
@@ -73,7 +76,7 @@ export function createPaymentMethod(
 	}
 }
 
-export function getCreateSalesforceContactState(
+export function createSalesforceContactState(
 	state: CreatePaymentMethodState,
 	paymentMethod: PaymentMethod,
 ): CreateSalesforceContactState {
@@ -83,34 +86,39 @@ export function getCreateSalesforceContactState(
 	};
 }
 
-export function createStripePaymentMethod(
-	stripe: StripePaymentFields,
-	currency: Currency,
+export async function createStripePaymentMethod(
+	isTestUser: boolean,
+	paymentFields: StripePaymentFields,
 ): Promise<StripePaymentMethod> {
-	// const stripeServiceForCurrency = stripe.stripePublicKey
-	// 	? stripeService.withPublicKey(stripe.stripePublicKey)
-	// 	: stripeService.withCurrency(currency);
-	//
-	// return stripeServiceForCurrency
-	// 	.createCustomerFromPaymentMethod(stripe.paymentMethod)
-	// 	.then((stripeCustomer) =>
-	// 		stripeServiceForCurrency
-	// 			.getPaymentMethod(stripe.paymentMethod)
-	// 			.then((stripePaymentMethod) => {
-	// 				const card = stripePaymentMethod.card;
-	// 				return {
-	// 					paymentMethodId: stripe.paymentMethod.value,
-	// 					customerId: stripeCustomer.id,
-	// 					last4: card.last4,
-	// 					country: CountryGroup.countryByCode(card.country),
-	// 					expMonth: card.exp_month,
-	// 					expYear: card.exp_year,
-	// 					cardType: card.brand.zuoraCreditCardType,
-	// 					paymentGateway: stripeServiceForCurrency.paymentIntentGateway,
-	// 					stripePaymentType: stripe.stripePaymentType,
-	// 				};
-	// 			}),
-	// 	);
+	const stripeService = await stripeServiceHandler.getServiceForUser(
+		isTestUser,
+	);
+	const customer = await stripeService.createCustomer(
+		paymentFields.stripePublicKey,
+		paymentFields.paymentMethod,
+	);
+	const paymentMethod = await stripeService.getPaymentMethod(
+		paymentFields.stripePublicKey,
+		paymentFields.paymentMethod,
+	);
+	const card = getIfDefined(
+		paymentMethod.card,
+		`Couldn't retrieve card details from Stripe for customer ${customer.id}`,
+	);
+	return {
+		TokenId: paymentFields.paymentMethod,
+		SecondTokenId: customer.id,
+		CreditCardNumber: card.last4,
+		CreditCardCountry: card.country,
+		CreditCardExpirationMonth: card.exp_month,
+		CreditCardExpirationYear: card.exp_year,
+		CreditCardType: card.brand,
+		PaymentGateway: stripeService.getPaymentGateway(
+			paymentFields.stripePublicKey,
+		),
+		Type: 'CreditCardReferenceTransaction',
+		StripePaymentType: paymentFields.stripePaymentType,
+	};
 }
 
 async function createPayPalPaymentMethod(
