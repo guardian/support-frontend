@@ -117,50 +117,52 @@ export function BenefitsCheckList({
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<table css={[tableCss(style), cssOverrides]}>
-			{benefitsCheckListData.map((item) => (
-				<tr>
-					{style !== 'hidden' && (
-						<td
-							css={[
-								checkListIconCss(style),
-								checkListIconColor(iconColor),
-								item.maybeGreyedOut,
-							]}
-						>
-							<div css={style === 'standard' ? iconContainerCss : css``}>
-								<ChecklistItemIcon
-									checked={item.isChecked}
-									style={style}
-									hideBullet={item.hideBullet}
-								/>
-							</div>
-						</td>
-					)}
-					<td css={[checkListTextCss, item.maybeGreyedOut]}>
-						{typeof item.text === 'string' ? (
-							<span css={checkListTextItemCss}>
-								{item.isNew && (
-									<>
-										<NewBenefitPill />{' '}
-									</>
-								)}
-								{item.strong ? <strong>{item.text}</strong> : item.text}
-								{item.toolTip && (
-									<Tooltip
-										children={<p>{item.toolTip}</p>}
-										xAxisOffset={108}
-										yAxisOffset={12}
-										placement="bottom"
-										desktopOnly={true}
-									></Tooltip>
-								)}
-							</span>
-						) : (
-							item.text
+			<tbody>
+				{benefitsCheckListData.map((item) => (
+					<tr>
+						{style !== 'hidden' && (
+							<td
+								css={[
+									checkListIconCss(style),
+									checkListIconColor(iconColor),
+									item.maybeGreyedOut,
+								]}
+							>
+								<div css={style === 'standard' ? iconContainerCss : css``}>
+									<ChecklistItemIcon
+										checked={item.isChecked}
+										style={style}
+										hideBullet={item.hideBullet}
+									/>
+								</div>
+							</td>
 						)}
-					</td>
-				</tr>
-			))}
+						<td css={[checkListTextCss, item.maybeGreyedOut]}>
+							{typeof item.text === 'string' ? (
+								<span css={checkListTextItemCss}>
+									{item.isNew && (
+										<>
+											<NewBenefitPill />{' '}
+										</>
+									)}
+									{item.strong ? <strong>{item.text}</strong> : item.text}
+									{item.toolTip && (
+										<Tooltip
+											children={<p>{item.toolTip}</p>}
+											xAxisOffset={108}
+											yAxisOffset={12}
+											placement="bottom"
+											desktopOnly={true}
+										></Tooltip>
+									)}
+								</span>
+							) : (
+								item.text
+							)}
+						</td>
+					</tr>
+				))}
+			</tbody>
 		</table>
 	);
 }
