@@ -50,7 +50,7 @@ const checkListTextItemCss = css`
 		font-weight: bold;
 	}
 `;
-const tableCss = (style: CheckListStyle) => css`
+const listCss = (style: CheckListStyle) => css`
 	${style === 'standard'
 		? css`
 				${textSans17};
@@ -58,14 +58,12 @@ const tableCss = (style: CheckListStyle) => css`
 		  `
 		: textSans15};
 
-	padding-top: ${space[4]}px;
-
-	& tr:not(:last-child) {
+	& li:not(:last-child) {
 		border-bottom: 6px solid transparent;
 	}
 
 	${from.mobileLandscape} {
-		& tr:not(:last-child) {
+		& li:not(:last-child) {
 			border-bottom: ${space[3]}px solid transparent;
 		}
 	}
@@ -116,53 +114,55 @@ export function BenefitsCheckList({
 	cssOverrides,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
-		<table css={[tableCss(style), cssOverrides]}>
-			<tbody>
-				{benefitsCheckListData.map((item) => (
-					<tr>
-						{style !== 'hidden' && (
-							<td
-								css={[
-									checkListIconCss(style),
-									checkListIconColor(iconColor),
-									item.maybeGreyedOut,
-								]}
-							>
-								<div css={style === 'standard' ? iconContainerCss : css``}>
-									<ChecklistItemIcon
-										checked={item.isChecked}
-										style={style}
-										hideBullet={item.hideBullet}
-									/>
-								</div>
-							</td>
+		<ul css={[listCss(style), cssOverrides]}>
+			{benefitsCheckListData.map((item) => (
+				<li
+					css={css`
+						display: flex;
+					`}
+				>
+					{style !== 'hidden' && (
+						<div
+							css={[
+								checkListIconCss(style),
+								checkListIconColor(iconColor),
+								item.maybeGreyedOut,
+							]}
+						>
+							<div css={style === 'standard' ? iconContainerCss : css``}>
+								<ChecklistItemIcon
+									checked={item.isChecked}
+									style={style}
+									hideBullet={item.hideBullet}
+								/>
+							</div>
+						</div>
+					)}
+					<div css={[checkListTextCss, item.maybeGreyedOut]}>
+						{typeof item.text === 'string' ? (
+							<span css={checkListTextItemCss}>
+								{item.isNew && (
+									<>
+										<NewBenefitPill />{' '}
+									</>
+								)}
+								{item.strong ? <strong>{item.text}</strong> : item.text}
+								{item.toolTip && (
+									<Tooltip
+										children={<p>{item.toolTip}</p>}
+										xAxisOffset={108}
+										yAxisOffset={12}
+										placement="bottom"
+										desktopOnly={true}
+									></Tooltip>
+								)}
+							</span>
+						) : (
+							item.text
 						)}
-						<td css={[checkListTextCss, item.maybeGreyedOut]}>
-							{typeof item.text === 'string' ? (
-								<span css={checkListTextItemCss}>
-									{item.isNew && (
-										<>
-											<NewBenefitPill />{' '}
-										</>
-									)}
-									{item.strong ? <strong>{item.text}</strong> : item.text}
-									{item.toolTip && (
-										<Tooltip
-											children={<p>{item.toolTip}</p>}
-											xAxisOffset={108}
-											yAxisOffset={12}
-											placement="bottom"
-											desktopOnly={true}
-										></Tooltip>
-									)}
-								</span>
-							) : (
-								item.text
-							)}
-						</td>
-					</tr>
-				))}
-			</tbody>
-		</table>
+					</div>
+				</li>
+			))}
+		</ul>
 	);
 }
