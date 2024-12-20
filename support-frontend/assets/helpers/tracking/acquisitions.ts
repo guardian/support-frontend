@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 
 import { viewId } from 'ophan';
-import type { $Keys } from 'utility-types';
 import { type Participations, testIsActive } from 'helpers/abTests/abtest';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
@@ -87,7 +86,7 @@ const campaigns: Record<string, string[]> = {
 	banner_just_one_just_one: ['banner_just_one_just_one'],
 };
 
-export type Campaign = $Keys<typeof campaigns>;
+export type Campaign = keyof typeof campaigns;
 
 // ----- Functions ----- //
 

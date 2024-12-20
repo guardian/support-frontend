@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import type { $Keys } from 'utility-types';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/types/option';
@@ -18,7 +17,8 @@ export const Sides = {
 	right: 'right',
 	left: 'left',
 };
-export type Appearance = $Keys<typeof Appearances>;
+export type Appearance = keyof typeof Appearances;
+
 type PropTypes = {
 	appearance: Appearance;
 	id?: string;
