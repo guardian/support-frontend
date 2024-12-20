@@ -50,7 +50,7 @@ const checkListTextItemCss = css`
 		font-weight: bold;
 	}
 `;
-const tableCss = (style: CheckListStyle) => css`
+const listCss = (style: CheckListStyle) => css`
 	${style === 'standard'
 		? css`
 				${textSans17};
@@ -58,14 +58,12 @@ const tableCss = (style: CheckListStyle) => css`
 		  `
 		: textSans15};
 
-	padding-top: ${space[4]}px;
-
-	& tr:not(:last-child) {
+	& li:not(:last-child) {
 		border-bottom: 6px solid transparent;
 	}
 
 	${from.mobileLandscape} {
-		& tr:not(:last-child) {
+		& li:not(:last-child) {
 			border-bottom: ${space[3]}px solid transparent;
 		}
 	}
@@ -116,11 +114,15 @@ export function BenefitsCheckList({
 	cssOverrides,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
-		<table css={[tableCss(style), cssOverrides]}>
+		<ul css={[listCss(style), cssOverrides]}>
 			{benefitsCheckListData.map((item) => (
-				<tr>
+				<li
+					css={css`
+						display: flex;
+					`}
+				>
 					{style !== 'hidden' && (
-						<td
+						<div
 							css={[
 								checkListIconCss(style),
 								checkListIconColor(iconColor),
@@ -134,9 +136,9 @@ export function BenefitsCheckList({
 									hideBullet={item.hideBullet}
 								/>
 							</div>
-						</td>
+						</div>
 					)}
-					<td css={[checkListTextCss, item.maybeGreyedOut]}>
+					<div css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
 							<span css={checkListTextItemCss}>
 								{item.isNew && (
@@ -158,9 +160,9 @@ export function BenefitsCheckList({
 						) : (
 							item.text
 						)}
-					</td>
-				</tr>
+					</div>
+				</li>
 			))}
-		</table>
+		</ul>
 	);
 }
