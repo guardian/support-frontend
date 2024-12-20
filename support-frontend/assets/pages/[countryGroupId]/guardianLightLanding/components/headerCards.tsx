@@ -97,12 +97,13 @@ export function HeaderCards({
 		ratePlan: contributionType,
 		contribution: price.toString(),
 	};
-	const guardianLightParamsInclAddress = {
-		...guardianLightParams,
-		returnAddress: returnLink ?? '',
-	};
 	const card1UrlParams = new URLSearchParams(
-		returnLink ? guardianLightParamsInclAddress : guardianLightParams,
+		returnLink
+			? {
+					...guardianLightParams,
+					returnAddress: returnLink,
+			  }
+			: guardianLightParams,
 	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
