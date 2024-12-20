@@ -76,7 +76,7 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
-	returnLink: string;
+	returnLink?: string;
 };
 
 export function HeaderCards({
@@ -92,12 +92,18 @@ export function HeaderCards({
 		];
 	const formattedPrice = simpleFormatAmount(currency, price);
 
-	const card1UrlParams = new URLSearchParams({
+	const guardianLightParams = {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 		contribution: price.toString(),
-		returnAddress: returnLink,
-	});
+	};
+	const guardianLightParamsInclAddress = {
+		...guardianLightParams,
+		returnAddress: returnLink ?? '',
+	};
+	const card1UrlParams = new URLSearchParams(
+		returnLink ? guardianLightParamsInclAddress : guardianLightParams,
+	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,
@@ -105,7 +111,7 @@ export function HeaderCards({
 		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
 	};
 	const card2 = {
-		link: returnLink,
+		link: returnLink ?? `https://www.theguardian.com/${geoId}`,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};
