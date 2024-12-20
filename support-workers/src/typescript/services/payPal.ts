@@ -1,7 +1,6 @@
-import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { z } from 'zod';
 import type { Stage } from '../model/stage';
-import { awsConfig } from '../util/awsConfig';
+import { getConfig } from './config';
 
 const payPalConfigSchema = z.object({
 	user: z.string(),
@@ -13,17 +12,8 @@ const payPalConfigSchema = z.object({
 
 type PayPalConfig = z.infer<typeof payPalConfigSchema>;
 
-export const getPayPalConfig = async (stage: Stage) => {
-	const ssmClient = new SSMClient(awsConfig);
-	const params = {
-		Name: `/${stage}/support/support-workers/paypal-config`,
-		WithDecryption: true,
-	};
-	const command = new GetParameterCommand(params);
-	const response = await ssmClient.send(command);
-	console.log(response.Parameter?.Value);
-
-	return payPalConfigSchema.parse(JSON.parse(response.Parameter?.Value ?? ''));
+export const getPayPalConfig = async (stage: Stage): Promise<PayPalConfig> => {
+	return getConfig(stage, 'paypal-config', payPalConfigSchema);
 };
 
 export class PayPalService {
