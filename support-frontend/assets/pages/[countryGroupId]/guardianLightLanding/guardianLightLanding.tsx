@@ -46,3 +46,5 @@ export function GuardianLightLanding({
 		</LandingPageLayout>
 	);
 }
+
+export default GuardianLightLanding;

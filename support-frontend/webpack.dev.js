@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 
@@ -22,4 +21,12 @@ module.exports = merge(common('[name].css', '[name].js', false), {
 	resolve: {
 		fallback: { crypto: false },
 	},
+	// See https://webpack.js.org/configuration/optimization/
+	// optimization: {
+	// 	splitChunks: {
+	// 		chunks() {
+	// 			return false;
+	// 		},
+	// 	},
+	// },
 });
