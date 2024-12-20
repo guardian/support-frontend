@@ -262,12 +262,6 @@ export function CheckoutComponent({
 		},
 	});
 
-	const returnUrlParam = returnLink
-		? new URLSearchParams({
-				returnAddress: returnLink,
-		  }).toString()
-		: '';
-
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
 	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
@@ -760,16 +754,10 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							productKey === 'GuardianLight' ? (
-								<BackButton
-									path={`/guardian-light${
-										returnUrlParam && '?'
-									}${returnUrlParam}`}
-									buttonText="Back"
-								/>
-							) : (
-								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
-							)
+							<BackButton
+								path={`javascript:history.back()`}
+								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
+							/>
 						}
 					/>
 				</BoxContents>

@@ -26,7 +26,7 @@ export function GuardianLightLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn =
 		urlSearchParams.get('returnAddress') ??
-		`https://www.theguardian.com/${geoId}`;
+		`https://www.theguardian.com/${geoId}`; // default back address if no returnAddress supplied
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
