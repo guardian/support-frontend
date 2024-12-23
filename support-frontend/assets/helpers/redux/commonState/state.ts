@@ -13,11 +13,8 @@ import type {
 	Campaign,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import type {
-	LandingPageSelection} from '../../abTests/landingPageAbTests';
-import {
-	fallBackLandingPageSelection
-} from '../../abTests/landingPageAbTests';
+import type { LandingPageSelection } from '../../abTests/landingPageAbTests';
+import { fallBackLandingPageSelection } from '../../abTests/landingPageAbTests';
 
 export type Internationalisation = {
 	currencyId: IsoCurrency;
@@ -46,7 +43,7 @@ export type CommonStateSetupData = {
 	abParticipations: Participations;
 	settings: Settings;
 	amounts: SelectedAmountsVariant;
-  landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageSelection;
 };
 
 const countryGroupId = CountryGroup.detect();

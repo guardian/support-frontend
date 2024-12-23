@@ -15,11 +15,8 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
-import type {
-	LandingPageSelection} from '../../abTests/landingPageAbTests';
-import {
-	getLandingPageSettings
-} from '../../abTests/landingPageAbTests';
+import type { LandingPageSelection } from '../../abTests/landingPageAbTests';
+import { getLandingPageSettings } from '../../abTests/landingPageAbTests';
 import type { SelectedAmountsVariant } from '../../contributions';
 import type { CommonState, Internationalisation } from '../commonState/state';
 

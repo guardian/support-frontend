@@ -347,7 +347,7 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCountdownCampaign]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- todo
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- todo
 	const getHeadline = (
 		showCountdown: boolean,
 		currentCountdownSettings?: CountdownSetting,

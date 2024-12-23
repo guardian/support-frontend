@@ -29,17 +29,17 @@ export function getLandingPageSettings(
 			return countryGroups.includes(countryGroupId);
 		});
 
-  if (test) {
-    const idx = randomNumber(mvtId, test.name) % test.variants.length;
-    const variant = test.variants[idx];
+	if (test) {
+		const idx = randomNumber(mvtId, test.name) % test.variants.length;
+		const variant = test.variants[idx];
 
-    /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- extra cautious */
-    if (variant) {
-      return {
-        testName: test.name,
-        ...variant,
-      };
-    }
-  }
-  return fallBackLandingPageSelection;
+		/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- extra cautious */
+		if (variant) {
+			return {
+				testName: test.name,
+				...variant,
+			};
+		}
+	}
+	return fallBackLandingPageSelection;
 }
