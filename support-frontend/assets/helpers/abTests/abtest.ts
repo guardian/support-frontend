@@ -141,7 +141,7 @@ const MVT_COOKIE = 'GU_mvt_id';
 const MVT_MAX = 1_000_000;
 
 // Attempts to retrieve the MVT id from a cookie, or sets it.
-function getMvtId(): number {
+export function getMvtId(): number {
 	const mvtIdCookieValue = cookie.get(MVT_COOKIE);
 	let mvtId = Number(mvtIdCookieValue);
 
@@ -600,7 +600,7 @@ const referrerControlledActiveParticipation = (
 	acquisitionDataTest,
 });
 
-function randomNumber(mvtId: number, seed: number): number {
+export function randomNumber(mvtId: number, seed: number | string): number {
 	const rng = seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }

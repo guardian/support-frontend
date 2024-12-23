@@ -58,6 +58,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -265,9 +266,11 @@ function getPlanCost(
 
 type ThreeTierLandingProps = {
 	geoId: GeoId;
+	settings: LandingPageSelection;
 };
 export function ThreeTierLanding({
 	geoId,
+	settings,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
@@ -344,6 +347,7 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCountdownCampaign]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- todo
 	const getHeadline = (
 		showCountdown: boolean,
 		currentCountdownSettings?: CountdownSetting,
@@ -553,20 +557,22 @@ export function ThreeTierLanding({
 						/>
 					)}
 					<h1 css={heading}>
-						{getHeadline(
-							showCountdown,
-							currentCountdownSettings,
-							campaignSettings,
-						)}
+						{/*{getHeadline(*/}
+						{/*	showCountdown,*/}
+						{/*	currentCountdownSettings,*/}
+						{/*	campaignSettings,*/}
+						{/*)}*/}
+						{settings.copy.heading}
 					</h1>
 					<p css={standFirst}>
-						{campaignSettings?.copy.subheading ?? (
-							<>
-								We're not owned by a billionaire or shareholders - our readers
-								support us. Choose to join with one of the options below.{' '}
-								<strong>Cancel anytime.</strong>
-							</>
-						)}
+						{/*{campaignSettings?.copy.subheading ?? (*/}
+						{/*	<>*/}
+						{/*		We're not owned by a billionaire or shareholders - our readers*/}
+						{/*		support us. Choose to join with one of the options below.{' '}*/}
+						{/*		<strong>Cancel anytime.</strong>*/}
+						{/*	</>*/}
+						{/*)}*/}
+						{settings.copy.subheading}
 					</p>
 					{campaignSettings?.tickerSettings && (
 						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
