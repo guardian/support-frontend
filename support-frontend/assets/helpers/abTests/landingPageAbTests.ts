@@ -1,9 +1,10 @@
+import seedrandom from 'seedrandom';
 import type {
 	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
-import { getMvtId, randomNumber } from './abtest';
+import { getMvtId } from './abtest';
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
@@ -16,6 +17,11 @@ export const fallBackLandingPageSelection: LandingPageSelection = {
 			"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. Cancel anytime.",
 	},
 };
+
+function randomNumber(mvtId: number, seed: string): number {
+	const rng = seedrandom(mvtId + seed);
+	return Math.abs(rng.int32());
+}
 
 export function getLandingPageSettings(
 	countryGroupId: CountryGroupId,

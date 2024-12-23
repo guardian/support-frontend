@@ -600,7 +600,7 @@ const referrerControlledActiveParticipation = (
 	acquisitionDataTest,
 });
 
-export function randomNumber(mvtId: number, seed: number | string): number {
+function randomNumber(mvtId: number, seed: number): number {
 	const rng = seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }
