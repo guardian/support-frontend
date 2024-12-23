@@ -17,7 +17,6 @@ export const fallBackLandingPageSelection: LandingPageSelection = {
 	},
 };
 
-// TODO - track this with other AB tests
 export function getLandingPageSettings(
 	countryGroupId: CountryGroupId,
 	tests: LandingPageTest[] = [],
