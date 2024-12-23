@@ -51,7 +51,10 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import { HeadlineReturn } from './guardianAdLite/headlineReturn';
+import {
+	HeadlineReturn,
+	HeadlineReturnCTA,
+} from './guardianAdLite/headlineReturn';
 import { Reminder } from './guardianAdLite/reminder';
 import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
@@ -115,6 +118,9 @@ export const getThankYouModuleData = (
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
+	finalAmount?: number,
+	startDate?: string,
+	returnAddress?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -324,7 +330,12 @@ export const getThankYouModuleData = (
 		whatNext: {
 			icon: getThankYouModuleIcon('whatNext'),
 			header: 'What happens next?',
-			bodyCopy: <WhatNext />,
+			bodyCopy: (
+				<WhatNext
+					amount={(finalAmount ?? '').toString()}
+					startDate={startDate ?? ''}
+				/>
+			),
 			ctas: null,
 		},
 		reminder: {
@@ -337,7 +348,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('headlineReturn'),
 			header: 'Headline to bring user back to Guardian front page',
 			bodyCopy: <HeadlineReturn />,
-			ctas: null,
+			ctas: <HeadlineReturnCTA returnAddress={returnAddress ?? ''} />,
 		},
 	};
 

@@ -58,4 +58,14 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-export { getWeeklyDays, addDays, getTierThreeDeliveryDate };
+function getGuardianAdLiteDate(today?: number) {
+	const firstValidDate = addDays(new Date(today ?? new Date()), 15);
+	return firstValidDate;
+}
+
+export {
+	getWeeklyDays,
+	addDays,
+	getTierThreeDeliveryDate,
+	getGuardianAdLiteDate,
+};

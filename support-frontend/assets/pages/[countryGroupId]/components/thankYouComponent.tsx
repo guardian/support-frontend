@@ -31,9 +31,11 @@ import {
 	sendEventOneTimeCheckoutValue,
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 
 const checkoutContainer = css`
@@ -246,6 +248,11 @@ export function ThankYouComponent({
 		undefined,
 		isTier3,
 		benefitsChecklist,
+		undefined,
+		undefined,
+		payment.finalAmount,
+		formatUserDate(getGuardianAdLiteDate()),
+		'https://www.theguardian.com',
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
