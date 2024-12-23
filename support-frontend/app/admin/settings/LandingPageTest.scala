@@ -62,6 +62,7 @@ object LandingPageTest {
   implicit val decoder: Decoder[LandingPageTest] = deriveDecoder
 }
 
+// TODO - fetch config from dynamodb
 object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] {
   def settings(): List[LandingPageTest] = List(
     LandingPageTest(
