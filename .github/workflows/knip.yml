@@ -5,7 +5,7 @@ on:
 
 jobs:
   knip:
-    name: knip
+    name: detect unused exports
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
