@@ -70,7 +70,10 @@ const router = () => {
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
 									inThreeTier ? (
-										<ThreeTierLanding geoId={countryId} />
+										<ThreeTierLanding
+											geoId={countryId}
+											settings={store.getState().common.landingPageSettings}
+										/>
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}

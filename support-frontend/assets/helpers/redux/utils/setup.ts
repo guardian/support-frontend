@@ -15,6 +15,8 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
+import type { LandingPageSelection } from '../../abTests/landingPageAbTests';
+import { getLandingPageSettings } from '../../abTests/landingPageAbTests';
 import type { SelectedAmountsVariant } from '../../contributions';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
@@ -27,6 +29,7 @@ function buildInitialState(
 	settings: Settings,
 	acquisitionData: ReferrerAcquisitionData,
 	amounts: SelectedAmountsVariant,
+	landingPageSettings: LandingPageSelection,
 ): CommonState {
 	const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
 	const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
@@ -46,6 +49,7 @@ function buildInitialState(
 		abParticipations,
 		settings,
 		amounts,
+		landingPageSettings,
 	};
 }
 
@@ -57,6 +61,11 @@ export function getInitialState(): CommonState {
 	const { selectedAmountsVariant, amountsParticipation } =
 		getAmountsTestVariant(countryId, countryGroupId, settings);
 
+	const landingPageSettings = getLandingPageSettings(
+		countryGroupId,
+		settings.landingPageTests,
+	);
+
 	const abtestInitalizerData = {
 		countryId,
 		countryGroupId,
@@ -67,6 +76,7 @@ export function getInitialState(): CommonState {
 	const participationsWithAmountsTest = {
 		...participations,
 		...amountsParticipation,
+		[landingPageSettings.testName]: landingPageSettings.name,
 	};
 
 	const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
@@ -78,5 +88,6 @@ export function getInitialState(): CommonState {
 		settings,
 		acquisitionData,
 		selectedAmountsVariant,
+		landingPageSettings,
 	);
 }
