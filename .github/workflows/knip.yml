@@ -1,8 +1,7 @@
 name: knip
 
-on: push:
-  paths:
-    - support-frontend/**
+on:
+  pull_request:
 
 jobs:
   knip:
