@@ -3,14 +3,10 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
-import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
-import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import { userReducer } from 'helpers/redux/user/reducer';
-import type { UserState } from 'helpers/redux/user/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -20,19 +16,6 @@ export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 export type RedemptionCheckoutState = {
 	stage: Stage;
 	errors: Array<FormError<FormField>>;
-};
-
-export type RedemptionFormState = {
-	userCode: Option<string>;
-	readerType: Option<ReaderType>;
-	error: Option<string>;
-	user: UserState;
-	checkout: RedemptionCheckoutState;
-	checkoutForm: {
-		personalDetails: PersonalDetailsState;
-		marketingConsent: MarketingConsentState;
-		csrf: CsrfState;
-	};
 };
 
 // ------- Actions ---------- //

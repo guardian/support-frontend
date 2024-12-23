@@ -7,19 +7,22 @@ this function flattens all colours into a
 child free map where the keys are named as
 parent-child.
 */
-const flatten = (obj, prefixes = []) => Object.entries(obj)
-  .reduce((prev, [key, val]) => ((typeof val === 'string') ?
-    {
-      ...prev,
-      [[...prefixes, key].join('-')]: val,
-    }
-    : {
-      ...prev,
-      ...flatten(val, [...prefixes, key]),
-    }), {});
+const flatten = (obj, prefixes = []) =>
+	Object.entries(obj).reduce(
+		(prev, [key, val]) =>
+			typeof val === 'string'
+				? {
+						...prev,
+						[[...prefixes, key].join('-')]: val,
+				  }
+				: {
+						...prev,
+						...flatten(val, [...prefixes, key]),
+				  },
+		{},
+	);
 
 const paletteAsMap = () => flatten(palette);
 const paletteAsSass = () => `$palette: ${convertToSass(paletteAsMap())};`;
 
-
-module.exports = { paletteAsMap, paletteAsSass };
+module.exports = { paletteAsSass };

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import type { DateYMDString } from 'helpers/types/DateString';
-import type { Option } from 'helpers/types/option';
 
 type LandingPage = 'digitalSubscription' | 'newspaper' | 'guardianWeekly';
 
@@ -33,24 +32,6 @@ const timedCopy: TimedCopyCollection = {
 		},
 	],
 };
-
-const forceQueryKey = 'forceTimeboundCopy';
-
-export function getTimeboundQuery(): Option<Date> {
-	const { search } = window.location;
-
-	if (search) {
-		const queryList = search.replace('?', '').split('&');
-		const overrideQuery = queryList.find((keyValPair) =>
-			keyValPair.startsWith(forceQueryKey),
-		);
-		return overrideQuery
-			? new Date(overrideQuery.replace(`${forceQueryKey}=`, ''))
-			: null;
-	}
-
-	return null;
-}
 
 export function getTimeboundCopy(
 	page: LandingPage,
