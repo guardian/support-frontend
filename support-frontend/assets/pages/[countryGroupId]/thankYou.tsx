@@ -104,15 +104,11 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {
-					case 'SupporterPlus':
-					case 'Contribution':
-						return 'NoFulfilmentOptions';
 					case 'TierThree':
 						return countryGroupId === 'International'
 							? 'RestOfWorld'
 							: 'Domestic';
 					default:
-						// ToDo: define for every product here
 						return 'NoFulfilmentOptions';
 				}
 			};
