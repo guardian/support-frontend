@@ -8,6 +8,7 @@ interface SubheadingProps {
 	isTier3: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	isGuardianAdLite: boolean;
 }
 
 function MarketingCopy({
@@ -35,6 +36,7 @@ const getSubHeadingCopy = (
 	isTier3: boolean,
 	isSignedIn: boolean,
 	identityUserType: UserType,
+	isGuardianAdLite: boolean,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
@@ -54,18 +56,25 @@ const getSubHeadingCopy = (
 		const tier3HeadingCopy = (
 			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
 		);
+		const guardianAdLiteCopy = (
+			<span>{`Your valued support powers our journalism.${' '}`}</span>
+		);
+		const notSignedInCopy = isTier3
+			? tier3HeadingCopy
+			: isGuardianAdLite
+			? guardianAdLiteCopy
+			: signedInBelowThreshold;
+		const signedInCopy = amountIsAboveThreshold ? (
+			<>
+				{signedInAboveThreshold}
+				{notSignedInCopy}
+			</>
+		) : (
+			notSignedInCopy
+		);
 		return {
-			isSignedIn: isTier3 ? (
-				<>{tier3HeadingCopy}</>
-			) : amountIsAboveThreshold ? (
-				<>
-					{signedInAboveThreshold}
-					{signedInBelowThreshold}
-				</>
-			) : (
-				<>{signedInBelowThreshold}</>
-			),
-			notSignedIn: <>{isTier3 ? tier3HeadingCopy : signedInBelowThreshold}</>,
+			isSignedIn: signedInCopy,
+			notSignedIn: notSignedInCopy,
 		};
 	};
 
@@ -85,6 +94,7 @@ function Subheading({
 	isTier3,
 	isSignedIn,
 	identityUserType,
+	isGuardianAdLite,
 }: SubheadingProps): JSX.Element {
 	const subheadingCopy = getSubHeadingCopy(
 		amountIsAboveThreshold,
@@ -92,25 +102,33 @@ function Subheading({
 		isTier3,
 		isSignedIn,
 		identityUserType,
+		isGuardianAdLite,
 	);
 
 	return (
 		<>
 			{subheadingCopy}
-			<MarketingCopy contributionType={contributionType} isTier3={isTier3} />
-			{identityUserType !== 'current' &&
-				!isTier3 &&
-				contributionType !== 'ONE_OFF' && (
-					<span
-						css={css`
-							font-weight: bold;
-						`}
-					>
-						{' '}
-						In the meantime, please sign in to get the best supporter
-						experience.
-					</span>
-				)}
+			{!isGuardianAdLite && (
+				<>
+					<MarketingCopy
+						contributionType={contributionType}
+						isTier3={isTier3}
+					/>
+					{identityUserType !== 'current' &&
+						!isTier3 &&
+						contributionType !== 'ONE_OFF' && (
+							<span
+								css={css`
+									font-weight: bold;
+								`}
+							>
+								{' '}
+								In the meantime, please sign in to get the best supporter
+								experience.
+							</span>
+						)}
+				</>
+			)}
 		</>
 	);
 }

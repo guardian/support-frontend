@@ -40,6 +40,7 @@ type ThankYouHeaderProps = {
 	identityUserType: UserType;
 	promotion?: Promotion;
 	showOffer?: boolean;
+	isGuardianAdLite?: boolean;
 };
 
 function ThankYouHeader({
@@ -55,6 +56,7 @@ function ThankYouHeader({
 	showOffer,
 	promotion,
 	isTier3,
+	isGuardianAdLite = false,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -66,6 +68,7 @@ function ThankYouHeader({
 				promotion={promotion}
 				currency={currency}
 				contributionType={contributionType}
+				isGuardianAdLite={isGuardianAdLite}
 			/>
 
 			<p css={headerSupportingText}>
@@ -76,6 +79,7 @@ function ThankYouHeader({
 					isTier3={isTier3}
 					isSignedIn={isSignedIn}
 					identityUserType={identityUserType}
+					isGuardianAdLite={isGuardianAdLite}
 				/>
 			</p>
 			{showOffer && (

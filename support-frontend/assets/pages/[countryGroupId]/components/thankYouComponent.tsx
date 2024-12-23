@@ -308,6 +308,7 @@ export function ThankYouComponent({
 							currency={currencyKey}
 							promotion={promotion}
 							identityUserType={identityUserType}
+							isGuardianAdLite={isGuardianAdLite}
 						/>
 					</div>
 

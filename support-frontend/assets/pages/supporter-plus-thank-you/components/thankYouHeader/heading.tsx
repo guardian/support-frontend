@@ -178,6 +178,7 @@ type HeadingProps = {
 	name: string | null;
 	isOneOffPayPal: boolean;
 	isTier3: boolean;
+	isGuardianAdLite: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
@@ -190,6 +191,7 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
+	isGuardianAdLite,
 	promotion,
 }: HeadingProps): JSX.Element {
 	const maybeNameAndTrailingSpace: string =
@@ -206,7 +208,7 @@ function Heading({
 		);
 	}
 
-	if (isTier3) {
+	if (isTier3 || isGuardianAdLite) {
 		return (
 			<h1 css={tier3HeaderTitleText}>
 				Thank you{' '}
@@ -215,10 +217,14 @@ function Heading({
 				<YellowHighlight
 					currency={currency}
 					amount={amount}
-					productName={'Digital + print.'}
+					productName={isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite'}
 				/>
-				<br css={tier3lineBreak} />
-				Your valued support powers our journalism.
+				{isTier3 && (
+					<>
+						<br css={tier3lineBreak} />
+						'Your valued support powers our journalism.'
+					</>
+				)}
 			</h1>
 		);
 	}
