@@ -13,10 +13,7 @@ export const Appearances = {
 	feature: 'feature',
 	dark: 'dark',
 };
-export const Sides = {
-	right: 'right',
-	left: 'left',
-};
+
 export type Appearance = keyof typeof Appearances;
 
 type PropTypes = {
@@ -116,11 +113,5 @@ export function NarrowContent({
 }): JSX.Element {
 	return <div className="component-content__narrowContent">{children}</div>;
 }
-
-/*
-A css class that sets the background colour to match the block.
-Use on children that need to match the background of the parent
-*/
-export const bgClassName = 'component-content-bg'; // ---- Exports ----- //
 
 export default Content;
