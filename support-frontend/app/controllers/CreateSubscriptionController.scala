@@ -25,7 +25,14 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService, UserDetails}
+import services.{
+  IdentityService,
+  RecaptchaResponse,
+  RecaptchaService,
+  TestUserService,
+  UserBenefitsApiService,
+  UserDetails,
+}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -63,6 +70,7 @@ class CreateSubscriptionController(
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
     paperRoundServiceProvider: PaperRoundServiceProvider,
+    userBenefitsApiService: UserBenefitsApiService,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -149,9 +157,22 @@ class CreateSubscriptionController(
     request.body.product match {
       case GuardianLight(_) => {
         if (userDetails.isSignedIn) {
+          // If the user is signed in, we'll assume they're eligible as they shouldn't have got
+          // to this point of the journey.
           EitherT.rightT(())
         } else {
-          EitherT.leftT(RequestValidationError("guardian_light_purchase_not_allowed"))
+          userBenefitsApiService
+            .getUserBenefits(userDetails.userDetails.identityId)
+            .map { benefits =>
+              if (benefits.benefits.contains("adFree")) {
+                // Not eligible
+                throw new Error()
+              } else {
+                // Eligible
+                ()
+              }
+            }
+            .leftMap(_ => RequestValidationError("guardian_light_purchase_not_allowed"))
         }
       }
       case _ => EitherT.rightT(())
