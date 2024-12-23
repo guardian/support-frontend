@@ -226,7 +226,10 @@ export type ThankYouModuleType =
 	| 'supportReminder'
 	| 'benefits'
 	| 'subscriptionStart'
-	| 'newspaperArchiveBenefit';
+	| 'newspaperArchiveBenefit'
+	| 'whatNext'
+	| 'reminder'
+	| 'headlineReturn';
 
 export interface ThankYouModuleProps {
 	icon: JSX.Element;

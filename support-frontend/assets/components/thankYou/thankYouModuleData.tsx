@@ -51,6 +51,9 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
+import { HeadlineReturn } from './guardianAdLite/headlineReturn';
+import { Reminder } from './guardianAdLite/reminder';
+import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -317,6 +320,24 @@ export const getThankYouModuleData = (
 					}}
 				/>
 			),
+		},
+		whatNext: {
+			icon: getThankYouModuleIcon('whatNext'),
+			header: 'What happens next?',
+			bodyCopy: <WhatNext />,
+			ctas: null,
+		},
+		reminder: {
+			icon: getThankYouModuleIcon('reminder'),
+			header: 'Important reminder',
+			bodyCopy: <Reminder />,
+			ctas: null,
+		},
+		headlineReturn: {
+			icon: getThankYouModuleIcon('headlineReturn'),
+			header: 'Headline to bring user back to Guardian front page',
+			bodyCopy: <HeadlineReturn />,
+			ctas: null,
 		},
 	};
 

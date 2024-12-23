@@ -202,6 +202,7 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
+	const isGuardianAdLite = productKey === 'GuardianLight';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
@@ -253,7 +254,10 @@ export function ThankYouComponent({
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
-		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
+		...maybeThankYouModule(
+			!isNewAccount && !isSignedIn && !isGuardianAdLite,
+			'signIn',
+		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(
 			isTier3 && showNewspaperArchiveBenefit,
@@ -267,7 +271,10 @@ export function ThankYouComponent({
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
-		...maybeThankYouModule(!isTier3, 'socialShare'),
+		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
+		...maybeThankYouModule(isGuardianAdLite, 'whatNext'),
+		...maybeThankYouModule(isGuardianAdLite, 'reminder'),
+		...maybeThankYouModule(isGuardianAdLite, 'headlineReturn'),
 	];
 
 	return (
