@@ -28,6 +28,8 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val paymentApiUrl = config.getString("paymentApi.url")
 
+  lazy val userBenefitsApi = new UserBenefitsApi(config.getConfig("userBenefitsApi"))
+
   lazy val membersDataServiceApiUrl = config.getString("membersDataService.api.url")
 
   lazy val metricUrl = MetricUrl(config.getString("metric.url"))

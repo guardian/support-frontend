@@ -29,6 +29,8 @@ trait Services {
 
   lazy val identityService = IdentityService(appConfig.identity)
 
+  lazy val userBenefitsApiService = UserBenefitsApiService(appConfig.userBenefitsApi)
+
   lazy val goCardlessServiceProvider = new GoCardlessFrontendServiceProvider(appConfig.goCardlessConfigProvider)
 
   lazy val supportWorkersClient = {
