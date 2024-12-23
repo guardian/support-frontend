@@ -48,6 +48,13 @@ const defaultGridContainer = css`
 	}
 `;
 
+const defaultContainerNoIcon = css`
+	margin: ${space[3]}px ${space[2]}px;
+	${until.tablet} {
+		margin-top: ${space[0]}px;
+	}
+`;
+
 const imageryAndQrCodesGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
@@ -232,11 +239,11 @@ export type ThankYouModuleType =
 	| 'headlineReturn';
 
 export interface ThankYouModuleProps {
-	icon: JSX.Element;
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
 	moduleType: ThankYouModuleType;
+	icon?: JSX.Element;
 	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: JSX.Element | string;
@@ -267,7 +274,9 @@ function ThankYouModule({
 	const gridContainer =
 		hasImagery || hasQrCodes
 			? imageryAndQrCodesGridContainer
-			: defaultGridContainer;
+			: icon
+			? defaultGridContainer
+			: defaultContainerNoIcon;
 
 	const maybePaddingRight =
 		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);

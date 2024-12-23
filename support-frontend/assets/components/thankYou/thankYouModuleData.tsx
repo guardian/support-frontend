@@ -78,10 +78,10 @@ import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
 
 export interface ThankYouModuleData {
-	icon: JSX.Element;
 	header: string;
 	bodyCopy: string | JSX.Element;
 	ctas: JSX.Element | null;
+	icon?: JSX.Element;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: string | JSX.Element;
 	ctasSecond?: JSX.Element | null;
@@ -328,7 +328,6 @@ export const getThankYouModuleData = (
 			),
 		},
 		whatNext: {
-			icon: getThankYouModuleIcon('whatNext'),
 			header: 'What happens next?',
 			bodyCopy: (
 				<WhatNext
@@ -339,13 +338,11 @@ export const getThankYouModuleData = (
 			ctas: null,
 		},
 		reminder: {
-			icon: getThankYouModuleIcon('reminder'),
 			header: 'Important reminder',
 			bodyCopy: <Reminder />,
 			ctas: null,
 		},
 		headlineReturn: {
-			icon: getThankYouModuleIcon('headlineReturn'),
 			header: 'Headline to bring user back to Guardian front page',
 			bodyCopy: <HeadlineReturn />,
 			ctas: <HeadlineReturnCTA returnAddress={returnAddress ?? ''} />,
