@@ -1,4 +1,3 @@
-import type { $Keys } from 'utility-types';
 import catalogue from './imageCatalogue.json';
 // ----- Types ----- //
 export type ImageType = 'jpg' | 'png';
@@ -6,7 +5,7 @@ export type ImageType = 'jpg' | 'png';
 export const GRID_DOMAIN = 'https://i.guim.co.uk';
 export const imageCatalogue: Record<string, string> = catalogue;
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
-export type ImageId = $Keys<typeof imageCatalogue>;
+export type ImageId = keyof typeof imageCatalogue;
 // ----- Functions ----- //
 /**
  * Builds a fastly-image-service url from and id and an image size.

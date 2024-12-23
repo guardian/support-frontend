@@ -1,9 +1,3 @@
-// ----- Imports ----- //
-
-import type { $Keys } from 'utility-types';
-
-// ----- Setup ----- //
-
 const usStates: Record<string, string> = {
 	AL: 'Alabama',
 	AK: 'Alaska',
@@ -599,9 +593,9 @@ const countries: Record<IsoCountry, string> = {
 	SH: 'Saint Helena',
 };
 // ----- Types ----- //
-export type UsState = $Keys<typeof usStates>;
-export type CaState = $Keys<typeof caStates>;
-export type AuState = $Keys<typeof auStates>;
+export type UsState = keyof typeof usStates;
+export type CaState = keyof typeof caStates;
+export type AuState = keyof typeof auStates;
 export type StateProvince = UsState;
 // Annoyingly, this isn't Stripe's documentation, but if you try and submit
 // a country that isn't on this list, you get an error
