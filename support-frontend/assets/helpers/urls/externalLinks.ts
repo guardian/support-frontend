@@ -7,19 +7,12 @@ import type {
 	DigitalGiftBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getBaseDomain, getOrigin } from 'helpers/urls/url';
 
 // ----- Types ----- //
 
 export type MemProduct = 'events';
-export type SubsUrls = {
-	[key in SubscriptionProduct]: string;
-} & {
-	GuardianWeeklyGift: string;
-	DigitalPackGift: string;
-};
 
 // ----- Setup ----- //
 

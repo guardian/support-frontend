@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
-import type { $Keys } from 'utility-types';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import 'helpers/types/option';
@@ -14,11 +13,9 @@ export const Appearances = {
 	feature: 'feature',
 	dark: 'dark',
 };
-export const Sides = {
-	right: 'right',
-	left: 'left',
-};
-export type Appearance = $Keys<typeof Appearances>;
+
+export type Appearance = keyof typeof Appearances;
+
 type PropTypes = {
 	appearance: Appearance;
 	id?: string;
@@ -116,11 +113,5 @@ export function NarrowContent({
 }): JSX.Element {
 	return <div className="component-content__narrowContent">{children}</div>;
 }
-
-/*
-A css class that sets the background colour to match the block.
-Use on children that need to match the background of the parent
-*/
-export const bgClassName = 'component-content-bg'; // ---- Exports ----- //
 
 export default Content;

@@ -7,17 +7,11 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import type { CommonState } from 'helpers/redux/commonState/state';
 
 export type PromotionTermsPropTypes = {
 	productPrices: ProductPrices;
 	promotionTerms: PromotionTerms;
 	countryGroupId: CountryGroupId;
-};
-
-export type State = {
-	common: CommonState;
-	page: PromotionTermsPropTypes;
 };
 
 // ----- Export ----- //

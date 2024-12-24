@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import type { ReactNode } from 'react';
 import { createElement } from 'react';
-import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './button.scss';
@@ -22,8 +21,8 @@ export const Sides = {
 	right: 'right',
 	left: 'left',
 };
-type Appearance = $Keys<typeof Appearances>;
-type IconSide = $Keys<typeof Sides>;
+type Appearance = keyof typeof Appearances;
+type IconSide = keyof typeof Sides;
 
 /* **********************************************************************
 Note: postDeploymentTestID will be prefixed with 'qa' to indicate it is
