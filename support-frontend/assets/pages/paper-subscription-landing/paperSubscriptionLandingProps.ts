@@ -9,11 +9,6 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
-export type PaperLandingContentPropTypes = {
-	productPrices: ProductPrices | null | undefined;
-	promotionCopy: PromotionCopy | null | undefined;
-};
-
 export type PaperLandingPropTypes = {
 	productPrices: ProductPrices | null | undefined;
 	promotionCopy: PromotionCopy | null | undefined;

@@ -51,7 +51,6 @@ export type StripePaymentMethod =
 	// button”
 	| 'StripeApplePay'
 	| 'StripePaymentRequestButton';
-export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 type RegularContribution = {
 	productType: 'Contribution';
 	amount: number;

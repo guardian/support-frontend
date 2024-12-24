@@ -13,8 +13,6 @@ export type WeeklyBillingPeriod =
 	| typeof Quarterly
 	| typeof Annual;
 
-export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
-
 const weeklyBillingPeriods = (): WeeklyBillingPeriod[] => {
 	return [Monthly, Quarterly, Annual];
 };
