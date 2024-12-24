@@ -1,5 +1,4 @@
 import {
-	checkGiftStartDate,
 	checkOptionalEmail,
 	emailAddressesMatch,
 	isValidEmail,
@@ -199,13 +198,6 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						error: formError(
 							'emailGiftRecipient',
 							'Email address is too long.',
-						),
-					},
-					{
-						rule: checkGiftStartDate(fields.giftDeliveryDate),
-						error: formError(
-							'giftDeliveryDate',
-							'Please enter a valid delivery date for your gift.',
 						),
 					},
 			  ]
