@@ -663,6 +663,12 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
+	const returnToLandingPage =
+		productKey === 'GuardianLight'
+			? `/guardian-light${returnParam}`
+			: `/${geoId}/contribute`;
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -755,7 +761,7 @@ export function CheckoutComponent({
 						)}
 						headerButton={
 							<BackButton
-								path={`javascript:history.back()`}
+								path={returnToLandingPage}
 								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
 							/>
 						}
