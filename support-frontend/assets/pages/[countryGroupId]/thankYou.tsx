@@ -40,7 +40,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 		: undefined;
 	// returnAddress
 	const urlSearchParamsReturn =
-		searchParams.get('returnAddress') ?? `https://www.theguardian.com/${geoId}`; // default back address if no returnAddress supplied
+		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;

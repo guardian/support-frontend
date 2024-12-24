@@ -112,7 +112,7 @@ export function HeaderCards({
 		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
 	};
 	const card2 = {
-		link: returnLink ?? `https://www.theguardian.com/${geoId}`,
+		link: returnLink ?? `https://www.theguardian.com`,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};
