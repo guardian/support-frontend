@@ -80,10 +80,7 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.26.0",
-		"@emotion/cache": "^11.13.1",
-		"@emotion/core": "^11.0.0",
 		"@emotion/react": "^11.11.1",
-		"@emotion/serialize": "^1.1.2",
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.19.2",
 		"@guardian/libs": "^19.1.0",
@@ -101,7 +98,6 @@
 		"@types/uuid": "^9.0.2",
 		"classnames": "^2.5.1",
 		"dompurify": "^3.2.0",
-		"emotion-theming": "^11.0.0",
 		"framer-motion": "^1.11.1",
 		"lodash.debounce": "^4.0.6",
 		"mockdate": "^3.0.5",
