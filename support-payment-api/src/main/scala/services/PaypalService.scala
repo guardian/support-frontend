@@ -26,7 +26,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
 
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment] = {
     if (model.Currency.isAmountOutOfBounds(createPaypalPaymentData.amount, createPaypalPaymentData.currency)) {
-      Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
+      Left(PaypalApiError.fromString("Amount is outside the allowed range ")).toEitherT[Future]
     } else {
       Either
         .catchNonFatal {

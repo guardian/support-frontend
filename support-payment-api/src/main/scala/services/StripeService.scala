@@ -46,7 +46,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
 
   def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] = {
     if (model.Currency.isAmountOutOfBounds(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
+      Left(StripeApiError.fromString("Amount is outside the allowed range ", Some(config.publicKey))).toEitherT[Future]
     } else {
       Future(Charge.create(getChargeParams(data), requestOptions)).attemptT
         .bimap(
@@ -80,7 +80,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
       data: StripePaymentIntentRequest.CreatePaymentIntent,
   ): EitherT[Future, StripeApiError, PaymentIntent] = {
     if (model.Currency.isAmountOutOfBounds(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
+      Left(StripeApiError.fromString("Amount is outside the allowed range ", Some(config.publicKey))).toEitherT[Future]
     } else
       {
         Future {
