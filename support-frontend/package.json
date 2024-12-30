@@ -79,7 +79,6 @@
 		"url": "https://github.com/guardian/support-frontend/issues"
 	},
 	"dependencies": {
-		"@babel/runtime": "^7.26.0",
 		"@emotion/react": "^11.11.1",
 		"@emotion/utils": "^1.1.0",
 		"@floating-ui/react": "^0.19.2",
