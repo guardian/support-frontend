@@ -91,6 +91,7 @@ export type CheckoutComponentProps = {
 	productKey?: ProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
+	returnLink?: string;
 	identityUserType: UserType;
 };
 
@@ -100,6 +101,7 @@ export function ThankYouComponent({
 	productKey,
 	ratePlanKey,
 	promotion,
+	returnLink,
 	identityUserType,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
@@ -252,7 +254,7 @@ export function ThankYouComponent({
 		undefined,
 		payment.finalAmount,
 		formatUserDate(getGuardianAdLiteDate()),
-		'https://www.theguardian.com',
+		returnLink ?? 'https://www.theguardian.com',
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
