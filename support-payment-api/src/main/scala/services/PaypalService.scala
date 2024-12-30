@@ -25,7 +25,7 @@ trait Paypal {
 class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) extends Paypal with StrictLogging {
 
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment] = {
-    if (model.Currency.exceedsMaxAmount(createPaypalPaymentData.amount, createPaypalPaymentData.currency)) {
+    if (model.Currency.isAmountOutOfBounds(createPaypalPaymentData.amount, createPaypalPaymentData.currency)) {
       Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")).toEitherT[Future]
     } else {
       Either

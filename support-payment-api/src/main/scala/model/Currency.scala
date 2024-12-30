@@ -27,7 +27,7 @@ object Currency extends Enum[Currency] with CirceEnum[Currency] {
 
   case object NZD extends Currency
 
-  def exceedsMaxAmount(amount: BigDecimal, currency: Currency): Boolean = {
+  def isAmountOutOfBounds(amount: BigDecimal, currency: Currency): Boolean = {
     // Users can opt in to add 4% to cover the transaction cost
     val transactionCostAsPercentage = 1.04
 

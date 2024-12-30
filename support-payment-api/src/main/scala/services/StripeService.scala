@@ -45,7 +45,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
     ).asJava
 
   def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] = {
-    if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
+    if (model.Currency.isAmountOutOfBounds(data.paymentData.amount, data.paymentData.currency)) {
       Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
     } else {
       Future(Charge.create(getChargeParams(data), requestOptions)).attemptT
@@ -79,7 +79,7 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   def createPaymentIntent(
       data: StripePaymentIntentRequest.CreatePaymentIntent,
   ): EitherT[Future, StripeApiError, PaymentIntent] = {
-    if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
+    if (model.Currency.isAmountOutOfBounds(data.paymentData.amount, data.paymentData.currency)) {
       Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
     } else
       {
