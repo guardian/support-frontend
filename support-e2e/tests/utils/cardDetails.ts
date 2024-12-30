@@ -1,9 +1,9 @@
 import { Page } from '@playwright/test';
 
-export const fillInCardDetails = async (page: Page) =>
+export const fillInCardDetails = (page: Page) =>
 	fillInCardDetailsWithNumber(page, '4242424242424242');
 
-export const fillInDeclinedCardDetails = async (page: Page) =>
+export const fillInDeclinedCardDetails = (page: Page) =>
 	fillInCardDetailsWithNumber(page, '4000000000000002');
 
 const fillInCardDetailsWithNumber = async (page: Page, cardNumber: string) => {
