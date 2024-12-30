@@ -347,7 +347,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently.`,
       metric: this.buildPaymentSuccessMetric("DirectDebit", "Contribution", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 16,
+      evaluationPeriods: 18,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
@@ -383,7 +383,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric("DirectDebit", "SupporterPlus", Duration.seconds(3600)),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 14,
+      evaluationPeriods: 18,
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
