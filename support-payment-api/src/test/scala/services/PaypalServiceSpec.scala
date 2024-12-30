@@ -114,14 +114,14 @@ class PaypalServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with
   it should "return an error if the payment amount exceeds Australia max" in new PaypalServiceTestFixture {
     val createPaypalPaymentData = CreatePaypalPaymentData(Currency.AUD, 16640.50, "url", "url")
     whenReady(paypalService.createPayment(createPaypalPaymentData).value) { result =>
-      result mustBe (Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
+      result mustBe (Left(PaypalApiError.fromString("Amount is outside the allowed range ")))
     }
   }
 
   it should "return an error if the payment amount exceeds non-Australia max" in new PaypalServiceTestFixture {
     val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, 2080.50, "url", "url")
     whenReady(paypalService.createPayment(createPaypalPaymentData).value) { result =>
-      result mustBe (Left(PaypalApiError.fromString("Amount exceeds the maximum allowed ")))
+      result mustBe (Left(PaypalApiError.fromString("Amount is outside the allowed range ")))
     }
   }
 
