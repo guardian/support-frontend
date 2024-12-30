@@ -16,7 +16,7 @@ class CurrencyTest extends AnyFlatSpec with Matchers {
     Currency.isAmountOutOfBounds(100, Currency.GBP) mustBe false
   }
 
-  it should "allow the max to be 4% larger than the value specified to allow for covering transaction cost" in {
+  it should "allow the amount to be 4% larger than the nominal max to allow for covering transaction cost" in {
     Currency.isAmountOutOfBounds(2080, Currency.GBP) mustBe false
   }
 }
