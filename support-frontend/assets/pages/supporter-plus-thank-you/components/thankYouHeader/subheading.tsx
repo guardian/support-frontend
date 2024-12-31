@@ -57,7 +57,7 @@ const getSubHeadingCopy = (
 			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
 		);
 		const guardianAdLiteCopy = (
-			<span>{`Your valued support powers our journalism.${' '}`}</span>
+			<span>{`Your valued support powers our journalism${' '}`}</span>
 		);
 		const notSignedInCopy = isTier3
 			? tier3HeadingCopy

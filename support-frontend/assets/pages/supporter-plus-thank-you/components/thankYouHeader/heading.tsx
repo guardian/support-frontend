@@ -217,7 +217,7 @@ function Heading({
 				<YellowHighlight
 					currency={currency}
 					amount={amount}
-					productName={isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite'}
+					productName={isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite.'}
 				/>
 				{isTier3 && (
 					<>

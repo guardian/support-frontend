@@ -182,7 +182,7 @@ const qrCodesContainer = css`
 
 const paddingRight = css`
 	${from.tablet} {
-		padding-right: 72px;
+		padding-right: 54px;
 	}
 `;
 const paddingRightApps = css`
@@ -235,7 +235,8 @@ export type ThankYouModuleType =
 	| 'subscriptionStart'
 	| 'newspaperArchiveBenefit'
 	| 'whatNext'
-	| 'reminder'
+	| 'reminderToSignIn'
+	| 'reminderToActivateSubscription'
 	| 'headlineReturn';
 
 export interface ThankYouModuleProps {

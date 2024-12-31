@@ -55,7 +55,10 @@ import {
 	HeadlineReturn,
 	HeadlineReturnCTA,
 } from './guardianAdLite/headlineReturn';
-import { Reminder } from './guardianAdLite/reminder';
+import {
+	ReminderToActivateSubscription,
+	ReminderToSignIn,
+} from './guardianAdLite/reminders';
 import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
@@ -339,9 +342,15 @@ export const getThankYouModuleData = (
 			),
 			ctas: null,
 		},
-		reminder: {
+		reminderToSignIn: {
 			header: 'Important reminder',
-			bodyCopy: <Reminder />,
+			bodyCopy: <ReminderToSignIn />,
+			ctas: null,
+		},
+		reminderToActivateSubscription: {
+			header:
+				'Almost there! Complete your Guardian account to activate your subscription',
+			bodyCopy: <ReminderToActivateSubscription />,
 			ctas: null,
 		},
 		headlineReturn: {
