@@ -237,7 +237,8 @@ export type ThankYouModuleType =
 	| 'whatNext'
 	| 'reminderToSignIn'
 	| 'reminderToActivateSubscription'
-	| 'headlineReturn';
+	| 'headlineReturn'
+	| 'signInToActivate';
 
 export interface ThankYouModuleProps {
 	header: string;

@@ -218,7 +218,7 @@ export function ThankYouComponent({
 
 	// Clarify Guardian Ad-lite thankyou page states
 	const isRegisteredAndSignedIn = !isNewAccount && isSignedIn;
-	//const isRegisteredAndNotSignedIn = !isNewAccount && !isSignedIn;
+	const isRegisteredAndNotSignedIn = !isNewAccount && !isSignedIn;
 	const isNotRegistered = isNewAccount;
 
 	let benefitsChecklist;
@@ -288,6 +288,10 @@ export function ThankYouComponent({
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(
+			isGuardianAdLite && isRegisteredAndNotSignedIn,
+			'signInToActivate',
+		), // Registered-Not-Signed-In
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndSignedIn,
 			'reminderToSignIn',

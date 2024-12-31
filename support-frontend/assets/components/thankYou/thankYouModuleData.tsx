@@ -26,6 +26,7 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -59,6 +60,10 @@ import {
 	ReminderToActivateSubscription,
 	ReminderToSignIn,
 } from './guardianAdLite/reminders';
+import {
+	SignInToActivate,
+	SignInToActivateCTA,
+} from './guardianAdLite/signInToActivate';
 import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
@@ -357,6 +362,11 @@ export const getThankYouModuleData = (
 			header: 'Headline to bring user back to Guardian front page',
 			bodyCopy: <HeadlineReturn />,
 			ctas: <HeadlineReturnCTA returnAddress={returnAddress ?? ''} />,
+		},
+		signInToActivate: {
+			header: 'Almost there! Sign in to activate your subscription',
+			bodyCopy: <SignInToActivate />,
+			ctas: <SignInToActivateCTA returnAddress={manageSubsUrl} />,
 		},
 	};
 

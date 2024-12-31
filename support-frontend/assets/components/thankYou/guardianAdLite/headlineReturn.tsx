@@ -16,12 +16,10 @@ export type HeadlineReturnCTAProp = {
 
 export function HeadlineReturn(): JSX.Element {
 	return (
-		<>
-			<div>
-				Copy to prompt users to enjoy the Guardian with non personalised
-				advertising
-			</div>
-		</>
+		<p>
+			Copy to prompt users to enjoy the Guardian with non personalised
+			advertising
+		</p>
 	);
 }
 
