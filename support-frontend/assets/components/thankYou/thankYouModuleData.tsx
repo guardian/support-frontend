@@ -121,6 +121,7 @@ export const getThankYouModuleData = (
 	finalAmount?: number,
 	startDate?: string,
 	returnAddress?: string,
+	isSignedIn?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -333,6 +334,7 @@ export const getThankYouModuleData = (
 				<WhatNext
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate ?? ''}
+					isSignedIn={isSignedIn}
 				/>
 			),
 			ctas: null,

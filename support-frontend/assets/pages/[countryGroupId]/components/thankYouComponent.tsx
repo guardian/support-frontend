@@ -255,6 +255,7 @@ export function ThankYouComponent({
 		payment.finalAmount,
 		formatUserDate(getGuardianAdLiteDate()),
 		returnLink ?? 'https://www.theguardian.com',
+		isSignedIn,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
