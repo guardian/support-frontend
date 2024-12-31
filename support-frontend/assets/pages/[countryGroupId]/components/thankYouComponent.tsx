@@ -112,10 +112,7 @@ export function ThankYouComponent({
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
-	const parsedOrder = safeParse(
-		OrderSchema,
-		storage.session.get('thankYouOrder'),
-	);
+	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
 	if (!parsedOrder.success) {
 		return (
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
@@ -219,6 +216,11 @@ export function ThankYouComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
+	// Clarify Guardian Ad-lite thankyou page states
+	const isRegisteredAndSignedIn = !isNewAccount && isSignedIn;
+	// const isRegisteredAndNotSignedIn = !isNewAccount && !isSignedIn;
+	const isNotRegistered = isNewAccount;
+
 	let benefitsChecklist;
 	if (isTier) {
 		const productDescription = showNewspaperArchiveBenefit
@@ -263,7 +265,7 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
+		...maybeThankYouModule(isNewAccount && !isGuardianAdLite, 'signUp'), // Complete your Guardian account
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && !isGuardianAdLite,
 			'signIn',
@@ -277,14 +279,23 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && isSignedIn),
+			isOneOff ||
+				(!(isTier3 && showNewspaperArchiveBenefit) &&
+					isSignedIn &&
+					!isGuardianAdLite),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
-		...maybeThankYouModule(isGuardianAdLite, 'whatNext'),
-		...maybeThankYouModule(isGuardianAdLite, 'reminder'),
-		...maybeThankYouModule(isGuardianAdLite, 'headlineReturn'),
+		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(
+			isGuardianAdLite && isRegisteredAndSignedIn,
+			'reminder',
+		), // Signed-In
+		...maybeThankYouModule(
+			isGuardianAdLite && (isRegisteredAndSignedIn || isNotRegistered),
+			'headlineReturn',
+		), //  Signed-In Or Not-Registered
 	];
 
 	return (
@@ -323,15 +334,17 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
-						<LinkButton
-							href="https://www.theguardian.com"
-							priority="tertiary"
-							onClick={() =>
-								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-							}
-						>
-							Return to the Guardian
-						</LinkButton>
+						{!isGuardianAdLite && (
+							<LinkButton
+								href="https://www.theguardian.com"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+								}
+							>
+								Return to the Guardian
+							</LinkButton>
+						)}
 					</div>
 				</Container>
 			</div>
