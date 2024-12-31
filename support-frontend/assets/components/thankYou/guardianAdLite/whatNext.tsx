@@ -1,4 +1,12 @@
+import { css } from '@emotion/react';
+import { palette } from '@guardian/source/foundations';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
+
+const bulletPointBlack = css`
+	& > li > div > svg > circle {
+		fill: ${palette.neutral[7]};
+	}
+`;
 
 type WhatNextProps = {
 	amount: string;
@@ -22,6 +30,7 @@ export function WhatNext({
 		<>
 			<BulletPointedList
 				items={isSignedIn ? bulletPointSignedIn : bulletItems}
+				cssOverrides={bulletPointBlack}
 			/>
 		</>
 	);

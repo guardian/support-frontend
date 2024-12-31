@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 
@@ -19,6 +20,7 @@ type BulletPointedListItemProps = {
 };
 type BulletPointedListProps = {
 	items: string[];
+	cssOverrides?: SerializedStyles;
 };
 
 function SvgBullet() {
@@ -46,9 +48,9 @@ function BulletPointedListItem({ item }: BulletPointedListItemProps) {
 	);
 }
 
-function BulletPointedList({ items }: BulletPointedListProps) {
+function BulletPointedList({ items, cssOverrides }: BulletPointedListProps) {
 	return (
-		<ul css={list}>
+		<ul css={[list, cssOverrides]}>
 			{items.map((item) => (
 				<BulletPointedListItem key={item} item={item} />
 			))}
