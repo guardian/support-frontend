@@ -4481,11 +4481,6 @@ chokidar@^4.0.0:
   dependencies:
     readdirp "^4.0.1"
 
-chromatic@^10.9.6:
-  version "10.9.6"
-  resolved "https://registry.yarnpkg.com/chromatic/-/chromatic-10.9.6.tgz#0dd9c82fbbf1f5a7aa73b96b5b7e066fe5408be3"
-  integrity sha512-1MoT+/U+vQwEiq2GuehPyStbqhxqHmM1B9pdpVU1dKh26userQg1FyOFYifkTgy+9reo2w2p7sAbc0JRd2kzlA==
-
 chrome-trace-event@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
