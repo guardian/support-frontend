@@ -15,7 +15,7 @@ module.exports = {
 		// used by scripts in package.json
 		'webpack-cli',
 		'webpack-dev-server',
-		// necessary for chromatic to work
+		// could be used to run Chromatic locally
 		'chromatic',
 		'concurrently', // used in devrun.sh
 		// used in webpack.common.js
