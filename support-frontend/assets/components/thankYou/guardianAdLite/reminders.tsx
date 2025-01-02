@@ -1,10 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	space,
-	textEgyptianBold15,
-	textEgyptianBold17,
-} from '@guardian/source/foundations';
+import { from, space } from '@guardian/source/foundations';
 
 export function ReminderToSignIn(): JSX.Element {
 	return (
@@ -18,11 +13,10 @@ export function ReminderToSignIn(): JSX.Element {
 }
 
 const paragraphCheckInbox = css`
+	font-weight: bold;
 	margin-top: ${space[5]}px;
-	${textEgyptianBold15};
 	${from.tablet} {
 		margin-top: ${space[6]}px;
-		${textEgyptianBold17};
 	}
 `;
 
