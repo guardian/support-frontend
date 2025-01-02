@@ -140,7 +140,7 @@ export default function ExpressCheckout({
 					paymentMethods: {
 						applePay: 'auto',
 						googlePay: 'auto',
-						link: 'auto',
+						link: 'never',
 					},
 				}}
 			/>
