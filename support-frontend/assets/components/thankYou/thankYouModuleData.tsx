@@ -52,18 +52,11 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import {
-	HeadlineReturn,
-	HeadlineReturnCTA,
-} from './guardianAdLite/headlineReturn';
+import { AddressCta } from './guardianAdLite/addressCta';
 import {
 	ReminderToActivateSubscription,
 	ReminderToSignIn,
 } from './guardianAdLite/reminders';
-import {
-	SignInToActivate,
-	SignInToActivateCTA,
-} from './guardianAdLite/signInToActivate';
 import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
@@ -360,13 +353,34 @@ export const getThankYouModuleData = (
 		},
 		headlineReturn: {
 			header: 'Headline to bring user back to Guardian front page',
-			bodyCopy: <HeadlineReturn />,
-			ctas: <HeadlineReturnCTA returnAddress={returnAddress ?? ''} />,
+			bodyCopy: (
+				<p>
+					Copy to prompt users to enjoy the Guardian with non personalised
+					advertising
+				</p>
+			),
+			ctas: (
+				<AddressCta
+					address={returnAddress ?? ''}
+					copy={'Continue to the Guardian'}
+					hasArrow={true}
+				/>
+			),
 		},
 		signInToActivate: {
 			header: 'Almost there! Sign in to activate your subscription',
-			bodyCopy: <SignInToActivate />,
-			ctas: <SignInToActivateCTA returnAddress={manageSubsUrl} />,
+			bodyCopy: (
+				<p>
+					To be able to read the Guardian with non-personalised advertising you
+					must be signed in on all your devices.'
+				</p>
+			),
+			ctas: (
+				<AddressCta
+					address={manageSubsUrl}
+					copy={'Sign in and activate your subscription'}
+				/>
+			),
 		},
 	};
 
