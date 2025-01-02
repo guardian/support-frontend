@@ -17,7 +17,7 @@ type WhatNextProps = {
 export function WhatNext({
 	amount,
 	startDate,
-	isSignedIn,
+	isSignedIn = false,
 }: WhatNextProps): JSX.Element {
 	const bulletItems = [
 		'You will receive an email confirming the detail of your offer',

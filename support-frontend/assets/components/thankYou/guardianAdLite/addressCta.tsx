@@ -19,7 +19,7 @@ export type AddressCtaProp = {
 export function AddressCta({
 	address,
 	copy,
-	hasArrow,
+	hasArrow = false,
 }: AddressCtaProp): JSX.Element {
 	return (
 		<>
