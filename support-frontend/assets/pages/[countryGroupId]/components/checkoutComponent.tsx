@@ -47,13 +47,10 @@ import type {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	DirectDebit,
-	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
-	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -122,12 +119,6 @@ const PaymentSection = lazy(() => import('./paymentSection'));
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
-
-function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
-	return isSwitchOn(
-		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
-	);
-}
 
 /**
 /**
@@ -269,18 +260,6 @@ export function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const validPaymentMethods = [
-		/* NOT YET IMPLEMENTED
-		countryGroupId === 'EURCountries' && Sepa,
-    countryId === 'US' && AmazonPay,
-    */
-		countryId === 'GB' && DirectDebit,
-		Stripe,
-		PayPal,
-	]
-		.filter(isPaymentMethod)
-		.filter(paymentMethodIsActive);
-
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
@@ -380,13 +359,6 @@ export function CheckoutComponent({
 	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
-
-	/** Direct debit details */
-	const [accountHolderName, setAccountHolderName] = useState('');
-	const [accountNumber, setAccountNumber] = useState('');
-	const [sortCode, setSortCode] = useState('');
-	const [accountHolderConfirmation, setAccountHolderConfirmation] =
-		useState(false);
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
@@ -1124,7 +1096,6 @@ export function CheckoutComponent({
 
 						<Suspense fallback={<div>Loading...</div>}>
 							<PaymentSection
-								validPaymentMethods={validPaymentMethods}
 								paymentMethodError={paymentMethodError}
 								setPaymentMethodError={setPaymentMethodError}
 								setStripeClientSecret={setStripeClientSecret}
@@ -1133,20 +1104,13 @@ export function CheckoutComponent({
 								}
 								recaptchaToken={recaptchaToken}
 								setRecaptchaToken={setRecaptchaToken}
-								accountHolderName={accountHolderName}
-								setAccountHolderName={setAccountHolderName}
-								accountNumber={accountNumber}
-								setAccountNumber={setAccountNumber}
-								sortCode={sortCode}
-								setSortCode={setSortCode}
-								accountHolderConfirmation={accountHolderConfirmation}
-								setAccountHolderConfirmation={setAccountHolderConfirmation}
 								paymentMethod={paymentMethod}
 								setPaymentMethod={setPaymentMethod}
 								sectionNumber={productDescription.deliverableTo ? 3 : 2}
 								stripePublicKey={stripePublicKey}
 								isTestUser={isTestUser}
 								countryGroupId={countryGroupId}
+								countryId={countryId}
 							/>
 						</Suspense>
 						<SummaryTsAndCs

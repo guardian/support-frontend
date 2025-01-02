@@ -1,12 +1,22 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { Radio, RadioGroup } from '@guardian/source/react-components';
+import { useState } from 'react';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+	DirectDebit,
+	isPaymentMethod,
+	type PaymentMethod,
+	PayPal,
+	Stripe,
+	toPaymentMethodSwitchNaming,
+} from 'helpers/forms/paymentMethods';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { stripeCreateSetupIntentRecaptcha } from '../checkout/helpers/stripe';
@@ -19,53 +29,63 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 
-export type PaymentSectionProps = {
-	validPaymentMethods: PaymentMethod[];
+function paymentMethodIsActive(paymentMethod: PaymentMethod) {
+	return isSwitchOn(
+		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
+	);
+}
+
+type PaymentSectionProps = {
 	paymentMethodError: string | undefined;
 	setPaymentMethodError: (error: string | undefined) => void;
 	setStripeClientSecret: (clientSecret: string) => void;
 	setStripeClientSecretInProgress: (inProgress: boolean) => void;
 	recaptchaToken: string | undefined;
 	setRecaptchaToken: (token: string | undefined) => void;
-	accountHolderName: string;
-	setAccountHolderName: (name: string) => void;
-	accountNumber: string;
-	setAccountNumber: (number: string) => void;
-	sortCode: string;
-	setSortCode: (sortCode: string) => void;
-	accountHolderConfirmation: boolean;
-	setAccountHolderConfirmation: (confirmation: boolean) => void;
 	paymentMethod: PaymentMethod | 'StripeExpressCheckoutElement' | undefined;
 	setPaymentMethod: (paymentMethod: PaymentMethod) => void;
 	sectionNumber: number;
 	stripePublicKey: string;
 	isTestUser: boolean;
 	countryGroupId: CountryGroupId;
+	countryId: IsoCountry;
 };
 
 export default function PaymentSection({
-	validPaymentMethods,
 	paymentMethodError,
 	setPaymentMethodError,
 	setStripeClientSecret,
 	setStripeClientSecretInProgress,
 	recaptchaToken,
 	setRecaptchaToken,
-	accountHolderName,
-	setAccountHolderName,
-	accountNumber,
-	setAccountNumber,
-	sortCode,
-	setSortCode,
-	accountHolderConfirmation,
-	setAccountHolderConfirmation,
+
 	paymentMethod,
 	setPaymentMethod,
 	sectionNumber,
 	stripePublicKey,
 	isTestUser,
 	countryGroupId,
+	countryId,
 }: PaymentSectionProps) {
+	const validPaymentMethods = [
+		/* NOT YET IMPLEMENTED
+		countryGroupId === 'EURCountries' && Sepa,
+    countryId === 'US' && AmazonPay,
+    */
+		countryId === 'GB' && DirectDebit,
+		Stripe,
+		PayPal,
+	]
+		.filter(isPaymentMethod)
+		.filter(paymentMethodIsActive);
+
+	/** Direct debit details */
+	const [accountHolderName, setAccountHolderName] = useState('');
+	const [accountNumber, setAccountNumber] = useState('');
+	const [sortCode, setSortCode] = useState('');
+	const [accountHolderConfirmation, setAccountHolderConfirmation] =
+		useState(false);
+
 	return (
 		<FormSection>
 			<Legend>
