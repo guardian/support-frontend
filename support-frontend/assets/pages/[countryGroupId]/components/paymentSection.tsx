@@ -58,7 +58,6 @@ export default function PaymentSection({
 	setStripeClientSecretInProgress,
 	recaptchaToken,
 	setRecaptchaToken,
-
 	paymentMethod,
 	setPaymentMethod,
 	sectionNumber,

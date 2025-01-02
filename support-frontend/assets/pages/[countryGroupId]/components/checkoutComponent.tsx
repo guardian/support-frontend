@@ -2,13 +2,11 @@ import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Checkbox, Label, TextInput } from '@guardian/source/react-components';
 import {
-	Divider,
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
-	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
@@ -71,9 +69,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
-import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -83,6 +79,7 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { LoadingDots } from '../../../../stories/animations/LoadingDots.stories';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -111,7 +108,7 @@ import { retryPaymentStatus } from './retryPaymentStatus';
 import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 const PaymentSection = lazy(() => import('./paymentSection'));
-
+const ExpressCheckout = lazy(() => import('./expressCheckout'));
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
  * as it is heavily coupled through the code base and would require adding
@@ -274,8 +271,6 @@ export function CheckoutComponent({
 	] = useState<ExpressPaymentType>();
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
 		useState(false);
-	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
-		useState(false);
 	useEffect(() => {
 		if (stripeExpressCheckoutSuccessful) {
 			formRef.current?.requestSubmit();
@@ -365,9 +360,6 @@ export function CheckoutComponent({
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
-
-	const useLinkExpressCheckout =
-		abParticipations.linkExpressCheckout === 'variant';
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
@@ -730,133 +722,28 @@ export function CheckoutComponent({
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
 						{useStripeExpressCheckout && (
-							<div
-								css={css`
-									/* Prevent content layout shift */
-									min-height: 8px;
-								`}
-							>
-								<ExpressCheckoutElement
-									onReady={({ availablePaymentMethods }) => {
-										/**
-										 * This is use to show UI needed besides this Element
-										 * i.e. The "or" divider
-										 */
-										if (availablePaymentMethods) {
-											setStripeExpressCheckoutReady(true);
-										}
-									}}
-									onClick={({ resolve }) => {
-										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options = {
-											emailRequired: true,
-										};
-
-										// Track payment method selection with QM
-										sendEventPaymentMethodSelected(
-											'StripeExpressCheckoutElement',
-										);
-
-										resolve(options);
-									}}
-									onConfirm={async (event) => {
-										if (!(stripe && elements)) {
-											console.error('Stripe not loaded');
-											return;
-										}
-
-										const { error: submitError } = await elements.submit();
-
-										if (submitError) {
-											setErrorMessage(submitError.message);
-											return;
-										}
-
-										const name = event.billingDetails?.name ?? '';
-
-										/**
-										 * splits by the last space, and uses the head as firstName
-										 * and tail as lastName
-										 */
-										const firstName = name
-											.substring(0, name.lastIndexOf(' ') + 1)
-											.trim();
-										const lastName = name
-											.substring(name.lastIndexOf(' ') + 1, name.length)
-											.trim();
-										setFirstName(firstName);
-										setLastName(lastName);
-
-										event.billingDetails?.address.postal_code &&
-											setBillingPostcode(
-												event.billingDetails.address.postal_code,
-											);
-
-										if (
-											!event.billingDetails?.address.state &&
-											countriesRequiringBillingState.includes(countryId)
-										) {
-											logException(
-												"Could not find state from Stripe's billingDetails",
-												{ geoId, countryGroupId, countryId },
-											);
-										}
-										event.billingDetails?.address.state &&
-											setBillingState(event.billingDetails.address.state);
-
-										event.billingDetails?.email &&
-											setEmail(event.billingDetails.email);
-
-										setPaymentMethod('StripeExpressCheckoutElement');
-										setStripeExpressCheckoutPaymentType(
-											event.expressPaymentType,
-										);
-										/**
-										 * There is a useEffect that listens to this and submits the form
-										 * when true
-										 */
-										setStripeExpressCheckoutSuccessful(true);
-									}}
-									options={{
-										paymentMethods: {
-											applePay: 'auto',
-											googlePay: 'auto',
-											link: useLinkExpressCheckout ? 'auto' : 'never',
-										},
-									}}
+							<Suspense fallback={<></>}>
+								<ExpressCheckout
+									setStripeExpressCheckoutPaymentType={
+										setStripeExpressCheckoutPaymentType
+									}
+									stripe={stripe}
+									elements={elements}
+									setErrorMessage={setErrorMessage}
+									setFirstName={setFirstName}
+									setLastName={setLastName}
+									setBillingPostcode={setBillingPostcode}
+									setBillingState={setBillingState}
+									setEmail={setEmail}
+									setPaymentMethod={setPaymentMethod}
+									setStripeExpressCheckoutSuccessful={
+										setStripeExpressCheckoutSuccessful
+									}
+									countryId={countryId}
+									geoId={geoId}
+									countryGroupId={countryGroupId}
 								/>
-
-								{stripeExpressCheckoutReady && (
-									<Divider
-										displayText="or"
-										size="full"
-										cssOverrides={css`
-											::before {
-												margin-left: 0;
-											}
-
-											::after {
-												margin-right: 0;
-											}
-
-											margin: 0;
-											margin-top: 14px;
-											margin-bottom: 14px;
-											width: 100%;
-
-											@keyframes fadeIn {
-												0% {
-													opacity: 0;
-												}
-												100% {
-													opacity: 1;
-												}
-											}
-											animation: fadeIn 1s;
-										`}
-									/>
-								)}
-							</div>
+							</Suspense>
 						)}
 						<FormSection>
 							<Legend>1. Your details</Legend>
@@ -1094,7 +981,7 @@ export function CheckoutComponent({
 							</>
 						)}
 
-						<Suspense fallback={<div>Loading...</div>}>
+						<Suspense fallback={<LoadingDots appearance={'dark'} />}>
 							<PaymentSection
 								paymentMethodError={paymentMethodError}
 								setPaymentMethodError={setPaymentMethodError}
