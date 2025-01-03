@@ -1,4 +1,3 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 
@@ -15,24 +14,20 @@ const list = css`
 		margin-top: ${space[4]}px;
 	}
 `;
-const setColor = (color: string) => {
-	return css`
-		& > svg > circle {
-			fill: ${color};
-		}
-	`;
-};
 
+type SvgBulletProps = {
+	color?: string;
+};
 type BulletPointedListItemProps = {
 	item: string;
-	cssOverrides?: SerializedStyles;
+	color?: string;
 };
 type BulletPointedListProps = {
 	items: string[];
 	color?: string;
 };
 
-function SvgBullet() {
+function SvgBullet({ color = palette.brand[500] }: SvgBulletProps) {
 	return (
 		<svg
 			width="8"
@@ -41,37 +36,27 @@ function SvgBullet() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="4" cy="4" r="4" />
+			<circle cx="4" cy="4" r="4" fill={`${color}`} />
 		</svg>
 	);
 }
 
-function BulletPointedListItem({
-	item,
-	cssOverrides,
-}: BulletPointedListItemProps) {
+function BulletPointedListItem({ item, color }: BulletPointedListItemProps) {
 	return (
 		<li css={listItem}>
-			<div css={cssOverrides}>
-				<SvgBullet />
+			<div>
+				<SvgBullet color={color} />
 			</div>
 			<div>{item}</div>
 		</li>
 	);
 }
 
-function BulletPointedList({
-	items,
-	color = palette.brand[500], // default color
-}: BulletPointedListProps) {
+function BulletPointedList({ items, color }: BulletPointedListProps) {
 	return (
 		<ul css={list}>
 			{items.map((item) => (
-				<BulletPointedListItem
-					key={item}
-					item={item}
-					cssOverrides={setColor(color)}
-				/>
+				<BulletPointedListItem key={item} item={item} color={color} />
 			))}
 		</ul>
 	);
