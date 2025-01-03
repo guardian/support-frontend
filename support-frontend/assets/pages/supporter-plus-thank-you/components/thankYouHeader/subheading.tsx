@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
-import type { ProductKey } from 'helpers/productCatalog';
+import {
+	productCatalogDescription,
+	type ProductKey,
+} from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
@@ -31,12 +34,11 @@ function MarketingCopy({
 }
 
 const getSubHeadingCopy = (
+	productKey: ProductKey,
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
-	isTier3: boolean,
 	isSignedIn: boolean,
 	identityUserType: UserType,
-	isGuardianAdLite: boolean,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
@@ -48,22 +50,15 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
-		const signedInBelowThreshold = (
-			<span>{`Look out for your exclusive newsletter from our supporter editor.
+		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
-						Guardian journalism.${' '}`}</span>
+						Guardian journalism.${' '}`;
+		const notSignedInCopy = (
+			<span>
+				{productCatalogDescription[productKey].thankyouMessage ??
+					signedInBelowThreshold}
+			</span>
 		);
-		const tier3HeadingCopy = (
-			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
-		);
-		const guardianAdLiteCopy = (
-			<span>{`Your valued support powers our journalism${' '}`}</span>
-		);
-		const notSignedInCopy = isTier3
-			? tier3HeadingCopy
-			: isGuardianAdLite
-			? guardianAdLiteCopy
-			: signedInBelowThreshold;
 		const signedInCopy = amountIsAboveThreshold ? (
 			<>
 				{signedInAboveThreshold}
@@ -98,12 +93,11 @@ function Subheading({
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianLight';
 	const subheadingCopy = getSubHeadingCopy(
+		productKey,
 		amountIsAboveThreshold,
 		contributionType,
-		isTier3,
 		isSignedIn,
 		identityUserType,
-		isGuardianAdLite,
 	);
 
 	return (
