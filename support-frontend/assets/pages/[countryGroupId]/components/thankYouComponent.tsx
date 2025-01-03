@@ -291,19 +291,19 @@ export function ThankYouComponent({
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
-		), // Registered-Not-Signed-In
+		),
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndSignedIn,
 			'reminderToSignIn',
-		), // Signed-In
+		),
 		...maybeThankYouModule(
 			isGuardianAdLite && isNotRegistered,
 			'reminderToActivateSubscription',
-		), // Not-Registered
+		),
 		...maybeThankYouModule(
 			isGuardianAdLite && (isRegisteredAndSignedIn || isNotRegistered),
 			'headlineReturn',
-		), //  Signed-In Or Not-Registered
+		),
 	];
 
 	return (
