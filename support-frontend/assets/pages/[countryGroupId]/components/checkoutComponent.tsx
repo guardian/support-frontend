@@ -209,6 +209,7 @@ type CheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
+	returnLink?: string;
 };
 
 export function CheckoutComponent({
@@ -225,6 +226,7 @@ export function CheckoutComponent({
 	useStripeExpressCheckout,
 	countryId,
 	forcedCountry,
+	returnLink,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
@@ -626,13 +628,12 @@ export function CheckoutComponent({
 				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
 				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
 				userType && thankYouUrlSearchParams.set('userType', userType);
-
 				contributionAmount &&
 					thankYouUrlSearchParams.set(
 						'contribution',
 						contributionAmount.toString(),
 					);
-
+				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
@@ -661,6 +662,12 @@ export function CheckoutComponent({
 		supportInternationalisationId,
 		abParticipations.abandonedBasket === 'variant',
 	);
+
+	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
+	const returnToLandingPage =
+		productKey === 'GuardianLight'
+			? `/guardian-light${returnParam}`
+			: `/${geoId}/contribute`;
 
 	return (
 		<CheckoutLayout>
@@ -753,11 +760,10 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							productKey === 'GuardianLight' ? (
-								<BackButton path={`/guardian-light`} buttonText="Back" />
-							) : (
-								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
-							)
+							<BackButton
+								path={returnToLandingPage}
+								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
+							/>
 						}
 					/>
 				</BoxContents>
