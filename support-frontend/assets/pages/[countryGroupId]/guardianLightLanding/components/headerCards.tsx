@@ -97,7 +97,7 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 	const card1 = {
 		link: checkoutLink,
 		productDescription: productCatalogGuardianLight().GuardianLight,
-		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
+		ctaCopy: `Get Guardian Ad-Lite for ${formattedPrice}/month`,
 	};
 
 	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
@@ -117,7 +117,7 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 				<h1 css={heading}>Choose how to read the Guardian</h1>
 				<GuardianLightCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					If you already have Guardian Light or read the Guardian ad-free,{' '}
+					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
 					{SignInLink}
 				</div>
 			</Container>

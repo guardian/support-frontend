@@ -36,7 +36,7 @@ Default.args = {
 			cardPosition: 1,
 			link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
 			productDescription: productCatalogGuardianLight().GuardianLight,
-			ctaCopy: 'Get Guardian Light for XX/month',
+			ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 		},
 		{
 			cardPosition: 2,

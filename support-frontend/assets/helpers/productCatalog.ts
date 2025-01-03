@@ -144,7 +144,7 @@ const supporterPlusBenefits = [
 
 const guardianLightBenefits = [
 	{
-		copy: 'A Guardian Light subscription enables you to read the Guardian without personalised advertising.',
+		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian without personalised advertising.',
 	},
 	{
 		copy: 'If you already read the Guardian ad-free you should sign in.',
@@ -155,7 +155,7 @@ const guardianLightBenefits = [
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
-			label: 'Guardian Light',
+			label: 'Guardian Ad-Lite',
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
@@ -396,14 +396,14 @@ export function productCatalogGuardianLight(): Record<
 		...productCatalogDescription,
 		GuardianLight: {
 			...productCatalogDescription.GuardianLight,
-			label: 'Purchase Guardian Light',
+			label: 'Purchase Guardian Ad-Lite',
 		},
 		GuardianLightGoBack: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [
 				{
-					copy: `Click ‘Go back to Accept all’ if you do not want to subscribe to Guardian Light.`,
+					copy: `Click ‘Go back to Accept all’ if you do not want to subscribe to Guardian Ad-Lite.`,
 					hideBullet: true,
 				},
 			],
