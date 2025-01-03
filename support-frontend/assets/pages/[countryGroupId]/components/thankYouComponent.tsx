@@ -207,19 +207,16 @@ export function ThankYouComponent({
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
-
-	const isNewAccount = identityUserType === 'new';
 	const validEmail = order.email !== '';
-
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const isRegisteredAndSignedIn = !isNewAccount && isSignedIn;
-	const isRegisteredAndNotSignedIn = !isNewAccount && !isSignedIn;
-	const isNotRegistered = isNewAccount;
+	const isNotRegistered = identityUserType === 'new';
+	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
+	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
 
 	let benefitsChecklist;
 	if (isTier) {
@@ -265,9 +262,9 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount && !isGuardianAdLite, 'signUp'), // Complete your Guardian account
+		...maybeThankYouModule(isNotRegistered && !isGuardianAdLite, 'signUp'), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && !isGuardianAdLite,
+			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
