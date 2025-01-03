@@ -7,6 +7,7 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import type { ProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -176,9 +177,8 @@ const tier3HeaderTitleText = css`
 
 type HeadingProps = {
 	name: string | null;
+	productKey: ProductKey;
 	isOneOffPayPal: boolean;
-	isTier3: boolean;
-	isGuardianAdLite: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
@@ -186,14 +186,15 @@ type HeadingProps = {
 };
 function Heading({
 	name,
+	productKey,
 	isOneOffPayPal,
-	isTier3,
 	amount,
 	currency,
 	contributionType,
-	isGuardianAdLite,
 	promotion,
 }: HeadingProps): JSX.Element {
+	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 

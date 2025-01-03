@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
+import type { ProductKey } from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
 	contributionType: ContributionType;
+	productKey: ProductKey;
 	amountIsAboveThreshold: boolean;
-	isTier3: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	isGuardianAdLite: boolean;
 }
 
 function MarketingCopy({
@@ -90,12 +90,13 @@ const getSubHeadingCopy = (
 
 function Subheading({
 	contributionType,
+	productKey,
 	amountIsAboveThreshold,
-	isTier3,
 	isSignedIn,
 	identityUserType,
-	isGuardianAdLite,
 }: SubheadingProps): JSX.Element {
+	const isTier3 = productKey === 'TierThree';
+	const isGuardianAdLite = productKey === 'GuardianLight';
 	const subheadingCopy = getSubHeadingCopy(
 		amountIsAboveThreshold,
 		contributionType,

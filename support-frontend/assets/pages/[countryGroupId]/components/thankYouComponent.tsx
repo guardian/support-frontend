@@ -317,17 +317,16 @@ export function ThankYouComponent({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
+							productKey={productKey ?? 'Contribution'}
 							name={order.firstName}
 							amount={payment.originalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
-							isTier3={isTier3}
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
 							identityUserType={identityUserType}
-							isGuardianAdLite={isGuardianAdLite}
 						/>
 					</div>
 
