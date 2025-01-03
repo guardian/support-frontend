@@ -27,11 +27,9 @@ export function WhatNext({
 		'You can now start reading the Guardian on this device in a reject all state',
 	]);
 	return (
-		<>
-			<BulletPointedList
-				items={isSignedIn ? bulletPointSignedIn : bulletItems}
-				cssOverrides={bulletPointBlack}
-			/>
-		</>
+		<BulletPointedList
+			items={isSignedIn ? bulletPointSignedIn : bulletItems}
+			cssOverrides={bulletPointBlack}
+		/>
 	);
 }
