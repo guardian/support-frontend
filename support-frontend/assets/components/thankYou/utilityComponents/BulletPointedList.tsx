@@ -15,12 +15,21 @@ const list = css`
 		margin-top: ${space[4]}px;
 	}
 `;
+const setColor = (color: string) => {
+	return css`
+		& > svg > circle {
+			fill: ${color};
+		}
+	`;
+};
+
 type BulletPointedListItemProps = {
 	item: string;
+	cssOverrides?: SerializedStyles;
 };
 type BulletPointedListProps = {
 	items: string[];
-	cssOverrides?: SerializedStyles;
+	color?: string;
 };
 
 function SvgBullet() {
@@ -32,15 +41,18 @@ function SvgBullet() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="4" cy="4" r="4" fill={`${palette.brand[500]}`} />
+			<circle cx="4" cy="4" r="4" />
 		</svg>
 	);
 }
 
-function BulletPointedListItem({ item }: BulletPointedListItemProps) {
+function BulletPointedListItem({
+	item,
+	cssOverrides,
+}: BulletPointedListItemProps) {
 	return (
 		<li css={listItem}>
-			<div>
+			<div css={cssOverrides}>
 				<SvgBullet />
 			</div>
 			<div>{item}</div>
@@ -48,11 +60,18 @@ function BulletPointedListItem({ item }: BulletPointedListItemProps) {
 	);
 }
 
-function BulletPointedList({ items, cssOverrides }: BulletPointedListProps) {
+function BulletPointedList({
+	items,
+	color = palette.brand[500], // default color
+}: BulletPointedListProps) {
 	return (
-		<ul css={[list, cssOverrides]}>
+		<ul css={list}>
 			{items.map((item) => (
-				<BulletPointedListItem key={item} item={item} />
+				<BulletPointedListItem
+					key={item}
+					item={item}
+					cssOverrides={setColor(color)}
+				/>
 			))}
 		</ul>
 	);
