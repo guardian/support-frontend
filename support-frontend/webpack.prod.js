@@ -30,5 +30,13 @@ module.exports = (
 				'process.env.NODE_ENV': JSON.stringify('production'),
 			}),
 		],
+		// See https://webpack.js.org/configuration/optimization/
+		// optimization: {
+		// 	splitChunks: {
+		// 		chunks() {
+		// 			return false;
+		// 		},
+		// 	},
+		// },
 	});
 };
