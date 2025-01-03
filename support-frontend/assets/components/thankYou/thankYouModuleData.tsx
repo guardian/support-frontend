@@ -52,11 +52,8 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
+import { ActivateSubscriptionReminder } from './guardianAdLite/activateSubscriptionReminder';
 import { AddressCta } from './guardianAdLite/addressCta';
-import {
-	ReminderToActivateSubscription,
-	ReminderToSignIn,
-} from './guardianAdLite/reminders';
 import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
@@ -342,13 +339,20 @@ export const getThankYouModuleData = (
 		},
 		reminderToSignIn: {
 			header: 'Important reminder',
-			bodyCopy: <ReminderToSignIn />,
+			bodyCopy: (
+				<p>
+					To enjoy reading the Guardian with non-personalised advertising on all
+					your devices. please remember to sign in on each device or browser
+					session. This will ensure you to read with non-personalised
+					advertising no matter where you log in.
+				</p>
+			),
 			ctas: null,
 		},
 		reminderToActivateSubscription: {
 			header:
 				'Almost there! Complete your Guardian account to activate your subscription',
-			bodyCopy: <ReminderToActivateSubscription />,
+			bodyCopy: <ActivateSubscriptionReminder />,
 			ctas: null,
 		},
 		headlineReturn: {
