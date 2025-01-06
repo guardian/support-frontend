@@ -143,7 +143,7 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
-const guardianLightBenefits = [
+const guardianAdLiteBenefits = [
 	{
 		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian without personalised advertising.',
 	},
@@ -163,7 +163,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 					billingPeriod: 'Monthly',
 				},
 			},
-			benefits: guardianLightBenefits,
+			benefits: guardianAdLiteBenefits,
 		},
 		TierThree: {
 			label: 'Digital + print',
@@ -391,17 +391,17 @@ export function productCatalogDescriptionNewBenefits(
 	};
 }
 
-export function productCatalogGuardianLight(): Record<
-	ProductKey | 'GuardianLightGoBack',
+export function productCatalogGuardianAdLite(): Record<
+	ProductKey | 'GuardianAdLiteGoBack' | 'GuardianAdLite', // remove GuardianAdLite when productKey (in Zuora Catalog)
 	ProductDescription
 > {
 	return {
 		...productCatalogDescription,
-		GuardianLight: {
+		GuardianAdLite: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Purchase Guardian Ad-Lite',
 		},
-		GuardianLightGoBack: {
+		GuardianAdLiteGoBack: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [

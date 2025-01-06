@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { productCatalogGuardianLight } from 'helpers/productCatalog';
+import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
 import type { GuardianLightCardsProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCards';
 import { GuardianLightCards } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -35,13 +35,13 @@ Default.args = {
 		{
 			cardPosition: 1,
 			link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
-			productDescription: productCatalogGuardianLight().GuardianLight,
+			productDescription: productCatalogGuardianAdLite().GuardianAdLite,
 			ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 		},
 		{
 			cardPosition: 2,
 			link: `https://www.theguardian.com/uk/contribute`,
-			productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+			productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 			ctaCopy: `Go back to 'Accept all'`,
 		},
 	],

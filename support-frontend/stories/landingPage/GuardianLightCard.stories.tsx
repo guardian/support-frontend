@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { productCatalogGuardianLight } from 'helpers/productCatalog';
+import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
 import type { GuardianLightCardProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
 import { GuardianLightCard } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
 
@@ -30,6 +30,6 @@ export const Default = Template.bind({});
 Default.args = {
 	cardPosition: 1,
 	link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
-	productDescription: productCatalogGuardianLight().GuardianLight,
+	productDescription: productCatalogGuardianAdLite().GuardianAdLite,
 	ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 };

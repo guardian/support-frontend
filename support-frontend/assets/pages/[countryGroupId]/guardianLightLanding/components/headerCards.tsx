@@ -12,7 +12,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogGuardianLight,
+	productCatalogGuardianAdLite,
 } from 'helpers/productCatalog';
 import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -107,12 +107,12 @@ export function HeaderCards({
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,
-		productDescription: productCatalogGuardianLight().GuardianLight,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLite,
 		ctaCopy: `Get Guardian Ad-Lite for ${formattedPrice}/month`,
 	};
 	const card2 = {
 		link: returnLink ?? `https://www.theguardian.com`,
-		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};
 	return (
