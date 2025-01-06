@@ -526,8 +526,13 @@ export function ThreeTierLanding({
 							setShowCountdown={setShowCountdown}
 						/>
 					)}
-					<h1 css={heading}>{settings.copy.heading}</h1>
-					<p css={standFirst}>{settings.copy.subheading}</p>
+					<h1 css={heading}>
+						<span dangerouslySetInnerHTML={{ __html: settings.copy.heading }} />
+					</h1>
+					<p
+						css={standFirst}
+						dangerouslySetInnerHTML={{ __html: settings.copy.subheading }}
+					/>
 
 					{campaignSettings?.tickerSettings && (
 						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />

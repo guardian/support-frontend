@@ -53,19 +53,37 @@ object LandingPageTest {
   implicit val decoder: Decoder[LandingPageTest] = deriveDecoder
 }
 
-// TODO - fetch config from dynamodb
+// TODO - fetch config from dynamodb instead of hardcoding here
 object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] {
   def settings(): List[LandingPageTest] = List(
     LandingPageTest(
-      name = "MY_TEST",
+      name = "LP_DEFAULT_US",
       status = Status.Live,
-      targeting = LandingPageTestTargeting(countryGroups = List("GBPCountries")),
+      targeting = LandingPageTestTargeting(countryGroups = List("UnitedStates")),
       variants = List(
         LandingPageVariant(
           name = "CONTROL",
           copy = LandingPageCopy(
-            heading = "My heading",
-            subheading = "Subheading",
+            heading = "Support fearless, independent journalism",
+            subheading =
+              "We're not owned by a billionaire or profit-driven corporation: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact (and you can cancel anytime). Thank you.",
+          ),
+        ),
+      ),
+    ),
+    LandingPageTest(
+      name = "LP_DEFAULT",
+      status = Status.Live,
+      targeting = LandingPageTestTargeting(countryGroups =
+        List("GBPCountries", "AUDCountries", "EURCountries", "International", "NZDCountries", "Canada"),
+      ),
+      variants = List(
+        LandingPageVariant(
+          name = "CONTROL",
+          copy = LandingPageCopy(
+            heading = "Support fearless, independent journalism",
+            subheading =
+              "We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>",
           ),
         ),
       ),
