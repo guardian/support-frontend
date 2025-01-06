@@ -2,6 +2,7 @@ package admin.settings
 
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
+import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 
@@ -10,18 +11,8 @@ object Status {
   case object Live extends Status
   case object Draft extends Status
 
-  implicit val decoder: Decoder[Status] = Decoder[String].emap {
-    case "Live" => Right(Live)
-    case "Draft" => Right(Draft)
-    case other => Left(s"Invalid Status: $other")
-  }
-  implicit val encoder: Encoder[Status] = Encoder[String].contramap { s =>
-    println(s"encoding $s")
-    s match {
-      case Live => "Live"
-      case Draft => "Draft"
-    }
-  }
+  implicit val statusEncoder = deriveEnumerationEncoder[Status]
+  implicit val statusDecoder = deriveEnumerationDecoder[Status]
 }
 
 case class LandingPageTestTargeting(
