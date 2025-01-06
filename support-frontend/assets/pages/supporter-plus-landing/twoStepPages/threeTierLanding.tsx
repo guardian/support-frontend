@@ -28,10 +28,7 @@ import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type {
-	CampaignSettings,
-	CountdownSetting,
-} from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -140,12 +137,6 @@ const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
 		margin: 0 auto ${space[9]}px;
-	}
-`;
-
-const tabletLineBreak = css`
-	${from.desktop} {
-		display: none;
 	}
 `;
 
@@ -347,27 +338,6 @@ export function ThreeTierLanding({
 		}
 	}, [memoizedCurrentCountdownCampaign]);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- todo
-	const getHeadline = (
-		showCountdown: boolean,
-		currentCountdownSettings?: CountdownSetting,
-		campaignSettings?: CampaignSettings | null,
-	) => {
-		if (showCountdown && currentCountdownSettings?.label.trim()) {
-			return currentCountdownSettings.label;
-		} else {
-			return (
-				<>
-					{campaignSettings?.copy.headingFragment ?? <>Support </>}
-					fearless, <br css={tabletLineBreak} />
-					independent journalism
-					{campaignSettings?.copy.punctuation ??
-						campaignSettings?.copy.punctuation}
-				</>
-			);
-		}
-	};
-
 	/*
 	 * /////////////// END US EOY 2024 Campaign
 	 */
@@ -556,24 +526,8 @@ export function ThreeTierLanding({
 							setShowCountdown={setShowCountdown}
 						/>
 					)}
-					<h1 css={heading}>
-						{/*{getHeadline(*/}
-						{/*	showCountdown,*/}
-						{/*	currentCountdownSettings,*/}
-						{/*	campaignSettings,*/}
-						{/*)}*/}
-						{settings.copy.heading}
-					</h1>
-					<p css={standFirst}>
-						{/*{campaignSettings?.copy.subheading ?? (*/}
-						{/*	<>*/}
-						{/*		We're not owned by a billionaire or shareholders - our readers*/}
-						{/*		support us. Choose to join with one of the options below.{' '}*/}
-						{/*		<strong>Cancel anytime.</strong>*/}
-						{/*	</>*/}
-						{/*)}*/}
-						{settings.copy.subheading}
-					</p>
+					<h1 css={heading}>{settings.copy.heading}</h1>
+					<p css={standFirst}>{settings.copy.subheading}</p>
 					{campaignSettings?.tickerSettings && (
 						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
 					)}
