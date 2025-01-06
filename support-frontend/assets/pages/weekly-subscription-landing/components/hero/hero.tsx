@@ -21,26 +21,16 @@ import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
-import WeeklyProductPrices from '../weeklyProductPrices';
 
 type WeeklyHeroPropTypes = {
 	orderIsAGift: boolean;
 	promotionCopy: PromotionCopy;
-};
-
-type PriceCardsWeeklyHeroPropTypes = {
-	orderIsAGift: boolean;
-	promotionCopy: PromotionCopy;
-	countryId: IsoCountry;
-	productPrices: ProductPrices;
 };
 
 const styles = {
@@ -202,42 +192,6 @@ export function WeeklyHero({
 					</section>
 				</Hero>
 			</CentredContainer>
-		</PageTitle>
-	);
-}
-
-export function PriceCardsWeeklyHero({
-	orderIsAGift,
-	promotionCopy,
-	countryId,
-	productPrices,
-}: PriceCardsWeeklyHeroPropTypes): JSX.Element {
-	const defaultRoundelText = 'Save up to 35% a year';
-	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
-
-	return (
-		<PageTitle
-			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
-			theme="weekly"
-			cssOverrides={styles.pageTitleOverrides}
-		>
-			<CentredContainer>
-				<OfferStrapline
-					fgCol={palette.neutral[7]}
-					bgCol={brandAlt[400]}
-					copy={roundelText}
-					orderIsAGift={orderIsAGift}
-				/>
-			</CentredContainer>
-			<div css={styles.priceCardsHeroContainer}>
-				<CentredContainer>
-					<WeeklyProductPrices
-						countryId={countryId}
-						productPrices={productPrices}
-						orderIsAGift={orderIsAGift}
-					/>
-				</CentredContainer>
-			</div>
 		</PageTitle>
 	);
 }

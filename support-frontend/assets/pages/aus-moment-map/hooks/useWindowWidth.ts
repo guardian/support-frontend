@@ -1,5 +1,4 @@
 import * as React from 'preact/compat';
-import type { $Keys } from 'utility-types';
 
 const breakpoints = {
 	mobile: 320,
@@ -12,7 +11,7 @@ const breakpoints = {
 	wide: 1300,
 };
 
-type Breakpoint = $Keys<typeof breakpoints>;
+type Breakpoint = keyof typeof breakpoints;
 
 export const useWindowWidth = (): Record<
 	string,

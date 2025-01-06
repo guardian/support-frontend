@@ -482,6 +482,7 @@ export function OneTimeCheckoutComponent({
 					) {
 						setErrorContext(appropriateErrorMessage(paymentResult.error ?? ''));
 					}
+					setIsProcessingPayment(false);
 				}
 			} else {
 				setIsProcessingPayment(false);

@@ -1,8 +1,4 @@
 import { stripeCardSlice } from './reducer';
 
-export const {
-	setStripeFieldsCompleted,
-	setClientSecret,
-	setStripePaymentMethod,
-	setStripeFormError,
-} = stripeCardSlice.actions;
+export const { setStripePaymentMethod, setStripeFormError } =
+	stripeCardSlice.actions;
