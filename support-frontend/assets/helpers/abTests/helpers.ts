@@ -1,7 +1,3 @@
-import type {
-	AmountsTest,
-	SelectedAmountsVariant,
-} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export const FALLBACK_AMOUNTS = [
@@ -250,11 +246,9 @@ export const FALLBACK_AMOUNTS = [
 			},
 		],
 	},
-] as const satisfies readonly AmountsTest[];
+] as const;
 
-export function getFallbackAmounts(
-	countryGroupId: CountryGroupId,
-): SelectedAmountsVariant {
+export function getFallbackAmounts(countryGroupId: CountryGroupId) {
 	// Create fallback data - the amounts card must always have data to dsplay
 	const fallbackTest = FALLBACK_AMOUNTS.find(
 		(t) => t.targeting.region === countryGroupId,
