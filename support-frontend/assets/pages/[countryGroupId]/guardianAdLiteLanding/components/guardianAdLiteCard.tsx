@@ -87,7 +87,7 @@ export function GuardianAdLiteCard({
 	productDescription,
 	ctaCopy,
 }: GuardianAdLiteCardProps): JSX.Element {
-	const quantumMetricButtonRef = `guardianLight-${cardIndex}-button`;
+	const quantumMetricButtonRef = `guardianAdLite-${cardIndex}-button`;
 	const { label, benefits } = productDescription;
 	const icon =
 		cardIndex === 0 ? guardianAdLiteIconLeftSvg : guardianAdLiteIconRightSvg;
