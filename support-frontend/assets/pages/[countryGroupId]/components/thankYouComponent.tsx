@@ -90,6 +90,7 @@ export type CheckoutComponentProps = {
 	ratePlanKey?: string;
 	promotion?: Promotion;
 	identityUserType: UserType;
+	returnLink: string;
 };
 
 export function ThankYouComponent({
