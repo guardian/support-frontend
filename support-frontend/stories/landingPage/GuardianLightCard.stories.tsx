@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
-import type { GuardianAdLiteCardProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianAdLiteCard';
-import { GuardianAdLiteCard } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianAdLiteCard';
+import type { GuardianAdLiteCardProps } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCard';
+import { GuardianAdLiteCard } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCard';
 
 export default {
 	title: 'LandingPage/GuardianAdLite Card',

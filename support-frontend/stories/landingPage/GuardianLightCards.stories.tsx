@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
-import type { GuardianAdLiteCardsProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianAdLiteCards';
-import { GuardianAdLiteCards } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianAdLiteCards';
+import type { GuardianAdLiteCardsProps } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCards';
+import { GuardianAdLiteCards } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
