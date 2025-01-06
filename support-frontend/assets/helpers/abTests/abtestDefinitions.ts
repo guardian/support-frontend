@@ -140,10 +140,13 @@ export const tests: Tests = {
 	adFreeTierThree: {
 		variants: [
 			{
-				id: 'control',
+				id: 'control', // Tier2 ad-free
 			},
 			{
-				id: 'variant',
+				id: 'v1', // Tier3 ad-free
+			},
+			{
+				id: 'v2', // No ad-free
 			},
 		],
 		audiences: {
@@ -152,7 +155,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 6,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,

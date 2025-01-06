@@ -76,9 +76,13 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
+	returnLink?: string;
 };
 
-export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
+export function HeaderCards({
+	geoId,
+	returnLink,
+}: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
@@ -88,21 +92,28 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 		];
 	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
-	const card1UrlParams = new URLSearchParams({
+	const guardianLightParams = {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 		contribution: price?.toString() ?? '',
 	});
+	};
+	const card1UrlParams = new URLSearchParams(
+		returnLink
+			? {
+					...guardianLightParams,
+					returnAddress: returnLink,
+			  }
+			: guardianLightParams,
+	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,
 		productDescription: productCatalogGuardianLight().GuardianLight,
 		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
 	};
-
-	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
 	const card2 = {
-		link: returnLink,
+		link: returnLink ?? `https://www.theguardian.com`,
 		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};

@@ -19,4 +19,4 @@ export function preventDefaultValidityMessage(
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
  */
 export const doesNotContainExtendedEmojiOrLeadingSpace =
-	'^[^\\p{Extended_Pictographic}\\s][^\\p{Extended_Pictographic}]*$';
+	'^[^\\p{Extended_Pictographic}\\p{Emoji_Presentation}\\s][^\\p{Extended_Pictographic}\\p{Emoji_Presentation}]*$';
