@@ -96,7 +96,6 @@ export function HeaderCards({
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 		contribution: price?.toString() ?? '',
-	});
 	};
 	const card1UrlParams = new URLSearchParams(
 		returnLink
