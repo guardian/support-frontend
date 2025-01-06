@@ -1,6 +1,20 @@
+import type {
+	AmountsTest,
+	AmountsVariant,
+	SelectedAmountsVariant,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-export const FALLBACK_AMOUNTS = [
+type AmountsTestWithVariants = AmountsTest & {
+	variants: [AmountsVariant, ...AmountsVariant[]];
+};
+
+type NonEmptyAmountsTestArray = [
+	AmountsTestWithVariants,
+	...AmountsTestWithVariants[],
+];
+
+export const FALLBACK_AMOUNTS: NonEmptyAmountsTestArray = [
 	{
 		testName: 'FALLBACK_AMOUNTS__GBPCountries',
 		liveTestName: '',
@@ -246,12 +260,16 @@ export const FALLBACK_AMOUNTS = [
 			},
 		],
 	},
-] as const;
+];
 
-export function getFallbackAmounts(countryGroupId: CountryGroupId) {
+export function getFallbackAmounts(
+	countryGroupId: CountryGroupId,
+): SelectedAmountsVariant {
 	// Create fallback data - the amounts card must always have data to dsplay
 	const fallbackTest = FALLBACK_AMOUNTS.find(
-		(t) => t.targeting.region === countryGroupId,
+		(t) =>
+			t.targeting.targetingType === 'Region' &&
+			t.targeting.region === countryGroupId,
 	);
 	if (fallbackTest) {
 		return {
