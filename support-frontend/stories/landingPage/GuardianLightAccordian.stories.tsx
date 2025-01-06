@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { AccordianComponent } from 'pages/[countryGroupId]/guardianLightLanding/components/accordianComponent';
 
 export default {
-	title: 'LandingPage/GuardianLight Accordian',
+	title: 'LandingPage/GuardianAdLite Accordian',
 	component: AccordianComponent,
 	argTypes: {},
 };

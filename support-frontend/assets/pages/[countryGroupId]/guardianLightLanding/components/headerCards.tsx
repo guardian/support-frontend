@@ -92,17 +92,17 @@ export function HeaderCards({
 		];
 	const formattedPrice = simpleFormatAmount(currency, price);
 
-	const guardianLightParams = {
+	const guardianAdLiteParams = {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 	};
 	const card1UrlParams = new URLSearchParams(
 		returnLink
 			? {
-					...guardianLightParams,
+					...guardianAdLiteParams,
 					returnAddress: returnLink,
 			  }
-			: guardianLightParams,
+			: guardianAdLiteParams,
 	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
