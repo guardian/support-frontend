@@ -317,7 +317,7 @@ export function ThreeTierLanding({
 	);
 
 	const tierPlanPeriod = contributionType.toLowerCase();
-	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
@@ -373,7 +373,7 @@ export function ThreeTierLanding({
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex]);
+		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
 	const selectedContributionRatePlan =
@@ -394,8 +394,10 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
+	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
+		.amounts[0] as number;
+	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
+		.amounts[0] as number;
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
@@ -422,10 +424,9 @@ export function ThreeTierLanding({
 	/** Tier 2: SupporterPlus */
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Pricing =
-		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
-			currencyId
-		];
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		supporterPlusRatePlan
+	]?.pricing[currencyId] as number;
 
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
@@ -486,8 +487,8 @@ export function ThreeTierLanding({
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
-	const tier3Pricing =
-		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
+	const tier3Pricing = productCatalog.TierThree?.ratePlans[tier3RatePlan]
+		?.pricing[currencyId] as number;
 
 	const tier3UrlParams = new URLSearchParams({
 		product: 'TierThree',

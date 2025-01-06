@@ -76,7 +76,7 @@ function getInitialContributionType(
 	);
 	return defaultContributionType
 		? defaultContributionType.contributionType
-		: contributionTypes[countryGroupId][0].contributionType;
+		: contributionTypes[countryGroupId][0]?.contributionType ?? 'ONE_OFF';
 }
 
 function selectInitialAmounts(

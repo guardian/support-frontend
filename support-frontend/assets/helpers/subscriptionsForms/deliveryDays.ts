@@ -34,7 +34,10 @@ const getDeliveryDays = (
 	const deliveryDays = [initial];
 
 	for (let i = 1; i <= length; i += 1) {
-		deliveryDays.push(getNextDeliveryDay(deliveryDays[i - 1]));
+		const previousDay = deliveryDays[i - 1];
+		if (previousDay) {
+			deliveryDays.push(getNextDeliveryDay(previousDay));
+		}
 	}
 
 	return deliveryDays;

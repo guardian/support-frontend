@@ -32,7 +32,7 @@ export const addressMetaSlice = createSlice({
 				state.deliveryAgent.isLoading = false;
 				state.deliveryAgent.response = action.payload;
 				if (action.payload.agents?.length === 1) {
-					state.deliveryAgent.chosenAgent = action.payload.agents[0].agentId;
+					state.deliveryAgent.chosenAgent = action.payload.agents[0]?.agentId;
 				}
 			},
 		);

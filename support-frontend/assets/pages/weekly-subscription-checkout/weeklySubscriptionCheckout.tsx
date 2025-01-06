@@ -29,7 +29,7 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 	billingPeriodInUrl === 'Annual'
 		? billingPeriodInUrl
 		: 'Monthly';
-const startDate = formatMachineDate(getWeeklyDays()[0]);
+const startDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 const store = initReduxForSubscriptions(
 	GuardianWeekly,

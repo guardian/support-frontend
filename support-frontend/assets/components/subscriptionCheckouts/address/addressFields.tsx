@@ -202,7 +202,8 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 
 						if (countryGroupId !== selectedCountryGroup) {
 							const pathname = window.location.pathname;
-							const currentInternationalisationId = pathname.split('/')[1];
+							const currentInternationalisationId =
+								pathname.split('/')[1] ?? '';
 							const selectedInternationalisationId =
 								countryGroups[selectedCountryGroup as CountryGroupId]
 									.supportInternationalisationId;

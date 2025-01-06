@@ -20,7 +20,7 @@ const getSpecifiedRegionAmountsFromGlobal = (
 	if (!testArray.length) {
 		return {};
 	}
-	return testArray[0];
+	return testArray[0] ?? {};
 };
 
 describe('getGlobal', () => {

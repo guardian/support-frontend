@@ -1,7 +1,3 @@
-/* eslint "@typescript-eslint/no-unnecessary-condition": "off" -- this is while we are fixing `noUncheckedIndexedAccess` errors */
-
-// ----- Imports ----- //
-
 import seedrandom from 'seedrandom';
 import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
@@ -427,16 +423,10 @@ function getAmountsTestVariant(
 
 	const { testName, liveTestName, seed, variants, isLive } = targetedTest;
 
-	if (!variants.length) {
-		return {
-			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
-		};
-	}
-
 	const selectVariant = (
 		isLive: boolean,
 		variants: AmountsVariant[],
-	): AmountsVariant => {
+	): AmountsVariant | undefined => {
 		if (isLive && variants.length > 1) {
 			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
 
@@ -453,8 +443,14 @@ function getAmountsTestVariant(
 	const amountsParticipation = buildParticipation(
 		targetedTest,
 		currentTestName,
-		variant.variantName,
+		variant?.variantName ?? '',
 	);
+
+	if (!variant) {
+		return {
+			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
+		};
+	}
 
 	return {
 		selectedAmountsVariant: {

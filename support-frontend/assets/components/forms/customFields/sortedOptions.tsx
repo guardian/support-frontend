@@ -7,11 +7,13 @@ function sortedOptions(optionsForSorting: Record<string, string>): JSX.Element {
 		<>
 			{Object.keys(optionsForSorting)
 				.sort((a, b) =>
-					optionsForSorting[a].localeCompare(optionsForSorting[b]),
+					(optionsForSorting[a] ?? '').localeCompare(
+						optionsForSorting[b] ?? '',
+					),
 				)
 				.map((key) => (
 					<Option value={key} key={key}>
-						{optionsForSorting[key]}
+						{optionsForSorting[key] ?? ''}
 					</Option>
 				))}
 		</>

@@ -16,11 +16,6 @@
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
 			"@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
 		},
-
-		// These override @guardian/tsconfig as they have introduced a lot of errors.
-		// The number of errors indicated below is at the time of writing to give an idea of the scale of the fix needed.
-		// We should look at removing these as soon as we can.
-		"noUncheckedIndexedAccess": false, // 209 errors in 63 files.
 		"types": ["@testing-library/jest-dom"]
 	},
 	"include": [

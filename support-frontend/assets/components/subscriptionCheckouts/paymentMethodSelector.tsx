@@ -104,6 +104,7 @@ function PaymentMethodSelector({
 }: PropTypes): JSX.Element {
 	useEffect(() => {
 		availablePaymentMethods.length === 1 &&
+			availablePaymentMethods[0] &&
 			setPaymentMethod(availablePaymentMethods[0]);
 	}, []);
 

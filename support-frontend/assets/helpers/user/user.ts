@@ -68,6 +68,10 @@ const getEmailValidatedFromUserCookie = (
 	if (guuCookie) {
 		const tokens = guuCookie.split('.');
 
+		if (tokens[0] === undefined) {
+			return false;
+		}
+
 		try {
 			const parsed = JSON.parse(
 				Buffer.from(tokens[0], 'base64').toString(),

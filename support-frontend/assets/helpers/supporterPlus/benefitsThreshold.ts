@@ -27,9 +27,11 @@ export function getLowerBenefitThreshold(
 ): number {
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	return productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
-		currencyId
-	];
+	return (
+		productCatalog.SupporterPlus?.ratePlans[supporterPlusRatePlan]?.pricing[
+			currencyId
+		] ?? 0
+	);
 }
 
 export function getLowerProductBenefitThreshold(
@@ -49,9 +51,11 @@ export function getLowerProductBenefitThreshold(
 	const ratePlanSupporterPlus =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	return productCatalog[product].ratePlans[
-		product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
-	].pricing[currencyId];
+	return (
+		productCatalog[product]?.ratePlans[
+			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
+		]?.pricing[currencyId] ?? 0
+	);
 }
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring

@@ -26,7 +26,9 @@ export const getProductFields = ({
 	const { currencyKey, finalAmount, originalAmount, contributionAmount } =
 		financial;
 
-	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
+	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
+		billingPeriod: 'Monthly',
+	};
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.

@@ -24,7 +24,7 @@ function setPayerName(
 	const nameParts = payerName.trim().replace(/\s+/g, ' ').split(' ');
 
 	if (nameParts.length > 1) {
-		dispatch(setFirstName(nameParts[0]));
+		dispatch(setFirstName(nameParts[0] ?? ''));
 		dispatch(setLastName(nameParts.slice(1).join(' ')));
 	} else if (nameParts.length === 1) {
 		logException(

@@ -6,11 +6,20 @@ import {
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
 
-const everyDayAndSixDay = [3, 3, 3, 3, 6, 5, 4];
-const weekendAndSaturday = [6, 5, 4, 3, 9, 8, 7];
-const sunday = [7, 6, 5, 4, 10, 9, 8];
+export type DayOfWeekIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-const getDaysToAdd = (today: number, product: ProductOptions): number => {
+const everyDayAndSixDay = [
+	3, 3, 3, 3, 6, 5, 4,
+] as const satisfies readonly number[];
+const weekendAndSaturday = [
+	6, 5, 4, 3, 9, 8, 7,
+] as const satisfies readonly number[];
+const sunday = [7, 6, 5, 4, 10, 9, 8] as const satisfies readonly number[];
+
+const getDaysToAdd = (
+	today: DayOfWeekIndex,
+	product: ProductOptions,
+): number => {
 	switch (product) {
 		case 'Everyday':
 		case 'EverydayPlus':
@@ -47,7 +56,7 @@ const getHomeDeliveryDays = (
 	today: number,
 	product: ProductOptions,
 ): Date[] => {
-	const currentWeekday = new Date(today).getDay();
+	const currentWeekday = new Date(today).getDay() as DayOfWeekIndex;
 	const delayDays = getDaysToAdd(currentWeekday, product);
 	const deliveryDay: Day = ((currentWeekday + delayDays) % 7) as Day;
 	const canMakeNextDelivery = canDeliverOnNextDeliveryDay(

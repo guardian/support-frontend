@@ -83,15 +83,15 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const price =
-		productCatalog.GuardianLight.ratePlans[contributionType].pricing[
+		productCatalog.GuardianLight?.ratePlans[contributionType]?.pricing[
 			currencyKey
 		];
-	const formattedPrice = simpleFormatAmount(currency, price);
+	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
 	const card1UrlParams = new URLSearchParams({
 		product: 'GuardianLight',
 		ratePlan: contributionType,
-		contribution: price.toString(),
+		contribution: price?.toString() ?? '',
 	});
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {

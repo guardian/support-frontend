@@ -67,9 +67,9 @@ function AusMomentMap(): JSX.Element {
 				if (selectedTerritory) {
 					const index =
 						(territories.indexOf(selectedTerritory) + 1) % territories.length;
-					setSelectedTerritory(territories[index]);
+					setSelectedTerritory(territories[index] ?? null);
 				} else {
-					setSelectedTerritory(territories[0]);
+					setSelectedTerritory(territories[0] ?? null);
 				}
 
 				setShouldScrollIntoView(true);

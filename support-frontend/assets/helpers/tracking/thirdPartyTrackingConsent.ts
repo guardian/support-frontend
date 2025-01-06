@@ -48,7 +48,10 @@ const onConsentChangeEvent = async (
 					(accumulator, vendorKey) => {
 						const vendorId = vendorIds[vendorKey];
 
-						if (state.tcfv2?.vendorConsents[vendorId] !== undefined) {
+						if (
+							vendorId &&
+							state.tcfv2?.vendorConsents[vendorId] !== undefined
+						) {
 							return {
 								...accumulator,
 								[vendorKey]: state.tcfv2.vendorConsents[vendorId],

@@ -11,8 +11,9 @@ export const userSlice = createSlice({
 			state.isSignedIn = action.payload;
 		},
 		setTestUserStatus(state, action: PayloadAction<Record<string, boolean>>) {
-			state.isTestUser = action.payload.isTestUser;
-			state.isPostDeploymentTestUser = action.payload.isPostDeploymentTestUser;
+			state.isTestUser = action.payload.isTestUser ?? false;
+			state.isPostDeploymentTestUser =
+				action.payload.isPostDeploymentTestUser ?? false;
 		},
 		setIsReturningContributor(state, action: PayloadAction<boolean>) {
 			state.isReturningContributor = action.payload;

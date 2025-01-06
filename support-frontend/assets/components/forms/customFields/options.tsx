@@ -6,7 +6,7 @@ const options = (optionsForMapping: Record<string, string>): JSX.Element => {
 	return (
 		<>
 			{Object.keys(optionsForMapping).map((key) => (
-				<Option value={key}>{optionsForMapping[key]}</Option>
+				<Option value={key}>{optionsForMapping[key] ?? ''}</Option>
 			))}
 		</>
 	);

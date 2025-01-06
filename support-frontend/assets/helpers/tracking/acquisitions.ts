@@ -102,7 +102,7 @@ function getCampaign(
 
 	return (
 		Object.keys(campaigns).find((campaign) =>
-			campaigns[campaign].includes(campaignCode),
+			campaigns[campaign]?.includes(campaignCode),
 		) ?? null
 	);
 }
@@ -285,15 +285,20 @@ function getAcquisitionDataFromUtmParams():
 	);
 
 	// All must be present in the URL for them to be accepted
-	if (utmParamNames.every((paramName) => utmParameters[paramName].length > 0)) {
+	if (
+		utmParamNames.every((paramName) => {
+			const param = utmParameters[paramName];
+			return param && param.length > 0;
+		})
+	) {
 		return {
-			campaignCode: utmParameters.utm_campaign,
+			campaignCode: utmParameters.utm_campaign as string,
 			abTest: {
-				name: utmParameters.utm_content,
-				variant: utmParameters.utm_term,
+				name: utmParameters.utm_content as string,
+				variant: utmParameters.utm_term as string,
 			},
-			source: utmParameters.utm_source,
-			componentType: utmParameters.utm_medium,
+			source: utmParameters.utm_source as string,
+			componentType: utmParameters.utm_medium as string,
 			queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
 		};
 	}

@@ -15,8 +15,9 @@ export function get(name: string): string | null | undefined {
 	const cookies = document.cookie.split('; ');
 
 	for (let i = cookies.length - 1; i >= 0; i -= 1) {
-		if (cookies[i].startsWith(name)) {
-			return cookies[i].substr(cookies[i].indexOf('=') + 1);
+		const cookie = cookies[i];
+		if (cookie && cookie.startsWith(name)) {
+			return cookie.substr(cookie.indexOf('=') + 1);
 		}
 	}
 
