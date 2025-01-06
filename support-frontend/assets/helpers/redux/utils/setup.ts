@@ -61,10 +61,12 @@ export function getInitialState(): CommonState {
 	const { selectedAmountsVariant, amountsParticipation } =
 		getAmountsTestVariant(countryId, countryGroupId, settings);
 
+  // TODO - remove from here?
 	const landingPageSettings = getLandingPageSettings(
 		countryGroupId,
 		settings.landingPageTests,
 	);
+  debugger
 
 	const abtestInitalizerData = {
 		countryId,

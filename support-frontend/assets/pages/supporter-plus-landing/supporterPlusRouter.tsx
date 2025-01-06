@@ -16,6 +16,8 @@ import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
+import {getLandingPageSettings} from "../../helpers/abTests/landingPageAbTests";
+import {getSettings} from "../../helpers/globalsAndSwitches/globals";
 
 parseAppConfig(window.guardian);
 
@@ -25,12 +27,20 @@ if (!isDetailsSupported) {
 
 setUpTrackingAndConsents();
 
+const settings = getSettings();
+
+
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = CountryGroup.detect();
-const store = initReduxForContributions();
+// const store = initReduxForContributions();
 
-setUpRedux(store);
+const landingPageSettings = getLandingPageSettings(
+  countryGroupId,
+  settings.landingPageTests,
+);
+
+// setUpRedux(store);
 
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
@@ -49,12 +59,13 @@ function ScrollToTop(): null {
 	return null;
 }
 
-const commonState = store.getState().common;
+// const commonState = store.getState().common;
 
-export const inThreeTier = threeTierCheckoutEnabled(
-	commonState.abParticipations,
-	commonState.amounts,
-);
+const inThreeTier = true;
+// export const inThreeTier = threeTierCheckoutEnabled(
+// 	commonState.abParticipations,
+// 	commonState.amounts,
+// );
 
 // ----- Render ----- //
 
@@ -62,7 +73,7 @@ const router = () => {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-			<Provider store={store}>
+			{/*<Provider store={store}>*/}
 				<Routes>
 					{countryIds.map((countryId) => (
 						<>
@@ -72,7 +83,7 @@ const router = () => {
 									inThreeTier ? (
 										<ThreeTierLanding
 											geoId={countryId}
-											settings={store.getState().common.landingPageSettings}
+											settings={landingPageSettings}
 										/>
 									) : (
 										<SupporterPlusInitialLandingPage
@@ -94,7 +105,7 @@ const router = () => {
 						</>
 					))}
 				</Routes>
-			</Provider>
+			{/*</Provider>*/}
 		</BrowserRouter>
 	);
 };
