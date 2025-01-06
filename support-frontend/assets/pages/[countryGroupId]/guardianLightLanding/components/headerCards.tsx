@@ -17,7 +17,7 @@ import {
 import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { GuardianLightCards } from './guardianLightCards';
+import { GuardianAdLiteCards } from './guardianAdLiteCards';
 
 const containerCardsAndSignIn = css`
 	background-color: ${palette.brand[400]};
@@ -124,7 +124,7 @@ export function HeaderCards({
 				cssOverrides={containerCardsAndSignIn}
 			>
 				<h1 css={heading}>Choose how to read the Guardian</h1>
-				<GuardianLightCards cardsContent={[card1, card2]} />
+				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
 					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
 					{SignInLink}

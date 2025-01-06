@@ -11,10 +11,10 @@ import { LinkButton, themeLinkBrand } from '@guardian/source/react-components';
 import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { type ProductDescription } from 'helpers/productCatalog';
-import { guardianLightIconLeftSvg } from './guardianLightIconLeftSvg';
-import { guardianLightIconRightSvg } from './guardianLightIconRightSvg';
+import { guardianAdLiteIconLeftSvg } from './guardianAdLiteIconLeftSvg';
+import { guardianAdLiteIconRightSvg } from './guardianAdLiteIconRightSvg';
 
-export type GuardianLightCardProps = {
+export type GuardianAdLiteCardProps = {
 	cardIndex: number;
 	link: string;
 	productDescription: ProductDescription;
@@ -81,16 +81,16 @@ const checkmarkBenefitList = css`
 	}
 `;
 
-export function GuardianLightCard({
+export function GuardianAdLiteCard({
 	cardIndex,
 	link,
 	productDescription,
 	ctaCopy,
-}: GuardianLightCardProps): JSX.Element {
+}: GuardianAdLiteCardProps): JSX.Element {
 	const quantumMetricButtonRef = `guardianLight-${cardIndex}-button`;
 	const { label, benefits } = productDescription;
 	const icon =
-		cardIndex === 0 ? guardianLightIconLeftSvg : guardianLightIconRightSvg;
+		cardIndex === 0 ? guardianAdLiteIconLeftSvg : guardianAdLiteIconRightSvg;
 	return (
 		<section css={container}>
 			<div css={titleSummarySvgCss}>

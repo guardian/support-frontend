@@ -1,4 +1,4 @@
-export const guardianLightIconRightSvg = (
+export const guardianAdLiteIconRightSvg = (
 	<svg
 		width="58"
 		height="59"

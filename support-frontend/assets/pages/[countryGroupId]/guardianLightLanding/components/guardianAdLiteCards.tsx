@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { ProductDescription } from 'helpers/productCatalog';
-import { GuardianLightCard } from './guardianLightCard';
+import { GuardianAdLiteCard } from './guardianAdLiteCard';
 
-export type GuardianLightCardsProps = {
+export type GuardianAdLiteCardsProps = {
 	cardsContent: Array<{
 		link: string;
 		productDescription: ProductDescription;
@@ -29,9 +29,9 @@ const container = (cardCount: number) => css`
 	}
 `;
 
-export function GuardianLightCards({
+export function GuardianAdLiteCards({
 	cardsContent,
-}: GuardianLightCardsProps): JSX.Element {
+}: GuardianAdLiteCardsProps): JSX.Element {
 	return (
 		<div
 			css={container(cardsContent.length)}
@@ -41,7 +41,7 @@ export function GuardianLightCards({
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
 				return (
-					<GuardianLightCard
+					<GuardianAdLiteCard
 						cardIndex={cardIndex}
 						key={`guardianLightCard${cardIndex}`}
 						{...cardContent}
