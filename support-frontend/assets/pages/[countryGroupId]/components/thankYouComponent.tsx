@@ -31,9 +31,11 @@ import {
 	sendEventOneTimeCheckoutValue,
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 
 const checkoutContainer = css`
@@ -89,6 +91,7 @@ export type CheckoutComponentProps = {
 	productKey?: ProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
+	returnLink?: string;
 	identityUserType: UserType;
 };
 
@@ -98,6 +101,7 @@ export function ThankYouComponent({
 	productKey,
 	ratePlanKey,
 	promotion,
+	returnLink,
 	identityUserType,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
@@ -108,10 +112,7 @@ export function ThankYouComponent({
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
-	const parsedOrder = safeParse(
-		OrderSchema,
-		storage.session.get('thankYouOrder'),
-	);
+	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
 	if (!parsedOrder.success) {
 		return (
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
@@ -202,17 +203,20 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
+	const isGuardianAdLite = productKey === 'GuardianLight';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
-
-	const isNewAccount = identityUserType === 'new';
 	const validEmail = order.email !== '';
-
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
+
+	// Clarify Guardian Ad-lite thankyou page states
+	const isNotRegistered = identityUserType === 'new';
+	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
+	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
 
 	let benefitsChecklist;
 	if (isTier) {
@@ -245,6 +249,12 @@ export function ThankYouComponent({
 		undefined,
 		isTier3,
 		benefitsChecklist,
+		undefined,
+		undefined,
+		payment.finalAmount,
+		formatUserDate(getGuardianAdLiteDate()),
+		returnLink ?? 'https://www.theguardian.com',
+		isSignedIn,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
@@ -252,8 +262,11 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'), // Create your Guardian account
-		...maybeThankYouModule(!isNewAccount && !isSignedIn, 'signIn'), // Sign in to access your benefits
+		...maybeThankYouModule(isNotRegistered && !isGuardianAdLite, 'signUp'), // Complete your Guardian account
+		...maybeThankYouModule(
+			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
+			'signIn',
+		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
 		...maybeThankYouModule(
 			isTier3 && showNewspaperArchiveBenefit,
@@ -263,11 +276,31 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
-			isOneOff || (!(isTier3 && showNewspaperArchiveBenefit) && isSignedIn),
+			isOneOff ||
+				(!(isTier3 && showNewspaperArchiveBenefit) &&
+					isSignedIn &&
+					!isGuardianAdLite),
 			'feedback',
 		),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
-		...maybeThankYouModule(!isTier3, 'socialShare'),
+		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
+		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(
+			isGuardianAdLite && isRegisteredAndNotSignedIn,
+			'signInToActivate',
+		),
+		...maybeThankYouModule(
+			isGuardianAdLite && isRegisteredAndSignedIn,
+			'reminderToSignIn',
+		),
+		...maybeThankYouModule(
+			isGuardianAdLite && isNotRegistered,
+			'reminderToActivateSubscription',
+		),
+		...maybeThankYouModule(
+			isGuardianAdLite && (isRegisteredAndSignedIn || isNotRegistered),
+			'headlineReturn',
+		),
 	];
 
 	return (
@@ -284,11 +317,11 @@ export function ThankYouComponent({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
+							productKey={productKey ?? 'Contribution'}
 							name={order.firstName}
 							amount={payment.originalAmount}
 							contributionType={contributionType}
 							amountIsAboveThreshold={isSupporterPlus}
-							isTier3={isTier3}
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
@@ -305,15 +338,17 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
-						<LinkButton
-							href="https://www.theguardian.com"
-							priority="tertiary"
-							onClick={() =>
-								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-							}
-						>
-							Return to the Guardian
-						</LinkButton>
+						{!isGuardianAdLite && (
+							<LinkButton
+								href="https://www.theguardian.com"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+								}
+							>
+								Return to the Guardian
+							</LinkButton>
+						)}
 					</div>
 				</Container>
 			</div>

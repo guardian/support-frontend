@@ -23,11 +23,14 @@ export function GuardianLightLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-light',
 	}; // hidden initially, will display with more regions
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsReturn =
+		urlSearchParams.get('returnAddress') ?? undefined; // no return address supplied
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
 				<>
-					<HeaderCards geoId={geoId} />
+					<HeaderCards geoId={geoId} returnLink={urlSearchParamsReturn} />
 					<PosterComponent />
 					<AccordianComponent />
 				</>

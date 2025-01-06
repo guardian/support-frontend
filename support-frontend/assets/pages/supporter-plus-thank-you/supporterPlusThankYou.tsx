@@ -22,7 +22,7 @@ import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
+import { setHideSupportMessagingCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import {
@@ -206,7 +206,7 @@ export function SupporterPlusThankYou({
 		);
 
 		if (contributionType === 'ONE_OFF') {
-			setOneOffContributionCookie();
+			setHideSupportMessagingCookie();
 		}
 	}, []);
 
@@ -256,13 +256,13 @@ export function SupporterPlusThankYou({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							name={firstName}
+							productKey={isSupporterPlus ? 'SupporterPlus' : 'Contribution'}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
 							isOneOffPayPal={isOneOffPayPal}
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
 							amountIsAboveThreshold={isSupporterPlus}
-							isTier3={false}
 							isSignedIn={isSignedIn}
 							identityUserType={'current'}
 							promotion={promotion}

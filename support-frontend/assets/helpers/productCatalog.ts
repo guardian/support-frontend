@@ -27,6 +27,7 @@ type ProductBenefit = {
 
 export type ProductDescription = {
 	label: string;
+	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
 	benefitsMissing?: ProductBenefit[];
@@ -100,13 +101,13 @@ const appBenefit = {
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: false },
+		{ name: 'adFreeTierThree', variants: ['v1', 'v2'], display: false },
 	],
 };
 const addFreeBenefitTierThree = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: true },
+		{ name: 'adFreeTierThree', variants: ['v1'], display: true },
 	],
 };
 const newsletterBenefit = {
@@ -156,6 +157,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
 			label: 'Guardian Ad-Lite',
+			thankyouMessage: `Your valued support powers our journalism${' '}`,
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
@@ -165,6 +167,7 @@ export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 		},
 		TierThree: {
 			label: 'Digital + print',
+			thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
 			benefitsSummary: [
 				'The rewards from ',
 				{ strong: true, copy: 'All-access digital' },

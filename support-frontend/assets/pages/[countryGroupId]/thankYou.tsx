@@ -38,6 +38,9 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
+	// returnAddress
+	const urlSearchParamsReturn =
+		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;
@@ -104,15 +107,11 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {
-					case 'SupporterPlus':
-					case 'Contribution':
-						return 'NoFulfilmentOptions';
 					case 'TierThree':
 						return countryGroupId === 'International'
 							? 'RestOfWorld'
 							: 'Domestic';
 					default:
-						// ToDo: define for every product here
 						return 'NoFulfilmentOptions';
 				}
 			};
@@ -160,6 +159,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
+			returnLink={urlSearchParamsReturn}
 		/>
 	);
 }
