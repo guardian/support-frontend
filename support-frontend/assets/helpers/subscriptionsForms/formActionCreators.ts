@@ -153,6 +153,4 @@ export function setPaperDeliveryPostcode(postcode: string) {
 	};
 }
 
-export type FormActionCreators = typeof formActionCreators;
-
 export { setCsrCustomerData, formActionCreators };

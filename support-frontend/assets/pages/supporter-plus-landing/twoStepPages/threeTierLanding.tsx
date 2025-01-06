@@ -528,6 +528,7 @@ export function ThreeTierLanding({
 					)}
 					<h1 css={heading}>{settings.copy.heading}</h1>
 					<p css={standFirst}>{settings.copy.subheading}</p>
+
 					{campaignSettings?.tickerSettings && (
 						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
 					)}
