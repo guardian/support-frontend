@@ -4,7 +4,7 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
-import { GuardianLightLanding } from './guardianAdLiteLanding/guardianLightLanding';
+import { GuardianAdLiteLanding } from './guardianAdLiteLanding/guardianAdLiteLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
 import { ThankYou } from './thankYou';
 
@@ -27,7 +27,7 @@ const router = createBrowserRouter(
 		},
 		{
 			path: `/${geoId}/guardian-light`,
-			element: <GuardianLightLanding geoId={geoId} />,
+			element: <GuardianAdLiteLanding geoId={geoId} />,
 		},
 	]),
 );

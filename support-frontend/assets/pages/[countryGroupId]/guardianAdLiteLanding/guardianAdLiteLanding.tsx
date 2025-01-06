@@ -10,13 +10,13 @@ import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
 
-type GuardianLightLandingProps = {
+type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
 };
 
-export function GuardianLightLanding({
+export function GuardianAdLiteLanding({
 	geoId,
-}: GuardianLightLandingProps): JSX.Element {
+}: GuardianAdLiteLandingProps): JSX.Element {
 	const { countryGroupId } = getGeoIdConfig(geoId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries],
