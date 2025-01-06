@@ -101,13 +101,13 @@ const appBenefit = {
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: false },
+		{ name: 'adFreeTierThree', variants: ['v1', 'v2'], display: false },
 	],
 };
 const addFreeBenefitTierThree = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: true },
+		{ name: 'adFreeTierThree', variants: ['v1'], display: true },
 	],
 };
 const newsletterBenefit = {

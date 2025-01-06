@@ -93,6 +93,7 @@ export type CheckoutComponentProps = {
 	promotion?: Promotion;
 	returnLink?: string;
 	identityUserType: UserType;
+	returnLink: string;
 };
 
 export function ThankYouComponent({
