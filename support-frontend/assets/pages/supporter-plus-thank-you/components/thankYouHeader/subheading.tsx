@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
+import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
 	productCatalogDescription,
 	type ProductKey,
@@ -12,6 +13,7 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	paymentStatus: PaymentStatus;
 }
 
 function MarketingCopy({
@@ -32,6 +34,15 @@ function MarketingCopy({
 		</span>
 	);
 }
+
+const getPendingCopy = (isPending: boolean) => {
+	const pendingCopy = (
+		<span>
+			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and =you will receive an email when your account is live.`}
+		</span>
+	);
+	return isPending ? pendingCopy : null;
+};
 
 const getSubHeadingCopy = (
 	productKey: ProductKey,
@@ -89,6 +100,7 @@ function Subheading({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	paymentStatus,
 }: SubheadingProps): JSX.Element {
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianLight';
@@ -99,9 +111,10 @@ function Subheading({
 		isSignedIn,
 		identityUserType,
 	);
-
+	const pendingCopy = getPendingCopy(paymentStatus === 'pending');
 	return (
 		<>
+			{pendingCopy}
 			{subheadingCopy}
 			{!isGuardianAdLite && (
 				<>

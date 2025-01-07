@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
+import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -39,6 +40,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	paymentStatus: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
 };
@@ -54,8 +56,9 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
-	showOffer,
+	paymentStatus,
 	promotion,
+	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -64,9 +67,10 @@ function ThankYouHeader({
 				productKey={productKey}
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
-				promotion={promotion}
 				currency={currency}
 				contributionType={contributionType}
+				paymentStatus={paymentStatus}
+				promotion={promotion}
 			/>
 
 			<p css={headerSupportingText}>
@@ -77,6 +81,7 @@ function ThankYouHeader({
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
 					identityUserType={identityUserType}
+					paymentStatus={paymentStatus}
 				/>
 			</p>
 			{showOffer && (

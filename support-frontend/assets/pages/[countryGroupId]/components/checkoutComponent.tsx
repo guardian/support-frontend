@@ -158,6 +158,7 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
  */
 type ProcessPaymentResponse =
 	| { status: 'success' }
+	| { status: 'pending' }
 	| { status: 'failure'; failureReason?: ErrorReason };
 
 type CreateSubscriptionResponse = StatusResponse & {
@@ -190,7 +191,7 @@ const handlePaymentStatus = (
 	if (status === 'failure') {
 		return { status, failureReason };
 	} else {
-		return { status: 'success' }; // success or pending
+		return { status: status }; // success or pending
 	}
 };
 
@@ -620,11 +621,15 @@ export function CheckoutComponent({
 				};
 			}
 
-			if (processPaymentResponse.status === 'success') {
+			if (
+				processPaymentResponse.status === 'success' ||
+				processPaymentResponse.status === 'pending'
+			) {
 				const order = {
 					firstName: personalData.firstName,
 					email: personalData.email,
 					paymentMethod: paymentMethod,
+					status: processPaymentResponse.status,
 				};
 				setThankYouOrder(order);
 				const thankYouUrlSearchParams = new URLSearchParams();

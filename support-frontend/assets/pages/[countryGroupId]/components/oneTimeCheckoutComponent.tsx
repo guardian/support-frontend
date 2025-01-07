@@ -461,6 +461,7 @@ export function OneTimeCheckoutComponent({
 					firstName: '',
 					email: email,
 					paymentMethod: paymentMethod,
+					status: 'success', // retry pending mechanism not applied to one-time payments
 				});
 				const thankYouUrlSearchParams = new URLSearchParams();
 				thankYouUrlSearchParams.set('contribution', finalAmount.toString());
