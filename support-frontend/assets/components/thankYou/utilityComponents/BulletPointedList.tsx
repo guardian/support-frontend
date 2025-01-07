@@ -14,14 +14,20 @@ const list = css`
 		margin-top: ${space[4]}px;
 	}
 `;
+
+type SvgBulletProps = {
+	color?: string;
+};
 type BulletPointedListItemProps = {
 	item: string;
+	color?: string;
 };
 type BulletPointedListProps = {
 	items: string[];
+	color?: string;
 };
 
-function SvgBullet() {
+function SvgBullet({ color = palette.brand[500] }: SvgBulletProps) {
 	return (
 		<svg
 			width="8"
@@ -30,27 +36,27 @@ function SvgBullet() {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="4" cy="4" r="4" fill={`${palette.brand[500]}`} />
+			<circle cx="4" cy="4" r="4" fill={`${color}`} />
 		</svg>
 	);
 }
 
-function BulletPointedListItem({ item }: BulletPointedListItemProps) {
+function BulletPointedListItem({ item, color }: BulletPointedListItemProps) {
 	return (
 		<li css={listItem}>
 			<div>
-				<SvgBullet />
+				<SvgBullet color={color} />
 			</div>
 			<div>{item}</div>
 		</li>
 	);
 }
 
-function BulletPointedList({ items }: BulletPointedListProps) {
+function BulletPointedList({ items, color }: BulletPointedListProps) {
 	return (
 		<ul css={list}>
 			{items.map((item) => (
-				<BulletPointedListItem key={item} item={item} />
+				<BulletPointedListItem key={item} item={item} color={color} />
 			))}
 		</ul>
 	);

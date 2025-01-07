@@ -1,4 +1,3 @@
-import { DateUtils } from 'react-day-picker';
 import { config } from 'helpers/contributions';
 import type {
 	ContributionType,
@@ -6,8 +5,6 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-const daysFromNowForGift = 89;
 
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
@@ -22,14 +19,6 @@ export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 
 export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
-
-export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
-	const rangeDate = new Date();
-	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
-
-	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
-	return dateIsInsideRange;
-};
 
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 	!!input && new RegExp(emailRegexPattern).test(input);
@@ -74,17 +63,6 @@ export const emailAddressesMatch: (
 
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
-
-export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
-	rawDate,
-) => {
-	const date = rawDate ? new Date(rawDate) : null;
-
-	if (isNotEmpty(rawDate) && date) {
-		return isNotTooFarInTheFuture(date);
-	}
-	return false;
-};
 
 export const amountIsValid = (
 	input: string,
