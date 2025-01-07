@@ -31,6 +31,7 @@ import services.{
   RecaptchaService,
   TestUserService,
   UserBenefitsApiService,
+  UserBenefitsResponse,
   UserDetails,
 }
 import utils.CheckoutValidationRules.{Invalid, Valid}
@@ -150,6 +151,16 @@ class CreateSubscriptionController(
     }
   }
 
+  private def validateBenefits(response: UserBenefitsResponse): EitherT[Future, CreateSubscriptionError, Unit] = {
+    if (response.benefits.contains("adFree")) {
+      // Not eligible
+      EitherT.leftT(RequestValidationError("guardian_light_purchase_not_allowed"))
+    } else {
+      // Eligible
+      EitherT.rightT(())
+    }
+  }
+
   private def validateUserIsEligibleForPurchase(
       request: Request[CreateSupportWorkersRequest],
       userDetails: UserDetailsWithSignedInStatus,
@@ -161,18 +172,12 @@ class CreateSubscriptionController(
           // to this point of the journey.
           EitherT.rightT(())
         } else {
-          userBenefitsApiService
-            .getUserBenefits(userDetails.userDetails.identityId)
-            .map { benefits =>
-              if (benefits.benefits.contains("adFree")) {
-                // Not eligible
-                throw new Error()
-              } else {
-                // Eligible
-                ()
-              }
-            }
-            .leftMap(_ => RequestValidationError("guardian_light_purchase_not_allowed"))
+          for {
+            benefits <- userBenefitsApiService
+              .getUserBenefits(userDetails.userDetails.identityId)
+              .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
+            _ <- validateBenefits(benefits)
+          } yield ()
         }
       }
       case _ => EitherT.rightT(())
