@@ -196,7 +196,7 @@ function addTagManagerScript() {
 		processQueues();
 	};
 
-	if (firstScript.parentNode) {
+	if (firstScript?.parentNode) {
 		firstScript.parentNode.insertBefore(googleTagManagerScript, firstScript);
 		scriptAdded = true;
 	}
@@ -220,7 +220,8 @@ async function init(): Promise<void> {
 			 * Update userConsentsToGTM value when
 			 * consent changes via the CMP library.
 			 */
-			userConsentsToGTM = thirdPartyTrackingConsent[googleTagManagerKey];
+			userConsentsToGTM =
+				thirdPartyTrackingConsent[googleTagManagerKey] ?? false;
 
 			if (userConsentsToGTM) {
 				if (!scriptAdded) {

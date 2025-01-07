@@ -32,15 +32,15 @@ describe('deliveryDays', () => {
 	describe('getWeeklyDays', () => {
 		it('if you order after wednesday, it delivers the Weekly on Friday fortnight', () => {
 			const days = getWeeklyDays(thursday);
-			expect(formatMachineDate(days[0])).toEqual('2019-03-22');
+			expect(formatMachineDate(days[0]!)).toEqual('2019-03-22');
 		});
 		it('if you order before wednesday midnight, it delivers the Weekly on Friday week', () => {
 			const days = getWeeklyDays(tuesday);
-			expect(formatMachineDate(days[0])).toEqual('2019-03-08');
+			expect(formatMachineDate(days[0]!)).toEqual('2019-03-08');
 		});
 		it('if you order on a Sunday, it delivers the Weekly on Friday week', () => {
 			const days = getWeeklyDays(sunday);
-			expect(formatMachineDate(days[0])).toEqual('2019-03-22');
+			expect(formatMachineDate(days[0]!)).toEqual('2019-03-22');
 		});
 		it('should not offer the 27th of December as a possible delivery date', () => {
 			const days = getWeeklyDays(ninthOfDecember);

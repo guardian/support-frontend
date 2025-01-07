@@ -26,9 +26,10 @@ const getWeeklyDays = (today?: number): Date[] => {
 	const nonChrismassy = allDeliveryDays.filter((d) => !isChrismassy(d));
 
 	if (allDeliveryDays.length > nonChrismassy.length) {
-		nonChrismassy.push(
-			getNextDeliveryDay(nonChrismassy[nonChrismassy.length - 1]),
-		);
+		const lastNonChrismassy = nonChrismassy[nonChrismassy.length - 1];
+		if (lastNonChrismassy) {
+			nonChrismassy.push(getNextDeliveryDay(lastNonChrismassy));
+		}
 	}
 
 	return nonChrismassy.splice(weeksToAdd);

@@ -39,7 +39,7 @@ const getAllQueryParams = (): Array<[string, string]> =>
 const getAllQueryParamsWithExclusions = (
 	excluded: string[],
 ): Array<[string, string]> =>
-	getAllQueryParams().filter((p: string[]) => !excluded.includes(p[0]));
+	getAllQueryParams().filter((p: string[]) => !excluded.includes(p[0] ?? ''));
 
 // Takes a mapping of query params and adds to an absolute or relative URL.
 function addQueryParamsToURL(

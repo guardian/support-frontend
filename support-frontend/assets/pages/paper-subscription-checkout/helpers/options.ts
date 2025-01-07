@@ -47,6 +47,6 @@ const getStartDate = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: ProductOptions,
 ): DateYMDString =>
-	formatMachineDate(getDays(fulfilmentOption, productOption)[0]);
+	formatMachineDate(getDays(fulfilmentOption, productOption)[0] as Date);
 
 export { getProductOption, getFulfilmentOption, getDays, getStartDate };

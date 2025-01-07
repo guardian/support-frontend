@@ -119,7 +119,7 @@ describe('Guardian Weekly checkout form', () => {
 				});
 				fireEvent.click(addressIsNotSame);
 				const allCountrySelects = await screen.findAllByLabelText('Country');
-				fireEvent.change(allCountrySelects[1], {
+				fireEvent.change(allCountrySelects[1]!, {
 					target: {
 						value: 'FR',
 					},

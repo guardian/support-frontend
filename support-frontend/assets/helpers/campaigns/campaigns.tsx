@@ -175,11 +175,14 @@ export function getCampaignSettings(
 	promoCode?: string | null,
 ): CampaignSettings | null {
 	for (const campaignId in campaigns) {
-		const isEligible =
-			isCampaignEnabled(campaignId) &&
-			campaigns[campaignId].isEligible(countryGroupId, promoCode);
-		if (isEligible || forceCampaign(campaignId)) {
-			return campaigns[campaignId];
+		const campaign = campaigns[campaignId];
+		if (campaign) {
+			const isEligible =
+				isCampaignEnabled(campaignId) &&
+				campaign.isEligible(countryGroupId, promoCode);
+			if (isEligible || forceCampaign(campaignId)) {
+				return campaign;
+			}
 		}
 	}
 	return null;

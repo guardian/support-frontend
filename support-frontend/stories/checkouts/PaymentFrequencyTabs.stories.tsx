@@ -44,7 +44,7 @@ export default {
 
 function Template(args: PaymentFrequencyTabsProps) {
 	const [selectedTab, setSelectedTab] = useState(
-		args.tabs.find((tab) => tab.selected)?.id ?? args.tabs[0].id,
+		args.tabs.find((tab) => tab.selected)?.id ?? args.tabs[0]!.id,
 	);
 	const [tabList, setTabList] = useState(args.tabs);
 

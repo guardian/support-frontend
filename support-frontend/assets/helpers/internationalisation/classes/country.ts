@@ -44,7 +44,7 @@ export class Country {
 			? searchUppercase
 			: Object.keys(states).find(
 					(key) =>
-						states[key].toUpperCase() === searchUppercase ||
+						states[key]?.toUpperCase() === searchUppercase ||
 						(searchUppercase.length === 3 && searchUppercase.startsWith(key)),
 			  );
 	}
@@ -223,7 +223,7 @@ export class Country {
 
 		if (
 			path !== paths[targetCountryGroup][0] &&
-			!path.startsWith(paths[targetCountryGroup][1]) &&
+			!path.startsWith(paths[targetCountryGroup][1] ?? '') &&
 			countryGroupId !== targetCountryGroup
 		) {
 			return null;

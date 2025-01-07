@@ -191,6 +191,11 @@ export function SupportReminderCTAandPrivacy({
 } & SupportReminderState): JSX.Element {
 	const setReminder = () => {
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
+
+		if (!choice) {
+			return;
+		}
+
 		const url = getReminderUrl(choice);
 
 		if (!isCodeOrProd()) {

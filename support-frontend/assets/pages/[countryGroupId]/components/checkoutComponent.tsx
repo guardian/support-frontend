@@ -246,7 +246,9 @@ export function CheckoutComponent({
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
-	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
+	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
+		billingPeriod: 'Monthly',
+	};
 
 	const productFields = getProductFields({
 		product: {
@@ -269,7 +271,9 @@ export function CheckoutComponent({
 	let isInvalidAmount = false;
 	if (productKey === 'Contribution') {
 		const supporterPlusRatePlanPrice =
-			productCatalog.SupporterPlus.ratePlans[ratePlanKey].pricing[currencyKey];
+			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
+				currencyKey
+			];
 
 		const { selectedAmountsVariant } = getAmountsTestVariant(
 			countryId,
@@ -280,7 +284,7 @@ export function CheckoutComponent({
 			isInvalidAmount = true;
 		}
 		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-			if (originalAmount >= supporterPlusRatePlanPrice) {
+			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
 		}

@@ -13,10 +13,7 @@ const breakpoints = {
 
 type Breakpoint = keyof typeof breakpoints;
 
-export const useWindowWidth = (): Record<
-	string,
-	(breakpoint: Breakpoint) => boolean
-> => {
+export const useWindowWidth = () => {
 	function getWindowWidth() {
 		return window.innerWidth;
 	}

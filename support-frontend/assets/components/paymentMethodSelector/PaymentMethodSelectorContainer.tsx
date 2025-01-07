@@ -61,6 +61,7 @@ function PaymentMethodSelectorContainer({
 
 	useEffect(() => {
 		availablePaymentMethods.length === 1 &&
+			availablePaymentMethods[0] &&
 			dispatch(setPaymentMethod({ paymentMethod: availablePaymentMethods[0] }));
 	}, []);
 

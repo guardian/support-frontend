@@ -339,7 +339,7 @@ export const TestimonialsContainer = React.forwardRef(
 						(territory) =>
 							props.testimonialsCollection && (
 								<TestimonialsForTerritory
-									testimonials={props.testimonialsCollection[territory]}
+									testimonials={props.testimonialsCollection[territory] ?? []}
 									territory={territory}
 									shouldScrollIntoView={props.shouldScrollIntoView}
 									selectedTerritory={props.selectedTerritory}
