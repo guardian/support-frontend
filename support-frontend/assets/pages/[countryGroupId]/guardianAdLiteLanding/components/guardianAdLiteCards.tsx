@@ -40,7 +40,13 @@ export function GuardianAdLiteCards({
 			aria-labelledby={`monthly`}
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
-				return <GuardianAdLiteCard cardIndex={cardIndex} {...cardContent} />;
+				return (
+					<GuardianAdLiteCard
+						cardIndex={cardIndex}
+						key={`guardianAdLite${cardIndex}`}
+						{...cardContent}
+					/>
+				);
 			})}
 		</div>
 	);
