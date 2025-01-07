@@ -75,6 +75,11 @@ export type GuardianLight = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
+export type GuardianAdLite = {
+	productType: 'GuardianAdLite';
+	currency: string;
+	billingPeriod: BillingPeriod;
+};
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
@@ -102,7 +107,8 @@ export type SubscriptionProductFields =
 	| PaperSubscription
 	| GuardianWeeklySubscription
 	| TierThree
-	| GuardianLight;
+	| GuardianLight
+	| GuardianAdLite;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;

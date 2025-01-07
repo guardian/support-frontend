@@ -1,19 +1,19 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { productCatalogGuardianLight } from 'helpers/productCatalog';
-import type { GuardianLightCardsProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCards';
-import { GuardianLightCards } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCards';
+import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
+import type { GuardianAdLiteCardsProps } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCards';
+import { GuardianAdLiteCards } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
-	title: 'LandingPage/GuardianLight Cards',
-	component: GuardianLightCards,
+	title: 'LandingPage/GuardianAdLite Cards',
+	component: GuardianAdLiteCards,
 	argTypes: {},
 	decorators: [withCenterAlignment, withSourceReset],
 };
 
-function Template(args: GuardianLightCardsProps) {
+function Template(args: GuardianAdLiteCardsProps) {
 	const innerContentContainer = css`
 		max-width: 940px;
 		margin: 0 auto;
@@ -23,7 +23,7 @@ function Template(args: GuardianLightCardsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<GuardianLightCards {...args} />
+			<GuardianAdLiteCards {...args} />
 		</div>
 	);
 }
@@ -35,13 +35,13 @@ Default.args = {
 		{
 			cardPosition: 1,
 			link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
-			productDescription: productCatalogGuardianLight().GuardianLight,
-			ctaCopy: 'Get Guardian Light for XX/month',
+			productDescription: productCatalogGuardianAdLite().GuardianAdLite,
+			ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 		},
 		{
 			cardPosition: 2,
 			link: `https://www.theguardian.com/uk/contribute`,
-			productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+			productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 			ctaCopy: `Go back to 'Accept all'`,
 		},
 	],

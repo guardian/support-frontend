@@ -116,7 +116,7 @@ case object GuardianLight extends Product {
       Monthly,
       NoFulfilmentOptions,
       NoProductOptions,
-      s"Guardian Light Monthly",
+      s"Guardian Ad-Lite Monthly",
     )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianLight.type]]] =

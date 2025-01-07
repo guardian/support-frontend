@@ -12,12 +12,12 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogGuardianLight,
+	productCatalogGuardianAdLite,
 } from 'helpers/productCatalog';
 import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { GuardianLightCards } from './guardianLightCards';
+import { GuardianAdLiteCards } from './guardianAdLiteCards';
 
 const containerCardsAndSignIn = css`
 	background-color: ${palette.brand[400]};
@@ -92,7 +92,7 @@ export function HeaderCards({
 		];
 	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
-	const guardianLightParams = {
+	const guardianAdLiteParams = {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
 		contribution: price?.toString() ?? '',
@@ -100,20 +100,20 @@ export function HeaderCards({
 	const card1UrlParams = new URLSearchParams(
 		returnLink
 			? {
-					...guardianLightParams,
+					...guardianAdLiteParams,
 					returnAddress: returnLink,
 			  }
-			: guardianLightParams,
+			: guardianAdLiteParams,
 	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,
-		productDescription: productCatalogGuardianLight().GuardianLight,
-		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLite,
+		ctaCopy: `Get Guardian Ad-Lite for ${formattedPrice}/month`,
 	};
 	const card2 = {
 		link: returnLink ?? `https://www.theguardian.com`,
-		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};
 	return (
@@ -125,9 +125,9 @@ export function HeaderCards({
 				cssOverrides={containerCardsAndSignIn}
 			>
 				<h1 css={heading}>Choose how to read the Guardian</h1>
-				<GuardianLightCards cardsContent={[card1, card2]} />
+				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					If you already have Guardian Light or read the Guardian ad-free,{' '}
+					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
 					{SignInLink}
 				</div>
 			</Container>
