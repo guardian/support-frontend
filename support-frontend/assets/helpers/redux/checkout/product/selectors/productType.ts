@@ -44,8 +44,8 @@ function getSubscriptionTypeFromURL(): SubscriptionProduct {
 		weekly: GuardianWeekly,
 	};
 	const [, match] = urlPathRegex.exec(window.location.pathname) ?? [];
-	if (match) {
-		return productsToUrlPath[match] ?? DigitalPack;
+	if (match && productsToUrlPath[match]) {
+		return productsToUrlPath[match];
 	}
 	return DigitalPack;
 }
