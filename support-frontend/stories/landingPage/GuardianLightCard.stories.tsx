@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
-import { productCatalogGuardianLight } from 'helpers/productCatalog';
-import type { GuardianLightCardProps } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
-import { GuardianLightCard } from 'pages/[countryGroupId]/guardianLightLanding/components/guardianLightCard';
+import { productCatalogGuardianAdLite } from 'helpers/productCatalog';
+import type { GuardianAdLiteCardProps } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCard';
+import { GuardianAdLiteCard } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/guardianAdLiteCard';
 
 export default {
-	title: 'LandingPage/GuardianLight Card',
-	component: GuardianLightCard,
+	title: 'LandingPage/GuardianAdLite Card',
+	component: GuardianAdLiteCard,
 	argTypes: {},
 };
 
-function Template(args: GuardianLightCardProps) {
+function Template(args: GuardianAdLiteCardProps) {
 	const innerContentContainer = css`
 		max-width: 940px;
 		margin: 0 auto;
@@ -20,7 +20,7 @@ function Template(args: GuardianLightCardProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<GuardianLightCard {...args} />;
+			<GuardianAdLiteCard {...args} />;
 		</div>
 	);
 }
@@ -30,6 +30,6 @@ export const Default = Template.bind({});
 Default.args = {
 	cardPosition: 1,
 	link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
-	productDescription: productCatalogGuardianLight().GuardianLight,
-	ctaCopy: 'Get Guardian Light for XX/month',
+	productDescription: productCatalogGuardianAdLite().GuardianAdLite,
+	ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 };
