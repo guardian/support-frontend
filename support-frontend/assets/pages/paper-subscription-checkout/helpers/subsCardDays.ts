@@ -87,9 +87,7 @@ const additionalDays = [
 		SundayPlus: 15,
 		SaturdayPlus: 14,
 	},
-] as const satisfies ReadonlyArray<
-	Record<ActivePaperProducts | 'Saturday' | 'SaturdayPlus', number>
->;
+] as const;
 const monthText = [
 	'January',
 	'February',

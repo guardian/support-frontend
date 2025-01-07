@@ -8,13 +8,9 @@ import {
 
 export type DayOfWeekIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-const everyDayAndSixDay = [
-	3, 3, 3, 3, 6, 5, 4,
-] as const satisfies readonly number[];
-const weekendAndSaturday = [
-	6, 5, 4, 3, 9, 8, 7,
-] as const satisfies readonly number[];
-const sunday = [7, 6, 5, 4, 10, 9, 8] as const satisfies readonly number[];
+const everyDayAndSixDay = [3, 3, 3, 3, 6, 5, 4] as const;
+const weekendAndSaturday = [6, 5, 4, 3, 9, 8, 7] as const;
+const sunday = [7, 6, 5, 4, 10, 9, 8] as const;
 
 const getDaysToAdd = (
 	today: DayOfWeekIndex,
