@@ -48,6 +48,13 @@ const defaultGridContainer = css`
 	}
 `;
 
+const defaultContainerNoIcon = css`
+	margin: ${space[3]}px ${space[2]}px;
+	${until.tablet} {
+		margin-top: ${space[0]}px;
+	}
+`;
+
 const imageryAndQrCodesGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
@@ -131,11 +138,11 @@ const bodyStyle = css`
 	}
 `;
 
-const bodyCopyStyle = css`
+const bodyCopyStyle = (isGuardianAdLite: boolean) => css`
 	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
-		${textEgyptian17};
+		${isGuardianAdLite ? textEgyptian15 : textEgyptian17};
 	}
 `;
 const bodyCopyMarginTop = css`
@@ -175,7 +182,7 @@ const qrCodesContainer = css`
 
 const paddingRight = css`
 	${from.tablet} {
-		padding-right: 72px;
+		padding-right: 54px;
 	}
 `;
 const paddingRightApps = css`
@@ -226,14 +233,19 @@ export type ThankYouModuleType =
 	| 'supportReminder'
 	| 'benefits'
 	| 'subscriptionStart'
-	| 'newspaperArchiveBenefit';
+	| 'newspaperArchiveBenefit'
+	| 'whatNext'
+	| 'reminderToSignIn'
+	| 'reminderToActivateSubscription'
+	| 'headlineReturn'
+	| 'signInToActivate';
 
 export interface ThankYouModuleProps {
-	icon: JSX.Element;
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
 	moduleType: ThankYouModuleType;
+	icon?: JSX.Element;
 	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: JSX.Element | string;
@@ -255,6 +267,13 @@ function ThankYouModule({
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
+	const isGuardianAdLite = [
+		'whatNext',
+		'reminderToSignIn',
+		'reminderToActivateSubscription',
+		'headlineReturn',
+		'signInToActivate',
+	].includes(moduleType);
 	const hasQrCodes = moduleType === 'appDownload';
 	const isDownloadModules = moduleType === 'appsDownload';
 	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
@@ -264,7 +283,9 @@ function ThankYouModule({
 	const gridContainer =
 		hasImagery || hasQrCodes
 			? imageryAndQrCodesGridContainer
-			: defaultGridContainer;
+			: icon
+			? defaultGridContainer
+			: defaultContainerNoIcon;
 
 	const maybePaddingRight =
 		!hasImagery && (isDownloadModules ? paddingRightApps : paddingRight);
@@ -290,7 +311,7 @@ function ThankYouModule({
 						<>
 							<div css={[bodyApps, bodyAppsTop]}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopy}</p>
+									<p css={bodyCopyStyle(isGuardianAdLite)}>{bodyCopy}</p>
 									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
 								</div>
 								<span css={appContainer}>
@@ -299,7 +320,7 @@ function ThankYouModule({
 							</div>
 							<div css={bodyApps}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
+									<p css={bodyCopyStyle(isGuardianAdLite)}>{bodyCopySecond}</p>
 									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
 								</div>
 								<span css={appContainer}>
@@ -309,7 +330,9 @@ function ThankYouModule({
 						</>
 					) : (
 						<>
-							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
+							<p css={[bodyCopyStyle(isGuardianAdLite), bodyCopyMarginTop]}>
+								{bodyCopy}
+							</p>
 							<div css={resizeMarginTop}>{ctas}</div>
 						</>
 					)}

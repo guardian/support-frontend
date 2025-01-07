@@ -256,13 +256,13 @@ export function SupporterPlusThankYou({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							name={firstName}
+							productKey={isSupporterPlus ? 'SupporterPlus' : 'Contribution'}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
 							isOneOffPayPal={isOneOffPayPal}
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
 							amountIsAboveThreshold={isSupporterPlus}
-							isTier3={false}
 							isSignedIn={isSignedIn}
 							identityUserType={'current'}
 							promotion={promotion}
