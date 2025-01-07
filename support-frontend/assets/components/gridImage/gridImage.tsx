@@ -31,7 +31,7 @@ export default function GridImage(props: PropTypes): JSX.Element | null {
 	const srcSet = gridSrcset(props.gridId, sorted, props.imgType);
 	const fallbackSize = sorted.find((_) => _ > MIN_IMG_WIDTH) ?? sorted[0];
 
-	if (!fallbackSize) {
+	if (fallbackSize === undefined) {
 		return null;
 	}
 
