@@ -1,11 +1,6 @@
 import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
-import {
-	AUDCountries,
-	GBPCountries,
-	UnitedStates,
-} from '../internationalisation/countryGroup';
 
 export type CountdownSetting = {
 	label: string;
@@ -44,126 +39,7 @@ export type CampaignSettings = {
 	tickerSettings?: CampaignTickerSettings;
 };
 
-const campaigns: Record<string, CampaignSettings> = {
-	usEoy2024: {
-		isEligible: (countryGroupId: CountryGroupId) =>
-			countryGroupId === UnitedStates,
-		enableSingleContributions: false,
-		countdownSettings: [
-			{
-				label: 'This Giving Tuesday, give to the Guardian',
-				countdownStartInMillis: Date.parse('Nov 27, 2024 00:01:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 03, 2024 23:59:59'),
-				theme: {
-					backgroundColor: '#ab0613',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
-				label: "It's not too late to give to the Guardian",
-				countdownStartInMillis: Date.parse('Dec 04, 2024 00:01:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 05, 2024 00:01:00'),
-				theme: {
-					backgroundColor: '#ab0613',
-					foregroundColor: '#ffffff',
-				},
-			},
-			{
-				label: 'Last chance to support our appeal',
-				countdownStartInMillis: Date.parse('Dec 20, 2024 00:01:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 31, 2024 23:59:59'),
-				theme: {
-					backgroundColor: '#ab0613',
-					foregroundColor: '#ffffff',
-				},
-			},
-		],
-		copy: {
-			headingFragment: <>Protect </>,
-			subheading: (
-				<>
-					We're not owned by a billionaire or profit-driven corporation: our
-					fiercely independent journalism is funded by our readers. We welcome
-					all year-end gifts, but monthly giving makes the most impact (and you
-					can cancel anytime). Thank you.
-				</>
-			),
-			oneTimeHeading: <>Choose your gift amount</>,
-		},
-		tickerSettings: {
-			currencySymbol: '$',
-			copy: {},
-			tickerStylingSettings: {
-				headlineColour: '#ffffff',
-				totalColour: '#ffffff',
-				goalColour: '#ffffff',
-				filledProgressColour: '#ffffff',
-				progressBarBackgroundColour: 'rgba(250, 250, 250, 0.3)',
-			},
-			size: 'large',
-			id: 'US',
-		},
-	},
-	ausEoy2024: {
-		isEligible: (countryGroupId: CountryGroupId) =>
-			countryGroupId === AUDCountries,
-		enableSingleContributions: false,
-		countdownSettings: [],
-		copy: {
-			headingFragment: <>Support </>,
-			subheading: (
-				<>
-					We're not owned by a billionaire or shareholders - our readers support
-					us. Choose to join with one of the options below.
-					<strong>Cancel anytime.</strong>
-				</>
-			),
-			oneTimeHeading: <>Choose your gift amount</>,
-		},
-		tickerSettings: {
-			currencySymbol: '$',
-			copy: {},
-			tickerStylingSettings: {
-				headlineColour: '#000000',
-				totalColour: '#FBBCC7',
-				goalColour: '#FFFFFF',
-				filledProgressColour: '#FBBCC7',
-				progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
-			},
-			size: 'large',
-			id: 'AU',
-		},
-	},
-	ukBlackFriday2024: {
-		isEligible: (countryGroupId: CountryGroupId, promoCode?: string | null) =>
-			countryGroupId === GBPCountries &&
-			promoCode === 'BLACK_FRIDAY_DISCOUNT_2024',
-		enableSingleContributions: false,
-		countdownSettings: [
-			{
-				label: 'Last chance to claim your Black Friday offer',
-				countdownStartInMillis: Date.parse('Nov 29, 2024 00:00:00'),
-				countdownDeadlineInMillis: Date.parse('Dec 02, 2024 23:59:59'),
-				theme: {
-					backgroundColor: '#1e3e72',
-					foregroundColor: '#ffffff',
-				},
-			},
-		],
-		copy: {
-			headingFragment: <>This Black Friday, why not support </>,
-			subheading: (
-				<>
-					We're not owned by a billionaire or shareholders - our readers support
-					us. Choose to join with one of the options below.
-					<strong>Cancel anytime.</strong>
-				</>
-			),
-			oneTimeHeading: <>Choose your gift amount</>,
-			punctuation: <>?</>,
-		},
-	},
-};
+const campaigns: Record<string, CampaignSettings> = {};
 
 const forceCampaign = (campaignId: string): boolean => {
 	const urlParams = new URLSearchParams(window.location.search);
