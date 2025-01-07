@@ -75,14 +75,14 @@ const accordianRow = css`
 
 const contents = [
 	{
-		title: 'What is included in my Guardian Light subscription?',
+		title: 'What is included in my Guardian Ad-Lite subscription?',
 		body: 'tbc',
 	},
 	{
-		title: 'Will my Guardian Light subscription work across all devices?',
+		title: 'Will my Guardian Ad-Lite subscription work across all devices?',
 		body: 'tbc',
 	},
-	{ title: 'How do I cancel my Guardian Light subscription?', body: 'tbc' },
+	{ title: 'How do I cancel my Guardian Ad-Lite subscription?', body: 'tbc' },
 	{ title: 'How do I contact customer services?', body: 'tbc' },
 ];
 
