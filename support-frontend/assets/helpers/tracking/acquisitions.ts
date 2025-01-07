@@ -270,35 +270,30 @@ function getReferrerAcquisitionDataFromSessionStorage():
 
 function getAcquisitionDataFromUtmParams():
 	| Record<string, string | AcquisitionABTest | AcquisitionQueryParameters>
-	| null
 	| undefined {
 	// Same order of fields as https://reader-revenue-lynx.s3.eu-west-1.amazonaws.com/v3.html
-	const utmParamNames = [
-		'utm_campaign',
-		'utm_content',
-		'utm_term',
-		'utm_source',
-		'utm_medium',
-	];
-	const utmParameters = Object.fromEntries(
-		utmParamNames.map((paramName) => [paramName, getQueryParameter(paramName)]),
-	);
+	const utmCampaign = getQueryParameter('utm_campaign');
+	const utmContent = getQueryParameter('utm_content');
+	const utmTerm = getQueryParameter('utm_term');
+	const utmSource = getQueryParameter('utm_source');
+	const utmMedium = getQueryParameter('utm_medium');
 
 	// All must be present in the URL for them to be accepted
 	if (
-		utmParamNames.every((paramName) => {
-			const param = utmParameters[paramName];
-			return param && param.length > 0;
-		})
+		utmCampaign !== '' &&
+		utmContent !== '' &&
+		utmTerm !== '' &&
+		utmSource !== '' &&
+		utmMedium !== ''
 	) {
 		return {
-			campaignCode: utmParameters.utm_campaign as string,
+			campaignCode: utmCampaign,
 			abTest: {
-				name: utmParameters.utm_content as string,
-				variant: utmParameters.utm_term as string,
+				name: utmContent,
+				variant: utmTerm,
 			},
-			source: utmParameters.utm_source as string,
-			componentType: utmParameters.utm_medium as string,
+			source: utmSource,
+			componentType: utmMedium,
 			queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
 		};
 	}
