@@ -5,6 +5,7 @@ const flattenedEntryPoints = [...Object.keys(entryPoints)].map(
 );
 
 module.exports = {
+	// ! signals that this is production code https://knip.dev/features/production-mode
 	entry: [...flattenedEntryPoints, 'scripts/build-ssr-content.tsx!'],
 	project: ['**/*.{js,jsx,ts,tsx,scss}!'],
 	ignoreExportsUsedInFile: true,
