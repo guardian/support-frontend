@@ -13,7 +13,7 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	paymentStatus: PaymentStatus;
+	paymentStatus?: PaymentStatus;
 }
 
 function MarketingCopy({
@@ -111,7 +111,8 @@ function Subheading({
 		isSignedIn,
 		identityUserType,
 	);
-	const pendingCopy = getPendingCopy(paymentStatus === 'pending');
+	const isPending = paymentStatus === 'pending';
+	const pendingCopy = getPendingCopy(isPending);
 	return (
 		<>
 			{pendingCopy}

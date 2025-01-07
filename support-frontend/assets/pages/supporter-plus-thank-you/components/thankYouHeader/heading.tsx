@@ -183,7 +183,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
-	paymentStatus: PaymentStatus;
+	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
 function Heading({

@@ -40,7 +40,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	paymentStatus: PaymentStatus;
+	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
 };
