@@ -86,7 +86,7 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'Please prove you are not a robot';
 
 			case 'guardian_light_purchase_not_allowed':
-				return 'Guardian Light purchase not allowed copy TBD';
+				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
