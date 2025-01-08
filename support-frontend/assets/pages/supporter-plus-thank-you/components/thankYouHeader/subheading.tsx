@@ -91,7 +91,7 @@ function Subheading({
 	identityUserType,
 }: SubheadingProps): JSX.Element {
 	const isTier3 = productKey === 'TierThree';
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isGuardianAdLite = productKey === 'GuardianAdLight';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,

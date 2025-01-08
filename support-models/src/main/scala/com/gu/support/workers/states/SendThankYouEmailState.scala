@@ -50,9 +50,9 @@ object SendThankYouEmailState {
       firstDeliveryDate: LocalDate,
   ) extends SendThankYouEmailState
 
-  case class SendThankYouEmailGuardianLightState(
+  case class SendThankYouEmailGuardianAdLightState(
       user: User,
-      product: GuardianLight,
+      product: GuardianAdLight,
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       accountNumber: String,
@@ -141,7 +141,7 @@ object SendThankYouEmailState {
       ),
       discriminatedType.variant[SendThankYouEmailPaperState](paper),
       discriminatedType.variant[SendThankYouEmailGuardianWeeklyState](guardianWeekly),
-      discriminatedType.variant[SendThankYouEmailGuardianLightState](guardianLight),
+      discriminatedType.variant[SendThankYouEmailGuardianAdLightState](guardianLight),
     ),
   )
 

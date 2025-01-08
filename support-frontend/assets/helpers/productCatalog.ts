@@ -155,7 +155,7 @@ const guardianAdLiteBenefits = [
 
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
-		GuardianLight: {
+		GuardianAdLight: {
 			label: 'Guardian Ad-Lite',
 			thankyouMessage: `Your valued support powers our journalism${' '}`,
 			ratePlans: {
@@ -398,11 +398,11 @@ export function productCatalogGuardianAdLite(): Record<
 	return {
 		...productCatalogDescription,
 		GuardianAdLite: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLight,
 			label: 'Purchase Guardian Ad-Lite',
 		},
 		GuardianAdLiteGoBack: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLight,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [
 				{

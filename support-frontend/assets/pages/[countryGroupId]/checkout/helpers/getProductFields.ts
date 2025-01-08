@@ -39,9 +39,9 @@ export const getProductFields = ({
 	 * We might be able to defer this to the backend.
 	 */
 	switch (productKey) {
-		case 'GuardianLight':
+		case 'GuardianAdLight':
 			return {
-				productType: 'GuardianLight',
+				productType: 'GuardianAdLight',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
 			};

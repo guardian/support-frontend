@@ -87,13 +87,13 @@ export function HeaderCards({
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const price =
-		productCatalog.GuardianLight?.ratePlans[contributionType]?.pricing[
+		productCatalog.GuardianAdLight?.ratePlans[contributionType]?.pricing[
 			currencyKey
 		];
 	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
 	const guardianAdLiteParams = {
-		product: 'GuardianLight',
+		product: 'GuardianAdLight',
 		ratePlan: contributionType,
 		contribution: price?.toString() ?? '',
 	};

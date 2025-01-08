@@ -111,7 +111,7 @@ object AcquisitionProduct {
 
   case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
 
-  case object GuardianLight extends AcquisitionProduct("GUARDIAN_LIGHT")
+  case object GuardianAdLight extends AcquisitionProduct("GUARDIAN_LIGHT")
 
   case object FeastApp extends AcquisitionProduct("FEAST_APP")
 
@@ -125,7 +125,7 @@ object AcquisitionProduct {
       GuardianWeekly,
       AppPremiumTier,
       TierThree,
-      GuardianLight,
+      GuardianAdLight,
       FeastApp
     )
       .find(

@@ -193,7 +193,7 @@ function Heading({
 	contributionType,
 	promotion,
 }: HeadingProps): JSX.Element {
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isGuardianAdLite = productKey === 'GuardianAdLight';
 	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';

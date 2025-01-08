@@ -105,7 +105,7 @@ object CheckoutValidationRules {
           createSupportWorkersRequest,
         ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
-      case _: GuardianLight => PaidProductValidation.passes(createSupportWorkersRequest)
+      case _: GuardianAdLight => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) =>
         Invalid(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")

@@ -34,7 +34,7 @@ Default.args = {
 	cardsContent: [
 		{
 			cardPosition: 1,
-			link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
+			link: 'https://support.theguardian.com/uk/checkout?product=GuardianAdLight&ratePlan=Monthly',
 			productDescription: productCatalogGuardianAdLite().GuardianAdLite,
 			ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 		},

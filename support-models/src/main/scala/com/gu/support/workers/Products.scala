@@ -81,10 +81,10 @@ case class GuardianWeekly(
   override def describe: String = s"$billingPeriod-GuardianWeekly-$fulfilmentOptions-$currency"
 }
 
-case class GuardianLight(
+case class GuardianAdLight(
     currency: Currency,
 ) extends ProductType {
-  override def describe: String = s"GuardianLight-$currency"
+  override def describe: String = s"GuardianAdLight-$currency"
 
   override def billingPeriod: BillingPeriod = Monthly
 }
@@ -105,8 +105,8 @@ object ProductType {
     discriminatedType.variant[GuardianWeekly]("GuardianWeekly")
   implicit val codecDigital: discriminatedType.VariantCodec[DigitalPack] =
     discriminatedType.variant[DigitalPack]("DigitalPack")
-  implicit val codecGuardianLight: discriminatedType.VariantCodec[GuardianLight] =
-    discriminatedType.variant[GuardianLight]("GuardianLight")
+  implicit val codecGuardianAdLight: discriminatedType.VariantCodec[GuardianAdLight] =
+    discriminatedType.variant[GuardianAdLight]("GuardianAdLight")
 
   implicit val codec: Codec[ProductType] =
     discriminatedType.codec(
@@ -117,7 +117,7 @@ object ProductType {
         codecPaper,
         codecGuardianWeekly,
         codecDigital,
-        codecGuardianLight,
+        codecGuardianAdLight,
       ),
     )
 

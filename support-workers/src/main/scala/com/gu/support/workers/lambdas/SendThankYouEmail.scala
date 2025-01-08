@@ -79,7 +79,7 @@ class EmailBuilder(
       created = DateTime.now(),
     )
     val tierThreeEmailFields = new TierThreeEmailFields(paperFieldsGenerator, touchpointEnvironment)
-    val guardianLightEmailFields = new GuardianLightEmailFields(created = DateTime.now())
+    val guardianLightEmailFields = new GuardianAdLightEmailFields(created = DateTime.now())
 
     state match {
       case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))
@@ -91,7 +91,7 @@ class EmailBuilder(
       case paper: SendThankYouEmailPaperState =>
         getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _)).map(List(_))
       case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))
-      case guardianLight: SendThankYouEmailGuardianLightState =>
+      case guardianLight: SendThankYouEmailGuardianAdLightState =>
         guardianLightEmailFields.build(guardianLight).map(List(_))
     }
   }

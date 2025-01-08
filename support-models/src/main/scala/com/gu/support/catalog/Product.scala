@@ -109,7 +109,7 @@ case object SupporterPlus extends Product {
     )
 }
 
-case object GuardianLight extends Product {
+case object GuardianAdLight extends Product {
   private def productRatePlan(id: String) =
     ProductRatePlan(
       id,
@@ -119,7 +119,7 @@ case object GuardianLight extends Product {
       s"Guardian Ad-Lite Monthly",
     )
 
-  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianLight.type]]] =
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianAdLight.type]]] =
     Map(
       PROD -> List(
         productRatePlan("8a12831492c341730192dd1c39207038"),

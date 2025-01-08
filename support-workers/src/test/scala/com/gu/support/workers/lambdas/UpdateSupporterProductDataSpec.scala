@@ -138,7 +138,7 @@ object UpdateSupporterProductDataSpec {
           "currency": "GBP",
           "billingPeriod": "Monthly",
           "fulfilmentOptions": "NoFulfilmentOptions",
-          "productType": "GuardianLight"
+          "productType": "GuardianAdLight"
         },
         "paymentMethod": {
           "TokenId": "pm_0MZap9ItVxyc3Q6nRNfyJHfO",
@@ -162,7 +162,7 @@ object UpdateSupporterProductDataSpec {
         },
         "accountNumber": "A00485141",
         "subscriptionNumber": "A-S00489451",
-        "productType": "GuardianLight"
+        "productType": "GuardianAdLight"
       }
   """
 

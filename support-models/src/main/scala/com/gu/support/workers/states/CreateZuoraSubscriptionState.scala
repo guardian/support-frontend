@@ -60,8 +60,8 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
-  case class GuardianLightState(
-      product: GuardianLight,
+  case class GuardianAdLightState(
+      product: GuardianAdLight,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -121,7 +121,7 @@ object CreateZuoraSubscriptionProductState {
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[TierThreeState](tierThree),
-      discriminatedType.variant[GuardianLightState](guardianLight),
+      discriminatedType.variant[GuardianAdLightState](guardianLight),
     ),
   )
 
