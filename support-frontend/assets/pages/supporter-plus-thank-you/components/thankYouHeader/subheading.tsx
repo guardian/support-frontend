@@ -36,8 +36,8 @@ function MarketingCopy({
 	);
 }
 
-const getPendingCopy = (isPending: boolean) => {
-	const pendingCopy = (
+const pendingCopy = () => {
+	return (
 		<p
 			css={css`
 				padding-bottom: ${space[3]}px;
@@ -46,7 +46,6 @@ const getPendingCopy = (isPending: boolean) => {
 			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and you will receive an email when your account is live.`}
 		</p>
 	);
-	return isPending ? pendingCopy : null;
 };
 
 const getSubHeadingCopy = (
@@ -117,10 +116,9 @@ function Subheading({
 		identityUserType,
 	);
 	const isPending = paymentStatus === 'pending';
-	const pendingCopy = getPendingCopy(isPending);
 	return (
 		<>
-			{pendingCopy}
+			{isPending && pendingCopy()}
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && (
 				<>
