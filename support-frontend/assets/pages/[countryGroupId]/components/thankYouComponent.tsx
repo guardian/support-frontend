@@ -269,7 +269,7 @@ export function ThankYouComponent({
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isPending && !isNotRegistered && !isSignedIn && !isGuardianAdLite,
+			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
@@ -291,7 +291,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
 		...maybeThankYouModule(
-			!isPending && isGuardianAdLite && isRegisteredAndNotSignedIn,
+			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
 		),
 		...maybeThankYouModule(
