@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
@@ -37,9 +38,13 @@ function MarketingCopy({
 
 const getPendingCopy = (isPending: boolean) => {
 	const pendingCopy = (
-		<span>
-			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and =you will receive an email when your account is live.`}
-		</span>
+		<p
+			css={css`
+				padding-bottom: ${space[3]}px;
+			`}
+		>
+			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and you will receive an email when your account is live.`}
+		</p>
 	);
 	return isPending ? pendingCopy : null;
 };
@@ -117,7 +122,7 @@ function Subheading({
 		<>
 			{pendingCopy}
 			{subheadingCopy}
-			{!isGuardianAdLite && (
+			{!isGuardianAdLite && !isPending && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}
