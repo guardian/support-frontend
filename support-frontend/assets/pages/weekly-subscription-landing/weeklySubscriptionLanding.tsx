@@ -17,7 +17,10 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
@@ -174,5 +177,5 @@ function WeeklyLandingPage({
 	);
 }
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);

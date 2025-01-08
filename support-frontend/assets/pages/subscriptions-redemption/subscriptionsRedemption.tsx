@@ -2,7 +2,10 @@ import { Provider } from 'react-redux';
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { initReduxForRedemption } from 'helpers/redux/redemptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -12,7 +15,7 @@ import ThankYouPendingContent from 'pages/subscriptions-redemption/thankYouPendi
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 
 // ----- Redux Store ----- //
 const store = initReduxForRedemption();

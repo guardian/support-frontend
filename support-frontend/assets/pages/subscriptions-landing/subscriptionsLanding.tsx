@@ -2,7 +2,10 @@
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
 import SubscriptionLandingContent from './components/subscriptionsLandingContent';
@@ -31,5 +34,5 @@ function SubscriptionsLandingPage({
 	);
 }
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />);

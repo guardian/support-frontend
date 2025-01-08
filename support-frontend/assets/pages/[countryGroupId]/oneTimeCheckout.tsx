@@ -6,6 +6,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import type { Participations } from '../../helpers/abTests/abtest';
 import { OneTimeCheckoutComponent } from './components/oneTimeCheckoutComponent';
 
 const countryId = Country.detect();
@@ -13,9 +14,14 @@ const countryId = Country.detect();
 type OneTimeCheckoutProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	abParticipations: Participations;
 };
 
-export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
+export function OneTimeCheckout({
+	geoId,
+	appConfig,
+	abParticipations,
+}: OneTimeCheckoutProps) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
 
@@ -48,6 +54,7 @@ export function OneTimeCheckout({ geoId, appConfig }: OneTimeCheckoutProps) {
 				appConfig={appConfig}
 				stripePublicKey={stripePublicKey}
 				countryId={countryId}
+				abParticipations={abParticipations}
 			/>
 		</Elements>
 	);

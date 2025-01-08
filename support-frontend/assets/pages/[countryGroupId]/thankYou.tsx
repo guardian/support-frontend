@@ -8,14 +8,20 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import type { Participations } from '../../helpers/abTests/abtest';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 export type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	abParticipations: Participations;
 };
 
-export function ThankYou({ geoId, appConfig }: ThankYouProps) {
+export function ThankYou({
+	geoId,
+	appConfig,
+	abParticipations,
+}: ThankYouProps) {
 	const countryId = Country.detect();
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -160,6 +166,7 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			promotion={promotion}
 			identityUserType={userType}
 			returnLink={urlSearchParamsReturn}
+			abParticipations={abParticipations}
 		/>
 	);
 }

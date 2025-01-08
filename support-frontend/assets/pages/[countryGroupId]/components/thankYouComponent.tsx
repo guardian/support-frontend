@@ -9,7 +9,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import { init as abTestInit } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -93,6 +93,7 @@ export type CheckoutComponentProps = {
 	promotion?: Promotion;
 	returnLink?: string;
 	identityUserType: UserType;
+	abParticipations: Participations;
 };
 
 export function ThankYouComponent({
@@ -103,6 +104,7 @@ export function ThankYouComponent({
 	promotion,
 	returnLink,
 	identityUserType,
+	abParticipations,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
@@ -208,7 +210,6 @@ export function ThankYouComponent({
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
 	const validEmail = order.email !== '';
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);

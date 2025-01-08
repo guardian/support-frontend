@@ -2,7 +2,10 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
@@ -14,7 +17,7 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 
 // ----- Redux Store ----- //
 

@@ -4,7 +4,10 @@ import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -20,7 +23,7 @@ import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod =

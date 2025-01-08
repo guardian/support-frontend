@@ -39,10 +39,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import {
-	init as abTestInit,
-	getAmountsTestVariant,
-} from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -210,6 +208,7 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	returnLink?: string;
+	abParticipations: Participations;
 };
 
 export function CheckoutComponent({
@@ -227,6 +226,7 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	returnLink,
+	abParticipations,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
@@ -238,7 +238,6 @@ export function CheckoutComponent({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);

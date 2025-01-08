@@ -33,10 +33,8 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import {
-	init as abTestInit,
-	getAmountsTestVariant,
-} from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -142,6 +140,7 @@ type OneTimeCheckoutComponentProps = {
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	countryId: IsoCountry;
+	abParticipations: Participations;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -201,6 +200,7 @@ export function OneTimeCheckoutComponent({
 	appConfig,
 	stripePublicKey,
 	countryId,
+	abParticipations,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -216,8 +216,6 @@ export function OneTimeCheckoutComponent({
 		countryGroupId,
 		settings,
 	);
-
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =

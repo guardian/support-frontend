@@ -10,7 +10,10 @@ import Header from 'components/headers/header/header';
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
@@ -108,7 +111,7 @@ function PaperLandingPage({
 	);
 }
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 const content = <PaperLandingPage {...paperLandingProps()} />;
 renderPage(content);
 export { content };
