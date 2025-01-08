@@ -5,10 +5,7 @@ import Footer from 'components/footerCompliant/Footer';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
-import {
-	getAbParticipations,
-	setUpTrackingAndConsents,
-} from 'helpers/page/page';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
@@ -23,7 +20,6 @@ import ThankYouContent from './components/thankYou';
 import 'stylesheets/skeleton/skeleton.scss';
 import './_legacyImports.scss';
 
-setUpTrackingAndConsents(getAbParticipations());
 // ----- Redux Store ----- //
 const fulfilmentOption = getFulfilmentOption();
 const productOption = getProductOption();
@@ -36,6 +32,8 @@ const store = initReduxForSubscriptions(
 	productOption,
 	getFulfilmentOption,
 );
+
+setUpTrackingAndConsents(store.getState().common.abParticipations);
 
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
