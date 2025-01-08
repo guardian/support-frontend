@@ -204,7 +204,7 @@ function Heading({
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
 	if (isOneOffPayPal || !amount || isPending) {
-		const headerTitleSuffix = isPending
+		const headerTitleClosure = isPending
 			? 'your recurring subscription is being processed'
 			: 'your valuable contribution';
 
@@ -212,7 +212,7 @@ function Heading({
 			<h1 css={headerTitleText}>
 				Thank you{' '}
 				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
-				{headerTitleSuffix}
+				{headerTitleClosure}
 			</h1>
 		);
 	}
