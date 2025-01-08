@@ -34,5 +34,8 @@ function SubscriptionsLandingPage({
 	);
 }
 
-setUpTrackingAndConsents(getAbParticipations());
-renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />);
+const abParticipations = getAbParticipations();
+setUpTrackingAndConsents(abParticipations);
+renderPage(
+	<SubscriptionsLandingPage {...subscriptionsLandingProps(abParticipations)} />,
+);

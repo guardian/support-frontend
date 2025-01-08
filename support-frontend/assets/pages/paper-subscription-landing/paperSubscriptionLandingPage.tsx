@@ -111,7 +111,8 @@ function PaperLandingPage({
 	);
 }
 
-setUpTrackingAndConsents(getAbParticipations());
-const content = <PaperLandingPage {...paperLandingProps()} />;
+const abParticipations = getAbParticipations();
+setUpTrackingAndConsents(abParticipations);
+const content = <PaperLandingPage {...paperLandingProps(abParticipations)} />;
 renderPage(content);
 export { content };

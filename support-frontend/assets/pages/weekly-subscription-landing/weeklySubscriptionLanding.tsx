@@ -177,5 +177,6 @@ function WeeklyLandingPage({
 	);
 }
 
-setUpTrackingAndConsents(getAbParticipations());
-renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);
+const abParticipations = getAbParticipations();
+setUpTrackingAndConsents(abParticipations);
+renderPage(<WeeklyLandingPage {...weeklyLandingProps(abParticipations)} />);

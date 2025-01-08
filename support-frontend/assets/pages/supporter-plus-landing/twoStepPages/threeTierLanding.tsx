@@ -20,10 +20,8 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import {
-	init as abTestInit,
-	getAmountsTestVariant,
-} from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import {
 	countdownSwitchOn,
 	getCampaignSettings,
@@ -265,9 +263,11 @@ function getPlanCost(
 
 type ThreeTierLandingProps = {
 	geoId: GeoId;
+	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	geoId,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
@@ -292,7 +292,6 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 	// Persist any tests for tracking in the checkout page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
