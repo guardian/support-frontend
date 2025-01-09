@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+// import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
+// import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { setUpRedux } from './setup/setUpRedux';
-import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
-import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
+// import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
+// import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
+import { ContributionsOnlyLanding } from './twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
@@ -24,12 +25,12 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const countryGroupId: CountryGroupId = CountryGroup.detect();
+// const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+// const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
@@ -46,12 +47,14 @@ function ScrollToTop(): null {
 	return null;
 }
 
-const commonState = store.getState().common;
+// const commonState = store.getState().common;
 
-export const inThreeTier = threeTierCheckoutEnabled(
-	commonState.abParticipations,
-	commonState.amounts,
-);
+// export const inThreeTier = threeTierCheckoutEnabled(
+// 	commonState.abParticipations,
+// 	commonState.amounts,
+// );
+
+const showContributionsOnly = true;
 
 // ----- Render ----- //
 
@@ -59,26 +62,31 @@ const router = () => {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-			<Provider store={store}>
-				<Routes>
-					{countryIds.map((countryId) => (
-						<>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode?`}
-								element={
-									inThreeTier ? (
-										<ThreeTierLanding geoId={countryId} />
-									) : (
-										<SupporterPlusInitialLandingPage
-											thankYouRoute={thankYouRoute}
-										/>
-									)
-								}
-							/>
-						</>
-					))}
-				</Routes>
-			</Provider>
+			{/* <Provider store={store}> */}
+			<Routes>
+				{countryIds.map((countryId) => (
+					<>
+						<Route
+							path={`/${countryId}/contribute/:campaignCode?`}
+							element={
+								showContributionsOnly ? (
+									<ContributionsOnlyLanding geoId={countryId} />
+								) : (
+									<ThreeTierLanding geoId={countryId} />
+								)
+								// inThreeTier ? (
+								// 	<ThreeTierLanding geoId={countryId} />
+								// ) : (
+								// 	<SupporterPlusInitialLandingPage
+								// 		thankYouRoute={thankYouRoute}
+								// 	/>
+								// )
+							}
+						/>
+					</>
+				))}
+			</Routes>
+			{/* </Provider> */}
 		</BrowserRouter>
 	);
 };
