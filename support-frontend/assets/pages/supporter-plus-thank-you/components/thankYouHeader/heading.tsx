@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
+import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
@@ -182,6 +183,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
+	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
 function Heading({
@@ -191,20 +193,26 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
+	paymentStatus,
 	promotion,
 }: HeadingProps): JSX.Element {
+	const isPending = paymentStatus === 'pending';
 	const isGuardianAdLite = productKey === 'GuardianLight';
 	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
-	if (isOneOffPayPal || !amount) {
+	if (isOneOffPayPal || !amount || isPending) {
+		const headerTitleClosure = isPending
+			? 'your recurring subscription is being processed'
+			: 'your valuable contribution';
+
 		return (
 			<h1 css={headerTitleText}>
 				Thank you{' '}
-				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
-				your valuable contribution
+				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
+				{headerTitleClosure}
 			</h1>
 		);
 	}

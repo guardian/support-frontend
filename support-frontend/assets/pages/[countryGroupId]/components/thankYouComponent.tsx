@@ -71,6 +71,7 @@ const OrderSchema = object({
 		'AmazonPay',
 		'None',
 	]),
+	status: picklist(['success', 'pending']),
 });
 export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
@@ -119,6 +120,7 @@ export function ThankYouComponent({
 		);
 	}
 	const order = parsedOrder.output;
+	const isPending = order.status === 'pending';
 
 	/**
 	 * contributionType is only applicable to SupporterPlus and Contributions.
@@ -262,7 +264,10 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNotRegistered && !isGuardianAdLite, 'signUp'), // Complete your Guardian account
+		...maybeThankYouModule(
+			!isPending && isNotRegistered && !isGuardianAdLite,
+			'signUp',
+		), // Complete your Guardian account
 		...maybeThankYouModule(
 			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
 			'signIn',
@@ -327,6 +332,7 @@ export function ThankYouComponent({
 							currency={currencyKey}
 							promotion={promotion}
 							identityUserType={identityUserType}
+							paymentStatus={order.status}
 						/>
 					</div>
 
