@@ -12,7 +12,6 @@ import { renderPage } from 'helpers/rendering/render';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
@@ -74,12 +73,6 @@ const router = () => {
 											thankYouRoute={thankYouRoute}
 										/>
 									)
-								}
-							/>
-							<Route
-								path={`/${countryId}/contribute/checkout`}
-								element={
-									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
 								}
 							/>
 						</>
