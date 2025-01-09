@@ -1,3 +1,11 @@
+import { css } from '@emotion/react';
+import {
+	between,
+	from,
+	neutral,
+	space,
+	sport,
+} from '@guardian/source/foundations';
 import { Column, Columns, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -12,14 +20,45 @@ import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
-import {
-	buttonContainer,
-	checkoutContainer,
-	columnContainer,
-	firstColumnContainer,
-	headerContainer,
-} from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import ThankYouHeader from './components/thankYouHeader';
+
+const checkoutContainer = css`
+	background-color: ${neutral[100]};
+	${from.tablet} {
+		background-color: ${sport[800]};
+	}
+`;
+
+const columnContainer = css`
+	> *:not(:last-child) {
+		${from.tablet} {
+			margin-bottom: ${space[6]}px;
+		}
+
+		${from.desktop} {
+			margin-bottom: ${space[5]}px;
+		}
+	}
+`;
+
+const firstColumnContainer = css`
+	${between.tablet.and.desktop} {
+		margin-bottom: ${space[6]}px;
+	}
+`;
+
+const headerContainer = css`
+	${from.desktop} {
+		width: 60%;
+	}
+	${from.leftCol} {
+		width: calc(50% - ${space[3]}px);
+	}
+`;
+
+const buttonContainer = css`
+	padding: ${space[12]}px 0;
+`;
 
 export function DigitalSubscriptionThankYou(): JSX.Element {
 	const { countryId, countryGroupId } = useContributionsSelector(

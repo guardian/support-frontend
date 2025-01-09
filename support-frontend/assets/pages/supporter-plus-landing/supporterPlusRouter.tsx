@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
@@ -10,7 +9,6 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
@@ -83,10 +81,6 @@ const router = () => {
 								element={
 									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
 								}
-							/>
-							<Route
-								path={`/${countryId}/thankyou`}
-								element={<SupporterPlusThankYou />}
 							/>
 						</>
 					))}
