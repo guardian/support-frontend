@@ -14,13 +14,3 @@ export function getUserSelectedAmount(state: ContributionsState): number {
 		coverTransactionCost,
 	);
 }
-
-export function getUserSelectedOtherAmount(
-	state: ContributionsState,
-): number | string {
-	const contributionType = getContributionType(state);
-	const { selectedAmounts } = state.page.checkoutForm.product;
-	const priceCardAmountSelected = selectedAmounts[contributionType];
-
-	return priceCardAmountSelected;
-}

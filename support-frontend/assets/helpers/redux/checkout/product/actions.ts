@@ -9,7 +9,6 @@ export const {
 	setProductPrices,
 	setAllAmounts,
 	setSelectedAmount,
-	setCoverTransactionCost,
 	setOtherAmount,
 	setCurrency,
 	setOrderIsAGift,
