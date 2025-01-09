@@ -150,12 +150,10 @@ export function ContributionsOnlyLanding({
 		'ONE_OFF',
 		'MONTHLY',
 		'ANNUAL',
-	] as const;
+	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		if (paymentFrequencies[buttonIndex]) {
-			setContributionType(paymentFrequencies[buttonIndex]);
-		}
+		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(

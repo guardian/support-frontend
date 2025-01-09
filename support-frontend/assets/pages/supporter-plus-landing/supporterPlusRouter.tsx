@@ -51,7 +51,6 @@ const router = () => {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-
 			<Routes>
 				{countryIds.map((countryId) => (
 					<>
