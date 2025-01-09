@@ -1,7 +1,3 @@
-import type { ContributionType } from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { trackComponentEvents } from '../../tracking/trackingOphan';
-
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
 export const OPHAN_COMPONENT_ID_SET_REMINDER = 'reminder-test-link-clicked';
@@ -28,65 +24,3 @@ export const OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE =
 export const OPHAN_COMPONENT_ID_APP_STORE_BADGE =
 	'supporter-plus-thankyou-app-store';
 //////////////////////////////////////////
-
-const OPHAN_EVENT_ID_PAYMENT_METHOD = 'contributions-thankyou-payment-method';
-const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
-	'contributions-thankyou-contribution-type';
-const OPHAN_EVENT_ID_SIGNED_IN = 'contributions-thankyou-signed-in';
-const OPHAN_EVENT_ID_LARGE_DONATION = 'contributions-thankyou-large-donation';
-
-const trackPaymentMethod = (paymentMethod: PaymentMethod) => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'VIEW',
-		id: OPHAN_EVENT_ID_PAYMENT_METHOD,
-		value: paymentMethod,
-	});
-};
-
-const trackContributionType = (contributionType: ContributionType) => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'VIEW',
-		id: OPHAN_EVENT_ID_CONTRIBUTION_TYPE,
-		value: contributionType,
-	});
-};
-
-const trackSignedIn = (isSignedIn: boolean) => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'VIEW',
-		id: OPHAN_EVENT_ID_SIGNED_IN,
-		value: isSignedIn.toString(),
-	});
-};
-
-const trackLargeDonation = (isLargeUsDonation: boolean) => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'VIEW',
-		id: OPHAN_EVENT_ID_LARGE_DONATION,
-		value: isLargeUsDonation.toString(),
-	});
-};
-
-export const trackUserData = (
-	paymentMethod: PaymentMethod,
-	contributionType: ContributionType,
-	isSignedIn: boolean,
-	isLargeDonation: boolean,
-): void => {
-	trackPaymentMethod(paymentMethod);
-	trackContributionType(contributionType);
-	trackSignedIn(isSignedIn);
-	trackLargeDonation(isLargeDonation);
-};

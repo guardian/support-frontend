@@ -5,6 +5,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import { setHideSupportMessagingCookie } from 'helpers/storage/contributionsCookies';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
@@ -60,6 +61,8 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			originalAmount: finalAmount,
 			finalAmount: finalAmount,
 		};
+
+		setHideSupportMessagingCookie();
 	} else {
 		/** Recurring product must have product & ratePlan */
 		if (!product) {
