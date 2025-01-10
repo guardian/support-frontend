@@ -22,3 +22,28 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 
 	return selectedAmount >= thresholdPrice;
 }
+
+export function hideBenefitsListFromState(state: ContributionsState): boolean {
+	const contributionType = getContributionType(state);
+	const countryIsAffectedByVATStatus = isContributionsOnlyCountry(
+		state.common.amounts,
+	);
+
+	if (isOneOff(contributionType) || countryIsAffectedByVATStatus) {
+		return true;
+	}
+
+	/**
+	 * If amounts config has no options at or above the benefits
+	 * threshold then hide then hide the benefits container.
+	 */
+	const thresholdPrice = getThresholdPrice(contributionType, state);
+	const displayedAmounts =
+		state.common.amounts.amountsCardData[contributionType];
+	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount;
+
+	const thresholdPriceIsNotOffered =
+		Math.max(...displayedAmounts.amounts) < thresholdPrice;
+
+	return thresholdPriceIsNotOffered && customAmountIsHidden;
+}
