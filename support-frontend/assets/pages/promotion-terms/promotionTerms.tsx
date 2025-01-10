@@ -2,7 +2,10 @@ import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import {
 	DigitalPack,
@@ -15,7 +18,7 @@ import type { PromotionTermsPropTypes } from './promotionTermsReducer';
 import getPromotionTermsProps from './promotionTermsReducer';
 import './promotionTerms.scss';
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
 	if (product === DigitalPack) {

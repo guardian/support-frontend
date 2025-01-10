@@ -9,7 +9,7 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 // ----- Page Startup ----- //
-setUpTrackingAndConsents();
+setUpTrackingAndConsents({});
 // ----- Render ----- //
 const content = (
 	<Page

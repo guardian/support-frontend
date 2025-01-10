@@ -12,12 +12,12 @@ import ThankYouPendingContent from 'pages/subscriptions-redemption/thankYouPendi
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
 
-setUpTrackingAndConsents();
-
 // ----- Redux Store ----- //
 const store = initReduxForRedemption();
 const state = store.getState();
 const { countryGroupId } = state.common.internationalisation;
+
+setUpTrackingAndConsents(state.common.abParticipations);
 
 const thankyouProps = {
 	countryGroupId,

@@ -1,8 +1,6 @@
 // ----- Imports ----- //
 import type { Participations } from 'helpers/abTests/abtest';
-import { init as initAbTests } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -21,13 +19,12 @@ export type SubscriptionsLandingPropTypes = {
 	referrerAcquisitions: ReferrerAcquisitionData;
 };
 const countryGroupId = CountryGroup.detect();
-const abtestInitalizerData = {
-	countryId: Country.detect(),
+
+export const subscriptionsLandingProps = (
+	participations: Participations,
+): SubscriptionsLandingPropTypes => ({
 	countryGroupId,
-};
-export const subscriptionsLandingProps = (): SubscriptionsLandingPropTypes => ({
-	countryGroupId,
-	participations: initAbTests(abtestInitalizerData),
+	participations,
 	pricingCopy: getGlobal('pricingCopy'),
 	referrerAcquisitions: getReferrerAcquisitionData(),
 });

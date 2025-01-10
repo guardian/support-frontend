@@ -1,5 +1,4 @@
 import type { Participations } from 'helpers/abTests/abtest';
-import { init as initAbTests } from 'helpers/abTests/abtest';
 import {
 	getGlobal,
 	getProductPrices,
@@ -34,16 +33,14 @@ export type WeeklyLPContentPropTypes = {
 };
 
 const countryGroupId = CountryGroup.detect();
-const abtestInitalizerData = {
-	countryId: Country.detect(),
-	countryGroupId,
-};
 
-export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
+export const weeklyLandingProps = (
+	participations: Participations,
+): WeeklyLandingPropTypes => ({
 	countryGroupId,
 	countryId: Country.detect(),
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
 	orderIsAGift: getGlobal('orderIsAGift'),
-	participations: initAbTests(abtestInitalizerData),
+	participations,
 });

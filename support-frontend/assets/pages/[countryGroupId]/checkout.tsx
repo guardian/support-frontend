@@ -14,16 +14,18 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import type { Participations } from '../../helpers/abTests/abtest';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	abParticipations: Participations;
 };
 
 const countryId: IsoCountry = Country.detect();
 
-export function Checkout({ geoId, appConfig }: Props) {
+export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -268,6 +270,7 @@ export function Checkout({ geoId, appConfig }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				returnLink={returnLink}
+				abParticipations={abParticipations}
 			/>
 		</Elements>
 	);

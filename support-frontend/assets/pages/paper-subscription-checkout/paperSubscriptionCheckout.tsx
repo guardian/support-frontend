@@ -20,7 +20,6 @@ import ThankYouContent from './components/thankYou';
 import 'stylesheets/skeleton/skeleton.scss';
 import './_legacyImports.scss';
 
-setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const fulfilmentOption = getFulfilmentOption();
 const productOption = getProductOption();
@@ -33,6 +32,8 @@ const store = initReduxForSubscriptions(
 	productOption,
 	getFulfilmentOption,
 );
+
+setUpTrackingAndConsents(store.getState().common.abParticipations);
 
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();

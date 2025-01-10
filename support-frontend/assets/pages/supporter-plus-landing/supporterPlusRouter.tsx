@@ -21,8 +21,6 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-setUpTrackingAndConsents();
-
 // ----- Redux Store ----- //
 const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
@@ -47,6 +45,8 @@ function ScrollToTop(): null {
 }
 
 const commonState = store.getState().common;
+
+setUpTrackingAndConsents(commonState.abParticipations);
 
 export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.abParticipations,

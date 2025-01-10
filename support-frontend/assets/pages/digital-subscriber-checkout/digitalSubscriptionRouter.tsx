@@ -14,11 +14,11 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-setUpTrackingAndConsents();
-
 // ----- Redux Store ----- //
 
 const store = initReduxForContributions();
+
+setUpTrackingAndConsents(store.getState().common.abParticipations);
 
 // Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments
 window.guardian.settings = {
