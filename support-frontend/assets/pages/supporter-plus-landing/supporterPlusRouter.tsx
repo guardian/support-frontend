@@ -70,7 +70,10 @@ const router = () => {
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
 									inThreeTier ? (
-										<ThreeTierLanding geoId={countryId} />
+										<ThreeTierLanding
+											geoId={countryId}
+											abParticipations={commonState.abParticipations}
+										/>
 									) : showNewContributionsOnly ? (
 										<ContributionsOnlyLanding geoId={countryId} />
 									) : (
