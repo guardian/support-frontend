@@ -9,8 +9,6 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { getLandingPageSettings } from '../../helpers/abTests/landingPageAbTests';
-import { getSettings } from '../../helpers/globalsAndSwitches/globals';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
@@ -22,17 +20,10 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-const settings = getSettings();
-
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
-
-const landingPageSettings = getLandingPageSettings(
-	countryGroupId,
-	settings.landingPageTests,
-);
 
 setUpRedux(store);
 
@@ -78,7 +69,7 @@ const router = () => {
 									inThreeTier ? (
 										<ThreeTierLanding
 											geoId={countryId}
-											settings={landingPageSettings}
+											settings={commonState.landingPageSettings}
 											abParticipations={commonState.abParticipations}
 										/>
 									) : (
