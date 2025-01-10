@@ -140,10 +140,13 @@ export const tests: Tests = {
 	adFreeTierThree: {
 		variants: [
 			{
-				id: 'control',
+				id: 'control', // Tier2 ad-free
 			},
 			{
-				id: 'variant',
+				id: 'v1', // Tier3 ad-free
+			},
+			{
+				id: 'v2', // No ad-free
 			},
 		],
 		audiences: {

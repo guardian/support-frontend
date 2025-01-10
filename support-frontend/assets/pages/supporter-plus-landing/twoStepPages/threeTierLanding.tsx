@@ -20,10 +20,8 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import {
-	init as abTestInit,
-	getAmountsTestVariant,
-} from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import {
 	countdownSwitchOn,
 	getCampaignSettings,
@@ -258,10 +256,12 @@ function getPlanCost(
 type ThreeTierLandingProps = {
 	geoId: GeoId;
 	settings: LandingPageSelection;
+	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	geoId,
 	settings,
+	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
@@ -286,7 +286,6 @@ export function ThreeTierLanding({
 		subPath: '/contribute',
 	};
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 	// Persist any tests for tracking in the checkout page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
@@ -311,7 +310,7 @@ export function ThreeTierLanding({
 	);
 
 	const tierPlanPeriod = contributionType.toLowerCase();
-	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
 		tierPlanPeriod.slice(1)) as BillingPeriod;
 
 	// Handle which countdown to show (if any).
@@ -347,7 +346,7 @@ export function ThreeTierLanding({
 		: ['MONTHLY', 'ANNUAL'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex]);
+		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
 	};
 
 	const selectedContributionRatePlan =
@@ -368,8 +367,10 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
+	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
+		.amounts[0] as number;
+	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
+		.amounts[0] as number;
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
@@ -396,10 +397,9 @@ export function ThreeTierLanding({
 	/** Tier 2: SupporterPlus */
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Pricing =
-		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
-			currencyId
-		];
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
+		supporterPlusRatePlan
+	]?.pricing[currencyId] as number;
 
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
@@ -460,8 +460,8 @@ export function ThreeTierLanding({
 	};
 
 	const tier3RatePlan = getTier3RatePlan();
-	const tier3Pricing =
-		productCatalog.TierThree.ratePlans[tier3RatePlan].pricing[currencyId];
+	const tier3Pricing = productCatalog.TierThree?.ratePlans[tier3RatePlan]
+		?.pricing[currencyId] as number;
 
 	const tier3UrlParams = new URLSearchParams({
 		product: 'TierThree',

@@ -1,14 +1,3 @@
-import { DateUtils } from 'react-day-picker';
-import { config } from 'helpers/contributions';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-const daysFromNowForGift = 89;
-
 // Copied from
 // https://github.com/playframework/playframework/blob/master/framework/src/play/
 // src/main/scala/play/api/data/validation/Validation.scala#L81
@@ -23,34 +12,11 @@ export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
-export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
-	const rangeDate = new Date();
-	rangeDate.setDate(rangeDate.getDate() + daysFromNowForGift);
-
-	const dateIsInsideRange = !DateUtils.isDayAfter(date, rangeDate);
-	return dateIsInsideRange;
-};
-
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 	!!input && new RegExp(emailRegexPattern).test(input);
 
 export const isValidZipCode = (zipCode: string): boolean =>
 	/^\d{5}(-\d{4})?$/.test(zipCode);
-
-export const isNotNaN = (value: string): boolean => !isNaN(parseFloat(value));
-
-export const isLargerOrEqual: (arg0: number, arg1: string) => boolean = (
-	min,
-	input,
-) => min <= parseFloat(input);
-
-export const isSmallerOrEqual: (arg0: number, arg1: string) => boolean = (
-	max,
-	input,
-) => parseFloat(input) <= max;
-
-export const maxTwoDecimals: (arg0: string) => boolean = (input) =>
-	new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
 
 export const notLongerThan = (
 	value: string | null,
@@ -74,58 +40,6 @@ export const emailAddressesMatch: (
 
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
-
-export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
-	rawDate,
-) => {
-	const date = rawDate ? new Date(rawDate) : null;
-
-	if (isNotEmpty(rawDate) && date) {
-		return isNotTooFarInTheFuture(date);
-	}
-	return false;
-};
-
-export const amountIsValid = (
-	input: string,
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-): boolean => {
-	const min = config[countryGroupId][contributionType].min;
-	const max = config[countryGroupId][contributionType].max;
-	return (
-		isNotEmpty(input) &&
-		isNotNaN(input) &&
-		isLargerOrEqual(min, input) &&
-		isSmallerOrEqual(max, input) &&
-		maxTwoDecimals(input)
-	);
-};
-
-export const amountOrOtherAmountIsValid = (
-	selectedAmounts: SelectedAmounts,
-	otherAmounts: OtherAmounts,
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-): boolean => {
-	let amt = '';
-
-	if (
-		selectedAmounts[contributionType] &&
-		selectedAmounts[contributionType] === 'other'
-	) {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- otherAmounts[contributionType] may be undefined
-		if (otherAmounts[contributionType]?.amount) {
-			if (typeof otherAmounts[contributionType].amount === 'string') {
-				amt = otherAmounts[contributionType].amount as string;
-			}
-		}
-	} else if (selectedAmounts[contributionType]) {
-		amt = selectedAmounts[contributionType].toString();
-	}
-
-	return amountIsValid(amt, countryGroupId, contributionType);
-};
 
 // regex from: https://gist.github.com/simonwhitaker/5748487?permalink_comment_id=4648104#gistcomment-4648104
 // based on UK Gov logic: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/488478/Bulk_Data_Transfer_-_additional_validation_valid_from_12_November_2015.pdf

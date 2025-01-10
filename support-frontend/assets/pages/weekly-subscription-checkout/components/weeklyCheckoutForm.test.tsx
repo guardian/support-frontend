@@ -287,12 +287,12 @@ describe('Guardian Weekly checkout form', () => {
 			const [Germany, UnitedKingdom] = ['DE', 'GB'];
 			const [deliveryAddressCountry, billingAddressCountry] =
 				await screen.findAllByLabelText('Country');
-			fireEvent.change(deliveryAddressCountry, {
+			fireEvent.change(deliveryAddressCountry!, {
 				target: {
 					value: Germany,
 				},
 			});
-			fireEvent.change(billingAddressCountry, {
+			fireEvent.change(billingAddressCountry!, {
 				target: {
 					value: UnitedKingdom,
 				},

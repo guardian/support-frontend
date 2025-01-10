@@ -10,24 +10,27 @@ import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
 
-type GuardianLightLandingProps = {
+type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
 };
 
-export function GuardianLightLanding({
+export function GuardianAdLiteLanding({
 	geoId,
-}: GuardianLightLandingProps): JSX.Element {
+}: GuardianAdLiteLandingProps): JSX.Element {
 	const { countryGroupId } = getGeoIdConfig(geoId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries],
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-light',
 	}; // hidden initially, will display with more regions
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsReturn =
+		urlSearchParams.get('returnAddress') ?? undefined; // no return address supplied
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
 				<>
-					<HeaderCards geoId={geoId} />
+					<HeaderCards geoId={geoId} returnLink={urlSearchParamsReturn} />
 					<PosterComponent />
 					<AccordianComponent />
 				</>

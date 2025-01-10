@@ -1,33 +1,55 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
-import { GuardianLightLanding } from './guardianLightLanding/guardianLightLanding';
+import { GuardianAdLiteLanding } from './guardianAdLiteLanding/guardianAdLiteLanding';
 import { OneTimeCheckout } from './oneTimeCheckout';
 import { ThankYou } from './thankYou';
 
-setUpTrackingAndConsents();
+const abParticipations = getAbParticipations();
+setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
 		{
 			path: `/${geoId}/checkout`,
-			element: <Checkout geoId={geoId} appConfig={appConfig} />,
+			element: (
+				<Checkout
+					geoId={geoId}
+					appConfig={appConfig}
+					abParticipations={abParticipations}
+				/>
+			),
 		},
 		{
 			path: `/${geoId}/one-time-checkout`,
-			element: <OneTimeCheckout geoId={geoId} appConfig={appConfig} />,
+			element: (
+				<OneTimeCheckout
+					geoId={geoId}
+					appConfig={appConfig}
+					abParticipations={abParticipations}
+				/>
+			),
 		},
 		{
 			path: `/${geoId}/thank-you`,
-			element: <ThankYou geoId={geoId} appConfig={appConfig} />,
+			element: (
+				<ThankYou
+					geoId={geoId}
+					appConfig={appConfig}
+					abParticipations={abParticipations}
+				/>
+			),
 		},
 		{
 			path: `/${geoId}/guardian-light`,
-			element: <GuardianLightLanding geoId={geoId} />,
+			element: <GuardianAdLiteLanding geoId={geoId} />,
 		},
 	]),
 );

@@ -19,6 +19,11 @@ export function gridUrl(
 	imgType: ImageType = 'jpg',
 ): string {
 	const gridReference = imageCatalogue[gridId];
+
+	if (!gridReference) {
+		return '';
+	}
+
 	const originalWidth = gridReference.split('_')[2];
 	const path = `/img/media/${imageCatalogue[gridId]}/master/${originalWidth}.${imgType}?dpr=1&s=none&width=${size}`;
 	const url = new URL(path, GRID_DOMAIN);

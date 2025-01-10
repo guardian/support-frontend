@@ -39,7 +39,6 @@ export function getLandingPageSettings(
 		const idx = randomNumber(mvtId, test.name) % test.variants.length;
 		const variant = test.variants[idx];
 
-		/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- extra cautious */
 		if (variant) {
 			return {
 				testName: test.name,

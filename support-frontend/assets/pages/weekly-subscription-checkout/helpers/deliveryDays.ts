@@ -26,9 +26,10 @@ const getWeeklyDays = (today?: number): Date[] => {
 	const nonChrismassy = allDeliveryDays.filter((d) => !isChrismassy(d));
 
 	if (allDeliveryDays.length > nonChrismassy.length) {
-		nonChrismassy.push(
-			getNextDeliveryDay(nonChrismassy[nonChrismassy.length - 1]),
-		);
+		const lastNonChrismassy = nonChrismassy[nonChrismassy.length - 1];
+		if (lastNonChrismassy) {
+			nonChrismassy.push(getNextDeliveryDay(lastNonChrismassy));
+		}
 	}
 
 	return nonChrismassy.splice(weeksToAdd);
@@ -58,4 +59,14 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-export { getWeeklyDays, addDays, getTierThreeDeliveryDate };
+function getGuardianAdLiteDate(today?: number) {
+	const firstValidDate = addDays(new Date(today ?? new Date()), 15);
+	return firstValidDate;
+}
+
+export {
+	getWeeklyDays,
+	addDays,
+	getTierThreeDeliveryDate,
+	getGuardianAdLiteDate,
+};

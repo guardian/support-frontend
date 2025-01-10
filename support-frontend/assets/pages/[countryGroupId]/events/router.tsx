@@ -1,10 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { setUpTrackingAndConsents } from 'helpers/page/page';
+import {
+	getAbParticipations,
+	setUpTrackingAndConsents,
+} from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Events } from './events';
 
-setUpTrackingAndConsents();
+setUpTrackingAndConsents(getAbParticipations());
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
 		{

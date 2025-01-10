@@ -101,8 +101,9 @@ interface AddressSelectorProps {
 function AddressSelector({ results, onAddressSelected }: AddressSelectorProps) {
 	function handleAddressSelected(e: React.ChangeEvent<HTMLSelectElement>) {
 		const resultIndex = Number.parseInt(e.currentTarget.value);
-		if (results[resultIndex]) {
-			onAddressSelected(results[resultIndex]);
+		const result = results[resultIndex];
+		if (result) {
+			onAddressSelected(result);
 		}
 	}
 

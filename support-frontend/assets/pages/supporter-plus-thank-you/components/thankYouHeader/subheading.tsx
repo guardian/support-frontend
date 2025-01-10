@@ -1,13 +1,20 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
+import type { PaymentStatus } from 'helpers/forms/paymentMethods';
+import {
+	productCatalogDescription,
+	type ProductKey,
+} from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
 	contributionType: ContributionType;
+	productKey: ProductKey;
 	amountIsAboveThreshold: boolean;
-	isTier3: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	paymentStatus?: PaymentStatus;
 }
 
 function MarketingCopy({
@@ -29,10 +36,22 @@ function MarketingCopy({
 	);
 }
 
+const pendingCopy = () => {
+	return (
+		<p
+			css={css`
+				padding-bottom: ${space[3]}px;
+			`}
+		>
+			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and you will receive an email when your account is live.`}
+		</p>
+	);
+};
+
 const getSubHeadingCopy = (
+	productKey: ProductKey,
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
-	isTier3: boolean,
 	isSignedIn: boolean,
 	identityUserType: UserType,
 ) => {
@@ -46,26 +65,26 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
-		const signedInBelowThreshold = (
-			<span>{`Look out for your exclusive newsletter from our supporter editor.
+		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
-						Guardian journalism.${' '}`}</span>
+						Guardian journalism.${' '}`;
+		const notSignedInCopy = (
+			<span>
+				{productCatalogDescription[productKey].thankyouMessage ??
+					signedInBelowThreshold}
+			</span>
 		);
-		const tier3HeadingCopy = (
-			<span>{`You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`}</span>
+		const signedInCopy = amountIsAboveThreshold ? (
+			<>
+				{signedInAboveThreshold}
+				{notSignedInCopy}
+			</>
+		) : (
+			notSignedInCopy
 		);
 		return {
-			isSignedIn: isTier3 ? (
-				<>{tier3HeadingCopy}</>
-			) : amountIsAboveThreshold ? (
-				<>
-					{signedInAboveThreshold}
-					{signedInBelowThreshold}
-				</>
-			) : (
-				<>{signedInBelowThreshold}</>
-			),
-			notSignedIn: <>{isTier3 ? tier3HeadingCopy : signedInBelowThreshold}</>,
+			isSignedIn: signedInCopy,
+			notSignedIn: notSignedInCopy,
 		};
 	};
 
@@ -81,36 +100,47 @@ const getSubHeadingCopy = (
 
 function Subheading({
 	contributionType,
+	productKey,
 	amountIsAboveThreshold,
-	isTier3,
 	isSignedIn,
 	identityUserType,
+	paymentStatus,
 }: SubheadingProps): JSX.Element {
+	const isTier3 = productKey === 'TierThree';
+	const isGuardianAdLite = productKey === 'GuardianLight';
 	const subheadingCopy = getSubHeadingCopy(
+		productKey,
 		amountIsAboveThreshold,
 		contributionType,
-		isTier3,
 		isSignedIn,
 		identityUserType,
 	);
-
+	const isPending = paymentStatus === 'pending';
 	return (
 		<>
+			{isPending && pendingCopy()}
 			{subheadingCopy}
-			<MarketingCopy contributionType={contributionType} isTier3={isTier3} />
-			{identityUserType !== 'current' &&
-				!isTier3 &&
-				contributionType !== 'ONE_OFF' && (
-					<span
-						css={css`
-							font-weight: bold;
-						`}
-					>
-						{' '}
-						In the meantime, please sign in to get the best supporter
-						experience.
-					</span>
-				)}
+			{!isGuardianAdLite && !isPending && (
+				<>
+					<MarketingCopy
+						contributionType={contributionType}
+						isTier3={isTier3}
+					/>
+					{identityUserType !== 'current' &&
+						!isTier3 &&
+						contributionType !== 'ONE_OFF' && (
+							<span
+								css={css`
+									font-weight: bold;
+								`}
+							>
+								{' '}
+								In the meantime, please sign in to get the best supporter
+								experience.
+							</span>
+						)}
+				</>
+			)}
 		</>
 	);
 }

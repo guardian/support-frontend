@@ -172,9 +172,9 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 			Object.keys(acquisitionDataKeysToLog).forEach((key) => {
 				const acquisitionDataValueToLog =
 					acquisitionData[key as keyof ReferrerAcquisitionData]?.toString();
-				if (acquisitionDataValueToLog) {
+				if (acquisitionDataValueToLog && acquisitionDataKeysToLog[key]) {
 					sendEvent(
-						acquisitionDataKeysToLog[key],
+						acquisitionDataKeysToLog[key] ?? 0,
 						false,
 						acquisitionDataValueToLog.toString(),
 					);

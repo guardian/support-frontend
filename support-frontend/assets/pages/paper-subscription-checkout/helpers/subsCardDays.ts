@@ -1,5 +1,6 @@
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import type { DayOfWeekIndex } from './homeDeliveryDays';
 
 const additionalDays = [
 	{
@@ -86,7 +87,7 @@ const additionalDays = [
 		SundayPlus: 15,
 		SaturdayPlus: 14,
 	},
-];
+] as const;
 const monthText = [
 	'January',
 	'February',
@@ -114,7 +115,7 @@ const getPaymentStartDate = (
 	date: number,
 	productOption: ActivePaperProducts,
 ): Date => {
-	const day = new Date(date).getDay();
+	const day = new Date(date).getDay() as DayOfWeekIndex;
 	const delay = additionalDays[day][productOption];
 	const delayInMils = delay * milsInADay;
 	return new Date(date + delayInMils);

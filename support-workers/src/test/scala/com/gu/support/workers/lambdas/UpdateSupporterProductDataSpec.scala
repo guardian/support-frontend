@@ -46,7 +46,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
     supporterRatePlanItem.value.contributionAmount shouldBe None // not guaranteed right if discounted, and unused anyway
   }
 
-  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Guardian Light purchase" in {
+  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Guardian Ad-Lite purchase" in {
     val state = decode[SendThankYouEmailState](guardianLightState).value
     val supporterRatePlanItem =
       UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value

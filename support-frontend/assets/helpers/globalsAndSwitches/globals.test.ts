@@ -17,7 +17,7 @@ const getSpecifiedRegionAmountsFromGlobal = (
 		(t) =>
 			t.targeting.targetingType === 'Region' && t.targeting.region === target,
 	);
-	if (!testArray.length) {
+	if (!testArray.length || !testArray[0]) {
 		return {};
 	}
 	return testArray[0];

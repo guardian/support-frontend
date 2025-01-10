@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
@@ -10,14 +9,12 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+import { getLandingPageSettings } from '../../helpers/abTests/landingPageAbTests';
+import { getSettings } from '../../helpers/globalsAndSwitches/globals';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
-import {getLandingPageSettings} from "../../helpers/abTests/landingPageAbTests";
-import {getSettings} from "../../helpers/globalsAndSwitches/globals";
 
 parseAppConfig(window.guardian);
 
@@ -25,22 +22,19 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-setUpTrackingAndConsents();
-
 const settings = getSettings();
-
 
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = CountryGroup.detect();
-// const store = initReduxForContributions();
+const store = initReduxForContributions();
 
 const landingPageSettings = getLandingPageSettings(
-  countryGroupId,
-  settings.landingPageTests,
+	countryGroupId,
+	settings.landingPageTests,
 );
 
-// setUpRedux(store);
+setUpRedux(store);
 
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
@@ -59,13 +53,14 @@ function ScrollToTop(): null {
 	return null;
 }
 
-// const commonState = store.getState().common;
+const commonState = store.getState().common;
 
-const inThreeTier = true;
-// export const inThreeTier = threeTierCheckoutEnabled(
-// 	commonState.abParticipations,
-// 	commonState.amounts,
-// );
+setUpTrackingAndConsents(commonState.abParticipations);
+
+export const inThreeTier = threeTierCheckoutEnabled(
+	commonState.abParticipations,
+	commonState.amounts,
+);
 
 // ----- Render ----- //
 
@@ -73,7 +68,7 @@ const router = () => {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-			{/*<Provider store={store}>*/}
+			<Provider store={store}>
 				<Routes>
 					{countryIds.map((countryId) => (
 						<>
@@ -84,6 +79,7 @@ const router = () => {
 										<ThreeTierLanding
 											geoId={countryId}
 											settings={landingPageSettings}
+											abParticipations={commonState.abParticipations}
 										/>
 									) : (
 										<SupporterPlusInitialLandingPage
@@ -92,20 +88,10 @@ const router = () => {
 									)
 								}
 							/>
-							<Route
-								path={`/${countryId}/contribute/checkout`}
-								element={
-									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
-								}
-							/>
-							<Route
-								path={`/${countryId}/thankyou`}
-								element={<SupporterPlusThankYou />}
-							/>
 						</>
 					))}
 				</Routes>
-			{/*</Provider>*/}
+			</Provider>
 		</BrowserRouter>
 	);
 };

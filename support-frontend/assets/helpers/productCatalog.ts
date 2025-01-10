@@ -27,6 +27,7 @@ type ProductBenefit = {
 
 export type ProductDescription = {
 	label: string;
+	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
 	benefitsMissing?: ProductBenefit[];
@@ -100,13 +101,13 @@ const appBenefit = {
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: false },
+		{ name: 'adFreeTierThree', variants: ['v1', 'v2'], display: false },
 	],
 };
 const addFreeBenefitTierThree = {
 	copy: 'Ad-free reading on all your devices',
 	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['variant'], display: true },
+		{ name: 'adFreeTierThree', variants: ['v1'], display: true },
 	],
 };
 const newsletterBenefit = {
@@ -142,9 +143,9 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
-const guardianLightBenefits = [
+const guardianAdLiteBenefits = [
 	{
-		copy: 'A Guardian Light subscription enables you to read the Guardian without personalised advertising.',
+		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian without personalised advertising.',
 	},
 	{
 		copy: 'If you already read the Guardian ad-free you should sign in.',
@@ -155,16 +156,18 @@ const guardianLightBenefits = [
 export const productCatalogDescription: Record<ProductKey, ProductDescription> =
 	{
 		GuardianLight: {
-			label: 'Guardian Light',
+			label: 'Guardian Ad-Lite',
+			thankyouMessage: `Your valued support powers our journalism${' '}`,
 			ratePlans: {
 				Monthly: {
 					billingPeriod: 'Monthly',
 				},
 			},
-			benefits: guardianLightBenefits,
+			benefits: guardianAdLiteBenefits,
 		},
 		TierThree: {
 			label: 'Digital + print',
+			thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
 			benefitsSummary: [
 				'The rewards from ',
 				{ strong: true, copy: 'All-access digital' },
@@ -388,22 +391,22 @@ export function productCatalogDescriptionNewBenefits(
 	};
 }
 
-export function productCatalogGuardianLight(): Record<
-	ProductKey | 'GuardianLightGoBack',
+export function productCatalogGuardianAdLite(): Record<
+	ProductKey | 'GuardianAdLiteGoBack' | 'GuardianAdLite', // remove GuardianAdLite when productKey (in Zuora Catalog)
 	ProductDescription
 > {
 	return {
 		...productCatalogDescription,
-		GuardianLight: {
+		GuardianAdLite: {
 			...productCatalogDescription.GuardianLight,
-			label: 'Purchase Guardian Light',
+			label: 'Purchase Guardian Ad-Lite',
 		},
-		GuardianLightGoBack: {
+		GuardianAdLiteGoBack: {
 			...productCatalogDescription.GuardianLight,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [
 				{
-					copy: `Click ‘Go back to Accept all’ if you do not want to subscribe to Guardian Light.`,
+					copy: `Click ‘Go back to Accept all’ if you do not want to subscribe to Guardian Ad-Lite.`,
 					hideBullet: true,
 				},
 			],

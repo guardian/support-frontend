@@ -2,7 +2,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
-import { validateOtherAmount } from 'helpers/redux/checkout/product/actions';
 import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation/contributionFormValidation';
 import {
 	useContributionsDispatch,
@@ -69,25 +68,6 @@ export function useFormValidation<
 	const validateAndPay = useValidation(
 		paymentHandler,
 		() => validateForm(paymentMethod.name),
-		dispatchPaymentWaiting,
-	);
-
-	return validateAndPay;
-}
-
-/**
- * A hook to wrap any payment handler function.
- * Validates the other amount field *only*, and will only run the handler if the form is valid.
- */
-export function useOtherAmountValidation<
-	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
->(
-	paymentHandler: (event: EventType) => void,
-	dispatchPaymentWaiting = true,
-): (event: EventType) => void {
-	const validateAndPay = useValidation(
-		paymentHandler,
-		validateOtherAmount,
 		dispatchPaymentWaiting,
 	);
 

@@ -39,10 +39,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import {
-	init as abTestInit,
-	getAmountsTestVariant,
-} from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -158,6 +156,7 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
  */
 type ProcessPaymentResponse =
 	| { status: 'success' }
+	| { status: 'pending' }
 	| { status: 'failure'; failureReason?: ErrorReason };
 
 type CreateSubscriptionResponse = StatusResponse & {
@@ -190,7 +189,7 @@ const handlePaymentStatus = (
 	if (status === 'failure') {
 		return { status, failureReason };
 	} else {
-		return { status: 'success' }; // success or pending
+		return { status: status }; // success or pending
 	}
 };
 
@@ -209,6 +208,8 @@ type CheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
+	returnLink?: string;
+	abParticipations: Participations;
 };
 
 export function CheckoutComponent({
@@ -225,6 +226,8 @@ export function CheckoutComponent({
 	useStripeExpressCheckout,
 	countryId,
 	forcedCountry,
+	returnLink,
+	abParticipations,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
@@ -236,7 +239,6 @@ export function CheckoutComponent({
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
-	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
@@ -244,7 +246,9 @@ export function CheckoutComponent({
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
-	const ratePlanDescription = productDescription.ratePlans[ratePlanKey];
+	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
+		billingPeriod: 'Monthly',
+	};
 
 	const productFields = getProductFields({
 		product: {
@@ -267,7 +271,9 @@ export function CheckoutComponent({
 	let isInvalidAmount = false;
 	if (productKey === 'Contribution') {
 		const supporterPlusRatePlanPrice =
-			productCatalog.SupporterPlus.ratePlans[ratePlanKey].pricing[currencyKey];
+			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
+				currencyKey
+			];
 
 		const { selectedAmountsVariant } = getAmountsTestVariant(
 			countryId,
@@ -278,7 +284,7 @@ export function CheckoutComponent({
 			isInvalidAmount = true;
 		}
 		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-			if (originalAmount >= supporterPlusRatePlanPrice) {
+			if (originalAmount >= (supporterPlusRatePlanPrice ?? 0)) {
 				isInvalidAmount = true;
 			}
 		}
@@ -614,11 +620,15 @@ export function CheckoutComponent({
 				};
 			}
 
-			if (processPaymentResponse.status === 'success') {
+			if (
+				processPaymentResponse.status === 'success' ||
+				processPaymentResponse.status === 'pending'
+			) {
 				const order = {
 					firstName: personalData.firstName,
 					email: personalData.email,
 					paymentMethod: paymentMethod,
+					status: processPaymentResponse.status,
 				};
 				setThankYouOrder(order);
 				const thankYouUrlSearchParams = new URLSearchParams();
@@ -626,13 +636,12 @@ export function CheckoutComponent({
 				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
 				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
 				userType && thankYouUrlSearchParams.set('userType', userType);
-
 				contributionAmount &&
 					thankYouUrlSearchParams.set(
 						'contribution',
 						contributionAmount.toString(),
 					);
-
+				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
@@ -661,6 +670,12 @@ export function CheckoutComponent({
 		supportInternationalisationId,
 		abParticipations.abandonedBasket === 'variant',
 	);
+
+	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
+	const returnToLandingPage =
+		productKey === 'GuardianLight'
+			? `/guardian-light${returnParam}`
+			: `/${geoId}/contribute`;
 
 	return (
 		<CheckoutLayout>
@@ -753,11 +768,10 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							productKey === 'GuardianLight' ? (
-								<BackButton path={`/guardian-light`} buttonText="Back" />
-							) : (
-								<BackButton path={`/${geoId}/contribute`} buttonText="Change" />
-							)
+							<BackButton
+								path={returnToLandingPage}
+								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
+							/>
 						}
 					/>
 				</BoxContents>

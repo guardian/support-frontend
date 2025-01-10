@@ -20,7 +20,6 @@ import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
-setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod =
@@ -29,7 +28,7 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 	billingPeriodInUrl === 'Annual'
 		? billingPeriodInUrl
 		: 'Monthly';
-const startDate = formatMachineDate(getWeeklyDays()[0]);
+const startDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 const store = initReduxForSubscriptions(
 	GuardianWeekly,
@@ -38,6 +37,8 @@ const store = initReduxForSubscriptions(
 	NoProductOptions,
 	getWeeklyFulfilmentOption,
 );
+
+setUpTrackingAndConsents(store.getState().common.abParticipations);
 
 const { orderIsAGift, productPrices } =
 	store.getState().page.checkoutForm.product;

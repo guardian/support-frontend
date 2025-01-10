@@ -26,6 +26,7 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -51,6 +52,9 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
+import { ActivateSubscriptionReminder } from './guardianAdLite/activateSubscriptionReminder';
+import { AddressCta } from './guardianAdLite/addressCta';
+import { WhatNext } from './guardianAdLite/whatNext';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -72,10 +76,10 @@ import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
 
 export interface ThankYouModuleData {
-	icon: JSX.Element;
 	header: string;
 	bodyCopy: string | JSX.Element;
 	ctas: JSX.Element | null;
+	icon?: JSX.Element;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: string | JSX.Element;
 	ctasSecond?: JSX.Element | null;
@@ -112,6 +116,10 @@ export const getThankYouModuleData = (
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
+	finalAmount?: number,
+	startDate?: string,
+	returnAddress?: string,
+	isSignedIn?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -242,7 +250,11 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<>
 					<SubscriptionStartBodyCopy
-						startDateGW={formatUserDate(publicationStartDays[0])}
+						startDateGW={
+							publicationStartDays[0]
+								? formatUserDate(publicationStartDays[0])
+								: ''
+						}
 					/>
 				</>
 			),
@@ -315,6 +327,66 @@ export const getThankYouModuleData = (
 							);
 						}
 					}}
+				/>
+			),
+		},
+		whatNext: {
+			header: 'What happens next?',
+			bodyCopy: (
+				<WhatNext
+					amount={(finalAmount ?? '').toString()}
+					startDate={startDate ?? ''}
+					isSignedIn={isSignedIn}
+				/>
+			),
+			ctas: null,
+		},
+		reminderToSignIn: {
+			header: 'Important reminder',
+			bodyCopy: (
+				<p>
+					To enjoy reading the Guardian with non-personalised advertising on all
+					your devices. please remember to sign in on each device or browser
+					session. This will ensure you to read with non-personalised
+					advertising no matter where you log in.
+				</p>
+			),
+			ctas: null,
+		},
+		reminderToActivateSubscription: {
+			header:
+				'Almost there! Complete your Guardian account to activate your subscription',
+			bodyCopy: <ActivateSubscriptionReminder />,
+			ctas: null,
+		},
+		headlineReturn: {
+			header: 'Headline to bring user back to Guardian front page',
+			bodyCopy: (
+				<p>
+					Copy to prompt users to enjoy the Guardian with non personalised
+					advertising
+				</p>
+			),
+			ctas: (
+				<AddressCta
+					address={returnAddress ?? ''}
+					copy={'Continue to the Guardian'}
+					hasArrow={true}
+				/>
+			),
+		},
+		signInToActivate: {
+			header: 'Almost there! Sign in to activate your subscription',
+			bodyCopy: (
+				<p>
+					To be able to read the Guardian with non-personalised advertising you
+					must be signed in on all your devices.'
+				</p>
+			),
+			ctas: (
+				<AddressCta
+					address={manageSubsUrl}
+					copy={'Sign in and activate your subscription'}
 				/>
 			),
 		},

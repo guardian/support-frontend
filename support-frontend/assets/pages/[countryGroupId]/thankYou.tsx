@@ -5,17 +5,24 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import { setHideSupportMessagingCookie } from 'helpers/storage/contributionsCookies';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import type { Participations } from '../../helpers/abTests/abtest';
 import { ThankYouComponent } from './components/thankYouComponent';
 
 export type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
+	abParticipations: Participations;
 };
 
-export function ThankYou({ geoId, appConfig }: ThankYouProps) {
+export function ThankYou({
+	geoId,
+	appConfig,
+	abParticipations,
+}: ThankYouProps) {
 	const countryId = Country.detect();
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -38,6 +45,9 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
+	// returnAddress
+	const urlSearchParamsReturn =
+		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;
@@ -57,6 +67,8 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			originalAmount: finalAmount,
 			finalAmount: finalAmount,
 		};
+
+		setHideSupportMessagingCookie();
 	} else {
 		/** Recurring product must have product & ratePlan */
 		if (!product) {
@@ -104,15 +116,11 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {
-					case 'SupporterPlus':
-					case 'Contribution':
-						return 'NoFulfilmentOptions';
 					case 'TierThree':
 						return countryGroupId === 'International'
 							? 'RestOfWorld'
 							: 'Domestic';
 					default:
-						// ToDo: define for every product here
 						return 'NoFulfilmentOptions';
 				}
 			};
@@ -160,6 +168,8 @@ export function ThankYou({ geoId, appConfig }: ThankYouProps) {
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
+			returnLink={urlSearchParamsReturn}
+			abParticipations={abParticipations}
 		/>
 	);
 }

@@ -45,7 +45,10 @@ function getSubscriptionTypeFromURL(): SubscriptionProduct {
 	};
 	const [, match] = urlPathRegex.exec(window.location.pathname) ?? [];
 	if (match) {
-		return productsToUrlPath[match];
+		const product = productsToUrlPath[match];
+		if (product) {
+			return product;
+		}
 	}
 	return DigitalPack;
 }

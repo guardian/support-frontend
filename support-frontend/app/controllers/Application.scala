@@ -349,7 +349,7 @@ class Application(
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("supporterPlusLandingPage.js"),
-      css = Some(RefPath("supporterPlusLandingPage.css")),
+      css = None,
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),

@@ -12,12 +12,12 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogGuardianLight,
+	productCatalogGuardianAdLite,
 } from 'helpers/productCatalog';
 import { isCode } from 'helpers/urls/url';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { GuardianLightCards } from './guardianLightCards';
+import { GuardianAdLiteCards } from './guardianAdLiteCards';
 
 const containerCardsAndSignIn = css`
 	background-color: ${palette.brand[400]};
@@ -76,34 +76,44 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
+	returnLink?: string;
 };
 
-export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
+export function HeaderCards({
+	geoId,
+	returnLink,
+}: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const price =
-		productCatalog.GuardianLight.ratePlans[contributionType].pricing[
+		productCatalog.GuardianLight?.ratePlans[contributionType]?.pricing[
 			currencyKey
 		];
-	const formattedPrice = simpleFormatAmount(currency, price);
+	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
-	const card1UrlParams = new URLSearchParams({
+	const guardianAdLiteParams = {
 		product: 'GuardianLight',
 		ratePlan: contributionType,
-		contribution: price.toString(),
-	});
+		contribution: price?.toString() ?? '',
+	};
+	const card1UrlParams = new URLSearchParams(
+		returnLink
+			? {
+					...guardianAdLiteParams,
+					returnAddress: returnLink,
+			  }
+			: guardianAdLiteParams,
+	);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,
-		productDescription: productCatalogGuardianLight().GuardianLight,
-		ctaCopy: `Get Guardian Light for ${formattedPrice}/month`,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLite,
+		ctaCopy: `Get Guardian Ad-Lite for ${formattedPrice}/month`,
 	};
-
-	const returnLink = `https://www.theguardian.com/${geoId}`; // ToDo : store and use return path
 	const card2 = {
-		link: returnLink,
-		productDescription: productCatalogGuardianLight().GuardianLightGoBack,
+		link: returnLink ?? `https://www.theguardian.com`,
+		productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};
 	return (
@@ -115,9 +125,9 @@ export function HeaderCards({ geoId }: HeaderCardsProps): JSX.Element {
 				cssOverrides={containerCardsAndSignIn}
 			>
 				<h1 css={heading}>Choose how to read the Guardian</h1>
-				<GuardianLightCards cardsContent={[card1, card2]} />
+				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					If you already have Guardian Light or read the Guardian ad-free,{' '}
+					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
 					{SignInLink}
 				</div>
 			</Container>

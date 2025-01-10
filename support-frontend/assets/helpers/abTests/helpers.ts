@@ -1,10 +1,20 @@
 import type {
 	AmountsTest,
+	AmountsVariant,
 	SelectedAmountsVariant,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-export const FALLBACK_AMOUNTS: AmountsTest[] = [
+type AmountsTestWithVariants = AmountsTest & {
+	variants: [AmountsVariant, ...AmountsVariant[]];
+};
+
+type NonEmptyAmountsTestArray = [
+	AmountsTestWithVariants,
+	...AmountsTestWithVariants[],
+];
+
+export const FALLBACK_AMOUNTS: NonEmptyAmountsTestArray = [
 	{
 		testName: 'FALLBACK_AMOUNTS__GBPCountries',
 		liveTestName: '',

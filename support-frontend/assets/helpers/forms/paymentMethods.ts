@@ -8,6 +8,9 @@ const Sepa = 'Sepa';
 const AmazonPay = 'AmazonPay';
 const None = 'None';
 
+const Success = 'success';
+const Pending = 'pending';
+
 export type PaymentMethodMap<T> = {
 	Stripe: T;
 	PayPal: T;
@@ -24,6 +27,8 @@ export type PaymentMethod =
 	| typeof Sepa
 	| typeof AmazonPay
 	| typeof None;
+
+export type PaymentStatus = typeof Success | typeof Pending;
 
 export type FullPaymentMethod = {
 	paymentMethod: PaymentMethod;

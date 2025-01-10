@@ -2,11 +2,13 @@ import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
+import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import type { ProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -176,37 +178,46 @@ const tier3HeaderTitleText = css`
 
 type HeadingProps = {
 	name: string | null;
+	productKey: ProductKey;
 	isOneOffPayPal: boolean;
-	isTier3: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
+	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
 function Heading({
 	name,
+	productKey,
 	isOneOffPayPal,
-	isTier3,
 	amount,
 	currency,
 	contributionType,
+	paymentStatus,
 	promotion,
 }: HeadingProps): JSX.Element {
+	const isPending = paymentStatus === 'pending';
+	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
-	if (isOneOffPayPal || !amount) {
+	if (isOneOffPayPal || !amount || isPending) {
+		const headerTitleClosure = isPending
+			? 'your recurring subscription is being processed'
+			: 'your valuable contribution';
+
 		return (
 			<h1 css={headerTitleText}>
 				Thank you{' '}
-				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
-				your valuable contribution
+				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
+				{headerTitleClosure}
 			</h1>
 		);
 	}
 
-	if (isTier3) {
+	if (isTier3 || isGuardianAdLite) {
 		return (
 			<h1 css={tier3HeaderTitleText}>
 				Thank you{' '}
@@ -215,10 +226,14 @@ function Heading({
 				<YellowHighlight
 					currency={currency}
 					amount={amount}
-					productName={'Digital + print.'}
+					productName={isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite.'}
 				/>
-				<br css={tier3lineBreak} />
-				Your valued support powers our journalism.
+				{isTier3 && (
+					<>
+						<br css={tier3lineBreak} />
+						'Your valued support powers our journalism.'
+					</>
+				)}
 			</h1>
 		);
 	}

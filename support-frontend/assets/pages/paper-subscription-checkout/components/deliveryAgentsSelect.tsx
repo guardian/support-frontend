@@ -43,6 +43,10 @@ export function DeliveryAgentsSelect(
 
 	if (props.deliveryAgentsResponse?.type === 'Covered' && !postcodeError) {
 		if (props.deliveryAgentsResponse.agents?.length === 1) {
+			if (!props.deliveryAgentsResponse.agents[0]) {
+				return null;
+			}
+
 			return (
 				<SingleDeliveryProvider
 					singleDeliveryProvider={props.deliveryAgentsResponse.agents[0]}

@@ -9,11 +9,21 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	analyticsInitialisation,
 	consentInitialisation,
+	sendConsentToOphan,
 } from 'helpers/page/analyticsAndConsent';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSettings } from '../globalsAndSwitches/globals';
 
-function setUpTrackingAndConsents(): void {
+function setUpTrackingAndConsents(participations: Participations): void {
+	const countryId: IsoCountry = Country.detect();
+	const acquisitionData = getReferrerAcquisitionData();
+
+	void consentInitialisation(countryId);
+	analyticsInitialisation(participations, acquisitionData);
+	sendConsentToOphan();
+}
+
+function getAbParticipations(): Participations {
 	const settings = getSettings();
 	const countryId: IsoCountry = Country.detect();
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
@@ -21,20 +31,18 @@ function setUpTrackingAndConsents(): void {
 		countryId,
 		countryGroupId,
 	};
+
 	const participations: Participations = abTest.init(abtestInitalizerData);
 	const { amountsParticipation } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		settings,
 	);
-	const participationsWithAmountsTest = {
+	return {
 		...participations,
 		...amountsParticipation,
 	};
-	const acquisitionData = getReferrerAcquisitionData();
-	void consentInitialisation(countryId);
-	analyticsInitialisation(participationsWithAmountsTest, acquisitionData);
 }
 
 // ----- Exports ----- //
-export { setUpTrackingAndConsents };
+export { getAbParticipations, setUpTrackingAndConsents };
