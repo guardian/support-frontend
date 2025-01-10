@@ -8,7 +8,7 @@ class CurrencyTest extends AnyFlatSpec with Matchers {
     Currency.isAmountOutOfBounds(2100, Currency.GBP) mustBe true
   }
 
-  it should "return false if the amount is below the allowed range" in {
+  it should "return true if the amount is below the allowed range" in {
     Currency.isAmountOutOfBounds(0.5, Currency.GBP) mustBe true
   }
 
