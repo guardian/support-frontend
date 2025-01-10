@@ -20,7 +20,6 @@ import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
-setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod: WeeklyBillingPeriod =
@@ -38,6 +37,8 @@ const store = initReduxForSubscriptions(
 	NoProductOptions,
 	getWeeklyFulfilmentOption,
 );
+
+setUpTrackingAndConsents(store.getState().common.abParticipations);
 
 const { orderIsAGift, productPrices } =
 	store.getState().page.checkoutForm.product;

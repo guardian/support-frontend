@@ -20,8 +20,6 @@ if (!isDetailsSupported) {
 	polyfillDetails();
 }
 
-setUpTrackingAndConsents();
-
 // ----- Redux Store ----- //
 
 const countryGroupId: CountryGroupId = CountryGroup.detect();
@@ -48,6 +46,8 @@ function ScrollToTop(): null {
 
 const commonState = store.getState().common;
 
+setUpTrackingAndConsents(commonState.abParticipations);
+
 export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.abParticipations,
 	commonState.amounts,
@@ -67,7 +67,10 @@ const router = () => {
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
 									inThreeTier ? (
-										<ThreeTierLanding geoId={countryId} />
+										<ThreeTierLanding
+											geoId={countryId}
+											abParticipations={commonState.abParticipations}
+										/>
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}

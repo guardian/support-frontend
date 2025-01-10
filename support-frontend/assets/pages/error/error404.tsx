@@ -4,7 +4,7 @@ import { renderPage } from 'helpers/rendering/render';
 import ErrorPage from './components/errorPage';
 
 // ----- Page Startup ----- //
-setUpTrackingAndConsents();
+setUpTrackingAndConsents({});
 
 // ----- Render ----- //
 const content = (
