@@ -31,6 +31,7 @@ import services.{
   RecaptchaService,
   TestUserService,
   UserBenefitsApiService,
+  UserBenefitsApiServiceProvider,
   UserBenefitsResponse,
   UserDetails,
 }
@@ -71,7 +72,7 @@ class CreateSubscriptionController(
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
     paperRoundServiceProvider: PaperRoundServiceProvider,
-    userBenefitsApiService: UserBenefitsApiService,
+    userBenefitsApiServiceProvider: UserBenefitsApiServiceProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -173,7 +174,8 @@ class CreateSubscriptionController(
           EitherT.rightT(())
         } else {
           for {
-            benefits <- userBenefitsApiService
+            benefits <- userBenefitsApiServiceProvider
+              .forUser(testUsers.isTestUser(request))
               .getUserBenefits(userDetails.userDetails.identityId)
               .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
             _ <- validateBenefits(benefits)

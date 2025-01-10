@@ -2,9 +2,11 @@ package services
 
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.support.touchpoint.TouchpointService
 import config.UserBenefitsApi
 import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+
 import scala.collection.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,7 +38,7 @@ object UserBenefitsApiService {
     new UserBenefitsApiService(host = config.host, apiKey = config.apiKey)
 }
 
-class UserBenefitsApiService(host: String, apiKey: String)(implicit wsClient: WSClient) {
+class UserBenefitsApiService(host: String, apiKey: String)(implicit wsClient: WSClient) extends TouchpointService {
   def getUserBenefits(
       identityId: String,
   )(implicit ec: ExecutionContext): EitherT[Future, UserBenefitsError, UserBenefitsResponse] = {
