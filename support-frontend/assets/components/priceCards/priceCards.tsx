@@ -123,7 +123,7 @@ export function PriceCards({
 					)}
 				</>
 			</ChoiceCardGroup>
-			{otherAmountField}
+			{(!hideChooseYourAmount || !amounts.length) && otherAmountField}
 		</div>
 	);
 }

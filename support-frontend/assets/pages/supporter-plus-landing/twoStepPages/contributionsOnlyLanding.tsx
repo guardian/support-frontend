@@ -84,7 +84,7 @@ const standFirst = css`
 	}
 `;
 
-const paymentFrequencyButtonsCss = css`
+const paymentFrequencyButtons = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
 		margin: 0 auto ${space[9]}px;
@@ -164,15 +164,7 @@ export function ContributionsOnlyLanding({
 
 	return (
 		<PageScaffold
-			header={
-				<>
-					<Header>
-						{/* <CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer> */}
-					</Header>
-				</>
-			}
+			header={<Header></Header>}
 			footer={
 				<FooterWithContents>
 					<FooterLinks links={links}></FooterLinks>
@@ -182,7 +174,7 @@ export function ContributionsOnlyLanding({
 			<Container
 				sideBorders
 				topBorder
-				borderColor="rgba(170, 170, 180, 0.5)"
+				borderColor={palette.brand[600]}
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
@@ -201,7 +193,7 @@ export function ContributionsOnlyLanding({
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
-						additionalStyles={paymentFrequencyButtonsCss}
+						additionalStyles={paymentFrequencyButtons}
 					/>
 					<AmountsCard
 						amountsData={amounts.amountsCardData[contributionType]}
@@ -213,7 +205,7 @@ export function ContributionsOnlyLanding({
 			</Container>
 			<Container
 				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
+				borderColor={palette.brand[600]}
 				cssOverrides={disclaimerContainer}
 			></Container>
 		</PageScaffold>

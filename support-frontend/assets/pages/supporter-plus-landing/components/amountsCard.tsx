@@ -103,8 +103,6 @@ export function AmountsCard({
 					amounts={amountsData.amounts}
 					selectedAmount={selectedAmount}
 					currency={currencyId}
-					// This is always undefined as we're ONE_OFF
-					paymentInterval={undefined}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
 							setSelectedAmount(amount);

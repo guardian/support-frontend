@@ -164,10 +164,10 @@ export const tests: Tests = {
 	contributionsOnly: {
 		variants: [
 			{
-				id: 'control', // Existing
+				id: 'control',
 			},
 			{
-				id: 'variant', // New
+				id: 'variant',
 			},
 		],
 		audiences: {
