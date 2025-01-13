@@ -165,7 +165,7 @@ export function ContributionsOnlyLanding({
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex]);
+		setContributionType(paymentFrequencies[buttonIndex] ?? contributionType);
 	};
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
