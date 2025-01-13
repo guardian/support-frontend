@@ -66,7 +66,7 @@ export type PriceCardsProps = {
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
 	paymentInterval?: PriceCardPaymentInterval;
-	otherAmountField?: React.ReactNode;
+	otherAmountField: React.ReactNode;
 	hideChooseYourAmount?: boolean;
 };
 
@@ -123,7 +123,7 @@ export function PriceCards({
 					)}
 				</>
 			</ChoiceCardGroup>
-			{(!hideChooseYourAmount || !amounts.length) && otherAmountField}
+			{enableChooseYourAmountButton && otherAmountField}
 		</div>
 	);
 }
