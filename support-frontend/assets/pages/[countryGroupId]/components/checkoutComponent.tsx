@@ -674,7 +674,7 @@ export function CheckoutComponent({
 	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
 	const returnToLandingPage =
 		productKey === 'GuardianLight'
-			? `/guardian-light${returnParam}`
+			? `/guardian-ad-lite${returnParam}`
 			: `/${geoId}/contribute`;
 
 	return (

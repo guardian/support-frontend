@@ -21,7 +21,7 @@ export function GuardianAdLiteLanding({
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries],
 		selectedCountryGroup: countryGroupId,
-		subPath: '/guardian-light',
+		subPath: '/guardian-ad-lite',
 	}; // hidden initially, will display with more regions
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn =
