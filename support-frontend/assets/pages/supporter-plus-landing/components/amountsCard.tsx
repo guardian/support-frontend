@@ -12,6 +12,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
+import type { PriceCardPaymentInterval } from 'components/priceCards/priceCard';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type {
@@ -90,6 +91,13 @@ export function AmountsCard({
 			? `one-time-checkout?contribution=${amount}`
 			: `checkout?product=Contribution&ratePlan=${billingPeriod}&contribution=${amount}`;
 
+	const contributionTypeToPaymentInterval: Partial<
+		Record<ContributionType, PriceCardPaymentInterval>
+	> = {
+		MONTHLY: 'month',
+		ANNUAL: 'year',
+	};
+
 	return (
 		<section css={sectionStyle}>
 			<div
@@ -103,6 +111,7 @@ export function AmountsCard({
 					amounts={amountsData.amounts}
 					selectedAmount={selectedAmount}
 					currency={currencyId}
+					paymentInterval={contributionTypeToPaymentInterval[contributionType]}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
 							setSelectedAmount(amount);
