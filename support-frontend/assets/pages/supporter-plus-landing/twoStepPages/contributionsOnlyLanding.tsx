@@ -140,11 +140,23 @@ type ContributionsOnlyLandingProps = {
 export function ContributionsOnlyLanding({
 	geoId,
 }: ContributionsOnlyLandingProps): JSX.Element {
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
-	const [contributionType, setContributionType] =
-		useState<ContributionType>('MONTHLY');
+	const getInitialContributionType = () => {
+		if (urlSearchParamsOneTime) {
+			return 'ONE_OFF';
+		}
+		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+	};
+
+	const [contributionType, setContributionType] = useState<ContributionType>(
+		getInitialContributionType(),
+	);
 
 	const paymentFrequencies: ContributionType[] = [
 		'ONE_OFF',
@@ -153,7 +165,7 @@ export function ContributionsOnlyLanding({
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
+		setContributionType(paymentFrequencies[buttonIndex]);
 	};
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
