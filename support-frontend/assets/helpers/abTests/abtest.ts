@@ -195,33 +195,31 @@ function getParticipations(
 		if (!targetPageMatches(path, test.targetPage)) {
 			return;
 		}
-		console.log(
-			'*** 1 ',
-			selectedAmountsVariant?.testName,
-			test.excludeContributionsOnlyCountries,
-			test,
-		);
-		// Return if : -
-		// 1. contributionsOnlyAmountsTest
-		// 2. AND excludes countries subject to contributionsOnly
-		// 3. AND does not include countries subject to contributionsOnly
+
+		/**
+		 * We only exclude users assigned to the contributions only amounts test
+		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
+		 * AND includeOnlyContributionsOnlyCountries is not true
+		 */
 		if (
 			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
 			test.excludeContributionsOnlyCountries &&
 			!test.includeOnlyContributionsOnlyCountries
 		) {
-			console.log('*** 2 ');
 			return;
 		}
-		console.log('*** 3');
+
+		/**
+		 * Exclude users NOT assigned to the contributions only amounts test
+		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
+		 */
 		if (
 			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
 			test.includeOnlyContributionsOnlyCountries
 		) {
-			console.log('*** 4 ');
 			return;
 		}
-		console.log('*** 5');
+
 		const participation = getUserParticipation(
 			test,
 			testId,

@@ -338,31 +338,7 @@ describe('init', () => {
 	});
 
 	describe('excludeContributionsOnlyCountries', () => {
-		const selectedAmountsVariant: SelectedAmountsVariant = {
-			testName: contributionsOnlyAmountsTestName,
-			variantName: 'CONTROL',
-			defaultContributionType: 'MONTHLY',
-			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-			amountsCardData: {
-				ONE_OFF: {
-					amounts: [1, 2, 5, 10],
-					defaultAmount: 2,
-					hideChooseYourAmount: true,
-				},
-				MONTHLY: {
-					amounts: [2, 3, 5, 7, 9, 12],
-					defaultAmount: 5,
-					hideChooseYourAmount: true,
-				},
-				ANNUAL: {
-					amounts: [10, 15, 20, 30],
-					defaultAmount: 15,
-					hideChooseYourAmount: true,
-				},
-			},
-		};
-
-		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -376,10 +352,12 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
 
-			expect(participations).toEqual({});
+			expect(participations.t1).toBeUndefined();
 		});
 
 		it(`does assign a user to a test if excludeContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
@@ -396,38 +374,36 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
 
-			expect(participations).toEqual({ t1: 'variant' });
+			expect(participations.t1).toBeDefined();
+		});
+
+		it(`does assign a user to the test if excludeContributionsOnlyCountries is true BUT selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeContributionsOnlyCountries: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
+			});
+
+			expect(participations.t1).toBeDefined();
 		});
 	});
 
 	describe('includeOnlyCountriesSubjectToContributionsOnlyAmounts', () => {
-		const selectedAmountsVariant: SelectedAmountsVariant = {
-			testName: contributionsOnlyAmountsTestName,
-			variantName: 'CONTROL',
-			defaultContributionType: 'MONTHLY',
-			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
-			amountsCardData: {
-				ONE_OFF: {
-					amounts: [1, 2, 5, 10],
-					defaultAmount: 2,
-					hideChooseYourAmount: true,
-				},
-				MONTHLY: {
-					amounts: [2, 3, 5, 7, 9, 12],
-					defaultAmount: 5,
-					hideChooseYourAmount: true,
-				},
-				ANNUAL: {
-					amounts: [10, 15, 20, 30],
-					defaultAmount: 15,
-					hideChooseYourAmount: true,
-				},
-			},
-		};
-
 		it(`does assign a user to a test if includeOnlyContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
@@ -443,7 +419,9 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
 			expect(participations.t1).toBeDefined();
 		});
@@ -463,7 +441,9 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
 			expect(participations.t1).toBeDefined();
 		});
@@ -483,7 +463,9 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
 			expect(participations.t1).toBeUndefined();
 		});
@@ -503,9 +485,32 @@ describe('init', () => {
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
-				selectedAmountsVariant,
+				selectedAmountsVariant: buildSelectedAmountsVariant(
+					contributionsOnlyAmountsTestName,
+				),
 			});
+
 			expect(participations.t1).toBeDefined();
+		});
+
+		it(`does not assign a user to a test if includeOnlyContributionsOnlyCountries is true and selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					includeOnlyContributionsOnlyCountries: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
+			});
+
+			expect(participations.t1).toBeUndefined();
 		});
 	});
 
@@ -1027,5 +1032,33 @@ function buildAcquisitionAbTest({
 	return {
 		name,
 		variant,
+	};
+}
+
+function buildSelectedAmountsVariant(
+	amountsTestName: string,
+): SelectedAmountsVariant {
+	return {
+		testName: amountsTestName,
+		variantName: 'CONTROL',
+		defaultContributionType: 'MONTHLY',
+		displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+		amountsCardData: {
+			ONE_OFF: {
+				amounts: [1, 2, 5, 10],
+				defaultAmount: 2,
+				hideChooseYourAmount: true,
+			},
+			MONTHLY: {
+				amounts: [2, 3, 5, 7, 9, 12],
+				defaultAmount: 5,
+				hideChooseYourAmount: true,
+			},
+			ANNUAL: {
+				amounts: [10, 15, 20, 30],
+				defaultAmount: 15,
+				hideChooseYourAmount: true,
+			},
+		},
 	};
 }
