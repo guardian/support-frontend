@@ -182,6 +182,7 @@ function getParticipations(
 		// Is the user already in this test in the current browser session?
 		if (
 			!!sessionParticipations[testId] &&
+			test.persistPage &&
 			targetPageMatches(path, test.persistPage)
 		) {
 			participations[testId] = sessionParticipations[testId];
