@@ -48,7 +48,7 @@ const router = createBrowserRouter(
 			),
 		},
 		{
-			path: `/${geoId}/guardian-light`,
+			path: `/${geoId}/guardian-ad-lite`,
 			element: <GuardianAdLiteLanding geoId={geoId} />,
 		},
 	]),
