@@ -275,3 +275,5 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		</Elements>
 	);
 }
+
+export default Checkout;
