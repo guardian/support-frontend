@@ -4,7 +4,7 @@ import type {
 } from 'helpers/contributions';
 import type { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -38,7 +38,7 @@ export function getLowerProductBenefitThreshold(
 	contributionType: ContributionType,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroup,
-	product: ProductKey,
+	product: ActiveProductKey,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'

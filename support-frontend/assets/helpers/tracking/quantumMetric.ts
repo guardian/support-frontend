@@ -4,7 +4,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -330,7 +330,7 @@ function sendEventOneTimeCheckoutValue(
 
 function sendEventCheckoutValue(
 	amount: number,
-	product: ProductKey,
+	product: ActiveProductKey,
 	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
 	isConversion?: boolean,

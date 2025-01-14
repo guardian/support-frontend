@@ -67,11 +67,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
+	type ActiveProductKey,
 	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -198,7 +198,7 @@ type CheckoutComponentProps = {
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	isTestUser: boolean;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	originalAmount: number;
 	discountedAmount?: number;
