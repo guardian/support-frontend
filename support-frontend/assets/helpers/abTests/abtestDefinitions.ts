@@ -58,7 +58,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	abandonedBasket: {
 		variants: [
@@ -79,7 +79,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	newspaperArchiveBenefit: {
 		variants: [
@@ -103,7 +103,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	linkExpressCheckout: {
 		variants: [
@@ -135,7 +135,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	adFreeTierThree: {
 		variants: [
@@ -159,7 +159,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 6,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	contributionsOnly: {
 		variants: [
@@ -180,6 +180,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: false,
+		excludeContributionsOnlyCountries: false,
+		includeOnlyContributionsOnlyCountries: true,
 	},
 };

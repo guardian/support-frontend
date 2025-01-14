@@ -84,7 +84,11 @@ export type Test = {
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
-	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
+	excludeContributionsOnlyCountries: boolean;
+	// Some users will see a version of the checkout that only offers
+	// the option to make contributions. We only want to include these
+	// users in some AB tests
+	includeOnlyContributionsOnlyCountries?: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -191,14 +195,33 @@ function getParticipations(
 		if (!targetPageMatches(path, test.targetPage)) {
 			return;
 		}
-
+		console.log(
+			'*** 1 ',
+			selectedAmountsVariant?.testName,
+			test.excludeContributionsOnlyCountries,
+			test,
+		);
+		// Return if : -
+		// 1. contributionsOnlyAmountsTest
+		// 2. AND excludes countries subject to contributionsOnly
+		// 3. AND does not include countries subject to contributionsOnly
 		if (
-			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
-			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
+			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
+			test.excludeContributionsOnlyCountries &&
+			!test.includeOnlyContributionsOnlyCountries
 		) {
+			console.log('*** 2 ');
 			return;
 		}
-
+		console.log('*** 3');
+		if (
+			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
+			test.includeOnlyContributionsOnlyCountries
+		) {
+			console.log('*** 4 ');
+			return;
+		}
+		console.log('*** 5');
 		const participation = getUserParticipation(
 			test,
 			testId,

@@ -337,7 +337,7 @@ describe('init', () => {
 		expect(participations).toEqual({});
 	});
 
-	describe('excludeCountriesSubjectToContributionsOnlyAmounts', () => {
+	describe('excludeContributionsOnlyCountries', () => {
 		const selectedAmountsVariant: SelectedAmountsVariant = {
 			testName: contributionsOnlyAmountsTestName,
 			variantName: 'CONTROL',
@@ -362,14 +362,14 @@ describe('init', () => {
 			},
 		};
 
-		it(`does not assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
-					excludeCountriesSubjectToContributionsOnlyAmounts: true,
+					excludeContributionsOnlyCountries: true,
 				}),
 			};
 
@@ -382,14 +382,14 @@ describe('init', () => {
 			expect(participations).toEqual({});
 		});
 
-		it(`does assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does assign a user to a test if excludeContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
-					excludeCountriesSubjectToContributionsOnlyAmounts: false,
+					excludeContributionsOnlyCountries: false,
 				}),
 			};
 
@@ -400,6 +400,112 @@ describe('init', () => {
 			});
 
 			expect(participations).toEqual({ t1: 'variant' });
+		});
+	});
+
+	describe('includeOnlyCountriesSubjectToContributionsOnlyAmounts', () => {
+		const selectedAmountsVariant: SelectedAmountsVariant = {
+			testName: contributionsOnlyAmountsTestName,
+			variantName: 'CONTROL',
+			defaultContributionType: 'MONTHLY',
+			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+			amountsCardData: {
+				ONE_OFF: {
+					amounts: [1, 2, 5, 10],
+					defaultAmount: 2,
+					hideChooseYourAmount: true,
+				},
+				MONTHLY: {
+					amounts: [2, 3, 5, 7, 9, 12],
+					defaultAmount: 5,
+					hideChooseYourAmount: true,
+				},
+				ANNUAL: {
+					amounts: [10, 15, 20, 30],
+					defaultAmount: 15,
+					hideChooseYourAmount: true,
+				},
+			},
+		};
+
+		it(`does assign a user to a test if includeOnlyContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeContributionsOnlyCountries: false,
+					includeOnlyContributionsOnlyCountries: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+			expect(participations.t1).toBeDefined();
+		});
+
+		it(`does assign a user to a test if excludeContributionsOnlyCountries is false, includeOnlyContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeContributionsOnlyCountries: false,
+					includeOnlyContributionsOnlyCountries: false,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+			expect(participations.t1).toBeDefined();
+		});
+
+		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true, includeOnlyContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeContributionsOnlyCountries: true,
+					includeOnlyContributionsOnlyCountries: false,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+			expect(participations.t1).toBeUndefined();
+		});
+
+		it(`does assign a user to a test if excludeContributionsOnlyCountries is true, includeOnlyContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeContributionsOnlyCountries: true,
+					includeOnlyContributionsOnlyCountries: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+			expect(participations.t1).toBeDefined();
 		});
 	});
 
@@ -895,7 +1001,8 @@ function buildTest({
 	isActive = true,
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
-	excludeCountriesSubjectToContributionsOnlyAmounts = true,
+	excludeContributionsOnlyCountries = true,
+	includeOnlyContributionsOnlyCountries = false,
 	targetPage = undefined,
 	persistPage = undefined,
 }: Partial<Test>): Test {
@@ -906,7 +1013,8 @@ function buildTest({
 		referrerControlled,
 		seed,
 		excludeIfInReferrerControlledTest,
-		excludeCountriesSubjectToContributionsOnlyAmounts,
+		excludeContributionsOnlyCountries,
+		includeOnlyContributionsOnlyCountries,
 		targetPage,
 		persistPage,
 	};
