@@ -404,15 +404,20 @@ describe('init', () => {
 	});
 
 	describe('includeOnlyCountriesSubjectToContributionsOnlyAmounts', () => {
-		it(`does assign a user to a test if includeOnlyContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does assign a user to a test if audience is CONTRIBUTIONS_ONLY and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
+					audiences: {
+						CONTRIBUTIONS_ONLY: {
+							offset: 0,
+							size: 1,
+						},
+					},
 					excludeContributionsOnlyCountries: false,
-					includeOnlyContributionsOnlyCountries: true,
 				}),
 			};
 
@@ -470,15 +475,20 @@ describe('init', () => {
 			expect(participations.t1).toBeUndefined();
 		});
 
-		it(`does assign a user to a test if excludeContributionsOnlyCountries is true, includeOnlyContributionsOnlyCountries is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does assign a user to a test if audiences is CONTRIBUTIONS_ONLY, excludeContributionsOnlyCountries is true and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
+					audiences: {
+						CONTRIBUTIONS_ONLY: {
+							offset: 0,
+							size: 1,
+						},
+					},
 					excludeContributionsOnlyCountries: true,
-					includeOnlyContributionsOnlyCountries: true,
 				}),
 			};
 
@@ -493,14 +503,19 @@ describe('init', () => {
 			expect(participations.t1).toBeDefined();
 		});
 
-		it(`does not assign a user to a test if includeOnlyContributionsOnlyCountries is true and selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does not assign a user to a test if audiences is CONTRIBUTIONS_ONLY and selectedAmountsVariant test name is NOT ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
-					includeOnlyContributionsOnlyCountries: true,
+					audiences: {
+						CONTRIBUTIONS_ONLY: {
+							offset: 0,
+							size: 1,
+						},
+					},
 				}),
 			};
 

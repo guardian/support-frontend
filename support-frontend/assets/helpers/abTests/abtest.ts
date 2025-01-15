@@ -46,8 +46,14 @@ export type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
+export type AudienceType =
+	| IsoCountry
+	| CountryGroupId
+	| 'ALL'
+	| 'CONTRIBUTIONS_ONLY';
+
 export type Audiences = {
-	[key in IsoCountry | CountryGroupId | 'ALL']?: Audience;
+	[key in AudienceType]?: Audience;
 };
 
 type AcquisitionABTest = {
@@ -196,6 +202,9 @@ function getParticipations(
 			return;
 		}
 
+		const includeOnlyContributionsOnlyCountries =
+			!!test.audiences.CONTRIBUTIONS_ONLY;
+
 		/**
 		 * We only exclude users assigned to the contributions only amounts test
 		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
@@ -204,7 +213,7 @@ function getParticipations(
 		if (
 			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
 			test.excludeContributionsOnlyCountries &&
-			!test.includeOnlyContributionsOnlyCountries
+			!includeOnlyContributionsOnlyCountries
 		) {
 			return;
 		}
@@ -215,7 +224,7 @@ function getParticipations(
 		 */
 		if (
 			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
-			test.includeOnlyContributionsOnlyCountries
+			includeOnlyContributionsOnlyCountries
 		) {
 			return;
 		}
@@ -578,7 +587,10 @@ function getUserParticipation(
 	}
 
 	const audience =
-		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
+		audiences[country] ??
+		audiences[countryGroupId] ??
+		audiences.ALL ??
+		audiences.CONTRIBUTIONS_ONLY;
 
 	if (!audience) {
 		return NO_PARTICIPATION;
