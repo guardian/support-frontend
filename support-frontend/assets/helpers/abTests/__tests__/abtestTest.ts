@@ -439,7 +439,6 @@ describe('init', () => {
 						buildVariant({ id: 'variant' }),
 					],
 					excludeContributionsOnlyCountries: false,
-					includeOnlyContributionsOnlyCountries: false,
 				}),
 			};
 
@@ -461,7 +460,6 @@ describe('init', () => {
 						buildVariant({ id: 'variant' }),
 					],
 					excludeContributionsOnlyCountries: true,
-					includeOnlyContributionsOnlyCountries: false,
 				}),
 			};
 
@@ -1022,7 +1020,6 @@ function buildTest({
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
 	excludeContributionsOnlyCountries = true,
-	includeOnlyContributionsOnlyCountries = false,
 	targetPage = undefined,
 	persistPage = undefined,
 }: Partial<Test>): Test {
@@ -1034,7 +1031,6 @@ function buildTest({
 		seed,
 		excludeIfInReferrerControlledTest,
 		excludeContributionsOnlyCountries,
-		includeOnlyContributionsOnlyCountries,
 		targetPage,
 		persistPage,
 	};

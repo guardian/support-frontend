@@ -91,10 +91,6 @@ export type Test = {
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
 	excludeContributionsOnlyCountries: boolean;
-	// Some users will see a version of the checkout that only offers
-	// the option to make contributions. We only want to include these
-	// users in some AB tests
-	includeOnlyContributionsOnlyCountries?: boolean;
 };
 
 export type Tests = Record<string, Test>;
