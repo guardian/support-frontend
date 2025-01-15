@@ -150,12 +150,12 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			UnitedStates: {
 				offset: 0,
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 6,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
