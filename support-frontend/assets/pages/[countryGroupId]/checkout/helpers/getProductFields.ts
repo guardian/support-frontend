@@ -6,6 +6,7 @@ import type {
 } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { logException } from 'helpers/utilities/logger';
 
 type GetProductFieldsParams = {
 	product: {
@@ -32,6 +33,8 @@ export const getProductFields = ({
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
 	};
+
+	const unsupportedProductMessage = `Product not supported by generic checkout: ${productKey}`;
 
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
@@ -141,9 +144,7 @@ export const getProductFields = ({
 
 		case 'GuardianPatron':
 		case 'OneTimeContribution':
-			// How would we know this is happening
-			throw new Error(
-				`Product not supported by generic checkout: ${productKey}`,
-			);
+			logException(unsupportedProductMessage);
+			throw new Error(unsupportedProductMessage);
 	}
 };
