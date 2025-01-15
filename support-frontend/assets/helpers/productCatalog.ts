@@ -381,14 +381,30 @@ export const productCatalogDescription: Record<
 		},
 	},
 	OneTimeContribution: {
-		label: 'TBD',
-		benefits: [],
+		label: 'One-time contribution',
+		benefits: [fewerAsksBenefit],
+		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
+		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
 	},
 	GuardianPatron: {
-		label: 'TBD',
-		benefits: [],
-		ratePlans: {},
+		label: 'Guardian Patron',
+		benefits: [
+			{
+				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+			},
+			{
+				copy: 'Full access to the Guardian app. Read our reporting on the go',
+			},
+			{
+				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+			},
+		],
+		ratePlans: {
+			GuardianPatron: {
+				billingPeriod: 'Monthly',
+			},
+		},
 	},
 };
 
