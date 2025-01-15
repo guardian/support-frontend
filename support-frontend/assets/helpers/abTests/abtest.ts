@@ -84,7 +84,11 @@ export type Test = {
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
-	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
+	excludeContributionsOnlyCountries: boolean;
+	// Some users will see a version of the checkout that only offers
+	// the option to make contributions. We only want to include these
+	// users in some AB tests
+	includeOnlyContributionsOnlyCountries?: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -192,9 +196,26 @@ function getParticipations(
 			return;
 		}
 
+		/**
+		 * We only exclude users assigned to the contributions only amounts test
+		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
+		 * AND includeOnlyContributionsOnlyCountries is not true
+		 */
 		if (
-			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
-			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
+			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
+			test.excludeContributionsOnlyCountries &&
+			!test.includeOnlyContributionsOnlyCountries
+		) {
+			return;
+		}
+
+		/**
+		 * Exclude users NOT assigned to the contributions only amounts test
+		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
+		 */
+		if (
+			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
+			test.includeOnlyContributionsOnlyCountries
 		) {
 			return;
 		}
