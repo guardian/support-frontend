@@ -348,7 +348,6 @@ describe('init', () => {
 					excludeContributionsOnlyCountries: true,
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
@@ -356,7 +355,6 @@ describe('init', () => {
 					contributionsOnlyAmountsTestName,
 				),
 			});
-
 			expect(participations.t1).toBeUndefined();
 		});
 
@@ -370,7 +368,6 @@ describe('init', () => {
 					excludeContributionsOnlyCountries: false,
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
@@ -378,7 +375,6 @@ describe('init', () => {
 					contributionsOnlyAmountsTestName,
 				),
 			});
-
 			expect(participations.t1).toBeDefined();
 		});
 
@@ -392,18 +388,16 @@ describe('init', () => {
 					excludeContributionsOnlyCountries: true,
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
 				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
 			});
-
 			expect(participations.t1).toBeDefined();
 		});
 	});
 
-	describe('includeOnlyCountriesSubjectToContributionsOnlyAmounts', () => {
+	describe('CONTRIBUTIONS_ONLY audiences', () => {
 		it(`does assign a user to a test if audience is CONTRIBUTIONS_ONLY and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
@@ -420,7 +414,6 @@ describe('init', () => {
 					excludeContributionsOnlyCountries: false,
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
@@ -429,48 +422,6 @@ describe('init', () => {
 				),
 			});
 			expect(participations.t1).toBeDefined();
-		});
-
-		it(`does assign a user to a test if excludeContributionsOnlyCountries is false, includeOnlyContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
-			const abTests = {
-				t1: buildTest({
-					variants: [
-						buildVariant({ id: 'control' }),
-						buildVariant({ id: 'variant' }),
-					],
-					excludeContributionsOnlyCountries: false,
-				}),
-			};
-
-			const participations: Participations = abInit({
-				...abtestInitalizerData,
-				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
-			});
-			expect(participations.t1).toBeDefined();
-		});
-
-		it(`does not assign a user to a test if excludeContributionsOnlyCountries is true, includeOnlyContributionsOnlyCountries is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
-			const abTests = {
-				t1: buildTest({
-					variants: [
-						buildVariant({ id: 'control' }),
-						buildVariant({ id: 'variant' }),
-					],
-					excludeContributionsOnlyCountries: true,
-				}),
-			};
-
-			const participations: Participations = abInit({
-				...abtestInitalizerData,
-				abTests,
-				selectedAmountsVariant: buildSelectedAmountsVariant(
-					contributionsOnlyAmountsTestName,
-				),
-			});
-			expect(participations.t1).toBeUndefined();
 		});
 
 		it(`does assign a user to a test if audiences is CONTRIBUTIONS_ONLY, excludeContributionsOnlyCountries is true and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
@@ -489,7 +440,6 @@ describe('init', () => {
 					excludeContributionsOnlyCountries: true,
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
@@ -497,7 +447,6 @@ describe('init', () => {
 					contributionsOnlyAmountsTestName,
 				),
 			});
-
 			expect(participations.t1).toBeDefined();
 		});
 
@@ -516,13 +465,11 @@ describe('init', () => {
 					},
 				}),
 			};
-
 			const participations: Participations = abInit({
 				...abtestInitalizerData,
 				abTests,
 				selectedAmountsVariant: buildSelectedAmountsVariant('foo'),
 			});
-
 			expect(participations.t1).toBeUndefined();
 		});
 	});
