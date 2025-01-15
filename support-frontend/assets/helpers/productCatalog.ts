@@ -89,8 +89,6 @@ function displayBenefitByABTestVariant(
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
-// const testObject: ActiveTypeObject = activeTypeObject;
-// export { testObject };
 export const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
