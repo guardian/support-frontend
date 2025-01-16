@@ -15,6 +15,7 @@
 		"paths": {
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
 			"@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
+			"@modules/internationalisation/*": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"],
 		},
 		"types": ["@testing-library/jest-dom"]
 	},
@@ -24,6 +25,7 @@
 		"./declaration.d.ts",
 		"./window.d.ts",
 		"./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src",
+		"./node_modules/@guardian/support-service-lambdas/modules/internationalisation/src",
 		"./scripts/build-ssr-content.tsx",
 	], // The files to type check,
 	"exclude": ["node_modules"] // The files to not type check

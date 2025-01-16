@@ -8,13 +8,13 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { simpleFormatAmount } from './forms/checkouts';
-import type { ProductKey } from './productCatalog';
+import type { ActiveProductKey } from './productCatalog';
 
 export const productLegal = (
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 	divider: string,
-	product: ProductKey,
+	product: ActiveProductKey,
 	promotion?: Promotion,
 ) => {
 	const isoCurrency = detect(countryGroupId);

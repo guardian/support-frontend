@@ -8,7 +8,7 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -178,7 +178,7 @@ const tier3HeaderTitleText = css`
 
 type HeadingProps = {
 	name: string | null;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
