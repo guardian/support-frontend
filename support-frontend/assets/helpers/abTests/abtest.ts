@@ -338,7 +338,7 @@ function getAmountsTestVariant(
 		// Check if we actually want to track this test
 		const pathMatches = targetPageMatches(
 			path,
-			'/??/contribute|thankyou(/.*)?$',
+			'/??/checkout|one-time-checkout|contribute|thankyou(/.*)?$',
 		);
 
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
