@@ -82,6 +82,7 @@ const router = () => {
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}
+											abParticipations={commonState.abParticipations}
 										/>
 									)
 								}
