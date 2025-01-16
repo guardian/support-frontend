@@ -181,6 +181,5 @@ export const tests: Tests = {
 		seed: 9,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: false,
-		includeOnlyContributionsOnlyCountries: true,
 	},
 };
