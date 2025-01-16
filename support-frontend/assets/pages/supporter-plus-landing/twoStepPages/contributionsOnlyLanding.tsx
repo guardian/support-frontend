@@ -20,7 +20,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-import * as storage from 'helpers/storage/storage';
+// import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AmountsCard } from '../components/amountsCard';
@@ -142,8 +142,8 @@ type ContributionsOnlyLandingProps = {
 };
 export function ContributionsOnlyLanding({
 	geoId,
-	abParticipations,
-}: ContributionsOnlyLandingProps): JSX.Element {
+}: // abParticipations,
+ContributionsOnlyLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
@@ -152,7 +152,7 @@ export function ContributionsOnlyLanding({
 	const countryId = Country.detect();
 
 	// Persist any tests for tracking from this contribute page
-	storage.setSession('abParticipations', JSON.stringify(abParticipations));
+	// storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
 	const getInitialContributionType = () => {
 		if (urlSearchParamsOneTime) {

@@ -24,7 +24,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import * as storage from 'helpers/storage/storage';
+// import * as storage from 'helpers/storage/storage';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { PatronsPriceCards } from '../formSections/patronsPriceCards';
@@ -87,7 +87,6 @@ const cancelAnytimeDescription = css`
 
 export function SupporterPlusInitialLandingPage({
 	thankYouRoute,
-	abParticipations,
 }: {
 	thankYouRoute: string;
 	abParticipations: Participations;
@@ -104,7 +103,10 @@ export function SupporterPlusInitialLandingPage({
 	);
 
 	// Persist any tests for tracking from this contribute page
-	storage.setSession('abParticipations', JSON.stringify(abParticipations));
+	// storage.setSession('abParticipations', JSON.stringify(abParticipations));
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';

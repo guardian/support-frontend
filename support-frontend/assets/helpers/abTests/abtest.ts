@@ -127,7 +127,7 @@ function init({
 		selectedAmountsVariant,
 		sessionParticipations,
 	);
-
+	console.log('*** init.participations', participations);
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
@@ -171,9 +171,10 @@ function getParticipations(
 	sessionParticipations: Participations = {},
 ): Participations {
 	const participations: Participations = {};
-
 	Object.entries(abTests).forEach(([testId, test]) => {
+		console.log('*** testId:', testId);
 		if (!test.isActive) {
+			console.log('*** getParticipations 0');
 			return;
 		}
 
@@ -219,9 +220,11 @@ function getParticipations(
 		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
 		 */
 		if (
-			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
+			selectedAmountsVariant &&
+			selectedAmountsVariant.testName !== contributionsOnlyAmountsTestName &&
 			includeOnlyContributionsOnlyCountries
 		) {
+			console.log('*** getParticipations 6');
 			return;
 		}
 
@@ -239,13 +242,20 @@ function getParticipations(
 		}
 
 		const variantAssignment = assignUserToVariant(mvtId, test, participation);
-
+		console.log(
+			'*** getParticipations 9, test, participation',
+			test,
+			participation,
+		);
 		if (variantAssignment.type === 'NOT_ASSIGNED') {
 			return;
 		}
-
+		console.log(
+			'*** getParticipations 9, variantAssignment',
+			variantAssignment,
+		);
 		const testVariantId = test.variants[variantAssignment.variantIndex]?.id;
-
+		console.log('*** getParticipations 9, testVariantId', testVariantId);
 		if (testVariantId) {
 			participations[testId] = testVariantId;
 		}
@@ -641,9 +651,14 @@ function assignUserToVariant(
 ): VariantAssignment {
 	// For non-referrrer controlled tests we assign the user randomly
 	if (participation.type === 'ACTIVE_PARTICIPATION') {
+		console.log(
+			'*** assignUserToVariant.ACTIVE_PARTICIPATION (non-referrrer controlled)',
+			randomNumber(mvtId, test.seed) % test.variants.length,
+			assigned(randomNumber(mvtId, test.seed) % test.variants.length),
+		);
 		return assigned(randomNumber(mvtId, test.seed) % test.variants.length);
 	}
-
+	console.log('*** assignUserToVariant. referrrer controlled ');
 	// For referrrer controlled tests the assignment comes from the acquisition data.
 	// If the variant in the acquisition data doesn't match up with any defined in
 	// the test, we log an error and don't assign the user to the test.
