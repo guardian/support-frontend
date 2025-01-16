@@ -340,8 +340,11 @@ function getAmountsTestVariant(
 			path,
 			'/??/checkout|one-time-checkout|contribute|thankyou(/.*)?$',
 		);
-
-		if (pathMatches && test.variants.length > 1 && test.isLive) {
+		console.log('*** testName: variantName', testName, variantName);
+		console.log('*** pathMatches, path', pathMatches, path);
+		console.log('*** test.variants', test.variants);
+		// if (pathMatches && test.variants.length > 1 && test.isLive) {
+		if (pathMatches && test.isLive) {
 			return {
 				[testName]: variantName,
 			};
@@ -358,7 +361,9 @@ function getAmountsTestVariant(
 			t.targeting.countries.includes(country)
 		);
 	});
+	console.log('*** contribOnlyAmounts', contribOnlyAmounts);
 	if (contribOnlyAmounts?.variants[0]) {
+		console.log('*** buildParticipation 1');
 		const amountsParticipation = buildParticipation(
 			contribOnlyAmounts,
 			contributionsOnlyAmountsTestName,
@@ -392,6 +397,7 @@ function getAmountsTestVariant(
 					variants[0];
 
 				if (variant) {
+					console.log('*** buildParticipation 2');
 					const amountsParticipation = buildParticipation(
 						candidate,
 						urlTest.name,
@@ -466,6 +472,7 @@ function getAmountsTestVariant(
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
 	const variant = selectVariant(isLive, variants);
 
+	console.log('*** buildParticipation 3');
 	const amountsParticipation = buildParticipation(
 		targetedTest,
 		currentTestName,

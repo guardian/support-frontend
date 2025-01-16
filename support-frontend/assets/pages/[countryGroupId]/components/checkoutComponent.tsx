@@ -231,7 +231,7 @@ export function CheckoutComponent({
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
-
+	console.log('*** abParticipations', abParticipations);
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
