@@ -436,11 +436,11 @@ export function productCatalogGuardianAdLite(): Record<
 	return {
 		...productCatalogDescription,
 		GuardianAdLite: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLite,
 			label: 'Purchase Guardian Ad-Lite',
 		},
 		GuardianAdLiteGoBack: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLite,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [
 				{

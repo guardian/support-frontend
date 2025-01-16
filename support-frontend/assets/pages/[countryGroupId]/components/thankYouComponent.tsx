@@ -207,7 +207,8 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isGuardianAdLite =
+		productKey === 'GuardianLight' || productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
