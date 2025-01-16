@@ -171,7 +171,7 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			CONTRIBUTIONS_ONLY: {
 				offset: 0,
 				size: 1,
 			},
