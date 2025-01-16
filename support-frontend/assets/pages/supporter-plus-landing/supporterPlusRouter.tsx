@@ -75,14 +75,10 @@ const router = () => {
 											abParticipations={commonState.abParticipations}
 										/>
 									) : showNewContributionsOnly ? (
-										<ContributionsOnlyLanding
-											geoId={countryId}
-											abParticipations={commonState.abParticipations}
-										/>
+										<ContributionsOnlyLanding geoId={countryId} />
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}
-											abParticipations={commonState.abParticipations}
 										/>
 									)
 								}

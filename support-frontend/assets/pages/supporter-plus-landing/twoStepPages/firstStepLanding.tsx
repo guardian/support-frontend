@@ -16,7 +16,6 @@ import { useEffect } from 'preact/hooks';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
-import type { Participations } from 'helpers/abTests/abtest';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
@@ -24,7 +23,6 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-// import * as storage from 'helpers/storage/storage';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { PatronsPriceCards } from '../formSections/patronsPriceCards';
@@ -89,7 +87,6 @@ export function SupporterPlusInitialLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
-	abParticipations: Participations;
 }): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId } = useContributionsSelector(
@@ -102,8 +99,6 @@ export function SupporterPlusInitialLandingPage({
 		getThresholdPrice(contributionType, state),
 	);
 
-	// Persist any tests for tracking from this contribute page
-	// storage.setSession('abParticipations', JSON.stringify(abParticipations));
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);

@@ -16,11 +16,9 @@ import { useState } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-// import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AmountsCard } from '../components/amountsCard';
@@ -138,21 +136,16 @@ const paymentFrequencyMap = {
 
 type ContributionsOnlyLandingProps = {
 	geoId: GeoId;
-	abParticipations: Participations;
 };
 export function ContributionsOnlyLanding({
 	geoId,
-}: // abParticipations,
-ContributionsOnlyLandingProps): JSX.Element {
+}: ContributionsOnlyLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
-
-	// Persist any tests for tracking from this contribute page
-	// storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
 	const getInitialContributionType = () => {
 		if (urlSearchParamsOneTime) {
