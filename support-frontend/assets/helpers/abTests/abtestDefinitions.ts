@@ -137,30 +137,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true,
 	},
-	adFreeTierThree: {
-		variants: [
-			{
-				id: 'control', // Tier2 ad-free
-			},
-			{
-				id: 'v1', // Tier3 ad-free
-			},
-			{
-				id: 'v2', // No ad-free
-			},
-		],
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 6,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeContributionsOnlyCountries: true,
-	},
 	contributionsOnly: {
 		variants: [
 			{

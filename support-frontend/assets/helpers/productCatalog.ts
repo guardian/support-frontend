@@ -100,15 +100,6 @@ const appBenefit = {
 };
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['v1', 'v2'], display: false },
-	],
-};
-const addFreeBenefitTierThree = {
-	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['v1'], display: true },
-	],
 };
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
@@ -184,7 +175,7 @@ export const productCatalogDescription: Record<
 			'The rewards from ',
 			{ strong: true, copy: 'All-access digital' },
 		],
-		benefits: [addFreeBenefitTierThree, guardianWeeklyBenefit],
+		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
 		benefitsAdditional: supporterPlusBenefits,
 		deliverableTo: gwDeliverableCountries,
