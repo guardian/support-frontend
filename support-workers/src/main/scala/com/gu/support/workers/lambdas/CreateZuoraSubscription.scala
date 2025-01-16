@@ -71,7 +71,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
-      case state: GuardianLightState =>
+      case state: GuardianAdLiteState =>
         zuoraGuardianLightHandler.subscribe(
           state,
           zuoraSubscriptionState.csrUsername,

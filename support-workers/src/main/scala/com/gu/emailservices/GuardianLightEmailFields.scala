@@ -9,7 +9,7 @@ import com.gu.support.workers.{
   PaymentMethod,
   SepaPaymentMethod,
 }
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianLightState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
 import org.joda.time.DateTime
 import com.gu.zuora.subscriptionBuilders.GuardianLightSubscriptionBuilder
 
@@ -17,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class GuardianLightEmailFields(created: DateTime) {
   def build(
-      state: SendThankYouEmailGuardianLightState,
+      state: SendThankYouEmailGuardianAdLiteState,
   )(implicit ec: ExecutionContext): Future[EmailFields] = {
     val subscription_details = SubscriptionEmailFieldHelpers
       .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)

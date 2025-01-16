@@ -3,7 +3,7 @@ package com.gu.zuora.subscriptionBuilders
 import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers.ProductTypeRatePlans.guardianLightRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianLightState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianAdLiteState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api.SubscribeItem
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
@@ -14,7 +14,7 @@ class GuardianLightSubscriptionBuilder(
     subscribeItemBuilder: SubscribeItemBuilder,
 ) {
   def build(
-      state: GuardianLightState,
+      state: GuardianAdLiteState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): SubscribeItem = {

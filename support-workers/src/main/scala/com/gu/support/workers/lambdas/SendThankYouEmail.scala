@@ -91,7 +91,7 @@ class EmailBuilder(
       case paper: SendThankYouEmailPaperState =>
         getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _)).map(List(_))
       case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))
-      case guardianLight: SendThankYouEmailGuardianLightState =>
+      case guardianLight: SendThankYouEmailGuardianAdLiteState =>
         guardianLightEmailFields.build(guardianLight).map(List(_))
     }
   }

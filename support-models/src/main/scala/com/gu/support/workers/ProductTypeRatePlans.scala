@@ -40,7 +40,7 @@ object ProductTypeRatePlans {
       .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
 
   def guardianLightRatePlan(
-      product: GuardianLight,
+      product: GuardianAdLite,
       environment: TouchPointEnvironment,
   ): Option[ProductRatePlan[catalog.GuardianLight.type]] =
     catalog.GuardianLight.ratePlans
