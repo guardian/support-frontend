@@ -1809,10 +1809,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.29.1"
 
-"@guardian/libs@0.0.0-canary-20250114175557":
-  version "0.0.0-canary-20250114175557"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20250114175557.tgz#472ecb6d0f8c02cafe2afc877ae0d5f50bc2338a"
-  integrity sha512-Y7+/6D8yst7ssXPPAUP69cpTnxMUUZAuP6ewEqlLrjUr35BvTzUoXLWZ/yFfLa9aP7pM1EfjP0evMsi1xtmdDg==
+"@guardian/libs@0.0.0-canary-20250116095322":
+  version "0.0.0-canary-20250116095322"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20250116095322.tgz#a7f5ec5ecfc5a3785b04ac0b18dde0689f5390af"
+  integrity sha512-vthmy6s6J5mb62TTmFH5DXgZJmNq1OZuKzQfoj4RTwe02Dd5xUYoRfW9hRYXGj6SxmMTn+/zp/49ieDrADbqtw==
 
 "@guardian/pasteup@1.0.0-alpha.7":
   version "1.0.0-alpha.7"
