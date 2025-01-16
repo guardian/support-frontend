@@ -46,8 +46,14 @@ export type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
+export type AudienceType =
+	| IsoCountry
+	| CountryGroupId
+	| 'ALL'
+	| 'CONTRIBUTIONS_ONLY';
+
 export type Audiences = {
-	[key in IsoCountry | CountryGroupId | 'ALL']?: Audience;
+	[key in AudienceType]?: Audience;
 };
 
 type AcquisitionABTest = {
@@ -84,7 +90,7 @@ export type Test = {
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
-	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
+	excludeContributionsOnlyCountries: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -192,9 +198,29 @@ function getParticipations(
 			return;
 		}
 
+		const includeOnlyContributionsOnlyCountries =
+			!!test.audiences.CONTRIBUTIONS_ONLY;
+
+		/**
+		 * We only exclude users assigned to the contributions only amounts test
+		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
+		 * AND includeOnlyContributionsOnlyCountries is not true
+		 */
 		if (
-			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
-			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
+			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
+			test.excludeContributionsOnlyCountries &&
+			!includeOnlyContributionsOnlyCountries
+		) {
+			return;
+		}
+
+		/**
+		 * Exclude users NOT assigned to the contributions only amounts test
+		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
+		 */
+		if (
+			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
+			includeOnlyContributionsOnlyCountries
 		) {
 			return;
 		}
@@ -557,7 +583,10 @@ function getUserParticipation(
 	}
 
 	const audience =
-		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
+		audiences[country] ??
+		audiences[countryGroupId] ??
+		audiences.ALL ??
+		audiences.CONTRIBUTIONS_ONLY;
 
 	if (!audience) {
 		return NO_PARTICIPATION;
