@@ -17,7 +17,6 @@ const container = css`
 	background-color: ${palette.brand[400]};
 
 	& main {
-		flex: 1;
 		display: flex;
 		flex-direction: column;
 		& > :last-child {
