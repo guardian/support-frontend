@@ -151,7 +151,7 @@ export function ContributionsOnlyLanding({
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
-	// Persist any tests for tracking in the contribute page
+	// Persist any tests for tracking from this contribute page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
 	const getInitialContributionType = () => {

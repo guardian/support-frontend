@@ -103,7 +103,7 @@ export function SupporterPlusInitialLandingPage({
 		getThresholdPrice(contributionType, state),
 	);
 
-	// Persist any tests for tracking in the contribute page
+	// Persist any tests for tracking from this contribute page
 	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
