@@ -14,7 +14,7 @@ case class Catalog(
 
 object Catalog {
   lazy val productRatePlansWithPrices: List[ProductRatePlanId] = for {
-    product <- List(SupporterPlus, DigitalPack, Paper, GuardianWeekly, TierThree, GuardianLight)
+    product <- List(SupporterPlus, DigitalPack, Paper, GuardianWeekly, TierThree, GuardianAdLite)
     env <- List(PROD, CODE)
     plan <- product.ratePlans(env)
   } yield plan.id

@@ -72,7 +72,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.salesforceCaseId,
         )
       case state: GuardianAdLiteState =>
-        zuoraGuardianLightHandler.subscribe(
+        zuoraGuardianAdLiteHandler.subscribe(
           state,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
@@ -158,9 +158,9 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       subscribeItemBuilder,
     ),
   )
-  lazy val zuoraGuardianLightHandler = new ZuoraGuardianLightHandler(
+  lazy val zuoraGuardianAdLiteHandler = new ZuoraGuardianAdLiteHandler(
     zuoraSubscriptionCreator,
-    new GuardianLightSubscriptionBuilder(
+    new GuardianAdLiteSubscriptionBuilder(
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,

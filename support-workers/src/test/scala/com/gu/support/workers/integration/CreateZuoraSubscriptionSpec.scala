@@ -157,7 +157,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   it should "create a Guardian Ad-Lite monthly subscription" in {
     createZuoraHelper
-      .createSubscription(createGuardianLightZuoraSubscriptionJson)
+      .createSubscription(createGuardianAdLiteZuoraSubscriptionJson)
       .map(_ should matchPattern { case s: SendThankYouEmailGuardianAdLiteState =>
       })
   }

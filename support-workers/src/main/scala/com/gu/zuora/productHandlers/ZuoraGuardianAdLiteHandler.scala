@@ -6,14 +6,14 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Guardia
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
 import com.gu.zuora.ZuoraSubscriptionCreator
-import com.gu.zuora.subscriptionBuilders.GuardianLightSubscriptionBuilder
+import com.gu.zuora.subscriptionBuilders.GuardianAdLiteSubscriptionBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ZuoraGuardianLightHandler(
+class ZuoraGuardianAdLiteHandler(
     zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-    subscriptionBuilder: GuardianLightSubscriptionBuilder,
+    subscriptionBuilder: GuardianAdLiteSubscriptionBuilder,
     user: User,
 ) {
 

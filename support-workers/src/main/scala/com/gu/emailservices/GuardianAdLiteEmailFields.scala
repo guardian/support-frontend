@@ -11,11 +11,11 @@ import com.gu.support.workers.{
 }
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
 import org.joda.time.DateTime
-import com.gu.zuora.subscriptionBuilders.GuardianLightSubscriptionBuilder
+import com.gu.zuora.subscriptionBuilders.GuardianAdLiteSubscriptionBuilder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GuardianLightEmailFields(created: DateTime) {
+class GuardianAdLiteEmailFields(created: DateTime) {
   def build(
       state: SendThankYouEmailGuardianAdLiteState,
   )(implicit ec: ExecutionContext): Future[EmailFields] = {
@@ -27,7 +27,7 @@ class GuardianLightEmailFields(created: DateTime) {
       "email_address" -> state.user.primaryEmailAddress,
       "billing_period" -> state.product.billingPeriod.toString.toLowerCase,
       "first_payment_date" -> formatDate(
-        created.plusDays(GuardianLightSubscriptionBuilder.gracePeriodInDays).toLocalDate,
+        created.plusDays(GuardianAdLiteSubscriptionBuilder.gracePeriodInDays).toLocalDate,
       ),
       "payment_method" -> paymentMethodName(state.paymentMethod),
       "subscription_details" -> subscription_details,

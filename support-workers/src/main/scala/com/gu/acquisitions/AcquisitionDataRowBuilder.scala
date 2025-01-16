@@ -124,7 +124,7 @@ object AcquisitionDataRowBuilder {
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
-    case _: GuardianAdLite => (AcquisitionProduct.GuardianLight, None)
+    case _: GuardianAdLite => (AcquisitionProduct.GuardianAdLite, None)
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {

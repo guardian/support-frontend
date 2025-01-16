@@ -65,7 +65,7 @@ class NextState(state: CreateSalesforceContactState) {
       case (product: TierThree, Purchase(purchase)) =>
         toNextTierThree(salesforceContactRecords, product, purchase)
       case (product: GuardianAdLite, Purchase(purchase)) =>
-        toNextGuardianLight(salesforceContactRecords, product, purchase)
+        toNextGuardianAdLite(salesforceContactRecords, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -151,7 +151,7 @@ class NextState(state: CreateSalesforceContactState) {
       acquisitionData,
     )
 
-  def toNextGuardianLight(
+  def toNextGuardianAdLite(
       salesforceContactRecords: SalesforceContactRecords,
       product: GuardianAdLite,
       purchase: PaymentMethod,

@@ -695,7 +695,7 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val createGuardianLightZuoraSubscriptionJson =
+  val createGuardianAdLiteZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(
       GuardianAdLiteState(
         GuardianAdLite(GBP),

@@ -5,7 +5,7 @@ import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
   digitalSubscriptionGiftRedemptionState,
   digitalSusbcriptionGiftPurchaseState,
-  guardianLightState,
+  guardianAdLiteState,
   serviceWithFixtures,
   supporterPlusState,
 }
@@ -47,7 +47,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Guardian Ad-Lite purchase" in {
-    val state = decode[SendThankYouEmailState](guardianLightState).value
+    val state = decode[SendThankYouEmailState](guardianAdLiteState).value
     val supporterRatePlanItem =
       UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
     supporterRatePlanItem.value.identityId shouldBe "200092951"
@@ -111,7 +111,7 @@ object UpdateSupporterProductDataSpec {
         }
     """
 
-  val guardianLightState =
+  val guardianAdLiteState =
     """
     {
         "user": {
@@ -138,7 +138,7 @@ object UpdateSupporterProductDataSpec {
           "currency": "GBP",
           "billingPeriod": "Monthly",
           "fulfilmentOptions": "NoFulfilmentOptions",
-          "productType": "GuardianLight"
+          "productType": "GuardianAdLite"
         },
         "paymentMethod": {
           "TokenId": "pm_0MZap9ItVxyc3Q6nRNfyJHfO",
@@ -162,7 +162,7 @@ object UpdateSupporterProductDataSpec {
         },
         "accountNumber": "A00485141",
         "subscriptionNumber": "A-S00489451",
-        "productType": "GuardianLight"
+        "productType": "GuardianAdLite"
       }
   """
 
