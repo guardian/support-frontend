@@ -93,9 +93,8 @@ export function HeaderCards({
 	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
 	const guardianAdLiteParams = {
-		product: 'GuardianLight',
+		product: 'GuardianAdLite',
 		ratePlan: contributionType,
-		contribution: price?.toString() ?? '',
 	};
 	const card1UrlParams = new URLSearchParams(
 		returnLink
