@@ -59,3 +59,5 @@ export function OneTimeCheckout({
 		</Elements>
 	);
 }
+
+export default OneTimeCheckout;
