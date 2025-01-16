@@ -340,6 +340,7 @@ function getAmountsTestVariant(
 			path,
 			'/??/checkout|one-time-checkout|contribute|thankyou(/.*)?$',
 		);
+
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
 			return {
 				[testName]: variantName,
