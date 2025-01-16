@@ -3,14 +3,14 @@ import { space } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
+	type ActiveProductKey,
 	productCatalogDescription,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
 	contributionType: ContributionType;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
@@ -49,7 +49,7 @@ const pendingCopy = () => {
 };
 
 const getSubHeadingCopy = (
-	productKey: ProductKey,
+	productKey: ActiveProductKey,
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
 	isSignedIn: boolean,

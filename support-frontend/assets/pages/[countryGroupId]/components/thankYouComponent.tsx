@@ -13,7 +13,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	productCatalogDescription,
@@ -89,7 +89,7 @@ export type CheckoutComponentProps = {
 		contributionAmount?: number;
 		finalAmount: number;
 	};
-	productKey?: ProductKey;
+	productKey?: ActiveProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
 	returnLink?: string;

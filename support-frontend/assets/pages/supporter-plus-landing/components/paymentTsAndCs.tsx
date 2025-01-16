@@ -26,8 +26,8 @@ import {
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import {
+	type ActiveProductKey,
 	productCatalogDescription,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
@@ -73,7 +73,7 @@ interface SummaryTsAndCsProps {
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	amount: number;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	promotion?: Promotion;
 	cssOverrides?: SerializedStyles;
 }
@@ -152,7 +152,7 @@ export function PaymentTsAndCs({
 
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
-		product: ProductKey,
+		product: ActiveProductKey,
 		promotion?: Promotion,
 	) => {
 		const productLabel = productCatalogDescription[productKey].label;
@@ -266,7 +266,7 @@ export function SummaryTsAndCs({
 
 	const copyTier2 = (
 		contributionType: ContributionType,
-		productKey: ProductKey,
+		productKey: ActiveProductKey,
 	) => {
 		return (
 			<>
@@ -283,7 +283,7 @@ export function SummaryTsAndCs({
 
 	const copyTier3 = (
 		contributionType: ContributionType,
-		productKey: ProductKey,
+		productKey: ActiveProductKey,
 	) => {
 		return (
 			<>

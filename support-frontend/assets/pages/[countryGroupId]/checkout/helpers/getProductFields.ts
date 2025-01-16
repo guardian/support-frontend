@@ -1,12 +1,16 @@
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductDescription, ProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ProductDescription,
+} from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { logException } from 'helpers/utilities/logger';
 
 type GetProductFieldsParams = {
 	product: {
-		productKey: ProductKey;
+		productKey: ActiveProductKey;
 		productDescription: ProductDescription;
 		ratePlanKey: string;
 	};
@@ -30,6 +34,8 @@ export const getProductFields = ({
 		billingPeriod: 'Monthly',
 	};
 
+	const unsupportedProductMessage = `Product not supported by generic checkout: ${productKey}`;
+
 	/**
 	 * This is the data structure used by the `/subscribe/create` endpoint.
 	 *
@@ -42,6 +48,13 @@ export const getProductFields = ({
 		case 'GuardianLight':
 			return {
 				productType: 'GuardianLight',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+
+		case 'GuardianAdLite':
+			return {
+				productType: 'GuardianAdLite',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
 			};
@@ -128,5 +141,10 @@ export const getProductFields = ({
 				fulfilmentOptions: NoFulfilmentOptions,
 				productOptions: NoProductOptions,
 			};
+
+		case 'GuardianPatron':
+		case 'OneTimeContribution':
+			logException(unsupportedProductMessage);
+			throw new Error(unsupportedProductMessage);
 	}
 };
