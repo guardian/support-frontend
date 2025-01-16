@@ -11,6 +11,7 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
+import { ContributionsOnlyLanding } from './twoStepPages/contributionsOnlyLanding';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
@@ -21,7 +22,6 @@ if (!isDetailsSupported) {
 }
 
 // ----- Redux Store ----- //
-
 const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
@@ -53,6 +53,9 @@ export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.amounts,
 );
 
+const showNewContributionsOnly =
+	commonState.abParticipations.contributionsOnly === 'variant';
+
 // ----- Render ----- //
 
 const router = () => {
@@ -71,6 +74,8 @@ const router = () => {
 											geoId={countryId}
 											abParticipations={commonState.abParticipations}
 										/>
+									) : showNewContributionsOnly ? (
+										<ContributionsOnlyLanding geoId={countryId} />
 									) : (
 										<SupporterPlusInitialLandingPage
 											thankYouRoute={thankYouRoute}
