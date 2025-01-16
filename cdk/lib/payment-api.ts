@@ -122,9 +122,13 @@ export class PaymentApi extends GuStack {
               "dynamodb:Query",
               "dynamodb:DescribeTable",
             ],
-            resources: [
-              `arn:aws:dynamodb:*:*:table/SupporterProductData-${this.stage}`,
-            ],
+            resources:
+              this.stage === "PROD"
+                ? [
+                    "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+                    "arn:aws:dynamodb:*:*:table/SupporterProductData-CODE",
+                  ]
+                : ["arn:aws:dynamodb:*:*:table/SupporterProductData-CODE"],
           }),
 
           new GuAllowPolicy(this, "CloudwatchLogs", {

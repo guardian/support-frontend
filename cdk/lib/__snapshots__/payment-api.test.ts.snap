@@ -1715,7 +1715,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                 "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+              "Resource": [
+                "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+                "arn:aws:dynamodb:*:*:table/SupporterProductData-CODE",
+              ],
             },
           ],
           "Version": "2012-10-17",
