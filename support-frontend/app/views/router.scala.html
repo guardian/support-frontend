@@ -1,4 +1,4 @@
-@import admin.ServersideAbTest.Participation
+@import admin.ServersideAbTest.{Participation, Variant}
 @import assets.RefPath
 @import assets.AssetsResolver
 @import admin.settings.AllSettings
@@ -23,7 +23,7 @@
 @main(
   title = "Support the Guardian | Checkout",
   mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
-  mainJsBundle = RefPath("[countryGroupId]/router.js"),
+  mainJsBundle = if (serversideTests.get("lazyLoading").contains(Variant)) RefPath("[countryGroupId]/lazyRouter.js")  else RefPath("[countryGroupId]/router.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
   canonicalLink = Some("https://support.theguardian.com/checkout"),
