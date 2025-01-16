@@ -43,7 +43,9 @@ const pendingCopy = () => {
 				padding-bottom: ${space[3]}px;
 			`}
 		>
-			{`Thankyou for subscribing to a recurring subscription. Your subscription is being processed and you will receive an email when your account is live.`}
+			Thank you for subscribing to a recurring subscription. Your subscription
+			is being processed and you will receive an email when your account is
+			live.
 		</p>
 	);
 };
