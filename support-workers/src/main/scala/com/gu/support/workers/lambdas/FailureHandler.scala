@@ -50,7 +50,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       case _: GuardianWeekly =>
         FailedEmailFields.guardianWeekly(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: GuardianAdLite =>
-        FailedEmailFields.guardianLight(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+        FailedEmailFields.guardianAdLite(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
     }
     logger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)

@@ -33,7 +33,7 @@ class GuardianAdLiteEmailFields(created: DateTime) {
       "subscription_details" -> subscription_details,
     )
 
-    Future.successful(EmailFields(fields, state.user, "guardian-light"))
+    Future.successful(EmailFields(fields, state.user, "guardian-ad-lite"))
   }
 
   private def paymentMethodName(method: PaymentMethod): String = method match {
