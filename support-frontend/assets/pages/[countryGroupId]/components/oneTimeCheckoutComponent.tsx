@@ -52,7 +52,6 @@ import type {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	isPaymentMethod,
 	PayPal,
 	Stripe,
@@ -313,7 +312,7 @@ export function OneTimeCheckoutComponent({
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-	const validPaymentMethods = [Stripe, PayPal, countryId === 'US' && AmazonPay]
+	const validPaymentMethods = [Stripe, PayPal]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 

@@ -42,14 +42,6 @@ const PaymentConfigSchema = object({
 		ONE_OFF: object({ default: string(), test: string() }),
 		REGULAR: object({ default: string(), test: string() }),
 	}),
-	amazonPayClientId: object({
-		default: string(),
-		test: string(),
-	}),
-	amazonPaySellerId: object({
-		default: string(),
-		test: string(),
-	}),
 	payPalEnvironment: object({
 		default: string(),
 		test: string(),

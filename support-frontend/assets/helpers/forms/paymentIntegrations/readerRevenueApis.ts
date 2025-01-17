@@ -7,7 +7,6 @@ import {
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
-	AmazonPay,
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -138,17 +137,12 @@ type RegularSepaPaymentFields = {
 type GiftRedemption = {
 	redemptionCode: string;
 };
-type RegularAmazonPayPaymentFields = {
-	paymentType: typeof AmazonPay;
-	amazonPayBillingAgreementId: string;
-};
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| GiftRedemption
-	| RegularAmazonPayPaymentFields;
+	| GiftRedemption;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
 	state?: UsState | null;
@@ -215,11 +209,6 @@ export type SepaAuthorisation = {
 	country?: Country;
 	streetName?: string;
 };
-export type AmazonPayAuthorisation = {
-	paymentMethod: typeof AmazonPay;
-	orderReferenceId?: string;
-	amazonPayBillingAgreementId?: string;
-};
 // Represents an authorisation to execute payments with a given payment method.
 // This will generally be supplied by third-party code (Stripe, PayPal, GoCardless).
 // It applies both to one-off payments, where it is sent to the Payment API which
@@ -229,8 +218,7 @@ export type PaymentAuthorisation =
 	| StripePaymentIntentAuthorisation
 	| PayPalAuthorisation
 	| DirectDebitAuthorisation
-	| SepaAuthorisation
-	| AmazonPayAuthorisation;
+	| SepaAuthorisation;
 
 type Status = 'failure' | 'pending' | 'success';
 
@@ -310,19 +298,6 @@ function regularPaymentFieldsFromAuthorisation(
 					iban: authorisation.iban.replace(/ /g, ''),
 				};
 			}
-
-		case AmazonPay:
-			if (authorisation.amazonPayBillingAgreementId) {
-				return {
-					paymentType: AmazonPay,
-					amazonPayBillingAgreementId:
-						authorisation.amazonPayBillingAgreementId,
-				};
-			}
-
-			throw new Error(
-				'Cant create a regular Amazon Pay authorisation for one off',
-			);
 	}
 }
 

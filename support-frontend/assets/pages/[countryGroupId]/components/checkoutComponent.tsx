@@ -297,7 +297,6 @@ export function CheckoutComponent({
 	const validPaymentMethods = [
 		/* NOT YET IMPLEMENTED
 		countryGroupId === 'EURCountries' && Sepa,
-    countryId === 'US' && AmazonPay,
     */
 		countryId === 'GB' && DirectDebit,
 		Stripe,

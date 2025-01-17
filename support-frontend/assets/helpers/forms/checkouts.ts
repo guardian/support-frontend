@@ -14,7 +14,6 @@ import type {
 import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -37,12 +36,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
-export type PaymentMethodSwitch =
-	| 'directDebit'
-	| 'sepa'
-	| 'payPal'
-	| 'stripe'
-	| 'amazonPay';
+export type PaymentMethodSwitch = 'directDebit' | 'sepa' | 'payPal' | 'stripe';
 
 // ----- Functions ----- //
 function toPaymentMethodSwitchNaming(
@@ -57,9 +51,6 @@ function toPaymentMethodSwitchNaming(
 
 		case DirectDebit:
 			return 'directDebit';
-
-		case AmazonPay:
-			return 'amazonPay';
 
 		case Sepa:
 			return 'sepa';
@@ -142,8 +133,6 @@ function getPaymentMethods(
 
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
-	} else if (countryId === 'US') {
-		return [...nonRegionSpecificPaymentMethods, AmazonPay];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
 		countryGroupId === 'EURCountries'
@@ -180,7 +169,7 @@ function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	const pm: string | null | undefined = storage.getSession(
 		'selectedPaymentMethod',
 	);
-	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal', 'AmazonPay'];
+	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal'];
 
 	if (pm && paymentMethodNames.includes(pm)) {
 		return pm as PaymentMethod;
@@ -196,8 +185,6 @@ function getPaymentDescription(
 	if (contributionType === 'ONE_OFF') {
 		if (paymentMethod === PayPal) {
 			return 'with PayPal';
-		} else if (paymentMethod === AmazonPay) {
-			return 'with Amazon Pay';
 		}
 
 		return 'with card';
@@ -307,9 +294,6 @@ function getPaymentLabel(paymentMethod: PaymentMethod): string {
 
 		case PayPal:
 			return PayPal;
-
-		case AmazonPay:
-			return 'Amazon Pay';
 
 		default:
 			return 'Other Payment Method';

@@ -5,19 +5,16 @@ import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type {
-	AmazonPayData,
 	CreatePaypalPaymentData,
 	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
 	StripeChargeData,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import {
-	postOneOffAmazonPayExecutePaymentRequest,
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
-	AmazonPayAuthorisation,
 	PaymentAuthorisation,
 	PaymentResult,
 	RegularPaymentRequest,
@@ -28,12 +25,7 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import {
-	AmazonPay,
-	DirectDebit,
-	Sepa,
-	Stripe,
-} from 'helpers/forms/paymentMethods';
+import { DirectDebit, Sepa, Stripe } from 'helpers/forms/paymentMethods';
 import {
 	getStripeKey,
 	stripeAccountForContributionType,
@@ -44,10 +36,6 @@ import type {
 } from 'helpers/internationalisation/country';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import {
-	setAmazonPayFatalError,
-	setAmazonPayWalletIsStale,
-} from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -253,31 +241,6 @@ function regularPaymentRequestFromAuthorisation(
 	};
 }
 
-const amazonPayDataFromAuthorisation = (
-	authorisation: AmazonPayAuthorisation,
-	state: ContributionsState,
-): AmazonPayData => ({
-	paymentData: {
-		currency: state.common.internationalisation.currencyId,
-		amount: getAmount(
-			state.page.checkoutForm.product.selectedAmounts,
-			state.page.checkoutForm.product.otherAmounts,
-			getContributionType(state),
-			state.page.checkoutForm.product.coverTransactionCost,
-		),
-		orderReferenceId: authorisation.orderReferenceId ?? '',
-		email: state.page.checkoutForm.personalDetails.email,
-	},
-	acquisitionData: derivePaymentApiAcquisitionData(
-		addTransactionCoveredAcquisitionEventLabel(
-			state.common.referrerAcquisitionData,
-			state.page.checkoutForm.product.coverTransactionCost,
-		),
-		state.common.abParticipations,
-		state.page.checkoutForm.billingAddress.fields.postCode,
-	),
-});
-
 // A PaymentResult represents the end state of the checkout process,
 // standardised across payment methods & contribution types.
 // This will execute at the end of every checkout, with the exception
@@ -317,18 +280,6 @@ const onPaymentResult =
 							}),
 						);
 					} else {
-						if (paymentAuthorisation.paymentMethod === 'AmazonPay') {
-							if (
-								result.error === 'amazon_pay_try_other_card' ||
-								result.error === 'amazon_pay_try_again'
-							) {
-								// Must re-render the wallet widget in order to display amazon's error message
-								dispatch(setAmazonPayWalletIsStale(true));
-							} else {
-								// Disable Amazon Pay
-								dispatch(setAmazonPayFatalError());
-							}
-						}
 						// Finally, trigger the form display
 						if (result.error) {
 							dispatch(paymentFailure(result.error));
@@ -408,17 +359,6 @@ const makeCreateStripePaymentIntentRequest =
 			paymentAuthorisation,
 		)(dispatch, getState);
 
-const executeAmazonPayOneOffPayment =
-	(data: AmazonPayData, paymentAuthorisation: PaymentAuthorisation) =>
-	(
-		dispatch: Dispatch<Action>,
-		getState: () => ContributionsState,
-	): Promise<PaymentResult> =>
-		onPaymentResult(
-			postOneOffAmazonPayExecutePaymentRequest(data),
-			paymentAuthorisation,
-		)(dispatch, getState);
-
 function recurringPaymentAuthorisationHandler(
 	dispatch: Dispatch<Action>,
 	state: ContributionsState,
@@ -445,7 +385,6 @@ const recurringPaymentAuthorisationHandlers = {
 	Stripe: recurringPaymentAuthorisationHandler,
 	DirectDebit: recurringPaymentAuthorisationHandler,
 	Sepa: recurringPaymentAuthorisationHandler,
-	AmazonPay: recurringPaymentAuthorisationHandler,
 };
 const error: PaymentResult = {
 	paymentStatus: 'failure',
@@ -511,23 +450,6 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		},
 		Sepa: () => {
 			logInvalidCombination('ONE_OFF', Sepa);
-			return Promise.resolve(error);
-		},
-		AmazonPay: (
-			dispatch: Dispatch<Action>,
-			state: ContributionsState,
-			paymentAuthorisation: PaymentAuthorisation,
-		): Promise<PaymentResult> => {
-			if (
-				paymentAuthorisation.paymentMethod === AmazonPay &&
-				paymentAuthorisation.orderReferenceId !== undefined
-			) {
-				return executeAmazonPayOneOffPayment(
-					amazonPayDataFromAuthorisation(paymentAuthorisation, state),
-					paymentAuthorisation,
-				)(dispatch, () => state);
-			}
-
 			return Promise.resolve(error);
 		},
 		None: () => {
