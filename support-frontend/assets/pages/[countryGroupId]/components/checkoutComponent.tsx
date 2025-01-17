@@ -1,27 +1,18 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
+import { Checkbox, Label, TextInput } from '@guardian/source/react-components';
 import {
-	Checkbox,
-	Label,
-	Radio,
-	RadioGroup,
-	TextInput,
-} from '@guardian/source/react-components';
-import {
-	Divider,
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
-	ExpressCheckoutElement,
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
 import type { ExpressPaymentType } from '@stripe/stripe-js';
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -29,13 +20,9 @@ import {
 	getTermsStartDateTier3,
 } from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
-import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
-import { Recaptcha } from 'components/recaptcha/recaptcha';
-import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
-import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -56,13 +43,10 @@ import type {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	DirectDebit,
-	isPaymentMethod,
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
-	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -83,9 +67,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
-import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -95,6 +77,7 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { LoadingDots } from '../../../../stories/animations/LoadingDots.stories';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -111,10 +94,7 @@ import {
 	paypalOneClickCheckout,
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
-import {
-	stripeCreateSetupIntentPrb,
-	stripeCreateSetupIntentRecaptcha,
-} from '../checkout/helpers/stripe';
+import { stripeCreateSetupIntentPrb } from '../checkout/helpers/stripe';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -122,16 +102,11 @@ import {
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
-import {
-	checkedRadioLabelColour,
-	defaultRadioLabelColour,
-	paymentMethodBody,
-	PaymentMethodRadio,
-	PaymentMethodSelector,
-} from './paymentMethod';
 import { retryPaymentStatus } from './retryPaymentStatus';
 import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
+const PaymentSection = lazy(() => import('./paymentSection'));
+const ExpressCheckout = lazy(() => import('./expressCheckout'));
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
  * as it is heavily coupled through the code base and would require adding
@@ -139,12 +114,6 @@ import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
  */
 type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
-
-function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
-	return isSwitchOn(
-		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
-	);
-}
 
 /**
 /**
@@ -294,18 +263,6 @@ export function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const validPaymentMethods = [
-		/* NOT YET IMPLEMENTED
-		countryGroupId === 'EURCountries' && Sepa,
-    countryId === 'US' && AmazonPay,
-    */
-		countryId === 'GB' && DirectDebit,
-		Stripe,
-		PayPal,
-	]
-		.filter(isPaymentMethod)
-		.filter(paymentMethodIsActive);
-
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
@@ -319,8 +276,6 @@ export function CheckoutComponent({
 		setStripeExpressCheckoutPaymentType,
 	] = useState<ExpressPaymentType>();
 	const [stripeExpressCheckoutSuccessful, setStripeExpressCheckoutSuccessful] =
-		useState(false);
-	const [stripeExpressCheckoutReady, setStripeExpressCheckoutReady] =
 		useState(false);
 	useEffect(() => {
 		if (stripeExpressCheckoutSuccessful) {
@@ -406,21 +361,11 @@ export function CheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	/** Direct debit details */
-	const [accountHolderName, setAccountHolderName] = useState('');
-	const [accountNumber, setAccountNumber] = useState('');
-	const [sortCode, setSortCode] = useState('');
-	const [accountHolderConfirmation, setAccountHolderConfirmation] =
-		useState(false);
-
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
-
-	const useLinkExpressCheckout =
-		abParticipations.linkExpressCheckout === 'variant';
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
@@ -791,133 +736,28 @@ export function CheckoutComponent({
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
 						{useStripeExpressCheckout && (
-							<div
-								css={css`
-									/* Prevent content layout shift */
-									min-height: 8px;
-								`}
-							>
-								<ExpressCheckoutElement
-									onReady={({ availablePaymentMethods }) => {
-										/**
-										 * This is use to show UI needed besides this Element
-										 * i.e. The "or" divider
-										 */
-										if (availablePaymentMethods) {
-											setStripeExpressCheckoutReady(true);
-										}
-									}}
-									onClick={({ resolve }) => {
-										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										const options = {
-											emailRequired: true,
-										};
-
-										// Track payment method selection with QM
-										sendEventPaymentMethodSelected(
-											'StripeExpressCheckoutElement',
-										);
-
-										resolve(options);
-									}}
-									onConfirm={async (event) => {
-										if (!(stripe && elements)) {
-											console.error('Stripe not loaded');
-											return;
-										}
-
-										const { error: submitError } = await elements.submit();
-
-										if (submitError) {
-											setErrorMessage(submitError.message);
-											return;
-										}
-
-										const name = event.billingDetails?.name ?? '';
-
-										/**
-										 * splits by the last space, and uses the head as firstName
-										 * and tail as lastName
-										 */
-										const firstName = name
-											.substring(0, name.lastIndexOf(' ') + 1)
-											.trim();
-										const lastName = name
-											.substring(name.lastIndexOf(' ') + 1, name.length)
-											.trim();
-										setFirstName(firstName);
-										setLastName(lastName);
-
-										event.billingDetails?.address.postal_code &&
-											setBillingPostcode(
-												event.billingDetails.address.postal_code,
-											);
-
-										if (
-											!event.billingDetails?.address.state &&
-											countriesRequiringBillingState.includes(countryId)
-										) {
-											logException(
-												"Could not find state from Stripe's billingDetails",
-												{ geoId, countryGroupId, countryId },
-											);
-										}
-										event.billingDetails?.address.state &&
-											setBillingState(event.billingDetails.address.state);
-
-										event.billingDetails?.email &&
-											setEmail(event.billingDetails.email);
-
-										setPaymentMethod('StripeExpressCheckoutElement');
-										setStripeExpressCheckoutPaymentType(
-											event.expressPaymentType,
-										);
-										/**
-										 * There is a useEffect that listens to this and submits the form
-										 * when true
-										 */
-										setStripeExpressCheckoutSuccessful(true);
-									}}
-									options={{
-										paymentMethods: {
-											applePay: 'auto',
-											googlePay: 'auto',
-											link: useLinkExpressCheckout ? 'auto' : 'never',
-										},
-									}}
+							<Suspense fallback={<></>}>
+								<ExpressCheckout
+									setStripeExpressCheckoutPaymentType={
+										setStripeExpressCheckoutPaymentType
+									}
+									stripe={stripe}
+									elements={elements}
+									setErrorMessage={setErrorMessage}
+									setFirstName={setFirstName}
+									setLastName={setLastName}
+									setBillingPostcode={setBillingPostcode}
+									setBillingState={setBillingState}
+									setEmail={setEmail}
+									setPaymentMethod={setPaymentMethod}
+									setStripeExpressCheckoutSuccessful={
+										setStripeExpressCheckoutSuccessful
+									}
+									countryId={countryId}
+									geoId={geoId}
+									countryGroupId={countryGroupId}
 								/>
-
-								{stripeExpressCheckoutReady && (
-									<Divider
-										displayText="or"
-										size="full"
-										cssOverrides={css`
-											::before {
-												margin-left: 0;
-											}
-
-											::after {
-												margin-right: 0;
-											}
-
-											margin: 0;
-											margin-top: 14px;
-											margin-bottom: 14px;
-											width: 100%;
-
-											@keyframes fadeIn {
-												0% {
-													opacity: 0;
-												}
-												100% {
-													opacity: 1;
-												}
-											}
-											animation: fadeIn 1s;
-										`}
-									/>
-								)}
-							</div>
+							</Suspense>
 						)}
 						<FormSection>
 							<Legend>1. Your details</Legend>
@@ -1155,143 +995,25 @@ export function CheckoutComponent({
 							</>
 						)}
 
-						<FormSection>
-							<Legend>
-								{productDescription.deliverableTo ? '3' : '2'}. Payment method
-								<SecureTransactionIndicator
-									hideText={true}
-									cssOverrides={css``}
-								/>
-							</Legend>
-
-							<RadioGroup
-								role="radiogroup"
-								label="Select payment method"
-								hideLabel
-								error={paymentMethodError}
-							>
-								{validPaymentMethods.map((validPaymentMethod) => {
-									const selected = paymentMethod === validPaymentMethod;
-									const { label, icon } = paymentMethodData[validPaymentMethod];
-									return (
-										<PaymentMethodSelector selected={selected}>
-											<PaymentMethodRadio selected={selected}>
-												<Radio
-													label={
-														<>
-															{label}
-															<div>{icon}</div>
-														</>
-													}
-													name="paymentMethod"
-													value={validPaymentMethod}
-													cssOverrides={
-														selected
-															? checkedRadioLabelColour
-															: defaultRadioLabelColour
-													}
-													onChange={() => {
-														setPaymentMethod(validPaymentMethod);
-														setPaymentMethodError(undefined);
-														// Track payment method selection with QM
-														sendEventPaymentMethodSelected(validPaymentMethod);
-													}}
-												/>
-											</PaymentMethodRadio>
-											{validPaymentMethod === 'Stripe' && selected && (
-												<div css={paymentMethodBody}>
-													<input
-														type="hidden"
-														name="recaptchaToken"
-														value={recaptchaToken}
-													/>
-													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
-														}}
-														onExpiryChange={() => {
-															// no-op
-														}}
-														onCvcChange={() => {
-															// no-op
-														}}
-														errors={{}}
-														recaptcha={
-															<Recaptcha
-																// We could change the parents type to Promise and use await here, but that has
-																// a lot of refactoring with not too much gain
-																onRecaptchaCompleted={(token) => {
-																	setStripeClientSecretInProgress(true);
-																	setRecaptchaToken(token);
-																	void stripeCreateSetupIntentRecaptcha(
-																		isTestUser,
-																		stripePublicKey,
-																		token,
-																	).then((client_secret) => {
-																		setStripeClientSecret(client_secret);
-																		setStripeClientSecretInProgress(false);
-																	});
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
-														}
-													/>
-												</div>
-											)}
-
-											{validPaymentMethod === 'DirectDebit' && selected && (
-												<div
-													css={css`
-														padding: ${space[5]}px ${space[3]}px ${space[6]}px;
-													`}
-												>
-													<DirectDebitForm
-														countryGroupId={countryGroupId}
-														accountHolderName={accountHolderName}
-														accountNumber={accountNumber}
-														accountHolderConfirmation={
-															accountHolderConfirmation
-														}
-														sortCode={sortCode}
-														recaptchaCompleted={false}
-														updateAccountHolderName={(name: string) => {
-															setAccountHolderName(name);
-														}}
-														updateAccountNumber={(number: string) => {
-															setAccountNumber(number);
-														}}
-														updateSortCode={(sortCode: string) => {
-															setSortCode(sortCode);
-														}}
-														updateAccountHolderConfirmation={(
-															confirmation: boolean,
-														) => {
-															setAccountHolderConfirmation(confirmation);
-														}}
-														recaptcha={
-															<Recaptcha
-																// We could change the parents type to Promise and uses await here, but that has
-																// a lot of refactoring with not too much gain
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
-														}
-														formError={''}
-														errors={{}}
-													/>
-												</div>
-											)}
-										</PaymentMethodSelector>
-									);
-								})}
-							</RadioGroup>
-						</FormSection>
+						<Suspense fallback={<LoadingDots appearance={'dark'} />}>
+							<PaymentSection
+								paymentMethodError={paymentMethodError}
+								setPaymentMethodError={setPaymentMethodError}
+								setStripeClientSecret={setStripeClientSecret}
+								setStripeClientSecretInProgress={
+									setStripeClientSecretInProgress
+								}
+								recaptchaToken={recaptchaToken}
+								setRecaptchaToken={setRecaptchaToken}
+								paymentMethod={paymentMethod}
+								setPaymentMethod={setPaymentMethod}
+								sectionNumber={productDescription.deliverableTo ? 3 : 2}
+								stripePublicKey={stripePublicKey}
+								isTestUser={isTestUser}
+								countryGroupId={countryGroupId}
+								countryId={countryId}
+							/>
+						</Suspense>
 						<SummaryTsAndCs
 							contributionType={
 								productFields.billingPeriod === 'Monthly'
