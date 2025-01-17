@@ -669,7 +669,7 @@ export function CheckoutComponent({
 
 	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
 	const returnToLandingPage =
-		productKey === 'GuardianLight' || productKey === 'GuardianAdLite'
+		productKey === 'GuardianAdLite'
 			? `/guardian-ad-lite${returnParam}`
 			: `/${geoId}/contribute`;
 
@@ -766,12 +766,7 @@ export function CheckoutComponent({
 						headerButton={
 							<BackButton
 								path={returnToLandingPage}
-								buttonText={
-									productKey === 'GuardianLight' ||
-									productKey === 'GuardianAdLite'
-										? 'Back'
-										: 'Change'
-								}
+								buttonText={productKey === 'GuardianAdLite' ? 'Back' : 'Change'}
 							/>
 						}
 					/>

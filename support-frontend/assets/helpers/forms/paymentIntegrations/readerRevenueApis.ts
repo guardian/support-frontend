@@ -69,11 +69,6 @@ export type TierThree = {
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 };
-export type GuardianLight = {
-	productType: 'GuardianLight';
-	currency: string;
-	billingPeriod: BillingPeriod;
-};
 export type GuardianAdLite = {
 	productType: 'GuardianAdLite';
 	currency: string;
@@ -106,7 +101,6 @@ export type SubscriptionProductFields =
 	| PaperSubscription
 	| GuardianWeeklySubscription
 	| TierThree
-	| GuardianLight
 	| GuardianAdLite;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
