@@ -472,6 +472,29 @@ describe('init', () => {
 			});
 			expect(participations.t1).toBeUndefined();
 		});
+
+		it(`does not assign a user to a test if audiences is CONTRIBUTIONS_ONLY and selectedAmountsVariant is undefined`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					audiences: {
+						CONTRIBUTIONS_ONLY: {
+							offset: 0,
+							size: 1,
+						},
+					},
+				}),
+			};
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant: undefined,
+			});
+			expect(participations.t1).toBeUndefined();
+		});
 	});
 
 	describe('path matching', () => {
