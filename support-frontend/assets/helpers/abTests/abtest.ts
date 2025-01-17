@@ -219,15 +219,9 @@ function getParticipations(
 		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
 		 */
 		if (
-			selectedAmountsVariant &&
-			selectedAmountsVariant.testName !== contributionsOnlyAmountsTestName &&
+			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
 			includeOnlyContributionsOnlyCountries
 		) {
-			return;
-		}
-
-		// Exclude undefined users assigned to the contributions only amounts test
-		if (!selectedAmountsVariant && includeOnlyContributionsOnlyCountries) {
 			return;
 		}
 
