@@ -202,7 +202,7 @@ function getParticipations(
 			!!test.audiences.CONTRIBUTIONS_ONLY;
 
 		/**
-		 * We only exclude users assigned to the contributions only amounts test
+		 * Exclude any users assigned to the contributions only amounts test
 		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
 		 * AND includeOnlyContributionsOnlyCountries is not true
 		 */
@@ -215,7 +215,7 @@ function getParticipations(
 		}
 
 		/**
-		 * Exclude users NOT assigned to the contributions only amounts test
+		 * Exclude defined users NOT assigned to the contributions only amounts test
 		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
 		 */
 		if (
@@ -223,6 +223,11 @@ function getParticipations(
 			selectedAmountsVariant.testName !== contributionsOnlyAmountsTestName &&
 			includeOnlyContributionsOnlyCountries
 		) {
+			return;
+		}
+
+		// Exclude undefined users assigned to the contributions only amounts test
+		if (!selectedAmountsVariant && includeOnlyContributionsOnlyCountries) {
 			return;
 		}
 
