@@ -27,22 +27,15 @@ function getAbParticipations(): Participations {
 	const settings = getSettings();
 	const countryId: IsoCountry = Country.detect();
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
-	const { selectedAmountsVariant } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		settings,
-	);
+	const { amountsParticipation, selectedAmountsVariant } =
+		getAmountsTestVariant(countryId, countryGroupId, settings);
 	const abtestInitalizerData = {
 		countryId,
 		countryGroupId,
 		selectedAmountsVariant,
 	};
 	const participations: Participations = abTest.init(abtestInitalizerData);
-	const { amountsParticipation } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		settings,
-	);
+
 	return {
 		...participations,
 		...amountsParticipation,
