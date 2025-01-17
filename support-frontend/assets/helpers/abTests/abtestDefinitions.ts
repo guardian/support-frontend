@@ -105,38 +105,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	linkExpressCheckout: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-			EURCountries: {
-				offset: 0,
-				size: 1,
-			},
-			Canada: { offset: 0, size: 1 },
-			NZDCountries: { offset: 0, size: 1 },
-			International: { offset: 0, size: 1 },
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: true,
-	},
 	contributionsOnly: {
 		variants: [
 			{
