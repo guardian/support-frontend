@@ -187,6 +187,7 @@ function getParticipations(
 
 		// Is the user already in this test in the current browser session?
 		if (
+			test.persistPage &&
 			!!sessionParticipations[testId] &&
 			targetPageMatches(path, test.persistPage)
 		) {
@@ -262,6 +263,14 @@ function getParticipations(
 			}
 		});
 	}
+
+	// Store participations which use the persistPage prop in sessionStorage
+	Object.keys(participations).forEach((testId) => {
+		if (abTests[testId]?.persistPage) {
+			sessionParticipations[testId] = participations[testId];
+		}
+	});
+	storage.setSession('abParticipations', JSON.stringify(sessionParticipations));
 
 	return participations;
 }

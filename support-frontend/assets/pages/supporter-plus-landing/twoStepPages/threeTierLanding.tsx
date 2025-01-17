@@ -53,7 +53,6 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import * as storage from 'helpers/storage/storage';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import Countdown from '../components/countdown';
@@ -291,9 +290,6 @@ export function ThreeTierLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
-
-	// Persist any tests for tracking in the checkout page
-	storage.setSession('abParticipations', JSON.stringify(abParticipations));
 
 	const campaignSettings = getCampaignSettings(
 		countryGroupId,
