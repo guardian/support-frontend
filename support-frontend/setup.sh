@@ -111,10 +111,9 @@ setup_nginx() {
   dev-nginx restart-nginx
 }
 
-install_yarn_if_linux() {
-  # This will be installed by 'install_brew_deps' if on mac
-  if linux && ! installed yarn; then
-    sudo apt-get install yarn
+install_yarn() {
+  if ! installed yarn; then
+    npm install -g yarn
   fi
 }
 
@@ -139,11 +138,11 @@ main () {
   check_encryption
   create_aws_config
   install_node
+  install_yarn
   install_homebrew_if_mac
   install_brew_deps
   setup_nginx
   install_jdk
-  install_yarn_if_linux
   install_js_deps
 
   report
