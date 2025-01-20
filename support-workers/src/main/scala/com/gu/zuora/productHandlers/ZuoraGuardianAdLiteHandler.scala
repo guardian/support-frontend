@@ -2,23 +2,23 @@ package com.gu.zuora.productHandlers
 
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianLightState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianAdLiteState
 import com.gu.support.workers.states.SendThankYouEmailState
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianLightState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
 import com.gu.zuora.ZuoraSubscriptionCreator
-import com.gu.zuora.subscriptionBuilders.GuardianLightSubscriptionBuilder
+import com.gu.zuora.subscriptionBuilders.GuardianAdLiteSubscriptionBuilder
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ZuoraGuardianLightHandler(
+class ZuoraGuardianAdLiteHandler(
     zuoraSubscriptionCreator: ZuoraSubscriptionCreator,
-    subscriptionBuilder: GuardianLightSubscriptionBuilder,
+    subscriptionBuilder: GuardianAdLiteSubscriptionBuilder,
     user: User,
 ) {
 
   def subscribe(
-      state: GuardianLightState,
+      state: GuardianAdLiteState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Future[SendThankYouEmailState] = {
@@ -27,7 +27,7 @@ class ZuoraGuardianLightHandler(
     for {
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
-    } yield SendThankYouEmailGuardianLightState(
+    } yield SendThankYouEmailGuardianAdLiteState(
       user,
       state.product,
       state.paymentMethod,

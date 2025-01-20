@@ -10,7 +10,7 @@ import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailDigitalSubscriptionDirectPurchaseState,
   SendThankYouEmailDigitalSubscriptionGiftPurchaseState,
   SendThankYouEmailDigitalSubscriptionGiftRedemptionState,
-  SendThankYouEmailGuardianLightState,
+  SendThankYouEmailGuardianAdLiteState,
   SendThankYouEmailGuardianWeeklyState,
   SendThankYouEmailPaperState,
   SendThankYouEmailSupporterPlusState,
@@ -194,9 +194,9 @@ object UpdateSupporterProductData {
             ),
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-      case SendThankYouEmailGuardianLightState(user, product, _, _, _, subscriptionNumber) =>
+      case SendThankYouEmailGuardianAdLiteState(user, product, _, _, _, subscriptionNumber) =>
         catalogService
-          .getProductRatePlan(GuardianLight, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(GuardianAdLite, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(

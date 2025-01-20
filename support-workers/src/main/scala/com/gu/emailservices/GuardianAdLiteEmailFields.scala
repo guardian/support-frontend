@@ -9,15 +9,15 @@ import com.gu.support.workers.{
   PaymentMethod,
   SepaPaymentMethod,
 }
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianLightState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
 import org.joda.time.DateTime
-import com.gu.zuora.subscriptionBuilders.GuardianLightSubscriptionBuilder
+import com.gu.zuora.subscriptionBuilders.GuardianAdLiteSubscriptionBuilder
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GuardianLightEmailFields(created: DateTime) {
+class GuardianAdLiteEmailFields(created: DateTime) {
   def build(
-      state: SendThankYouEmailGuardianLightState,
+      state: SendThankYouEmailGuardianAdLiteState,
   )(implicit ec: ExecutionContext): Future[EmailFields] = {
     val subscription_details = SubscriptionEmailFieldHelpers
       .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency)
@@ -27,13 +27,13 @@ class GuardianLightEmailFields(created: DateTime) {
       "email_address" -> state.user.primaryEmailAddress,
       "billing_period" -> state.product.billingPeriod.toString.toLowerCase,
       "first_payment_date" -> formatDate(
-        created.plusDays(GuardianLightSubscriptionBuilder.gracePeriodInDays).toLocalDate,
+        created.plusDays(GuardianAdLiteSubscriptionBuilder.gracePeriodInDays).toLocalDate,
       ),
       "payment_method" -> paymentMethodName(state.paymentMethod),
       "subscription_details" -> subscription_details,
     )
 
-    Future.successful(EmailFields(fields, state.user, "guardian-light"))
+    Future.successful(EmailFields(fields, state.user, "guardian-ad-lite"))
   }
 
   private def paymentMethodName(method: PaymentMethod): String = method match {

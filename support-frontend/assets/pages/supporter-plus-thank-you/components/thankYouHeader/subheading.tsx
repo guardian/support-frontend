@@ -109,7 +109,8 @@ function Subheading({
 	paymentStatus,
 }: SubheadingProps): JSX.Element {
 	const isTier3 = productKey === 'TierThree';
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isGuardianAdLite =
+		productKey === 'GuardianLight' || productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,
