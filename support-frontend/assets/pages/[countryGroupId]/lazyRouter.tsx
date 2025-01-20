@@ -68,7 +68,7 @@ const router = createBrowserRouter(
 			),
 		},
 		{
-			path: `/${geoId}/guardian-light`,
+			path: `/${geoId}/guardian-ad-lite`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
 					<GuardianAdLiteLanding geoId={geoId} />
