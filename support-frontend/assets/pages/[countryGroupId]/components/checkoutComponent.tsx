@@ -419,9 +419,6 @@ export function CheckoutComponent({
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
 
-	const useLinkExpressCheckout =
-		abParticipations.linkExpressCheckout === 'variant';
-
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -882,7 +879,7 @@ export function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: useLinkExpressCheckout ? 'auto' : 'never',
+											link: 'never',
 										},
 									}}
 								/>
