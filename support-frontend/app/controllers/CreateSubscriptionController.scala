@@ -167,7 +167,7 @@ class CreateSubscriptionController(
       userDetails: UserDetailsWithSignedInStatus,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     request.body.product match {
-      case GuardianLight(_) => {
+      case GuardianAdLite(_) => {
         if (userDetails.isSignedIn) {
           // If the user is signed in, we'll assume they're eligible as they shouldn't have got
           // to this point of the journey.
