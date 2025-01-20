@@ -77,16 +77,6 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	paymentMethodId: string | PaymentMethod;
 };
 
-export type AmazonPayData = {
-	paymentData: {
-		currency: IsoCurrency;
-		amount: number;
-		orderReferenceId: string;
-		email: string;
-	};
-	acquisitionData: PaymentAPIAcquisitionData;
-};
-
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
@@ -177,13 +167,6 @@ const postToPaymentApi = (
 const handleOneOffExecution = (
 	result: Promise<Record<string, unknown>>,
 ): Promise<PaymentResult> => logPromise(result).then(paymentResultFromObject);
-
-const postOneOffAmazonPayExecutePaymentRequest = (
-	data: AmazonPayData,
-): Promise<PaymentResult> =>
-	handleOneOffExecution(
-		postToPaymentApi(data, '/contribute/one-off/amazon-pay/execute-payment'),
-	);
 
 // Create a Stripe Payment Request, and if necessary perform 3DS auth and confirmation steps
 const processStripePaymentIntentRequest = (
@@ -282,5 +265,4 @@ async function postOneOffPayPalCreatePaymentRequest(
 export {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
-	postOneOffAmazonPayExecutePaymentRequest,
 };

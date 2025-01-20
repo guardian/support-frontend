@@ -1,6 +1,4 @@
 import { combineReducers } from 'redux';
-import { amazonPayReducer } from './amazonPay/reducer';
-import type { AmazonPayState } from './amazonPay/state';
 import { directDebitReducer } from './directDebit/reducer';
 import type { DirectDebitState } from './directDebit/state';
 import { paymentMethodReducer } from './paymentMethod/reducer';
@@ -19,7 +17,6 @@ import type { StripeAccountDetailsState } from './stripeAccountDetails/state';
 export type PaymentState = {
 	paymentMethod: PaymentMethodState;
 	directDebit: DirectDebitState;
-	amazonPay: AmazonPayState;
 	sepa: SepaState;
 	payPal: PayPalState;
 	stripe: StripeCardState;
@@ -30,7 +27,6 @@ export type PaymentState = {
 export const paymentReducer = combineReducers({
 	paymentMethod: paymentMethodReducer,
 	directDebit: directDebitReducer,
-	amazonPay: amazonPayReducer,
 	sepa: sepaReducer,
 	payPal: payPalReducer,
 	stripe: stripeCardReducer,

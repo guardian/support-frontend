@@ -68,7 +68,6 @@ const OrderSchema = object({
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
-		'AmazonPay',
 		'None',
 	]),
 	status: picklist(['success', 'pending']),
