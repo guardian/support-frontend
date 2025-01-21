@@ -94,6 +94,10 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
 
+const appBenefitControlV2 = {
+	copy: 'Unlimited access to the Guardian app',
+	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+};
 const appBenefit = {
 	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
@@ -101,8 +105,16 @@ const appBenefit = {
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
+
+const newsletterBenefitControl = {
+	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+};
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+};
+const newsletterBenefitV2 = {
+	copy: 'Our minimum level of [monthly/annual] support (no blue benefit tick)',
+	display: false,
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -118,6 +130,17 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
+const newsPaperArchiveBenefitUK = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
+};
+const newsPaperArchiveBenefitROW = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
+};
+
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
@@ -132,6 +155,43 @@ const supporterPlusBenefits = [
 	appBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
+];
+
+const supporterPlusBenefitsControl = [
+	appBenefitControlV2,
+	addFreeBenefit,
+	newsletterBenefitControl,
+	fewerAsksBenefit,
+	partnerOffersBenefit,
+	feastBenefit,
+];
+
+const supporterPlusBenefitsV1 = [
+	fewerAsksBenefit,
+	newsletterBenefit,
+	addFreeBenefit,
+	appBenefit,
+	feastBenefit,
+];
+
+const supporterPlusBenefitsV2 = [
+	appBenefitControlV2,
+	addFreeBenefit,
+	fewerAsksBenefit,
+	partnerOffersBenefit,
+	feastBenefit,
+];
+
+const contributionBenefits = [newsletterBenefit];
+const contributionBenefitsControl = [newsletterBenefitControl];
+const contributionBenefitsV1 = [newsletterBenefit];
+const contributionBenefitsV2 = [newsletterBenefitV2];
+
+const tierThreeBenefits = [guardianWeeklyBenefit];
+const tierThreeBenefitsUK = [guardianWeeklyBenefit, newsPaperArchiveBenefitUK];
+const tierThreeBenefitsROW = [
+	guardianWeeklyBenefit,
+	newsPaperArchiveBenefitROW,
 ];
 
 const guardianAdLiteBenefits = [
@@ -330,7 +390,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit],
+		benefits: contributionBenefits,
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
@@ -398,6 +458,45 @@ export const productCatalogDescription: Record<
 		},
 	},
 };
+
+export function productCatalogDescriptionResetAndNewspaperArchive(
+	resetVariant?: string,
+	countryGroupId?: CountryGroupId,
+) {
+	const supporterPlusBenefits =
+		resetVariant === 'v1'
+			? supporterPlusBenefitsV1
+			: resetVariant === 'v2'
+			? supporterPlusBenefitsV2
+			: supporterPlusBenefitsControl;
+	const contributionBenefits =
+		resetVariant === 'v1'
+			? contributionBenefitsV1
+			: resetVariant === 'v2'
+			? contributionBenefitsV2
+			: contributionBenefitsControl;
+	const newsPaperArchiveBenefit = countryGroupId
+		? countryGroupId === 'GBPCountries'
+			? tierThreeBenefitsUK
+			: tierThreeBenefitsROW
+		: tierThreeBenefits;
+
+	return {
+		...productCatalogDescription,
+		SupporterPlus: {
+			...productCatalogDescription.SupporterPlus,
+			benefits: supporterPlusBenefits,
+		},
+		Contribution: {
+			...productCatalogDescription.Contribution,
+			benefits: contributionBenefits,
+		},
+		TierThree: {
+			...productCatalogDescription.TierThree,
+			benefits: newsPaperArchiveBenefit,
+		},
+	};
+}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,
