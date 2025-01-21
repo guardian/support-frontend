@@ -113,12 +113,12 @@ const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
 const newsletterBenefitMonthlyV2 = {
-	copy: 'Our minimum level of monthly support (no blue benefit tick)',
-	display: false,
+	copy: 'Our minimum level of monthly support',
+	hideBullet: true,
 };
 const newsletterBenefitAnnualV2 = {
-	copy: 'Our minimum level of annual support (no blue benefit tick)',
-	display: false,
+	copy: 'Our minimum level of annual support',
+	hideBullet: true,
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',

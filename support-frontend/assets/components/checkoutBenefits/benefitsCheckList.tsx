@@ -68,6 +68,9 @@ const listCss = (style: CheckListStyle) => css`
 		}
 	}
 `;
+const opaqueCss = css`
+	opacity: 0;
+`;
 
 export type BenefitsCheckListData = {
 	isChecked: boolean;
@@ -91,15 +94,13 @@ export type BenefitsCheckListProps = {
 function ChecklistItemIcon({
 	checked,
 	style,
-	hideBullet,
 }: {
 	checked: boolean;
 	style: CheckListStyle;
-	hideBullet?: boolean;
 }): JSX.Element {
 	const styleSize = style === 'standard' ? 'small' : 'xsmall';
 	return style === 'bullet' ? (
-		<BulletSvg opacity={hideBullet ? 0 : 1} />
+		<BulletSvg />
 	) : checked ? (
 		<SvgTickRound isAnnouncedByScreenReader size={styleSize} />
 	) : (
@@ -129,12 +130,13 @@ export function BenefitsCheckList({
 								item.maybeGreyedOut,
 							]}
 						>
-							<div css={style === 'standard' ? iconContainerCss : css``}>
-								<ChecklistItemIcon
-									checked={item.isChecked}
-									style={style}
-									hideBullet={item.hideBullet}
-								/>
+							<div
+								css={[
+									style === 'standard' ? iconContainerCss : css``,
+									item.hideBullet ? opaqueCss : css``,
+								]}
+							>
+								<ChecklistItemIcon checked={item.isChecked} style={style} />
 							</div>
 						</div>
 					)}

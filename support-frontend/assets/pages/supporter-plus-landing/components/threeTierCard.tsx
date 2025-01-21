@@ -304,6 +304,7 @@ export function ThreeTierCard({
 							isChecked: true,
 							toolTip: benefit.tooltip,
 							isNew: benefit.isNew,
+							hideBullet: benefit.hideBullet,
 						};
 					})}
 				style={'compact'}
