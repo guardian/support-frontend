@@ -134,12 +134,12 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
-const newsPaperArchiveBenefitUK = {
+const newspaperArchiveBenefitUK = {
 	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
 	isNew: true,
 	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
 };
-const newsPaperArchiveBenefitROW = {
+const newspaperArchiveBenefitROW = {
 	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
 	isNew: true,
 	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
@@ -182,10 +182,13 @@ const contributionBenefitsAnnualV2 = [newsletterBenefitAnnualV2];
 const contributionBenefitsMonthlyV2 = [newsletterBenefitMonthlyV2];
 
 const tierThreeBenefits = [guardianWeeklyBenefit];
-const tierThreeBenefitsUK = [guardianWeeklyBenefit, newsPaperArchiveBenefitUK];
-const tierThreeBenefitsROW = [
+const tierThreeInclArchiveBenefitsUK = [
 	guardianWeeklyBenefit,
-	newsPaperArchiveBenefitROW,
+	newspaperArchiveBenefitUK,
+];
+const tierThreeInclArchiveBenefitsROW = [
+	guardianWeeklyBenefit,
+	newspaperArchiveBenefitROW,
 ];
 
 const guardianAdLiteBenefits = [
@@ -474,8 +477,8 @@ export function productCatalogDescriptionResetAndNewspaperArchive(
 			: contributionBenefitsControl;
 	const newsPaperArchiveBenefit = countryGroupId
 		? countryGroupId === 'GBPCountries'
-			? tierThreeBenefitsUK
-			: tierThreeBenefitsROW
+			? tierThreeInclArchiveBenefitsUK
+			: tierThreeInclArchiveBenefitsROW
 		: tierThreeBenefits;
 
 	return {
