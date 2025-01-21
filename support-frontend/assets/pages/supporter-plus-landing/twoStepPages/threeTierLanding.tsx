@@ -452,8 +452,9 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: 'Support',
-		lozengeText:
-			inResetBenefits === 'control' ? 'Recommended' : 'Highest impact',
+		lozengeText: ['control', 'v2'].includes(inResetBenefits ?? '')
+			? 'Recommended'
+			: 'Highest impact',
 	};
 
 	/**
