@@ -124,7 +124,7 @@ export function Events({ geoId }: Props) {
 		!hashUrlSearchParams.has('p[meta_page_view_id]') ||
 		hashUrlSearchParams.get('p[meta_page_view_id]') !== pageviewId
 	) {
-		logException(`hashUrlSearchParams pageviewId mismatch: ${pageviewId}`);
+		logException('hashUrlSearchParams pageviewId mismatch');
 	}
 
 	const embedUrl = `${ticketTailorUrl}/${eventId}/book${presetDataUrl}`;
