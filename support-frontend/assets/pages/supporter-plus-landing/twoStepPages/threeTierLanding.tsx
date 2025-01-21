@@ -379,6 +379,7 @@ export function ThreeTierLanding({
 	);
 	const productCatalogDescription =
 		productCatalogDescriptionResetAndNewspaperArchive(
+			selectedContributionRatePlan,
 			inResetBenefits,
 			inNewsPaperArchiveBenefit ? countryGroupId : undefined,
 		);

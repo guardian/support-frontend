@@ -112,8 +112,12 @@ const newsletterBenefitControl = {
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
-const newsletterBenefitV2 = {
-	copy: 'Our minimum level of [monthly/annual] support (no blue benefit tick)',
+const newsletterBenefitMonthlyV2 = {
+	copy: 'Our minimum level of monthly support (no blue benefit tick)',
+	display: false,
+};
+const newsletterBenefitAnnualV2 = {
+	copy: 'Our minimum level of annual support (no blue benefit tick)',
 	display: false,
 };
 const fewerAsksBenefit = {
@@ -185,7 +189,8 @@ const supporterPlusBenefitsV2 = [
 const contributionBenefits = [newsletterBenefit];
 const contributionBenefitsControl = [newsletterBenefitControl];
 const contributionBenefitsV1 = [newsletterBenefit];
-const contributionBenefitsV2 = [newsletterBenefitV2];
+const contributionBenefitsAnnualV2 = [newsletterBenefitAnnualV2];
+const contributionBenefitsMonthlyV2 = [newsletterBenefitMonthlyV2];
 
 const tierThreeBenefits = [guardianWeeklyBenefit];
 const tierThreeBenefitsUK = [guardianWeeklyBenefit, newsPaperArchiveBenefitUK];
@@ -460,6 +465,7 @@ export const productCatalogDescription: Record<
 };
 
 export function productCatalogDescriptionResetAndNewspaperArchive(
+	period: string,
 	resetVariant?: string,
 	countryGroupId?: CountryGroupId,
 ) {
@@ -473,7 +479,9 @@ export function productCatalogDescriptionResetAndNewspaperArchive(
 		resetVariant === 'v1'
 			? contributionBenefitsV1
 			: resetVariant === 'v2'
-			? contributionBenefitsV2
+			? period === 'Monthly'
+				? contributionBenefitsMonthlyV2
+				: contributionBenefitsAnnualV2
 			: contributionBenefitsControl;
 	const newsPaperArchiveBenefit = countryGroupId
 		? countryGroupId === 'GBPCountries'
