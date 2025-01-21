@@ -152,15 +152,6 @@ const feastBenefit = {
 		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
 };
 
-const supporterPlusBenefits = [
-	fewerAsksBenefit,
-	newsletterBenefit,
-	addFreeBenefit,
-	appBenefit,
-	partnerOffersBenefit,
-	feastBenefit,
-];
-
 const supporterPlusBenefitsControl = [
 	appBenefitControlV2,
 	addFreeBenefit,
@@ -169,15 +160,14 @@ const supporterPlusBenefitsControl = [
 	partnerOffersBenefit,
 	feastBenefit,
 ];
-
 const supporterPlusBenefitsV1 = [
 	fewerAsksBenefit,
 	newsletterBenefit,
 	addFreeBenefit,
 	appBenefit,
+	partnerOffersBenefit,
 	feastBenefit,
 ];
-
 const supporterPlusBenefitsV2 = [
 	appBenefitControlV2,
 	addFreeBenefit,
@@ -186,7 +176,6 @@ const supporterPlusBenefitsV2 = [
 	feastBenefit,
 ];
 
-const contributionBenefits = [newsletterBenefit];
 const contributionBenefitsControl = [newsletterBenefitControl];
 const contributionBenefitsV1 = [newsletterBenefit];
 const contributionBenefitsAnnualV2 = [newsletterBenefitAnnualV2];
@@ -242,7 +231,7 @@ export const productCatalogDescription: Record<
 		],
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
-		benefitsAdditional: supporterPlusBenefits,
+		benefitsAdditional: supporterPlusBenefitsV1,
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
@@ -318,7 +307,7 @@ export const productCatalogDescription: Record<
 	SupporterPlus: {
 		label: 'All-access digital',
 		/** These are duplicated in the TierThree benefitsAdditional */
-		benefits: supporterPlusBenefits,
+		benefits: supporterPlusBenefitsV1,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -395,7 +384,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: contributionBenefits,
+		benefits: contributionBenefitsV1,
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
