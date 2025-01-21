@@ -104,10 +104,6 @@ export function Events({ geoId }: Props) {
 
 	const pageviewId = getPageViewId();
 
-	if (!pageviewId) {
-		logException('pageviewId not available on event listing');
-	}
-
 	const hashUrlSearchParams = new URLSearchParams({
 		'p[meta_page_view_id]': pageviewId,
 		'p[meta_region_id]': geoId,
@@ -123,6 +119,13 @@ export function Events({ geoId }: Props) {
 	const presetDataUrl = `?preset_data=1&widget=true#${decodeURIComponent(
 		hashUrlSearchParams.toString(),
 	)}`;
+
+	if (
+		!hashUrlSearchParams.has('p[meta_page_view_id]') ||
+		hashUrlSearchParams.get('p[meta_page_view_id]') !== pageviewId
+	) {
+		logException('hashUrlSearchParams pageviewId mismatch');
+	}
 
 	const embedUrl = `${ticketTailorUrl}/${eventId}/book${presetDataUrl}`;
 
