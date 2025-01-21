@@ -148,16 +148,6 @@ export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
 > = {
-	GuardianLight: {
-		label: 'Guardian Ad-Lite',
-		thankyouMessage: `Your valued support powers our journalism${' '}`,
-		ratePlans: {
-			Monthly: {
-				billingPeriod: 'Monthly',
-			},
-		},
-		benefits: guardianAdLiteBenefits,
-	},
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
 		thankyouMessage: `Your valued support powers our journalism${' '}`,

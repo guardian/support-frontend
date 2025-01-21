@@ -197,8 +197,7 @@ function Heading({
 	promotion,
 }: HeadingProps): JSX.Element {
 	const isPending = paymentStatus === 'pending';
-	const isGuardianAdLite =
-		productKey === 'GuardianLight' || productKey === 'GuardianAdLite';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
