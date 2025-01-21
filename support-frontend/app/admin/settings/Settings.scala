@@ -25,6 +25,7 @@ case class AllSettings(
     amounts: AmountsTests,
     contributionTypes: ContributionTypes,
     metricUrl: MetricUrl,
+    landingPageTests: List[LandingPageTest],
 )
 
 object AllSettings {

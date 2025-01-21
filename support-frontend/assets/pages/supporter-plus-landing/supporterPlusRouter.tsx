@@ -72,6 +72,7 @@ const router = () => {
 									inThreeTier ? (
 										<ThreeTierLanding
 											geoId={countryId}
+											settings={commonState.landingPageSettings}
 											abParticipations={commonState.abParticipations}
 										/>
 									) : showNewContributionsOnly ? (
