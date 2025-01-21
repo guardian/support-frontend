@@ -373,16 +373,14 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
+	const inResetBenefits = abParticipations.benefitsReset; // all variants
 	const inNewsPaperArchiveBenefit = ['v1', 'v2'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
-	const newsPaperArchiveCountryGroupId = inNewsPaperArchiveBenefit
-		? countryGroupId
-		: undefined;
 	const productCatalogDescription =
 		productCatalogDescriptionResetAndNewspaperArchive(
-			abParticipations.benefitsReset,
-			newsPaperArchiveCountryGroupId,
+			inResetBenefits,
+			inNewsPaperArchiveBenefit ? countryGroupId : undefined,
 		);
 
 	/**
@@ -453,6 +451,8 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: 'Support',
+		lozengeText:
+			inResetBenefits === 'control' ? 'Recommended' : 'Highest impact',
 	};
 
 	/**
