@@ -53,7 +53,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
-      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -158,63 +157,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "Priority": 1,
       },
       "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
-    },
-    "AmazonPayPaymentErrorAECECF4D": {
-      "Properties": {
-        "ActionsEnabled": true,
-        "AlarmActions": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
-                {
-                  "Ref": "AWS::AccountId",
-                },
-                ":alarms-handler-topic-PROD",
-              ],
-            ],
-          },
-        ],
-        "AlarmName": "[CDK] payment-api PROD Amazon Pay payment error for one-off contribution via the payment-api",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": [
-          {
-            "Name": "payment-provider",
-            "Value": "AmazonPay",
-          },
-        ],
-        "EvaluationPeriods": 1,
-        "MetricName": "payment-error",
-        "Namespace": "support-payment-api-PROD",
-        "Period": 60,
-        "Statistic": "Sum",
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-        "Threshold": 1,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
     },
     "AssumeOphanRoleE66A9D46": {
       "Properties": {
