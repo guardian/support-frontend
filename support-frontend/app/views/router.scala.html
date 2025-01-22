@@ -23,7 +23,7 @@
 @main(
   title = "Support the Guardian | Checkout",
   mainElement = assets.getSsrCacheContentsAsHtml(divId = "router", file = "ssr-holding-content.html"),
-  mainJsBundle = if (serversideTests.get("lazyLoading").contains(Variant)) RefPath("[countryGroupId]/lazyRouter.js")  else RefPath("[countryGroupId]/router.js"),
+  mainJsBundle = RefPath("[countryGroupId]/lazyRouter.js"),
   mainStyleBundle = None,
   description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
   canonicalLink = Some("https://support.theguardian.com/checkout"),
