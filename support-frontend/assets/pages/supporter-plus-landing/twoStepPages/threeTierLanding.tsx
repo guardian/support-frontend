@@ -46,9 +46,8 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
-	productCatalogDescription as canonicalProductCatalogDescription,
 	productCatalog,
-	productCatalogDescriptionNewBenefits,
+	productCatalogDescriptionResetAndNewspaperArchive,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -374,11 +373,16 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	const productCatalogDescription = ['v1', 'v2'].includes(
+	const inResetBenefits = abParticipations.benefitsReset; // all variants
+	const inNewsPaperArchiveBenefit = ['v1', 'v2'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
-	)
-		? productCatalogDescriptionNewBenefits(countryGroupId)
-		: canonicalProductCatalogDescription;
+	);
+	const productCatalogDescription =
+		productCatalogDescriptionResetAndNewspaperArchive(
+			selectedContributionRatePlan,
+			inResetBenefits,
+			inNewsPaperArchiveBenefit ? countryGroupId : undefined,
+		);
 
 	/**
 	 * Tier 1: Contributions
@@ -448,6 +452,9 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: 'Support',
+		lozengeText: ['control', 'v2'].includes(inResetBenefits ?? '')
+			? 'Recommended'
+			: 'Highest impact',
 	};
 
 	/**

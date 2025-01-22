@@ -12,6 +12,9 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
+export type SupporterPlusVariants = 'control' | 'v1' | 'v2';
+export type ContributionVariants = 'control' | 'v1' | 'v2Annual' | 'v2Monthly';
+
 type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
@@ -94,6 +97,10 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
 
+const appBenefitControlV2 = {
+	copy: 'Unlimited access to the Guardian app',
+	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+};
 const appBenefit = {
 	copy: 'Full access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
@@ -101,8 +108,20 @@ const appBenefit = {
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
+
+const newsletterBenefitControl = {
+	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+};
 const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+};
+const newsletterBenefitMonthlyV2 = {
+	copy: 'Give to the Guardian every month with Support',
+	hideBullet: true,
+};
+const newsletterBenefitAnnualV2 = {
+	copy: 'Give to the Guardian every year with Support',
+	hideBullet: true,
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -118,6 +137,17 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
+const newspaperArchiveBenefitUK = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
+};
+const newspaperArchiveBenefitROW = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
+};
+
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
@@ -132,6 +162,45 @@ const supporterPlusBenefits = [
 	appBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
+];
+const supporterPlusBenefitsList: Record<
+	SupporterPlusVariants,
+	ProductBenefit[]
+> = {
+	control: [
+		appBenefitControlV2,
+		addFreeBenefit,
+		newsletterBenefitControl,
+		fewerAsksBenefit,
+		partnerOffersBenefit,
+		feastBenefit,
+	],
+	v1: supporterPlusBenefits,
+	v2: [
+		appBenefitControlV2,
+		addFreeBenefit,
+		fewerAsksBenefit,
+		partnerOffersBenefit,
+		feastBenefit,
+	],
+};
+
+const contributionBenefitsList: Record<ContributionVariants, ProductBenefit[]> =
+	{
+		control: [newsletterBenefitControl],
+		v1: [newsletterBenefit],
+		v2Monthly: [newsletterBenefitMonthlyV2],
+		v2Annual: [newsletterBenefitAnnualV2],
+	};
+
+const tierThreeBenefits = [guardianWeeklyBenefit];
+const tierThreeInclArchiveBenefitsUK = [
+	guardianWeeklyBenefit,
+	newspaperArchiveBenefitUK,
+];
+const tierThreeInclArchiveBenefitsROW = [
+	guardianWeeklyBenefit,
+	newspaperArchiveBenefitROW,
 ];
 
 const guardianAdLiteBenefits = [
@@ -388,6 +457,58 @@ export const productCatalogDescription: Record<
 		},
 	},
 };
+
+function supporterPlusVariant(variant?: string): SupporterPlusVariants {
+	switch (variant) {
+		case 'v1':
+		case 'v2':
+			return variant;
+		default:
+			return 'control';
+	}
+}
+function contributionVariant(
+	period: 'Monthly' | 'Annual',
+	variant?: string,
+): ContributionVariants {
+	switch (variant) {
+		case 'v1':
+			return variant;
+		case 'v2':
+			return `v2${period}`;
+		default:
+			return 'control';
+	}
+}
+
+export function productCatalogDescriptionResetAndNewspaperArchive(
+	period: 'Monthly' | 'Annual',
+	resetVariant?: string,
+	countryGroupId?: CountryGroupId,
+) {
+	const newsPaperArchiveBenefit = countryGroupId
+		? countryGroupId === 'GBPCountries'
+			? tierThreeInclArchiveBenefitsUK
+			: tierThreeInclArchiveBenefitsROW
+		: tierThreeBenefits;
+
+	return {
+		...productCatalogDescription,
+		SupporterPlus: {
+			...productCatalogDescription.SupporterPlus,
+			benefits: supporterPlusBenefitsList[supporterPlusVariant(resetVariant)],
+		},
+		Contribution: {
+			...productCatalogDescription.Contribution,
+			benefits:
+				contributionBenefitsList[contributionVariant(period, resetVariant)],
+		},
+		TierThree: {
+			...productCatalogDescription.TierThree,
+			benefits: newsPaperArchiveBenefit,
+		},
+	};
+}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,
