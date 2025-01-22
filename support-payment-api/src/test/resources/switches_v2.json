@@ -27,10 +27,6 @@
         "description": "Stripe - Apple Pay",
         "state": "On"
       },
-      "amazonPay": {
-        "description": "Amazon Pay",
-        "state": "Off"
-      },
       "directDebit": {
         "description": "Direct Debit",
         "state": "On"
@@ -62,10 +58,6 @@
       },
       "stripeApplePay": {
         "description": "Stripe - Apple Pay",
-        "state": "On"
-      },
-      "amazonPay": {
-        "description": "Amazon Pay",
         "state": "On"
       },
       "payPal": {
