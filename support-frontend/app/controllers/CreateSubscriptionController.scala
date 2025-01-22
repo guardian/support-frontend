@@ -153,7 +153,7 @@ class CreateSubscriptionController(
   }
 
   private def validateBenefits(response: UserBenefitsResponse): EitherT[Future, CreateSubscriptionError, Unit] = {
-    if (response.benefits.contains("adFree") || response.benefits.contains("rejectTracking")) {
+    if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
       // Not eligible
       EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
     } else {
