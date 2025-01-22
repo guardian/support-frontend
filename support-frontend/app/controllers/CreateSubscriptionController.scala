@@ -19,7 +19,6 @@ import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
-import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -343,56 +342,9 @@ class CreateSubscriptionController(
   }
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
-    // Setting the user attributes cookies used by frontend. See:
-    // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
-    val standardCookies = List(
-      "gu_user_features_expiry" -> DateTime.now.plusDays(1).getMillis.toString,
-      "gu_hide_support_messaging" -> true.toString,
-    )
-    val productCookies = product match {
-      case Contribution(_, _, billingPeriod) =>
-        List(
-          s"gu.contributions.recurring.contrib-timestamp.$billingPeriod" -> DateTime.now.getMillis.toString,
-          "gu_recurring_contributor" -> true.toString,
-        )
-      case _: SupporterPlus =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: TierThree =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: DigitalPack =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case p: Paper if p.productOptions.hasDigitalSubscription =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: Paper => List.empty
-      case _: GuardianWeekly => List.empty
-      case _: GuardianAdLite => List("gu_allow_reject_all" -> true.toString)
-    }
-
-    val standardAndProductCookies = (standardCookies ++ productCookies).map { case (name, value) =>
-      Cookie(
-        name = name,
-        value = value,
-        secure = true,
-        httpOnly = false,
-        domain = Some(guardianDomain.value),
-      )
-    }
-
-    checkoutCompleteCookies(product, userEmail).map(_ ++ standardAndProductCookies)
+    val productCookiesCreator = SubscriptionProductCookiesCreator(guardianDomain)
+    val productCookies = productCookiesCreator.createCookiesForProduct(product)
+    checkoutCompleteCookies(product, userEmail).map(_ ++ productCookies)
   }
 
   private def buildSupportWorkersUser(
