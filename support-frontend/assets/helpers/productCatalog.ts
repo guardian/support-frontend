@@ -113,11 +113,11 @@ const newsletterBenefit = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 };
 const newsletterBenefitMonthlyV2 = {
-	copy: 'Our minimum level of monthly support',
+	copy: 'Give to the Guardian every month with Support',
 	hideBullet: true,
 };
 const newsletterBenefitAnnualV2 = {
-	copy: 'Our minimum level of annual support',
+	copy: 'Give to the Guardian every year with Support',
 	hideBullet: true,
 };
 const fewerAsksBenefit = {
