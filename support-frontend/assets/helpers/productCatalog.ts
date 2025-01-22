@@ -155,7 +155,7 @@ const feastBenefit = {
 		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
 };
 
-const supporterPlusBenefitsV1 = [
+const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	newsletterBenefit,
 	addFreeBenefit,
@@ -175,7 +175,7 @@ const supporterPlusBenefitsList: Record<
 		partnerOffersBenefit,
 		feastBenefit,
 	],
-	v1: supporterPlusBenefitsV1,
+	v1: supporterPlusBenefits,
 	v2: [
 		appBenefitControlV2,
 		addFreeBenefit,
@@ -236,7 +236,7 @@ export const productCatalogDescription: Record<
 		],
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
-		benefitsAdditional: supporterPlusBenefitsV1,
+		benefitsAdditional: supporterPlusBenefits,
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
@@ -312,7 +312,7 @@ export const productCatalogDescription: Record<
 	SupporterPlus: {
 		label: 'All-access digital',
 		/** These are duplicated in the TierThree benefitsAdditional */
-		benefits: supporterPlusBenefitsV1,
+		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
