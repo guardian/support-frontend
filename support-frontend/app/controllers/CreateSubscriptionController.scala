@@ -19,6 +19,7 @@ import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
+import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -416,7 +417,7 @@ class CreateSubscriptionController(
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     val productCookiesCreator = SubscriptionProductCookiesCreator(guardianDomain)
-    val productCookies = productCookiesCreator.createCookiesForProduct(product)
+    val productCookies = productCookiesCreator.createCookiesForProduct(product, DateTime.now())
     checkoutCompleteCookies(product, userEmail).map(_ ++ productCookies)
   }
 
