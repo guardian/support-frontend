@@ -152,7 +152,9 @@ class CreateSubscriptionController(
     }
   }
 
-  private def validateBenefits(response: UserBenefitsResponse): EitherT[Future, CreateSubscriptionError, Unit] = {
+  private def validateBenefitsForAdLitePurchase(
+      response: UserBenefitsResponse,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
     if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
       // Not eligible
       EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
@@ -178,7 +180,7 @@ class CreateSubscriptionController(
               .forUser(testUsers.isTestUser(request))
               .getUserBenefits(userDetails.userDetails.identityId)
               .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
-            _ <- validateBenefits(benefits)
+            _ <- validateBenefitsForAdLitePurchase(benefits)
           } yield ()
         }
       }
