@@ -76,14 +76,20 @@ const accordianRow = css`
 const contents = [
 	{
 		title: 'What is included in my Guardian Ad-Lite subscription?',
-		body: 'tbc',
+		body: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising. You will still see advertising but it will be delivered without the use of personalised advertising cookies or similar technologies.\nA Guardian Ad-Lite subscription does not entitle you to the additional benefits on offer via our All-access digital and Digital + print subscriptions, which are stated <a href="/contribute"}>here</a>.',
 	},
 	{
 		title: 'Will my Guardian Ad-Lite subscription work across all devices?',
-		body: 'tbc',
+		body: 'You can access your Guardian Ad-Lite subscription across all devices by logging into your Guardian account.',
 	},
-	{ title: 'How do I cancel my Guardian Ad-Lite subscription?', body: 'tbc' },
-	{ title: 'How do I contact customer services?', body: 'tbc' },
+	{
+		title: 'How do I cancel my Guardian Ad-Lite subscription?',
+		body: 'To cancel, go to Manage my account, and for further information on your Guardian Ad-Lite subscription, see here.',
+	},
+	{
+		title: 'How do I contact customer services?',
+		body: 'For any queries, including subscription-related queries, please visit our <a href="https://manage.theguardian.com/help-centre">Help centre</a>, where you will also find contact details for your region.',
+	},
 ];
 
 export function AccordianComponent(): JSX.Element {
