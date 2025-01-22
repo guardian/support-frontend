@@ -152,14 +152,6 @@ const feastBenefit = {
 		'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
 };
 
-const supporterPlusBenefitsControl = [
-	appBenefitControlV2,
-	addFreeBenefit,
-	newsletterBenefitControl,
-	fewerAsksBenefit,
-	partnerOffersBenefit,
-	feastBenefit,
-];
 const supporterPlusBenefitsV1 = [
 	fewerAsksBenefit,
 	newsletterBenefit,
@@ -168,18 +160,31 @@ const supporterPlusBenefitsV1 = [
 	partnerOffersBenefit,
 	feastBenefit,
 ];
-const supporterPlusBenefitsV2 = [
-	appBenefitControlV2,
-	addFreeBenefit,
-	fewerAsksBenefit,
-	partnerOffersBenefit,
-	feastBenefit,
-];
+const supporterPlusBenefitsList = {
+	control: [
+		appBenefitControlV2,
+		addFreeBenefit,
+		newsletterBenefitControl,
+		fewerAsksBenefit,
+		partnerOffersBenefit,
+		feastBenefit,
+	],
+	v1: supporterPlusBenefitsV1,
+	v2: [
+		appBenefitControlV2,
+		addFreeBenefit,
+		fewerAsksBenefit,
+		partnerOffersBenefit,
+		feastBenefit,
+	],
+};
 
-const contributionBenefitsControl = [newsletterBenefitControl];
-const contributionBenefitsV1 = [newsletterBenefit];
-const contributionBenefitsAnnualV2 = [newsletterBenefitAnnualV2];
-const contributionBenefitsMonthlyV2 = [newsletterBenefitMonthlyV2];
+const contributionBenefitsList = {
+	control: [newsletterBenefitControl],
+	v1: [newsletterBenefit],
+	v2monthly: [newsletterBenefitMonthlyV2],
+	v2annual: [newsletterBenefitAnnualV2],
+};
 
 const tierThreeBenefits = [guardianWeeklyBenefit];
 const tierThreeInclArchiveBenefitsUK = [
@@ -377,7 +382,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: contributionBenefitsV1,
+		benefits: [newsletterBenefit],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
@@ -447,24 +452,20 @@ export const productCatalogDescription: Record<
 };
 
 export function productCatalogDescriptionResetAndNewspaperArchive(
-	period: string,
-	resetVariant?: string,
+	period: 'monthly' | 'annual',
+	resetVariant?: 'v1' | 'v2' | 'control',
 	countryGroupId?: CountryGroupId,
 ) {
 	const supporterPlusBenefits =
-		resetVariant === 'v1'
-			? supporterPlusBenefitsV1
-			: resetVariant === 'v2'
-			? supporterPlusBenefitsV2
-			: supporterPlusBenefitsControl;
-	const contributionBenefits =
-		resetVariant === 'v1'
-			? contributionBenefitsV1
-			: resetVariant === 'v2'
-			? period === 'Monthly'
-				? contributionBenefitsMonthlyV2
-				: contributionBenefitsAnnualV2
-			: contributionBenefitsControl;
+		supporterPlusBenefitsList[resetVariant ?? 'control'];
+	const resetVariantPeriod = resetVariant
+		? resetVariant === 'v2'
+			? period === 'monthly'
+				? `v2monthly`
+				: `v2annual`
+			: `v1`
+		: 'control';
+	const contributionBenefits = contributionBenefitsList[resetVariantPeriod];
 	const newsPaperArchiveBenefit = countryGroupId
 		? countryGroupId === 'GBPCountries'
 			? tierThreeInclArchiveBenefitsUK
