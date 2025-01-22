@@ -12,6 +12,9 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
+export type SupporterPlusVariants = 'control' | 'v1' | 'v2';
+export type ContributionVariants = 'control' | 'v1' | 'v2Annual' | 'v2Monthly';
+
 type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
@@ -160,7 +163,10 @@ const supporterPlusBenefitsV1 = [
 	partnerOffersBenefit,
 	feastBenefit,
 ];
-const supporterPlusBenefitsList = {
+const supporterPlusBenefitsList: Record<
+	SupporterPlusVariants,
+	ProductBenefit[]
+> = {
 	control: [
 		appBenefitControlV2,
 		addFreeBenefit,
@@ -179,12 +185,13 @@ const supporterPlusBenefitsList = {
 	],
 };
 
-const contributionBenefitsList = {
-	control: [newsletterBenefitControl],
-	v1: [newsletterBenefit],
-	v2monthly: [newsletterBenefitMonthlyV2],
-	v2annual: [newsletterBenefitAnnualV2],
-};
+const contributionBenefitsList: Record<ContributionVariants, ProductBenefit[]> =
+	{
+		control: [newsletterBenefitControl],
+		v1: [newsletterBenefit],
+		v2Monthly: [newsletterBenefitMonthlyV2],
+		v2Annual: [newsletterBenefitAnnualV2],
+	};
 
 const tierThreeBenefits = [guardianWeeklyBenefit];
 const tierThreeInclArchiveBenefitsUK = [
@@ -451,21 +458,34 @@ export const productCatalogDescription: Record<
 	},
 };
 
+function supporterPlusVariant(variant?: string): SupporterPlusVariants {
+	switch (variant) {
+		case 'v1':
+		case 'v2':
+			return variant;
+		default:
+			return 'control';
+	}
+}
+function contributionVariant(
+	period: 'Monthly' | 'Annual',
+	variant?: string,
+): ContributionVariants {
+	switch (variant) {
+		case 'v1':
+			return variant;
+		case 'v2':
+			return `v2${period}`;
+		default:
+			return 'control';
+	}
+}
+
 export function productCatalogDescriptionResetAndNewspaperArchive(
-	period: 'monthly' | 'annual',
-	resetVariant?: 'v1' | 'v2' | 'control',
+	period: 'Monthly' | 'Annual',
+	resetVariant?: string,
 	countryGroupId?: CountryGroupId,
 ) {
-	const supporterPlusBenefits =
-		supporterPlusBenefitsList[resetVariant ?? 'control'];
-	const resetVariantPeriod = resetVariant
-		? resetVariant === 'v2'
-			? period === 'monthly'
-				? `v2monthly`
-				: `v2annual`
-			: `v1`
-		: 'control';
-	const contributionBenefits = contributionBenefitsList[resetVariantPeriod];
 	const newsPaperArchiveBenefit = countryGroupId
 		? countryGroupId === 'GBPCountries'
 			? tierThreeInclArchiveBenefitsUK
@@ -476,11 +496,12 @@ export function productCatalogDescriptionResetAndNewspaperArchive(
 		...productCatalogDescription,
 		SupporterPlus: {
 			...productCatalogDescription.SupporterPlus,
-			benefits: supporterPlusBenefits,
+			benefits: supporterPlusBenefitsList[supporterPlusVariant(resetVariant)],
 		},
 		Contribution: {
 			...productCatalogDescription.Contribution,
-			benefits: contributionBenefits,
+			benefits:
+				contributionBenefitsList[contributionVariant(period, resetVariant)],
 		},
 		TierThree: {
 			...productCatalogDescription.TierThree,
