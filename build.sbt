@@ -113,7 +113,6 @@ lazy val root = (project in file("."))
     `module-acquisition-events`,
     `module-rest`,
     `support-payment-api`,
-    `acquisitions-firehose-transformer`,
     `support-lambdas`,
   )
 
@@ -319,17 +318,6 @@ lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .dependsOn(`module-aws`)
 
-lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas/acquisitions-firehose-transformer"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .settings(
-    scalafmtSettings,
-    scalacOptions += "-Ytasty-reader",
-    libraryDependencies ++= commonDependencies,
-  )
-  .dependsOn(`module-acquisition-events`)
-  .aggregate(`module-acquisition-events`)
-
 lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisition-events-api"))
   .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
@@ -357,7 +345,6 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
   .aggregate(
     `stripe-intent`,
     `it-test-runner`,
-    `acquisitions-firehose-transformer`,
     `acquisition-events-api`,
     `bigquery-acquisitions-publisher`,
   )
