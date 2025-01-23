@@ -61,6 +61,7 @@ import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import * as cookie from 'helpers/storage/cookie';
+import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
@@ -195,6 +196,26 @@ function getFinalAmount(
 			: roundToDecimalPlaces(parsedAmount * transactionMultiplier);
 	}
 	return roundToDecimalPlaces(selectedPriceCard * transactionMultiplier);
+}
+
+function getAcquisitionData(
+	abParticipations: Participations,
+	billingPostcode: string,
+	coverTransactionCost: boolean,
+): PaymentAPIAcquisitionData {
+	const referrerAcquisitionData = getReferrerAcquisitionData();
+	return derivePaymentApiAcquisitionData(
+		{
+			...referrerAcquisitionData,
+			labels: [
+				...(referrerAcquisitionData.labels ?? []),
+				'one-time-checkout',
+				...(coverTransactionCost ? ['transaction-fee-covered'] : []),
+			],
+		},
+		abParticipations,
+		billingPostcode,
+	);
 }
 
 export function OneTimeCheckoutComponent({
@@ -360,13 +381,10 @@ export function OneTimeCheckoutComponent({
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
-				const acquisitionData = derivePaymentApiAcquisitionData(
-					{
-						...getReferrerAcquisitionData(),
-						labels: ['one-time-checkout'],
-					},
+				const acquisitionData = getAcquisitionData(
 					abParticipations,
 					billingPostcode,
+					coverTransactionCost,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -444,13 +462,10 @@ export function OneTimeCheckoutComponent({
 							email,
 							stripePaymentMethod: stripePaymentMethod,
 						},
-						acquisitionData: derivePaymentApiAcquisitionData(
-							{
-								...getReferrerAcquisitionData(),
-								labels: ['one-time-checkout'],
-							},
+						acquisitionData: getAcquisitionData(
 							abParticipations,
 							billingPostcode,
+							coverTransactionCost,
 						),
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
