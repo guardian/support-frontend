@@ -3,7 +3,7 @@ object LibraryVersions {
 
   @deprecated("use awsClientVersion2")
   val awsClientVersion = "1.12.780"
-  val awsClientVersion2 = "2.29.17"
+  val awsClientVersion2 = "2.29.52"
 
   val catsVersion = "2.10.0"
   val jacksonVersion = "2.15.2"
