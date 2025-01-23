@@ -640,6 +640,33 @@ it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingNotAusNotUS),
 	).toEqual(false);
+	expect(
+		targetPageMatches(
+			'/subscribe/weekly/checkout',
+			allLandingPagesAndThankyouPages,
+		),
+	).toEqual(false);
+	expect(
+		targetPageMatches(
+			'/subscribe/paper/checkout',
+			allLandingPagesAndThankyouPages,
+		),
+	).toEqual(false);
+	expect(
+		targetPageMatches(
+			'/subscribe/digitaledition',
+			allLandingPagesAndThankyouPages,
+		),
+	).toEqual(false);
+	expect(
+		targetPageMatches('/subscribe/paper', allLandingPagesAndThankyouPages),
+	).toEqual(false);
+	expect(
+		targetPageMatches('/subscribe/weekly', allLandingPagesAndThankyouPages),
+	).toEqual(false);
+	expect(
+		targetPageMatches('/subscribe', allLandingPagesAndThankyouPages),
+	).toEqual(false);
 	// Test 3-tier landing page
 	expect(
 		targetPageMatches('/uk/contribute', allLandingPagesAndThankyouPages),
