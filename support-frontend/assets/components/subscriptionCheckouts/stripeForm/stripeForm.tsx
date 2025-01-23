@@ -40,7 +40,7 @@ import {
 } from './composedStripeElements';
 
 // Types
-export type StripeFormPropTypes = {
+type StripeFormPropTypes = {
 	allErrors: Array<FormError<FormField>>;
 	stripeKey: string;
 	submitForm: () => void;

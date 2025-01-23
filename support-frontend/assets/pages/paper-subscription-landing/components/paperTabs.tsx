@@ -14,7 +14,7 @@ type TabOptions = {
 	href: string;
 	content: typeof SubsCardFaqBlock | typeof ContentDeliveryFaqBlock;
 };
-export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
+const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
 		name: 'Home Delivery',
 		href: `#${HomeDelivery}`,

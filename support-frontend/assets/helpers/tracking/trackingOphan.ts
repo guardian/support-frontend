@@ -69,7 +69,7 @@ export type OphanComponentEvent = {
 	};
 };
 
-export type OphanABEvent = {
+type OphanABEvent = {
 	variantName: string;
 	complete: boolean;
 	campaignCodes?: string[];
@@ -168,7 +168,6 @@ const navigateWithPageView = (
 
 export {
 	trackComponentEvents,
-	pageView,
 	trackAbTests,
 	setReferrerDataInLocalStorage,
 	navigateWithPageView,

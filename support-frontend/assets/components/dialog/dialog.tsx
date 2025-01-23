@@ -48,7 +48,7 @@ const backdrop = css`
 	width: 100%;
 `;
 
-export type PropTypes = {
+type PropTypes = {
 	closeDialog: () => void;
 	styled?: boolean;
 	open?: boolean;

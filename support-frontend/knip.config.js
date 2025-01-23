@@ -8,7 +8,7 @@ module.exports = {
 	// ! signals that this is production code https://knip.dev/features/production-mode
 	entry: [...flattenedEntryPoints, 'scripts/build-ssr-content.tsx!'],
 	project: ['**/*.{js,jsx,ts,tsx,scss}!'],
-	ignoreExportsUsedInFile: true,
+	ignoreExportsUsedInFile: false,
 	ignoreDependencies: [
 		// used in package.json
 		'@guardian/browserslist-config',

@@ -3,7 +3,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-export type SubscriptionsPaymentMethod =
+type SubscriptionsPaymentMethod =
 	| typeof DirectDebit
 	| typeof PayPal
 	| typeof Stripe;

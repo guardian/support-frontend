@@ -18,7 +18,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
-import PageTitle from 'components/page/pageTitle';
+import { PageTitle } from 'components/page/pageTitle';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';

@@ -12,7 +12,7 @@ import type { Participations } from '../../helpers/abTests/abtest';
 import { setOneOffContributionCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 
-export type ThankYouProps = {
+type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;

@@ -527,7 +527,6 @@ export {
 	sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
 	sendEventConversionPaymentMethod,
-	sendEventAcquisitionDataFromQueryParamEvent,
 	sendEventCheckoutValue,
 	sendEventOneTimeCheckoutValue,
 };

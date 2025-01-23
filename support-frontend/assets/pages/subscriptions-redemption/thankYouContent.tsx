@@ -18,7 +18,7 @@ import ThankYouHero from './components/thankYou/hero';
 import 'helpers/abTests/abtest';
 
 // ----- Types ----- //
-export type PropTypes = {
+type PropTypes = {
 	countryGroupId: CountryGroupId;
 	paymentMethod: Option<PaymentMethod>;
 	marketingConsent: React.ReactNode;
