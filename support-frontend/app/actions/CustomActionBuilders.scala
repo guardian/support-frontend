@@ -67,15 +67,13 @@ class CustomActionBuilders(
       AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
     }
 
-    private def isNon200Result(result: Result) = result.header.status.toString.head != '2'
-
     private def maybePushAlarmMetric(result: Result) = {
       val ignoreList = Set(
         emailProviderRejectedCode,
         invalidEmailAddressCode,
         recaptchaFailedCode,
       )
-      if (isNon200Result(result)) {
+      if (result.header.status == 500) {
         if (!ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {
           logger.error(
             scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
