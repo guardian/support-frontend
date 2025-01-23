@@ -82,19 +82,6 @@ export type ContributionTypes = Record<
 	ContributionTypeSetting[]
 >;
 
-type ParseError = 'ParseError';
-
-type ValidationError = 'TooMuch' | 'TooLittle';
-
-type ParsedContribution =
-	| {
-			valid: true;
-			amount: number;
-	  }
-	| {
-			error: ParseError;
-	  };
-
 type Config = Record<
 	ContributionType,
 	{
@@ -306,42 +293,6 @@ function getConfigMinAmount(
 	return config[countryGroupId][contribType].min;
 }
 
-function validateContribution(
-	input: number,
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-): ValidationError | null | undefined {
-	if (input < config[countryGroupId][contributionType].min) {
-		return 'TooLittle';
-	} else if (input > config[countryGroupId][contributionType].max) {
-		return 'TooMuch';
-	}
-
-	return null;
-}
-
-function parseContribution(input: string): ParsedContribution {
-	const amount = Number(input);
-
-	if (input === '' || Number.isNaN(amount)) {
-		return {
-			error: 'ParseError',
-		};
-	}
-
-	return {
-		valid: true,
-		amount: roundToDecimalPlaces(amount),
-	};
-}
-
-function getMinContribution(
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-): number {
-	return config[countryGroupId][contributionType].min;
-}
-
 function toContributionType(
 	s: string | null | undefined,
 ): ContributionType | null | undefined {
@@ -408,9 +359,6 @@ export {
 	getConfigMinAmount,
 	toContributionType,
 	generateContributionTypes,
-	validateContribution,
-	parseContribution,
-	getMinContribution,
 	billingPeriodFromContrib,
 	getAmount,
 	contributionsOnlyAmountsTestName,
