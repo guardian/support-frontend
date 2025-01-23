@@ -53,6 +53,9 @@ const heading = css`
 const accordian = css`
 	justify-content: space-between;
 	border-bottom: 0px;
+	& a {
+		color: ${palette.brand[500]};
+	}
 `;
 const accordianRow = css`
 	border-top: 1px solid ${palette.neutral[73]};
@@ -115,9 +118,9 @@ const contents = [
 		title: 'How do I contact customer services?',
 		body: (
 			<div>
-				'For any queries, including subscription-related queries, please visit
+				For any queries, including subscription-related queries, please visit
 				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
-				contact details for your region.{' '}
+				contact details for your region.
 			</div>
 		),
 	},
