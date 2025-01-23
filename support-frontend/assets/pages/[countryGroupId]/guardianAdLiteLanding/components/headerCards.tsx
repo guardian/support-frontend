@@ -126,7 +126,8 @@ export function HeaderCards({
 				<h1 css={heading}>Choose how to read the Guardian</h1>
 				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
+					If you already have Guardian Ad-Lite or another Guardian subscription
+					that offers ad-free reading, such as All-access digital, you should,{' '}
 					{SignInLink}
 				</div>
 			</Container>

@@ -101,11 +101,11 @@ export function PosterComponent(): JSX.Element {
 						<p css={paragraph}>
 							The Guardian is lucky to have a unique ownership structure and a
 							revenue model powered by the direct support of many of our
-							readers. However advertising remains a crucial part of how we fund
-							our journalism.
+							readers. However, advertising remains a crucial part of how we
+							fund our journalism.
 						</p>
 						<p css={paragraph}>
-							Readers choosing to reject personalised advertising makes it more
+							Readers choosing to reject personalised advertising make it more
 							difficult for us to generate revenue from online advertising. Put
 							simply, that means that the more people who press “reject”, the
 							less money to pay for quality reporting.

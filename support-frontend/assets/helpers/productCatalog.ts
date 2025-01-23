@@ -205,12 +205,12 @@ const tierThreeInclArchiveBenefitsROW = [
 
 const guardianAdLiteBenefits = [
 	{
-		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian without personalised advertising.',
+		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising.',
 	},
 	{
-		copy: 'If you already read the Guardian ad-free you should sign in.',
+		copy: 'You will still see non-personalised advertising.',
 	},
-	{ copy: 'You can cancel anytime.' },
+	{ copy: 'You can cancel at any time.' },
 ];
 
 export const productCatalogDescription: Record<
