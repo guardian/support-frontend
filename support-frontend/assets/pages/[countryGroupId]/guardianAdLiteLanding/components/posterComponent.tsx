@@ -26,7 +26,7 @@ const container = css`
 `;
 const headingContentContainer = css`
 	${from.tablet} {
-		min-height: 418px;
+		min-height: 404px;
 	}
 	${from.desktop} {
 		max-width: 940px;
