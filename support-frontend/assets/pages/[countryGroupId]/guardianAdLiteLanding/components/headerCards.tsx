@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold24,
+	headlineBold28,
+	headlineBold42,
 	palette,
 	space,
 	textSans15,
@@ -38,13 +39,13 @@ const containerCardsAndSignIn = css`
 const heading = css`
 	color: ${palette.neutral[100]};
 	text-align: left;
-	${headlineBold24}
+	${headlineBold28}
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		text-align: center;
 	}
 	${from.desktop} {
-		font-size: 2.625rem;
+		font-size: ${headlineBold42};
 		margin-bottom: ${space[10]}px;
 	}
 `;
@@ -123,7 +124,7 @@ export function HeaderCards({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={containerCardsAndSignIn}
 			>
-				<h1 css={heading}>Choose how to read the Guardian</h1>
+				<h1 css={heading}>Choose your advertising preferences</h1>
 				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
 					If you already have Guardian Ad-Lite or another Guardian subscription

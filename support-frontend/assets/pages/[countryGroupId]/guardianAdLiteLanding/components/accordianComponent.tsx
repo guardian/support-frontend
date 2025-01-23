@@ -1,14 +1,13 @@
 import { css } from '@emotion/react';
 import {
+	article15,
+	article17,
 	from,
 	headlineBold17,
 	headlineBold20,
-	headlineBold24,
-	headlineBold34,
+	headlineBold28,
 	palette,
 	space,
-	textSans17,
-	textSans20,
 } from '@guardian/source/foundations';
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
 import { Container } from 'components/layout/container';
@@ -44,11 +43,8 @@ const bodyContainer = css`
 `;
 const heading = css`
 	text-align: left;
-	${headlineBold24}
+	${headlineBold28}
 	margin-bottom: ${space[6]}px;
-	${from.desktop} {
-		${headlineBold34}
-	}
 `;
 const accordian = css`
 	justify-content: space-between;
@@ -67,9 +63,9 @@ const accordianRow = css`
 		}
 	} // title
 	> div > * {
-		${textSans17}
+		${article15}
 		${from.desktop} {
-			${textSans20}
+			${article17}
 		}
 	} // body
 	> button > div > span {

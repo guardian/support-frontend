@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold24,
+	headlineBold28,
 	headlineBold34,
 	palette,
 	space,
-	textSans17,
-	textSans20,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import { Container } from 'components/layout/container';
 
@@ -48,7 +47,7 @@ const bodyContainer = css`
 `;
 const heading = css`
 	text-align: left;
-	${headlineBold24}
+	${headlineBold28}
 	margin-bottom: ${space[3]}px;
 	${from.tablet} {
 		max-width: 340px;
@@ -66,12 +65,9 @@ const headingColor = css`
 const copy = css`
 	text-align: left;
 	padding-top: ${space[1]}px;
-	${textSans17};
+	${textEgyptian17};
 	${from.tablet} {
 		padding-top: ${space[2]}px;
-	}
-	${from.desktop} {
-		${textSans20};
 	}
 `;
 const paragraph = css`
