@@ -169,6 +169,7 @@ trait Controllers {
     controllerComponents,
     appConfig.guardianDomain,
     paperRoundServiceProvider,
+    userBenefitsApiServiceProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
