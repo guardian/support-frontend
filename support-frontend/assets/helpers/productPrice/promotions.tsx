@@ -15,7 +15,7 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
 
-export type DiscountBenefit = {
+type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };

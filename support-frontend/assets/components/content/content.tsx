@@ -6,7 +6,7 @@ import 'helpers/types/option';
 import './content.scss';
 
 // ---- Types ----- //
-export const Appearances = {
+const Appearances = {
 	white: 'white',
 	grey: 'grey',
 	highlight: 'highlight',

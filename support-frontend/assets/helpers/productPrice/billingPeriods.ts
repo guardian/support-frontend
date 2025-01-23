@@ -4,10 +4,6 @@ const Quarterly = 'Quarterly';
 
 export type BillingPeriod = typeof Annual | typeof Monthly | typeof Quarterly;
 
-export type DigitalBillingPeriod = typeof Monthly | typeof Annual;
-
-export type DigitalGiftBillingPeriod = typeof Annual | typeof Quarterly;
-
 export type WeeklyBillingPeriod =
 	| typeof Monthly
 	| typeof Quarterly

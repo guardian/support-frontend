@@ -23,7 +23,7 @@ const firstColumnContainer = css`
 	}
 `;
 
-export interface ThankYouModulesProps {
+interface ThankYouModulesProps {
 	isSignedIn?: boolean;
 	showNewspaperArchiveBenefit: boolean;
 	thankYouModules: ThankYouModuleType[];

@@ -5,11 +5,6 @@ import type {
 } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { logException } from 'helpers/utilities/logger';
@@ -18,12 +13,12 @@ import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 // ----- Types ----- //
 export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
 
-export type RegularContributionTypeMap<T> = {
+type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
 };
 
-export type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
+type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
 
@@ -46,7 +41,7 @@ export interface AmountValuesObject {
 	hideChooseYourAmount: boolean;
 }
 
-export type AmountsCardData = {
+type AmountsCardData = {
 	[key in ContributionType]: AmountValuesObject;
 };
 
@@ -89,10 +84,9 @@ export type ContributionTypes = Record<
 
 type ParseError = 'ParseError';
 
-export type ValidationError = 'TooMuch' | 'TooLittle';
-export type ContributionError = ParseError | ValidationError;
+type ValidationError = 'TooMuch' | 'TooLittle';
 
-export type ParsedContribution =
+type ParsedContribution =
 	| {
 			valid: true;
 			amount: number;
@@ -101,7 +95,7 @@ export type ParsedContribution =
 			error: ParseError;
 	  };
 
-export type Config = Record<
+type Config = Record<
 	ContributionType,
 	{
 		min: number;
@@ -387,14 +381,6 @@ function generateContributionTypes(
 	};
 }
 
-function parseRegularContributionType(s: string): RegularContributionType {
-	if (s === 'ANNUAL') {
-		return 'ANNUAL';
-	}
-
-	return 'MONTHLY';
-}
-
 function billingPeriodFromContrib(
 	contributionType: ContributionType,
 ): BillingPeriod {
@@ -406,108 +392,6 @@ function billingPeriodFromContrib(
 			return Monthly;
 	}
 }
-
-function errorMessage(
-	error: ContributionError,
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-): string | null | undefined {
-	const minContrib = config[countryGroupId][contributionType].min;
-	const maxContrib = config[countryGroupId][contributionType].max;
-	const currency = currencies[countryGroups[countryGroupId].currency];
-
-	switch (error) {
-		case 'TooLittle':
-			return `Please enter at least ${currency.glyph}${minContrib}`;
-
-		case 'TooMuch':
-			return `${currency.glyph}${maxContrib} is the maximum we can accept`;
-
-		case 'ParseError':
-			return 'Please enter a numeric amount';
-
-		default:
-			return null;
-	}
-}
-
-function getContributionTypeClassName(
-	contributionType: ContributionType,
-): string {
-	if (contributionType === 'ONE_OFF') {
-		return 'one-off';
-	} else if (contributionType === 'ANNUAL') {
-		return 'annual';
-	}
-
-	return 'monthly';
-}
-
-function getSpokenType(contributionType: ContributionType): string {
-	if (contributionType === 'ONE_OFF') {
-		return 'single';
-	} else if (contributionType === 'ANNUAL') {
-		return 'annual';
-	}
-
-	return 'monthly';
-}
-
-function getFrequency(contributionType: ContributionType): string {
-	if (contributionType === 'ONE_OFF') {
-		return '';
-	} else if (contributionType === 'MONTHLY') {
-		return 'per month';
-	}
-
-	return 'per year';
-}
-
-function getCustomAmountA11yHint(
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-): string {
-	const isoCurrency = countryGroups[countryGroupId].currency;
-	let spokenCurrency = spokenCurrencies[isoCurrency].plural;
-
-	if (contributionType === 'ONE_OFF') {
-		spokenCurrency = spokenCurrencies[isoCurrency].singular;
-	}
-
-	return `Enter an amount of ${
-		config[countryGroupId][contributionType].minInWords
-	}
-    ${spokenCurrency} or more for your
-    ${getSpokenType(contributionType)} contribution.`;
-}
-
-const contributionTypeRadios = [
-	{
-		value: 'ONE_OFF',
-		text: 'Single',
-		accessibilityHint: 'Make a single contribution',
-		id: 'qa-one-off-toggle',
-	},
-	{
-		value: 'MONTHLY',
-		text: 'Monthly',
-		accessibilityHint: 'Make a regular monthly contribution',
-	},
-	{
-		value: 'ANNUAL',
-		text: 'Annually',
-		accessibilityHint: 'Make a regular annual contribution',
-	},
-];
-
-const contributionTypeAvailable = (
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-	contributionTypes: ContributionTypes,
-): boolean =>
-	contributionTypes[countryGroupId].some(
-		(settings) => settings.contributionType === contributionType,
-	);
 
 const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
 
@@ -528,15 +412,7 @@ export {
 	parseContribution,
 	getMinContribution,
 	billingPeriodFromContrib,
-	errorMessage,
-	getContributionTypeClassName,
-	getSpokenType,
-	getFrequency,
-	getCustomAmountA11yHint,
-	contributionTypeRadios,
-	parseRegularContributionType,
 	getAmount,
-	contributionTypeAvailable,
 	contributionsOnlyAmountsTestName,
 	isContributionsOnlyCountry,
 };

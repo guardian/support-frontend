@@ -1,9 +1,6 @@
 // ----- Types ----- //
-export type Domain =
-	| 'thegulocal.com'
-	| 'code.dev-theguardian.com'
-	| 'theguardian.com';
-export type Env = 'DEV' | 'CODE' | 'PROD';
+type Domain = 'thegulocal.com' | 'code.dev-theguardian.com' | 'theguardian.com';
+type Env = 'DEV' | 'CODE' | 'PROD';
 // ----- Setup ----- //
 const DOMAINS: Record<Env, Domain> = {
 	DEV: 'thegulocal.com',

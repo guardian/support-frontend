@@ -62,26 +62,26 @@ type SupporterPlus = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
-export type TierThree = {
+type TierThree = {
 	productType: 'TierThree';
 	currency: string;
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 };
-export type GuardianAdLite = {
+type GuardianAdLite = {
 	productType: 'GuardianAdLite';
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
-export type DigitalSubscription = {
+type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
 	amount?: number;
 };
-export type PaperSubscription = {
+type PaperSubscription = {
 	productType: typeof Paper;
 	currency: string;
 	billingPeriod: BillingPeriod;
@@ -89,7 +89,7 @@ export type PaperSubscription = {
 	productOptions: ProductOptions;
 	deliveryAgent?: number;
 };
-export type GuardianWeeklySubscription = {
+type GuardianWeeklySubscription = {
 	productType: typeof GuardianWeekly;
 	currency: string;
 	billingPeriod: BillingPeriod;
@@ -153,7 +153,7 @@ type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
-export type AppliedPromotion = {
+type AppliedPromotion = {
 	promoCode: string;
 	countryGroupId: SupportInternationalisationId; // There is a bit of naming mismatch between the front and back end
 };
@@ -186,17 +186,17 @@ export type StripePaymentIntentAuthorisation = {
 	paymentMethodId: string | PaymentMethod;
 	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
 };
-export type PayPalAuthorisation = {
+type PayPalAuthorisation = {
 	paymentMethod: typeof PayPal;
 	token: string;
 };
-export type DirectDebitAuthorisation = {
+type DirectDebitAuthorisation = {
 	paymentMethod: typeof DirectDebit;
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
 };
-export type SepaAuthorisation = {
+type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;

@@ -1,15 +1,12 @@
 // ----- Imports ----- //
-import type { CanMakePaymentResult } from '@stripe/stripe-js';
 import {
 	generateContributionTypes,
-	getFrequency,
 	toContributionType,
 } from 'helpers/contributions';
 import type {
 	ContributionType,
 	ContributionTypes,
 	ContributionTypeSetting,
-	SelectedAmounts,
 } from 'helpers/contributions';
 import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -22,18 +19,12 @@ import {
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import type {
 	Currency,
-	IsoCurrency,
 	SpokenCurrency,
 } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
-import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
 export type PaymentMethodSwitch = 'directDebit' | 'sepa' | 'payPal' | 'stripe';
@@ -178,21 +169,6 @@ function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	return null;
 }
 
-function getPaymentDescription(
-	contributionType: ContributionType,
-	paymentMethod: PaymentMethod,
-): string {
-	if (contributionType === 'ONE_OFF') {
-		if (paymentMethod === PayPal) {
-			return 'with PayPal';
-		}
-
-		return 'with card';
-	}
-
-	return '';
-}
-
 function round(amount: number) {
 	/**
 	 * This rounds a `number` to the second decimal.
@@ -237,96 +213,8 @@ const formatAmount = (
 	return simpleFormatAmount(currency, amount);
 };
 
-const getContributeButtonCopy = (
-	contributionType: ContributionType,
-	maybeOtherAmount: string | null,
-	selectedAmounts: SelectedAmounts,
-	currency: IsoCurrency,
-): string => {
-	const frequency = getFrequency(contributionType);
-	const amount =
-		selectedAmounts[contributionType] === 'other'
-			? parseFloat(maybeOtherAmount as string)
-			: selectedAmounts[contributionType];
-
-	const amountCopy = amount
-		? formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount as number,
-				false,
-		  )
-		: '';
-
-	return `Contribute ${amountCopy} ${frequency}`;
-};
-
-const getContributeButtonCopyWithPaymentType = (
-	contributionType: ContributionType,
-	maybeOtherAmount: string | null,
-	selectedAmounts: SelectedAmounts,
-	currency: IsoCurrency,
-	paymentMethod: PaymentMethod,
-): string => {
-	const paymentDescriptionCopy = getPaymentDescription(
-		contributionType,
-		paymentMethod,
-	);
-	const contributionButtonCopy = getContributeButtonCopy(
-		contributionType,
-		maybeOtherAmount,
-		selectedAmounts,
-		currency,
-	);
-	return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
-};
-
-function getPaymentLabel(paymentMethod: PaymentMethod): string {
-	switch (paymentMethod) {
-		case Stripe:
-			return 'Credit/Debit card';
-
-		case DirectDebit:
-			return 'Direct debit';
-
-		case Sepa:
-			return 'Direct debit (SEPA)';
-
-		case PayPal:
-			return PayPal;
-
-		default:
-			return 'Other Payment Method';
-	}
-}
-
-// The value of result will either be:
-// . null - browser has no compatible payment method button)
-// . {applePay: true} - applePay is available
-// . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
-function getAvailablePaymentRequestButtonPaymentMethod(
-	result: CanMakePaymentResult | null,
-	contributionType: ContributionType,
-): StripePaymentMethod | null {
-	const switchKey = switchKeyForContributionType(contributionType);
-
-	if (result?.applePay && isSwitchOn(`${switchKey}.stripeApplePay`)) {
-		return 'StripeApplePay';
-	} else if (
-		result &&
-		!result.applePay &&
-		isSwitchOn(`${switchKey}.stripePaymentRequestButton`)
-	) {
-		return 'StripePaymentRequestButton';
-	}
-
-	return null;
-}
-
 // ----- Exports ----- //
 export {
-	getContributeButtonCopy,
-	getContributeButtonCopyWithPaymentType,
 	simpleFormatAmount,
 	formatAmount,
 	getValidContributionTypesFromUrlOrElse,
@@ -336,7 +224,4 @@ export {
 	toHumanReadableContributionType,
 	getValidPaymentMethods,
 	getPaymentMethodFromSession,
-	getPaymentDescription,
-	getPaymentLabel,
-	getAvailablePaymentRequestButtonPaymentMethod,
 };

@@ -11,8 +11,8 @@ import {
 import type { ReactElement, ReactNode } from 'react';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
-export const roundelSizeMob = 100;
-export const roundelSize = 180;
+const roundelSizeMob = 100;
+const roundelSize = 180;
 
 const heroRoundelStyles = css`
 	display: flex;

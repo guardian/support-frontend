@@ -9,7 +9,7 @@ import 'helpers/subscriptionsForms/formFields';
 const marginBotom = css`
 	margin-bottom: ${space[6]}px;
 `;
-export type PropTypes = {
+type PropTypes = {
 	firstNameGiftRecipient: string;
 	setFirstNameGift: (firstName: string) => void;
 	lastNameGiftRecipient: string;
@@ -57,41 +57,4 @@ function PersonalDetailsGift(props: PropTypes): JSX.Element {
 	);
 }
 
-function PersonalDetailsDigitalGift(props: PropTypes): JSX.Element {
-	return (
-		<div>
-			<TextInput
-				cssOverrides={marginBotom}
-				id="firstNameGiftRecipient"
-				data-qm-masking="blocklist"
-				label="First name"
-				type="text"
-				value={props.firstNameGiftRecipient}
-				onChange={(e) => props.setFirstNameGift(e.target.value)}
-				error={firstError('firstNameGiftRecipient', props.formErrors)}
-			/>
-			<TextInput
-				cssOverrides={marginBotom}
-				id="lastNameGiftRecipient"
-				data-qm-masking="blocklist"
-				label="Last name"
-				type="text"
-				value={props.lastNameGiftRecipient}
-				onChange={(e) => props.setLastNameGift(e.target.value)}
-				error={firstError('lastNameGiftRecipient', props.formErrors)}
-			/>
-			<TextInput
-				cssOverrides={marginBotom}
-				id="emailGiftRecipient"
-				data-qm-masking="blocklist"
-				label="Email"
-				type="email"
-				onChange={(e) => props.setEmailGift(e.target.value)}
-				value={props.emailGiftRecipient}
-				error={firstError('emailGiftRecipient', props.formErrors)}
-			/>
-		</div>
-	);
-}
-
-export { PersonalDetailsGift, PersonalDetailsDigitalGift };
+export { PersonalDetailsGift };

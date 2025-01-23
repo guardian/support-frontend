@@ -96,9 +96,4 @@ const useCsrCustomerData = (
 const csrUserName = (csrCustomerData: CsrCustomerData): string =>
 	`${csrCustomerData.csr.firstName} ${csrCustomerData.csr.lastName}`;
 
-export {
-	useCsrCustomerData,
-	isSalesforceDomain,
-	csrUserName,
-	parseCustomerData,
-};
+export { useCsrCustomerData, csrUserName, parseCustomerData };

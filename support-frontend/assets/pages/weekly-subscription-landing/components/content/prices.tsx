@@ -18,7 +18,7 @@ import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 
-export type PropTypes = {
+type PropTypes = {
 	orderIsAGift: boolean;
 	products: Product[];
 };

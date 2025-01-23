@@ -5,6 +5,8 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.i18n.Country.UK
 import com.gu.support.catalog.Paper
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.DefaultPromotions
@@ -25,6 +27,7 @@ class PaperSubscriptionController(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -54,6 +57,7 @@ class PaperSubscriptionController(
             "?width=1200&height=1200&quality=85&auto=format&fit=crop&s=c6c7f5b373a1ae54bc66c876a9a60031",
         ),
         shareUrl = canonicalLink,
+        noindex = stage != PROD,
       ) {
         val maybePromotionCopy =
           landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, Paper, "uk")

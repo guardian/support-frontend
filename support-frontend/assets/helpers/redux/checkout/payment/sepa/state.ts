@@ -14,7 +14,7 @@ export const sepaSchema = z.object({
 	country: z.string().min(1, 'Please select a billing country'),
 });
 
-export type SepaValidateableState = z.infer<typeof sepaSchema>;
+type SepaValidateableState = z.infer<typeof sepaSchema>;
 
 export type SepaState = SepaValidateableState & {
 	errors: SliceErrors<SepaValidateableState>;

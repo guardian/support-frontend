@@ -31,15 +31,6 @@ type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
 // ---- Validation ---- //
 
-export function validateCheckoutForm(
-	dispatch: Dispatch,
-	state: SubscriptionsState,
-): boolean {
-	const allErrors = checkoutValidation(state);
-	dispatchAllErrors(dispatch, allErrors);
-	return allErrors.length === 0;
-}
-
 export function validateWithDeliveryForm(
 	dispatch: Dispatch<Action>,
 	state: SubscriptionsState,
