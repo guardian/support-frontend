@@ -5,6 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.Paper
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
 import config.RecaptchaConfigProvider
@@ -78,6 +79,7 @@ class PaperSubscriptionFormController(
       orderIsAGift = false,
       Some(PaperValidation.M25_POSTCODE_PREFIXES),
       productCatalog,
+      stage != PROD,
     )
   }
 

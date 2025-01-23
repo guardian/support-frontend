@@ -61,6 +61,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.stage,
   )
 
   lazy val redemptionController = new RedemptionController(
@@ -103,6 +104,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.stage,
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
@@ -114,6 +116,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.stage,
   )
 
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(

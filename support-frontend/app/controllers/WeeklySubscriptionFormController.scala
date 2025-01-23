@@ -5,6 +5,7 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.promotions.DefaultPromotions
@@ -63,23 +64,24 @@ class WeeklySubscriptionFormController(
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
     subscriptionCheckout(
-      title,
-      id,
-      js,
-      css,
-      Some(csrf),
-      maybeIdUser,
-      testMode,
-      priceSummaryServiceProvider.forUser(testMode).getPrices(GuardianWeekly, promoCodes, readerType),
+      title = title,
+      mainElement = id,
+      js = js,
+      css = css,
+      csrf = Some(csrf),
+      idUser = maybeIdUser,
+      testMode = testMode,
+      productPrices = priceSummaryServiceProvider.forUser(testMode).getPrices(GuardianWeekly, promoCodes, readerType),
       maybePromotionCopy = None,
-      stripeConfigProvider.get(),
-      stripeConfigProvider.get(true),
-      payPalConfigProvider.get(),
-      payPalConfigProvider.get(true),
-      v2recaptchaConfigPublicKey,
-      orderIsAGift,
-      None,
-      productCatalog,
+      defaultStripeConfig = stripeConfigProvider.get(),
+      testStripeConfig = stripeConfigProvider.get(true),
+      defaultPayPalConfig = payPalConfigProvider.get(),
+      testPayPalConfig = payPalConfigProvider.get(true),
+      v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
+      orderIsAGift = orderIsAGift,
+      homeDeliveryPostcodes = None,
+      productCatalog = productCatalog,
+      noIndex = stage != PROD,
     )
   }
 

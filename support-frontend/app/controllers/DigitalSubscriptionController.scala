@@ -4,6 +4,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, On, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
@@ -83,23 +84,25 @@ class DigitalSubscriptionController(
 
         Ok(
           views.html.subscriptionCheckout(
-            title,
-            mainElement,
-            js,
-            css,
-            Some(csrf),
-            request.user,
-            testMode,
-            priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
-            maybePromotionCopy,
-            stripeConfigProvider.get(),
-            stripeConfigProvider.get(true),
-            payPalConfigProvider.get(),
-            payPalConfigProvider.get(true),
-            v2recaptchaConfigPublicKey,
-            orderIsAGift,
-            None,
-            productCatalog,
+            title = title,
+            mainElement = mainElement,
+            js = js,
+            css = css,
+            csrf = Some(csrf),
+            idUser = request.user,
+            testMode = testMode,
+            productPrices =
+              priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+            maybePromotionCopy = maybePromotionCopy,
+            defaultStripeConfig = stripeConfigProvider.get(),
+            testStripeConfig = stripeConfigProvider.get(true),
+            defaultPayPalConfig = payPalConfigProvider.get(),
+            testPayPalConfig = payPalConfigProvider.get(true),
+            v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
+            orderIsAGift = orderIsAGift,
+            homeDeliveryPostcodes = None,
+            productCatalog = productCatalog,
+            noIndex = stage != PROD,
           ),
         )
       }
