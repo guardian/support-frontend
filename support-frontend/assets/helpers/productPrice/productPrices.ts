@@ -27,7 +27,7 @@ export type ProductPrice = {
 	promotions?: Promotion[];
 };
 
-export type BillingPeriods = {
+type BillingPeriods = {
 	[K in BillingPeriod]?: { [K in IsoCurrency]?: ProductPrice };
 };
 

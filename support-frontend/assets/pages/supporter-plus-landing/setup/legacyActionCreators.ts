@@ -5,15 +5,10 @@ import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type {
-	CreatePaypalPaymentData,
-	CreatePayPalPaymentResponse,
 	CreateStripePaymentIntentRequest,
 	StripeChargeData,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import {
-	postOneOffPayPalCreatePaymentRequest,
-	processStripePaymentIntentRequest,
-} from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import { processStripePaymentIntentRequest } from 'helpers/forms/paymentIntegrations/oneOffContributions';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -41,7 +36,6 @@ import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selecto
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import * as cookie from 'helpers/storage/cookie';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	derivePaymentApiAcquisitionData,
@@ -293,39 +287,6 @@ const onPaymentResult =
 			return result;
 		});
 
-const onCreateOneOffPayPalPaymentResponse =
-	(paymentResult: Promise<CreatePayPalPaymentResponse>) =>
-	(dispatch: Dispatch<Action>, getState: () => ContributionsState): void => {
-		void paymentResult.then((result: CreatePayPalPaymentResponse) => {
-			const state = getState();
-			const acquisitionData = derivePaymentApiAcquisitionData(
-				addTransactionCoveredAcquisitionEventLabel(
-					state.common.referrerAcquisitionData,
-					state.page.checkoutForm.product.coverTransactionCost,
-				),
-				state.common.abParticipations,
-				state.page.checkoutForm.billingAddress.fields.postCode,
-			);
-			// We've only created a payment at this point, and the user has to get through
-			// the PayPal flow on their site before we can actually try and execute the payment.
-			// So we drop a cookie which will be used by the /paypal/rest/return endpoint
-			// that the user returns to from PayPal, if payment is successful.
-			cookie.set(
-				'acquisition_data',
-				encodeURIComponent(JSON.stringify(acquisitionData)),
-			);
-
-			if (result.type === 'success') {
-				window.location.href = result.data.approvalUrl;
-			} else {
-				// For PayPal create payment errors, the Payment API passes through the
-				// error from PayPal's API which we don't want to expose to the user.
-				dispatch(paymentFailure('unknown'));
-				dispatch(paymentWaiting(false));
-			}
-		});
-	};
-
 // The steps for one-off payment can be summarised as follows:
 // 1. Create a payment
 // 2. Authorise a payment
@@ -336,13 +297,6 @@ const onCreateOneOffPayPalPaymentResponse =
 //
 // So from the clientside perspective, for one-off we just see "create payment" for PayPal
 // and "execute payment" for Stripe, and these are not synonymous.
-const createOneOffPayPalPayment =
-	(data: CreatePaypalPaymentData) =>
-	(dispatch: Dispatch<Action>, getState: () => ContributionsState): void => {
-		onCreateOneOffPayPalPaymentResponse(
-			postOneOffPayPalCreatePaymentRequest(data),
-		)(dispatch, getState);
-	};
 
 const makeCreateStripePaymentIntentRequest =
 	(
@@ -510,8 +464,6 @@ function addTransactionCoveredAcquisitionEventLabel(
 export {
 	paymentFailure,
 	paymentWaiting,
-	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
-	createOneOffPayPalPayment,
 	getBillingCountryAndState,
 };

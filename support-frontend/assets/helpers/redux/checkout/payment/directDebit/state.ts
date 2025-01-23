@@ -22,7 +22,7 @@ export const directDebitSchema = z.object({
 	}),
 });
 
-export type DirectDebitValidateableState = z.infer<typeof directDebitSchema>;
+type DirectDebitValidateableState = z.infer<typeof directDebitSchema>;
 
 export type DirectDebitState = DirectDebitValidateableState & {
 	isPopUpOpen: boolean;

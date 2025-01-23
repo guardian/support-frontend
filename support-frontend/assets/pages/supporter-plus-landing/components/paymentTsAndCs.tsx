@@ -78,7 +78,7 @@ interface SummaryTsAndCsProps {
 	cssOverrides?: SerializedStyles;
 }
 
-export const termsSupporterPlus = (linkText: string) => (
+const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
 );
 

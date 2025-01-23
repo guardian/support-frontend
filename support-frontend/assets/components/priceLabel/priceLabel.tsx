@@ -5,7 +5,7 @@ import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 
-export type PropTypes = {
+type PropTypes = {
 	productPrice: ProductPrice;
 	billingPeriod: BillingPeriod;
 	className: string;
