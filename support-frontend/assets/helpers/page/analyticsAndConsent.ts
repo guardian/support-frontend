@@ -45,8 +45,8 @@ function consentInitialisation(country: IsoCountry): void {
 					platform: 'support',
 				},
 				country,
-        isUserSignedIn: window.location.search.includes('CMP_SIGNED_IN'),
-        useNonAdvertisedList: window.location.search.includes('CMP_MAIN'),
+				isUserSignedIn: window.location.search.includes('CMP_SIGNED_IN'),
+				useNonAdvertisedList: window.location.search.includes('CMP_MAIN'),
 			});
 		} catch (e) {
 			if (typeof e === 'string') {
