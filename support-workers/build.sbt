@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
-  "com.lihaoyi" %% "pprint" % "0.8.1",
+  "com.lihaoyi" %% "pprint" % "0.9.0",
 )
 
 assemblyJarName := s"${name.value}.jar"
