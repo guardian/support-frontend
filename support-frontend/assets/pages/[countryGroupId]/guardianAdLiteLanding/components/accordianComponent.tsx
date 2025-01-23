@@ -6,6 +6,7 @@ import {
 	headlineBold17,
 	headlineBold20,
 	headlineBold28,
+	headlineBold34,
 	palette,
 	space,
 } from '@guardian/source/foundations';
@@ -16,13 +17,14 @@ import { helpCentreUrl } from 'helpers/urls/externalLinks';
 const container = css`
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[3]}px 10px ${space[12]}px;
+		padding: ${space[3]}px 10px ${space[14]}px;
 		${from.mobileLandscape} {
 			padding-left: ${space[5]}px;
 			padding-right: ${space[5]}px;
 		}
 		${from.tablet} {
 			padding-top: ${space[9]}px;
+			padding-bottom: ${space[24]}px;
 			display: flex;
 			justify-content: center;
 		}
@@ -33,9 +35,9 @@ const bodyContainer = css`
 	color: ${palette.neutral[7]};
 	background-color: ${palette.neutral[100]};
 	border-radius: ${space[3]}px;
-	padding: ${space[4]}px ${space[3]}px ${space[6]}px;
+	padding: ${space[3]}px;
 	${from.tablet} {
-		padding: ${space[5]}px ${space[6]}px 28px;
+		padding: ${space[5]}px ${space[6]}px ${space[1]}px;
 	}
 	${from.desktop} {
 		max-width: 940px;
@@ -45,6 +47,10 @@ const heading = css`
 	text-align: left;
 	${headlineBold28}
 	margin-bottom: ${space[6]}px;
+	${from.desktop} {
+		${headlineBold34}
+		margin-bottom: ${space[9]}px;
+	}
 `;
 const accordian = css`
 	justify-content: space-between;
@@ -56,12 +62,19 @@ const accordian = css`
 const accordianRow = css`
 	border-top: 1px solid ${palette.neutral[73]};
 	text-align: left;
+	> button {
+		padding: ${space[1]}px 0px ${space[6]}px;
+		${from.desktop} {
+			padding: ${space[2]}px 0px ${space[8]}px;
+		}
+	} // title
 	> button > * {
+		margin-right: ${space[1]}px;
 		${headlineBold17}
 		${from.desktop} {
 			${headlineBold20}
 		}
-	} // title
+	} // title (content)
 	> div > * {
 		${article15}
 		${from.desktop} {
