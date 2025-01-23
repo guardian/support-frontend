@@ -31,19 +31,6 @@ function billingPeriodNoun(
 	}
 }
 
-function billingPeriodAdverb(billingPeriod: BillingPeriod): string {
-	switch (billingPeriod) {
-		case Annual:
-			return 'Annually';
-
-		case Quarterly:
-			return 'Quarterly';
-
-		default:
-			return 'Monthly';
-	}
-}
-
 function billingPeriodTitle(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
@@ -65,7 +52,6 @@ export {
 	Monthly,
 	Quarterly,
 	billingPeriodNoun,
-	billingPeriodAdverb,
 	billingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
