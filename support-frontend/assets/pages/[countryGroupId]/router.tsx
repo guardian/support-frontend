@@ -13,21 +13,30 @@ const abParticipations = getAbParticipations();
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
 
-const Checkout = lazy(
-	() => import(/* webpackChunkName: "checkout" */ './checkout'),
-);
-const OneTimeCheckout = lazy(
-	() => import(/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'),
-);
-const ThankYou = lazy(
-	() => import(/* webpackChunkName: "ThankYou" */ './thankYou'),
-);
-const GuardianAdLiteLanding = lazy(
-	() =>
-		import(
-			/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
-		),
-);
+const Checkout = lazy(() => {
+	return import(/* webpackChunkName: "checkout" */ './checkout').then((mod) => {
+		return { default: mod.Checkout };
+	});
+});
+const OneTimeCheckout = lazy(() => {
+	return import(
+		/* webpackChunkName: "oneTimeCheckout" */ './oneTimeCheckout'
+	).then((mod) => {
+		return { default: mod.OneTimeCheckout };
+	});
+});
+const ThankYou = lazy(() => {
+	return import(/* webpackChunkName: "ThankYou" */ './thankYou').then((mod) => {
+		return { default: mod.ThankYou };
+	});
+});
+const GuardianAdLiteLanding = lazy(() => {
+	return import(
+		/* webpackChunkName: "GuardianAdLiteLanding" */ './guardianAdLiteLanding/guardianAdLiteLanding'
+	).then((mod) => {
+		return { default: mod.GuardianAdLiteLanding };
+	});
+});
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
