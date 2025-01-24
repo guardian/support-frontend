@@ -9,6 +9,7 @@ module.exports = {
 	entry: [...flattenedEntryPoints, 'scripts/build-ssr-content.tsx!'],
 	project: ['**/*.{js,jsx,ts,tsx,scss}!'],
 	ignoreExportsUsedInFile: false,
+	ignore: ['**/knip.*.js'],
 	ignoreDependencies: [
 		// used in package.json
 		'@guardian/browserslist-config',
