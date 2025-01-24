@@ -61,13 +61,19 @@ const signIn = css`
 	${from.tablet} {
 		color: ${palette.neutral[7]};
 		padding: ${space[8]}px 0px ${space[9]}px;
-		text-align: center;
+		justify-self: center;
 		> a {
 			color: ${palette.brand[500]};
 		}
 	}
 	${from.desktop} {
 		${textSans17}
+	}
+`;
+const signInParagraph = css`
+	${from.tablet} {
+		text-align: center;
+		max-width: 620px;
 	}
 `;
 
@@ -127,9 +133,11 @@ export function HeaderCards({
 				<h1 css={heading}>Choose your advertising preferences</h1>
 				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					If you already have Guardian Ad-Lite or another Guardian subscription
-					that offers ad-free reading, such as All-access digital, you should,{' '}
-					{SignInLink}
+					<p css={signInParagraph}>
+						If you already have Guardian Ad-Lite or another Guardian
+						subscription that offers ad-free reading, such as All-access
+						digital, you should, {SignInLink}
+					</p>
 				</div>
 			</Container>
 		</>
