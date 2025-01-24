@@ -1784,10 +1784,10 @@
     aria-hidden "^1.1.3"
     tabbable "^6.0.1"
 
-"@guardian/browserslist-config@^6.1.1":
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-6.1.1.tgz#acca57ca0666490ca2dd67522a9fbaf5c7ef4b4d"
-  integrity sha512-62fVcqE5opXxN1bgm5lF6ykPrKM2/U8WdGH7gcrFGV6f5VVz+oFloMX+C2Svj19fdmXpfHj6+I1AmJbqSAX5CQ==
+"@guardian/browserslist-config@^6.1.2":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-6.1.2.tgz#ba6ed8bb005d6143702a1e9f5c9fa40b39e21f6d"
+  integrity sha512-3SWaa6759XJVyYX3b4NERv7juqzX4Qt5VigxaQAp1gnFOPZMkjKmEZrDW1s3Ty2bSs6MAMrUovIgcDCqfRX71w==
 
 "@guardian/eslint-config-typescript@10.0.1":
   version "10.0.1"
