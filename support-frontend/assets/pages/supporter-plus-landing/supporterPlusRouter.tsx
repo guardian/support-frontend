@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
@@ -12,7 +10,6 @@ import { renderPage } from 'helpers/rendering/render';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { ContributionsOnlyLanding } from './twoStepPages/contributionsOnlyLanding';
-import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 parseAppConfig(window.guardian);
@@ -22,12 +19,10 @@ if (!isDetailsSupported) {
 }
 
 // ----- Redux Store ----- //
-const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
@@ -53,11 +48,6 @@ export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.amounts,
 );
 
-const showNewContributionsOnly =
-	commonState.abParticipations.contributionsOnly === 'variant';
-
-// ----- Render ----- //
-
 const router = () => {
 	return (
 		<BrowserRouter>
@@ -74,12 +64,8 @@ const router = () => {
 											geoId={countryId}
 											abParticipations={commonState.abParticipations}
 										/>
-									) : showNewContributionsOnly ? (
-										<ContributionsOnlyLanding geoId={countryId} />
 									) : (
-										<SupporterPlusInitialLandingPage
-											thankYouRoute={thankYouRoute}
-										/>
+										<ContributionsOnlyLanding geoId={countryId} />
 									)
 								}
 							/>
