@@ -12,8 +12,8 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
-export type SupporterPlusVariants = 'control' | 'v1' | 'v2';
-export type ContributionVariants = 'control' | 'v1' | 'v2Annual' | 'v2Monthly';
+type SupporterPlusVariants = 'control' | 'v1' | 'v2';
+type ContributionVariants = 'control' | 'v1' | 'v2Annual' | 'v2Monthly';
 
 type ProductBenefit = {
 	copy: string;
@@ -92,7 +92,7 @@ function displayBenefitByABTestVariant(
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
-export const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
+const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }

@@ -9,7 +9,7 @@ export type Position = {
 	y: number;
 };
 
-export type PropTypes = {
+type PropTypes = {
 	onClose: () => void;
 	utility: ReactNode;
 	links: ReactNode;

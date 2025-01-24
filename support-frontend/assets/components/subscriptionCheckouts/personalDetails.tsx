@@ -23,7 +23,7 @@ const paragraphWithButton = css`
 	${textSans17};
 `;
 
-export type PropTypes = {
+type PropTypes = {
 	firstName: string;
 	setFirstName: (firstName: string) => void;
 	lastName: string;

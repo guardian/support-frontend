@@ -21,7 +21,7 @@ export function getLowerBenefitsThreshold(
 	return getLowerBenefitThreshold(contributionType, currency);
 }
 
-export function getLowerBenefitThreshold(
+function getLowerBenefitThreshold(
 	contributionType: ContributionType,
 	currencyId: IsoCurrency,
 ): number {

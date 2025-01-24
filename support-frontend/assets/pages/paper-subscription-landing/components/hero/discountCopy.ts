@@ -1,7 +1,7 @@
 import type { Option } from 'helpers/types/option';
 import 'helpers/types/option';
 
-export type DiscountCopy = {
+type DiscountCopy = {
 	roundel: string[];
 	heading: Option<string>;
 };

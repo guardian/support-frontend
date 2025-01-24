@@ -61,7 +61,7 @@ const header = css`
 		}
 	}
 `;
-export const pageTitle = css`
+const pageTitle = css`
 	${titlepiece42};
 	font-weight: bold;
 	z-index: 10;
@@ -88,7 +88,7 @@ export const pageTitle = css`
 	}
 `;
 
-function PageTitle({
+export function PageTitle({
 	title,
 	theme,
 	cssOverrides,
@@ -103,8 +103,3 @@ function PageTitle({
 		</div>
 	);
 }
-
-PageTitle.defaultProps = {
-	cssOverrides: '',
-};
-export default PageTitle;

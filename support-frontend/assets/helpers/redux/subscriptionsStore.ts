@@ -42,7 +42,7 @@ export type SubscriptionsStartListening = TypedStartListening<
 	SubscriptionsDispatch
 >;
 
-export const startSubscriptionsListening =
+const startSubscriptionsListening =
 	listenerMiddleware.startListening as SubscriptionsStartListening;
 
 const subscriptionsStore = configureStore({

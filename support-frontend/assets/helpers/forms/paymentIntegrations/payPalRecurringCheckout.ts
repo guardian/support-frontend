@@ -1,16 +1,12 @@
 // ----- Imports ----- //
-import type { Dispatch } from 'redux';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { billingPeriodFromContrib, getAmount } from '../../contributions';
 
 export type SetupPayPalRequestType = (
 	resolve: (arg0: string) => void,
@@ -21,7 +17,7 @@ export type SetupPayPalRequestType = (
 	billingPeriod: BillingPeriod,
 ) => void;
 
-export type PayPalUserDetails = {
+type PayPalUserDetails = {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -62,59 +58,6 @@ const payPalRequestData = (
 		body: JSON.stringify(bodyObj),
 	};
 };
-
-// This is the recurring PayPal equivalent of the "Create a payment" Step 1 described above.
-// It happens when the user clicks the recurring PayPal button,
-// before the PayPal popup in which they authorise the payment appears.
-// It should probably be called createOneOffPayPalPayment but it's called setupPayment
-// on the backend so pending a far-reaching rename, I'll keep the terminology consistent with the backend.
-const setupRecurringPayPalPayment =
-	(
-		resolve: (arg0: string) => void,
-		reject: (arg0: Error) => void,
-		currency: IsoCurrency,
-		csrf: CsrfState,
-	) =>
-	(_dispatch: Dispatch, getState: () => ContributionsState): void => {
-		const state = getState();
-		const csrfToken = csrf.token;
-		const contributionType = getContributionType(state);
-		const amount = getAmount(
-			state.page.checkoutForm.product.selectedAmounts,
-			state.page.checkoutForm.product.otherAmounts,
-			contributionType,
-		);
-		const billingPeriod = billingPeriodFromContrib(contributionType);
-		storage.setSession('selectedPaymentMethod', 'PayPal');
-		const requestBody = {
-			amount,
-			billingPeriod,
-			currency,
-			requireShippingAddress: false,
-		};
-		fetch(
-			routes.payPalSetupPayment,
-			payPalRequestData(requestBody, csrfToken ?? ''),
-		)
-			.then((response) => (response.ok ? response.json() : null))
-			.then(
-				(
-					token: {
-						token: string;
-					} | null,
-				) => {
-					if (token) {
-						resolve(token.token);
-					} else {
-						logException('PayPal token came back blank');
-					}
-				},
-			)
-			.catch((err: Error) => {
-				logException(err.message);
-				reject(err);
-			});
-	};
 
 // This is the recurring PayPal Express version of the PayPal checkout.
 // It happens when the user clicks the PayPal button, and before the PayPal popup
@@ -271,7 +214,5 @@ const getPayPalOptions = (
 export {
 	getPayPalOptions,
 	loadPayPalRecurring,
-	payPalRequestData,
 	setupSubscriptionPayPalPayment,
-	setupRecurringPayPalPayment,
 };

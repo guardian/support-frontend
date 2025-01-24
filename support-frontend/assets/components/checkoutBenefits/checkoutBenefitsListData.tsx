@@ -21,7 +21,7 @@ type TierUnlocks = {
 	countryGroupId: CountryGroupId;
 };
 
-export type CheckListData = {
+type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;

@@ -144,10 +144,6 @@ const glyph = (c: IsoCurrency): string => currencies[c].glyph;
 
 const extendedGlyph = (c: IsoCurrency): string => currencies[c].extendedGlyph;
 
-const isSuffixGlyph = (c: IsoCurrency): boolean => currencies[c].isSuffixGlyph;
-
-const isPaddedGlyph = (c: IsoCurrency): boolean => currencies[c].isPaddedGlyph;
-
 // ----- Exports ----- //
 export {
 	detect,
@@ -157,6 +153,4 @@ export {
 	currencies,
 	glyph,
 	extendedGlyph,
-	isSuffixGlyph,
-	isPaddedGlyph,
 };

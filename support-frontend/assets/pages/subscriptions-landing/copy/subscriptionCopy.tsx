@@ -34,7 +34,7 @@ export type ProductButton = {
 	modifierClasses?: string;
 };
 
-export type ProductCopy = {
+type ProductCopy = {
 	title: string;
 	subtitle: Option<string>;
 	description: string;

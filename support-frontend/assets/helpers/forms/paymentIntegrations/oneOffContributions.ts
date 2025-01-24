@@ -31,7 +31,7 @@ type PaymentApiSuccess<A> = {
 	data: A;
 };
 
-export type PaymentApiResponse<E, A> =
+type PaymentApiResponse<E, A> =
 	| UnexpectedError
 	| PaymentApiError<E>
 	| PaymentApiSuccess<A>;
@@ -39,14 +39,14 @@ export type PaymentApiResponse<E, A> =
 // Models a PayPal payment being successfully created.
 // The user should be redirected to the approvalUrl so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentSuccess.scala
-export type CreatePayPalPaymentSuccess = {
+type CreatePayPalPaymentSuccess = {
 	// For brevity, unneeded fields are omitted
 	approvalUrl: string; // paymentId: string,
 };
 
 // Models a failure to create a PayPal payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalApiError.scala
-export type PayPalApiError = {
+type PayPalApiError = {
 	// For brevity, unneeded fields are omitted
 	// responseCode: number | null,
 	// errorName: number | null,
@@ -80,7 +80,7 @@ export type CreateStripePaymentIntentRequest = StripeChargeData & {
 // Data that should be posted to the payment API to get a url for the PayPal UI
 // where the user is redirected to so that they can authorize the payment.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
-export type CreatePaypalPaymentData = {
+type CreatePaypalPaymentData = {
 	currency: IsoCurrency;
 	amount: number;
 	// Specifies the url that PayPal should make a GET request to, should the user authorize the payment.

@@ -32,7 +32,7 @@ interface FormState {
 	paymentError: ErrorReason | null;
 }
 
-export interface PageState {
+interface PageState {
 	form: FormState;
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;

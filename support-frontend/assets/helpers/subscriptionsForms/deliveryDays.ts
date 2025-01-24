@@ -1,13 +1,4 @@
 export type Day = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-const DeliveryDays = {
-	Sunday: 0,
-	Monday: 1,
-	Tuesday: 2,
-	Wednesday: 3,
-	Thursday: 4,
-	Friday: 5,
-	Saturday: 6,
-};
 const milsInADay = 1000 * 60 * 60 * 24;
 export const numberOfWeeksWeDeliverTo = 4;
 
@@ -43,9 +34,4 @@ const getDeliveryDays = (
 	return deliveryDays;
 };
 
-export {
-	jsDayToFulfilmentDay,
-	getDeliveryDays,
-	getNextDeliveryDay,
-	DeliveryDays,
-};
+export { jsDayToFulfilmentDay, getDeliveryDays, getNextDeliveryDay };

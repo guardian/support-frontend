@@ -29,9 +29,10 @@
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
   productCatalog: JsonObject,
+  noIndex: Boolean,
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Some(RefPath(css)), csrf = csrf) {
+  @main(title = title, mainJsBundle = RefPath(js), mainElement = mainElement, mainStyleBundle = Some(RefPath(css)), csrf = csrf, noindex = noIndex) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
 

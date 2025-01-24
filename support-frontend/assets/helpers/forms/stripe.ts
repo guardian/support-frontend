@@ -2,15 +2,8 @@ import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js/pure';
 import { useEffect, useState } from 'react';
 import type { ContributionType } from 'helpers/contributions';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from '../internationalisation/currency';
-
-const stripeCardFormIsIncomplete = (
-	paymentMethod: PaymentMethod,
-	stripeCardFormComplete: boolean,
-): boolean => paymentMethod === Stripe && !stripeCardFormComplete;
 
 export type StripeAccount = 'ONE_OFF' | 'REGULAR';
 
@@ -77,8 +70,4 @@ export function useStripeAccount(stripeKey: string): StripeJs | null {
 	return stripeSdk;
 }
 
-export {
-	stripeCardFormIsIncomplete,
-	stripeAccountForContributionType,
-	getStripeKey,
-};
+export { stripeAccountForContributionType, getStripeKey };

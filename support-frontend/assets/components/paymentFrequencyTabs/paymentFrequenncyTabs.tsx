@@ -18,7 +18,7 @@ const tabPanelStyles = css`
 	}
 `;
 
-export type TabProps = {
+type TabProps = {
 	id: ContributionType;
 	labelText: string;
 	selected: boolean;

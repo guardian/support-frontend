@@ -79,7 +79,7 @@ export function unsetThankYouOrder() {
 	storage.session.remove('thankYouOrder');
 }
 
-export type CheckoutComponentProps = {
+type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	payment: {
