@@ -499,7 +499,7 @@ class Application(
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
-    val serversideTests = generateParticipations(List("lazyLoading"))
+    val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
