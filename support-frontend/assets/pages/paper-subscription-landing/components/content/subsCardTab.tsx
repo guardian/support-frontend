@@ -34,7 +34,7 @@ const paragraphSpacing = css`
 		padding: 0 ${space[2]}px;
 	}
 `;
-export const accordionContainer = css`
+const accordionContainer = css`
 	background-color: ${neutral['97']};
 
 	p,

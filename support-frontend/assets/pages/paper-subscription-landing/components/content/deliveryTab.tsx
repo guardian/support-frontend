@@ -37,7 +37,7 @@ const paragraph = css`
 		color: inherit;
 	}
 `;
-export const accordionContainer = css`
+const accordionContainer = css`
 	background-color: ${neutral['97']};
 
 	p,

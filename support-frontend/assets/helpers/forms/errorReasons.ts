@@ -18,6 +18,7 @@ const errorReasons = [
 	'email_provider_rejected',
 	'invalid_email_address',
 	'recaptcha_validation_failed',
+	'guardian_ad_lite_purchase_not_allowed',
 	'unknown',
 ] as const;
 export function isErrorReason(value: string): value is ErrorReason {
@@ -73,6 +74,9 @@ function appropriateErrorMessage(errorReason: string): string {
 
 			case 'recaptcha_validation_failed':
 				return 'Please prove you are not a robot';
+
+			case 'guardian_ad_lite_purchase_not_allowed':
+				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';

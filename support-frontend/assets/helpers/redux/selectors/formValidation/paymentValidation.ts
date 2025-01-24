@@ -60,9 +60,7 @@ export function getPaymentMethodErrors(
 	}
 }
 
-export function getRecaptchaError(
-	state: ContributionsState,
-): string[] | undefined {
+function getRecaptchaError(state: ContributionsState): string[] | undefined {
 	const { paymentMethod } = state.page.checkoutForm.payment;
 
 	if (recaptchaRequiredPaymentMethods.includes(paymentMethod.name)) {

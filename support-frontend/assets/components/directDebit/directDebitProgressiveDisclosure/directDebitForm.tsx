@@ -51,7 +51,7 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export type PropTypes = ConnectedProps<typeof connector> & {
+type PropTypes = ConnectedProps<typeof connector> & {
 	allErrors: Array<Record<string, string>>;
 	buttonText: string;
 	submissionErrorHeading: string;

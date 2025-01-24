@@ -9,7 +9,7 @@ export const emailRegexPattern =
 export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
-export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
+const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
 export const isValidEmail: (arg0: string | null) => boolean = (input) =>

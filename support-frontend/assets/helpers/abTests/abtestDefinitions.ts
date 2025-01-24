@@ -7,8 +7,12 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
+		/*
+        We can revert to a simpler regex like below when subscription checkouts are deleted
+        /contribute|checkout|one-time-checkout|thankyou(/.*)?$
+      */
 		allLandingPagesAndThankyouPages:
-			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
+			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},

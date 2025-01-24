@@ -46,13 +46,9 @@ export type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-export type AudienceType =
-	| IsoCountry
-	| CountryGroupId
-	| 'ALL'
-	| 'CONTRIBUTIONS_ONLY';
+type AudienceType = IsoCountry | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
 
-export type Audiences = {
+type Audiences = {
 	[key in AudienceType]?: Audience;
 };
 

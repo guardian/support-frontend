@@ -24,7 +24,16 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService, UserDetails}
+import services.{
+  IdentityService,
+  RecaptchaResponse,
+  RecaptchaService,
+  TestUserService,
+  UserBenefitsApiService,
+  UserBenefitsApiServiceProvider,
+  UserBenefitsResponse,
+  UserDetails,
+}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -62,6 +71,7 @@ class CreateSubscriptionController(
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
     paperRoundServiceProvider: PaperRoundServiceProvider,
+    userBenefitsApiServiceProvider: UserBenefitsApiServiceProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -141,13 +151,60 @@ class CreateSubscriptionController(
     }
   }
 
+  private def validateBenefitsForAdLitePurchase(
+      response: UserBenefitsResponse,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
+      // Not eligible
+      EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
+    } else {
+      // Eligible
+      EitherT.rightT(())
+    }
+  }
+
+  private def validateUserIsEligibleForPurchase(
+      request: Request[CreateSupportWorkersRequest],
+      userDetails: UserDetailsWithSignedInStatus,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    request.body.product match {
+      case GuardianAdLite(_) => {
+        if (userDetails.isSignedIn) {
+          // If the user is signed in, we'll assume they're eligible as they shouldn't have got
+          // to this point of the journey.
+          EitherT.rightT(())
+        } else {
+          for {
+            benefits <- userBenefitsApiServiceProvider
+              .forUser(testUsers.isTestUser(request))
+              .getUserBenefits(userDetails.userDetails.identityId)
+              .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
+            _ <- validateBenefitsForAdLitePurchase(benefits)
+          } yield ()
+        }
+      }
+      case _ => EitherT.rightT(())
+    }
+  }
+
+  case class UserDetailsWithSignedInStatus(
+      userDetails: UserDetails,
+      isSignedIn: Boolean,
+  )
+
   private def createSubscription(implicit
       settings: AllSettings,
       request: CreateRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse] = {
 
     val maybeLoggedInUserDetails =
-      request.user.map(authIdUser => UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"))
+      request.user.map(authIdUser =>
+        UserDetailsWithSignedInStatus(
+          UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"),
+          isSignedIn = true,
+        ),
+      )
+
     logDetailedMessage("createSubscription")
 
     for {
@@ -156,9 +213,13 @@ class CreateSubscriptionController(
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+            .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
-      supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
+
+      _ <- validateUserIsEligibleForPurchase(request, userDetails)
+
+      supportWorkersUser = buildSupportWorkersUser(userDetails.userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
@@ -166,7 +227,7 @@ class CreateSubscriptionController(
 
     } yield CreateSubscriptionResponse(
       statusResponse.status,
-      userDetails.userType,
+      userDetails.userDetails.userType,
       statusResponse.trackingUri,
       statusResponse.failureReason,
     )

@@ -92,7 +92,6 @@ export {
 	SixdayPlus,
 	Everyday,
 	EverydayPlus,
-	NewspaperArchive,
 	ActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,

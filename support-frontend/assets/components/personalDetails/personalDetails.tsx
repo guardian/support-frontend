@@ -132,5 +132,3 @@ export function PersonalDetails({
 		</div>
 	);
 }
-
-export default PersonalDetails;
