@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
-import type { NavigateFunction, NavigateOptions } from 'react-router';
 import { type Participations, testIsActive } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -83,14 +82,6 @@ const trackComponentEvents = (componentEvent: OphanComponentEvent): void =>
 		componentEvent,
 	});
 
-const pageView = (url: string, referrer: string): void => {
-	try {
-		ophan.sendInitialEvent(url, referrer);
-	} catch (e) {
-		console.log(`Error in Ophan tracking: ${e as string}`);
-	}
-};
-
 export const buildOphanPayload = (
 	participations: Participations,
 ): OphanABPayload => {
@@ -136,40 +127,9 @@ const setReferrerDataInLocalStorage = (
 
 const getPageViewId = (): string => ophan.viewId;
 
-/**
- * To be used when navigating with React Router
- * in order to generate new Page View event in Ophan
- */
-const navigateWithPageView = (
-	navigate: NavigateFunction,
-	destination: string,
-	participations?: Participations,
-	options?: NavigateOptions,
-): void => {
-	const referrerUrl = document.location.href;
-
-	const refererData = {
-		referrerUrl,
-		referrerPageviewId: getPageViewId(),
-	};
-
-	// store referer data to be read and transmitted on manual pageView
-	setReferrerDataInLocalStorage(refererData);
-
-	navigate(destination, options);
-
-	// manual pageView
-	pageView(document.location.href, referrerUrl);
-
-	if (participations) {
-		trackAbTests(participations);
-	}
-};
-
 export {
 	trackComponentEvents,
 	trackAbTests,
 	setReferrerDataInLocalStorage,
-	navigateWithPageView,
 	getPageViewId,
 };
