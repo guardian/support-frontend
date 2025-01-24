@@ -51,29 +51,29 @@ const heading = css`
 `;
 const signIn = css`
 	color: ${palette.neutral[100]};
-	text-align: left;
 	${textSans15}
 	padding: ${space[5]}px 0px ${space[6]}px;
-	> a {
-		color: ${palette.neutral[100]};
-		font-weight: bold;
-	}
 	${from.tablet} {
 		color: ${palette.neutral[7]};
 		padding: ${space[8]}px 0px ${space[9]}px;
 		justify-self: center;
-		> a {
-			color: ${palette.brand[500]};
-		}
 	}
 	${from.desktop} {
 		${textSans17}
 	}
 `;
-const signInParagraph = css`
+const paragraph = css`
+	text-align: left;
+	> a {
+		color: ${palette.neutral[100]};
+		font-weight: bold;
+	}
 	${from.tablet} {
 		text-align: center;
 		max-width: 620px;
+		> a {
+			color: ${palette.brand[500]};
+		}
 	}
 `;
 
@@ -133,7 +133,7 @@ export function HeaderCards({
 				<h1 css={heading}>Choose your advertising preferences</h1>
 				<GuardianAdLiteCards cardsContent={[card1, card2]} />
 				<div css={signIn}>
-					<p css={signInParagraph}>
+					<p css={paragraph}>
 						If you already have Guardian Ad-Lite or another Guardian
 						subscription that offers ad-free reading, such as All-access
 						digital, you should, {SignInLink}
