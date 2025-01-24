@@ -6,8 +6,6 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	getAdverbialSubscriptionDescription,
-	getAppliedPromoDescription,
 	getPriceDescription,
 	getSimplifiedPriceDescription,
 } from 'helpers/productPrice/priceDescriptions';
@@ -95,38 +93,6 @@ describe('getPriceDescription', () => {
 	});
 });
 
-describe('getAppliedPromoDescription', () => {
-	const productPriceWithLandingPageDiscount: ProductPrice = {
-		price: 11.99,
-		currency: 'GBP',
-		fixedTerm: false,
-		promotions: [
-			{
-				name: 'Sept 2021 Discount',
-				description: '50% off for 3 months',
-				promoCode: 'DK0NT24WG',
-				discountedPrice: 5.99,
-				numberOfDiscountedPeriods: 3,
-				discount: {
-					amount: 50,
-					durationMonths: 3,
-				},
-				landingPage: {
-					title: 'Sept 2021 Discount',
-					description: '50% off for 3 months',
-					roundel: 'Save 50% for 3 months!',
-				},
-			},
-		],
-	};
-
-	it('should return a landing page promotion roundel description', () => {
-		expect(
-			getAppliedPromoDescription(productPriceWithLandingPageDiscount),
-		).toBe('Save 50% for 3 months!');
-	});
-});
-
 describe('getSimplifiedPriceDescription', () => {
 	it('should return a price description', () => {
 		expect(
@@ -160,13 +126,5 @@ describe('getSimplifiedPriceDescription', () => {
 				monthlyBillingPeriod,
 			),
 		).toEqual('per month, then £11.99 per month');
-	});
-});
-
-describe('getAdverbialSubscriptionDescription', () => {
-	it('should return an adverbial subscription description', () => {
-		expect(
-			getAdverbialSubscriptionDescription(productPrice, monthlyBillingPeriod),
-		).toEqual('Subscribe monthly for £11.99');
 	});
 });

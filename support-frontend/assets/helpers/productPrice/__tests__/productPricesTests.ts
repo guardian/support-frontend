@@ -4,7 +4,6 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import {
-	displayPrice,
 	getCountryGroup,
 	getCurrency,
 	getFirstValidPrice,
@@ -221,31 +220,5 @@ describe('showPrice', () => {
 	it('should return the price prepended with a glyph', () => {
 		expect(showPrice(productPrice)).toEqual('US$6.99');
 		expect(showPrice(productPrice, false)).toEqual('$6.99');
-	});
-});
-
-describe('displayPrice', () => {
-	const productPrices = {
-		'United Kingdom': {
-			Collection: {
-				Weekend: {
-					Monthly: {
-						GBP: {
-							price: 20.76,
-							savingVsRetail: 20,
-							currency: 'GBP',
-							fixedTerm: false,
-							promotions: [],
-						},
-					},
-				},
-			},
-		},
-	} as unknown as ProductPrices;
-
-	it('should return the price prepended with a glyph', () => {
-		expect(
-			displayPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Weekend'),
-		).toEqual('£20.76');
 	});
 });

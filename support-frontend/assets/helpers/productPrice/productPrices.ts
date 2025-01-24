@@ -78,23 +78,6 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
 
-const displayPrice = (
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): string =>
-	showPrice(
-		getProductPrice(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
-
 function getCurrency(country: IsoCountry): IsoCurrency {
 	const { currency } = getCountryGroup(country);
 	return currency;
@@ -122,7 +105,6 @@ export {
 	getCurrency,
 	getCountryGroup,
 	showPrice,
-	displayPrice,
 	isNumeric,
 	getDiscountVsRetail,
 };
