@@ -3,6 +3,7 @@ import { textSans24 } from '@guardian/source/foundations';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
+import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordianComponent } from './components/accordianComponent';
@@ -17,6 +18,7 @@ type GuardianAdLiteLandingProps = {
 export function GuardianAdLiteLanding({
 	geoId,
 }: GuardianAdLiteLandingProps): JSX.Element {
+	const user = getUser();
 	const { countryGroupId } = getGeoIdConfig(geoId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [GBPCountries],
@@ -30,7 +32,11 @@ export function GuardianAdLiteLanding({
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
 				<>
-					<HeaderCards geoId={geoId} returnLink={urlSearchParamsReturn} />
+					<HeaderCards
+						geoId={geoId}
+						returnLink={urlSearchParamsReturn}
+						isSignedIn={user.isSignedIn}
+					/>
 					<PosterComponent />
 					<AccordianComponent />
 				</>

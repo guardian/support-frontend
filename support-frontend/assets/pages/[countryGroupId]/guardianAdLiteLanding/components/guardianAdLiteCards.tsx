@@ -9,6 +9,7 @@ export type GuardianAdLiteCardsProps = {
 		productDescription: ProductDescription;
 		ctaCopy: string;
 	}>;
+	isSignedIn?: boolean;
 };
 
 const container = (cardCount: number) => css`
@@ -28,13 +29,24 @@ const container = (cardCount: number) => css`
 		justify-content: center;
 	}
 `;
+const containerExpand = css`
+	padding-bottom: ${space[6]}px;
+	${from.tablet} {
+		padding-bottom: ${space[9]}px;
+	}
+`;
 
 export function GuardianAdLiteCards({
 	cardsContent,
+	isSignedIn,
 }: GuardianAdLiteCardsProps): JSX.Element {
+	console.log('*** IsSignedIn', isSignedIn);
 	return (
 		<div
-			css={container(cardsContent.length)}
+			css={[
+				container(cardsContent.length),
+				!isSignedIn ? containerExpand : css``,
+			]}
 			role="tabpanel"
 			id={`monthly-tab`}
 			aria-labelledby={`monthly`}

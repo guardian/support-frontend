@@ -50,30 +50,30 @@ const heading = css`
 	}
 `;
 const signIn = css`
-	color: ${palette.neutral[100]};
-	${textSans15}
 	padding: ${space[5]}px 0px ${space[6]}px;
 	${from.tablet} {
-		color: ${palette.neutral[7]};
-		padding: ${space[8]}px 0px ${space[9]}px;
 		justify-self: center;
-	}
-	${from.desktop} {
-		${textSans17}
+		padding: ${space[8]}px 0px ${space[9]}px;
 	}
 `;
 const paragraph = css`
+	${textSans15}
+	color: ${palette.neutral[100]};
 	text-align: left;
 	> a {
 		color: ${palette.neutral[100]};
 		font-weight: bold;
 	}
 	${from.tablet} {
+		color: ${palette.neutral[7]};
 		text-align: center;
 		max-width: 620px;
 		> a {
 			color: ${palette.brand[500]};
 		}
+	}
+	${from.desktop} {
+		${textSans17}
 	}
 `;
 
@@ -83,11 +83,13 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
+	isSignedIn: boolean;
 	returnLink?: string;
 };
 
 export function HeaderCards({
 	geoId,
+	isSignedIn,
 	returnLink,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
@@ -131,14 +133,19 @@ export function HeaderCards({
 				cssOverrides={containerCardsAndSignIn}
 			>
 				<h1 css={heading}>Choose your advertising preferences</h1>
-				<GuardianAdLiteCards cardsContent={[card1, card2]} />
-				<div css={signIn}>
-					<p css={paragraph}>
-						If you already have Guardian Ad-Lite or another Guardian
-						subscription that offers ad-free reading, such as All-access
-						digital, you should, {SignInLink}
-					</p>
-				</div>
+				<GuardianAdLiteCards
+					cardsContent={[card1, card2]}
+					isSignedIn={isSignedIn}
+				/>
+				{isSignedIn && (
+					<div css={signIn}>
+						<p css={paragraph}>
+							If you already have Guardian Ad-Lite or another Guardian
+							subscription that offers ad-free reading, such as All-access
+							digital, you should, {SignInLink}
+						</p>
+					</div>
+				)}
 			</Container>
 		</>
 	);
