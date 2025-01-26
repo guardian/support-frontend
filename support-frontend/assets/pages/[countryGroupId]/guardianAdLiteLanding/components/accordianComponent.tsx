@@ -87,23 +87,27 @@ const accordianRow = (expanded: boolean) => css`
 	} // body
 	> button > div > span {
 		display: none;
-	} // toggle label
+	} // remove label
 `;
-const spaceTop = css`
+const rowSpacing = css`
 	padding-top: ${space[2]}px;
+	${from.desktop} {
+		max-width: 648px;
+	}
 `;
-const contents = [
+
+const rows = [
 	{
 		title: 'What is included in my Guardian Ad-Lite subscription?',
 		body: (
 			<div>
-				<p css={spaceTop}>
+				<p css={rowSpacing}>
 					A Guardian Ad-Lite subscription enables you to read the Guardian
 					website without personalised advertising. You will still see
 					advertising but it will be delivered without the use of personalised
 					advertising cookies or similar technologies.
 				</p>
-				<p css={spaceTop}>
+				<p css={rowSpacing}>
 					A Guardian Ad-Lite subscription does not entitle you to the additional
 					benefits on offer via our All-access digital and Digital + print
 					subscriptions, which are stated <a href="/contribute">here</a>.
@@ -114,7 +118,7 @@ const contents = [
 	{
 		title: 'Will my Guardian Ad-Lite subscription work across all devices?',
 		body: (
-			<div css={spaceTop}>
+			<div css={rowSpacing}>
 				You can read the Guardian website without personalised advertising
 				across all devices by logging into your Guardian account.
 			</div>
@@ -123,7 +127,7 @@ const contents = [
 	{
 		title: 'How do I cancel my Guardian Ad-Lite subscription?',
 		body: (
-			<div css={spaceTop}>
+			<div css={rowSpacing}>
 				To cancel, go to Manage my account, and for further information on your
 				Guardian Ad-Lite subscription, see <a href="/contribute">here</a>.
 			</div>
@@ -132,7 +136,7 @@ const contents = [
 	{
 		title: 'How do I contact customer services?',
 		body: (
-			<div css={spaceTop}>
+			<div css={rowSpacing}>
 				For any queries, including subscription-related queries, please visit
 				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
 				contact details for your region.
@@ -147,8 +151,8 @@ export function AccordianComponent(): JSX.Element {
 			<div css={bodyContainer}>
 				<h2 css={heading}>Any questions?</h2>
 				<Accordion cssOverrides={accordian}>
-					{contents.map((content) => (
-						<AccordianComponentRow title={content.title} body={content.body} />
+					{rows.map((row) => (
+						<AccordianComponentRow title={row.title} body={row.body} />
 					))}
 				</Accordion>
 			</div>
