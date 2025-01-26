@@ -40,7 +40,6 @@ export function GuardianAdLiteCards({
 	cardsContent,
 	isSignedIn,
 }: GuardianAdLiteCardsProps): JSX.Element {
-	console.log('*** IsSignedIn', isSignedIn);
 	return (
 		<div
 			css={[

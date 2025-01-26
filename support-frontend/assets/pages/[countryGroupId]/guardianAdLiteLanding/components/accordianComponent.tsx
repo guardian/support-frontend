@@ -11,6 +11,7 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
+import { useState } from 'react';
 import { Container } from 'components/layout/container';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 
@@ -59,13 +60,14 @@ const accordian = css`
 		color: ${palette.brand[500]};
 	}
 `;
-const accordianRow = css`
+const accordianRow = (expanded: boolean) => css`
 	border-top: 1px solid ${palette.neutral[73]};
 	text-align: left;
 	> button {
-		padding: ${space[1]}px 0px ${space[6]}px;
+		align-items: flex-start;
+		padding: ${space[1]}px 0px ${expanded ? 0 : space[6]}px;
 		${from.desktop} {
-			padding: ${space[2]}px 0px ${space[8]}px;
+			padding: ${space[2]}px 0px ${expanded ? 0 : space[8]}px;
 		}
 	} // title
 	> button > * {
@@ -77,7 +79,9 @@ const accordianRow = css`
 	} // title (content)
 	> div > * {
 		${article15}
+		padding-bottom: ${expanded ? space[1] : 0}px;
 		${from.desktop} {
+			padding-bottom: ${expanded ? space[3] : 0}px;
 			${article17}
 		}
 	} // body
@@ -85,19 +89,21 @@ const accordianRow = css`
 		display: none;
 	} // toggle label
 `;
-
+const spaceTop = css`
+	padding-top: ${space[2]}px;
+`;
 const contents = [
 	{
 		title: 'What is included in my Guardian Ad-Lite subscription?',
 		body: (
 			<div>
-				<p>
+				<p css={spaceTop}>
 					A Guardian Ad-Lite subscription enables you to read the Guardian
 					website without personalised advertising. You will still see
 					advertising but it will be delivered without the use of personalised
 					advertising cookies or similar technologies.
 				</p>
-				<p>
+				<p css={spaceTop}>
 					A Guardian Ad-Lite subscription does not entitle you to the additional
 					benefits on offer via our All-access digital and Digital + print
 					subscriptions, which are stated <a href="/contribute">here</a>.
@@ -108,7 +114,7 @@ const contents = [
 	{
 		title: 'Will my Guardian Ad-Lite subscription work across all devices?',
 		body: (
-			<div>
+			<div css={spaceTop}>
 				You can read the Guardian website without personalised advertising
 				across all devices by logging into your Guardian account.
 			</div>
@@ -117,7 +123,7 @@ const contents = [
 	{
 		title: 'How do I cancel my Guardian Ad-Lite subscription?',
 		body: (
-			<div>
+			<div css={spaceTop}>
 				To cancel, go to Manage my account, and for further information on your
 				Guardian Ad-Lite subscription, see <a href="/contribute">here</a>.
 			</div>
@@ -126,7 +132,7 @@ const contents = [
 	{
 		title: 'How do I contact customer services?',
 		body: (
-			<div>
+			<div css={spaceTop}>
 				For any queries, including subscription-related queries, please visit
 				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
 				contact details for your region.
@@ -142,16 +148,32 @@ export function AccordianComponent(): JSX.Element {
 				<h2 css={heading}>Any questions?</h2>
 				<Accordion cssOverrides={accordian}>
 					{contents.map((content) => (
-						<AccordionRow
-							label={content.title}
-							hideToggleLabel={true}
-							cssOverrides={accordianRow}
-						>
-							{content.body}
-						</AccordionRow>
+						<AccordianComponentRow title={content.title} body={content.body} />
 					))}
 				</Accordion>
 			</div>
 		</Container>
+	);
+}
+
+type AccordianRowProps = {
+	title: string;
+	body: React.ReactNode;
+};
+
+function AccordianComponentRow({
+	title,
+	body,
+}: AccordianRowProps): JSX.Element {
+	const [expanded, setExpanded] = useState<boolean>(false);
+	return (
+		<AccordionRow
+			label={title}
+			hideToggleLabel={true}
+			cssOverrides={accordianRow(expanded)}
+			onClick={() => setExpanded(!expanded)}
+		>
+			{body}
+		</AccordionRow>
 	);
 }
