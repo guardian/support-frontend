@@ -102,8 +102,6 @@ object SendThankYouEmailManualTest {
     SendSupporterPlusEmail.main(args)
     SendTierThreeEmail.main(args)
     SendDigitalPackEmail.main(args)
-    SendDigitalPackGiftPurchaseEmails.main(args)
-    SendDigitalPackGiftRedemptionEmail.main(args)
     SendPaperSubscriptionEmail.main(args)
     SendWeeklySubscriptionEmail.main(args)
     SendWeeklySubscriptionGiftEmail.main(args)
@@ -212,7 +210,7 @@ object SendDigitalPackEmail extends App {
 
   send(
     digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+      SendThankYouEmailDigitalSubscriptionState(
         billingOnlyUser,
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
@@ -225,45 +223,7 @@ object SendDigitalPackEmail extends App {
   )
 
 }
-object SendDigitalPackGiftPurchaseEmails extends App {
 
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-        billingOnlyUser,
-        giftRecipientSFContactIdToSendTo, // recipient
-        DigitalPack(GBP, Annual, ReaderType.Gift),
-        DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
-        GeneratedGiftCode("gd12-02345678").get,
-        new LocalDate(2020, 10, 14),
-        directDebitPaymentMethod,
-        paymentSchedule,
-        None,
-        acno,
-        subno,
-      ),
-    ),
-  )
-
-}
-object SendDigitalPackGiftRedemptionEmail extends App {
-
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-        billingOnlyUser,
-        DigitalPack(GBP, Annual, ReaderType.Gift),
-        "subno",
-        TermDates(
-          new LocalDate(2020, 10, 24),
-          new LocalDate(2021, 1, 24),
-          3,
-        ),
-      ),
-    ),
-  )
-
-}
 object SendPaperSubscriptionEmail extends App {
 
   sendSingle(

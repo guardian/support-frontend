@@ -93,7 +93,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       TestData.getMandate,
       CODE,
     ).build(
-      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+      SendThankYouEmailDigitalSubscriptionState(
         User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
@@ -101,50 +101,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         None,
         "acno",
         "A-S00045678",
-      ),
-    ).map(_.map(ef => parse(ef.payload)))
-    actual.map(inside(_) { case actualJson :: Nil =>
-      actualJson should be(expectedJson)
-    })
-  }
-
-  it should "generate the right json for gift redemption subs" in {
-    val expectedJson = parse("""{
-        |  "To" : {
-        |    "Address" : "test@theguardian.com",
-        |    "ContactAttributes" : {
-        |      "SubscriberAttributes" : {
-        |        "gift_recipient_first_name" : "Mickey",
-        |        "subscription_details" : "3 month digital subscription",
-        |        "gift_end_date" : "Thursday, 18 February 2021",
-        |        "gift_recipient_email" : "test@theguardian.com",
-        |        "gift_start_date" : "Wednesday, 18 November 2020"
-        |      }
-        |    }
-        |  },
-        |  "DataExtensionName" : "digipack-gift-redemption",
-        |  "IdentityUserId" : "1234",
-        |  "UserAttributes" : {
-        |    "unmanaged_digital_subscription_gift_duration_months" : 3,
-        |    "unmanaged_digital_subscription_gift_start_date" : "2020-11-18",
-        |    "unmanaged_digital_subscription_gift_end_date" : "2021-02-18"
-        |  }
-        |}
-        |""".stripMargin)
-    val actual = new DigitalPackEmailFields(
-      new PaperFieldsGenerator(TestData.getMandate),
-      TestData.getMandate,
-      CODE,
-    ).build(
-      SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-        User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        DigitalPack(GBP, Annual),
-        "subno",
-        TermDates(
-          new LocalDate(2020, 11, 18),
-          new LocalDate(2021, 2, 18),
-          3,
-        ),
       ),
     ).map(_.map(ef => parse(ef.payload)))
     actual.map(inside(_) { case actualJson :: Nil =>

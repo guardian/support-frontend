@@ -4,7 +4,7 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
@@ -102,7 +102,7 @@ object StatesTestData {
   )
 
   val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
-    DigitalSubscriptionDirectPurchaseState(
+    DigitalSubscriptionState(
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
@@ -121,11 +121,11 @@ object StatesTestData {
   )
 
   val thankYouEmailProductTypeState: SendThankYouEmailState =
-    ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated
+    ProductTypeCreatedTestData.digitalSubscriptionCreated
 
   val sendAcquisitionEventState: SendAcquisitionEventState = SendAcquisitionEventState(
     requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    ProductTypeCreatedTestData.digitalSubscriptionDirectPurchaseCreated,
+    ProductTypeCreatedTestData.digitalSubscriptionCreated,
     analyticsInfo = AnalyticsInfo(false, PayPal),
     acquisitionData = None,
   )

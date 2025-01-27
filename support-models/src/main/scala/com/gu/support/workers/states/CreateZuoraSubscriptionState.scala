@@ -65,7 +65,7 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
-  case class DigitalSubscriptionDirectPurchaseState(
+  case class DigitalSubscriptionState(
       billingCountry: Country,
       product: DigitalPack,
       paymentMethod: PaymentMethod,
@@ -99,7 +99,7 @@ object CreateZuoraSubscriptionProductState {
     List(
       discriminatedType.variant[ContributionState](contribution),
       discriminatedType.variant[SupporterPlusState](supporterPlus),
-      discriminatedType.variant[DigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
+      discriminatedType.variant[DigitalSubscriptionState](digitalSubscription),
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[TierThreeState](tierThree),

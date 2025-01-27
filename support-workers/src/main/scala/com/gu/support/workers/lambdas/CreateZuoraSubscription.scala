@@ -42,7 +42,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
-      case state: DigitalSubscriptionDirectPurchaseState =>
+      case state: DigitalSubscriptionState =>
         zuoraDigitalSubscriptionDirectHandler.subscribe(
           state,
           zuoraSubscriptionState.csrUsername,
@@ -91,9 +91,9 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.user,
     state.product.currency,
   )
-  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
+  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionHandler(
     zuoraSubscriptionCreator,
-    new DigitalSubscriptionDirectPurchaseBuilder(
+    new DigitalSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
       services.promotionService,
       dateGenerator,

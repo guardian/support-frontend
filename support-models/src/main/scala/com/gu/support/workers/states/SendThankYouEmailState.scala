@@ -17,10 +17,6 @@ sealed trait SendThankYouEmailState extends StepFunctionUserState {
 
 object SendThankYouEmailState {
 
-  sealed trait SendThankYouEmailDigitalSubscriptionState extends SendThankYouEmailState {
-    override def product: DigitalPack
-  }
-
   case class SendThankYouEmailContributionState(
       user: User,
       product: Contribution,
@@ -59,7 +55,7 @@ object SendThankYouEmailState {
       subscriptionNumber: String,
   ) extends SendThankYouEmailState
 
-  case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+  case class SendThankYouEmailDigitalSubscriptionState(
       user: User,
       product: DigitalPack,
       paymentMethod: PaymentMethod,
@@ -67,28 +63,7 @@ object SendThankYouEmailState {
       promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
-  ) extends SendThankYouEmailDigitalSubscriptionState
-
-  case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-      user: User,
-      recipientSFContactId: SfContactId,
-      product: DigitalPack,
-      giftRecipient: DigitalSubscriptionGiftRecipient,
-      giftCode: GeneratedGiftCode,
-      lastRedemptionDate: LocalDate,
-      paymentMethod: PaymentMethod,
-      paymentSchedule: PaymentSchedule,
-      promoCode: Option[PromoCode],
-      accountNumber: String,
-      subscriptionNumber: String,
-  ) extends SendThankYouEmailDigitalSubscriptionState
-
-  case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-      user: User,
-      product: DigitalPack,
-      subscriptionNumber: String,
-      termDates: TermDates,
-  ) extends SendThankYouEmailDigitalSubscriptionState
+  ) extends SendThankYouEmailState
 
   case class SendThankYouEmailPaperState(
       user: User,
@@ -132,13 +107,7 @@ object SendThankYouEmailState {
       discriminatedType.variant[SendThankYouEmailContributionState](contribution),
       discriminatedType.variant[SendThankYouEmailSupporterPlusState](supporterPlus),
       discriminatedType.variant[SendThankYouEmailTierThreeState](tierThree),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState](
-        digitalSubscriptionDirectPurchase,
-      ),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftRedemptionState](
-        digitalSubscriptionGiftRedemption,
-      ),
+      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionState](digitalSubscription),
       discriminatedType.variant[SendThankYouEmailPaperState](paper),
       discriminatedType.variant[SendThankYouEmailGuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[SendThankYouEmailGuardianAdLiteState](guardianAdLite),

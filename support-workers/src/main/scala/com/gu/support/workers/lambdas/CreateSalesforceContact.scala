@@ -7,7 +7,7 @@ import com.gu.support.workers._
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
-  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionState,
   GuardianAdLiteState,
   GuardianWeeklyState,
   PaperState,
@@ -220,7 +220,7 @@ class NextState(state: CreateSalesforceContactState) {
       purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         user.billingAddress.country,
         product,
         purchase,

@@ -6,13 +6,13 @@ import com.gu.support.acquisitions.{AbTest, AcquisitionData}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
 import com.gu.support.workers.{DigitalPack, Monthly}
 import com.gu.support.zuora.api.ReaderType.Patron
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
-class DigitalSubscriptionDirectPurchaseBuilder(
+class DigitalSubscriptionBuilder(
     config: ZuoraDigitalPackConfig,
     promotionService: PromotionService,
     dateGenerator: DateGenerator,
@@ -21,7 +21,7 @@ class DigitalSubscriptionDirectPurchaseBuilder(
 ) {
 
   def build(
-      state: DigitalSubscriptionDirectPurchaseState,
+      state: DigitalSubscriptionState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
       acquisitionData: Option[AcquisitionData],

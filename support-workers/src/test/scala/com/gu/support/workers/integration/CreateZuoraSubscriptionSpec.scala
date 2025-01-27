@@ -91,21 +91,21 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Digital Pack subscription" in {
     createZuoraHelper
       .createSubscription(createDigiPackZuoraSubscriptionJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount" in {
     createZuoraHelper
       .createSubscription(createDigiPackSubscriptionWithPromoJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
     createZuoraHelper
       .createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 

@@ -12,7 +12,7 @@ import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
-  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionState,
   GuardianAdLiteState,
   GuardianWeeklyState,
   PaperState,
@@ -522,7 +522,7 @@ object JsonFixtures {
 
   val createDigiPackZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
@@ -542,7 +542,7 @@ object JsonFixtures {
 
   val createDigiPackSubscriptionWithPromoJson =
     CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
@@ -955,7 +955,7 @@ object JsonFixtures {
     """
   val digipackSubscriptionWithDiscountAndFreeTrialJson =
     CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,

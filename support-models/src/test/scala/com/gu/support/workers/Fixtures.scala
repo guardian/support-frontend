@@ -272,7 +272,7 @@ object Fixtures {
   def createDigiPackZuoraSubscriptionJson: String =
     s"""
           {
-            "productType": "DigitalSubscriptionDirectPurchase",
+            "productType": "DigitalSubscription",
             "billingCountry": "GB",
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,

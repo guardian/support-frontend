@@ -3,14 +3,14 @@ package com.gu.support.workers.createZuoraSubscription
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionState
 import com.gu.support.workers._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.domain
-import com.gu.zuora.productHandlers.ZuoraDigitalSubscriptionDirectHandler
-import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionDirectPurchaseBuilder, SubscribeItemBuilder}
+import com.gu.zuora.productHandlers.ZuoraDigitalSubscriptionHandler
+import com.gu.zuora.subscriptionBuilders.{DigitalSubscriptionBuilder, SubscribeItemBuilder}
 import com.gu.zuora.{ZuoraSubscribeService, ZuoraSubscriptionCreator}
 import org.joda.time.{DateTime, LocalDate}
 import org.scalatest.Inside.inside
@@ -24,7 +24,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
 
   it should "create a Digital Pack standard (paid) subscription" in {
 
-    val state = DigitalSubscriptionDirectPurchaseState(
+    val state = DigitalSubscriptionState(
       billingCountry = Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
@@ -65,14 +65,14 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       }
     }
 
-    val subscriptionCreator = new ZuoraDigitalSubscriptionDirectHandler(
+    val subscriptionCreator = new ZuoraDigitalSubscriptionHandler(
       new ZuoraSubscriptionCreator(
         zuora,
         DateGenerator(new DateTime(2020, 6, 15, 16, 28, 57)),
         requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
         userId = "111222",
       ),
-      new DigitalSubscriptionDirectPurchaseBuilder(
+      new DigitalSubscriptionBuilder(
         config = ZuoraDigitalPackConfig(14, 2, "", ""),
         promotionService = null, // shouldn't be called for subs with no promo code
         DateGenerator(new LocalDate(2020, 6, 15)),
@@ -98,7 +98,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {
-        inside(sendThankYouEmailState) { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+        inside(sendThankYouEmailState) { case s: SendThankYouEmailDigitalSubscriptionState =>
           s.accountNumber should be("accountdigi")
           s.subscriptionNumber should be("subdigi")
         }
