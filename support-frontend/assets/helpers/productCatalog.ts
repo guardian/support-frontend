@@ -12,9 +12,6 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
-type SupporterPlusVariants = 'control' | 'v1' | 'v2';
-type ContributionVariants = 'control' | 'v1' | 'v2Annual' | 'v2Monthly';
-
 type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
@@ -112,17 +109,6 @@ const addFreeBenefit = {
 const newsletterBenefitControl = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 };
-const newsletterBenefit = {
-	copy: 'Regular dispatches from the newsroom to see the impact of your support',
-};
-const newsletterBenefitMonthlyV2 = {
-	copy: 'Give to the Guardian every month with Support',
-	hideBullet: true,
-};
-const newsletterBenefitAnnualV2 = {
-	copy: 'Give to the Guardian every year with Support',
-	hideBullet: true,
-};
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
 	tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
@@ -156,42 +142,13 @@ const feastBenefit = {
 };
 
 const supporterPlusBenefits = [
-	fewerAsksBenefit,
-	newsletterBenefit,
+	appBenefitControlV2,
 	addFreeBenefit,
-	appBenefit,
+	newsletterBenefitControl,
+	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
 ];
-const supporterPlusBenefitsList: Record<
-	SupporterPlusVariants,
-	ProductBenefit[]
-> = {
-	control: [
-		appBenefitControlV2,
-		addFreeBenefit,
-		newsletterBenefitControl,
-		fewerAsksBenefit,
-		partnerOffersBenefit,
-		feastBenefit,
-	],
-	v1: supporterPlusBenefits,
-	v2: [
-		appBenefitControlV2,
-		addFreeBenefit,
-		fewerAsksBenefit,
-		partnerOffersBenefit,
-		feastBenefit,
-	],
-};
-
-const contributionBenefitsList: Record<ContributionVariants, ProductBenefit[]> =
-	{
-		control: [newsletterBenefitControl],
-		v1: [newsletterBenefit],
-		v2Monthly: [newsletterBenefitMonthlyV2],
-		v2Annual: [newsletterBenefitAnnualV2],
-	};
 
 const tierThreeBenefits = [guardianWeeklyBenefit];
 const tierThreeInclArchiveBenefitsUK = [
@@ -389,7 +346,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit],
+		benefits: [newsletterBenefitControl],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
@@ -458,32 +415,7 @@ export const productCatalogDescription: Record<
 	},
 };
 
-function supporterPlusVariant(variant?: string): SupporterPlusVariants {
-	switch (variant) {
-		case 'v1':
-		case 'v2':
-			return variant;
-		default:
-			return 'control';
-	}
-}
-function contributionVariant(
-	period: 'Monthly' | 'Annual',
-	variant?: string,
-): ContributionVariants {
-	switch (variant) {
-		case 'v1':
-			return variant;
-		case 'v2':
-			return `v2${period}`;
-		default:
-			return 'control';
-	}
-}
-
-export function productCatalogDescriptionResetAndNewspaperArchive(
-	period: 'Monthly' | 'Annual',
-	resetVariant?: string,
+export function productCatalogDescriptionNewspaperArchive(
 	countryGroupId?: CountryGroupId,
 ) {
 	const newsPaperArchiveBenefit = countryGroupId
@@ -494,15 +426,6 @@ export function productCatalogDescriptionResetAndNewspaperArchive(
 
 	return {
 		...productCatalogDescription,
-		SupporterPlus: {
-			...productCatalogDescription.SupporterPlus,
-			benefits: supporterPlusBenefitsList[supporterPlusVariant(resetVariant)],
-		},
-		Contribution: {
-			...productCatalogDescription.Contribution,
-			benefits:
-				contributionBenefitsList[contributionVariant(period, resetVariant)],
-		},
 		TierThree: {
 			...productCatalogDescription.TierThree,
 			benefits: newsPaperArchiveBenefit,

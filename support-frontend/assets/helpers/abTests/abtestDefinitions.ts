@@ -109,28 +109,4 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	benefitsReset: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'v1',
-			},
-			{
-				id: 'v2',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 4,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeContributionsOnlyCountries: true,
-	},
 };
