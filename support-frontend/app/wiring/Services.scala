@@ -10,7 +10,6 @@ import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
-import com.gu.zuora.ZuoraGiftLookupServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -91,9 +90,6 @@ trait Services {
     new PaperRoundServiceProvider(appConfig.paperRoundConfigProvider)
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
-
-  lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
-    new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
 
   lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
     RequestRunners.futureRunner,

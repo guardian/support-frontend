@@ -8,8 +8,6 @@ import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
-import com.gu.support.promotions.PromoCode
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers._
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
@@ -49,7 +47,7 @@ case class CreateSupportWorkersRequest(
     giftRecipient: Option[GiftRecipientRequest],
     product: ProductType,
     firstDeliveryDate: Option[LocalDate],
-    paymentFields: Either[PaymentFields, RedemptionData],
+    paymentFields: PaymentFields,
     appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
@@ -155,7 +153,7 @@ class SupportWorkersClient(
         product = request.body.product,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
-          PaymentProvider.fromPaymentFields(request.body.paymentFields.left.toOption),
+          PaymentProvider.fromPaymentFields(request.body.paymentFields),
         ),
         paymentFields = request.body.paymentFields,
         acquisitionData = Some(
@@ -173,11 +171,11 @@ class SupportWorkersClient(
         ipAddress =
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
       )
-      isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
+      isExistingAccount = createPaymentMethodState.paymentFields.isInstanceOf[ExistingPaymentFields]
       name =
         (if (user.isTestUser) "TestUser-" else "") +
           createPaymentMethodState.product.describe + "-" +
-          createPaymentMethodState.paymentFields.fold(_.describe, _.getClass.getSimpleName)
+          createPaymentMethodState.paymentFields.describe
       executionResult <- underlying
         .triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount, name)
         .bimap(

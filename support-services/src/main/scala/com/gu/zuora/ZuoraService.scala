@@ -5,7 +5,6 @@ import cats.implicits._
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig
-import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._

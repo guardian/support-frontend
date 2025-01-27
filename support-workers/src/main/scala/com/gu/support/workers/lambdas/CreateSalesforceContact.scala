@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
@@ -48,27 +47,24 @@ class NextState(state: CreateSalesforceContactState) {
 
   import state._
 
-  val Purchase = Left
-  type Redemption = Right[PaymentMethod, RedemptionData]
-
   // scalastyle:off cyclomatic.complexity
   def build(
       salesforceContactRecords: SalesforceContactRecords,
   ): CreateZuoraSubscriptionState =
     (product, paymentMethod) match {
-      case (product: Contribution, Purchase(purchase)) =>
+      case (product: Contribution, purchase) =>
         toNextContribution(salesforceContactRecords, product, purchase)
-      case (product: SupporterPlus, Purchase(purchase)) =>
+      case (product: SupporterPlus, purchase) =>
         toNextSupporterPlus(salesforceContactRecords, product, purchase)
-      case (product: TierThree, Purchase(purchase)) =>
+      case (product: TierThree, purchase) =>
         toNextTierThree(salesforceContactRecords, product, purchase)
-      case (product: GuardianAdLite, Purchase(purchase)) =>
+      case (product: GuardianAdLite, purchase) =>
         toNextGuardianAdLite(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
+      case (product: DigitalPack, purchase) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
-      case (product: Paper, Purchase(purchase)) =>
+      case (product: Paper, purchase) =>
         toNextPaper(salesforceContactRecords.buyer, product, purchase)
-      case (product: GuardianWeekly, Purchase(purchase)) =>
+      case (product: GuardianWeekly, purchase) =>
         toNextWeekly(salesforceContactRecords, product, purchase)
       case _ => throw new RuntimeException("could not create value state")
     }

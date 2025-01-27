@@ -22,22 +22,6 @@ import scala.io.Source
 
 class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
 
-  "UpdateSupporterProductData" should "not insert an item into Dynamo for a digisub gift purchase" in {
-    val state = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState).value
-    val supporterRatePlanItem =
-      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
-
-    supporterRatePlanItem shouldBe None
-  }
-
-  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a digisub gift redemption" in {
-    val state = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState).value
-    val supporterRatePlanItem =
-      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
-
-    supporterRatePlanItem.value.identityId shouldBe "102803446"
-  }
-
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus purchase" in {
     val state = decode[SendThankYouEmailState](supporterPlusState).value
     val supporterRatePlanItem =

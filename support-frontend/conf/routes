@@ -138,11 +138,6 @@ GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.W
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
 
-# redemptions
-GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
-GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String, isTestUser: Option[Boolean])
-GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
-
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
 

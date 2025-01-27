@@ -8,7 +8,6 @@ import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.zuora.api.AcquisitionSource.CSR
@@ -42,7 +41,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = None,
-        redemptionCode = None,
       ),
     )
   }
@@ -119,7 +117,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = Some("NOTAPATRONPROMO"),
-        redemptionCode = None,
       ),
     )
   }
@@ -160,14 +157,12 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Patron,
         promoCode = Some("FOOPATRON"),
-        redemptionCode = None,
       ),
     )
   }
 
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
-  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),

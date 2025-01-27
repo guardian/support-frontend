@@ -50,14 +50,13 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       )
       // ideally should also check we called zuora with the right post data
       override def subscribe(subscribeRequest: SubscribeRequest): Future[List[SubscribeResponseAccount]] = {
-        val maybeRedemptionCode = subscribeRequest.subscribes.head.subscriptionData.subscription.redemptionCode
         val paymentType = subscribeRequest.subscribes.head.paymentMethod.get.Type
         val autoPay = subscribeRequest.subscribes.head.account.autoPay
         val readerType = subscribeRequest.subscribes.head.subscriptionData.subscription.readerType
         val ratePlan = subscribeRequest.subscribes.head.subscriptionData.ratePlanData.head.ratePlan.productRatePlanId
-        val actual = (maybeRedemptionCode, paymentType, autoPay, readerType, ratePlan)
+        val actual = (paymentType, autoPay, readerType, ratePlan)
         actual match {
-          case (None, "PayPal", true, ReaderType.Direct, "2c92c0f84bbfec8b014bc655f4852d9d") =>
+          case ("PayPal", true, ReaderType.Direct, "2c92c0f84bbfec8b014bc655f4852d9d") =>
             Future.successful(
               List(SubscribeResponseAccount("accountdigi", "subdigi", 135.67f, "ididdigi", 246.67f, "aciddigi", true)),
             )

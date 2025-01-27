@@ -69,36 +69,6 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     json.mapObject(_.mapValues(_.dropNullValues)) should be(expected)
   }
 
-  it should "serialise if it is a gift" in {
-    val json = dsGiftSubscriptionData.asJson
-    val expected =
-      parse("""
-              |{
-              |  "RatePlanData" : [
-              |    {
-              |      "RatePlan" : { "ProductRatePlanId" : "12345" },
-              |      "RatePlanChargeData" : [],
-              |      "SubscriptionProductFeatureList" : []
-              |    }
-              |  ],
-              |  "Subscription" : {
-              |    "ContractEffectiveDate" : "2020-12-01",
-              |    "ContractAcceptanceDate" : "2020-12-01",
-              |    "TermStartDate" : "2020-12-01",
-              |    "AutoRenew" : false,
-              |    "InitialTermPeriodType" : "Month",
-              |    "InitialTerm" : 3,
-              |    "RenewalTerm" : 12,
-              |    "TermType" : "TERMED",
-              |    "ReaderType__c" : "Gift",
-              |    "RedemptionCode__c" : "gd03-asdfghjq",
-              |    "CreatedRequestId__c" : "requestId",
-              |    "GiftNotificationEmailDate__c" : "2020-12-25"
-              |  }
-              |}""".stripMargin).toTry.get
-    json.mapObject(_.mapValues(_.dropNullValues)) should be(expected)
-  }
-
   "SubscribeRequest" should "serialise to correct json" in {
     val json = creditCardSubscriptionRequest().asJson
     (json \\ "GenerateInvoice").head.asBoolean should be(Some(true))
