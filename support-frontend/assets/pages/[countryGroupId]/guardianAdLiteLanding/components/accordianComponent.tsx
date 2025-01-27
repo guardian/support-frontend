@@ -13,7 +13,10 @@ import {
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { Container } from 'components/layout/container';
-import { helpCentreUrl } from 'helpers/urls/externalLinks';
+import {
+	guardianAdLiteConditionsUrl,
+	helpCentreUrl,
+} from 'helpers/urls/externalLinks';
 
 const container = css`
 	background-color: ${palette.neutral[97]};
@@ -129,7 +132,8 @@ const rows = [
 		body: (
 			<div css={rowSpacing}>
 				To cancel, go to Manage my account, and for further information on your
-				Guardian Ad-Lite subscription, see <a href="/contribute">here</a>.
+				Guardian Ad-Lite subscription, see{' '}
+				<a href={guardianAdLiteConditionsUrl}>here</a>.
 			</div>
 		),
 	},
