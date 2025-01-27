@@ -71,24 +71,6 @@ function getValidContributionTypesFromUrlOrElse(
 	return fallback;
 }
 
-function toHumanReadableContributionType(
-	contributionType: ContributionType,
-): 'One-time' | 'Monthly' | 'Annual' {
-	switch (contributionType) {
-		case 'ONE_OFF':
-			return 'One-time';
-
-		case 'MONTHLY':
-			return 'Monthly';
-
-		case 'ANNUAL':
-			return 'Annual';
-
-		default:
-			return 'Monthly';
-	}
-}
-
 function getContributionTypeFromSession(): ContributionType | null | undefined {
 	return toContributionType(storage.getSession('selectedContributionType'));
 }
@@ -221,7 +203,6 @@ export {
 	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getAmountFromUrl,
-	toHumanReadableContributionType,
 	getValidPaymentMethods,
 	getPaymentMethodFromSession,
 };
