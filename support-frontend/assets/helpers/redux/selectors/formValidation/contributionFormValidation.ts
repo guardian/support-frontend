@@ -8,7 +8,7 @@ import { getPersonalDetailsErrors } from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
 import { errorCollectionHasErrors } from './utils';
 
-export function getAllErrorsForContributions(
+function getAllErrorsForContributions(
 	state: ContributionsState,
 ): ErrorCollection {
 	// The payment request button- Apple/Google Pay- has a different validation pattern- we validate any custom amount,

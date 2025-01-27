@@ -271,28 +271,6 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-// ----- Functions ----- //
-function getConfigMinAmount(
-	countryGroupId: CountryGroupId,
-	contribType: ContributionType,
-): number {
-	if (contribType === 'ANNUAL') {
-		switch (countryGroupId) {
-			case 'AUDCountries':
-			case 'NZDCountries':
-				return 75;
-			case 'Canada':
-				return 60;
-			case 'EURCountries':
-			case 'International':
-			case 'GBPCountries':
-			case 'UnitedStates':
-				return 50;
-		}
-	}
-	return config[countryGroupId][contribType].min;
-}
-
 function toContributionType(
 	s: string | null | undefined,
 ): ContributionType | null | undefined {
@@ -356,7 +334,6 @@ const isContributionsOnlyCountry = (
 // ----- Exports ----- //
 export {
 	config,
-	getConfigMinAmount,
 	toContributionType,
 	generateContributionTypes,
 	billingPeriodFromContrib,

@@ -1,6 +1,6 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 
-export const mockSettings = {
+const mockSettings = {
 	switches: {
 		oneOffPaymentMethods: {
 			stripe: 'On',
