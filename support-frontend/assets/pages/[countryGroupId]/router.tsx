@@ -37,9 +37,24 @@ const GuardianAdLiteLanding = lazy(() => {
 		return { default: mod.GuardianAdLiteLanding };
 	});
 });
+const LandingPage = lazy(() => {
+	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
+		(mod) => {
+			return { default: mod.LandingPage };
+		},
+	);
+});
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
+		{
+			path: `/${geoId}/contribute/:campaignCode?`,
+			element: (
+				<Suspense fallback={<HoldingContent />}>
+					<LandingPage geoId={geoId} abParticipations={abParticipations} />
+				</Suspense>
+			),
+		},
 		{
 			path: `/${geoId}/checkout`,
 			element: (

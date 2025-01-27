@@ -350,7 +350,7 @@ class Application(
       title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
-      js = RefPath("supporterPlusLandingPage.js"),
+      js = RefPath("[countryGroupId]/router.js"),
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
