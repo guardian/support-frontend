@@ -55,5 +55,3 @@ export function GuardianAdLiteLanding({
 		</LandingPageLayout>
 	);
 }
-
-export default GuardianAdLiteLanding;
