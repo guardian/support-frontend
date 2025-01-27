@@ -19,6 +19,7 @@
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
 		"knip": "knip --include files,exports,nsExports,types,nsTypes,dependencies",
+		"knip:production": "yarn knip --production --config knip.production.config.js",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
 		"prettier:check": "prettier --check ./assets",
