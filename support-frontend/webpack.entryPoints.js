@@ -6,8 +6,6 @@ module.exports = {
 		favicons: 'images/favicons.ts',
 		subscriptionsLandingPage:
 			'pages/subscriptions-landing/subscriptionsLanding.tsx',
-		supporterPlusLandingPage:
-			'pages/supporter-plus-landing/supporterPlusRouter.tsx',
 		paperSubscriptionLandingPage:
 			'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
 		paperSubscriptionCheckoutPage:
