@@ -6,7 +6,6 @@ import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import io.circe.{Decoder, Encoder}
 import org.joda.time.LocalDate
@@ -79,7 +78,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailGuardianWeeklyState(
       user: User,
       product: GuardianWeekly,
-      giftRecipient: Option[WeeklyGiftRecipient],
+      giftRecipient: Option[GiftRecipient],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       promoCode: Option[PromoCode],

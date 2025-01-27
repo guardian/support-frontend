@@ -72,13 +72,11 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
   def writeItem(
       item: SupporterRatePlanItem,
   )(implicit executionContext: ExecutionContext): Future[UpdateItemResponse] = {
-    val beneficiaryIdentityId = item.gifteeIdentityId.getOrElse(item.identityId)
-
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
     val expiryDate = item.termEndDate.plusDays(1)
 
     val key = Map(
-      identityIdField -> AttributeValue.builder.s(beneficiaryIdentityId).build,
+      identityIdField -> AttributeValue.builder.s(item.identityId).build,
       subscriptionNameField -> AttributeValue.builder.s(item.subscriptionName).build,
     ).asJava
 

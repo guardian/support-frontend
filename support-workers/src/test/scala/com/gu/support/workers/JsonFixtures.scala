@@ -7,7 +7,6 @@ import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
@@ -633,7 +632,7 @@ object JsonFixtures {
       GuardianWeeklyState(
         userJsonWithDeliveryAddress,
         Some(
-          WeeklyGiftRecipient(
+          GiftRecipient(
             Some(Title.Mr),
             "Harry",
             "Ramsden",

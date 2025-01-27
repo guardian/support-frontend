@@ -8,7 +8,6 @@ import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
-import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
 import com.gu.support.zuora.api.AcquisitionSource.CSR
@@ -168,7 +167,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
         Address(None, None, None, None, None, Country.UK),
         Some(Address(None, None, None, None, None, Country.UK)),
       ),
-      Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
+      Some(GiftRecipient(None, "bob", "smith", None)),
       weekly,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,

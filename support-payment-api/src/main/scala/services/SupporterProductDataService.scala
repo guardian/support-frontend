@@ -8,8 +8,6 @@ import com.typesafe.scalalogging.StrictLogging
 import model.db.ContributionData
 import model.Environment
 import model.Environment.Live
-
-import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupporterProductDataService(environment: Environment) extends StrictLogging {
@@ -27,7 +25,6 @@ class SupporterProductDataService(environment: Environment) extends StrictLoggin
             SupporterRatePlanItem(
               subscriptionName = s"${contributionData.paymentProvider.entryName} - ${contributionData.paymentId}",
               identityId = idAsLong.toString,
-              gifteeIdentityId = None,
               productRatePlanId = "single_contribution",
               productRatePlanName = "Single Contribution",
               termEndDate = contributionData.created.toLocalDate

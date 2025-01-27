@@ -9,7 +9,6 @@ import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, encodeCountryAsAlpha2, encodeLocalTime}
 import com.gu.support.encoding.{Codec, DiscriminatedType}
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
@@ -84,7 +83,7 @@ object CreateZuoraSubscriptionProductState {
 
   case class GuardianWeeklyState(
       user: User,
-      giftRecipient: Option[WeeklyGiftRecipient],
+      giftRecipient: Option[GiftRecipient],
       product: GuardianWeekly,
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,

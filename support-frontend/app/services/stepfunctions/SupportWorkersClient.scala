@@ -115,23 +115,12 @@ class SupportWorkersClient(
     product match {
       case _: GuardianWeekly =>
         Right(
-          GiftRecipient.WeeklyGiftRecipient(
+          GiftRecipient(
             giftRecipient.title,
             giftRecipient.firstName,
             giftRecipient.lastName,
             giftRecipient.email,
           ),
-        )
-      case _: DigitalPack =>
-        for {
-          email <- giftRecipient.email.toRight("email address is required for DS gifts")
-          deliveryDate <- giftRecipient.deliveryDate.toRight("delivery date is required for DS gifts")
-        } yield GiftRecipient.DigitalSubscriptionGiftRecipient(
-          giftRecipient.firstName,
-          giftRecipient.lastName,
-          email,
-          giftRecipient.message,
-          deliveryDate,
         )
       case _ =>
         Left(s"gifting is not supported for $product")

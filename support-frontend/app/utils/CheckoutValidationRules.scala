@@ -11,7 +11,6 @@ import com.gu.support.paperround.{AgentId, PaperRoundAPI}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 import services.stepfunctions.CreateSupportWorkersRequest
-import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
 
 import scala.concurrent.{ExecutionContext, Future}

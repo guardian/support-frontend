@@ -63,7 +63,7 @@ object ProductTypeCreatedTestData {
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     GuardianWeekly(GBP, Monthly, Domestic),
-    Some(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
+    Some(GiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,

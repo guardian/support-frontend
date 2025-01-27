@@ -12,7 +12,6 @@ import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, Promot
 import com.gu.support.paperround.AgentId
 import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.promotions.{AppliesTo, DiscountBenefit, Promotion, PromotionService, SimplePromotionCollection}
-import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -289,7 +288,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
-        Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
+        Some(GiftRecipient(None, "Earl", "Palmer", None)),
         directDebitPaymentMethod,
         PaymentSchedule(
           List(

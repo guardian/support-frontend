@@ -88,12 +88,6 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     } yield SalesforceContactRecordsResponse(contactRecord, recipientContactRecord)
   }
 
-  private def deliveryAddressForGiftRecipientType(giftRecipient: GiftRecipient, user: User) =
-    giftRecipient match {
-      case _: GiftRecipient.WeeklyGiftRecipient => user.deliveryAddress
-      case _: GiftRecipient.DigitalSubscriptionGiftRecipient => None
-    }
-
   private def maybeAddGiftRecipient(
       contactRecord: SalesforceContactRecord,
       maybeGiftRecipient: Option[GiftRecipient],
@@ -102,7 +96,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     maybeGiftRecipient
       .filter(recipient => recipient.firstName != "" && recipient.lastName != "")
       .map { giftRecipient =>
-        val deliveryAddress = deliveryAddressForGiftRecipientType(giftRecipient, user)
+        val deliveryAddress = user.deliveryAddress
         upsert(getGiftRecipient(contactRecord.AccountId, deliveryAddress, giftRecipient)).map(Some(_))
       }
       .getOrElse(Future.successful(None))
@@ -156,14 +150,10 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
       deliveryAddress: Option[Address],
       giftRecipient: GiftRecipient,
   ) = {
-    val (email, title) = giftRecipient match {
-      case w: GiftRecipient.WeeklyGiftRecipient => (w.email, w.title)
-      case ds: GiftRecipient.DigitalSubscriptionGiftRecipient => (Some(ds.email), None)
-    }
     DeliveryContact(
       AccountId = buyerAccountId,
-      Email = email,
-      Salutation = title,
+      Email = giftRecipient.email,
+      Salutation = giftRecipient.title,
       FirstName = giftRecipient.firstName,
       LastName = giftRecipient.lastName,
       MailingStreet = deliveryAddress.flatMap(getAddressLine),

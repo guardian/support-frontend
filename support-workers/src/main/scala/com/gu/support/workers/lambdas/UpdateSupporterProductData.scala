@@ -200,7 +200,6 @@ object UpdateSupporterProductData {
     SupporterRatePlanItem(
       subscriptionName = subscriptionName,
       identityId = identityId,
-      gifteeIdentityId = None,
       productRatePlanId = productRatePlanId,
       productRatePlanName = productRatePlanName,
       termEndDate = LocalDate.now.plusWeeks(1),

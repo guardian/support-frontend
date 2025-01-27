@@ -171,7 +171,7 @@ class NextState(state: CreateSalesforceContactState) {
     CreateZuoraSubscriptionState(
       GuardianWeeklyState(
         user,
-        giftRecipient.map(_.asWeekly.get),
+        giftRecipient,
         product,
         purchase,
         firstDeliveryDate.get,
