@@ -4,12 +4,11 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
+import com.gu.support.workers._
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
   DigitalSubscriptionDirectPurchaseState,
-  DigitalSubscriptionGiftPurchaseState,
-  DigitalSubscriptionGiftRedemptionState,
   GuardianAdLiteState,
   GuardianWeeklyState,
   PaperState,
@@ -17,7 +16,6 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   TierThreeState,
 }
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
-import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -68,14 +66,10 @@ class NextState(state: CreateSalesforceContactState) {
         toNextGuardianAdLite(salesforceContactRecords, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
-        toNextDSGift(salesforceContactRecords, product, purchase)
       case (product: Paper, Purchase(purchase)) =>
         toNextPaper(salesforceContactRecords.buyer, product, purchase)
       case (product: GuardianWeekly, Purchase(purchase)) =>
         toNextWeekly(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, redemptionData: Redemption) =>
-        toNextDSRedemption(product, redemptionData.value)
       case _ => throw new RuntimeException("could not create value state")
     }
   // scalastyle:on cyclomatic.complexity
@@ -173,26 +167,6 @@ class NextState(state: CreateSalesforceContactState) {
       acquisitionData,
     )
 
-  def toNextDSRedemption(
-      product: DigitalPack,
-      redemptionData: RedemptionData,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftRedemptionState(
-        user.id,
-        product,
-        redemptionData,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      None,
-      None,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
   def toNextWeekly(
       salesforceContactRecords: SalesforceContactRecords,
       product: GuardianWeekly,
@@ -232,31 +206,6 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecord,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      firstDeliveryDate,
-      appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
-
-  def toNextDSGift(
-      salesforceContactRecords: SalesforceContactRecords,
-      product: DigitalPack,
-      purchase: PaymentMethod,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftPurchaseState(
-        user.billingAddress.country,
-        giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
-        product,
-        purchase,
-        appliedPromotion,
-        salesforceContactRecords,
       ),
       requestId,
       user,

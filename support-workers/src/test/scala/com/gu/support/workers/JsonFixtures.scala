@@ -7,16 +7,12 @@ import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
-import com.gu.support.promotions.PromoCode
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
   DigitalSubscriptionDirectPurchaseState,
-  DigitalSubscriptionGiftPurchaseState,
-  DigitalSubscriptionGiftRedemptionState,
   GuardianAdLiteState,
   GuardianWeeklyState,
   PaperState,
@@ -543,40 +539,6 @@ object JsonFixtures {
       None,
       None,
     ).asJson.spaces2
-
-  def createDigiPackGiftSubscriptionJson(requestId: UUID): String =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftPurchaseState(
-        Country.UK,
-        DigitalSubscriptionGiftRecipient(
-          "Gifty",
-          "McRecipent",
-          "gift.recipient@thegulocal.com",
-          None,
-          new LocalDate(2020, 1, 1),
-        ),
-        DigitalPack(GBP, Annual),
-        stripePaymentMethodObj,
-        None,
-        salesforceContacts,
-      ),
-      requestId,
-      user(),
-      DigitalPack(GBP, Annual),
-      AnalyticsInfo(isGiftPurchase = false, Stripe),
-      None,
-      None,
-      None,
-      None,
-      None,
-    ).asJson.spaces2
-
-  def createDigiPackGiftRedemptionJson(code: String): String =
-    (DigitalSubscriptionGiftRedemptionState(
-      idId,
-      DigitalPack(GBP, Annual),
-      RedemptionData(RedemptionCode(code).toOption.get),
-    ): CreateZuoraSubscriptionProductState).asJson.spaces2
 
   val createDigiPackSubscriptionWithPromoJson =
     CreateZuoraSubscriptionState(
