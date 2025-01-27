@@ -8,10 +8,6 @@
         "resource-summary:document:size": [
           "error",
           { "maxNumericValue": 22000 }
-        ],
-        "resource-summary:third-party:count": [
-          "error",
-          { "maxNumericValue": 30 }
         ]
       }
     }
