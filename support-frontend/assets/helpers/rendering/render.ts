@@ -13,6 +13,7 @@ const safeFetch = (url: string, opts?: Record<string, string>) => {
 const logRenderingException = (e: Error): void => {
 	safeFetch(window.guardian.settings.metricUrl, {
 		mode: 'no-cors',
+		method: 'HEAD',
 	}); // ignore result, fire and forget
 
 	logException(
