@@ -234,8 +234,8 @@ function Heading({
 		return (
 			<h1 css={tier3HeaderTitleText}>
 				Thank you{' '}
-				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
-				for subscribing to{' '}
+				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
+				subscribing to{' '}
 				<YellowHighlight
 					currency={currency}
 					amount={amount}
