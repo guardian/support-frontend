@@ -173,5 +173,3 @@ export function ThankYou({
 		/>
 	);
 }
-
-export default ThankYou;
