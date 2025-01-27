@@ -8,7 +8,7 @@ import com.gu.support.config.ZuoraConfig
 import com.gu.support.touchpoint.TouchpointService
 import com.gu.support.workers.IdentityId
 import com.gu.support.zuora.api.response._
-import com.gu.support.zuora.api.{Day, PreviewSubscribeRequest, QueryData, SubscribeRequest, UpdateRedemptionDataRequest}
+import com.gu.support.zuora.api.{Day, PreviewSubscribeRequest, QueryData, SubscribeRequest}
 import com.gu.support.zuora.domain.{DomainAccount, DomainSubscription}
 import io.circe
 import io.circe.Decoder

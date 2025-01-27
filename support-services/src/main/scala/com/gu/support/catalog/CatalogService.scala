@@ -1,9 +1,9 @@
 package com.gu.support.catalog
 
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.workers.{Annual, BillingPeriod, Quarterly}
+import com.gu.support.workers.BillingPeriod
 import com.gu.support.zuora.api.ReaderType
-import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.Direct
 import com.typesafe.scalalogging.LazyLogging
 
 object CatalogService {
