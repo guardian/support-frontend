@@ -239,9 +239,11 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
+	const inAdLite = productKey === 'GuardianAdLite';
 	const inTier3 = productKey === 'TierThree';
 	const inTier2 = productKey === 'SupporterPlus';
-	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
+	const inTier1 =
+		productKey === 'Contribution' || !(inTier2 || inTier3 || inAdLite);
 
 	const amountCopy = ` of ${formatAmount(
 		currencies[currency],
@@ -284,14 +286,16 @@ export function SummaryTsAndCs({
 	const copyTier3 = (
 		contributionType: ContributionType,
 		productKey: ActiveProductKey,
+		plural: boolean,
 	) => {
 		return (
 			<>
 				<div>
-					The {productCatalogDescription[productKey].label} subscriptions will
-					auto-renew each {frequencySingular(contributionType)}. You will be
-					charged the subscription amount using your chosen payment method at
-					each renewal, at the rate then in effect, unless you cancel.
+					The {productCatalogDescription[productKey].label} subscription
+					{plural ? 's' : ''} will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					subscription amount using your chosen payment method at each renewal,
+					at the rate then in effect, unless you cancel.
 				</div>
 			</>
 		);
@@ -301,7 +305,8 @@ export function SummaryTsAndCs({
 		<div css={[containerSummaryTsCs, cssOverrides]}>
 			{inTier1 && copyTier1(contributionType)}
 			{inTier2 && copyTier2(contributionType, productKey)}
-			{inTier3 && copyTier3(contributionType, productKey)}
+			{inTier3 && copyTier3(contributionType, productKey, true)}
+			{inAdLite && copyTier3(contributionType, productKey, false)}
 		</div>
 	);
 }

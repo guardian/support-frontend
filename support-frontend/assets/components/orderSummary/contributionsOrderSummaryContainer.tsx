@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
-import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
@@ -28,7 +27,7 @@ export function getTermsStartDateTier3(startDateTier3: string) {
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	productId: ProductKey,
+	productId: string,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
