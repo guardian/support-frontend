@@ -1,6 +1,8 @@
+import { storage } from '@guardian/libs';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
+import { type InferInput, object, safeParse, string } from 'valibot';
 import { getStripeKey } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -22,6 +24,13 @@ type Props = {
 	appConfig: AppConfig;
 	abParticipations: Participations;
 };
+
+const ReturnAddressSchema = object({
+	link: string(),
+});
+export function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
+	storage.session.set('returnAddress', link);
+}
 
 const countryId: IsoCountry = Country.detect();
 
@@ -236,9 +245,14 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 
 	/**
-	 * The returnLink for back button and thank you page
+	 * returnAddress re-added for future use on thank-you page
 	 */
-	const returnLink = urlSearchParams.get('returnAddress') ?? undefined;
+	const sessionStorageReturnAddress = storage.session.get('returnAddress');
+	const parsedOrder = safeParse(
+		ReturnAddressSchema,
+		sessionStorageReturnAddress,
+	);
+	const returnLink = parsedOrder.success ? parsedOrder.output.link : undefined;
 
 	useEffect(() => {
 		/**

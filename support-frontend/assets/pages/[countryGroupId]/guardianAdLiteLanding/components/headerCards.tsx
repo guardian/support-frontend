@@ -105,14 +105,7 @@ export function HeaderCards({
 		product: 'GuardianAdLite',
 		ratePlan: contributionType,
 	};
-	const card1UrlParams = new URLSearchParams(
-		returnLink
-			? {
-					...guardianAdLiteParams,
-					returnAddress: returnLink,
-			  }
-			: guardianAdLiteParams,
-	);
+	const card1UrlParams = new URLSearchParams(guardianAdLiteParams);
 	const checkoutLink = `checkout?${card1UrlParams.toString()}`;
 	const card1 = {
 		link: checkoutLink,

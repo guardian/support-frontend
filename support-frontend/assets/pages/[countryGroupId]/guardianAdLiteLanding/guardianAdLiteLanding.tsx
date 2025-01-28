@@ -6,6 +6,7 @@ import { isProd } from 'helpers/urls/url';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { setReturnAddress } from '../checkout';
 import { AccordianComponent } from './components/accordianComponent';
 import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
@@ -28,6 +29,9 @@ export function GuardianAdLiteLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn =
 		urlSearchParams.get('returnAddress') ?? undefined; // no return address supplied
+	if (urlSearchParamsReturn) {
+		setReturnAddress({ link: urlSearchParamsReturn });
+	} // pass through return address for use on thank-you page (ParamUrl not required on checkout)
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
