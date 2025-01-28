@@ -135,23 +135,18 @@ case object DigitalPack extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      readerType: ReaderType = Direct,
   ) =
-    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, description, readerType = readerType)
+    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, description)
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[DigitalPack.type]]] =
     Map(
       PROD -> List(
         productRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, "Digital Subscription Annual"),
-        productRatePlan("2c92a00d779932ef0177a65430d30ac1", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92a00c77992ba70177a6596f710265", Annual, "Digital Subscription One Year Gift", Gift),
       ),
       CODE -> List(
         productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
-        productRatePlan("2c92c0f8778bf8f60177915b477714aa", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92c0f8778bf8cd0177a610cdf230ae", Annual, "Digital Subscription One Year Gift", Gift),
       ),
     )
 }

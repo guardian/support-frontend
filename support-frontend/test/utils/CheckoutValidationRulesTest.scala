@@ -19,7 +19,6 @@ import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery, NationalDelivery}
 import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRoundAPI}
 import com.gu.support.paperround.CoverageEndpoint.{NC, CO, PostcodeCoverage}
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.StripePaymentType.StripeCheckout
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -38,7 +37,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with direct debit but the Direct debit switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
+      paymentFields = DirectDebitPaymentFields("Testuser", "", "", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(Off), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -49,12 +48,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Apple Pay but the  Apple Pay switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeApplePay),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeApplePay),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -73,7 +70,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Sepa but the Sepa switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
+      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(Off)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -84,7 +81,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with PayPal but the Pay Pal switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(PayPalPaymentFields("")),
+      paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(Off), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -94,12 +91,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Stripe but the switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          PaymentMethodId("testStripeToken").get,
-          stripePaymentType = None,
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        PaymentMethodId("testStripeToken").get,
+        stripePaymentType = None,
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(Off), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -110,12 +105,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(Off), Some(On), Some(On), Some(On), Some(On)),
@@ -126,12 +119,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Stripe Checkout but the switch  in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeCheckout),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(Off), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -142,7 +133,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = DigitalPack(GBP, Monthly),
-      paymentFields = Left(PayPalPaymentFields("")),
+      paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(Off)),
@@ -157,7 +148,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Direct,
         Some(0),
       ),
-      paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
+      paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(Off), Some(On), Some(On)),
@@ -173,12 +164,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Direct,
         Some(0),
       ),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeCheckout),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -191,7 +180,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with direct debit while the Direct debit switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
+      paymentFields = DirectDebitPaymentFields("Testuser", "", "", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -202,12 +191,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Apple Pay while the  Apple Pay switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeApplePay),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeApplePay),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -218,7 +205,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Sepa while the Sepa switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
+      paymentFields = SepaPaymentFields("", "", Some(""), Some("")),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -229,7 +216,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with PayPal while the Pay Pal switch in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(PayPalPaymentFields("")),
+      paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -239,12 +226,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Stripe  while the switch  in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          PaymentMethodId("testStripeToken").get,
-          stripePaymentType = Some(StripeCheckout),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        PaymentMethodId("testStripeToken").get,
+        stripePaymentType = Some(StripeCheckout),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -255,12 +240,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Stripe Payment Request Button while the switch  in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -271,12 +254,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Stripe Checkout while the switch  in RRCP is on" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeCheckout),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -287,7 +268,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on for Subscription Payment " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = SupporterPlus(0, GBP, Monthly),
-      paymentFields = Left(PayPalPaymentFields("")),
+      paymentFields = PayPalPaymentFields(""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -302,7 +283,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Direct,
         Some(0),
       ),
-      paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
+      paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
@@ -318,12 +299,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Direct,
         Some(0),
       ),
-      paymentFields = Left(
-        StripePaymentFields(
-          paymentMethod = PaymentMethodId("testId").get,
-          stripePaymentType = Some(StripePaymentType.StripeCheckout),
-          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
-        ),
+      paymentFields = StripePaymentFields(
+        paymentMethod = PaymentMethodId("testId").get,
+        stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On), Some(On), Some(On)),
@@ -524,35 +503,6 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   //   )
   //   DigitalPackValidation.passes(requestDigiSubPostCode, monthlyDirectUSDProduct) shouldBe an[Invalid]
   // }
-
-  it should "succeed when there is a valid gift sub purchase" in {
-    val product = DigitalPack(USD, Monthly, Gift)
-    val giftPurchase = validDigitalPackRequest.copy(
-      product = product,
-      giftRecipient = Some(
-        GiftRecipientRequest(
-          None,
-          "bob",
-          "builder",
-          Some("bob@thegulocal.com"),
-          Some("have a nice sub"),
-          Some(new LocalDate(2020, 10, 2)),
-        ),
-      ),
-    )
-
-    DigitalPackValidation.passes(giftPurchase, product) shouldBe Valid
-  }
-
-  it should "succeed when there is a valid gift sub redemption" in {
-    val product = DigitalPack(GBP, Monthly, Gift)
-    val giftRedemption = validDigitalPackRequest.copy(
-      product = product,
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
-    )
-
-    DigitalPackValidation.passes(giftRedemption, product) shouldBe Valid
-  }
 
 }
 
@@ -765,7 +715,7 @@ object TestData {
     OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
-    SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+    SubscriptionsSwitches(Some(On), Some(On)),
     FeatureSwitches(Some(On), Some(On), Some(On), Some(On)),
     CampaignSwitches(Some(On), Some(On)),
     RecaptchaSwitches(Some(On), Some(On)),
@@ -783,7 +733,7 @@ object TestData {
     lastName = "hopper",
     product = monthlyDirectUSDProduct,
     firstDeliveryDate = None,
-    paymentFields = Left(stripePaymentFields),
+    paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
@@ -822,7 +772,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(AgentId(134789))),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = Left(stripePaymentFields),
+    paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
@@ -845,7 +795,7 @@ object TestData {
     lastName = "hopper",
     product = GuardianWeekly(Currency.GBP, Monthly, Domestic),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields = Left(stripePaymentFields),
+    paymentFields = stripePaymentFields,
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),

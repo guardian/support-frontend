@@ -143,124 +143,7 @@ class DigitalPackEmailFields(
     subscription_details = details,
   )
 
-  def build(digi: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[List[EmailFields]] =
-    digi match {
-      case giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
-        for {
-          emails <- List(
-            giftPurchaserConfirmation(giftPurchase),
-            Future.successful(giftRecipientNotification(giftPurchase)),
-          ).sequence
-        } yield emails
-      case directPurchase: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
-        directThankYou(directPurchase).map(List(_))
-      case state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
-        Future.successful(List(giftRedemption(state)))
-    }
-
-  private def wrap(
-      dataExtensionName: String,
-      fields: DigitalSubscriptionEmailAttributes,
-      user: User,
-      userAttributes: Option[JsonObject] = None,
-  ): EmailFields = {
-    val attributePairs =
-      JsonToAttributes
-        .asFlattenedPairs(fields.asJsonObject)
-        .left
-        .map(error => throw new RuntimeException(s"coding error: $error"))
-        .merge
-    EmailFields(attributePairs, user, dataExtensionName, userAttributes)
-  }
-
-  private def giftRecipientNotification(giftPurchase: SendThankYouEmailDigitalSubscriptionGiftPurchaseState) = {
-    val fields = GifteeNotificationAttributes(
-      gifter_first_name = giftPurchase.user.firstName,
-      gifter_last_name = giftPurchase.user.lastName,
-      gift_personal_message = giftPurchase.giftRecipient.message,
-      gift_code = giftPurchase.giftCode.value,
-      last_redemption_date = formatDate(giftPurchase.lastRedemptionDate),
-      duration = s"${giftPurchase.product.billingPeriod.monthsInPeriod} months",
-    )
-    val attributePairs =
-      JsonToAttributes
-        .asFlattenedPairs(fields.asJsonObject)
-        .left
-        .map(error => throw new RuntimeException(s"coding error: $error"))
-        .merge
-    EmailFields(
-      attributePairs,
-      Left(giftPurchase.recipientSFContactId),
-      giftPurchase.giftRecipient.email,
-      "digipack-gift-notification",
-      Some(giftPurchase.giftRecipient.deliveryDate),
-      None,
-    )
-  }
-
-  private def giftPurchaserConfirmation(
-      state: SendThankYouEmailDigitalSubscriptionGiftPurchaseState,
-  )(implicit ec: ExecutionContext) = {
-    import state._
-    digitalPackPaymentEmailFields
-      .paymentFields(paymentMethod, accountNumber)
-      .map(paymentFieldsAttributes =>
-        wrap(
-          "digipack-gift-purchase",
-          GifterPurchaseAttributes(
-            gifter_first_name = user.firstName,
-            gifter_last_name = user.lastName,
-            gift_recipient_first_name = giftRecipient.firstName,
-            gift_recipient_last_name = giftRecipient.lastName,
-            gift_recipient_email = giftRecipient.email,
-            gift_personal_message = giftRecipient.message.getOrElse(""),
-            gift_code = giftCode.value,
-            gift_delivery_date = formatDate(giftRecipient.deliveryDate),
-            subscription_details = SubscriptionEmailFieldHelpers
-              .describe(paymentSchedule, product.billingPeriod, product.currency, true),
-            date_of_first_payment = formatDate(SubscriptionEmailFieldHelpers.firstPayment(paymentSchedule).date),
-            paymentAttributes = paymentFieldsAttributes,
-            last_redemption_date = formatDate(lastRedemptionDate),
-          ),
-          user,
-        ),
-      )
-  }
-
-  case class GifteeRedemptionUserAttributes(
-      unmanaged_digital_subscription_gift_duration_months: Int,
-      unmanaged_digital_subscription_gift_start_date: String,
-      unmanaged_digital_subscription_gift_end_date: String,
-  )
-  object GifteeRedemptionUserAttributes {
-    implicit val encoder: Encoder.AsObject[GifteeRedemptionUserAttributes] =
-      deriveEncoder[GifteeRedemptionUserAttributes]
-  }
-
-  private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
-    wrap(
-      "digipack-gift-redemption",
-      GifteeRedemptionAttributes(
-        gift_recipient_first_name = state.user.firstName,
-        subscription_details = s"${state.termDates.months} month digital subscription",
-        gift_start_date = formatDate(state.termDates.giftStartDate),
-        gift_recipient_email = state.user.primaryEmailAddress,
-        gift_end_date = formatDate(state.termDates.giftEndDate),
-      ),
-      state.user,
-      Some(
-        GifteeRedemptionUserAttributes(
-          unmanaged_digital_subscription_gift_duration_months = state.termDates.months,
-          unmanaged_digital_subscription_gift_start_date =
-            ISODateTimeFormat.date().print(state.termDates.giftStartDate),
-          unmanaged_digital_subscription_gift_end_date = ISODateTimeFormat.date().print(state.termDates.giftEndDate),
-        ).asJsonObject,
-      ),
-    )
-
-  private def directThankYou(
-      state: SendThankYouEmailDigitalSubscriptionDirectPurchaseState,
-  )(implicit ec: ExecutionContext) = {
+  def build(state: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[EmailFields] =
     digitalPackPaymentEmailFields
       .paymentFields(
         state.paymentMethod,
@@ -285,6 +168,20 @@ class DigitalPackEmailFields(
           None,
         ),
       )
+
+  private def wrap(
+      dataExtensionName: String,
+      fields: DigitalSubscriptionEmailAttributes,
+      user: User,
+      userAttributes: Option[JsonObject] = None,
+  ): EmailFields = {
+    val attributePairs =
+      JsonToAttributes
+        .asFlattenedPairs(fields.asJsonObject)
+        .left
+        .map(error => throw new RuntimeException(s"coding error: $error"))
+        .merge
+    EmailFields(attributePairs, user, dataExtensionName, userAttributes)
   }
 
 }

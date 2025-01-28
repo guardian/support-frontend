@@ -43,17 +43,16 @@ object PaymentProvider {
 
   implicit val encoder: Encoder[PaymentProvider] = Encoder.encodeString.contramap[PaymentProvider](_.toString)
 
-  def fromPaymentFields(paymentFields: Option[PaymentFields]): PaymentProvider = paymentFields match {
-    case Some(stripe: StripePaymentFields) =>
+  def fromPaymentFields(paymentFields: PaymentFields): PaymentProvider = paymentFields match {
+    case stripe: StripePaymentFields =>
       stripe.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) => StripeApplePay
         case _ => Stripe
       }
-    case Some(_: PayPalPaymentFields) => PayPal
-    case Some(_: DirectDebitPaymentFields) => DirectDebit
-    case Some(_: SepaPaymentFields) => Sepa
-    case Some(_: ExistingPaymentFields) => Existing
-    case None => RedemptionNoProvider
+    case _: PayPalPaymentFields => PayPal
+    case _: DirectDebitPaymentFields => DirectDebit
+    case _: SepaPaymentFields => Sepa
+    case _: ExistingPaymentFields => Existing
   }
 
 }

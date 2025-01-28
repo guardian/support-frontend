@@ -4,8 +4,6 @@ import com.gu.config.Configuration
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
-import com.gu.support.config.Stages
-import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, StripeGatewayPaymentIntentsAUD, SubscribeRequest}
@@ -27,13 +25,6 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
       RequestRunners.configurableFutureRunner(30.seconds),
     )
 
-  def codeGiftService: ZuoraGiftService =
-    new ZuoraGiftService(
-      Configuration.load().zuoraConfigProvider.get(),
-      Stages.CODE,
-      RequestRunners.configurableFutureRunner(30.seconds),
-    )
-
   // actual sub "CreatedDate": "2017-12-07T15:47:21.000+00:00",
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
 
@@ -47,24 +38,6 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   it should "retrieve account ids from an Identity id" in {
     codeService.getAccountFields(IdentityId("200110674").get, earlyDate).map { response =>
       response.nonEmpty should be(true)
-    }
-  }
-
-  // I'm going to ignore this test for now since gifts expire after a year and the one we are currently
-  // testing with has just expired
-  ignore should "retrieve subscription redemption information from a redemption code" in {
-    val redemptionCode = "gd12-it-test1"
-    codeGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).toOption.get).map { response =>
-      response.records.size shouldBe 1
-      response.records.head.gifteeIdentityId shouldBe None
-    }
-  }
-
-  it should "handle invalid redemption codes" in {
-    val invalidRedemptionCode = "xxxx-0000-111"
-    codeGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).toOption.get).map {
-      response =>
-        response.records.size shouldBe 0
     }
   }
 

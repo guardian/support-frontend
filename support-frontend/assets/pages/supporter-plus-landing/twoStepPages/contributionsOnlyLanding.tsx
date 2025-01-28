@@ -24,6 +24,7 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AmountsCard } from '../components/amountsCard';
 
 const recurringContainer = css`
+	display: flex;
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 	> div {
@@ -178,9 +179,16 @@ export function ContributionsOnlyLanding({
 		<PageScaffold
 			header={<Header></Header>}
 			footer={
-				<FooterWithContents>
-					<FooterLinks links={links}></FooterLinks>
-				</FooterWithContents>
+				<>
+					<Container
+						sideBorders
+						borderColor={palette.brand[600]}
+						cssOverrides={disclaimerContainer}
+					></Container>
+					<FooterWithContents>
+						<FooterLinks links={links}></FooterLinks>
+					</FooterWithContents>
+				</>
 			}
 		>
 			<Container
@@ -215,11 +223,6 @@ export function ContributionsOnlyLanding({
 					/>
 				</div>
 			</Container>
-			<Container
-				sideBorders
-				borderColor={palette.brand[600]}
-				cssOverrides={disclaimerContainer}
-			></Container>
 		</PageScaffold>
 	);
 }

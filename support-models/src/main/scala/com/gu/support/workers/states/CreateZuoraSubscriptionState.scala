@@ -9,8 +9,6 @@ import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, encodeCountryAsAlpha2, encodeLocalTime}
 import com.gu.support.encoding.{Codec, DiscriminatedType}
-import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 
@@ -66,27 +64,12 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
-  case class DigitalSubscriptionDirectPurchaseState(
+  case class DigitalSubscriptionState(
       billingCountry: Country,
       product: DigitalPack,
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionProductState
-
-  case class DigitalSubscriptionGiftPurchaseState(
-      billingCountry: Country,
-      giftRecipient: DigitalSubscriptionGiftRecipient,
-      product: DigitalPack,
-      paymentMethod: PaymentMethod,
-      appliedPromotion: Option[AppliedPromotion],
-      salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionProductState
-
-  case class DigitalSubscriptionGiftRedemptionState(
-      userId: String,
-      product: DigitalPack,
-      redemptionData: RedemptionData,
   ) extends CreateZuoraSubscriptionProductState
 
   case class PaperState(
@@ -100,7 +83,7 @@ object CreateZuoraSubscriptionProductState {
 
   case class GuardianWeeklyState(
       user: User,
-      giftRecipient: Option[WeeklyGiftRecipient],
+      giftRecipient: Option[GiftRecipient],
       product: GuardianWeekly,
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
@@ -115,9 +98,7 @@ object CreateZuoraSubscriptionProductState {
     List(
       discriminatedType.variant[ContributionState](contribution),
       discriminatedType.variant[SupporterPlusState](supporterPlus),
-      discriminatedType.variant[DigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
-      discriminatedType.variant[DigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
-      discriminatedType.variant[DigitalSubscriptionGiftRedemptionState](digitalSubscriptionGiftRedemption),
+      discriminatedType.variant[DigitalSubscriptionState](digitalSubscription),
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
       discriminatedType.variant[TierThreeState](tierThree),

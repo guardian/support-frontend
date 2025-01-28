@@ -9,9 +9,6 @@ import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerA
 import com.gu.support.catalog.{CatalogService, Everyday, NationalDelivery, S3CatalogProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
-import com.gu.support.redemption.CodeAlreadyUsed
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers._
 import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -23,7 +20,7 @@ import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.test.tags.annotations.IntegrationTest
-import com.gu.zuora.{ZuoraGiftService, ZuoraService}
+import com.gu.zuora.ZuoraService
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.invocation.InvocationOnMock
@@ -94,21 +91,21 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Digital Pack subscription" in {
     createZuoraHelper
       .createSubscription(createDigiPackZuoraSubscriptionJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount" in {
     createZuoraHelper
       .createSubscription(createDigiPackSubscriptionWithPromoJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
     createZuoraHelper
       .createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
@@ -169,9 +166,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   def createSubscription(
       json: String,
-      giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService,
   )(implicit executionContext: ExecutionContext): Future[SendThankYouEmailState] = {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider(giftCodeGenerator))
+    val createZuora = new CreateZuoraSubscription()
 
     val outStream = new ByteArrayOutputStream()
 
@@ -182,9 +178,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   def createSubscriptionError(
       json: String,
-      giftCodeGenerator: GiftCodeGeneratorService = new GiftCodeGeneratorService,
   )(implicit executionContext: ExecutionContext): Future[Option[ExecutionError]] = {
-    val createZuora = new CreateZuoraSubscription(mockServiceProvider(giftCodeGenerator))
+    val createZuora = new CreateZuoraSubscription()
 
     val outStream = new ByteArrayOutputStream()
 
@@ -196,9 +191,6 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
   val realConfig = Configuration.load()
 
   val realZuoraService = new ZuoraService(realConfig.zuoraConfigProvider.get(), configurableFutureRunner(60.seconds))
-
-  val realZuoraGiftService =
-    new ZuoraGiftService(realConfig.zuoraConfigProvider.get(), Stages.DEV, configurableFutureRunner(60.seconds))
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
@@ -226,13 +218,4 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     when(mockZuora.config).thenReturn(realZuoraService.config)
     mockZuora
   }
-
-  def mockServiceProvider(giftCodeGenerator: GiftCodeGeneratorService): ServiceProvider = mockServices[Any](
-    (s => s.zuoraService, mockZuoraService),
-    (s => s.zuoraGiftService, realZuoraGiftService),
-    (s => s.promotionService, realPromotionService),
-    (s => s.config, realConfig),
-    (s => s.giftCodeGenerator, giftCodeGenerator),
-    (s => s.catalogService, realCatalogService),
-  )
 }

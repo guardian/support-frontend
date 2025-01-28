@@ -12,7 +12,6 @@ object SupporterRatePlanItemCodecs {
     HeaderDecoder.decoder(
       subscriptionName,
       identityId,
-      gifteeIdentityId,
       productRatePlanId,
       productRatePlanName,
       termEndDate,
@@ -21,7 +20,6 @@ object SupporterRatePlanItemCodecs {
       (
           subscriptionName,
           identityId,
-          gifteeIdentityId,
           productRatePlanId,
           productRatePlanName,
           termEndDate,
@@ -30,7 +28,6 @@ object SupporterRatePlanItemCodecs {
         SupporterRatePlanItem(
           subscriptionName,
           identityId,
-          gifteeIdentityId,
           productRatePlanId,
           productRatePlanName,
           termEndDate,
