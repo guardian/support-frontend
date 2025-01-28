@@ -667,6 +667,7 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const isAdLite = productKey === 'GuardianAdLite';
 	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
 	const returnToLandingPage =
 		productKey === 'GuardianAdLite'
@@ -1432,8 +1433,18 @@ export function CheckoutComponent({
 					</BoxContents>
 				</Box>
 			</form>
-			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			{!isAdLite && (
+				<>
+					<PatronsMessage
+						countryGroupId={countryGroupId}
+						mobileTheme={'light'}
+					/>
+					<GuardianTsAndCs
+						mobileTheme={'light'}
+						displayPatronsCheckout={false}
+					/>
+				</>
+			)}
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>
