@@ -25,6 +25,7 @@ const secureTransactionIndicator = css`
 `;
 
 const darkBackgroundContainerMobile = css`
+	display: flex;
 	background-color: ${palette.neutral[97]};
 	${until.tablet} {
 		background-color: ${palette.brand[400]};
