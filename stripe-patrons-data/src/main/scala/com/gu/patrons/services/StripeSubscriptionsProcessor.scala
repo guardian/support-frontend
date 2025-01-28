@@ -65,7 +65,6 @@ abstract class DynamoProcessor(
         SupporterRatePlanItem(
           sub.id,
           identityId,
-          None,
           "guardian_patron",
           "Guardian Patron",
           sub.currentPeriodEnd,

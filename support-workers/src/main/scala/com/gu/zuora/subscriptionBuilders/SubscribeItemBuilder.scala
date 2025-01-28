@@ -5,7 +5,6 @@ import com.gu.i18n.Currency.AUD
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.paperround.AgentId
-import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, PaymentMethod, SalesforceContactRecord, User}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api._
@@ -67,7 +66,6 @@ class SubscribeItemBuilder(
       autoRenew: Boolean = true,
       initialTerm: Int = 12,
       initialTermPeriodType: PeriodType = Month,
-      redemptionCode: Option[RawRedemptionCode] = None,
       giftNotificationEmailDate: Option[LocalDate] = None,
       csrUsername: Option[String] = None,
       salesforceCaseId: Option[String] = None,
@@ -90,7 +88,6 @@ class SubscribeItemBuilder(
         autoRenew = autoRenew,
         initialTerm = initialTerm,
         initialTermPeriodType = initialTermPeriodType,
-        redemptionCode = redemptionCode,
         giftNotificationEmailDate = giftNotificationEmailDate,
         createdByCsr = csrUsername,
         acquisitionSource = csrUsername.map(_ => CSR),

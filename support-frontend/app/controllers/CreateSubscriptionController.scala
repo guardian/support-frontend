@@ -103,7 +103,7 @@ class CreateSubscriptionController(
         // For Stripe payments, recaptcha validation is done earlier in the flow
         val recaptchaToken =
           request.body.paymentFields match {
-            case Left(dd: DirectDebitPaymentFields) => Some(dd.recaptchaToken)
+            case dd: DirectDebitPaymentFields => Some(dd.recaptchaToken)
             case _ => None
           }
 

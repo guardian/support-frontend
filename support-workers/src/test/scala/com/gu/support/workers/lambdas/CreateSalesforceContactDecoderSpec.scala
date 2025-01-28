@@ -18,7 +18,7 @@ class CreateSalesforceContactDecoderSpec extends AnyFlatSpec with Matchers with 
     val result = state.toOption.get
     result.product should be(GuardianWeekly(GBP, Monthly, Domestic))
     result.paymentMethod match {
-      case Left(_: PayPalReferenceTransaction) => succeed
+      case _: PayPalReferenceTransaction => succeed
       case _ => fail()
     }
   }

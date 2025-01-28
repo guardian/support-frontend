@@ -18,9 +18,7 @@ class SendThankYouEmailStateSerialisationSpec extends AnyFlatSpec with Matchers 
 
   "ProductTypeCreated" should "subclasses roundtrip ok via parent" in {
     testRoundTripSerialisation[SendThankYouEmailState](contributionCreated)
-    testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionDirectPurchaseCreated)
-    testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionGiftPurchaseCreated)
-    testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionGiftRedemptionCreated)
+    testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionCreated)
     testRoundTripSerialisation[SendThankYouEmailState](paperCreated)
     testRoundTripSerialisation[SendThankYouEmailState](guardianWeeklyCreated)
   }
@@ -37,7 +35,7 @@ object ProductTypeCreatedTestData {
     "subno",
   )
 
-  val digitalSubscriptionDirectPurchaseCreated = SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+  val digitalSubscriptionCreated = SendThankYouEmailDigitalSubscriptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(GBP, Monthly, ReaderType.Direct),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
@@ -47,36 +45,6 @@ object ProductTypeCreatedTestData {
     "subno",
   )
 
-  val digitalSubscriptionGiftPurchaseCreated = SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    recipientSFContactId = SfContactId("sfrecip"),
-    DigitalPack(GBP, Monthly, ReaderType.Gift),
-    GiftRecipient
-      .DigitalSubscriptionGiftRecipient(
-        "bob",
-        "builder",
-        "bob@thegulocal.com",
-        Some("message"),
-        new LocalDate(2020, 10, 2),
-      ),
-    GeneratedGiftCode("gd12-23456789").get,
-    new LocalDate(2020, 10, 14),
-    PayPalReferenceTransaction("baid", "email@emaail.com"),
-    PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
-    None,
-    "acno",
-    "subno",
-  )
-  val digitalSubscriptionGiftRedemptionCreated = SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    DigitalPack(GBP, Monthly, ReaderType.Gift),
-    "subno",
-    TermDates(
-      new LocalDate(2020, 10, 24),
-      new LocalDate(2021, 1, 24),
-      3,
-    ),
-  )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     Paper(
@@ -95,7 +63,7 @@ object ProductTypeCreatedTestData {
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     GuardianWeekly(GBP, Monthly, Domestic),
-    Some(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
+    Some(GiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
