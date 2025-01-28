@@ -12,6 +12,7 @@ import {
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -190,6 +191,17 @@ const handlePaymentStatus = (
 		return { status, failureReason };
 	} else {
 		return { status: status }; // success or pending
+	}
+};
+
+const productLanding = (product: ProductKey) => {
+	switch (product) {
+		case 'GuardianAdLite':
+			return '/guardian-ad-lite';
+		case 'DigitalSubscription':
+			return `/subscribe`;
+		default:
+			return `/contribute`;
 	}
 };
 
@@ -667,11 +679,10 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
-	const returnToLandingPage =
-		productKey === 'GuardianAdLite'
-			? `/guardian-ad-lite${returnParam}`
-			: `/${geoId}/contribute`;
+	const returnParam = returnLink ? `?returnAddress=${returnLink}` : '';
+	const returnToLandingPage = `/${geoId}${productLanding(
+		productKey,
+	)}${returnParam}`;
 
 	return (
 		<CheckoutLayout>
