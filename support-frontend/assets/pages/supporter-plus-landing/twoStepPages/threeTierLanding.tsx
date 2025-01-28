@@ -47,7 +47,7 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescriptionResetAndNewspaperArchive,
+	productCatalogDescriptionNewspaperArchive,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -373,16 +373,12 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	const inResetBenefits = abParticipations.benefitsReset; // all variants
 	const inNewsPaperArchiveBenefit = ['v1', 'v2'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
-	const productCatalogDescription =
-		productCatalogDescriptionResetAndNewspaperArchive(
-			selectedContributionRatePlan,
-			inResetBenefits,
-			inNewsPaperArchiveBenefit ? countryGroupId : undefined,
-		);
+	const productCatalogDescription = productCatalogDescriptionNewspaperArchive(
+		inNewsPaperArchiveBenefit ? countryGroupId : undefined,
+	);
 
 	/**
 	 * Tier 1: Contributions
@@ -452,9 +448,7 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		ctaCopy: 'Support',
-		lozengeText: ['control', 'v2'].includes(inResetBenefits ?? '')
-			? 'Recommended'
-			: 'Highest impact',
+		lozengeText: 'Recommended',
 	};
 
 	/**
