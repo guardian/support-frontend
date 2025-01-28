@@ -764,10 +764,7 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							<BackButton
-								path={returnToLandingPage}
-								buttonText={productKey === 'GuardianAdLite' ? 'Back' : 'Change'}
-							/>
+							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
 					/>
 				</BoxContents>
