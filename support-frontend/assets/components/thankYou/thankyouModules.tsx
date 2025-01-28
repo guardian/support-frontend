@@ -24,14 +24,14 @@ const firstColumnContainer = css`
 `;
 
 interface ThankYouModulesProps {
-	isSignedIn?: boolean;
+	isSignedIn: boolean;
 	showNewspaperArchiveBenefit: boolean;
 	thankYouModules: ThankYouModuleType[];
 	thankYouModulesData: Record<ThankYouModuleType, ThankYouModuleData>;
 }
 
 export function ThankYouModules({
-	isSignedIn,
+	isSignedIn = false,
 	showNewspaperArchiveBenefit = false,
 	thankYouModules,
 	thankYouModulesData,
