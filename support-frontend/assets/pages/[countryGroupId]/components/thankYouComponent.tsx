@@ -206,6 +206,7 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
+	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
@@ -287,6 +288,7 @@ export function ThankYouComponent({
 					!isGuardianAdLite),
 			'feedback',
 		),
+		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All

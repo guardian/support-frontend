@@ -220,6 +220,8 @@ export const productCatalogDescription: Record<
 	},
 	DigitalSubscription: {
 		label: 'The Guardian Digital Edition',
+		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
+            Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
 		benefits: [
 			{
 				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
