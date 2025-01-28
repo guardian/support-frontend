@@ -21,6 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
+	guardianAdLiteTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
 } from 'helpers/legal';
@@ -80,6 +81,9 @@ interface SummaryTsAndCsProps {
 
 const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
+);
+const termsGuardianAdLite = (linkText: string) => (
+	<a href={guardianAdLiteTermsLink}>{linkText}</a>
 );
 
 const frequencySingular = (contributionType: ContributionType) =>
@@ -141,11 +145,12 @@ export function PaymentTsAndCs({
 	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
+	const inAdLite = productKey === 'GuardianAdLite';
 	const inSupporterPlus =
 		productKey === 'SupporterPlus' && amountIsAboveThreshold;
 	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
-		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
+		productKey === 'Contribution' || !(inSupporterPlus || inTier3 || inAdLite);
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -216,6 +221,30 @@ export function PaymentTsAndCs({
 		);
 	};
 
+	const copyAdLite = (
+		contributionType: RegularContributionType,
+		productKey: ActiveProductKey,
+	) => {
+		const productLabel = productCatalogDescription[productKey].label;
+		return (
+			<div>
+				Your {productLabel} will auto-renew each{' '}
+				{frequencySingular(contributionType)} unless cancelled. Your first
+				payment will be taken on day 15 after signing up but you will start to
+				receive your {productLabel} benefits when you sign up. Unless you
+				cancel, subsequent monthly payments will be taken on this date using
+				your chosen payment method. You can cancel your subscription at any time
+				before your next renewal date. If you cancel your Guardian Ad-Lite
+				subscription within 14 days of signing up, your subscription will stop
+				immediately and we will not take the first payment from you.
+				Cancellation of your subscription after 14 days will take effect at the
+				end of your current monthly payment period. To cancel, go to{' '}
+				{ManageMyAccountLink} or see our {productLabel}{' '}
+				{termsGuardianAdLite('Terms')}.
+			</div>
+		);
+	};
+
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
@@ -226,7 +255,8 @@ export function PaymentTsAndCs({
 				)}
 				{inSupporterPlus &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inSupport && copyBelowThreshold(countryGroupId)}
+				{inAdLite && copyAdLite(contributionType, productKey)}
+				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
 			</FinePrint>
 		</div>
 	);
