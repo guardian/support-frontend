@@ -106,9 +106,9 @@ object SendThankYouEmailManualTest {
     SendWeeklySubscriptionGiftEmail.main(args)
   }
 
-  def send(eventualEF: Future[List[EmailFields]]): Unit = {
+  def send(eventualEF: Future[EmailFields]): Unit = {
     val service = new EmailService(emailQueueName)
-    Await.ready(eventualEF.map(efList => efList.map(service.send)), Duration.Inf)
+    Await.ready(eventualEF.map(fields => service.send(fields)), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
     val service = new EmailService(emailQueueName)

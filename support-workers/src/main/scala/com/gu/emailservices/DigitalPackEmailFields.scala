@@ -143,27 +143,7 @@ class DigitalPackEmailFields(
     subscription_details = details,
   )
 
-  def build(digi: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[List[EmailFields]] =
-    buildThankYou(digi).map(List(_))
-
-  private def wrap(
-      dataExtensionName: String,
-      fields: DigitalSubscriptionEmailAttributes,
-      user: User,
-      userAttributes: Option[JsonObject] = None,
-  ): EmailFields = {
-    val attributePairs =
-      JsonToAttributes
-        .asFlattenedPairs(fields.asJsonObject)
-        .left
-        .map(error => throw new RuntimeException(s"coding error: $error"))
-        .merge
-    EmailFields(attributePairs, user, dataExtensionName, userAttributes)
-  }
-
-  private def buildThankYou(
-      state: SendThankYouEmailDigitalSubscriptionState,
-  )(implicit ec: ExecutionContext) = {
+  def build(state: SendThankYouEmailDigitalSubscriptionState)(implicit ec: ExecutionContext): Future[EmailFields] =
     digitalPackPaymentEmailFields
       .paymentFields(
         state.paymentMethod,
@@ -188,6 +168,20 @@ class DigitalPackEmailFields(
           None,
         ),
       )
+
+  private def wrap(
+      dataExtensionName: String,
+      fields: DigitalSubscriptionEmailAttributes,
+      user: User,
+      userAttributes: Option[JsonObject] = None,
+  ): EmailFields = {
+    val attributePairs =
+      JsonToAttributes
+        .asFlattenedPairs(fields.asJsonObject)
+        .left
+        .map(error => throw new RuntimeException(s"coding error: $error"))
+        .merge
+    EmailFields(attributePairs, user, dataExtensionName, userAttributes)
   }
 
 }
