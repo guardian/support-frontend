@@ -14,10 +14,9 @@ import com.gu.support.config.Stages.PROD
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.paperround.PaperRoundService
 import com.gu.support.promotions.PromotionService
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
-import com.gu.zuora.{ZuoraGiftService, ZuoraService}
+import com.gu.zuora.ZuoraService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -41,12 +40,9 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val salesforceService =
     new SalesforceService(salesforceConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
-  lazy val zuoraGiftService =
-    new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
-  lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val acquisitionsEventBusService = AcquisitionsEventBusService(Sources.supportWorkers, stage, isTestUser)
   lazy val paperRoundService =
     new PaperRoundService(paperRoundConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))

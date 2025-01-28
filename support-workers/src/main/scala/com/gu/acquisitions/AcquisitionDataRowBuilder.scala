@@ -211,20 +211,11 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      case s: SendThankYouEmailDigitalSubscriptionState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),
           s.promoCode,
           Direct,
-          Purchase,
-          Some(s.accountNumber),
-          Some(s.subscriptionNumber),
-        )
-      case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
-        AcquisitionTypeDetails(
-          Some(s.paymentMethod),
-          s.promoCode,
-          Gift,
           Purchase,
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
@@ -246,15 +237,6 @@ object AcquisitionDataRowBuilder {
           Purchase,
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
-        )
-      case s: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
-        AcquisitionTypeDetails(
-          None,
-          None,
-          Gift,
-          Redemption,
-          None, // TODO: if we rework digital gift modelling in Zuora we should include the relevant ids here
-          None,
         )
       case s: SendThankYouEmailGuardianAdLiteState =>
         AcquisitionTypeDetails(

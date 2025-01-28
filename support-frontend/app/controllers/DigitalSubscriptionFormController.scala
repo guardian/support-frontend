@@ -8,7 +8,7 @@ import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config.{PayPalConfigProvider, Stage, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.Direct
 import config.RecaptchaConfigProvider
 import play.api.mvc._
 import play.twirl.api.Html
@@ -39,22 +39,18 @@ class DigitalSubscriptionFormController(
 
   implicit val a: AssetsResolver = assets
 
-  def displayForm(orderIsAGift: Boolean): Action[AnyContent] = {
+  def displayForm(): Action[AnyContent] = {
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     MaybeAuthenticatedAction { implicit request =>
-      Ok(digitalSubscriptionFormHtml(request.user, orderIsAGift)).withSettingsSurrogateKey
+      Ok(digitalSubscriptionFormHtml(request.user)).withSettingsSurrogateKey
     }
   }
 
-  private def digitalSubscriptionFormHtml(maybeIdUser: Option[IdUser], orderIsAGift: Boolean)(implicit
+  private def digitalSubscriptionFormHtml(maybeIdUser: Option[IdUser])(implicit
       request: RequestHeader,
       settings: AllSettings,
   ): Html = {
-    val title = if (orderIsAGift) {
-      "Support the Guardian | The Guardian Digital Gift Subscription"
-    } else {
-      "Support the Guardian | The Guardian Digital Subscription"
-    }
+    val title = "Support the Guardian | The Guardian Digital Subscription"
     val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
@@ -63,7 +59,7 @@ class DigitalSubscriptionFormController(
     val testMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
-    val readerType = if (orderIsAGift) Gift else Direct
+    val readerType = Direct
     val isTestUser = testUsers.isTestUser(request)
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
 
@@ -82,7 +78,6 @@ class DigitalSubscriptionFormController(
       defaultPayPalConfig = payPalConfigProvider.get(),
       testPayPalConfig = payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
-      orderIsAGift = orderIsAGift,
       homeDeliveryPostcodes = None,
       productCatalog = productCatalog,
       noIndex = stage != PROD,

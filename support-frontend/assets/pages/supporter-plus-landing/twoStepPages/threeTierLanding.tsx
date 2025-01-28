@@ -530,9 +530,75 @@ export function ThreeTierLanding({
 				</>
 			}
 			footer={
-				<FooterWithContents>
-					<FooterLinks links={links}></FooterLinks>
-				</FooterWithContents>
+				<>
+					{countryGroupId === UnitedStates && (
+						<Container
+							sideBorders
+							borderColor="rgba(170, 170, 180, 0.5)"
+							cssOverrides={supportAnotherWayContainer}
+						>
+							<div css={supportAnotherWay}>
+								<h4>Support another way</h4>
+								<p>
+									If you are interested in contributing through a donor-advised
+									fund, foundation or retirement account, or by mailing a check,{' '}
+									<br />
+									please visit our{' '}
+									<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
+										help page
+									</a>{' '}
+									to learn how.
+								</p>
+							</div>
+						</Container>
+					)}
+					<Container
+						sideBorders
+						borderColor="rgba(170, 170, 180, 0.5)"
+						cssOverrides={disclaimerContainer}
+					>
+						<ThreeTierTsAndCs
+							tsAndCsContent={[
+								{
+									title: tier1Card.productDescription.label,
+									planCost: getPlanCost(tier1Card.price, contributionType),
+								},
+								{
+									title: tier2Card.productDescription.label,
+									planCost: getPlanCost(
+										tier2Card.price,
+										contributionType,
+										promotionTier2,
+									),
+									starts: promotionTier2?.starts
+										? new Date(promotionTier2.starts)
+										: undefined,
+									expires: promotionTier2?.expires
+										? new Date(promotionTier2.expires)
+										: undefined,
+								},
+								{
+									title: tier3Card.productDescription.label,
+									planCost: getPlanCost(
+										tier3Card.price,
+										contributionType,
+										promotionTier3,
+									),
+									starts: promotionTier3?.starts
+										? new Date(promotionTier3.starts)
+										: undefined,
+									expires: promotionTier3?.expires
+										? new Date(promotionTier3.expires)
+										: undefined,
+								},
+							]}
+							currency={currencies[currencyId].glyph}
+						></ThreeTierTsAndCs>
+					</Container>
+					<FooterWithContents>
+						<FooterLinks links={links}></FooterLinks>
+					</FooterWithContents>
+				</>
 			}
 		>
 			<Container
@@ -626,70 +692,6 @@ export function ThreeTierLanding({
 					/>
 				</Container>
 			)}
-			{countryGroupId === UnitedStates && (
-				<Container
-					sideBorders
-					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={supportAnotherWayContainer}
-				>
-					<div css={supportAnotherWay}>
-						<h4>Support another way</h4>
-						<p>
-							If you are interested in contributing through a donor-advised
-							fund, foundation or retirement account, or by mailing a check,{' '}
-							<br />
-							please visit our{' '}
-							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
-								help page
-							</a>{' '}
-							to learn how.
-						</p>
-					</div>
-				</Container>
-			)}
-			<Container
-				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={disclaimerContainer}
-			>
-				<ThreeTierTsAndCs
-					tsAndCsContent={[
-						{
-							title: tier1Card.productDescription.label,
-							planCost: getPlanCost(tier1Card.price, contributionType),
-						},
-						{
-							title: tier2Card.productDescription.label,
-							planCost: getPlanCost(
-								tier2Card.price,
-								contributionType,
-								promotionTier2,
-							),
-							starts: promotionTier2?.starts
-								? new Date(promotionTier2.starts)
-								: undefined,
-							expires: promotionTier2?.expires
-								? new Date(promotionTier2.expires)
-								: undefined,
-						},
-						{
-							title: tier3Card.productDescription.label,
-							planCost: getPlanCost(
-								tier3Card.price,
-								contributionType,
-								promotionTier3,
-							),
-							starts: promotionTier3?.starts
-								? new Date(promotionTier3.starts)
-								: undefined,
-							expires: promotionTier3?.expires
-								? new Date(promotionTier3.expires)
-								: undefined,
-						},
-					]}
-					currency={currencies[currencyId].glyph}
-				></ThreeTierTsAndCs>
-			</Container>
 		</PageScaffold>
 	);
 }

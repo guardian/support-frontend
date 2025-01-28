@@ -64,15 +64,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val redemptionController = new RedemptionController(
-    actionBuilders,
-    assetsResolver,
-    allSettingsProvider,
-    testUsers,
-    controllerComponents,
-    zuoraGiftLookupServiceProvider,
-  )
-
   private lazy val landingCopyProvider = new LandingCopyProvider(
     promotionServiceProvider,
     appConfig.stage,

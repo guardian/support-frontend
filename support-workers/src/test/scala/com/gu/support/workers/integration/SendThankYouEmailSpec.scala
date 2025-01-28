@@ -12,7 +12,6 @@ import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, Promot
 import com.gu.support.paperround.AgentId
 import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.promotions.{AppliesTo, DiscountBenefit, Promotion, PromotionService, SimplePromotionCollection}
-import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
@@ -102,16 +101,14 @@ object SendThankYouEmailManualTest {
     SendSupporterPlusEmail.main(args)
     SendTierThreeEmail.main(args)
     SendDigitalPackEmail.main(args)
-    SendDigitalPackGiftPurchaseEmails.main(args)
-    SendDigitalPackGiftRedemptionEmail.main(args)
     SendPaperSubscriptionEmail.main(args)
     SendWeeklySubscriptionEmail.main(args)
     SendWeeklySubscriptionGiftEmail.main(args)
   }
 
-  def send(eventualEF: Future[List[EmailFields]]): Unit = {
+  def send(eventualEF: Future[EmailFields]): Unit = {
     val service = new EmailService(emailQueueName)
-    Await.ready(eventualEF.map(efList => efList.map(service.send)), Duration.Inf)
+    Await.ready(eventualEF.map(fields => service.send(fields)), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
     val service = new EmailService(emailQueueName)
@@ -212,7 +209,7 @@ object SendDigitalPackEmail extends App {
 
   send(
     digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
+      SendThankYouEmailDigitalSubscriptionState(
         billingOnlyUser,
         DigitalPack(GBP, Annual),
         directDebitPaymentMethod,
@@ -225,45 +222,7 @@ object SendDigitalPackEmail extends App {
   )
 
 }
-object SendDigitalPackGiftPurchaseEmails extends App {
 
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-        billingOnlyUser,
-        giftRecipientSFContactIdToSendTo, // recipient
-        DigitalPack(GBP, Annual, ReaderType.Gift),
-        DigitalSubscriptionGiftRecipient("first", "last", addressToSendTo, Some("gift message"), LocalDate.now()),
-        GeneratedGiftCode("gd12-02345678").get,
-        new LocalDate(2020, 10, 14),
-        directDebitPaymentMethod,
-        paymentSchedule,
-        None,
-        acno,
-        subno,
-      ),
-    ),
-  )
-
-}
-object SendDigitalPackGiftRedemptionEmail extends App {
-
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
-        billingOnlyUser,
-        DigitalPack(GBP, Annual, ReaderType.Gift),
-        "subno",
-        TermDates(
-          new LocalDate(2020, 10, 24),
-          new LocalDate(2021, 1, 24),
-          3,
-        ),
-      ),
-    ),
-  )
-
-}
 object SendPaperSubscriptionEmail extends App {
 
   sendSingle(
@@ -329,7 +288,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
-        Some(GiftRecipient.WeeklyGiftRecipient(None, "Earl", "Palmer", None)),
+        Some(GiftRecipient(None, "Earl", "Palmer", None)),
         directDebitPaymentMethod,
         PaymentSchedule(
           List(

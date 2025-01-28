@@ -54,10 +54,6 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
         CatalogServiceSpec.serviceWithFixtures,
       )
 
-    val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
-    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 36
-    dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 99
-
     val weeklyGifts = service.getPrices(GuardianWeekly, Nil, Gift)
     weeklyGifts(US)(Domestic)(NoProductOptions)(Annual)(USD).price shouldBe 360
 

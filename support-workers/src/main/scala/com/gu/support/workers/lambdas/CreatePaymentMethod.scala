@@ -2,12 +2,10 @@ package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.i18n.{CountryGroup, Currency}
-import com.gu.monitoring.SafeLogger
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
@@ -27,35 +25,22 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       services: Services,
   ): FutureHandlerResult = {
     logger.debug(s"CreatePaymentMethod state: $state")
-
-    state.paymentFields fold (
-      paymentFields =>
-        createPaymentMethod(
-          paymentFields,
-          state.user,
-          state.product.currency,
-          services,
-          state.ipAddress,
-          state.userAgent,
-        )
-          .map(paymentMethod =>
-            HandlerResult(
-              getCreateSalesforceContactState(state, Left(paymentMethod)),
-              requestInfo
-                .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
-                .appendMessage(s"Product is ${state.product.describe}"),
-            ),
-          ),
-      redemptionData =>
-        Future.successful(
-          HandlerResult(
-            getCreateSalesforceContactState(state, Right(redemptionData)),
-            requestInfo
-              .appendMessage(s"Product redemption has no payment method")
-              .appendMessage(s"Product is ${state.product.describe}"),
-          ),
-        )
+    createPaymentMethod(
+      state.paymentFields,
+      state.user,
+      state.product.currency,
+      services,
+      state.ipAddress,
+      state.userAgent,
     )
+      .map(paymentMethod =>
+        HandlerResult(
+          getCreateSalesforceContactState(state, paymentMethod),
+          requestInfo
+            .appendMessage(s"Payment method is ${paymentMethod.toFriendlyString}")
+            .appendMessage(s"Product is ${state.product.describe}"),
+        ),
+      )
   }
 
   private def createPaymentMethod(
@@ -81,7 +66,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
   private def getCreateSalesforceContactState(
       state: CreatePaymentMethodState,
-      paymentMethod: Either[PaymentMethod, RedemptionData],
+      paymentMethod: PaymentMethod,
   ) =
     CreateSalesforceContactState(
       state.requestId,
