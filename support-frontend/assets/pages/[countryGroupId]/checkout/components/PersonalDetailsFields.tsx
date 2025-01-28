@@ -14,6 +14,9 @@ type PersonalDetailsFieldsProps = {
 	email: string;
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
+	requireConfirmedEmail: boolean;
+	confirmedEmail: string;
+	setConfirmedEmail: (value: string) => void;
 };
 
 export function PersonalDetailsFields({
@@ -25,10 +28,19 @@ export function PersonalDetailsFields({
 	email,
 	setEmail,
 	isEmailAddressReadOnly,
+	requireConfirmedEmail,
+	confirmedEmail,
+	setConfirmedEmail,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
 	const [emailError, setEmailError] = useState<string>();
+
+	const emailAddressDoesNotMatch =
+		confirmedEmail.length && email !== confirmedEmail;
+	const confirmedEmailError = emailAddressDoesNotMatch
+		? 'The email addresses do not match.'
+		: undefined;
 
 	return (
 		<>
@@ -66,6 +78,25 @@ export function PersonalDetailsFields({
 					}}
 				/>
 			</div>
+			{requireConfirmedEmail && !isEmailAddressReadOnly && (
+				<div>
+					<TextInput
+						id="confirm-email"
+						data-qm-masking="blocklist"
+						label="Confirm email address"
+						value={confirmedEmail}
+						type="email"
+						autoComplete="email"
+						onChange={(event) => {
+							setConfirmedEmail(event.currentTarget.value);
+						}}
+						name="confirm-email"
+						required
+						maxLength={80}
+						error={confirmedEmailError}
+					/>
+				</div>
+			)}
 			{children}
 			<div>
 				<TextInput

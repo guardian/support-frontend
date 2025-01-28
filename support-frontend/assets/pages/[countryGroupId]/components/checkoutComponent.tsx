@@ -243,6 +243,8 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
+	const requireConfirmedEmail = abParticipations.confirmEmail === 'variant';
+
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
@@ -363,6 +365,7 @@ export function CheckoutComponent({
 	const [firstName, setFirstName] = useState(user?.firstName ?? '');
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [email, setEmail] = useState(user?.email ?? '');
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -420,6 +423,15 @@ export function CheckoutComponent({
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
+
+		/**  This validation has to happen on submit,
+		 *   as we cannot check it with form validation rules
+		 */
+		if (requireConfirmedEmail && email !== confirmedEmail) {
+			setIsProcessingPayment(false);
+			return;
+		}
+
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -926,6 +938,11 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
+								requireConfirmedEmail={requireConfirmedEmail}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
 							>
 								<Signout isSignedIn={isSignedIn} />
 							</PersonalDetailsFields>
