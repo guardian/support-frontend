@@ -160,7 +160,10 @@ class SupportWorkersClient(
         ipAddress =
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
       )
-      isExistingAccount = createPaymentMethodState.paymentFields.isInstanceOf[ExistingPaymentFields]
+      isExistingAccount = createPaymentMethodState.paymentFields match {
+        case _: ExistingPaymentFields => true
+        case _ => false
+      }
       name =
         (if (user.isTestUser) "TestUser-" else "") +
           createPaymentMethodState.product.describe + "-" +
