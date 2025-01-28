@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space } from '@guardian/source/foundations';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
@@ -27,7 +28,7 @@ export function getTermsStartDateTier3(startDateTier3: string) {
 export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	productId: string,
+	productId: ProductKey,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
@@ -36,6 +37,7 @@ export function getTermsConditions(
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const isSupporterPlus = productId === 'SupporterPlus';
 	const isTier3 = productId === 'TierThree';
+	const isAdLite = productId === 'GuardianAdLite';
 
 	if (isSupporterPlus || isTier3) {
 		return (
@@ -68,10 +70,13 @@ export function getTermsConditions(
 			</div>
 		);
 	}
+	const cancelCopy = isAdLite
+		? 'Cancel anytime.'
+		: 'Cancel or change your support anytime.';
 	return (
 		<div css={containerSummaryTsCs}>
 			<p>Auto renews every {period} until you cancel.</p>
-			<p>Cancel or change your support anytime.</p>
+			<p>{cancelCopy}</p>
 		</div>
 	);
 }
