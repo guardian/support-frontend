@@ -110,3 +110,11 @@ export const createSalesforceContactStateSchema = baseStateSchema.merge(
 export type CreateSalesforceContactState = z.infer<
 	typeof createSalesforceContactStateSchema
 >;
+
+export function wrapperSchemaForState<SchemaType extends z.ZodTypeAny>(
+	stateSchema: SchemaType,
+) {
+	return z.object({
+		state: stateSchema,
+	});
+}
