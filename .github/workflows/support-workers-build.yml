@@ -105,7 +105,6 @@ jobs:
               support-workers-typescript:
                 type: aws-lambda
                 parameters:
-                  bucket: support-workers-dist
                   functionNames:
                     - "-CreatePaymentMethodLambda-"
                   fileName: support-workers.zip
