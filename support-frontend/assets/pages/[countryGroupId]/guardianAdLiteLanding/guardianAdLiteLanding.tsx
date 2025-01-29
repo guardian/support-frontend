@@ -16,7 +16,7 @@ import { PosterComponent } from './components/posterComponent';
 export const ReturnAddressSchema = object({
 	link: string(),
 });
-export function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
+function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
 	storage.session.set('returnAddress', link);
 }
 
