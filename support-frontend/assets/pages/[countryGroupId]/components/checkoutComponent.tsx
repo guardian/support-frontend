@@ -220,7 +220,6 @@ type CheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
-	returnLink?: string;
 	abParticipations: Participations;
 };
 
@@ -238,7 +237,6 @@ export function CheckoutComponent({
 	useStripeExpressCheckout,
 	countryId,
 	forcedCountry,
-	returnLink,
 	abParticipations,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
@@ -649,7 +647,6 @@ export function CheckoutComponent({
 						'contribution',
 						contributionAmount.toString(),
 					);
-				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
@@ -679,10 +676,7 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnParam = returnLink ? `?returnAddress=${returnLink}` : '';
-	const returnToLandingPage = `/${geoId}${productLanding(
-		productKey,
-	)}${returnParam}`;
+	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 
 	return (
 		<CheckoutLayout>

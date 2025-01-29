@@ -1,8 +1,6 @@
-import { storage } from '@guardian/libs';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
-import { safeParse } from 'valibot';
 import { getStripeKey } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -18,7 +16,6 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/abtest';
 import { CheckoutComponent } from './components/checkoutComponent';
-import { ReturnAddressSchema } from './guardianAdLiteLanding/guardianAdLiteLanding';
 
 type Props = {
 	geoId: GeoId;
@@ -238,16 +235,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 
-	/**
-	 * returnAddress re-added for future use on thank-you page
-	 */
-	const sessionStorageReturnAddress = storage.session.get('returnAddress');
-	const parsedOrder = safeParse(
-		ReturnAddressSchema,
-		sessionStorageReturnAddress,
-	);
-	const returnLink = parsedOrder.success ? parsedOrder.output.link : undefined;
-
 	useEffect(() => {
 		/**
 		 * Notify QM of checkout value
@@ -277,7 +264,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				useStripeExpressCheckout={useStripeExpressCheckout}
 				countryId={countryId}
 				forcedCountry={forcedCountry}
-				returnLink={returnLink}
 				abParticipations={abParticipations}
 			/>
 		</Elements>
