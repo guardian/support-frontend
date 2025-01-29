@@ -9,7 +9,7 @@
     "lint": "eslint src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
-    "package": "yarn check-formatting && yarn lint && yarn test && yarn build && mkdir -p target && cd target && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\""
+    "package": "yarn check-formatting && yarn lint && yarn test && yarn build && mkdir -p target && cp -R node_modules target/ && cd target && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\""
   },
   "repository": {
     "type": "git",
