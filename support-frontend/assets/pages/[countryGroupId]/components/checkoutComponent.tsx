@@ -121,7 +121,12 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
-import { FormSection, Legend, shorterBoxMargin } from './form';
+import {
+	FormSection,
+	Legend,
+	lengthenBoxMargin,
+	shorterBoxMargin,
+} from './form';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -782,7 +787,12 @@ export function CheckoutComponent({
 					return false;
 				}}
 			>
-				<Box cssOverrides={shorterBoxMargin}>
+				<Box
+					cssOverrides={[
+						shorterBoxMargin,
+						isAdLite ? lengthenBoxMargin : css``,
+					]}
+				>
 					<BoxContents>
 						{useStripeExpressCheckout && (
 							<div
