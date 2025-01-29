@@ -113,6 +113,10 @@ import {
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
 import {
+	setThankYouOrder,
+	unsetThankYouOrder,
+} from '../checkout/helpers/sessionStorage';
+import {
 	stripeCreateSetupIntentPrb,
 	stripeCreateSetupIntentRecaptcha,
 } from '../checkout/helpers/stripe';
@@ -131,7 +135,6 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 import { retryPaymentStatus } from './retryPaymentStatus';
-import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod

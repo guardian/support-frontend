@@ -3,8 +3,7 @@ import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import type { InferInput } from 'valibot';
-import { object, picklist, safeParse, string } from 'valibot';
+import { safeParse } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -37,7 +36,10 @@ import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFo
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
-import { ReturnAddressSchema } from '../guardianAdLiteLanding/guardianAdLiteLanding';
+import {
+	getReturnAddress,
+	OrderSchema,
+} from '../checkout/helpers/sessionStorage';
 
 const checkoutContainer = css`
 	${from.tablet} {
@@ -55,30 +57,6 @@ const headerContainer = css`
 const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
-
-/**
- * The checkout page sets the order in sessionStorage
- * And the thank-you page reads it.
- */
-const OrderSchema = object({
-	firstName: string(),
-	email: string(),
-	paymentMethod: picklist([
-		'Stripe',
-		'StripeExpressCheckoutElement',
-		'PayPal',
-		'DirectDebit',
-		'Sepa',
-		'None',
-	]),
-	status: picklist(['success', 'pending']),
-});
-export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
-	storage.session.set('thankYouOrder', order);
-}
-export function unsetThankYouOrder() {
-	storage.session.remove('thankYouOrder');
-}
 
 type CheckoutComponentProps = {
 	geoId: GeoId;
@@ -111,16 +89,6 @@ export function ThankYouComponent({
 	const csrf = { token: window.guardian.csrf.token };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
-
-	// Session storage returnAddress (from GuardianAdLiteLanding)
-	const sessionStorageReturnAddress = storage.session.get('returnAddress');
-	const parsedReturnAddress = safeParse(
-		ReturnAddressSchema,
-		sessionStorageReturnAddress,
-	);
-	const returnLink = parsedReturnAddress.success
-		? parsedReturnAddress.output.link
-		: 'https://www.theguardian.com';
 	// Session storage order (from Checkout)
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
 	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
@@ -265,7 +233,7 @@ export function ThankYouComponent({
 		undefined,
 		payment.finalAmount,
 		formatUserDate(getGuardianAdLiteDate()),
-		returnLink,
+		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 	);
 	const maybeThankYouModule = (

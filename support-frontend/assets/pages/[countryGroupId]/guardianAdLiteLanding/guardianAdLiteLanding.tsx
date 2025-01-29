@@ -1,24 +1,19 @@
 import { css } from '@emotion/react';
-import { storage } from '@guardian/libs';
 import { textSans24 } from '@guardian/source/foundations';
-import { type InferInput, object, safeParse, string } from 'valibot';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import {
+	getReturnAddress,
+	setReturnAddress,
+} from '../checkout/helpers/sessionStorage';
 import { AccordianComponent } from './components/accordianComponent';
 import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
-
-export const ReturnAddressSchema = object({
-	link: string(),
-});
-function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
-	storage.session.set('returnAddress', link);
-}
 
 type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
@@ -45,21 +40,13 @@ export function GuardianAdLiteLanding({
 	if (urlSearchParamsReturn) {
 		setReturnAddress({ link: urlSearchParamsReturn });
 	}
-	const sessionStorageReturnAddress = storage.session.get('returnAddress');
-	const parsedOrder = safeParse(
-		ReturnAddressSchema,
-		sessionStorageReturnAddress,
-	);
-	const returnLink = parsedOrder.success
-		? parsedOrder.output.link
-		: 'https://www.theguardian.com'; // defaults to urlSearchParamsReturn if available
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
 				<>
 					<HeaderCards
 						geoId={geoId}
-						returnLink={returnLink}
+						returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 						isSignedIn={user.isSignedIn}
 					/>
 					<PosterComponent />
