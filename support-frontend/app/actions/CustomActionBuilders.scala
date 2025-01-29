@@ -72,6 +72,7 @@ class CustomActionBuilders(
         emailProviderRejectedCode,
         invalidEmailAddressCode,
         recaptchaFailedCode,
+        emailAddressAlreadyTakenCode,
       )
       if (result.header.status == 500) {
         if (!ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {

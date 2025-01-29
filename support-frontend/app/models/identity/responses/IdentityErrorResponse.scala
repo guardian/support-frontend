@@ -28,6 +28,7 @@ object IdentityErrorResponse {
   implicit val reads: Reads[IdentityErrorResponse] = Json.reads[IdentityErrorResponse]
   val emailProviderRejectedCode = "email_provider_rejected"
   val invalidEmailAddressCode = "invalid_email_address"
+  val emailAddressAlreadyTakenCode = "email_address_already_taken"
 
   sealed trait IdentityError {
     def endpoint: Option[IdentityEndpoint]
@@ -45,6 +46,9 @@ object IdentityErrorResponse {
 
   /** The email address is invalid. */
   case class InvalidEmailAddress(endpoint: Option[IdentityEndpoint]) extends IdentityError
+
+  /** The email address is already associated with an existing account. */
+  case class EmailAddressAlreadyTaken(endpoint: Option[IdentityEndpoint]) extends IdentityError
 
   /** Some other error occurred. */
   case class OtherIdentityError(message: String, description: String, endpoint: Option[IdentityEndpoint])
@@ -65,6 +69,8 @@ object IdentityErrorResponse {
         EmailProviderRejected(endpoint = None)
       } else if (message == "Invalid emailAddress:" && description == "Please enter a valid email address") {
         InvalidEmailAddress(endpoint = None)
+      } else if (message == "Email in use" && description == "This email has already been taken") {
+        EmailAddressAlreadyTaken(endpoint = None)
       } else {
         OtherIdentityError(message, description, endpoint = None)
       }
