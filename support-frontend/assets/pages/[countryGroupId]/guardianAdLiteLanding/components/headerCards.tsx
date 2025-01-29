@@ -84,7 +84,7 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 type HeaderCardsProps = {
 	geoId: GeoId;
 	isSignedIn: boolean;
-	returnLink?: string;
+	returnLink: string;
 };
 
 export function HeaderCards({
@@ -113,7 +113,7 @@ export function HeaderCards({
 		ctaCopy: `Get Guardian Ad-Lite for ${formattedPrice}/month`,
 	};
 	const card2 = {
-		link: returnLink ?? `https://www.theguardian.com`,
+		link: returnLink,
 		productDescription: productCatalogGuardianAdLite().GuardianAdLiteGoBack,
 		ctaCopy: `Go back to 'Accept all'`,
 	};

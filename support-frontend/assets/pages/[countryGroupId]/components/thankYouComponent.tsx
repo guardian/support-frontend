@@ -37,6 +37,7 @@ import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFo
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import { ReturnAddressSchema } from '../guardianAdLiteLanding/guardianAdLiteLanding';
 
 const checkoutContainer = css`
 	${from.tablet} {
@@ -91,7 +92,6 @@ type CheckoutComponentProps = {
 	productKey?: ActiveProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
-	returnLink?: string;
 	identityUserType: UserType;
 	abParticipations: Participations;
 };
@@ -102,7 +102,6 @@ export function ThankYouComponent({
 	productKey,
 	ratePlanKey,
 	promotion,
-	returnLink,
 	identityUserType,
 	abParticipations,
 }: CheckoutComponentProps) {
@@ -113,6 +112,16 @@ export function ThankYouComponent({
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
+	// Session storage returnAddress (from GuardianAdLiteLanding)
+	const sessionStorageReturnAddress = storage.session.get('returnAddress');
+	const parsedReturnAddress = safeParse(
+		ReturnAddressSchema,
+		sessionStorageReturnAddress,
+	);
+	const returnLink = parsedReturnAddress.success
+		? parsedReturnAddress.output.link
+		: 'https://www.theguardian.com';
+	// Session storage order (from Checkout)
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
 	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
 	if (!parsedOrder.success) {
@@ -256,7 +265,7 @@ export function ThankYouComponent({
 		undefined,
 		payment.finalAmount,
 		formatUserDate(getGuardianAdLiteDate()),
-		returnLink ?? 'https://www.theguardian.com',
+		returnLink,
 		isSignedIn,
 	);
 	const maybeThankYouModule = (

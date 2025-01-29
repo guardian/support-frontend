@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { textSans24 } from '@guardian/source/foundations';
-import { type InferInput, object, string } from 'valibot';
+import { type InferInput, object, safeParse, string } from 'valibot';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
@@ -16,7 +16,7 @@ import { PosterComponent } from './components/posterComponent';
 export const ReturnAddressSchema = object({
 	link: string(),
 });
-export function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
+function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
 	storage.session.set('returnAddress', link);
 }
 
@@ -34,19 +34,32 @@ export function GuardianAdLiteLanding({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/guardian-ad-lite',
 	}; // hidden initially, will display with more regions
+
+	/* Return Address loading order:-
+	 * 1. URLSearchParams (SessionStorage write)
+	 * 2. SessionStorage load
+	 * 3. Default https://www.theguardian.com
+	 */
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsReturn =
-		urlSearchParams.get('returnAddress') ?? undefined; // no return address supplied
+	const urlSearchParamsReturn = urlSearchParams.get('returnAddress');
 	if (urlSearchParamsReturn) {
 		setReturnAddress({ link: urlSearchParamsReturn });
-	} // pass through return address for use on thank-you page (ParamUrl not required on checkout)
+	}
+	const sessionStorageReturnAddress = storage.session.get('returnAddress');
+	const parsedOrder = safeParse(
+		ReturnAddressSchema,
+		sessionStorageReturnAddress,
+	);
+	const returnLink = parsedOrder.success
+		? parsedOrder.output.link
+		: 'https://www.theguardian.com'; // defaults to urlSearchParamsReturn if available
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			{!isProd() ? (
 				<>
 					<HeaderCards
 						geoId={geoId}
-						returnLink={urlSearchParamsReturn}
+						returnLink={returnLink}
 						isSignedIn={user.isSignedIn}
 					/>
 					<PosterComponent />
