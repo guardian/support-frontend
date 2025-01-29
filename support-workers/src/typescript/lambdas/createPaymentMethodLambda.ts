@@ -19,6 +19,7 @@ import type {
 	CreateSalesforceContactState,
 	User,
 } from '../model/stateSchemas';
+import { createPaymentMethodStateSchema } from '../model/stateSchemas';
 import { ServiceHandler } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
@@ -35,12 +36,16 @@ const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
 });
 
 export const handler = async (
-	state: CreatePaymentMethodState,
+	state: unknown,
 ): Promise<CreateSalesforceContactState> => {
 	console.log(`Input is ${JSON.stringify(state)}`);
+	const createPaymentMethodState = createPaymentMethodStateSchema.parse(state);
 	return createSalesforceContactState(
-		state,
-		await createPaymentMethod(state.paymentFields, state.user),
+		createPaymentMethodState,
+		await createPaymentMethod(
+			createPaymentMethodState.paymentFields,
+			createPaymentMethodState.user,
+		),
 	);
 };
 
