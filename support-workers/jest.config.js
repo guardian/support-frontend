@@ -3,4 +3,5 @@ module.exports = {
 	preset: 'ts-jest',
 	testEnvironment: 'node',
 	runner: 'groups',
+	testPathIgnorePatterns: ['/node_modules/', 'target'],
 };
