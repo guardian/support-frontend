@@ -3,29 +3,30 @@ import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
 	PayPalPaymentFields,
-	// SepaPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
 	PayPalPaymentMethod,
-	// SepaPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
-import type { Stage } from '../model/stage';
+import { stageFromEnvironment } from '../model/stage';
 import type {
 	CreatePaymentMethodState,
 	CreateSalesforceContactState,
 	User,
 } from '../model/stateSchemas';
-import { createPaymentMethodStateSchema } from '../model/stateSchemas';
+import {
+	createPaymentMethodStateSchema,
+	wrapperSchemaForState,
+} from '../model/stateSchemas';
 import { ServiceHandler } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { getIfDefined } from '../util/nullAndUndefined';
 
-const stage = process.env.stage as Stage;
+const stage = stageFromEnvironment();
 const stripeServiceHandler = new ServiceHandler(stage, async (stage) => {
 	const config = await getStripeConfig(stage);
 	return new StripeService(config);
@@ -35,11 +36,11 @@ const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
 	return new PayPalService(config);
 });
 
-export const handler = async (
-	state: unknown,
-): Promise<CreateSalesforceContactState> => {
+export const handler = async (state: unknown) => {
 	console.log(`Input is ${JSON.stringify(state)}`);
-	const createPaymentMethodState = createPaymentMethodStateSchema.parse(state);
+	const createPaymentMethodState = wrapperSchemaForState(
+		createPaymentMethodStateSchema,
+	).parse(state).state;
 	return createSalesforceContactState(
 		createPaymentMethodState,
 		await createPaymentMethod(
@@ -71,12 +72,16 @@ export function createPaymentMethod(
 }
 
 export function createSalesforceContactState(
-	state: CreatePaymentMethodState,
+	inputState: CreatePaymentMethodState,
 	paymentMethod: PaymentMethod,
-): CreateSalesforceContactState {
-	return {
-		...state,
+) {
+	const outputState: CreateSalesforceContactState = {
+		...inputState,
 		paymentMethod,
+	};
+
+	return {
+		state: outputState,
 	};
 }
 
