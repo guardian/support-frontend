@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getBaseDomain } from './urls/url';
 // ----- Terms & Conditions ----- //
 const defaultContributionTermsLink =
 	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
@@ -33,7 +34,8 @@ const supporterPlusTermsLink =
 	'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
 const tierThreeTermsLink =
 	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
-const guardianAdLiteTermsLink = '';
+// Placeholder, awaiting Ts&Cs location
+const guardianAdLiteTermsLink = `https://manage.${getBaseDomain()}/help-centre`;
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
