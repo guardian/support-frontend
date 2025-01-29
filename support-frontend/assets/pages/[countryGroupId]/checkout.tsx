@@ -2,7 +2,7 @@ import { storage } from '@guardian/libs';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
-import { type InferInput, object, safeParse, string } from 'valibot';
+import { safeParse } from 'valibot';
 import { getStripeKey } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -18,19 +18,13 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/abtest';
 import { CheckoutComponent } from './components/checkoutComponent';
+import { ReturnAddressSchema } from './guardianAdLiteLanding/guardianAdLiteLanding';
 
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
 };
-
-const ReturnAddressSchema = object({
-	link: string(),
-});
-export function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
-	storage.session.set('returnAddress', link);
-}
 
 const countryId: IsoCountry = Country.detect();
 

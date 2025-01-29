@@ -1,16 +1,24 @@
 import { css } from '@emotion/react';
+import { storage } from '@guardian/libs';
 import { textSans24 } from '@guardian/source/foundations';
+import { type InferInput, object, string } from 'valibot';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { setReturnAddress } from '../checkout';
 import { AccordianComponent } from './components/accordianComponent';
 import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
+
+export const ReturnAddressSchema = object({
+	link: string(),
+});
+export function setReturnAddress(link: InferInput<typeof ReturnAddressSchema>) {
+	storage.session.set('returnAddress', link);
+}
 
 type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
