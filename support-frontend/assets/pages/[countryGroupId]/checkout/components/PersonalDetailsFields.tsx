@@ -1,5 +1,5 @@
 import { TextInput } from '@guardian/source/react-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -35,12 +35,18 @@ export function PersonalDetailsFields({
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
 	const [emailError, setEmailError] = useState<string>();
+	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
-	const emailAddressDoesNotMatch =
-		confirmedEmail.length && email !== confirmedEmail;
-	const confirmedEmailError = emailAddressDoesNotMatch
-		? 'The email addresses do not match.'
-		: undefined;
+	useEffect(() => {
+		const emailAddressDoesNotMatch =
+			confirmedEmail.length && email !== confirmedEmail;
+
+		setConfirmedEmailError(
+			emailAddressDoesNotMatch
+				? 'The email addresses do not match.'
+				: undefined,
+		);
+	}, [email, confirmedEmail]);
 
 	return (
 		<>
@@ -94,6 +100,17 @@ export function PersonalDetailsFields({
 						required
 						maxLength={80}
 						error={confirmedEmailError}
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setConfirmedEmailError(undefined);
+							} else {
+								if (validityState.valueMissing) {
+									setConfirmedEmailError('Please confirm your email address.');
+								}
+							}
+						}}
 					/>
 				</div>
 			)}
