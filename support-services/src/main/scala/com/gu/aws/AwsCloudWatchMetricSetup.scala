@@ -47,6 +47,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def serverSideHighThresholdCreateFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("ServerSideHighThresholdCreateFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   def defaultPromotionsLoadingFailure(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("DefaultPromotionsLoadingFailure"),
