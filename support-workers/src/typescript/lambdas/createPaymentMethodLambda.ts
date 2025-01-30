@@ -37,8 +37,10 @@ const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
 	return new PayPalService(config);
 });
 
-export const handler = async (state: unknown) => {
-	console.log(`Input is ${JSON.stringify(state)}`);
+export const handler = async (
+	state: WrappedState<CreatePaymentMethodState>,
+) => {
+	console.info(`Input is ${JSON.stringify(state)}`);
 	const createPaymentMethodState = wrapperSchemaForState(
 		createPaymentMethodStateSchema,
 	).parse(state).state;
