@@ -87,7 +87,7 @@ const digitalEdition = (
 	offer: priceCopy.discountCopy,
 });
 
-export function digitalCheckout(
+function digitalCheckout(
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy {
