@@ -45,9 +45,6 @@ export function ThankYou({
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
-	// returnAddress
-	const urlSearchParamsReturn =
-		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;
@@ -168,7 +165,6 @@ export function ThankYou({
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
-			returnLink={urlSearchParamsReturn}
 			abParticipations={abParticipations}
 		/>
 	);
