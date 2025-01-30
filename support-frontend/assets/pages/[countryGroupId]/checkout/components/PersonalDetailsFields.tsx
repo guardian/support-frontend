@@ -1,5 +1,6 @@
 import { TextInput } from '@guardian/source/react-components';
-import { useEffect, useState } from 'react';
+import escapeStringRegexp from 'escape-string-regexp';
+import { useRef, useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -37,16 +38,7 @@ export function PersonalDetailsFields({
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
-	useEffect(() => {
-		const emailAddressDoesNotMatch =
-			confirmedEmail.length && email !== confirmedEmail;
-
-		setConfirmedEmailError(
-			emailAddressDoesNotMatch
-				? 'The email addresses do not match.'
-				: undefined,
-		);
-	}, [email, confirmedEmail]);
+	const confirmEmailRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<>
@@ -63,6 +55,7 @@ export function PersonalDetailsFields({
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
+						confirmEmailRef.current?.querySelector('input')?.checkValidity();
 					}}
 					readOnly={isEmailAddressReadOnly}
 					name="email"
@@ -85,7 +78,7 @@ export function PersonalDetailsFields({
 				/>
 			</div>
 			{requireConfirmedEmail && !isEmailAddressReadOnly && (
-				<div>
+				<div ref={confirmEmailRef}>
 					<TextInput
 						id="confirm-email"
 						data-qm-masking="blocklist"
@@ -96,10 +89,14 @@ export function PersonalDetailsFields({
 						onChange={(event) => {
 							setConfirmedEmail(event.currentTarget.value);
 						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
 						name="confirm-email"
 						required
 						maxLength={80}
 						error={confirmedEmailError}
+						pattern={escapeStringRegexp(email)}
 						onInvalid={(event) => {
 							preventDefaultValidityMessage(event.currentTarget);
 							const validityState = event.currentTarget.validity;
@@ -108,6 +105,8 @@ export function PersonalDetailsFields({
 							} else {
 								if (validityState.valueMissing) {
 									setConfirmedEmailError('Please confirm your email address.');
+								} else {
+									setConfirmedEmailError('The email addresses do not match.');
 								}
 							}
 						}}

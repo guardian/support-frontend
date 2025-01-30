@@ -429,19 +429,6 @@ export function CheckoutComponent({
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 
-		const requireConfirmedEmail =
-			inConfirmEmailVariant &&
-			!isSignedIn &&
-			paymentMethod !== 'StripeExpressCheckoutElement';
-
-		/**  This validation has to happen on submit,
-		 *   as we cannot check it with form validation rules
-		 */
-		if (requireConfirmedEmail && email !== confirmedEmail) {
-			setIsProcessingPayment(false);
-			return;
-		}
-
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -884,6 +871,8 @@ export function CheckoutComponent({
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
 
 										setPaymentMethod('StripeExpressCheckoutElement');
 										setStripeExpressCheckoutPaymentType(
