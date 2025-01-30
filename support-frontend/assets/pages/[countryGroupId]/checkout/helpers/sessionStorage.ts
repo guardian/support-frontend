@@ -15,16 +15,17 @@ function fromSessionStorage(
  * The Guardian Ad-Lite Landing Page sets the returnLink in sessionStorage
  * And the thank-you page reads it.
  */
+const returnAddressKey = 'returnAddress';
 const ReturnAddressSchema = object({
 	link: string(),
 });
 type ReturnAddressSchemaType = InferInput<typeof ReturnAddressSchema>;
 export function setReturnAddress(link: ReturnAddressSchemaType) {
-	storage.session.set('returnAddress', link);
+	storage.session.set(returnAddressKey, link);
 }
 export function getReturnAddress(): string {
 	const parsedReturnAddress = fromSessionStorage(
-		'returnAddress',
+		returnAddressKey,
 		ReturnAddressSchema,
 	);
 	return is(ReturnAddressSchema, parsedReturnAddress)
@@ -36,6 +37,7 @@ export function getReturnAddress(): string {
  * The checkout page sets the order in sessionStorage
  * And the thank-you page reads it.
  */
+const orderKey = 'thankYouOrder';
 const OrderSchema = object({
 	firstName: string(),
 	email: string(),
@@ -51,12 +53,12 @@ const OrderSchema = object({
 });
 type OrderSchemaType = InferInput<typeof OrderSchema>;
 export function setThankYouOrder(order: OrderSchemaType) {
-	storage.session.set('thankYouOrder', order);
+	storage.session.set(orderKey, order);
 }
 export function getThankYouOrder(): OrderSchemaType | undefined {
-	const parsedOrder = fromSessionStorage('thankYouOrder', OrderSchema);
+	const parsedOrder = fromSessionStorage(orderKey, OrderSchema);
 	return is(OrderSchema, parsedOrder) ? parsedOrder : undefined;
 }
 export function unsetThankYouOrder() {
-	storage.session.remove('thankYouOrder');
+	storage.session.remove(orderKey);
 }
