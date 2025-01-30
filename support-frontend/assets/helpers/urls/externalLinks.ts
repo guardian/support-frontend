@@ -23,10 +23,6 @@ const androidDailyUrl =
 const myAccountUrl = `${profileUrl}/account/edit`;
 const manageSubsUrl = `${manageUrl}/subscriptions`;
 const helpCentreUrl = `${manageUrl}/help-centre`;
-
-// Awaiting Ts&Cs location
-const guardianAdLiteConditionsUrl = `${manageUrl}/help-centre`;
-
 // ----- Functions ----- //
 
 function getPatronsLink(
@@ -98,5 +94,4 @@ export {
 	homeDeliveryUrl,
 	helpCentreUrl,
 	feastAppUrl,
-	guardianAdLiteConditionsUrl,
 };

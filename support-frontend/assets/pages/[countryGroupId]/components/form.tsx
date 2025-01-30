@@ -41,6 +41,13 @@ export const shorterBoxMargin = css`
 	}
 `;
 
+export const lengthenBoxMargin = css`
+	margin-bottom: ${space[6]}px;
+	${from.tablet} {
+		margin-bottom: ${space[24]}px;
+	}
+`;
+
 type LegendProps = {
 	children: ReactNode;
 };
