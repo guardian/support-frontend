@@ -62,7 +62,7 @@ function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	return '';
 }
 
-const digital = (
+const digitalEdition = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy => ({
@@ -86,6 +86,37 @@ const digital = (
 	classModifier: ['subscriptions__digital'],
 	offer: priceCopy.discountCopy,
 });
+
+export function digitalCheckout(
+	countryGroupId: CountryGroupId,
+	priceCopy: PriceCopy,
+): ProductCopy {
+	return {
+		...digitalEdition(countryGroupId, priceCopy),
+		buttons: [
+			{
+				ctaButtonText: 'Subscribe Monthly',
+				link: digitalSubscriptionLanding(countryGroupId, 'Monthly'),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_monthly_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+			},
+			{
+				ctaButtonText: 'Subscribe Annually',
+				link: digitalSubscriptionLanding(countryGroupId, 'Annual'),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_annual_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+			},
+		],
+	};
+}
 
 const guardianWeekly = (
 	countryGroupId: CountryGroupId,
@@ -152,13 +183,20 @@ const getSubscriptionCopy = (
 	pricingCopy: PricingCopy,
 	participations: Participations,
 ): ProductCopy[] => {
+	const inDigitalEditionCheckout =
+		participations.digitalEditionCheckout === 'variant';
+
 	const productcopy: ProductCopy[] = [
 		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
 	}
-	productcopy.push(digital(countryGroupId, pricingCopy[DigitalPack]));
+	productcopy.push(
+		inDigitalEditionCheckout
+			? digitalCheckout(countryGroupId, pricingCopy[DigitalPack])
+			: digitalEdition(countryGroupId, pricingCopy[DigitalPack]),
+	);
 	return productcopy;
 };
 
