@@ -233,10 +233,14 @@ class CreateSubscriptionController(
     )
   }
 
-  private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
+  private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError): CreateSubscriptionError =
     identityError match {
       case EmailProviderRejected(_) => RequestValidationError(emailProviderRejectedCode)
       case InvalidEmailAddress(_) => RequestValidationError(invalidEmailAddressCode)
+      // We're mapping this to a ServerError because it shouldn't ever happen, but sometimes does. Even though we
+      // asked identity (in getOrCreateIdentityUser) whether the user exists first, sometimes we get an answer of no
+      // back but then attempting to create returns this error.
+      case EmailAddressAlreadyTaken(_) => ServerError(emailAddressAlreadyTakenCode)
       case OtherIdentityError(message, description, endpoint) =>
         endpoint match {
           case Some(GuestEndpoint) => ServerError(s"Identity error calling /guest: $message; $description")
@@ -344,6 +348,14 @@ class CreateSubscriptionController(
                   reasonPhrase = Some(err.message),
                 ),
                 body = writeable.toEntity(err.message),
+              )
+            case ServerError(code) if code == emailAddressAlreadyTakenCode =>
+              Result(
+                header = new ResponseHeader(
+                  status = INTERNAL_SERVER_ERROR,
+                  reasonPhrase = Some(emailAddressAlreadyTakenCode),
+                ),
+                body = writeable.toEntity(""),
               )
             case _: ServerError =>
               InternalServerError
