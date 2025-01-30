@@ -248,7 +248,7 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
-	const requireConfirmedEmail = abParticipations.confirmEmail === 'variant';
+	const inConfirmEmailVariant = abParticipations.confirmEmail === 'variant';
 
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
@@ -429,10 +429,15 @@ export function CheckoutComponent({
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 
+		const requireConfirmedEmail =
+			inConfirmEmailVariant &&
+			!isSignedIn &&
+			paymentMethod !== 'StripeExpressCheckoutElement';
+
 		/**  This validation has to happen on submit,
 		 *   as we cannot check it with form validation rules
 		 */
-		if (requireConfirmedEmail && !isSignedIn && email !== confirmedEmail) {
+		if (requireConfirmedEmail && email !== confirmedEmail) {
 			setIsProcessingPayment(false);
 			return;
 		}
@@ -946,7 +951,7 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
-								requireConfirmedEmail={requireConfirmedEmail}
+								requireConfirmedEmail={inConfirmEmailVariant}
 								confirmedEmail={confirmedEmail}
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
