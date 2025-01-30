@@ -243,8 +243,7 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
-	const requireConfirmedEmail =
-		abParticipations.confirmEmail === 'variant' && !isSignedIn;
+	const requireConfirmedEmail = abParticipations.confirmEmail === 'variant';
 
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
@@ -428,7 +427,7 @@ export function CheckoutComponent({
 		/**  This validation has to happen on submit,
 		 *   as we cannot check it with form validation rules
 		 */
-		if (requireConfirmedEmail && email !== confirmedEmail) {
+		if (requireConfirmedEmail && !isSignedIn && email !== confirmedEmail) {
 			setIsProcessingPayment(false);
 			return;
 		}
