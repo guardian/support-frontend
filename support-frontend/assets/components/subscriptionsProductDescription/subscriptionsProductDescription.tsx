@@ -1,4 +1,5 @@
 import AnchorButton from 'components/button/anchorButton';
+import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
@@ -8,6 +9,7 @@ type PropTypes = {
 	isFeature?: boolean;
 	offer?: string;
 	buttons: ProductButton[];
+	benefits?: ProductBenefit[];
 };
 
 const getButtonAppearance = (
@@ -36,6 +38,7 @@ function SubscriptionsProductDescription({
 	offer,
 	isFeature,
 	buttons,
+	benefits,
 }: PropTypes): JSX.Element {
 	return (
 		<div>
@@ -47,7 +50,11 @@ function SubscriptionsProductDescription({
 			{!offer && (
 				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
 			)}
-			<p className="subscriptions__description">{description}</p>
+			{benefits ? (
+				<SubscriptionsProductBenefits benefits={benefits} />
+			) : (
+				<p className="subscriptions__description">{description}</p>
+			)}
 			<div
 				className={
 					isFeature
@@ -69,6 +76,20 @@ function SubscriptionsProductDescription({
 					</AnchorButton>
 				))}
 			</div>
+		</div>
+	);
+}
+
+function SubscriptionsProductBenefits({
+	benefits,
+}: {
+	benefits: ProductBenefit[];
+}): JSX.Element {
+	return (
+		<div className="subscriptions__description">
+			{benefits.map((benefit) => (
+				<section>{benefit.copy}</section>
+			))}
 		</div>
 	);
 }
