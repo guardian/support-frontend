@@ -146,11 +146,13 @@ export function PaymentTsAndCs({
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const inAdLite = productKey === 'GuardianAdLite';
-	const inSupporterPlus =
+	const inAllAccessDigital =
 		productKey === 'SupporterPlus' && amountIsAboveThreshold;
-	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
+	const inDigitalPlusPrint =
+		productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
-		productKey === 'Contribution' || !(inSupporterPlus || inTier3 || inAdLite);
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -248,12 +250,12 @@ export function PaymentTsAndCs({
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
-				{inTier3 && (
+				{inDigitalPlusPrint && (
 					<TierThreeTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
 					/>
 				)}
-				{inSupporterPlus &&
+				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
 				{inAdLite && copyAdLite(contributionType, productKey)}
 				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
@@ -270,10 +272,11 @@ export function SummaryTsAndCs({
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
 	const inAdLite = productKey === 'GuardianAdLite';
-	const inTier3 = productKey === 'TierThree';
-	const inTier2 = productKey === 'SupporterPlus';
-	const inTier1 =
-		productKey === 'Contribution' || !(inTier2 || inTier3 || inAdLite);
+	const inDigitalPlusPrint = productKey === 'TierThree';
+	const inAllAccessDigital = productKey === 'SupporterPlus';
+	const inSupport =
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
 
 	const amountCopy = ` of ${formatAmount(
 		currencies[currency],
@@ -333,9 +336,9 @@ export function SummaryTsAndCs({
 
 	return (
 		<div css={[containerSummaryTsCs, cssOverrides]}>
-			{inTier1 && copyTier1(contributionType)}
-			{inTier2 && copyTier2(contributionType, productKey)}
-			{inTier3 && copyTier3(contributionType, productKey, true)}
+			{inSupport && copyTier1(contributionType)}
+			{inAllAccessDigital && copyTier2(contributionType, productKey)}
+			{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
 			{inAdLite && copyTier3(contributionType, productKey, false)}
 		</div>
 	);
