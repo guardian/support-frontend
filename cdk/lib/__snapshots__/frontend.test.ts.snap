@@ -1369,6 +1369,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         "AlarmDescription": "Impact - Someone pressed buy on a recurring product but received an error. This has happened multiple times for a known reason.. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "Support-frontend create recurring product call failed multiple times for a known reason",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 10,
         "Dimensions": [
           {
             "Name": "Stage",
@@ -1398,7 +1399,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Threshold": 10,
+        "Threshold": 1,
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",

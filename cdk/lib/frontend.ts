@@ -340,8 +340,9 @@ export class Frontend extends GuStack {
           "Someone pressed buy on a recurring product but received an error. This has happened multiple times for a known reason."
         ),
         actionsEnabled: shouldCreateAlarms,
-        threshold: 10,
+        threshold: 1,
         evaluationPeriods: 60,
+        datapointsToAlarm: 10,
         comparisonOperator:
           ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
         metric: new Metric({
