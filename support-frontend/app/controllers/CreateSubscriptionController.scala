@@ -355,7 +355,7 @@ class CreateSubscriptionController(
                   status = INTERNAL_SERVER_ERROR,
                   reasonPhrase = Some(emailAddressAlreadyTakenCode),
                 ),
-                body = writeable.toEntity(emailAddressAlreadyTakenCode),
+                body = writeable.toEntity(""),
               )
             case _: ServerError =>
               InternalServerError
