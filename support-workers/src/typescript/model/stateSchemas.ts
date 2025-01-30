@@ -111,10 +111,40 @@ export type CreateSalesforceContactState = z.infer<
 	typeof createSalesforceContactStateSchema
 >;
 
+export type LambdaState =
+	| CreatePaymentMethodState
+	| CreateSalesforceContactState;
+
+export type WrappedState<InputState> = {
+	state: InputState;
+	error: {
+		Error: string;
+		Cause: string;
+	} | null;
+	requestInfo: {
+		testUser: boolean;
+		failed: boolean;
+		messages: string[];
+		accountExists: boolean;
+	};
+};
+
 export function wrapperSchemaForState<SchemaType extends z.ZodTypeAny>(
 	stateSchema: SchemaType,
 ) {
 	return z.object({
 		state: stateSchema,
+		error: z
+			.object({
+				Error: z.string(),
+				Cause: z.string(),
+			})
+			.nullable(),
+		requestInfo: z.object({
+			testUser: z.boolean(),
+			failed: z.boolean(),
+			messages: z.array(z.string()),
+			accountExists: z.boolean(),
+		}),
 	});
 }

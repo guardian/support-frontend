@@ -16,6 +16,7 @@ import type {
 	CreatePaymentMethodState,
 	CreateSalesforceContactState,
 	User,
+	WrappedState,
 } from '../model/stateSchemas';
 import {
 	createPaymentMethodStateSchema,
@@ -74,7 +75,7 @@ export function createPaymentMethod(
 export function createSalesforceContactState(
 	inputState: CreatePaymentMethodState,
 	paymentMethod: PaymentMethod,
-) {
+): WrappedState<CreateSalesforceContactState> {
 	const outputState: CreateSalesforceContactState = {
 		...inputState,
 		paymentMethod,
@@ -82,6 +83,13 @@ export function createSalesforceContactState(
 
 	return {
 		state: outputState,
+		error: null,
+		requestInfo: {
+			testUser: false,
+			failed: false,
+			messages: [],
+			accountExists: false,
+		},
 	};
 }
 
