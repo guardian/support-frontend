@@ -42,6 +42,16 @@ export const OrderSchema = object({
 export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
 }
+export function getThankYouOrder() {
+	const sessionStorageOrder = storage.session.get('thankYouOrder');
+	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
+	if (parsedOrder.success) {
+		return parsedOrder.output;
+	} else {
+		return undefined;
+	}
+}
+
 export function unsetThankYouOrder() {
 	storage.session.remove('thankYouOrder');
 }

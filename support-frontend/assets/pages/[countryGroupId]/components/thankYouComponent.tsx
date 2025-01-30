@@ -3,7 +3,6 @@ import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import { safeParse } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -38,7 +37,7 @@ import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helper
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 import {
 	getReturnAddress,
-	OrderSchema,
+	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
 
 const checkoutContainer = css`
@@ -90,14 +89,13 @@ export function ThankYouComponent({
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)
-	const sessionStorageOrder = storage.session.get('thankYouOrder');
-	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
-	if (!parsedOrder.success) {
+	const order = getThankYouOrder();
+	if (!order) {
+		const sessionStorageOrder = storage.session.get('thankYouOrder');
 		return (
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
-	const order = parsedOrder.output;
 	const isPending = order.status === 'pending';
 
 	/**
