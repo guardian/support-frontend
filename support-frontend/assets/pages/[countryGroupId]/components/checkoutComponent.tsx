@@ -243,7 +243,8 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
-	const requireConfirmedEmail = abParticipations.confirmEmail === 'variant';
+	const requireConfirmedEmail =
+		abParticipations.confirmEmail === 'variant' && !isSignedIn;
 
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
