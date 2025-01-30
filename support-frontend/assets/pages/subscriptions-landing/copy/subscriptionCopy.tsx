@@ -73,7 +73,7 @@ const digital = (
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
-			link: digitalSubscriptionLanding(countryGroupId, false),
+			link: digitalSubscriptionLanding(countryGroupId),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'digipack_cta',
 				product: 'DigitalPack',
