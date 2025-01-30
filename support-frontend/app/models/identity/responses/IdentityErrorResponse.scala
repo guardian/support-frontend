@@ -36,6 +36,7 @@ object IdentityErrorResponse {
       this match {
         case EmailProviderRejected(_) => EmailProviderRejected(Some(e))
         case InvalidEmailAddress(_) => InvalidEmailAddress(Some(e))
+        case EmailAddressAlreadyTaken(_) => EmailAddressAlreadyTaken(Some(e))
         case OtherIdentityError(m, d, _endpoint) => OtherIdentityError(m, d, endpoint = Some(e))
       }
     }
