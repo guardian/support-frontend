@@ -126,7 +126,12 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
-import { FormSection, Legend, shorterBoxMargin } from './form';
+import {
+	FormSection,
+	Legend,
+	lengthenBoxMargin,
+	shorterBoxMargin,
+} from './form';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -680,6 +685,7 @@ export function CheckoutComponent({
 	);
 
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
+	const isAdLite = productKey === 'GuardianAdLite';
 
 	return (
 		<CheckoutLayout>
@@ -772,10 +778,7 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							<BackButton
-								path={returnToLandingPage}
-								buttonText={productKey === 'GuardianAdLite' ? 'Back' : 'Change'}
-							/>
+							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
 					/>
 				</BoxContents>
@@ -792,7 +795,12 @@ export function CheckoutComponent({
 					return false;
 				}}
 			>
-				<Box cssOverrides={shorterBoxMargin}>
+				<Box
+					cssOverrides={[
+						shorterBoxMargin,
+						isAdLite ? lengthenBoxMargin : css``,
+					]}
+				>
 					<BoxContents>
 						{useStripeExpressCheckout && (
 							<div
@@ -1443,8 +1451,18 @@ export function CheckoutComponent({
 					</BoxContents>
 				</Box>
 			</form>
-			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			{!isAdLite && (
+				<>
+					<PatronsMessage
+						countryGroupId={countryGroupId}
+						mobileTheme={'light'}
+					/>
+					<GuardianTsAndCs
+						mobileTheme={'light'}
+						displayPatronsCheckout={false}
+					/>
+				</>
+			)}
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>
