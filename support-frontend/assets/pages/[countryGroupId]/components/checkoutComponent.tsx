@@ -12,6 +12,7 @@ import {
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -112,6 +113,10 @@ import {
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
 import {
+	setThankYouOrder,
+	unsetThankYouOrder,
+} from '../checkout/helpers/sessionStorage';
+import {
 	stripeCreateSetupIntentPrb,
 	stripeCreateSetupIntentRecaptcha,
 } from '../checkout/helpers/stripe';
@@ -135,7 +140,6 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 import { retryPaymentStatus } from './retryPaymentStatus';
-import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -198,6 +202,17 @@ const handlePaymentStatus = (
 	}
 };
 
+const productLanding = (product: ProductKey) => {
+	switch (product) {
+		case 'GuardianAdLite':
+			return '/guardian-ad-lite';
+		case 'DigitalSubscription':
+			return `/subscribe`;
+		default:
+			return `/contribute`;
+	}
+};
+
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -213,7 +228,6 @@ type CheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
-	returnLink?: string;
 	abParticipations: Participations;
 };
 
@@ -231,7 +245,6 @@ export function CheckoutComponent({
 	useStripeExpressCheckout,
 	countryId,
 	forcedCountry,
-	returnLink,
 	abParticipations,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
@@ -642,7 +655,6 @@ export function CheckoutComponent({
 						'contribution',
 						contributionAmount.toString(),
 					);
-				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
@@ -672,12 +684,8 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
-	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
-	const returnToLandingPage =
-		productKey === 'GuardianAdLite'
-			? `/guardian-ad-lite${returnParam}`
-			: `/${geoId}/contribute`;
 
 	return (
 		<CheckoutLayout>
