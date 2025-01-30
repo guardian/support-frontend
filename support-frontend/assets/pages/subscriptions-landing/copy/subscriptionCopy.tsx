@@ -8,6 +8,8 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
+import type { ProductBenefit } from 'helpers/productCatalog';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
@@ -43,6 +45,7 @@ type ProductCopy = {
 	buttons: ProductButton[];
 	classModifier?: string[];
 	participations?: Participations;
+	benefits?: ProductBenefit[];
 };
 
 const getDisplayPrice = (
@@ -115,6 +118,7 @@ function digitalCheckout(
 				modifierClasses: 'digital',
 			},
 		],
+		benefits: productCatalogDescription['DigitalSubscription'].benefits,
 	};
 }
 
