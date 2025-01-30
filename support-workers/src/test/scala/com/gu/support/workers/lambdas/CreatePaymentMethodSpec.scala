@@ -38,7 +38,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
         createSalesforceContactState.isSuccess should be(true)
         createSalesforceContactState.get._1.paymentMethod match {
-          case Left(payPal: PayPalReferenceTransaction) =>
+          case payPal: PayPalReferenceTransaction =>
             payPal.PaypalBaid should be(validBaid)
             payPal.PaypalEmail should be("membership.paypal-buyer@theguardian.com")
           case _ => fail()
@@ -60,7 +60,7 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
 
         createSalesforceContactState.isSuccess should be(true)
         createSalesforceContactState.get._1.paymentMethod match {
-          case Left(stripe: CreditCardReferenceTransaction) =>
+          case stripe: CreditCardReferenceTransaction =>
             withClue("stripe: " + stripe) {
               stripe.SecondTokenId should be("12345")
               stripe.CreditCardNumber should be("1234")

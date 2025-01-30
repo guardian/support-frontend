@@ -8,7 +8,7 @@ import type {
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 
-export type PayPalButtonControls = {
+type PayPalButtonControls = {
 	enable?: () => void;
 	disable?: () => void;
 };

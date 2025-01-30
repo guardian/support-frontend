@@ -109,7 +109,7 @@ case object SupporterPlus extends Product {
     )
 }
 
-case object GuardianLight extends Product {
+case object GuardianAdLite extends Product {
   private def productRatePlan(id: String) =
     ProductRatePlan(
       id,
@@ -119,13 +119,13 @@ case object GuardianLight extends Product {
       s"Guardian Ad-Lite Monthly",
     )
 
-  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianLight.type]]] =
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[GuardianAdLite.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("8a12831492c341730192dd1c39207038"),
+        productRatePlan("8a1285e294443da501944b04cb692c9e"),
       ),
       CODE -> List(
-        productRatePlan("71a1c43a1e192b28f702b3b47113000a"),
+        productRatePlan("71a1bebf6be9444afad446c5ebaf0019"),
       ),
     )
 }
@@ -135,23 +135,18 @@ case object DigitalPack extends Product {
       id: String,
       billingPeriod: BillingPeriod,
       description: String,
-      readerType: ReaderType = Direct,
   ) =
-    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, description, readerType = readerType)
+    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, description)
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[DigitalPack.type]]] =
     Map(
       PROD -> List(
         productRatePlan("2c92a0fb4edd70c8014edeaa4eae220a", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92a0fb4edd70c8014edeaa4e972204", Annual, "Digital Subscription Annual"),
-        productRatePlan("2c92a00d779932ef0177a65430d30ac1", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92a00c77992ba70177a6596f710265", Annual, "Digital Subscription One Year Gift", Gift),
       ),
       CODE -> List(
         productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
-        productRatePlan("2c92c0f8778bf8f60177915b477714aa", Quarterly, "Digital Subscription Three Month Gift", Gift),
-        productRatePlan("2c92c0f8778bf8cd0177a610cdf230ae", Annual, "Digital Subscription One Year Gift", Gift),
       ),
     )
 }

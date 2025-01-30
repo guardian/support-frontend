@@ -61,15 +61,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-  )
-
-  lazy val redemptionController = new RedemptionController(
-    actionBuilders,
-    assetsResolver,
-    allSettingsProvider,
-    testUsers,
-    controllerComponents,
-    zuoraGiftLookupServiceProvider,
+    appConfig.stage,
   )
 
   private lazy val landingCopyProvider = new LandingCopyProvider(
@@ -103,6 +95,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.stage,
   )
 
   lazy val weeklyController = new WeeklySubscriptionController(
@@ -114,6 +107,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.stage,
   )
 
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(
@@ -169,6 +163,7 @@ trait Controllers {
     controllerComponents,
     appConfig.guardianDomain,
     paperRoundServiceProvider,
+    userBenefitsApiServiceProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

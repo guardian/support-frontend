@@ -7,8 +7,12 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
+		/*
+        We can revert to a simpler regex like below when subscription checkouts are deleted
+        /contribute|checkout|one-time-checkout|thankyou(/.*)?$
+      */
 		allLandingPagesAndThankyouPages:
-			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
+			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
@@ -58,7 +62,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	abandonedBasket: {
 		variants: [
@@ -79,7 +83,7 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 	newspaperArchiveBenefit: {
 		variants: [
@@ -103,62 +107,6 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	linkExpressCheckout: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-			EURCountries: {
-				offset: 0,
-				size: 1,
-			},
-			Canada: { offset: 0, size: 1 },
-			NZDCountries: { offset: 0, size: 1 },
-			International: { offset: 0, size: 1 },
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	adFreeTierThree: {
-		variants: [
-			{
-				id: 'control', // Tier2 ad-free
-			},
-			{
-				id: 'v1', // Tier3 ad-free
-			},
-			{
-				id: 'v2', // No ad-free
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 6,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+		excludeContributionsOnlyCountries: true,
 	},
 };

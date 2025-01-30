@@ -13,7 +13,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import {
 	filterBenefitByRegion,
 	productCatalogDescription,
@@ -68,7 +68,6 @@ const OrderSchema = object({
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
-		'AmazonPay',
 		'None',
 	]),
 	status: picklist(['success', 'pending']),
@@ -80,7 +79,7 @@ export function unsetThankYouOrder() {
 	storage.session.remove('thankYouOrder');
 }
 
-export type CheckoutComponentProps = {
+type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	payment: {
@@ -89,7 +88,7 @@ export type CheckoutComponentProps = {
 		contributionAmount?: number;
 		finalAmount: number;
 	};
-	productKey?: ProductKey;
+	productKey?: ActiveProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
 	returnLink?: string;
@@ -207,7 +206,8 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isDigitalEdition = productKey === 'DigitalSubscription';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
@@ -288,6 +288,7 @@ export function ThankYouComponent({
 					!isGuardianAdLite),
 			'feedback',
 		),
+		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All

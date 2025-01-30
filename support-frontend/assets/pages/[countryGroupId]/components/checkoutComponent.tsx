@@ -67,11 +67,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
+	type ActiveProductKey,
 	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -121,7 +121,12 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
-import { FormSection, Legend, shorterBoxMargin } from './form';
+import {
+	FormSection,
+	Legend,
+	lengthenBoxMargin,
+	shorterBoxMargin,
+} from './form';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -198,7 +203,7 @@ type CheckoutComponentProps = {
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	isTestUser: boolean;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	originalAmount: number;
 	discountedAmount?: number;
@@ -297,7 +302,6 @@ export function CheckoutComponent({
 	const validPaymentMethods = [
 		/* NOT YET IMPLEMENTED
 		countryGroupId === 'EURCountries' && Sepa,
-    countryId === 'US' && AmazonPay,
     */
 		countryId === 'GB' && DirectDebit,
 		Stripe,
@@ -418,9 +422,6 @@ export function CheckoutComponent({
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
-
-	const useLinkExpressCheckout =
-		abParticipations.linkExpressCheckout === 'variant';
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
@@ -671,10 +672,11 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const isAdLite = productKey === 'GuardianAdLite';
 	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
 	const returnToLandingPage =
-		productKey === 'GuardianLight'
-			? `/guardian-light${returnParam}`
+		productKey === 'GuardianAdLite'
+			? `/guardian-ad-lite${returnParam}`
 			: `/${geoId}/contribute`;
 
 	return (
@@ -768,10 +770,7 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							<BackButton
-								path={returnToLandingPage}
-								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
-							/>
+							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
 					/>
 				</BoxContents>
@@ -788,7 +787,12 @@ export function CheckoutComponent({
 					return false;
 				}}
 			>
-				<Box cssOverrides={shorterBoxMargin}>
+				<Box
+					cssOverrides={[
+						shorterBoxMargin,
+						isAdLite ? lengthenBoxMargin : css``,
+					]}
+				>
 					<BoxContents>
 						{useStripeExpressCheckout && (
 							<div
@@ -882,7 +886,7 @@ export function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: useLinkExpressCheckout ? 'auto' : 'never',
+											link: 'never',
 										},
 									}}
 								/>
@@ -1439,8 +1443,18 @@ export function CheckoutComponent({
 					</BoxContents>
 				</Box>
 			</form>
-			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			{!isAdLite && (
+				<>
+					<PatronsMessage
+						countryGroupId={countryGroupId}
+						mobileTheme={'light'}
+					/>
+					<GuardianTsAndCs
+						mobileTheme={'light'}
+						displayPatronsCheckout={false}
+					/>
+				</>
+			)}
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>

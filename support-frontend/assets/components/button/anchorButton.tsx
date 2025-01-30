@@ -4,7 +4,7 @@ import SharedButton, { defaultProps } from './_sharedButton';
 import './button.scss';
 
 // ----- Render ----- //
-export type PropTypes = SharedButtonPropTypes & {
+type PropTypes = SharedButtonPropTypes & {
 	'aria-label'?: string | null | undefined;
 	href: string;
 	onClick?: () => void;

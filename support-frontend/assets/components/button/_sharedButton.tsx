@@ -6,7 +6,7 @@ import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './button.scss';
 
 // ----- PropTypes ----- //
-export const Appearances = {
+const Appearances = {
 	primary: 'primary',
 	secondary: 'secondary',
 	tertiary: 'tertiary',
@@ -17,7 +17,7 @@ export const Appearances = {
 	greyHollow: 'greyHollow',
 	disabled: 'disabled',
 };
-export const Sides = {
+const Sides = {
 	right: 'right',
 	left: 'left',
 };
@@ -83,5 +83,5 @@ export const defaultProps = {
 	modifierClasses: [],
 };
 SharedButton.defaultProps = { ...defaultProps };
-export type { SharedButtonPropTypes, IconSide, Appearance };
+export type { SharedButtonPropTypes };
 export default SharedButton;

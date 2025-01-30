@@ -23,15 +23,15 @@ const firstColumnContainer = css`
 	}
 `;
 
-export interface ThankYouModulesProps {
-	isSignedIn?: boolean;
+interface ThankYouModulesProps {
+	isSignedIn: boolean;
 	showNewspaperArchiveBenefit: boolean;
 	thankYouModules: ThankYouModuleType[];
 	thankYouModulesData: Record<ThankYouModuleType, ThankYouModuleData>;
 }
 
 export function ThankYouModules({
-	isSignedIn,
+	isSignedIn = false,
 	showNewspaperArchiveBenefit = false,
 	thankYouModules,
 	thankYouModulesData,

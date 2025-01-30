@@ -3,21 +3,18 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.redemptions.RedemptionData
+import com.gu.support.workers._
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
-  DigitalSubscriptionDirectPurchaseState,
-  DigitalSubscriptionGiftPurchaseState,
-  DigitalSubscriptionGiftRedemptionState,
-  GuardianLightState,
+  DigitalSubscriptionState,
+  GuardianAdLiteState,
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
   TierThreeState,
 }
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
-import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -50,32 +47,25 @@ class NextState(state: CreateSalesforceContactState) {
 
   import state._
 
-  val Purchase = Left
-  type Redemption = Right[PaymentMethod, RedemptionData]
-
   // scalastyle:off cyclomatic.complexity
   def build(
       salesforceContactRecords: SalesforceContactRecords,
   ): CreateZuoraSubscriptionState =
     (product, paymentMethod) match {
-      case (product: Contribution, Purchase(purchase)) =>
+      case (product: Contribution, purchase) =>
         toNextContribution(salesforceContactRecords, product, purchase)
-      case (product: SupporterPlus, Purchase(purchase)) =>
+      case (product: SupporterPlus, purchase) =>
         toNextSupporterPlus(salesforceContactRecords, product, purchase)
-      case (product: TierThree, Purchase(purchase)) =>
+      case (product: TierThree, purchase) =>
         toNextTierThree(salesforceContactRecords, product, purchase)
-      case (product: GuardianLight, Purchase(purchase)) =>
-        toNextGuardianLight(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
+      case (product: GuardianAdLite, purchase) =>
+        toNextGuardianAdLite(salesforceContactRecords, product, purchase)
+      case (product: DigitalPack, purchase) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
-        toNextDSGift(salesforceContactRecords, product, purchase)
-      case (product: Paper, Purchase(purchase)) =>
+      case (product: Paper, purchase) =>
         toNextPaper(salesforceContactRecords.buyer, product, purchase)
-      case (product: GuardianWeekly, Purchase(purchase)) =>
+      case (product: GuardianWeekly, purchase) =>
         toNextWeekly(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, redemptionData: Redemption) =>
-        toNextDSRedemption(product, redemptionData.value)
       case _ => throw new RuntimeException("could not create value state")
     }
   // scalastyle:on cyclomatic.complexity
@@ -151,13 +141,13 @@ class NextState(state: CreateSalesforceContactState) {
       acquisitionData,
     )
 
-  def toNextGuardianLight(
+  def toNextGuardianAdLite(
       salesforceContactRecords: SalesforceContactRecords,
-      product: GuardianLight,
+      product: GuardianAdLite,
       purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
-      GuardianLightState(
+      GuardianAdLiteState(
         product,
         purchase,
         salesforceContactRecords.buyer,
@@ -173,26 +163,6 @@ class NextState(state: CreateSalesforceContactState) {
       acquisitionData,
     )
 
-  def toNextDSRedemption(
-      product: DigitalPack,
-      redemptionData: RedemptionData,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftRedemptionState(
-        user.id,
-        product,
-        redemptionData,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      None,
-      None,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
   def toNextWeekly(
       salesforceContactRecords: SalesforceContactRecords,
       product: GuardianWeekly,
@@ -201,7 +171,7 @@ class NextState(state: CreateSalesforceContactState) {
     CreateZuoraSubscriptionState(
       GuardianWeeklyState(
         user,
-        giftRecipient.map(_.asWeekly.get),
+        giftRecipient,
         product,
         purchase,
         firstDeliveryDate.get,
@@ -244,38 +214,13 @@ class NextState(state: CreateSalesforceContactState) {
       acquisitionData,
     )
 
-  def toNextDSGift(
-      salesforceContactRecords: SalesforceContactRecords,
-      product: DigitalPack,
-      purchase: PaymentMethod,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftPurchaseState(
-        user.billingAddress.country,
-        giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
-        product,
-        purchase,
-        appliedPromotion,
-        salesforceContactRecords,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      firstDeliveryDate,
-      appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
-
   def toNextDSDirect(
       salesforceContactRecord: SalesforceContactRecord,
       product: DigitalPack,
       purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         user.billingAddress.country,
         product,
         purchase,

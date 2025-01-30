@@ -14,7 +14,6 @@
   id: String,
   mainElement: ReactDiv,
   js: RefPath,
-  css: Option[RefPath],
   description: Option[String],
   paymentMethodConfigs: PaymentMethodConfigs,
   paymentApiUrl: String,
@@ -29,9 +28,10 @@
   serversideTests: Map[String, Participation] = Map(),
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
+  noIndex: Boolean,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
+@main(title = title, mainJsBundle = js, description = description, mainElement = mainElement, mainStyleBundle = None, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests, noindex = noIndex) {
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     @idUser.map { user =>

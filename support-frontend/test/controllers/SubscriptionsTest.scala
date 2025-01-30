@@ -97,7 +97,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
           Some(Off),
         ),
         subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
-        subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+        subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
         featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On)),
         campaignSwitches = CampaignSwitches(Some(On), Some(On)),
         recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),
@@ -165,7 +165,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     def fakeRequestAuthenticatedWith(
         actionRefiner: CustomActionBuilders = loggedInActionRefiner,
     ): Future[Result] = {
-      fakeDigitalPack(actionRefiner).displayForm(false)(FakeRequest())
+      fakeDigitalPack(actionRefiner).displayForm()(FakeRequest())
     }
   }
 

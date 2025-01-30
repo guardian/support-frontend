@@ -46,8 +46,10 @@ export type Audience = {
 	breakpoint?: BreakpointRange;
 };
 
-export type Audiences = {
-	[key in IsoCountry | CountryGroupId | 'ALL']?: Audience;
+type AudienceType = IsoCountry | CountryGroupId | 'ALL' | 'CONTRIBUTIONS_ONLY';
+
+type Audiences = {
+	[key in AudienceType]?: Audience;
 };
 
 type AcquisitionABTest = {
@@ -84,7 +86,7 @@ export type Test = {
 	// Some users will see a version of the checkout that only offers
 	// the option to make contributions. We won't want to include these
 	// users in some AB tests
-	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
+	excludeContributionsOnlyCountries: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -181,6 +183,7 @@ function getParticipations(
 
 		// Is the user already in this test in the current browser session?
 		if (
+			test.persistPage &&
 			!!sessionParticipations[testId] &&
 			targetPageMatches(path, test.persistPage)
 		) {
@@ -192,9 +195,29 @@ function getParticipations(
 			return;
 		}
 
+		const includeOnlyContributionsOnlyCountries =
+			!!test.audiences.CONTRIBUTIONS_ONLY;
+
+		/**
+		 * Exclude any users assigned to the contributions only amounts test
+		 * from an ab test if the ab test definition has excludeContributionsOnlyCountries as true
+		 * AND includeOnlyContributionsOnlyCountries is not true
+		 */
 		if (
-			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
-			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
+			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName &&
+			test.excludeContributionsOnlyCountries &&
+			!includeOnlyContributionsOnlyCountries
+		) {
+			return;
+		}
+
+		/**
+		 * Exclude defined users NOT assigned to the contributions only amounts test
+		 * if the  the ab test definition has includeOnlyContributionsOnlyCountries as true
+		 */
+		if (
+			selectedAmountsVariant?.testName !== contributionsOnlyAmountsTestName &&
+			includeOnlyContributionsOnlyCountries
 		) {
 			return;
 		}
@@ -236,6 +259,14 @@ function getParticipations(
 			}
 		});
 	}
+
+	// Store participations which use the persistPage prop in sessionStorage
+	Object.keys(participations).forEach((testId) => {
+		if (abTests[testId]?.persistPage) {
+			sessionParticipations[testId] = participations[testId];
+		}
+	});
+	storage.setSession('abParticipations', JSON.stringify(sessionParticipations));
 
 	return participations;
 }
@@ -312,7 +343,7 @@ function getAmountsTestVariant(
 		// Check if we actually want to track this test
 		const pathMatches = targetPageMatches(
 			path,
-			'/??/contribute|thankyou(/.*)?$',
+			'/??/checkout|one-time-checkout|contribute|thankyou(/.*)?$',
 		);
 
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
@@ -557,7 +588,10 @@ function getUserParticipation(
 	}
 
 	const audience =
-		audiences[country] ?? audiences[countryGroupId] ?? audiences.ALL;
+		audiences[country] ??
+		audiences[countryGroupId] ??
+		audiences.ALL ??
+		audiences.CONTRIBUTIONS_ONLY;
 
 	if (!audience) {
 		return NO_PARTICIPATION;

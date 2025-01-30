@@ -4,7 +4,7 @@ import type { LandingPageTest } from './landingPageSettings';
 
 export type Status = 'On' | 'Off';
 
-export type SwitchObject = Record<string, Status | undefined>;
+type SwitchObject = Record<string, Status | undefined>;
 
 /**
  * These keys are generated in Switches.scala
@@ -22,7 +22,7 @@ type SwitchesKeys =
 	| 'campaignSwitches'
 	| 'recaptchaSwitches';
 
-export type Switches = Record<SwitchesKeys, SwitchObject>;
+type Switches = Record<SwitchesKeys, SwitchObject>;
 
 export type Settings = {
 	switches: Switches;

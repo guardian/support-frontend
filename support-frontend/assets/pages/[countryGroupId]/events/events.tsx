@@ -102,6 +102,7 @@ export function Events({ geoId }: Props) {
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const pageviewId = getPageViewId();
+
 	const hashUrlSearchParams = new URLSearchParams({
 		'p[meta_page_view_id]': pageviewId,
 		'p[meta_region_id]': geoId,

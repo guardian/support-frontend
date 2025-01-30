@@ -18,7 +18,7 @@ import {
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
 
-export type PaperPricesPropTypes = {
+type PaperPricesPropTypes = {
 	activeTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];

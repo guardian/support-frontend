@@ -226,7 +226,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         )
         .map(response => UserDetails(response.guestRegistrationRequest.userId, email, "new"))
     }
-  }
+  }.leftMap(e => e.setEndpoint(GuestEndpoint))
 
   private def uriWithoutQuery(uri: URI) = uri.toString.takeWhile(_ != '?')
 

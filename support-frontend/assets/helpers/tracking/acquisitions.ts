@@ -18,12 +18,12 @@ export type AcquisitionABTest = {
 	variant: string;
 };
 
-export type QueryParameter = {
+type QueryParameter = {
 	name: string;
 	value: string;
 };
 
-export type AcquisitionQueryParameters = QueryParameter[];
+type AcquisitionQueryParameters = QueryParameter[];
 
 export type OphanIds = {
 	pageviewId: string;
@@ -247,15 +247,6 @@ function derivePaymentApiAcquisitionData(
 	};
 }
 
-function deriveSubsAcquisitionData(
-	referrerAcquisitionData: ReferrerAcquisitionData,
-	nativeAbParticipations: Participations,
-): ReferrerAcquisitionData {
-	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
-
-	return { ...referrerAcquisitionData, abTests };
-}
-
 // Reads the acquisition data from sessionStorage.
 function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
@@ -355,6 +346,5 @@ export {
 	getOphanIds,
 	participationsToAcquisitionABTest,
 	derivePaymentApiAcquisitionData,
-	deriveSubsAcquisitionData,
 	getSupportAbTests,
 };

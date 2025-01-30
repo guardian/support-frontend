@@ -6,7 +6,6 @@ import java.util.UUID
 import com.gu.support.workers.{PaymentMethod, User, _}
 import org.joda.time.LocalDate
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
-import com.gu.support.redemptions.RedemptionData
 
 case class CreateSalesforceContactState(
     requestId: UUID,
@@ -14,7 +13,7 @@ case class CreateSalesforceContactState(
     giftRecipient: Option[GiftRecipient],
     product: ProductType,
     analyticsInfo: AnalyticsInfo,
-    paymentMethod: Either[PaymentMethod, RedemptionData],
+    paymentMethod: PaymentMethod,
     firstDeliveryDate: Option[LocalDate],
     appliedPromotion: Option[AppliedPromotion],
     csrUsername: Option[String],

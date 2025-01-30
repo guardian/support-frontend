@@ -20,10 +20,10 @@ export type ContributionsStartListening = TypedStartListening<
 	ContributionsDispatch
 >;
 
-export const startContributionsListening =
+const startContributionsListening =
 	listenerMiddleware.startListening as ContributionsStartListening;
 
-export const contributionsStore = configureStore({
+const contributionsStore = configureStore({
 	reducer: {
 		common: commonReducer,
 		page: initReducer(),

@@ -36,6 +36,7 @@ export function getTermsConditions(
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const isSupporterPlus = productId === 'SupporterPlus';
 	const isTier3 = productId === 'TierThree';
+	const isAdLite = productId === 'GuardianAdLite';
 
 	if (isSupporterPlus || isTier3) {
 		return (
@@ -68,10 +69,13 @@ export function getTermsConditions(
 			</div>
 		);
 	}
+	const cancelCopy = isAdLite
+		? 'Cancel anytime.'
+		: 'Cancel or change your support anytime.';
 	return (
 		<div css={containerSummaryTsCs}>
 			<p>Auto renews every {period} until you cancel.</p>
-			<p>Cancel or change your support anytime.</p>
+			<p>{cancelCopy}</p>
 		</div>
 	);
 }

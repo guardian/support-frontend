@@ -52,7 +52,6 @@ import type {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	isPaymentMethod,
 	PayPal,
 	Stripe,
@@ -62,6 +61,7 @@ import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import * as cookie from 'helpers/storage/cookie';
+import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
@@ -183,16 +183,39 @@ function getFinalAmount(
 	selectedPriceCard: number | 'other',
 	otherAmount: string,
 	minAmount: number,
+	maxAmount: number,
 	coverTransactionCostSelected: boolean,
 ): number | undefined {
 	const transactionMultiplier: number = coverTransactionCostSelected ? 1.04 : 1;
 	if (selectedPriceCard === 'other') {
 		const parsedAmount = parseFloat(otherAmount);
-		return Number.isNaN(parsedAmount) || parsedAmount < minAmount
+		return Number.isNaN(parsedAmount) ||
+			parsedAmount < minAmount ||
+			parsedAmount > maxAmount
 			? undefined
 			: roundToDecimalPlaces(parsedAmount * transactionMultiplier);
 	}
 	return roundToDecimalPlaces(selectedPriceCard * transactionMultiplier);
+}
+
+function getAcquisitionData(
+	abParticipations: Participations,
+	billingPostcode: string,
+	coverTransactionCost: boolean,
+): PaymentAPIAcquisitionData {
+	const referrerAcquisitionData = getReferrerAcquisitionData();
+	return derivePaymentApiAcquisitionData(
+		{
+			...referrerAcquisitionData,
+			labels: [
+				...(referrerAcquisitionData.labels ?? []),
+				'one-time-checkout',
+				...(coverTransactionCost ? ['transaction-fee-covered'] : []),
+			],
+		},
+		abParticipations,
+		billingPostcode,
+	);
 }
 
 export function OneTimeCheckoutComponent({
@@ -242,13 +265,20 @@ export function OneTimeCheckoutComponent({
 		useState<boolean>(false);
 
 	const amountWithoutCoverCost =
-		getFinalAmount(selectedPriceCard, otherAmount, minAmount, false) ?? 0;
+		getFinalAmount(
+			selectedPriceCard,
+			otherAmount,
+			minAmount,
+			maxAmount,
+			false,
+		) ?? 0;
 	const transactionCoverCost = amountWithoutCoverCost * 0.04;
 
 	const finalAmount = getFinalAmount(
 		selectedPriceCard,
 		otherAmount,
 		minAmount,
+		maxAmount,
 		coverTransactionCost,
 	);
 
@@ -303,7 +333,7 @@ export function OneTimeCheckoutComponent({
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-	const validPaymentMethods = [Stripe, PayPal, countryId === 'US' && AmazonPay]
+	const validPaymentMethods = [Stripe, PayPal]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
@@ -351,13 +381,10 @@ export function OneTimeCheckoutComponent({
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
-				const acquisitionData = derivePaymentApiAcquisitionData(
-					{
-						...getReferrerAcquisitionData(),
-						labels: ['one-time-checkout'],
-					},
+				const acquisitionData = getAcquisitionData(
 					abParticipations,
 					billingPostcode,
+					coverTransactionCost,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -435,13 +462,10 @@ export function OneTimeCheckoutComponent({
 							email,
 							stripePaymentMethod: stripePaymentMethod,
 						},
-						acquisitionData: derivePaymentApiAcquisitionData(
-							{
-								...getReferrerAcquisitionData(),
-								labels: ['one-time-checkout'],
-							},
+						acquisitionData: getAcquisitionData(
 							abParticipations,
 							billingPostcode,
+							coverTransactionCost,
 						),
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',

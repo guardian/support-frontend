@@ -8,7 +8,7 @@ import {
 } from 'helpers/utilities/dateFormatting';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 
-export interface TsAndCsProps {
+interface TsAndCsProps {
 	title: string;
 	planCost: TierPlanCosts;
 	starts?: Date;

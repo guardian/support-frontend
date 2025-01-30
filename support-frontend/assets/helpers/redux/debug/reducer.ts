@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const isAnyAction = () => true;
 
-export const debugSlice = createSlice({
+const debugSlice = createSlice({
 	name: 'debug',
 	initialState: {
 		actionHistory: '',

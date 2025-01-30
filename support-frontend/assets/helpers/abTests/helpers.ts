@@ -14,7 +14,7 @@ type NonEmptyAmountsTestArray = [
 	...AmountsTestWithVariants[],
 ];
 
-export const FALLBACK_AMOUNTS: NonEmptyAmountsTestArray = [
+const FALLBACK_AMOUNTS: NonEmptyAmountsTestArray = [
 	{
 		testName: 'FALLBACK_AMOUNTS__GBPCountries',
 		liveTestName: '',

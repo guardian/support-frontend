@@ -40,7 +40,6 @@ object CampaignSwitches {
 }
 
 case class SubscriptionsSwitches(
-    enableDigitalSubGifting: Option[SwitchState],
     useDotcomContactPage: Option[SwitchState],
     checkoutPostcodeLookup: Option[SwitchState],
 )

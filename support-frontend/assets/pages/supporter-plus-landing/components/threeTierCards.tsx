@@ -17,6 +17,7 @@ export type ThreeTierCardsProps = {
 		price: number;
 		promotion?: Promotion;
 		ctaCopy: string;
+		lozengeText?: string;
 	}>;
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
@@ -89,6 +90,7 @@ export function ThreeTierCards({
 						countryGroupId={countryGroupId}
 						paymentFrequency={paymentFrequency}
 						ctaCopy={cardContent.ctaCopy}
+						lozengeText={cardContent.lozengeText}
 						abParticipations={abParticipations}
 					/>
 				);

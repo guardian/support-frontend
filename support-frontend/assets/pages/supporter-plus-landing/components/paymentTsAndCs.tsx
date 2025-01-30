@@ -21,13 +21,14 @@ import {
 } from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
+	guardianAdLiteTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import {
+	type ActiveProductKey,
 	productCatalogDescription,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
@@ -73,13 +74,16 @@ interface SummaryTsAndCsProps {
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	amount: number;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	promotion?: Promotion;
 	cssOverrides?: SerializedStyles;
 }
 
-export const termsSupporterPlus = (linkText: string) => (
+const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
+);
+const termsGuardianAdLite = (linkText: string) => (
+	<a href={guardianAdLiteTermsLink}>{linkText}</a>
 );
 
 const frequencySingular = (contributionType: ContributionType) =>
@@ -141,18 +145,21 @@ export function PaymentTsAndCs({
 	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
-	const inSupporterPlus =
+	const inAdLite = productKey === 'GuardianAdLite';
+	const inAllAccessDigital =
 		productKey === 'SupporterPlus' && amountIsAboveThreshold;
-	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
+	const inDigitalPlusPrint =
+		productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
-		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
-		product: ProductKey,
+		product: ActiveProductKey,
 		promotion?: Promotion,
 	) => {
 		const productLabel = productCatalogDescription[productKey].label;
@@ -216,17 +223,42 @@ export function PaymentTsAndCs({
 		);
 	};
 
+	const copyAdLite = (
+		contributionType: RegularContributionType,
+		productKey: ActiveProductKey,
+	) => {
+		const productLabel = productCatalogDescription[productKey].label;
+		return (
+			<div>
+				Your {productLabel} will auto-renew each{' '}
+				{frequencySingular(contributionType)} unless cancelled. Your first
+				payment will be taken on day 15 after signing up but you will start to
+				receive your {productLabel} benefits when you sign up. Unless you
+				cancel, subsequent monthly payments will be taken on this date using
+				your chosen payment method. You can cancel your subscription at any time
+				before your next renewal date. If you cancel your Guardian Ad-Lite
+				subscription within 14 days of signing up, your subscription will stop
+				immediately and we will not take the first payment from you.
+				Cancellation of your subscription after 14 days will take effect at the
+				end of your current monthly payment period. To cancel, go to{' '}
+				{ManageMyAccountLink} or see our {productLabel}{' '}
+				{termsGuardianAdLite('Terms')}.
+			</div>
+		);
+	};
+
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
-				{inTier3 && (
+				{inDigitalPlusPrint && (
 					<TierThreeTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
 					/>
 				)}
-				{inSupporterPlus &&
+				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inSupport && copyBelowThreshold(countryGroupId)}
+				{inAdLite && copyAdLite(contributionType, productKey)}
+				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
 			</FinePrint>
 		</div>
 	);
@@ -239,9 +271,12 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
-	const inTier3 = productKey === 'TierThree';
-	const inTier2 = productKey === 'SupporterPlus';
-	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
+	const inAdLite = productKey === 'GuardianAdLite';
+	const inDigitalPlusPrint = productKey === 'TierThree';
+	const inAllAccessDigital = productKey === 'SupporterPlus';
+	const inSupport =
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
 
 	const amountCopy = ` of ${formatAmount(
 		currencies[currency],
@@ -266,7 +301,7 @@ export function SummaryTsAndCs({
 
 	const copyTier2 = (
 		contributionType: ContributionType,
-		productKey: ProductKey,
+		productKey: ActiveProductKey,
 	) => {
 		return (
 			<>
@@ -283,15 +318,17 @@ export function SummaryTsAndCs({
 
 	const copyTier3 = (
 		contributionType: ContributionType,
-		productKey: ProductKey,
+		productKey: ActiveProductKey,
+		plural: boolean,
 	) => {
 		return (
 			<>
 				<div>
-					The {productCatalogDescription[productKey].label} subscriptions will
-					auto-renew each {frequencySingular(contributionType)}. You will be
-					charged the subscription amount using your chosen payment method at
-					each renewal, at the rate then in effect, unless you cancel.
+					The {productCatalogDescription[productKey].label} subscription
+					{plural ? 's' : ''} will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					subscription amount using your chosen payment method at each renewal,
+					at the rate then in effect, unless you cancel.
 				</div>
 			</>
 		);
@@ -299,9 +336,10 @@ export function SummaryTsAndCs({
 
 	return (
 		<div css={[containerSummaryTsCs, cssOverrides]}>
-			{inTier1 && copyTier1(contributionType)}
-			{inTier2 && copyTier2(contributionType, productKey)}
-			{inTier3 && copyTier3(contributionType, productKey)}
+			{inSupport && copyTier1(contributionType)}
+			{inAllAccessDigital && copyTier2(contributionType, productKey)}
+			{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
+			{inAdLite && copyTier3(contributionType, productKey, false)}
 		</div>
 	);
 }

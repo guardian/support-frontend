@@ -22,7 +22,7 @@ const inlineContainer = css`
 	}
 `;
 
-export type StripeCardFormProps = {
+type StripeCardFormProps = {
 	onCardNumberChange: (event: StripeCardNumberElementChangeEvent) => void;
 	onExpiryChange: (event: StripeCardExpiryElementChangeEvent) => void;
 	onCvcChange: (event: StripeCardCvcElementChangeEvent) => void;

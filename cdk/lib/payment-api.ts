@@ -122,9 +122,13 @@ export class PaymentApi extends GuStack {
               "dynamodb:Query",
               "dynamodb:DescribeTable",
             ],
-            resources: [
-              `arn:aws:dynamodb:*:*:table/SupporterProductData-${this.stage}`,
-            ],
+            resources:
+              this.stage === "PROD"
+                ? [
+                    "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+                    "arn:aws:dynamodb:*:*:table/SupporterProductData-CODE",
+                  ]
+                : ["arn:aws:dynamodb:*:*:table/SupporterProductData-CODE"],
           }),
 
           new GuAllowPolicy(this, "CloudwatchLogs", {
@@ -387,26 +391,6 @@ export class PaymentApi extends GuStack {
         namespace: `support-payment-api-${this.stage}`,
         dimensionsMap: {
           "payment-provider": "Stripe",
-        },
-        statistic: "Sum",
-        period: Duration.seconds(60),
-      }),
-      treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-    });
-
-    new GuAlarm(this, "AmazonPayPaymentError", {
-      app,
-      alarmName: `[CDK] ${app} ${this.stage} Amazon Pay payment error for one-off contribution via the payment-api`,
-      actionsEnabled: props.stage === "PROD",
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_THRESHOLD,
-      metric: new Metric({
-        metricName: "payment-error",
-        namespace: `support-payment-api-${this.stage}`,
-        dimensionsMap: {
-          "payment-provider": "AmazonPay",
         },
         statistic: "Sum",
         period: Duration.seconds(60),

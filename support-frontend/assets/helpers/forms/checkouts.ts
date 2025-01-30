@@ -1,20 +1,16 @@
 // ----- Imports ----- //
-import type { CanMakePaymentResult } from '@stripe/stripe-js';
 import {
 	generateContributionTypes,
-	getFrequency,
 	toContributionType,
 } from 'helpers/contributions';
 import type {
 	ContributionType,
 	ContributionTypes,
 	ContributionTypeSetting,
-	SelectedAmounts,
 } from 'helpers/contributions';
 import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -23,26 +19,15 @@ import {
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import type {
 	Currency,
-	IsoCurrency,
 	SpokenCurrency,
 } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
-import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
 
 // ----- Types ----- //
-export type PaymentMethodSwitch =
-	| 'directDebit'
-	| 'sepa'
-	| 'payPal'
-	| 'stripe'
-	| 'amazonPay';
+export type PaymentMethodSwitch = 'directDebit' | 'sepa' | 'payPal' | 'stripe';
 
 // ----- Functions ----- //
 function toPaymentMethodSwitchNaming(
@@ -57,9 +42,6 @@ function toPaymentMethodSwitchNaming(
 
 		case DirectDebit:
 			return 'directDebit';
-
-		case AmazonPay:
-			return 'amazonPay';
 
 		case Sepa:
 			return 'sepa';
@@ -87,24 +69,6 @@ function getValidContributionTypesFromUrlOrElse(
 	}
 
 	return fallback;
-}
-
-function toHumanReadableContributionType(
-	contributionType: ContributionType,
-): 'One-time' | 'Monthly' | 'Annual' {
-	switch (contributionType) {
-		case 'ONE_OFF':
-			return 'One-time';
-
-		case 'MONTHLY':
-			return 'Monthly';
-
-		case 'ANNUAL':
-			return 'Annual';
-
-		default:
-			return 'Monthly';
-	}
 }
 
 function getContributionTypeFromSession(): ContributionType | null | undefined {
@@ -142,8 +106,6 @@ function getPaymentMethods(
 
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
-	} else if (countryId === 'US') {
-		return [...nonRegionSpecificPaymentMethods, AmazonPay];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
 		countryGroupId === 'EURCountries'
@@ -180,30 +142,13 @@ function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	const pm: string | null | undefined = storage.getSession(
 		'selectedPaymentMethod',
 	);
-	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal', 'AmazonPay'];
+	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal'];
 
 	if (pm && paymentMethodNames.includes(pm)) {
 		return pm as PaymentMethod;
 	}
 
 	return null;
-}
-
-function getPaymentDescription(
-	contributionType: ContributionType,
-	paymentMethod: PaymentMethod,
-): string {
-	if (contributionType === 'ONE_OFF') {
-		if (paymentMethod === PayPal) {
-			return 'with PayPal';
-		} else if (paymentMethod === AmazonPay) {
-			return 'with Amazon Pay';
-		}
-
-		return 'with card';
-	}
-
-	return '';
 }
 
 function round(amount: number) {
@@ -250,109 +195,14 @@ const formatAmount = (
 	return simpleFormatAmount(currency, amount);
 };
 
-const getContributeButtonCopy = (
-	contributionType: ContributionType,
-	maybeOtherAmount: string | null,
-	selectedAmounts: SelectedAmounts,
-	currency: IsoCurrency,
-): string => {
-	const frequency = getFrequency(contributionType);
-	const amount =
-		selectedAmounts[contributionType] === 'other'
-			? parseFloat(maybeOtherAmount as string)
-			: selectedAmounts[contributionType];
-
-	const amountCopy = amount
-		? formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount as number,
-				false,
-		  )
-		: '';
-
-	return `Contribute ${amountCopy} ${frequency}`;
-};
-
-const getContributeButtonCopyWithPaymentType = (
-	contributionType: ContributionType,
-	maybeOtherAmount: string | null,
-	selectedAmounts: SelectedAmounts,
-	currency: IsoCurrency,
-	paymentMethod: PaymentMethod,
-): string => {
-	const paymentDescriptionCopy = getPaymentDescription(
-		contributionType,
-		paymentMethod,
-	);
-	const contributionButtonCopy = getContributeButtonCopy(
-		contributionType,
-		maybeOtherAmount,
-		selectedAmounts,
-		currency,
-	);
-	return `${contributionButtonCopy} ${paymentDescriptionCopy}`;
-};
-
-function getPaymentLabel(paymentMethod: PaymentMethod): string {
-	switch (paymentMethod) {
-		case Stripe:
-			return 'Credit/Debit card';
-
-		case DirectDebit:
-			return 'Direct debit';
-
-		case Sepa:
-			return 'Direct debit (SEPA)';
-
-		case PayPal:
-			return PayPal;
-
-		case AmazonPay:
-			return 'Amazon Pay';
-
-		default:
-			return 'Other Payment Method';
-	}
-}
-
-// The value of result will either be:
-// . null - browser has no compatible payment method button)
-// . {applePay: true} - applePay is available
-// . {applePay: false} - GooglePay, Microsoft Pay and PaymentRequestApi available
-function getAvailablePaymentRequestButtonPaymentMethod(
-	result: CanMakePaymentResult | null,
-	contributionType: ContributionType,
-): StripePaymentMethod | null {
-	const switchKey = switchKeyForContributionType(contributionType);
-
-	if (result?.applePay && isSwitchOn(`${switchKey}.stripeApplePay`)) {
-		return 'StripeApplePay';
-	} else if (
-		result &&
-		!result.applePay &&
-		isSwitchOn(`${switchKey}.stripePaymentRequestButton`)
-	) {
-		return 'StripePaymentRequestButton';
-	}
-
-	return null;
-}
-
 // ----- Exports ----- //
 export {
-	getContributeButtonCopy,
-	getContributeButtonCopyWithPaymentType,
 	simpleFormatAmount,
 	formatAmount,
 	getValidContributionTypesFromUrlOrElse,
 	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getAmountFromUrl,
-	toHumanReadableContributionType,
 	getValidPaymentMethods,
 	getPaymentMethodFromSession,
-	getPaymentDescription,
-	getPaymentLabel,
-	getAvailablePaymentRequestButtonPaymentMethod,
 };

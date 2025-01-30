@@ -6,6 +6,8 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.Monthly
 import config.StringsConfig
@@ -26,6 +28,7 @@ class SubscriptionsController(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -102,6 +105,7 @@ class SubscriptionsController(
         RefPath(js),
         Some(RefPath("subscriptionsLandingPage.css")),
         description = stringsConfig.subscriptionsLandingDescription,
+        noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)}

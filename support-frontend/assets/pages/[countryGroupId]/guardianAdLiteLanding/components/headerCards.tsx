@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold24,
+	headlineBold28,
+	headlineBold42,
 	palette,
 	space,
 	textSans15,
@@ -38,29 +39,35 @@ const containerCardsAndSignIn = css`
 const heading = css`
 	color: ${palette.neutral[100]};
 	text-align: left;
-	${headlineBold24}
+	${headlineBold28}
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		text-align: center;
 	}
 	${from.desktop} {
-		font-size: 2.625rem;
+		font-size: ${headlineBold42};
 		margin-bottom: ${space[10]}px;
 	}
 `;
 const signIn = css`
+	padding: ${space[5]}px 0px ${space[6]}px;
+	${from.tablet} {
+		justify-self: center;
+		padding: ${space[8]}px 0px ${space[9]}px;
+	}
+`;
+const paragraph = css`
+	${textSans15}
 	color: ${palette.neutral[100]};
 	text-align: left;
-	${textSans15}
-	padding: ${space[5]}px 0px ${space[6]}px;
 	> a {
 		color: ${palette.neutral[100]};
 		font-weight: bold;
 	}
 	${from.tablet} {
 		color: ${palette.neutral[7]};
-		padding: ${space[8]}px 0px ${space[9]}px;
 		text-align: center;
+		max-width: 620px;
 		> a {
 			color: ${palette.brand[500]};
 		}
@@ -76,26 +83,27 @@ const SignInLink = <a href={SignInUrl}>sign in</a>;
 
 type HeaderCardsProps = {
 	geoId: GeoId;
+	isSignedIn: boolean;
 	returnLink?: string;
 };
 
 export function HeaderCards({
 	geoId,
+	isSignedIn,
 	returnLink,
 }: HeaderCardsProps): JSX.Element {
 	const contributionType = 'Monthly';
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const price =
-		productCatalog.GuardianLight?.ratePlans[contributionType]?.pricing[
+		productCatalog.GuardianAdLite?.ratePlans[contributionType]?.pricing[
 			currencyKey
 		];
 	const formattedPrice = simpleFormatAmount(currency, price ?? 0);
 
 	const guardianAdLiteParams = {
-		product: 'GuardianLight',
+		product: 'GuardianAdLite',
 		ratePlan: contributionType,
-		contribution: price?.toString() ?? '',
 	};
 	const card1UrlParams = new URLSearchParams(
 		returnLink
@@ -124,12 +132,20 @@ export function HeaderCards({
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={containerCardsAndSignIn}
 			>
-				<h1 css={heading}>Choose how to read the Guardian</h1>
-				<GuardianAdLiteCards cardsContent={[card1, card2]} />
-				<div css={signIn}>
-					If you already have Guardian Ad-Lite or read the Guardian ad-free,{' '}
-					{SignInLink}
-				</div>
+				<h1 css={heading}>Choose your advertising preferences</h1>
+				<GuardianAdLiteCards
+					cardsContent={[card1, card2]}
+					isSignedIn={isSignedIn}
+				/>
+				{isSignedIn && (
+					<div css={signIn}>
+						<p css={paragraph}>
+							If you already have Guardian Ad-Lite or another Guardian
+							subscription that offers ad-free reading, such as All-access
+							digital, you should, {SignInLink}
+						</p>
+					</div>
+				)}
 			</Container>
 		</>
 	);

@@ -49,10 +49,7 @@ class SendThankYouEmail(
       Configuration.stage,
     )
 
-    for {
-      emailFields <- emailBuilder.buildEmail(state)
-      _ = emailFields.map(emailService.send)
-    } yield HandlerResult((), requestInfo)
+    emailBuilder.buildEmail(state).map(emailFields => HandlerResult(emailService.send(emailFields), requestInfo))
   }
 
 }
@@ -65,7 +62,7 @@ class EmailBuilder(
 ) {
   val paperFieldsGenerator = new PaperFieldsGenerator(getMandate)
 
-  def buildEmail(state: SendThankYouEmailState): Future[List[EmailFields]] = {
+  def buildEmail(state: SendThankYouEmailState): Future[EmailFields] = {
     val touchpointEnvironment = TouchPointEnvironments.fromStage(stage, state.user.isTestUser)
 
     val digitalPackEmailFields = new DigitalPackEmailFields(paperFieldsGenerator, getMandate, touchpointEnvironment)
@@ -79,20 +76,20 @@ class EmailBuilder(
       created = DateTime.now(),
     )
     val tierThreeEmailFields = new TierThreeEmailFields(paperFieldsGenerator, touchpointEnvironment)
-    val guardianLightEmailFields = new GuardianLightEmailFields(created = DateTime.now())
+    val guardianAdLiteEmailFields = new GuardianAdLiteEmailFields(created = DateTime.now())
 
     state match {
-      case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))
+      case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution)
       case supporterPlus: SendThankYouEmailSupporterPlusState =>
-        supporterPlusEmailFields.build(supporterPlus).map(List(_))
+        supporterPlusEmailFields.build(supporterPlus)
       case tierThree: SendThankYouEmailTierThreeState =>
-        tierThreeEmailFields.build(tierThree).map(List(_))
+        tierThreeEmailFields.build(tierThree)
       case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
       case paper: SendThankYouEmailPaperState =>
-        getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _)).map(List(_))
-      case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))
-      case guardianLight: SendThankYouEmailGuardianLightState =>
-        guardianLightEmailFields.build(guardianLight).map(List(_))
+        getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _))
+      case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly)
+      case guardianAdLite: SendThankYouEmailGuardianAdLiteState =>
+        guardianAdLiteEmailFields.build(guardianAdLite)
     }
   }
 

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import * as storage from 'helpers/storage/storage';
@@ -20,7 +20,7 @@ type ContributionConversionData = {
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
-	productType: ProductKey;
+	productType: ActiveProductKey;
 };
 
 type SubscriptionConversionData = {
@@ -256,7 +256,7 @@ function successfulContributionConversion(
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
 	paymentMethod: PaymentMethod,
-	productKey: ProductKey,
+	productKey: ActiveProductKey,
 ): void {
 	const contributionConversionData: ContributionConversionData = {
 		value: amount,

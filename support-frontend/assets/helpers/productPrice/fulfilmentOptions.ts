@@ -9,9 +9,7 @@ const Domestic = 'Domestic';
 const RestOfWorld = 'RestOfWorld';
 const NoFulfilmentOptions = 'NoFulfilmentOptions';
 
-export type GuardianWeeklyFulfilmentOptions =
-	| typeof Domestic
-	| typeof RestOfWorld;
+type GuardianWeeklyFulfilmentOptions = typeof Domestic | typeof RestOfWorld;
 
 export type PaperFulfilmentOptions = typeof HomeDelivery | typeof Collection;
 

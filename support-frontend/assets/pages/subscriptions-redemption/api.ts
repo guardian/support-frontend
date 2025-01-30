@@ -254,4 +254,4 @@ function createSubscription(
 		.catch(() => null);
 }
 
-export { validateUserCode, submitCode, createSubscription };
+export { validateUserCode, submitCode };

@@ -19,13 +19,21 @@ import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
-import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService, UserDetails}
+import services.{
+  IdentityService,
+  RecaptchaResponse,
+  RecaptchaService,
+  TestUserService,
+  UserBenefitsApiService,
+  UserBenefitsApiServiceProvider,
+  UserBenefitsResponse,
+  UserDetails,
+}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -63,6 +71,7 @@ class CreateSubscriptionController(
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
     paperRoundServiceProvider: PaperRoundServiceProvider,
+    userBenefitsApiServiceProvider: UserBenefitsApiServiceProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -94,7 +103,7 @@ class CreateSubscriptionController(
         // For Stripe payments, recaptcha validation is done earlier in the flow
         val recaptchaToken =
           request.body.paymentFields match {
-            case Left(dd: DirectDebitPaymentFields) => Some(dd.recaptchaToken)
+            case dd: DirectDebitPaymentFields => Some(dd.recaptchaToken)
             case _ => None
           }
 
@@ -142,13 +151,60 @@ class CreateSubscriptionController(
     }
   }
 
+  private def validateBenefitsForAdLitePurchase(
+      response: UserBenefitsResponse,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
+      // Not eligible
+      EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
+    } else {
+      // Eligible
+      EitherT.rightT(())
+    }
+  }
+
+  private def validateUserIsEligibleForPurchase(
+      request: Request[CreateSupportWorkersRequest],
+      userDetails: UserDetailsWithSignedInStatus,
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+    request.body.product match {
+      case GuardianAdLite(_) => {
+        if (userDetails.isSignedIn) {
+          // If the user is signed in, we'll assume they're eligible as they shouldn't have got
+          // to this point of the journey.
+          EitherT.rightT(())
+        } else {
+          for {
+            benefits <- userBenefitsApiServiceProvider
+              .forUser(testUsers.isTestUser(request))
+              .getUserBenefits(userDetails.userDetails.identityId)
+              .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
+            _ <- validateBenefitsForAdLitePurchase(benefits)
+          } yield ()
+        }
+      }
+      case _ => EitherT.rightT(())
+    }
+  }
+
+  case class UserDetailsWithSignedInStatus(
+      userDetails: UserDetails,
+      isSignedIn: Boolean,
+  )
+
   private def createSubscription(implicit
       settings: AllSettings,
       request: CreateRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse] = {
 
     val maybeLoggedInUserDetails =
-      request.user.map(authIdUser => UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"))
+      request.user.map(authIdUser =>
+        UserDetailsWithSignedInStatus(
+          UserDetails(authIdUser.id, authIdUser.primaryEmailAddress, "current"),
+          isSignedIn = true,
+        ),
+      )
+
     logDetailedMessage("createSubscription")
 
     for {
@@ -157,9 +213,13 @@ class CreateSubscriptionController(
         case Some(userDetails) => EitherT.pure[Future, CreateSubscriptionError](userDetails)
         case None =>
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+            .map(userDetails => UserDetailsWithSignedInStatus(userDetails, isSignedIn = false))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
-      supportWorkersUser = buildSupportWorkersUser(userDetails, request.body, testUsers.isTestUser(request))
+
+      _ <- validateUserIsEligibleForPurchase(request, userDetails)
+
+      supportWorkersUser = buildSupportWorkersUser(userDetails.userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
@@ -167,16 +227,20 @@ class CreateSubscriptionController(
 
     } yield CreateSubscriptionResponse(
       statusResponse.status,
-      userDetails.userType,
+      userDetails.userDetails.userType,
       statusResponse.trackingUri,
       statusResponse.failureReason,
     )
   }
 
-  private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
+  private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError): CreateSubscriptionError =
     identityError match {
       case EmailProviderRejected(_) => RequestValidationError(emailProviderRejectedCode)
       case InvalidEmailAddress(_) => RequestValidationError(invalidEmailAddressCode)
+      // We're mapping this to a ServerError because it shouldn't ever happen, but sometimes does. Even though we
+      // asked identity (in getOrCreateIdentityUser) whether the user exists first, sometimes we get an answer of no
+      // back but then attempting to create returns this error.
+      case EmailAddressAlreadyTaken(_) => ServerError(emailAddressAlreadyTakenCode)
       case OtherIdentityError(message, description, endpoint) =>
         endpoint match {
           case Some(GuestEndpoint) => ServerError(s"Identity error calling /guest: $message; $description")
@@ -285,6 +349,14 @@ class CreateSubscriptionController(
                 ),
                 body = writeable.toEntity(err.message),
               )
+            case ServerError(code) if code == emailAddressAlreadyTakenCode =>
+              Result(
+                header = new ResponseHeader(
+                  status = INTERNAL_SERVER_ERROR,
+                  reasonPhrase = Some(emailAddressAlreadyTakenCode),
+                ),
+                body = writeable.toEntity(""),
+              )
             case _: ServerError =>
               InternalServerError
           }
@@ -343,56 +415,9 @@ class CreateSubscriptionController(
   }
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
-    // Setting the user attributes cookies used by frontend. See:
-    // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
-    val standardCookies = List(
-      "gu_user_features_expiry" -> DateTime.now.plusDays(1).getMillis.toString,
-      "gu_hide_support_messaging" -> true.toString,
-    )
-    val productCookies = product match {
-      case Contribution(_, _, billingPeriod) =>
-        List(
-          s"gu.contributions.recurring.contrib-timestamp.$billingPeriod" -> DateTime.now.getMillis.toString,
-          "gu_recurring_contributor" -> true.toString,
-        )
-      case _: SupporterPlus =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: TierThree =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: DigitalPack =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case p: Paper if p.productOptions.hasDigitalSubscription =>
-        List(
-          "gu_digital_subscriber" -> true.toString,
-          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
-        )
-      case _: Paper => List.empty
-      case _: GuardianWeekly => List.empty
-      case _: GuardianLight => List("gu_guardian_light" -> true.toString)
-    }
-
-    val standardAndProductCookies = (standardCookies ++ productCookies).map { case (name, value) =>
-      Cookie(
-        name = name,
-        value = value,
-        secure = true,
-        httpOnly = false,
-        domain = Some(guardianDomain.value),
-      )
-    }
-
-    checkoutCompleteCookies(product, userEmail).map(_ ++ standardAndProductCookies)
+    val productCookiesCreator = SubscriptionProductCookiesCreator(guardianDomain)
+    val productCookies = productCookiesCreator.createCookiesForProduct(product)
+    checkoutCompleteCookies(product, userEmail).map(_ ++ productCookies)
   }
 
   private def buildSupportWorkersUser(

@@ -8,7 +8,6 @@ import com.gu.support.encoding.CustomCodecs.{monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.PromoCode
-import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.AppliedPromotion
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
@@ -214,7 +213,6 @@ case class Subscription(
     termType: String = "TERMED",
     readerType: ReaderType = ReaderType.Direct,
     promoCode: Option[PromoCode] = None,
-    redemptionCode: Option[RawRedemptionCode] = None,
     giftNotificationEmailDate: Option[LocalDate] = None,
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,

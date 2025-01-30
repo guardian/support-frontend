@@ -29,12 +29,12 @@ import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { Option } from 'helpers/types/option';
 
-export type ReduxState<PageState> = {
+type ReduxState<PageState> = {
 	common: CommonState;
 	page: PageState;
 };
 
-export type CheckoutFormState = {
+type CheckoutFormState = {
 	personalDetails: PersonalDetailsState;
 	gifting: GiftingState;
 	product: ProductState;

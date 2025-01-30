@@ -5,7 +5,6 @@ const Stripe = 'Stripe';
 const PayPal = 'PayPal';
 const DirectDebit = 'DirectDebit';
 const Sepa = 'Sepa';
-const AmazonPay = 'AmazonPay';
 const None = 'None';
 
 const Success = 'success';
@@ -17,7 +16,6 @@ export type PaymentMethodMap<T> = {
 	DirectDebit: T;
 	Sepa: T;
 	None: T;
-	AmazonPay: T;
 };
 
 export type PaymentMethod =
@@ -25,7 +23,6 @@ export type PaymentMethod =
 	| typeof PayPal
 	| typeof DirectDebit
 	| typeof Sepa
-	| typeof AmazonPay
 	| typeof None;
 
 export type PaymentStatus = typeof Success | typeof Pending;
@@ -40,7 +37,7 @@ export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 	Stripe,
 ];
 
-const paymentMethods = [Stripe, PayPal, DirectDebit, Sepa, AmazonPay, None];
+const paymentMethods = [Stripe, PayPal, DirectDebit, Sepa, None];
 
 export const isPaymentMethod = (
 	paymentMethod: unknown,
@@ -63,9 +60,6 @@ export function toPaymentMethodSwitchNaming(
 		case DirectDebit:
 			return 'directDebit';
 
-		case AmazonPay:
-			return 'amazonPay';
-
 		case Sepa:
 			return 'sepa';
 
@@ -74,4 +68,4 @@ export function toPaymentMethodSwitchNaming(
 	}
 }
 
-export { Stripe, PayPal, DirectDebit, Sepa, AmazonPay };
+export { Stripe, PayPal, DirectDebit, Sepa };

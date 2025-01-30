@@ -210,6 +210,7 @@ export function ThreeTierCard({
 	price,
 	promotion,
 	ctaCopy,
+	lozengeText,
 	abParticipations,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
@@ -227,7 +228,9 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge
 					subdue={isRecommendedSubdued}
-					title={promotion?.landingPage?.roundel ?? 'Highest impact'}
+					title={
+						promotion?.landingPage?.roundel ?? lozengeText ?? 'Highest impact'
+					}
 				/>
 			)}
 			<h2 css={titleCss}>{label}</h2>
@@ -301,6 +304,7 @@ export function ThreeTierCard({
 							isChecked: true,
 							toolTip: benefit.tooltip,
 							isNew: benefit.isNew,
+							hideBullet: benefit.hideBullet,
 						};
 					})}
 				style={'compact'}
