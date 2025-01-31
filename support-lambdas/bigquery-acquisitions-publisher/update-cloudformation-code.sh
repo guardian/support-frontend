@@ -17,4 +17,3 @@ aws cloudformation update-stack \
 cd -
 echo -e "\nStack update has been started, check progress in the AWS console.";
 echo -e "https://eu-west-1.console.aws.amazon.com/cloudformation/home";
- 
