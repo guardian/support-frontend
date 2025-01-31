@@ -55,7 +55,9 @@ export function PersonalDetailsFields({
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
-						confirmEmailRef.current?.querySelector('input')?.checkValidity();
+						if (email.length > 0) {
+							confirmEmailRef.current?.querySelector('input')?.checkValidity();
+						}
 					}}
 					readOnly={isEmailAddressReadOnly}
 					name="email"
@@ -105,8 +107,10 @@ export function PersonalDetailsFields({
 							} else {
 								if (validityState.valueMissing) {
 									setConfirmedEmailError('Please confirm your email address.');
-								} else {
+								} else if (validityState.patternMismatch) {
 									setConfirmedEmailError('The email addresses do not match.');
+								} else {
+									setConfirmedEmailError('Please enter a valid email address.');
 								}
 							}
 						}}
