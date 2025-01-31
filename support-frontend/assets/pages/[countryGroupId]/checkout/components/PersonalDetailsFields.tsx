@@ -55,7 +55,7 @@ export function PersonalDetailsFields({
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
-						if (email.length > 0) {
+						if (confirmedEmail.length > 0) {
 							confirmEmailRef.current?.querySelector('input')?.checkValidity();
 						}
 					}}
