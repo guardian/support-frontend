@@ -100,4 +100,52 @@ class DigitalSubscriptionController(
     }
   }
 
+  def digitalSubscription(countryCode: String): Action[AnyContent] = {
+    MaybeAuthenticatedAction { implicit request =>
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+      val title = "Support the Guardian | Get a Subscription"
+
+      val js = "subscriptionsLandingPage.js"
+      val css = "subscriptionsLandingPage.css"
+      val csrf = CSRF.getToken.value
+      val testMode = testUsers.isTestUser(request)
+      val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+      val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
+      val readerType = Direct
+      val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
+      val maybePromotionCopy = {
+        landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk")
+      }
+      val mainElement = assets.getSsrCacheContentsAsHtml(
+        divId = s"subscriptions-landing-page-$countryCode",
+        file = "ssr-holding-content.html",
+      )
+
+      val isTestUser = testUserService.isTestUser(request)
+      val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+
+      Ok(
+        views.html.subscriptionCheckout(
+          title = title,
+          mainElement = mainElement,
+          js = js,
+          css = css,
+          csrf = Some(csrf),
+          idUser = request.user,
+          testMode = testMode,
+          productPrices = priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+          maybePromotionCopy = maybePromotionCopy,
+          defaultStripeConfig = stripeConfigProvider.get(),
+          testStripeConfig = stripeConfigProvider.get(true),
+          defaultPayPalConfig = payPalConfigProvider.get(),
+          testPayPalConfig = payPalConfigProvider.get(true),
+          v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
+          homeDeliveryPostcodes = None,
+          productCatalog = productCatalog,
+          noIndex = stage != PROD,
+        ),
+      )
+    }
+  }
 }

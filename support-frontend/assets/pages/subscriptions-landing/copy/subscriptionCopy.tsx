@@ -9,9 +9,12 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { ProductBenefit } from 'helpers/productCatalog';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import {
+	// productCatalog,
+	productCatalogDescription,
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { /* Annual, */ Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -19,6 +22,8 @@ import {
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
+// import { getSubscriptionPrices } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
+// import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { Option } from 'helpers/types/option';
 import {
 	digitalSubscriptionLanding,
@@ -56,6 +61,47 @@ const getDisplayPrice = (
 	const currency = currencies[detect(countryGroupId)].glyph;
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
+
+/*
+  FAILS : No productCatalog on window.guardian using Router
+          digitalSubscriptionRouter.tsx for a Redux setup
+*/
+// const getDigitialEditionPricesNoRedux = (
+// 	countryGroupId: CountryGroupId,
+// 	price: number,
+// ): string => {
+// 	const currencyKey = detect(countryGroupId);
+// 	const currency = currencies[currencyKey].glyph;
+// 	const product = productCatalog['DigitalSubscription'];
+// 	if (
+// 		product?.ratePlans[Monthly]?.pricing[currencyKey] &&
+// 		product.ratePlans[Annual]?.pricing[currencyKey]
+// 	) {
+// 		const price = {
+// 			Monthly: product.ratePlans[Monthly].pricing[currencyKey],
+// 			Annual: product.ratePlans[Annual].pricing[currencyKey],
+// 		};
+// 		return `${currency}${fixDecimals(
+// 			price.Monthly,
+// 		)}/${Monthly} ${currency}${fixDecimals(price.Annual)}/${Annual}`;
+// 	}
+// 	return getDisplayPrice(countryGroupId, price);
+// };
+
+/*
+  FAILS :  web-client-content-script.js:2 Uncaught (in promise) Error: Access to storage is not allowed from this context.
+           suspect No productCatalog on window.guardian using Router
+*/
+// const getDigitialEditionPricesRedux = (
+// 	countryGroupId: CountryGroupId,
+// ): string => {
+// 	const currencyKey = detect(countryGroupId);
+// 	const currency = currencies[currencyKey].glyph;
+// 	const { monthlyPrice, annualPrice } = useContributionsSelector(
+// 		getSubscriptionPrices,
+// 	);
+// 	return `${currency}${monthlyPrice}/${Monthly} ${currency}${annualPrice}/${Annual}`;
+// };
 
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	if (discountCopy !== '') {
@@ -96,6 +142,9 @@ function digitalCheckout(
 ): ProductCopy {
 	return {
 		...digitalEdition(countryGroupId, priceCopy),
+		//subtitle: getDigitialEditionPricesNoRedux(countryGroupId, priceCopy.price),
+		//subtitle: getDigitialEditionPricesRedux(countryGroupId),
+		subtitle: `${getDisplayPrice(countryGroupId, priceCopy.price)} £149/Annual`,
 		buttons: [
 			{
 				ctaButtonText: 'Subscribe Monthly',
