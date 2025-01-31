@@ -34,13 +34,13 @@ const stripePaymentMethodSchema = z.object({
 	TokenId: z.string(), // Stripe Card id
 	SecondTokenId: z.string(), // Stripe Customer Id
 	CreditCardNumber: z.string(),
-	CreditCardCountry: z.string().nullable(), //TODO: build a schema for this
+	CreditCardCountry: z.string().nullable(),
 	CreditCardExpirationMonth: z.number(),
 	CreditCardExpirationYear: z.number(),
 	CreditCardType: z.string().optional(),
 	PaymentGateway: stripePaymentGatewaySchema,
 	Type: z.literal('CreditCardReferenceTransaction'),
-	StripePaymentType: stripePaymentTypeSchema, //TODO: this is optional in the scala model
+	StripePaymentType: stripePaymentTypeSchema,
 });
 export type StripePaymentMethod = z.infer<typeof stripePaymentMethodSchema>;
 
