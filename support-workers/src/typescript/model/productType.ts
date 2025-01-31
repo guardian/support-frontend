@@ -40,6 +40,10 @@ export const digitalPackProductSchema = z.object({
 	readerType: z.string(), //TODO type this properly
 	productType: z.literal('DigitalPack'),
 });
+export const guardianAdLiteProductSchema = z.object({
+	currency: currencySchema,
+	productType: z.literal('GuardianAdLite'),
+});
 export const productTypeSchema = z.discriminatedUnion('productType', [
 	contributionProductSchema,
 	supporterPlusProductSchema,
@@ -47,4 +51,5 @@ export const productTypeSchema = z.discriminatedUnion('productType', [
 	guardianWeeklyProductSchema,
 	paperProductSchema,
 	digitalPackProductSchema,
+	guardianAdLiteProductSchema,
 ]);
