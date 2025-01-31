@@ -62,28 +62,45 @@ class CustomActionBuilders(
 
   case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction with SafeLogging {
 
+    private def pushMetric(cloudwatchEvent: AwsCloudWatchMetricPut.MetricRequest) = {
+      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+    }
     private def pushAlarmMetric = {
       val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
-      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+      pushMetric(cloudwatchEvent)
+    }
+
+    private def pushHighThresholdAlarmMetric = {
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideHighThresholdCreateFailure(stage)
+      pushMetric(cloudwatchEvent)
     }
 
     private def maybePushAlarmMetric(result: Result) = {
+      // We'll never alarm on these
       val ignoreList = Set(
         emailProviderRejectedCode,
         invalidEmailAddressCode,
         recaptchaFailedCode,
+      )
+      // We'll alarm on these, but only over a certain threshold
+      val highThresholdList = Set(
         emailAddressAlreadyTakenCode,
       )
       if (result.header.status == 500) {
-        if (!ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {
+        if (ignoreList.contains(result.header.reasonPhrase.getOrElse(""))) {
+          logger.info(
+            s"not pushing alarm metric for ${result.header.status} ${result.header.reasonPhrase} as it is in our ignore list",
+          )
+        } else if (highThresholdList.contains(result.header.reasonPhrase.getOrElse(""))) {
+          logger.info(
+            s"pushing higher threshold alarm metric for ${result.header.status} ${result.header.reasonPhrase}",
+          )
+          pushHighThresholdAlarmMetric
+        } else {
           logger.error(
             scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
           )
           pushAlarmMetric
-        } else {
-          logger.info(
-            s"not pushing alarm metric for ${result.header.status} ${result.header.reasonPhrase} as it is in our ignore list",
-          )
         }
       }
     }
