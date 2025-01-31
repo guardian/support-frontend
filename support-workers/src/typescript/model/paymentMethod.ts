@@ -15,7 +15,6 @@ export const paymentGatewaySchema = z
 	.union([
 		z.literal('PayPal Express'),
 		directDebitPaymentGatewaySchema,
-		// z.literal("GoCardless - Zuora Instance"), TODO: I think we can delete this
 		z.literal('Amazon Pay - Contributions USA'),
 	])
 	.or(stripePaymentGatewaySchema);
