@@ -121,6 +121,6 @@ jobs:
               support-workers-scala:
                 - support-workers/target/scala-2.13/support-workers.jar
               support-workers-typescript:
-                - support-workers/target/support-workers.zip
+                - support-workers/target/typescript/support-workers.zip
               it-tests:
                 - support-workers/target/scala-2.13/support-workers-it.jar
