@@ -331,33 +331,6 @@ export class Frontend extends GuStack {
         snsTopicName: `alarms-handler-topic-${this.stage}`,
       });
 
-      new GuAlarm(this, "ServerSideHighThresholdCreateFailureAlarm", {
-        app,
-        alarmName: alarmName(
-          "support-frontend create recurring product call failed multiple times for a known reason"
-        ),
-        alarmDescription: alarmDescription(
-          "Someone pressed buy on a recurring product but received an error. This has happened multiple times for a known reason."
-        ),
-        actionsEnabled: shouldCreateAlarms,
-        threshold: 1,
-        evaluationPeriods: 60,
-        datapointsToAlarm: 10,
-        comparisonOperator:
-          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-        metric: new Metric({
-          metricName: "ServerSideHighThresholdCreateFailure",
-          namespace: "support-frontend",
-          dimensionsMap: {
-            Stage: "PROD",
-          },
-          statistic: "Sum",
-          period: Duration.minutes(1),
-        }),
-        treatMissingData: TreatMissingData.NOT_BREACHING,
-        snsTopicName: `alarms-handler-topic-${this.stage}`,
-      });
-
       new GuAlarm(this, "GetDeliveryAgentsFailure", {
         app,
         alarmName: alarmName("support-frontend GetDeliveryAgentsFailure"),
@@ -382,5 +355,32 @@ export class Frontend extends GuStack {
         snsTopicName: `alarms-handler-topic-${this.stage}`,
       });
     }
+
+    new GuAlarm(this, "ServerSideHighThresholdCreateFailureAlarm", {
+      app,
+      alarmName: alarmName(
+        "support-frontend create recurring product call failed multiple times for a known reason"
+      ),
+      alarmDescription: alarmDescription(
+        "Someone pressed buy on a recurring product but received an error. This has happened multiple times for a known reason."
+      ),
+      actionsEnabled: shouldCreateAlarms,
+      threshold: 1,
+      evaluationPeriods: 60,
+      datapointsToAlarm: 10,
+      comparisonOperator:
+        ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      metric: new Metric({
+        metricName: "ServerSideHighThresholdCreateFailure",
+        namespace: "support-frontend",
+        dimensionsMap: {
+          Stage: "PROD",
+        },
+        statistic: "Sum",
+        period: Duration.minutes(1),
+      }),
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+    });
   }
 }
