@@ -8,7 +8,7 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { setOneOffContributionCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 

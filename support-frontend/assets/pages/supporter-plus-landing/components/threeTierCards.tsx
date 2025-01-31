@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { Participations } from '../../../helpers/abTests/models';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {

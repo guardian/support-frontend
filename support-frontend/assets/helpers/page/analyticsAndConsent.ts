@@ -3,13 +3,13 @@
 import type { ConsentState } from '@guardian/libs';
 import { cmp, getCookie, onConsent } from '@guardian/libs';
 import ophan from 'ophan';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
 import { init as initQuantumMetric } from 'helpers/tracking/quantumMetric';
 import { isPostDeployUser } from 'helpers/user/user';
 import { init as initLogger } from 'helpers/utilities/logger';
+import type { Participations } from '../abTests/models';
 import {
 	setReferrerDataInLocalStorage,
 	trackAbTests,

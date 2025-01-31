@@ -1,4 +1,4 @@
-import type { Participations } from '../../abTests/abtest';
+import type { Participations } from '../../abTests/models';
 import type { OphanABPayload } from '../trackingOphan';
 import { buildOphanPayload } from '../trackingOphan';
 

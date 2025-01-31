@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -12,6 +11,7 @@ import {
 	sendConsentToOphan,
 } from 'helpers/page/analyticsAndConsent';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import type { Participations } from '../abTests/models';
 import { getSettings } from '../globalsAndSwitches/globals';
 
 function setUpTrackingAndConsents(participations: Participations): void {

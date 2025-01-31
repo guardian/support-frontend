@@ -1,4 +1,3 @@
-import type { Participations } from 'helpers/abTests/abtest';
 import { getFallbackAmounts } from 'helpers/abTests/helpers';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
@@ -13,6 +12,7 @@ import type {
 	Campaign,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
+import type { Participations } from '../../abTests/models';
 
 export type Internationalisation = {
 	currencyId: IsoCurrency;

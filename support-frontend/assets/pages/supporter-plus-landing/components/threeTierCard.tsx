@@ -13,7 +13,6 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -29,6 +28,7 @@ import {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+import type { Participations } from '../../../helpers/abTests/models';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 export type ThreeTierCardProps = {

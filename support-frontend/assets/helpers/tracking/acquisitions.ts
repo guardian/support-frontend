@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import { viewId } from 'ophan';
-import { type Participations, testIsActive } from 'helpers/abTests/abtest';
+import { testIsActive } from 'helpers/abTests/abtest';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -10,6 +10,7 @@ import {
 	getQueryParameter,
 } from 'helpers/urls/url';
 import { deserialiseJsonObject } from 'helpers/utilities/utilities';
+import type { Participations } from '../abTests/models';
 
 // ----- Types ----- //
 

@@ -1,10 +1,10 @@
-import type { Participations } from 'helpers/abTests/abtest';
 import {
 	getProductPrices,
 	getPromotionCopy,
 } from 'helpers/globalsAndSwitches/globals';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
+import type { Participations } from '../../helpers/abTests/models';
 
 export type PaperLandingPropTypes = {
 	productPrices: ProductPrices | null | undefined;
