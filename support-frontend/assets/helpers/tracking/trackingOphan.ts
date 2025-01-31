@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
 import { testIsActive } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import type { Participations } from '../abTests/models';
 
 // ----- Types ----- //
 // These are to match Thrift definitions which can be found here:

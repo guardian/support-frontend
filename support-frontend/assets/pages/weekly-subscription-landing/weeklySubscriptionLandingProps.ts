@@ -1,3 +1,4 @@
+import type { Participations } from 'helpers/abTests/models';
 import {
 	getGlobal,
 	getProductPrices,
@@ -9,7 +10,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { Participations } from '../../helpers/abTests/models';
 
 export type WeeklyLandingPropTypes = {
 	countryId: IsoCountry;

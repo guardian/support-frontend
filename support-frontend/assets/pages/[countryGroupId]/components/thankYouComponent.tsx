@@ -7,6 +7,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
+import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -34,7 +35,6 @@ import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFo
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
-import type { Participations } from '../../../helpers/abTests/models';
 import {
 	getReturnAddress,
 	getThankYouOrder,

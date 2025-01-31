@@ -1,5 +1,6 @@
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -14,7 +15,6 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
-import type { Participations } from '../../abTests/models';
 import type { SelectedAmountsVariant } from '../../contributions';
 import type { CommonState, Internationalisation } from '../commonState/state';
 

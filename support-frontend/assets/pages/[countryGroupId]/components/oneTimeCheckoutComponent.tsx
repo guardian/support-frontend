@@ -34,6 +34,7 @@ import { SecureTransactionIndicator } from 'components/secureTransactionIndicato
 import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -80,7 +81,6 @@ import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import type { Participations } from '../../../helpers/abTests/models';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,

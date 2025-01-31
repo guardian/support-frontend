@@ -41,6 +41,7 @@ import { AddressFields } from 'components/subscriptionCheckouts/address/addressF
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -95,7 +96,6 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import type { Participations } from '../../../helpers/abTests/models';
 import {
 	formatMachineDate,
 	formatUserDate,

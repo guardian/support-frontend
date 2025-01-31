@@ -1,3 +1,4 @@
+import type { Participations } from 'helpers/abTests/models';
 import { fetchJson } from 'helpers/async/fetch';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -26,7 +27,6 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { getOrigin } from 'helpers/urls/url';
 import type { Stage } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
-import type { Participations } from '../../helpers/abTests/models';
 
 type ValidationResult = {
 	valid: boolean;

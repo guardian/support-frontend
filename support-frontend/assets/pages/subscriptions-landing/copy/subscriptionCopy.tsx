@@ -4,6 +4,7 @@ import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
+import type { Participations } from 'helpers/abTests/models';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
@@ -22,7 +23,6 @@ import {
 	guardianWeeklyLanding,
 	paperSubsUrl,
 } from 'helpers/urls/routes';
-import type { Participations } from '../../../helpers/abTests/models';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
 // types
