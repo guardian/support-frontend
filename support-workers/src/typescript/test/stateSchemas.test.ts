@@ -21,7 +21,7 @@ describe('stateSchemas', () => {
 		);
 		expect(supporterPlus.product.currency).toBe('EUR');
 		expect(supporterPlus.acquisitionData?.ophanIds.pageviewId).toBe(
-			'm21r1npxieyqa3kn5gxh',
+			'9999999999999',
 		);
 
 		const contribution: CreatePaymentMethodState =
