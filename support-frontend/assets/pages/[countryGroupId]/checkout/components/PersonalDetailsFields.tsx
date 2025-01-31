@@ -1,6 +1,6 @@
 import { TextInput } from '@guardian/source/react-components';
 import escapeStringRegexp from 'escape-string-regexp';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -38,8 +38,6 @@ export function PersonalDetailsFields({
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
-	const confirmEmailRef = useRef<HTMLDivElement>(null);
-
 	return (
 		<>
 			<div>
@@ -55,9 +53,6 @@ export function PersonalDetailsFields({
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
-						if (confirmedEmail.length > 0) {
-							confirmEmailRef.current?.querySelector('input')?.checkValidity();
-						}
 					}}
 					readOnly={isEmailAddressReadOnly}
 					name="email"
@@ -80,7 +75,7 @@ export function PersonalDetailsFields({
 				/>
 			</div>
 			{requireConfirmedEmail && !isEmailAddressReadOnly && (
-				<div ref={confirmEmailRef}>
+				<div>
 					<TextInput
 						id="confirm-email"
 						data-qm-masking="blocklist"
