@@ -374,7 +374,7 @@ export class Frontend extends GuStack {
         metricName: "ServerSideHighThresholdCreateFailure",
         namespace: "support-frontend",
         dimensionsMap: {
-          Stage: "PROD",
+          Stage: this.stage,
         },
         statistic: "Sum",
         period: Duration.minutes(1),
