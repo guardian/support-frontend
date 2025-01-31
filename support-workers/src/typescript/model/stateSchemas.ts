@@ -90,7 +90,7 @@ const baseStateSchema = z.object({
 	appliedPromotion: z
 		.object({
 			promoCode: z.string(),
-			countryGroupId: z.string(), //TODO: build a schema for this
+			countryGroupId: z.string(), //TODO: build a schema for this or take it from the frontend
 		})
 		.nullable(),
 	csrUsername: z.string().nullable(),
@@ -100,7 +100,7 @@ const baseStateSchema = z.object({
 
 export const createPaymentMethodStateSchema = baseStateSchema.merge(
 	z.object({
-		paymentFields: paymentFieldsSchema, //TODO scala model is an either with redemption data
+		paymentFields: paymentFieldsSchema,
 		ipAddress: z.string(),
 		userAgent: z.string(),
 	}),

@@ -28,8 +28,8 @@ export const stripePaymentTypeSchema = z.union([
 const stripePaymentFieldsSchema = z.object({
 	paymentType: stripePaymentProviderSchema,
 	paymentMethod: z.string(),
-	stripePaymentType: stripePaymentTypeSchema, //TODO: this was optional in scala model
-	stripePublicKey: z.string(), //TODO: this has more validation in scala model
+	stripePaymentType: stripePaymentTypeSchema,
+	stripePublicKey: z.string(),
 });
 export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
 const directDebitPaymentFieldsSchema = z.object({
