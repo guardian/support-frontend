@@ -71,13 +71,22 @@ const acquisitionDataSchema = z.object({
 	supportAbTests: z.array(abTestSchema),
 });
 
+export const giftRecipientSchema = z.object({
+	title: titleSchema.nullable(),
+	firstName: z.string(),
+	lastName: z.string(),
+	email: z.string().nullable(),
+});
+
 const baseStateSchema = z.object({
 	requestId: z.string(),
 	user: userSchema,
-	//giftRecipient: Option[GiftRecipient], TODO: I think we can remove this
+	giftRecipient: giftRecipientSchema.nullable(),
 	product: productTypeSchema,
 	analyticsInfo: analyticsInfoSchema,
-	firstDeliveryDate: z.coerce.date().nullable(),
+	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
+	// so leave it as a string until all the lambdas are Typescript
+	firstDeliveryDate: z.string().nullable(),
 	appliedPromotion: z
 		.object({
 			promoCode: z.string(),

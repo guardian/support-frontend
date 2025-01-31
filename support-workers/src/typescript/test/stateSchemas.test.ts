@@ -52,7 +52,7 @@ describe('stateSchemas', () => {
 
 		const paper = createPaymentMethodStateSchema.parse(createPaymentPaper);
 		expect(paper.product.productType).toBe('Paper');
-		expect(paper.firstDeliveryDate?.getFullYear()).toBe(2024);
+		expect(paper.firstDeliveryDate).toBe('2024-10-17');
 		expect(paper.user.deliveryAddress?.lineOne).toBe('123 Test Street');
 		const ddPaymentFields = paper.paymentFields as DirectDebitPaymentFields;
 		expect(ddPaymentFields.accountNumber).toBe('00000000');
