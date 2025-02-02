@@ -86,11 +86,14 @@ function SubscriptionsProductBenefits({
 	benefits: ProductBenefit[];
 }): JSX.Element {
 	return (
-		<div className="subscriptions__description">
+		<ul className="subscriptions__list">
 			{benefits.map((benefit) => (
-				<section>{benefit.copy}</section>
+				<li className="subscriptions__listitem">
+					<div className="subscriptions__listitem__bullet">{`\u2022`}</div>
+					<div>{benefit.copy}</div>
+				</li>
 			))}
-		</div>
+		</ul>
 	);
 }
 
