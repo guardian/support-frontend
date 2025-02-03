@@ -102,7 +102,7 @@
 		"mockdate": "^3.0.5",
 		"ophan-tracker-js": "^1.4.3",
 		"react-redux": "^8.1.0",
-		"react-router-dom": "^6.23.0",
+		"react-router-dom": "^7.1.5",
 		"redux": "^4.0.0",
 		"seedrandom": "^3.0.5",
 		"snarkdown": "^2.0.0",
