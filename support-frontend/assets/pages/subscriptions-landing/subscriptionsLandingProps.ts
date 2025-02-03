@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

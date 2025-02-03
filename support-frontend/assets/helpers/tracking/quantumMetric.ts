@@ -1,6 +1,6 @@
 import { loadScript } from '@guardian/libs';
 import { viewId } from 'ophan';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -41,7 +41,6 @@ enum SendEventSubscriptionCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
-	DigiSubGift = 78,
 	GuardianWeeklySubGift = 79,
 }
 
@@ -49,7 +48,6 @@ enum SendEventSubscriptionCheckoutConversion {
 	DigiSub = 31,
 	PaperSub = 67,
 	GuardianWeeklySub = 68,
-	DigiSubGift = 69,
 	GuardianWeeklySubGift = 70,
 }
 
@@ -82,13 +80,8 @@ type SendEventId =
 
 // ---- sendEvent logic ---- //
 
-const {
-	DigiSub,
-	PaperSub,
-	GuardianWeeklySub,
-	DigiSubGift,
-	GuardianWeeklySubGift,
-} = SendEventSubscriptionCheckoutStart;
+const { DigiSub, PaperSub, GuardianWeeklySub, GuardianWeeklySubGift } =
+	SendEventSubscriptionCheckoutStart;
 
 const { SingleContribution, RecurringContribution } =
 	SendEventContributionAmountUpdate;
@@ -97,7 +90,6 @@ const cartValueEventIds: SendEventId[] = [
 	DigiSub,
 	PaperSub,
 	GuardianWeeklySub,
-	DigiSubGift,
 	GuardianWeeklySubGift,
 	SingleContribution,
 	RecurringContribution,
@@ -228,15 +220,10 @@ function productToCheckoutEvents(
 	| undefined {
 	switch (product) {
 		case 'DigitalPack':
-			return orderIsAGift
-				? checkoutEvents(
-						SendEventSubscriptionCheckoutStart.DigiSubGift,
-						SendEventSubscriptionCheckoutConversion.DigiSubGift,
-				  )
-				: checkoutEvents(
-						SendEventSubscriptionCheckoutStart.DigiSub,
-						SendEventSubscriptionCheckoutConversion.DigiSub,
-				  );
+			return checkoutEvents(
+				SendEventSubscriptionCheckoutStart.DigiSub,
+				SendEventSubscriptionCheckoutConversion.DigiSub,
+			);
 		case 'GuardianWeekly':
 			return orderIsAGift
 				? checkoutEvents(

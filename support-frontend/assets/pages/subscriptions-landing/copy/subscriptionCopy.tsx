@@ -4,7 +4,7 @@ import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
@@ -73,7 +73,7 @@ const digital = (
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
-			link: digitalSubscriptionLanding(countryGroupId, false),
+			link: digitalSubscriptionLanding(countryGroupId),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'digipack_cta',
 				product: 'DigitalPack',

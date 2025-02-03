@@ -1,4 +1,4 @@
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { fetchJson } from 'helpers/async/fetch';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';

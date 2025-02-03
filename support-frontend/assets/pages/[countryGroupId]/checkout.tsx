@@ -14,7 +14,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
@@ -235,11 +235,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
 
-	/**
-	 * The returnLink for back button and thank you page
-	 */
-	const returnLink = urlSearchParams.get('returnAddress') ?? undefined;
-
 	useEffect(() => {
 		/**
 		 * Notify QM of checkout value
@@ -269,7 +264,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				useStripeExpressCheckout={useStripeExpressCheckout}
 				countryId={countryId}
 				forcedCountry={forcedCountry}
-				returnLink={returnLink}
 				abParticipations={abParticipations}
 			/>
 		</Elements>

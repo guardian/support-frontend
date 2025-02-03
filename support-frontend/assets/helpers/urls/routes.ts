@@ -30,7 +30,6 @@ const routes = {
 	subscriptionCreate: '/subscribe/create',
 	subscriptionsLanding: '/subscribe',
 	digitalSubscriptionLanding: '/subscribe/digitaledition',
-	digitalSubscriptionLandingGift: '/subscribe/digital/gift',
 	paperSubscriptionLanding: '/subscribe/paper',
 	paperSubscriptionProductChoices: '/subscribe/paper#HomeDelivery',
 	paperSubscriptionDeliveryProductChoices:
@@ -81,14 +80,9 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalSubscriptionLanding(
-	countryGroupId: CountryGroupId,
-	gift: boolean,
-) {
+function digitalSubscriptionLanding(countryGroupId: CountryGroupId) {
 	return `${getOrigin()}/${countryPath(countryGroupId)}${
-		gift
-			? routes.digitalSubscriptionLandingGift
-			: routes.digitalSubscriptionLanding
+		routes.digitalSubscriptionLanding
 	}`;
 }
 

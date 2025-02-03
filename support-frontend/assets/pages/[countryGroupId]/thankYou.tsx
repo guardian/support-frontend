@@ -8,7 +8,7 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { setOneOffContributionCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 
@@ -45,9 +45,6 @@ export function ThankYou({
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
-	// returnAddress
-	const urlSearchParamsReturn =
-		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;
@@ -168,7 +165,6 @@ export function ThankYou({
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
-			returnLink={urlSearchParamsReturn}
 			abParticipations={abParticipations}
 		/>
 	);
