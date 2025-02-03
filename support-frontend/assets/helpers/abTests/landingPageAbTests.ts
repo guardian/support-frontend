@@ -65,6 +65,8 @@ export function getLandingPageParticipations(
 				return participations;
 			}
 		}
+		// No test assigned
+		return;
 	} else {
 		// This is not a landing page, but check if the session has a landing page test participation
 		return getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY);
@@ -74,7 +76,7 @@ export function getLandingPageParticipations(
 // Use the AB test participations to find the specific variant configuration for this page
 export function getLandingPageVariant(
 	participations: Participations,
-	landingPageTests: LandingPageTest[],
+	landingPageTests: LandingPageTest[] = [],
 ): LandingPageVariant & { testName: string } {
 	for (const test of landingPageTests) {
 		// Is the user in this test?
