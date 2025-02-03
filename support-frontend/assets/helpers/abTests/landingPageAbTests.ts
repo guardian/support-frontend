@@ -4,11 +4,12 @@ import type {
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
-import { getMvtId } from './abtest';
+import type { Participations } from './models';
+import { getLandingPageParticipationsFromSession } from './sessionStorage';
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
-export const fallBackLandingPageSelection: LandingPageSelection = {
+const fallBackLandingPageSelection: LandingPageSelection = {
 	testName: 'FALLBACK_LANDING_PAGE',
 	name: 'CONTROL',
 	copy: {
@@ -23,27 +24,59 @@ function randomNumber(mvtId: number, seed: string): number {
 	return Math.abs(rng.int32());
 }
 
-export function getLandingPageSettings(
+const landingPageRegex = '^/(uk|us|ca|eu|nz|int)/contribute(/.*)?$';
+function isLandingPage(path: string) {
+	return !!path && path.match(landingPageRegex);
+}
+
+export function getLandingPageParticipations(
 	countryGroupId: CountryGroupId,
+	path: string,
 	tests: LandingPageTest[] = [],
-	mvtId: number = getMvtId(),
+	mvtId: number,
+): Participations | undefined {
+	if (isLandingPage(path)) {
+		// This is a landing page, assign user to a test + variant
+		const test = tests
+			.filter((test) => test.status == 'Live')
+			.find((test) => {
+				const { countryGroups } = test.targeting;
+				return countryGroups.includes(countryGroupId);
+			});
+
+		if (test) {
+			const idx = randomNumber(mvtId, test.name) % test.variants.length;
+			const variant = test.variants[idx];
+
+			if (variant) {
+				return {
+					[test.name]: variant.name,
+				};
+			}
+		}
+	} else {
+		// This is not a landing page, but check if the session has a landing page test participation
+		return getLandingPageParticipationsFromSession();
+	}
+}
+
+// Use the AB test participations to find the specific variant configuration for this page
+export function getLandingPageVariant(
+	participations: Participations,
+	tests: LandingPageTest[],
 ): LandingPageVariant & { testName: string } {
-	const test = tests
-		.filter((test) => test.status == 'Live')
-		.find((test) => {
-			const { countryGroups } = test.targeting;
-			return countryGroups.includes(countryGroupId);
-		});
-
-	if (test) {
-		const idx = randomNumber(mvtId, test.name) % test.variants.length;
-		const variant = test.variants[idx];
-
-		if (variant) {
-			return {
-				testName: test.name,
-				...variant,
-			};
+	for (const test of tests) {
+		const variantName = participations[test.name];
+		if (variantName) {
+			const variant = test.variants.find(
+				(variant) => variant.name === variantName,
+			);
+			if (variant) {
+				return {
+					testName: test.name,
+					...variant,
+				};
+			}
 		}
 	}
 	return fallBackLandingPageSelection;

@@ -24,6 +24,7 @@ function setUpTrackingAndConsents(participations: Participations): void {
 }
 
 function getAbParticipations(): Participations {
+	console.log('getAbParticipations', window.location.pathname);
 	const settings = getSettings();
 	const countryId: IsoCountry = Country.detect();
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
@@ -33,6 +34,7 @@ function getAbParticipations(): Participations {
 		countryId,
 		countryGroupId,
 		selectedAmountsVariant,
+		settings,
 	};
 	const participations: Participations = abTest.init(abtestInitalizerData);
 
