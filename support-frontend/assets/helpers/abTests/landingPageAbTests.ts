@@ -74,9 +74,10 @@ export function getLandingPageParticipations(
 // Use the AB test participations to find the specific variant configuration for this page
 export function getLandingPageVariant(
 	participations: Participations,
-	tests: LandingPageTest[],
+	landingPageTests: LandingPageTest[],
 ): LandingPageVariant & { testName: string } {
-	for (const test of tests) {
+	for (const test of landingPageTests) {
+		// Is the user in this test?
 		const variantName = participations[test.name];
 		if (variantName) {
 			const variant = test.variants.find(
