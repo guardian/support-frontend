@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
-import { type Participations, testIsActive } from 'helpers/abTests/abtest';
+import { testIsActive } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 

@@ -1,6 +1,6 @@
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
-import type { Participations } from './abTests/abtest';
+import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
 import type {
 	CountryGroupId,

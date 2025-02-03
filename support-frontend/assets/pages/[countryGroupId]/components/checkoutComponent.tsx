@@ -40,8 +40,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -261,6 +261,8 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
+	const inConfirmEmailVariant = abParticipations.confirmEmail === 'variant';
+
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
@@ -381,6 +383,7 @@ export function CheckoutComponent({
 	const [firstName, setFirstName] = useState(user?.firstName ?? '');
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [email, setEmail] = useState(user?.email ?? '');
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -438,6 +441,7 @@ export function CheckoutComponent({
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
+
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -570,10 +574,6 @@ export function CheckoutComponent({
 			...getReferrerAcquisitionData(),
 			labels: ['generic-checkout'],
 		};
-
-		if (stripeExpressCheckoutPaymentType === 'link') {
-			referrerAcquisitionData.labels.push('express-checkout-link');
-		}
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
@@ -879,6 +879,8 @@ export function CheckoutComponent({
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
 
 										setPaymentMethod('StripeExpressCheckoutElement');
 										setStripeExpressCheckoutPaymentType(
@@ -942,6 +944,11 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
+								requireConfirmedEmail={inConfirmEmailVariant}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
 							>
 								<Signout isSignedIn={isSignedIn} />
 							</PersonalDetailsFields>

@@ -1,4 +1,4 @@
-import type { Tests } from './abtest';
+import type { Tests } from './models';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
 // you should always target both the landing page *and* the thank you page.

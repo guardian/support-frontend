@@ -14,7 +14,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {

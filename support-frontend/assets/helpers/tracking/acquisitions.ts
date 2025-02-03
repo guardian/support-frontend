@@ -1,7 +1,8 @@
 // ----- Imports ----- //
 
 import { viewId } from 'ophan';
-import { type Participations, testIsActive } from 'helpers/abTests/abtest';
+import { testIsActive } from 'helpers/abTests/abtest';
+import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
