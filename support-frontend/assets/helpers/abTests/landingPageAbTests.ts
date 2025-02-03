@@ -13,7 +13,7 @@ import {
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
-const fallBackLandingPageSelection: LandingPageSelection = {
+export const fallBackLandingPageSelection: LandingPageSelection = {
 	testName: 'FALLBACK_LANDING_PAGE',
 	name: 'CONTROL',
 	copy: {
