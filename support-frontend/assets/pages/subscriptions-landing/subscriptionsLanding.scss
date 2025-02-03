@@ -162,21 +162,21 @@
 		width: 200%;
 		right: 0;
 	}
-}
 
-.subscriptions__list {
-  display: block;
-  border-top: 1px solid gu-colour(neutral-86);
-  margin: 45px 20px 25px 0px;
-}
+	.subscriptions__list {
+		display: block;
+		border-top: 1px solid gu-colour(neutral-86);
+		margin: 45px 20px 25px 0px;
+	}
 
-.subscriptions__listitem {
-  display: flex;
-}
+	.subscriptions__listitem {
+		display: flex;
+	}
 
-.subscriptions__listitem__bullet {
-  vertical-align: top;
-  padding-right: 4px;
+	.subscriptions__listitem__bullet {
+		vertical-align: top;
+		padding-right: 4px;
+	}
 }
 
 .subscriptions__product--reverse {
