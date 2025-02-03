@@ -13,12 +13,12 @@ import type { SubscriptionsLandingPropTypes } from './subscriptionsLandingProps'
 import { subscriptionsLandingProps } from './subscriptionsLandingProps';
 
 // ----- Render ----- //
-export function SubscriptionsLandingPage({
+function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,
 	referrerAcquisitions,
-}: SubscriptionsLandingPropTypes): JSX.Element {
+}: SubscriptionsLandingPropTypes) {
 	return (
 		<Page
 			header={<Header countryGroupId={countryGroupId} />}
