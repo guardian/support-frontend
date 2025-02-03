@@ -5,7 +5,11 @@ import type {
 } from '../globalsAndSwitches/landingPageSettings';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import type { Participations } from './models';
-import { getLandingPageParticipationsFromSession } from './sessionStorage';
+import {
+	getSessionParticipations,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
+	setSessionParticipations,
+} from './sessionStorage';
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
@@ -49,14 +53,21 @@ export function getLandingPageParticipations(
 			const variant = test.variants[idx];
 
 			if (variant) {
-				return {
+				const participations = {
 					[test.name]: variant.name,
 				};
+				// Record the participation in session storage so that we can track it from the checkout
+				setSessionParticipations(
+					participations,
+					LANDING_PAGE_PARTICIPATIONS_KEY,
+				);
+
+				return participations;
 			}
 		}
 	} else {
 		// This is not a landing page, but check if the session has a landing page test participation
-		return getLandingPageParticipationsFromSession();
+		return getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY);
 	}
 }
 

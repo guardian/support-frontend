@@ -4,7 +4,6 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	AmountsTest,
@@ -23,8 +22,9 @@ import type {
 } from './models';
 import { breakpoints } from './models';
 import {
-	getParticipationsFromSession,
-	setLandingPageParticipations,
+	getSessionParticipations,
+	PARTICIPATIONS_KEY,
+	setSessionParticipations,
 } from './sessionStorage';
 
 export const testIsActive = (
@@ -54,7 +54,7 @@ function init({
 	path = window.location.pathname,
 	settings,
 }: ABtestInitalizerData): Participations {
-	const sessionParticipations = getParticipationsFromSession();
+	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
 		abTests,
 		mvt,
@@ -66,15 +66,13 @@ function init({
 		sessionParticipations,
 	);
 
+	// A landing page test config may be passed through from the server, so we handle this separately
 	const landingPageParticipations = getLandingPageParticipations(
 		countryGroupId,
 		path,
 		settings.landingPageTests,
 		mvt,
 	);
-	if (landingPageParticipations) {
-		setLandingPageParticipations(landingPageParticipations);
-	}
 
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
@@ -92,7 +90,7 @@ const MVT_COOKIE = 'GU_mvt_id';
 const MVT_MAX = 1_000_000;
 
 // Attempts to retrieve the MVT id from a cookie, or sets it.
-export function getMvtId(): number {
+function getMvtId(): number {
 	const mvtIdCookieValue = cookie.get(MVT_COOKIE);
 	let mvtId = Number(mvtIdCookieValue);
 
@@ -219,7 +217,7 @@ function getParticipations(
 			sessionParticipations[testId] = participations[testId];
 		}
 	});
-	storage.setSession('abParticipations', JSON.stringify(sessionParticipations));
+	setSessionParticipations(sessionParticipations, PARTICIPATIONS_KEY);
 
 	return participations;
 }

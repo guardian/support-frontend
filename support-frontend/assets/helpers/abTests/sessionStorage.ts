@@ -1,38 +1,30 @@
 import * as storage from '../storage/storage';
 import type { Participations } from './models';
 
-function getParticipationsFromSession(
-	key: string = 'abParticipations',
-): Participations | undefined {
+const PARTICIPATIONS_KEY = 'abParticipations';
+const LANDING_PAGE_PARTICIPATIONS_KEY = 'landingPageParticipations';
+type Key = typeof PARTICIPATIONS_KEY | typeof LANDING_PAGE_PARTICIPATIONS_KEY;
+
+function getSessionParticipations(key: Key): Participations | undefined {
 	const participations = storage.getSession(key);
 	if (participations) {
 		try {
 			return JSON.parse(participations) as Participations;
 		} catch (error) {
-			console.error(
-				'Failed to parse abParticipations from session storage',
-				error,
-			);
+			console.error(`Failed to parse ${key} from session storage`, error);
 			return undefined;
 		}
 	}
 	return undefined;
 }
 
-const landingPageParticipationsKey = 'landingPageParticipations';
-function getLandingPageParticipationsFromSession(): Participations | undefined {
-	return getParticipationsFromSession(landingPageParticipationsKey);
-}
-
-function setLandingPageParticipations(participations: Participations) {
-	storage.setSession(
-		landingPageParticipationsKey,
-		JSON.stringify(participations),
-	);
+function setSessionParticipations(participations: Participations, key: Key) {
+	storage.setSession(key, JSON.stringify(participations));
 }
 
 export {
-	getParticipationsFromSession,
-	getLandingPageParticipationsFromSession,
-	setLandingPageParticipations,
+	getSessionParticipations,
+	setSessionParticipations,
+	PARTICIPATIONS_KEY,
+	LANDING_PAGE_PARTICIPATIONS_KEY,
 };
