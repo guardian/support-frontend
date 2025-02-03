@@ -39,6 +39,7 @@ export type ProductButton = {
 	analyticsTracking: () => void;
 	hierarchy?: string;
 	modifierClasses?: string;
+	primary?: boolean;
 };
 
 type ProductCopy = {
@@ -165,6 +166,7 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
+				primary: true,
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,

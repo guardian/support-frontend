@@ -16,7 +16,11 @@ const getButtonAppearance = (
 	index: number,
 	isFeature?: boolean,
 	hierarchy?: string,
+	primary?: boolean,
 ) => {
+	if (primary) {
+		return 'primary';
+	}
 	if (isFeature && index === 0) {
 		return 'primary';
 	} else if (isFeature && index > 0) {
@@ -66,7 +70,12 @@ function SubscriptionsProductDescription({
 					<AnchorButton
 						href={button.link}
 						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(index, isFeature, button.hierarchy)}
+						appearance={getButtonAppearance(
+							index,
+							isFeature,
+							button.hierarchy,
+							button.primary,
+						)}
 						modifierClasses={[
 							button.modifierClasses ?? '',
 							'subscriptions__product-button',
