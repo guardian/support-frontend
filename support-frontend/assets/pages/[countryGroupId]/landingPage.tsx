@@ -1,7 +1,5 @@
-import {
-	getAmountsTestVariant,
-	type Participations,
-} from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';

@@ -18,7 +18,7 @@ import {
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
 import { _, init as abInit, getAmountsTestVariant } from '../abtest';
-import type { Audience, Participations, Test, Variant } from '../abtest';
+import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
 const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =

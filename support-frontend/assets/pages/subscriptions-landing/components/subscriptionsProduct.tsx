@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import type { ReactNode } from 'react';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import 'helpers/types/option';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 

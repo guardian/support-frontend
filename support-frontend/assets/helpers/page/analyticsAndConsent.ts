@@ -3,7 +3,7 @@
 import type { ConsentState } from '@guardian/libs';
 import { cmp, getCookie, onConsent } from '@guardian/libs';
 import ophan from 'ophan';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import * as googleTagManager from 'helpers/tracking/googleTagManager';
