@@ -65,11 +65,15 @@ const getDigitialEditionPrices = (countryGroupId: CountryGroupId): string => {
 	const currencyKey = detect(countryGroupId);
 	const currency = currencies[currencyKey].glyph;
 	const product = productCatalog['DigitalSubscription'];
-	const priceMonthly = product?.ratePlans[Monthly]?.pricing[currencyKey] ?? 0;
-	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey] ?? 0;
-	return `${currency}${fixDecimals(
-		priceMonthly,
-	)}/${Monthly} ${currency}${fixDecimals(priceAnnual)}/${Annual}`;
+	const priceMonthly = product?.ratePlans[Monthly]?.pricing[currencyKey];
+	const currencyPriceMonthly = priceMonthly
+		? `${currency}${fixDecimals(priceMonthly)}/${Monthly}`
+		: '';
+	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey];
+	const currencyPriceAnnual = priceAnnual
+		? ` ${currency}${fixDecimals(priceAnnual)}/${Annual}`
+		: '';
+	return `${currencyPriceMonthly}${currencyPriceAnnual}`;
 };
 
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
