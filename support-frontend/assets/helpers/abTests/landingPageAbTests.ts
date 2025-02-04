@@ -77,7 +77,7 @@ export function getLandingPageParticipations(
 export function getLandingPageVariant(
 	participations: Participations,
 	landingPageTests: LandingPageTest[] = [],
-): LandingPageVariant & { testName: string } {
+): LandingPageSelection {
 	for (const test of landingPageTests) {
 		// Is the user in this test?
 		const variantName = participations[test.name];
