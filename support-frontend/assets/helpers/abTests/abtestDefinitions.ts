@@ -24,8 +24,6 @@ export const pageUrlRegexes = {
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
-		digitalEditions:
-			'(?:/(uk|us|ca|eu|nz|int)/)(subscribe$|subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout?(.*DigitalSubscription.*)|thank-you?(.*DigitalSubscription.*))',
 	},
 };
 
@@ -125,15 +123,21 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			GBPCountries: {
 				offset: 0,
 				size: 1,
 			},
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 2,
-		targetPage: pageUrlRegexes.subscriptions.digitalEditions,
-		excludeContributionsOnlyCountries: false,
+		seed: 7,
+		targetPage:
+			'(/uk/)(subscribe$|subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)', // one-off test using canRun to exclude all products except DigitalSubscription
+		excludeContributionsOnlyCountries: true,
+		canRun: () => {
+			const urlSearchParams = new URLSearchParams(window.location.search);
+			const productParam = urlSearchParams.get('product');
+			return !productParam || productParam === 'DigitalSubscription';
+		},
 	},
 };
