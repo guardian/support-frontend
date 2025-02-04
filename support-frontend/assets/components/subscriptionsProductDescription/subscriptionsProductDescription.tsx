@@ -100,7 +100,7 @@ function SubscriptionsProductBenefits({
 		<ul className="subscriptions__list">
 			{benefits.map((benefit) => (
 				<li className="subscriptions__listitem">
-					<div className="subscriptions__listitem__bullet">{`\u2022`}</div>
+					<div className="subscriptions__listitem__bullet">{`●`}</div>
 					<div>{benefit.copy}</div>
 				</li>
 			))}
