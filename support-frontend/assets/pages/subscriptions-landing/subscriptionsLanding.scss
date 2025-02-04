@@ -582,7 +582,7 @@
 .subscriptions__button-container--feature--benefits {
 	.component-button {
 		@include mq($from: desktop) {
-			padding: 0 ($gu-cta-height * 0.4);
+			padding: 0 ($gu-cta-height * 0.3);
 		}
 	}
 }
