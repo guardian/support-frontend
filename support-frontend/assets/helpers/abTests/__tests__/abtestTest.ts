@@ -21,8 +21,11 @@ import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
-	pageUrlRegexes.contributions;
+const {
+	allLandingPagesAndThankyouPages,
+	genericCheckoutOnly,
+	digitalEditions,
+} = pageUrlRegexes.contributions;
 
 jest.mock('ophan', () => ({
 	record: () => null,
@@ -636,6 +639,26 @@ it('targetPage matching', () => {
 	expect(targetPageMatches('/uk/checkout', genericCheckoutOnly)).toEqual(true);
 	expect(targetPageMatches('/uk/thank-you', genericCheckoutOnly)).toEqual(true);
 	expect(targetPageMatches('/uk/thankyou', genericCheckoutOnly)).toEqual(false);
+	// Digital Edition Checkout
+	expect(
+		targetPageMatches(
+			'/uk/checkout?product=DigitalSubscription&ratePlan=Monthly',
+			digitalEditions,
+		),
+	).toEqual(true);
+	expect(
+		targetPageMatches(
+			'/uk/thank-you?product=DigitalSubscription&ratePlan=Annual&userType=current',
+			digitalEditions,
+		),
+	).toEqual(true);
+	// Digital Edition Landing Page
+	expect(
+		targetPageMatches('/uk/subscribe/digitaledition', digitalEditions),
+	).toEqual(true);
+	expect(
+		targetPageMatches('/uk/subscribe/digitaledition/thankyou', digitalEditions),
+	).toEqual(true);
 });
 
 describe('getAmountsTestVariant', () => {
