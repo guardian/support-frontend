@@ -18,10 +18,7 @@ const getButtonAppearance = (
 	hierarchy?: string,
 	primary?: boolean,
 ) => {
-	if (primary) {
-		return 'primary';
-	}
-	if (isFeature && index === 0) {
+	if (primary ?? (isFeature && index === 0)) {
 		return 'primary';
 	} else if (isFeature && index > 0) {
 		return 'tertiaryFeature';
