@@ -62,7 +62,9 @@ function SubscriptionsProductDescription({
 			<div
 				className={
 					isFeature
-						? 'subscriptions__button-container--feature'
+						? benefits
+							? 'subscriptions__button-container--feature--benefits'
+							: 'subscriptions__button-container--feature'
 						: 'subscriptions__button-container'
 				}
 			>
