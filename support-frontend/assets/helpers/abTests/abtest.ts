@@ -4,7 +4,6 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	AmountsTest,
@@ -13,6 +12,7 @@ import type {
 } from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
+import { getLandingPageParticipations } from './landingPageAbTests';
 import type {
 	AcquisitionABTest,
 	Audience,
@@ -21,6 +21,11 @@ import type {
 	Tests,
 } from './models';
 import { breakpoints } from './models';
+import {
+	getSessionParticipations,
+	PARTICIPATIONS_KEY,
+	setSessionParticipations,
+} from './sessionStorage';
 
 export const testIsActive = (
 	value: [string, string | undefined],
@@ -36,6 +41,7 @@ type ABtestInitalizerData = {
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
 	path?: string;
+	settings: Settings;
 };
 
 function init({
@@ -46,8 +52,9 @@ function init({
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 	path = window.location.pathname,
+	settings,
 }: ABtestInitalizerData): Participations {
-	const sessionParticipations = getParticipationsFromSession();
+	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
 		abTests,
 		mvt,
@@ -59,10 +66,19 @@ function init({
 		sessionParticipations,
 	);
 
+	// A landing page test config may be passed through from the server, so we handle this separately
+	const landingPageParticipations = getLandingPageParticipations(
+		countryGroupId,
+		path,
+		settings.landingPageTests,
+		mvt,
+	);
+
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
 		...participations,
+		...landingPageParticipations,
 		...serverSideParticipations,
 		...urlParticipations,
 	};
@@ -201,7 +217,7 @@ function getParticipations(
 			sessionParticipations[testId] = participations[testId];
 		}
 	});
-	storage.setSession('abParticipations', JSON.stringify(sessionParticipations));
+	setSessionParticipations(sessionParticipations, PARTICIPATIONS_KEY);
 
 	return participations;
 }
@@ -217,22 +233,6 @@ function getParticipationsFromUrl(): Participations | undefined {
 	}
 
 	return;
-}
-
-function getParticipationsFromSession(): Participations | undefined {
-	const participations = storage.getSession('abParticipations');
-	if (participations) {
-		try {
-			return JSON.parse(participations) as Participations;
-		} catch (error) {
-			console.error(
-				'Failed to parse abParticipations from session storage',
-				error,
-			);
-			return undefined;
-		}
-	}
-	return undefined;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {

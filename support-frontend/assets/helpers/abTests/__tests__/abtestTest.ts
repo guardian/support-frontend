@@ -11,7 +11,7 @@ import type {
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from '../../contributions';
-import { emptySwitches } from '../../globalsAndSwitches/globals';
+import { emptySwitches, getSettings } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
 import {
 	GBPCountries,
@@ -45,6 +45,7 @@ describe('init', () => {
 		countryId: country,
 		countryGroupId,
 		mvt,
+		settings: getSettings(),
 	};
 
 	afterEach(() => {
