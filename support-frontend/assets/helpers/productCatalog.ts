@@ -12,7 +12,7 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
-type ProductBenefit = {
+export type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];

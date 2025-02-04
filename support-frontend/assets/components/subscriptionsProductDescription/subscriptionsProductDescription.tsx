@@ -1,4 +1,5 @@
 import AnchorButton from 'components/button/anchorButton';
+import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
@@ -8,14 +9,16 @@ type PropTypes = {
 	isFeature?: boolean;
 	offer?: string;
 	buttons: ProductButton[];
+	benefits?: ProductBenefit[];
 };
 
 const getButtonAppearance = (
 	index: number,
 	isFeature?: boolean,
 	hierarchy?: string,
+	primary?: boolean,
 ) => {
-	if (isFeature && index === 0) {
+	if (primary ?? (isFeature && index === 0)) {
 		return 'primary';
 	} else if (isFeature && index > 0) {
 		return 'tertiaryFeature';
@@ -36,6 +39,7 @@ function SubscriptionsProductDescription({
 	offer,
 	isFeature,
 	buttons,
+	benefits,
 }: PropTypes): JSX.Element {
 	return (
 		<div>
@@ -47,11 +51,17 @@ function SubscriptionsProductDescription({
 			{!offer && (
 				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
 			)}
-			<p className="subscriptions__description">{description}</p>
+			{benefits ? (
+				<SubscriptionsProductBenefits benefits={benefits} />
+			) : (
+				<p className="subscriptions__description">{description}</p>
+			)}
 			<div
 				className={
 					isFeature
-						? 'subscriptions__button-container--feature'
+						? benefits
+							? 'subscriptions__button-container--feature--benefits'
+							: 'subscriptions__button-container--feature'
 						: 'subscriptions__button-container'
 				}
 			>
@@ -59,7 +69,12 @@ function SubscriptionsProductDescription({
 					<AnchorButton
 						href={button.link}
 						onClick={button.analyticsTracking}
-						appearance={getButtonAppearance(index, isFeature, button.hierarchy)}
+						appearance={getButtonAppearance(
+							index,
+							isFeature,
+							button.hierarchy,
+							button.primary,
+						)}
 						modifierClasses={[
 							button.modifierClasses ?? '',
 							'subscriptions__product-button',
@@ -70,6 +85,23 @@ function SubscriptionsProductDescription({
 				))}
 			</div>
 		</div>
+	);
+}
+
+function SubscriptionsProductBenefits({
+	benefits,
+}: {
+	benefits: ProductBenefit[];
+}): JSX.Element {
+	return (
+		<ul className="subscriptions__list">
+			{benefits.map((benefit) => (
+				<li className="subscriptions__listitem">
+					<div className="subscriptions__listitem__bullet">{`●`}</div>
+					<div>{benefit.copy}</div>
+				</li>
+			))}
+		</ul>
 	);
 }
 

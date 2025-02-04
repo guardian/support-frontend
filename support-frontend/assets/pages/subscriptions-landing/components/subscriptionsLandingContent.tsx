@@ -58,7 +58,7 @@ function SubscriptionsLandingContent({
 						}
 						isFeature={isFeature(index)}
 						classModifier={product.classModifier ?? []}
-						participations={participations}
+						benefits={product.benefits}
 					/>
 				))}
 			</div>

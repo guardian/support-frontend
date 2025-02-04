@@ -62,6 +62,8 @@ trait Controllers {
     allSettingsProvider,
     appConfig.supportUrl,
     appConfig.stage,
+    testUsers,
+    cachedProductCatalogServiceProvider,
   )
 
   private lazy val landingCopyProvider = new LandingCopyProvider(
