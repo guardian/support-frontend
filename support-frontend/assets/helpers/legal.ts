@@ -33,7 +33,6 @@ const supporterPlusTermsLink =
 	'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
 const tierThreeTermsLink =
 	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
-// Placeholder, awaiting Ts&Cs location
 const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tcs`;
 // ----- Exports ----- //
 export {
