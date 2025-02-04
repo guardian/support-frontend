@@ -21,11 +21,9 @@ import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const {
-	allLandingPagesAndThankyouPages,
-	genericCheckoutOnly,
-	digitalEditions,
-} = pageUrlRegexes.contributions;
+const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
+	pageUrlRegexes.contributions;
+const { digitalEditions } = pageUrlRegexes.subscriptions;
 
 jest.mock('ophan', () => ({
 	record: () => null,

@@ -15,8 +15,6 @@ export const pageUrlRegexes = {
 			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
-		digitalEditions:
-			'(?:/(uk|us|ca|eu|nz|int)/)(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout?(.*DigitalSubscription.*)|thank-you?(.*DigitalSubscription.*))',
 	},
 	subscriptions: {
 		paper: {
@@ -26,6 +24,8 @@ export const pageUrlRegexes = {
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
+		digitalEditions:
+			'(?:/(uk|us|ca|eu|nz|int)/)(subscribe$|subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout?(.*DigitalSubscription.*)|thank-you?(.*DigitalSubscription.*))',
 	},
 };
 
@@ -130,10 +130,10 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 2,
-		targetPage: pageUrlRegexes.contributions.digitalEditions,
+		targetPage: pageUrlRegexes.subscriptions.digitalEditions,
 		excludeContributionsOnlyCountries: false,
 	},
 };
