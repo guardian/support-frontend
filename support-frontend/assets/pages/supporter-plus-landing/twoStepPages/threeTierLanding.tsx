@@ -99,6 +99,7 @@ const innerContentContainer = css`
 `;
 
 const heading = css`
+	text-wrap: balance;
 	text-align: left;
 	color: ${palette.neutral[100]};
 	${headlineBold24}

@@ -64,7 +64,7 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
         LandingPageVariant(
           name = "CONTROL",
           copy = LandingPageCopy(
-            heading = "Support fearless, <br /> independent journalism",
+            heading = "Support fearless, independent journalism",
             subheading =
               "We're not owned by a billionaire or profit-driven corporation: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact (and you can cancel anytime). Thank you.",
           ),
@@ -81,7 +81,7 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
         LandingPageVariant(
           name = "CONTROL",
           copy = LandingPageCopy(
-            heading = "Support fearless, <br /> independent journalism",
+            heading = "Support fearless, independent journalism",
             subheading =
               "We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>",
           ),
