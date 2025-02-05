@@ -364,7 +364,7 @@ export const getThankYouModuleData = (
 		},
 		reminderToActivateSubscription: {
 			header:
-				'Almost there! Complete your Guardian account to activate your subscription',
+				'Complete your Guardian account for full access to your subscription',
 			bodyCopy: <ActivateSubscriptionReminder />,
 			ctas: null,
 		},
