@@ -26,7 +26,6 @@ const setUserDetailsForProduct = async (
 ) => {
 	switch (product) {
 		case 'SupporterPlus':
-		case 'GuardianLight':
 		case 'GuardianAdLite':
 			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
 
@@ -59,7 +58,8 @@ export const testCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}`;
+		// Temporary opt out of this test
+		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}#ab-confirmEmail=control`;
 		const page = await context.newPage();
 		await setupPage(page, context, baseURL, url);
 

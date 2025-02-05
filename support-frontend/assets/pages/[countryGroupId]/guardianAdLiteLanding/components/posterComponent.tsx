@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
 import {
 	from,
-	headlineBold24,
+	headlineBold28,
 	headlineBold34,
 	palette,
 	space,
-	textSans17,
-	textSans20,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import { Container } from 'components/layout/container';
 
@@ -27,7 +26,7 @@ const container = css`
 `;
 const headingContentContainer = css`
 	${from.tablet} {
-		min-height: 418px;
+		min-height: 404px;
 	}
 	${from.desktop} {
 		max-width: 940px;
@@ -48,7 +47,7 @@ const bodyContainer = css`
 `;
 const heading = css`
 	text-align: left;
-	${headlineBold24}
+	${headlineBold28}
 	margin-bottom: ${space[3]}px;
 	${from.tablet} {
 		max-width: 340px;
@@ -66,12 +65,9 @@ const headingColor = css`
 const copy = css`
 	text-align: left;
 	padding-top: ${space[1]}px;
-	${textSans17};
+	${textEgyptian17};
 	${from.tablet} {
 		padding-top: ${space[2]}px;
-	}
-	${from.desktop} {
-		${textSans20};
 	}
 `;
 const paragraph = css`
@@ -101,11 +97,11 @@ export function PosterComponent(): JSX.Element {
 						<p css={paragraph}>
 							The Guardian is lucky to have a unique ownership structure and a
 							revenue model powered by the direct support of many of our
-							readers. However advertising remains a crucial part of how we fund
-							our journalism.
+							readers. However, advertising remains a crucial part of how we
+							fund our journalism.
 						</p>
 						<p css={paragraph}>
-							Readers choosing to reject personalised advertising makes it more
+							Readers choosing to reject personalised advertising make it more
 							difficult for us to generate revenue from online advertising. Put
 							simply, that means that the more people who press “reject”, the
 							less money to pay for quality reporting.

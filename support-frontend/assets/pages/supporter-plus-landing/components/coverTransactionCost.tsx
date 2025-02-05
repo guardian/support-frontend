@@ -39,7 +39,7 @@ const coverTransactionSummaryContainer = css`
 	padding: 0px 0px ${space[2]}px;
 `;
 
-export type CoverTransactionCostProps = {
+type CoverTransactionCostProps = {
 	transactionCost: boolean;
 	transactionCostAmount: string;
 	transactionCostTotal: string;

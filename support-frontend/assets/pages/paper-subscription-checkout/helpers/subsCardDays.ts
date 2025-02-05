@@ -121,4 +121,4 @@ const getPaymentStartDate = (
 	return new Date(date + delayInMils);
 };
 
-export { getFormattedStartDate, getPaymentStartDate, monthText };
+export { getFormattedStartDate, getPaymentStartDate };

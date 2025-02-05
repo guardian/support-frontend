@@ -28,7 +28,6 @@ import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/thunk
 import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
-	setGiftDeliveryDate,
 	setGiftMessage,
 	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
@@ -83,7 +82,6 @@ const formActionCreators = {
 	setGiftStatus: setOrderIsAGift,
 	setDeliveryInstructions,
 	setGiftMessage,
-	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
 	setAddDigitalSubscription: setAddDigital,
 	setCsrUsername: (username: string): Action => ({
 		type: 'SET_CSR_USERNAME',

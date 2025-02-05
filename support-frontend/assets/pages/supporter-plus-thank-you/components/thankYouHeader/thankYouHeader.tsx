@@ -3,7 +3,7 @@ import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductKey } from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import DirectDebitMessage from './directDebitMessage';
@@ -31,7 +31,7 @@ export const headerSupportingText = css`
 
 type ThankYouHeaderProps = {
 	name: string | null;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
 	contributionType: ContributionType;

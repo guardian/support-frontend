@@ -18,7 +18,6 @@ import { guardianLiveTermsLink, privacyLink } from 'helpers/legal';
 import * as cookie from 'helpers/storage/cookie';
 import { getPageViewId } from 'helpers/tracking/trackingOphan';
 import { isProd } from 'helpers/urls/url';
-import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 
 const darkBackgroundContainerMobile = css`
@@ -103,10 +102,6 @@ export function Events({ geoId }: Props) {
 	const privacyPolicy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const pageviewId = getPageViewId();
-
-	if (!pageviewId) {
-		logException('pageviewId not available on event listing');
-	}
 
 	const hashUrlSearchParams = new URLSearchParams({
 		'p[meta_page_view_id]': pageviewId,

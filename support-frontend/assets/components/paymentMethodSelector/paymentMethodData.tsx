@@ -1,5 +1,4 @@
 import { SvgDirectDebitWide } from '@guardian/source/react-components';
-import { AmazonPayFormContainer } from 'components/amazonPayForm/amazonPayFormContainer';
 import type { DirectDebitFormProps } from 'components/directDebit/directDebitForm/directDebitForm';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { DirectDebitFormContainer } from 'components/directDebit/directDebitForm/directDebitFormContainer';
@@ -7,7 +6,6 @@ import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
 import { SepaFormContainer } from 'components/sepaForm/SepaFormContainer';
 import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
-import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { CreditDebitIcons, SvgCreditCardWithTheme } from './creditDebitIcons';
@@ -56,12 +54,6 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 				)}
 			/>
 		),
-	},
-	AmazonPay: {
-		id: 'qa-amazon-pay',
-		label: 'Amazon Pay',
-		icon: <SvgAmazonPayLogoDs />,
-		accordionBody: () => <AmazonPayFormContainer />,
 	},
 	None: {
 		id: 'qa-none',

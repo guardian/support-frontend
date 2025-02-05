@@ -3,7 +3,7 @@ import catalogue from './imageCatalogue.json';
 export type ImageType = 'jpg' | 'png';
 // ----- Setup ----- //
 export const GRID_DOMAIN = 'https://i.guim.co.uk';
-export const imageCatalogue: Record<string, string> = catalogue;
+const imageCatalogue: Record<string, string> = catalogue;
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
 export type ImageId = keyof typeof imageCatalogue;
 // ----- Functions ----- //

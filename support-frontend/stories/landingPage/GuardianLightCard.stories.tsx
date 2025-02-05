@@ -29,7 +29,7 @@ export const Default = Template.bind({});
 
 Default.args = {
 	cardPosition: 1,
-	link: 'https://support.theguardian.com/uk/checkout?product=GuardianLight&ratePlan=Monthly',
+	link: 'https://support.theguardian.com/uk/checkout?product=GuardianAdLite&ratePlan=Monthly',
 	productDescription: productCatalogGuardianAdLite().GuardianAdLite,
 	ctaCopy: 'Get Guardian Ad-Lite for XX/month',
 };

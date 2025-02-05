@@ -9,7 +9,6 @@ import {
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import Rows from 'components/base/rows';
-import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';
@@ -83,11 +82,6 @@ const paymentMethodData = {
 		id: 'qa-direct-debit-sepa',
 		label: 'Direct debit (SEPA)',
 		icon: <SvgSepa />,
-	},
-	AmazonPay: {
-		id: 'qa-amazon-pay',
-		label: 'Amazon Pay',
-		icon: <SvgAmazonPayLogoDs />,
 	},
 	None: {
 		id: 'qa-none',

@@ -17,7 +17,6 @@ class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
     val service = SupporterDataDynamoService(CODE)
     val item = supporterdata.model.SupporterRatePlanItem(
       identityId = "999965",
-      gifteeIdentityId = None,
       subscriptionName = "test-digi-sub-name",
       productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
       productRatePlanName = "Digital Pack Annual",
@@ -34,7 +33,6 @@ class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
     val service = SupporterDataDynamoService(CODE)
     val item = supporterdata.model.SupporterRatePlanItem(
       identityId = "999965",
-      gifteeIdentityId = None,
       subscriptionName = "test-sub-name",
       productRatePlanId = "2c92c0f85a6b134e015a7fcd9f0c7855",
       productRatePlanName = "Monthly Contribution",

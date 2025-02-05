@@ -52,7 +52,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with
     fieldsToTest should be(
       Right(
         Contribution(5, GBP, Monthly),
-        Left(PayPalPaymentFields(validBaid)),
+        PayPalPaymentFields(validBaid),
       ),
     )
 
@@ -64,12 +64,10 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with
     fieldsToTest should be(
       Right(
         Contribution(5, GBP, Monthly),
-        Left(
-          StripePaymentFields(
-            stripeToken,
-            Some(StripePaymentType.StripeCheckout),
-            Some(StripePublicKey("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")),
-          ),
+        StripePaymentFields(
+          stripeToken,
+          Some(StripePaymentType.StripeCheckout),
+          Some(StripePublicKey("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")),
         ),
       ),
     )
@@ -83,7 +81,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with
       case _ => fail()
     }
     result.paymentFields match {
-      case Left(paypal: PayPalPaymentFields) => paypal.baid should be(validBaid)
+      case paypal: PayPalPaymentFields => paypal.baid should be(validBaid)
       case _ => fail()
     }
   }
@@ -98,7 +96,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with
           case _ => fail()
         }
         result.paymentFields match {
-          case Left(dd: DirectDebitPaymentFields) => dd.accountHolderName should be(mickeyMouse)
+          case dd: DirectDebitPaymentFields => dd.accountHolderName should be(mickeyMouse)
           case _ => fail()
         }
       },

@@ -33,8 +33,8 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { config } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
@@ -52,7 +52,6 @@ import type {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	isPaymentMethod,
 	PayPal,
 	Stripe,
@@ -62,6 +61,7 @@ import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import * as cookie from 'helpers/storage/cookie';
+import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	derivePaymentApiAcquisitionData,
 	getReferrerAcquisitionData,
@@ -81,6 +81,7 @@ import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -95,7 +96,6 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { setThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -196,6 +196,26 @@ function getFinalAmount(
 			: roundToDecimalPlaces(parsedAmount * transactionMultiplier);
 	}
 	return roundToDecimalPlaces(selectedPriceCard * transactionMultiplier);
+}
+
+function getAcquisitionData(
+	abParticipations: Participations,
+	billingPostcode: string,
+	coverTransactionCost: boolean,
+): PaymentAPIAcquisitionData {
+	const referrerAcquisitionData = getReferrerAcquisitionData();
+	return derivePaymentApiAcquisitionData(
+		{
+			...referrerAcquisitionData,
+			labels: [
+				...(referrerAcquisitionData.labels ?? []),
+				'one-time-checkout',
+				...(coverTransactionCost ? ['transaction-fee-covered'] : []),
+			],
+		},
+		abParticipations,
+		billingPostcode,
+	);
 }
 
 export function OneTimeCheckoutComponent({
@@ -313,7 +333,7 @@ export function OneTimeCheckoutComponent({
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-	const validPaymentMethods = [Stripe, PayPal, countryId === 'US' && AmazonPay]
+	const validPaymentMethods = [Stripe, PayPal]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
@@ -361,13 +381,10 @@ export function OneTimeCheckoutComponent({
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
 				});
-				const acquisitionData = derivePaymentApiAcquisitionData(
-					{
-						...getReferrerAcquisitionData(),
-						labels: ['one-time-checkout'],
-					},
+				const acquisitionData = getAcquisitionData(
 					abParticipations,
 					billingPostcode,
+					coverTransactionCost,
 				);
 				// We've only created a payment at this point, and the user has to get through
 				// the PayPal flow on their site before we can actually try and execute the payment.
@@ -445,13 +462,10 @@ export function OneTimeCheckoutComponent({
 							email,
 							stripePaymentMethod: stripePaymentMethod,
 						},
-						acquisitionData: derivePaymentApiAcquisitionData(
-							{
-								...getReferrerAcquisitionData(),
-								labels: ['one-time-checkout'],
-							},
+						acquisitionData: getAcquisitionData(
 							abParticipations,
 							billingPostcode,
+							coverTransactionCost,
 						),
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',

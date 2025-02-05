@@ -3,12 +3,8 @@ import {
 	glyph as shortGlyph,
 } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	billingPeriodAdverb,
-	billingPeriodNoun as upperCaseNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { billingPeriodNoun as upperCaseNoun } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
@@ -123,10 +119,6 @@ function getPriceDescription(
 	);
 }
 
-function getAppliedPromoDescription(productPrice: ProductPrice): string {
-	return getAppliedPromo(productPrice.promotions)?.landingPage?.roundel ?? '';
-}
-
 function getSimplifiedPriceDescription(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
@@ -154,33 +146,4 @@ function getSimplifiedPriceDescription(
 	)}`;
 }
 
-function getPriceForDescription(
-	productPrice: ProductPrice,
-	promotion: Promotion | undefined,
-) {
-	if (hasDiscount(promotion)) {
-		return promotion.discountedPrice;
-	}
-
-	return productPrice.price;
-}
-
-function getAdverbialSubscriptionDescription(
-	productPrice: ProductPrice,
-	billingPeriod: BillingPeriod,
-): string {
-	const glyph = shortGlyph(productPrice.currency);
-	const promotion = getAppliedPromo(productPrice.promotions);
-	const price = getPriceForDescription(productPrice, promotion);
-	return `Subscribe ${billingPeriodAdverb(
-		billingPeriod,
-	).toLowerCase()} for ${displayPrice(glyph, price)}`;
-}
-
-export {
-	displayPrice,
-	getPriceDescription,
-	getAppliedPromoDescription,
-	getSimplifiedPriceDescription,
-	getAdverbialSubscriptionDescription,
-};
+export { displayPrice, getPriceDescription, getSimplifiedPriceDescription };

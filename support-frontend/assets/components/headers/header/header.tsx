@@ -9,12 +9,12 @@ import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';
 import './header.scss';
 
-export type PropTypes = {
+type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
-export type State = {
+type State = {
 	isTestUser: boolean | null | undefined;
 };
 

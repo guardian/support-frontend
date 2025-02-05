@@ -12,6 +12,7 @@ import {
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -39,8 +40,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -67,11 +68,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
+	type ActiveProductKey,
 	filterBenefitByABTest,
 	filterBenefitByRegion,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
-	type ProductKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -112,6 +113,10 @@ import {
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
 import {
+	setThankYouOrder,
+	unsetThankYouOrder,
+} from '../checkout/helpers/sessionStorage';
+import {
 	stripeCreateSetupIntentPrb,
 	stripeCreateSetupIntentRecaptcha,
 } from '../checkout/helpers/stripe';
@@ -121,7 +126,12 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
-import { FormSection, Legend, shorterBoxMargin } from './form';
+import {
+	FormSection,
+	Legend,
+	lengthenBoxMargin,
+	shorterBoxMargin,
+} from './form';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -130,7 +140,6 @@ import {
 	PaymentMethodSelector,
 } from './paymentMethod';
 import { retryPaymentStatus } from './retryPaymentStatus';
-import { setThankYouOrder, unsetThankYouOrder } from './thankYouComponent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -193,12 +202,23 @@ const handlePaymentStatus = (
 	}
 };
 
+const productLanding = (product: ProductKey) => {
+	switch (product) {
+		case 'GuardianAdLite':
+			return '/guardian-ad-lite';
+		case 'DigitalSubscription':
+			return `/subscribe`;
+		default:
+			return `/contribute`;
+	}
+};
+
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
 	isTestUser: boolean;
-	productKey: ProductKey;
+	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	originalAmount: number;
 	discountedAmount?: number;
@@ -208,7 +228,6 @@ type CheckoutComponentProps = {
 	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
-	returnLink?: string;
 	abParticipations: Participations;
 };
 
@@ -226,7 +245,6 @@ export function CheckoutComponent({
 	useStripeExpressCheckout,
 	countryId,
 	forcedCountry,
-	returnLink,
 	abParticipations,
 }: CheckoutComponentProps) {
 	/** we unset any previous orders that have been made */
@@ -242,6 +260,8 @@ export function CheckoutComponent({
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
+
+	const inConfirmEmailVariant = abParticipations.confirmEmail === 'variant';
 
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
@@ -297,7 +317,6 @@ export function CheckoutComponent({
 	const validPaymentMethods = [
 		/* NOT YET IMPLEMENTED
 		countryGroupId === 'EURCountries' && Sepa,
-    countryId === 'US' && AmazonPay,
     */
 		countryId === 'GB' && DirectDebit,
 		Stripe,
@@ -364,6 +383,7 @@ export function CheckoutComponent({
 	const [firstName, setFirstName] = useState(user?.firstName ?? '');
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [email, setEmail] = useState(user?.email ?? '');
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -419,11 +439,9 @@ export function CheckoutComponent({
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
 
-	const useLinkExpressCheckout =
-		abParticipations.linkExpressCheckout === 'variant';
-
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
+
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -557,10 +575,6 @@ export function CheckoutComponent({
 			labels: ['generic-checkout'],
 		};
 
-		if (stripeExpressCheckoutPaymentType === 'link') {
-			referrerAcquisitionData.labels.push('express-checkout-link');
-		}
-
 		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add debugInfo
@@ -641,7 +655,6 @@ export function CheckoutComponent({
 						'contribution',
 						contributionAmount.toString(),
 					);
-				returnLink && thankYouUrlSearchParams.set('returnAddress', returnLink);
 				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 			} else {
 				console.error(
@@ -671,11 +684,8 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnParam = returnLink ? '?returnAddress=' + returnLink : '';
-	const returnToLandingPage =
-		productKey === 'GuardianLight'
-			? `/guardian-ad-lite${returnParam}`
-			: `/${geoId}/contribute`;
+	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
+	const isAdLite = productKey === 'GuardianAdLite';
 
 	return (
 		<CheckoutLayout>
@@ -768,10 +778,7 @@ export function CheckoutComponent({
 							promotion,
 						)}
 						headerButton={
-							<BackButton
-								path={returnToLandingPage}
-								buttonText={productKey === 'GuardianLight' ? 'Back' : 'Change'}
-							/>
+							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
 					/>
 				</BoxContents>
@@ -788,7 +795,12 @@ export function CheckoutComponent({
 					return false;
 				}}
 			>
-				<Box cssOverrides={shorterBoxMargin}>
+				<Box
+					cssOverrides={[
+						shorterBoxMargin,
+						isAdLite ? lengthenBoxMargin : css``,
+					]}
+				>
 					<BoxContents>
 						{useStripeExpressCheckout && (
 							<div
@@ -867,6 +879,8 @@ export function CheckoutComponent({
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
 
 										setPaymentMethod('StripeExpressCheckoutElement');
 										setStripeExpressCheckoutPaymentType(
@@ -882,7 +896,7 @@ export function CheckoutComponent({
 										paymentMethods: {
 											applePay: 'auto',
 											googlePay: 'auto',
-											link: useLinkExpressCheckout ? 'auto' : 'never',
+											link: 'never',
 										},
 									}}
 								/>
@@ -930,6 +944,11 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
+								requireConfirmedEmail={inConfirmEmailVariant}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
 							>
 								<Signout isSignedIn={isSignedIn} />
 							</PersonalDetailsFields>
@@ -1439,8 +1458,18 @@ export function CheckoutComponent({
 					</BoxContents>
 				</Box>
 			</form>
-			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			{!isAdLite && (
+				<>
+					<PatronsMessage
+						countryGroupId={countryGroupId}
+						mobileTheme={'light'}
+					/>
+					<GuardianTsAndCs
+						mobileTheme={'light'}
+						displayPatronsCheckout={false}
+					/>
+				</>
+			)}
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>

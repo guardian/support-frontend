@@ -146,5 +146,4 @@ ProductPageHeroHeader.defaultProps = {
 	orderIsAGift: false,
 	giftImage: null,
 };
-export { HeroWrapper, HeroHeading, ProductPageHeroHeader };
-export default ProductPageHero;
+export { HeroWrapper };

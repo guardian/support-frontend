@@ -1,7 +1,7 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	from,
-	headlineBold17,
+	headlineBold20,
 	headlineBold24,
 	palette,
 	space,
@@ -31,7 +31,9 @@ const container = css`
 		padding: ${space[4]}px ${space[3]}px ${space[4]}px ${space[3]}px;
 		margin-top: ${'0'}px;
 	}
-	max-width: 460px;
+	${from.desktop} {
+		max-width: 460px;
+	}
 `;
 const titleSummarySvgCss = css`
 	display: flex;
@@ -51,7 +53,7 @@ const svgCss = css`
 `;
 const titleCss = (cardIndex: number) => css`
 	text-align: center;
-	${headlineBold17};
+	${headlineBold20};
 	color: ${palette.brand[100]};
 	${until.desktop} {
 		max-width: ${cardIndex === 1 ? '85%' : '100%'};

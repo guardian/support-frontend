@@ -1,7 +1,8 @@
 // ----- Imports ----- //
 
 import { viewId } from 'ophan';
-import { type Participations, testIsActive } from 'helpers/abTests/abtest';
+import { testIsActive } from 'helpers/abTests/abtest';
+import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -18,12 +19,12 @@ export type AcquisitionABTest = {
 	variant: string;
 };
 
-export type QueryParameter = {
+type QueryParameter = {
 	name: string;
 	value: string;
 };
 
-export type AcquisitionQueryParameters = QueryParameter[];
+type AcquisitionQueryParameters = QueryParameter[];
 
 export type OphanIds = {
 	pageviewId: string;
@@ -247,15 +248,6 @@ function derivePaymentApiAcquisitionData(
 	};
 }
 
-function deriveSubsAcquisitionData(
-	referrerAcquisitionData: ReferrerAcquisitionData,
-	nativeAbParticipations: Participations,
-): ReferrerAcquisitionData {
-	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
-
-	return { ...referrerAcquisitionData, abTests };
-}
-
 // Reads the acquisition data from sessionStorage.
 function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
@@ -355,6 +347,5 @@ export {
 	getOphanIds,
 	participationsToAcquisitionABTest,
 	derivePaymentApiAcquisitionData,
-	deriveSubsAcquisitionData,
 	getSupportAbTests,
 };

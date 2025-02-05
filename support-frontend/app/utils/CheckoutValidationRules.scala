@@ -8,11 +8,9 @@ import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.catalog._
 import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
 import com.gu.support.paperround.{AgentId, PaperRoundAPI}
-import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 import services.stepfunctions.CreateSupportWorkersRequest
-import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,29 +35,28 @@ object CheckoutValidationRules {
   case object Valid extends Result
   def checkSubscriptionPaymentMethodEnabled(
       switches: SubscriptionsPaymentMethodSwitches,
-      paymentFields: Either[PaymentFields, RedemptionData],
+      paymentFields: PaymentFields,
   ) = paymentFields match {
-    case Left(_: PayPalPaymentFields) =>
+    case _: PayPalPaymentFields =>
       if (switches.paypal.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(_: DirectDebitPaymentFields) =>
+    case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(_: StripePaymentFields) =>
+    case _: StripePaymentFields =>
       if (switches.creditCard.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(_) => Invalid("Invalid Payment Method")
-    case Right(_) => Valid
+    case _ => Invalid("Invalid Payment Method")
   }
 
   def checkContributionPaymentMethodEnabled(
       switches: RecurringPaymentMethodSwitches,
-      paymentFields: Either[PaymentFields, RedemptionData],
+      paymentFields: PaymentFields,
   ) = paymentFields match {
-    case Left(_: PayPalPaymentFields) =>
+    case _: PayPalPaymentFields =>
       if (switches.payPal.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(_: DirectDebitPaymentFields) =>
+    case _: DirectDebitPaymentFields =>
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(_: SepaPaymentFields) =>
+    case _: SepaPaymentFields =>
       if (switches.sepa.contains(On)) Valid else Invalid("Invalid Payment Method")
-    case Left(s: StripePaymentFields) =>
+    case s: StripePaymentFields =>
       s.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) =>
           if (switches.stripeApplePay.contains(On)) Valid else Invalid("Invalid Payment Method")
@@ -69,16 +66,14 @@ object CheckoutValidationRules {
           if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")
       }
-    case Left(_: ExistingPaymentFields) =>
+    case _: ExistingPaymentFields =>
       // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
       // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
       Valid
-    case Right(_) => Invalid("Invalid Payment Method")
-
   }
   def checkPaymentMethodEnabled(
       product: ProductType,
-      paymentFields: Either[PaymentFields, RedemptionData],
+      paymentFields: PaymentFields,
       switches: Switches,
   ) =
     product match {
@@ -105,7 +100,7 @@ object CheckoutValidationRules {
           createSupportWorkersRequest,
         ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
-      case _: GuardianLight => PaidProductValidation.passes(createSupportWorkersRequest)
+      case _: GuardianAdLite => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) =>
         Invalid(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
@@ -201,17 +196,11 @@ object PaidProductValidation {
   import AddressAndCurrencyValidationRules._
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
-      hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields) and
+      noEmptyPaymentFields(createSupportWorkersRequest.paymentFields) and
       hasStateIfRequired(
         createSupportWorkersRequest.billingAddress.country,
         createSupportWorkersRequest.billingAddress.state,
       )
-
-  def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Result =
-    paymentDetails match {
-      case Left(paymentFields) => noEmptyPaymentFields(paymentFields)
-      case Right(redemptionData) => Invalid("paid product can't be a redemption")
-    }
 
   def noEmptyPaymentFields(paymentFields: PaymentFields): Result = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
@@ -296,10 +285,6 @@ object DigitalPackValidation {
     import createSupportWorkersRequest.billingAddress._
     import createSupportWorkersRequest.product._
 
-    def isValidRedemption =
-      SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
-        hasStateIfRequired(country, state)
-
     def isValidPaidSub(paymentFields: PaymentFields) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
         hasStateIfRequired(country, state) and
@@ -320,22 +305,7 @@ object DigitalPackValidation {
       else
         Invalid("User is not in the benefits test")
     }
-
-    val Purchase = Left
-    type Redemption[A, B] = Right[A, B]
-
-    (paymentFields, digitalPack.readerType, createSupportWorkersRequest.giftRecipient) match {
-      case (Purchase(paymentFields), ReaderType.Direct, None) =>
-        isValidBenefitsTestSub or isValidPaidSub(paymentFields)
-      case (Purchase(paymentFields), ReaderType.Gift, Some(GiftRecipientRequest(_, _, _, Some(_), _, _))) =>
-        isValidPaidSub(paymentFields)
-      case (_: Redemption[_, _], ReaderType.Gift, None) =>
-        SimpleCheckoutFormValidation.passes(createSupportWorkersRequest)
-      case _ =>
-        Invalid(
-          s"invalid digital subscription request: paymentFields: $paymentFields, readerType: $digitalPack.readerType, giftRecipient: $giftRecipient",
-        )
-    }
+    isValidBenefitsTestSub or isValidPaidSub(paymentFields)
   }
 }
 

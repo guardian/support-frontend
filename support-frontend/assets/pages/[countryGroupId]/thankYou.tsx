@@ -5,14 +5,14 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
-import { setHideSupportMessagingCookie } from 'helpers/storage/contributionsCookies';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
+import { setOneOffContributionCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 
-export type ThankYouProps = {
+type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
@@ -45,9 +45,6 @@ export function ThankYou({
 	const contributionAmount = contributionParam
 		? roundToDecimalPlaces(parseFloat(contributionParam))
 		: undefined;
-	// returnAddress
-	const urlSearchParamsReturn =
-		searchParams.get('returnAddress') ?? `https://www.theguardian.com`; // default back address if no returnAddress supplied
 
 	// userType: default to 'current' since it has the least specific messaging
 	const userType = (searchParams.get('userType') ?? 'current') as UserType;
@@ -68,7 +65,7 @@ export function ThankYou({
 			finalAmount: finalAmount,
 		};
 
-		setHideSupportMessagingCookie();
+		setOneOffContributionCookie();
 	} else {
 		/** Recurring product must have product & ratePlan */
 		if (!product) {
@@ -168,7 +165,6 @@ export function ThankYou({
 			ratePlanKey={ratePlanKey}
 			promotion={promotion}
 			identityUserType={userType}
-			returnLink={urlSearchParamsReturn}
 			abParticipations={abParticipations}
 		/>
 	);

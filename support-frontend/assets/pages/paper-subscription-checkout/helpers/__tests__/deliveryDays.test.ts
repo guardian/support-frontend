@@ -6,7 +6,6 @@ import {
 	Sunday,
 	Weekend,
 } from 'helpers/productPrice/productOptions';
-import { DeliveryDays } from 'helpers/subscriptionsForms/deliveryDays';
 import {
 	formatMachineDate,
 	formatUserDate,
@@ -20,6 +19,16 @@ import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
 import { getVoucherDays } from '../voucherDeliveryDays';
 
 jest.mock('ophan', () => {});
+
+const DeliveryDays = {
+	Sunday: 0,
+	Monday: 1,
+	Tuesday: 2,
+	Wednesday: 3,
+	Thursday: 4,
+	Friday: 5,
+	Saturday: 6,
+};
 
 // ----- Tests ----- //
 const monday = 1551075752198;

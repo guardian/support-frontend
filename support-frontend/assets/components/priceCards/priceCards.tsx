@@ -80,7 +80,8 @@ export function PriceCards({
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
 	// Override hideChooseYourAmount if no amounts supplied
-	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
+	const enableChooseYourAmountButton =
+		(!hideChooseYourAmount || !amounts.length) && otherAmountField;
 	const buttonCount = enableChooseYourAmountButton
 		? amounts.length + 1
 		: amounts.length;
@@ -123,7 +124,7 @@ export function PriceCards({
 					)}
 				</>
 			</ChoiceCardGroup>
-			{otherAmountField}
+			{enableChooseYourAmountButton && otherAmountField}
 		</div>
 	);
 }

@@ -39,11 +39,11 @@ object ProductTypeRatePlans {
       .getOrElse(environment, Nil)
       .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
 
-  def guardianLightRatePlan(
-      product: GuardianLight,
+  def guardianAdLiteRatePlan(
+      product: GuardianAdLite,
       environment: TouchPointEnvironment,
-  ): Option[ProductRatePlan[catalog.GuardianLight.type]] =
-    catalog.GuardianLight.ratePlans
+  ): Option[ProductRatePlan[catalog.GuardianAdLite.type]] =
+    catalog.GuardianAdLite.ratePlans
       .getOrElse(environment, Nil)
       .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
 

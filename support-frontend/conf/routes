@@ -113,19 +113,15 @@ GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events/:eventId     controllers.A
 GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 # Digital subscriptions
-GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/digital/gift                                       controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = true)
+GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect()
+GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String)
 GET  /subscribe/digitaledition                                     controllers.DigitalSubscriptionController.digitalEditionGeoRedirect()
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digitaledition   controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digitaledition   controllers.DigitalSubscriptionController.digital(country: String)
 
 # redirect from old checkout urls
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")
-GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
+GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm()
 
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
@@ -137,11 +133,6 @@ GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.W
 
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
-
-# redemptions
-GET  /subscribe/redeem                                             controllers.RedemptionController.displayForm(redemptionCode: String)
-GET  /subscribe/redeem/validate/:redemptionCode                    controllers.RedemptionController.validateCode(redemptionCode: String, isTestUser: Option[Boolean])
-GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)

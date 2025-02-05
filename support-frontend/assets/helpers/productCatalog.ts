@@ -1,6 +1,6 @@
-import type { ProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-import { typeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
-import type { Participations } from './abTests/abtest';
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
+import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
 import type {
 	CountryGroupId,
@@ -8,7 +8,7 @@ import type {
 } from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 
-export type { ProductKey };
+export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
@@ -89,29 +89,21 @@ function displayBenefitByABTestVariant(
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
-export const productKeys = Object.keys(typeObject) as ProductKey[];
-export function isProductKey(val: unknown): val is ProductKey {
-	return productKeys.includes(val as ProductKey);
+const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
+export function isProductKey(val: unknown): val is ActiveProductKey {
+	return productKeys.includes(val as ActiveProductKey);
 }
 
 const appBenefit = {
-	copy: 'Full access to the Guardian app',
+	copy: 'Unlimited access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 };
 const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['v1', 'v2'], display: false },
-	],
 };
-const addFreeBenefitTierThree = {
-	copy: 'Ad-free reading on all your devices',
-	specificToAbTest: [
-		{ name: 'adFreeTierThree', variants: ['v1'], display: true },
-	],
-};
+
 const newsletterBenefit = {
-	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -127,6 +119,17 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
+const newspaperArchiveBenefitUK = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
+};
+const newspaperArchiveBenefitROW = {
+	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
+	isNew: true,
+	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
+};
+
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
 	isNew: true,
@@ -135,240 +138,298 @@ const feastBenefit = {
 };
 
 const supporterPlusBenefits = [
-	fewerAsksBenefit,
-	newsletterBenefit,
-	addFreeBenefit,
 	appBenefit,
+	addFreeBenefit,
+	newsletterBenefit,
+	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
 ];
 
-const guardianAdLiteBenefits = [
-	{
-		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian without personalised advertising.',
-	},
-	{
-		copy: 'If you already read the Guardian ad-free you should sign in.',
-	},
-	{ copy: 'You can cancel anytime.' },
+const tierThreeBenefits = [guardianWeeklyBenefit];
+const tierThreeInclArchiveBenefitsUK = [
+	guardianWeeklyBenefit,
+	newspaperArchiveBenefitUK,
+];
+const tierThreeInclArchiveBenefitsROW = [
+	guardianWeeklyBenefit,
+	newspaperArchiveBenefitROW,
 ];
 
-export const productCatalogDescription: Record<ProductKey, ProductDescription> =
+const guardianAdLiteBenefits = [
 	{
-		GuardianLight: {
-			label: 'Guardian Ad-Lite',
-			thankyouMessage: `Your valued support powers our journalism${' '}`,
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
+		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising.',
+	},
+	{
+		copy: 'You will still see non-personalised advertising.',
+	},
+	{ copy: 'You can cancel at any time.' },
+];
+
+export const productCatalogDescription: Record<
+	ActiveProductKey,
+	ProductDescription
+> = {
+	GuardianAdLite: {
+		label: 'Guardian Ad-Lite',
+		thankyouMessage: `Your valued support powers our journalism${' '}`,
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
 			},
-			benefits: guardianAdLiteBenefits,
 		},
+		benefits: guardianAdLiteBenefits,
+	},
+	TierThree: {
+		label: 'Digital + print',
+		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
+		benefitsSummary: [
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
+		],
+		benefits: [guardianWeeklyBenefit],
+		/** These are just the SupporterPlus benefits */
+		benefitsAdditional: supporterPlusBenefits,
+		deliverableTo: gwDeliverableCountries,
+		ratePlans: {
+			DomesticMonthly: {
+				billingPeriod: 'Monthly',
+			},
+			DomesticAnnual: {
+				billingPeriod: 'Annual',
+			},
+			RestOfWorldMonthly: {
+				billingPeriod: 'Monthly',
+			},
+			RestOfWorldAnnual: {
+				billingPeriod: 'Annual',
+			},
+			DomesticMonthlyV2: {
+				billingPeriod: 'Monthly',
+			},
+			DomesticAnnualV2: {
+				billingPeriod: 'Annual',
+			},
+			RestOfWorldMonthlyV2: {
+				billingPeriod: 'Monthly',
+			},
+			RestOfWorldAnnualV2: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+	DigitalSubscription: {
+		label: 'The Guardian Digital Edition',
+		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
+            Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
+		benefits: [
+			{
+				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+			},
+			{
+				copy: 'Full access to the Guardian app. Read our reporting on the go',
+			},
+			{
+				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+			},
+		],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Monthly',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+	NationalDelivery: {
+		label: 'National Delivery',
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Sixday: {
+				billingPeriod: 'Monthly',
+			},
+			Weekend: {
+				billingPeriod: 'Annual',
+			},
+			Everyday: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+	SupporterPlus: {
+		label: 'All-access digital',
+		/** These are duplicated in the TierThree benefitsAdditional */
+		benefits: supporterPlusBenefits,
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+	GuardianWeeklyRestOfWorld: {
+		label: 'The Guardian Weekly',
+		benefits: [],
+		deliverableTo: gwDeliverableCountries,
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			Quarterly: {
+				billingPeriod: 'Quarterly',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+	GuardianWeeklyDomestic: {
+		label: 'The Guardian Weekly',
+		benefits: [],
+		deliverableTo: gwDeliverableCountries,
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			Quarterly: {
+				billingPeriod: 'Quarterly',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+	SubscriptionCard: {
+		label: 'Newspaper subscription',
+		benefits: [],
+		ratePlans: {
+			Sixday: {
+				billingPeriod: 'Monthly',
+			},
+			Everyday: {
+				billingPeriod: 'Monthly',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+			},
+			Saturday: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+	Contribution: {
+		label: 'Support',
+		benefits: [newsletterBenefit],
+		benefitsMissing: [
+			appBenefit,
+			addFreeBenefit,
+			fewerAsksBenefit,
+			{
+				copy: 'Unlimited access to the Guardian Feast app',
+			},
+			partnerOffersBenefit,
+		],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Monthly',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+		},
+	},
+	HomeDelivery: {
+		label: 'Home Delivery',
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+			},
+			Saturday: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+	OneTimeContribution: {
+		label: 'One-time contribution',
+		benefits: [fewerAsksBenefit],
+		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
+		// can't handle a billingPeriod of OneTime.
+		ratePlans: {},
+	},
+	GuardianPatron: {
+		label: 'Guardian Patron',
+		benefits: [
+			{
+				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+			},
+			{
+				copy: 'Full access to the Guardian app. Read our reporting on the go',
+			},
+			{
+				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+			},
+		],
+		ratePlans: {
+			GuardianPatron: {
+				billingPeriod: 'Monthly',
+			},
+		},
+	},
+};
+
+export function productCatalogDescriptionNewspaperArchive(
+	countryGroupId?: CountryGroupId,
+) {
+	const newsPaperArchiveBenefit = countryGroupId
+		? countryGroupId === 'GBPCountries'
+			? tierThreeInclArchiveBenefitsUK
+			: tierThreeInclArchiveBenefitsROW
+		: tierThreeBenefits;
+
+	return {
+		...productCatalogDescription,
 		TierThree: {
-			label: 'Digital + print',
-			thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
-			benefitsSummary: [
-				'The rewards from ',
-				{ strong: true, copy: 'All-access digital' },
-			],
-			benefits: [addFreeBenefitTierThree, guardianWeeklyBenefit],
-			/** These are just the SupporterPlus benefits */
-			benefitsAdditional: supporterPlusBenefits,
-			deliverableTo: gwDeliverableCountries,
-			ratePlans: {
-				DomesticMonthly: {
-					billingPeriod: 'Monthly',
-				},
-				DomesticAnnual: {
-					billingPeriod: 'Annual',
-				},
-				RestOfWorldMonthly: {
-					billingPeriod: 'Monthly',
-				},
-				RestOfWorldAnnual: {
-					billingPeriod: 'Annual',
-				},
-				DomesticMonthlyV2: {
-					billingPeriod: 'Monthly',
-				},
-				DomesticAnnualV2: {
-					billingPeriod: 'Annual',
-				},
-				RestOfWorldMonthlyV2: {
-					billingPeriod: 'Monthly',
-				},
-				RestOfWorldAnnualV2: {
-					billingPeriod: 'Annual',
-				},
-			},
-		},
-		DigitalSubscription: {
-			label: 'The Guardian Digital Edition',
-			benefits: [
-				{
-					copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-				},
-				{
-					copy: 'Full access to the Guardian app. Read our reporting on the go',
-				},
-				{
-					copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
-				},
-			],
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-				Annual: {
-					billingPeriod: 'Annual',
-				},
-				ThreeMonthGift: {
-					billingPeriod: 'Monthly',
-				},
-				OneYearGift: {
-					billingPeriod: 'Annual',
-				},
-			},
-		},
-		NationalDelivery: {
-			label: 'National Delivery',
-			benefits: [],
-			deliverableTo: newspaperCountries,
-			ratePlans: {
-				Sixday: {
-					billingPeriod: 'Monthly',
-				},
-				Weekend: {
-					billingPeriod: 'Annual',
-				},
-				Everyday: {
-					billingPeriod: 'Monthly',
-				},
-			},
-		},
-		SupporterPlus: {
-			label: 'All-access digital',
-			/** These are duplicated in the TierThree benefitsAdditional */
-			benefits: supporterPlusBenefits,
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-				Annual: {
-					billingPeriod: 'Annual',
-				},
-			},
-		},
-		GuardianWeeklyRestOfWorld: {
-			label: 'The Guardian Weekly',
-			benefits: [],
-			deliverableTo: gwDeliverableCountries,
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-				OneYearGift: {
-					billingPeriod: 'Annual',
-				},
-				Annual: {
-					billingPeriod: 'Annual',
-				},
-				Quarterly: {
-					billingPeriod: 'Quarterly',
-				},
-				ThreeMonthGift: {
-					billingPeriod: 'Monthly',
-				},
-			},
-		},
-		GuardianWeeklyDomestic: {
-			label: 'The Guardian Weekly',
-			benefits: [],
-			deliverableTo: gwDeliverableCountries,
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-				OneYearGift: {
-					billingPeriod: 'Annual',
-				},
-				Annual: {
-					billingPeriod: 'Annual',
-				},
-				Quarterly: {
-					billingPeriod: 'Quarterly',
-				},
-				ThreeMonthGift: {
-					billingPeriod: 'Monthly',
-				},
-			},
-		},
-		SubscriptionCard: {
-			label: 'Newspaper subscription',
-			benefits: [],
-			ratePlans: {
-				Sixday: {
-					billingPeriod: 'Monthly',
-				},
-				Everyday: {
-					billingPeriod: 'Monthly',
-				},
-				Weekend: {
-					billingPeriod: 'Monthly',
-				},
-				Sunday: {
-					billingPeriod: 'Monthly',
-				},
-				Saturday: {
-					billingPeriod: 'Monthly',
-				},
-			},
-		},
-		Contribution: {
-			label: 'Support',
-			benefits: [newsletterBenefit],
-			benefitsMissing: [
-				appBenefit,
-				addFreeBenefit,
-				fewerAsksBenefit,
-				{
-					copy: 'Unlimited access to the Guardian Feast app',
-				},
-				partnerOffersBenefit,
-			],
-			ratePlans: {
-				Monthly: {
-					billingPeriod: 'Monthly',
-				},
-				Annual: {
-					billingPeriod: 'Annual',
-				},
-			},
-		},
-		HomeDelivery: {
-			label: 'Home Delivery',
-			benefits: [],
-			deliverableTo: newspaperCountries,
-			ratePlans: {
-				Everyday: {
-					billingPeriod: 'Monthly',
-				},
-				Sunday: {
-					billingPeriod: 'Monthly',
-				},
-				Sixday: {
-					billingPeriod: 'Monthly',
-				},
-				Weekend: {
-					billingPeriod: 'Monthly',
-				},
-				Saturday: {
-					billingPeriod: 'Monthly',
-				},
-			},
+			...productCatalogDescription.TierThree,
+			benefits: newsPaperArchiveBenefit,
 		},
 	};
+}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,
@@ -392,17 +453,17 @@ export function productCatalogDescriptionNewBenefits(
 }
 
 export function productCatalogGuardianAdLite(): Record<
-	ProductKey | 'GuardianAdLiteGoBack' | 'GuardianAdLite', // remove GuardianAdLite when productKey (in Zuora Catalog)
+	ActiveProductKey | 'GuardianAdLiteGoBack',
 	ProductDescription
 > {
 	return {
 		...productCatalogDescription,
 		GuardianAdLite: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLite,
 			label: 'Purchase Guardian Ad-Lite',
 		},
 		GuardianAdLiteGoBack: {
-			...productCatalogDescription.GuardianLight,
+			...productCatalogDescription.GuardianAdLite,
 			label: 'Read the Guardian with personalised ads',
 			benefits: [
 				{
@@ -432,9 +493,9 @@ export function productCatalogGuardianAdLite(): Record<
  * */
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
-	productKey: ProductKey,
+	productKey: ActiveProductKey,
 	ratePlanKey: string,
-): { productKey: ProductKey; ratePlanKey: string } {
+): { productKey: ActiveProductKey; ratePlanKey: string } {
 	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 
