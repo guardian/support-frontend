@@ -376,17 +376,17 @@ export const getThankYouModuleData = (
 			),
 		},
 		signInToActivate: {
-			header: 'Almost there! Sign in to activate your subscription',
+			header: 'To get started, sign in to activate your subscription',
 			bodyCopy: (
 				<p>
-					To be able to read the Guardian with non-personalised advertising you
-					must be signed in on all your devices.'
+					To be able to read the Guardian website with non-personalised
+					advertising, you must be signed in across all your devices.
 				</p>
 			),
 			ctas: (
 				<AddressCta
 					address={manageSubsUrl}
-					copy={'Sign in and activate your subscription'}
+					copy={'Sign in to activate your subscription'}
 				/>
 			),
 		},
