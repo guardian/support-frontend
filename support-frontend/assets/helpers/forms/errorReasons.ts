@@ -19,6 +19,7 @@ const errorReasons = [
 	'invalid_email_address',
 	'recaptcha_validation_failed',
 	'guardian_ad_lite_purchase_not_allowed',
+	'invalid_characters_in_billing_postcode',
 	'unknown',
 ] as const;
 export function isErrorReason(value: string): value is ErrorReason {
@@ -77,6 +78,9 @@ function appropriateErrorMessage(errorReason: string): string {
 
 			case 'guardian_ad_lite_purchase_not_allowed':
 				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
+
+			case 'invalid_characters_in_billing_postcode':
+				return 'Please check your billing postcode to ensure it is valid';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
