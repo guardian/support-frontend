@@ -17,7 +17,7 @@ export function WhatNext({
 		`Your payment of £${amount}/month will be taken on ${startDate}`,
 	];
 	const bulletPointSignedIn = bulletItems.concat([
-		'You can now start reading the Guardian on this device in a reject all state',
+		'You can now start reading the Guardian website on all your devices without personalised advertising',
 	]);
 	return (
 		<BulletPointedList
