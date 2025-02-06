@@ -258,8 +258,8 @@ export function PaymentTsAndCs({
 					year unless you cancel. You can cancel at any time before your next
 					renewal date. Cancellation will take effect at the end of your current
 					subscription month. To cancel, go to{' '}
-					<a href="http://manage.theguardian.com/">Manage My Account</a> or see
-					our{' '}
+					<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or
+					see our{' '}
 					<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
 						Terms
 					</a>
@@ -298,6 +298,7 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
+	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
 	const inDigitalPlusPrint = productKey === 'TierThree';
 	const inAllAccessDigital = productKey === 'SupporterPlus';
@@ -362,11 +363,15 @@ export function SummaryTsAndCs({
 	};
 
 	return (
-		<div css={[containerSummaryTsCs, cssOverrides]}>
-			{inSupport && copyTier1(contributionType)}
-			{inAllAccessDigital && copyTier2(contributionType, productKey)}
-			{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
-			{inAdLite && copyTier3(contributionType, productKey, false)}
-		</div>
+		<>
+			{!inDigitalEdition && (
+				<div css={[containerSummaryTsCs, cssOverrides]}>
+					{inSupport && copyTier1(contributionType)}
+					{inAllAccessDigital && copyTier2(contributionType, productKey)}
+					{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
+					{inAdLite && copyTier3(contributionType, productKey, false)}
+				</div>
+			)}
+		</>
 	);
 }
