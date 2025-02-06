@@ -172,7 +172,7 @@ export const productCatalogDescription: Record<
 > = {
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
-		thankyouMessage: `Your valued support powers our journalism${' '}`,
+		thankyouMessage: `Your subscription powers our journalism.`,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
