@@ -44,6 +44,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
@@ -342,13 +343,15 @@ export function ThreeTierLanding({
 		showCountdown: boolean,
 		currentCountdownSettings?: CountdownSetting,
 		campaignSettings?: CampaignSettings | null,
+		countryGroupId?: CountryGroupId,
 	) => {
 		if (showCountdown && currentCountdownSettings?.label.trim()) {
 			return currentCountdownSettings.label;
 		} else {
+			const firstWord = countryGroupId === UnitedStates ? 'Protect' : 'Support';
 			return (
 				<>
-					{campaignSettings?.copy.headingFragment ?? <>Support </>}
+					{campaignSettings?.copy.headingFragment ?? <>{firstWord} </>}
 					fearless, <br css={tabletLineBreak} />
 					independent journalism
 					{campaignSettings?.copy.punctuation ??
@@ -620,6 +623,7 @@ export function ThreeTierLanding({
 							showCountdown,
 							currentCountdownSettings,
 							campaignSettings,
+							countryGroupId,
 						)}
 					</h1>
 					{countryGroupId !== 'UnitedStates' && (

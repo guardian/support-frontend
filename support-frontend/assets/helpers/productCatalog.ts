@@ -104,6 +104,18 @@ const addFreeBenefit = {
 
 const newsletterBenefit = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+	specificToRegions: [
+		'GBPCountries',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
+};
+const newsletterBenefitUS = {
+	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+	specificToRegions: ['UnitedStates'] as CountryGroupId[],
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -141,6 +153,7 @@ const supporterPlusBenefits = [
 	appBenefit,
 	addFreeBenefit,
 	newsletterBenefit,
+	newsletterBenefitUS,
 	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
