@@ -97,6 +97,12 @@ const checklistCss = css`
 	}
 `;
 
+const strongBold = css`
+	strong {
+		font-weight: bold;
+	}
+`;
+
 const defaultSupportReminder = {
 	selectedChoiceIndex: 0,
 	hasBeenCompleted: false,
@@ -344,49 +350,52 @@ export const getThankYouModuleData = (
 		reminderToSignIn: {
 			header: 'Important reminder',
 			bodyCopy: (
-				<p>
-					To enjoy reading the Guardian with non-personalised advertising on all
-					your devices. please remember to sign in on each device or browser
-					session. This will ensure you to read with non-personalised
-					advertising no matter where you log in.
+				<p css={strongBold}>
+					To enjoy reading the Guardian website with non-personalised
+					advertising on all your devices,{' '}
+					<strong>
+						please remember to sign in on each device or browser session.
+					</strong>{' '}
+					This will enable you to read with non-personalised advertising no
+					matter where you log in.
 				</p>
 			),
 			ctas: null,
 		},
 		reminderToActivateSubscription: {
 			header:
-				'Almost there! Complete your Guardian account to activate your subscription',
+				'Complete your Guardian account for full access to your subscription',
 			bodyCopy: <ActivateSubscriptionReminder />,
 			ctas: null,
 		},
 		headlineReturn: {
-			header: 'Headline to bring user back to Guardian front page',
+			header: 'Time to start reading',
 			bodyCopy: (
 				<p>
-					Copy to prompt users to enjoy the Guardian with non personalised
-					advertising
+					Continue where you left off and return to our site, now with
+					non-personalised advertising.
 				</p>
 			),
 			ctas: (
 				<AddressCta
 					address={returnAddress ?? ''}
-					copy={'Continue to the Guardian'}
+					copy={'Head back to the Guardian'}
 					hasArrow={true}
 				/>
 			),
 		},
 		signInToActivate: {
-			header: 'Almost there! Sign in to activate your subscription',
+			header: 'To get started, sign in to activate your subscription',
 			bodyCopy: (
 				<p>
-					To be able to read the Guardian with non-personalised advertising you
-					must be signed in on all your devices.'
+					To be able to read the Guardian website with non-personalised
+					advertising, you must be signed in across all your devices.
 				</p>
 			),
 			ctas: (
 				<AddressCta
 					address={manageSubsUrl}
-					copy={'Sign in and activate your subscription'}
+					copy={'Sign in to activate your subscription'}
 				/>
 			),
 		},
