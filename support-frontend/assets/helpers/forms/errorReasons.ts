@@ -80,7 +80,8 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
 
 			case 'invalid_characters_in_billing_postcode':
-				return 'Please check your billing postcode to ensure it is valid';
+				// Note, we're using ZIP code here as generally this error affects US users
+				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
