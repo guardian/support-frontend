@@ -80,7 +80,10 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
 
 			case 'invalid_characters_in_billing_postcode':
-				// Note, we're using ZIP code here as generally this error affects US users
+				// Note, we're using "ZIP code" here as generally this error
+				// affects US users only. For the products where we perform this
+				// validation rule, the only country we collect a ZIP/postal
+				// code is the US
 				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}

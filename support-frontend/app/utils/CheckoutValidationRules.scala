@@ -212,6 +212,7 @@ object PaidProductValidation {
         createSupportWorkersRequest.billingAddress.country,
         createSupportWorkersRequest.billingAddress.state,
       ) and
+      // For products which use this validation, we only collect postal/zip code in the US
       hasValidBillingPostcodeCharacters(createSupportWorkersRequest.billingAddress.postCode)
 
   def noEmptyPaymentFields(paymentFields: PaymentFields): Result = paymentFields match {
