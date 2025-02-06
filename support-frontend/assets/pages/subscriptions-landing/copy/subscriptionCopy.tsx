@@ -61,7 +61,7 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
-const getDigitialEditionPrices = (countryGroupId: CountryGroupId): string => {
+const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
 	const currencyKey = detect(countryGroupId);
 	const currency = currencies[currencyKey].glyph;
 	const product = productCatalog['DigitalSubscription'];
@@ -115,7 +115,7 @@ function digitalCheckout(
 ): ProductCopy {
 	return {
 		...digitalEdition(countryGroupId, priceCopy),
-		subtitle: getDigitialEditionPrices(countryGroupId),
+		subtitle: getDigitalEditionPrices(countryGroupId),
 		buttons: [
 			{
 				ctaButtonText: 'Subscribe Monthly',
