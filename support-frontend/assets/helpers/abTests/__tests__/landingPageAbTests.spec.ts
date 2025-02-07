@@ -6,7 +6,7 @@ import {
 } from '../landingPageAbTests';
 import { LANDING_PAGE_PARTICIPATIONS_KEY } from '../sessionStorage';
 
-const ukTest: LandingPageTest = {
+const nonUsTest: LandingPageTest = {
 	name: 'LP_DEFAULT',
 	status: 'Live',
 	targeting: {
@@ -45,7 +45,7 @@ const usTest: LandingPageTest = {
 		},
 	],
 };
-const tests = [usTest, ukTest];
+const tests = [usTest, nonUsTest];
 
 const mvtId = 0;
 
@@ -61,7 +61,7 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toEqual({ [ukTest.name]: 'CONTROL' });
+		expect(result).toEqual({ [nonUsTest.name]: 'CONTROL' });
 	});
 
 	it('assigns a user to the US test on US landing page', () => {
@@ -77,7 +77,7 @@ describe('getLandingPageParticipations', () => {
 	it('assigns a user to the UK test on a checkout page if it is in session storage', () => {
 		window.sessionStorage.setItem(
 			LANDING_PAGE_PARTICIPATIONS_KEY,
-			JSON.stringify({ [ukTest.name]: 'CONTROL' }),
+			JSON.stringify({ [nonUsTest.name]: 'CONTROL' }),
 		);
 
 		const result = getLandingPageParticipations(
@@ -86,7 +86,7 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toEqual({ [ukTest.name]: 'CONTROL' });
+		expect(result).toEqual({ [nonUsTest.name]: 'CONTROL' });
 	});
 
 	it('does not assign a user to the UK test on a checkout page if it is *not* in session storage', () => {
@@ -105,12 +105,12 @@ describe('getLandingPageVariant', () => {
 		const participations = {
 			TEST_A: 'V1',
 			TEST_B: 'V2',
-			[ukTest.name]: 'CONTROL',
+			[nonUsTest.name]: 'CONTROL',
 		};
 		const result = getLandingPageVariant(participations, tests);
 		expect(result).toEqual({
-			...ukTest.variants[0],
-			testName: ukTest.name,
+			...nonUsTest.variants[0],
+			testName: nonUsTest.name,
 		});
 	});
 
