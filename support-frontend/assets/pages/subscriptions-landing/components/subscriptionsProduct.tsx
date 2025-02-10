@@ -1,8 +1,8 @@
 import cx from 'classnames';
 import type { ReactNode } from 'react';
 import SubscriptionsProductDescription from 'components/subscriptionsProductDescription/subscriptionsProductDescription';
-import type { Participations } from 'helpers/abTests/models';
 import 'helpers/types/option';
+import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
 type PropTypes = {
@@ -14,13 +14,14 @@ type PropTypes = {
 	offer?: string;
 	isFeature?: boolean;
 	classModifier: string[];
-	participations: Participations;
+	benefits?: ProductBenefit[];
 };
 
 function SubscriptionsProduct({
 	classModifier,
 	productImage,
 	isFeature,
+	benefits,
 	...props
 }: PropTypes): JSX.Element {
 	return (
@@ -55,7 +56,11 @@ function SubscriptionsProduct({
 				})}
 			>
 				<div className="subscriptions__copy-wrapper">
-					<SubscriptionsProductDescription {...props} isFeature={isFeature} />
+					<SubscriptionsProductDescription
+						{...props}
+						isFeature={isFeature}
+						benefits={benefits}
+					/>
 				</div>
 			</div>
 		</div>
