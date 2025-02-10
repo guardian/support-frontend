@@ -52,6 +52,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
+import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -493,6 +494,9 @@ export function ThreeTierLanding({
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
 
+	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
+	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
+
 	return (
 		<PageScaffold
 			header={
@@ -591,11 +595,11 @@ export function ThreeTierLanding({
 						/>
 					)}
 					<h1 css={heading}>
-						<span dangerouslySetInnerHTML={{ __html: settings.copy.heading }} />
+						<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
 					</h1>
 					<p
 						css={standFirst}
-						dangerouslySetInnerHTML={{ __html: settings.copy.subheading }}
+						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
 					/>
 
 					{campaignSettings?.tickerSettings && (
