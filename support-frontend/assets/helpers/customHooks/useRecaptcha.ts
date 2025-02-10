@@ -3,6 +3,7 @@ import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 
 export function useRecaptchaV2(
 	placeholderId: string,
+	attemptNumber: number,
 	onCompletionCallback: (token: string) => void,
 	onExpireCallback?: () => void,
 ): void {
@@ -25,5 +26,5 @@ export function useRecaptchaV2(
 			};
 			void loadRecaptchaV2();
 		}
-	}, []);
+	}, [attemptNumber]);
 }

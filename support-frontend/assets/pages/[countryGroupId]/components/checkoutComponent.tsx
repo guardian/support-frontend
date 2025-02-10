@@ -328,6 +328,8 @@ export function CheckoutComponent({
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
+	const [attemptNumber, setAttemptNumber] = useState<number>(1);
+
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const elements = useElements();
@@ -627,6 +629,8 @@ export function CheckoutComponent({
 					statusResponse,
 				);
 			} else {
+				setAttemptNumber(attemptNumber + 1);
+
 				const errorReason = (await createResponse.text()) as ErrorReason;
 				processPaymentResponse = {
 					status: 'failure',
@@ -1237,6 +1241,7 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
+																attemptNumber={attemptNumber}
 																// We could change the parents type to Promise and use await here, but that has
 																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
