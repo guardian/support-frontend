@@ -629,6 +629,8 @@ export function CheckoutComponent({
 					statusResponse,
 				);
 			} else {
+				setRecaptchaToken(undefined);
+				// This will trigger a new recaptcha token:
 				setAttemptNumber(attemptNumber + 1);
 
 				const errorReason = (await createResponse.text()) as ErrorReason;
