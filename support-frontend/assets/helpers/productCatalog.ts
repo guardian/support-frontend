@@ -357,7 +357,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit],
+		benefits: [newsletterBenefit, newsletterBenefitUS],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
