@@ -31,14 +31,14 @@ export type RecaptchaProps = {
 	id?: string;
 	onRecaptchaCompleted: (token: string) => void;
 	onRecaptchaExpired?: () => void;
-	attemptNumber: number;
+	attemptNumber?: number;
 };
 
 export function Recaptcha({
 	id = 'robot_checkbox',
 	onRecaptchaCompleted,
 	onRecaptchaExpired,
-	attemptNumber,
+	attemptNumber = 1,
 }: RecaptchaProps): JSX.Element {
 	useRecaptchaV2(id, attemptNumber, onRecaptchaCompleted, onRecaptchaExpired);
 
