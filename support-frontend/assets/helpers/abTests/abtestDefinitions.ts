@@ -113,4 +113,31 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: false,
 	},
+	digitalEditionCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 7,
+		targetPage:
+			'(/uk/)(subscribe$|subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)', // one-off test using canRun to exclude all products except DigitalSubscription
+		excludeContributionsOnlyCountries: true,
+		canRun: () => {
+			const urlSearchParams = new URLSearchParams(window.location.search);
+			const productParam = urlSearchParams.get('product');
+			return !productParam || productParam === 'DigitalSubscription';
+		},
+	},
 };
