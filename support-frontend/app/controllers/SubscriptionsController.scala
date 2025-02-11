@@ -14,6 +14,7 @@ import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import play.twirl.api.Html
+import services.CachedProductCatalogServiceProvider
 import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
@@ -29,6 +30,7 @@ class SubscriptionsController(
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
     stage: Stage,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -97,6 +99,8 @@ class SubscriptionsController(
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
     val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
+    // TestUser remains un-used, page caching preferred
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
 
     Ok(
       views.html.main(
@@ -108,7 +112,8 @@ class SubscriptionsController(
         noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.pricingCopy = ${outputJson(pricingCopy)}
+              window.guardian.pricingCopy = ${outputJson(pricingCopy)};
+              window.guardian.productCatalog = ${outputJson(productCatalog)}
             </script>""")
       },
     ).withSettingsSurrogateKey
