@@ -30,7 +30,7 @@ export type OrderSummaryProps = {
 	changeSubscription?: string | null;
 	startDate?: string;
 	total: ProductPrice;
-	participations: Participations;
+	participations?: Participations;
 };
 
 function getMobileSummaryTitle(
@@ -59,7 +59,7 @@ type PropTypes = ConnectedProps<typeof connector> & OrderSummaryProps;
 
 function PaperOrderSummary(props: PropTypes) {
 	const hideSummaryImage =
-		props.participations.subscribeCheckoutImage === 'variant';
+		props.participations?.subscribeCheckoutImage === 'variant';
 	const rawTotal = getPriceSummary(
 		showPrice(props.total, false),
 		props.billingPeriod,
