@@ -127,12 +127,11 @@ export function TsAndCsFooterLinks({
 		: inAdLite
 		? termsGuardianAdLite('Terms')
 		: termsContributions;
-	const productNameSummary = inAdLite ? ' the Guardian Ad-Lite ' : ' our ';
+	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
 
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to{productNameSummary}
-			{terms}.{' '}
+			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
