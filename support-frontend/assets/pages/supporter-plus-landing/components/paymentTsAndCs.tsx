@@ -294,7 +294,8 @@ export function PaymentTsAndCs({
 				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
 				{inAdLite && copyAdLite(contributionType, productKey)}
-				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
+				{(inSupport || inAdLite) &&
+					copyBelowThreshold(countryGroupId, productKey)}
 				{inDigitalEdition && copyDigitalEdition()}
 			</FinePrint>
 		</div>
