@@ -335,22 +335,21 @@ class CreateSubscriptionController(
       product: ProductType,
       userEmail: String,
   )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
-    result
-      .fold(
-        { error =>
-          logErrorDetailedMessage(s"create failed due to $error")
-          val errResult = error match {
-            case err: RequestValidationError =>
-              // Store the error message in the result.header.reasonPhrase this will allow us to
-              // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
-              Result(
-                header = new ResponseHeader(
-                  status = BAD_REQUEST,
-                  reasonPhrase = Some(err.message),
-                ),
-                body = writeable.toEntity(err.message),
-              )
-            case ServerError(code) if code == emailAddressAlreadyTakenCode =>
+    result.value.flatMap {
+      case Left(error) =>
+        logErrorDetailedMessage(s"create failed due to $error")
+        val errResult = error match {
+          case err: RequestValidationError =>
+            // Store the error message in the result.header.reasonPhrase this will allow us to
+            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+            Result(
+              header = new ResponseHeader(
+                status = BAD_REQUEST,
+                reasonPhrase = Some(err.message),
+              ),
+              body = writeable.toEntity(err.message),
+            )
+          case ServerError(code) if code == emailAddressAlreadyTakenCode =>
               Result(
                 header = new ResponseHeader(
                   status = INTERNAL_SERVER_ERROR,
@@ -359,21 +358,17 @@ class CreateSubscriptionController(
                 body = writeable.toEntity(""),
               )
             case _: ServerError =>
-              InternalServerError
-          }
-          Future.successful(errResult)
-        },
-        { createSubscriptionResponse =>
-          logDetailedMessage("create succeeded")
-          cookies(product, userEmail)
-            .map(cookies =>
-              Accepted(createSubscriptionResponse.asJson)
-                .withCookies(cookies: _*)
-                .discardingCookies(discardIncompleteCheckoutCookie),
-            )
-        },
-      )
-      .flatten
+            InternalServerError
+        }
+        Future.successful(errResult)
+      case Right(createSubscriptionResponse) =>
+        logDetailedMessage("create succeeded")
+        cookies(product, userEmail).map { cookies =>
+          Accepted(createSubscriptionResponse.asJson)
+            .withCookies(cookies: _*)
+            .discardingCookies(discardIncompleteCheckoutCookie)
+        }
+    }
   }
 
   case class CheckoutCompleteCookieBody(
