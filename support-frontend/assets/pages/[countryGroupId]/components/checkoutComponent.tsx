@@ -1230,8 +1230,6 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and use await here, but that has
-																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
 																	setRecaptchaToken(token);
 																}}
