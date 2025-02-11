@@ -169,19 +169,13 @@ class CreateSubscriptionController(
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     request.body.product match {
       case GuardianAdLite(_) => {
-        if (userDetails.isSignedIn) {
-          // If the user is signed in, we'll assume they're eligible as they shouldn't have got
-          // to this point of the journey.
-          EitherT.rightT(())
-        } else {
-          for {
-            benefits <- userBenefitsApiServiceProvider
-              .forUser(testUsers.isTestUser(request))
-              .getUserBenefits(userDetails.userDetails.identityId)
-              .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
-            _ <- validateBenefitsForAdLitePurchase(benefits)
-          } yield ()
-        }
+        for {
+          benefits <- userBenefitsApiServiceProvider
+            .forUser(testUsers.isTestUser(request))
+            .getUserBenefits(userDetails.userDetails.identityId)
+            .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
+          _ <- validateBenefitsForAdLitePurchase(benefits)
+        } yield ()
       }
       case _ => EitherT.rightT(())
     }
