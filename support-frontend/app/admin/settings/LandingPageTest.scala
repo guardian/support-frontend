@@ -44,6 +44,7 @@ object LandingPageVariant {
 case class LandingPageTest(
     name: String,
     status: Status,
+    priority: Int,
     targeting: LandingPageTestTargeting,
     variants: List[LandingPageVariant],
 )
