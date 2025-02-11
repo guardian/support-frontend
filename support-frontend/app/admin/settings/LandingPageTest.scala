@@ -60,6 +60,7 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
     LandingPageTest(
       name = "LP_DEFAULT_US",
       status = Status.Live,
+      priority = 0,
       targeting = LandingPageTestTargeting(countryGroups = List("UnitedStates")),
       variants = List(
         LandingPageVariant(
@@ -75,6 +76,7 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
     LandingPageTest(
       name = "LP_DEFAULT",
       status = Status.Live,
+      priority = 1,
       targeting = LandingPageTestTargeting(countryGroups =
         List("GBPCountries", "AUDCountries", "EURCountries", "International", "NZDCountries", "Canada"),
       ),
