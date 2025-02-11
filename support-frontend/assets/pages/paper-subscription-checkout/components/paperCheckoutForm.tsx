@@ -302,6 +302,7 @@ function PaperCheckoutForm(props: PropTypes) {
 				Collection,
 				getQueryParameter('promoCode'),
 			)}`}
+			participations={props.participations}
 		/>
 	);
 
@@ -324,6 +325,7 @@ function PaperCheckoutForm(props: PropTypes) {
 				getQueryParameter('promoCode'),
 			)}`}
 			startDate={formattedStartDate}
+			participations={props.participations}
 		/>
 	);
 

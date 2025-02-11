@@ -27,7 +27,7 @@ function OrderSummary(props: PropTypes): JSX.Element {
 				</div>
 			</div>
 			<div css={styles.contentBlock}>
-				<div css={styles.imageContainer}>{props.image}</div>
+				{props.image && <div css={styles.imageContainer}>{props.image}</div>}
 				<div css={styles.mobileSummary}>
 					<h4>{props.mobileSummary.title}</h4>
 					<p>{props.mobileSummary.price}</p>
