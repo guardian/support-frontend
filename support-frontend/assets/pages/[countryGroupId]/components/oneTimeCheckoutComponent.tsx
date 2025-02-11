@@ -82,7 +82,7 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import {countryGroups} from "../../../helpers/internationalisation/countryGroup";
-import {useAbandonedBasketCookie} from "../../../helpers/storage/abandonedBasketCookies";
+import {updateAbandonedBasketCookie, useAbandonedBasketCookie} from "../../../helpers/storage/abandonedBasketCookies";
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -572,6 +572,7 @@ export function OneTimeCheckoutComponent({
 								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
+                updateAbandonedBasketCookie(amount);
 							}}
 							hideChooseYourAmount={hideChooseYourAmount}
 							otherAmountField={
