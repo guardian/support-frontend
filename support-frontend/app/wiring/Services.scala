@@ -104,4 +104,6 @@ trait Services {
       prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
     )
 
+  lazy val landingPageTestService = new LandingPageTestService(appConfig.stage)
+
 }
