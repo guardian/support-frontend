@@ -109,10 +109,13 @@ function TsAndCsRenewal({
 export function TsAndCsFooterLinks({
 	countryGroupId,
 	amountIsAboveThreshold,
+	productKey,
 }: {
 	countryGroupId: CountryGroupId;
 	amountIsAboveThreshold?: boolean;
+	productKey?: ActiveProductKey;
 }) {
+	const inAdLite = productKey === 'GuardianAdLite';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const termsContributions = (
@@ -121,11 +124,14 @@ export function TsAndCsFooterLinks({
 
 	const terms = amountIsAboveThreshold
 		? termsSupporterPlus('Terms and Conditions')
+		: inAdLite
+		? termsGuardianAdLite('Terms')
 		: termsContributions;
+	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
 
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to our {terms}.{' '}
+			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -215,11 +221,15 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const copyBelowThreshold = (countryGroupId: CountryGroupId) => {
+	const copyBelowThreshold = (
+		countryGroupId: CountryGroupId,
+		productKey: ActiveProductKey,
+	) => {
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
 				amountIsAboveThreshold={amountIsAboveThreshold}
+				productKey={productKey}
 			/>
 		);
 	};
@@ -284,7 +294,8 @@ export function PaymentTsAndCs({
 				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
 				{inAdLite && copyAdLite(contributionType, productKey)}
-				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
+				{(inSupport || inAdLite) &&
+					copyBelowThreshold(countryGroupId, productKey)}
 				{inDigitalEdition && copyDigitalEdition()}
 			</FinePrint>
 		</div>
