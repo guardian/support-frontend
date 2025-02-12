@@ -193,6 +193,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
+	const hideSummaryImage =
+		props.participations.subscribeCheckoutImage === 'variant';
+
 	return (
 		<Content>
 			<Layout
@@ -200,13 +203,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<>
 						<Summary
 							image={
-								<GridImage
-									gridId="checkoutPackshotWeekly"
-									srcSizes={[500]}
-									sizes="(max-width: 740px) 50vw, 548"
-									imgType="png"
-									altText=""
-								/>
+								!hideSummaryImage ? (
+									<GridImage
+										gridId="checkoutPackshotWeekly"
+										srcSizes={[500]}
+										sizes="(max-width: 740px) 50vw, 548"
+										imgType="png"
+										altText=""
+									/>
+								) : undefined
 							}
 							title="Guardian Weekly"
 							description=""

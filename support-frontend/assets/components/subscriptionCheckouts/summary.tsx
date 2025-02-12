@@ -19,25 +19,25 @@ interface DataListItem {
 
 interface SummaryPropTypes {
 	billingPeriod: BillingPeriod;
-	changeSubscription?: string | null;
-	dataList?: DataListItem[];
-	description?: string | null;
-	image: JSX.Element | null;
 	productPrice: ProductPrice;
 	title: string;
 	product: SubscriptionProduct;
+	changeSubscription?: string | null;
+	dataList?: DataListItem[];
+	description?: string | null;
+	image?: JSX.Element;
 	orderIsAGift?: boolean;
 }
 
 interface TabletAndDesktopPropTypes {
 	billingPeriod: BillingPeriod;
-	changeSubscription?: string | null;
 	dataList: DataListItem[];
-	description?: string | null;
-	image: JSX.Element | null;
 	productPrice: ProductPrice;
 	title: string;
 	product: SubscriptionProduct;
+	changeSubscription?: string | null;
+	description?: string | null;
+	image?: JSX.Element;
 	orderIsAGift?: boolean;
 }
 
@@ -185,11 +185,15 @@ function TabletAndDesktop({
 	const isGuardianWeeklyGift = product === GuardianWeekly && !orderIsAGift;
 	return (
 		<span className={styles.tabletAndDesktop}>
-			<div
-				className={isGuardianWeeklyGift ? styles.imgGuardianWeekly : styles.img}
-			>
-				{image}
-			</div>
+			{image && (
+				<div
+					className={
+						isGuardianWeeklyGift ? styles.imgGuardianWeekly : styles.img
+					}
+				>
+					{image}
+				</div>
+			)}
 			<div className={styles.content}>
 				<h3
 					className={
