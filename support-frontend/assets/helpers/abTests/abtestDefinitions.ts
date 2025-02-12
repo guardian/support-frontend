@@ -133,7 +133,7 @@ export const tests: Tests = {
 		seed: 7,
 		persistPage:
 			// uk will ensure we match the generic checkout
-			'(/uk/)(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
+			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
 		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
 	},
