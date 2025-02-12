@@ -156,11 +156,11 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
+			'(/subscribe/paper/checkout$|/subscribe/weekly/checkout$|/subscribe/weekly/checkout/gift$)',
 		excludeContributionsOnlyCountries: true,
 	},
 };
