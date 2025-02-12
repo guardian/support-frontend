@@ -9,10 +9,10 @@ type MobileOrderSummary = {
 };
 type PropTypes = {
 	children: ReactNode;
-	changeSubscription?: string | null;
-	image: JSX.Element | null;
 	mobileSummary: MobileOrderSummary;
 	total: ReactNode;
+	changeSubscription?: string | null;
+	image?: JSX.Element;
 };
 
 function OrderSummary(props: PropTypes): JSX.Element {

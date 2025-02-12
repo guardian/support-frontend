@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { Participations } from 'helpers/abTests/models';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import type {
@@ -25,12 +24,11 @@ import {
 
 export type OrderSummaryProps = {
 	digiSubPrice: string;
-	image: JSX.Element | null;
 	includesDigiSub: boolean;
+	total: ProductPrice;
+	image?: JSX.Element;
 	changeSubscription?: string | null;
 	startDate?: string;
-	total: ProductPrice;
-	participations?: Participations;
 };
 
 function getMobileSummaryTitle(
@@ -58,8 +56,6 @@ const connector = connect(mapStateToProps);
 type PropTypes = ConnectedProps<typeof connector> & OrderSummaryProps;
 
 function PaperOrderSummary(props: PropTypes) {
-	const hideSummaryImage =
-		props.participations?.subscribeCheckoutImage === 'variant';
 	const rawTotal = getPriceSummary(
 		showPrice(props.total, false),
 		props.billingPeriod,
@@ -132,7 +128,7 @@ function PaperOrderSummary(props: PropTypes) {
 
 	return (
 		<OrderSummary
-			image={!hideSummaryImage ? props.image : null}
+			image={props.image}
 			changeSubscription={props.changeSubscription}
 			total={total}
 			mobileSummary={mobileSummary}
