@@ -16,6 +16,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ComparisonOperator, Condition, QueryRequest}
 
+import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters.{IterableHasAsScala, MapHasAsJava, MapHasAsScala}
 import scala.jdk.FutureConverters._
 import scala.util.control.NonFatal
@@ -58,7 +59,7 @@ object LandingPageTestService {
     dynamoMapToJson(record).as[LandingPageTest]
 }
 
-class LandingPageTestService(stage: Stage) extends StrictLogging {
+class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext) extends StrictLogging {
   private val credentialsProvider = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
@@ -96,16 +97,17 @@ class LandingPageTestService(stage: Stage) extends StrictLogging {
           .map(parseLandingPageTest)
           .map({
             case err @ Left(msg) =>
+              // TODO alarm
               logger.error(s"Could not decode landing page config: $msg")
               err
             case ok @ Right(_) => ok
           })
           .collect({ case Right(test) => test })
-          .sortBy(epicTest => epicTest.priority)
+          .sortBy(test => test.priority)
       }
       .recover { case NonFatal(error) =>
+        // TODO alarm
         logger.error(s"Error fetching epic tests from dynamodb: ${error.getMessage}")
-        putAppleNewsMetric("EpicTestsError")
         Nil
       }
     Nil
