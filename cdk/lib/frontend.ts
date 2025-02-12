@@ -106,6 +106,12 @@ export class Frontend extends GuStack {
           `arn:aws:lambda:eu-west-1:${this.account}:function:stripe-intent-${this.stage}`,
         ],
       }),
+      new GuAllowPolicy(this, "DynamoLandingPageTests", {
+        actions: [
+          "dynamodb:Query",
+        ],
+        resources: [`arn:aws:dynamodb:*:*:table/support-admin-console-channel-tests-${this.stage}`,],
+      }),
     ];
 
     const alarmName = (shortDescription: string) =>
