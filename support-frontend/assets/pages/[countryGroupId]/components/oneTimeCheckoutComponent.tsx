@@ -81,6 +81,11 @@ import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
+import {
+	updateAbandonedBasketCookie,
+	useAbandonedBasketCookie,
+} from '../../../helpers/storage/abandonedBasketCookies';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -532,6 +537,16 @@ export function OneTimeCheckoutComponent({
 		return;
 	}
 
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
+
+	useAbandonedBasketCookie(
+		'OneTimeContribution',
+		finalAmount ?? 0,
+		'ONE_OFF',
+		supportInternationalisationId,
+		abParticipations.abandonedBasket === 'variant',
+	);
+
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -560,6 +575,7 @@ export function OneTimeCheckoutComponent({
 								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
+								updateAbandonedBasketCookie(amount);
 							}}
 							hideChooseYourAmount={hideChooseYourAmount}
 							otherAmountField={
