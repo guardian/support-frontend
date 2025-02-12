@@ -5,6 +5,7 @@ import com.gu.aws.ProfileName
 import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Json, JsonObject}
+import org.apache.pekko.actor.ActorSystem
 import services.LandingPageTestService.parseLandingPageTest
 import software.amazon.awssdk.auth.credentials.{
   AwsCredentialsProviderChain,
@@ -16,14 +17,16 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, ComparisonOperator, Condition, QueryRequest}
 
-import scala.concurrent.ExecutionContext
+import java.util.concurrent.atomic.AtomicReference
+import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters.{IterableHasAsScala, MapHasAsJava, MapHasAsScala}
 import scala.jdk.FutureConverters._
 import scala.util.control.NonFatal
+import scala.concurrent.duration._
 
 object LandingPageTestService {
   // Converts Dynamodb Attributes to Circe Json
-  def dynamoToJson(attribute: AttributeValue): Json = {
+  private def dynamoToJson(attribute: AttributeValue): Json = {
     if (attribute.hasM()) {
       // Map
       dynamoMapToJson(attribute.m())
@@ -47,7 +50,7 @@ object LandingPageTestService {
     }
   }
 
-  def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): Json = {
+  private def dynamoMapToJson(item: java.util.Map[String, AttributeValue]): Json = {
     val jsonMap: Map[String, Json] = item.asScala.view
       .mapValues(dynamoToJson)
       .toMap
@@ -59,7 +62,12 @@ object LandingPageTestService {
     dynamoMapToJson(record).as[LandingPageTest]
 }
 
-class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext) extends StrictLogging {
+/** A service for polling DynamoDb for landing page tests config
+  */
+class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext, system: ActorSystem)
+    extends StrictLogging {
+  private val cachedTests = new AtomicReference[List[LandingPageTest]](Nil)
+
   private val credentialsProvider = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
@@ -75,7 +83,7 @@ class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext) ex
 
   private val tableName = s"support-admin-console-channel-tests-$stage"
 
-  def fetchLandingPageTests(): List[LandingPageTest] = {
+  private def fetchLandingPageTests(): Future[List[LandingPageTest]] = {
     val condition = Condition
       .builder()
       .comparisonOperator(ComparisonOperator.EQ)
@@ -105,12 +113,21 @@ class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext) ex
           .collect({ case Right(test) => test })
           .sortBy(test => test.priority)
       }
+  }
+
+  // Start polling DynamoDb
+  system.scheduler.scheduleAtFixedRate(1.minute, 1.minute)(() => {
+    fetchLandingPageTests()
+      .map { tests =>
+        logger.info(s"Got landing page tests: ${tests}")
+        cachedTests.set(tests)
+      }
       .recover { case NonFatal(error) =>
         // TODO alarm
         logger.error(s"Error fetching epic tests from dynamodb: ${error.getMessage}")
         Nil
       }
-    Nil
-  }
+  })
 
+  def getTests(): List[LandingPageTest] = cachedTests.get()
 }

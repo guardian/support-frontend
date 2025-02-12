@@ -33,7 +33,7 @@ class AllSettingsProvider private (
     amountsProvider: SettingsProvider[AmountsTests],
     contributionTypesProvider: SettingsProvider[ContributionTypes],
     metricUrl: MetricUrl,
-    landingPageTestsProvider: SettingsProvider[List[LandingPageTest]],
+    landingPageTestsProvider: LandingPageTestService,
 ) {
 
   def getAllSettings(): AllSettings = {
@@ -42,7 +42,7 @@ class AllSettingsProvider private (
       amountsProvider.settings(),
       contributionTypesProvider.settings(),
       metricUrl,
-      landingPageTestsProvider.settings(),
+      landingPageTestsProvider.getTests(),
     )
   }
 }
@@ -62,7 +62,7 @@ object AllSettingsProvider {
       amountsProvider,
       contributionTypesProvider,
       config.metricUrl,
-      LandingPageTestsProvider,
+      landingPageTestService,
     )
   }
 }
