@@ -1,14 +1,14 @@
 import { set } from './cookie';
 
-const ONE_OFF_CONTRIBUTION_COOKIE_NAME = 'gu.contributions.contrib-timestamp';
-const ONE_OFF_CONTRIBUTION_COOKIE_NAME_DAYS_TO_LIVE = 90;
+const HIDE_SUPPORT_MESSAGING_COOKIE = 'gu_hide_support_messaging';
+const HIDE_SUPPORT_MESSAGING_DAYS_TO_LIVE = 90;
 
-export const setOneOffContributionCookie = (): void => {
+export const setHideSupportMessaginCookie = (): void => {
 	const currentTimeInEpochMilliseconds: number = Date.now();
 
 	set(
-		ONE_OFF_CONTRIBUTION_COOKIE_NAME,
+		HIDE_SUPPORT_MESSAGING_COOKIE,
 		currentTimeInEpochMilliseconds.toString(),
-		ONE_OFF_CONTRIBUTION_COOKIE_NAME_DAYS_TO_LIVE,
+		HIDE_SUPPORT_MESSAGING_DAYS_TO_LIVE,
 	);
 };

@@ -30,8 +30,8 @@ case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
   private def allowRejectAllCookie(now: DateTime) =
     persistentCookieWithMaxAge("gu_allow_reject_all", now)
 
-  private def userFeaturesExpiryCookie(now: DateTime) =
-    persistentCookieWithMaxAge("gu_user_features_expiry", now)
+  private def userBenefitsExpiryCookie(now: DateTime) =
+    persistentCookieWithMaxAge("gu_user_benefits_expiry", now)
 
   def createCookiesForProduct(product: ProductType, now: DateTime): List[Cookie] = {
     // Setting the user benefits cookies used by frontend. See:
@@ -46,6 +46,6 @@ case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
       case _: GuardianAdLite => List(allowRejectAllCookie(now))
     }
 
-    userFeaturesExpiryCookie(now) :: productCookies
+    userBenefitsExpiryCookie(now) :: productCookies
   }
 }

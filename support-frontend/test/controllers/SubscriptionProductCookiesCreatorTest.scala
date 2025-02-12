@@ -27,7 +27,7 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
 
     cookies should contain(expectedCookie("gu_allow_reject_all"))
     cookies should contain(
-      expectedCookie("gu_user_features_expiry"),
+      expectedCookie("gu_user_benefits_expiry"),
     ) // It should also contain the user features expiry cookie
   }
   it should "not set the hide support messaging cookie for Guardian Ad Lite because it is not a supporter product" in {
@@ -36,7 +36,7 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
 
     cookies should not contain expectedCookie("gu_hide_support_messaging")
     cookies should contain(
-      expectedCookie("gu_user_features_expiry"),
+      expectedCookie("gu_user_benefits_expiry"),
     ) // It should also contain the user features expiry cookie
   }
 
@@ -48,7 +48,7 @@ class SubscriptionProductCookiesCreatorTest extends AnyFlatSpec with Matchers {
     cookies should contain(expectedCookie("gu_hide_support_messaging"))
     cookies should contain(expectedCookie("gu_allow_reject_all"))
     cookies should contain(
-      expectedCookie("gu_user_features_expiry"),
+      expectedCookie("gu_user_benefits_expiry"),
     ) // It should also contain the user features expiry cookie
   }
 
