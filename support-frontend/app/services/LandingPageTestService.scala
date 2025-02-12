@@ -1,7 +1,9 @@
 package services
 
+import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import admin.settings.LandingPageTest
-import com.gu.aws.ProfileName
+import com.gu.aws.AwsCloudWatchMetricSetup.getLandingPageTestsError
+import com.gu.aws.{AwsCloudWatchMetricPut, ProfileName}
 import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Json, JsonObject}
@@ -110,12 +112,12 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext
           .map(parseLandingPageTest)
           .map({
             case err @ Left(msg) =>
-              // TODO alarm
-              logger.error(s"Could not decode landing page config: $msg")
+              AwsCloudWatchMetricPut(cloudwatchClient)(getLandingPageTestsError(stage))
+              logger.error(s"Could not decode landing page test config: $msg")
               err
             case ok @ Right(_) => ok
           })
-          .collect({ case Right(test) => test })
+          .collect({ case Right(test) => test }) // filter out any invalid tests
           .sortBy(test => test.priority)
       }
   }
@@ -128,7 +130,7 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext
         cachedTests.set(tests)
       }
       .recover { case NonFatal(error) =>
-        // TODO alarm
+        AwsCloudWatchMetricPut(cloudwatchClient)(getLandingPageTestsError(stage))
         logger.error(s"Error fetching epic tests from dynamodb: ${error.getMessage}")
         Nil
       }
