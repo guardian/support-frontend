@@ -195,13 +195,15 @@ function TabletAndDesktop({
 				</div>
 			)}
 			<div className={styles.content}>
-				<h3
-					className={
-						isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header
-					}
-				>
-					Order summary
-				</h3>
+				{image && (
+					<h3
+						className={
+							isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header
+						}
+					>
+						Order summary
+					</h3>
+				)}
 				<h4 className={styles.title} title={`your subscription is ${title}`}>
 					{!orderIsAGift && 'The '}
 					{title}
