@@ -121,7 +121,7 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext
   }
 
   // Start polling DynamoDb
-  system.scheduler.scheduleAtFixedRate(1.minute, 1.minute)(() => {
+  system.scheduler.scheduleAtFixedRate(0.minute, 1.minute)(() => {
     fetchLandingPageTests()
       .map { tests =>
         logger.info(s"Got landing page tests: ${tests}")
