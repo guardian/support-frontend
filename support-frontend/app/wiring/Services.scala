@@ -76,7 +76,7 @@ trait Services {
 
   lazy val stripeService = new StripeSetupIntentService(appConfig.stage)
 
-  lazy val landingPageTestService = new LandingPageTestService(appConfig.stage)
+  lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
 
   lazy val allSettingsProvider: AllSettingsProvider =
     AllSettingsProvider.fromConfig(appConfig, landingPageTestService).valueOr(throw _)

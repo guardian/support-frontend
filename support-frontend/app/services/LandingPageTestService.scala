@@ -24,6 +24,10 @@ import scala.jdk.FutureConverters._
 import scala.util.control.NonFatal
 import scala.concurrent.duration._
 
+trait LandingPageTestService {
+  def getTests(): List[LandingPageTest]
+}
+
 object LandingPageTestService {
   // Converts Dynamodb Attributes to Circe Json
   private def dynamoToJson(attribute: AttributeValue): Json = {
@@ -64,8 +68,9 @@ object LandingPageTestService {
 
 /** A service for polling DynamoDb for landing page tests config
   */
-class LandingPageTestService(stage: Stage)(implicit val ec: ExecutionContext, system: ActorSystem)
-    extends StrictLogging {
+class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext, system: ActorSystem)
+    extends LandingPageTestService
+    with StrictLogging {
   private val cachedTests = new AtomicReference[List[LandingPageTest]](Nil)
 
   private val credentialsProvider = AwsCredentialsProviderChain.builder
