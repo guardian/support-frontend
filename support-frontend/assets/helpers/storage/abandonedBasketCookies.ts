@@ -39,8 +39,15 @@ export function useAbandonedBasketCookie(
 		region,
 	};
 
+	// support-dotcom-components can only return a user to the checkout for these products
+	// don't drop the cookie if they came from a different checkout
+	const isSupportedProduct =
+		product === 'Contribution' ||
+		product === 'SupporterPlus' ||
+		product === 'OneTimeContribution';
+
 	useEffect(() => {
-		if (inAbandonedBasketVariant) {
+		if (inAbandonedBasketVariant && isSupportedProduct) {
 			cookie.set(
 				ABANDONED_BASKET_COOKIE_NAME,
 				JSON.stringify(abandonedBasket),
