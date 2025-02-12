@@ -524,7 +524,8 @@
 /****************** subscriptions__product-button ********************/
 
 .subscriptions__button-container,
-.subscriptions__button-container--feature {
+.subscriptions__button-container--feature,
+.subscriptions__button-container--feature--benefits {
 	display: block;
 
 	@include mq($from: phablet) {
