@@ -61,6 +61,7 @@ export function getInitialState(): CommonState {
 		countryId,
 		countryGroupId,
 		selectedAmountsVariant,
+		settings,
 	};
 
 	const participations: Participations = abTest.init(abtestInitalizerData);
