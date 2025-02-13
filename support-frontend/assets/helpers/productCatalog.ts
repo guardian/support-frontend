@@ -103,7 +103,7 @@ const addFreeBenefit = {
 };
 
 const newsletterBenefit = {
-	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+	copy: 'Give to the Guardian every month with Support',
 	specificToRegions: [
 		'GBPCountries',
 		'EURCountries',
@@ -112,6 +112,7 @@ const newsletterBenefit = {
 		'Canada',
 		'International',
 	] as CountryGroupId[],
+	hideBullet: true,
 };
 const newsletterBenefitUS = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
