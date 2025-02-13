@@ -153,10 +153,15 @@ class CreateSubscriptionController(
 
   private def validateBenefitsForAdLitePurchase(
       response: UserBenefitsResponse,
+      userDetails: UserDetailsWithSignedInStatus,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
-      // Not eligible
-      EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
+      if (userDetails.isSignedIn) {
+        EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed_signed_in"))
+      } else {
+        // Not eligible
+        EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
+      }
     } else {
       // Eligible
       EitherT.rightT(())
@@ -174,7 +179,7 @@ class CreateSubscriptionController(
             .forUser(testUsers.isTestUser(request))
             .getUserBenefits(userDetails.userDetails.identityId)
             .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
-          _ <- validateBenefitsForAdLitePurchase(benefits)
+          _ <- validateBenefitsForAdLitePurchase(benefits, userDetails)
         } yield ()
       }
       case _ => EitherT.rightT(())
@@ -328,45 +333,40 @@ class CreateSubscriptionController(
       product: ProductType,
       userEmail: String,
   )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
-    result
-      .fold(
-        { error =>
-          logErrorDetailedMessage(s"create failed due to $error")
-          val errResult = error match {
-            case err: RequestValidationError =>
-              // Store the error message in the result.header.reasonPhrase this will allow us to
-              // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
-              Result(
-                header = new ResponseHeader(
-                  status = BAD_REQUEST,
-                  reasonPhrase = Some(err.message),
-                ),
-                body = writeable.toEntity(err.message),
-              )
-            case ServerError(code) if code == emailAddressAlreadyTakenCode =>
-              Result(
-                header = new ResponseHeader(
-                  status = INTERNAL_SERVER_ERROR,
-                  reasonPhrase = Some(emailAddressAlreadyTakenCode),
-                ),
-                body = writeable.toEntity(""),
-              )
-            case _: ServerError =>
-              InternalServerError
-          }
-          Future.successful(errResult)
-        },
-        { createSubscriptionResponse =>
-          logDetailedMessage("create succeeded")
-          cookies(product, userEmail)
-            .map(cookies =>
-              Accepted(createSubscriptionResponse.asJson)
-                .withCookies(cookies: _*)
-                .discardingCookies(discardIncompleteCheckoutCookie),
+    result.value.flatMap {
+      case Left(error) =>
+        logErrorDetailedMessage(s"create failed due to $error")
+        val errResult = error match {
+          case err: RequestValidationError =>
+            // Store the error message in the result.header.reasonPhrase this will allow us to
+            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+            Result(
+              header = new ResponseHeader(
+                status = BAD_REQUEST,
+                reasonPhrase = Some(err.message),
+              ),
+              body = writeable.toEntity(err.message),
             )
-        },
-      )
-      .flatten
+          case ServerError(code) if code == emailAddressAlreadyTakenCode =>
+            Result(
+              header = new ResponseHeader(
+                status = INTERNAL_SERVER_ERROR,
+                reasonPhrase = Some(emailAddressAlreadyTakenCode),
+              ),
+              body = writeable.toEntity(""),
+            )
+          case _: ServerError =>
+            InternalServerError
+        }
+        Future.successful(errResult)
+      case Right(createSubscriptionResponse) =>
+        logDetailedMessage("create succeeded")
+        cookies(product, userEmail).map { cookies =>
+          Accepted(createSubscriptionResponse.asJson)
+            .withCookies(cookies: _*)
+            .discardingCookies(discardIncompleteCheckoutCookie)
+        }
+    }
   }
 
   case class CheckoutCompleteCookieBody(
