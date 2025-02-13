@@ -345,9 +345,9 @@ class Application(
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+    val canonicalLink = s"https://support.theguardian.com${buildCanonicalContributeLink(countryCode)}"
 
     views.html.contributions(
-      title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
@@ -367,12 +367,12 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
-      shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
       allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
       noIndex = stage != PROD,
+      canonicalLink = canonicalLink,
     )
   }
 
