@@ -260,7 +260,6 @@ export function ThreeTierCard({
 					href={link}
 					cssOverrides={btnStyleOverrides}
 					data-qm-trackable={quantumMetricButtonRef}
-					aria-label={label}
 				>
 					{ctaCopy}
 				</LinkButton>
