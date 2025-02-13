@@ -17,7 +17,6 @@ export const pageUrlRegexes = {
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
-		all: '^(?!(?:/subscribe/paper(/delivery|/checkout|/checkout/guest)?(?.*)?$))(?:(/??/subscribe(?.*)?$|/??/subscribe/weekly(/checkout)?(?.*)?$))',
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
