@@ -48,11 +48,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.zip",
+          "S3Key": "support/PROD/support-workers-typescript/support-workers.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-typescript",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -79,7 +79,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-typescript",
           },
           {
             "Key": "gu:cdk:version",
@@ -133,7 +133,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-typescript",
           },
           {
             "Key": "gu:cdk:version",
@@ -213,7 +213,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.zip",
+                      "/support/PROD/support-workers-typescript/support-workers.zip",
                     ],
                   ],
                 },
@@ -234,7 +234,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-typescript",
                   ],
                 ],
               },
@@ -257,7 +257,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-typescript/*",
                   ],
                 ],
               },
@@ -287,11 +287,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -318,7 +318,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -372,7 +372,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -452,7 +452,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -473,7 +473,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -496,7 +496,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -526,11 +526,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -557,7 +557,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -611,7 +611,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -704,7 +704,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -725,7 +725,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -748,7 +748,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -842,11 +842,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -873,7 +873,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -927,7 +927,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -1017,7 +1017,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -1038,7 +1038,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -1061,7 +1061,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -1922,11 +1922,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -1953,7 +1953,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -2007,7 +2007,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -2087,7 +2087,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -2108,7 +2108,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -2131,7 +2131,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -2161,11 +2161,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -2192,7 +2192,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -2246,7 +2246,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -2334,7 +2334,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -2355,7 +2355,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -2378,7 +2378,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -2408,11 +2408,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -2439,7 +2439,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -2530,7 +2530,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -2551,7 +2551,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -2574,7 +2574,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },
@@ -2622,7 +2622,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -3112,11 +3112,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers",
+            "APP": "support-workers-scala",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -3143,7 +3143,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -3197,7 +3197,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers",
+            "Value": "support-workers-scala",
           },
           {
             "Key": "gu:cdk:version",
@@ -3292,7 +3292,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers/support-workers.jar",
+                      "/support/PROD/support-workers-scala/support-workers.jar",
                     ],
                   ],
                 },
@@ -3313,7 +3313,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers",
+                    ":parameter/PROD/support/support-workers-scala",
                   ],
                 ],
               },
@@ -3336,7 +3336,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers/*",
+                    ":parameter/PROD/support/support-workers-scala/*",
                   ],
                 ],
               },

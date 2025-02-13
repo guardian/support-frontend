@@ -85,7 +85,6 @@ export class SupportWorkers extends GuStack {
 
     // Lambdas
     const lambdaDefaultConfig = {
-      app,
       memorySize: 1536,
       timeout: Duration.seconds(300),
       architecture: Architecture.ARM_64,
@@ -108,6 +107,7 @@ export class SupportWorkers extends GuStack {
       const lambdaId = `${lambdaName}Lambda`;
       const lambda = new GuLambdaFunction(this, lambdaId, {
         ...lambdaDefaultConfig,
+        app: "support-workers-scala",
         fileName: `support-workers.jar`,
         runtime: Runtime.JAVA_21,
         handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
@@ -158,6 +158,7 @@ export class SupportWorkers extends GuStack {
       const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
       const lambda = new GuLambdaFunction(this, lambdaId, {
         ...lambdaDefaultConfig,
+        app: "support-workers-typescript",
         fileName: `support-workers.zip`,
         runtime: Runtime.NODEJS_20_X,
         handler: `lambdas/${lambdaTSFile}.handler`,
