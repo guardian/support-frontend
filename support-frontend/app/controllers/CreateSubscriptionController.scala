@@ -153,15 +153,12 @@ class CreateSubscriptionController(
 
   private def validateBenefitsForAdLitePurchase(
       response: UserBenefitsResponse,
-      userDetails: UserDetailsWithSignedInStatus,
+      userSignedIn: Boolean,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
     if (response.benefits.contains("adFree") || response.benefits.contains("allowRejectAll")) {
-      if (userDetails.isSignedIn) {
-        EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed_signed_in"))
-      } else {
-        // Not eligible
-        EitherT.leftT(RequestValidationError("guardian_ad_lite_purchase_not_allowed"))
-      }
+      val errorCode =
+        if (userSignedIn) "guardian_ad_lite_purchase_not_allowed_signed_in" else "guardian_ad_lite_purchase_not_allowed"
+      EitherT.leftT(RequestValidationError(errorCode))
     } else {
       // Eligible
       EitherT.rightT(())
@@ -179,7 +176,7 @@ class CreateSubscriptionController(
             .forUser(testUsers.isTestUser(request))
             .getUserBenefits(userDetails.userDetails.identityId)
             .leftMap(_ => ServerError("Something went wrong calling the user benefits API"))
-          _ <- validateBenefitsForAdLitePurchase(benefits, userDetails)
+          _ <- validateBenefitsForAdLitePurchase(benefits, userDetails.isSignedIn)
         } yield ()
       }
       case _ => EitherT.rightT(())
