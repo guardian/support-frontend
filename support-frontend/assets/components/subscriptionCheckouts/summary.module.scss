@@ -81,6 +81,7 @@
 }
 
 .header,
+.headerNoImage,
 .headerShowDetails,
 .headerGuardianWeekly {
 	@include gu-fontset-body-sans;
@@ -93,13 +94,18 @@
 		padding: 0 4px;
 		margin: 0 -4px;
 	}
-	@include mq($from: desktop) {
-		position: absolute;
-		top: $gu-v-spacing;
-	}
 	@include mq($until: tablet) {
 		margin-bottom: $gu-v-spacing * 0.5;
 		text-align: left;
+	}
+}
+
+.header,
+.headerShowDetails,
+.headerGuardianWeekly {
+	@include mq($from: desktop) {
+		position: absolute;
+		top: $gu-v-spacing;
 	}
 }
 
