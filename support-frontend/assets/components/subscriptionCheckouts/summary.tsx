@@ -92,6 +92,7 @@ const styles = moduleStyles as {
 	content: string;
 	headerGuardianWeekly: string;
 	header: string;
+	headerNoImage: string;
 	title: string;
 	titleDescription: string;
 	pricing: string;
@@ -195,15 +196,17 @@ function TabletAndDesktop({
 				</div>
 			)}
 			<div className={styles.content}>
-				{image && (
-					<h3
-						className={
-							isGuardianWeeklyGift ? styles.headerGuardianWeekly : styles.header
-						}
-					>
-						Order summary
-					</h3>
-				)}
+				<h3
+					className={
+						!image
+							? styles.headerNoImage
+							: isGuardianWeeklyGift
+							? styles.headerGuardianWeekly
+							: styles.header
+					}
+				>
+					Order summary
+				</h3>
 				<h4 className={styles.title} title={`your subscription is ${title}`}>
 					{!orderIsAGift && 'The '}
 					{title}
