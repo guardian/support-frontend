@@ -20,6 +20,7 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 		expectedCheckoutTotalText: 'Was £12, now £9.60/month',
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/month for the first (\d|\.)+ months, then £(\d|\.)+\/month afterwards unless you cancel\./,
+		accessibleCtaText: 'All-access digital',
 	},
 	{
 		tier: 2,
@@ -31,6 +32,7 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 		expectedCheckoutTotalText: /Was £(\d|\.)+, now £(\d|\.)+\/year/i,
 		expectedThankYouText:
 			/You'll pay £(\d|\.)+\/year for the first year, then £(\d|\.)+\/year afterwards unless you cancel\./i,
+		accessibleCtaText: 'All-access digital',
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode}`, async ({
@@ -42,7 +44,6 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 		const testFirstName = firstName();
 		const testLastName = lastName();
 		const testEmail = email();
-		const ctaCopy = 'Support';
 
 		await setupPage(
 			page,
@@ -60,8 +61,7 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 			card.getByText(testDetails.expectedPromoText).first(),
 		).toBeVisible();
 		await page
-			.getByRole('link', { name: ctaCopy })
-			.nth(testDetails.tier - 1)
+			.getByRole('link', { name: testDetails.accessibleCtaText })
 			.click();
 
 		// Checkout
