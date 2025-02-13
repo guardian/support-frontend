@@ -25,6 +25,7 @@ import {
 import { ServiceHandler } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
+import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
@@ -40,17 +41,21 @@ const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
 export const handler = async (
 	state: WrappedState<CreatePaymentMethodState>,
 ) => {
-	console.info(`Input is ${JSON.stringify(state)}`);
-	const createPaymentMethodState = wrapperSchemaForState(
-		createPaymentMethodStateSchema,
-	).parse(state).state;
-	return createSalesforceContactState(
-		createPaymentMethodState,
-		await createPaymentMethod(
-			createPaymentMethodState.paymentFields,
-			createPaymentMethodState.user,
-		),
-	);
+	try {
+		console.info(`Input is ${JSON.stringify(state)}`);
+		const createPaymentMethodState = wrapperSchemaForState(
+			createPaymentMethodStateSchema,
+		).parse(state).state;
+		return createSalesforceContactState(
+			createPaymentMethodState,
+			await createPaymentMethod(
+				createPaymentMethodState.paymentFields,
+				createPaymentMethodState.user,
+			),
+		);
+	} catch (error) {
+		throw asRetryError(error);
+	}
 };
 
 export function createPaymentMethod(
