@@ -15,8 +15,16 @@ object Status {
   implicit val statusDecoder = deriveEnumerationDecoder[Status]
 }
 
+case class RegionTargeting(
+    targetedCountryGroups: List[String] = Nil,
+)
+
+object RegionTargeting {
+  implicit val codec: Codec[RegionTargeting] = deriveCodec
+}
+
 case class LandingPageTestTargeting(
-    countryGroups: List[String],
+    regionTargeting: RegionTargeting,
 )
 
 object LandingPageTestTargeting {

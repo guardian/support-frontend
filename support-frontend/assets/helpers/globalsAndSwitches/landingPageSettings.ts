@@ -10,6 +10,14 @@ export interface LandingPageVariant {
 	copy: LandingPageCopy;
 }
 
+interface RegionTargeting {
+	targetedCountryGroups: CountryGroupId[];
+}
+
+interface LandingPageTestTargeting {
+	regionTargeting: RegionTargeting;
+}
+
 interface LandingPageTestTargeting {
 	countryGroups: CountryGroupId[];
 }

@@ -1,6 +1,13 @@
 package services
 
-import admin.settings.{LandingPageCopy, LandingPageTest, LandingPageTestTargeting, LandingPageVariant, Status}
+import admin.settings.{
+  LandingPageCopy,
+  LandingPageTest,
+  LandingPageTestTargeting,
+  LandingPageVariant,
+  RegionTargeting,
+  Status,
+}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
@@ -18,10 +25,17 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
         .builder()
         .m(
           Map(
-            "countryGroups" -> AttributeValue
+            "regionTargeting" -> AttributeValue
               .builder()
-              .l(
-                AttributeValue.builder().s("GBPCountries").build(),
+              .m(
+                Map(
+                  "targetedCountryGroups" -> AttributeValue
+                    .builder()
+                    .l(
+                      AttributeValue.builder().s("GBPCountries").build(),
+                    )
+                    .build(),
+                ).asJava,
               )
               .build(),
           ).asJava,
@@ -58,7 +72,9 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
         priority = 3,
         status = Status.Live,
         targeting = LandingPageTestTargeting(
-          countryGroups = List("GBPCountries"),
+          regionTargeting = RegionTargeting(
+            targetedCountryGroups = List("GBPCountries"),
+          ),
         ),
         variants = List(
           LandingPageVariant(
