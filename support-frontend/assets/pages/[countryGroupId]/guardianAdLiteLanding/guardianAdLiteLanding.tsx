@@ -1,8 +1,5 @@
-import { css } from '@emotion/react';
-import { textSans24 } from '@guardian/source/foundations';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
-import { isProd } from 'helpers/urls/url';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -42,28 +39,13 @@ export function GuardianAdLiteLanding({
 	}
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			{!isProd() ? (
-				<>
-					<HeaderCards
-						geoId={geoId}
-						returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
-						isSignedIn={user.isSignedIn}
-					/>
-					<PosterComponent />
-					<AccordianComponent />
-				</>
-			) : (
-				<div
-					css={css`
-						position: relative;
-						${textSans24};
-						color: white;
-						text-align: center;
-					`}
-				>
-					Under Construction. Viewable within Code or Dev environments only.
-				</div>
-			)}
+			<HeaderCards
+				geoId={geoId}
+				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
+				isSignedIn={user.isSignedIn}
+			/>
+			<PosterComponent />
+			<AccordianComponent />
 		</LandingPageLayout>
 	);
 }

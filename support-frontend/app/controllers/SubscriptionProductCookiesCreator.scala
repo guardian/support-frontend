@@ -7,75 +7,45 @@ import play.api.mvc.Cookie
 import com.gu.support.workers._
 
 case class SubscriptionProductCookiesCreator(domain: GuardianDomain) {
-  sealed trait SupportCookie {
-    def toPlayCookie: Cookie
-  }
+  private val oneDayInSeconds = 60 * 60 * 24;
+  private val maxAgeInDays = 7
 
-  case class SessionCookie(name: String, value: String) extends SupportCookie {
-    def toPlayCookie: Cookie = Cookie(
+  private def persistentCookieWithMaxAge(name: String, now: DateTime) = {
+    val expiryTime = now.plusDays(maxAgeInDays).withTimeAtStartOfDay().getMillis.toString
+    Cookie(
       name = name,
-      value = value,
+      value = expiryTime,
+      maxAge = Some(oneDayInSeconds * maxAgeInDays),
       secure = true,
       httpOnly = false,
       domain = Some(domain.value),
     )
   }
+  private def adFreeCookie(now: DateTime) =
+    persistentCookieWithMaxAge("GU_AF1", now)
 
-  case class PersistentCookie(name: String, value: String, maxAge: Int) extends SupportCookie {
-    def toPlayCookie: Cookie = Cookie(
-      name = name,
-      value = value,
-      maxAge = Some(maxAge),
-      secure = true,
-      httpOnly = false,
-      domain = Some(domain.value),
-    )
-  }
+  private def hideSupportMessagingCookie(now: DateTime) =
+    persistentCookieWithMaxAge("gu_hide_support_messaging", now)
 
-  def createCookiesForProduct(product: ProductType): List[Cookie] = {
-    // Setting the user attributes cookies used by frontend. See:
+  private def allowRejectAllCookie(now: DateTime) =
+    persistentCookieWithMaxAge("gu_allow_reject_all", now)
+
+  private def userBenefitsExpiryCookie(now: DateTime) =
+    persistentCookieWithMaxAge("gu_user_benefits_expiry", now)
+
+  def createCookiesForProduct(product: ProductType, now: DateTime): List[Cookie] = {
+    // Setting the user benefits cookies used by frontend. See:
     // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
-    val standardCookies: List[SupportCookie] = List(
-      SessionCookie("gu_user_features_expiry", DateTime.now.plusDays(1).getMillis.toString),
-      SessionCookie("gu_hide_support_messaging", true.toString),
-    )
-    val oneWeekInSeconds = 604800
-    val productCookies: List[SupportCookie] = product match {
-      case Contribution(_, _, billingPeriod) =>
-        List(
-          SessionCookie(
-            s"gu.contributions.recurring.contrib-timestamp.$billingPeriod",
-            DateTime.now.getMillis.toString,
-          ),
-          SessionCookie("gu_recurring_contributor", true.toString),
-        )
-      case _: SupporterPlus =>
-        List(
-          SessionCookie("gu_digital_subscriber", true.toString),
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          SessionCookie("GU_AF1", DateTime.now().plusDays(1).getMillis.toString),
-        )
-      case _: TierThree =>
-        List(
-          SessionCookie("gu_digital_subscriber", true.toString),
-          // SessionCookie("gu_supporter_plus", true.toString), // TODO: add this and remove the digisub one now that the CMP cookie list has been updated
-          SessionCookie("GU_AF1", DateTime.now().plusDays(1).getMillis.toString),
-        )
-      case _: DigitalPack =>
-        List(
-          SessionCookie("gu_digital_subscriber", true.toString),
-          SessionCookie("GU_AF1", DateTime.now().plusDays(1).getMillis.toString),
-        )
-      case p: Paper if p.productOptions.hasDigitalSubscription =>
-        List(
-          SessionCookie("gu_digital_subscriber", true.toString),
-          SessionCookie("GU_AF1", DateTime.now().plusDays(1).getMillis.toString),
-        )
-      case _: Paper => List.empty
-      case _: GuardianWeekly => List.empty
-      case _: GuardianAdLite => List(PersistentCookie("gu_allow_reject_all", true.toString, oneWeekInSeconds))
+
+    val productCookies: List[Cookie] = product match {
+      case _: SupporterPlus | _: TierThree | _: DigitalPack | _: Paper =>
+        List(adFreeCookie(now), allowRejectAllCookie(now), hideSupportMessagingCookie(now))
+
+      case _: Contribution | _: GuardianWeekly => List(hideSupportMessagingCookie(now))
+
+      case _: GuardianAdLite => List(allowRejectAllCookie(now))
     }
 
-    (standardCookies ++ productCookies).map(_.toPlayCookie)
+    userBenefitsExpiryCookie(now) :: productCookies
   }
 }

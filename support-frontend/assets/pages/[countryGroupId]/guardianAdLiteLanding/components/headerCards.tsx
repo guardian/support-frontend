@@ -130,7 +130,7 @@ export function HeaderCards({
 					cardsContent={[card1, card2]}
 					isSignedIn={isSignedIn}
 				/>
-				{isSignedIn && (
+				{!isSignedIn && (
 					<div css={signIn}>
 						<p css={paragraph}>
 							If you already have Guardian Ad-Lite or another Guardian

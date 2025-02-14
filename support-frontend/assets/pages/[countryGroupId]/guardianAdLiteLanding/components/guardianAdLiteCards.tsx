@@ -44,7 +44,7 @@ export function GuardianAdLiteCards({
 		<div
 			css={[
 				container(cardsContent.length),
-				!isSignedIn ? containerExpand : css``,
+				isSignedIn ? containerExpand : css``,
 			]}
 			role="tabpanel"
 			id={`monthly-tab`}
