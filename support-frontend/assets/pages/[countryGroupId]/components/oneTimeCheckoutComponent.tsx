@@ -287,23 +287,26 @@ export function OneTimeCheckoutComponent({
 		coverTransactionCost,
 	);
 
+	const elements = useElements();
+	useEffect(() => {
+		if (finalAmount && elements) {
+			// valid elements and final amount, set amount, enable Express checkout
+			elements.update({ amount: finalAmount * 100 });
+			setStripeExpressCheckoutEnable(true);
+		} else {
+			// invalid elements and final amount, disable Express checkout
+			setStripeExpressCheckoutEnable(false);
+		}
+	}, [finalAmount, elements]);
 	useEffect(() => {
 		if (finalAmount) {
-			// valid final amount, set amount, enable Express checkout
-			elements?.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-
-			// Track amount selection with QM
+			// Track valid final amount selection with QM
 			sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
-		} else {
-			// invalid final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
 		}
 	}, [finalAmount]);
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
-	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [
 		stripeExpressCheckoutPaymentType,
@@ -641,7 +644,6 @@ export function OneTimeCheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
-
 										// Track payment method selection with QM
 										sendEventPaymentMethodSelected(
 											'StripeExpressCheckoutElement',
