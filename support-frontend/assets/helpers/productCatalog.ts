@@ -118,6 +118,15 @@ const newsletterBenefitUS = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 	specificToRegions: ['UnitedStates'] as CountryGroupId[],
 };
+const newsletterBenefitAllAccessDigital = {
+	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+	specificToRegions: [
+		'GBPCountries',
+		'EURCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
+};
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
 	tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
@@ -153,7 +162,7 @@ const feastBenefit = {
 const supporterPlusBenefits = [
 	appBenefit,
 	addFreeBenefit,
-	newsletterBenefit,
+	newsletterBenefitAllAccessDigital,
 	newsletterBenefitUS,
 	fewerAsksBenefit,
 	partnerOffersBenefit,
