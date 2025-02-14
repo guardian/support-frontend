@@ -198,17 +198,17 @@ export class SupportWorkers extends GuStack {
         outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
       })
         .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryNone"],
+          errors: ["RetryNone"],
           maxAttempts: 0,
         })
         .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryLimited"],
+          errors: ["RetryLimited"],
           maxAttempts: 5,
           interval: Duration.seconds(1),
           backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
         })
         .addRetry({
-          errors: ["com.gu.support.workers.exceptions.RetryUnlimited"],
+          errors: ["RetryUnlimited"],
           maxAttempts: 999999, //If we don't provide a value here it defaults to 3
           interval: Duration.seconds(1),
           backoffRate: 2,
