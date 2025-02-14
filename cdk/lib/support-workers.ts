@@ -82,6 +82,12 @@ export class SupportWorkers extends GuStack {
         Fn.importValue(table)
       ),
     });
+    const parameterStorePolicy = new PolicyStatement({
+      actions: ["ssm:GetParameter"],
+      resources: [
+        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
+      ],
+    });
 
     // Lambdas
     const lambdaDefaultConfig = {
@@ -166,6 +172,7 @@ export class SupportWorkers extends GuStack {
         initialPolicy: [
           s3Policy,
           cloudWatchLoggingPolicy,
+          parameterStorePolicy,
           ...additionalPolicies,
         ],
       });
