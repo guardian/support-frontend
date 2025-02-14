@@ -235,6 +235,10 @@ function getParticipationsFromSession(): Participations | undefined {
 	return undefined;
 }
 
+function clearParticipationsFromSession(): void {
+	storage.setSession('abParticipations', JSON.stringify({}));
+}
+
 function getServerSideParticipations(): Participations | null | undefined {
 	if (window.guardian.serversideTests) {
 		return window.guardian.serversideTests;
@@ -619,7 +623,7 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-export { init, getAmountsTestVariant };
+export { init, getAmountsTestVariant, clearParticipationsFromSession };
 
 // Exported for testing only
 export const _ = {
