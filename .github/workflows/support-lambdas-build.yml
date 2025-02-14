@@ -60,3 +60,30 @@ jobs:
           export LAST_TEAMCITY_BUILD=15000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project support-lambdas" riffRaffUpload
+  support_lambdas_typescripts_bigquery_acquisition_publisher:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-lambdas-bigquery-acquisition-publisher build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "support-lambdas/bigquery-acquisitions-publisher/.nvmrc"
+
+      - run: yarn install
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn tsc
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
