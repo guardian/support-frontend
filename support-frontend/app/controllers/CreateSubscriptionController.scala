@@ -19,6 +19,7 @@ import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
+import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
@@ -334,45 +335,40 @@ class CreateSubscriptionController(
       product: ProductType,
       userEmail: String,
   )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
-    result
-      .fold(
-        { error =>
-          logErrorDetailedMessage(s"create failed due to $error")
-          val errResult = error match {
-            case err: RequestValidationError =>
-              // Store the error message in the result.header.reasonPhrase this will allow us to
-              // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
-              Result(
-                header = new ResponseHeader(
-                  status = BAD_REQUEST,
-                  reasonPhrase = Some(err.message),
-                ),
-                body = writeable.toEntity(err.message),
-              )
-            case ServerError(code) if code == emailAddressAlreadyTakenCode =>
-              Result(
-                header = new ResponseHeader(
-                  status = INTERNAL_SERVER_ERROR,
-                  reasonPhrase = Some(emailAddressAlreadyTakenCode),
-                ),
-                body = writeable.toEntity(""),
-              )
-            case _: ServerError =>
-              InternalServerError
-          }
-          Future.successful(errResult)
-        },
-        { createSubscriptionResponse =>
-          logDetailedMessage("create succeeded")
-          cookies(product, userEmail)
-            .map(cookies =>
-              Accepted(createSubscriptionResponse.asJson)
-                .withCookies(cookies: _*)
-                .discardingCookies(discardIncompleteCheckoutCookie),
+    result.value.flatMap {
+      case Left(error) =>
+        logErrorDetailedMessage(s"create failed due to $error")
+        val errResult = error match {
+          case err: RequestValidationError =>
+            // Store the error message in the result.header.reasonPhrase this will allow us to
+            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+            Result(
+              header = new ResponseHeader(
+                status = BAD_REQUEST,
+                reasonPhrase = Some(err.message),
+              ),
+              body = writeable.toEntity(err.message),
             )
-        },
-      )
-      .flatten
+          case ServerError(code) if code == emailAddressAlreadyTakenCode =>
+            Result(
+              header = new ResponseHeader(
+                status = INTERNAL_SERVER_ERROR,
+                reasonPhrase = Some(emailAddressAlreadyTakenCode),
+              ),
+              body = writeable.toEntity(""),
+            )
+          case _: ServerError =>
+            InternalServerError
+        }
+        Future.successful(errResult)
+      case Right(createSubscriptionResponse) =>
+        logDetailedMessage("create succeeded")
+        cookies(product, userEmail).map { cookies =>
+          Accepted(createSubscriptionResponse.asJson)
+            .withCookies(cookies: _*)
+            .discardingCookies(discardIncompleteCheckoutCookie)
+        }
+    }
   }
 
   case class CheckoutCompleteCookieBody(
@@ -416,7 +412,7 @@ class CreateSubscriptionController(
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     val productCookiesCreator = SubscriptionProductCookiesCreator(guardianDomain)
-    val productCookies = productCookiesCreator.createCookiesForProduct(product)
+    val productCookies = productCookiesCreator.createCookiesForProduct(product, DateTime.now())
     checkoutCompleteCookies(product, userEmail).map(_ ++ productCookies)
   }
 

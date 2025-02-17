@@ -24,7 +24,13 @@ function setSessionParticipations(participations: Participations, key: Key) {
 	storage.setSession(key, JSON.stringify(participations));
 }
 
+function clearParticipationsFromSession(): void {
+	storage.setSession(PARTICIPATIONS_KEY, JSON.stringify({}));
+	storage.setSession(LANDING_PAGE_PARTICIPATIONS_KEY, JSON.stringify({}));
+}
+
 export {
+	clearParticipationsFromSession,
 	getSessionParticipations,
 	setSessionParticipations,
 	PARTICIPATIONS_KEY,

@@ -28,7 +28,7 @@ import org.scalatest.matchers.should.Matchers
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules.{Invalid, Valid}
-import utils.TestData.monthlyDirectUSDProduct
+import utils.TestData.{monthlyDirectUSDProduct, validSupporterPlusRequest}
 
 import scala.concurrent.Future
 
@@ -393,6 +393,13 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
     PaidProductValidation.passes(requestSupporterPlus) shouldBe Valid
   }
 
+  it should "fail if the billing postcode field contains an email address" in {
+    val requestEmailInBillingPostcodeField = validSupporterPlusRequest.copy(
+      billingAddress = validSupporterPlusRequest.billingAddress.copy(postCode = Some("test@example.com")),
+      product = SupporterPlus(5, Currency.USD, Annual),
+    )
+    PaidProductValidation.passes(requestEmailInBillingPostcodeField) shouldBe an[Invalid]
+  }
 }
 class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
 
@@ -755,6 +762,9 @@ object TestData {
     giftRecipient = None,
     deliveryInstructions = None,
     debugInfo = None,
+  )
+  val validSupporterPlusRequest = validDigitalPackRequest.copy(
+    product = SupporterPlus(50, Currency.USD, Monthly),
   )
 
   val someDateNextMonth = new LocalDate().plusMonths(1)
