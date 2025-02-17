@@ -8,7 +8,7 @@ import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
-import { clearParticipationsFromSession } from 'helpers/abTests/abtest';
+import { clearParticipationsFromSession } from 'helpers/abTests/sessionStorage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
