@@ -93,7 +93,7 @@ jobs:
       - run: yarn tsc
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
-      - run: yarn -c prettier typescript/*.ts
+      - run: yarn prettier -c typescript/*.ts
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn test
