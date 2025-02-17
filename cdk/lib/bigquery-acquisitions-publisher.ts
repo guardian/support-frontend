@@ -113,10 +113,10 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
-      runtime: Runtime.JAVA_21,
-      fileName: `${appName}.jar`,
+      runtime: Runtime.NODEJS_20_X,
+      fileName: `index.zip`,
       functionName,
-      handler: "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
+      handler: "index.handler",
       events: [eventSource],
       timeout: Duration.minutes(2),
       role,
