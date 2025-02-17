@@ -283,13 +283,13 @@ function PaperCheckoutForm(props: PropTypes) {
 		);
 	}, []);
 
-	const hideSummaryImage =
-		props.participations.subscribeCheckoutImage === 'variant';
+	const showSummaryImage =
+		props.participations.subscribeCheckoutImage !== 'variant';
 
 	const subsCardOrderSummary = (
 		<PaperOrderSummary
 			image={
-				!hideSummaryImage ? (
+				showSummaryImage ? (
 					<GridImage
 						gridId="printCampaignDigitalVoucher"
 						srcSizes={[500]}
@@ -313,7 +313,7 @@ function PaperCheckoutForm(props: PropTypes) {
 	const homeDeliveryOrderSummary = (
 		<PaperOrderSummary
 			image={
-				!hideSummaryImage ? (
+				showSummaryImage ? (
 					<GridImage
 						gridId="printCampaignHDdigitalVoucher"
 						srcSizes={[500]}

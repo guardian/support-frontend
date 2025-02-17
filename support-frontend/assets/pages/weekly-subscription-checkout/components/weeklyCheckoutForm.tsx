@@ -193,9 +193,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
-	const hideSummaryImage =
-		props.participations.subscribeCheckoutImage === 'variant';
-
+	const showSummaryImage =
+		props.participations.subscribeCheckoutImage !== 'variant';
 	return (
 		<Content>
 			<Layout
@@ -203,7 +202,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<>
 						<Summary
 							image={
-								!hideSummaryImage ? (
+								showSummaryImage ? (
 									<GridImage
 										gridId="checkoutPackshotWeekly"
 										srcSizes={[500]}

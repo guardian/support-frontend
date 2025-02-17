@@ -182,8 +182,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 		props.billingCountry,
 	);
 
-	const hideSummaryImage =
-		props.participations.subscribeCheckoutImage === 'variant';
+	const showSummaryImage =
+		props.participations.subscribeCheckoutImage !== 'variant';
 
 	return (
 		<Content>
@@ -191,7 +191,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 				aside={
 					<Summary
 						image={
-							!hideSummaryImage ? (
+							showSummaryImage ? (
 								<GridImage
 									gridId="checkoutPackshotWeeklyGifting"
 									srcSizes={[696, 500]}
