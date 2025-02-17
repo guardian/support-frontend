@@ -1,5 +1,5 @@
-describe("index", () => {
-  test("example test", () => {
-    expect(1 + 1).toBe(2);
-  })
+describe('index', () => {
+	test('example test', () => {
+		expect(1 + 1).toBe(2);
+	});
 });
