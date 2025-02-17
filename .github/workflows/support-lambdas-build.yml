@@ -87,3 +87,20 @@ jobs:
 
       - run: yarn tsc
         working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "corretto"
+          cache: sbt
+
+      - name: Build and upload to RiffRaff
+        run: |
+          export LAST_TEAMCITY_BUILD=15000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          sbt "project support-lambdas" riffRaffUpload
