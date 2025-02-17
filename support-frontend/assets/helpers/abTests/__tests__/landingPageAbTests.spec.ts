@@ -9,8 +9,8 @@ import { LANDING_PAGE_PARTICIPATIONS_KEY } from '../sessionStorage';
 const nonUsTest: LandingPageTest = {
 	name: 'LP_DEFAULT',
 	status: 'Live',
-	targeting: {
-		countryGroups: [
+	regionTargeting: {
+		targetedCountryGroups: [
 			'GBPCountries',
 			'AUDCountries',
 			'EURCountries',
@@ -33,7 +33,7 @@ const nonUsTest: LandingPageTest = {
 const usTest: LandingPageTest = {
 	name: 'LP_DEFAULT_US',
 	status: 'Live',
-	targeting: { countryGroups: ['UnitedStates'] },
+	regionTargeting: { targetedCountryGroups: ['UnitedStates'] },
 	variants: [
 		{
 			name: 'CONTROL',
