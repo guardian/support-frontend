@@ -60,6 +60,7 @@ jobs:
           export LAST_TEAMCITY_BUILD=15000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project support-lambdas" riffRaffUpload
+
   support_lambdas_typescripts_bigquery_acquisition_publisher:
     if: >-
       (github.actor != 'dependabot[bot]') &&
@@ -90,6 +91,12 @@ jobs:
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn tsc
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn -c prettier typescript/*.ts
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn test
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: zip -qr index.zip ./*.js
