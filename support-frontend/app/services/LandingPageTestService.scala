@@ -4,7 +4,7 @@ import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import admin.settings.LandingPageTest
 import com.gu.aws.AwsCloudWatchMetricSetup.getLandingPageTestsError
 import com.gu.aws.{AwsCloudWatchMetricPut, ProfileName}
-import com.gu.support.config.Stage
+import com.gu.support.config.{Stage, Stages}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.{Json, JsonObject}
 import org.apache.pekko.actor.ActorSystem
@@ -88,7 +88,10 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext
     .credentialsProvider(credentialsProvider)
     .build
 
-  private val tableName = s"support-admin-console-channel-tests-$stage"
+  private val tableName = stage match {
+    case Stages.PROD => s"support-admin-console-channel-tests-PROD"
+    case _ => s"support-admin-console-channel-tests-CODE"
+  }
 
   private def fetchLandingPageTests(): Future[List[LandingPageTest]] = {
     val condition = Condition
