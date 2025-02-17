@@ -10,13 +10,13 @@ export interface LandingPageVariant {
 	copy: LandingPageCopy;
 }
 
-interface LandingPageTestTargeting {
-	countryGroups: CountryGroupId[];
+interface RegionTargeting {
+	targetedCountryGroups: CountryGroupId[];
 }
 
 export interface LandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
-	targeting: LandingPageTestTargeting;
+	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
 }

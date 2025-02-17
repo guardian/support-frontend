@@ -44,8 +44,14 @@ export function getLandingPageParticipations(
 		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
-				const { countryGroups } = test.targeting;
-				return countryGroups.includes(countryGroupId);
+				const targetedCountryGroups =
+					test.regionTargeting?.targetedCountryGroups ?? [];
+				if (targetedCountryGroups.length === 0) {
+					return true;
+				} // no targeting
+				else {
+					return targetedCountryGroups.includes(countryGroupId);
+				}
 			});
 
 		if (test) {

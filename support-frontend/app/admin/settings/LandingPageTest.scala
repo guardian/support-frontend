@@ -15,12 +15,12 @@ object Status {
   implicit val statusDecoder = deriveEnumerationDecoder[Status]
 }
 
-case class LandingPageTestTargeting(
-    countryGroups: List[String],
+case class RegionTargeting(
+    targetedCountryGroups: List[String] = Nil,
 )
 
-object LandingPageTestTargeting {
-  implicit val codec: Codec[LandingPageTestTargeting] = deriveCodec
+object RegionTargeting {
+  implicit val codec: Codec[RegionTargeting] = deriveCodec
 }
 
 case class LandingPageCopy(
@@ -45,7 +45,7 @@ case class LandingPageTest(
     name: String,
     status: Status,
     priority: Int,
-    targeting: LandingPageTestTargeting,
+    regionTargeting: Option[RegionTargeting],
     variants: List[LandingPageVariant],
 )
 
@@ -61,7 +61,7 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
       name = "LP_DEFAULT_US",
       status = Status.Live,
       priority = 0,
-      targeting = LandingPageTestTargeting(countryGroups = List("UnitedStates")),
+      regionTargeting = Some(RegionTargeting(targetedCountryGroups = List("UnitedStates"))),
       variants = List(
         LandingPageVariant(
           name = "CONTROL",
@@ -77,8 +77,10 @@ object LandingPageTestsProvider extends SettingsProvider[List[LandingPageTest]] 
       name = "LP_DEFAULT",
       status = Status.Live,
       priority = 1,
-      targeting = LandingPageTestTargeting(countryGroups =
-        List("GBPCountries", "AUDCountries", "EURCountries", "International", "NZDCountries", "Canada"),
+      regionTargeting = Some(
+        RegionTargeting(targetedCountryGroups =
+          List("GBPCountries", "AUDCountries", "EURCountries", "International", "NZDCountries", "Canada"),
+        ),
       ),
       variants = List(
         LandingPageVariant(
