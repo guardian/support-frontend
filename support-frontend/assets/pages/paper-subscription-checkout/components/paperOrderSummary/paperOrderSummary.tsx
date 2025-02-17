@@ -24,11 +24,11 @@ import {
 
 export type OrderSummaryProps = {
 	digiSubPrice: string;
-	image: JSX.Element | null;
 	includesDigiSub: boolean;
+	total: ProductPrice;
+	image?: JSX.Element;
 	changeSubscription?: string | null;
 	startDate?: string;
-	total: ProductPrice;
 };
 
 function getMobileSummaryTitle(
