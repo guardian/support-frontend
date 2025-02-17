@@ -1,7 +1,8 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { config } from 'helpers/contributions';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getStripeKey } from 'helpers/forms/stripe';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
@@ -34,7 +35,15 @@ export function OneTimeCheckout({
 
 	const stripePromise = loadStripe(stripePublicKey);
 
-	const minAmount = config[countryGroupId]['ONE_OFF'].min;
+	const settings = getSettings();
+	const { selectedAmountsVariant } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		settings,
+	);
+	const { amountsCardData } = selectedAmountsVariant;
+	const { defaultAmount } = amountsCardData['ONE_OFF'];
+
 	const elementsOptions = {
 		mode: 'payment',
 		/**
@@ -42,7 +51,7 @@ export function OneTimeCheckout({
 		 * @see https://docs.stripe.com/api/charges/object
 		 * @see https://docs.stripe.com/currencies#zero-decimal
 		 */
-		amount: minAmount * 100,
+		amount: defaultAmount * 100,
 		currency: currencyKey.toLowerCase(),
 		paymentMethodCreation: 'manual',
 	} as const;
