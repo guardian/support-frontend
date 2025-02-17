@@ -289,19 +289,16 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (finalAmount && elements) {
-			// valid elements and final amount, set amount, enable Express checkout
-			elements.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-		} else {
-			// invalid elements and final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
-		}
-	}, [finalAmount, elements]);
-	useEffect(() => {
 		if (finalAmount) {
-			// Track valid final amount selection with QM
+			// valid final amount, set amount, enable Express checkout
+			elements?.update({ amount: finalAmount * 100 });
+			setStripeExpressCheckoutEnable(true);
+
+			// Track amount selection with QM
 			sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
+		} else {
+			// invalid final amount, disable Express checkout
+			setStripeExpressCheckoutEnable(false);
 		}
 	}, [finalAmount]);
 
