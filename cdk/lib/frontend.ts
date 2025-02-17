@@ -106,6 +106,12 @@ export class Frontend extends GuStack {
           `arn:aws:lambda:eu-west-1:${this.account}:function:stripe-intent-${this.stage}`,
         ],
       }),
+      new GuAllowPolicy(this, "DynamoLandingPageTests", {
+        actions: [
+          "dynamodb:Query",
+        ],
+        resources: [`arn:aws:dynamodb:*:*:table/support-admin-console-channel-tests-${this.stage}`,],
+      }),
     ];
 
     const alarmName = (shortDescription: string) =>
@@ -377,6 +383,30 @@ export class Frontend extends GuStack {
           },
           statistic: "Sum",
           period: Duration.minutes(1),
+        }),
+        treatMissingData: TreatMissingData.NOT_BREACHING,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+      });
+
+      new GuAlarm(this, "GetLandingPageTestsError", {
+        app,
+        alarmName: alarmName("support-frontend GetLandingPageTestsError"),
+        alarmDescription: alarmDescription(
+          "support-frontend failed to fetch one or more landing page tests from DynamoDb"
+        ),
+        actionsEnabled: shouldCreateAlarms,
+        threshold: 1,
+        evaluationPeriods: 1,
+        comparisonOperator:
+        ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        metric: new Metric({
+          metricName: "GetLandingPageTestsError",
+          namespace: "support-frontend",
+          dimensionsMap: {
+            Stage: this.stage,
+          },
+          statistic: "Sum",
+          period: Duration.seconds(60),
         }),
         treatMissingData: TreatMissingData.NOT_BREACHING,
         snsTopicName: `alarms-handler-topic-${this.stage}`,

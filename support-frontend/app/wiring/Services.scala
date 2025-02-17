@@ -76,7 +76,10 @@ trait Services {
 
   lazy val stripeService = new StripeSetupIntentService(appConfig.stage)
 
-  lazy val allSettingsProvider: AllSettingsProvider = AllSettingsProvider.fromConfig(appConfig).valueOr(throw _)
+  lazy val landingPageTestService = new LandingPageTestServiceImpl(appConfig.stage)
+
+  lazy val allSettingsProvider: AllSettingsProvider =
+    AllSettingsProvider.fromConfig(appConfig, landingPageTestService).valueOr(throw _)
 
   lazy val defaultPromotionService = new DefaultPromotionServiceS3(s3Client, appConfig.stage, actorSystem)
 

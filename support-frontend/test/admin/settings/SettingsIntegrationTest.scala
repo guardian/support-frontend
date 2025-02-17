@@ -13,6 +13,7 @@ import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.libs.ws.WSClient
+import services.LandingPageTestService
 
 import java.nio.file.{Files, Paths}
 import java.io.File
@@ -30,8 +31,12 @@ class SettingsIntegrationTest extends AsyncFlatSpec with Matchers with StrictLog
 
     val configuration = new Configuration(typesafeConfig)
 
+    val mockLandingPageTestService = new LandingPageTestService {
+      def getTests(): List[LandingPageTest] = Nil
+    }
+
     val maybeAllSettings = for {
-      allSettingsProvider <- AllSettingsProvider.fromConfig(configuration)
+      allSettingsProvider <- AllSettingsProvider.fromConfig(configuration, mockLandingPageTestService)
       allSettings = allSettingsProvider.getAllSettings()
     } yield allSettings
 
