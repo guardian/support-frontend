@@ -82,25 +82,36 @@ jobs:
         with:
           node-version-file: "support-lambdas/bigquery-acquisitions-publisher/.nvmrc"
 
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
       - run: yarn install
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn tsc
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
-      - name: Build CFN from CDK
-        run: ./script/ci
-        working-directory: cdk
+      - run: zip -qr index.zip ./*.js
+        working-directory: support-lambdas/bigquery-acquisitions-publisher/target/typescript
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          java-version: "21"
-          distribution: "corretto"
-          cache: sbt
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
 
-      - name: Build and upload to RiffRaff
-        run: |
-          export LAST_TEAMCITY_BUILD=15000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-lambdas" riffRaffUpload
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:bigquery-acquisitions-publisher"
+          buildNumberOffset: 15000
+          configPath: "support-lambdas/bigquery-acquisitions-publisher/riff-raff.yaml"
+          commentingEnabled: "false"
+          contentDirectories: |
+            cfn:
+              - ./cdk/cdk.out
+            bigquery-acquisitions-publisher:
+              - ./support-lambdas/bigquery-acquisitions-publisher/target/typescript/index.zip
