@@ -14,11 +14,11 @@ export function StripeDisclaimer() {
 		<>
 			All card payments are powered by Stripe. Read the Stripe{' '}
 			<a href="https://stripe.com/privacy" target="_blank">
-				privacy policy
+				Privacy Policy
 			</a>{' '}
 			and{' '}
 			<a href="https://stripe.com/legal/end-users" target="_blank">
-				terms and conditions
+				Terms and conditions
 			</a>
 			.
 		</>

@@ -212,7 +212,12 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
 		 * which then needs this configuration.
 		 */
-		if (productKey === 'Contribution' || productKey === 'SupporterPlus') {
+		if (
+			productKey === 'Contribution' ||
+			productKey === 'SupporterPlus' ||
+			productKey === 'GuardianAdLite' ||
+			productKey === 'DigitalSubscription'
+		) {
 			elementsOptions = {
 				mode: 'payment',
 				/**

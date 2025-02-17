@@ -332,7 +332,6 @@ export function CheckoutComponent({
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
-	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -346,13 +345,6 @@ export function CheckoutComponent({
 			formRef.current?.requestSubmit();
 		}
 	}, [stripeExpressCheckoutSuccessful]);
-
-	/**
-	 * flag that disables the submission of the form until the stripeClientSecret is
-	 * fetched from the Stripe API with using the reCaptcha token
-	 */
-	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
-		useState(false);
 
 	/**
 	 * Payment method: PayPal
@@ -467,12 +459,13 @@ export function CheckoutComponent({
 
 		/** FormData: `paymentFields` */
 		let paymentFields: RegularPaymentFields | undefined = undefined;
-		if (
-			paymentMethod === 'Stripe' &&
-			stripe &&
-			cardElement &&
-			stripeClientSecret
-		) {
+		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
+			const stripeClientSecret = await stripeCreateSetupIntentRecaptcha(
+				isTestUser,
+				stripePublicKey,
+				recaptchaToken,
+			);
+
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -1237,19 +1230,8 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and use await here, but that has
-																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
-																	setStripeClientSecretInProgress(true);
 																	setRecaptchaToken(token);
-																	void stripeCreateSetupIntentRecaptcha(
-																		isTestUser,
-																		stripePublicKey,
-																		token,
-																	).then((client_secret) => {
-																		setStripeClientSecret(client_secret);
-																		setStripeClientSecretInProgress(false);
-																	});
 																}}
 																onRecaptchaExpired={() => {
 																	setRecaptchaToken(undefined);
@@ -1331,24 +1313,21 @@ export function CheckoutComponent({
 						>
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
-									isLoading={stripeClientSecretInProgress}
-									buttonText={
-										stripeClientSecretInProgress
-											? 'Validating reCAPTCHA...'
-											: `Pay ${simpleFormatAmount(currency, finalAmount)} per ${
-													ratePlanDescription.billingPeriod === 'Annual'
-														? 'year'
-														: ratePlanDescription.billingPeriod === 'Monthly'
-														? 'month'
-														: 'quarter'
-											  }`
-									}
+									buttonText={`Pay ${simpleFormatAmount(
+										currency,
+										finalAmount,
+									)} per ${
+										ratePlanDescription.billingPeriod === 'Annual'
+											? 'year'
+											: ratePlanDescription.billingPeriod === 'Monthly'
+											? 'month'
+											: 'quarter'
+									}`}
 									onClick={() => {
 										// no-op
 										// This isn't needed because we are now using the formOnSubmit handler
 									}}
 									type="submit"
-									disabled={stripeClientSecretInProgress}
 								/>
 							)}
 							{payPalLoaded && paymentMethod === 'PayPal' && (

@@ -86,6 +86,7 @@ export function SupportOnce({
 					);
 				}}
 				data-qm-trackable="support-once-button"
+				aria-label="Support once"
 			>
 				Support now
 			</LinkButton>
