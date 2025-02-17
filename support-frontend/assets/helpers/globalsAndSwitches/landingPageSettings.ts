@@ -14,17 +14,9 @@ interface RegionTargeting {
 	targetedCountryGroups: CountryGroupId[];
 }
 
-interface LandingPageTestTargeting {
-	regionTargeting: RegionTargeting;
-}
-
-interface LandingPageTestTargeting {
-	countryGroups: CountryGroupId[];
-}
-
 export interface LandingPageTest {
 	name: string;
 	status: 'Live' | 'Draft';
-	targeting: LandingPageTestTargeting;
+	regionTargeting?: RegionTargeting;
 	variants: LandingPageVariant[];
 }

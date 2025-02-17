@@ -23,14 +23,6 @@ object RegionTargeting {
   implicit val codec: Codec[RegionTargeting] = deriveCodec
 }
 
-case class LandingPageTestTargeting(
-    regionTargeting: RegionTargeting,
-)
-
-object LandingPageTestTargeting {
-  implicit val codec: Codec[LandingPageTestTargeting] = deriveCodec
-}
-
 case class LandingPageCopy(
     heading: String,
     subheading: String,
@@ -53,7 +45,7 @@ case class LandingPageTest(
     name: String,
     status: Status,
     priority: Int,
-    targeting: LandingPageTestTargeting,
+    regionTargeting: Option[RegionTargeting],
     variants: List[LandingPageVariant],
 )
 
