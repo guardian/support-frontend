@@ -6,6 +6,8 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
+import { getLandingPageVariant } from '../../helpers/abTests/landingPageAbTests';
+import { getSettings } from '../../helpers/globalsAndSwitches/globals';
 
 type Props = {
 	geoId: GeoId;
@@ -23,11 +25,20 @@ export function LandingPage({ geoId, abParticipations }: Props) {
 		window.guardian.settings,
 	);
 
+	const settings = getLandingPageVariant(
+		abParticipations,
+		getSettings().landingPageTests,
+	);
+
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 
 	if (inThreeTier) {
 		return (
-			<ThreeTierLanding geoId={geoId} abParticipations={abParticipations} />
+			<ThreeTierLanding
+				geoId={geoId}
+				abParticipations={abParticipations}
+				settings={settings}
+			/>
 		);
 	} else {
 		return <ContributionsOnlyLanding geoId={geoId} />;
