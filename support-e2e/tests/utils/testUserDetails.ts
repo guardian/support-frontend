@@ -7,7 +7,8 @@ export const setTestUserRequiredDetails = async (
 	firstName?: string,
 	lastName?: string,
 ) => {
-	await page.getByLabel('Email address').fill(email);
+	await page.getByLabel('Email address', { exact: true }).fill(email);
+	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
