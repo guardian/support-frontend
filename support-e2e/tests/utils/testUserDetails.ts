@@ -1,15 +1,6 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
-export const setTestUserRequiredDetailsNoEmailConfirmation = async (
-	page: Page,
-	email: string,
-	firstName?: string,
-	lastName?: string,
-) => {
-	return setTestUserRequiredDetails(page, email, firstName, lastName, true);
-};
-
 export const setTestUserRequiredDetails = async (
 	page: Page,
 	email: string,
