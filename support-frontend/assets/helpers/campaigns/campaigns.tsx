@@ -28,7 +28,7 @@ export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
 	id: string;
 };
 
-export type CampaignSettings = {
+type CampaignSettings = {
 	isEligible: (
 		countryGroupId: CountryGroupId,
 		promoCode?: string | null,

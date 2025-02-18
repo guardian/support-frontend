@@ -261,8 +261,6 @@ export function CheckoutComponent({
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
-	const inConfirmEmailVariant = abParticipations.confirmEmail === 'variant';
-
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
@@ -937,7 +935,6 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
-								requireConfirmedEmail={inConfirmEmailVariant}
 								confirmedEmail={confirmedEmail}
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
