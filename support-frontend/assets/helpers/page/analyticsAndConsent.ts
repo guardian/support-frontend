@@ -45,6 +45,8 @@ function consentInitialisation(country: IsoCountry): void {
 					platform: 'support',
 				},
 				country,
+				isUserSignedIn: false,
+				useNonAdvertisedList: true,
 			});
 		} catch (e) {
 			if (typeof e === 'string') {
