@@ -123,6 +123,8 @@ const newsletterBenefit = {
 	specificToRegions: [
 		'GBPCountries',
 		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
 		'Canada',
 		'International',
 	] as CountryGroupId[],
