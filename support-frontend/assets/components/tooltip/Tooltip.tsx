@@ -210,8 +210,8 @@ export default function Tooltip({
 			shift(),
 		],
 	});
-	const xShift = x ?? 0;
-	const yShift = y ?? 0;
+	const xShift = x ? x : 0;
+	const yShift = y ? y : 0;
 
 	// Event listeners to change the open state
 	const click = useClick(context, { toggle: false });
