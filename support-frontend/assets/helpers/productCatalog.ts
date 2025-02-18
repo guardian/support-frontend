@@ -1,6 +1,6 @@
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
-import type { Participations } from './abTests/abtest';
+import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
 import type {
 	CountryGroupId,
@@ -12,7 +12,7 @@ export type { ActiveProductKey };
 
 export const productCatalog = window.guardian.productCatalog;
 
-type ProductBenefit = {
+export type ProductBenefit = {
 	copy: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
@@ -102,8 +102,32 @@ const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
 
+const supportBenefit = {
+	copy: 'Give to the Guardian every month with Support',
+	specificToRegions: [
+		'GBPCountries',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
+	hideBullet: true,
+};
+const newsletterBenefitUS = {
+	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+	specificToRegions: ['UnitedStates'] as CountryGroupId[],
+};
 const newsletterBenefit = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+	specificToRegions: [
+		'GBPCountries',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -141,6 +165,7 @@ const supporterPlusBenefits = [
 	appBenefit,
 	addFreeBenefit,
 	newsletterBenefit,
+	newsletterBenefitUS,
 	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
@@ -172,7 +197,7 @@ export const productCatalogDescription: Record<
 > = {
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
-		thankyouMessage: `Your valued support powers our journalism${' '}`,
+		thankyouMessage: `Your subscription powers our journalism.`,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -344,7 +369,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit],
+		benefits: [supportBenefit, newsletterBenefitUS],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,

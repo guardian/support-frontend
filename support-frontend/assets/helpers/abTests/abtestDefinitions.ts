@@ -1,4 +1,4 @@
-import type { Tests } from './abtest';
+import type { Tests } from './models';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
 // you should always target both the landing page *and* the thank you page.
@@ -90,6 +90,30 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeContributionsOnlyCountries: true,
+	},
+	digitalEditionCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 7,
+		persistPage:
+			// uk will ensure we match the generic checkout
+			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
+		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
 	},
 };

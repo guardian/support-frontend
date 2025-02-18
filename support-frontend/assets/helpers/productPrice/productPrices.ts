@@ -96,7 +96,12 @@ const getDiscountVsRetail = (
 	const onlinePrice = discountedPrice / (1 - discountedVsOnlinePerc / 100);
 	const retailPrice = onlinePrice / (1 - onlineVsRetailPerc / 100);
 	const totalSavingVsRetail = (1 - discountedPrice / retailPrice) * 100;
-	return Math.round(totalSavingVsRetail);
+	/**
+	 * We should never overstate a discount,
+	 * even by a fraction of a %. Therefore
+	 * we always round down to the nearest whole number.
+	 */
+	return Math.floor(totalSavingVsRetail);
 };
 
 export {

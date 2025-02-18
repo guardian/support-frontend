@@ -81,7 +81,7 @@ const image = css`
 	}
 `;
 
-const posterImageUrl = `https://i.guim.co.uk/img/media/a3e6d39656007bf310093a2a934155abbfe10a49/0_0_794_794/794.png?width=500&quality=75&s=e74bca9368c32efdf60855a9ac714f17`;
+const posterImageUrl = `https://i.guim.co.uk/img/media/c64768218dc3fa9fe8294038e8f9e31920f9beaa/0_0_341_336/341.png?width=341&quality=75&s=dab7519a52c1eb0fc3442600a0572ceb`;
 
 export function PosterComponent(): JSX.Element {
 	return (

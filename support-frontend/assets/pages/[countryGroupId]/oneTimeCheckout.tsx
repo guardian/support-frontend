@@ -6,7 +6,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { OneTimeCheckoutComponent } from './components/oneTimeCheckoutComponent';
 
 const countryId = Country.detect();

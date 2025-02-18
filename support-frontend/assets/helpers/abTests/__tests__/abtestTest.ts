@@ -11,14 +11,14 @@ import type {
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from '../../contributions';
-import { emptySwitches } from '../../globalsAndSwitches/globals';
+import { emptySwitches, getSettings } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
 import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
 import { _, init as abInit, getAmountsTestVariant } from '../abtest';
-import type { Audience, Participations, Test, Variant } from '../abtest';
+import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
 const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
@@ -45,6 +45,7 @@ describe('init', () => {
 		countryId: country,
 		countryGroupId,
 		mvt,
+		settings: getSettings(),
 	};
 
 	afterEach(() => {

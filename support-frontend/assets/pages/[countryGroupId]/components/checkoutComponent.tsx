@@ -40,8 +40,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
@@ -330,7 +330,6 @@ export function CheckoutComponent({
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
-	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -344,13 +343,6 @@ export function CheckoutComponent({
 			formRef.current?.requestSubmit();
 		}
 	}, [stripeExpressCheckoutSuccessful]);
-
-	/**
-	 * flag that disables the submission of the form until the stripeClientSecret is
-	 * fetched from the Stripe API with using the reCaptcha token
-	 */
-	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
-		useState(false);
 
 	/**
 	 * Payment method: PayPal
@@ -381,6 +373,7 @@ export function CheckoutComponent({
 	const [firstName, setFirstName] = useState(user?.firstName ?? '');
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [email, setEmail] = useState(user?.email ?? '');
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -438,6 +431,7 @@ export function CheckoutComponent({
 
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
+
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -463,12 +457,13 @@ export function CheckoutComponent({
 
 		/** FormData: `paymentFields` */
 		let paymentFields: RegularPaymentFields | undefined = undefined;
-		if (
-			paymentMethod === 'Stripe' &&
-			stripe &&
-			cardElement &&
-			stripeClientSecret
-		) {
+		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
+			const stripeClientSecret = await stripeCreateSetupIntentRecaptcha(
+				isTestUser,
+				stripePublicKey,
+				recaptchaToken,
+			);
+
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -570,10 +565,6 @@ export function CheckoutComponent({
 			...getReferrerAcquisitionData(),
 			labels: ['generic-checkout'],
 		};
-
-		if (stripeExpressCheckoutPaymentType === 'link') {
-			referrerAcquisitionData.labels.push('express-checkout-link');
-		}
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
@@ -879,6 +870,8 @@ export function CheckoutComponent({
 
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
 
 										setPaymentMethod('StripeExpressCheckoutElement');
 										setStripeExpressCheckoutPaymentType(
@@ -942,6 +935,10 @@ export function CheckoutComponent({
 								setLastName={(lastName) => setLastName(lastName)}
 								email={email}
 								setEmail={(email) => setEmail(email)}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
 							>
 								<Signout isSignedIn={isSignedIn} />
 							</PersonalDetailsFields>
@@ -1230,19 +1227,8 @@ export function CheckoutComponent({
 														errors={{}}
 														recaptcha={
 															<Recaptcha
-																// We could change the parents type to Promise and use await here, but that has
-																// a lot of refactoring with not too much gain
 																onRecaptchaCompleted={(token) => {
-																	setStripeClientSecretInProgress(true);
 																	setRecaptchaToken(token);
-																	void stripeCreateSetupIntentRecaptcha(
-																		isTestUser,
-																		stripePublicKey,
-																		token,
-																	).then((client_secret) => {
-																		setStripeClientSecret(client_secret);
-																		setStripeClientSecretInProgress(false);
-																	});
 																}}
 																onRecaptchaExpired={() => {
 																	setRecaptchaToken(undefined);
@@ -1324,24 +1310,21 @@ export function CheckoutComponent({
 						>
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
-									isLoading={stripeClientSecretInProgress}
-									buttonText={
-										stripeClientSecretInProgress
-											? 'Validating reCAPTCHA...'
-											: `Pay ${simpleFormatAmount(currency, finalAmount)} per ${
-													ratePlanDescription.billingPeriod === 'Annual'
-														? 'year'
-														: ratePlanDescription.billingPeriod === 'Monthly'
-														? 'month'
-														: 'quarter'
-											  }`
-									}
+									buttonText={`Pay ${simpleFormatAmount(
+										currency,
+										finalAmount,
+									)} per ${
+										ratePlanDescription.billingPeriod === 'Annual'
+											? 'year'
+											: ratePlanDescription.billingPeriod === 'Monthly'
+											? 'month'
+											: 'quarter'
+									}`}
 									onClick={() => {
 										// no-op
 										// This isn't needed because we are now using the formOnSubmit handler
 									}}
 									type="submit"
-									disabled={stripeClientSecretInProgress}
 								/>
 							)}
 							{payPalLoaded && paymentMethod === 'PayPal' && (
