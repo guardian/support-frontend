@@ -102,7 +102,7 @@ const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
 
-const newsletterBenefit = {
+const supportBenefit = {
 	copy: 'Give to the Guardian every month with Support',
 	specificToRegions: [
 		'GBPCountries',
@@ -118,7 +118,7 @@ const newsletterBenefitUS = {
 	copy: 'Regular dispatches from the newsroom to see the impact of your support',
 	specificToRegions: ['UnitedStates'] as CountryGroupId[],
 };
-const newsletterBenefitAllAccessDigital = {
+const newsletterBenefit = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 	specificToRegions: [
 		'GBPCountries',
@@ -162,7 +162,7 @@ const feastBenefit = {
 const supporterPlusBenefits = [
 	appBenefit,
 	addFreeBenefit,
-	newsletterBenefitAllAccessDigital,
+	newsletterBenefit,
 	newsletterBenefitUS,
 	fewerAsksBenefit,
 	partnerOffersBenefit,
@@ -367,7 +367,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit, newsletterBenefitUS],
+		benefits: [supportBenefit, newsletterBenefitUS],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
