@@ -210,8 +210,6 @@ export default function Tooltip({
 			shift(),
 		],
 	});
-	const xShift = x ? x : 0;
-	const yShift = y ? y : 0;
 
 	// Event listeners to change the open state
 	const click = useClick(context, { toggle: false });
@@ -249,8 +247,8 @@ export default function Tooltip({
 						style={{
 							// Positioning styles
 							position: strategy,
-							top: yShift,
-							left: xShift,
+							top: y ? y : 0,
+							left: x ? x : 0,
 						}}
 						{...getFloatingProps()}
 					>
