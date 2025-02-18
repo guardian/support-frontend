@@ -1,14 +1,26 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
-export const setTestUserRequiredDetails = async (
+export const setTestUserRequiredDetailsNoEmailConfirmation = async (
 	page: Page,
 	email: string,
 	firstName?: string,
 	lastName?: string,
 ) => {
+	return setTestUserRequiredDetails(page, email, firstName, lastName, true);
+};
+
+export const setTestUserRequiredDetails = async (
+	page: Page,
+	email: string,
+	firstName?: string,
+	lastName?: string,
+	noEmailConfirmation?: boolean,
+) => {
 	await page.getByLabel('Email address', { exact: true }).fill(email);
-	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	if (!noEmailConfirmation) {
+		await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	}
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
