@@ -939,6 +939,7 @@ export function CheckoutComponent({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
+								requireConfirmedEmail={true}
 							>
 								<Signout isSignedIn={isSignedIn} />
 							</PersonalDetailsFields>
