@@ -241,7 +241,7 @@ export function PaymentTsAndCs({
 		const productLabel = productCatalogDescription[productKey].label;
 		return (
 			<div>
-				Your {productLabel} will auto-renew each{' '}
+				Your {productLabel} subscription will auto-renew each{' '}
 				{frequencySingular(contributionType)} unless cancelled. Your first
 				payment will be taken on day 15 after signing up but you will start to
 				receive your {productLabel} benefits when you sign up. Unless you
