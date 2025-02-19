@@ -31,13 +31,7 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		const page = await context.newPage();
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
-		await setTestUserRequiredDetails(
-			page,
-			testEmail,
-			undefined,
-			undefined,
-			true,
-		);
+		await setTestUserRequiredDetails(page, testEmail);
 		await page.getByRole('radio', { name: paymentType }).check();
 
 		if (paymentType === 'Credit/Debit card') {
