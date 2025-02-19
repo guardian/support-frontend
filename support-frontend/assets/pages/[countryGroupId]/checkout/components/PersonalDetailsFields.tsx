@@ -8,10 +8,10 @@ import {
 
 type PersonalDetailsFieldsProps = {
 	children: React.ReactNode;
-	firstName: string;
-	setFirstName: (value: string) => void;
-	lastName: string;
-	setLastName: (value: string) => void;
+	firstName?: string;
+	setFirstName?: (value: string) => void;
+	lastName?: string;
+	setLastName?: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
@@ -111,74 +111,78 @@ export function PersonalDetailsFields({
 				</div>
 			)}
 			{children}
-			<div>
-				<TextInput
-					id="firstName"
-					data-qm-masking="blocklist"
-					label="First name"
-					value={firstName}
-					autoComplete="given-name"
-					autoCapitalize="words"
-					onChange={(event) => {
-						setFirstName(event.target.value);
-					}}
-					onBlur={(event) => {
-						event.target.checkValidity();
-					}}
-					name="firstName"
-					required
-					maxLength={40}
-					error={firstNameError}
-					pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-					onInvalid={(event) => {
-						preventDefaultValidityMessage(event.currentTarget);
-						const validityState = event.currentTarget.validity;
-						if (validityState.valid) {
-							setFirstNameError(undefined);
-						} else {
-							if (validityState.valueMissing) {
-								setFirstNameError('Please enter your first name.');
+			{firstName && (
+				<div>
+					<TextInput
+						id="firstName"
+						data-qm-masking="blocklist"
+						label="First name"
+						value={firstName}
+						autoComplete="given-name"
+						autoCapitalize="words"
+						onChange={(event) => {
+							setFirstName?.(event.target.value);
+						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
+						name="firstName"
+						required
+						maxLength={40}
+						error={firstNameError}
+						pattern={doesNotContainExtendedEmojiOrLeadingSpace}
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setFirstNameError(undefined);
 							} else {
-								setFirstNameError('Please enter a valid first name.');
+								if (validityState.valueMissing) {
+									setFirstNameError('Please enter your first name.');
+								} else {
+									setFirstNameError('Please enter a valid first name.');
+								}
 							}
-						}
-					}}
-				/>
-			</div>
-			<div>
-				<TextInput
-					id="lastName"
-					data-qm-masking="blocklist"
-					label="Last name"
-					value={lastName}
-					autoComplete="family-name"
-					autoCapitalize="words"
-					onChange={(event) => {
-						setLastName(event.target.value);
-					}}
-					onBlur={(event) => {
-						event.target.checkValidity();
-					}}
-					name="lastName"
-					required
-					maxLength={40}
-					error={lastNameError}
-					pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-					onInvalid={(event) => {
-						preventDefaultValidityMessage(event.currentTarget);
-						const validityState = event.currentTarget.validity;
-						if (validityState.valid) {
-							setLastNameError(undefined);
-						} else {
-							if (validityState.valueMissing) {
-								setLastNameError('Please enter your last name.');
+						}}
+					/>
+				</div>
+			)}
+			{lastName && (
+				<div>
+					<TextInput
+						id="lastName"
+						data-qm-masking="blocklist"
+						label="Last name"
+						value={lastName}
+						autoComplete="family-name"
+						autoCapitalize="words"
+						onChange={(event) => {
+							setLastName?.(event.target.value);
+						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
+						name="lastName"
+						required
+						maxLength={40}
+						error={lastNameError}
+						pattern={doesNotContainExtendedEmojiOrLeadingSpace}
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setLastNameError(undefined);
 							} else {
-								setLastNameError('Please enter a valid last name.');
+								if (validityState.valueMissing) {
+									setLastNameError('Please enter your last name.');
+								} else {
+									setLastNameError('Please enter a valid last name.');
+								}
 							}
-						}
-					}}
-				/>
-			</div>
+						}}
+					/>
+				</div>
+			)}
 		</>
 	);
 }

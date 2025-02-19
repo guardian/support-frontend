@@ -86,6 +86,7 @@ import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
 } from '../../../helpers/storage/abandonedBasketCookies';
+import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -330,7 +331,7 @@ export function OneTimeCheckoutComponent({
 
 	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [emailErrors, setEmailErrors] = useState<string>();
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
@@ -718,37 +719,22 @@ export function OneTimeCheckoutComponent({
 
 						<FormSection>
 							<Legend>1. Your details</Legend>
-							<div>
-								<TextInput
-									id="email"
-									data-qm-masking="blocklist"
-									label="Email address"
-									value={email}
-									type="email"
-									autoComplete="email"
-									onChange={(event) => {
-										setEmail(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.target.checkValidity();
-									}}
-									readOnly={isSignedIn}
-									name="email"
-									required
-									maxLength={80}
-									error={emailErrors}
-									onInvalid={(event) => {
-										validate(
-											event,
-											setEmailErrors,
-											'Please enter your email address.',
-											'Please enter a valid email address.',
-										);
-									}}
-								/>
-							</div>
 
-							<Signout isSignedIn={isSignedIn} />
+							<PersonalDetailsFields
+								firstName={''}
+								setFirstName={() => {}}
+								lastName={''}
+								setLastName={() => {}}
+								email={email}
+								setEmail={(email) => setEmail(email)}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
+								isEmailAddressReadOnly={isSignedIn}
+							>
+								<Signout isSignedIn={isSignedIn} />
+							</PersonalDetailsFields>
 
 							{countryId === 'US' && (
 								<div>
