@@ -346,13 +346,13 @@ class CreateSubscriptionController(
               body = writeable.toEntity(err.message),
             )
           case ServerError(code) if code == emailAddressAlreadyTakenCode =>
-              Result(
-                header = new ResponseHeader(
-                  status = INTERNAL_SERVER_ERROR,
-                  reasonPhrase = Some(emailAddressAlreadyTakenCode),
-                ),
-                body = writeable.toEntity(""),
-              )
+            Result(
+              header = new ResponseHeader(
+                status = INTERNAL_SERVER_ERROR,
+                reasonPhrase = Some(emailAddressAlreadyTakenCode),
+              ),
+              body = writeable.toEntity(""),
+            )
           case _: ServerError =>
             InternalServerError
         }
