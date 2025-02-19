@@ -81,6 +81,11 @@ import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
+import {
+	updateAbandonedBasketCookie,
+	useAbandonedBasketCookie,
+} from '../../../helpers/storage/abandonedBasketCookies';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -282,23 +287,26 @@ export function OneTimeCheckoutComponent({
 		coverTransactionCost,
 	);
 
+	const elements = useElements();
+	useEffect(() => {
+		if (finalAmount && elements) {
+			// valid elements and final amount, set amount, enable Express checkout
+			elements.update({ amount: finalAmount * 100 });
+			setStripeExpressCheckoutEnable(true);
+		} else {
+			// invalid elements and final amount, disable Express checkout
+			setStripeExpressCheckoutEnable(false);
+		}
+	}, [finalAmount, elements]);
 	useEffect(() => {
 		if (finalAmount) {
-			// valid final amount, set amount, enable Express checkout
-			elements?.update({ amount: finalAmount * 100 });
-			setStripeExpressCheckoutEnable(true);
-
-			// Track amount selection with QM
+			// Track valid final amount selection with QM
 			sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
-		} else {
-			// invalid final amount, disable Express checkout
-			setStripeExpressCheckoutEnable(false);
 		}
 	}, [finalAmount]);
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
-	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [
 		stripeExpressCheckoutPaymentType,
@@ -532,6 +540,16 @@ export function OneTimeCheckoutComponent({
 		return;
 	}
 
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
+
+	useAbandonedBasketCookie(
+		'OneTimeContribution',
+		finalAmount ?? 0,
+		'ONE_OFF',
+		supportInternationalisationId,
+		abParticipations.abandonedBasket === 'variant',
+	);
+
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -560,6 +578,7 @@ export function OneTimeCheckoutComponent({
 								setSelectedPriceCard(
 									amount === 'other' ? amount : Number.parseFloat(amount),
 								);
+								updateAbandonedBasketCookie(amount);
 							}}
 							hideChooseYourAmount={hideChooseYourAmount}
 							otherAmountField={
@@ -625,7 +644,6 @@ export function OneTimeCheckoutComponent({
 										const options = {
 											emailRequired: true,
 										};
-
 										// Track payment method selection with QM
 										sendEventPaymentMethodSelected(
 											'StripeExpressCheckoutElement',

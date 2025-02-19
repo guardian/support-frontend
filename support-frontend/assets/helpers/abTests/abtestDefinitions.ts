@@ -92,27 +92,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	confirmEmail: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
-		excludeContributionsOnlyCountries: false,
-	},
 	digitalEditionCheckout: {
 		variants: [
 			{
@@ -131,14 +110,11 @@ export const tests: Tests = {
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 7,
-		targetPage:
-			'(/uk/)(subscribe$|subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)', // one-off test using canRun to exclude all products except DigitalSubscription
+		persistPage:
+			// uk will ensure we match the generic checkout
+			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
+		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
-		canRun: () => {
-			const urlSearchParams = new URLSearchParams(window.location.search);
-			const productParam = urlSearchParams.get('product');
-			return !productParam || productParam === 'DigitalSubscription';
-		},
 	},
 	subscribeCheckoutImage: {
 		variants: [

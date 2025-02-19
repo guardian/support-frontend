@@ -58,8 +58,7 @@ export const testCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		// Temporary opt out of this test
-		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}#ab-confirmEmail=control`;
+		const url = `/${internationalisationId.toLowerCase()}/checkout?product=${product}&ratePlan=${ratePlan}`;
 		const page = await context.newPage();
 		await setupPage(page, context, baseURL, url);
 

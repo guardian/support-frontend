@@ -102,6 +102,22 @@ const addFreeBenefit = {
 	copy: 'Ad-free reading on all your devices',
 };
 
+const supportBenefit = {
+	copy: 'Give to the Guardian every month with Support',
+	specificToRegions: [
+		'GBPCountries',
+		'EURCountries',
+		'AUDCountries',
+		'NZDCountries',
+		'Canada',
+		'International',
+	] as CountryGroupId[],
+	hideBullet: true,
+};
+const newsletterBenefitUS = {
+	copy: 'Regular dispatches from the newsroom to see the impact of your support',
+	specificToRegions: ['UnitedStates'] as CountryGroupId[],
+};
 const newsletterBenefit = {
 	copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 	specificToRegions: [
@@ -112,10 +128,6 @@ const newsletterBenefit = {
 		'Canada',
 		'International',
 	] as CountryGroupId[],
-};
-const newsletterBenefitUS = {
-	copy: 'Regular dispatches from the newsroom to see the impact of your support',
-	specificToRegions: ['UnitedStates'] as CountryGroupId[],
 };
 const fewerAsksBenefit = {
 	copy: 'Far fewer asks for support',
@@ -357,7 +369,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
-		benefits: [newsletterBenefit, newsletterBenefitUS],
+		benefits: [supportBenefit, newsletterBenefitUS],
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
