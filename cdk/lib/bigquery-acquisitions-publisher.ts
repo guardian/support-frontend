@@ -11,7 +11,7 @@ import {
 import { Archive, EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { SqsQueue } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue } from "aws-cdk-lib/aws-sqs";
 
@@ -113,14 +113,15 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
-      runtime: Runtime.JAVA_21,
-      fileName: `${appName}.jar`,
+      runtime: Runtime.NODEJS_20_X,
+      fileName: `index.zip`,
       functionName,
-      handler: "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
+      handler: "index.handler",
       events: [eventSource],
       timeout: Duration.minutes(2),
       role,
       errorPercentageMonitoring: monitoring,
+      loggingFormat: LoggingFormat.TEXT,
     });
 
     new GuAlarm(this, "DeadLetterQueueAlarm", {
