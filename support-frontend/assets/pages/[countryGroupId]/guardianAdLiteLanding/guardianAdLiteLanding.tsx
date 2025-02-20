@@ -34,8 +34,15 @@ export function GuardianAdLiteLanding({
 	 */
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsReturn = urlSearchParams.get('returnAddress');
+	/* CORP_FLAG is a shortened query parameter
+     appended to enable the CODE environment ConsentOrPay Banner
+     assuming they are not an ad-free reader (via cookie gu_allow_reject_all) */
+	const urlSearchParamsCorpFlag =
+		urlSearchParams.get('CORP_FLAG') === null ? '' : '?CORP_FLAG';
 	if (urlSearchParamsReturn) {
-		setReturnAddress({ link: urlSearchParamsReturn });
+		setReturnAddress({
+			link: `${urlSearchParamsReturn}${urlSearchParamsCorpFlag}`,
+		});
 	}
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
