@@ -1809,10 +1809,10 @@
     eslint-plugin-eslint-comments "3.2.0"
     eslint-plugin-import "2.29.1"
 
-"@guardian/libs@^19.1.0":
-  version "19.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-19.1.0.tgz#df30c98c51303f6e1e7b5750838892b60ee43323"
-  integrity sha512-hH+yMhsBwUU7p8BdmbSqjk9hwp5obtglugviwSIeu89JqlDQnC1LrYKw0kVZbkn+P4sW+aQDYg7OVswgpNPOHg==
+"@guardian/libs@^21.1.0":
+  version "21.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-21.1.0.tgz#24450f6fd87363177fe96f516e255ad44120ed1c"
+  integrity sha512-M02tJniKcRDLYPIxJ/KYViLTjugjnzmNi/UTDKZm38xc6hjOPNnhFPBw59W2DlGENrMt58+m7qYAcdMmcEp+KQ==
 
 "@guardian/pasteup@1.0.0-alpha.7":
   version "1.0.0-alpha.7"
