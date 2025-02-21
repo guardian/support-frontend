@@ -724,10 +724,6 @@ export function OneTimeCheckoutComponent({
 							<Legend>1. Your details</Legend>
 
 							<PersonalDetailsFields
-								firstName={''}
-								setFirstName={() => {}}
-								lastName={''}
-								setLastName={() => {}}
 								email={email}
 								setEmail={(email) => setEmail(email)}
 								confirmedEmail={confirmedEmail}
