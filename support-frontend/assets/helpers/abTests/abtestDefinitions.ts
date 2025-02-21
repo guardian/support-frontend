@@ -15,6 +15,8 @@ export const pageUrlRegexes = {
 			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
+		oneTimeCheckoutOnly:
+			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
 		paper: {
@@ -91,6 +93,27 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
+	},
+	oneTimeConfirmEmail: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
 	},
 	digitalEditionCheckout: {
 		variants: [
