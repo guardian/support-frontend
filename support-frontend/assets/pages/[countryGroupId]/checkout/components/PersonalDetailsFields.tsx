@@ -113,7 +113,7 @@ export function PersonalDetailsFields({
 				</div>
 			)}
 			{children}
-			{firstName && (
+			{firstName !== undefined && (
 				<div>
 					<TextInput
 						id="firstName"
@@ -149,7 +149,7 @@ export function PersonalDetailsFields({
 					/>
 				</div>
 			)}
-			{lastName && (
+			{lastName !== undefined && (
 				<div>
 					<TextInput
 						id="lastName"
