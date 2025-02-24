@@ -109,10 +109,13 @@ function TsAndCsRenewal({
 export function TsAndCsFooterLinks({
 	countryGroupId,
 	amountIsAboveThreshold,
+	productKey,
 }: {
 	countryGroupId: CountryGroupId;
 	amountIsAboveThreshold?: boolean;
+	productKey?: ActiveProductKey;
 }) {
+	const inAdLite = productKey === 'GuardianAdLite';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const termsContributions = (
@@ -121,11 +124,14 @@ export function TsAndCsFooterLinks({
 
 	const terms = amountIsAboveThreshold
 		? termsSupporterPlus('Terms and Conditions')
+		: inAdLite
+		? termsGuardianAdLite('Terms')
 		: termsContributions;
+	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
 
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to our {terms}.{' '}
+			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -145,6 +151,7 @@ export function PaymentTsAndCs({
 	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
+	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
 	const inAllAccessDigital =
 		productKey === 'SupporterPlus' && amountIsAboveThreshold;
@@ -152,7 +159,7 @@ export function PaymentTsAndCs({
 		productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
 		productKey === 'Contribution' ||
-		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite || inDigitalEdition);
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -214,26 +221,26 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const copyBelowThreshold = (countryGroupId: CountryGroupId) => {
+	const copyBelowThreshold = (
+		countryGroupId: CountryGroupId,
+		productKey: ActiveProductKey,
+	) => {
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
 				amountIsAboveThreshold={amountIsAboveThreshold}
+				productKey={productKey}
 			/>
 		);
 	};
 
-	const copyAdLite = (
-		contributionType: RegularContributionType,
-		productKey: ActiveProductKey,
-	) => {
-		const productLabel = productCatalogDescription[productKey].label;
+	const copyAdLite = (contributionType: RegularContributionType) => {
 		return (
 			<div>
-				Your {productLabel} will auto-renew each{' '}
+				Your Guardian Ad-Lite subscription will auto-renew each{' '}
 				{frequencySingular(contributionType)} unless cancelled. Your first
 				payment will be taken on day 15 after signing up but you will start to
-				receive your {productLabel} benefits when you sign up. Unless you
+				receive your Guardian Ad-Lite benefits when you sign up. Unless you
 				cancel, subsequent monthly payments will be taken on this date using
 				your chosen payment method. You can cancel your subscription at any time
 				before your next renewal date. If you cancel your Guardian Ad-Lite
@@ -241,9 +248,34 @@ export function PaymentTsAndCs({
 				immediately and we will not take the first payment from you.
 				Cancellation of your subscription after 14 days will take effect at the
 				end of your current monthly payment period. To cancel, go to{' '}
-				{ManageMyAccountLink} or see our {productLabel}{' '}
+				{ManageMyAccountLink} or see our Guardian Ad-Lite{' '}
 				{termsGuardianAdLite('Terms')}.
 			</div>
+		);
+	};
+
+	const copyDigitalEdition = () => {
+		return (
+			<>
+				<div>
+					Payment taken after the first 14 day free trial. At the end of the
+					free trial period your subscription will auto-renew, and you will be
+					charged, each month at the full price of £14.99 per month or £149 per
+					year unless you cancel. You can cancel at any time before your next
+					renewal date. Cancellation will take effect at the end of your current
+					subscription month. To cancel, go to{' '}
+					<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or
+					see our{' '}
+					<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+						Terms
+					</a>
+					.
+				</div>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</>
 		);
 	};
 
@@ -257,8 +289,10 @@ export function PaymentTsAndCs({
 				)}
 				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inAdLite && copyAdLite(contributionType, productKey)}
-				{(inSupport || inAdLite) && copyBelowThreshold(countryGroupId)}
+				{inAdLite && copyAdLite(contributionType)}
+				{(inSupport || inAdLite) &&
+					copyBelowThreshold(countryGroupId, productKey)}
+				{inDigitalEdition && copyDigitalEdition()}
 			</FinePrint>
 		</div>
 	);
@@ -271,6 +305,7 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
+	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
 	const inDigitalPlusPrint = productKey === 'TierThree';
 	const inAllAccessDigital = productKey === 'SupporterPlus';
@@ -335,11 +370,15 @@ export function SummaryTsAndCs({
 	};
 
 	return (
-		<div css={[containerSummaryTsCs, cssOverrides]}>
-			{inSupport && copyTier1(contributionType)}
-			{inAllAccessDigital && copyTier2(contributionType, productKey)}
-			{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
-			{inAdLite && copyTier3(contributionType, productKey, false)}
-		</div>
+		<>
+			{!inDigitalEdition && (
+				<div css={[containerSummaryTsCs, cssOverrides]}>
+					{inSupport && copyTier1(contributionType)}
+					{inAllAccessDigital && copyTier2(contributionType, productKey)}
+					{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
+					{inAdLite && copyTier3(contributionType, productKey, false)}
+				</div>
+			)}
+		</>
 	);
 }

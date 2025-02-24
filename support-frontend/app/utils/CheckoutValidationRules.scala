@@ -15,6 +15,16 @@ import utils.CheckoutValidationRules._
 
 import scala.concurrent.{ExecutionContext, Future}
 
+object PreservableErrorMessages {
+  val invalidCharactersInBillingPostcodeError = "invalid_characters_in_billing_postcode"
+
+  val preservableErrorMessages = Set(
+    invalidCharactersInBillingPostcodeError,
+  )
+
+  def isMessagePreservable(message: String): Boolean = preservableErrorMessages.contains(message)
+}
+
 object CheckoutValidationRules {
 
   sealed trait Result {
@@ -102,6 +112,7 @@ object CheckoutValidationRules {
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
       case _: GuardianAdLite => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
+      case Invalid(message) if PreservableErrorMessages.isMessagePreservable(message) => Invalid(message)
       case Invalid(message) =>
         Invalid(s"validation of the request body failed with $message - body was $createSupportWorkersRequest")
       case Valid => Valid
@@ -200,7 +211,9 @@ object PaidProductValidation {
       hasStateIfRequired(
         createSupportWorkersRequest.billingAddress.country,
         createSupportWorkersRequest.billingAddress.state,
-      )
+      ) and
+      // For products which use this validation, we only collect postal/zip code in the US
+      hasValidBillingPostcodeCharacters(createSupportWorkersRequest.billingAddress.postCode)
 
   def noEmptyPaymentFields(paymentFields: PaymentFields): Result = paymentFields match {
     case directDebitDetails: DirectDebitPaymentFields =>
@@ -251,6 +264,13 @@ object AddressAndCurrencyValidationRules {
     }
     validPostCode
   }
+
+  def hasValidBillingPostcodeCharacters(postcodeFromRequest: Option[String]): Result =
+    postcodeFromRequest match {
+      case Some(postCode) if postCode.contains("@") =>
+        Invalid(PreservableErrorMessages.invalidCharactersInBillingPostcodeError)
+      case _ => Valid
+    }
 
   def hasPostcodeIfRequired(countryFromRequest: Country, postcodeFromRequest: Option[String]): Result =
     if (

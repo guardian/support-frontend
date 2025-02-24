@@ -1,4 +1,4 @@
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import {
 	getProductPrices,
 	getPromotionCopy,

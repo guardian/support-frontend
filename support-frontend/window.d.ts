@@ -1,5 +1,5 @@
 import type { ComponentType, React } from 'react';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';

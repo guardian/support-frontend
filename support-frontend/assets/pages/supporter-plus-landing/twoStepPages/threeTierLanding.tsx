@@ -20,16 +20,13 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type {
-	CampaignSettings,
-	CountdownSetting,
-} from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -54,6 +51,8 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
+import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
@@ -101,6 +100,7 @@ const innerContentContainer = css`
 `;
 
 const heading = css`
+	text-wrap: balance;
 	text-align: left;
 	color: ${palette.neutral[100]};
 	${headlineBold24}
@@ -135,12 +135,6 @@ const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
 		margin: 0 auto ${space[9]}px;
-	}
-`;
-
-const tabletLineBreak = css`
-	${from.desktop} {
-		display: none;
 	}
 `;
 
@@ -261,10 +255,12 @@ function getPlanCost(
 
 type ThreeTierLandingProps = {
 	geoId: GeoId;
+	settings: LandingPageSelection;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({
 	geoId,
+	settings,
 	abParticipations,
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -337,26 +333,6 @@ export function ThreeTierLanding({
 			setShowCountdown(true);
 		}
 	}, [memoizedCurrentCountdownCampaign]);
-
-	const getHeadline = (
-		showCountdown: boolean,
-		currentCountdownSettings?: CountdownSetting,
-		campaignSettings?: CampaignSettings | null,
-	) => {
-		if (showCountdown && currentCountdownSettings?.label.trim()) {
-			return currentCountdownSettings.label;
-		} else {
-			return (
-				<>
-					{campaignSettings?.copy.headingFragment ?? <>Support </>}
-					fearless, <br css={tabletLineBreak} />
-					independent journalism
-					{campaignSettings?.copy.punctuation ??
-						campaignSettings?.copy.punctuation}
-				</>
-			);
-		}
-	};
 
 	/*
 	 * /////////////// END US EOY 2024 Campaign
@@ -518,6 +494,9 @@ export function ThreeTierLanding({
 	const showNewspaperArchiveBanner =
 		abParticipations.newspaperArchiveBenefit === 'v2';
 
+	const sanitisedHeading = getSanitisedHtml(settings.copy.heading);
+	const sanitisedSubheading = getSanitisedHtml(settings.copy.subheading);
+
 	return (
 		<PageScaffold
 			header={
@@ -616,35 +595,13 @@ export function ThreeTierLanding({
 						/>
 					)}
 					<h1 css={heading}>
-						{getHeadline(
-							showCountdown,
-							currentCountdownSettings,
-							campaignSettings,
-						)}
+						<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
 					</h1>
-					{countryGroupId !== 'UnitedStates' && (
-						<p css={standFirst}>
-							{campaignSettings?.copy.subheading ?? (
-								<>
-									We're not owned by a billionaire or shareholders - our readers
-									support us. Choose to join with one of the options below.{' '}
-									<strong>Cancel anytime.</strong>
-								</>
-							)}
-						</p>
-					)}
-					{countryGroupId === 'UnitedStates' && (
-						<p css={standFirst}>
-							{campaignSettings?.copy.subheading ?? (
-								<>
-									We're not owned by a billionaire or profit-driven corporation:
-									our fiercely independent journalism is funded by our readers.
-									Monthly giving makes the most impact (and you can cancel
-									anytime). Thank you.
-								</>
-							)}
-						</p>
-					)}
+					<p
+						css={standFirst}
+						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
+					/>
+
 					{campaignSettings?.tickerSettings && (
 						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
 					)}

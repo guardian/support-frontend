@@ -1,5 +1,6 @@
 import type { AmountsTests, ContributionTypes } from 'helpers/contributions';
 import 'helpers/contributions';
+import type { LandingPageTest } from './landingPageSettings';
 
 export type Status = 'On' | 'Off';
 
@@ -28,4 +29,5 @@ export type Settings = {
 	amounts?: AmountsTests;
 	contributionTypes: ContributionTypes;
 	metricUrl: string;
+	landingPageTests?: LandingPageTest[];
 };

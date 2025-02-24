@@ -283,16 +283,21 @@ function PaperCheckoutForm(props: PropTypes) {
 		);
 	}, []);
 
+	const showSummaryImage =
+		props.participations.subscribeCheckoutImage !== 'variant';
+
 	const subsCardOrderSummary = (
 		<PaperOrderSummary
 			image={
-				<GridImage
-					gridId="printCampaignDigitalVoucher"
-					srcSizes={[500]}
-					sizes="(max-width: 740px) 50vw, 696"
-					imgType="png"
-					altText=""
-				/>
+				showSummaryImage ? (
+					<GridImage
+						gridId="printCampaignDigitalVoucher"
+						srcSizes={[500]}
+						sizes="(max-width: 740px) 50vw, 696"
+						imgType="png"
+						altText=""
+					/>
+				) : undefined
 			}
 			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}
@@ -308,13 +313,15 @@ function PaperCheckoutForm(props: PropTypes) {
 	const homeDeliveryOrderSummary = (
 		<PaperOrderSummary
 			image={
-				<GridImage
-					gridId="printCampaignHDdigitalVoucher"
-					srcSizes={[500]}
-					sizes="(max-width: 740px) 50vw, 696"
-					imgType="png"
-					altText=""
-				/>
+				showSummaryImage ? (
+					<GridImage
+						gridId="printCampaignHDdigitalVoucher"
+						srcSizes={[500]}
+						sizes="(max-width: 740px) 50vw, 696"
+						imgType="png"
+						altText=""
+					/>
+				) : undefined
 			}
 			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}

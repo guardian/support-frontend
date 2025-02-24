@@ -19,6 +19,8 @@ const errorReasons = [
 	'invalid_email_address',
 	'recaptcha_validation_failed',
 	'guardian_ad_lite_purchase_not_allowed',
+	'guardian_ad_lite_purchase_not_allowed_signed_in',
+	'invalid_characters_in_billing_postcode',
 	'unknown',
 ] as const;
 export function isErrorReason(value: string): value is ErrorReason {
@@ -77,6 +79,16 @@ function appropriateErrorMessage(errorReason: string): string {
 
 			case 'guardian_ad_lite_purchase_not_allowed':
 				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
+
+			case 'guardian_ad_lite_purchase_not_allowed_signed_in':
+				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free';
+
+			case 'invalid_characters_in_billing_postcode':
+				// Note, we're using "ZIP code" here as generally this error
+				// affects US users only. For the products where we perform this
+				// validation rule, the only country we collect a ZIP/postal
+				// code is the US
+				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
