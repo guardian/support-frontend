@@ -1,4 +1,5 @@
 // ----- Routes ----- //
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
@@ -29,8 +30,8 @@ const routes = {
 	payPalRestReturnURL: '/paypal/rest/return',
 	subscriptionCreate: '/subscribe/create',
 	subscriptionsLanding: '/subscribe',
+	checkout: '/checkout',
 	digitalSubscriptionLanding: '/subscribe/digitaledition',
-	digitalSubscriptionLandingGift: '/subscribe/digital/gift',
 	paperSubscriptionLanding: '/subscribe/paper',
 	paperSubscriptionProductChoices: '/subscribe/paper#HomeDelivery',
 	paperSubscriptionDeliveryProductChoices:
@@ -83,13 +84,14 @@ function paperSubsUrl(
 
 function digitalSubscriptionLanding(
 	countryGroupId: CountryGroupId,
-	gift: boolean,
+	billingPeriod?: BillingPeriod,
 ) {
-	return `${getOrigin()}/${countryPath(countryGroupId)}${
-		gift
-			? routes.digitalSubscriptionLandingGift
-			: routes.digitalSubscriptionLanding
-	}`;
+	const routeDigitalSubscription = billingPeriod
+		? `${routes.checkout}?product=DigitalSubscription&ratePlan=${billingPeriod}`
+		: routes.digitalSubscriptionLanding;
+	return `${getOrigin()}/${countryPath(
+		countryGroupId,
+	)}${routeDigitalSubscription}`;
 }
 
 function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {

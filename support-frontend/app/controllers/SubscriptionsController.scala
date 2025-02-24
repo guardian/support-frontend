@@ -6,12 +6,15 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog._
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers.Monthly
 import config.StringsConfig
 import lib.RedirectWithEncodedQueryString
 import play.api.mvc._
 import play.twirl.api.Html
+import services.CachedProductCatalogServiceProvider
 import services.pricing.{PriceSummary, PriceSummaryServiceProvider}
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
@@ -26,6 +29,8 @@ class SubscriptionsController(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
+    stage: Stage,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -94,6 +99,8 @@ class SubscriptionsController(
     val mainElement = EmptyDiv("subscriptions-landing-page")
     val js = "subscriptionsLandingPage.js"
     val pricingCopy = CountryGroup.byId(countryCode).map(getLandingPrices)
+    // TestUser remains un-used, page caching preferred
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, false).get()
 
     Ok(
       views.html.main(
@@ -102,9 +109,11 @@ class SubscriptionsController(
         RefPath(js),
         Some(RefPath("subscriptionsLandingPage.css")),
         description = stringsConfig.subscriptionsLandingDescription,
+        noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
-              window.guardian.pricingCopy = ${outputJson(pricingCopy)}
+              window.guardian.pricingCopy = ${outputJson(pricingCopy)};
+              window.guardian.productCatalog = ${outputJson(productCatalog)}
             </script>""")
       },
     ).withSettingsSurrogateKey

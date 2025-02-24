@@ -21,6 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
+	guardianAdLiteTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
 } from 'helpers/legal';
@@ -78,8 +79,11 @@ interface SummaryTsAndCsProps {
 	cssOverrides?: SerializedStyles;
 }
 
-export const termsSupporterPlus = (linkText: string) => (
+const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
+);
+const termsGuardianAdLite = (linkText: string) => (
+	<a href={guardianAdLiteTermsLink}>{linkText}</a>
 );
 
 const frequencySingular = (contributionType: ContributionType) =>
@@ -105,10 +109,13 @@ function TsAndCsRenewal({
 export function TsAndCsFooterLinks({
 	countryGroupId,
 	amountIsAboveThreshold,
+	productKey,
 }: {
 	countryGroupId: CountryGroupId;
 	amountIsAboveThreshold?: boolean;
+	productKey?: ActiveProductKey;
 }) {
+	const inAdLite = productKey === 'GuardianAdLite';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const termsContributions = (
@@ -117,11 +124,14 @@ export function TsAndCsFooterLinks({
 
 	const terms = amountIsAboveThreshold
 		? termsSupporterPlus('Terms and Conditions')
+		: inAdLite
+		? termsGuardianAdLite('Terms')
 		: termsContributions;
+	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
 
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to our {terms}.{' '}
+			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -141,11 +151,15 @@ export function PaymentTsAndCs({
 	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
-	const inSupporterPlus =
+	const inDigitalEdition = productKey === 'DigitalSubscription';
+	const inAdLite = productKey === 'GuardianAdLite';
+	const inAllAccessDigital =
 		productKey === 'SupporterPlus' && amountIsAboveThreshold;
-	const inTier3 = productKey === 'TierThree' && amountIsAboveThreshold;
+	const inDigitalPlusPrint =
+		productKey === 'TierThree' && amountIsAboveThreshold;
 	const inSupport =
-		productKey === 'Contribution' || !(inSupporterPlus || inTier3);
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite || inDigitalEdition);
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
@@ -207,26 +221,78 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const copyBelowThreshold = (countryGroupId: CountryGroupId) => {
+	const copyBelowThreshold = (
+		countryGroupId: CountryGroupId,
+		productKey: ActiveProductKey,
+	) => {
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
 				amountIsAboveThreshold={amountIsAboveThreshold}
+				productKey={productKey}
 			/>
+		);
+	};
+
+	const copyAdLite = (contributionType: RegularContributionType) => {
+		return (
+			<div>
+				Your Guardian Ad-Lite subscription will auto-renew each{' '}
+				{frequencySingular(contributionType)} unless cancelled. Your first
+				payment will be taken on day 15 after signing up but you will start to
+				receive your Guardian Ad-Lite benefits when you sign up. Unless you
+				cancel, subsequent monthly payments will be taken on this date using
+				your chosen payment method. You can cancel your subscription at any time
+				before your next renewal date. If you cancel your Guardian Ad-Lite
+				subscription within 14 days of signing up, your subscription will stop
+				immediately and we will not take the first payment from you.
+				Cancellation of your subscription after 14 days will take effect at the
+				end of your current monthly payment period. To cancel, go to{' '}
+				{ManageMyAccountLink} or see our Guardian Ad-Lite{' '}
+				{termsGuardianAdLite('Terms')}.
+			</div>
+		);
+	};
+
+	const copyDigitalEdition = () => {
+		return (
+			<>
+				<div>
+					Payment taken after the first 14 day free trial. At the end of the
+					free trial period your subscription will auto-renew, and you will be
+					charged, each month at the full price of £14.99 per month or £149 per
+					year unless you cancel. You can cancel at any time before your next
+					renewal date. Cancellation will take effect at the end of your current
+					subscription month. To cancel, go to{' '}
+					<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or
+					see our{' '}
+					<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+						Terms
+					</a>
+					.
+				</div>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</>
 		);
 	};
 
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={mobileTheme}>
-				{inTier3 && (
+				{inDigitalPlusPrint && (
 					<TierThreeTerms
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
 					/>
 				)}
-				{inSupporterPlus &&
+				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inSupport && copyBelowThreshold(countryGroupId)}
+				{inAdLite && copyAdLite(contributionType)}
+				{(inSupport || inAdLite) &&
+					copyBelowThreshold(countryGroupId, productKey)}
+				{inDigitalEdition && copyDigitalEdition()}
 			</FinePrint>
 		</div>
 	);
@@ -239,9 +305,13 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
-	const inTier3 = productKey === 'TierThree';
-	const inTier2 = productKey === 'SupporterPlus';
-	const inTier1 = productKey === 'Contribution' || !(inTier2 || inTier3);
+	const inDigitalEdition = productKey === 'DigitalSubscription';
+	const inAdLite = productKey === 'GuardianAdLite';
+	const inDigitalPlusPrint = productKey === 'TierThree';
+	const inAllAccessDigital = productKey === 'SupporterPlus';
+	const inSupport =
+		productKey === 'Contribution' ||
+		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
 
 	const amountCopy = ` of ${formatAmount(
 		currencies[currency],
@@ -284,24 +354,31 @@ export function SummaryTsAndCs({
 	const copyTier3 = (
 		contributionType: ContributionType,
 		productKey: ActiveProductKey,
+		plural: boolean,
 	) => {
 		return (
 			<>
 				<div>
-					The {productCatalogDescription[productKey].label} subscriptions will
-					auto-renew each {frequencySingular(contributionType)}. You will be
-					charged the subscription amount using your chosen payment method at
-					each renewal, at the rate then in effect, unless you cancel.
+					The {productCatalogDescription[productKey].label} subscription
+					{plural ? 's' : ''} will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					subscription amount using your chosen payment method at each renewal,
+					at the rate then in effect, unless you cancel.
 				</div>
 			</>
 		);
 	};
 
 	return (
-		<div css={[containerSummaryTsCs, cssOverrides]}>
-			{inTier1 && copyTier1(contributionType)}
-			{inTier2 && copyTier2(contributionType, productKey)}
-			{inTier3 && copyTier3(contributionType, productKey)}
-		</div>
+		<>
+			{!inDigitalEdition && (
+				<div css={[containerSummaryTsCs, cssOverrides]}>
+					{inSupport && copyTier1(contributionType)}
+					{inAllAccessDigital && copyTier2(contributionType, productKey)}
+					{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
+					{inAdLite && copyTier3(contributionType, productKey, false)}
+				</div>
+			)}
+		</>
 	);
 }

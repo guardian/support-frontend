@@ -7,10 +7,7 @@ import {
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Domestic,
-	NoFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
+import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -176,24 +173,4 @@ function GuardianWeeklyFooter({
 	);
 }
 
-function DigitalFooter({
-	productPrices,
-	orderIsAGift,
-	country,
-}: FooterWithPromoTermsProps): JSX.Element {
-	const termsConditionsLink = orderIsAGift
-		? 'https://www.theguardian.com/help/2020/nov/24/gift-digital-subscriptions-terms-and-conditions'
-		: 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
-
-	return (
-		<FooterWithPromoTerms
-			productPrices={productPrices}
-			orderIsAGift={orderIsAGift}
-			country={country}
-			fulfillmentOption={NoFulfilmentOptions}
-			termsConditionsLink={termsConditionsLink}
-		/>
-	);
-}
-
-export { DigitalFooter, GuardianWeeklyFooter };
+export { GuardianWeeklyFooter };

@@ -4,12 +4,17 @@ import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
+import type { ProductBenefit } from 'helpers/productCatalog';
+import {
+	productCatalog,
+	productCatalogDescription,
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -32,9 +37,10 @@ export type ProductButton = {
 	analyticsTracking: () => void;
 	hierarchy?: string;
 	modifierClasses?: string;
+	primary?: boolean;
 };
 
-export type ProductCopy = {
+type ProductCopy = {
 	title: string;
 	subtitle: Option<string>;
 	description: string;
@@ -43,6 +49,7 @@ export type ProductCopy = {
 	buttons: ProductButton[];
 	classModifier?: string[];
 	participations?: Participations;
+	benefits?: ProductBenefit[];
 };
 
 const getDisplayPrice = (
@@ -54,6 +61,21 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
+const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
+	const currencyKey = detect(countryGroupId);
+	const currency = currencies[currencyKey].glyph;
+	const product = productCatalog['DigitalSubscription'];
+	const priceMonthly = product?.ratePlans[Monthly]?.pricing[currencyKey];
+	const currencyPriceMonthly = priceMonthly
+		? `${currency}${fixDecimals(priceMonthly)}/${Monthly}`
+		: '';
+	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey];
+	const currencyPriceAnnual = priceAnnual
+		? ` ${currency}${fixDecimals(priceAnnual)}/${Annual}`
+		: '';
+	return `${currencyPriceMonthly}${currencyPriceAnnual}`;
+};
+
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	if (discountCopy !== '') {
 		return discountCopy;
@@ -62,7 +84,7 @@ function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	return '';
 }
 
-const digital = (
+const digitalEdition = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy => ({
@@ -73,7 +95,7 @@ const digital = (
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
-			link: digitalSubscriptionLanding(countryGroupId, false),
+			link: digitalSubscriptionLanding(countryGroupId),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'digipack_cta',
 				product: 'DigitalPack',
@@ -86,6 +108,40 @@ const digital = (
 	classModifier: ['subscriptions__digital'],
 	offer: priceCopy.discountCopy,
 });
+
+function digitalCheckout(
+	countryGroupId: CountryGroupId,
+	priceCopy: PriceCopy,
+): ProductCopy {
+	return {
+		...digitalEdition(countryGroupId, priceCopy),
+		subtitle: getDigitalEditionPrices(countryGroupId),
+		buttons: [
+			{
+				ctaButtonText: 'Subscribe Monthly',
+				link: digitalSubscriptionLanding(countryGroupId, 'Monthly'),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_monthly_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+			},
+			{
+				ctaButtonText: 'Subscribe Annually',
+				link: digitalSubscriptionLanding(countryGroupId, 'Annual'),
+				analyticsTracking: sendTrackingEventsOnClick({
+					id: 'digipack_annual_cta',
+					product: 'DigitalPack',
+					componentType: 'ACQUISITIONS_BUTTON',
+				}),
+				modifierClasses: 'digital',
+				primary: true,
+			},
+		],
+		benefits: productCatalogDescription['DigitalSubscription'].benefits,
+	};
+}
 
 const guardianWeekly = (
 	countryGroupId: CountryGroupId,
@@ -152,13 +208,20 @@ const getSubscriptionCopy = (
 	pricingCopy: PricingCopy,
 	participations: Participations,
 ): ProductCopy[] => {
+	const inDigitalEditionCheckout =
+		participations.digitalEditionCheckout === 'variant';
+
 	const productcopy: ProductCopy[] = [
 		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
 	}
-	productcopy.push(digital(countryGroupId, pricingCopy[DigitalPack]));
+	productcopy.push(
+		inDigitalEditionCheckout
+			? digitalCheckout(countryGroupId, pricingCopy[DigitalPack])
+			: digitalEdition(countryGroupId, pricingCopy[DigitalPack]),
+	);
 	return productcopy;
 };
 

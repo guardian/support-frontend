@@ -7,7 +7,6 @@ import {
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
-	AmazonPay,
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -63,31 +62,26 @@ type SupporterPlus = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
-export type TierThree = {
+type TierThree = {
 	productType: 'TierThree';
 	currency: string;
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 };
-export type GuardianLight = {
-	productType: 'GuardianLight';
-	currency: string;
-	billingPeriod: BillingPeriod;
-};
-export type GuardianAdLite = {
+type GuardianAdLite = {
 	productType: 'GuardianAdLite';
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
-export type DigitalSubscription = {
+type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
 	amount?: number;
 };
-export type PaperSubscription = {
+type PaperSubscription = {
 	productType: typeof Paper;
 	currency: string;
 	billingPeriod: BillingPeriod;
@@ -95,7 +89,7 @@ export type PaperSubscription = {
 	productOptions: ProductOptions;
 	deliveryAgent?: number;
 };
-export type GuardianWeeklySubscription = {
+type GuardianWeeklySubscription = {
 	productType: typeof GuardianWeekly;
 	currency: string;
 	billingPeriod: BillingPeriod;
@@ -107,7 +101,6 @@ export type SubscriptionProductFields =
 	| PaperSubscription
 	| GuardianWeeklySubscription
 	| TierThree
-	| GuardianLight
 	| GuardianAdLite;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
@@ -138,17 +131,12 @@ type RegularSepaPaymentFields = {
 type GiftRedemption = {
 	redemptionCode: string;
 };
-type RegularAmazonPayPaymentFields = {
-	paymentType: typeof AmazonPay;
-	amazonPayBillingAgreementId: string;
-};
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| GiftRedemption
-	| RegularAmazonPayPaymentFields;
+	| GiftRedemption;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
 	state?: UsState | null;
@@ -165,7 +153,7 @@ type GiftRecipientType = {
 	message?: string;
 	deliveryDate?: string;
 };
-export type AppliedPromotion = {
+type AppliedPromotion = {
 	promoCode: string;
 	countryGroupId: SupportInternationalisationId; // There is a bit of naming mismatch between the front and back end
 };
@@ -198,27 +186,22 @@ export type StripePaymentIntentAuthorisation = {
 	paymentMethodId: string | PaymentMethod;
 	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
 };
-export type PayPalAuthorisation = {
+type PayPalAuthorisation = {
 	paymentMethod: typeof PayPal;
 	token: string;
 };
-export type DirectDebitAuthorisation = {
+type DirectDebitAuthorisation = {
 	paymentMethod: typeof DirectDebit;
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
 };
-export type SepaAuthorisation = {
+type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
 	country?: Country;
 	streetName?: string;
-};
-export type AmazonPayAuthorisation = {
-	paymentMethod: typeof AmazonPay;
-	orderReferenceId?: string;
-	amazonPayBillingAgreementId?: string;
 };
 // Represents an authorisation to execute payments with a given payment method.
 // This will generally be supplied by third-party code (Stripe, PayPal, GoCardless).
@@ -229,8 +212,7 @@ export type PaymentAuthorisation =
 	| StripePaymentIntentAuthorisation
 	| PayPalAuthorisation
 	| DirectDebitAuthorisation
-	| SepaAuthorisation
-	| AmazonPayAuthorisation;
+	| SepaAuthorisation;
 
 type Status = 'failure' | 'pending' | 'success';
 
@@ -310,19 +292,6 @@ function regularPaymentFieldsFromAuthorisation(
 					iban: authorisation.iban.replace(/ /g, ''),
 				};
 			}
-
-		case AmazonPay:
-			if (authorisation.amazonPayBillingAgreementId) {
-				return {
-					paymentType: AmazonPay,
-					amazonPayBillingAgreementId:
-						authorisation.amazonPayBillingAgreementId,
-				};
-			}
-
-			throw new Error(
-				'Cant create a regular Amazon Pay authorisation for one off',
-			);
 	}
 }
 

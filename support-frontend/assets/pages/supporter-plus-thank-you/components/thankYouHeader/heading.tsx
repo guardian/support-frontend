@@ -197,10 +197,13 @@ function Heading({
 	promotion,
 }: HeadingProps): JSX.Element {
 	const isPending = paymentStatus === 'pending';
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isDigitalEdition = productKey === 'DigitalSubscription';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
+	const maybeNameAndCommaSpace: string =
+		name && name.length < 10 ? `, ${name}, ` : '';
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
 	if (isOneOffPayPal || !amount || isPending) {
@@ -213,6 +216,16 @@ function Heading({
 				Thank you{' '}
 				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
 				{headerTitleClosure}
+			</h1>
+		);
+	}
+
+	if (isDigitalEdition) {
+		return (
+			<h1 css={headerTitleText}>
+				Thank you
+				<span data-qm-masking="blocklist">{maybeNameAndCommaSpace}</span>
+				{'for subscribing to the Digital Edition'}
 			</h1>
 		);
 	}

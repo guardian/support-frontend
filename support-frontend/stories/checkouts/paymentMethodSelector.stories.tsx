@@ -6,7 +6,6 @@ import type { PaymentMethodSelectorProps } from 'components/paymentMethodSelecto
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	AmazonPay,
 	DirectDebit,
 	PayPal,
 	Sepa,
@@ -35,7 +34,6 @@ function Template(args: Partial<PaymentMethodSelectorProps>): JSX.Element {
 		Sepa,
 		Stripe,
 		PayPal,
-		AmazonPay,
 	];
 
 	return (

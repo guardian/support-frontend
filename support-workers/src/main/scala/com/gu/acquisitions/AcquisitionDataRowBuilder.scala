@@ -26,7 +26,7 @@ import com.gu.support.workers.{
   StripePaymentType,
   SupporterPlus,
   TierThree,
-  GuardianLight,
+  GuardianAdLite,
 }
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -124,7 +124,7 @@ object AcquisitionDataRowBuilder {
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
-    case _: GuardianLight => (AcquisitionProduct.GuardianLight, None)
+    case _: GuardianAdLite => (AcquisitionProduct.GuardianAdLite, None)
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
@@ -211,20 +211,11 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
+      case s: SendThankYouEmailDigitalSubscriptionState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),
           s.promoCode,
           Direct,
-          Purchase,
-          Some(s.accountNumber),
-          Some(s.subscriptionNumber),
-        )
-      case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
-        AcquisitionTypeDetails(
-          Some(s.paymentMethod),
-          s.promoCode,
-          Gift,
           Purchase,
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
@@ -247,16 +238,7 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
-        AcquisitionTypeDetails(
-          None,
-          None,
-          Gift,
-          Redemption,
-          None, // TODO: if we rework digital gift modelling in Zuora we should include the relevant ids here
-          None,
-        )
-      case s: SendThankYouEmailGuardianLightState =>
+      case s: SendThankYouEmailGuardianAdLiteState =>
         AcquisitionTypeDetails(
           paymentMethod = Some(s.paymentMethod),
           promoCode = None,

@@ -1,4 +1,5 @@
 import { TextInput } from '@guardian/source/react-components';
+import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -14,6 +15,8 @@ type PersonalDetailsFieldsProps = {
 	email: string;
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
+	confirmedEmail: string;
+	setConfirmedEmail: (value: string) => void;
 };
 
 export function PersonalDetailsFields({
@@ -25,10 +28,13 @@ export function PersonalDetailsFields({
 	email,
 	setEmail,
 	isEmailAddressReadOnly,
+	confirmedEmail,
+	setConfirmedEmail,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
 	const [emailError, setEmailError] = useState<string>();
+	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
 	return (
 		<>
@@ -66,6 +72,44 @@ export function PersonalDetailsFields({
 					}}
 				/>
 			</div>
+			{!isEmailAddressReadOnly && (
+				<div>
+					<TextInput
+						id="confirm-email"
+						data-qm-masking="blocklist"
+						label="Confirm email address"
+						value={confirmedEmail}
+						type="email"
+						autoComplete="email"
+						onChange={(event) => {
+							setConfirmedEmail(event.currentTarget.value);
+						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
+						name="confirm-email"
+						required
+						maxLength={80}
+						error={confirmedEmailError}
+						pattern={escapeStringRegexp(email)}
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setConfirmedEmailError(undefined);
+							} else {
+								if (validityState.valueMissing) {
+									setConfirmedEmailError('Please confirm your email address.');
+								} else if (validityState.patternMismatch) {
+									setConfirmedEmailError('The email addresses do not match.');
+								} else {
+									setConfirmedEmailError('Please enter a valid email address.');
+								}
+							}
+						}}
+					/>
+				</div>
+			)}
 			{children}
 			<div>
 				<TextInput

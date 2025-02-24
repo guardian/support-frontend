@@ -1,9 +1,5 @@
 import type { ComponentType, React } from 'react';
-import type { Participations } from 'helpers/abTests/abtest';
-import type {
-	AmazonObject,
-	AmazonPaymentsObject,
-} from 'helpers/forms/paymentIntegrations/amazonPay/types';
+import type { Participations } from 'helpers/abTests/models';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -51,7 +47,6 @@ declare global {
 			user?: User;
 		};
 
-		amazon?: AmazonObject;
 		disablePayPalButton?: () => void;
 		enablePayPalButton?: () => void;
 		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
@@ -60,9 +55,6 @@ declare global {
 			reset: (id: number | undefined) => void;
 		};
 		gtag_enable_tcf_support?: boolean;
-		OffAmazonPayments?: AmazonPaymentsObject;
-		onAmazonLoginReady: unknown;
-		onAmazonPaymentsReady: () => void;
 		paypal: {
 			FUNDING: {
 				CREDIT: unknown;

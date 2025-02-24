@@ -42,7 +42,9 @@ export function useAbandonedBasketCookie(
 	// support-dotcom-components can only return a user to the checkout for these products
 	// don't drop the cookie if they came from a different checkout
 	const isSupportedProduct =
-		product === 'Contribution' || product === 'SupporterPlus';
+		product === 'Contribution' ||
+		product === 'SupporterPlus' ||
+		product === 'OneTimeContribution';
 
 	useEffect(() => {
 		if (inAbandonedBasketVariant && isSupportedProduct) {

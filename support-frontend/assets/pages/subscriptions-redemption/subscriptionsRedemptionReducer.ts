@@ -13,13 +13,13 @@ import type { Option } from 'helpers/types/option';
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 
-export type RedemptionCheckoutState = {
+type RedemptionCheckoutState = {
 	stage: Stage;
 	errors: Array<FormError<FormField>>;
 };
 
 // ------- Actions ---------- //
-export type Action =
+type Action =
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;

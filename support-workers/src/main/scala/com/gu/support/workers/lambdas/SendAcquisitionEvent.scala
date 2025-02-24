@@ -26,17 +26,8 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
-
     logger.info(s"Sending acquisition event to BigQuery: ${state.toString}")
-
-    state.sendThankYouEmailState match {
-      case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
-        // We don't want to send an acquisition event for Digital subscription gift redemptions as we have already done so on purchase
-        Future.successful(HandlerResult((), requestInfo))
-      case _ =>
-        sendAcquisitionEvent(state, requestInfo, services)
-    }
-
+    sendAcquisitionEvent(state, requestInfo, services)
   }
 
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {

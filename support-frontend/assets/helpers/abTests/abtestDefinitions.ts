@@ -1,4 +1,4 @@
-import type { Tests } from './abtest';
+import type { Tests } from './models';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
 // you should always target both the landing page *and* the thank you page.
@@ -7,29 +7,16 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
+		/*
+        We can revert to a simpler regex like below when subscription checkouts are deleted
+        /contribute|checkout|one-time-checkout|thankyou(/.*)?$
+      */
 		allLandingPagesAndThankyouPages:
-			'/checkout|one-time-checkout|contribute|thankyou|thank-you(/.*)?$',
+			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
 	},
 	subscriptions: {
-		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-		digiSubLandingPages:
-			'(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-		digiSubLandingPagesNotAus:
-			'(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
-		digiSub: {
-			// Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
-			allLandingAndCheckout:
-				/\/subscribe\/digital(\/checkout)?(\/gift)?(\?.*)?$/,
-			// Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
-			giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
-			// Requires /subscribe/digital, allows /checkout, allows any query string
-			nonGiftLandingAndCheckoutWithGuest:
-				/\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
-			nonGiftLandingNotAusNotUS:
-				/((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
-		},
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
@@ -105,7 +92,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	linkExpressCheckout: {
+	digitalEditionCheckout: {
 		variants: [
 			{
 				id: 'control',
@@ -115,29 +102,21 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
 			GBPCountries: {
 				offset: 0,
 				size: 1,
 			},
-			EURCountries: {
-				offset: 0,
-				size: 1,
-			},
-			Canada: { offset: 0, size: 1 },
-			NZDCountries: { offset: 0, size: 1 },
-			International: { offset: 0, size: 1 },
 		},
 		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		seed: 7,
+		persistPage:
+			// uk will ensure we match the generic checkout
+			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
+		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
 	},
-	contributionsOnly: {
+	subscribeCheckoutImage: {
 		variants: [
 			{
 				id: 'control',
@@ -147,15 +126,16 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			CONTRIBUTIONS_ONLY: {
+			ALL: {
 				offset: 0,
 				size: 1,
 			},
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeContributionsOnlyCountries: false,
+		seed: 5,
+		targetPage:
+			'(/subscribe/weekly/checkout$|/subscribe/weekly/checkout/gift$)', // weekly only test
+		excludeContributionsOnlyCountries: true,
 	},
 };

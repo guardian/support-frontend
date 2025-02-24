@@ -1,12 +1,14 @@
 import { set } from './cookie';
 
-const HIDE_SUPPORT_MESSAGING_COOKIE_NAME = 'gu_hide_support_messaging';
-const HIDE_SUPPORT_MESSAGING_COOKIE_DAYS_TO_LIVE = 90;
+const HIDE_SUPPORT_MESSAGING_COOKIE = 'gu_hide_support_messaging';
+const HIDE_SUPPORT_MESSAGING_DAYS_TO_LIVE = 90;
 
-export const setHideSupportMessagingCookie = (): void => {
+export const setHideSupportMessaginCookie = (): void => {
+	const currentTimeInEpochMilliseconds: number = Date.now();
+
 	set(
-		HIDE_SUPPORT_MESSAGING_COOKIE_NAME,
-		'true',
-		HIDE_SUPPORT_MESSAGING_COOKIE_DAYS_TO_LIVE,
+		HIDE_SUPPORT_MESSAGING_COOKIE,
+		currentTimeInEpochMilliseconds.toString(),
+		HIDE_SUPPORT_MESSAGING_DAYS_TO_LIVE,
 	);
 };

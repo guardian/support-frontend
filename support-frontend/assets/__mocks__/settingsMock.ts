@@ -1,6 +1,6 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 
-export const mockSettings = {
+const mockSettings = {
 	switches: {
 		oneOffPaymentMethods: {
 			stripe: 'On',
@@ -8,7 +8,6 @@ export const mockSettings = {
 			stripePaymentRequestButton: 'On',
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
-			amazonPay: 'On',
 		},
 		recurringPaymentMethods: {
 			stripe: 'On',
@@ -17,7 +16,6 @@ export const mockSettings = {
 			stripeExpressCheckout: 'On',
 			payPal: 'On',
 			directDebit: 'Off',
-			amazonPay: 'Off',
 			sepa: 'On',
 		},
 		subscriptionsPaymentMethods: {

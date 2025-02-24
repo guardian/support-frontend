@@ -1,5 +1,5 @@
-import type { Participations } from 'helpers/abTests/abtest';
 import { getFallbackAmounts } from 'helpers/abTests/helpers';
+import type { Participations } from 'helpers/abTests/models';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';

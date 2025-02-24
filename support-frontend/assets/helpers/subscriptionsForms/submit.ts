@@ -47,10 +47,7 @@ import {
 	setStage,
 	setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
-import {
-	validateCheckoutForm,
-	validateWithDeliveryForm,
-} from 'helpers/subscriptionsForms/formValidation';
+import { validateWithDeliveryForm } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
@@ -443,20 +440,5 @@ function submitWithDeliveryForm(
 	}
 }
 
-function submitCheckoutForm(
-	dispatch: Dispatch<Action>,
-	state: SubscriptionsState,
-): void {
-	if (validateCheckoutForm(dispatch, state)) {
-		submitForm(dispatch, state);
-	}
-}
-
 // ----- Export ----- //
-export {
-	onPaymentAuthorised,
-	showPaymentMethod,
-	submitCheckoutForm,
-	submitWithDeliveryForm,
-	trackSubmitAttempt,
-};
+export { onPaymentAuthorised, submitWithDeliveryForm, trackSubmitAttempt };

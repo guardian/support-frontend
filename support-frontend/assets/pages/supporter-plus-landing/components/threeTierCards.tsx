@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -17,6 +17,7 @@ export type ThreeTierCardsProps = {
 		price: number;
 		promotion?: Promotion;
 		ctaCopy: string;
+		lozengeText?: string;
 	}>;
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
@@ -89,6 +90,7 @@ export function ThreeTierCards({
 						countryGroupId={countryGroupId}
 						paymentFrequency={paymentFrequency}
 						ctaCopy={cardContent.ctaCopy}
+						lozengeText={cardContent.lozengeText}
 						abParticipations={abParticipations}
 					/>
 				);

@@ -14,7 +14,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { Participations } from '../../helpers/abTests/abtest';
+import type { Participations } from '../../helpers/abTests/models';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
@@ -212,7 +212,12 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
 		 * which then needs this configuration.
 		 */
-		if (productKey === 'Contribution' || productKey === 'SupporterPlus') {
+		if (
+			productKey === 'Contribution' ||
+			productKey === 'SupporterPlus' ||
+			productKey === 'GuardianAdLite' ||
+			productKey === 'DigitalSubscription'
+		) {
 			elementsOptions = {
 				mode: 'payment',
 				/**
@@ -234,11 +239,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	 * a country that doesn't correspond to the countryGroup a product is in.
 	 */
 	const forcedCountry = urlSearchParams.get('country') ?? undefined;
-
-	/**
-	 * The returnLink for back button and thank you page
-	 */
-	const returnLink = urlSearchParams.get('returnAddress') ?? undefined;
 
 	useEffect(() => {
 		/**
@@ -269,11 +269,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				useStripeExpressCheckout={useStripeExpressCheckout}
 				countryId={countryId}
 				forcedCountry={forcedCountry}
-				returnLink={returnLink}
 				abParticipations={abParticipations}
 			/>
 		</Elements>
 	);
 }
-
-export default Checkout;

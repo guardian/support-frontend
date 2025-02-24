@@ -29,33 +29,3 @@ object SubscribeRequest {
 //The subscribe request documented here: https://www.zuora.com/developer/api-references/older-api/operation/Action_POSTsubscribe/
 //fields are upper case to match the expected json structure
 case class SubscribeRequest(subscribes: List[SubscribeItem])
-
-import com.gu.support.encoding.Codec._
-
-object UpdateRedemptionDataRequest {
-  implicit val encoder: Encoder[UpdateRedemptionDataRequest] = deriveEncoder[UpdateRedemptionDataRequest].mapJsonObject(
-    _.renameField("gifteeIdentityId", "GifteeIdentityId__c")
-      .renameField("requestId", "CreatedRequestId__c")
-      .renameField("giftRedemptionDate", "GiftRedemptionDate__c"),
-  )
-}
-
-case class UpdateRedemptionDataRequest(
-    requestId: String,
-    gifteeIdentityId: String,
-    giftRedemptionDate: LocalDate,
-    currentTerm: Int,
-    currentTermPeriodType: PeriodType,
-)
-
-object DistributeRevenueRequest {
-  implicit val encoder: Encoder[DistributeRevenueRequest] = deriveEncoder[DistributeRevenueRequest].mapJsonObject(
-    _.add("distributionType", Json.fromString("Daily distribution"))
-      .add("eventTypeSystemId", Json.fromString("DigitalSubscriptionGiftRedeemed")),
-  )
-}
-
-case class DistributeRevenueRequest(
-    recognitionStart: LocalDate,
-    recognitionEnd: LocalDate,
-)

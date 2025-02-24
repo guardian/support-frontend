@@ -1,5 +1,3 @@
-import DOMPurify from 'dompurify';
-import snarkdown from 'snarkdown';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -14,8 +12,9 @@ import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
+import { getSanitisedHtml } from '../utilities/utilities';
 
-export type DiscountBenefit = {
+type DiscountBenefit = {
 	amount: number;
 	durationMonths?: number;
 };
@@ -102,13 +101,6 @@ function getPromotion(
 	} catch (error) {
 		return undefined;
 	}
-}
-
-function getSanitisedHtml(markdownString: string): string {
-	// ensure we don't accidentally inject dangerous html into the page
-	return DOMPurify.sanitize(snarkdown(markdownString), {
-		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'],
-	});
 }
 
 function getPromotionCopy(

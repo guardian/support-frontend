@@ -9,6 +9,7 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.{SupporterPlus, TierThree}
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
 import com.typesafe.scalalogging.StrictLogging
@@ -301,6 +302,7 @@ class Application(
         views.EmptyDiv("down-for-maintenance-page"),
         RefPath("downForMaintenancePage.js"),
         Some(RefPath("downForMaintenancePage.css")),
+        noindex = stage != PROD,
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
   }
@@ -343,13 +345,12 @@ class Application(
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+    val canonicalLink = s"https://support.theguardian.com${buildCanonicalContributeLink(countryCode)}"
 
     views.html.contributions(
-      title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
-      js = RefPath("supporterPlusLandingPage.js"),
-      css = None,
+      js = RefPath("[countryGroupId]/router.js"),
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -366,11 +367,12 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
-      shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
       allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
       productCatalog = productCatalog,
+      noIndex = stage != PROD,
+      canonicalLink = canonicalLink,
     )
   }
 
@@ -390,6 +392,7 @@ class Application(
         shareImageUrl = Some(
           ausMomentMapSocialImageUrl,
         ),
+        noindex = stage != PROD,
       )(),
     ).withSettingsSurrogateKey
   }
@@ -496,7 +499,7 @@ class Application(
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
-    val serversideTests = generateParticipations(List("lazyLoading"))
+    val serversideTests = generateParticipations(Nil)
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")

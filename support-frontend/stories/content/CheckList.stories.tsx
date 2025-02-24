@@ -2,10 +2,43 @@ import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
 import type { BenefitsCheckListProps } from 'components/checkoutBenefits/benefitsCheckList';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+
+const boldText = css`
+	font-weight: bold;
+`;
+
+const checkListData = [
+	{
+		isChecked: true,
+		text: (
+			<p>
+				<span css={boldText}>The Digital Edition app. </span>Enjoy the Guardian
+				and Observer newspaper, available for mobile and tablet
+			</p>
+		),
+	},
+	{
+		isChecked: true,
+		text: (
+			<p>
+				<span css={boldText}>Full access to the Guardian app. </span>
+				Read our reporting on the go
+			</p>
+		),
+	},
+	{
+		isChecked: true,
+		text: (
+			<p>
+				<span css={boldText}>Free 14 day trial. </span>Enjoy a free trial of
+				your subscription, before you pay
+			</p>
+		),
+	},
+];
 
 export default {
 	title: 'Content/Benefits Check List',
@@ -41,18 +74,12 @@ Template.args = {} as BenefitsCheckListProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	benefitsCheckListData: checkListData({
-		higherTier: true,
-		countryGroupId: 'GBPCountries',
-	}),
+	benefitsCheckListData: checkListData,
 };
 
 export const Compact = Template.bind({});
 
 Compact.args = {
-	benefitsCheckListData: checkListData({
-		higherTier: true,
-		countryGroupId: 'GBPCountries',
-	}),
+	benefitsCheckListData: checkListData,
 	style: 'compact',
 };

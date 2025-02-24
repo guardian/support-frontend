@@ -19,7 +19,7 @@ import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
-import PageTitle from 'components/page/pageTitle';
+import { PageTitle } from 'components/page/pageTitle';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
@@ -75,7 +75,7 @@ const styles = {
 	`,
 };
 
-export const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
+const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
 	region === GBPCountries ? (
 		<span>
 			Find clarity
@@ -88,7 +88,7 @@ export const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
 		</span>
 	);
 
-export const getFirstParagraph = (
+const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
 	orderIsAGift: boolean,
 ): JSX.Element | null => {

@@ -161,7 +161,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
             Some(Off),
           ),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
-          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On), Some(On)),
+          subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
           featureSwitches = FeatureSwitches(None, Some(On), Some(Off), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),
           recaptchaSwitches = RecaptchaSwitches(Some(On), Some(On)),

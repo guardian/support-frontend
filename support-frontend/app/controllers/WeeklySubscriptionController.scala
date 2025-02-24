@@ -4,6 +4,8 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.GuardianWeekly
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.PROD
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.PriceSummaryServiceProvider
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -24,6 +26,7 @@ class WeeklySubscriptionController(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
+    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -66,6 +69,7 @@ class WeeklySubscriptionController(
             "?width=1200&height=1200&quality=85&auto=format&fit=crop&s=0034a6a7408ca4d162620f2c8b6bf2b9",
         ),
         shareUrl = canonicalLink,
+        noindex = stage != PROD,
       ) {
         Html(s"""<script type="text/javascript">
               window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}

@@ -9,7 +9,7 @@ import { getUser } from 'helpers/user/user';
 export const userTypeSchema = z.union([z.literal('new'), z.literal('current')]);
 export type UserType = z.infer<typeof userTypeSchema>;
 
-export const emailRules = zuoraCompatibleString(
+const emailRules = zuoraCompatibleString(
 	z
 		.string()
 		.regex(/^[^,]+$/, 'Please enter a valid email address.')

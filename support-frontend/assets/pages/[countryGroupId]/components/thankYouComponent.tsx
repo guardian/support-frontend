@@ -3,13 +3,11 @@ import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import type { InferInput } from 'valibot';
-import { object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -37,6 +35,10 @@ import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFo
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import {
+	getReturnAddress,
+	getThankYouOrder,
+} from '../checkout/helpers/sessionStorage';
 
 const checkoutContainer = css`
 	${from.tablet} {
@@ -55,32 +57,7 @@ const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
-/**
- * The checkout page sets the order in sessionStorage
- * And the thank-you page reads it.
- */
-const OrderSchema = object({
-	firstName: string(),
-	email: string(),
-	paymentMethod: picklist([
-		'Stripe',
-		'StripeExpressCheckoutElement',
-		'PayPal',
-		'DirectDebit',
-		'Sepa',
-		'AmazonPay',
-		'None',
-	]),
-	status: picklist(['success', 'pending']),
-});
-export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
-	storage.session.set('thankYouOrder', order);
-}
-export function unsetThankYouOrder() {
-	storage.session.remove('thankYouOrder');
-}
-
-export type CheckoutComponentProps = {
+type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	payment: {
@@ -92,7 +69,6 @@ export type CheckoutComponentProps = {
 	productKey?: ActiveProductKey;
 	ratePlanKey?: string;
 	promotion?: Promotion;
-	returnLink?: string;
 	identityUserType: UserType;
 	abParticipations: Participations;
 };
@@ -103,7 +79,6 @@ export function ThankYouComponent({
 	productKey,
 	ratePlanKey,
 	promotion,
-	returnLink,
 	identityUserType,
 	abParticipations,
 }: CheckoutComponentProps) {
@@ -113,15 +88,14 @@ export function ThankYouComponent({
 	const csrf = { token: window.guardian.csrf.token };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
-
-	const sessionStorageOrder = storage.session.get('thankYouOrder');
-	const parsedOrder = safeParse(OrderSchema, sessionStorageOrder);
-	if (!parsedOrder.success) {
+	// Session storage order (from Checkout)
+	const order = getThankYouOrder();
+	if (!order) {
+		const sessionStorageOrder = storage.session.get('thankYouOrder');
 		return (
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
-	const order = parsedOrder.output;
 	const isPending = order.status === 'pending';
 
 	/**
@@ -207,7 +181,8 @@ export function ThankYouComponent({
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isGuardianAdLite = productKey === 'GuardianLight';
+	const isDigitalEdition = productKey === 'DigitalSubscription';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTier3 = productKey === 'TierThree';
@@ -256,7 +231,7 @@ export function ThankYouComponent({
 		undefined,
 		payment.finalAmount,
 		formatUserDate(getGuardianAdLiteDate()),
-		returnLink ?? 'https://www.theguardian.com',
+		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 	);
 	const maybeThankYouModule = (
@@ -288,6 +263,7 @@ export function ThankYouComponent({
 					!isGuardianAdLite),
 			'feedback',
 		),
+		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All

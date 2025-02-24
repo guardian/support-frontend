@@ -42,20 +42,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
-      case state: DigitalSubscriptionGiftRedemptionState =>
-        zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
-      case state: DigitalSubscriptionDirectPurchaseState =>
+      case state: DigitalSubscriptionState =>
         zuoraDigitalSubscriptionDirectHandler.subscribe(
           state,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
           zuoraSubscriptionState.acquisitionData,
-        )
-      case state: DigitalSubscriptionGiftPurchaseState =>
-        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
         )
       case state: ContributionState =>
         zuoraContributionHandler.subscribe(state)
@@ -71,8 +63,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
-      case state: GuardianLightState =>
-        zuoraGuardianLightHandler.subscribe(
+      case state: GuardianAdLiteState =>
+        zuoraGuardianAdLiteHandler.subscribe(
           state,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
@@ -94,33 +86,14 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
 }
 
 class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
-
-  lazy val zuoraDigitalSubscriptionGiftRedemptionHandler = new ZuoraDigitalSubscriptionGiftRedemptionHandler(
-    services.zuoraGiftService,
-    services.catalogService,
-    state.user,
-    state.requestId,
-  )
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     state.requestId,
     state.user,
     state.product.currency,
   )
-  lazy val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
+  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionHandler(
     zuoraSubscriptionCreator,
-    dateGenerator,
-    new DigitalSubscriptionGiftPurchaseBuilder(
-      services.promotionService,
-      dateGenerator,
-      services.giftCodeGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
-  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
-    zuoraSubscriptionCreator,
-    new DigitalSubscriptionDirectPurchaseBuilder(
+    new DigitalSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
       services.promotionService,
       dateGenerator,
@@ -158,9 +131,9 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       subscribeItemBuilder,
     ),
   )
-  lazy val zuoraGuardianLightHandler = new ZuoraGuardianLightHandler(
+  lazy val zuoraGuardianAdLiteHandler = new ZuoraGuardianAdLiteHandler(
     zuoraSubscriptionCreator,
-    new GuardianLightSubscriptionBuilder(
+    new GuardianAdLiteSubscriptionBuilder(
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,

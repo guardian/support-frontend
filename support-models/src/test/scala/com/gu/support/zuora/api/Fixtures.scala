@@ -197,24 +197,7 @@ object Fixtures {
       autoRenew = true,
       initialTerm = 12,
       initialTermPeriodType = Month,
-      redemptionCode = None,
       giftNotificationEmailDate = None,
-    ),
-  )
-
-  val dsGiftSubscriptionData = SubscriptionData(
-    List(RatePlanData(RatePlan(productRatePlanId), Nil, Nil)),
-    Subscription(
-      contractEffectiveDate = new LocalDate(2020, 12, 1),
-      contractAcceptanceDate = new LocalDate(2020, 12, 1),
-      termStartDate = new LocalDate(2020, 12, 1),
-      createdRequestId = "requestId",
-      readerType = ReaderType.Gift,
-      autoRenew = false,
-      initialTerm = 3,
-      initialTermPeriodType = Month,
-      redemptionCode = Some("gd03-asdfghjq"),
-      giftNotificationEmailDate = Some(new LocalDate(2020, 12, 25)),
     ),
   )
 

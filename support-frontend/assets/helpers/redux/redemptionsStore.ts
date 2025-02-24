@@ -12,11 +12,11 @@ const baseReducer = {
 	debug: debugReducer,
 };
 
-export const redemptionStore = configureStore({
+const redemptionStore = configureStore({
 	reducer: baseReducer,
 });
 
-export type RedemptionStore = typeof redemptionStore;
+type RedemptionStore = typeof redemptionStore;
 
 export function initReduxForRedemption(): RedemptionStore {
 	try {

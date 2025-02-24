@@ -10,7 +10,7 @@ const btnStyleOverrides = css`
 	margin-bottom: ${space[5]}px;
 `;
 
-export type AddressCtaProp = {
+type AddressCtaProp = {
 	copy: string;
 	address: string;
 	hasArrow?: boolean;

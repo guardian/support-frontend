@@ -27,7 +27,7 @@ export type ProductPrice = {
 	promotions?: Promotion[];
 };
 
-export type BillingPeriods = {
+type BillingPeriods = {
 	[K in BillingPeriod]?: { [K in IsoCurrency]?: ProductPrice };
 };
 
@@ -78,23 +78,6 @@ const showPrice = (p: ProductPrice, isExtended = true): string => {
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
 };
 
-const displayPrice = (
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): string =>
-	showPrice(
-		getProductPrice(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
-
 function getCurrency(country: IsoCountry): IsoCurrency {
 	const { currency } = getCountryGroup(country);
 	return currency;
@@ -113,7 +96,12 @@ const getDiscountVsRetail = (
 	const onlinePrice = discountedPrice / (1 - discountedVsOnlinePerc / 100);
 	const retailPrice = onlinePrice / (1 - onlineVsRetailPerc / 100);
 	const totalSavingVsRetail = (1 - discountedPrice / retailPrice) * 100;
-	return Math.round(totalSavingVsRetail);
+	/**
+	 * We should never overstate a discount,
+	 * even by a fraction of a %. Therefore
+	 * we always round down to the nearest whole number.
+	 */
+	return Math.floor(totalSavingVsRetail);
 };
 
 export {
@@ -122,7 +110,6 @@ export {
 	getCurrency,
 	getCountryGroup,
 	showPrice,
-	displayPrice,
 	isNumeric,
 	getDiscountVsRetail,
 };

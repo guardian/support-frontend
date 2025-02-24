@@ -4,9 +4,7 @@ import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getBillingCountryAndState } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import type { ErrorCollection } from './utils';
 
-export function getStateOrProvinceError(
-	state: ContributionsState,
-): ErrorCollection {
+function getStateOrProvinceError(state: ContributionsState): ErrorCollection {
 	const contributionType = getContributionType(state);
 	const billingCountry = getBillingCountryAndState(state).billingCountry;
 	if (shouldCollectStateForContributions(billingCountry, contributionType)) {

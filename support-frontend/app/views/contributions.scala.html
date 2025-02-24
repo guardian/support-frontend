@@ -10,11 +10,9 @@
 @import views.ViewHelpers.outputJson
 @import io.circe.JsonObject
 @(
-  title: String,
   id: String,
   mainElement: ReactDiv,
   js: RefPath,
-  css: Option[RefPath],
   description: Option[String],
   paymentMethodConfigs: PaymentMethodConfigs,
   paymentApiUrl: String,
@@ -24,14 +22,26 @@
   guestAccountCreationToken: Option[String],
   geoData: GeoData,
   shareImageUrl: String,
-  shareUrl: String,
   v2recaptchaConfigPublicKey: String,
   serversideTests: Map[String, Participation] = Map(),
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
+  noIndex: Boolean,
+  canonicalLink: String
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
-@main(title = title, mainJsBundle = js, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
+@main(
+  title = "Support the Guardian",
+  mainJsBundle = js,
+  description = description,
+  mainElement = mainElement,
+  mainStyleBundle = None,
+  shareImageUrl = Some(shareImageUrl),
+  shareUrl = Some(canonicalLink),
+  serversideTests = serversideTests,
+  noindex = noIndex,
+  canonicalLink = Some(canonicalLink)
+) {
   <script type="text/javascript">
     window.guardian = window.guardian || {};
     @idUser.map { user =>

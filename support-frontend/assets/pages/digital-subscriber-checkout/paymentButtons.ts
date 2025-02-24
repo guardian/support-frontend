@@ -1,4 +1,3 @@
-import { AmazonPaymentButton } from 'components/amazonPayForm/amazonPaymentButton';
 import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
 import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { DigiSubPayPalPaymentButton } from 'components/payPalPaymentButton/digiSubPayPalPaymentButton';
@@ -13,7 +12,6 @@ type PaymentMethodButtons = Partial<
 	Record<PaymentMethod, React.FC<PaymentButtonComponentProps>>
 >;
 const allPaymentMethodButtons: PaymentMethodButtons = {
-	AmazonPay: AmazonPaymentButton,
 	DirectDebit: DirectDebitPaymentButton,
 	PayPal: DigiSubPayPalPaymentButton,
 	Stripe: StripePaymentButton,

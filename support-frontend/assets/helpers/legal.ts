@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { SubscriptionProduct } from './productPrice/subscriptions';
 // ----- Terms & Conditions ----- //
 const defaultContributionTermsLink =
 	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
@@ -14,31 +13,6 @@ const contributionsTermsLinks: Record<CountryGroupId, string> = {
 	International: defaultContributionTermsLink,
 	NZDCountries: defaultContributionTermsLink,
 	Canada: defaultContributionTermsLink,
-};
-// TBD update these before or early in the moment launch
-const defaultPhilanthropyContactEmail = 'us.philanthropy@theguardian.com';
-const philanthropyContactEmail: Record<CountryGroupId, string> = {
-	GBPCountries: defaultPhilanthropyContactEmail,
-	UnitedStates: defaultPhilanthropyContactEmail,
-	AUDCountries: 'australia.philanthropy@theguardian.com',
-	EURCountries: defaultPhilanthropyContactEmail,
-	International: defaultPhilanthropyContactEmail,
-	NZDCountries: defaultPhilanthropyContactEmail,
-	Canada: defaultPhilanthropyContactEmail,
-};
-const subscriptionsTermsLinks: Record<SubscriptionProduct, string> = {
-	DigitalPack:
-		'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions',
-	PremiumTier:
-		'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions',
-	DailyEdition:
-		'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions',
-	GuardianWeekly:
-		'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions',
-	Paper:
-		'https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions',
-	PaperAndDigital:
-		'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions',
 };
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';
@@ -59,15 +33,15 @@ const supporterPlusTermsLink =
 	'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
 const tierThreeTermsLink =
 	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
+const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tcs`;
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
-	subscriptionsTermsLinks,
 	privacyLink,
 	copyrightNotice,
 	contributionsEmail,
-	philanthropyContactEmail,
 	guardianLiveTermsLink,
 	supporterPlusTermsLink,
 	tierThreeTermsLink,
+	guardianAdLiteTermsLink,
 };

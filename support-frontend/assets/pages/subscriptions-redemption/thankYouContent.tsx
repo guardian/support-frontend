@@ -4,7 +4,7 @@ import Content from 'components/content/content';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import Text, { LargeParagraph } from 'components/text/text';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -15,10 +15,9 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Option } from 'helpers/types/option';
 import AppsSection from './components/thankYou/appsSection';
 import ThankYouHero from './components/thankYou/hero';
-import 'helpers/abTests/abtest';
 
 // ----- Types ----- //
-export type PropTypes = {
+type PropTypes = {
 	countryGroupId: CountryGroupId;
 	paymentMethod: Option<PaymentMethod>;
 	marketingConsent: React.ReactNode;

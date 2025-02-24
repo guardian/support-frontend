@@ -15,12 +15,12 @@ const errorReasons = [
 	'internal_error',
 	'card_authentication_error',
 	'incomplete_payment_request_details',
-	'amazon_pay_try_other_card',
-	'amazon_pay_try_again',
-	'amazon_pay_fatal',
 	'email_provider_rejected',
 	'invalid_email_address',
 	'recaptcha_validation_failed',
+	'guardian_ad_lite_purchase_not_allowed',
+	'guardian_ad_lite_purchase_not_allowed_signed_in',
+	'invalid_characters_in_billing_postcode',
 	'unknown',
 ] as const;
 export function isErrorReason(value: string): value is ErrorReason {
@@ -38,9 +38,6 @@ function appropriateErrorMessage(errorReason: string): string {
 			case 'payment_details_incorrect':
 				return 'An error occurred while trying to process your payment. Please double check your card details and try again. Alternatively, try another card or payment method.';
 
-			case 'amazon_pay_try_again':
-				return 'An error occurred while trying to process your payment. You have not been charged. Please try entering your payment details again.';
-
 			case 'personal_details_incorrect':
 				return 'Please double check the name and contact details you provided and try again.';
 
@@ -48,14 +45,10 @@ function appropriateErrorMessage(errorReason: string): string {
 				return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
 
 			case 'payment_method_unacceptable':
-			case 'amazon_pay_try_other_card':
 				return 'The transaction was unsuccessful and you have not been charged. Please use a different card or choose another payment method.';
 
 			case 'payment_provider_unavailable':
 				return 'The transaction was unsuccessful. This does not mean there’s anything wrong with your card, and you have not been charged. Please try using an alternative payment method.';
-
-			case 'amazon_pay_fatal':
-				return 'The transaction was unsuccessful and you have not been charged. Please try using an alternative payment method.';
 
 			case 'all_payment_methods_unavailable':
 				return 'Sorry, our payment methods are unavailable at this time. We are working hard to fix the problem and hope to be back up and running soon. Please come back later to complete your contribution or consider another type of contribution from the tabs above. Thank you.';
@@ -83,6 +76,19 @@ function appropriateErrorMessage(errorReason: string): string {
 
 			case 'recaptcha_validation_failed':
 				return 'Please prove you are not a robot';
+
+			case 'guardian_ad_lite_purchase_not_allowed':
+				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free, please sign in';
+
+			case 'guardian_ad_lite_purchase_not_allowed_signed_in':
+				return 'You already have Guardian Ad-Lite or can read the Guardian ad-free';
+
+			case 'invalid_characters_in_billing_postcode':
+				// Note, we're using "ZIP code" here as generally this error
+				// affects US users only. For the products where we perform this
+				// validation rule, the only country we collect a ZIP/postal
+				// code is the US
+				return 'Please check your billing ZIP code to ensure it is correct';
 		}
 	}
 	return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';

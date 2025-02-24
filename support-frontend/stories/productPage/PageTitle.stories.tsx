@@ -1,5 +1,5 @@
 import CentredContainer from 'components/containers/centredContainer';
-import PageTitle from 'components/page/pageTitle';
+import { PageTitle } from 'components/page/pageTitle';
 import { Hero } from './Hero.stories';
 
 export default {

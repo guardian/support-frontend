@@ -13,7 +13,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/models';
 import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -210,6 +210,7 @@ export function ThreeTierCard({
 	price,
 	promotion,
 	ctaCopy,
+	lozengeText,
 	abParticipations,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
@@ -227,7 +228,9 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge
 					subdue={isRecommendedSubdued}
-					title={promotion?.landingPage?.roundel ?? 'Highest impact'}
+					title={
+						promotion?.landingPage?.roundel ?? lozengeText ?? 'Highest impact'
+					}
 				/>
 			)}
 			<h2 css={titleCss}>{label}</h2>
@@ -257,6 +260,7 @@ export function ThreeTierCard({
 					href={link}
 					cssOverrides={btnStyleOverrides}
 					data-qm-trackable={quantumMetricButtonRef}
+					aria-label={label}
 				>
 					{ctaCopy}
 				</LinkButton>
@@ -301,6 +305,7 @@ export function ThreeTierCard({
 							isChecked: true,
 							toolTip: benefit.tooltip,
 							isNew: benefit.isNew,
+							hideBullet: benefit.hideBullet,
 						};
 					})}
 				style={'compact'}

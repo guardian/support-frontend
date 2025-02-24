@@ -11,19 +11,16 @@ import type {
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from '../../contributions';
-import { emptySwitches } from '../../globalsAndSwitches/globals';
+import { emptySwitches, getSettings } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
 import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
 import { _, init as abInit, getAmountsTestVariant } from '../abtest';
-import type { Audience, Participations, Test, Variant } from '../abtest';
+import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
-const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
-	digiSub;
 const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
 	pageUrlRegexes.contributions;
 
@@ -48,6 +45,7 @@ describe('init', () => {
 		countryId: country,
 		countryGroupId,
 		mvt,
+		settings: getSettings(),
 	};
 
 	afterEach(() => {
@@ -581,64 +579,33 @@ describe('init', () => {
 });
 
 it('targetPage matching', () => {
-	expect(targetPageMatches('/uk/subscribe/paper', subsDigiSubPages)).toEqual(
-		false,
-	);
-	expect(
-		targetPageMatches('/uk/subscribe/digital/checkout', subsDigiSubPages),
-	).toEqual(false);
-	expect(targetPageMatches('/us/subscribe', subsDigiSubPages)).toEqual(true);
-	expect(targetPageMatches('/us/subscribe/digital', subsDigiSubPages)).toEqual(
-		true,
-	);
-	const withAcquisitionParams =
-		'/uk/subscribe?INTCMP=header_support_subscribe&acquisitionData=%7B"componentType"%3A"ACQUISITIONS_HEADER"%2C"componentId"%3A"header_support_subscribe"%2C"source"%3A"GUARDIAN_WEB"%2C"referrerPageviewId"%3A"k8heft91k5c3tnnnmwjd"%2C"referrerUrl"%3A"https%3A%2F%2Fwww.theguardian.com%2Fuk"%7D';
-	expect(targetPageMatches(withAcquisitionParams, subsDigiSubPages)).toEqual(
-		true,
-	);
-	expect(
-		targetPageMatches('/us/subscribe/digital?test=blah', subsDigiSubPages),
-	).toEqual(true);
 	// Test nonGiftLandingAndCheckout regex
 	expect(
 		targetPageMatches(
-			'/uk/subscribe/digital',
-			nonGiftLandingAndCheckoutWithGuest,
-		),
-	).toEqual(true);
-	expect(
-		targetPageMatches(
-			'/subscribe/digital/checkout',
-			nonGiftLandingAndCheckoutWithGuest,
-		),
-	).toEqual(true);
-	expect(
-		targetPageMatches(
-			'/subscribe/digital/checkout/guest',
-			nonGiftLandingAndCheckoutWithGuest,
-		),
-	).toEqual(true);
-	expect(
-		targetPageMatches(
-			'/uk/subscribe/digital/gift',
-			nonGiftLandingAndCheckoutWithGuest,
+			'/subscribe/weekly/checkout',
+			allLandingPagesAndThankyouPages,
 		),
 	).toEqual(false);
-	// Test nonGiftLandingNotAusNotUS regex
 	expect(
-		targetPageMatches('/uk/subscribe/digital', nonGiftLandingNotAusNotUS),
-	).toEqual(true);
-	expect(
-		targetPageMatches('/subscribe/digital/checkout', nonGiftLandingNotAusNotUS),
-	).toEqual(true);
-	expect(
-		targetPageMatches('/us/subscribe/digital', nonGiftLandingNotAusNotUS),
+		targetPageMatches(
+			'/subscribe/paper/checkout',
+			allLandingPagesAndThankyouPages,
+		),
 	).toEqual(false);
 	expect(
-		targetPageMatches('/au/subscribe/digital', nonGiftLandingNotAusNotUS),
+		targetPageMatches(
+			'/subscribe/digitaledition',
+			allLandingPagesAndThankyouPages,
+		),
 	).toEqual(false);
 	expect(
-		targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingNotAusNotUS),
+		targetPageMatches('/subscribe/paper', allLandingPagesAndThankyouPages),
+	).toEqual(false);
+	expect(
+		targetPageMatches('/subscribe/weekly', allLandingPagesAndThankyouPages),
+	).toEqual(false);
+	expect(
+		targetPageMatches('/subscribe', allLandingPagesAndThankyouPages),
 	).toEqual(false);
 	// Test 3-tier landing page
 	expect(

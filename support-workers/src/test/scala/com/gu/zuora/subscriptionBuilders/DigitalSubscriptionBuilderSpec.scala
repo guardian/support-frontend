@@ -2,25 +2,15 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
-import com.gu.i18n.Country.Australia
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.CODE
-import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
+import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
-import com.gu.support.redemption.gifting.GiftCodeValidator
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
-import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
-  DigitalSubscriptionDirectPurchaseState,
-  DigitalSubscriptionGiftPurchaseState,
-}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
 import com.gu.support.zuora.api.AcquisitionSource.CSR
-import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.zuora.Fixtures.blankReferrerAcquisitionData
 import org.joda.time.LocalDate
@@ -32,7 +22,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar._
 
 import java.util.UUID
-import scala.concurrent.Future
 
 //noinspection RedundantDefaultArgument
 class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
@@ -52,24 +41,8 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = None,
-        redemptionCode = None,
       ),
     )
-  }
-
-  "SubscriptionData for a 3 monthly gift subscription purchase" should "be correct" in {
-    threeMonthGiftPurchase._1.subscriptionData.ratePlanData shouldBe List(
-      RatePlanData(RatePlan("2c92c0f8778bf8f60177915b477714aa"), List(), List()),
-    )
-    import threeMonthGiftPurchase._1.subscriptionData.subscription._
-    autoRenew shouldBe false
-    contractAcceptanceDate shouldBe saleDate
-    readerType shouldBe Gift
-    threeMonthGiftPurchase._2.value.substring(0, 4) shouldBe "gd03"
-    initialTerm shouldBe GiftCodeValidator.expirationTimeInMonths + 1
-    initialTermPeriodType shouldBe Month
-    promoCode shouldBe None
-    giftNotificationEmailDate shouldBe Some(new LocalDate(2020, 12, 1))
   }
 
   "SubscriptionData" should "have set acquisitionSource csrUsername and salesforceCaseId" in {
@@ -144,7 +117,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Direct,
         promoCode = Some("NOTAPATRONPROMO"),
-        redemptionCode = None,
       ),
     )
   }
@@ -185,16 +157,14 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         termType = "TERMED",
         readerType = ReaderType.Patron,
         promoCode = Some("FOOPATRON"),
-        redemptionCode = None,
       ),
     )
   }
 
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
-  lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
 
-  lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
+  lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionBuilder(
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
     promotionService,
     DateGenerator(saleDate),
@@ -206,22 +176,10 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     ),
   )
 
-  lazy val subscriptionGiftPurchaseBuilder = new DigitalSubscriptionGiftPurchaseBuilder(
-    promotionService,
-    DateGenerator(saleDate),
-    new GiftCodeGeneratorService,
-    CODE,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-    ),
-  )
-
   lazy val monthly =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -238,7 +196,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val validMonthlyBenefitsTest =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(12)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -257,7 +215,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val lowAmountMonthlyBenefitsTest =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(1)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -276,7 +234,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthlyNotInBenefitsTest =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(12)),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -290,26 +248,9 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .toOption
       .get
 
-  lazy val threeMonthGiftPurchase =
-    subscriptionGiftPurchaseBuilder
-      .build(
-        DigitalSubscriptionGiftPurchaseState(
-          Country.UK,
-          DigitalSubscriptionGiftRecipient("bob", "smith", "hi@thegulocal.com", None, new LocalDate(2020, 12, 1)),
-          DigitalPack(GBP, Quarterly, Gift),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          None,
-          SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-        ),
-        None,
-        None,
-      )
-      .toOption
-      .get
-
   lazy val csrSubscription = subscriptionDirectPurchaseBuilder
     .build(
-      DigitalSubscriptionDirectPurchaseState(
+      DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Monthly),
         PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -327,7 +268,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthlyWithPromo =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
@@ -344,7 +285,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthlyPatron =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionDirectPurchaseState(
+        DigitalSubscriptionState(
           Country.UK,
           DigitalPack(GBP, Monthly),
           PayPalReferenceTransaction("baid", "hi@thegulocal.com"),

@@ -1,14 +1,11 @@
 module.exports = {
 	common: {
 		'[countryGroupId]/router': 'pages/[countryGroupId]/router.tsx',
-		'[countryGroupId]/lazyRouter': 'pages/[countryGroupId]/lazyRouter.tsx',
 		'[countryGroupId]/events/router':
 			'pages/[countryGroupId]/events/router.tsx',
 		favicons: 'images/favicons.ts',
 		subscriptionsLandingPage:
 			'pages/subscriptions-landing/subscriptionsLanding.tsx',
-		supporterPlusLandingPage:
-			'pages/supporter-plus-landing/supporterPlusRouter.tsx',
 		paperSubscriptionLandingPage:
 			'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
 		paperSubscriptionCheckoutPage:
