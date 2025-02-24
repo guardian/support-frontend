@@ -25,6 +25,16 @@ export type ProductBenefit = {
 	hideBullet?: boolean;
 };
 
+export type ProductTsAndCs = {
+	copy: string;
+	specificToRegions?: CountryGroupId[];
+	specificToAbTest?: Array<{
+		name: string;
+		variants: string[];
+		display: boolean;
+	}>;
+};
+
 export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
@@ -32,15 +42,16 @@ export type ProductDescription = {
 	benefitsAdditional?: ProductBenefit[];
 	benefitsMissing?: ProductBenefit[];
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
-	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
-	offersSummary?: Array<string | { strong: boolean; copy: string }>;
-	deliverableTo?: Record<string, string>;
+	tsAndCs: ProductTsAndCs[];
 	ratePlans: Record<
 		string,
 		{
 			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
 		}
 	>;
+	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
+	offersSummary?: Array<string | { strong: boolean; copy: string }>;
+	deliverableTo?: Record<string, string>;
 };
 
 export function filterBenefitByRegion(
@@ -191,6 +202,46 @@ const guardianAdLiteBenefits = [
 	{ copy: 'You can cancel at any time.' },
 ];
 
+const proceedingTsAndCs = {
+	copy: 'By proceeding, you are agreeing to the Digital + print Terms.',
+};
+const personalDataTsAndCs = {
+	copy: 'To find out what personal data we collect and how we use it, please visit our Privacy Policy.',
+};
+const stripeTsAndCs = {
+	copy: 'All card payments are powered by Stripe. Read the Stripe Privacy Policy and Terms and conditions.',
+};
+
+const contributionTsAndCs = [
+	proceedingTsAndCs,
+	personalDataTsAndCs,
+	stripeTsAndCs,
+];
+const supporterPlusTsAndCs = [
+	{
+		copy: `If you pay at least £12 per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
+	},
+	...contributionTsAndCs,
+];
+
+const tierThreeTsAndCs = [
+	{
+		copy: `By signing up, you are taking out a Digital + print subscription. Your Digital + print subscription will auto-renew each month unless cancelled. Your first payment will be taken on the publication date of your first Guardian Weekly magazine (as shown in the checkout) but you will start to receive your digital benefits when you sign up. Unless you cancel, subsequent monthly payments will be taken on this date using your chosen payment method. You can cancel your Digital + print subscription at any time before your next renewal date. If you cancel your Digital + print subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current monthly payment period. To cancel go to Manage My Account or see our Digital + print Terms.`,
+	},
+	{
+		copy: `By proceeding, you are agreeing to the Digital + print Terms.`,
+	},
+	personalDataTsAndCs,
+	stripeTsAndCs,
+];
+
+const adLiteTsAndCs = [
+	{
+		copy: `Your Guardian Ad-Lite subscription will auto-renew each month unless cancelled. Your first payment will be taken on day 15 after signing up but you will start to receive your Guardian Ad-Lite benefits when you sign up. Unless you cancel, subsequent monthly payments will be taken on this date using your chosen payment method. You can cancel your subscription at any time before your next renewal date. If you cancel your Guardian Ad-Lite subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Guardian Ad-Lite Terms.`,
+	},
+	...contributionTsAndCs,
+];
+
 export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
@@ -198,6 +249,7 @@ export const productCatalogDescription: Record<
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
 		thankyouMessage: `Your subscription powers our journalism.`,
+		tsAndCs: adLiteTsAndCs,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -208,6 +260,7 @@ export const productCatalogDescription: Record<
 	TierThree: {
 		label: 'Digital + print',
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
+		tsAndCs: tierThreeTsAndCs,
 		benefitsSummary: [
 			'The rewards from ',
 			{ strong: true, copy: 'All-access digital' },
@@ -258,6 +311,11 @@ export const productCatalogDescription: Record<
 				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
 			},
 		],
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs DigitalSubscription',
+			},
+		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -277,6 +335,11 @@ export const productCatalogDescription: Record<
 		label: 'National Delivery',
 		benefits: [],
 		deliverableTo: newspaperCountries,
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs NationalDelivery',
+			},
+		],
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',
@@ -293,6 +356,7 @@ export const productCatalogDescription: Record<
 		label: 'All-access digital',
 		/** These are duplicated in the TierThree benefitsAdditional */
 		benefits: supporterPlusBenefits,
+		tsAndCs: supporterPlusTsAndCs,
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -306,6 +370,11 @@ export const productCatalogDescription: Record<
 		label: 'The Guardian Weekly',
 		benefits: [],
 		deliverableTo: gwDeliverableCountries,
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs GuardianWeeklyRestOfWorld',
+			},
+		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -328,6 +397,11 @@ export const productCatalogDescription: Record<
 		label: 'The Guardian Weekly',
 		benefits: [],
 		deliverableTo: gwDeliverableCountries,
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs GuardianWeeklyDomestic',
+			},
+		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -349,6 +423,11 @@ export const productCatalogDescription: Record<
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
 		benefits: [],
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs SubscriptionCard',
+			},
+		],
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',
@@ -370,6 +449,7 @@ export const productCatalogDescription: Record<
 	Contribution: {
 		label: 'Support',
 		benefits: [supportBenefit, newsletterBenefitUS],
+		tsAndCs: contributionTsAndCs,
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
@@ -391,6 +471,11 @@ export const productCatalogDescription: Record<
 	HomeDelivery: {
 		label: 'Home Delivery',
 		benefits: [],
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs HomeDelivery',
+			},
+		],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
@@ -413,6 +498,11 @@ export const productCatalogDescription: Record<
 	OneTimeContribution: {
 		label: 'One-time contribution',
 		benefits: [fewerAsksBenefit],
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs OneTimeContribution',
+			},
+		],
 		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
 		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
@@ -428,6 +518,11 @@ export const productCatalogDescription: Record<
 			},
 			{
 				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+			},
+		],
+		tsAndCs: [
+			{
+				copy: 'Ts&Cs GuardianPatron',
 			},
 		],
 		ratePlans: {
