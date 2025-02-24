@@ -81,7 +81,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.11.1",
 		"@emotion/utils": "^1.1.0",
-		"@floating-ui/react": "^0.19.2",
+		"@floating-ui/react": "^0.27.4",
 		"@guardian/libs": "^21.1.0",
 		"@guardian/pasteup": "1.0.0-alpha.7",
 		"@guardian/source": "8.0.0",
