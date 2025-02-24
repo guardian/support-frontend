@@ -121,7 +121,8 @@ const rows = [
 		body: (
 			<div css={rowSpacing}>
 				You can read the Guardian website without personalised advertising
-				across all devices by logging into your Guardian account.
+				across all devices by logging into your Guardian account. Guardian
+				Ad-Lite applies to our website only, and not the Guardian Live App.
 			</div>
 		),
 	},

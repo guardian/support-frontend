@@ -234,17 +234,13 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const copyAdLite = (
-		contributionType: RegularContributionType,
-		productKey: ActiveProductKey,
-	) => {
-		const productLabel = productCatalogDescription[productKey].label;
+	const copyAdLite = (contributionType: RegularContributionType) => {
 		return (
 			<div>
-				Your {productLabel} will auto-renew each{' '}
+				Your Guardian Ad-Lite subscription will auto-renew each{' '}
 				{frequencySingular(contributionType)} unless cancelled. Your first
 				payment will be taken on day 15 after signing up but you will start to
-				receive your {productLabel} benefits when you sign up. Unless you
+				receive your Guardian Ad-Lite benefits when you sign up. Unless you
 				cancel, subsequent monthly payments will be taken on this date using
 				your chosen payment method. You can cancel your subscription at any time
 				before your next renewal date. If you cancel your Guardian Ad-Lite
@@ -252,7 +248,7 @@ export function PaymentTsAndCs({
 				immediately and we will not take the first payment from you.
 				Cancellation of your subscription after 14 days will take effect at the
 				end of your current monthly payment period. To cancel, go to{' '}
-				{ManageMyAccountLink} or see our {productLabel}{' '}
+				{ManageMyAccountLink} or see our Guardian Ad-Lite{' '}
 				{termsGuardianAdLite('Terms')}.
 			</div>
 		);
@@ -293,7 +289,7 @@ export function PaymentTsAndCs({
 				)}
 				{inAllAccessDigital &&
 					copyAboveThreshold(contributionType, productKey, promotion)}
-				{inAdLite && copyAdLite(contributionType, productKey)}
+				{inAdLite && copyAdLite(contributionType)}
 				{(inSupport || inAdLite) &&
 					copyBelowThreshold(countryGroupId, productKey)}
 				{inDigitalEdition && copyDigitalEdition()}
