@@ -14,5 +14,10 @@
     "prettier": "^3.5.1",
     "tslib": "^2.6.2",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.750.0",
+    "@aws-sdk/credential-provider-node": "^3.750.0",
+    "@google-cloud/bigquery": "^7.9.2"
   }
 }
