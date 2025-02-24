@@ -69,6 +69,37 @@ function productOptionIfDigiAddOnChanged(
 	return matchingProducLookup[selectedOption];
 }
 
+const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
+	switch (ratePlanKey) {
+		case 'Saturday':
+		case 'Sunday':
+		case 'Weekend':
+		case 'Sixday':
+		case 'Everyday':
+			return ratePlanKey;
+	}
+	throw new Error(
+		`Paper product option not defined for ratePlan ${ratePlanKey}`,
+	);
+};
+export const getProductOptionFromProductAndRatePlan = (
+	productKey: string,
+	ratePlanKey: string,
+): ProductOptions => {
+	switch (productKey) {
+		case 'TierThree':
+			return ratePlanKey.endsWith('V2')
+				? 'NewspaperArchive'
+				: 'NoProductOptions';
+		case 'SubscriptionCard':
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+			return getPaperProductOptions(ratePlanKey);
+		default:
+			return 'NoProductOptions';
+	}
+};
+
 export {
 	NoProductOptions,
 	Saturday,

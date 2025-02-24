@@ -37,4 +37,28 @@ const getWeeklyFulfilmentOption = (
 		? RestOfWorld
 		: Domestic;
 
+export const getFulfilmentOptionFromProductKey = (
+	productKey: string,
+): FulfilmentOptions => {
+	switch (productKey) {
+		case 'SupporterPlus':
+		case 'Contribution':
+			return 'NoFulfilmentOptions';
+		case 'TierThree':
+		case 'GuardianWeeklyDomestic':
+			return 'Domestic';
+		case 'GuardianWeeklyRestOfWorld':
+			return 'RestOfWorld';
+		case 'SubscriptionCard':
+			return 'Collection';
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+			return productKey;
+		default:
+			throw new Error(
+				`Fulfilment option not defined for product ${productKey}`,
+			);
+	}
+};
+
 export { getWeeklyFulfilmentOption };
