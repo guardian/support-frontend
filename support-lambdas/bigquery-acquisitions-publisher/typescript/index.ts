@@ -2,7 +2,6 @@ import { getStage } from './stage';
 import { buildAuthClient, createBigQueryClient } from './bigQuery';
 // import { BigQuery, Query } from '@google-cloud/bigquery';
 import { getGCPCredentialsFromSSM } from './ssm';
-import { SQSEvent } from 'aws-lambda';
 
 // const exampleReadFromBigQuery = async (bigQueryClient: BigQuery) => {
 // 	const query: Query = {
@@ -17,7 +16,7 @@ import { SQSEvent } from 'aws-lambda';
 // 	rows.forEach((row) => console.log(row));
 // };
 
-export const handler = async (event: SQSEvent) => {
+export const handler = async (event: unknown) => {
 	const stage = getStage();
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
