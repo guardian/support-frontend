@@ -1,8 +1,3 @@
-import type {
-	ExpressPaymentType,
-	Stripe,
-	StripeElements,
-} from '@stripe/stripe-js';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import type { Participations } from '../../../helpers/abTests/models';
@@ -10,6 +5,7 @@ import type { ErrorReason } from '../../../helpers/forms/errorReasons';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import type {
 	ProductFields,
+	RegularPaymentFields,
 	RegularPaymentRequest,
 	StatusResponse,
 } from '../../../helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -30,10 +26,7 @@ import {
 } from '../checkout/helpers/formDataExtractors';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import type { PaymentMethod } from './paymentFields';
-import {
-	FormSubmissionError,
-	getPaymentFieldsForPaymentMethod,
-} from './paymentFields';
+import { FormSubmissionError } from './paymentFields';
 import type { ProcessPaymentResponse } from './retryPaymentStatus';
 import { processPaymentWithRetries } from './retryPaymentStatus';
 
@@ -42,61 +35,34 @@ type CreateSubscriptionResponse = StatusResponse & {
 };
 
 export const submitForm = async ({
+	geoId,
 	productKey,
 	ratePlanKey,
 	formData,
-	hasDeliveryAddress,
-	isTestUser,
-	stripePublicKey,
-	stripeExpressCheckoutPaymentType,
-	stripe,
-	stripeElements,
-	promotion,
-	geoId,
-	abParticipations,
-	productFields,
 	paymentMethod,
-	recaptchaToken,
+	paymentFields,
+	productFields,
+	hasDeliveryAddress,
+	abParticipations,
+	promotion,
 	contributionAmount,
 }: {
+	geoId: GeoId;
 	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	formData: FormData;
-	hasDeliveryAddress: boolean;
-	isTestUser: boolean;
-	stripePublicKey: string;
-	stripeExpressCheckoutPaymentType: ExpressPaymentType | undefined;
-	stripe: Stripe | null;
-	stripeElements: StripeElements | null;
-	promotion: Promotion | undefined;
-	geoId: GeoId;
-	abParticipations: Participations;
-	productFields: ProductFields;
 	paymentMethod: PaymentMethod;
-	recaptchaToken: string | undefined;
-	contributionAmount?: number;
+	paymentFields: RegularPaymentFields;
+	productFields: ProductFields;
+	hasDeliveryAddress: boolean;
+	abParticipations: Participations;
+	promotion: Promotion | undefined;
+	contributionAmount: number | undefined;
 }) => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
 		? extractDeliverableAddressDataFromForm(formData)
 		: extractNonDeliverableAddressDataFromForm(formData);
-
-	const paymentFields = await getPaymentFieldsForPaymentMethod(
-		paymentMethod,
-		stripeExpressCheckoutPaymentType,
-		stripe,
-		stripeElements,
-		isTestUser,
-		stripePublicKey,
-		recaptchaToken,
-		formData,
-	);
-
-	if (paymentFields === undefined) {
-		// TODO: show error message to user?
-		console.error('paymentFields is undefined');
-		return;
-	}
 
 	const ophanIds = getOphanIds();
 	const referrerAcquisitionData = {
@@ -234,7 +200,5 @@ const goToThankYouPage = (
 	userType && thankYouUrlSearchParams.set('userType', userType);
 	contributionAmount &&
 		thankYouUrlSearchParams.set('contribution', contributionAmount.toString());
-	setTimeout(() => {
-		window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-	}, 50); // 50ms delay ensures the change is registered
+	window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
 };

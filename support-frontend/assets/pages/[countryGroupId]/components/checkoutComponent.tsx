@@ -79,6 +79,7 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
@@ -101,7 +102,10 @@ import {
 } from './form';
 import { submitForm } from './formOnSubmit';
 import type { PaymentMethod } from './paymentFields';
-import { FormSubmissionError } from './paymentFields';
+import {
+	FormSubmissionError,
+	getPaymentFieldsForPaymentMethod,
+} from './paymentFields';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -346,6 +350,51 @@ export function CheckoutComponent({
 
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 
+	const onFormSubmit = async (formData: FormData) => {
+		if (paymentMethod === undefined) {
+			setPaymentMethodError('Please select a payment method');
+			return;
+		}
+		setIsProcessingPayment(true);
+		try {
+			const paymentFields = await getPaymentFieldsForPaymentMethod(
+				paymentMethod,
+				stripeExpressCheckoutPaymentType,
+				stripe,
+				elements,
+				isTestUser,
+				stripePublicKey,
+				recaptchaToken,
+				formData,
+			);
+			if (paymentFields === undefined) {
+				throw new Error('paymentFields is undefined');
+			}
+			await submitForm({
+				geoId,
+				productKey,
+				ratePlanKey,
+				formData,
+				paymentMethod,
+				paymentFields,
+				productFields,
+				hasDeliveryAddress: !!productDescription.deliverableTo,
+				abParticipations,
+				promotion,
+				contributionAmount,
+			});
+		} catch (error) {
+			if (error instanceof FormSubmissionError) {
+				setErrorMessage(error.message);
+				setErrorContext(error.context);
+			} else {
+				setErrorMessage('Sorry, something went wrong');
+				setErrorContext(appropriateErrorMessage('internal_error'));
+			}
+		}
+		setIsProcessingPayment(false);
+	};
+
 	useAbandonedBasketCookie(
 		productKey,
 		originalAmount,
@@ -457,44 +506,9 @@ export function CheckoutComponent({
 				ref={formRef}
 				onSubmit={(event) => {
 					event.preventDefault();
-					if (paymentMethod === undefined) {
-						setPaymentMethodError('Please select a payment method');
-					} else {
-						const form = event.currentTarget;
-						const formData = new FormData(form);
-						setIsProcessingPayment(true);
-						try {
-							/** we defer this to an external function as a lot of the payment methods use async */
-							void submitForm({
-								formData,
-								hasDeliveryAddress: !!productDescription.deliverableTo,
-								isTestUser,
-								stripePublicKey,
-								stripeExpressCheckoutPaymentType,
-								stripe,
-								stripeElements: elements,
-								productKey,
-								promotion,
-								geoId,
-								abParticipations,
-								productFields,
-								ratePlanKey,
-								paymentMethod,
-								recaptchaToken,
-								contributionAmount,
-							}).then(() => {
-								setIsProcessingPayment(false);
-							});
-						} catch (error) {
-							if (error instanceof FormSubmissionError) {
-								setErrorMessage(error.message);
-								setErrorContext(error.context);
-							}
-							setIsProcessingPayment(false);
-						}
-					}
-
-					return false;
+					const form = event.currentTarget;
+					const formData = new FormData(form);
+					void onFormSubmit(formData);
 				}}
 			>
 				<Box

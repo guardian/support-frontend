@@ -142,7 +142,6 @@ export const getPaymentFieldsForPaymentMethod = async (
 	recaptchaToken: string | undefined,
 	formData: FormData,
 ): Promise<RegularPaymentFields | undefined> => {
-	console.log('paymentMethod', paymentMethod, recaptchaToken);
 	if (paymentMethod === 'Stripe') {
 		return getStripePaymentFields(
 			stripe,
