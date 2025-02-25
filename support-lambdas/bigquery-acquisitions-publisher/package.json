@@ -4,12 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts"
   },
   "devDependencies": {
     "@guardian/prettier": "^8.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.4",
+    "esbuild": "^0.25.0",
     "jest": "^29.7.0",
     "prettier": "^3.5.1",
     "tslib": "^2.6.2",

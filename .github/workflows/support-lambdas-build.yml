@@ -90,13 +90,16 @@ jobs:
       - run: yarn install
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
-      - run: yarn tsc
+      - run: yarn tsc --noEmit
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn prettier -c typescript/*.ts
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn test
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn build
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: zip -qr index.zip ./*.js
