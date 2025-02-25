@@ -1,4 +1,4 @@
-import { Stage } from './stage';
+import { getStage } from './stage';
 import { buildAuthClient, createBigQueryClient } from './bigQuery';
 // import { BigQuery, Query } from '@google-cloud/bigquery';
 import { getGCPCredentialsFromSSM } from './ssm';
@@ -17,7 +17,7 @@ import { getGCPCredentialsFromSSM } from './ssm';
 // };
 
 export const handler = async (event: unknown) => {
-	const stage = process.env.STAGE as Stage;
+	const stage = getStage();
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
 	createBigQueryClient(authClient, stage);
