@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import type { ContributionType } from '../../../support-frontend/assets/helpers/contributions.ts';
 import type { IsoCountry } from '../../../support-frontend/assets/helpers/internationalisation/country';
 import type { IsoCurrency } from '../../../support-frontend/assets/helpers/internationalisation/currency';
@@ -57,6 +59,26 @@ export type AcquisitionsProduct = {
 	contributionId: string; //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
 	paymentId: string; // PAYID-M64KYRY1DX444112D060283M
 };
+
+export const AcquisitionsProductZod = z.object({
+	amount: z.number(),
+	componentId: z.string().nullable(),
+	componentType: z.string().nullable(),
+	campaignCode: z.string(),
+	source: z.string().nullable(),
+	referrerUrl: z.string().nullable(),
+	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
+	paymentProvider: z.string(), // ???
+	printOptions: z.string().nullable(),
+	browserId: z.string().nullable(),
+	identityId: z.string(), // 200381287
+	pageViewId: z.string(), // m7ezxppo1x1qg5b4q1x8
+	referrerPageViewId: z.string(),
+	promoCode: z.string().nullable(),
+	zuoraSubscriptionNumber: z.string().nullable(),
+	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
+	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
+});
 
 export const aquisitionProduct: AcquisitionsProduct = {
 	amount: 10.0,

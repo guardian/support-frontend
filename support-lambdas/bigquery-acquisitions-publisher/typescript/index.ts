@@ -3,7 +3,11 @@ import { buildAuthClient, createBigQueryClient } from './bigQuery';
 import { BigQuery } from '@google-cloud/bigquery';
 import { getGCPCredentialsFromSSM } from './ssm';
 import type { SQSEvent } from 'aws-lambda';
-import { AcquisitionsProduct, aquisitionProduct } from './acquisitions';
+import {
+	AcquisitionsProductDetail,
+	aquisitionProductDetail,
+	AcquisitionsProductZod,
+} from './acquisitions';
 
 // const exampleReadFromBigQuery = async (bigQueryClient: BigQuery) => {
 // 	const query: Query = {
@@ -20,9 +24,12 @@ import { AcquisitionsProduct, aquisitionProduct } from './acquisitions';
 
 const exampleWriteToBigQuery = async (
 	bigQueryClient: BigQuery,
-	aquisitionProduct: AcquisitionsProduct,
+	aquisitionProductDetail: AcquisitionsProductDetail,
 ) => {
-	const rows = [aquisitionProduct];
+	const parsedAquisitionProduct = AcquisitionsProductZod.parse(
+		aquisitionProductDetail,
+	);
+	const rows = [parsedAquisitionProduct];
 	await bigQueryClient
 		.dataset('datalake')
 		.table('fact_acquisition_event')
@@ -35,5 +42,5 @@ export const handler = async (event: SQSEvent) => {
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
 	const bigQueryClient = createBigQueryClient(authClient, stage);
-	exampleWriteToBigQuery(bigQueryClient, aquisitionProduct);
+	exampleWriteToBigQuery(bigQueryClient, aquisitionProductDetail);
 };
