@@ -30,6 +30,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - run: corepack enable
+        shell: bash
+
       # (Respects .nvmrc)
       - name: Setup Node
         uses: actions/setup-node@v4

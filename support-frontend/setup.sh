@@ -111,11 +111,8 @@ setup_nginx() {
   dev-nginx restart-nginx
 }
 
-install_yarn_if_linux() {
-  # This will be installed by 'install_brew_deps' if on mac
-  if linux && ! installed yarn; then
-    sudo apt-get install yarn
-  fi
+corepack_enable() {
+  corepack enable
 }
 
 install_js_deps() {
@@ -143,7 +140,7 @@ main () {
   install_brew_deps
   setup_nginx
   install_jdk
-  install_yarn_if_linux
+  corepack_enable
   install_js_deps
 
   report
