@@ -1,6 +1,6 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-type FormPersonalFields = {
+export type FormPersonalFields = {
 	firstName: string;
 	lastName: string;
 	email: string;
