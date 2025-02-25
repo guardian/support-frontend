@@ -176,6 +176,7 @@ const discountSummaryCopy = (
 ) => {
 	/**
 	 * EXAMPLE:
+	 * - £6/month for the first month, then £10/month
 	 * - £6.5/month for 6 months, then £10/month
 	 * - £173/year for the first year, then £275/year
 	 */
@@ -191,7 +192,7 @@ const discountSummaryCopy = (
 
 	return `${formattedPromotionPrice}/${period} for ${
 		period === 'year' ? 'the first' : ''
-	}${duration > 1 ? duration : ''} ${period}${
+	}${duration > 1 ? duration : period === 'year' ? '' : 'the first'} ${period}${
 		duration > 1 ? 's' : ''
 	}, then ${formattedPrice}/${period}${'*'.repeat(promoCount)}`;
 };
