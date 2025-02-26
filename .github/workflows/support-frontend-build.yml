@@ -46,7 +46,7 @@ jobs:
           #   support-frontend/pnpm-lock.yaml
 
       - name: Install
-        run: pnpm
+        run: pnpm install
         working-directory: support-frontend
 
       - name: Build the html used for SSR pages
