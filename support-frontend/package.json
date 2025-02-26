@@ -4,10 +4,10 @@
 	"description": "Frontend for the supporter platform.",
 	"scripts": {
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
-		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && yarn tsc && yarn knip",
+		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
-		"lint:fix": "yarn lint:check --fix",
+		"lint:fix": "pnpm lint:check --fix",
 		"build-dev": "webpack --config webpack.dev.js",
 		"build-ssr": "tsx ./scripts/build-ssr-content.tsx",
 		"build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
@@ -19,7 +19,7 @@
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
 		"knip": "knip --include files,exports,nsExports,types,nsTypes,dependencies",
-		"knip:production": "yarn knip --production --config knip.production.config.js",
+		"knip:production": "pnpm knip --production --config knip.production.config.js",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
 		"prettier:check": "prettier --check ./assets",
@@ -27,7 +27,7 @@
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
 		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
-		"update-support-service-lambdas": "rm -rf node_modules && yarn cache clean @guardian/support-service-lambdas && yarn install"
+		"update-support-service-lambdas": "rm -rf node_modules && pnpm cache clean @guardian/support-service-lambdas && pnpm install"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
