@@ -33,8 +33,8 @@ jobs:
       #   with:
       #     working-directory: support-frontend
 
-      - name: Install
-        run: pnpm install
+      - name: Print package.json
+        run: cat /home/runner/work/support-frontend/support-frontend/support-frontend/package.json
 
       - name: Check compressed size of JS
         uses: preactjs/compressed-size-action@v2
