@@ -37,7 +37,7 @@ export const processPaymentWithRetries = async (
 	);
 };
 
-function retryPaymentStatus(
+export function retryPaymentStatus(
 	promiseFunction: () => Promise<StatusResponse>,
 	pollMax: number = DEFAULT_MAX_POLLS,
 	pollInterval: number = DEFAULT_POLLING_INTERVAL_MILLIS,
