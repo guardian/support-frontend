@@ -1,17 +1,17 @@
 import { TextInput } from '@guardian/source/react-components';
-import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
+import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
 	children: React.ReactNode;
-	firstName?: string;
-	setFirstName?: (value: string) => void;
-	lastName?: string;
-	setLastName?: (value: string) => void;
+	firstName: string;
+	setFirstName: (value: string) => void;
+	lastName: string;
+	setLastName: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
@@ -35,156 +35,87 @@ export function PersonalDetailsFields({
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
-	const [emailError, setEmailError] = useState<string>();
-	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
 	return (
 		<>
+			<PersonalEmailFields
+				email={email}
+				setEmail={setEmail}
+				isEmailAddressReadOnly={isEmailAddressReadOnly}
+				confirmedEmail={confirmedEmail}
+				setConfirmedEmail={setConfirmedEmail}
+				requireConfirmedEmail={requireConfirmedEmail}
+			>
+				{children}
+			</PersonalEmailFields>
 			<div>
 				<TextInput
-					id="email"
+					id="firstName"
 					data-qm-masking="blocklist"
-					label="Email address"
-					value={email}
-					type="email"
-					autoComplete="email"
+					label="First name"
+					value={firstName}
+					autoComplete="given-name"
+					autoCapitalize="words"
 					onChange={(event) => {
-						setEmail(event.currentTarget.value);
+						setFirstName(event.target.value);
 					}}
 					onBlur={(event) => {
 						event.target.checkValidity();
 					}}
-					readOnly={isEmailAddressReadOnly}
-					name="email"
+					name="firstName"
 					required
-					maxLength={80}
-					error={emailError}
+					maxLength={40}
+					error={firstNameError}
+					pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 					onInvalid={(event) => {
 						preventDefaultValidityMessage(event.currentTarget);
 						const validityState = event.currentTarget.validity;
 						if (validityState.valid) {
-							setEmailError(undefined);
+							setFirstNameError(undefined);
 						} else {
 							if (validityState.valueMissing) {
-								setEmailError('Please enter your email address.');
+								setFirstNameError('Please enter your first name.');
 							} else {
-								setEmailError('Please enter a valid email address.');
+								setFirstNameError('Please enter a valid first name.');
 							}
 						}
 					}}
 				/>
 			</div>
-			{!isEmailAddressReadOnly && requireConfirmedEmail && (
-				<div>
-					<TextInput
-						id="confirm-email"
-						data-qm-masking="blocklist"
-						label="Confirm email address"
-						value={confirmedEmail}
-						type="email"
-						autoComplete="email"
-						onChange={(event) => {
-							setConfirmedEmail(event.currentTarget.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						name="confirm-email"
-						required
-						maxLength={80}
-						error={confirmedEmailError}
-						pattern={escapeStringRegexp(email)}
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setConfirmedEmailError(undefined);
+			<div>
+				<TextInput
+					id="lastName"
+					data-qm-masking="blocklist"
+					label="Last name"
+					value={lastName}
+					autoComplete="family-name"
+					autoCapitalize="words"
+					onChange={(event) => {
+						setLastName(event.target.value);
+					}}
+					onBlur={(event) => {
+						event.target.checkValidity();
+					}}
+					name="lastName"
+					required
+					maxLength={40}
+					error={lastNameError}
+					pattern={doesNotContainExtendedEmojiOrLeadingSpace}
+					onInvalid={(event) => {
+						preventDefaultValidityMessage(event.currentTarget);
+						const validityState = event.currentTarget.validity;
+						if (validityState.valid) {
+							setLastNameError(undefined);
+						} else {
+							if (validityState.valueMissing) {
+								setLastNameError('Please enter your last name.');
 							} else {
-								if (validityState.valueMissing) {
-									setConfirmedEmailError('Please confirm your email address.');
-								} else if (validityState.patternMismatch) {
-									setConfirmedEmailError('The email addresses do not match.');
-								} else {
-									setConfirmedEmailError('Please enter a valid email address.');
-								}
+								setLastNameError('Please enter a valid last name.');
 							}
-						}}
-					/>
-				</div>
-			)}
-			{children}
-			{firstName !== undefined && (
-				<div>
-					<TextInput
-						id="firstName"
-						data-qm-masking="blocklist"
-						label="First name"
-						value={firstName}
-						autoComplete="given-name"
-						autoCapitalize="words"
-						onChange={(event) => {
-							setFirstName?.(event.target.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						name="firstName"
-						required
-						maxLength={40}
-						error={firstNameError}
-						pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setFirstNameError(undefined);
-							} else {
-								if (validityState.valueMissing) {
-									setFirstNameError('Please enter your first name.');
-								} else {
-									setFirstNameError('Please enter a valid first name.');
-								}
-							}
-						}}
-					/>
-				</div>
-			)}
-			{lastName !== undefined && (
-				<div>
-					<TextInput
-						id="lastName"
-						data-qm-masking="blocklist"
-						label="Last name"
-						value={lastName}
-						autoComplete="family-name"
-						autoCapitalize="words"
-						onChange={(event) => {
-							setLastName?.(event.target.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						name="lastName"
-						required
-						maxLength={40}
-						error={lastNameError}
-						pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setLastNameError(undefined);
-							} else {
-								if (validityState.valueMissing) {
-									setLastNameError('Please enter your last name.');
-								} else {
-									setLastNameError('Please enter a valid last name.');
-								}
-							}
-						}}
-					/>
-				</div>
-			)}
+						}
+					}}
+				/>
+			</div>
 		</>
 	);
 }

@@ -86,7 +86,7 @@ import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
 } from '../../../helpers/storage/abandonedBasketCookies';
-import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -723,7 +723,7 @@ export function OneTimeCheckoutComponent({
 						<FormSection>
 							<Legend>1. Your details</Legend>
 
-							<PersonalDetailsFields
+							<PersonalEmailFields
 								email={email}
 								setEmail={(email) => setEmail(email)}
 								confirmedEmail={confirmedEmail}
@@ -734,7 +734,7 @@ export function OneTimeCheckoutComponent({
 								requireConfirmedEmail={inOneTimeConfirmEmailVariant}
 							>
 								<Signout isSignedIn={isSignedIn} />
-							</PersonalDetailsFields>
+							</PersonalEmailFields>
 
 							{countryId === 'US' && (
 								<div>
