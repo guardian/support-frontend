@@ -87,6 +87,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def getLandingPageTestsError(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("GetLandingPageTestsError"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],
