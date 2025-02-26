@@ -20,13 +20,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: support-frontend/yarn.lock
+          cache: 'pnpm'
+          cache-dependency-path: support-frontend/pnpm-lock.yaml
 
       - name: Install
-        run: yarn
+        run: pnpm
         working-directory: support-frontend
 
       - name: Type check
-        run: yarn tsc
+        run: pnpm tsc
         working-directory: support-frontend
