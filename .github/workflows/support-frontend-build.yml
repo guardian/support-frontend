@@ -34,6 +34,7 @@ jobs:
 
       - run: corepack enable
         shell: bash
+        working-directory: support-frontend
 
       # (Respects .nvmrc)
       - name: Setup Node
