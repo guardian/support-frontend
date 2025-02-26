@@ -1,15 +1,11 @@
 import { z } from 'zod';
-
-import type { ContributionType } from '../../../support-frontend/assets/helpers/contributions.ts';
-import type { IsoCountry } from '../../../support-frontend/assets/helpers/internationalisation/country';
-import type { IsoCurrency } from '../../../support-frontend/assets/helpers/internationalisation/currency';
-import type { PaymentMethod } from '../../../support-frontend/assets/helpers/forms/paymentMethods';
-type ProductType =
-	| 'Contribution'
-	| 'Paper'
-	| 'GuardianWeekly'
-	| 'SupporterPlus'
-	| 'TierThree';
+import {
+	ContributionType,
+	IsoCountry,
+	IsoCurrency,
+	PaymentMethod,
+	ProductType,
+} from './dependencies';
 
 export type AcquisitionsProductDetails = {
 	details: [AcquisitionsProductDetail];
