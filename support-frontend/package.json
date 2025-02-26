@@ -195,5 +195,5 @@
 	"lint-staged": {
 		"./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
 	},
-	"packageManager": "pnpm@9.15.6"
+	"packageManager": "pnpm@10.5.0"
 }
