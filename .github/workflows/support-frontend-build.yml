@@ -50,11 +50,11 @@ jobs:
         working-directory: support-frontend
 
       - name: Build the html used for SSR pages
-        run: pnpm run build-ssr
+        run: pnpm build-ssr
         working-directory: support-frontend
 
       - name: Build assets
-        run: pnpm run build-prod
+        run: pnpm build-prod
         working-directory: support-frontend
 
       - name: Build CFN from CDK
