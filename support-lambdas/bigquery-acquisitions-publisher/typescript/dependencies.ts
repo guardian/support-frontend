@@ -1,26 +1,17 @@
-//import type { ContributionType } from '../../../support-frontend/assets/helpers/contributions.ts';
-//import type { IsoCountry } from '../../../support-frontend/assets/helpers/internationalisation/country';
-//import type { IsoCurrency } from '../../../support-frontend/assets/helpers/internationalisation/currency';
-//import type { PaymentMethod } from '../../../support-frontend/assets/helpers/forms/paymentMethods';
+export type ProductType = (typeof ProductTypeSchema)[number];
+export const ProductTypeSchema = [
+	'Contribution',
+	'Paper',
+	'GuardianWeekly',
+	'SupporterPlus',
+	'TierThree',
+] as const;
 
-export type ProductType =
-	| 'Contribution'
-	| 'Paper'
-	| 'GuardianWeekly'
-	| 'SupporterPlus'
-	| 'TierThree';
+export type ContributionType = (typeof ContributionTypeSchema)[number];
+export const ContributionTypeSchema = ['MONTHLY', 'ANNUAL', 'ONE_OFF'] as const;
 
-type RegularContributionTypeMap<T> = {
-	MONTHLY: T;
-	ANNUAL: T;
-};
-type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
-	ONE_OFF: T;
-};
-export type ContributionType = keyof ContributionTypeMap<null>;
-
-export type IsoCountry = (typeof isoCountries)[number];
-const isoCountries = [
+export type IsoCountryType = (typeof IsoCountrySchema)[number];
+export const IsoCountrySchema = [
 	'GB',
 	'US',
 	'AU',
@@ -272,16 +263,21 @@ const isoCountries = [
 	'SH',
 ] as const;
 
-export type IsoCurrency = 'GBP' | 'USD' | 'AUD' | 'EUR' | 'NZD' | 'CAD';
+export type IsoCurrencyType = (typeof IsoCurrencySchema)[number];
+export const IsoCurrencySchema = [
+	'GBP',
+	'USD',
+	'AUD',
+	'EUR',
+	'NZD',
+	'CAD',
+] as const;
 
-const Stripe = 'Stripe';
-const PayPal = 'PayPal';
-const DirectDebit = 'DirectDebit';
-const Sepa = 'Sepa';
-const None = 'None';
-export type PaymentMethod =
-	| typeof Stripe
-	| typeof PayPal
-	| typeof DirectDebit
-	| typeof Sepa
-	| typeof None;
+export type PaymentMethodType = (typeof PaymentMethodSchema)[number];
+export const PaymentMethodSchema = [
+	'Stripe',
+	'PayPal',
+	'DirectDebit',
+	'Sepa',
+	'None',
+] as const;

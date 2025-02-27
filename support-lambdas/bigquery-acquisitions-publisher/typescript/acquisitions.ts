@@ -1,61 +1,14 @@
 import { z } from 'zod';
 import {
-	ContributionType,
-	IsoCountry,
-	IsoCurrency,
-	PaymentMethod,
-	ProductType,
+	ProductTypeSchema,
+	IsoCountrySchema,
+	IsoCurrencySchema,
+	ContributionTypeSchema,
+	PaymentMethodSchema,
 } from './dependencies';
 
-export type AcquisitionsProductDetails = {
-	details: [AcquisitionsProductDetail];
-};
-
-// Items not required by BigQuery
-export type AcquisitionsProductDetail = AcquisitionsProduct & {
-	eventTimeStamp: Date;
-	product: ProductType;
-	country: IsoCountry;
-	currency: IsoCurrency;
-	paymentFrequency: ContributionType;
-	labels: [string]; // one-time-checkout
-	reusedExistingPaymentMethod: boolean;
-	readerType: string; // Direct
-	acquisitionType: string; // Purchase
-	queryParameters: [string] | []; // ??
-	platform: string; // SUPPORT
-	postalCode: string;
-	state: string;
-	email: string;
-};
-
-// Items to write to BigQuery
+// Items to write to BigQuery (datalake:fact_acquisition_event)
 // From scala : AcquistionDataRowMapper.mapToTableRow
-export type AcquisitionsProduct = {
-	amount: number;
-	componentId: string | null;
-	componentType: string | null;
-	campaignCode: string;
-	source: string | null;
-	referrerUrl: string | null;
-	abTests: [
-		{
-			name: string; // oneTimeConfirmEmail
-			variant: string; // variant
-		},
-	];
-	paymentProvider: PaymentMethod;
-	printOptions: string | null;
-	browserId: string | null;
-	identityId: string; // 200381287
-	pageViewId: string; // m7ezxppo1x1qg5b4q1x8
-	referrerPageViewId: string;
-	promoCode: string | null;
-	zuoraSubscriptionNumber: string | null;
-	contributionId: string; //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
-	paymentId: string; // PAYID-M64KYRY1DX444112D060283M
-};
-
 export const AcquisitionsProductZod = z.object({
 	amount: z.number(),
 	componentId: z.string().nullable(),
@@ -64,8 +17,11 @@ export const AcquisitionsProductZod = z.object({
 	source: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
-	paymentProvider: z.string(), // ???
-	printOptions: z.string().nullable(),
+	paymentProvider: z.enum(PaymentMethodSchema), // ???
+	printOptions: z
+		.object({ product: z.string(), delivery_country_code: z.string() })
+		.array()
+		.nullable(),
 	browserId: z.string().nullable(),
 	identityId: z.string(), // 200381287
 	pageViewId: z.string(), // m7ezxppo1x1qg5b4q1x8
@@ -75,6 +31,35 @@ export const AcquisitionsProductZod = z.object({
 	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
 	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
 });
+export type AcquisitionsProduct = z.infer<typeof AcquisitionsProductZod>;
+
+// Items not required by BigQuery
+export const AcquisitionsProductDetailsZod = z.object({
+	eventTimeStamp: z.date(),
+	product: z.enum(ProductTypeSchema),
+	country: z.enum(IsoCountrySchema),
+	currency: z.enum(IsoCurrencySchema),
+	paymentFrequency: z.enum(ContributionTypeSchema),
+	labels: z.string().array().nullable(), // one-time-checkout
+	reusedExistingPaymentMethod: z.boolean(),
+	readerType: z.string(), // Direct
+	acquisitionType: z.string(), // Purchase
+	queryParameters: z
+		.object({ key: z.string(), value: z.string() })
+		.array()
+		.nullable(),
+	platform: z.string(), // SUPPORT
+	postalCode: z.string().nullable(),
+	state: z.string().nullable(),
+	email: z.string(),
+});
+export type AcquisitionsProductDetail = z.infer<
+	typeof AcquisitionsProductDetailsZod
+>;
+
+export type AcquisitionsProductDetails = {
+	details: [AcquisitionsProductDetail];
+};
 
 export const aquisitionProduct: AcquisitionsProduct = {
 	amount: 10.0,
