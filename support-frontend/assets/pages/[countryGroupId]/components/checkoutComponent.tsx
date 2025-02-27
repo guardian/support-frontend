@@ -167,9 +167,6 @@ export function CheckoutComponent({
 	forcedCountry,
 	abParticipations,
 }: CheckoutComponentProps) {
-	/** we unset any previous orders that have been made */
-	// unsetThankYouOrder(); TODO: after refactor this clears the session state after the submit is finished but before we get to the thank you page which causes an error
-
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -391,6 +388,11 @@ export function CheckoutComponent({
 			} else {
 				setErrorMessage('Sorry, something went wrong');
 				setErrorContext(appropriateErrorMessage('internal_error'));
+				const errorMessage =
+					error instanceof Error ? error.message : 'Unknown error';
+				logException(
+					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
+				);
 			}
 		}
 		setIsProcessingPayment(false);
