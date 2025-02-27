@@ -26,8 +26,7 @@
 		"prettier:fix": "prettier --write ./assets",
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
-		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
-		"update-support-service-lambdas": "rm -rf node_modules && pnpm cache clean @guardian/support-service-lambdas && pnpm install"
+		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
