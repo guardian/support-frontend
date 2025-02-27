@@ -31,7 +31,6 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
@@ -732,9 +731,8 @@ export function OneTimeCheckoutComponent({
 								}
 								isEmailAddressReadOnly={isSignedIn}
 								requireConfirmedEmail={inOneTimeConfirmEmailVariant}
-							>
-								<Signout isSignedIn={isSignedIn} />
-							</PersonalEmailFields>
+								isSignedIn={isSignedIn}
+							/>
 
 							{countryId === 'US' && (
 								<div>

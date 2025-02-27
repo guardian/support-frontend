@@ -7,7 +7,6 @@ import {
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
-	children: React.ReactNode;
 	firstName: string;
 	setFirstName: (value: string) => void;
 	lastName: string;
@@ -18,10 +17,10 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	requireConfirmedEmail: boolean;
+	isSignedIn: boolean;
 };
 
 export function PersonalDetailsFields({
-	children,
 	firstName,
 	setFirstName,
 	lastName,
@@ -32,6 +31,7 @@ export function PersonalDetailsFields({
 	confirmedEmail,
 	setConfirmedEmail,
 	requireConfirmedEmail,
+	isSignedIn,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -45,9 +45,8 @@ export function PersonalDetailsFields({
 				confirmedEmail={confirmedEmail}
 				setConfirmedEmail={setConfirmedEmail}
 				requireConfirmedEmail={requireConfirmedEmail}
-			>
-				{children}
-			</PersonalEmailFields>
+				isSignedIn={isSignedIn}
+			/>
 			<div>
 				<TextInput
 					id="firstName"

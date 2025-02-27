@@ -1,26 +1,27 @@
 import { TextInput } from '@guardian/source/react-components';
 import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
+import Signout from 'components/signout/signout';
 import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation';
 
 type PersonalEmailFieldsProps = {
-	children: React.ReactNode;
 	email: string;
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	requireConfirmedEmail: boolean;
+	isSignedIn: boolean;
 };
 
 export function PersonalEmailFields({
-	children,
 	email,
 	setEmail,
 	isEmailAddressReadOnly,
 	confirmedEmail,
 	setConfirmedEmail,
 	requireConfirmedEmail,
+	isSignedIn,
 }: PersonalEmailFieldsProps) {
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
@@ -99,7 +100,7 @@ export function PersonalEmailFields({
 					/>
 				</div>
 			)}
-			{children}
+			<Signout isSignedIn={isSignedIn} />
 		</>
 	);
 }
