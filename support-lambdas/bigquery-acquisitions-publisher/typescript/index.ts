@@ -8,6 +8,7 @@ import {
 	aquisitionProductDetail,
 	AcquisitionProductSchemaRelabel,
 	AcquisitionProductSchemaKeep,
+	existingQuery,
 } from './acquisitions';
 
 // const exampleReadFromBigQuery = async (bigQueryClient: BigQuery) => {
@@ -76,11 +77,11 @@ const exampleWriteToBigQuery = async (
 	};
 
 	const acquisitionEventRows = [acquisitionEvent];
-	console.log('Inserting rows... :', acquisitionEventRows);
+	console.log('Inserting rows... :', existingQuery);
 	await bigQueryClient
 		.dataset('datalake')
 		.table('fact_acquisition_event')
-		.insert(acquisitionEventRows);
+		.insert(existingQuery);
 	console.log('Inserted rows:', acquisitionEventRows);
 };
 
