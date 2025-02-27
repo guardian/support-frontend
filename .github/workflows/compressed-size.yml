@@ -44,3 +44,4 @@ jobs:
           pattern: "./public/compiled-assets/{javascripts,webpack}/**/*.js"
           build-script: "build-github-action"
           minimum-change-threshold: 500
+          clean-script: "clean-compressed-action"
