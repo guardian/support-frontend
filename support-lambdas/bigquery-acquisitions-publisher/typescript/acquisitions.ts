@@ -9,14 +9,19 @@ import {
 
 // Items to write to BigQuery (datalake:fact_acquisition_event)
 // From scala : AcquistionDataRowMapper.mapToTableRow
-export const AcquisitionsProductZod = z.object({
+export const AcquisitionProductSchema = z.object({
+	eventTimeStamp: z.date(),
+	product: z.enum(ProductTypeSchema),
 	amount: z.number(),
+	country: z.enum(IsoCountrySchema),
+	currency: z.enum(IsoCurrencySchema),
 	componentId: z.string().nullable(),
 	componentType: z.string().nullable(),
-	campaignCode: z.string(),
+	campaignCodes: z.string().array(),
 	source: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
+	paymentFrequency: z.enum(ContributionTypeSchema),
 	paymentProvider: z.enum(PaymentMethodSchema), // ???
 	printOptions: z
 		.object({ product: z.string(), delivery_country_code: z.string() })
@@ -26,79 +31,67 @@ export const AcquisitionsProductZod = z.object({
 	identityId: z.string(), // 200381287
 	pageViewId: z.string(), // m7ezxppo1x1qg5b4q1x8
 	referrerPageViewId: z.string(),
-	promoCode: z.string().nullable(),
-	zuoraSubscriptionNumber: z.string().nullable(),
-	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
-	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
-});
-export type AcquisitionsProduct = z.infer<typeof AcquisitionsProductZod>;
-
-// Items not required by BigQuery
-export const AcquisitionsProductDetailsZod = z.object({
-	eventTimeStamp: z.date(),
-	product: z.enum(ProductTypeSchema),
-	country: z.enum(IsoCountrySchema),
-	currency: z.enum(IsoCurrencySchema),
-	paymentFrequency: z.enum(ContributionTypeSchema),
+	platform: z.string(), // SUPPORT
 	labels: z.string().array().nullable(), // one-time-checkout
-	reusedExistingPaymentMethod: z.boolean(),
-	readerType: z.string(), // Direct
-	acquisitionType: z.string(), // Purchase
+	promoCode: z.string().nullable(),
 	queryParameters: z
 		.object({ key: z.string(), value: z.string() })
 		.array()
 		.nullable(),
-	platform: z.string(), // SUPPORT
+	reusedExistingPaymentMethod: z.boolean(),
+	acquisitionType: z.string(), // Purchase
+	readerType: z.string(), // Direct
+	zuoraSubscriptionNumber: z.string().nullable(),
+	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
+	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
+});
+export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
+
+// Items not required by BigQuery
+export const AcquisitionProductDetailSchema = z.object({
 	postalCode: z.string().nullable(),
 	state: z.string().nullable(),
 	email: z.string(),
 });
-export type AcquisitionsProductDetail = z.infer<
-	typeof AcquisitionsProductDetailsZod
->;
+export type AcquisitionProductDetail = z.infer<
+	typeof AcquisitionProductDetailSchema
+> &
+	AcquisitionProduct;
 
-export type AcquisitionsProductDetails = {
-	details: [AcquisitionsProductDetail];
+export type AcquisitionProductDetails = {
+	details: [AcquisitionProductDetail];
 };
 
-export const aquisitionProduct: AcquisitionsProduct = {
+export const aquisitionProductDetail: AcquisitionProductDetail = {
+	eventTimeStamp: new Date(),
+	product: 'Contribution',
 	amount: 10.0,
+	country: 'GB',
+	currency: 'GBP',
 	componentId: null,
 	componentType: null,
-	campaignCode: '',
+	campaignCodes: [''],
 	source: null,
 	referrerUrl: null,
 	abTests: [{ name: 'oneTimeConfirmEmail', variant: 'variant' }],
+	paymentFrequency: 'ONE_OFF',
 	paymentProvider: 'PayPal',
 	printOptions: null,
 	browserId: null,
 	identityId: '200381287',
 	pageViewId: 'm7ezxppo1x1qg5b4q1x8',
 	referrerPageViewId: '',
+	platform: 'SUPPORT',
+	labels: ['one-time-checkout'],
 	promoCode: null,
+	queryParameters: [],
+	reusedExistingPaymentMethod: false,
+	acquisitionType: 'Purchase',
+	readerType: 'Direct',
 	zuoraSubscriptionNumber: null,
 	contributionId: 'f7c7aef7-f12d-476b-ba68-5ae79237cd8f',
 	paymentId: 'PAYID-M64KYRY1DX444112D060283M',
-};
-
-export const aquisitionProductDetail: AcquisitionsProductDetail = {
-	eventTimeStamp: new Date(),
-	product: 'Contribution',
-	country: 'GB',
-	currency: 'GBP',
-	paymentFrequency: 'ONE_OFF',
-	labels: ['one-time-checkout'],
-	reusedExistingPaymentMethod: false,
-	readerType: 'Direct',
-	acquisitionType: 'Purchase',
-	queryParameters: [],
-	platform: 'SUPPORT',
 	postalCode: '',
 	state: 'CA',
 	email: '',
-	...aquisitionProduct,
-};
-
-export const aquisitionProductDetails: AcquisitionsProductDetails = {
-	details: [aquisitionProductDetail],
 };
