@@ -1,14 +1,20 @@
 export type ProductType = (typeof ProductTypeSchema)[number];
 export const ProductTypeSchema = [
-	'Contribution',
-	'Paper',
-	'GuardianWeekly',
-	'SupporterPlus',
-	'TierThree',
+	'CONTRIBUTION',
+	'PRINT_SUBSCRIPTION',
+	'DIGITAL_SUBSCRIPTION',
+	'RECURRING_CONTRIBUTION',
+	'SUPPORTER_PLUS',
+	'TIER_THREE',
 ] as const;
 
 export type ContributionType = (typeof ContributionTypeSchema)[number];
-export const ContributionTypeSchema = ['MONTHLY', 'ANNUAL', 'ONE_OFF'] as const;
+export const ContributionTypeSchema = [
+	'MONTHLY',
+	'ANNUALLY',
+	'ONE_OFF',
+	'QUARTERLY',
+] as const;
 
 export type IsoCountryType = (typeof IsoCountrySchema)[number];
 export const IsoCountrySchema = [
@@ -275,9 +281,10 @@ export const IsoCurrencySchema = [
 
 export type PaymentMethodType = (typeof PaymentMethodSchema)[number];
 export const PaymentMethodSchema = [
-	'Stripe',
-	'PayPal',
-	'DirectDebit',
-	'Sepa',
-	'None',
+	'STRIPE',
+	'STRIPE_APPLE_PAY',
+	'STRIPE_PAYMENT_REQUEST_BUTTON',
+	'PAYPAL',
+	'GOCARDLESS',
+	'STRIPE',
 ] as const;

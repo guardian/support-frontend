@@ -6,7 +6,8 @@ import type { SQSEvent } from 'aws-lambda';
 import {
 	AcquisitionProductDetail,
 	aquisitionProductDetail,
-	AcquisitionProductSchema,
+	AcquisitionProductSchemaRelabel,
+	AcquisitionProductSchemaKeep,
 } from './acquisitions';
 
 // const exampleReadFromBigQuery = async (bigQueryClient: BigQuery) => {
@@ -26,48 +27,51 @@ const exampleWriteToBigQuery = async (
 	bigQueryClient: BigQuery,
 	aquisitionProductDetail: AcquisitionProductDetail,
 ) => {
-	const parsedAquisitionProduct = AcquisitionProductSchema.parse(
+	const parsedAquisitionProductRelabel = AcquisitionProductSchemaRelabel.parse(
 		aquisitionProductDetail,
 	);
-
+	const parsedAquisitionProduct = AcquisitionProductSchemaKeep.parse(
+		aquisitionProductDetail,
+	);
 	const acquisitionEvent = {
-		event_timestamp: parsedAquisitionProduct.eventTimeStamp,
+		event_timestamp: parsedAquisitionProductRelabel.eventTimeStamp,
 		// amount_in_gbp: null,
 		// annualised_value: null,
-		country_code: parsedAquisitionProduct.country,
-		component_id: parsedAquisitionProduct.componentId,
-		component_type: parsedAquisitionProduct.componentType,
-		campaign_codes: parsedAquisitionProduct.campaignCodes,
+		country_code: parsedAquisitionProductRelabel.country,
+		component_id: parsedAquisitionProductRelabel.componentId,
+		component_type: parsedAquisitionProductRelabel.componentType,
+		campaign_codes: parsedAquisitionProductRelabel.campaignCodes,
 		// device_type: null,
 		// total_visit_days: null,
 		// average_days_between_recent_visits: null,
 		// regular: null,
-		referrer_url: parsedAquisitionProduct.referrerUrl,
-		ab_tests: parsedAquisitionProduct.abTests,
-		payment_frequency: parsedAquisitionProduct.paymentFrequency,
-		payment_provider: parsedAquisitionProduct.paymentProvider,
-		print_options: parsedAquisitionProduct.printOptions,
-		browser_id: parsedAquisitionProduct.browserId,
-		identity_id: parsedAquisitionProduct.identityId,
-		page_view_id: parsedAquisitionProduct.pageViewId,
-		referrer_page_view_id: parsedAquisitionProduct.referrerPageViewId,
+		referrer_url: parsedAquisitionProductRelabel.referrerUrl,
+		ab_tests: parsedAquisitionProductRelabel.abTests,
+		payment_frequency: parsedAquisitionProductRelabel.paymentFrequency,
+		payment_provider: parsedAquisitionProductRelabel.paymentProvider,
+		print_options: parsedAquisitionProductRelabel.printOptions,
+		browser_id: parsedAquisitionProductRelabel.browserId,
+		identity_id: parsedAquisitionProductRelabel.identityId,
+		page_view_id: parsedAquisitionProductRelabel.pageViewId,
+		referrer_page_view_id: parsedAquisitionProductRelabel.referrerPageViewId,
 		// received_timestamp: null,
-		promo_code: parsedAquisitionProduct.promoCode,
+		promo_code: parsedAquisitionProductRelabel.promoCode,
 		// discount_percentage: null,
 		// discount_length_in_months: null,
 		// annualised_value_in_gbp: null,
 		// received_date: null,
 		// meta_created_at: null,
 		// meta_produced_at: null,
-		query_parameters: parsedAquisitionProduct.queryParameters,
+		query_parameters: parsedAquisitionProductRelabel.queryParameters,
 		reused_existing_payment_method:
-			parsedAquisitionProduct.reusedExistingPaymentMethod,
-		acquisition_type: parsedAquisitionProduct.acquisitionType,
-		reader_type: parsedAquisitionProduct.readerType,
-		zuora_subscription_number: parsedAquisitionProduct.zuoraSubscriptionNumber,
+			parsedAquisitionProductRelabel.reusedExistingPaymentMethod,
+		acquisition_type: parsedAquisitionProductRelabel.acquisitionType,
+		reader_type: parsedAquisitionProductRelabel.readerType,
+		zuora_subscription_number:
+			parsedAquisitionProductRelabel.zuoraSubscriptionNumber,
 		// zuora_account_number: null,
-		contribution_id: parsedAquisitionProduct.contributionId,
-		payment_id: parsedAquisitionProduct.paymentId,
+		contribution_id: parsedAquisitionProductRelabel.contributionId,
+		payment_id: parsedAquisitionProductRelabel.paymentId,
 		...parsedAquisitionProduct,
 	};
 
