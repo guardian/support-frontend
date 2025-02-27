@@ -4,6 +4,7 @@
 	"description": "Frontend for the supporter platform.",
 	"scripts": {
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
+		"clean-compressed-action": "rm -rf node_modules && yarn cache clean",
 		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
