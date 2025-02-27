@@ -370,7 +370,7 @@ export function CheckoutComponent({
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');
 			}
-			await submitForm({
+			const thankYouPageUrl = await submitForm({
 				geoId,
 				productKey,
 				ratePlanKey,
@@ -383,6 +383,7 @@ export function CheckoutComponent({
 				promotion,
 				contributionAmount,
 			});
+			window.location.href = thankYouPageUrl;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
