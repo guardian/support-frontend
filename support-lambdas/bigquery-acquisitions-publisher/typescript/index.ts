@@ -31,9 +31,7 @@ const exampleWriteToBigQuery = async (
 	);
 
 	const acquisitionEvent = {
-		event_timestamp: parsedAquisitionProduct.eventTimeStamp.toLocaleString(
-			'YYYY-MM-DD HH:MM:SS',
-		),
+		event_timestamp: parsedAquisitionProduct.eventTimeStamp,
 		// amount_in_gbp: null,
 		// annualised_value: null,
 		country_code: parsedAquisitionProduct.country,
