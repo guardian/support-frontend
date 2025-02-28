@@ -8,7 +8,6 @@ import {
 	aquisitionProductDetail,
 	AcquisitionProductSchemaRelabel,
 	AcquisitionProductSchemaKeep,
-	// existingQuery,
 } from './acquisitions';
 
 // const exampleReadFromBigQuery = async (bigQueryClient: BigQuery) => {
