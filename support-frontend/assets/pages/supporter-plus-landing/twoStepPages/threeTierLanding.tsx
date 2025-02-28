@@ -409,7 +409,6 @@ export function ThreeTierLanding({
 		link: tier2Url,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: promotionTier2,
-		// isRecommended: true,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
