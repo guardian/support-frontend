@@ -14,7 +14,6 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
-	CardNumberElement,
 	ExpressCheckoutElement,
 	useElements,
 	useStripe,
@@ -44,17 +43,7 @@ import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import {
-	appropriateErrorMessage,
-	type ErrorReason,
-} from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import type {
-	RegularPaymentFields,
-	RegularPaymentRequest,
-	StatusResponse,
-	StripePaymentMethod,
-} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	DirectDebit,
 	isPaymentMethod,
@@ -76,13 +65,7 @@ import {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import {
-	getOphanIds,
-	getReferrerAcquisitionData,
-	getSupportAbTests,
-} from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
@@ -96,30 +79,15 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from '../../../helpers/utilities/dateConversions';
+import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
+import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
-import {
-	extractDeliverableAddressDataFromForm,
-	extractNonDeliverableAddressDataFromForm,
-	extractPersonalDataFromForm,
-} from '../checkout/helpers/formDataExtractors';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
 	paypalOneClickCheckout,
 	setupPayPalPayment,
 } from '../checkout/helpers/paypal';
-import {
-	setThankYouOrder,
-	unsetThankYouOrder,
-} from '../checkout/helpers/sessionStorage';
-import {
-	stripeCreateSetupIntentPrb,
-	stripeCreateSetupIntentRecaptcha,
-} from '../checkout/helpers/stripe';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -132,6 +100,12 @@ import {
 	lengthenBoxMargin,
 	shorterBoxMargin,
 } from './form';
+import { submitForm } from './formOnSubmit';
+import type { PaymentMethod } from './paymentFields';
+import {
+	FormSubmissionError,
+	getPaymentFieldsForPaymentMethod,
+} from './paymentFields';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -139,14 +113,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { retryPaymentStatus } from './retryPaymentStatus';
 
-/**
- * We have not added StripeExpressCheckoutElement to the old PaymentMethod
- * as it is heavily coupled through the code base and would require adding
- * a lot of extra unused code to those coupled areas.
- */
-type PaymentMethod = LegacyPaymentMethod | 'StripeExpressCheckoutElement';
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
@@ -154,53 +121,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
 }
-
-/**
-/**
- * Attempt to submit a payment to the server. The response will be either `success`, `failure` or `pending`.
- * If it is pending, we keep polling until we get either a success or failure response, or we reach the
- * maximum number of retries. Reaching the maximum number of retries is treated as a success, as we assume
- * that the job has been delayed, but will complete successfully in the future and if it doesn't, then the
- * user will be emailed.
- */
-type ProcessPaymentResponse =
-	| { status: 'success' }
-	| { status: 'pending' }
-	| { status: 'failure'; failureReason?: ErrorReason };
-
-type CreateSubscriptionResponse = StatusResponse & {
-	userType: UserType;
-};
-
-const processPaymentWithRetries = async (
-	statusResponse: StatusResponse,
-): Promise<ProcessPaymentResponse> => {
-	const { trackingUri, status } = statusResponse;
-	if (status === 'success' || status === 'failure') {
-		return handlePaymentStatus(statusResponse);
-	}
-	const getTrackingStatus = () =>
-		fetch(trackingUri, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then((response) => response.json() as unknown as StatusResponse);
-
-	return retryPaymentStatus(getTrackingStatus).then((response) =>
-		handlePaymentStatus(response),
-	);
-};
-
-const handlePaymentStatus = (
-	statusResponse: StatusResponse,
-): ProcessPaymentResponse => {
-	const { status, failureReason } = statusResponse;
-	if (status === 'failure') {
-		return { status, failureReason };
-	} else {
-		return { status: status }; // success or pending
-	}
-};
 
 const productLanding = (product: ProductKey) => {
 	switch (product) {
@@ -247,9 +167,6 @@ export function CheckoutComponent({
 	forcedCountry,
 	abParticipations,
 }: CheckoutComponentProps) {
-	/** we unset any previous orders that have been made */
-	unsetThankYouOrder();
-
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
@@ -329,7 +246,6 @@ export function CheckoutComponent({
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const elements = useElements();
-	const cardElement = elements?.getElement(CardNumberElement);
 	const [
 		stripeExpressCheckoutPaymentType,
 		setStripeExpressCheckoutPaymentType,
@@ -429,243 +345,58 @@ export function CheckoutComponent({
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
 
-	const formOnSubmit = async (formData: FormData) => {
-		setIsProcessingPayment(true);
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
 
-		/**
-		 * The validation for this is currently happening on the client side form validation
-		 * So we'll assume strings are not null.
-		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
-		 */
-
-		const personalData = extractPersonalDataFromForm(formData);
-
-		/**
-		 * FormData: address
-		 * `billingAddress` is required for all products, but we only ever need to the country field populated.
-		 *
-		 * For products that have a `deliveryAddress`, we collect that and either copy it in `billingAddress`
-		 * or allow a person to enter it manually.
-		 */
-		const { billingAddress, deliveryAddress } = productDescription.deliverableTo
-			? extractDeliverableAddressDataFromForm(formData)
-			: extractNonDeliverableAddressDataFromForm(formData);
-
+	const onFormSubmit = async (formData: FormData) => {
 		if (paymentMethod === undefined) {
 			setPaymentMethodError('Please select a payment method');
+			return;
 		}
-
-		/** FormData: `paymentFields` */
-		let paymentFields: RegularPaymentFields | undefined = undefined;
-		if (paymentMethod === 'Stripe' && stripe && cardElement && recaptchaToken) {
-			const stripeClientSecret = await stripeCreateSetupIntentRecaptcha(
+		setIsProcessingPayment(true);
+		try {
+			const paymentFields = await getPaymentFieldsForPaymentMethod(
+				paymentMethod,
+				stripeExpressCheckoutPaymentType,
+				stripe,
+				elements,
 				isTestUser,
 				stripePublicKey,
 				recaptchaToken,
+				formData,
 			);
-
-			const stripeIntentResult = await stripe.confirmCardSetup(
-				stripeClientSecret,
-				{
-					payment_method: {
-						card: cardElement,
-					},
-				},
-			);
-
-			if (stripeIntentResult.error) {
-				setErrorMessage('There was an issue with your card details.');
-				setErrorContext(
-					appropriateErrorMessage(stripeIntentResult.error.decline_code ?? ''),
-				);
-				console.error(stripeIntentResult.error);
-			} else if (stripeIntentResult.setupIntent.payment_method) {
-				paymentFields = {
-					paymentType: Stripe,
-					stripePublicKey,
-					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
-					paymentMethod: stripeIntentResult.setupIntent
-						.payment_method as string,
-				};
+			if (paymentFields === undefined) {
+				throw new Error('paymentFields is undefined');
 			}
-		}
-
-		if (
-			paymentMethod === 'StripeExpressCheckoutElement' &&
-			stripe &&
-			elements
-		) {
-			/** 1. Get a clientSecret from our server from the stripePublicKey */
-			const stripeClientSecret = await stripeCreateSetupIntentPrb(
-				stripePublicKey,
-			);
-
-			/** 2. Get the Stripe paymentMethod from the Stripe elements */
-			const { paymentMethod: stripePaymentMethod, error: paymentMethodError } =
-				await stripe.createPaymentMethod({
-					elements,
-				});
-
-			if (paymentMethodError) {
-				setErrorMessage('There was an issue with wallet.');
-				setErrorContext(
-					appropriateErrorMessage(paymentMethodError.decline_code ?? ''),
-				);
-				return;
-			}
-
-			/** 3. Get the setupIntent from the paymentMethod */
-			const { setupIntent, error: cardSetupError } =
-				await stripe.confirmCardSetup(stripeClientSecret, {
-					payment_method: stripePaymentMethod.id,
-				});
-
-			if (cardSetupError) {
-				setErrorMessage('There was an issue with wallet.');
-				setErrorContext(
-					appropriateErrorMessage(cardSetupError.decline_code ?? ''),
-				);
-				return;
-			}
-
-			const stripePaymentType: StripePaymentMethod =
-				stripeExpressCheckoutPaymentType === 'apple_pay'
-					? 'StripeApplePay'
-					: 'StripePaymentRequestButton';
-
-			/** 4. Pass the setupIntent through to the paymentFields sent to our /create endpoint */
-			paymentFields = {
-				paymentType: Stripe,
-				paymentMethod: setupIntent.payment_method as string,
-				stripePaymentType,
-				stripePublicKey,
-			};
-		}
-
-		if (paymentMethod === 'PayPal') {
-			paymentFields = {
-				paymentType: PayPal,
-				baid: formData.get('payPalBAID') as string,
-			};
-		}
-
-		if (paymentMethod === 'DirectDebit' && recaptchaToken !== undefined) {
-			paymentFields = {
-				paymentType: DirectDebit,
-				accountHolderName: formData.get('accountHolderName') as string,
-				accountNumber: formData.get('accountNumber') as string,
-				sortCode: formData.get('sortCode') as string,
-				recaptchaToken,
-			};
-		}
-
-		/** Form: tracking data  */
-		const ophanIds = getOphanIds();
-		const referrerAcquisitionData = {
-			...getReferrerAcquisitionData(),
-			labels: ['generic-checkout'],
-		};
-
-		if (paymentMethod && paymentFields) {
-			/** TODO
-			 * - add debugInfo
-			 */
-			const firstDeliveryDate =
-				productKey === 'TierThree'
-					? formatMachineDate(getTierThreeDeliveryDate())
-					: null;
-
-			const promoCode = promotion?.promoCode;
-			const appliedPromotion =
-				promoCode !== undefined
-					? {
-							promoCode,
-							countryGroupId: geoId,
-					  }
-					: undefined;
-			const supportAbTests = getSupportAbTests(abParticipations);
-			const createSupportWorkersRequest: RegularPaymentRequest = {
-				...personalData,
-				billingAddress,
-				deliveryAddress,
-				firstDeliveryDate,
+			const thankYouPageUrl = await submitForm({
+				geoId,
+				productKey,
+				ratePlanKey,
+				formData,
+				paymentMethod,
 				paymentFields,
-				appliedPromotion,
-				ophanIds,
-				referrerAcquisitionData,
-				product: productFields,
-				supportAbTests,
-				debugInfo: '',
-			};
-			setErrorMessage(undefined);
-			setErrorContext(undefined);
-
-			const createResponse = await fetch('/subscribe/create', {
-				method: 'POST',
-				body: JSON.stringify(createSupportWorkersRequest),
-				headers: {
-					'Content-Type': 'application/json',
-				},
+				productFields,
+				hasDeliveryAddress: !!productDescription.deliverableTo,
+				abParticipations,
+				promotion,
+				contributionAmount,
 			});
-			let processPaymentResponse: ProcessPaymentResponse;
-			let userType: UserType | undefined;
-
-			if (createResponse.ok) {
-				const statusResponse =
-					(await createResponse.json()) as CreateSubscriptionResponse;
-				userType = statusResponse.userType;
-				processPaymentResponse = await processPaymentWithRetries(
-					statusResponse,
-				);
+			window.location.href = thankYouPageUrl;
+		} catch (error) {
+			if (error instanceof FormSubmissionError) {
+				setErrorMessage(error.message);
+				setErrorContext(error.context);
 			} else {
-				const errorReason = (await createResponse.text()) as ErrorReason;
-				processPaymentResponse = {
-					status: 'failure',
-					failureReason: errorReason,
-				};
-			}
-
-			if (
-				processPaymentResponse.status === 'success' ||
-				processPaymentResponse.status === 'pending'
-			) {
-				const order = {
-					firstName: personalData.firstName,
-					email: personalData.email,
-					paymentMethod: paymentMethod,
-					status: processPaymentResponse.status,
-				};
-				setThankYouOrder(order);
-				const thankYouUrlSearchParams = new URLSearchParams();
-				thankYouUrlSearchParams.set('product', productKey);
-				thankYouUrlSearchParams.set('ratePlan', ratePlanKey);
-				promoCode && thankYouUrlSearchParams.set('promoCode', promoCode);
-				userType && thankYouUrlSearchParams.set('userType', userType);
-				contributionAmount &&
-					thankYouUrlSearchParams.set(
-						'contribution',
-						contributionAmount.toString(),
-					);
-				window.location.href = `/${geoId}/thank-you?${thankYouUrlSearchParams.toString()}`;
-			} else {
-				console.error(
-					'processPaymentResponse error:',
-					processPaymentResponse.failureReason,
+				setErrorMessage('Sorry, something went wrong');
+				setErrorContext(appropriateErrorMessage('internal_error'));
+				const errorMessage =
+					error instanceof Error ? error.message : 'Unknown error';
+				logException(
+					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
 				);
-				setErrorMessage('Sorry, something went wrong.');
-				setErrorContext(
-					appropriateErrorMessage(
-						processPaymentResponse.failureReason ?? 'unknown',
-					),
-				);
-				setIsProcessingPayment(false);
 			}
-		} else {
-			setIsProcessingPayment(false);
 		}
+		setIsProcessingPayment(false);
 	};
-
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
 
 	useAbandonedBasketCookie(
 		productKey,
@@ -780,10 +511,7 @@ export function CheckoutComponent({
 					event.preventDefault();
 					const form = event.currentTarget;
 					const formData = new FormData(form);
-					/** we defer this to an external function as a lot of the payment methods use async */
-					void formOnSubmit(formData);
-
-					return false;
+					void onFormSubmit(formData);
 				}}
 			>
 				<Box
