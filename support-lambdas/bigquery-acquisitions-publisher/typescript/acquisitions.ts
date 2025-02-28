@@ -16,10 +16,7 @@ export const AcquisitionProductSchema = z.object({
 	componentType: z.string().nullable(),
 	campaignCode: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
-	abTests: z
-		.object({ name: z.string(), variant: z.string() })
-		.array()
-		.nullable(),
+	abTests: z.object({ name: z.string(), variant: z.string() }),
 	paymentFrequency: z.enum(ContributionTypeSchema),
 	paymentProvider: z.enum(PaymentMethodSchema), // ???
 	printOptions: z
@@ -31,10 +28,7 @@ export const AcquisitionProductSchema = z.object({
 	pageViewId: z.string(), // m7ezxppo1x1qg5b4q1x8
 	referrerPageViewId: z.string().nullable(),
 	promoCode: z.string().nullable(),
-	queryParameters: z
-		.object({ key: z.string(), value: z.string() })
-		.array()
-		.nullable(),
+	queryParameters: z.object({ key: z.string(), value: z.string() }).array(),
 	reusedExistingPaymentMethod: z.boolean(),
 	acquisitionType: z.string(), // Purchase
 	readerType: z.string(), // Direct
@@ -46,7 +40,7 @@ export const AcquisitionProductSchema = z.object({
 	currency: z.enum(IsoCurrencySchema),
 	source: z.string().nullable(),
 	platform: z.string().nullable(), // SUPPORT
-	labels: z.string().array().nullable(), // one-time-checkout
+	labels: z.string().array(), // one-time-checkout
 });
 
 export const AcquisitionProductEventSchema = z.object({
@@ -69,7 +63,7 @@ export const transformAcquisitionProductForBigQuery = (
 		component_type: acquisitionProduct.componentType,
 		campaign_codes: acquisitionProduct.campaignCode
 			? [acquisitionProduct.campaignCode]
-			: null,
+			: [],
 		referrer_url: acquisitionProduct.referrerUrl,
 		ab_tests: acquisitionProduct.abTests,
 		payment_frequency: acquisitionProduct.paymentFrequency,
