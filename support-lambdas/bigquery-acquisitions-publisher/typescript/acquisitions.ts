@@ -10,11 +10,11 @@ import {
 // Items to write to BigQuery (datalake:fact_acquisition_event)
 // From scala : AcquistionDataRowMapper.mapToTableRow
 export const AcquisitionProductSchema = z.object({
-	eventTimeStamp: z.date(),
+	eventTimeStamp: z.string(),
 	country: z.enum(IsoCountrySchema),
 	componentId: z.string().nullable(),
 	componentType: z.string().nullable(),
-	campaignCodes: z.string().array(),
+	campaignCode: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
 	abTests: z
 		.object({ name: z.string(), variant: z.string() })
@@ -39,13 +39,13 @@ export const AcquisitionProductSchema = z.object({
 	acquisitionType: z.string(), // Purchase
 	readerType: z.string(), // Direct
 	zuoraSubscriptionNumber: z.string().nullable(),
-	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
-	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
+	contributionId: z.string().nullable(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
+	paymentId: z.string().nullable(), // PAYID-M64KYRY1DX444112D060283M
 	product: z.enum(ProductTypeSchema),
-	amount: z.number(),
+	amount: z.number().nullable(),
 	currency: z.enum(IsoCurrencySchema),
 	source: z.string().nullable(),
-	platform: z.string(), // SUPPORT
+	platform: z.string().nullable(), // SUPPORT
 	labels: z.string().array().nullable(), // one-time-checkout
 });
 
@@ -67,7 +67,9 @@ export const transformAcquisitionProductForBigQuery = (
 		country_code: acquisitionProduct.country,
 		component_id: acquisitionProduct.componentId,
 		component_type: acquisitionProduct.componentType,
-		campaign_codes: acquisitionProduct.campaignCodes,
+		campaign_codes: acquisitionProduct.campaignCode
+			? [acquisitionProduct.campaignCode]
+			: null,
 		referrer_url: acquisitionProduct.referrerUrl,
 		ab_tests: acquisitionProduct.abTests,
 		payment_frequency: acquisitionProduct.paymentFrequency,
