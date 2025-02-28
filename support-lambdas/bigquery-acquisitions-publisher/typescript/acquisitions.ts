@@ -16,7 +16,7 @@ export const AcquisitionProductSchema = z.object({
 	componentType: z.string().nullable(),
 	campaignCode: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
-	abTests: z.object({ name: z.string(), variant: z.string() }),
+	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
 	paymentFrequency: z.enum(ContributionTypeSchema),
 	paymentProvider: z.enum(PaymentMethodSchema), // ???
 	printOptions: z
