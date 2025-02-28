@@ -46,7 +46,7 @@ import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
@@ -236,7 +236,7 @@ function PaperCheckoutForm(props: PropTypes) {
 		const timeNow = Date.now();
 		const startDate = getPaymentStartDate(
 			timeNow,
-			props.productOption as ActivePaperProducts,
+			props.productOption as ActivePaperProductOptions,
 		);
 		formattedStartDate = getFormattedStartDate(startDate);
 		setSubsCardStartDateInState(props.setStartDate, startDate);

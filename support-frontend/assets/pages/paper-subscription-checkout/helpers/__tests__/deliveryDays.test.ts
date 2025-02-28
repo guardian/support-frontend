@@ -2,8 +2,7 @@
 
 import {
 	Everyday,
-	Sixday,
-	Sunday,
+	Saturday,
 	Weekend,
 } from 'helpers/productPrice/productOptions';
 import {
@@ -179,12 +178,10 @@ describe('deliveryDays', () => {
 			const today = 1596727469480;
 			const day = getFormattedStartDate(getPaymentStartDate(today, Everyday));
 			expect(day).toBe('17 August 2020');
-			const day1 = getFormattedStartDate(getPaymentStartDate(today, Sixday));
-			expect(day1).toBe('17 August 2020');
 			const day2 = getFormattedStartDate(getPaymentStartDate(today, Weekend));
 			expect(day2).toBe('22 August 2020');
-			const day3 = getFormattedStartDate(getPaymentStartDate(today, Sunday));
-			expect(day3).toBe('23 August 2020');
+			const day3 = getFormattedStartDate(getPaymentStartDate(today, Saturday));
+			expect(day3).toBe('22 August 2020');
 		});
 	});
 });
