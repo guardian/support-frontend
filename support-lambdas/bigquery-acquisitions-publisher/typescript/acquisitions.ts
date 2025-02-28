@@ -58,6 +58,9 @@ export const transformAcquisitionProductForBigQuery = (
 ) => {
 	return {
 		event_timestamp: acquisitionProduct.eventTimeStamp,
+		product: acquisitionProduct.product,
+		amount: acquisitionProduct.amount,
+		currency: acquisitionProduct.currency,
 		country_code: acquisitionProduct.country,
 		component_id: acquisitionProduct.componentId,
 		component_type: acquisitionProduct.componentType,
@@ -82,5 +85,7 @@ export const transformAcquisitionProductForBigQuery = (
 		zuora_subscription_number: acquisitionProduct.zuoraSubscriptionNumber,
 		contribution_id: acquisitionProduct.contributionId,
 		payment_id: acquisitionProduct.paymentId,
+		// TODO: Pull in the mappings from the Scala code (e.g. iOS/Android)
+		platform: acquisitionProduct.platform || 'SUPPORT',
 	};
 };
