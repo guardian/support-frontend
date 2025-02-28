@@ -71,12 +71,14 @@ export const transformAcquisitionProductForBigQuery = (
 		ab_tests: acquisitionProduct.abTests,
 		payment_frequency: acquisitionProduct.paymentFrequency,
 		payment_provider: acquisitionProduct.paymentProvider,
+		// TODO: check this comes out correctly
 		print_options: acquisitionProduct.printOptions,
 		browser_id: acquisitionProduct.browserId,
 		identity_id: acquisitionProduct.identityId,
 		page_view_id: acquisitionProduct.pageViewId,
 		referrer_page_view_id: acquisitionProduct.referrerPageViewId,
 		promo_code: acquisitionProduct.promoCode,
+		// TODO: map to key/value like the Scala code
 		query_parameters: acquisitionProduct.queryParameters,
 		reused_existing_payment_method:
 			acquisitionProduct.reusedExistingPaymentMethod,
