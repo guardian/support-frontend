@@ -501,45 +501,6 @@ export function CheckoutComponent({
 						promotion={promotion}
 						currency={currency}
 						checkListData={getBenefits()}
-						// checkListData={[
-						// 	...productDescription.benefits
-						// 		.filter((benefit) =>
-						// 			filterBenefitByRegion(benefit, countryGroupId),
-						// 		)
-						// 		.filter((benefit) =>
-						// 			filterBenefitByABTest(benefit, abParticipations),
-						// 		)
-						// 		.map((benefit) => ({
-						// 			isChecked: true,
-						// 			text: benefit.copy,
-						// 		})),
-						// 	...(productDescription.benefitsAdditional ?? [])
-						// 		.filter((benefit) =>
-						// 			filterBenefitByRegion(benefit, countryGroupId),
-						// 		)
-						// 		.filter((benefit) =>
-						// 			filterBenefitByABTest(benefit, abParticipations),
-						// 		)
-						// 		.map((benefit) => ({
-						// 			isChecked: true,
-						// 			text: benefit.copy,
-						// 		})),
-						// 	...(productDescription.benefitsMissing ?? [])
-						// 		.filter((benefit) =>
-						// 			filterBenefitByRegion(benefit, countryGroupId),
-						// 		)
-						// 		.map((benefit) => ({
-						// 			isChecked: false,
-						// 			text: benefit.copy,
-						// 			maybeGreyedOut: css`
-						// 				color: ${palette.neutral[60]};
-						//
-						// 				svg {
-						// 					fill: ${palette.neutral[60]};
-						// 				}
-						// 			`,
-						// 		})),
-						// ]}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
