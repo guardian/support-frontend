@@ -55,8 +55,10 @@ export const handler = async (event: SQSEvent) => {
 		.filter((result) => result.success)
 		.map((result) => result.row);
 
-	// TODO: error handling
-	await writeRowsToBigQuery(bigQueryClient, successfulRows);
+	if (successfulRows.length > 0) {
+		// TODO: error handling
+		await writeRowsToBigQuery(bigQueryClient, successfulRows);
+	}
 
 	// TODO: return any failures to the runtime (either parsing failures or BigQuery write failures)
 	// https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html#services-sqs-batchfailurereporting
