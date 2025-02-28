@@ -374,12 +374,9 @@ export const productCatalogDescription: Record<
 			appBenefit,
 			addFreeBenefit,
 			newsletterBenefit,
-			newsletterBenefitUS,
 			fewerAsksBenefit,
-			{
-				copy: 'Unlimited access to the Guardian Feast app',
-			},
 			partnerOffersBenefit,
+			feastBenefit,
 		],
 		ratePlans: {
 			Monthly: {
