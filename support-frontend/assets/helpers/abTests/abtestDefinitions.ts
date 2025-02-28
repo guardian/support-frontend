@@ -14,9 +14,10 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
-		genericCheckoutOnly: '(uk|us|au|ca|eu|nz|int)/checkout|thank-you(/.*)?$',
+		genericCheckoutOnly:
+			'(uk|us|au|ca|eu|nz|int)/checkout|thank-you\\?product(.*)?$',
 		oneTimeCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you(/.*)?$',
+			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you\\?contribution(.*)?$',
 	},
 	subscriptions: {
 		paper: {
