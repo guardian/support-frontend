@@ -14,29 +14,26 @@ export const getFirstDeliveryDateForProduct = (
 		case 'TierThree':
 			return formatMachineDate(getTierThreeDeliveryDate());
 		case 'NationalDelivery':
-		case 'HomeDelivery': {
-			if (productFields.productType !== 'Paper') {
-				throw new Error('Product fields are not of type PaperSubscription');
-			}
-			return formatMachineDate(
-				getHomeDeliveryDays(
-					Date.now(),
-					productFields.productOptions,
-				)[0] as Date,
-			);
-		}
+		case 'HomeDelivery':
 		case 'SubscriptionCard': {
 			if (
 				productFields.productType !== 'Paper' ||
 				!isActivePaperProductOption(productFields.productOptions)
 			) {
 				throw new Error(
-					'Product fields or product options are not of type PaperSubscription & ActivePaperProductOptions',
+					// 'Should not be possible'™
+					`Invalid product fields ${JSON.stringify(productFields)}`,
 				);
 			}
-			return formatMachineDate(
-				getPaymentStartDate(Date.now(), productFields.productOptions),
-			);
+			const firstDeliveryDate =
+				productKey === 'SubscriptionCard'
+					? getPaymentStartDate(Date.now(), productFields.productOptions)
+					: (getHomeDeliveryDays(
+							Date.now(),
+							productFields.productOptions,
+					  )[0] as Date);
+
+			return formatMachineDate(firstDeliveryDate);
 		}
 		default:
 			return null;
