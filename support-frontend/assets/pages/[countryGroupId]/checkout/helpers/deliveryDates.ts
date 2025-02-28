@@ -1,5 +1,6 @@
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
+import { isActivePaperProductOption } from '../../../../helpers/productPrice/productOptions';
 import { formatMachineDate } from '../../../../helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from '../../../paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from '../../../paper-subscription-checkout/helpers/subsCardDays';
@@ -25,8 +26,13 @@ export const getFirstDeliveryDateForProduct = (
 			);
 		}
 		case 'SubscriptionCard': {
-			if (productFields.productType !== 'Paper') {
-				throw new Error('Product fields are not of type PaperSubscription');
+			if (
+				productFields.productType !== 'Paper' ||
+				!isActivePaperProductOption(productFields.productOptions)
+			) {
+				throw new Error(
+					'Product fields or product options are not of type PaperSubscription & ActivePaperProductOptions',
+				);
 			}
 			return formatMachineDate(
 				getPaymentStartDate(Date.now(), productFields.productOptions),

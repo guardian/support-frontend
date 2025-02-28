@@ -38,6 +38,14 @@ const ActivePaperProductTypes = [Everyday, Weekend, Saturday] as const;
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
 
+export const isActivePaperProductOption = (
+	productOption: ProductOptions,
+): productOption is ActivePaperProductOptions => {
+	return ActivePaperProductTypes.includes(
+		productOption as ActivePaperProductOptions,
+	);
+};
+
 const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
 	Sunday: SundayPlus,
