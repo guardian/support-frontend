@@ -6,7 +6,7 @@ import {
 	textSansBold14,
 } from '@guardian/source/foundations';
 
-const newBenefitPill = css`
+const benefitPillCss = css`
 	background-color: ${news[400]};
 	color: ${neutral[100]};
 	${textSansBold14};
@@ -15,6 +15,10 @@ const newBenefitPill = css`
 	vertical-align: middle;
 `;
 
-export function NewBenefitPill() {
-	return <span css={newBenefitPill}>New</span>;
+interface BenefitPillProps {
+	copy: string;
+}
+
+export function BenefitPill({ copy }: BenefitPillProps) {
+	return <span css={benefitPillCss}>{copy}</span>;
 }
