@@ -48,6 +48,14 @@ export const AcquisitionProductSchema = z.object({
 	platform: z.string(), // SUPPORT
 	labels: z.string().array().nullable(), // one-time-checkout
 });
+
+export const AcquisitionProductEventSchema = z.object({
+	detail: AcquisitionProductSchema,
+});
+
+export type AcquisitionProductEvent = z.infer<
+	typeof AcquisitionProductEventSchema
+>;
 export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
 
 // TODO: create a test for this function

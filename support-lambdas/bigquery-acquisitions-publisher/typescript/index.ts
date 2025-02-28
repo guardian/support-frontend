@@ -7,9 +7,9 @@ import {
 import { getGCPCredentialsFromSSM } from './ssm';
 import type { SQSEvent } from 'aws-lambda';
 import {
-	AcquisitionProductSchema,
 	AcquisitionProduct,
 	transformAcquisitionProductForBigQuery,
+	AcquisitionProductEventSchema,
 } from './acquisitions';
 
 type Result =
@@ -28,6 +28,7 @@ export const handler = async (event: SQSEvent) => {
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
 	const bigQueryClient = createBigQueryClient(authClient, stage);
+	console.log('Received event:', event);
 
 	const results: Array<Result> = event.Records.map((record) => {
 		// Parse JSON record body (TODO: handle JSON parsing errors)
@@ -35,7 +36,7 @@ export const handler = async (event: SQSEvent) => {
 
 		// Validate the payload against the schema
 		const parsedAcquisitionProductDetail =
-			AcquisitionProductSchema.safeParse(payload);
+			AcquisitionProductEventSchema.safeParse(payload);
 		if (!parsedAcquisitionProductDetail.success) {
 			console.error(
 				'Failed to parse payload:',
@@ -44,7 +45,7 @@ export const handler = async (event: SQSEvent) => {
 			return { success: false, messageId: record.messageId };
 		}
 
-		const data: AcquisitionProduct = parsedAcquisitionProductDetail.data;
+		const data: AcquisitionProduct = parsedAcquisitionProductDetail.data.detail;
 
 		const row = transformAcquisitionProductForBigQuery(data);
 
