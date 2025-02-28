@@ -57,6 +57,7 @@ import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
+import type { CardContent } from '../components/threeTierCards';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { TickerContainer } from './tickerContainer';
@@ -381,15 +382,16 @@ export function ThreeTierLanding({
 	});
 	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
 
-	const tier1Card = {
-		productDescription: productCatalogDescription.Contribution,
+	const tier1Card: CardContent = {
+		// productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
 		link: tier1Link,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(recurringAmount),
-		isRecommended: false,
-		ctaCopy: 'Support',
+		// isRecommended: false,
+		// ctaCopy: 'Support',
+		...settings.products.recurringContribution,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -413,18 +415,19 @@ export function ThreeTierLanding({
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
 	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
-	const tier2Card = {
-		productDescription: productCatalogDescription.SupporterPlus,
+	const tier2Card: CardContent = {
+		// productDescription: productCatalogDescription.SupporterPlus,
 		price: tier2Pricing,
 		link: tier2Url,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: promotionTier2,
-		isRecommended: true,
+		// isRecommended: true,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
-		ctaCopy: 'Support',
-		lozengeText: 'Recommended',
+		// ctaCopy: 'Support',
+		// lozengeText: 'Recommended',
+		...settings.products.supporterPlus,
 	};
 
 	/**
@@ -479,16 +482,17 @@ export function ThreeTierLanding({
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
-	const tier3Card = {
-		productDescription: productCatalogDescription.TierThree,
+	const tier3Card: CardContent = {
+		// productDescription: productCatalogDescription.TierThree,
 		price: tier3Pricing,
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: promotionTier3,
-		isRecommended: false,
+		// isRecommended: false,
 		isUserSelected:
 			urlSearchParamsProduct === 'TierThree' ||
 			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
-		ctaCopy: 'Support',
+		// ctaCopy: 'Support',
+		...settings.products.tierThree,
 	};
 
 	const showNewspaperArchiveBanner =
@@ -539,11 +543,11 @@ export function ThreeTierLanding({
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{
-									title: tier1Card.productDescription.label,
+									title: tier1Card.title,
 									planCost: getPlanCost(tier1Card.price, contributionType),
 								},
 								{
-									title: tier2Card.productDescription.label,
+									title: tier2Card.title,
 									planCost: getPlanCost(
 										tier2Card.price,
 										contributionType,
@@ -557,7 +561,7 @@ export function ThreeTierLanding({
 										: undefined,
 								},
 								{
-									title: tier3Card.productDescription.label,
+									title: tier3Card.title,
 									planCost: getPlanCost(
 										tier3Card.price,
 										contributionType,
@@ -629,9 +633,7 @@ export function ThreeTierLanding({
 						<ThreeTierCards
 							cardsContent={[tier1Card, tier2Card, tier3Card]}
 							currencyId={currencyId}
-							countryGroupId={countryGroupId}
 							paymentFrequency={contributionType}
-							abParticipations={abParticipations}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <LandingPageBanners />}

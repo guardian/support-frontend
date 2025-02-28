@@ -4,21 +4,19 @@ import type { Participations } from 'helpers/abTests/models';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCard } from './threeTierCard';
 
+export type CardContent = LandingPageProductDescription & {
+	isUserSelected: boolean;
+	link: string;
+	price: number;
+	promotion?: Promotion;
+};
+
 export type ThreeTierCardsProps = {
-	cardsContent: Array<{
-		isRecommended: boolean;
-		isUserSelected: boolean;
-		link: string;
-		productDescription: ProductDescription;
-		price: number;
-		promotion?: Promotion;
-		ctaCopy: string;
-		lozengeText?: string;
-	}>;
+	cardsContent: CardContent[];
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
@@ -60,13 +58,11 @@ const cardIndexToTier = (index: number): 1 | 2 | 3 => {
 export function ThreeTierCards({
 	cardsContent,
 	currencyId,
-	countryGroupId,
 	paymentFrequency,
-	abParticipations,
 }: ThreeTierCardsProps): JSX.Element {
-	const haveRecommendedAndSelectedCards =
-		cardsContent.filter((card) => card.isRecommended || card.isUserSelected)
-			.length > 1;
+	const haveLabelAndSelectedCards =
+		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
+		1;
 	let promoCount = 0;
 	return (
 		<div
@@ -83,15 +79,16 @@ export function ThreeTierCards({
 					<ThreeTierCard
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
+						link={cardContent.link}
 						promoCount={promoCount}
-						{...cardContent}
-						isRecommendedSubdued={haveRecommendedAndSelectedCards}
+						price={cardContent.price}
+						promotion={cardContent.promotion}
+						productDescription={cardContent}
+						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
-						countryGroupId={countryGroupId}
 						paymentFrequency={paymentFrequency}
-						ctaCopy={cardContent.ctaCopy}
-						lozengeText={cardContent.lozengeText}
-						abParticipations={abParticipations}
+						ctaCopy={cardContent.cta.copy}
+						lozengeText={cardContent.label?.copy}
 					/>
 				);
 			})}

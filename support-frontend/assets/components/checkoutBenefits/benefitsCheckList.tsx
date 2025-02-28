@@ -2,10 +2,13 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	from,
+	neutral,
+	news,
 	palette,
 	space,
 	textSans15,
 	textSans17,
+	textSansBold14,
 } from '@guardian/source/foundations';
 import {
 	SvgCrossRoundFilled,
@@ -50,6 +53,15 @@ const checkListTextItemCss = css`
 		font-weight: bold;
 	}
 `;
+const checkListItemLabelCss = css`
+	background-color: ${news[400]};
+	color: ${neutral[100]};
+	${textSansBold14};
+	border-radius: 4px;
+	padding: 0 ${space[1]}px;
+	vertical-align: middle;
+	margin-right: 4px;
+`;
 const listCss = (style: CheckListStyle) => css`
 	${style === 'standard'
 		? css`
@@ -80,6 +92,7 @@ export type BenefitsCheckListData = {
 	strong?: boolean;
 	isNew?: boolean;
 	hideBullet?: boolean;
+	label?: string;
 };
 
 type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
@@ -147,6 +160,9 @@ export function BenefitsCheckList({
 									<>
 										<NewBenefitPill />{' '}
 									</>
+								)}
+								{item.label && (
+									<span css={checkListItemLabelCss}>{item.label}</span>
 								)}
 								{item.strong ? <strong>{item.text}</strong> : item.text}
 								{item.toolTip && (

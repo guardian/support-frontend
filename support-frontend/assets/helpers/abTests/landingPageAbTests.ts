@@ -2,6 +2,7 @@ import seedrandom from 'seedrandom';
 import type {
 	LandingPageTest,
 	LandingPageVariant,
+	Products,
 } from '../globalsAndSwitches/landingPageSettings';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import type { Participations } from './models';
@@ -13,6 +14,58 @@ import {
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
+const products: Products = {
+	recurringContribution: {
+		title: 'Support',
+		summary: 'Give to the Guardian every month with Support',
+		benefits: [],
+		cta: { copy: 'Support' },
+	},
+	supporterPlus: {
+		title: 'All-access digital!',
+		benefits: [
+			{
+				copy: 'Unlimited access to the Guardian app',
+				tooltip:
+					'Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.',
+			},
+			{
+				copy: 'Ad-free reading on all your devices',
+			},
+			{
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
+			{
+				copy: 'Far fewer asks for support',
+				tooltip:
+					"You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.",
+			},
+			{
+				copy: 'Unlimited access to the Guardian Feast app',
+				tooltip:
+					'Make a feast out of anything with the Guardian’s new recipe app. Feast has thousands of recipes including quick and budget-friendly weeknight dinners, and showstopping weekend dishes – plus smart app features to make mealtimes inspiring.',
+				label: { copy: 'New' },
+			},
+		],
+		cta: {
+			copy: 'Support',
+		},
+		label: { copy: 'Recommended' },
+	},
+	tierThree: {
+		title: 'Digital + print',
+		summary: 'The rewards from <strong>All-access digital</strong>',
+		benefits: [
+			{
+				copy: 'Guardian Weekly print magazine delivered to your door every week',
+				tooltip:
+					'Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.',
+			},
+		],
+		cta: { copy: 'Support' },
+	},
+};
+
 export const fallBackLandingPageSelection: LandingPageSelection = {
 	testName: 'FALLBACK_LANDING_PAGE',
 	name: 'CONTROL',
@@ -21,6 +74,7 @@ export const fallBackLandingPageSelection: LandingPageSelection = {
 		subheading:
 			"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. Cancel anytime.",
 	},
+	products,
 };
 
 function randomNumber(mvtId: number, seed: string): number {
@@ -92,9 +146,13 @@ export function getLandingPageVariant(
 				(variant) => variant.name === variantName,
 			);
 			if (variant) {
+				const variantWithProductConfig = {
+					...variant,
+					products: products,
+				};
 				return {
 					testName: test.name,
-					...variant,
+					...variantWithProductConfig,
 				};
 			}
 		}
