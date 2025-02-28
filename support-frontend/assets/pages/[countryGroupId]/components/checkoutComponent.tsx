@@ -194,6 +194,7 @@ export function CheckoutComponent({
 				getSettings().landingPageTests,
 			);
 			if (productKey === 'Contribution') {
+				// Also show SupporterPlus benefits greyed out
 				return [
 					...landingPageSettings.products.Contribution.benefits.map(
 						(benefit) => ({
@@ -207,7 +208,6 @@ export function CheckoutComponent({
 							text: benefit.copy,
 							maybeGreyedOut: css`
 								color: ${palette.neutral[60]};
-
 								svg {
 									fill: ${palette.neutral[60]};
 								}
@@ -223,6 +223,7 @@ export function CheckoutComponent({
 					}),
 				);
 			} else if (productKey === 'TierThree') {
+				// Also show SupporterPlus benefits
 				return [
 					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
 						isChecked: true,
