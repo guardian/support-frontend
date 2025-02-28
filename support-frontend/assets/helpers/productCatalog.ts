@@ -30,10 +30,6 @@ export type ProductDescription = {
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	benefitsAdditional?: ProductBenefit[];
-	benefitsMissing?: ProductBenefit[];
-	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
-	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
-	offersSummary?: Array<string | { strong: boolean; copy: string }>;
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
@@ -208,10 +204,6 @@ export const productCatalogDescription: Record<
 	TierThree: {
 		label: 'Digital + print',
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
-		benefitsSummary: [
-			'The rewards from ',
-			{ strong: true, copy: 'All-access digital' },
-		],
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
 		benefitsAdditional: supporterPlusBenefits,
@@ -371,14 +363,6 @@ export const productCatalogDescription: Record<
 	Contribution: {
 		label: 'Support',
 		benefits: [supportBenefit, newsletterBenefitUS],
-		benefitsMissing: [
-			appBenefit,
-			addFreeBenefit,
-			newsletterBenefit,
-			fewerAsksBenefit,
-			partnerOffersBenefit,
-			feastBenefit,
-		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
