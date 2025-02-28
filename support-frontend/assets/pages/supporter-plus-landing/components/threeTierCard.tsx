@@ -212,7 +212,7 @@ export function ThreeTierCard({
 				<ThreeTierLozenge
 					subdue={isSubdued}
 					title={
-						promotion?.landingPage?.roundel ?? lozengeText ?? 'Highest impact'
+						promotion?.landingPage?.roundel ?? lozengeText
 					}
 				/>
 			)}
