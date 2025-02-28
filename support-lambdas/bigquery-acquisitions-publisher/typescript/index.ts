@@ -90,5 +90,5 @@ export const handler = async (event: SQSEvent) => {
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
 	const bigQueryClient = createBigQueryClient(authClient, stage);
-	exampleWriteToBigQuery(bigQueryClient, aquisitionProductDetail);
+	await exampleWriteToBigQuery(bigQueryClient, aquisitionProductDetail);
 };
