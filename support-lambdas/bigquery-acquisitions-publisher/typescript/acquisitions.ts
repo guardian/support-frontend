@@ -50,6 +50,7 @@ export const AcquisitionProductSchema = z.object({
 });
 export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
 
+// TODO: create a test for this function
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
 ) => {
