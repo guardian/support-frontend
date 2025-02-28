@@ -21,9 +21,9 @@ export interface LandingPageProductDescription {
 }
 
 export interface Products {
-	recurringContribution: LandingPageProductDescription;
-	supporterPlus: LandingPageProductDescription;
-	tierThree: LandingPageProductDescription;
+	Contribution: LandingPageProductDescription;
+	SupporterPlus: LandingPageProductDescription;
+	TierThree: LandingPageProductDescription;
 }
 
 interface LandingPageCopy {

@@ -15,7 +15,7 @@ import {
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
 const products: Products = {
-	recurringContribution: {
+	Contribution: {
 		title: 'Support',
 		benefits: [
 			{
@@ -24,7 +24,7 @@ const products: Products = {
 		],
 		cta: { copy: 'Support' },
 	},
-	supporterPlus: {
+	SupporterPlus: {
 		title: 'All-access digital!',
 		benefits: [
 			{
@@ -55,7 +55,7 @@ const products: Products = {
 		},
 		label: { copy: 'Recommended' },
 	},
-	tierThree: {
+	TierThree: {
 		title: 'Digital + print',
 		benefits: [
 			{

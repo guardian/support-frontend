@@ -392,7 +392,7 @@ export function ThreeTierLanding({
 			isCardUserSelected(recurringAmount),
 		// isRecommended: false,
 		// ctaCopy: 'Support',
-		...settings.products.recurringContribution,
+		...settings.products.Contribution,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -429,7 +429,7 @@ export function ThreeTierLanding({
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
 		// ctaCopy: 'Support',
 		// lozengeText: 'Recommended',
-		...settings.products.supporterPlus,
+		...settings.products.SupporterPlus,
 	};
 
 	/**
@@ -495,7 +495,7 @@ export function ThreeTierLanding({
 			urlSearchParamsProduct === 'TierThree' ||
 			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
 		// ctaCopy: 'Support',
-		...settings.products.tierThree,
+		...settings.products.TierThree,
 	};
 
 	const showNewspaperArchiveBanner =

@@ -51,7 +51,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -78,6 +78,8 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
+import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -182,6 +184,67 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
+	};
+
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
+			const landingPageSettings = getLandingPageVariant(
+				abParticipations,
+				getSettings().landingPageTests,
+			);
+			if (productKey === 'Contribution') {
+				return [
+					...landingPageSettings.products.Contribution.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: false,
+							text: benefit.copy,
+							maybeGreyedOut: css`
+								color: ${palette.neutral[60]};
+
+								svg {
+									fill: ${palette.neutral[60]};
+								}
+							`,
+						}),
+					),
+				];
+			} else if (productKey === 'SupporterPlus') {
+				return landingPageSettings.products.SupporterPlus.benefits.map(
+					(benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					}),
+				);
+			} else if (productKey === 'TierThree') {
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			}
+		} else {
+			return productDescription.benefits
+				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+				.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
+				.map((benefit) => ({
+					isChecked: true,
+					text: benefit.copy,
+				}));
+		}
 	};
 
 	const productFields = getProductFields({
@@ -436,45 +499,46 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={[
-							...productDescription.benefits
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsAdditional ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsMissing ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.map((benefit) => ({
-									isChecked: false,
-									text: benefit.copy,
-									maybeGreyedOut: css`
-										color: ${palette.neutral[60]};
-
-										svg {
-											fill: ${palette.neutral[60]};
-										}
-									`,
-								})),
-						]}
+						checkListData={getBenefits()}
+						// checkListData={[
+						// 	...productDescription.benefits
+						// 		.filter((benefit) =>
+						// 			filterBenefitByRegion(benefit, countryGroupId),
+						// 		)
+						// 		.filter((benefit) =>
+						// 			filterBenefitByABTest(benefit, abParticipations),
+						// 		)
+						// 		.map((benefit) => ({
+						// 			isChecked: true,
+						// 			text: benefit.copy,
+						// 		})),
+						// 	...(productDescription.benefitsAdditional ?? [])
+						// 		.filter((benefit) =>
+						// 			filterBenefitByRegion(benefit, countryGroupId),
+						// 		)
+						// 		.filter((benefit) =>
+						// 			filterBenefitByABTest(benefit, abParticipations),
+						// 		)
+						// 		.map((benefit) => ({
+						// 			isChecked: true,
+						// 			text: benefit.copy,
+						// 		})),
+						// 	...(productDescription.benefitsMissing ?? [])
+						// 		.filter((benefit) =>
+						// 			filterBenefitByRegion(benefit, countryGroupId),
+						// 		)
+						// 		.map((benefit) => ({
+						// 			isChecked: false,
+						// 			text: benefit.copy,
+						// 			maybeGreyedOut: css`
+						// 				color: ${palette.neutral[60]};
+						//
+						// 				svg {
+						// 					fill: ${palette.neutral[60]};
+						// 				}
+						// 			`,
+						// 		})),
+						// ]}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
