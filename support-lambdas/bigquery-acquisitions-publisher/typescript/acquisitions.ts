@@ -9,7 +9,7 @@ import {
 
 // Items to write to BigQuery (datalake:fact_acquisition_event)
 // From scala : AcquistionDataRowMapper.mapToTableRow
-export const AcquisitionProductSchemaRelabel = z.object({
+export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.date(),
 	country: z.enum(IsoCountrySchema),
 	componentId: z.string().nullable(),
@@ -41,8 +41,6 @@ export const AcquisitionProductSchemaRelabel = z.object({
 	zuoraSubscriptionNumber: z.string().nullable(),
 	contributionId: z.string(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
 	paymentId: z.string(), // PAYID-M64KYRY1DX444112D060283M
-});
-export const AcquisitionProductSchemaKeep = z.object({
 	product: z.enum(ProductTypeSchema),
 	amount: z.number(),
 	currency: z.enum(IsoCurrencySchema),
@@ -50,55 +48,34 @@ export const AcquisitionProductSchemaKeep = z.object({
 	platform: z.string(), // SUPPORT
 	labels: z.string().array().nullable(), // one-time-checkout
 });
-export type AcquisitionProduct = z.infer<
-	typeof AcquisitionProductSchemaRelabel & typeof AcquisitionProductSchemaKeep
->;
+export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
 
-// Items not required by BigQuery
-export const AcquisitionProductDetailSchema = z.object({
-	postalCode: z.string().nullable(),
-	state: z.string().nullable(),
-	email: z.string(),
-});
-export type AcquisitionProductDetail = z.infer<
-	typeof AcquisitionProductDetailSchema
-> &
-	AcquisitionProduct;
-
-export type AcquisitionProductDetails = {
-	details: [AcquisitionProductDetail];
-};
-
-export const aquisitionProductDetail: AcquisitionProductDetail = {
-	eventTimeStamp: new Date(),
-	product: 'CONTRIBUTION',
-	amount: 10.0,
-	country: 'GB',
-	currency: 'GBP',
-	componentId: null,
-	componentType: null,
-	campaignCodes: [''],
-	source: null,
-	referrerUrl: null,
-	abTests: [{ name: 'oneTimeConfirmEmail', variant: 'variant' }],
-	paymentFrequency: 'ONE_OFF',
-	paymentProvider: 'PAYPAL',
-	printOptions: null,
-	browserId: null,
-	identityId: '200381287',
-	pageViewId: 'm7ezxppo1x1Qg5b4q1x8',
-	referrerPageViewId: null,
-	platform: 'SUPPORT',
-	labels: ['one-time-checkout'],
-	promoCode: null,
-	queryParameters: [],
-	reusedExistingPaymentMethod: false,
-	acquisitionType: 'Purchase',
-	readerType: 'Direct',
-	zuoraSubscriptionNumber: null,
-	contributionId: 'f7c7aef7-f12d-476b-ba68-5ae89237cd8f',
-	paymentId: 'PAYID-M64KYRY1DX444113D060283M',
-	postalCode: '',
-	state: 'CA',
-	email: '',
+export const transformAcquisitionProductForBigQuery = (
+	acquisitionProduct: AcquisitionProduct,
+) => {
+	return {
+		event_timestamp: acquisitionProduct.eventTimeStamp,
+		country_code: acquisitionProduct.country,
+		component_id: acquisitionProduct.componentId,
+		component_type: acquisitionProduct.componentType,
+		campaign_codes: acquisitionProduct.campaignCodes,
+		referrer_url: acquisitionProduct.referrerUrl,
+		ab_tests: acquisitionProduct.abTests,
+		payment_frequency: acquisitionProduct.paymentFrequency,
+		payment_provider: acquisitionProduct.paymentProvider,
+		print_options: acquisitionProduct.printOptions,
+		browser_id: acquisitionProduct.browserId,
+		identity_id: acquisitionProduct.identityId,
+		page_view_id: acquisitionProduct.pageViewId,
+		referrer_page_view_id: acquisitionProduct.referrerPageViewId,
+		promo_code: acquisitionProduct.promoCode,
+		query_parameters: acquisitionProduct.queryParameters,
+		reused_existing_payment_method:
+			acquisitionProduct.reusedExistingPaymentMethod,
+		acquisition_type: acquisitionProduct.acquisitionType,
+		reader_type: acquisitionProduct.readerType,
+		zuora_subscription_number: acquisitionProduct.zuoraSubscriptionNumber,
+		contribution_id: acquisitionProduct.contributionId,
+		payment_id: acquisitionProduct.paymentId,
+	};
 };

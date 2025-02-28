@@ -31,3 +31,15 @@ export const createBigQueryClient = (
 	});
 	return bigQuery;
 };
+
+export const writeRowsToBigQuery = async (
+	bigQueryClient: BigQuery,
+	rows: unknown[],
+): Promise<void> => {
+	await bigQueryClient
+		.dataset('datalake')
+		.table('fact_acquisition_event')
+		.insert(rows);
+
+	console.log('Inserted rows:', rows);
+};
