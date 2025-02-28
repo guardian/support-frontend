@@ -77,11 +77,11 @@ const exampleWriteToBigQuery = async (
 	};
 
 	const acquisitionEventRows = [acquisitionEvent];
-	console.log('Inserting rows... :', existingQuery);
+	console.log('Inserting rows... :', acquisitionEventRows);
 	await bigQueryClient
 		.dataset('datalake')
 		.table('fact_acquisition_event')
-		.insert(existingQuery);
+		.insert(acquisitionEventRows);
 	console.log('Inserted rows:', acquisitionEventRows);
 };
 
