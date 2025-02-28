@@ -383,6 +383,7 @@ export function ThreeTierLanding({
 	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
 
 	const tier1Card: CardContent = {
+		product: 'Contribution',
 		// productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
 		link: tier1Link,
@@ -416,6 +417,7 @@ export function ThreeTierLanding({
 	}
 	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
 	const tier2Card: CardContent = {
+		product: 'SupporterPlus',
 		// productDescription: productCatalogDescription.SupporterPlus,
 		price: tier2Pricing,
 		link: tier2Url,
@@ -483,6 +485,7 @@ export function ThreeTierLanding({
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
 	const tier3Card: CardContent = {
+		product: 'TierThree',
 		// productDescription: productCatalogDescription.TierThree,
 		price: tier3Pricing,
 		link: `checkout?${tier3UrlParams.toString()}`,

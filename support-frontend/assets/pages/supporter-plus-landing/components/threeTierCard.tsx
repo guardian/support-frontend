@@ -23,10 +23,10 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 export type ThreeTierCardProps = {
+	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
@@ -120,11 +120,6 @@ const checkmarkBenefitList = css`
 	}
 `;
 
-const checkmarkOfferList = css`
-	width: 100%;
-	text-align: left;
-`;
-
 const benefitsPrefixCss = css`
 	${textSans15};
 	color: ${palette.neutral[7]};
@@ -190,6 +185,7 @@ const discountSummaryCopy = (
 };
 
 export function ThreeTierCard({
+	product,
 	cardTier,
 	promoCount,
 	isSubdued,
@@ -207,7 +203,7 @@ export function ThreeTierCard({
 	const period = recurringContributionPeriodMap[paymentFrequency];
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const { title, benefits, summary } = productDescription;
+	const { title, benefits } = productDescription;
 
 	return (
 		<section css={container(!!lozengeText, isUserSelected, isSubdued)}>
@@ -253,15 +249,13 @@ export function ThreeTierCard({
 				</LinkButton>
 			</ThemeProvider>
 
-			{summary && (
+			{product === 'TierThree' && (
 				<div css={benefitsPrefixCss}>
-					<span
-						dangerouslySetInnerHTML={{ __html: getSanitisedHtml(summary) }}
-					/>
+					<span>
+						The rewards from <strong>All-access digital</strong>
+					</span>
+					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>
-			)}
-			{summary && benefits.length > 0 && (
-				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<BenefitsCheckList
 				benefitsCheckListData={benefits.map((benefit) => {
@@ -270,6 +264,7 @@ export function ThreeTierCard({
 						isChecked: true,
 						toolTip: benefit.tooltip,
 						label: benefit.label?.copy,
+						hideBullet: benefits.length <= 1 && product !== 'TierThree',
 					};
 				})}
 				style={'compact'}

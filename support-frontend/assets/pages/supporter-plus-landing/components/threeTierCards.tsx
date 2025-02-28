@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { Participations } from 'helpers/abTests/models';
 import type { RegularContributionType } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -13,14 +11,13 @@ export type CardContent = LandingPageProductDescription & {
 	link: string;
 	price: number;
 	promotion?: Promotion;
+	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
 };
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
 	currencyId: IsoCurrency;
-	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
-	abParticipations?: Participations;
 };
 
 const container = (cardCount: number) => css`
@@ -77,6 +74,7 @@ export function ThreeTierCards({
 				}
 				return (
 					<ThreeTierCard
+						product={cardContent.product}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						link={cardContent.link}

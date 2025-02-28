@@ -17,8 +17,11 @@ export type LandingPageSelection = LandingPageVariant & { testName: string };
 const products: Products = {
 	recurringContribution: {
 		title: 'Support',
-		summary: 'Give to the Guardian every month with Support',
-		benefits: [],
+		benefits: [
+			{
+				copy: 'Give to the Guardian every month with Support',
+			},
+		],
 		cta: { copy: 'Support' },
 	},
 	supporterPlus: {
@@ -54,7 +57,6 @@ const products: Products = {
 	},
 	tierThree: {
 		title: 'Digital + print',
-		summary: 'The rewards from <strong>All-access digital</strong>',
 		benefits: [
 			{
 				copy: 'Guardian Weekly print magazine delivered to your door every week',

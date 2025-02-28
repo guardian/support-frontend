@@ -14,7 +14,6 @@ export interface LandingPageProductDescription {
 	label?: {
 		copy: string;
 	};
-	summary?: string;
 	benefits: ProductBenefit[];
 	cta: {
 		copy: string;
