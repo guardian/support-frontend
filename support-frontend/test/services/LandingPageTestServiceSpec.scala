@@ -54,7 +54,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   ),
                   "SupporterPlus" -> mapAttr(
                     Map(
-                      "title" -> stringAttr("All-access digital!!"),
+                      "title" -> stringAttr("All-access digital"),
                       "benefits" -> listAttr(
                         List(
                           mapAttr(

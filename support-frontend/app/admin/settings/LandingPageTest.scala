@@ -69,7 +69,7 @@ object Products {
       cta = Cta(copy = "Support"),
     ),
     SupporterPlus = LandingPageProductDescription(
-      title = "All-access digital!!",
+      title = "All-access digital",
       benefits = List(
         ProductBenefit(
           copy = "Unlimited access to the Guardian app",
