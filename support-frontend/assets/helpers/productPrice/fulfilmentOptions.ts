@@ -1,4 +1,5 @@
 // Fulfilment options describe the various ways that a user can receive a product
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
@@ -38,7 +39,7 @@ const getWeeklyFulfilmentOption = (
 		: Domestic;
 
 export const getFulfilmentOptionFromProductKey = (
-	productKey: string,
+	productKey: ActiveProductKey,
 ): FulfilmentOptions => {
 	switch (productKey) {
 		case 'SupporterPlus':

@@ -34,8 +34,8 @@ export const getProductFields = ({
 		billingPeriod: 'Monthly',
 	};
 
-	const fulfilmentOptions = getFulfilmentOptionFromProductKey(productKey);
-	const productOptions = getProductOptionFromProductAndRatePlan(
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
+	const productOption = getProductOptionFromProductAndRatePlan(
 		productKey,
 		ratePlanKey,
 	);
@@ -62,8 +62,8 @@ export const getProductFields = ({
 				productType: 'TierThree',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions,
-				productOptions,
+				fulfilmentOptions: fulfilmentOption,
+				productOptions: productOption,
 			};
 
 		case 'Contribution':
@@ -123,8 +123,8 @@ export const getProductFields = ({
 				productType: 'Paper',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions,
-				productOptions,
+				fulfilmentOptions: fulfilmentOption,
+				productOptions: productOption,
 			};
 
 		case 'GuardianPatron':
