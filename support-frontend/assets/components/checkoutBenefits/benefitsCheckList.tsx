@@ -80,7 +80,7 @@ export type BenefitsCheckListData = {
 	strong?: boolean;
 	isNew?: boolean;
 	hideBullet?: boolean;
-	label?: string;
+	pill?: string;
 };
 
 type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
@@ -149,7 +149,7 @@ export function BenefitsCheckList({
 										<BenefitPill copy="New" />{' '}
 									</>
 								)}
-								{item.label && <BenefitPill copy={item.label} />}
+								{item.pill && <BenefitPill copy={item.pill} />}
 								{item.strong ? <strong>{item.text}</strong> : item.text}
 								{item.toolTip && (
 									<Tooltip

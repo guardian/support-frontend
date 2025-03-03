@@ -261,7 +261,7 @@ export function ThreeTierCard({
 						text: benefit.copy,
 						isChecked: true,
 						toolTip: benefit.tooltip,
-						label: benefit.label?.copy,
+						pill: benefit.label?.copy,
 						hideBullet: benefits.length <= 1 && product !== 'TierThree',
 					};
 				})}
