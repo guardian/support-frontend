@@ -14,7 +14,7 @@ import {
 
 export type LandingPageSelection = LandingPageVariant & { testName: string };
 
-const products: Products = {
+const defaultProducts: Products = {
 	Contribution: {
 		title: 'Support',
 		benefits: [
@@ -76,7 +76,7 @@ export const fallBackLandingPageSelection: LandingPageSelection = {
 		subheading:
 			"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. Cancel anytime.",
 	},
-	products,
+	products: defaultProducts,
 };
 
 function randomNumber(mvtId: number, seed: string): number {
@@ -148,13 +148,9 @@ export function getLandingPageVariant(
 				(variant) => variant.name === variantName,
 			);
 			if (variant) {
-				const variantWithProductConfig = {
-					...variant,
-					products: products,
-				};
 				return {
 					testName: test.name,
-					...variantWithProductConfig,
+					...variant,
 				};
 			}
 		}
