@@ -27,17 +27,12 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const url = `/${internationalisationId}/one-time-checkout`;
+		// Temporary, assumes confirm email required
+		const url = `/${internationalisationId}/one-time-checkout#ab-oneTimeConfirmEmail=variant`;
 		const page = await context.newPage();
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
-		await setTestUserRequiredDetails(
-			page,
-			testEmail,
-			undefined,
-			undefined,
-			true,
-		);
+		await setTestUserRequiredDetails(page, testEmail);
 		await page.getByRole('radio', { name: paymentType }).check();
 
 		if (paymentType === 'Credit/Debit card') {

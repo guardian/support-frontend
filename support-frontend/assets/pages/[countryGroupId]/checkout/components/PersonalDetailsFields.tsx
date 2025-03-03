@@ -1,13 +1,12 @@
 import { TextInput } from '@guardian/source/react-components';
-import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
+import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
-	children: React.ReactNode;
 	firstName: string;
 	setFirstName: (value: string) => void;
 	lastName: string;
@@ -17,10 +16,11 @@ type PersonalDetailsFieldsProps = {
 	isEmailAddressReadOnly: boolean;
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
+	requireConfirmedEmail: boolean;
+	isSignedIn: boolean;
 };
 
 export function PersonalDetailsFields({
-	children,
 	firstName,
 	setFirstName,
 	lastName,
@@ -30,87 +30,23 @@ export function PersonalDetailsFields({
 	isEmailAddressReadOnly,
 	confirmedEmail,
 	setConfirmedEmail,
+	requireConfirmedEmail,
+	isSignedIn,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
-	const [emailError, setEmailError] = useState<string>();
-	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 
 	return (
 		<>
-			<div>
-				<TextInput
-					id="email"
-					data-qm-masking="blocklist"
-					label="Email address"
-					value={email}
-					type="email"
-					autoComplete="email"
-					onChange={(event) => {
-						setEmail(event.currentTarget.value);
-					}}
-					onBlur={(event) => {
-						event.target.checkValidity();
-					}}
-					readOnly={isEmailAddressReadOnly}
-					name="email"
-					required
-					maxLength={80}
-					error={emailError}
-					onInvalid={(event) => {
-						preventDefaultValidityMessage(event.currentTarget);
-						const validityState = event.currentTarget.validity;
-						if (validityState.valid) {
-							setEmailError(undefined);
-						} else {
-							if (validityState.valueMissing) {
-								setEmailError('Please enter your email address.');
-							} else {
-								setEmailError('Please enter a valid email address.');
-							}
-						}
-					}}
-				/>
-			</div>
-			{!isEmailAddressReadOnly && (
-				<div>
-					<TextInput
-						id="confirm-email"
-						data-qm-masking="blocklist"
-						label="Confirm email address"
-						value={confirmedEmail}
-						type="email"
-						autoComplete="email"
-						onChange={(event) => {
-							setConfirmedEmail(event.currentTarget.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						name="confirm-email"
-						required
-						maxLength={80}
-						error={confirmedEmailError}
-						pattern={escapeStringRegexp(email)}
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setConfirmedEmailError(undefined);
-							} else {
-								if (validityState.valueMissing) {
-									setConfirmedEmailError('Please confirm your email address.');
-								} else if (validityState.patternMismatch) {
-									setConfirmedEmailError('The email addresses do not match.');
-								} else {
-									setConfirmedEmailError('Please enter a valid email address.');
-								}
-							}
-						}}
-					/>
-				</div>
-			)}
-			{children}
+			<PersonalEmailFields
+				email={email}
+				setEmail={setEmail}
+				isEmailAddressReadOnly={isEmailAddressReadOnly}
+				confirmedEmail={confirmedEmail}
+				setConfirmedEmail={setConfirmedEmail}
+				requireConfirmedEmail={requireConfirmedEmail}
+				isSignedIn={isSignedIn}
+			/>
 			<div>
 				<TextInput
 					id="firstName"

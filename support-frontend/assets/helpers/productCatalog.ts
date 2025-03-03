@@ -349,6 +349,7 @@ export const productCatalogDescription: Record<
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
 		benefits: [],
+		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',

@@ -31,7 +31,6 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { PriceCards } from 'components/priceCards/priceCards';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import Signout from 'components/signout/signout';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
@@ -86,6 +85,7 @@ import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
 } from '../../../helpers/storage/abandonedBasketCookies';
+import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -146,6 +146,7 @@ type OneTimeCheckoutComponentProps = {
 	stripePublicKey: string;
 	countryId: IsoCountry;
 	abParticipations: Participations;
+	useStripeExpressCheckout: boolean;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -229,6 +230,7 @@ export function OneTimeCheckoutComponent({
 	stripePublicKey,
 	countryId,
 	abParticipations,
+	useStripeExpressCheckout,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -289,7 +291,7 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (finalAmount && elements) {
+		if (useStripeExpressCheckout && finalAmount && elements) {
 			// valid elements and final amount, set amount, enable Express checkout
 			elements.update({ amount: finalAmount * 100 });
 			setStripeExpressCheckoutEnable(true);
@@ -297,7 +299,8 @@ export function OneTimeCheckoutComponent({
 			// invalid elements and final amount, disable Express checkout
 			setStripeExpressCheckoutEnable(false);
 		}
-	}, [finalAmount, elements]);
+	}, [finalAmount, elements, useStripeExpressCheckout]);
+
 	useEffect(() => {
 		if (finalAmount) {
 			// Track valid final amount selection with QM
@@ -330,7 +333,7 @@ export function OneTimeCheckoutComponent({
 
 	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [emailErrors, setEmailErrors] = useState<string>();
+	const [confirmedEmail, setConfirmedEmail] = useState('');
 
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
@@ -347,6 +350,9 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+
+	const inOneTimeConfirmEmailVariant =
+		abParticipations.oneTimeConfirmEmail === 'variant';
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -619,136 +625,121 @@ export function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
-						<div
-							css={css`
-								/* Prevent content layout shift */
-								min-height: 8px;
-							`}
-						>
-							<ExpressCheckoutElement
-								onReady={({ availablePaymentMethods }) => {
-									/**
-									 * This is use to show UI needed besides this Element
-									 * i.e. The "or" divider
-									 */
-									if (
-										!!availablePaymentMethods?.applePay ||
-										!!availablePaymentMethods?.googlePay
-									) {
-										setStripeExpressCheckoutReady(true);
-									}
-								}}
-								onClick={({ resolve }) => {
-									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-									if (stripeExpressCheckoutEnable) {
-										const options = {
-											emailRequired: true,
-										};
-										// Track payment method selection with QM
-										sendEventPaymentMethodSelected(
-											'StripeExpressCheckoutElement',
+						{useStripeExpressCheckout && (
+							<div
+								css={css`
+									/* Prevent content layout shift */
+									min-height: 8px;
+								`}
+							>
+								<ExpressCheckoutElement
+									onReady={({ availablePaymentMethods }) => {
+										/**
+										 * This is use to show UI needed besides this Element
+										 * i.e. The "or" divider
+										 */
+										if (
+											!!availablePaymentMethods?.applePay ||
+											!!availablePaymentMethods?.googlePay
+										) {
+											setStripeExpressCheckoutReady(true);
+										}
+									}}
+									onClick={({ resolve }) => {
+										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+										if (stripeExpressCheckoutEnable) {
+											const options = {
+												emailRequired: true,
+											};
+											// Track payment method selection with QM
+											sendEventPaymentMethodSelected(
+												'StripeExpressCheckoutElement',
+											);
+
+											resolve(options);
+										}
+									}}
+									onConfirm={async (event) => {
+										if (!(stripe && elements)) {
+											console.error('Stripe not loaded');
+											return;
+										}
+
+										const { error: submitError } = await elements.submit();
+
+										if (submitError) {
+											setErrorMessage(submitError.message);
+											return;
+										}
+
+										// ->
+
+										setPaymentMethod('StripeExpressCheckoutElement');
+										setStripeExpressCheckoutPaymentType(
+											event.expressPaymentType,
 										);
+										event.billingDetails?.email &&
+											setEmail(event.billingDetails.email);
 
-										resolve(options);
-									}
-								}}
-								onConfirm={async (event) => {
-									if (!(stripe && elements)) {
-										console.error('Stripe not loaded');
-										return;
-									}
-
-									const { error: submitError } = await elements.submit();
-
-									if (submitError) {
-										setErrorMessage(submitError.message);
-										return;
-									}
-
-									// ->
-
-									setPaymentMethod('StripeExpressCheckoutElement');
-									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
-									event.billingDetails?.email &&
-										setEmail(event.billingDetails.email);
-
-									/**
-									 * There is a useEffect that listens to this and submits the form
-									 * when true
-									 */
-									setStripeExpressCheckoutSuccessful(true);
-								}}
-								options={{
-									paymentMethods: {
-										applePay: 'auto',
-										googlePay: 'auto',
-										link: 'never',
-									},
-								}}
-							/>
-
-							{stripeExpressCheckoutReady && (
-								<Divider
-									displayText="or"
-									size="full"
-									cssOverrides={css`
-										::before {
-											margin-left: 0;
-										}
-										::after {
-											margin-right: 0;
-										}
-										margin: 0;
-										margin-top: 14px;
-										margin-bottom: 14px;
-										width: 100%;
-										@keyframes fadeIn {
-											0% {
-												opacity: 0;
-											}
-											100% {
-												opacity: 1;
-											}
-										}
-										animation: fadeIn 1s;
-									`}
+										/**
+										 * There is a useEffect that listens to this and submits the form
+										 * when true
+										 */
+										setStripeExpressCheckoutSuccessful(true);
+									}}
+									options={{
+										paymentMethods: {
+											applePay: 'auto',
+											googlePay: 'auto',
+											link: 'never',
+										},
+									}}
 								/>
-							)}
-						</div>
+
+								{stripeExpressCheckoutReady && (
+									<Divider
+										displayText="or"
+										size="full"
+										cssOverrides={css`
+											::before {
+												margin-left: 0;
+											}
+											::after {
+												margin-right: 0;
+											}
+											margin: 0;
+											margin-top: 14px;
+											margin-bottom: 14px;
+											width: 100%;
+											@keyframes fadeIn {
+												0% {
+													opacity: 0;
+												}
+												100% {
+													opacity: 1;
+												}
+											}
+											animation: fadeIn 1s;
+										`}
+									/>
+								)}
+							</div>
+						)}
 
 						<FormSection>
 							<Legend>1. Your details</Legend>
-							<div>
-								<TextInput
-									id="email"
-									data-qm-masking="blocklist"
-									label="Email address"
-									value={email}
-									type="email"
-									autoComplete="email"
-									onChange={(event) => {
-										setEmail(event.currentTarget.value);
-									}}
-									onBlur={(event) => {
-										event.target.checkValidity();
-									}}
-									readOnly={isSignedIn}
-									name="email"
-									required
-									maxLength={80}
-									error={emailErrors}
-									onInvalid={(event) => {
-										validate(
-											event,
-											setEmailErrors,
-											'Please enter your email address.',
-											'Please enter a valid email address.',
-										);
-									}}
-								/>
-							</div>
 
-							<Signout isSignedIn={isSignedIn} />
+							<PersonalEmailFields
+								email={email}
+								setEmail={(email) => setEmail(email)}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
+								isEmailAddressReadOnly={isSignedIn}
+								requireConfirmedEmail={inOneTimeConfirmEmailVariant}
+								isSignedIn={isSignedIn}
+							/>
 
 							{countryId === 'US' && (
 								<div>

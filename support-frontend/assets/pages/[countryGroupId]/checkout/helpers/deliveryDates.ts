@@ -1,0 +1,41 @@
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
+import { isActivePaperProductOption } from '../../../../helpers/productPrice/productOptions';
+import { formatMachineDate } from '../../../../helpers/utilities/dateConversions';
+import { getHomeDeliveryDays } from '../../../paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getPaymentStartDate } from '../../../paper-subscription-checkout/helpers/subsCardDays';
+import { getTierThreeDeliveryDate } from '../../../weekly-subscription-checkout/helpers/deliveryDays';
+
+export const getFirstDeliveryDateForProduct = (
+	productKey: ActiveProductKey,
+	productFields: ProductFields,
+): string | null => {
+	switch (productKey) {
+		case 'TierThree':
+			return formatMachineDate(getTierThreeDeliveryDate());
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+		case 'SubscriptionCard': {
+			if (
+				productFields.productType !== 'Paper' ||
+				!isActivePaperProductOption(productFields.productOptions)
+			) {
+				throw new Error(
+					// 'Should not be possible'™
+					`Invalid product fields ${JSON.stringify(productFields)}`,
+				);
+			}
+			const firstDeliveryDate =
+				productKey === 'SubscriptionCard'
+					? getPaymentStartDate(Date.now(), productFields.productOptions)
+					: (getHomeDeliveryDays(
+							Date.now(),
+							productFields.productOptions,
+					  )[0] as Date);
+
+			return formatMachineDate(firstDeliveryDate);
+		}
+		default:
+			return null;
+	}
+};
