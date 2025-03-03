@@ -6,8 +6,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { type ProductOptions } from 'helpers/productPrice/productOptions';
+import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	getProductOptionFromProductAndRatePlan,
+	type ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
@@ -26,7 +29,7 @@ type Props = {
 const countryId: IsoCountry = Country.detect();
 
 export function Checkout({ geoId, appConfig, abParticipations }: Props) {
-	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currencyKey } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
 	/** 👇 a lot of this is copy/pasted into the thank you page */
@@ -131,33 +134,10 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				? appConfig.allProductPrices[productKey]
 				: undefined;
 
-		const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
-			switch (productKey) {
-				case 'SupporterPlus':
-				case 'Contribution':
-					return 'NoFulfilmentOptions';
-				case 'TierThree':
-					return countryGroupId === 'International'
-						? 'RestOfWorld'
-						: 'Domestic';
-				default:
-					// ToDo: define for every product here
-					return 'NoFulfilmentOptions';
-			}
-		};
-		const fulfilmentOption = getFulfilmentOptions(productKey);
-		const getProductOptions = (productKey: string): ProductOptions => {
-			switch (productKey) {
-				case 'TierThree':
-					return ratePlanKey.endsWith('V2')
-						? 'NewspaperArchive'
-						: 'NoProductOptions';
-				// TODO: define for newspaper
-				default:
-					return 'NoProductOptions';
-			}
-		};
-		const productOptions: ProductOptions = getProductOptions(productKey);
+		const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
+
+		const productOptions: ProductOptions =
+			getProductOptionFromProductAndRatePlan(productKey, ratePlanKey);
 
 		promotion = productPrices
 			? getPromotion(
