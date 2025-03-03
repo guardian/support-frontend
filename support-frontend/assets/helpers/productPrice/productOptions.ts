@@ -1,4 +1,6 @@
 // describes options relating to a product itself - only relevant for paper currently
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
 const SaturdayPlus = 'SaturdayPlus';
@@ -91,7 +93,7 @@ const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
 	);
 };
 export const getProductOptionFromProductAndRatePlan = (
-	productKey: string,
+	productKey: ActiveProductKey,
 	ratePlanKey: string,
 ): ProductOptions => {
 	switch (productKey) {
