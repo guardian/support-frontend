@@ -43,7 +43,11 @@ export const getFulfilmentOptionFromProductKey = (
 ): FulfilmentOptions => {
 	switch (productKey) {
 		case 'SupporterPlus':
+		case 'GuardianAdLite':
 		case 'Contribution':
+		case 'OneTimeContribution':
+		case 'DigitalSubscription':
+		case 'GuardianPatron':
 			return 'NoFulfilmentOptions';
 		case 'TierThree':
 		case 'GuardianWeeklyDomestic':
@@ -55,10 +59,6 @@ export const getFulfilmentOptionFromProductKey = (
 		case 'NationalDelivery':
 		case 'HomeDelivery':
 			return productKey;
-		default:
-			throw new Error(
-				`Fulfilment option not defined for product ${productKey}`,
-			);
 	}
 };
 
