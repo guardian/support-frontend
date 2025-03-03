@@ -14,8 +14,7 @@ import {
 	getReferrerAcquisitionData,
 	getSupportAbTests,
 } from '../../../helpers/tracking/acquisitions';
-import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
-import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import { getFirstDeliveryDateForProduct } from '../checkout/helpers/deliveryDates';
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
 	extractDeliverableAddressDataFromForm,
@@ -63,10 +62,10 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	const firstDeliveryDate =
-		productKey === 'TierThree'
-			? formatMachineDate(getTierThreeDeliveryDate())
-			: null;
+	const firstDeliveryDate = getFirstDeliveryDateForProduct(
+		productKey,
+		productFields,
+	);
 
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =

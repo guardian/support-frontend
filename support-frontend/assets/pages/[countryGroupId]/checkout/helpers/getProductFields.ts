@@ -4,8 +4,8 @@ import type {
 	ActiveProductKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
-import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
+import { getProductOptionFromProductAndRatePlan } from 'helpers/productPrice/productOptions';
 import { logException } from 'helpers/utilities/logger';
 
 type GetProductFieldsParams = {
@@ -34,6 +34,11 @@ export const getProductFields = ({
 		billingPeriod: 'Monthly',
 	};
 
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
+	const productOption = getProductOptionFromProductAndRatePlan(
+		productKey,
+		ratePlanKey,
+	);
 	const unsupportedProductMessage = `Product not supported by generic checkout: ${productKey}`;
 
 	/**
@@ -57,21 +62,8 @@ export const getProductFields = ({
 				productType: 'TierThree',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions:
-					ratePlanKey === 'DomesticMonthly' ||
-					ratePlanKey === 'DomesticAnnual' ||
-					ratePlanKey === 'DomesticMonthlyV2' ||
-					ratePlanKey === 'DomesticAnnualV2'
-						? 'Domestic'
-						: ratePlanKey === 'RestOfWorldMonthly' ||
-						  ratePlanKey === 'RestOfWorldAnnual' ||
-						  ratePlanKey === 'RestOfWorldMonthlyV2' ||
-						  ratePlanKey === 'RestOfWorldAnnualV2'
-						? 'RestOfWorld'
-						: 'Domestic',
-				productOptions: ratePlanKey.endsWith('V2')
-					? 'NewspaperArchive'
-					: 'NoProductOptions',
+				fulfilmentOptions: fulfilmentOption,
+				productOptions: productOption,
 			};
 
 		case 'Contribution':
@@ -131,8 +123,8 @@ export const getProductFields = ({
 				productType: 'Paper',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions: NoFulfilmentOptions,
-				productOptions: NoProductOptions,
+				fulfilmentOptions: fulfilmentOption,
+				productOptions: productOption,
 			};
 
 		case 'GuardianPatron':
