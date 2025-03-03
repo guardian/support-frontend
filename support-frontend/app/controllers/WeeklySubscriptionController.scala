@@ -43,7 +43,9 @@ class WeeklySubscriptionController(
 
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val canonicalLink = Some(buildRegionalisedWeeklySubscriptionLink("uk", orderIsAGift))
+    // We want the canonical link to point to the geo-redirect page so that users arriving from
+    // search will be redirected to the correct version of the page
+    val canonicalLink = Some(if (orderIsAGift) "/subscribe/weekly/gift" else "/subscribe/weekly")
 
     val queryPromos =
       request.queryString
