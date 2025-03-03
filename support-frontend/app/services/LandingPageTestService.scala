@@ -1,15 +1,7 @@
 package services
 
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
-import admin.settings.{
-  Cta,
-  Label,
-  LandingPageProductDescription,
-  LandingPageTest,
-  LandingPageVariant,
-  ProductBenefit,
-  Products,
-}
+import admin.settings.LandingPageTest
 import com.gu.aws.AwsCloudWatchMetricSetup.getLandingPageTestsError
 import com.gu.aws.{AwsCloudWatchMetricPut, ProfileName}
 import com.gu.support.config.{Stage, Stages}
