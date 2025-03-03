@@ -132,9 +132,7 @@ export function ThankYou({
 						fulfilmentOption,
 				  )
 				: undefined;
-			const discountedPrice = promotion?.discountedPrice
-				? promotion.discountedPrice
-				: undefined;
+			const discountedPrice = promotion?.discountedPrice;
 			const price = discountedPrice ?? productPrice;
 
 			if (productKey === 'SupporterPlus') {

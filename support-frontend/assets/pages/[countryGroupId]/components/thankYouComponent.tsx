@@ -113,6 +113,11 @@ export function ThankYouComponent({
 		case 'DomesticMonthly':
 		case 'RestOfWorldMonthlyV2':
 		case 'DomesticMonthlyV2':
+		case 'Everyday':
+		case 'Sixday':
+		case 'Weekend':
+		case 'Saturday':
+		case 'Sunday':
 			contributionType = 'MONTHLY';
 			break;
 		case 'Annual':
