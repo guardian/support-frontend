@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify';
+import DomPurify from 'dompurify';
 import snarkdown from 'snarkdown';
 
 // A series of general purpose helper functions.
@@ -50,7 +50,7 @@ function deserialiseJsonObject(
 
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
-	return DOMPurify.sanitize(snarkdown(markdownString), {
+	return DomPurify.sanitize(snarkdown(markdownString), {
 		ALLOWED_TAGS: ['em', 'strong', 'ul', 'li', 'a', 'p'],
 	});
 }
