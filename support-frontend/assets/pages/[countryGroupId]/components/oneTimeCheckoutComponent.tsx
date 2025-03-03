@@ -146,7 +146,6 @@ type OneTimeCheckoutComponentProps = {
 	stripePublicKey: string;
 	countryId: IsoCountry;
 	abParticipations: Participations;
-	useStripeExpressCheckout: boolean;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -230,7 +229,6 @@ export function OneTimeCheckoutComponent({
 	stripePublicKey,
 	countryId,
 	abParticipations,
-	useStripeExpressCheckout,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -291,7 +289,7 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (useStripeExpressCheckout && finalAmount && elements) {
+		if (finalAmount && elements) {
 			// valid elements and final amount, set amount, enable Express checkout
 			elements.update({ amount: finalAmount * 100 });
 			setStripeExpressCheckoutEnable(true);
@@ -299,8 +297,7 @@ export function OneTimeCheckoutComponent({
 			// invalid elements and final amount, disable Express checkout
 			setStripeExpressCheckoutEnable(false);
 		}
-	}, [finalAmount, elements, useStripeExpressCheckout]);
-
+	}, [finalAmount, elements]);
 	useEffect(() => {
 		if (finalAmount) {
 			// Track valid final amount selection with QM
@@ -622,106 +619,102 @@ export function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
-						{useStripeExpressCheckout && (
-							<div
-								css={css`
-									/* Prevent content layout shift */
-									min-height: 8px;
-								`}
-							>
-								<ExpressCheckoutElement
-									onReady={({ availablePaymentMethods }) => {
-										/**
-										 * This is use to show UI needed besides this Element
-										 * i.e. The "or" divider
-										 */
-										if (
-											!!availablePaymentMethods?.applePay ||
-											!!availablePaymentMethods?.googlePay
-										) {
-											setStripeExpressCheckoutReady(true);
-										}
-									}}
-									onClick={({ resolve }) => {
-										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-										if (stripeExpressCheckoutEnable) {
-											const options = {
-												emailRequired: true,
-											};
-											// Track payment method selection with QM
-											sendEventPaymentMethodSelected(
-												'StripeExpressCheckoutElement',
-											);
-
-											resolve(options);
-										}
-									}}
-									onConfirm={async (event) => {
-										if (!(stripe && elements)) {
-											console.error('Stripe not loaded');
-											return;
-										}
-
-										const { error: submitError } = await elements.submit();
-
-										if (submitError) {
-											setErrorMessage(submitError.message);
-											return;
-										}
-
-										// ->
-
-										setPaymentMethod('StripeExpressCheckoutElement');
-										setStripeExpressCheckoutPaymentType(
-											event.expressPaymentType,
+						<div
+							css={css`
+								/* Prevent content layout shift */
+								min-height: 8px;
+							`}
+						>
+							<ExpressCheckoutElement
+								onReady={({ availablePaymentMethods }) => {
+									/**
+									 * This is use to show UI needed besides this Element
+									 * i.e. The "or" divider
+									 */
+									if (
+										!!availablePaymentMethods?.applePay ||
+										!!availablePaymentMethods?.googlePay
+									) {
+										setStripeExpressCheckoutReady(true);
+									}
+								}}
+								onClick={({ resolve }) => {
+									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+									if (stripeExpressCheckoutEnable) {
+										const options = {
+											emailRequired: true,
+										};
+										// Track payment method selection with QM
+										sendEventPaymentMethodSelected(
+											'StripeExpressCheckoutElement',
 										);
-										event.billingDetails?.email &&
-											setEmail(event.billingDetails.email);
 
-										/**
-										 * There is a useEffect that listens to this and submits the form
-										 * when true
-										 */
-										setStripeExpressCheckoutSuccessful(true);
-									}}
-									options={{
-										paymentMethods: {
-											applePay: 'auto',
-											googlePay: 'auto',
-											link: 'never',
-										},
-									}}
+										resolve(options);
+									}
+								}}
+								onConfirm={async (event) => {
+									if (!(stripe && elements)) {
+										console.error('Stripe not loaded');
+										return;
+									}
+
+									const { error: submitError } = await elements.submit();
+
+									if (submitError) {
+										setErrorMessage(submitError.message);
+										return;
+									}
+
+									// ->
+
+									setPaymentMethod('StripeExpressCheckoutElement');
+									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
+									event.billingDetails?.email &&
+										setEmail(event.billingDetails.email);
+
+									/**
+									 * There is a useEffect that listens to this and submits the form
+									 * when true
+									 */
+									setStripeExpressCheckoutSuccessful(true);
+								}}
+								options={{
+									paymentMethods: {
+										applePay: 'auto',
+										googlePay: 'auto',
+										link: 'never',
+									},
+								}}
+							/>
+
+							{stripeExpressCheckoutReady && (
+								<Divider
+									displayText="or"
+									size="full"
+									cssOverrides={css`
+										::before {
+											margin-left: 0;
+										}
+										::after {
+											margin-right: 0;
+										}
+										margin: 0;
+										margin-top: 14px;
+										margin-bottom: 14px;
+										width: 100%;
+										@keyframes fadeIn {
+											0% {
+												opacity: 0;
+											}
+											100% {
+												opacity: 1;
+											}
+										}
+										animation: fadeIn 1s;
+									`}
 								/>
-
-								{stripeExpressCheckoutReady && (
-									<Divider
-										displayText="or"
-										size="full"
-										cssOverrides={css`
-											::before {
-												margin-left: 0;
-											}
-											::after {
-												margin-right: 0;
-											}
-											margin: 0;
-											margin-top: 14px;
-											margin-bottom: 14px;
-											width: 100%;
-											@keyframes fadeIn {
-												0% {
-													opacity: 0;
-												}
-												100% {
-													opacity: 1;
-												}
-											}
-											animation: fadeIn 1s;
-										`}
-									/>
-								)}
-							</div>
-						)}
+							)}
+						</div>
 
 						<FormSection>
 							<Legend>1. Your details</Legend>

@@ -17,9 +17,6 @@ type OneTimeCheckoutProps = {
 	abParticipations: Participations;
 };
 
-const stripeExpressCheckoutSwitch =
-	window.guardian.settings.switches.oneOffPaymentMethods.stripeExpressCheckout;
-
 export function OneTimeCheckout({
 	geoId,
 	appConfig,
@@ -58,7 +55,6 @@ export function OneTimeCheckout({
 				stripePublicKey={stripePublicKey}
 				countryId={countryId}
 				abParticipations={abParticipations}
-				useStripeExpressCheckout={stripeExpressCheckoutSwitch === 'On'}
 			/>
 		</Elements>
 	);
