@@ -127,7 +127,7 @@ object LandingPageVariant {
     LandingPageVariant(
       name = variant.name,
       copy = variant.copy,
-      products = Some(Products.defaultProducts),
+      products = variant.products.orElse(Some(Products.defaultProducts)),
     )
   }
   implicit val encoder: Encoder[LandingPageVariant] = deriveEncoder
