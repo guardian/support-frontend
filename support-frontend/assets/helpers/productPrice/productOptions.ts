@@ -97,6 +97,15 @@ export const getProductOptionFromProductAndRatePlan = (
 	ratePlanKey: string,
 ): ProductOptions => {
 	switch (productKey) {
+		case 'SupporterPlus':
+		case 'GuardianAdLite':
+		case 'Contribution':
+		case 'OneTimeContribution':
+		case 'DigitalSubscription':
+		case 'GuardianPatron':
+		case 'GuardianWeeklyRestOfWorld':
+		case 'GuardianWeeklyDomestic':
+			return 'NoProductOptions';
 		case 'TierThree':
 			return ratePlanKey.endsWith('V2')
 				? 'NewspaperArchive'
@@ -105,8 +114,6 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'NationalDelivery':
 		case 'HomeDelivery':
 			return getPaperProductOptions(ratePlanKey);
-		default:
-			return 'NoProductOptions';
 	}
 };
 
