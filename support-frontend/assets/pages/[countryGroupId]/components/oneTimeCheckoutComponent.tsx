@@ -146,6 +146,7 @@ type OneTimeCheckoutComponentProps = {
 	stripePublicKey: string;
 	countryId: IsoCountry;
 	abParticipations: Participations;
+	useStripeExpressCheckout: boolean;
 };
 
 function paymentMethodIsActive(paymentMethod: PaymentMethod) {
@@ -229,6 +230,7 @@ export function OneTimeCheckoutComponent({
 	stripePublicKey,
 	countryId,
 	abParticipations,
+	useStripeExpressCheckout,
 }: OneTimeCheckoutComponentProps) {
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
@@ -289,7 +291,7 @@ export function OneTimeCheckoutComponent({
 
 	const elements = useElements();
 	useEffect(() => {
-		if (finalAmount && elements) {
+		if (useStripeExpressCheckout && finalAmount && elements) {
 			// valid elements and final amount, set amount, enable Express checkout
 			elements.update({ amount: finalAmount * 100 });
 			setStripeExpressCheckoutEnable(true);
@@ -297,7 +299,8 @@ export function OneTimeCheckoutComponent({
 			// invalid elements and final amount, disable Express checkout
 			setStripeExpressCheckoutEnable(false);
 		}
-	}, [finalAmount, elements]);
+	}, [finalAmount, elements, useStripeExpressCheckout]);
+
 	useEffect(() => {
 		if (finalAmount) {
 			// Track valid final amount selection with QM
@@ -692,34 +695,75 @@ export function OneTimeCheckoutComponent({
 								}}
 							/>
 
-							{stripeExpressCheckoutReady && (
-								<Divider
-									displayText="or"
-									size="full"
-									cssOverrides={css`
-										::before {
-											margin-left: 0;
+											resolve(options);
 										}
-										::after {
-											margin-right: 0;
+									}}
+									onConfirm={async (event) => {
+										if (!(stripe && elements)) {
+											console.error('Stripe not loaded');
+											return;
 										}
-										margin: 0;
-										margin-top: 14px;
-										margin-bottom: 14px;
-										width: 100%;
-										@keyframes fadeIn {
-											0% {
-												opacity: 0;
-											}
-											100% {
-												opacity: 1;
-											}
+
+										const { error: submitError } = await elements.submit();
+
+										if (submitError) {
+											setErrorMessage(submitError.message);
+											return;
 										}
-										animation: fadeIn 1s;
-									`}
+
+										// ->
+
+										setPaymentMethod('StripeExpressCheckoutElement');
+										setStripeExpressCheckoutPaymentType(
+											event.expressPaymentType,
+										);
+										event.billingDetails?.email &&
+											setEmail(event.billingDetails.email);
+
+										/**
+										 * There is a useEffect that listens to this and submits the form
+										 * when true
+										 */
+										setStripeExpressCheckoutSuccessful(true);
+									}}
+									options={{
+										paymentMethods: {
+											applePay: 'auto',
+											googlePay: 'auto',
+											link: 'never',
+										},
+									}}
 								/>
-							)}
-						</div>
+
+								{stripeExpressCheckoutReady && (
+									<Divider
+										displayText="or"
+										size="full"
+										cssOverrides={css`
+											::before {
+												margin-left: 0;
+											}
+											::after {
+												margin-right: 0;
+											}
+											margin: 0;
+											margin-top: 14px;
+											margin-bottom: 14px;
+											width: 100%;
+											@keyframes fadeIn {
+												0% {
+													opacity: 0;
+												}
+												100% {
+													opacity: 1;
+												}
+											}
+											animation: fadeIn 1s;
+										`}
+									/>
+								)}
+							</div>
+						)}
 
 						<FormSection>
 							<Legend>1. Your details</Legend>

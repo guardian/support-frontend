@@ -59,6 +59,3 @@ export function getThankYouOrder(): OrderSchemaType | undefined {
 	const parsedOrder = fromSessionStorage(orderKey, OrderSchema);
 	return is(OrderSchema, parsedOrder) ? parsedOrder : undefined;
 }
-export function unsetThankYouOrder() {
-	storage.session.remove(orderKey);
-}
