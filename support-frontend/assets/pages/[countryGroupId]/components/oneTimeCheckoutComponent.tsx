@@ -625,75 +625,36 @@ export function OneTimeCheckoutComponent({
 			>
 				<Box cssOverrides={shorterBoxMargin}>
 					<BoxContents>
-						<div
-							css={css`
-								/* Prevent content layout shift */
-								min-height: 8px;
-							`}
-						>
-							<ExpressCheckoutElement
-								onReady={({ availablePaymentMethods }) => {
-									/**
-									 * This is use to show UI needed besides this Element
-									 * i.e. The "or" divider
-									 */
-									if (
-										!!availablePaymentMethods?.applePay ||
-										!!availablePaymentMethods?.googlePay
-									) {
-										setStripeExpressCheckoutReady(true);
-									}
-								}}
-								onClick={({ resolve }) => {
-									/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
-									if (stripeExpressCheckoutEnable) {
-										const options = {
-											emailRequired: true,
-										};
-										// Track payment method selection with QM
-										sendEventPaymentMethodSelected(
-											'StripeExpressCheckoutElement',
-										);
-
-										resolve(options);
-									}
-								}}
-								onConfirm={async (event) => {
-									if (!(stripe && elements)) {
-										console.error('Stripe not loaded');
-										return;
-									}
-
-									const { error: submitError } = await elements.submit();
-
-									if (submitError) {
-										setErrorMessage(submitError.message);
-										return;
-									}
-
-									// ->
-
-									setPaymentMethod('StripeExpressCheckoutElement');
-									setStripeExpressCheckoutPaymentType(event.expressPaymentType);
-									event.billingDetails?.email &&
-										setEmail(event.billingDetails.email);
-									event.billingDetails?.email &&
-										setConfirmedEmail(event.billingDetails.email);
-
-									/**
-									 * There is a useEffect that listens to this and submits the form
-									 * when true
-									 */
-									setStripeExpressCheckoutSuccessful(true);
-								}}
-								options={{
-									paymentMethods: {
-										applePay: 'auto',
-										googlePay: 'auto',
-										link: 'never',
-									},
-								}}
-							/>
+						{useStripeExpressCheckout && (
+							<div
+								css={css`
+									/* Prevent content layout shift */
+									min-height: 8px;
+								`}
+							>
+								<ExpressCheckoutElement
+									onReady={({ availablePaymentMethods }) => {
+										/**
+										 * This is use to show UI needed besides this Element
+										 * i.e. The "or" divider
+										 */
+										if (
+											!!availablePaymentMethods?.applePay ||
+											!!availablePaymentMethods?.googlePay
+										) {
+											setStripeExpressCheckoutReady(true);
+										}
+									}}
+									onClick={({ resolve }) => {
+										/** @see https://docs.stripe.com/elements/express-checkout-element/accept-a-payment?locale=en-GB#handle-click-event */
+										if (stripeExpressCheckoutEnable) {
+											const options = {
+												emailRequired: true,
+											};
+											// Track payment method selection with QM
+											sendEventPaymentMethodSelected(
+												'StripeExpressCheckoutElement',
+											);
 
 											resolve(options);
 										}
