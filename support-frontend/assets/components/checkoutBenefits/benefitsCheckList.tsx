@@ -117,56 +117,54 @@ export function BenefitsCheckList({
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
-			{benefitsCheckListData.map((item) => (
-				<li
-					css={css`
-						display: flex;
-					`}
-				>
-					{style !== 'hidden' && (
-						<div
-							css={[
-								checkListIconCss(style),
-								checkListIconColor(iconColor),
-								item.maybeGreyedOut,
-							]}
-						>
+			{benefitsCheckListData.map((item) => {
+				const pillCopy = item.isNew ? 'New' : item.pill;
+				return (
+					<li
+						css={css`
+							display: flex;
+						`}
+					>
+						{style !== 'hidden' && (
 							<div
 								css={[
-									style === 'standard' ? iconContainerCss : css``,
-									item.hideBullet ? opaqueCss : css``,
+									checkListIconCss(style),
+									checkListIconColor(iconColor),
+									item.maybeGreyedOut,
 								]}
 							>
-								<ChecklistItemIcon checked={item.isChecked} style={style} />
+								<div
+									css={[
+										style === 'standard' ? iconContainerCss : css``,
+										item.hideBullet ? opaqueCss : css``,
+									]}
+								>
+									<ChecklistItemIcon checked={item.isChecked} style={style} />
+								</div>
 							</div>
-						</div>
-					)}
-					<div css={[checkListTextCss, item.maybeGreyedOut]}>
-						{typeof item.text === 'string' ? (
-							<span css={checkListTextItemCss}>
-								{item.isNew && (
-									<>
-										<BenefitPill copy="New" />{' '}
-									</>
-								)}
-								{item.pill && <BenefitPill copy={item.pill} />}
-								{item.strong ? <strong>{item.text}</strong> : item.text}
-								{item.toolTip && (
-									<Tooltip
-										children={<p>{item.toolTip}</p>}
-										xAxisOffset={108}
-										yAxisOffset={12}
-										placement="bottom"
-										desktopOnly={true}
-									></Tooltip>
-								)}
-							</span>
-						) : (
-							item.text
 						)}
-					</div>
-				</li>
-			))}
+						<div css={[checkListTextCss, item.maybeGreyedOut]}>
+							{typeof item.text === 'string' ? (
+								<span css={checkListTextItemCss}>
+									{pillCopy && <BenefitPill copy={pillCopy} />}{' '}
+									{item.strong ? <strong>{item.text}</strong> : item.text}
+									{item.toolTip && (
+										<Tooltip
+											children={<p>{item.toolTip}</p>}
+											xAxisOffset={108}
+											yAxisOffset={12}
+											placement="bottom"
+											desktopOnly={true}
+										></Tooltip>
+									)}
+								</span>
+							) : (
+								item.text
+							)}
+						</div>
+					</li>
+				);
+			})}
 		</ul>
 	);
 }
