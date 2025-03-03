@@ -30,7 +30,7 @@ class WeeklySubscriptionController(
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
-    with CanonicalLinks
+    with RegionalisedLinks
     with SettingsSurrogateKeySyntax {
 
   import actionRefiners._
@@ -43,7 +43,7 @@ class WeeklySubscriptionController(
 
   def weekly(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val canonicalLink = Some(buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift))
+    val canonicalLink = Some(buildRegionalisedWeeklySubscriptionLink("uk", orderIsAGift))
 
     val queryPromos =
       request.queryString
@@ -81,13 +81,13 @@ class WeeklySubscriptionController(
   }
 
   private def getWeeklyHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = Map(
-    "en-us" -> buildCanonicalWeeklySubscriptionLink("us", orderIsAGift),
-    "en-gb" -> buildCanonicalWeeklySubscriptionLink("uk", orderIsAGift),
-    "en-au" -> buildCanonicalWeeklySubscriptionLink("au", orderIsAGift),
-    "en-nz" -> buildCanonicalWeeklySubscriptionLink("nz", orderIsAGift),
-    "en-ca" -> buildCanonicalWeeklySubscriptionLink("ca", orderIsAGift),
-    "en" -> buildCanonicalWeeklySubscriptionLink("int", orderIsAGift),
-    "en" -> buildCanonicalWeeklySubscriptionLink("eu", orderIsAGift),
+    "en-us" -> buildRegionalisedWeeklySubscriptionLink("us", orderIsAGift),
+    "en-gb" -> buildRegionalisedWeeklySubscriptionLink("uk", orderIsAGift),
+    "en-au" -> buildRegionalisedWeeklySubscriptionLink("au", orderIsAGift),
+    "en-nz" -> buildRegionalisedWeeklySubscriptionLink("nz", orderIsAGift),
+    "en-ca" -> buildRegionalisedWeeklySubscriptionLink("ca", orderIsAGift),
+    "en" -> buildRegionalisedWeeklySubscriptionLink("int", orderIsAGift),
+    "en" -> buildRegionalisedWeeklySubscriptionLink("eu", orderIsAGift),
   )
 
   private def productPrices(queryPromos: List[String], orderIsAGift: Boolean) = {
