@@ -9,12 +9,12 @@ import {
 } from '@guardian/source/foundations';
 import { Label, Radio, RadioGroup } from '@guardian/source/react-components';
 import type { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import type {
 	DeliveryAgentOption,
 	DeliveryAgentsResponse,
-} from 'helpers/redux/checkout/addressMeta/state';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { firstError } from 'helpers/subscriptionsForms/validation';
+} from '../../[countryGroupId]/checkout/helpers/getDeliveryAgents';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -28,10 +28,12 @@ type GreenDeliveryMethod = (typeof greenDeliveryMethods)[number];
 interface DeliveryAgentsSelectProps {
 	chosenDeliveryAgent?: number;
 	deliveryAgentsResponse?: DeliveryAgentsResponse;
-	setDeliveryAgent: ActionCreatorWithOptionalPayload<
-		number | undefined,
-		'addressMeta/setDeliveryAgent'
-	>;
+	setDeliveryAgent:
+		| ActionCreatorWithOptionalPayload<
+				number | undefined,
+				'addressMeta/setDeliveryAgent'
+		  >
+		| ((agent: number) => void);
 	formErrors: Array<FormError<string>>;
 	deliveryAddressErrors: Array<FormError<string>>;
 }

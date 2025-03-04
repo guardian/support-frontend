@@ -1,18 +1,17 @@
 package com.gu.support.paperround
 
-import com.gu.okhttp.RequestRunners.{FutureHttpClient, futureRunner}
+import com.gu.okhttp.RequestRunners.{FutureHttpClient, configurableFutureRunner}
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.{PaperRoundConfig, PaperRoundConfigProvider}
-import com.gu.support.paperround.PaperRound
-import com.gu.support.paperround.{AgentsEndpoint, CoverageEndpoint, ChargeBandsEndpoint}
 import com.gu.support.touchpoint.{TouchpointService, TouchpointServiceProvider}
 
+import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaperRoundServiceProvider(configProvider: PaperRoundConfigProvider)(implicit ec: ExecutionContext)
     extends TouchpointServiceProvider[PaperRoundService, PaperRoundConfig](configProvider) {
   override protected def createService(config: PaperRoundConfig) = {
-    new PaperRoundService(config, futureRunner)
+    new PaperRoundService(config, configurableFutureRunner(20.seconds))
   }
 }
 
