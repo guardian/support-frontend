@@ -32,14 +32,13 @@ export const createBigQueryClient = (
 	return bigQuery;
 };
 
-export const writeRowsToBigQuery = async (
+export const writeRowToBigQuery = async (
 	bigQueryClient: BigQuery,
-	rows: unknown[],
+	row: unknown,
 ): Promise<void> => {
 	await bigQueryClient
 		.dataset('datalake')
 		.table('fact_acquisition_event')
-		.insert(rows);
-
-	console.log('Inserted rows:', rows);
+		.insert(row);
+	console.log('Inserted row:', row);
 };
