@@ -20,7 +20,7 @@ export interface LandingPageProductDescription {
 	};
 }
 
-export interface Products {
+interface Products {
 	Contribution: LandingPageProductDescription;
 	SupporterPlus: LandingPageProductDescription;
 	TierThree: LandingPageProductDescription;

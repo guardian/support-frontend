@@ -139,16 +139,6 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
-const newspaperArchiveBenefitUK = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
-};
-const newspaperArchiveBenefitROW = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
-};
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
@@ -165,16 +155,6 @@ const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
-];
-
-const tierThreeBenefits = [guardianWeeklyBenefit];
-const tierThreeInclArchiveBenefitsUK = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitUK,
-];
-const tierThreeInclArchiveBenefitsROW = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitROW,
 ];
 
 const guardianAdLiteBenefits = [
@@ -421,24 +401,6 @@ export const productCatalogDescription: Record<
 		},
 	},
 };
-
-export function productCatalogDescriptionNewspaperArchive(
-	countryGroupId?: CountryGroupId,
-) {
-	const newsPaperArchiveBenefit = countryGroupId
-		? countryGroupId === 'GBPCountries'
-			? tierThreeInclArchiveBenefitsUK
-			: tierThreeInclArchiveBenefitsROW
-		: tierThreeBenefits;
-
-	return {
-		...productCatalogDescription,
-		TierThree: {
-			...productCatalogDescription.TierThree,
-			benefits: newsPaperArchiveBenefit,
-		},
-	};
-}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,
