@@ -77,6 +77,7 @@ export function ThreeTierCards({
 						product={cardContent.product}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
+						isUserSelected={cardContent.isUserSelected}
 						link={cardContent.link}
 						promoCount={promoCount}
 						price={cardContent.price}
