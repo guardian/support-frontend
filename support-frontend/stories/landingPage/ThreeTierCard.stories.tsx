@@ -4,11 +4,11 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { productCatalogDescription } from 'helpers/productCatalog';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import {fallBackLandingPageSelection} from "../../assets/helpers/abTests/landingPageAbTests";
 
 const promotionEURCountries = {
 	name: 'SupportPlusAndGuardianWeekly',
@@ -63,56 +63,30 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	isRecommended: true,
-	isRecommendedSubdued: false,
+  lozengeText: 'Highest impact',
+  isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
 	price: 12,
-	productDescription: productCatalogDescription.SupporterPlus,
+  product: 'SupporterPlus',
+  cardTier: 2,
+  productDescription: fallBackLandingPageSelection.products.SupporterPlus,
+  ctaCopy: 'Support',
 };
 
 export const Promotion = Template.bind({});
 
 Promotion.args = {
-	isRecommended: true,
-	isRecommendedSubdued: false,
+  lozengeText: 'Highest impact',
+  isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
 	price: 38.5,
-	productDescription: productCatalogDescription.TierThree,
+  product: 'TierThree',
+  cardTier: 3,
+	productDescription: fallBackLandingPageSelection.products.TierThree,
+  ctaCopy: 'Support',
 	promotion: promotionEURCountries,
-};
-
-export const Offer = Template.bind({});
-
-Offer.args = {
-	isRecommended: false,
-	isRecommendedSubdued: false,
-	isUserSelected: true,
-	currencyId: 'USD',
-	paymentFrequency: 'MONTHLY',
-	price: 15,
-	productDescription: {
-		...productCatalogDescription.TierThree,
-		offersSummary: [
-			{ strong: true, copy: 'including a free book as our gift to you**' },
-		],
-		offers: [
-			{
-				copy: (
-					<p>
-						<span style={{ fontWeight: 'bold' }}>
-							A free book as our gift to you
-							<sup style={{ fontWeight: 'lighter', fontSize: '14px' }}>
-								**
-							</sup>{' '}
-						</span>
-						Choose from a selection curated by Guardian staff{' '}
-					</p>
-				),
-			},
-		],
-	},
 };
