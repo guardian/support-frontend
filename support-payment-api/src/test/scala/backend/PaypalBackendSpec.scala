@@ -124,8 +124,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
                 Some(SwitchDetails(On)),
                 Some(SwitchDetails(On)),
                 Some(SwitchDetails(On)),
-                Some(SwitchDetails(On)),
-                Some(SwitchDetails(On)),
               ),
             ),
           ),
@@ -184,9 +182,9 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
   "Paypal Backend" when {
 
-    "a request  is made to create a payment" should {
+    "a request is made to create a payment" should {
 
-      "return Paypal switch not enabled error  if paypal switch in support-admin-console is Off" in new PaypalBackendFixture {
+      "return Paypal switch not enabled error if paypal switch in support-admin-console is Off" in new PaypalBackendFixture {
         val createPaypalPaymentData = CreatePaypalPaymentData(
           Currency.GBP,
           BigDecimal(3),
@@ -201,8 +199,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
                 Some(
                   OneOffPaymentMethodsSwitches(
                     OneOffPaymentMethodsSwitchesTypes(
-                      Some(SwitchDetails(On)),
-                      Some(SwitchDetails(On)),
                       Some(SwitchDetails(On)),
                       Some(SwitchDetails(On)),
                       Some(SwitchDetails(Off)),

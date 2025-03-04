@@ -59,8 +59,6 @@ object RecaptchaSwitches {
 
 case class OneOffPaymentMethodSwitches(
     stripe: Option[SwitchState],
-    stripeApplePay: Option[SwitchState],
-    stripePaymentRequestButton: Option[SwitchState],
     // @see https://docs.stripe.com/elements/express-checkout-element
     stripeExpressCheckout: Option[SwitchState],
     payPal: Option[SwitchState],
