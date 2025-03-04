@@ -52,7 +52,6 @@ case class RecaptchaSwitchTypes(
 
 case class OneOffPaymentMethodsSwitchesTypes(
     stripe: Option[SwitchDetails],
-    stripePaymentRequestButton: Option[SwitchDetails],
     stripeExpressCheckout: Option[SwitchDetails],
     payPal: Option[SwitchDetails],
 )
