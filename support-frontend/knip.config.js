@@ -29,6 +29,7 @@ module.exports = {
 		'ts-loader',
 		'sass', // peer dependency of fast-sass-loader
 		'sass-mq', // imported from breakpoints.scss
+		'@babel/runtime', // required by the build (errors without it)
 	],
 	webpack: {
 		entry: ['webpack.*.js'],

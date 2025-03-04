@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-cd support-frontend && yarn lint-staged
+cd support-frontend && pnpm lint-staged
 
 if git diff-index --cached  --diff-filter=AM --name-only  HEAD | grep --quiet .scala$
 then

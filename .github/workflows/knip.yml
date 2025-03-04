@@ -11,17 +11,23 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - run: npm install --global corepack@0.31.0
+
+      - run: corepack enable
+        shell: bash
+        working-directory: support-frontend
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: support-frontend/yarn.lock
+          # cache: 'yarn'
+          # cache-dependency-path: support-frontend/yarn.lock
 
       - name: Install
-        run: yarn
+        run: pnpm install
         working-directory: support-frontend
 
       - name: Knip check
-        run: yarn knip
+        run: pnpm knip
         working-directory: support-frontend
