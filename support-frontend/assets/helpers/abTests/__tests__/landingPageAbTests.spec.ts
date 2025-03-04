@@ -27,6 +27,7 @@ const nonUsTest: LandingPageTest = {
 				subheading:
 					"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>",
 			},
+			products: fallBackLandingPageSelection.products,
 		},
 	],
 };
@@ -42,6 +43,7 @@ const usTest: LandingPageTest = {
 				subheading:
 					"We're not owned by a billionaire or profit-driven corporation: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact (and you can cancel anytime). Thank you.",
 			},
+			products: fallBackLandingPageSelection.products,
 		},
 	],
 };
