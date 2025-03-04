@@ -75,16 +75,17 @@ const paragraph = css`
 	margin-bottom: ${space[3]}px;
 `;
 const displayMobile = css`
-	${from.desktop} {
-		display: none;
+	${until.desktop} {
+		display: inherit;
 	}
 `;
 const displayDesktop = css`
-	${until.desktop} {
-		display: none;
+	${from.desktop} {
+		display: inherit;
 	}
 `;
 const image = css`
+	display: none;
 	width: 100%;
 	object-fit: contain;
 	${from.tablet} {
