@@ -17,14 +17,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |        "description" : "Stripe - Credit/Debit card",
           |        "state" : "On"
           |      },
-          |      "stripeApplePay" : {
-          |        "description" : "Stripe - Apple Pay",
-          |        "state" : "On"
-          |      },
-          |      "stripePaymentRequestButton" : {
-          |        "description" : "Stripe - Payment Request Button",
-          |        "state" : "On"
-          |      },
           |      "stripeExpressCheckout" : {
           |        "description" : "Stripe - Payment Request Button",
           |        "state" : "On"
@@ -150,7 +142,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
 
       decode[Switches](json) mustBe (Right(
         Switches(
-          oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
+          oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
           recurringPaymentMethods = RecurringPaymentMethodSwitches(
             Some(On),
             Some(On),

@@ -86,7 +86,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     val allSettings = AllSettings(
       Switches(
-        oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
+        oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
         recurringPaymentMethods = RecurringPaymentMethodSwitches(
           Some(On),
           Some(On),
