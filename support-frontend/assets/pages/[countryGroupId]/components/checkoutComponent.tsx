@@ -237,15 +237,14 @@ export function CheckoutComponent({
 					),
 				];
 			}
-		} else {
-			return productDescription.benefits
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-				.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				}));
 		}
+		return productDescription.benefits
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
+			.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
 	};
 
 	const productFields = getProductFields({
