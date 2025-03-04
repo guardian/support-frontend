@@ -8,7 +8,7 @@ import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import {fallBackLandingPageSelection} from "../../assets/helpers/abTests/landingPageAbTests";
+import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
 
 const promotionEURCountries = {
 	name: 'SupportPlusAndGuardianWeekly',
@@ -63,30 +63,30 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-  lozengeText: 'Highest impact',
-  isSubdued: false,
+	lozengeText: 'Highest impact',
+	isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
 	price: 12,
-  product: 'SupporterPlus',
-  cardTier: 2,
-  productDescription: fallBackLandingPageSelection.products.SupporterPlus,
-  ctaCopy: 'Support',
+	product: 'SupporterPlus',
+	cardTier: 2,
+	productDescription: fallBackLandingPageSelection.products.SupporterPlus,
+	ctaCopy: 'Support',
 };
 
 export const Promotion = Template.bind({});
 
 Promotion.args = {
-  lozengeText: 'Highest impact',
-  isSubdued: false,
+	lozengeText: 'Highest impact',
+	isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
 	price: 38.5,
-  product: 'TierThree',
-  cardTier: 3,
+	product: 'TierThree',
+	cardTier: 3,
 	productDescription: fallBackLandingPageSelection.products.TierThree,
-  ctaCopy: 'Support',
+	ctaCopy: 'Support',
 	promotion: promotionEURCountries,
 };

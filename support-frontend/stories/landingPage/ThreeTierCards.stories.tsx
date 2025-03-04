@@ -8,7 +8,7 @@ import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/component
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { fallBackLandingPageSelection } from "../../assets/helpers/abTests/landingPageAbTests";
+import { fallBackLandingPageSelection } from '../../assets/helpers/abTests/landingPageAbTests';
 
 export default {
 	title: 'LandingPage/Three Tier Cards',
@@ -54,21 +54,21 @@ Default.args = {
 		{
 			isUserSelected: false,
 			price: 5,
-      product: 'Contribution',
-      ...fallBackLandingPageSelection.products.Contribution,
+			product: 'Contribution',
+			...fallBackLandingPageSelection.products.Contribution,
 		},
 		{
 			isUserSelected: false,
 			price: 10,
-      product: 'SupporterPlus',
-      ...fallBackLandingPageSelection.products.SupporterPlus,
+			product: 'SupporterPlus',
+			...fallBackLandingPageSelection.products.SupporterPlus,
 			// productDescription: productCatalogDescription.SupporterPlus,
 		},
 		{
 			isUserSelected: true,
 			price: 25,
-      product: 'TierThree',
-      ...fallBackLandingPageSelection.products.TierThree,
+			product: 'TierThree',
+			...fallBackLandingPageSelection.products.TierThree,
 			promotion: {
 				discountedPrice: 16,
 				discount: {
