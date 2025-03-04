@@ -7,7 +7,6 @@ import {
 import { getGCPCredentialsFromSSM } from './ssm';
 import type { SQSEvent } from 'aws-lambda';
 import {
-	AcquisitionProduct,
 	transformAcquisitionProductForBigQuery,
 	AcquisitionProductEventSchema,
 } from './acquisitions';
@@ -22,15 +21,17 @@ type Result =
 	  };
 
 export const handler = async (event: SQSEvent) => {
+	// BigQuery connect
 	const stage = getStage();
 	const credentials = await getGCPCredentialsFromSSM(stage);
 	const authClient = await buildAuthClient(credentials);
 	const bigQueryClient = createBigQueryClient(authClient, stage);
-	console.log('Received event:', event);
 
+	// Parse SQSEvents
+	console.log('Received event:', event);
 	const asyncResults: Array<Promise<Result>> = event.Records.map(
 		async (record): Promise<Result> => {
-			// Parse JSON record body
+			// JSON parse record body
 			let payload;
 			try {
 				payload = JSON.parse(record.body);
@@ -41,7 +42,7 @@ export const handler = async (event: SQSEvent) => {
 				return { success: false, messageId: record.messageId };
 			}
 
-			// Validate the payload against the schema
+			// Validate the payload against Zod schema
 			const parsedAcquisitionProductDetail =
 				AcquisitionProductEventSchema.safeParse(payload);
 			if (!parsedAcquisitionProductDetail.success) {
@@ -52,11 +53,12 @@ export const handler = async (event: SQSEvent) => {
 				return { success: false, messageId: record.messageId };
 			}
 
-			const data: AcquisitionProduct =
-				parsedAcquisitionProductDetail.data.detail;
-			const row = transformAcquisitionProductForBigQuery(data);
+			// Transform payload to BigQuery row
+			const row = transformAcquisitionProductForBigQuery(
+				parsedAcquisitionProductDetail.data.detail,
+			);
 
-			// Write the row to BigQuery
+			// Write BigQuery row
 			try {
 				await writeRowToBigQuery(bigQueryClient, row);
 			} catch (bigQueryError) {
@@ -73,10 +75,10 @@ export const handler = async (event: SQSEvent) => {
 		},
 	);
 
+	// Wait for all async results to complete
 	const results = await Promise.all(asyncResults);
 
-	// If certain messages fail to be processed, retry these ones but
-	// not successfully processed messages:
+	// Batch return failed items
 	// https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html#services-sqs-batchfailurereporting
 	const itemFailures = results
 		.filter((result) => !result.success)

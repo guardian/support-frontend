@@ -5,10 +5,14 @@ import {
 	IsoCurrencySchema,
 	ContributionTypeSchema,
 	PaymentMethodSchema,
+	IsoCountryType,
+	ContributionType,
+	ProductType,
+	IsoCurrencyType,
+	PaymentMethodType,
 } from './dependencies';
 
 // Items to write to BigQuery (datalake:fact_acquisition_event)
-// From scala : AcquistionDataRowMapper.mapToTableRow
 export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.string(),
 	country: z.enum(IsoCountrySchema),
@@ -24,38 +28,64 @@ export const AcquisitionProductSchema = z.object({
 		.array()
 		.nullable(),
 	browserId: z.string().nullable(),
-	identityId: z.string(), // 200381287
-	pageViewId: z.string(), // m7ezxppo1x1qg5b4q1x8
+	identityId: z.string(),
+	pageViewId: z.string(),
 	referrerPageViewId: z.string().nullable(),
 	promoCode: z.string().nullable(),
 	queryParameters: z.object({ key: z.string(), value: z.string() }).array(),
 	reusedExistingPaymentMethod: z.boolean(),
-	acquisitionType: z.string(), // Purchase
-	readerType: z.string(), // Direct
+	acquisitionType: z.string(),
+	readerType: z.string(),
 	zuoraSubscriptionNumber: z.string().nullable(),
-	contributionId: z.string().nullable(), //f7c7aef7-f12d-476b-ba68-5ae79237cd8f
-	paymentId: z.string().nullable(), // PAYID-M64KYRY1DX444112D060283M
+	contributionId: z.string().nullable(),
+	paymentId: z.string().nullable(),
 	product: z.enum(ProductTypeSchema),
 	amount: z.number().nullable(),
 	currency: z.enum(IsoCurrencySchema),
 	source: z.string().nullable(),
-	platform: z.string().nullable(), // SUPPORT
-	labels: z.string().array(), // one-time-checkout
+	platform: z.string().nullable(),
+	labels: z.string().array(),
 });
-
+export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
 export const AcquisitionProductEventSchema = z.object({
 	detail: AcquisitionProductSchema,
 });
-
 export type AcquisitionProductEvent = z.infer<
 	typeof AcquisitionProductEventSchema
 >;
-export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
 
+export type AcquisitionProductBigQueryType = {
+	event_timestamp: string;
+	product: ProductType;
+	amount: number | null;
+	currency: IsoCurrencyType;
+	country_code: IsoCountryType;
+	component_id: string | null;
+	component_type: string | null;
+	campaign_codes: [string] | [];
+	referrer_url: string | null;
+	ab_tests: { name: string; variant: string }[];
+	payment_frequency: ContributionType;
+	payment_provider: PaymentMethodType;
+	print_options: { product: string; delivery_country_code: string }[] | null;
+	browser_id: string | null;
+	identity_id: string;
+	page_view_id: string;
+	referrer_page_view_id: string | null;
+	promo_code: string | null;
+	query_parameters: { key: string; value: string }[];
+	reused_existing_payment_method: boolean;
+	acquisition_type: string;
+	reader_type: string;
+	zuora_subscription_number: string | null;
+	contribution_id: string | null;
+	payment_id: string | null;
+	platform: string | null;
+};
 // TODO: create a test for this function
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
-) => {
+): AcquisitionProductBigQueryType => {
 	return {
 		event_timestamp: acquisitionProduct.eventTimeStamp,
 		product: acquisitionProduct.product,
@@ -71,7 +101,6 @@ export const transformAcquisitionProductForBigQuery = (
 		ab_tests: acquisitionProduct.abTests,
 		payment_frequency: acquisitionProduct.paymentFrequency,
 		payment_provider: acquisitionProduct.paymentProvider,
-		// TODO: check this comes out correctly
 		print_options: acquisitionProduct.printOptions,
 		browser_id: acquisitionProduct.browserId,
 		identity_id: acquisitionProduct.identityId,
