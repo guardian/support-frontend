@@ -4,11 +4,11 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { productCatalogDescription } from 'helpers/productCatalog';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { fallBackLandingPageSelection } from "../../assets/helpers/abTests/landingPageAbTests";
 
 export default {
 	title: 'LandingPage/Three Tier Cards',
@@ -52,22 +52,23 @@ export const Default = Template.bind({});
 Default.args = {
 	cardsContent: [
 		{
-			isRecommended: false,
 			isUserSelected: false,
 			price: 5,
-			productDescription: productCatalogDescription.Contribution,
+      product: 'Contribution',
+      ...fallBackLandingPageSelection.products.Contribution,
 		},
 		{
-			isRecommended: true,
 			isUserSelected: false,
 			price: 10,
-			productDescription: productCatalogDescription.SupporterPlus,
+      product: 'SupporterPlus',
+      ...fallBackLandingPageSelection.products.SupporterPlus,
+			// productDescription: productCatalogDescription.SupporterPlus,
 		},
 		{
-			isRecommended: false,
 			isUserSelected: true,
 			price: 25,
-			productDescription: productCatalogDescription.TierThree,
+      product: 'TierThree',
+      ...fallBackLandingPageSelection.products.TierThree,
 			promotion: {
 				discountedPrice: 16,
 				discount: {
