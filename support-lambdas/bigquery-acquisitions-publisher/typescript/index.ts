@@ -15,8 +15,6 @@ import {
 type Result =
 	| {
 			success: true;
-			// TODO: define a type for the row object
-			row: unknown;
 	  }
 	| {
 			success: false;
@@ -30,37 +28,45 @@ export const handler = async (event: SQSEvent) => {
 	const bigQueryClient = createBigQueryClient(authClient, stage);
 	console.log('Received event:', event);
 
-	const results: Array<Result> = event.Records.map((record) => {
-		// Parse JSON record body (TODO: handle JSON parsing errors)
-		const payload = JSON.parse(record.body);
+	const asyncResults: Array<Promise<Result>> = event.Records.map(
+		async (record): Promise<Result> => {
+			// Parse JSON record body (TODO: handle JSON parsing errors)
+			const payload = JSON.parse(record.body);
 
-		// Validate the payload against the schema
-		const parsedAcquisitionProductDetail =
-			AcquisitionProductEventSchema.safeParse(payload);
-		if (!parsedAcquisitionProductDetail.success) {
-			console.error(
-				'Failed to parse payload:',
-				parsedAcquisitionProductDetail.error,
-			);
-			return { success: false, messageId: record.messageId };
-		}
+			// Validate the payload against the schema
+			const parsedAcquisitionProductDetail =
+				AcquisitionProductEventSchema.safeParse(payload);
+			if (!parsedAcquisitionProductDetail.success) {
+				console.error(
+					'Failed to parse payload:',
+					parsedAcquisitionProductDetail.error,
+				);
+				return { success: false, messageId: record.messageId };
+			}
 
-		const data: AcquisitionProduct = parsedAcquisitionProductDetail.data.detail;
+			const data: AcquisitionProduct =
+				parsedAcquisitionProductDetail.data.detail;
 
-		const row = transformAcquisitionProductForBigQuery(data);
+			const row = transformAcquisitionProductForBigQuery(data);
 
-		return { success: true, row };
-	});
+			await writeRowsToBigQuery(bigQueryClient, [row]);
 
-	const successfulRows = results
-		.filter((result) => result.success)
-		.map((result) => result.row);
+			return { success: true };
+		},
+	);
 
-	if (successfulRows.length > 0) {
-		// TODO: error handling
-		await writeRowsToBigQuery(bigQueryClient, successfulRows);
-	}
+	const results = await Promise.all(asyncResults);
 
-	// TODO: return any failures to the runtime (either parsing failures or BigQuery write failures)
+	// If certain messages fail to be processed, retry these ones but
+	// not successfully processed messages:
 	// https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html#services-sqs-batchfailurereporting
+	const itemFailures = results
+		.filter((result) => !result.success)
+		.map((result) => result.messageId);
+
+	return {
+		batchItemFailures: itemFailures.map((messageId) => ({
+			itemIdentifier: messageId,
+		})),
+	};
 };
