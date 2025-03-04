@@ -324,9 +324,11 @@ export function CheckoutComponent({
 				setDeliveryPostcodeIsOutsideM25(false);
 			} else {
 				setDeliveryPostcodeIsOutsideM25(true);
-				void getDeliveryAgents(deliveryPostcode).then((agents) => {
-					setDeliveryAgents(agents);
-				});
+				void getDeliveryAgents(deliveryPostcode).then(
+					(agents: DeliveryAgentsResponse) => {
+						setDeliveryAgents(agents);
+					},
+				);
 			}
 		}
 	}, [deliveryPostcode]);
@@ -926,7 +928,7 @@ export function CheckoutComponent({
 						)}
 						{deliveryPostcodeIsOutsideM25 && (
 							<FormSection>
-								<Legend>Delivery Agent</Legend>
+								<Legend>3. Delivery Agent</Legend>
 								<DeliveryAgentsSelect
 									chosenDeliveryAgent={chosenDeliveryAgent}
 									deliveryAgentsResponse={deliveryAgents}
@@ -951,7 +953,12 @@ export function CheckoutComponent({
 
 						<FormSection>
 							<Legend>
-								{productDescription.deliverableTo ? '3' : '2'}. Payment method
+								{productDescription.deliverableTo
+									? deliveryPostcodeIsOutsideM25
+										? '4'
+										: '3'
+									: '2'}
+								. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
 									cssOverrides={css``}
