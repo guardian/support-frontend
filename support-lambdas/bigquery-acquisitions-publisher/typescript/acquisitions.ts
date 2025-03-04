@@ -82,7 +82,7 @@ export type AcquisitionProductBigQueryType = {
 	payment_id: string | null;
 	platform: string | null;
 };
-// TODO: create a test for this function
+
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
 ): AcquisitionProductBigQueryType => {
