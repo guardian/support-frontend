@@ -32,7 +32,7 @@ export const AcquisitionProductSchema = z.object({
 	pageViewId: z.string(),
 	referrerPageViewId: z.string().nullable(),
 	promoCode: z.string().nullable(),
-	queryParameters: z.object({ key: z.string(), value: z.string() }).array(),
+	queryParameters: z.object({ name: z.string(), value: z.string() }).array(),
 	reusedExistingPaymentMethod: z.boolean(),
 	acquisitionType: z.string(),
 	readerType: z.string(),
@@ -107,8 +107,11 @@ export const transformAcquisitionProductForBigQuery = (
 		page_view_id: acquisitionProduct.pageViewId,
 		referrer_page_view_id: acquisitionProduct.referrerPageViewId,
 		promo_code: acquisitionProduct.promoCode,
-		// TODO: map to key/value like the Scala code
-		query_parameters: acquisitionProduct.queryParameters,
+		query_parameters: acquisitionProduct.queryParameters.map(
+			({ name, value }) => {
+				return { key: name, value };
+			},
+		),
 		reused_existing_payment_method:
 			acquisitionProduct.reusedExistingPaymentMethod,
 		acquisition_type: acquisitionProduct.acquisitionType,
