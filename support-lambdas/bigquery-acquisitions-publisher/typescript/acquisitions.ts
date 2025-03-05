@@ -83,6 +83,17 @@ export type AcquisitionProductBigQueryType = {
 	platform: string | null;
 };
 
+const mapPlatformName = (name: string): string => {
+	switch (name.toLowerCase()) {
+		case 'iosnativeapp':
+			return 'IOS_NATIVE_APP';
+		case 'androidnativeapp':
+			return 'ANDROID_NATIVE_APP';
+		default:
+			return name;
+	}
+};
+
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
 ): AcquisitionProductBigQueryType => {
@@ -120,6 +131,7 @@ export const transformAcquisitionProductForBigQuery = (
 		contribution_id: acquisitionProduct.contributionId,
 		payment_id: acquisitionProduct.paymentId,
 		// TODO: Pull in the mappings from the Scala code (e.g. iOS/Android)
-		platform: acquisitionProduct.platform || 'SUPPORT',
+		platform: mapPlatformName(acquisitionProduct.platform || 'SUPPORT'),
+		// TODO : label
 	};
 };

@@ -34,7 +34,7 @@ describe('index', () => {
 			amount: 1.0,
 			currency: 'GBP',
 			source: null,
-			platform: 'SUPPORT',
+			platform: 'IOSNATIVEAPP',
 			labels: ['label'],
 		};
 
@@ -64,7 +64,7 @@ describe('index', () => {
 			zuora_subscription_number: null,
 			contribution_id: '123456789',
 			payment_id: '123456789',
-			platform: 'SUPPORT',
+			platform: 'IOS_NATIVE_APP',
 		};
 
 		expect(
