@@ -87,7 +87,7 @@ export function ThreeTierCards({
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
 						ctaCopy={cardContent.cta.copy}
-						lozengeText={cardContent.label?.copy}
+						pillCopy={cardContent.label?.copy}
 					/>
 				);
 			})}

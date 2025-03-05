@@ -23,7 +23,7 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { ThreeTierLozenge } from './threeTierLozenge';
+import { ThreeTierCardPill } from './threeTierCardPill';
 
 export type ThreeTierCardProps = {
 	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
@@ -37,24 +37,24 @@ export type ThreeTierCardProps = {
 	productDescription: LandingPageProductDescription;
 	price: number;
 	ctaCopy: string;
-	lozengeText?: string;
+	pillCopy?: string;
 	promotion?: Promotion;
 };
 
 const container = (
-	hasLabel: boolean,
+	hasPill: boolean,
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
 ) => {
 	let cardOrder = 2;
-	if (hasLabel) {
+	if (hasPill) {
 		cardOrder = 1;
 	} else if (isUserSelected) {
 		cardOrder = 0;
 	}
 	return css`
-		position: ${hasLabel || isUserSelected ? 'relative' : 'static'};
-		background-color: ${(hasLabel && !subdueHighlight) || isUserSelected
+		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
+		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
 			? '#F1FBFF'
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
@@ -63,7 +63,7 @@ const container = (
 		${until.desktop} {
 			order: ${cardOrder};
 			padding-top: ${space[6]}px;
-			margin-top: ${hasLabel && subdueHighlight ? '15px' : '0'};
+			margin-top: ${hasPill && subdueHighlight ? '15px' : '0'};
 		}
 	`;
 };
@@ -197,7 +197,7 @@ export function ThreeTierCard({
 	price,
 	promotion,
 	ctaCopy,
-	lozengeText,
+	pillCopy,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
@@ -206,12 +206,12 @@ export function ThreeTierCard({
 	const { title, benefits } = productDescription;
 
 	return (
-		<section css={container(!!lozengeText, isUserSelected, isSubdued)}>
-			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
-			{!!lozengeText && !isUserSelected && (
-				<ThreeTierLozenge
+		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
+			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
+			{!!pillCopy && !isUserSelected && (
+				<ThreeTierCardPill
 					subdue={isSubdued}
-					title={promotion?.landingPage?.roundel ?? lozengeText}
+					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
 			<h2 css={titleCss}>{title}</h2>

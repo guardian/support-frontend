@@ -63,7 +63,7 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	lozengeText: 'Highest impact',
+	pillCopy: 'Highest impact',
 	isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'GBP',
@@ -78,7 +78,7 @@ Default.args = {
 export const Promotion = Template.bind({});
 
 Promotion.args = {
-	lozengeText: 'Highest impact',
+	pillCopy: 'Highest impact',
 	isSubdued: false,
 	isUserSelected: false,
 	currencyId: 'EUR',
