@@ -330,6 +330,9 @@ export function CheckoutComponent({
 					},
 				);
 			}
+		} else {
+			setDeliveryPostcodeIsOutsideM25(false);
+			setDeliveryAgents(undefined);
 		}
 	}, [deliveryPostcode]);
 
