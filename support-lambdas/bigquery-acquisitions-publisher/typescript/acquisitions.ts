@@ -81,6 +81,7 @@ export type AcquisitionProductBigQueryType = {
 	contribution_id: string | null;
 	payment_id: string | null;
 	platform: string | null;
+	labels: string[];
 };
 
 const mapPlatformName = (name: string): string => {
@@ -130,8 +131,7 @@ export const transformAcquisitionProductForBigQuery = (
 		zuora_subscription_number: acquisitionProduct.zuoraSubscriptionNumber,
 		contribution_id: acquisitionProduct.contributionId,
 		payment_id: acquisitionProduct.paymentId,
-		// TODO: Pull in the mappings from the Scala code (e.g. iOS/Android)
 		platform: mapPlatformName(acquisitionProduct.platform || 'SUPPORT'),
-		// TODO : label
+		labels: acquisitionProduct.labels,
 	};
 };

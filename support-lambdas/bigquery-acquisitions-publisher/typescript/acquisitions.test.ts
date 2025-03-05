@@ -65,6 +65,7 @@ describe('index', () => {
 			contribution_id: '123456789',
 			payment_id: '123456789',
 			platform: 'IOS_NATIVE_APP',
+			labels: ['label'],
 		};
 
 		expect(
