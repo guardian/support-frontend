@@ -318,21 +318,26 @@ export function CheckoutComponent({
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
-	useEffect(() => {
-		if (isValidPostcode(deliveryPostcode)) {
-			if (postcodeIsWithinDeliveryArea(deliveryPostcode)) {
+
+	const fetchDeliveryAgentsForPostcodesOutsideTheM25 = async (
+		postcode: string,
+	) => {
+		if (isValidPostcode(postcode)) {
+			if (postcodeIsWithinDeliveryArea(postcode)) {
 				setDeliveryPostcodeIsOutsideM25(false);
 			} else {
 				setDeliveryPostcodeIsOutsideM25(true);
-				void getDeliveryAgents(deliveryPostcode).then(
-					(agents: DeliveryAgentsResponse) => {
-						setDeliveryAgents(agents);
-					},
-				);
+				const agents = await getDeliveryAgents(postcode);
+				setDeliveryAgents(agents);
 			}
 		} else {
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
+		}
+	};
+	useEffect(() => {
+		if (productKey === 'HomeDelivery') {
+			void fetchDeliveryAgentsForPostcodesOutsideTheM25(deliveryPostcode);
 		}
 	}, [deliveryPostcode]);
 
