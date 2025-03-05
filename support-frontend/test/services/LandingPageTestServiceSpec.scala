@@ -199,7 +199,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               heading = "test heading",
               subheading = "test subheading",
             ),
-            products = Some(products),
+            products = products,
           ),
         ),
       ),
