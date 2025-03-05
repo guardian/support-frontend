@@ -1,12 +1,15 @@
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import type { Participations } from './abTests/models';
+import type { RegularContributionType } from './contributions';
 import { newspaperCountries } from './internationalisation/country';
 import type {
 	CountryGroupId,
 	SupportInternationalisationId,
 } from './internationalisation/countryGroup';
+import { currencies, detect } from './internationalisation/currency';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
+import type { Promotion } from './productPrice/promotions';
 
 export type { ActiveProductKey };
 
@@ -27,6 +30,7 @@ export type ProductBenefit = {
 
 export type ProductTsAndCs = {
 	copy: string;
+	promotionalCopy?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
 		name: string;
@@ -219,7 +223,8 @@ const contributionTsAndCs = [
 ];
 const supporterPlusTsAndCs = [
 	{
-		copy: `If you pay at least £12 per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
+		copy: `If you pay at least £X per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
+		promotionalCopy: `If you pay £XX per month for the first X months, then , then £X per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
 	},
 	...contributionTsAndCs,
 ];
@@ -593,6 +598,49 @@ export function productCatalogGuardianAdLite(): Record<
 			],
 		},
 	};
+}
+
+export function productCatalogTsAndCs(
+	productKey: ActiveProductKey,
+	countryGroupId: CountryGroupId,
+	contributionType: RegularContributionType,
+	promotion?: Promotion,
+): ProductTsAndCs[] {
+	const isoCurrency = detect(countryGroupId);
+	const currencyGlyph = currencies[isoCurrency].glyph;
+	const tsAndCs = productCatalogDescription[productKey].tsAndCs;
+	const frequencyPlural = contributionType === 'MONTHLY' ? 'monthly' : 'annual';
+	const frequencySingular = contributionType === 'MONTHLY' ? 'month' : 'year';
+	// const amount = getLowerProductBenefitThreshold(
+	// 	contributionType,
+	// 	fromCountryGroupId(countryGroupId),
+	// 	countryGroupId,
+	// 	productKey,
+	// );
+	const amount = 12;
+	console.log(promotion);
+	// if (promotion) {
+	// 	// EXAMPLE: $8.50/month for the first 6 months, then $17/month
+	// 	const promoPrice = promotion.discountedPrice ?? amount;
+	// 	const promoPriceFormatted = simpleFormatAmount(
+	// 		currencies[isoCurrency],
+	// 		promoPrice,
+	// 	);
+	// 	const discountDuration = promotion.numberOfDiscountedPeriods ?? 0;
+	// 	return `${promoPriceFormatted}${divider}${period} for the first ${
+	// 		discountDuration > 1 ? discountDuration : ''
+	// 	} ${period}${discountDuration > 1 ? 's' : ''}, then ${amountPerPeriod}`;
+	// }
+	const newTsAndCs = tsAndCs.map((item) => {
+		return {
+			...item,
+			copy: item.copy
+				.replace('£X', currencyGlyph + amount)
+				.replace('monthly', frequencyPlural)
+				.replace('month', frequencySingular),
+		};
+	});
+	return newTsAndCs;
 }
 
 /**
