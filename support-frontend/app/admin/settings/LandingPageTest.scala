@@ -70,7 +70,7 @@ object Products {
 case class LandingPageVariant(
     name: String,
     copy: LandingPageCopy,
-    products: Option[Products],
+    products: Products,
 )
 
 object LandingPageVariant {
