@@ -6,6 +6,9 @@ export const ProductTypeSchema = [
 	'RECURRING_CONTRIBUTION',
 	'SUPPORTER_PLUS',
 	'TIER_THREE',
+	'APP_PREMIUM_TIER',
+	'GUARDIAN_AD_LITE',
+	'FEAST_APP',
 ] as const;
 
 export type ContributionType = (typeof ContributionTypeSchema)[number];
