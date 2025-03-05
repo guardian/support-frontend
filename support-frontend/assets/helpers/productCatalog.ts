@@ -609,15 +609,25 @@ export function productCatalogTsAndCs(
 	const isoCurrency = detect(countryGroupId);
 	const currencyGlyph = currencies[isoCurrency].glyph;
 	const tsAndCs = productCatalogDescription[productKey].tsAndCs;
+
+	const ratePlanTier3 =
+		countryGroupId === 'International'
+			? contributionType === 'ANNUAL'
+				? 'RestOfWorldAnnual'
+				: 'RestOfWorldMonthly'
+			: contributionType === 'ANNUAL'
+			? 'DomesticAnnual'
+			: 'DomesticMonthly';
+	const ratePlanSupporterPlus =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	const amount =
+		productCatalog[productKey]?.ratePlans[
+			productKey === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
+		]?.pricing[isoCurrency] ?? 0;
+
 	const frequencyPlural = contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 	const frequencySingular = contributionType === 'MONTHLY' ? 'month' : 'year';
-	// const amount = getLowerProductBenefitThreshold(
-	// 	contributionType,
-	// 	fromCountryGroupId(countryGroupId),
-	// 	countryGroupId,
-	// 	productKey,
-	// );
-	const amount = 12;
+
 	console.log(promotion);
 	// if (promotion) {
 	// 	// EXAMPLE: $8.50/month for the first 6 months, then $17/month
