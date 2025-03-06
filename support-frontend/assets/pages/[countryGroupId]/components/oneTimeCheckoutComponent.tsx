@@ -680,6 +680,8 @@ export function OneTimeCheckoutComponent({
 										);
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
+										event.billingDetails?.email &&
+											setConfirmedEmail(event.billingDetails.email);
 
 										/**
 										 * There is a useEffect that listens to this and submits the form
