@@ -64,7 +64,12 @@ export function CheckoutTsAndCs({
 			<FinePrint mobileTheme={mobileTheme}>
 				<div>
 					{productTsAndCs.map((line) => {
-						return <div css={marginTop}>{line.copy}</div>;
+						return (
+							<div
+								css={marginTop}
+								dangerouslySetInnerHTML={{ __html: line.copy }}
+							/>
+						);
 					})}
 				</div>
 			</FinePrint>

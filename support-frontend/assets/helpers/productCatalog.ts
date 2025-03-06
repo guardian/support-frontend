@@ -9,6 +9,7 @@ import type {
 } from './internationalisation/countryGroup';
 import { currencies, detect } from './internationalisation/currency';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
+import { contributionsTermsLinks, privacyLink } from './legal';
 import type { Promotion } from './productPrice/promotions';
 
 export type { ActiveProductKey };
@@ -32,11 +33,6 @@ export type ProductTsAndCs = {
 	copy: string;
 	promotionalCopy?: string;
 	specificToRegions?: CountryGroupId[];
-	specificToAbTest?: Array<{
-		name: string;
-		variants: string[];
-		display: boolean;
-	}>;
 };
 
 export type ProductDescription = {
@@ -209,27 +205,46 @@ const guardianAdLiteBenefits = [
 const proceedingTsAndCsDigitalPlusPrint = {
 	copy: 'By proceeding, you are agreeing to the Digital + print Terms.',
 };
-const proceedingTsAndCs = {
-	copy: 'By proceeding, you are agreeing to our Terms and Conditions.',
+const proceedingTsAndCsUSD = {
+	copy: `By proceeding, you are agreeing to our <a href={${contributionsTermsLinks['UnitedStates']}}>Terms and Conditions</a> . <a href={${privacyLink}}>Privacy Policy</a>`,
+	countryGroupId: 'UnitedStates',
+};
+const proceedingTsAndCsAUD = {
+	copy: `By proceeding, you are agreeing to our <a href={${contributionsTermsLinks['AUDCountries']}}>Terms and Conditions</a> . <a href={${privacyLink}}>Privacy Policy</a>`,
+	countryGroupId: 'AUDCountries',
+};
+const proceedingTsAndCsROW = {
+	copy: `By proceeding, you are agreeing to our <a href={${contributionsTermsLinks['GBPCountries']}}>Terms and Conditions</a> . <a href={${privacyLink}}>Privacy Policy</a>`,
+	countryGroupId: [
+		'GBPCountries',
+		'EURCountries',
+		'CADCountries',
+		'NZDCountries',
+		'International',
+	],
 };
 const personalDataTsAndCs = {
 	copy: 'To find out what personal data we collect and how we use it, please visit our Privacy Policy.',
 };
 const stripeTsAndCs = {
-	copy: 'All card payments are powered by Stripe. Read the Stripe Privacy Policy and Terms and conditions.',
+	copy: `All card payments are powered by Stripe. Read the Stripe <a href={https://stripe.com/privacy}>Privacy Policy</a> and <a href={https://stripe.com/legal/end-users}>Terms and conditions</a>.`,
 };
 
 const contributionTsAndCs = [
-	proceedingTsAndCs,
+	proceedingTsAndCsROW,
+	proceedingTsAndCsUSD,
+	proceedingTsAndCsAUD,
 	personalDataTsAndCs,
 	stripeTsAndCs,
 ];
 const supporterPlusTsAndCs = [
 	{
 		copy: `SUPPORTERPLUS: If you pay at least £X per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
-		promotionalCopy: `If you pay £XX per month for the first X months, then , then £X per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
+		promotionalCopy: `SUPPORTERPLUSROW: If you pay £XX per month for the first X months, then , then £X per month, you will receive the All-access digital benefits on a subscription basis. If you increase your payments per month, these additional amounts will be separate monthly voluntary financial contributions to the Guardian. The All-access digital subscription and any contributions will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a All-access digital subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Terms.`,
 	},
-	proceedingTsAndCs,
+	proceedingTsAndCsROW,
+	proceedingTsAndCsUSD,
+	proceedingTsAndCsAUD,
 	personalDataTsAndCs,
 	stripeTsAndCs,
 ];
@@ -245,7 +260,9 @@ const adLiteTsAndCs = [
 	{
 		copy: `ADLITE: Your Guardian Ad-Lite subscription will auto-renew each month unless cancelled. Your first payment will be taken on day 15 after signing up but you will start to receive your Guardian Ad-Lite benefits when you sign up. Unless you cancel, subsequent monthly payments will be taken on this date using your chosen payment method. You can cancel your subscription at any time before your next renewal date. If you cancel your Guardian Ad-Lite subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current monthly payment period. To cancel, go to Manage My Account or see our Guardian Ad-Lite Terms.`,
 	},
-	proceedingTsAndCs,
+	proceedingTsAndCsROW,
+	proceedingTsAndCsUSD,
+	proceedingTsAndCsAUD,
 	personalDataTsAndCs,
 	stripeTsAndCs,
 ];
@@ -253,7 +270,9 @@ const digitalEditionTsAndCs = [
 	{
 		copy: `DIGITALEDITION: Payment taken after the first 14 day free trial. At the end of the free trial period your subscription will auto-renew, and you will be charged, each month at the full price of £14.99 per month or £149 per year unless you cancel. You can cancel at any time before your next renewal date. Cancellation will take effect at the end of your current subscription month. To cancel, go to Manage My Account or see our Terms.`,
 	},
-	proceedingTsAndCs,
+	proceedingTsAndCsROW,
+	proceedingTsAndCsUSD,
+	proceedingTsAndCsAUD,
 	personalDataTsAndCs,
 	stripeTsAndCs,
 ];
