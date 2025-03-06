@@ -459,6 +459,7 @@ export const productCatalogDescription: Record<
 				copy: 'Ts&Cs SubscriptionCard',
 			},
 		],
+		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',
@@ -484,11 +485,10 @@ export const productCatalogDescription: Record<
 		benefitsMissing: [
 			appBenefit,
 			addFreeBenefit,
+			newsletterBenefit,
 			fewerAsksBenefit,
-			{
-				copy: 'Unlimited access to the Guardian Feast app',
-			},
 			partnerOffersBenefit,
+			feastBenefit,
 		],
 		ratePlans: {
 			Monthly: {

@@ -6,7 +6,7 @@ import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import type {
-	ActivePaperProducts,
+	ActivePaperProductOptions,
 	ProductOptions,
 } from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -42,7 +42,7 @@ function mapStateToProps(state: SubscriptionsState) {
 	return {
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		productOption: state.page.checkoutForm.product
-			.productOption as ActivePaperProducts,
+			.productOption as ActivePaperProductOptions,
 		billingPeriod: state.page.checkoutForm.product.billingPeriod,
 		productPrices: state.page.checkoutForm.product.productPrices,
 		priceWithoutPromotions: selectPriceForProduct(state),

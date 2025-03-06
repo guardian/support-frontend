@@ -1,4 +1,5 @@
 // Fulfilment options describe the various ways that a user can receive a product
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
@@ -36,5 +37,29 @@ const getWeeklyFulfilmentOption = (
 	countryGroups.International.countries.includes(country)
 		? RestOfWorld
 		: Domestic;
+
+export const getFulfilmentOptionFromProductKey = (
+	productKey: ActiveProductKey,
+): FulfilmentOptions => {
+	switch (productKey) {
+		case 'SupporterPlus':
+		case 'GuardianAdLite':
+		case 'Contribution':
+		case 'OneTimeContribution':
+		case 'DigitalSubscription':
+		case 'GuardianPatron':
+			return 'NoFulfilmentOptions';
+		case 'TierThree':
+		case 'GuardianWeeklyDomestic':
+			return 'Domestic';
+		case 'GuardianWeeklyRestOfWorld':
+			return 'RestOfWorld';
+		case 'SubscriptionCard':
+			return 'Collection';
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+			return productKey;
+	}
+};
 
 export { getWeeklyFulfilmentOption };

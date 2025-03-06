@@ -1,4 +1,4 @@
-import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import type { DayOfWeekIndex } from './homeDeliveryDays';
 
@@ -113,7 +113,7 @@ const getFormattedStartDate = (startDate: Date): string => {
 
 const getPaymentStartDate = (
 	date: number,
-	productOption: ActivePaperProducts,
+	productOption: ActivePaperProductOptions,
 ): Date => {
 	const day = new Date(date).getDay() as DayOfWeekIndex;
 	const delay = additionalDays[day][productOption];

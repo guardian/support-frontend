@@ -102,7 +102,7 @@ export type SubscriptionProductFields =
 	| GuardianWeeklySubscription
 	| TierThree
 	| GuardianAdLite;
-type ProductFields = RegularContribution | SubscriptionProductFields;
+export type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	paymentType: typeof PayPal;
 	baid: string;

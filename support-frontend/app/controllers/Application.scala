@@ -204,7 +204,7 @@ class Application(
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
-    with CanonicalLinks
+    with RegionalisedLinks
     with StrictLogging
     with Circe {
 
@@ -212,12 +212,8 @@ class Application(
 
   implicit val a: AssetsResolver = assets
 
-  def contributionsRedirect(): Action[AnyContent] = CachedAction() {
-    Ok(views.html.contributionsRedirect())
-  }
-
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = buildCanonicalContributeLink(request.geoData.countryGroup match {
+    val redirectUrl = buildRegionalisedContributeLink(request.geoData.countryGroup match {
       case Some(UK) => "uk"
       case Some(US) => "us"
       case Some(Australia) => "au"
@@ -239,7 +235,7 @@ class Application(
     }
 
     RedirectWithEncodedQueryString(
-      buildCanonicalContributeLink(supportPageVariant),
+      buildRegionalisedContributeLink(supportPageVariant),
       request.queryString,
       status = FOUND,
     )
@@ -345,7 +341,9 @@ class Application(
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
-    val canonicalLink = s"https://support.theguardian.com${buildCanonicalContributeLink(countryCode)}"
+    // We want the canonical link to point to the geo-redirect page so that users arriving from
+    // search will be redirected to the correct version of the page
+    val canonicalLink = s"https://support.theguardian.com/contribute"
 
     views.html.contributions(
       id = s"contributions-landing-page-$countryCode",

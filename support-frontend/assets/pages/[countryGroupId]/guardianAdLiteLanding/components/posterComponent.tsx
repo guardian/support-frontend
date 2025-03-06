@@ -6,6 +6,7 @@ import {
 	palette,
 	space,
 	textEgyptian17,
+	until,
 } from '@guardian/source/foundations';
 import { Container } from 'components/layout/container';
 
@@ -73,7 +74,18 @@ const copy = css`
 const paragraph = css`
 	margin-bottom: ${space[3]}px;
 `;
+const displayMobile = css`
+	${until.desktop} {
+		display: inherit;
+	}
+`;
+const displayDesktop = css`
+	${from.desktop} {
+		display: inherit;
+	}
+`;
 const image = css`
+	display: none;
 	width: 100%;
 	object-fit: contain;
 	${from.tablet} {
@@ -81,7 +93,8 @@ const image = css`
 	}
 `;
 
-const posterImageUrl = `https://i.guim.co.uk/img/media/c64768218dc3fa9fe8294038e8f9e31920f9beaa/0_0_341_336/341.png?width=341&quality=75&s=dab7519a52c1eb0fc3442600a0572ceb`;
+const posterImageUrlMobile = `https://i.guim.co.uk/img/media/49109ff732b9fab51a496d015118504a07a7a69e/0_0_1396_1137/1396.png?width=1396&quality=75&s=ead4f371d212d1229c6bcce7fa936c2d`;
+const posterImageUrlDesktop = `https://i.guim.co.uk/img/media/5266c336f47108db31f68911d30f5259c8eed277/0_0_1424_1509/1424.png?width=1424&quality=75&s=485d4a200fc9428fc47c93e45f1bde2a`;
 
 export function PosterComponent(): JSX.Element {
 	return (
@@ -111,7 +124,8 @@ export function PosterComponent(): JSX.Element {
 							personalised advertising.
 						</p>
 					</div>
-					<img css={image} alt="" src={posterImageUrl} />
+					<img css={[displayMobile, image]} src={posterImageUrlMobile} />
+					<img css={[displayDesktop, image]} src={posterImageUrlDesktop} />
 				</div>
 			</div>
 		</Container>

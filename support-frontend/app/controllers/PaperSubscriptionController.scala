@@ -31,7 +31,7 @@ class PaperSubscriptionController(
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
-    with CanonicalLinks
+    with RegionalisedLinks
     with SettingsSurrogateKeySyntax {
 
   import actionRefiners._

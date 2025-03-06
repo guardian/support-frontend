@@ -1,4 +1,6 @@
 // describes options relating to a product itself - only relevant for paper currently
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
 const SaturdayPlus = 'SaturdayPlus';
@@ -33,21 +35,18 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday;
 
-const ActivePaperProductTypes: PaperProductOptions[] = [
-	Everyday,
-	Weekend,
-	Saturday,
-];
+const ActivePaperProductTypes = [Everyday, Weekend, Saturday] as const;
 
-export type ActivePaperProducts =
-	| typeof Sunday
-	| typeof SundayPlus
-	| typeof Weekend
-	| typeof WeekendPlus
-	| typeof Sixday
-	| typeof SixdayPlus
-	| typeof Everyday
-	| typeof EverydayPlus;
+export type ActivePaperProductOptions =
+	(typeof ActivePaperProductTypes)[number];
+
+export const isActivePaperProductOption = (
+	productOption: ProductOptions,
+): productOption is ActivePaperProductOptions => {
+	return ActivePaperProductTypes.includes(
+		productOption as ActivePaperProductOptions,
+	);
+};
 
 const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
@@ -79,6 +78,44 @@ function productOptionIfDigiAddOnChanged(
 	};
 	return matchingProducLookup[selectedOption];
 }
+
+const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
+	switch (ratePlanKey) {
+		case 'Saturday':
+		case 'Sunday':
+		case 'Weekend':
+		case 'Sixday':
+		case 'Everyday':
+			return ratePlanKey;
+	}
+	throw new Error(
+		`Paper product option not defined for ratePlan ${ratePlanKey}`,
+	);
+};
+export const getProductOptionFromProductAndRatePlan = (
+	productKey: ActiveProductKey,
+	ratePlanKey: string,
+): ProductOptions => {
+	switch (productKey) {
+		case 'SupporterPlus':
+		case 'GuardianAdLite':
+		case 'Contribution':
+		case 'OneTimeContribution':
+		case 'DigitalSubscription':
+		case 'GuardianPatron':
+		case 'GuardianWeeklyRestOfWorld':
+		case 'GuardianWeeklyDomestic':
+			return 'NoProductOptions';
+		case 'TierThree':
+			return ratePlanKey.endsWith('V2')
+				? 'NewspaperArchive'
+				: 'NoProductOptions';
+		case 'SubscriptionCard':
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+			return getPaperProductOptions(ratePlanKey);
+	}
+};
 
 export {
 	NoProductOptions,
