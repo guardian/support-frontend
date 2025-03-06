@@ -75,15 +75,9 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { CheckoutTsAndCs } from 'pages/supporter-plus-landing/components/checkoutTsAndCs';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from '../../../helpers/utilities/dateConversions';
-import {
-	PaymentTsAndCs,
-	SummaryTsAndCs,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
+import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { getProductFields } from '../checkout/helpers/getProductFields';
