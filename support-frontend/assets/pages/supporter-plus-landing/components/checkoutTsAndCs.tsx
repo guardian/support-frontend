@@ -1,15 +1,8 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral, textSans12 } from '@guardian/source/foundations';
-import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	contributionsTermsLinks,
-	guardianAdLiteTermsLink,
-	privacyLink,
-	supporterPlusTermsLink,
-} from 'helpers/legal';
 import {
 	type ActiveProductKey,
 	productCatalogTsAndCs,
@@ -30,13 +23,6 @@ const container = css`
 		color: ${neutral[20]};
 	}
 `;
-
-const termsSupporterPlus = (linkText: string) => (
-	<a href={supporterPlusTermsLink}>{linkText}</a>
-);
-const termsGuardianAdLite = (linkText: string) => (
-	<a href={guardianAdLiteTermsLink}>{linkText}</a>
-);
 
 interface CheckoutTsAndCsProps {
 	productKey: ActiveProductKey;
@@ -73,43 +59,6 @@ export function CheckoutTsAndCs({
 					})}
 				</div>
 			</FinePrint>
-		</div>
-	);
-}
-
-export function TsAndCsFooterLinks({
-	countryGroupId,
-	amountIsAboveThreshold,
-	productKey,
-}: {
-	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold?: boolean;
-	productKey?: ActiveProductKey;
-}) {
-	const inAdLite = productKey === 'GuardianAdLite';
-	const privacy = <a href={privacyLink}>Privacy Policy</a>;
-
-	const termsContributions = (
-		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
-	);
-
-	const terms = amountIsAboveThreshold
-		? termsSupporterPlus('Terms and Conditions')
-		: inAdLite
-		? termsGuardianAdLite('Terms')
-		: termsContributions;
-	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
-
-	return (
-		<div css={marginTop}>
-			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
-			<p css={marginTop}>
-				To find out what personal data we collect and how we use it, please
-				visit our {privacy}.
-			</p>
-			<p css={marginTop}>
-				<StripeDisclaimer />
-			</p>
 		</div>
 	);
 }
