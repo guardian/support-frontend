@@ -29,7 +29,7 @@ export type ProductBenefit = {
 	hideBullet?: boolean;
 };
 
-export type ProductTsAndCs = {
+type ProductTsAndCs = {
 	copy: string;
 	promotionalCopy?: string;
 	specificToRegions?: CountryGroupId[];
