@@ -63,30 +63,34 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	pillCopy: 'Highest impact',
 	isSubdued: false,
-	isUserSelected: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
-	price: 12,
 	product: 'SupporterPlus',
 	cardTier: 2,
-	productDescription: fallBackLandingPageSelection.products.SupporterPlus,
-	ctaCopy: 'Support',
+	cardContent: {
+		...fallBackLandingPageSelection.products.SupporterPlus,
+		isUserSelected: false,
+		price: 12,
+		ctaCopy: 'Support',
+		pillCopy: 'Highest impact',
+	},
 };
 
 export const Promotion = Template.bind({});
 
 Promotion.args = {
-	pillCopy: 'Highest impact',
 	isSubdued: false,
-	isUserSelected: false,
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
-	price: 38.5,
 	product: 'TierThree',
 	cardTier: 3,
-	productDescription: fallBackLandingPageSelection.products.TierThree,
-	ctaCopy: 'Support',
+	cardContent: {
+		...fallBackLandingPageSelection.products.TierThree,
+		isUserSelected: false,
+		price: 38.5,
+		ctaCopy: 'Support',
+		pillCopy: 'Highest impact',
+	},
 	promotion: promotionEURCountries,
 };
