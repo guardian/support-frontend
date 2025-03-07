@@ -22,11 +22,8 @@ import {
   InstanceType,
   UserData,
 } from "aws-cdk-lib/aws-ec2";
-import {
-  CfnListener,
-  SslPolicy
-} from "aws-cdk-lib/aws-elasticloadbalancingv2";
-
+import { SslPolicy } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import type { CfnListener } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
