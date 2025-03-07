@@ -62,7 +62,6 @@ Default.args = {
 			price: 10,
 			product: 'SupporterPlus',
 			...fallBackLandingPageSelection.products.SupporterPlus,
-			// productDescription: productCatalogDescription.SupporterPlus,
 		},
 		{
 			isUserSelected: true,
