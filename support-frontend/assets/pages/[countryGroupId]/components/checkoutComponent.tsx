@@ -72,6 +72,7 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { CheckoutTsAndCs } from 'pages/supporter-plus-landing/components/checkoutTsAndCs';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import {
@@ -1141,6 +1142,19 @@ export function CheckoutComponent({
 								/>
 							</div>
 						)}
+						<CheckoutTsAndCs
+							productKey={productKey}
+							countryGroupId={countryGroupId}
+							contributionType={
+								productFields.billingPeriod === 'Monthly'
+									? 'MONTHLY'
+									: productFields.billingPeriod === 'Annual'
+									? 'ANNUAL'
+									: 'ONE_OFF'
+							}
+							promotion={promotion}
+						/>
+
 						<PaymentTsAndCs
 							countryGroupId={countryGroupId}
 							contributionType={
