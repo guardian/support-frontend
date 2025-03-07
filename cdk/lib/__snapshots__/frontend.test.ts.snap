@@ -946,7 +946,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         },
         "Port": 443,
         "Protocol": "HTTPS",
-        "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-Ext2-2021-06",
+        "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-Res-2021-06",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
