@@ -92,7 +92,8 @@ class StripeBackend(
         err
       })
       .semiflatMap { charge =>
-        cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
+        val paymentProvider = PaymentProvider.fromStripePaymentMethod(chargeData.paymentData.stripePaymentMethod)
+        cloudWatchService.recordPaymentSuccess(paymentProvider)
 
         getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityUserDetails =>
           postPaymentTasks(
@@ -232,7 +233,8 @@ class StripeBackend(
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[StripePaymentIntentsApiResponse.Success] = {
 
-    cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
+    val paymentProvider = PaymentProvider.fromStripePaymentMethod(request.paymentData.stripePaymentMethod)
+    cloudWatchService.recordPaymentSuccess(paymentProvider)
 
     getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityUserDetails =>
       paymentIntent.getCharges.getData.asScala.toList.headOption match {
