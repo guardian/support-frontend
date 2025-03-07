@@ -7,7 +7,7 @@ deployments:
     parameters:
       bucket: membership-dist
       functionNames: [  bigquery-acquisitions-publisher-]
-      fileName:   bigquery-acquisitions-publisher.jar
+      fileName: index.zip
       prefixStack: false
     dependencies: [ cfn ]
   cfn:
