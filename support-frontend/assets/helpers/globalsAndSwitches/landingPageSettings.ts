@@ -20,7 +20,7 @@ export interface LandingPageProductDescription {
 	};
 }
 
-interface Products {
+interface LandingPageProducts {
 	Contribution: LandingPageProductDescription;
 	SupporterPlus: LandingPageProductDescription;
 	TierThree: LandingPageProductDescription;
@@ -34,7 +34,7 @@ interface LandingPageCopy {
 export interface LandingPageVariant {
 	name: string;
 	copy: LandingPageCopy;
-	products: Products;
+	products: LandingPageProducts;
 }
 
 interface RegionTargeting {
