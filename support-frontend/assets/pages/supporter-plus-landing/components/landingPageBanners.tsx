@@ -8,7 +8,7 @@ import {
 	textSans15,
 	textSans17,
 } from '@guardian/source/foundations';
-import { NewBenefitPill } from 'components/checkoutBenefits/newBenefitPill';
+import { BenefitPill } from 'components/checkoutBenefits/benefitPill';
 
 const container = css`
 	display: flex;
@@ -116,7 +116,7 @@ function LandingPageBanner({
 			<div css={headlineAndParagraph}>
 				<h2 css={headlineText}>
 					<>
-						<NewBenefitPill />{' '}
+						<BenefitPill copy="New" />{' '}
 					</>
 					{header}
 				</h2>
