@@ -66,14 +66,14 @@ Default.args = {
 	isSubdued: false,
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
-	product: 'SupporterPlus',
 	cardTier: 2,
 	cardContent: {
 		...fallBackLandingPageSelection.products.SupporterPlus,
+		product: 'SupporterPlus',
 		isUserSelected: false,
 		price: 12,
-		ctaCopy: 'Support',
-		pillCopy: 'Highest impact',
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
 	},
 };
 
@@ -83,14 +83,14 @@ Promotion.args = {
 	isSubdued: false,
 	currencyId: 'EUR',
 	paymentFrequency: 'MONTHLY',
-	product: 'TierThree',
 	cardTier: 3,
 	cardContent: {
 		...fallBackLandingPageSelection.products.TierThree,
+		product: 'TierThree',
 		isUserSelected: false,
 		price: 38.5,
-		ctaCopy: 'Support',
-		pillCopy: 'Highest impact',
+		cta: { copy: 'Support' },
+		label: { copy: 'Highest impact' },
+		promotion: promotionEURCountries,
 	},
-	promotion: promotionEURCountries,
 };
