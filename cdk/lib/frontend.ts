@@ -22,6 +22,8 @@ import {
   InstanceType,
   UserData,
 } from "aws-cdk-lib/aws-ec2";
+import {CfnListener, SslPolicy} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
@@ -151,6 +153,8 @@ export class Frontend extends GuStack {
       scaling,
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
     });
+
+    (ec2App.listener.node.defaultChild as CfnListener).sslPolicy = SslPolicy.TLS13_EXT2;
 
     // ---- Alarms ---- //
     if (shouldCreateAlarms) {
