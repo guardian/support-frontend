@@ -207,7 +207,7 @@ export function ThreeTierCard({
 	const period = recurringContributionPeriodMap[paymentFrequency];
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const pillCopy = cardContent.label?.copy;
+	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>

@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { CardContent} from './threeTierCard';
+import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {
