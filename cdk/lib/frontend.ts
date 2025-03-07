@@ -22,7 +22,10 @@ import {
   InstanceType,
   UserData,
 } from "aws-cdk-lib/aws-ec2";
-import {CfnListener, SslPolicy} from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {
+  CfnListener,
+  SslPolicy
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
