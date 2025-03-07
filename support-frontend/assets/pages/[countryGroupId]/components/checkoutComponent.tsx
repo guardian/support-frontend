@@ -78,10 +78,15 @@ import {
 	PaymentTsAndCs,
 	SummaryTsAndCs,
 } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
+import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
+import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
+import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import {
 	paypalOneClickCheckout,
@@ -184,11 +189,20 @@ export function CheckoutComponent({
 		billingPeriod: 'Monthly',
 	};
 
+	/** Delivery agent for National Delivery product */
+	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
+		useState(false);
+	const [deliveryAgents, setDeliveryAgents] =
+		useState<DeliveryAgentsResponse>();
+	const [chosenDeliveryAgent, setChosenDeliveryAgent] = useState<number>();
+	const [deliveryAgentError, setDeliveryAgentError] = useState<string>();
+
 	const productFields = getProductFields({
 		product: {
 			productKey,
 			productDescription,
 			ratePlanKey,
+			deliveryAgent: chosenDeliveryAgent,
 		},
 		financial: {
 			currencyKey,
@@ -305,6 +319,28 @@ export function CheckoutComponent({
 		AddressFormFieldError[]
 	>([]);
 
+	const fetchDeliveryAgentsForPostcodesOutsideTheM25 = async (
+		postcode: string,
+	) => {
+		if (isValidPostcode(postcode)) {
+			if (postcodeIsWithinDeliveryArea(postcode)) {
+				setDeliveryPostcodeIsOutsideM25(false);
+			} else {
+				setDeliveryPostcodeIsOutsideM25(true);
+				const agents = await getDeliveryAgents(postcode);
+				setDeliveryAgents(agents);
+			}
+		} else {
+			setDeliveryPostcodeIsOutsideM25(false);
+			setDeliveryAgents(undefined);
+		}
+	};
+	useEffect(() => {
+		if (productKey === 'HomeDelivery') {
+			void fetchDeliveryAgentsForPostcodesOutsideTheM25(deliveryPostcode);
+		}
+	}, [deliveryPostcode]);
+
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
 
@@ -351,6 +387,14 @@ export function CheckoutComponent({
 			setPaymentMethodError('Please select a payment method');
 			return;
 		}
+		const finalProductKey =
+			productKey === 'HomeDelivery' && deliveryPostcodeIsOutsideM25
+				? 'NationalDelivery'
+				: productKey;
+		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
+			setDeliveryAgentError('Please select a delivery agent');
+			return;
+		}
 		setIsProcessingPayment(true);
 		try {
 			const paymentFields = await getPaymentFieldsForPaymentMethod(
@@ -368,7 +412,7 @@ export function CheckoutComponent({
 			}
 			const thankYouPageUrl = await submitForm({
 				geoId,
-				productKey,
+				productKey: finalProductKey,
 				ratePlanKey,
 				formData,
 				paymentMethod,
@@ -890,10 +934,39 @@ export function CheckoutComponent({
 								<CheckoutDivider spacing="loose" />
 							</>
 						)}
+						{deliveryPostcodeIsOutsideM25 && (
+							<FormSection>
+								<Legend>3. Delivery Agent</Legend>
+								<DeliveryAgentsSelect
+									chosenDeliveryAgent={chosenDeliveryAgent}
+									deliveryAgentsResponse={deliveryAgents}
+									setDeliveryAgent={(agent: number | undefined) => {
+										setChosenDeliveryAgent(agent);
+										setDeliveryAgentError(undefined);
+									}}
+									formErrors={
+										deliveryAgentError !== undefined
+											? [
+													{
+														field: 'deliveryProvider',
+														message: deliveryAgentError,
+													},
+											  ]
+											: []
+									}
+									deliveryAddressErrors={[]}
+								/>
+							</FormSection>
+						)}
 
 						<FormSection>
 							<Legend>
-								{productDescription.deliverableTo ? '3' : '2'}. Payment method
+								{productDescription.deliverableTo
+									? deliveryPostcodeIsOutsideM25
+										? '4'
+										: '3'
+									: '2'}
+								. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
 									cssOverrides={css``}

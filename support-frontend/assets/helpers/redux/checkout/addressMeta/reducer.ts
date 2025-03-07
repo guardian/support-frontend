@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { DeliveryAgentsResponse } from './state';
+import type { DeliveryAgentsResponse } from '../../../../pages/[countryGroupId]/checkout/helpers/getDeliveryAgents';
 import { initialState } from './state';
 import { getDeliveryAgentsThunk } from './thunks';
 

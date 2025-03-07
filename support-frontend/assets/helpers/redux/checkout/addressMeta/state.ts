@@ -1,3 +1,5 @@
+import type { DeliveryAgentsResponse } from '../../../../pages/[countryGroupId]/checkout/helpers/getDeliveryAgents';
+
 export type AddressMetaState = {
 	billingAddressMatchesDelivery: boolean;
 	deliveryInstructions?: string;
@@ -14,24 +16,4 @@ export type DeliveryAgentState = {
 export const initialState: AddressMetaState = {
 	billingAddressMatchesDelivery: true,
 	deliveryAgent: { isLoading: false, response: undefined },
-};
-
-export type DeliveryAgentsResponse = {
-	type:
-		| 'Covered'
-		| 'NotCovered'
-		| 'UnknownPostcode'
-		| 'ProblemWithInput'
-		| 'PaperRoundError';
-	agents?: DeliveryAgentOption[];
-};
-
-export type DeliveryAgentOption = {
-	agentId: number;
-	agentName: string;
-	deliveryMethod: string;
-	nbrDeliveryDays: number;
-	postcode: string;
-	refGroupId: number;
-	summary: string;
 };
