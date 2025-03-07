@@ -14,6 +14,7 @@ import { Accordion, AccordionRow } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { Container } from 'components/layout/container';
 import { guardianAdLiteTermsLink } from 'helpers/legal';
+import { helpCentreUrl } from 'helpers/urls/externalLinks';
 
 const container = css`
 	background-color: ${palette.neutral[97]};
@@ -139,11 +140,9 @@ const rows = [
 		title: 'How do I contact customer services?',
 		body: (
 			<div css={rowSpacing}>
-				For any queries, including subscription-related queries, please contact
-				the Guardian User Help team:{' '}
-				<a href={'mailto:ad-lite.help@theguardian.com'}>
-					ad-lite.help@theguardian.com
-				</a>
+				For any queries, including subscription-related queries, please visit
+				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
+				contact details for your region.
 			</div>
 		),
 	},
