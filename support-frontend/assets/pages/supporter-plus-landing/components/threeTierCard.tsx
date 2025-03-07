@@ -15,30 +15,31 @@ import {
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { currencies } from 'helpers/internationalisation/currency';
 import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import { currencies } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
-export type ThreeTierCardProps = {
+export type CardContent = LandingPageProductDescription & {
+	isUserSelected: boolean;
+	link: string;
+	price: number;
+	promotion?: Promotion;
 	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
+};
+
+export type ThreeTierCardProps = {
+	cardContent: CardContent;
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isSubdued: boolean;
-	isUserSelected: boolean;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	link: string;
-	productDescription: LandingPageProductDescription;
-	price: number;
-	ctaCopy: string;
-	pillCopy?: string;
-	promotion?: Promotion;
 };
 
 const container = (
@@ -185,25 +186,28 @@ const discountSummaryCopy = (
 };
 
 export function ThreeTierCard({
-	product,
+	cardContent,
 	cardTier,
 	promoCount,
 	isSubdued,
-	isUserSelected,
 	currencyId,
 	paymentFrequency,
-	link,
-	productDescription,
-	price,
-	promotion,
-	ctaCopy,
-	pillCopy,
 }: ThreeTierCardProps): JSX.Element {
+	const {
+		title,
+		benefits,
+		isUserSelected,
+		promotion,
+		price,
+		link,
+		cta,
+		product,
+	} = cardContent;
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const { title, benefits } = productDescription;
+	const pillCopy = cardContent.label?.copy;
 
 	return (
 		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
@@ -243,7 +247,7 @@ export function ThreeTierCard({
 					data-qm-trackable={quantumMetricButtonRef}
 					aria-label={title}
 				>
-					{ctaCopy}
+					{cta.copy}
 				</LinkButton>
 			</ThemeProvider>
 

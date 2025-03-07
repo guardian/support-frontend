@@ -2,17 +2,8 @@ import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { CardContent} from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
-
-export type CardContent = LandingPageProductDescription & {
-	isUserSelected: boolean;
-	link: string;
-	price: number;
-	promotion?: Promotion;
-	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
-};
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
@@ -74,20 +65,13 @@ export function ThreeTierCards({
 				}
 				return (
 					<ThreeTierCard
-						product={cardContent.product}
+						cardContent={cardContent}
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
-						isUserSelected={cardContent.isUserSelected}
-						link={cardContent.link}
 						promoCount={promoCount}
-						price={cardContent.price}
-						promotion={cardContent.promotion}
-						productDescription={cardContent}
 						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
-						ctaCopy={cardContent.cta.copy}
-						pillCopy={cardContent.label?.copy}
 					/>
 				);
 			})}
