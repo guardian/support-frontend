@@ -13,6 +13,7 @@ type GetProductFieldsParams = {
 		productKey: ActiveProductKey;
 		productDescription: ProductDescription;
 		ratePlanKey: string;
+		deliveryAgent: number | undefined;
 	};
 	financial: {
 		currencyKey: IsoCurrency;
@@ -26,7 +27,8 @@ export const getProductFields = ({
 	product,
 	financial,
 }: GetProductFieldsParams): RegularPaymentRequest['product'] => {
-	const { productKey, ratePlanKey, productDescription } = product;
+	const { productKey, ratePlanKey, productDescription, deliveryAgent } =
+		product;
 	const { currencyKey, finalAmount, originalAmount, contributionAmount } =
 		financial;
 
@@ -118,15 +120,20 @@ export const getProductFields = ({
 
 		case 'NationalDelivery':
 		case 'SubscriptionCard':
-		case 'HomeDelivery':
+		case 'HomeDelivery': {
+			const finalFulfilmentOption =
+				fulfilmentOption === 'HomeDelivery' && deliveryAgent
+					? 'NationalDelivery'
+					: fulfilmentOption;
 			return {
 				productType: 'Paper',
 				currency: currencyKey,
 				billingPeriod: ratePlanDescription.billingPeriod,
-				fulfilmentOptions: fulfilmentOption,
+				fulfilmentOptions: finalFulfilmentOption,
 				productOptions: productOption,
+				deliveryAgent,
 			};
-
+		}
 		case 'GuardianPatron':
 		case 'OneTimeContribution':
 			logException(unsupportedProductMessage);
