@@ -16,8 +16,6 @@ export const pageUrlRegexes = {
 		usLandingPageOnly: '/us/contribute$',
 		genericCheckoutOnly:
 			'(uk|us|au|ca|eu|nz|int)/checkout|thank-you\\?product(.*)?$',
-		oneTimeCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you\\?contribution(.*)?$',
 	},
 	subscriptions: {
 		paper: {

@@ -21,11 +21,8 @@ import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../models';
 
 const { targetPageMatches } = _;
-const {
-	allLandingPagesAndThankyouPages,
-	genericCheckoutOnly,
-	oneTimeCheckoutOnly,
-} = pageUrlRegexes.contributions;
+const { allLandingPagesAndThankyouPages, genericCheckoutOnly } =
+	pageUrlRegexes.contributions;
 
 jest.mock('ophan', () => ({
 	record: () => null,
@@ -646,16 +643,6 @@ it('targetPage matching', () => {
 	).toEqual(true);
 	expect(targetPageMatches('/uk/thankyou', genericCheckoutOnly)).toEqual(false);
 	expect(targetPageMatches('/uk/thank-you', genericCheckoutOnly)).toEqual(
-		false,
-	);
-	expect(
-		targetPageMatches(
-			'/uk/thank-you?contribution=1&userType=current',
-			oneTimeCheckoutOnly,
-		),
-	).toEqual(true);
-	expect(targetPageMatches('/uk/thankyou', oneTimeCheckoutOnly)).toEqual(false);
-	expect(targetPageMatches('/uk/thank-you', oneTimeCheckoutOnly)).toEqual(
 		false,
 	);
 });
