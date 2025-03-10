@@ -29,10 +29,12 @@ const containerCardsAndSignIn = css`
 		position: relative;
 		display: grid;
 		justify-content: center;
-		padding: 44px 10px 0px;
-		${from.mobileLandscape} {
-			padding-left: ${space[5]}px;
-			padding-right: ${space[5]}px;
+		padding: ${space[2]}px 10px 0px;
+		${from.tablet} {
+			padding-top: ${space[6]}px;
+		}
+		${from.desktop} {
+			padding: 42px ${space[5]}px 0px;
 		}
 	}
 `;
