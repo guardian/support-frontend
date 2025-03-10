@@ -16,7 +16,6 @@ type PersonalDetailsFieldsProps = {
 	isEmailAddressReadOnly: boolean;
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
-	requireConfirmedEmail: boolean;
 	isSignedIn: boolean;
 };
 
@@ -30,7 +29,6 @@ export function PersonalDetailsFields({
 	isEmailAddressReadOnly,
 	confirmedEmail,
 	setConfirmedEmail,
-	requireConfirmedEmail,
 	isSignedIn,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
@@ -44,7 +42,6 @@ export function PersonalDetailsFields({
 				isEmailAddressReadOnly={isEmailAddressReadOnly}
 				confirmedEmail={confirmedEmail}
 				setConfirmedEmail={setConfirmedEmail}
-				requireConfirmedEmail={requireConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
 			<div>
