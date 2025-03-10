@@ -351,9 +351,6 @@ export function OneTimeCheckoutComponent({
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
-	const inOneTimeConfirmEmailVariant =
-		abParticipations.oneTimeConfirmEmail === 'variant';
-
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const validate = (
@@ -739,7 +736,6 @@ export function OneTimeCheckoutComponent({
 									setConfirmedEmail(confirmedEmail)
 								}
 								isEmailAddressReadOnly={isSignedIn}
-								requireConfirmedEmail={inOneTimeConfirmEmailVariant}
 								isSignedIn={isSignedIn}
 							/>
 

@@ -10,7 +10,6 @@ type PersonalEmailFieldsProps = {
 	isEmailAddressReadOnly: boolean;
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
-	requireConfirmedEmail: boolean;
 	isSignedIn: boolean;
 };
 
@@ -20,7 +19,6 @@ export function PersonalEmailFields({
 	isEmailAddressReadOnly,
 	confirmedEmail,
 	setConfirmedEmail,
-	requireConfirmedEmail,
 	isSignedIn,
 }: PersonalEmailFieldsProps) {
 	const [emailError, setEmailError] = useState<string>();
@@ -62,7 +60,7 @@ export function PersonalEmailFields({
 					}}
 				/>
 			</div>
-			{!isEmailAddressReadOnly && requireConfirmedEmail && (
+			{!isEmailAddressReadOnly && (
 				<div>
 					<TextInput
 						id="confirm-email"
