@@ -13,56 +13,49 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import type { Participations } from 'helpers/abTests/models';
 import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { currencies } from 'helpers/internationalisation/currency';
 import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import {
-	filterBenefitByABTest,
-	filterBenefitByRegion,
-	type ProductDescription,
-} from 'helpers/productCatalog';
+import { currencies } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { ThreeTierLozenge } from './threeTierLozenge';
+import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import { ThreeTierCardPill } from './threeTierCardPill';
+
+export type CardContent = LandingPageProductDescription & {
+	isUserSelected: boolean;
+	link: string;
+	price: number;
+	promotion?: Promotion;
+	product: 'TierThree' | 'SupporterPlus' | 'Contribution';
+};
 
 export type ThreeTierCardProps = {
+	cardContent: CardContent;
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
-	isRecommended: boolean;
-	isRecommendedSubdued: boolean;
-	isUserSelected: boolean;
+	isSubdued: boolean;
 	currencyId: IsoCurrency;
-	countryGroupId: CountryGroupId;
 	paymentFrequency: RegularContributionType;
-	link: string;
-	productDescription: ProductDescription;
-	price: number;
-	ctaCopy: string;
-	lozengeText?: string;
-	promotion?: Promotion;
-	abParticipations?: Participations | undefined;
 };
 
 const container = (
-	isRecommended: boolean,
+	hasPill: boolean,
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
 ) => {
 	let cardOrder = 2;
-	if (isRecommended) {
+	if (hasPill) {
 		cardOrder = 1;
 	} else if (isUserSelected) {
 		cardOrder = 0;
 	}
 	return css`
-		position: ${isRecommended || isUserSelected ? 'relative' : 'static'};
-		background-color: ${(isRecommended && !subdueHighlight) || isUserSelected
+		position: ${hasPill || isUserSelected ? 'relative' : 'static'};
+		background-color: ${(hasPill && !subdueHighlight) || isUserSelected
 			? '#F1FBFF'
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
@@ -71,7 +64,7 @@ const container = (
 		${until.desktop} {
 			order: ${cardOrder};
 			padding-top: ${space[6]}px;
-			margin-top: ${isRecommended && subdueHighlight ? '15px' : '0'};
+			margin-top: ${hasPill && subdueHighlight ? '15px' : '0'};
 		}
 	`;
 };
@@ -126,11 +119,6 @@ const checkmarkBenefitList = css`
 	${from.desktop} {
 		width: 90%;
 	}
-`;
-
-const checkmarkOfferList = css`
-	width: 100%;
-	text-align: left;
 `;
 
 const benefitsPrefixCss = css`
@@ -198,43 +186,39 @@ const discountSummaryCopy = (
 };
 
 export function ThreeTierCard({
+	cardContent,
 	cardTier,
 	promoCount,
-	isRecommended,
-	isRecommendedSubdued,
-	isUserSelected,
+	isSubdued,
 	currencyId,
-	countryGroupId,
 	paymentFrequency,
-	link,
-	productDescription,
-	price,
-	promotion,
-	ctaCopy,
-	lozengeText,
-	abParticipations,
 }: ThreeTierCardProps): JSX.Element {
+	const {
+		title,
+		benefits,
+		isUserSelected,
+		promotion,
+		price,
+		link,
+		cta,
+		product,
+	} = cardContent;
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const { label, benefits, benefitsSummary, offers, offersSummary } =
-		productDescription;
+	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
 
 	return (
-		<section
-			css={container(isRecommended, isUserSelected, isRecommendedSubdued)}
-		>
-			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
-			{isRecommended && !isUserSelected && (
-				<ThreeTierLozenge
-					subdue={isRecommendedSubdued}
-					title={
-						promotion?.landingPage?.roundel ?? lozengeText ?? 'Highest impact'
-					}
+		<section css={container(!!pillCopy, isUserSelected, isSubdued)}>
+			{isUserSelected && <ThreeTierCardPill title="Your selection" />}
+			{!!pillCopy && !isUserSelected && (
+				<ThreeTierCardPill
+					subdue={isSubdued}
+					title={promotion?.landingPage?.roundel ?? pillCopy}
 				/>
 			)}
-			<h2 css={titleCss}>{label}</h2>
+			<h2 css={titleCss}>{title}</h2>
 			<p css={priceCss(!!promotion)}>
 				{promotion && (
 					<>
@@ -261,75 +245,34 @@ export function ThreeTierCard({
 					href={link}
 					cssOverrides={btnStyleOverrides}
 					data-qm-trackable={quantumMetricButtonRef}
-					aria-label={label}
+					aria-label={title}
 				>
-					{ctaCopy}
+					{cta.copy}
 				</LinkButton>
 			</ThemeProvider>
 
-			{benefitsSummary && (
+			{product === 'TierThree' && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						{benefitsSummary.map((stringPart) => {
-							if (typeof stringPart !== 'string') {
-								return <strong>{stringPart.copy}</strong>;
-							} else {
-								return stringPart;
-							}
-						})}
+						The rewards from <strong>All-access digital</strong>
 					</span>
+					{benefits.length > 0 && <span css={benefitsPrefixPlus}>plus</span>}
 				</div>
-			)}
-			{offersSummary && (
-				<div css={benefitsPrefixCss}>
-					<span>
-						{offersSummary.map((stringPart) => {
-							if (typeof stringPart !== 'string') {
-								return <strong>{stringPart.copy}</strong>;
-							} else {
-								return stringPart;
-							}
-						})}
-					</span>
-				</div>
-			)}
-			{(benefitsSummary ?? offersSummary) && (
-				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<BenefitsCheckList
-				benefitsCheckListData={benefits
-					.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-					.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-					.map((benefit) => {
-						return {
-							text: benefit.copy,
-							isChecked: true,
-							toolTip: benefit.tooltip,
-							isNew: benefit.isNew,
-							hideBullet: benefit.hideBullet,
-						};
-					})}
+				benefitsCheckListData={benefits.map((benefit) => {
+					return {
+						text: benefit.copy,
+						isChecked: true,
+						toolTip: benefit.tooltip,
+						pill: benefit.label?.copy,
+						hideBullet: benefits.length <= 1 && product !== 'TierThree',
+					};
+				})}
 				style={'compact'}
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkBenefitList}
 			/>
-			{offers && offers.length > 0 && (
-				<>
-					<span css={benefitsPrefixPlus}>new</span>
-					<BenefitsCheckList
-						benefitsCheckListData={offers.map((offer) => {
-							return {
-								text: offer.copy,
-								isChecked: true,
-								toolTip: offer.tooltip,
-							};
-						})}
-						style={'hidden'}
-						iconColor={palette.brand[500]}
-						cssOverrides={checkmarkOfferList}
-					/>
-				</>
-			)}
 		</section>
 	);
 }
