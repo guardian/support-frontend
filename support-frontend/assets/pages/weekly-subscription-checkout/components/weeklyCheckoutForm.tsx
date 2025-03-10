@@ -193,8 +193,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
-	const showSummaryImage =
-		props.participations.subscribeCheckoutImage !== 'variant';
 	return (
 		<Content>
 			<Layout
@@ -202,15 +200,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<>
 						<Summary
 							image={
-								showSummaryImage ? (
-									<GridImage
-										gridId="checkoutPackshotWeekly"
-										srcSizes={[500]}
-										sizes="(max-width: 740px) 50vw, 548"
-										imgType="png"
-										altText=""
-									/>
-								) : undefined
+								<GridImage
+									gridId="checkoutPackshotWeekly"
+									srcSizes={[500]}
+									sizes="(max-width: 740px) 50vw, 548"
+									imgType="png"
+									altText=""
+								/>
 							}
 							title="Guardian Weekly"
 							description=""
