@@ -13,6 +13,7 @@ import { Duration } from "aws-cdk-lib";
 import type { App } from "aws-cdk-lib";
 import {
   ComparisonOperator,
+  MathExpression,
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
@@ -355,6 +356,42 @@ export class PaymentApi extends GuStack {
         statistic: "Sum",
         period: Duration.seconds(300),
       }),
+      treatMissingData: TreatMissingData.BREACHING,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+    });
+
+    const [applePaySuccessMetric, paymentRequestButtonSuccessMetric] = [
+      "StripeApplePay",
+      "StripePaymentRequestButton",
+    ].map(
+      (paymentProvider) =>
+        new Metric({
+          metricName: "payment-success",
+          namespace: `support-payment-api-${this.stage}`,
+          dimensionsMap: {
+            "payment-provider": paymentProvider,
+          },
+          statistic: "Sum",
+          period: Duration.seconds(300),
+        })
+    );
+    const combinedApplePayAndPaymentRequestButtonSuccessMetric =
+      new MathExpression({
+        expression: "SUM(METRICS())",
+        period: Duration.seconds(300),
+        usingMetrics: {
+          m1: applePaySuccessMetric,
+          m2: paymentRequestButtonSuccessMetric,
+        },
+      });
+    new GuAlarm(this, "NoStripeExpressPaymentsInOneHourAlarm", {
+      app,
+      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for an hour`,
+      actionsEnabled: props.stage === "PROD",
+      threshold: 0,
+      evaluationPeriods: 12,
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      metric: combinedApplePayAndPaymentRequestButtonSuccessMetric,
       treatMissingData: TreatMissingData.BREACHING,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
     });

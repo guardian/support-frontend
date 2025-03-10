@@ -53,6 +53,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -1041,6 +1042,95 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "Namespace": "support-payment-api-PROD",
         "Period": 600,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripeExpressPaymentsInOneHourAlarmB7ED847E": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "[CDK] payment-api PROD No successful stripe express payments via payment-api for an hour",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 12,
+        "Metrics": [
+          {
+            "Expression": "SUM(METRICS())",
+            "Id": "expr_1",
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "payment-provider",
+                    "Value": "StripeApplePay",
+                  },
+                ],
+                "MetricName": "payment-success",
+                "Namespace": "support-payment-api-PROD",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "payment-provider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                ],
+                "MetricName": "payment-success",
+                "Namespace": "support-payment-api-PROD",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
