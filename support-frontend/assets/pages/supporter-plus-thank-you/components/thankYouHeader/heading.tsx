@@ -216,17 +216,6 @@ function Heading({
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
 
-	const getPrintTitle = (productOption?: string) => {
-		switch (productOption) {
-			case 'Sixday':
-				return 'Six day';
-			case 'Everyday':
-				return 'Every day';
-			default:
-				return productOption;
-		}
-	};
-
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
 	if (isOneOffPayPal || !amount || isPending) {
 		const headerTitleClosure = isPending
@@ -274,6 +263,16 @@ function Heading({
 	}
 
 	if (isPaperOrGuardianWeekly) {
+		const getPrintTitle = (productOption?: string) => {
+			switch (productOption) {
+				case 'Sixday':
+					return 'Six day';
+				case 'Everyday':
+					return 'Every day';
+				default:
+					return productOption;
+			}
+		};
 		return (
 			<h1 css={headerTitleText}>
 				Thank you for supporting our journalism! You have now subscribed to the{' '}
