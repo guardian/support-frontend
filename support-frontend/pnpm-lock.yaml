@@ -47,6 +47,9 @@ importers:
       '@stripe/stripe-js':
         specifier: ^4.1.0
         version: 4.1.0
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
       '@types/dompurify':
         specifier: ^3.0.5
         version: 3.0.5
