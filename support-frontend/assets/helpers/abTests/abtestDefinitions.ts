@@ -119,4 +119,26 @@ export const tests: Tests = {
 		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
 	},
+	newspaperGenericCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 9,
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
+		excludeContributionsOnlyCountries: true,
+	},
 };
