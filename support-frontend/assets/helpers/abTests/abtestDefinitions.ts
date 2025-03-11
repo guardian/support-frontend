@@ -140,26 +140,4 @@ export const tests: Tests = {
 		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
 	},
-	subscribeCheckoutImage: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage:
-			'(/subscribe/weekly/checkout$|/subscribe/weekly/checkout/gift$)', // weekly only test
-		excludeContributionsOnlyCountries: true,
-	},
 };
