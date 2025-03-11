@@ -17,6 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - run: npm install --global corepack@0.31.0
+
+      - run: corepack enable
+        shell: bash
+        working-directory: support-frontend
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -28,10 +34,10 @@ jobs:
 #          working-directory: support-frontend
 
       - name: Install
-        run: yarn
+        run: pnpm install
 
       - name: Generate production build for github action
-        run: yarn build-github-action
+        run: pnpm build-github-action
 
       - name: Run Bundle Analyser
         uses: actions/upload-artifact@v4
