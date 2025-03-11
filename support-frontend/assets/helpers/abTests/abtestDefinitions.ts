@@ -139,5 +139,5 @@ export const tests: Tests = {
 			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
 		targetPage: '/subscribe$',
 		excludeContributionsOnlyCountries: true,
-	}
+	},
 };
