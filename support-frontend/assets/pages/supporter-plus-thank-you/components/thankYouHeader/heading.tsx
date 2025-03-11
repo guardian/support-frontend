@@ -200,6 +200,14 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
+	const isPaperOrGuardianWeekly = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'GuardianWeekly',
+		'GuardianWeeklyRestOfWorld',
+	]
+		.map((product) => productKey === product)
+		.includes(true);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
@@ -247,6 +255,15 @@ function Heading({
 						'Your valued support powers our journalism.'
 					</>
 				)}
+			</h1>
+		);
+	}
+
+	if (isPaperOrGuardianWeekly) {
+		return (
+			<h1 css={headerTitleText}>
+				Thank you for supporting our journalism! You have now subscribed to the{' '}
+				PACKAGE_NAME package
 			</h1>
 		);
 	}
