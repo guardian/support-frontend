@@ -305,6 +305,7 @@ export function ThankYouComponent({
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
 							productKey={productKey ?? 'Contribution'}
+							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
 							contributionType={contributionType}
