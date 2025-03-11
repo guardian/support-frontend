@@ -1225,9 +1225,6 @@ export function CheckoutComponent({
 							}
 							currency={currencyKey}
 							amount={originalAmount}
-							amountIsAboveThreshold={
-								productKey === 'SupporterPlus' || productKey === 'TierThree'
-							}
 							productKey={productKey}
 							promotion={promotion}
 						/>

@@ -888,7 +888,10 @@ export function OneTimeCheckoutComponent({
 						)}
 						<div css={tcContainer}>
 							<FinePrint mobileTheme={'dark'}>
-								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+								<TsAndCsFooterLinks
+									countryGroupId={countryGroupId}
+									productKey={'OneTimeContribution'}
+								/>
 							</FinePrint>
 						</div>
 					</BoxContents>
