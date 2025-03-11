@@ -17,19 +17,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - run: npm install --global corepack@0.31.0
+
+      - run: corepack enable
+        shell: bash
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
-      - name: Cache dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: support-frontend
+      # - name: Cache dependencies
+      #   uses: bahmutov/npm-install@v1
+      #   with:
+      #     working-directory: support-frontend
 
-      - name: Install
-        run: yarn
+      - name: Print package.json
+        run: cat /home/runner/work/support-frontend/support-frontend/support-frontend/package.json
 
       - name: Check compressed size of JS
         uses: preactjs/compressed-size-action@v2
