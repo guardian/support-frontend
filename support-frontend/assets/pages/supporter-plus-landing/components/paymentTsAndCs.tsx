@@ -299,14 +299,24 @@ export function SummaryTsAndCs({
 	productKey,
 	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
-	const inDigitalEdition = productKey === 'DigitalSubscription';
-	const inAdLite = productKey === 'GuardianAdLite';
-	const inDigitalPlusPrint = productKey === 'TierThree';
-	const inAllAccessDigital = productKey === 'SupporterPlus';
-	const inSupport =
-		productKey === 'Contribution' ||
-		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
+	return (
+		<div css={[containerSummaryTsCs, cssOverrides]}>
+			<SummaryTsAndCsCopy
+				contributionType={contributionType}
+				currency={currency}
+				amount={amount}
+				productKey={productKey}
+			/>
+		</div>
+	);
+}
 
+export function SummaryTsAndCsCopy({
+	contributionType,
+	currency,
+	amount,
+	productKey,
+}: SummaryTsAndCsProps): JSX.Element {
 	const amountCopy = ` of ${formatAmount(
 		currencies[currency],
 		spokenCurrencies[currency],
@@ -314,65 +324,47 @@ export function SummaryTsAndCs({
 		false,
 	)}`;
 
-	const copyTier1 = (contributionType: ContributionType) => {
-		return (
-			<>
-				<div>
-					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
-				</div>
-			</>
-		);
-	};
-
-	const copyTier2 = (
-		contributionType: ContributionType,
-		productKey: ActiveProductKey,
-	) => {
-		return (
-			<>
-				<div>
-					The {productCatalogDescription[productKey].label} subscription and any
-					contribution will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription and contribution amounts using your chosen payment method
-					at each renewal, at the rate then in effect, unless you cancel.
-				</div>
-			</>
-		);
-	};
-
-	const copyTier3 = (
-		contributionType: ContributionType,
-		productKey: ActiveProductKey,
-		plural: boolean,
-	) => {
-		return (
-			<>
-				<div>
-					The {productCatalogDescription[productKey].label} subscription
-					{plural ? 's' : ''} will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription amount using your chosen payment method at each renewal,
-					at the rate then in effect, unless you cancel.
-				</div>
-			</>
-		);
-	};
-
-	return (
-		<>
-			{!inDigitalEdition && (
-				<div css={[containerSummaryTsCs, cssOverrides]}>
-					{inSupport && copyTier1(contributionType)}
-					{inAllAccessDigital && copyTier2(contributionType, productKey)}
-					{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
-					{inAdLite && copyTier3(contributionType, productKey, false)}
-				</div>
-			)}
-		</>
-	);
+	switch (productKey) {
+		case 'Contribution':
+			return (
+				<>
+					<div>
+						We will attempt to take payment{amountCopy},{' '}
+						<TsAndCsRenewal contributionType={contributionType} />, from now
+						until you cancel your payment. Payments may take up to 6 days to be
+						recorded in your bank account. You can change how much you give or
+						cancel your payment at any time.
+					</div>
+				</>
+			);
+		case 'SupporterPlus':
+			return (
+				<>
+					<div>
+						The {productCatalogDescription[productKey].label} subscription and
+						any contribution will auto-renew each{' '}
+						{frequencySingular(contributionType)}. You will be charged the
+						subscription and contribution amounts using your chosen payment
+						method at each renewal, at the rate then in effect, unless you
+						cancel.
+					</div>
+				</>
+			);
+		case 'TierThree':
+		case 'GuardianAdLite':
+			return (
+				<>
+					<div>
+						The {productCatalogDescription[productKey].label} subscription
+						{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
+						{frequencySingular(contributionType)}. You will be charged the
+						subscription amount using your chosen payment method at each
+						renewal, at the rate then in effect, unless you cancel.
+					</div>
+				</>
+			);
+		case 'DigitalSubscription':
+		default:
+			return <></>;
+	}
 }
