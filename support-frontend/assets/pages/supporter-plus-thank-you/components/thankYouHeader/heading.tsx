@@ -205,13 +205,14 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const isPaperOrGuardianWeekly = [
+	const printProductKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 		'SubscriptionCard',
-	].includes(productKey);
+	];
+	const isPaperOrGuardianWeekly = printProductKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
