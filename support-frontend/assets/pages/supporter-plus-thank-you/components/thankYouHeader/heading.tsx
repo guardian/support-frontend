@@ -205,18 +205,59 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const printProductKeys: ActiveProductKey[] = [
+	const paperProductKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
 		'SubscriptionCard',
 	];
-	const isPaperOrGuardianWeekly = printProductKeys.includes(productKey);
+	const guardianWeeklyProductKeys: ActiveProductKey[] = [
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
+	const isPaperProduct = paperProductKeys.includes(productKey);
+	const isPrintProduct =
+		isPaperProduct || guardianWeeklyProductKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
+
+	// Print Products Header
+	if (isPrintProduct) {
+		const getPrintHeader = () => {
+			const paperRatePlanName =
+				ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
+			const guardianWeeklyRatePlanName =
+				ratePlanKey === 'Annual' ? '/ annual package ' : '';
+			switch (ratePlanKey) {
+				// Guardian Weekly
+				case 'Monthly':
+				case 'Annual':
+				case 'Quarterly':
+					return isPending
+						? `Your subscription to the Guardian Weekly ${guardianWeeklyRatePlanName}is being processed`
+						: `You have now subscribed to the Guardian Weekly ${guardianWeeklyRatePlanName}`;
+				// GuardianWeekly Gifting
+				case 'ThreeMonthGift':
+				case 'OneYearGift':
+					return isPending
+						? 'Your Guardian Weekly gift subscription is being processed'
+						: 'Your purchase of a Guardian Weekly gift subscription is now complete';
+				// Paper
+				default:
+					return isPending
+						? `You have now subscribed to the ${paperRatePlanName} package`
+						: `Your subscription to the ${paperRatePlanName} package is being processed`;
+			}
+		};
+		return (
+			<h1 css={longHeaderTitleText}>
+				Thank you for supporting our journalism!
+				<br css={printlineBreak} />
+				{getPrintHeader()}
+			</h1>
+		);
+	}
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
 	if (isOneOffPayPal || !amount || isPending) {
@@ -260,26 +301,6 @@ function Heading({
 						'Your valued support powers our journalism.'
 					</>
 				)}
-			</h1>
-		);
-	}
-
-	if (isPaperOrGuardianWeekly) {
-		const getPrintTitle = (productOption?: string) => {
-			switch (productOption) {
-				case 'Sixday':
-					return 'Six day';
-				case 'Everyday':
-					return 'Every day';
-				default:
-					return productOption;
-			}
-		};
-		return (
-			<h1 css={longHeaderTitleText}>
-				Thank you for supporting our journalism!
-				<br css={printlineBreak} />
-				You have now subscribed to the {getPrintTitle(ratePlanKey)} package
 			</h1>
 		);
 	}
