@@ -208,7 +208,7 @@ function Heading({
 	const isPaperOrGuardianWeekly = [
 		'NationalDelivery',
 		'HomeDelivery',
-		'GuardianWeekly',
+		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 		'SubscriptionCard',
 	]
