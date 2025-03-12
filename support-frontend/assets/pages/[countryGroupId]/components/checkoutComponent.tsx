@@ -345,6 +345,9 @@ export function CheckoutComponent({
 			// The user's postcode is invalid
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
+			setDeliveryAddressErrors((prevState) =>
+				prevState.filter((error) => error.field !== 'postCode'),
+			);
 		}
 	};
 	useEffect(() => {
