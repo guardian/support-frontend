@@ -211,9 +211,7 @@ function Heading({
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 		'SubscriptionCard',
-	]
-		.map((product) => productKey === product)
-		.includes(true);
+	].includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
