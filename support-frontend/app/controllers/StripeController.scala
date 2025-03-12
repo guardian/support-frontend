@@ -11,7 +11,7 @@ import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import services.{RecaptchaService, StripeSetupIntentService}
+import services.{RecaptchaService, StripeCheckoutSessionService, StripeSetupIntentService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -25,6 +25,12 @@ object SetupIntentRequest {
   implicit val decoder: Decoder[SetupIntentRequest] = deriveDecoder
 }
 
+case class CreateCheckoutSessionRequest()
+
+object SetupIntentRequest {
+  implicit val decoder: Decoder[SetupIntentRequest] = deriveDecoder
+}
+
 class StripeController(
     components: ControllerComponents,
     actionRefiners: CustomActionBuilders,
@@ -32,6 +38,7 @@ class StripeController(
     stripeService: StripeSetupIntentService,
     recaptchaConfigProvider: RecaptchaConfigProvider,
     settingsProvider: AllSettingsProvider,
+    stripeCheckoutSessionService: StripeCheckoutSessionService,
     stage: Stage,
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
@@ -104,6 +111,9 @@ class StripeController(
         response => Ok(response.asJson),
       )
   }
+
+  def createCheckoutSession: Action[CreateCheckoutSessionRequest] =
+    PrivateAction.async(circe.json[CreateCheckoutSessionRequest]) { implicit request => }
 
   // This endpoint is deprecated
   def createSetupIntentWithAuth: Action[AnyContent] = Action.async { implicit request =>
