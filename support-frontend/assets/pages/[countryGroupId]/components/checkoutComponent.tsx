@@ -342,7 +342,7 @@ export function CheckoutComponent({
 				setDeliveryAgents(agents);
 			}
 		} else {
-			// The user's postcode is invalid
+			// The postcode field does not contain a valid postcode, so reset to default state
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
 			setDeliveryAddressErrors((prevState) =>
