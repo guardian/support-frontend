@@ -319,25 +319,37 @@ export function CheckoutComponent({
 		AddressFormFieldError[]
 	>([]);
 
-	const fetchDeliveryAgentsForPostcodesOutsideTheM25 = async (
-		postcode: string,
-	) => {
+	const fetchDeliveryAgentsIfRequired = async (postcode: string) => {
 		if (isValidPostcode(postcode)) {
 			if (postcodeIsWithinDeliveryArea(postcode)) {
+				// The user's postcode is inside the M25
 				setDeliveryPostcodeIsOutsideM25(false);
+			} else if (ratePlanKey === 'Saturday' || ratePlanKey === 'Sunday') {
+				// The user's postcode is outside the M25 but they have selected a
+				// Saturday or Sunday only rate plan which is not supported
+				setDeliveryAddressErrors((prevState) => [
+					...prevState,
+					{
+						field: 'postCode',
+						message:
+							'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery option or choose a Digital Voucher.',
+					},
+				]);
 			} else {
+				// The users postcode is outside the M25 and they have selected a valid rate plan
 				setDeliveryPostcodeIsOutsideM25(true);
 				const agents = await getDeliveryAgents(postcode);
 				setDeliveryAgents(agents);
 			}
 		} else {
+			// The user's postcode is invalid
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
 		}
 	};
 	useEffect(() => {
 		if (productKey === 'HomeDelivery') {
-			void fetchDeliveryAgentsForPostcodesOutsideTheM25(deliveryPostcode);
+			void fetchDeliveryAgentsIfRequired(deliveryPostcode);
 		}
 	}, [deliveryPostcode]);
 
