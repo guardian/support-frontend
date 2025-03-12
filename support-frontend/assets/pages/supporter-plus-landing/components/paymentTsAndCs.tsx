@@ -144,7 +144,28 @@ export function TsAndCsFooterLinks({
 	);
 }
 
-export function PaymentTsAndCsCopy({
+export function PaymentTsAndCs({
+	productKey,
+	contributionType,
+	countryGroupId,
+	promotion,
+}: PaymentTsAndCsProps): JSX.Element {
+	return (
+		<div css={container}>
+			<FinePrint mobileTheme={'dark'}>
+				<PaymentTsAndCsCopy
+					contributionType={contributionType}
+					countryGroupId={countryGroupId}
+					productKey={productKey}
+					promotion={promotion}
+					currency={'GBP'}
+					amount={0}
+				/>
+			</FinePrint>
+		</div>
+	);
+}
+function PaymentTsAndCsCopy({
 	contributionType,
 	countryGroupId,
 	productKey,
@@ -259,28 +280,6 @@ export function PaymentTsAndCsCopy({
 	}
 }
 
-export function PaymentTsAndCs({
-	productKey,
-	contributionType,
-	countryGroupId,
-	promotion,
-}: PaymentTsAndCsProps): JSX.Element {
-	return (
-		<div css={container}>
-			<FinePrint mobileTheme={'dark'}>
-				<PaymentTsAndCsCopy
-					contributionType={contributionType}
-					countryGroupId={countryGroupId}
-					productKey={productKey}
-					promotion={promotion}
-					currency={'GBP'}
-					amount={0}
-				/>
-			</FinePrint>
-		</div>
-	);
-}
-
 export function SummaryTsAndCs({
 	productKey,
 	contributionType,
@@ -299,8 +298,7 @@ export function SummaryTsAndCs({
 		</div>
 	);
 }
-
-export function SummaryTsAndCsCopy({
+function SummaryTsAndCsCopy({
 	contributionType,
 	currency,
 	amount,
