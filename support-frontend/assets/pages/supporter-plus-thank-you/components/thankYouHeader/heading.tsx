@@ -136,6 +136,9 @@ const tier3lineBreak = css`
 		display: inline-block;
 	}
 `;
+const printlineBreak = css`
+	display: inline-block;
+`;
 
 const yellowAmountText = css`
 	background-color: #ffe500;
@@ -168,7 +171,7 @@ const headerTitleText = css`
 		font-size: 40px;
 	}
 `;
-const tier3HeaderTitleText = css`
+const longHeaderTitleText = css`
 	${titlepiece42};
 	font-size: 24px;
 	${from.tablet} {
@@ -243,7 +246,7 @@ function Heading({
 
 	if (isTier3 || isGuardianAdLite) {
 		return (
-			<h1 css={tier3HeaderTitleText}>
+			<h1 css={longHeaderTitleText}>
 				Thank you{' '}
 				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
 				subscribing to{' '}
@@ -274,9 +277,10 @@ function Heading({
 			}
 		};
 		return (
-			<h1 css={headerTitleText}>
-				Thank you for supporting our journalism! You have now subscribed to the{' '}
-				{getPrintTitle(ratePlanKey)} package
+			<h1 css={longHeaderTitleText}>
+				Thank you for supporting our journalism!
+				<br css={printlineBreak} />
+				You have now subscribed to the {getPrintTitle(ratePlanKey)} package
 			</h1>
 		);
 	}
