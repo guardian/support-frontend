@@ -7,7 +7,6 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
-import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -24,6 +23,7 @@ import {
 	guardianAdLiteTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
+	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
 import {
@@ -46,9 +46,11 @@ const marginTop = css`
 const container = css`
 	${textSans12};
 	color: ${neutral[20]};
-
 	& a {
 		color: ${neutral[20]};
+		:visited {
+			color: ${neutral[20]};
+		}
 	}
 `;
 
@@ -89,6 +91,12 @@ const frequencySingular = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'month' : 'year';
 const frequencyPlural = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'monthly' : 'annual';
+
+const termsLink = (linkText: string, url: string) => (
+	<a target="_blank" rel="noopener noreferrer" href={url}>
+		{linkText}
+	</a>
+);
 
 function TsAndCsRenewal({
 	contributionType,
@@ -266,9 +274,46 @@ function PaymentTsAndCsCopy({
 			);
 		case 'TierThree':
 			return (
-				<TierThreeTerms
-					paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
-				/>
+				<>
+					<div>
+						<p>
+							By signing up, you are taking out a Digital + print subscription.
+							Your Digital + print subscription will auto-renew each{' '}
+							{frequencySingular(contributionType)} unless cancelled. Your first
+							payment will be taken on the publication date of your first
+							Guardian Weekly magazine (as shown in the checkout) but you will
+							start to receive your digital benefits when you sign up. Unless
+							you cancel, subsequent {frequencyPlural(contributionType)}{' '}
+							payments will be taken on this date using your chosen payment
+							method. You can cancel your Digital + print subscription at any
+							time before your next renewal date. If you cancel your Digital +
+							print subscription within 14 days of signing up, your subscription
+							will stop immediately and we will not take the first payment from
+							you. Cancellation of your subscription after 14 days will take
+							effect at the end of your current{' '}
+							{frequencyPlural(contributionType)} payment period. To cancel go
+							to&nbsp;
+							{ManageMyAccountLink} or see our Digital + print{' '}
+							{termsLink('Terms', tierThreeTermsLink)}.
+						</p>
+						<p>
+							By proceeding, you are agreeing to the Digital + print{' '}
+							{termsLink('Terms', tierThreeTermsLink)}.
+						</p>
+						<p>
+							To find out what personal data we collect and how we use it,
+							please visit our {termsLink('Privacy Policy', privacyLink)}.
+						</p>
+						<p>
+							<StripeDisclaimer />
+						</p>
+					</div>
+					{/* TODO: Merge with above */}
+					{/* <TsAndCsFooterLinks
+						countryGroupId={countryGroupId}
+						productKey={productKey}
+					/> */}
+				</>
 			);
 		default:
 			return (
