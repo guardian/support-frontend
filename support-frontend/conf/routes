@@ -92,6 +92,8 @@ GET  /support-workers/status                                       controllers.S
 
 POST  /stripe/create-setup-intent/recaptcha                        controllers.StripeController.createSetupIntentRecaptcha()
 POST  /stripe/create-setup-intent/prb                              controllers.StripeController.createSetupIntentPRB()
+POST  /stripe/create-checkout-session                              controllers.StripeController.createCheckoutSession()
+#GET   /stripe/checkout-session-setup-intent/:checkoutSessionId     controllers.StripeController.createCheckoutSession()
 
 # this endpoint should be removed once identity remove
 # the need for a client token
