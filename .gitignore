@@ -16,7 +16,6 @@ yarn-error.log
 app/npm-debug.log
 coverage/
 package-lock.json
-pnpm-lock.yaml
 build-storybook.log
 tsconfig.tsbuildinfo
 

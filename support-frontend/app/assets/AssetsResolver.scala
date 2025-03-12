@@ -65,4 +65,4 @@ class AssetsResolver(base: String, mapResource: String, env: Environment) {
 }
 
 case class AssetNotFoundException(assetPath: RefPath)
-    extends Exception(s"Cannot find asset $assetPath. You should run `yarn run build-dev`.")
+    extends Exception(s"Cannot find asset $assetPath. You should run `pnpm run build-dev`.")

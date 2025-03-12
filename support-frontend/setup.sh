@@ -116,7 +116,7 @@ corepack_enable() {
 }
 
 install_js_deps() {
-  yarn install
+  pnpm install
 }
 
 install_brew_deps() {
