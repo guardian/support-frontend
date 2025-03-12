@@ -12,11 +12,6 @@ import type { ContributionType } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	filterBenefitByRegion,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
-} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
@@ -34,7 +29,10 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
+import { getSettings } from '../../../helpers/globalsAndSwitches/globals';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -201,26 +199,49 @@ export function ThankYouComponent({
 	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
 	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
 
-	let benefitsChecklist;
-	if (isTier) {
-		const productDescription = showNewspaperArchiveBenefit
-			? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-			: productCatalogDescription[productKey];
-		benefitsChecklist = [
-			...productDescription.benefits
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-			...(productDescription.benefitsAdditional ?? [])
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-		];
-	}
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (isTier) {
+			const landingPageSettings = getLandingPageVariant(
+				abParticipations,
+				getSettings().landingPageTests,
+			);
+			if (productKey === 'Contribution') {
+				return [
+					...landingPageSettings.products.Contribution.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			} else if (productKey === 'SupporterPlus') {
+				return landingPageSettings.products.SupporterPlus.benefits.map(
+					(benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					}),
+				);
+			} else {
+				// Also show SupporterPlus benefits
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			}
+		}
+		return [];
+	};
+
+	const benefitsChecklist = getBenefits();
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,

@@ -29,7 +29,6 @@ export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
-	benefitsAdditional?: ProductBenefit[];
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
@@ -186,7 +185,6 @@ export const productCatalogDescription: Record<
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
-		benefitsAdditional: supporterPlusBenefits,
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
@@ -263,7 +261,6 @@ export const productCatalogDescription: Record<
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
-		/** These are duplicated in the TierThree benefitsAdditional */
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
