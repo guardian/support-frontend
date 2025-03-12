@@ -289,5 +289,4 @@ export const PaymentMethodSchema = [
 	'STRIPE_PAYMENT_REQUEST_BUTTON',
 	'PAYPAL',
 	'GOCARDLESS',
-	'STRIPE',
 ] as const;

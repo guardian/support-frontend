@@ -22,7 +22,7 @@ export const AcquisitionProductSchema = z.object({
 	referrerUrl: z.string().nullable(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
 	paymentFrequency: z.enum(ContributionTypeSchema),
-	paymentProvider: z.enum(PaymentMethodSchema), // ???
+	paymentProvider: z.enum(PaymentMethodSchema),
 	printOptions: z
 		.object({ product: z.string(), delivery_country_code: z.string() })
 		.array()
