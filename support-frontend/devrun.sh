@@ -18,10 +18,10 @@ source_nvm
 
 nvm use
 
-yarn concurrently \
+pnpm concurrently \
   --prefix-colors auto \
   --names webpack,storybook,sbt \
   --pad-prefix \
-  "yarn devrun" \
-  "yarn storybook" \
+  "pnpm devrun" \
+  "pnpm storybook" \
   "cd .. && sbt -mem 2048 'project support-frontend' devrun"

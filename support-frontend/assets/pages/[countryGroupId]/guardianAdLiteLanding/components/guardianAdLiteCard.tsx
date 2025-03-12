@@ -48,7 +48,7 @@ const titleSummarySvgCss = css`
 const svgCss = css`
 	margin-bottom: ${`${space[2]}px`};
 	${from.desktop} {
-		margin-bottom: ${space[4]}px;
+		margin-bottom: ${space[3]}px;
 	}
 `;
 const titleCss = (cardIndex: number) => css`
@@ -67,6 +67,9 @@ const btnStyleOverrides = css`
 	width: 100%;
 	justify-content: center;
 	margin-bottom: ${space[1]}px;
+	${from.desktop} {
+		margin-bottom: ${space[2]}px;
+	}
 `;
 const dividerCss = css`
 	width: 100%;

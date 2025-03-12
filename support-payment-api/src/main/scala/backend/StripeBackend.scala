@@ -62,21 +62,16 @@ class StripeBackend(
   private def stripeEnabled(request: StripePaymentIntentRequest.CreatePaymentIntent) =
     request.paymentData.stripePaymentMethod match {
       case Some(StripeCheckout) => stripeCheckoutEnabled
-      case Some(StripeApplePay) => stripeApplePayEnabled
-      case Some(StripePaymentRequestButton) => stripePaymentRequestEnabled
+      case Some(StripeApplePay) => stripeExpressCheckoutEnabled
+      case Some(StripePaymentRequestButton) => stripeExpressCheckoutEnabled
       case None => stripeCheckoutEnabled
     }
 
   private def stripeCheckoutEnabled =
     switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripe.exists(_.state.isOn)))
 
-  private def stripeApplePayEnabled =
-    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripeApplePay.exists(_.state.isOn)))
-
-  private def stripePaymentRequestEnabled =
-    switchService.allSwitches.map(
-      _.oneOffPaymentMethods.exists(_.switches.stripePaymentRequestButton.exists(_.state.isOn)),
-    )
+  private def stripeExpressCheckoutEnabled =
+    switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripeExpressCheckout.exists(_.state.isOn)))
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
@@ -92,7 +87,8 @@ class StripeBackend(
         err
       })
       .semiflatMap { charge =>
-        cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
+        val paymentProvider = PaymentProvider.fromStripePaymentMethod(chargeData.paymentData.stripePaymentMethod)
+        cloudWatchService.recordPaymentSuccess(paymentProvider)
 
         getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityUserDetails =>
           postPaymentTasks(
@@ -232,7 +228,8 @@ class StripeBackend(
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[StripePaymentIntentsApiResponse.Success] = {
 
-    cloudWatchService.recordPaymentSuccess(PaymentProvider.Stripe)
+    val paymentProvider = PaymentProvider.fromStripePaymentMethod(request.paymentData.stripePaymentMethod)
+    cloudWatchService.recordPaymentSuccess(paymentProvider)
 
     getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityUserDetails =>
       paymentIntent.getCharges.getData.asScala.toList.headOption match {

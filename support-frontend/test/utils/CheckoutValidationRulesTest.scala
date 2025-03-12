@@ -719,7 +719,7 @@ object TestData {
       subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches =
         SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
   ): Switches = Switches(
-    OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(On), Some(On)),
+    OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
     SubscriptionsSwitches(Some(On), Some(On)),
