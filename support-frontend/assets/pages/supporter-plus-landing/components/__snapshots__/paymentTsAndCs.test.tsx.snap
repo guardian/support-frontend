@@ -8,6 +8,43 @@ exports[`Payment Ts&Cs Snapshot comparison render SupportPlus 1`] = `
     <div
       class="css-1w63ndr-FinePrint"
     >
+      <div>
+        If you pay at least
+         
+        £12 per month
+        , you will receive the 
+        All-access digital
+         benefits on a subscription basis. If you increase your payments per
+         
+        month
+        , these additional amounts will be separate 
+        monthly
+         voluntary financial contributions to the Guardian. The 
+        All-access digital
+         subscription and any contributions will auto-renew each
+         
+        month
+        . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a 
+        All-access digital
+         
+        subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current
+         
+        monthly
+         payment period. To cancel, go to
+         
+        <a
+          href="https://manage.theguardian.com/subscriptions"
+        >
+          Manage My Account
+        </a>
+         or see our 
+        <a
+          href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions"
+        >
+          Terms
+        </a>
+        .
+      </div>
       <div
         class="css-mhzvj4-TsAndCsFooterLinks"
       >
@@ -15,7 +52,7 @@ exports[`Payment Ts&Cs Snapshot comparison render SupportPlus 1`] = `
         our
          
         <a
-          href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+          href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions"
         >
           Terms and Conditions
         </a>
