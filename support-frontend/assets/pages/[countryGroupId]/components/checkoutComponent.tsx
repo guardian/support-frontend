@@ -1186,11 +1186,13 @@ export function CheckoutComponent({
 								<DefaultPaymentButton
 									buttonText={'Go to Stripe Checkout'}
 									onClick={() => {
+										setIsProcessingPayment(true);
 										submitStripeCheckoutSession()
 											.then((stripeCheckoutUrl) => {
 												window.location.href = stripeCheckoutUrl;
 											})
 											.catch((error) => {
+												setIsProcessingPayment(false);
 												console.error(
 													'Something went wrong creating a Stripe checkout session:, ',
 													error,
