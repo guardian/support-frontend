@@ -333,8 +333,6 @@ export function OneTimeCheckoutComponent({
 
 	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
-
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 
@@ -677,8 +675,6 @@ export function OneTimeCheckoutComponent({
 										);
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
-										event.billingDetails?.email &&
-											setConfirmedEmail(event.billingDetails.email);
 
 										/**
 										 * There is a useEffect that listens to this and submits the form
@@ -731,12 +727,7 @@ export function OneTimeCheckoutComponent({
 							<PersonalEmailFields
 								email={email}
 								setEmail={(email) => setEmail(email)}
-								confirmedEmail={confirmedEmail}
-								setConfirmedEmail={(confirmedEmail) =>
-									setConfirmedEmail(confirmedEmail)
-								}
 								isEmailAddressReadOnly={isSignedIn}
-								requireConfirmedEmail={false}
 								isSignedIn={isSignedIn}
 							/>
 
