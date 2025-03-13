@@ -180,6 +180,7 @@ trait Controllers {
     stripeService = stripeService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
     allSettingsProvider,
+    stripeCheckoutSessionService,
     appConfig.stage,
   )
 
