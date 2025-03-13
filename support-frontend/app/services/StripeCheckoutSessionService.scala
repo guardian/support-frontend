@@ -11,11 +11,10 @@ import io.circe.parser.decode
 
 import scala.concurrent.{ExecutionContext, Future}
 
-sealed trait CreateCheckoutSessionResponseError[+A]
+sealed trait CreateCheckoutSessionResponseError
 object CreateCheckoutSessionResponseError {
-  case class DecodingError(error: io.circe.Error) extends CreateCheckoutSessionResponseError[Nothing]
-  case class ExecuteError(error: Throwable) extends CreateCheckoutSessionResponseError[Nothing]
-  case class APIError[A](error: A) extends CreateCheckoutSessionResponseError[A]
+  case class DecodingError(error: io.circe.Error) extends CreateCheckoutSessionResponseError
+  case class ExecuteError(error: Throwable) extends CreateCheckoutSessionResponseError
 }
 
 case class CreateCheckoutSessionResponseSuccess(url: String, id: String)
@@ -23,26 +22,15 @@ object CreateCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[CreateCheckoutSessionResponseSuccess] = deriveDecoder
 }
 
-case class CreateCheckoutSessionError(responseCode: Option[Int], errorName: Option[String], message: String)
-
-object CreateCheckoutSessionError {
-  implicit val decoder: Decoder[CreateCheckoutSessionError] = deriveDecoder
-}
-
 class StripeCheckoutSessionService(
-    val configProvider: StripeConfigProvider,
+    configProvider: StripeConfigProvider,
     client: WSClient,
-    baseUrl: String = "https://api.stripe.com/v1",
 )(implicit ec: ExecutionContext)
     extends SafeLogging {
+  val baseUrl: String = "https://api.stripe.com/v1"
 
-  // Stripe URL is the same in all environments
-//  val wsUrl: String = baseUrl
-//  val httpClient: WSClient = client
-
-  def createCheckoutSession(): EitherT[Future, CreateCheckoutSessionResponseError[
-    CreateCheckoutSessionError,
-  ], CreateCheckoutSessionResponseSuccess] = {
+  def createCheckoutSession()
+      : EitherT[Future, CreateCheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
     val isTestUser = false
     val privateKey = configProvider.get(isTestUser).defaultAccount.secretKey
 
@@ -60,17 +48,14 @@ class StripeCheckoutSessionService(
       .execute()
       .attemptT
       .leftMap(CreateCheckoutSessionResponseError.ExecuteError)
-      .subflatMap(decodeCreateCheckoutSessionResponse[CreateCheckoutSessionError, CreateCheckoutSessionResponseSuccess])
+      .subflatMap(decodeCreateCheckoutSessionResponse)
   }
 
-  def decodeCreateCheckoutSessionResponse[A: Decoder, B: Decoder](
+  def decodeCreateCheckoutSessionResponse(
       response: WSResponse,
-  ): Either[CreateCheckoutSessionResponseError[A], B] = {
-    implicit def paymentAPIResponseDecoder: Decoder[Either[A, B]] = Decoder.decodeEither[A, B]("error", "data")
-
-    decode[Either[A, B]](response.body).fold(
-      err => Left(CreateCheckoutSessionResponseError.DecodingError(err)),
-      response => response.leftMap(err => CreateCheckoutSessionResponseError.APIError(err)),
+  ): Either[CreateCheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
+    decode[CreateCheckoutSessionResponseSuccess](response.body).leftMap(
+      CreateCheckoutSessionResponseError.DecodingError,
     )
   }
 }
