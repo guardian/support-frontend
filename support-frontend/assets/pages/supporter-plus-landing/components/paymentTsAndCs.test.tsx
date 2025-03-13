@@ -10,16 +10,16 @@ jest.mock('helpers/supporterPlus/benefitsThreshold', () => ({
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const productKeys = [
-		['Contribution', 'UnitedStates', false],
-		['SupporterPlus', 'GBPCountries', true],
-		['TierThree', 'GBPCountries', true],
-		['OneTimeContribution', 'AUDCountries', false],
-		['GuardianAdLite', 'GBPCountries', false],
-		['DigitalSubscription', 'GBPCountries', false],
+		['Contribution', 'UnitedStates'],
+		['SupporterPlus', 'GBPCountries'],
+		['TierThree', 'GBPCountries'],
+		['OneTimeContribution', 'AUDCountries'],
+		['GuardianAdLite', 'GBPCountries'],
+		['DigitalSubscription', 'GBPCountries'],
 	];
 	it.each(productKeys)(
 		`render product %s for region %s (above threshold %s) correctly`,
-		(productKey, countryGroupId, amountIsAboveThreshold) => {
+		(productKey, countryGroupId) => {
 			console.log('productKey:', productKey);
 			const { container } = render(
 				<PaymentTsAndCs
@@ -28,7 +28,6 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					productKey={productKey as ActiveProductKey}
 					currency={'GBP'}
 					amount={0}
-					amountIsAboveThreshold={amountIsAboveThreshold as boolean}
 				/>,
 			);
 			expect(container).toMatchSnapshot();

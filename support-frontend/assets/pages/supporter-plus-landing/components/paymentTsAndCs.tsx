@@ -65,7 +65,6 @@ const containerSummaryTsCs = css`
 `;
 
 interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
-	amountIsAboveThreshold: boolean;
 	countryGroupId: CountryGroupId;
 }
 
@@ -108,21 +107,21 @@ function TsAndCsRenewal({
 
 export function TsAndCsFooterLinks({
 	countryGroupId,
-	amountIsAboveThreshold,
 	productKey,
 }: {
 	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold?: boolean;
-	productKey?: ActiveProductKey;
+	productKey: ActiveProductKey;
 }) {
 	const inAdLite = productKey === 'GuardianAdLite';
+	const inSupporterPlusOrTierThree =
+		productKey === 'SupporterPlus' || productKey === 'TierThree';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const termsContributions = (
 		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
 	);
 
-	const terms = amountIsAboveThreshold
+	const terms = inSupporterPlusOrTierThree
 		? termsSupporterPlus('Terms and Conditions')
 		: inAdLite
 		? termsGuardianAdLite('Terms')
@@ -147,16 +146,13 @@ export function PaymentTsAndCs({
 	mobileTheme = 'dark',
 	contributionType,
 	countryGroupId,
-	amountIsAboveThreshold,
 	productKey,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
-	const inAllAccessDigital =
-		productKey === 'SupporterPlus' && amountIsAboveThreshold;
-	const inDigitalPlusPrint =
-		productKey === 'TierThree' && amountIsAboveThreshold;
+	const inAllAccessDigital = productKey === 'SupporterPlus';
+	const inDigitalPlusPrint = productKey === 'TierThree';
 	const inSupport =
 		productKey === 'Contribution' ||
 		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite || inDigitalEdition);
@@ -202,7 +198,7 @@ export function PaymentTsAndCs({
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
+					productKey={productKey}
 				/>
 			</>
 		);
@@ -214,7 +210,7 @@ export function PaymentTsAndCs({
 				<FinePrint mobileTheme={mobileTheme}>
 					<TsAndCsFooterLinks
 						countryGroupId={countryGroupId}
-						amountIsAboveThreshold={amountIsAboveThreshold}
+						productKey={productKey}
 					/>
 				</FinePrint>
 			</div>
@@ -228,7 +224,6 @@ export function PaymentTsAndCs({
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
-				amountIsAboveThreshold={amountIsAboveThreshold}
 				productKey={productKey}
 			/>
 		);
@@ -273,7 +268,7 @@ export function PaymentTsAndCs({
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
+					productKey={productKey}
 				/>
 			</>
 		);

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Payment Ts&Cs Snapshot comparison render product Contribution for region UnitedStates (above threshold false) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product Contribution for region UnitedStates (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
@@ -60,7 +60,7 @@ exports[`Payment Ts&Cs Snapshot comparison render product Contribution for regio
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison render product DigitalSubscription for region GBPCountries (above threshold false) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product DigitalSubscription for region GBPCountries (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
@@ -137,7 +137,7 @@ exports[`Payment Ts&Cs Snapshot comparison render product DigitalSubscription fo
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison render product GuardianAdLite for region GBPCountries (above threshold false) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product GuardianAdLite for region GBPCountries (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
@@ -217,7 +217,7 @@ exports[`Payment Ts&Cs Snapshot comparison render product GuardianAdLite for reg
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison render product OneTimeContribution for region AUDCountries (above threshold false) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product OneTimeContribution for region AUDCountries (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
@@ -277,7 +277,7 @@ exports[`Payment Ts&Cs Snapshot comparison render product OneTimeContribution fo
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison render product SupporterPlus for region GBPCountries (above threshold true) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product SupporterPlus for region GBPCountries (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
@@ -374,7 +374,7 @@ exports[`Payment Ts&Cs Snapshot comparison render product SupporterPlus for regi
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison render product TierThree for region GBPCountries (above threshold true) correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison render product TierThree for region GBPCountries (above threshold %s) correctly 1`] = `
 <div>
   <div
     class="css-1002frk-PaymentTsAndCs"
