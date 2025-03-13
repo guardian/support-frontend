@@ -80,6 +80,9 @@ interface SummaryTsAndCsProps {
 	cssOverrides?: SerializedStyles;
 }
 
+const termsTierThree = (linkText: string) => (
+	<a href={tierThreeTermsLink}>{linkText}</a>
+);
 const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
 );
@@ -122,25 +125,36 @@ export function TsAndCsFooterLinks({
 	countryGroupId: CountryGroupId;
 	productKey: ActiveProductKey;
 }) {
-	const showSupporterPlusTerms =
-		productKey === 'SupporterPlus' || productKey === 'TierThree';
-	const inAdLite = productKey === 'GuardianAdLite';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
-
-	const termsContributions = (
-		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
-	);
-
-	const terms = showSupporterPlusTerms
-		? termsSupporterPlus('Terms and Conditions')
-		: inAdLite
-		? termsGuardianAdLite('Terms')
-		: termsContributions;
-	const productNameSummary = inAdLite ? 'the Guardian Ad-Lite' : 'our';
-
+	const getProductNameSummary = (): string => {
+		switch (productKey) {
+			case 'GuardianAdLite':
+				return 'the Guardian Ad-Lite';
+			case 'TierThree':
+				return 'Digital + print';
+			default:
+				return 'our';
+		}
+	};
+	const getProductTerms = (): JSX.Element => {
+		const termsContributions = (
+			<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
+		);
+		switch (productKey) {
+			case 'GuardianAdLite':
+				return termsGuardianAdLite('Terms');
+			case 'SupporterPlus':
+				return termsSupporterPlus('Terms and Conditions');
+			case 'TierThree':
+				return termsTierThree('Terms');
+			default:
+				return termsContributions;
+		}
+	};
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to {productNameSummary} {terms}.{' '}
+			By proceeding, you are agreeing to {getProductNameSummary()}{' '}
+			{getProductTerms()}.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -296,23 +310,11 @@ function PaymentTsAndCsCopy({
 							{ManageMyAccountLink} or see our Digital + print{' '}
 							{termsLink('Terms', tierThreeTermsLink)}.
 						</p>
-						<p>
-							By proceeding, you are agreeing to the Digital + print{' '}
-							{termsLink('Terms', tierThreeTermsLink)}.
-						</p>
-						<p>
-							To find out what personal data we collect and how we use it,
-							please visit our {termsLink('Privacy Policy', privacyLink)}.
-						</p>
-						<p>
-							<StripeDisclaimer />
-						</p>
 					</div>
-					{/* TODO: Merge with above */}
-					{/* <TsAndCsFooterLinks
+					<TsAndCsFooterLinks
 						countryGroupId={countryGroupId}
 						productKey={productKey}
-					/> */}
+					/>
 				</>
 			);
 		default:
