@@ -4,11 +4,14 @@ import { TestFields } from './userFields';
 export const setTestUserRequiredDetails = async (
 	page: Page,
 	email: string,
+	confirmEmail?: string,
 	firstName?: string,
 	lastName?: string,
 ) => {
 	await page.getByLabel('Email address', { exact: true }).fill(email);
-	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	if (confirmEmail) {
+		await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	}
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
@@ -25,6 +28,7 @@ export const setTestUserDetails = async (
 ) => {
 	await setTestUserRequiredDetails(
 		page,
+		testFields.email,
 		testFields.email,
 		testFields.firstName,
 		testFields.lastName,

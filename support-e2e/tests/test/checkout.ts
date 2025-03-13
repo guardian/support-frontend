@@ -24,10 +24,17 @@ const setUserDetailsForProduct = async (
 	product,
 	internationalisationId,
 ) => {
+	const testEmail = email();
 	switch (product) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
-			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
+			await setTestUserRequiredDetails(
+				page,
+				testEmail,
+				testEmail,
+				firstName(),
+				lastName(),
+			);
 
 			break;
 		case 'TierThree':

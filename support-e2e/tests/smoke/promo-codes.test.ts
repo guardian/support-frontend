@@ -71,6 +71,7 @@ import { setTestUserRequiredDetails } from '../utils/testUserDetails';
 		await setTestUserRequiredDetails(
 			page,
 			testEmail,
+			testEmail,
 			testFirstName,
 			testLastName,
 		);
