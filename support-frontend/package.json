@@ -29,7 +29,8 @@
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
 		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
-		"pre-commit": "lint-staged"
+		"pre-commit": "lint-staged",
+		"pre-push": "pnpm test:no-lint"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
