@@ -1,23 +1,31 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
+export const setTestUserConfirmRequiredDetails = async (
+	page: Page,
+	email: string,
+	firstName?: string,
+	lastName?: string,
+) => {
+	await setTestUserRequiredDetails(page, email, firstName, lastName);
+	await setTestConfirmEmail(page, email);
+};
 export const setTestUserRequiredDetails = async (
 	page: Page,
 	email: string,
-	confirmEmail?: string,
 	firstName?: string,
 	lastName?: string,
 ) => {
 	await page.getByLabel('Email address', { exact: true }).fill(email);
-	if (confirmEmail) {
-		await page.getByLabel('Confirm email address', { exact: true }).fill(email);
-	}
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
 	if (lastName) {
 		await page.getByLabel('Last name').fill(lastName);
 	}
+};
+const setTestConfirmEmail = async (page: Page, email: string) => {
+	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
 };
 
 export const setTestUserDetails = async (
@@ -26,9 +34,8 @@ export const setTestUserDetails = async (
 	internationalisationId: string,
 	tier: number,
 ) => {
-	await setTestUserRequiredDetails(
+	await setTestUserConfirmRequiredDetails(
 		page,
-		testFields.email,
 		testFields.email,
 		testFields.firstName,
 		testFields.lastName,
