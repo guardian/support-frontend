@@ -49,6 +49,7 @@ import {
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
+	StripeCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
@@ -121,10 +122,16 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { submitStripeCheckoutSession } from './submitStripeCheckoutSession';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
+	// Just hardcode this for now - switch to come later
+	if (paymentMethod === 'StripeCheckout') {
+		return true;
+	}
+
 	return isSwitchOn(
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
@@ -314,6 +321,7 @@ export function CheckoutComponent({
 		countryId === 'GB' && DirectDebit,
 		Stripe,
 		PayPal,
+		countryId === 'GB' && StripeCheckout,
 	]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
@@ -1154,23 +1162,41 @@ export function CheckoutComponent({
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
+							{paymentMethod !== 'PayPal' &&
+								paymentMethod !== 'StripeCheckout' && (
+									<DefaultPaymentButton
+										buttonText={`Pay ${simpleFormatAmount(
+											currency,
+											finalAmount,
+										)} per ${
+											ratePlanDescription.billingPeriod === 'Annual'
+												? 'year'
+												: ratePlanDescription.billingPeriod === 'Monthly'
+												? 'month'
+												: 'quarter'
+										}`}
+										onClick={() => {
+											// no-op
+											// This isn't needed because we are now using the formOnSubmit handler
+										}}
+										type="submit"
+									/>
+								)}
+							{paymentMethod === 'StripeCheckout' && (
 								<DefaultPaymentButton
-									buttonText={`Pay ${simpleFormatAmount(
-										currency,
-										finalAmount,
-									)} per ${
-										ratePlanDescription.billingPeriod === 'Annual'
-											? 'year'
-											: ratePlanDescription.billingPeriod === 'Monthly'
-											? 'month'
-											: 'quarter'
-									}`}
+									buttonText={'Go to Stripe Checkout'}
 									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the formOnSubmit handler
+										submitStripeCheckoutSession()
+											.then((stripeCheckoutUrl) => {
+												window.location.href = stripeCheckoutUrl;
+											})
+											.catch((error) => {
+												console.error(
+													'Something went wrong creating a Stripe checkout session:, ',
+													error,
+												);
+											});
 									}}
-									type="submit"
 								/>
 							)}
 							{payPalLoaded && paymentMethod === 'PayPal' && (

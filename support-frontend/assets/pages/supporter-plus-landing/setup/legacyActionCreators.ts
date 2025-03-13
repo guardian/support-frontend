@@ -406,6 +406,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 			logInvalidCombination('ONE_OFF', Sepa);
 			return Promise.resolve(error);
 		},
+		StripeCheckout: () => {
+			logInvalidCombination('ONE_OFF', 'StripeCheckout');
+			return Promise.resolve(error);
+		},
 		None: () => {
 			logInvalidCombination('ONE_OFF', 'None');
 			return Promise.resolve(error);
@@ -413,6 +417,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 	},
 	ANNUAL: {
 		...recurringPaymentAuthorisationHandlers,
+		StripeCheckout: () => {
+			logInvalidCombination('ANNUAL', 'StripeCheckout');
+			return Promise.resolve(error);
+		},
 		None: () => {
 			logInvalidCombination('ANNUAL', 'None');
 			return Promise.resolve(error);
@@ -420,6 +428,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 	},
 	MONTHLY: {
 		...recurringPaymentAuthorisationHandlers,
+		StripeCheckout: () => {
+			logInvalidCombination('MONTHLY', 'StripeCheckout');
+			return Promise.resolve(error);
+		},
 		None: () => {
 			logInvalidCombination('MONTHLY', 'None');
 			return Promise.resolve(error);

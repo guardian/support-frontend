@@ -43,6 +43,12 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 			/>
 		),
 	},
+	StripeCheckout: {
+		id: 'qa-stripe-checkout',
+		label: 'Stripe Checkout',
+		icon: <></>,
+		accordionBody: () => <></>,
+	},
 	Sepa: {
 		id: 'qa-direct-debit-sepa',
 		label: 'Direct debit (SEPA)',
