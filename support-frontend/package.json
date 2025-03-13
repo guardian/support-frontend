@@ -30,7 +30,7 @@
 		"build-storybook": "storybook build -o storybook-static",
 		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
 		"pre-commit": "lint-staged",
-		"pre-push": "pnpm test:no-lint"
+		"pre-push": "pnpm test"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
