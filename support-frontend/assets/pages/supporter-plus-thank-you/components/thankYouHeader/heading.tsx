@@ -205,18 +205,15 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const paperProductKeys: ActiveProductKey[] = [
+	const printProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'SubscriptionCard',
-	];
-	const guardianWeeklyProductKeys: ActiveProductKey[] = [
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-	const isPaperProduct = paperProductKeys.includes(productKey);
-	const isPrintProduct =
-		isPaperProduct || guardianWeeklyProductKeys.includes(productKey);
+
+	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
