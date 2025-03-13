@@ -78,6 +78,11 @@ const paymentMethodData = {
 		label: 'Direct debit',
 		icon: <SvgDirectDebit />,
 	},
+	StripeCheckout: {
+		id: 'qa-stripe-checkout',
+		label: 'Stripe Checkout',
+		icon: <></>,
+	},
 	Sepa: {
 		id: 'qa-direct-debit-sepa',
 		label: 'Direct debit (SEPA)',
