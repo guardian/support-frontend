@@ -28,7 +28,7 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		baseURL,
 	}) => {
 		// Temporary, assumes confirm email required
-		const url = `/${internationalisationId}/one-time-checkout#ab-oneTimeConfirmEmail=control`;
+		const url = `/${internationalisationId}/one-time-checkout`;
 		const page = await context.newPage();
 		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
