@@ -4,10 +4,10 @@
 	"description": "Frontend for the supporter platform.",
 	"scripts": {
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
-		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && yarn tsc && yarn knip",
+		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
-		"lint:fix": "yarn lint:check --fix",
+		"lint:fix": "pnpm lint:check --fix",
 		"build-dev": "webpack --config webpack.dev.js",
 		"build-ssr": "tsx ./scripts/build-ssr-content.tsx",
 		"build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
@@ -19,15 +19,14 @@
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
 		"knip": "knip --include files,exports,nsExports,types,nsTypes,dependencies",
-		"knip:production": "yarn knip --production --config knip.production.config.js",
+		"knip:production": "pnpm knip --production --config knip.production.config.js",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",
 		"prettier:check": "prettier --check ./assets",
 		"prettier:fix": "prettier --write ./assets",
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
-		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
-		"update-support-service-lambdas": "rm -rf node_modules && yarn cache clean @guardian/support-service-lambdas && yarn install"
+		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
@@ -42,7 +41,7 @@
 			".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
 		},
 		"transformIgnorePatterns": [
-			"/node_modules/(?!@guardian|valibot)",
+			"/node_modules/\\.pnpm/(?!@guardian|valibot)",
 			"^.+\\.module\\.(css|sass|scss)$"
 		],
 		"moduleFileExtensions": [
@@ -102,6 +101,8 @@
 		"lodash.debounce": "^4.0.6",
 		"mockdate": "^3.0.5",
 		"ophan-tracker-js": "^1.4.3",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
 		"react-redux": "^8.1.0",
 		"react-router-dom": "^6.23.0",
 		"redux": "^4.0.0",
@@ -121,6 +122,7 @@
 		"@babel/preset-env": "^7.22.7",
 		"@babel/preset-react": "^7.23.3",
 		"@babel/preset-typescript": "^7.26.0",
+		"@babel/runtime": "7.26.0",
 		"@emotion/eslint-plugin": "^11.11.0",
 		"@guardian/browserslist-config": "^6.1.2",
 		"@guardian/eslint-config": "8.0.1",
@@ -141,7 +143,8 @@
 		"@types/jsdom": "^21.1.6",
 		"@types/lodash.debounce": "^4.0.9",
 		"@types/node": "^22.10.1",
-		"@types/react-dom": "^17.0.11",
+		"@types/react": "18.0.3",
+		"@types/react-dom": "18.2.7",
 		"@types/react-router-dom": "^5.3.3",
 		"autoprefixer": "^10.4.16",
 		"babel-jest": "^29.7.0",
@@ -162,6 +165,7 @@
 		"fast-sass-loader": "^2.0.1",
 		"file-loader": "^6.2.0",
 		"husky": "^7.0.1",
+		"immer": "^9.0.21",
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "^29.7.0",
 		"jest-environment-jsdom-global": "^4.0.0",
@@ -175,8 +179,6 @@
 		"postcss-pxtorem": "^6.1.0",
 		"preact": "^10.23.2",
 		"prettier": "^2.8.8",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
 		"rimraf": "^6.0.1",
 		"sass": "^1.69.5",
 		"sass-mq": "^5.0.1",
@@ -194,5 +196,5 @@
 	"lint-staged": {
 		"./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
 	},
-	"packageManager": "yarn@1.22.22"
+	"packageManager": "pnpm@10.5.0"
 }

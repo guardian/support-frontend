@@ -182,24 +182,19 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 		props.billingCountry,
 	);
 
-	const showSummaryImage =
-		props.participations.subscribeCheckoutImage !== 'variant';
-
 	return (
 		<Content>
 			<Layout
 				aside={
 					<Summary
 						image={
-							showSummaryImage ? (
-								<GridImage
-									gridId="checkoutPackshotWeeklyGifting"
-									srcSizes={[696, 500]}
-									sizes="(max-width: 740px) 50vw, 696"
-									imgType="png"
-									altText=""
-								/>
-							) : undefined
+							<GridImage
+								gridId="checkoutPackshotWeeklyGifting"
+								srcSizes={[696, 500]}
+								sizes="(max-width: 740px) 50vw, 696"
+								imgType="png"
+								altText=""
+							/>
 						}
 						title="Guardian Weekly"
 						description=""
