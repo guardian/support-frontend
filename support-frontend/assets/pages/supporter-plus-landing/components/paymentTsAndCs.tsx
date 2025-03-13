@@ -169,7 +169,7 @@ export function PaymentTsAndCs({
 		return (
 			<>
 				<div>
-					DIFFIf you pay at least{' '}
+					If you pay at least{' '}
 					{productLegal(
 						countryGroupId,
 						contributionType,
