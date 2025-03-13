@@ -118,7 +118,7 @@ describe('Guardian Weekly checkout form', () => {
 			});
 
 			it('shows all payment options', () => {
-				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
+				expect(screen.queryByText('PayPal')).toBeInTheDocument();
 				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
 				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
 			});
