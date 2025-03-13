@@ -67,6 +67,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { setSession } from 'helpers/storage/storage';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
@@ -1188,7 +1189,11 @@ export function CheckoutComponent({
 									onClick={() => {
 										setIsProcessingPayment(true);
 										submitStripeCheckoutSession()
-											.then((stripeCheckoutUrl) => {
+											.then(({ url: stripeCheckoutUrl, id }) => {
+												// Stash the checkoutSession ID in session storage so we can retrieve later
+												setSession('stripeCheckoutSessionId', id);
+
+												// Redirect to the Stripe Checkout session we just created
 												window.location.href = stripeCheckoutUrl;
 											})
 											.catch((error) => {
