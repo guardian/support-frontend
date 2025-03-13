@@ -7,8 +7,8 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import config.RecaptchaConfigProvider
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import services.{RecaptchaService, StripeCheckoutSessionService, StripeSetupIntentService}
@@ -26,9 +26,13 @@ object SetupIntentRequest {
 }
 
 case class CreateCheckoutSessionRequest()
+object CreateCheckoutSessionRequest {
+  implicit val decoder: Decoder[CreateCheckoutSessionRequest] = deriveDecoder
+}
 
-object SetupIntentRequest {
-  implicit val decoder: Decoder[SetupIntentRequest] = deriveDecoder
+case class CreateCheckoutSessionResponse(url: String, id: String)
+object CreateCheckoutSessionResponse {
+  implicit val encoder: Encoder[CreateCheckoutSessionResponse] = deriveEncoder
 }
 
 class StripeController(
@@ -113,7 +117,20 @@ class StripeController(
   }
 
   def createCheckoutSession: Action[CreateCheckoutSessionRequest] =
-    PrivateAction.async(circe.json[CreateCheckoutSessionRequest]) { implicit request => }
+    PrivateAction.async(circe.json[CreateCheckoutSessionRequest]) { implicit request =>
+      stripeCheckoutSessionService
+        .createCheckoutSession()
+        .fold(
+          error => {
+            logger.error(s"Returning status InternalServerError for Create Checkout Session request because: $error")
+            InternalServerError("")
+          },
+          stripeResponse => {
+            val response = CreateCheckoutSessionResponse(stripeResponse.url, stripeResponse.id)
+            Ok(response.asJson)
+          },
+        )
+    }
 
   // This endpoint is deprecated
   def createSetupIntentWithAuth: Action[AnyContent] = Action.async { implicit request =>
