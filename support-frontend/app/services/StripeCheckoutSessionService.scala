@@ -38,6 +38,11 @@ class StripeCheckoutSessionService(
       "mode" -> Seq("setup"),
       "success_url" -> Seq("https://support.thegulocal.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"),
       "currency" -> Seq("gbp"),
+      "payment_method_types[]" -> Seq("card"),
+      // Email should be provided by the client as we'll have collected it on the payment form
+      "customer_email" -> Seq(
+        "test@theguardian.com",
+      ),
     )
     client
       .url(s"$baseUrl/checkout/sessions")
@@ -54,6 +59,9 @@ class StripeCheckoutSessionService(
   def decodeCreateCheckoutSessionResponse(
       response: WSResponse,
   ): Either[CreateCheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
+    // TODO: remove this logging
+    logger.error(scrub"Create checkout response: ${response.body}")
+
     decode[CreateCheckoutSessionResponseSuccess](response.body).leftMap(
       CreateCheckoutSessionResponseError.DecodingError,
     )
