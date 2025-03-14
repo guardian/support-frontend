@@ -55,6 +55,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
@@ -65,6 +66,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
@@ -74,10 +76,8 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	PaymentTsAndCs,
-	SummaryTsAndCs,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -467,6 +467,18 @@ export function CheckoutComponent({
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
 
+	const contributionType =
+		productFields.billingPeriod === 'Monthly'
+			? 'MONTHLY'
+			: productFields.billingPeriod === 'Annual'
+			? 'ANNUAL'
+			: 'ONE_OFF';
+	const amount = getLowerProductBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+	);
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -549,12 +561,9 @@ export function CheckoutComponent({
 						}
 						tsAndCs={getTermsConditions(
 							countryGroupId,
-							productFields.billingPeriod === 'Monthly'
-								? 'MONTHLY'
-								: productFields.billingPeriod === 'Annual'
-								? 'ANNUAL'
-								: 'ONE_OFF',
+							contributionType,
 							productFields.productType,
+							amount,
 							promotion,
 						)}
 						headerButton={
@@ -1106,17 +1115,10 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
 							productKey={productKey}
-							promotion={promotion}
 						/>
 						<div
 							css={css`
@@ -1231,15 +1233,8 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							countryGroupId={countryGroupId}
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
-							currency={currencyKey}
-							amount={originalAmount}
+							contributionType={contributionType}
+							amount={amount}
 							productKey={productKey}
 							promotion={promotion}
 						/>

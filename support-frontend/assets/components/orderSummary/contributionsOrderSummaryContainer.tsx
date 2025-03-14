@@ -28,6 +28,7 @@ export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 	productId: string,
+	amount: number,
 	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') {
@@ -48,7 +49,7 @@ export function getTermsConditions(
 							countryGroupId,
 							contributionType,
 							'/',
-							productId,
+							amount,
 							promotion,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
