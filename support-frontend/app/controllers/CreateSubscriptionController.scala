@@ -219,7 +219,14 @@ class CreateSubscriptionController(
       supportWorkersUser = buildSupportWorkersUser(userDetails.userDetails, request.body, testUsers.isTestUser(request))
 
       statusResponse <- client
-        .createSubscription(request, supportWorkersUser, request.uuid)
+        .createSubscription(
+          request = request.body,
+          user = supportWorkersUser,
+          requestId = request.uuid,
+          ipAddress = request.headers.get("user-agent").getOrElse("Unknown"),
+          userAgent =
+            request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+        )
         .leftMap[CreateSubscriptionError](ServerError)
 
     } yield CreateSubscriptionResponse(

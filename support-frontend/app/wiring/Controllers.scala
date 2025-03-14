@@ -181,6 +181,7 @@ trait Controllers {
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
     allSettingsProvider,
     stripeCheckoutSessionService,
+    supportWorkersClient,
     appConfig.stage,
   )
 
