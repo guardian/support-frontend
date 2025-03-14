@@ -64,12 +64,11 @@ const containerSummaryTsCs = css`
 	}
 `;
 
-interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
-	amountIsAboveThreshold: boolean;
+export interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
+	amountIsAboveThreshold: boolean;
 }
-
-interface SummaryTsAndCsProps {
+export interface SummaryTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	currency: IsoCurrency;
