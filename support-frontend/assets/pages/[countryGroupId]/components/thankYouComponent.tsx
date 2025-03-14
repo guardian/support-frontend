@@ -206,37 +206,23 @@ export function ThankYouComponent({
 				abParticipations,
 				getSettings().landingPageTests,
 			);
-			if (productKey === 'Contribution') {
-				return [
-					...landingPageSettings.products.Contribution.benefits.map(
-						(benefit) => ({
-							isChecked: true,
-							text: benefit.copy,
-						}),
-					),
-				];
-			} else if (productKey === 'SupporterPlus') {
-				return landingPageSettings.products.SupporterPlus.benefits.map(
-					(benefit) => ({
-						isChecked: true,
-						text: benefit.copy,
-					}),
-				);
-			} else {
-				// Also show SupporterPlus benefits
-				return [
-					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
-						isChecked: true,
-						text: benefit.copy,
-					})),
-					...landingPageSettings.products.SupporterPlus.benefits.map(
-						(benefit) => ({
-							isChecked: true,
-							text: benefit.copy,
-						}),
-					),
-				];
-			}
+			const tierThreeAdditionalBenefits =
+				productKey === 'TierThree'
+					? landingPageSettings.products.SupporterPlus.benefits.map(
+							(benefit) => ({
+								isChecked: true,
+								text: benefit.copy,
+							}),
+					  )
+					: [];
+			return [
+				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
+					isChecked: true,
+					text: benefit.copy,
+				})),
+				...tierThreeAdditionalBenefits,
+			];
+`
 		}
 		return [];
 	};
