@@ -1,11 +1,6 @@
 package com.gu.support.workers
 
-import cats.syntax.functor._
-import com.gu.i18n.Country
 import com.gu.support.encoding.{Codec, CodecHelpers, DiscriminatedType}
-import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.workers.PaymentFields.discriminatedType
-import io.circe.syntax._
 import io.circe.{Encoder, _}
 
 sealed trait PaymentFields {
