@@ -50,12 +50,13 @@ export function getLowerProductBenefitThreshold(
 			: 'DomesticMonthly';
 	const ratePlanSupporterPlus =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-
-	return (
-		productCatalog[product]?.ratePlans[
-			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
-		]?.pricing[currencyId] ?? 0
-	);
+	// eslint-disable-next-line -- storybook tests have productCatalog itself as undefined, this contradicts the type definition linting
+	const price = productCatalog
+		? productCatalog[product]?.ratePlans[
+				product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
+		  ]?.pricing[currencyId] ?? 0
+		: 0;
+	return price;
 }
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring
