@@ -567,6 +567,7 @@ export function CheckoutComponent({
 							countryGroupId,
 							contributionType,
 							productFields.productType,
+							thresholdAmount,
 							promotion,
 						)}
 						headerButton={
