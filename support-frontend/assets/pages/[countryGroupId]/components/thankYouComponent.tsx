@@ -206,6 +206,7 @@ export function ThankYouComponent({
 				abParticipations,
 				getSettings().landingPageTests,
 			);
+			// Also show SupporterPlus benefits for TierThree
 			const tierThreeAdditionalBenefits =
 				productKey === 'TierThree'
 					? landingPageSettings.products.SupporterPlus.benefits.map(
@@ -222,7 +223,6 @@ export function ThankYouComponent({
 				})),
 				...tierThreeAdditionalBenefits,
 			];
-`
 		}
 		return [];
 	};
