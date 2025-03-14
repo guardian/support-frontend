@@ -60,18 +60,7 @@ class StripeCheckoutSessionService(
       .execute()
       .attemptT
       .leftMap(CheckoutSessionResponseError.ExecuteError)
-      .subflatMap(decodeCreateCheckoutSessionResponse)
-  }
-
-  private def decodeCreateCheckoutSessionResponse(
-      response: WSResponse,
-  ): Either[CheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
-    // TODO: remove this logging
-    logger.error(scrub"Create checkout response: ${response.body}")
-
-    decode[CreateCheckoutSessionResponseSuccess](response.body).leftMap(
-      CheckoutSessionResponseError.DecodingError,
-    )
+      .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
   }
 
   def retrieveCheckoutSession(
@@ -87,16 +76,16 @@ class StripeCheckoutSessionService(
       .execute()
       .attemptT
       .leftMap(CheckoutSessionResponseError.ExecuteError)
-      .subflatMap(decodeRetrieveCheckoutSessionResponse)
+      .subflatMap(decodeResponse[RetrieveCheckoutSessionResponseSuccess])
   }
 
-  private def decodeRetrieveCheckoutSessionResponse(
+  private def decodeResponse[A: Decoder](
       response: WSResponse,
-  ): Either[CheckoutSessionResponseError, RetrieveCheckoutSessionResponseSuccess] = {
+  ): Either[CheckoutSessionResponseError, A] = {
     // TODO: remove this logging
-    logger.error(scrub"Retrieve checkout response: ${response.body}")
+    logger.error(scrub"Response: ${response.body}")
 
-    decode[RetrieveCheckoutSessionResponseSuccess](response.body).leftMap(
+    decode[A](response.body).leftMap(
       CheckoutSessionResponseError.DecodingError,
     )
   }
