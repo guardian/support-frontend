@@ -8,7 +8,6 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { LinkButton, themeLinkBrand } from '@guardian/source/react-components';
-import { Divider } from '@guardian/source-development-kitchen/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { type ProductDescription } from 'helpers/productCatalog';
 import { guardianAdLiteIconLeftSvg } from './guardianAdLiteIconLeftSvg';
@@ -71,13 +70,6 @@ const btnStyleOverrides = css`
 		margin-bottom: ${space[2]}px;
 	}
 `;
-const dividerCss = css`
-	width: 100%;
-	margin: ${space[4]}px 0;
-	${from.desktop} {
-		margin: ${space[6]}px 0;
-	}
-`;
 const checkmarkBenefitList = css`
 	text-align: left;
 	width: 100%;
@@ -111,7 +103,6 @@ export function GuardianAdLiteCard({
 					{ctaCopy}
 				</LinkButton>
 			</ThemeProvider>
-			<Divider cssOverrides={dividerCss} />
 			<BenefitsCheckList
 				benefitsCheckListData={benefits.map((benefit) => {
 					return {
