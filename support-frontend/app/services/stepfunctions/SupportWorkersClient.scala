@@ -127,38 +127,39 @@ class SupportWorkersClient(
     }
 
   def createSubscription(
-      request: Request[CreateSupportWorkersRequest],
+      request: CreateSupportWorkersRequest,
       user: User,
       requestId: UUID,
+      ipAddress: String,
+      userAgent: String,
   ): EitherT[Future, String, StatusResponse] = {
     for {
       giftRecipient <- EitherT.fromEither[Future](
-        request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence,
+        request.giftRecipient.map(getGiftRecipient(_, request.product)).sequence,
       )
       createPaymentMethodState = CreatePaymentMethodState(
         requestId = requestId,
         user = user,
         giftRecipient = giftRecipient,
-        product = request.body.product,
+        product = request.product,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
-          PaymentProvider.fromPaymentFields(request.body.paymentFields),
+          PaymentProvider.fromPaymentFields(request.paymentFields),
         ),
-        paymentFields = request.body.paymentFields,
+        paymentFields = request.paymentFields,
         acquisitionData = Some(
           AcquisitionData(
-            ophanIds = request.body.ophanIds,
+            ophanIds = request.ophanIds,
             referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
-            supportAbTests = request.body.supportAbTests,
+            supportAbTests = request.supportAbTests,
           ),
         ),
-        appliedPromotion = request.body.appliedPromotion,
-        csrUsername = request.body.csrUsername,
-        salesforceCaseId = request.body.salesforceCaseId,
-        firstDeliveryDate = request.body.firstDeliveryDate,
-        userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
-        ipAddress =
-          request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+        appliedPromotion = request.appliedPromotion,
+        csrUsername = request.csrUsername,
+        salesforceCaseId = request.salesforceCaseId,
+        firstDeliveryDate = request.firstDeliveryDate,
+        userAgent = userAgent,
+        ipAddress = ipAddress,
       )
       isExistingAccount = createPaymentMethodState.paymentFields match {
         case _: ExistingPaymentFields => true

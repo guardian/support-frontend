@@ -41,3 +41,23 @@ export const stripeCreateSetupIntentRecaptcha = async (
 
 	return json.client_secret;
 };
+
+interface CreateCheckoutSessionResponse {
+	id: string;
+	url: string;
+}
+export const stripeCreateCheckoutSession =
+	async (): Promise<CreateCheckoutSessionResponse> => {
+		const response = await fetch('/stripe/create-checkout-session', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			// No payload yet, but I imagine there'll be something we need to send in future (price? promo code?)
+			body: JSON.stringify({}),
+		});
+
+		const json = (await response.json()) as CreateCheckoutSessionResponse;
+
+		return json;
+	};
