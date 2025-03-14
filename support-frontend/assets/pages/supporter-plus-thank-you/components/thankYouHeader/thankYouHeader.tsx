@@ -40,6 +40,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
@@ -56,6 +57,7 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
@@ -65,6 +67,7 @@ function ThankYouHeader({
 			<Heading
 				name={name}
 				productKey={productKey}
+				ratePlanKey={ratePlanKey}
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}

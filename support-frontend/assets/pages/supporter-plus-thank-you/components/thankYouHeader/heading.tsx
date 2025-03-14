@@ -136,6 +136,9 @@ const tier3lineBreak = css`
 		display: inline-block;
 	}
 `;
+const printlineBreak = css`
+	display: inline-block;
+`;
 
 const yellowAmountText = css`
 	background-color: #ffe500;
@@ -168,7 +171,7 @@ const headerTitleText = css`
 		font-size: 40px;
 	}
 `;
-const tier3HeaderTitleText = css`
+const longHeaderTitleText = css`
 	${titlepiece42};
 	font-size: 24px;
 	${from.tablet} {
@@ -183,6 +186,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
+	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
@@ -193,6 +197,7 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
+	ratePlanKey,
 	paymentStatus,
 	promotion,
 }: HeadingProps): JSX.Element {
@@ -200,10 +205,56 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
+	const printProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
+
+	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
+
+	// Print Products Header
+	if (isPrintProduct) {
+		const getPrintHeader = () => {
+			const paperRatePlanName =
+				ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
+			const guardianWeeklyRatePlanName =
+				ratePlanKey === 'Annual' ? '/ annual package ' : '';
+			switch (ratePlanKey) {
+				// Guardian Weekly
+				case 'Monthly':
+				case 'Annual':
+				case 'Quarterly':
+					return isPending
+						? `Your subscription to the Guardian Weekly ${guardianWeeklyRatePlanName}is being processed`
+						: `You have now subscribed to the Guardian Weekly ${guardianWeeklyRatePlanName}`;
+				// GuardianWeekly Gifting
+				case 'ThreeMonthGift':
+				case 'OneYearGift':
+					return isPending
+						? 'Your Guardian Weekly gift subscription is being processed'
+						: 'Your purchase of a Guardian Weekly gift subscription is now complete';
+				// Paper
+				default:
+					return isPending
+						? `You have now subscribed to the ${paperRatePlanName} package`
+						: `Your subscription to the ${paperRatePlanName} package is being processed`;
+			}
+		};
+		return (
+			<h1 css={longHeaderTitleText}>
+				Thank you for supporting our journalism!
+				<br css={printlineBreak} />
+				{getPrintHeader()}
+			</h1>
+		);
+	}
 
 	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
 	if (isOneOffPayPal || !amount || isPending) {
@@ -232,7 +283,7 @@ function Heading({
 
 	if (isTier3 || isGuardianAdLite) {
 		return (
-			<h1 css={tier3HeaderTitleText}>
+			<h1 css={longHeaderTitleText}>
 				Thank you{' '}
 				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
 				subscribing to{' '}
