@@ -1,30 +1,18 @@
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	detect,
-	fromCountryGroupId,
-} from 'helpers/internationalisation/currency';
+import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { simpleFormatAmount } from './forms/checkouts';
-import type { ActiveProductKey } from './productCatalog';
 
 export const productLegal = (
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 	divider: string,
-	product: ActiveProductKey,
+	amount: number,
 	promotion?: Promotion,
 ) => {
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
-	const amount = getLowerProductBenefitThreshold(
-		contributionType,
-		fromCountryGroupId(countryGroupId),
-		countryGroupId,
-		product,
-	);
 	const amountFormatted = simpleFormatAmount(currency, amount);
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const amountPerPeriod = `${amountFormatted}${divider}${period}`;
