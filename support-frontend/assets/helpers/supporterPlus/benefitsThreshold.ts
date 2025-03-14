@@ -50,7 +50,6 @@ export function getLowerProductBenefitThreshold(
 			: 'DomesticMonthly';
 	const ratePlanSupporterPlus =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-
 	return (
 		productCatalog[product]?.ratePlans[
 			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
