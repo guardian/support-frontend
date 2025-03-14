@@ -11,15 +11,20 @@ import io.circe.parser.decode
 
 import scala.concurrent.{ExecutionContext, Future}
 
-sealed trait CreateCheckoutSessionResponseError
-object CreateCheckoutSessionResponseError {
-  case class DecodingError(error: io.circe.Error) extends CreateCheckoutSessionResponseError
-  case class ExecuteError(error: Throwable) extends CreateCheckoutSessionResponseError
+sealed trait CheckoutSessionResponseError
+object CheckoutSessionResponseError {
+  case class DecodingError(error: io.circe.Error) extends CheckoutSessionResponseError
+  case class ExecuteError(error: Throwable) extends CheckoutSessionResponseError
 }
 
 case class CreateCheckoutSessionResponseSuccess(url: String, id: String)
 object CreateCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[CreateCheckoutSessionResponseSuccess] = deriveDecoder
+}
+
+case class RetrieveCheckoutSessionResponseSuccess(setup_intent: String)
+object RetrieveCheckoutSessionResponseSuccess {
+  implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
 }
 
 class StripeCheckoutSessionService(
@@ -29,8 +34,7 @@ class StripeCheckoutSessionService(
     extends SafeLogging {
   val baseUrl: String = "https://api.stripe.com/v1"
 
-  def createCheckoutSession()
-      : EitherT[Future, CreateCheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
+  def createCheckoutSession(): EitherT[Future, CheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
     val isTestUser = false
     val privateKey = configProvider.get(isTestUser).defaultAccount.secretKey
 
@@ -52,18 +56,45 @@ class StripeCheckoutSessionService(
       .withBody(data)
       .execute()
       .attemptT
-      .leftMap(CreateCheckoutSessionResponseError.ExecuteError)
+      .leftMap(CheckoutSessionResponseError.ExecuteError)
       .subflatMap(decodeCreateCheckoutSessionResponse)
   }
 
-  def decodeCreateCheckoutSessionResponse(
+  private def decodeCreateCheckoutSessionResponse(
       response: WSResponse,
-  ): Either[CreateCheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
+  ): Either[CheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
     // TODO: remove this logging
     logger.error(scrub"Create checkout response: ${response.body}")
 
     decode[CreateCheckoutSessionResponseSuccess](response.body).leftMap(
-      CreateCheckoutSessionResponseError.DecodingError,
+      CheckoutSessionResponseError.DecodingError,
+    )
+  }
+
+  def retrieveCheckoutSession(
+      id: String,
+  ): EitherT[Future, CheckoutSessionResponseError, RetrieveCheckoutSessionResponseSuccess] = {
+    val isTestUser = false
+    val privateKey = configProvider.get(isTestUser).defaultAccount.secretKey
+
+    client
+      .url(s"$baseUrl/checkout/sessions/$id")
+      .withAuth(privateKey.secret, "", WSAuthScheme.BASIC)
+      .withMethod("GET")
+      .execute()
+      .attemptT
+      .leftMap(CheckoutSessionResponseError.ExecuteError)
+      .subflatMap(decodeRetrieveCheckoutSessionResponse)
+  }
+
+  private def decodeRetrieveCheckoutSessionResponse(
+      response: WSResponse,
+  ): Either[CheckoutSessionResponseError, RetrieveCheckoutSessionResponseSuccess] = {
+    // TODO: remove this logging
+    logger.error(scrub"Retrieve checkout response: ${response.body}")
+
+    decode[RetrieveCheckoutSessionResponseSuccess](response.body).leftMap(
+      CheckoutSessionResponseError.DecodingError,
     )
   }
 }
