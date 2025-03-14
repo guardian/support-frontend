@@ -29,11 +29,6 @@ export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
-	benefitsAdditional?: ProductBenefit[];
-	benefitsMissing?: ProductBenefit[];
-	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
-	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
-	offersSummary?: Array<string | { strong: boolean; copy: string }>;
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
@@ -143,16 +138,6 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
-const newspaperArchiveBenefitUK = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
-};
-const newspaperArchiveBenefitROW = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
-};
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
@@ -169,16 +154,6 @@ const supporterPlusBenefits = [
 	fewerAsksBenefit,
 	partnerOffersBenefit,
 	feastBenefit,
-];
-
-const tierThreeBenefits = [guardianWeeklyBenefit];
-const tierThreeInclArchiveBenefitsUK = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitUK,
-];
-const tierThreeInclArchiveBenefitsROW = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitROW,
 ];
 
 const guardianAdLiteBenefits = [
@@ -208,13 +183,8 @@ export const productCatalogDescription: Record<
 	TierThree: {
 		label: 'Digital + print',
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
-		benefitsSummary: [
-			'The rewards from ',
-			{ strong: true, copy: 'All-access digital' },
-		],
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
-		benefitsAdditional: supporterPlusBenefits,
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
@@ -291,7 +261,6 @@ export const productCatalogDescription: Record<
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
-		/** These are duplicated in the TierThree benefitsAdditional */
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
@@ -371,14 +340,6 @@ export const productCatalogDescription: Record<
 	Contribution: {
 		label: 'Support',
 		benefits: [supportBenefit, newsletterBenefitUS],
-		benefitsMissing: [
-			appBenefit,
-			addFreeBenefit,
-			newsletterBenefit,
-			fewerAsksBenefit,
-			partnerOffersBenefit,
-			feastBenefit,
-		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -437,24 +398,6 @@ export const productCatalogDescription: Record<
 		},
 	},
 };
-
-export function productCatalogDescriptionNewspaperArchive(
-	countryGroupId?: CountryGroupId,
-) {
-	const newsPaperArchiveBenefit = countryGroupId
-		? countryGroupId === 'GBPCountries'
-			? tierThreeInclArchiveBenefitsUK
-			: tierThreeInclArchiveBenefitsROW
-		: tierThreeBenefits;
-
-	return {
-		...productCatalogDescription,
-		TierThree: {
-			...productCatalogDescription.TierThree,
-			benefits: newsPaperArchiveBenefit,
-		},
-	};
-}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,
