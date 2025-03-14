@@ -68,7 +68,7 @@ export interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	amountIsAboveThreshold: boolean;
 }
-interface SummaryTsAndCsProps {
+export interface SummaryTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	currency: IsoCurrency;
