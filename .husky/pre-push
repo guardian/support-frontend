@@ -1,1 +1,1 @@
-cd cdk && yarn check-formatting && yarn test
+pnpm pre-push
