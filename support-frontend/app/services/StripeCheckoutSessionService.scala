@@ -22,17 +22,19 @@ object CreateCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[CreateCheckoutSessionResponseSuccess] = deriveDecoder
 }
 
-case class RetrieveCheckoutSessionResponseSuccess(setup_intent: String)
+case class CheckoutPaymentMethod(id: String)
+object CheckoutPaymentMethod {
+  implicit val decoder: Decoder[CheckoutPaymentMethod] = deriveDecoder
+}
+case class CheckoutSetupIntent(id: String, payment_method: CheckoutPaymentMethod)
+object CheckoutSetupIntent {
+  implicit val decoder: Decoder[CheckoutSetupIntent] = deriveDecoder
+}
+case class RetrieveCheckoutSessionResponseSuccess(setup_intent: CheckoutSetupIntent)
 object RetrieveCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
 }
 
-case class RetrieveSetupIntentResponseSuccess(payment_method: String)
-object RetrieveSetupIntentResponseSuccess {
-  implicit val decoder: Decoder[RetrieveSetupIntentResponseSuccess] = deriveDecoder
-}
-
-// TODO: rename now that we're talking to endpoints which aren't doing stuff with checkout sessions, e.g. setup intents?
 class StripeCheckoutSessionService(
     configProvider: StripeConfigProvider,
     client: WSClient,
@@ -46,7 +48,7 @@ class StripeCheckoutSessionService(
 
     val data = Map(
       "mode" -> Seq("setup"),
-      "success_url" -> Seq("https://support.thegulocal.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"),
+      "success_url" -> Seq("https://support.thegulocal.com/stripe/complete-checkout-session/{CHECKOUT_SESSION_ID}"),
       "cancel_url" -> Seq("https://support.thegulocal.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"),
       "currency" -> Seq("gbp"),
       "payment_method_types[]" -> Seq("card"),
@@ -76,29 +78,13 @@ class StripeCheckoutSessionService(
     val privateKey = getPrivateKey(isTestUser)
 
     client
-      .url(s"$baseUrl/checkout/sessions/$id")
+      .url(s"$baseUrl/checkout/sessions/$id?expand[]=setup_intent.payment_method")
       .withAuth(privateKey, "", WSAuthScheme.BASIC)
       .withMethod("GET")
       .execute()
       .attemptT
       .leftMap(ResponseError.ExecuteError)
       .subflatMap(decodeResponse[RetrieveCheckoutSessionResponseSuccess])
-  }
-
-  def retrieveSetupIntent(
-      id: String,
-  ): EitherT[Future, ResponseError, RetrieveSetupIntentResponseSuccess] = {
-    val isTestUser = false
-    val privateKey = getPrivateKey(isTestUser)
-
-    client
-      .url(s"$baseUrl/setup_intents/$id")
-      .withAuth(privateKey, "", WSAuthScheme.BASIC)
-      .withMethod("GET")
-      .execute()
-      .attemptT
-      .leftMap(ResponseError.ExecuteError)
-      .subflatMap(decodeResponse[RetrieveSetupIntentResponseSuccess])
   }
 
   private def getPrivateKey(isTestUser: Boolean): String = {
