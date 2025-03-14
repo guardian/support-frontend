@@ -11,10 +11,10 @@ import io.circe.parser.decode
 
 import scala.concurrent.{ExecutionContext, Future}
 
-sealed trait CheckoutSessionResponseError
-object CheckoutSessionResponseError {
-  case class DecodingError(error: io.circe.Error) extends CheckoutSessionResponseError
-  case class ExecuteError(error: Throwable) extends CheckoutSessionResponseError
+sealed trait ResponseError
+object ResponseError {
+  case class DecodingError(error: io.circe.Error) extends ResponseError
+  case class ExecuteError(error: Throwable) extends ResponseError
 }
 
 case class CreateCheckoutSessionResponseSuccess(url: String, id: String)
@@ -27,6 +27,12 @@ object RetrieveCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
 }
 
+case class RetrieveSetupIntentResponseSuccess(payment_method: String)
+object RetrieveSetupIntentResponseSuccess {
+  implicit val decoder: Decoder[RetrieveSetupIntentResponseSuccess] = deriveDecoder
+}
+
+// TODO: rename now that we're talking to endpoints which aren't doing stuff with checkout sessions, e.g. setup intents?
 class StripeCheckoutSessionService(
     configProvider: StripeConfigProvider,
     client: WSClient,
@@ -34,9 +40,9 @@ class StripeCheckoutSessionService(
     extends SafeLogging {
   val baseUrl: String = "https://api.stripe.com/v1"
 
-  def createCheckoutSession(): EitherT[Future, CheckoutSessionResponseError, CreateCheckoutSessionResponseSuccess] = {
+  def createCheckoutSession(): EitherT[Future, ResponseError, CreateCheckoutSessionResponseSuccess] = {
     val isTestUser = false
-    val privateKey = configProvider.get(isTestUser).defaultAccount.secretKey
+    val privateKey = getPrivateKey(isTestUser)
 
     val data = Map(
       "mode" -> Seq("setup"),
@@ -53,40 +59,60 @@ class StripeCheckoutSessionService(
     )
     client
       .url(s"$baseUrl/checkout/sessions")
-      .withAuth(privateKey.secret, "", WSAuthScheme.BASIC)
+      .withAuth(privateKey, "", WSAuthScheme.BASIC)
       .withMethod("POST")
       // https: //www.playframework.com/documentation/3.0.x/ScalaWS#Submitting-form-data
       .withBody(data)
       .execute()
       .attemptT
-      .leftMap(CheckoutSessionResponseError.ExecuteError)
+      .leftMap(ResponseError.ExecuteError)
       .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
   }
 
   def retrieveCheckoutSession(
       id: String,
-  ): EitherT[Future, CheckoutSessionResponseError, RetrieveCheckoutSessionResponseSuccess] = {
+  ): EitherT[Future, ResponseError, RetrieveCheckoutSessionResponseSuccess] = {
     val isTestUser = false
-    val privateKey = configProvider.get(isTestUser).defaultAccount.secretKey
+    val privateKey = getPrivateKey(isTestUser)
 
     client
       .url(s"$baseUrl/checkout/sessions/$id")
-      .withAuth(privateKey.secret, "", WSAuthScheme.BASIC)
+      .withAuth(privateKey, "", WSAuthScheme.BASIC)
       .withMethod("GET")
       .execute()
       .attemptT
-      .leftMap(CheckoutSessionResponseError.ExecuteError)
+      .leftMap(ResponseError.ExecuteError)
       .subflatMap(decodeResponse[RetrieveCheckoutSessionResponseSuccess])
+  }
+
+  def retrieveSetupIntent(
+      id: String,
+  ): EitherT[Future, ResponseError, RetrieveSetupIntentResponseSuccess] = {
+    val isTestUser = false
+    val privateKey = getPrivateKey(isTestUser)
+
+    client
+      .url(s"$baseUrl/setup_intents/$id")
+      .withAuth(privateKey, "", WSAuthScheme.BASIC)
+      .withMethod("GET")
+      .execute()
+      .attemptT
+      .leftMap(ResponseError.ExecuteError)
+      .subflatMap(decodeResponse[RetrieveSetupIntentResponseSuccess])
+  }
+
+  private def getPrivateKey(isTestUser: Boolean): String = {
+    configProvider.get(isTestUser).defaultAccount.secretKey.secret
   }
 
   private def decodeResponse[A: Decoder](
       response: WSResponse,
-  ): Either[CheckoutSessionResponseError, A] = {
+  ): Either[ResponseError, A] = {
     // TODO: remove this logging
     logger.error(scrub"Response: ${response.body}")
 
     decode[A](response.body).leftMap(
-      CheckoutSessionResponseError.DecodingError,
+      ResponseError.DecodingError,
     )
   }
 }
