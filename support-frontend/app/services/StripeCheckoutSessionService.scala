@@ -41,8 +41,11 @@ class StripeCheckoutSessionService(
     val data = Map(
       "mode" -> Seq("setup"),
       "success_url" -> Seq("https://support.thegulocal.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"),
+      "cancel_url" -> Seq("https://support.thegulocal.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"),
       "currency" -> Seq("gbp"),
       "payment_method_types[]" -> Seq("card"),
+      "custom_text[submit][message]" -> Seq("Lorem ipsum dolor sit amet"),
+      "custom_text[after_submit][message]" -> Seq("Lorem ipsum dolor sit amet"),
       // Email should be provided by the client as we'll have collected it on the payment form
       "customer_email" -> Seq(
         "test@theguardian.com",
