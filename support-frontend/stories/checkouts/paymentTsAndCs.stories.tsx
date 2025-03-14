@@ -23,7 +23,7 @@ DigitalSubscription.args = {
 	currency: 'GBP',
 	amount: 0,
 	countryGroupId: 'GBPCountries',
-	amountIsAboveThreshold: true,
+	amountIsAboveThreshold: false,
 };
 
 export const GuardianAdLite = Template.bind({});
@@ -64,6 +64,7 @@ SupporterPlus.args = {
 	amount: 12,
 	countryGroupId: 'GBPCountries',
 	amountIsAboveThreshold: true,
+	thresholdAmount: 12,
 };
 
 export const TierThree = Template.bind({});
@@ -74,4 +75,5 @@ TierThree.args = {
 	amount: 27,
 	countryGroupId: 'GBPCountries',
 	amountIsAboveThreshold: true,
+	thresholdAmount: 12,
 };

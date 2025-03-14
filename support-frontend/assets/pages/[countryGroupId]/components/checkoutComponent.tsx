@@ -55,6 +55,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
@@ -65,6 +66,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
@@ -467,6 +469,20 @@ export function CheckoutComponent({
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
 
+	const contributionType =
+		productFields.billingPeriod === 'Monthly'
+			? 'MONTHLY'
+			: productFields.billingPeriod === 'Annual'
+			? 'ANNUAL'
+			: 'ONE_OFF';
+
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+	);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -549,11 +565,7 @@ export function CheckoutComponent({
 						}
 						tsAndCs={getTermsConditions(
 							countryGroupId,
-							productFields.billingPeriod === 'Monthly'
-								? 'MONTHLY'
-								: productFields.billingPeriod === 'Annual'
-								? 'ANNUAL'
-								: 'ONE_OFF',
+							contributionType,
 							productFields.productType,
 							promotion,
 						)}
@@ -1106,13 +1118,7 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
 							productKey={productKey}
@@ -1231,13 +1237,8 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							countryGroupId={countryGroupId}
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
+							thresholdAmount={thresholdAmount}
 							currency={currencyKey}
 							amount={originalAmount}
 							amountIsAboveThreshold={

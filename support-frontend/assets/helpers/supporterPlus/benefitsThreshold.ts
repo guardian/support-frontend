@@ -50,14 +50,11 @@ export function getLowerProductBenefitThreshold(
 			: 'DomesticMonthly';
 	const ratePlanSupporterPlus =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	// TODO: we need to lift the price above PaymentsTsandCs and pass the thresholdPrice as a prop.
-	// eslint-disable-next-line -- storybook tests have productCatalog itself as undefined, this contradicts the type definition linting
-	const price = productCatalog
-		? productCatalog[product]?.ratePlans[
-				product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
-		  ]?.pricing[currencyId] ?? 0
-		: 0;
-	return price;
+	return (
+		productCatalog[product]?.ratePlans[
+			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
+		]?.pricing[currencyId] ?? 0
+	);
 }
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring
