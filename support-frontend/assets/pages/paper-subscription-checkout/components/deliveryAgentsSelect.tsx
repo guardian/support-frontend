@@ -43,11 +43,11 @@ export function DeliveryAgentsSelect(
 	props: DeliveryAgentsSelectProps,
 ): JSX.Element | null {
 	const postcodeError = firstError('postCode', props.deliveryAddressErrors);
-	if (postcodeError) {
+	if (postcodeError ?? !props.deliveryAgentsResponse) {
 		return null;
 	}
 
-	switch (props.deliveryAgentsResponse?.type) {
+	switch (props.deliveryAgentsResponse.type) {
 		case 'Covered': {
 			if (props.deliveryAgentsResponse.agents?.length === 1) {
 				if (!props.deliveryAgentsResponse.agents[0]) {
