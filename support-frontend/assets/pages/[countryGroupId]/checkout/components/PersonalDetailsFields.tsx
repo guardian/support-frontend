@@ -16,7 +16,6 @@ type PersonalDetailsFieldsProps = {
 	isEmailAddressReadOnly: boolean;
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
-	requireConfirmedEmail: boolean;
 	isSignedIn: boolean;
 };
 
