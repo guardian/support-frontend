@@ -9,7 +9,6 @@ type PersonalEmailFieldsProps = {
 	setEmail: (value: string) => void;
 	isEmailAddressReadOnly: boolean;
 	isSignedIn: boolean;
-	requireConfirmedEmail?: boolean;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
 };
@@ -19,7 +18,6 @@ export function PersonalEmailFields({
 	setEmail,
 	isEmailAddressReadOnly,
 	isSignedIn,
-	requireConfirmedEmail,
 	confirmedEmail,
 	setConfirmedEmail,
 }: PersonalEmailFieldsProps) {
@@ -62,50 +60,44 @@ export function PersonalEmailFields({
 					}}
 				/>
 			</div>
-			{!isEmailAddressReadOnly &&
-				requireConfirmedEmail &&
-				setConfirmedEmail && (
-					<div>
-						<TextInput
-							id="confirm-email"
-							data-qm-masking="blocklist"
-							label="Confirm email address"
-							value={confirmedEmail}
-							type="email"
-							autoComplete="email"
-							onChange={(event) => {
-								setConfirmedEmail(event.currentTarget.value);
-							}}
-							onBlur={(event) => {
-								event.target.checkValidity();
-							}}
-							name="confirm-email"
-							required
-							maxLength={80}
-							error={confirmedEmailError}
-							pattern={escapeStringRegexp(email)}
-							onInvalid={(event) => {
-								preventDefaultValidityMessage(event.currentTarget);
-								const validityState = event.currentTarget.validity;
-								if (validityState.valid) {
-									setConfirmedEmailError(undefined);
+			{!isEmailAddressReadOnly && setConfirmedEmail && (
+				<div>
+					<TextInput
+						id="confirm-email"
+						data-qm-masking="blocklist"
+						label="Confirm email address"
+						value={confirmedEmail}
+						type="email"
+						autoComplete="email"
+						onChange={(event) => {
+							setConfirmedEmail(event.currentTarget.value);
+						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
+						name="confirm-email"
+						required
+						maxLength={80}
+						error={confirmedEmailError}
+						pattern={escapeStringRegexp(email)}
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setConfirmedEmailError(undefined);
+							} else {
+								if (validityState.valueMissing) {
+									setConfirmedEmailError('Please confirm your email address.');
+								} else if (validityState.patternMismatch) {
+									setConfirmedEmailError('The email addresses do not match.');
 								} else {
-									if (validityState.valueMissing) {
-										setConfirmedEmailError(
-											'Please confirm your email address.',
-										);
-									} else if (validityState.patternMismatch) {
-										setConfirmedEmailError('The email addresses do not match.');
-									} else {
-										setConfirmedEmailError(
-											'Please enter a valid email address.',
-										);
-									}
+									setConfirmedEmailError('Please enter a valid email address.');
 								}
-							}}
-						/>
-					</div>
-				)}
+							}
+						}}
+					/>
+				</div>
+			)}
 			<Signout isSignedIn={isSignedIn} />
 		</>
 	);

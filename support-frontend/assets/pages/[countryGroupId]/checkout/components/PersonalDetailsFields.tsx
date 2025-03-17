@@ -30,7 +30,6 @@ export function PersonalDetailsFields({
 	isEmailAddressReadOnly,
 	confirmedEmail,
 	setConfirmedEmail,
-	requireConfirmedEmail,
 	isSignedIn,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
@@ -44,7 +43,6 @@ export function PersonalDetailsFields({
 				isEmailAddressReadOnly={isEmailAddressReadOnly}
 				confirmedEmail={confirmedEmail}
 				setConfirmedEmail={setConfirmedEmail}
-				requireConfirmedEmail={requireConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
 			<div>
