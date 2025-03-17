@@ -88,6 +88,7 @@ export const submitForm = async ({
 		referrerAcquisitionData,
 		product: productFields,
 		supportAbTests,
+		deliveryInstructions: formData.get('deliveryInstructions') as string,
 		debugInfo: '',
 	};
 
