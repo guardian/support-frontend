@@ -257,7 +257,7 @@ export const getThankYouModuleData = (
 				<>
 					<SubscriptionStartBodyCopy
 						productKey="HomeDelivery"
-						startDateGW={
+						startDate={
 							publicationStartDays[0]
 								? formatUserDate(publicationStartDays[0])
 								: ''
