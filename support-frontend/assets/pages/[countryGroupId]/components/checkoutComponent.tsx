@@ -750,7 +750,6 @@ export function CheckoutComponent({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
-								requireConfirmedEmail={true}
 								isSignedIn={isSignedIn}
 							/>
 
