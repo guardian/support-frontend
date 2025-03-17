@@ -60,44 +60,50 @@ export function PersonalEmailFields({
 					}}
 				/>
 			</div>
-			{!isEmailAddressReadOnly && setConfirmedEmail && (
-				<div>
-					<TextInput
-						id="confirm-email"
-						data-qm-masking="blocklist"
-						label="Confirm email address"
-						value={confirmedEmail}
-						type="email"
-						autoComplete="email"
-						onChange={(event) => {
-							setConfirmedEmail(event.currentTarget.value);
-						}}
-						onBlur={(event) => {
-							event.target.checkValidity();
-						}}
-						name="confirm-email"
-						required
-						maxLength={80}
-						error={confirmedEmailError}
-						pattern={escapeStringRegexp(email)}
-						onInvalid={(event) => {
-							preventDefaultValidityMessage(event.currentTarget);
-							const validityState = event.currentTarget.validity;
-							if (validityState.valid) {
-								setConfirmedEmailError(undefined);
-							} else {
-								if (validityState.valueMissing) {
-									setConfirmedEmailError('Please confirm your email address.');
-								} else if (validityState.patternMismatch) {
-									setConfirmedEmailError('The email addresses do not match.');
+			{!isEmailAddressReadOnly &&
+				setConfirmedEmail &&
+				confirmedEmail !== undefined && (
+					<div>
+						<TextInput
+							id="confirm-email"
+							data-qm-masking="blocklist"
+							label="Confirm email address"
+							value={confirmedEmail}
+							type="email"
+							autoComplete="email"
+							onChange={(event) => {
+								setConfirmedEmail(event.currentTarget.value);
+							}}
+							onBlur={(event) => {
+								event.target.checkValidity();
+							}}
+							name="confirm-email"
+							required
+							maxLength={80}
+							error={confirmedEmailError}
+							pattern={escapeStringRegexp(email)}
+							onInvalid={(event) => {
+								preventDefaultValidityMessage(event.currentTarget);
+								const validityState = event.currentTarget.validity;
+								if (validityState.valid) {
+									setConfirmedEmailError(undefined);
 								} else {
-									setConfirmedEmailError('Please enter a valid email address.');
+									if (validityState.valueMissing) {
+										setConfirmedEmailError(
+											'Please confirm your email address.',
+										);
+									} else if (validityState.patternMismatch) {
+										setConfirmedEmailError('The email addresses do not match.');
+									} else {
+										setConfirmedEmailError(
+											'Please enter a valid email address.',
+										);
+									}
 								}
-							}
-						}}
-					/>
-				</div>
-			)}
+							}}
+						/>
+					</div>
+				)}
 			<Signout isSignedIn={isSignedIn} />
 		</>
 	);
