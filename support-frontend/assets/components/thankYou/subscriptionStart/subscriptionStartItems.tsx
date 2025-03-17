@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { between, space } from '@guardian/source/foundations';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 
 const downloadCopy = css`
 	${between.desktop.and.leftCol} {
@@ -29,10 +30,12 @@ export function BenefitsBodyCopy(): JSX.Element {
 export const subscriptionStartHeader = 'When will your subscription start?';
 
 type SubscriptionStartProps = {
+	productKey: ActiveProductKey;
 	startDateGW: string;
 };
 
 export function SubscriptionStartBodyCopy({
+	productKey,
 	startDateGW,
 }: SubscriptionStartProps): JSX.Element {
 	return (
@@ -40,8 +43,8 @@ export function SubscriptionStartBodyCopy({
 			<div>
 				<p>
 					<span css={boldText}>
-						Your first issue of Guardian Weekly will be published on{' '}
-						{startDateGW}.
+						{productKey}: Your first issue of Guardian Weekly will be published
+						on {startDateGW}.
 					</span>
 				</p>
 				<p>
