@@ -82,7 +82,7 @@ function randomNumber(mvtId: number, seed: string): number {
 	return Math.abs(rng.int32());
 }
 
-const landingPageRegex = '^/(uk|us|ca|eu|nz|int)/contribute(/.*)?$';
+const landingPageRegex = '^/.*/contribute(/.*)?$';
 function isLandingPage(path: string) {
 	return !!path && path.match(landingPageRegex);
 }
