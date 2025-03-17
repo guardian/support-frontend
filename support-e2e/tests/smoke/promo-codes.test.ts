@@ -3,7 +3,7 @@ import { email, firstName, lastName } from '../utils/users';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
-import { setTestUserConfirmRequiredDetails } from '../utils/testUserDetails';
+import { setTestUserPersonalDetails } from '../utils/testUserDetails';
 
 /**
  * These tests are here to test that the promoCode values and associated copy
@@ -68,8 +68,9 @@ import { setTestUserConfirmRequiredDetails } from '../utils/testUserDetails';
 		await expect(
 			page.getByText(testDetails.expectedCheckoutTotalText).first(),
 		).toBeVisible();
-		await setTestUserConfirmRequiredDetails(
+		await setTestUserPersonalDetails(
 			page,
+			testEmail,
 			testEmail,
 			testFirstName,
 			testLastName,
