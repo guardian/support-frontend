@@ -5,40 +5,46 @@ import {
 	transformAcquisitionProductForBigQuery,
 } from './acquisitions';
 
+const baseAcquisitionProduct: AcquisitionProduct = {
+	eventTimeStamp: '2025-03-04 12:22:40.378000 UTC',
+	country: 'US',
+	componentId: null,
+	componentType: null,
+	campaignCode: 'test',
+	referrerUrl: null,
+	abTests: [{ name: 'test', variant: 'variant' }],
+	paymentFrequency: 'ONE_OFF',
+	paymentProvider: 'STRIPE',
+	printOptions: null,
+	browserId: null,
+	identityId: '123456789',
+	pageViewId: 'm7uglc67vllj2cigko3l',
+	referrerPageViewId: null,
+	promoCode: 'PROMO',
+	queryParameters: [{ name: 'test', value: 'testValue' }],
+	reusedExistingPaymentMethod: false,
+	acquisitionType: 'Purchase',
+	readerType: 'Direct',
+	zuoraSubscriptionNumber: null,
+	contributionId: '123456789',
+	paymentId: '123456789',
+	product: 'CONTRIBUTION',
+	amount: 1.0,
+	currency: 'GBP',
+	source: null,
+	platform: 'IOSNATIVEAPP',
+	labels: ['label'],
+};
+
 describe('The transformAcquisitionProductForBigQuery function', () => {
 	it('successfully transforms an AcquisitionProduct to a AcquisitionProductBigQueryType', () => {
-		const testInputAcquisition: AcquisitionProduct = {
-			eventTimeStamp: '2025-03-04 12:22:40.378000 UTC',
-			country: 'US',
-			componentId: null,
-			componentType: null,
-			campaignCode: 'test',
-			referrerUrl: null,
-			abTests: [{ name: 'test', variant: 'variant' }],
-			paymentFrequency: 'ONE_OFF',
-			paymentProvider: 'STRIPE',
-			printOptions: null,
-			browserId: null,
-			identityId: '123456789',
-			pageViewId: 'm7uglc67vllj2cigko3l',
-			referrerPageViewId: null,
-			promoCode: 'PROMO',
-			queryParameters: [{ name: 'test', value: 'testValue' }],
-			reusedExistingPaymentMethod: false,
-			acquisitionType: 'Purchase',
-			readerType: 'Direct',
-			zuoraSubscriptionNumber: null,
-			contributionId: '123456789',
-			paymentId: '123456789',
-			product: 'CONTRIBUTION',
-			amount: 1.0,
-			currency: 'GBP',
-			source: null,
-			platform: 'IOSNATIVEAPP',
-			labels: ['label'],
+		const testInputAcquisition = {
+			...baseAcquisitionProduct,
 		};
 
-		const testOutputAcquisition: AcquisitionProductBigQueryType = {
+		const got = transformAcquisitionProductForBigQuery(testInputAcquisition);
+
+		const expected: AcquisitionProductBigQueryType = {
 			event_timestamp: '2025-03-04 12:22:40.378000 UTC',
 			product: 'CONTRIBUTION',
 			amount: 1.0,
@@ -67,9 +73,23 @@ describe('The transformAcquisitionProductForBigQuery function', () => {
 			platform: 'IOS_NATIVE_APP',
 			labels: ['label'],
 		};
+		expect(got).toEqual(expected);
+	});
 
-		expect(
-			transformAcquisitionProductForBigQuery(testInputAcquisition),
-		).toEqual(testOutputAcquisition);
+	it('correctly maps print options', () => {
+		const testInputAcquisition: AcquisitionProduct = {
+			...baseAcquisitionProduct,
+			printOptions: {
+				product: 'GUARDIAN_WEEKLY',
+				deliveryCountry: 'GB',
+			},
+		};
+
+		const got = transformAcquisitionProductForBigQuery(testInputAcquisition);
+
+		expect(got.print_options).toEqual({
+			product: 'GUARDIAN_WEEKLY',
+			delivery_country_code: 'GB',
+		});
 	});
 });

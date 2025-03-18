@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export type ProductType = (typeof ProductTypeSchema)[number];
 export const ProductTypeSchema = [
 	'CONTRIBUTION',
@@ -19,8 +21,7 @@ export const ContributionTypeSchema = [
 	'QUARTERLY',
 ] as const;
 
-export type IsoCountryType = (typeof IsoCountrySchema)[number];
-export const IsoCountrySchema = [
+export const IsoCountrySchema = z.enum([
 	'GB',
 	'US',
 	'AU',
@@ -270,7 +271,8 @@ export const IsoCountrySchema = [
 	'IM',
 	'JE',
 	'SH',
-] as const;
+]);
+export type IsoCountryType = z.infer<typeof IsoCountrySchema>;
 
 export type IsoCurrencyType = (typeof IsoCurrencySchema)[number];
 export const IsoCurrencySchema = [
@@ -290,3 +292,35 @@ export const PaymentMethodSchema = [
 	'PAYPAL',
 	'GOCARDLESS',
 ] as const;
+
+const PrintProductSchema = z.enum([
+	'HOME_DELIVERY_EVERYDAY',
+	'HOME_DELIVERY_EVERYDAY_PLUS',
+	'HOME_DELIVERY_SIXDAY',
+	'HOME_DELIVERY_SIXDAY_PLUS',
+	'HOME_DELIVERY_WEEKEND',
+	'HOME_DELIVERY_WEEKEND_PLUS',
+	'HOME_DELIVERY_SATURDAY',
+	'HOME_DELIVERY_SATURDAY_PLUS',
+	'HOME_DELIVERY_SUNDAY',
+	'HOME_DELIVERY_SUNDAY_PLUS',
+	'NATIONAL_DELIVERY_EVERYDAY',
+	'NATIONAL_DELIVERY_SIXDAY',
+	'NATIONAL_DELIVERY_WEEKEND',
+	'VOUCHER_EVERYDAY',
+	'VOUCHER_EVERYDAY_PLUS',
+	'VOUCHER_SIXDAY',
+	'VOUCHER_SIXDAY_PLUS',
+	'VOUCHER_WEEKEND',
+	'VOUCHER_WEEKEND_PLUS',
+	'VOUCHER_SATURDAY',
+	'VOUCHER_SATURDAY_PLUS',
+	'VOUCHER_SUNDAY',
+	'VOUCHER_SUNDAY_PLUS',
+	'GUARDIAN_WEEKLY',
+]);
+
+export const PrintOptionsSchema = z
+	.object({ product: PrintProductSchema, deliveryCountry: IsoCountrySchema })
+	.nullable();
+export type PrintOptions = z.infer<typeof PrintOptionsSchema>;

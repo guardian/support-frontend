@@ -10,12 +10,15 @@ import {
 	ProductType,
 	IsoCurrencyType,
 	PaymentMethodType,
+	PrintOptions,
+	PrintOptionsSchema,
 } from './dependencies';
 
 // Items to write to BigQuery (datalake:fact_acquisition_event)
+// This defines the schema for the data we expect to receive in the acquisition event.
 export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.string(),
-	country: z.enum(IsoCountrySchema),
+	country: IsoCountrySchema,
 	componentId: z.string().nullable(),
 	componentType: z.string().nullable(),
 	campaignCode: z.string().nullable(),
@@ -23,10 +26,7 @@ export const AcquisitionProductSchema = z.object({
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
 	paymentFrequency: z.enum(ContributionTypeSchema),
 	paymentProvider: z.enum(PaymentMethodSchema),
-	printOptions: z
-		.object({ product: z.string(), delivery_country_code: z.string() })
-		.array()
-		.nullable(),
+	printOptions: PrintOptionsSchema,
 	browserId: z.string().nullable(),
 	identityId: z.string(),
 	pageViewId: z.string(),
@@ -67,7 +67,7 @@ export type AcquisitionProductBigQueryType = {
 	ab_tests: { name: string; variant: string }[];
 	payment_frequency: ContributionType;
 	payment_provider: PaymentMethodType;
-	print_options: { product: string; delivery_country_code: string }[] | null;
+	print_options: { product: string; delivery_country_code: string } | null;
 	browser_id: string | null;
 	identity_id: string;
 	page_view_id: string;
@@ -95,6 +95,17 @@ const mapPlatformName = (name: string): string => {
 	}
 };
 
+const mapPrintOptions = (printOptions: PrintOptions) => {
+	if (!printOptions) {
+		return null;
+	}
+
+	return {
+		product: printOptions.product,
+		delivery_country_code: printOptions.deliveryCountry,
+	};
+};
+
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
 ): AcquisitionProductBigQueryType => {
@@ -113,7 +124,7 @@ export const transformAcquisitionProductForBigQuery = (
 		ab_tests: acquisitionProduct.abTests,
 		payment_frequency: acquisitionProduct.paymentFrequency,
 		payment_provider: acquisitionProduct.paymentProvider,
-		print_options: acquisitionProduct.printOptions,
+		print_options: mapPrintOptions(acquisitionProduct.printOptions),
 		browser_id: acquisitionProduct.browserId,
 		identity_id: acquisitionProduct.identityId,
 		page_view_id: acquisitionProduct.pageViewId,
