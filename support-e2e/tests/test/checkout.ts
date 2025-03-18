@@ -3,7 +3,7 @@ import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
 import {
 	setTestUserDetails,
-	setTestUserRequiredDetails,
+	setTestUserConfirmRequiredDetails,
 } from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
@@ -27,7 +27,12 @@ const setUserDetailsForProduct = async (
 	switch (product) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
-			await setTestUserRequiredDetails(page, email(), firstName(), lastName());
+			await setTestUserConfirmRequiredDetails(
+				page,
+				email(),
+				firstName(),
+				lastName(),
+			);
 
 			break;
 		case 'TierThree':
