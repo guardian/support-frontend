@@ -71,9 +71,9 @@ import { setTestUserDetails } from '../utils/testUserDetails';
 		await setTestUserDetails(
 			page,
 			testEmail,
-			testEmail,
 			testFirstName,
 			testLastName,
+			true,
 		);
 		await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 		await fillInCardDetails(page);
