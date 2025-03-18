@@ -317,14 +317,42 @@ SupportReminder.args = {
 	),
 };
 
-export const SubscriptionStart = Template.bind({});
+export const SubscriptionStartDelivery = Template.bind({});
 
-SubscriptionStart.args = {
+SubscriptionStartDelivery.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'Set a support reminder',
 	bodyCopy: (
 		<SubscriptionStartBodyCopy
 			productKey={'NationalDelivery'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartSubsCard = Template.bind({});
+
+SubscriptionStartSubsCard.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'Set a support reminder',
+	bodyCopy: (
+		<SubscriptionStartBodyCopy
+			productKey={'SubscriptionCard'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartGuardianWeekly = Template.bind({});
+
+SubscriptionStartGuardianWeekly.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'Set a support reminder',
+	bodyCopy: (
+		<SubscriptionStartBodyCopy
+			productKey={'GuardianWeeklyDomestic'}
 			startDate={'Friday, March 28, 2025'}
 		/>
 	),
