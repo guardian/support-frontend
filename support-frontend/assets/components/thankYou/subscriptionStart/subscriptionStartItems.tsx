@@ -38,19 +38,45 @@ export function SubscriptionStartBodyCopy({
 	productKey,
 	startDate,
 }: SubscriptionStartProps): JSX.Element {
+	const paperHeading = `You will receive your newspaper from ${startDate}`;
+	const paperBody = `Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.`;
+	const guardianWeeklyBodyHeading = {
+		heading: `Your first issue of Guardian Weekly will be published on ${startDate}`,
+		body: [
+			`Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.`,
+		],
+	};
 	let copy;
 	switch (productKey) {
 		case 'HomeDelivery':
-		case 'NationalDelivery':
+		case 'NationalDelivery': {
+			copy = [
+				{
+					heading: paperHeading,
+					body: [paperBody],
+				},
+			];
+			break;
+		}
 		case 'SubscriptionCard': {
 			copy = [
 				{
-					heading: `You will receive your newspapers from ${startDate}`,
+					heading: paperHeading,
 					body: [
-						`Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. You can opt out at any time via your account.`,
-						`Your newspaper will be delivered to your door.`,
 						`You will receive your Subscription Card in your subscriber pack in the post, along with your home delivery letter.`,
-						`Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.`,
+						paperBody,
+					],
+				},
+			];
+			break;
+		}
+		case 'TierThree': {
+			copy = [
+				guardianWeeklyBodyHeading,
+				{
+					heading: `Your digital benefits start today.`,
+					body: [
+						`Please ensure you are signed in on all your devices to enjoy all your benefits, including unlimited app access and uninterrupted ad-free reading.`,
 					],
 				},
 			];
@@ -58,17 +84,8 @@ export function SubscriptionStartBodyCopy({
 		}
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
-		case 'DigitalSubscription':
 		default: {
-			copy = [
-				{
-					heading: `Your first issue of Guardian Weekly will be published
-						on ${startDate}`,
-					body: [
-						`Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.`,
-					],
-				},
-			];
+			copy = [guardianWeeklyBodyHeading];
 		}
 	}
 	return (

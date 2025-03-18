@@ -13,7 +13,7 @@ jest.mock('../../checkout/helpers/sessionStorage', () => ({
 describe('thankYouComponent', () => {
 	const defaultProps: CheckoutComponentProps = {
 		geoId: 'uk',
-		csrf: 'token',
+		csrf: { token: 'token' },
 		payment: {
 			originalAmount: 12,
 			finalAmount: 12,

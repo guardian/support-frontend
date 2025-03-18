@@ -12,6 +12,7 @@ import {
 } from 'components/checkoutBenefits/benefitsCheckList';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setThankYouFeedbackSurveyHasBeenCompleted,
@@ -111,8 +112,9 @@ const defaultSupportReminder = {
 const defaultFeedbackSurveyHasBeenCompleted = false;
 
 export const getThankYouModuleData = (
-	countryId: IsoCountry,
+	productKey: ActiveProductKey,
 	countryGroupId: CountryGroupId,
+	countryId: IsoCountry,
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
@@ -137,6 +139,7 @@ export const getThankYouModuleData = (
 		);
 
 	const days = getWeeklyDays();
+	console.log('**** days:', days);
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 		const date = formatMachineDate(day);
@@ -256,7 +259,7 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<>
 					<SubscriptionStartBodyCopy
-						productKey="HomeDelivery"
+						productKey={productKey}
 						startDate={
 							publicationStartDays[0]
 								? formatUserDate(publicationStartDays[0])

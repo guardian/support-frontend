@@ -179,6 +179,14 @@ export function ThankYouComponent({
 		currencyKey,
 	);
 
+	const printProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
+	const isPrintProduct = printProductsKeys.includes(productKey);
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -216,8 +224,9 @@ export function ThankYouComponent({
 	}
 
 	const thankYouModuleData = getThankYouModuleData(
-		countryId,
+		productKey,
 		countryGroupId,
+		countryId,
 		csrf,
 		isOneOff,
 		isSupporterPlus,
@@ -251,7 +260,7 @@ export function ThankYouComponent({
 			isTier3 && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3, 'subscriptionStart'),
+		...maybeThankYouModule(isTier3 || isPrintProduct, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
@@ -263,7 +272,10 @@ export function ThankYouComponent({
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
-		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
+		...maybeThankYouModule(
+			!isTier3 && !isGuardianAdLite && !isPrintProduct,
+			'socialShare',
+		),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
