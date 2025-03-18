@@ -288,8 +288,10 @@ export const PaymentMethodSchema = z.enum([
 	'STRIPE',
 	'STRIPE_APPLE_PAY',
 	'STRIPE_PAYMENT_REQUEST_BUTTON',
+	'STRIPE_SEPA',
 	'PAYPAL',
 	'GOCARDLESS',
+	'IN_APP_PURCHASE',
 ]);
 export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
 
