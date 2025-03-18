@@ -37,7 +37,7 @@ const baseAcquisitionProduct: AcquisitionProduct = {
 };
 
 describe('The transformAcquisitionProductForBigQuery function', () => {
-	it('successfully transforms an AcquisitionProduct to a AcquisitionProductBigQueryType', () => {
+	it('transforms an AcquisitionProduct to an AcquisitionDataRow', () => {
 		const testInputAcquisition = {
 			...baseAcquisitionProduct,
 		};
@@ -76,7 +76,7 @@ describe('The transformAcquisitionProductForBigQuery function', () => {
 		expect(got).toEqual(expected);
 	});
 
-	it('correctly maps print options', () => {
+	it('maps print options if present', () => {
 		const testInputAcquisition: AcquisitionProduct = {
 			...baseAcquisitionProduct,
 			printOptions: {
