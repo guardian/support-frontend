@@ -30,7 +30,6 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -77,16 +76,12 @@ type CheckoutComponentProps = {
 export function ThankYouComponent({
 	geoId,
 	payment,
-	productKey,
+	productKey = 'Contribution',
 	ratePlanKey,
 	promotion,
 	identityUserType,
 	abParticipations,
 }: CheckoutComponentProps) {
-	if (!productKey) {
-		logException('Product not found');
-		return <div>Product not found</div>;
-	}
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
