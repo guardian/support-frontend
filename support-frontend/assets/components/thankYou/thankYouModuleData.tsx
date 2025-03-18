@@ -139,7 +139,6 @@ export const getThankYouModuleData = (
 		);
 
 	const days = getWeeklyDays();
-	console.log('**** days:', days);
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 		const date = formatMachineDate(day);
