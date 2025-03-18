@@ -248,11 +248,11 @@ export function ThankYouComponent({
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite,
+			!isPending && isNotRegistered && !isGuardianAdLite && !isPrintProduct,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
+			!isSignedIn && !isNotRegistered && !isGuardianAdLite && !isPrintProduct,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
