@@ -275,6 +275,7 @@ export const productCatalogDescription: Record<
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
+		thankyouMessage: `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
