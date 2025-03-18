@@ -904,26 +904,27 @@ export function CheckoutComponent({
 										}}
 									/>
 								</fieldset>
-								<fieldset
-									css={css`
-										margin-bottom: ${space[6]}px;
-									`}
-								>
-									<TextArea
-										id="deliveryInstructions"
-										data-qm-masking="blocklist"
-										name="deliveryInstructions"
-										label="Delivery instructions"
-										autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
-										supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
-										onChange={(event) => {
-											setDeliveryInstructions(event.target.value);
-										}}
-										value={deliveryInstructions}
-										optional
-									/>
-								</fieldset>
-
+								{productKey === 'HomeDelivery' && (
+									<fieldset
+										css={css`
+											margin-bottom: ${space[6]}px;
+										`}
+									>
+										<TextArea
+											id="deliveryInstructions"
+											data-qm-masking="blocklist"
+											name="deliveryInstructions"
+											label="Delivery instructions"
+											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+											onChange={(event) => {
+												setDeliveryInstructions(event.target.value);
+											}}
+											value={deliveryInstructions}
+											optional
+										/>
+									</fieldset>
+								)}
 								<fieldset
 									css={css`
 										margin-bottom: ${space[6]}px;
