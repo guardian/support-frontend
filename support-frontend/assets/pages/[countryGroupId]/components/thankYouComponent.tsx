@@ -17,6 +17,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
@@ -58,7 +59,7 @@ const buttonContainer = css`
 
 export type CheckoutComponentProps = {
 	geoId: GeoId;
-	csrf: string;
+	csrf: CsrfState;
 	payment: {
 		originalAmount: number;
 		discountedAmount?: number;
