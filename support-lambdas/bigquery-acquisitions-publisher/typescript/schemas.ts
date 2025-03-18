@@ -13,13 +13,14 @@ export const ProductTypeSchema = z.enum([
 ]);
 export type Product = z.infer<typeof ProductTypeSchema>;
 
-export const ContributionTypeSchema = z.enum([
-	'MONTHLY',
-	'ANNUALLY',
+export const PaymentFrequencySchema = z.enum([
 	'ONE_OFF',
+	'MONTHLY',
 	'QUARTERLY',
+	'SIX_MONTHLY',
+	'ANNUALLY',
 ]);
-export type Contribution = z.infer<typeof ContributionTypeSchema>;
+export type PaymentFrequency = z.infer<typeof PaymentFrequencySchema>;
 
 export const IsoCountrySchema = z.enum([
 	'GB',
@@ -284,7 +285,7 @@ export const IsoCurrencySchema = z.enum([
 ]);
 export type IsoCurrency = z.infer<typeof IsoCurrencySchema>;
 
-export const PaymentMethodSchema = z.enum([
+export const PaymentProviderSchema = z.enum([
 	'STRIPE',
 	'STRIPE_APPLE_PAY',
 	'STRIPE_PAYMENT_REQUEST_BUTTON',
@@ -293,7 +294,7 @@ export const PaymentMethodSchema = z.enum([
 	'GOCARDLESS',
 	'IN_APP_PURCHASE',
 ]);
-export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
+export type PaymentProvider = z.infer<typeof PaymentProviderSchema>;
 
 const PrintProductSchema = z.enum([
 	'HOME_DELIVERY_EVERYDAY',
@@ -336,8 +337,8 @@ export const AcquisitionProductSchema = z.object({
 	campaignCode: z.string().nullable(),
 	referrerUrl: z.string().nullable(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
-	paymentFrequency: ContributionTypeSchema,
-	paymentProvider: PaymentMethodSchema,
+	paymentFrequency: PaymentFrequencySchema,
+	paymentProvider: PaymentProviderSchema,
 	printOptions: PrintOptionsSchema,
 	browserId: z.string().nullable(),
 	identityId: z.string(),

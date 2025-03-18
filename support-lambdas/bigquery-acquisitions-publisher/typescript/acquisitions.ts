@@ -1,9 +1,9 @@
 import {
 	IsoCountry,
-	Contribution,
+	PaymentFrequency,
 	Product,
 	IsoCurrency,
-	PaymentMethod,
+	PaymentProvider,
 	PrintOptions,
 	AcquisitionProduct,
 } from './schemas';
@@ -19,8 +19,8 @@ export type AcquisitionProductBigQueryType = {
 	campaign_codes: [string] | [];
 	referrer_url: string | null;
 	ab_tests: { name: string; variant: string }[];
-	payment_frequency: Contribution;
-	payment_provider: PaymentMethod;
+	payment_frequency: PaymentFrequency;
+	payment_provider: PaymentProvider;
 	print_options: { product: string; delivery_country_code: string } | null;
 	browser_id: string | null;
 	identity_id: string;
