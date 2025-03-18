@@ -27,6 +27,7 @@ export function ThankYou({
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
 	const searchParams = new URLSearchParams(window.location.search);
+	const csrf = { token: window.guardian.csrf.token };
 	// product
 	const productParam = searchParams.get('product');
 	const productKey =
@@ -157,6 +158,7 @@ export function ThankYou({
 	return (
 		<ThankYouComponent
 			geoId={geoId}
+			csrf={csrf}
 			payment={payment}
 			productKey={productKey}
 			ratePlanKey={ratePlanKey}

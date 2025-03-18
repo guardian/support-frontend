@@ -58,6 +58,7 @@ const buttonContainer = css`
 
 export type CheckoutComponentProps = {
 	geoId: GeoId;
+	csrf: string;
 	payment: {
 		originalAmount: number;
 		discountedAmount?: number;
@@ -73,6 +74,7 @@ export type CheckoutComponentProps = {
 
 export function ThankYouComponent({
 	geoId,
+	csrf,
 	payment,
 	productKey = 'Contribution',
 	ratePlanKey,
@@ -83,7 +85,6 @@ export function ThankYouComponent({
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
-	const csrf = { token: window.guardian?.csrf?.token ?? '' };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)

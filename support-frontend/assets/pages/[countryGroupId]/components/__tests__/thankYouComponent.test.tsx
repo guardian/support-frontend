@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
 import {
+	type CheckoutComponentProps,
 	ThankYouComponent,
-	CheckoutComponentProps,
 } from '../thankYouComponent';
 
 jest.mock('../../checkout/helpers/sessionStorage', () => ({
@@ -14,6 +13,7 @@ jest.mock('../../checkout/helpers/sessionStorage', () => ({
 describe('thankYouComponent', () => {
 	const defaultProps: CheckoutComponentProps = {
 		geoId: 'uk',
+		csrf: 'token',
 		payment: {
 			originalAmount: 12,
 			finalAmount: 12,
@@ -42,9 +42,11 @@ describe('thankYouComponent', () => {
 				ratePlanKey="Monthly"
 			/>,
 		);
-		const signIn = screen.getByTestId('signUp');
+		const signUp = screen.getByTestId('signUp');
+		const signIn = screen.queryByTestId('signIn');
 		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
+		expect(signUp).toBeInTheDocument();
+		expect(signIn).not.toBeInTheDocument();
 		expect(socialShare).toBeInTheDocument();
 	});
 
@@ -58,8 +60,10 @@ describe('thankYouComponent', () => {
 			/>,
 		);
 		const signIn = screen.getByTestId('signIn');
+		const signUp = screen.queryByTestId('signUp');
 		const socialShare = screen.getByTestId('socialShare');
 		expect(signIn).toBeInTheDocument();
+		expect(signUp).not.toBeInTheDocument();
 		expect(socialShare).toBeInTheDocument();
 	});
 
