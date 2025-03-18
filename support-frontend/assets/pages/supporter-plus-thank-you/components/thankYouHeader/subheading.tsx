@@ -130,7 +130,7 @@ function Subheading({
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
-			{isPending && pendingCopy()}
+			{isPending && !isPaperProduct && pendingCopy()}
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && (
 				<>
