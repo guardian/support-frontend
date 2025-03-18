@@ -116,7 +116,6 @@ export function PaymentTsAndCs({
 
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
-		product: ActiveProductKey,
 		promotion?: Promotion,
 	) => {
 		const productLabel = productCatalogDescription[productKey].label;
@@ -128,7 +127,7 @@ export function PaymentTsAndCs({
 						countryGroupId,
 						contributionType,
 						' per ',
-						product,
+						thresholdAmount,
 						promotion,
 					)}
 					, you will receive the {productLabel} benefits on a subscription
@@ -236,8 +235,7 @@ export function PaymentTsAndCs({
 						paymentFrequency={contributionType === 'ANNUAL' ? 'year' : 'month'}
 					/>
 				)}
-				{inAllAccessDigital &&
-					copyAboveThreshold(contributionType, productKey, promotion)}
+				{inAllAccessDigital && copyAboveThreshold(contributionType, promotion)}
 				{inAdLite && copyAdLite(contributionType)}
 				{(inSupport || inAdLite) &&
 					copyBelowThreshold(countryGroupId, productKey)}

@@ -32,9 +32,45 @@ object LandingPageCopy {
   implicit val codec: Codec[LandingPageCopy] = deriveCodec
 }
 
+case class ProductBenefit(
+    copy: String,
+    tooltip: Option[String] = None,
+    label: Option[Label] = None,
+)
+
+case class Label(
+    copy: String,
+)
+
+case class LandingPageProductDescription(
+    title: String,
+    label: Option[Label] = None,
+    benefits: List[ProductBenefit],
+    cta: Cta,
+)
+
+case class Cta(
+    copy: String,
+)
+
+case class Products(
+    Contribution: LandingPageProductDescription,
+    SupporterPlus: LandingPageProductDescription,
+    TierThree: LandingPageProductDescription,
+)
+
+object Products {
+  implicit val benefitCodec: Codec[ProductBenefit] = deriveCodec
+  implicit val labelCodec: Codec[Label] = deriveCodec
+  implicit val descriptionCodec: Codec[LandingPageProductDescription] = deriveCodec
+  implicit val ctaCodec: Codec[Cta] = deriveCodec
+  implicit val codec: Codec[Products] = deriveCodec
+}
+
 case class LandingPageVariant(
     name: String,
     copy: LandingPageCopy,
+    products: Products,
 )
 
 object LandingPageVariant {
