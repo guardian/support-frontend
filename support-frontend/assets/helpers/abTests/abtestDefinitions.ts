@@ -137,8 +137,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
 };
