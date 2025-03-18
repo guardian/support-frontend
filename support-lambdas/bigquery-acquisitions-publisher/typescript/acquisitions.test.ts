@@ -5,8 +5,8 @@ import {
 	transformAcquisitionProductForBigQuery,
 } from './acquisitions';
 
-describe('index', () => {
-	it('transformAcquisitionProductForBigQuery', () => {
+describe('The transformAcquisitionProductForBigQuery function', () => {
+	it('successfully transforms an AcquisitionProduct to a AcquisitionProductBigQueryType', () => {
 		const testInputAcquisition: AcquisitionProduct = {
 			eventTimeStamp: '2025-03-04 12:22:40.378000 UTC',
 			country: 'US',
