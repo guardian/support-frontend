@@ -157,7 +157,6 @@ export function ThankYou({
 	return (
 		<ThankYouComponent
 			geoId={geoId}
-			appConfig={appConfig}
 			payment={payment}
 			productKey={productKey}
 			ratePlanKey={ratePlanKey}

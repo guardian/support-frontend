@@ -9,7 +9,6 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
-import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import {
@@ -57,9 +56,8 @@ const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
-type CheckoutComponentProps = {
+export type CheckoutComponentProps = {
 	geoId: GeoId;
-	appConfig: AppConfig;
 	payment: {
 		originalAmount: number;
 		discountedAmount?: number;
@@ -85,7 +83,7 @@ export function ThankYouComponent({
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
-	const csrf = { token: window.guardian.csrf.token };
+	const csrf = { token: window.guardian?.csrf?.token ?? '' };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)
@@ -282,6 +280,7 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
+	console.log('🚀 ~ thankYouModules:', thankYouModules);
 
 	return (
 		<PageScaffold
