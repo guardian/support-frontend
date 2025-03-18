@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
-export const setTestUserPersonalDetails = async (
+export const setTestUserDetails = async (
 	page: Page,
 	email: string,
 	confirmEmail?: string,
@@ -22,16 +22,16 @@ export const setTestUserPersonalDetails = async (
 	}
 };
 
-export const setTestUserDetails = async (
+export const setTestUserAddressDetails = async (
 	page: Page,
 	testFields: TestFields,
 	internationalisationId: string,
 	tier: number,
 ) => {
-	await setTestUserPersonalDetails(
+	await setTestUserDetails(
 		page,
 		testFields.email,
-		testFields.email,
+		testFields.email, // confirmEmail
 		testFields.firstName,
 		testFields.lastName,
 	);

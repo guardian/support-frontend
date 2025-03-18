@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import { setTestUserPersonalDetails } from '../utils/testUserDetails';
+import { setTestUserDetails } from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import {
 	fillInCardDetails,
@@ -31,7 +31,7 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		const url = `/${internationalisationId}/one-time-checkout`;
 		const page = await context.newPage();
 		await setupPage(page, context, baseURL, url);
-		await setTestUserPersonalDetails(page, email());
+		await setTestUserDetails(page, email());
 		await page.getByRole('radio', { name: paymentType }).check();
 
 		if (paymentType === 'Credit/Debit card') {

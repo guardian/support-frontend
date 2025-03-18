@@ -6,8 +6,8 @@ import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
 import {
+	setTestUserAddressDetails,
 	setTestUserDetails,
-	setTestUserPersonalDetails,
 } from '../utils/testUserDetails';
 
 // TODO: it'd be great to make the types here more specific, possibly using the
@@ -27,13 +27,7 @@ const setUserDetailsForProduct = async (
 	switch (product) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
-			await setTestUserPersonalDetails(
-				page,
-				email(),
-				email(),
-				firstName(),
-				lastName(),
-			);
+			await setTestUserDetails(page, email(), email(), firstName(), lastName());
 
 			break;
 		case 'TierThree':
@@ -46,7 +40,12 @@ const setUserDetailsForProduct = async (
 					`Couldn't find user details for ${product} in ${internationalisationId}`,
 				);
 			}
-			await setTestUserDetails(page, userDetails, internationalisationId, 3);
+			await setTestUserAddressDetails(
+				page,
+				userDetails,
+				internationalisationId,
+				3,
+			);
 
 			break;
 		default:
