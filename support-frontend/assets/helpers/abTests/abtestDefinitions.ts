@@ -24,7 +24,7 @@ export const pageUrlRegexes = {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
-			paperLandingAndGenericCheckout: /^\/uk\/subscribe\/paper?(\?.*)?$/,
+			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
@@ -138,8 +138,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingAndGenericCheckout,
+		targetPage: pageUrlRegexes.subscriptions.paper.paperLandingPage,
 		persistPage:
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
