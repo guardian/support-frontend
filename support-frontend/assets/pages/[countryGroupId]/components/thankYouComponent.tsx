@@ -30,6 +30,7 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { logException } from 'helpers/utilities/logger';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -82,6 +83,10 @@ export function ThankYouComponent({
 	identityUserType,
 	abParticipations,
 }: CheckoutComponentProps) {
+	if (!productKey) {
+		logException('Product not found');
+		return <div>Product not found</div>;
+	}
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
@@ -106,7 +111,7 @@ export function ThankYouComponent({
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
-	let contributionType: ContributionType | undefined;
+	let contributionType: ContributionType;
 	switch (ratePlanKey) {
 		case 'Monthly':
 		case 'RestOfWorldMonthly':
@@ -128,63 +133,56 @@ export function ThankYouComponent({
 			contributionType = 'ANNUAL';
 			break;
 		default:
-			if (!productKey && !ratePlanKey) {
-				// A one-off contribution indicated by the absence of product and ratePlan
-				contributionType = 'ONE_OFF';
-			}
+			// A one-off contribution indicated by the absence of product and ratePlan
+			contributionType = 'ONE_OFF';
 			break;
 	}
 
 	const isOneOff = contributionType === 'ONE_OFF';
 
-	if (contributionType) {
-		// track conversion with GTM
-		const paymentMethod =
-			order.paymentMethod === 'StripeExpressCheckoutElement'
-				? 'Stripe'
-				: order.paymentMethod;
+	// track conversion with GTM
+	const paymentMethod =
+		order.paymentMethod === 'StripeExpressCheckoutElement'
+			? 'Stripe'
+			: order.paymentMethod;
 
-		successfulContributionConversion(
-			payment.finalAmount, // This is the final amount after discounts
-			contributionType,
-			currencyKey,
-			paymentMethod,
-			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
-		);
+	successfulContributionConversion(
+		payment.finalAmount, // This is the final amount after discounts
+		contributionType,
+		currencyKey,
+		paymentMethod,
+		productKey,
+	);
 
-		/**
-		 * This is some annoying transformation we need from
-		 * Product API => Contributions work we need to do
-		 */
-		const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-		if (isOneOff) {
-			// track conversion with QM
-			sendEventOneTimeCheckoutValue(
-				payment.originalAmount, // This is the amount before discounts
-				currencyKey,
-				true,
-			);
-		} else if (productKey) {
-			// track conversion with QM
-			sendEventCheckoutValue(
-				payment.originalAmount, // This is the amount before discounts
-				productKey,
-				billingPeriod,
-				currencyKey,
-				true,
-			);
-		}
-
+	/**
+	 * This is some annoying transformation we need from
+	 * Product API => Contributions work we need to do
+	 */
+	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	if (isOneOff) {
 		// track conversion with QM
-		sendEventContributionCheckoutConversion(
+		sendEventOneTimeCheckoutValue(
 			payment.originalAmount, // This is the amount before discounts
-			contributionType,
 			currencyKey,
+			true,
+		);
+	} else {
+		// track conversion with QM
+		sendEventCheckoutValue(
+			payment.originalAmount, // This is the amount before discounts
+			productKey,
+			billingPeriod,
+			currencyKey,
+			true,
 		);
 	}
-	if (!contributionType) {
-		return <div>Unable to find contribution type {contributionType}</div>;
-	}
+
+	// track conversion with QM
+	sendEventContributionCheckoutConversion(
+		payment.originalAmount, // This is the amount before discounts
+		contributionType,
+		currencyKey,
+	);
 
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
@@ -304,7 +302,7 @@ export function ThankYouComponent({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
-							productKey={productKey ?? 'Contribution'}
+							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
