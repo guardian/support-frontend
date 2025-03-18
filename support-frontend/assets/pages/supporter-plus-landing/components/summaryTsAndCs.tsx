@@ -26,7 +26,7 @@ const containerSummaryTsCs = css`
 	}
 `;
 
-interface SummaryTsAndCsProps {
+export interface SummaryTsAndCsProps {
 	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	currency: IsoCurrency;

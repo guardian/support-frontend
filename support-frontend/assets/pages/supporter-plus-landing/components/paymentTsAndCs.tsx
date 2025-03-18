@@ -8,7 +8,6 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
 	guardianAdLiteTermsLink,
@@ -38,15 +37,14 @@ const container = css`
 	}
 `;
 
-interface PaymentTsAndCsProps {
-	mobileTheme?: FinePrintTheme;
-	contributionType: ContributionType;
-	currency: IsoCurrency;
-	amount: number;
+export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
-	promotion?: Promotion;
-	cssOverrides?: SerializedStyles;
+	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
+	promotion?: Promotion;
+	thresholdAmount?: number;
+	mobileTheme?: FinePrintTheme;
+	cssOverrides?: SerializedStyles;
 }
 
 const termsSupporterPlus = (linkText: string) => (
@@ -97,11 +95,12 @@ export function TsAndCsFooterLinks({
 }
 
 export function PaymentTsAndCs({
-	mobileTheme = 'dark',
+	productKey,
 	contributionType,
 	countryGroupId,
-	productKey,
 	promotion,
+	thresholdAmount,
+	mobileTheme = 'dark',
 }: PaymentTsAndCsProps): JSX.Element {
 	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
@@ -127,7 +126,7 @@ export function PaymentTsAndCs({
 						countryGroupId,
 						contributionType,
 						' per ',
-						thresholdAmount,
+						thresholdAmount ?? 0,
 						promotion,
 					)}
 					, you will receive the {productLabel} benefits on a subscription

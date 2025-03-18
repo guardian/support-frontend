@@ -3,14 +3,6 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
-// Mocking price retrieval from productCatalog (not available in window at runtime)
-jest.mock('helpers/supporterPlus/benefitsThreshold', () => ({
-	getLowerProductBenefitThreshold: () => 12,
-}));
-// jest.mock('./TsAndCsRenewal', () => ({
-// 	default: () => 'on the first day of every month',
-// }));
-
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const paymentProductKeys = [
 		['Contribution', 'UnitedStates'],
@@ -28,8 +20,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					contributionType={'MONTHLY'}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
-					currency={'GBP'}
-					amount={0}
+					thresholdAmount={12}
 				/>,
 			);
 			expect(container).toMatchSnapshot();
