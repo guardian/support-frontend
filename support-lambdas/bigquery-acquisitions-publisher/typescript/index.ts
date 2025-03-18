@@ -6,10 +6,8 @@ import {
 } from './bigQuery';
 import { getGCPCredentialsFromSSM } from './ssm';
 import type { SQSEvent } from 'aws-lambda';
-import {
-	transformAcquisitionProductForBigQuery,
-	AcquisitionProductEventSchema,
-} from './acquisitions';
+import { transformAcquisitionProductForBigQuery } from './acquisitions';
+import { AcquisitionProductEventSchema } from './schemas';
 
 type Result =
 	| {

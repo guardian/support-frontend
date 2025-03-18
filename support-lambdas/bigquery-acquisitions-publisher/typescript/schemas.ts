@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export type ProductType = (typeof ProductTypeSchema)[number];
-export const ProductTypeSchema = [
+export const ProductTypeSchema = z.enum([
 	'CONTRIBUTION',
 	'PRINT_SUBSCRIPTION',
 	'DIGITAL_SUBSCRIPTION',
@@ -11,15 +10,16 @@ export const ProductTypeSchema = [
 	'APP_PREMIUM_TIER',
 	'GUARDIAN_AD_LITE',
 	'FEAST_APP',
-] as const;
+]);
+export type Product = z.infer<typeof ProductTypeSchema>;
 
-export type ContributionType = (typeof ContributionTypeSchema)[number];
-export const ContributionTypeSchema = [
+export const ContributionTypeSchema = z.enum([
 	'MONTHLY',
 	'ANNUALLY',
 	'ONE_OFF',
 	'QUARTERLY',
-] as const;
+]);
+export type Contribution = z.infer<typeof ContributionTypeSchema>;
 
 export const IsoCountrySchema = z.enum([
 	'GB',
@@ -272,26 +272,26 @@ export const IsoCountrySchema = z.enum([
 	'JE',
 	'SH',
 ]);
-export type IsoCountryType = z.infer<typeof IsoCountrySchema>;
+export type IsoCountry = z.infer<typeof IsoCountrySchema>;
 
-export type IsoCurrencyType = (typeof IsoCurrencySchema)[number];
-export const IsoCurrencySchema = [
+export const IsoCurrencySchema = z.enum([
 	'GBP',
 	'USD',
 	'AUD',
 	'EUR',
 	'NZD',
 	'CAD',
-] as const;
+]);
+export type IsoCurrency = z.infer<typeof IsoCurrencySchema>;
 
-export type PaymentMethodType = (typeof PaymentMethodSchema)[number];
-export const PaymentMethodSchema = [
+export const PaymentMethodSchema = z.enum([
 	'STRIPE',
 	'STRIPE_APPLE_PAY',
 	'STRIPE_PAYMENT_REQUEST_BUTTON',
 	'PAYPAL',
 	'GOCARDLESS',
-] as const;
+]);
+export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
 
 const PrintProductSchema = z.enum([
 	'HOME_DELIVERY_EVERYDAY',
@@ -324,3 +324,43 @@ export const PrintOptionsSchema = z
 	.object({ product: PrintProductSchema, deliveryCountry: IsoCountrySchema })
 	.nullable();
 export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
+
+// This defines the schema for the data we expect to receive in the acquisition event.
+export const AcquisitionProductSchema = z.object({
+	eventTimeStamp: z.string(),
+	country: IsoCountrySchema,
+	componentId: z.string().nullable(),
+	componentType: z.string().nullable(),
+	campaignCode: z.string().nullable(),
+	referrerUrl: z.string().nullable(),
+	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
+	paymentFrequency: ContributionTypeSchema,
+	paymentProvider: PaymentMethodSchema,
+	printOptions: PrintOptionsSchema,
+	browserId: z.string().nullable(),
+	identityId: z.string(),
+	pageViewId: z.string(),
+	referrerPageViewId: z.string().nullable(),
+	promoCode: z.string().nullable(),
+	queryParameters: z.object({ name: z.string(), value: z.string() }).array(),
+	reusedExistingPaymentMethod: z.boolean(),
+	acquisitionType: z.string(),
+	readerType: z.string(),
+	zuoraSubscriptionNumber: z.string().nullable(),
+	contributionId: z.string().nullable(),
+	paymentId: z.string().nullable(),
+	product: ProductTypeSchema,
+	amount: z.number().nullable(),
+	currency: IsoCurrencySchema,
+	source: z.string().nullable(),
+	platform: z.string().nullable(),
+	labels: z.string().array(),
+});
+export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
+
+export const AcquisitionProductEventSchema = z.object({
+	detail: AcquisitionProductSchema,
+});
+export type AcquisitionProductEvent = z.infer<
+	typeof AcquisitionProductEventSchema
+>;

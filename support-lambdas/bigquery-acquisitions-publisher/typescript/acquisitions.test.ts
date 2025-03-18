@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
-	AcquisitionProduct,
 	AcquisitionProductBigQueryType,
 	transformAcquisitionProductForBigQuery,
 } from './acquisitions';
+import type { AcquisitionProduct } from './schemas';
 
 const baseAcquisitionProduct: AcquisitionProduct = {
 	eventTimeStamp: '2025-03-04 12:22:40.378000 UTC',

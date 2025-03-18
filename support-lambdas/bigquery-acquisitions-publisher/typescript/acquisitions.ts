@@ -1,72 +1,26 @@
-import { z } from 'zod';
 import {
-	ProductTypeSchema,
-	IsoCountrySchema,
-	IsoCurrencySchema,
-	ContributionTypeSchema,
-	PaymentMethodSchema,
-	IsoCountryType,
-	ContributionType,
-	ProductType,
-	IsoCurrencyType,
-	PaymentMethodType,
+	IsoCountry,
+	Contribution,
+	Product,
+	IsoCurrency,
+	PaymentMethod,
 	PrintOptions,
-	PrintOptionsSchema,
-} from './dependencies';
-
-// Items to write to BigQuery (datalake:fact_acquisition_event)
-// This defines the schema for the data we expect to receive in the acquisition event.
-export const AcquisitionProductSchema = z.object({
-	eventTimeStamp: z.string(),
-	country: IsoCountrySchema,
-	componentId: z.string().nullable(),
-	componentType: z.string().nullable(),
-	campaignCode: z.string().nullable(),
-	referrerUrl: z.string().nullable(),
-	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
-	paymentFrequency: z.enum(ContributionTypeSchema),
-	paymentProvider: z.enum(PaymentMethodSchema),
-	printOptions: PrintOptionsSchema,
-	browserId: z.string().nullable(),
-	identityId: z.string(),
-	pageViewId: z.string(),
-	referrerPageViewId: z.string().nullable(),
-	promoCode: z.string().nullable(),
-	queryParameters: z.object({ name: z.string(), value: z.string() }).array(),
-	reusedExistingPaymentMethod: z.boolean(),
-	acquisitionType: z.string(),
-	readerType: z.string(),
-	zuoraSubscriptionNumber: z.string().nullable(),
-	contributionId: z.string().nullable(),
-	paymentId: z.string().nullable(),
-	product: z.enum(ProductTypeSchema),
-	amount: z.number().nullable(),
-	currency: z.enum(IsoCurrencySchema),
-	source: z.string().nullable(),
-	platform: z.string().nullable(),
-	labels: z.string().array(),
-});
-export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
-export const AcquisitionProductEventSchema = z.object({
-	detail: AcquisitionProductSchema,
-});
-export type AcquisitionProductEvent = z.infer<
-	typeof AcquisitionProductEventSchema
->;
+	AcquisitionProduct,
+} from './schemas';
 
 export type AcquisitionProductBigQueryType = {
 	event_timestamp: string;
-	product: ProductType;
+	product: Product;
 	amount: number | null;
-	currency: IsoCurrencyType;
-	country_code: IsoCountryType;
+	currency: IsoCurrency;
+	country_code: IsoCountry;
 	component_id: string | null;
 	component_type: string | null;
 	campaign_codes: [string] | [];
 	referrer_url: string | null;
 	ab_tests: { name: string; variant: string }[];
-	payment_frequency: ContributionType;
-	payment_provider: PaymentMethodType;
+	payment_frequency: Contribution;
+	payment_provider: PaymentMethod;
 	print_options: { product: string; delivery_country_code: string } | null;
 	browser_id: string | null;
 	identity_id: string;
