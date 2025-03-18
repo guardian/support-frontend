@@ -280,7 +280,6 @@ export function ThankYouComponent({
 			'headlineReturn',
 		),
 	];
-	console.log('🚀 ~ thankYouModules:', thankYouModules);
 
 	return (
 		<PageScaffold
