@@ -5,6 +5,7 @@ import {
 	Label,
 	Radio,
 	RadioGroup,
+	TextArea,
 	TextInput,
 } from '@guardian/source/react-components';
 import {
@@ -55,6 +56,7 @@ import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
@@ -65,6 +67,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
@@ -367,6 +370,9 @@ export function CheckoutComponent({
 	const [email, setEmail] = useState(user?.email ?? '');
 	const [confirmedEmail, setConfirmedEmail] = useState('');
 
+	/** Delivery Instructions */
+	const [deliveryInstructions, setDeliveryInstructions] = useState('');
+
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
@@ -530,6 +536,20 @@ export function CheckoutComponent({
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
 
+	const contributionType =
+		productFields.billingPeriod === 'Monthly'
+			? 'MONTHLY'
+			: productFields.billingPeriod === 'Annual'
+			? 'ANNUAL'
+			: 'ONE_OFF';
+
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+	);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -574,12 +594,9 @@ export function CheckoutComponent({
 						}
 						tsAndCs={getTermsConditions(
 							countryGroupId,
-							productFields.billingPeriod === 'Monthly'
-								? 'MONTHLY'
-								: productFields.billingPeriod === 'Annual'
-								? 'ANNUAL'
-								: 'ONE_OFF',
+							contributionType,
 							productFields.productType,
+							thresholdAmount,
 							promotion,
 						)}
 						headerButton={
@@ -887,7 +904,27 @@ export function CheckoutComponent({
 										}}
 									/>
 								</fieldset>
-
+								{productKey === 'HomeDelivery' && (
+									<fieldset
+										css={css`
+											margin-bottom: ${space[6]}px;
+										`}
+									>
+										<TextArea
+											id="deliveryInstructions"
+											data-qm-masking="blocklist"
+											name="deliveryInstructions"
+											label="Delivery instructions"
+											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+											onChange={(event) => {
+												setDeliveryInstructions(event.target.value);
+											}}
+											value={deliveryInstructions}
+											optional
+										/>
+									</fieldset>
+								)}
 								<fieldset
 									css={css`
 										margin-bottom: ${space[6]}px;
@@ -1130,13 +1167,7 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
 							productKey={productKey}
@@ -1255,13 +1286,8 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							countryGroupId={countryGroupId}
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
+							thresholdAmount={thresholdAmount}
 							currency={currencyKey}
 							amount={originalAmount}
 							amountIsAboveThreshold={
