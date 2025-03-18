@@ -17,7 +17,8 @@
   v2recaptchaConfigPublicKey: String,
   allProductPrices: AllProductPrices,
   productCatalog: JsonObject,
-  user: Option[User]
+  user: Option[User],
+  homeDeliveryPostcodes: Option[List[String]] = None,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -38,6 +39,12 @@
     window.guardian = window.guardian || {};
     window.guardian.allProductPrices = @Html(outputJson(allProductPrices))
   </script>
+
+  @homeDeliveryPostcodes.map { postcodes =>
+    <script type="text/javascript">
+      window.guardian.homeDeliveryPostcodes = @Html(outputJson(postcodes))
+    </script>
+  }
 
   @windowGuardianPaymentConfig(
     geoData = geoData,

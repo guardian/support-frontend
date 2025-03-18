@@ -26,6 +26,7 @@ import play.api.mvc._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
+import utils.PaperValidation
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -533,6 +534,7 @@ class Application(
         productCatalog = productCatalog,
         allProductPrices = allProductPrices,
         user = request.user,
+        homeDeliveryPostcodes = Some(PaperValidation.M25_POSTCODE_PREFIXES),
       ),
     ).withSettingsSurrogateKey
   }
