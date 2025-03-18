@@ -45,6 +45,7 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
+import { SubscriptionStartBodyCopy } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -314,6 +315,20 @@ SupportReminder.args = {
 			}}
 		/>
 	),
+};
+
+export const SubscriptionStart = Template.bind({});
+
+SubscriptionStart.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'Set a support reminder',
+	bodyCopy: (
+		<SubscriptionStartBodyCopy
+			productKey={'NationalDelivery'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
 };
 
 SupportReminder.decorators = [

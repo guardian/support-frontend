@@ -256,16 +256,14 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('subscriptionStart'),
 			header: subscriptionStartHeader,
 			bodyCopy: (
-				<>
-					<SubscriptionStartBodyCopy
-						productKey={productKey}
-						startDate={
-							publicationStartDays[0]
-								? formatUserDate(publicationStartDays[0])
-								: ''
-						}
-					/>
-				</>
+				<SubscriptionStartBodyCopy
+					productKey={productKey}
+					startDate={
+						publicationStartDays[0]
+							? formatUserDate(publicationStartDays[0])
+							: ''
+					}
+				/>
 			),
 			ctas: null,
 		},
