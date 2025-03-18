@@ -537,7 +537,7 @@ export function CheckoutComponent({
 			? 'ANNUAL'
 			: 'ONE_OFF';
 
-	const thresholdAmount = getLowerProductBenefitThreshold(
+	const supporterPlusPrice = getLowerProductBenefitThreshold(
 		contributionType,
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
@@ -590,7 +590,7 @@ export function CheckoutComponent({
 							countryGroupId,
 							contributionType,
 							productFields.productType,
-							thresholdAmount,
+							supporterPlusPrice,
 							promotion,
 						)}
 						headerButton={
@@ -1263,7 +1263,7 @@ export function CheckoutComponent({
 							contributionType={contributionType}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
-							thresholdAmount={thresholdAmount}
+							supporterPlusPrice={supporterPlusPrice}
 						/>
 					</BoxContents>
 				</Box>

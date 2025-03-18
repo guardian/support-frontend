@@ -42,7 +42,7 @@ export interface PaymentTsAndCsProps {
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
-	thresholdAmount?: number;
+	supporterPlusPrice?: number;
 	mobileTheme?: FinePrintTheme;
 	cssOverrides?: SerializedStyles;
 }
@@ -99,7 +99,7 @@ export function PaymentTsAndCs({
 	contributionType,
 	countryGroupId,
 	promotion,
-	thresholdAmount,
+	supporterPlusPrice,
 	mobileTheme = 'dark',
 }: PaymentTsAndCsProps): JSX.Element {
 	const inDigitalEdition = productKey === 'DigitalSubscription';
@@ -126,7 +126,7 @@ export function PaymentTsAndCs({
 						countryGroupId,
 						contributionType,
 						' per ',
-						thresholdAmount ?? 0,
+						supporterPlusPrice ?? 0,
 						promotion,
 					)}
 					, you will receive the {productLabel} benefits on a subscription
