@@ -4,13 +4,20 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettingsProvider, On}
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudWatchClient}
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.i18n.Country
-import com.gu.support.acquisitions.{AbTest, OphanIds, ReferrerAcquisitionData}
+import com.gu.i18n.{Country, Currency}
+import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.config.Stage
-import com.gu.support.workers.{Address, User}
+import com.gu.support.workers.{
+  Address,
+  Monthly,
+  PaymentMethodId,
+  StripePaymentFields,
+  StripePaymentType,
+  SupporterPlus,
+  User,
+}
 import com.typesafe.scalalogging.StrictLogging
 import config.RecaptchaConfigProvider
-import controllers.CreateSubscriptionController.{CreateSubscriptionError, ServerError}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import lib.PlayImplicits.RichRequest
@@ -94,7 +101,7 @@ class StripeController(
       val v2RecaptchaSecretKey = recaptchaConfigProvider.get(isTestUser = request.body.isTestUser).v2SecretKey
 
       val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
-      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+      AwsCloudWatchMetricPut(cloudWatchClient)(cloudwatchEvent)
 
       // Requests against the test account do not require verification
       val verified =
@@ -130,7 +137,7 @@ class StripeController(
   def createSetupIntentPRB: Action[SetupIntentRequest] = PrivateAction.async(circe.json[SetupIntentRequest]) {
     implicit request =>
       val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "PRB-CSRF-only")
-      AwsCloudWatchMetricPut(client)(cloudwatchEvent)
+      AwsCloudWatchMetricPut(cloudWatchClient)(cloudwatchEvent)
 
       stripeService(request.body.stripePublicKey).fold(
         error => {
@@ -159,46 +166,64 @@ class StripeController(
 
   private def buildSupportWorkersRequest(
       session: RetrieveCheckoutSessionResponseSuccess,
-      request: Request[CompleteCheckoutSessionRequest],
-  ): CreateSupportWorkersRequest =
-    CreateSupportWorkersRequest(
-      title = None,
-      firstName = String,
-      lastName = String,
-      billingAddress = Address(
-        lineOne = None,
-        lineTwo = None,
-        city = None,
-        state = None,
-        postCode = None,
-        country = Country.UK,
-      ),
-      deliveryAddress = None,
-      giftRecipient = None,
-      product = ProductType,
-      firstDeliveryDate = None,
-      paymentFields = PaymentFields,
-      appliedPromotion = None,
-      csrUsername = None,
-      salesforceCaseId = None,
-      ophanIds = OphanIds(None, None),
-      referrerAcquisitionData =
-        ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
-      supportAbTests = Set.empty,
-      email = String,
-      telephoneNumber = None,
-      deliveryInstructions = None,
-      debugInfo = None,
-    )
+  ): EitherT[Future, String, CreateSupportWorkersRequest] = {
+    val maybePaymentMethod = PaymentMethodId(session.setup_intent.payment_method.id)
 
-  def completeCheckoutSession(checkoutSessionId: String): Action[CompleteCheckoutSessionRequest] =
-    PrivateAction.async(circe.json[CompleteCheckoutSessionRequest]) { implicit request =>
+    maybePaymentMethod match {
+      case Some(paymentMethod) =>
+        val createSupportWorkersRequest = CreateSupportWorkersRequest(
+          title = None,
+          firstName = "Example",
+          lastName = "Example",
+          billingAddress = Address(
+            lineOne = None,
+            lineTwo = None,
+            city = None,
+            state = None,
+            postCode = None,
+            country = Country.UK,
+          ),
+          deliveryAddress = None,
+          giftRecipient = None,
+          product = SupporterPlus(
+            amount = 12,
+            currency = Currency.GBP,
+            billingPeriod = Monthly,
+          ),
+          firstDeliveryDate = None,
+          paymentFields = StripePaymentFields(
+            paymentMethod = paymentMethod,
+            stripePaymentType = Some(StripePaymentType.StripeCheckout),
+            stripePublicKey = None,
+          ),
+          appliedPromotion = None,
+          csrUsername = None,
+          salesforceCaseId = None,
+          ophanIds = OphanIds(None, None),
+          referrerAcquisitionData =
+            ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+          supportAbTests = Set.empty,
+          email = "test@theguardian.com",
+          telephoneNumber = None,
+          deliveryInstructions = None,
+          debugInfo = None,
+        )
+        EitherT.rightT[Future, String] {
+          createSupportWorkersRequest
+        }
+      case _ =>
+        EitherT.leftT[Future, CreateSupportWorkersRequest] { "Couldn't create support workers request" }
+    }
+  }
+
+  def completeCheckoutSession(checkoutSessionId: String) =
+    Action.async { implicit request =>
       val result = for {
         checkoutSession <- stripeCheckoutSessionService.retrieveCheckoutSession(checkoutSessionId)
-        supportWorkersRequest = buildSupportWorkersRequest(checkoutSession, request)
+        supportWorkersRequest <- buildSupportWorkersRequest(checkoutSession)
         userDetails = UserDetails("123456789", "test@guardian.co.uk", "guest")
         supportWorkersUser = buildSupportWorkersUser(userDetails, supportWorkersRequest, isTestUser = false)
-        _ <- client
+        createSubscriptionResponse <- client
           .createSubscription(
             request = supportWorkersRequest,
             user = supportWorkersUser,
@@ -206,16 +231,19 @@ class StripeController(
             ipAddress = request.headers.get("user-agent").getOrElse("Unknown"),
             userAgent =
               request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+            host = "support.theguardian.com",
           )
-      } yield ()
+      } yield createSubscriptionResponse
 
       result.fold(
         error => {
           logger.error(s"Returning status InternalServerError for Complete Checkout Session request because: $error")
           InternalServerError("")
+            .withHeaders("Cache-Control" -> "private, no-store")
         },
         _ => {
           Ok("success")
+            .withHeaders("Cache-Control" -> "private, no-store")
         },
       )
     }
@@ -245,7 +273,6 @@ class StripeController(
         phoneNo <- request.telephoneNumber
         updatedNo <- NormalisedTelephoneNumber
           .formatFromStringAndCountry(phoneNo, request.billingAddress.country)
-          .tap(_.left.foreach(logger.warn))
           .toOption
       } yield updatedNo,
       isTestUser = isTestUser,

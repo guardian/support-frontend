@@ -226,6 +226,7 @@ class CreateSubscriptionController(
           ipAddress = request.headers.get("user-agent").getOrElse("Unknown"),
           userAgent =
             request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+          host = request.host,
         )
         .leftMap[CreateSubscriptionError](ServerError)
 

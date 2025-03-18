@@ -42,7 +42,7 @@ class StripeCheckoutSessionService(
     extends SafeLogging {
   val baseUrl: String = "https://api.stripe.com/v1"
 
-  def createCheckoutSession(): EitherT[Future, ResponseError, CreateCheckoutSessionResponseSuccess] = {
+  def createCheckoutSession(): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
     val isTestUser = false
     val privateKey = getPrivateKey(isTestUser)
 
@@ -67,13 +67,13 @@ class StripeCheckoutSessionService(
       .withBody(data)
       .execute()
       .attemptT
-      .leftMap(ResponseError.ExecuteError)
+      .leftMap(error => error.getMessage)
       .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
   }
 
   def retrieveCheckoutSession(
       id: String,
-  ): EitherT[Future, ResponseError, RetrieveCheckoutSessionResponseSuccess] = {
+  ): EitherT[Future, String, RetrieveCheckoutSessionResponseSuccess] = {
     val isTestUser = false
     val privateKey = getPrivateKey(isTestUser)
 
@@ -83,7 +83,7 @@ class StripeCheckoutSessionService(
       .withMethod("GET")
       .execute()
       .attemptT
-      .leftMap(ResponseError.ExecuteError)
+      .leftMap(error => error.getMessage)
       .subflatMap(decodeResponse[RetrieveCheckoutSessionResponseSuccess])
   }
 
@@ -93,12 +93,10 @@ class StripeCheckoutSessionService(
 
   private def decodeResponse[A: Decoder](
       response: WSResponse,
-  ): Either[ResponseError, A] = {
+  ): Either[String, A] = {
     // TODO: remove this logging
     logger.error(scrub"Response: ${response.body}")
 
-    decode[A](response.body).leftMap(
-      ResponseError.DecodingError,
-    )
+    decode[A](response.body).leftMap(_ => "Decode error")
   }
 }

@@ -97,16 +97,15 @@ class SupportWorkersClient(
   private val underlying = Client(arn)
 
   private def referrerAcquisitionDataWithGAFields(
-      request: Request[CreateSupportWorkersRequest],
+      request: CreateSupportWorkersRequest,
+      ipAddress: String,
+      host: String,
+      userAgent: String,
   ): ReferrerAcquisitionData = {
-    val hostname = request.host
-    val gaClientId = request.cookies.get("_ga").map(_.value)
-    val userAgent = request.headers.get("user-agent")
-    val ipAddress = request.remoteAddress
-    request.body.referrerAcquisitionData.copy(
-      hostname = Some(hostname),
-      gaClientId = gaClientId,
-      userAgent = userAgent,
+    request.referrerAcquisitionData.copy(
+      hostname = Some(host),
+      gaClientId = None,
+      userAgent = Some(userAgent),
       ipAddress = Some(ipAddress),
     )
   }
@@ -132,6 +131,7 @@ class SupportWorkersClient(
       requestId: UUID,
       ipAddress: String,
       userAgent: String,
+      host: String,
   ): EitherT[Future, String, StatusResponse] = {
     for {
       giftRecipient <- EitherT.fromEither[Future](
@@ -150,7 +150,7 @@ class SupportWorkersClient(
         acquisitionData = Some(
           AcquisitionData(
             ophanIds = request.ophanIds,
-            referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
+            referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request, ipAddress, host, userAgent),
             supportAbTests = request.supportAbTests,
           ),
         ),
