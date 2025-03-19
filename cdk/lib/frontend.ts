@@ -107,10 +107,10 @@ export class Frontend extends GuStack {
         ],
       }),
       new GuAllowPolicy(this, "DynamoLandingPageTests", {
-        actions: ["dynamodb:Query"],
-        resources: [
-          `arn:aws:dynamodb:*:*:table/support-admin-console-channel-tests-${this.stage}`,
+        actions: [
+          "dynamodb:Query",
         ],
+        resources: [`arn:aws:dynamodb:*:*:table/support-admin-console-channel-tests-${this.stage}`,],
       }),
     ];
 
@@ -398,7 +398,7 @@ export class Frontend extends GuStack {
         threshold: 1,
         evaluationPeriods: 1,
         comparisonOperator:
-          ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+        ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
         metric: new Metric({
           metricName: "GetLandingPageTestsError",
           namespace: "support-frontend",
