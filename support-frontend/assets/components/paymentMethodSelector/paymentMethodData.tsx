@@ -25,6 +25,12 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		icon: <CreditDebitIcons />,
 		accordionBody: () => <StripeCardFormContainer />,
 	},
+	StripeHostedCheckout: {
+		id: 'qa-stripe-hosted-checkout',
+		label: 'Stripe checkout',
+		icon: <CreditDebitIcons />,
+		accordionBody: () => <></>,
+	},
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
