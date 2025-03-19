@@ -81,7 +81,6 @@ import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentT
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
-
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -541,7 +540,12 @@ export function CheckoutComponent({
 			: productFields.billingPeriod === 'Annual'
 			? 'ANNUAL'
 			: 'ONE_OFF';
-	const amount = getLowerProductBenefitThreshold(
+
+	/*
+  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+          We should revisit this and see if we can remove this prop, pushing it lower down the tree
+  */
+	const thresholdAmount = getLowerProductBenefitThreshold(
 		contributionType,
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
@@ -594,7 +598,7 @@ export function CheckoutComponent({
 							countryGroupId,
 							contributionType,
 							productFields.productType,
-							amount,
+							thresholdAmount,
 							promotion,
 						)}
 						headerButton={
@@ -1284,7 +1288,7 @@ export function CheckoutComponent({
 						<PaymentTsAndCs
 							countryGroupId={countryGroupId}
 							contributionType={contributionType}
-							amount={amount}
+							thresholdAmount={thresholdAmount}
 							productKey={productKey}
 							promotion={promotion}
 						/>

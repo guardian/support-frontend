@@ -8,12 +8,12 @@ export const productLegal = (
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 	divider: string,
-	amount: number,
+	thresholdAmount: number,
 	promotion?: Promotion,
 ) => {
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
-	const amountFormatted = simpleFormatAmount(currency, amount);
+	const amountFormatted = simpleFormatAmount(currency, thresholdAmount);
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const amountPerPeriod = `${amountFormatted}${divider}${period}`;
 

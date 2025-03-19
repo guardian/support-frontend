@@ -47,7 +47,7 @@ function TsAndCsRenewal({
 	return <>on the {getDateWithOrdinal(today)} day of every month</>;
 }
 
-interface SummaryTsAndCsProps {
+export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	contributionType: ContributionType;
 	currency: IsoCurrency;

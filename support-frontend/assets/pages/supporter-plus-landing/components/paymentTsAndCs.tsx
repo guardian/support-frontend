@@ -107,19 +107,19 @@ export function TsAndCsFooterLinks({
 	);
 }
 
-interface PaymentTsAndCsProps {
+export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
-	amount: number;
 	promotion?: Promotion;
+	thresholdAmount?: number;
 }
 export function PaymentTsAndCs({
 	productKey,
 	contributionType,
 	countryGroupId,
-	amount,
 	promotion,
+	thresholdAmount,
 }: PaymentTsAndCsProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -129,7 +129,7 @@ export function PaymentTsAndCs({
 					countryGroupId={countryGroupId}
 					productKey={productKey}
 					promotion={promotion}
-					amount={amount}
+					thresholdAmount={thresholdAmount}
 				/>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
@@ -143,7 +143,7 @@ function PaymentTsAndCsComponent({
 	contributionType,
 	countryGroupId,
 	productKey,
-	amount,
+	thresholdAmount = 0,
 	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const productLabel = productCatalogDescription[productKey].label;
@@ -191,7 +191,7 @@ function PaymentTsAndCsComponent({
 						countryGroupId,
 						contributionType as RegularContributionType,
 						' per ',
-						amount,
+						thresholdAmount,
 						promotion,
 					)}
 					, you will receive the {productLabel} benefits on a subscription
