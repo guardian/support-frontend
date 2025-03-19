@@ -15,6 +15,7 @@ import {
 	PayPal,
 	Sepa,
 	Stripe,
+	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -27,7 +28,12 @@ import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Types ----- //
-export type PaymentMethodSwitch = 'directDebit' | 'sepa' | 'payPal' | 'stripe';
+export type PaymentMethodSwitch =
+	| 'directDebit'
+	| 'sepa'
+	| 'payPal'
+	| 'stripe'
+	| 'stripeHostedCheckout';
 
 // ----- Functions ----- //
 function toPaymentMethodSwitchNaming(
@@ -42,6 +48,9 @@ function toPaymentMethodSwitchNaming(
 
 		case DirectDebit:
 			return 'directDebit';
+
+		case StripeHostedCheckout:
+			return 'stripeHostedCheckout';
 
 		case Sepa:
 			return 'sepa';
