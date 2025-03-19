@@ -28,12 +28,14 @@ import {
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
 type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
+
 type ProductType =
   | "Contribution"
   | "Paper"
   | "GuardianWeekly"
   | "SupporterPlus"
-  | "TierThree";
+  | "TierThree"
+  | "GuardianAdLite";
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -522,8 +524,51 @@ export class SupportWorkers extends GuStack {
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
+
+    // begining of Ad lite
+
+    const adLiteMetricDuration = Duration.minutes(5);
+    const adLiteEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
+    const adLiteAlarmPeriod = Duration.minutes(
+      adLiteMetricDuration.toMinutes() * adLiteEvaluationPeriods
+    );
+
+    new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
+      app,
+      actionsEnabled: isProd,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `URGENT 9-5 - ${
+        this.stage
+      } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
+      metric: new MathExpression({
+        label: "AllTierThreeConversions",
+        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+        usingMetrics: {
+          m1: this.buildPaymentSuccessMetric(
+            "Stripe",
+            "GuardianAdLite",
+            adLiteMetricDuration
+          ),
+          m2: this.buildPaymentSuccessMetric(
+            "DirectDebit",
+            "GuardianAdLite",
+            adLiteMetricDuration
+          ),
+          m3: this.buildPaymentSuccessMetric(
+            "PayPal",
+            "GuardianAdLite",
+            adLiteMetricDuration
+          ),
+        },
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: adLiteEvaluationPeriods,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
   }
 
+  // End of an lite
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
     productType: ProductType,
