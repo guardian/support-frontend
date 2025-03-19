@@ -9,7 +9,7 @@ import type {
 } from './schemas';
 
 // This is the shape of the data we'll send to BigQuery
-export type AcquisitionDataRow = {
+export type FactAcquisitionEventRow = {
 	event_timestamp: string;
 	product: Product;
 	amount: number | null;
@@ -63,7 +63,7 @@ const mapPrintOptions = (printOptions: PrintOptions) => {
 
 export const transformAcquisitionProductForBigQuery = (
 	acquisitionProduct: AcquisitionProduct,
-): AcquisitionDataRow => {
+): FactAcquisitionEventRow => {
 	return {
 		event_timestamp: acquisitionProduct.eventTimeStamp,
 		product: acquisitionProduct.product,

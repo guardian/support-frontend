@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-	AcquisitionDataRow,
+	FactAcquisitionEventRow,
 	transformAcquisitionProductForBigQuery,
 } from './acquisitions';
 import type { AcquisitionProduct } from './schemas';
@@ -44,7 +44,7 @@ describe('The transformAcquisitionProductForBigQuery function', () => {
 
 		const got = transformAcquisitionProductForBigQuery(testInputAcquisition);
 
-		const expected: AcquisitionDataRow = {
+		const expected: FactAcquisitionEventRow = {
 			event_timestamp: '2025-03-04 12:22:40.378000 UTC',
 			product: 'CONTRIBUTION',
 			amount: 1.0,
