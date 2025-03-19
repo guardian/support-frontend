@@ -144,10 +144,8 @@ describe('thankYouComponent', () => {
 				identityUserType="current"
 			/>,
 		);
-		const signIn = screen.getByTestId('signIn');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
+		const subscriptionStart = screen.getByTestId('subscriptionStart');
+		expect(subscriptionStart).toBeInTheDocument();
 	});
 
 	it('should display the correct thankyou cards for Everyday SubscriptionCard Paper users', () => {
@@ -159,10 +157,8 @@ describe('thankYouComponent', () => {
 				identityUserType="current"
 			/>,
 		);
-		const signIn = screen.getByTestId('signIn');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
+		const subscriptionStart = screen.getByTestId('subscriptionStart');
+		expect(subscriptionStart).toBeInTheDocument();
 	});
 
 	it('should display the correct thankyou cards for Guardian Weekly Domestic users', () => {
@@ -174,9 +170,7 @@ describe('thankYouComponent', () => {
 				identityUserType="current"
 			/>,
 		);
-		const signIn = screen.getByTestId('signIn');
-		const socialShare = screen.getByTestId('socialShare');
-		expect(signIn).toBeInTheDocument();
-		expect(socialShare).toBeInTheDocument();
+		const subscriptionStart = screen.getByTestId('subscriptionStart');
+		expect(subscriptionStart).toBeInTheDocument();
 	});
 });
