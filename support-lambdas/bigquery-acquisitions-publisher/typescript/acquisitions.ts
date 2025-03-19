@@ -24,8 +24,8 @@ export type FactAcquisitionEventRow = {
 	payment_provider: PaymentProvider;
 	print_options: { product: string; delivery_country_code: string } | null;
 	browser_id: string | null;
-	identity_id: string;
-	page_view_id: string;
+	identity_id: string | null;
+	page_view_id: string | null;
 	referrer_page_view_id: string | null;
 	promo_code: string | null;
 	query_parameters: { key: string; value: string }[];
