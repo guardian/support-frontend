@@ -1112,7 +1112,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           {
             "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
             "Id": "expr_1",
-            "Label": "AllTierThreeConversions",
+            "Label": "AllGuardianAdLiteConversions",
           },
           {
             "Id": "m1",
