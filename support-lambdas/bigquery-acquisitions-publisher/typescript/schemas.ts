@@ -319,11 +319,7 @@ export const PrintOptionsSchema = z
 	.nullable();
 export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
 
-export const ReaderTypeSchema = z
-	.string()
-	.pipe(
-		z.enum(['Direct', 'Gift', 'Agent', 'Patron', 'Unknown']).catch('Unknown'),
-	);
+export const ReaderTypeSchema = z.enum(['Direct', 'Gift']);
 export type ReaderType = z.infer<typeof ReaderTypeSchema>;
 
 // This defines the schema for the data we expect to receive in the acquisition event.
