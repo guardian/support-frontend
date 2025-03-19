@@ -541,7 +541,7 @@ export class SupportWorkers extends GuStack {
         this.stage
       } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
-        label: "AllTierThreeConversions",
+        label: "AllGuardianAdLiteConversions",
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
