@@ -319,6 +319,13 @@ export const PrintOptionsSchema = z
 	.nullable();
 export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
 
+export const ReaderTypeSchema = z
+	.string()
+	.pipe(
+		z.enum(['Direct', 'Gift', 'Agent', 'Patron', 'Unknown']).catch('Unknown'),
+	);
+export type ReaderType = z.infer<typeof ReaderTypeSchema>;
+
 // This defines the schema for the data we expect to receive in the acquisition event.
 export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.string(),
@@ -339,7 +346,7 @@ export const AcquisitionProductSchema = z.object({
 	queryParameters: z.object({ name: z.string(), value: z.string() }).array(),
 	reusedExistingPaymentMethod: z.boolean(),
 	acquisitionType: z.string(),
-	readerType: z.string(),
+	readerType: ReaderTypeSchema,
 	zuoraSubscriptionNumber: z.string().nullable(),
 	contributionId: z.string().nullable(),
 	paymentId: z.string().nullable(),
