@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { IsoCurrencySchema } from './currencySchema';
 
 export const ProductTypeSchema = z.enum([
 	'CONTRIBUTION',
