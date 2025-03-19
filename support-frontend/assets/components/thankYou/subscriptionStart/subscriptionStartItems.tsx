@@ -83,9 +83,12 @@ export function SubscriptionStartBodyCopy({
 			break;
 		}
 		case 'GuardianWeeklyDomestic':
-		case 'GuardianWeeklyRestOfWorld':
-		default: {
+		case 'GuardianWeeklyRestOfWorld': {
 			copy = [guardianWeeklyBodyHeading];
+			break;
+		}
+		default: {
+			copy = [{ heading: '', body: [''] }];
 		}
 	}
 	return (
