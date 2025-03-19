@@ -1,8 +1,8 @@
-import {
+import type { IsoCurrency } from './currencySchema';
+import type {
 	IsoCountry,
 	PaymentFrequency,
 	Product,
-	IsoCurrency,
 	PaymentProvider,
 	PrintOptions,
 	AcquisitionProduct,

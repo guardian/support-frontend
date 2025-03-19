@@ -275,16 +275,6 @@ export const IsoCountrySchema = z.enum([
 ]);
 export type IsoCountry = z.infer<typeof IsoCountrySchema>;
 
-export const IsoCurrencySchema = z.enum([
-	'GBP',
-	'USD',
-	'AUD',
-	'EUR',
-	'NZD',
-	'CAD',
-]);
-export type IsoCurrency = z.infer<typeof IsoCurrencySchema>;
-
 export const PaymentProviderSchema = z.enum([
 	'STRIPE',
 	'STRIPE_APPLE_PAY',
