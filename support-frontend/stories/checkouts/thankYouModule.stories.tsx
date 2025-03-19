@@ -317,11 +317,11 @@ SupportReminder.args = {
 	),
 };
 
-export const SubscriptionStartDelivery = Template.bind({});
+export const SubscriptionStartPaperDelivery = Template.bind({});
 
-SubscriptionStartDelivery.args = {
+SubscriptionStartPaperDelivery.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'Set a support reminder',
+	header: 'When will your subscription start?',
 	bodyCopy: (
 		<SubscriptionStartBodyCopy
 			productKey={'NationalDelivery'}
@@ -331,11 +331,11 @@ SubscriptionStartDelivery.args = {
 	ctas: null,
 };
 
-export const SubscriptionStartSubsCard = Template.bind({});
+export const SubscriptionStartPaperSubsCard = Template.bind({});
 
-SubscriptionStartSubsCard.args = {
+SubscriptionStartPaperSubsCard.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'Set a support reminder',
+	header: 'When will your subscription start?',
 	bodyCopy: (
 		<SubscriptionStartBodyCopy
 			productKey={'SubscriptionCard'}
@@ -349,10 +349,24 @@ export const SubscriptionStartGuardianWeekly = Template.bind({});
 
 SubscriptionStartGuardianWeekly.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'Set a support reminder',
+	header: 'When will your subscription start?',
 	bodyCopy: (
 		<SubscriptionStartBodyCopy
 			productKey={'GuardianWeeklyDomestic'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartTierThree = Template.bind({});
+
+SubscriptionStartTierThree.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'When will your subscription start?',
+	bodyCopy: (
+		<SubscriptionStartBodyCopy
+			productKey={'TierThree'}
 			startDate={'Friday, March 28, 2025'}
 		/>
 	),
