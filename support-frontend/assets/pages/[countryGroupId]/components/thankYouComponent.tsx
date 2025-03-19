@@ -186,7 +186,7 @@ export function ThankYouComponent({
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-	const isPrintProduct = printProductsKeys.includes(productKey);
+	const isPrint = printProductsKeys.includes(productKey);
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -248,11 +248,11 @@ export function ThankYouComponent({
 
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite && !isPrintProduct,
+			!isPending && isNotRegistered && !isGuardianAdLite && !isPrint,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isSignedIn && !isNotRegistered && !isGuardianAdLite && !isPrintProduct,
+			!isSignedIn && !isNotRegistered && !isGuardianAdLite && !isPrint,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
@@ -260,7 +260,7 @@ export function ThankYouComponent({
 			isTier3 && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3 || isPrintProduct, 'subscriptionStart'),
+		...maybeThankYouModule(isTier3 || isPrint, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
@@ -273,7 +273,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTier3 && !isGuardianAdLite && !isPrintProduct,
+			!isTier3 && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
 		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
