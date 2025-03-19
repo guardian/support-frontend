@@ -117,7 +117,7 @@ function Subheading({
 		'HomeDelivery',
 		'SubscriptionCard',
 	];
-	const isPaperProduct = paperProductsKeys.includes(productKey);
+	const isPaper = paperProductsKeys.includes(productKey);
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
@@ -130,14 +130,14 @@ function Subheading({
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
-			{isPending && !isPaperProduct && pendingCopy()}
+			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}
 						isTier3={isTier3}
-						isPaper={isPaperProduct}
+						isPaper={isPaper}
 					/>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
