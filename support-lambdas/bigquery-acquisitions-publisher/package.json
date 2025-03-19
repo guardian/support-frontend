@@ -4,6 +4,7 @@
 	"main": "index.js",
 	"license": "MIT",
 	"scripts": {
+		"tsc": "tsc --noEmit",
 		"test": "vitest --run",
 		"test-watch": "vitest",
 		"build": "esbuild --bundle --platform=node --target=node20 --outfile=target/typescript/index.js typescript/index.ts"
