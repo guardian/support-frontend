@@ -37,15 +37,10 @@ const container = css`
 	}
 `;
 
-const termsTierThree = (linkText: string) => (
-	<a href={tierThreeTermsLink}>{linkText}</a>
-);
-
-const termsSupporterPlus = (linkText: string) => (
-	<a href={supporterPlusTermsLink}>{linkText}</a>
-);
-const termsGuardianAdLite = (linkText: string) => (
-	<a href={guardianAdLiteTermsLink}>{linkText}</a>
+const termsLink = (linkText: string, url: string) => (
+	<a target="_blank" rel="noopener noreferrer" href={url}>
+		{linkText}
+	</a>
 );
 
 const frequencySingular = (contributionType: ContributionType) =>
@@ -53,18 +48,12 @@ const frequencySingular = (contributionType: ContributionType) =>
 const frequencyPlural = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
-const termsLink = (linkText: string, url: string) => (
-	<a target="_blank" rel="noopener noreferrer" href={url}>
-		{linkText}
-	</a>
-);
-
-export function TsAndCsFooterLinks({
-	countryGroupId,
+export function FooterTsAndCs({
 	productKey,
+	countryGroupId,
 }: {
-	countryGroupId: CountryGroupId;
 	productKey: ActiveProductKey;
+	countryGroupId: CountryGroupId;
 }) {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 	const getProductNameSummary = (): string => {
@@ -78,18 +67,18 @@ export function TsAndCsFooterLinks({
 		}
 	};
 	const getProductTerms = (): JSX.Element => {
-		const termsContributions = (
-			<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
-		);
 		switch (productKey) {
 			case 'GuardianAdLite':
-				return termsGuardianAdLite('Terms');
+				return termsLink('Terms', guardianAdLiteTermsLink);
 			case 'SupporterPlus':
-				return termsSupporterPlus('Terms and Conditions');
+				return termsLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
-				return termsTierThree('Terms');
+				return termsLink('Terms', tierThreeTermsLink);
 			default:
-				return termsContributions;
+				return termsLink(
+					'Terms and Conditions',
+					contributionsTermsLinks[countryGroupId],
+				);
 		}
 	};
 	return (
@@ -131,9 +120,9 @@ export function PaymentTsAndCs({
 					promotion={promotion}
 					thresholdAmount={thresholdAmount}
 				/>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
+				<FooterTsAndCs
 					productKey={productKey}
+					countryGroupId={countryGroupId}
 				/>
 			</FinePrint>
 		</div>
@@ -163,7 +152,7 @@ function PaymentTsAndCsComponent({
 					Cancellation of your subscription after 14 days will take effect at
 					the end of your current monthly payment period. To cancel, go to{' '}
 					{ManageMyAccountLink} or see our Guardian Ad-Lite{' '}
-					{termsGuardianAdLite('Terms')}.
+					{termsLink('Terms', guardianAdLiteTermsLink)}.
 				</div>
 			);
 		case 'DigitalSubscription':
@@ -211,7 +200,8 @@ function PaymentTsAndCsComponent({
 					any contribution) or cancellation of your contribution made after 14
 					days will take effect at the end of your current{' '}
 					{frequencyPlural(contributionType)} payment period. To cancel, go to{' '}
-					{ManageMyAccountLink} or see our {termsSupporterPlus('Terms')}.
+					{ManageMyAccountLink} or see our{' '}
+					{termsLink('Terms', supporterPlusTermsLink)}.
 				</div>
 			);
 		case 'TierThree':

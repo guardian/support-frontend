@@ -79,7 +79,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
@@ -876,9 +876,9 @@ export function OneTimeCheckoutComponent({
 						)}
 						<div css={tcContainer}>
 							<FinePrint mobileTheme={'dark'}>
-								<TsAndCsFooterLinks
-									countryGroupId={countryGroupId}
+								<FooterTsAndCs
 									productKey={'OneTimeContribution'}
+									countryGroupId={countryGroupId}
 								/>
 							</FinePrint>
 						</div>
