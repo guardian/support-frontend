@@ -1,22 +1,17 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
-export const setTestUserConfirmRequiredDetails = async (
+export const setTestUserDetails = async (
 	page: Page,
 	email: string,
 	firstName?: string,
 	lastName?: string,
-) => {
-	await setTestUserRequiredDetails(page, email, firstName, lastName);
-	await setTestConfirmEmail(page, email);
-};
-export const setTestUserRequiredDetails = async (
-	page: Page,
-	email: string,
-	firstName?: string,
-	lastName?: string,
+	confirmEmail?: boolean,
 ) => {
 	await page.getByLabel('Email address', { exact: true }).fill(email);
+	if (confirmEmail) {
+		await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	}
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
@@ -24,21 +19,19 @@ export const setTestUserRequiredDetails = async (
 		await page.getByLabel('Last name').fill(lastName);
 	}
 };
-const setTestConfirmEmail = async (page: Page, email: string) => {
-	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
-};
 
-export const setTestUserDetails = async (
+export const setTestUserAddressDetails = async (
 	page: Page,
 	testFields: TestFields,
 	internationalisationId: string,
 	tier: number,
 ) => {
-	await setTestUserConfirmRequiredDetails(
+	await setTestUserDetails(
 		page,
 		testFields.email,
 		testFields.firstName,
 		testFields.lastName,
+		true, // confirmEmail required
 	);
 
 	if (testFields.addresses && testFields.addresses.length > 1) {

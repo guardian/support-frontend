@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/models';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
@@ -15,13 +16,13 @@ import {
 	getProductPrice,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
-import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
-import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
@@ -149,6 +150,7 @@ const copy: Record<
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
+	abParticipations: Participations,
 ): Product[] =>
 	ActivePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
@@ -176,7 +178,12 @@ const getPlans = (
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+			href: paperCheckoutUrl(
+				fulfilmentOption,
+				productOption,
+				abParticipations,
+				promoCode,
+			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe',
@@ -197,18 +204,20 @@ type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	abParticipations: Participations;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
+	abParticipations,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(tab, productPrices);
+	const products = getPlans(tab, productPrices, abParticipations);
 	return (
 		<PaperPrices
 			activeTab={tab}

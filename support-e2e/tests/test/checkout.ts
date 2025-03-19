@@ -1,14 +1,14 @@
 import { expect, Page, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import {
-	setTestUserDetails,
-	setTestUserConfirmRequiredDetails,
-} from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
+import {
+	setTestUserAddressDetails,
+	setTestUserDetails,
+} from '../utils/testUserDetails';
 
 // TODO: it'd be great to make the types here more specific, possibly using the
 // shared types from the product catalog.
@@ -27,12 +27,7 @@ const setUserDetailsForProduct = async (
 	switch (product) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
-			await setTestUserConfirmRequiredDetails(
-				page,
-				email(),
-				firstName(),
-				lastName(),
-			);
+			await setTestUserDetails(page, email(), firstName(), lastName(), true);
 
 			break;
 		case 'TierThree':
@@ -45,7 +40,12 @@ const setUserDetailsForProduct = async (
 					`Couldn't find user details for ${product} in ${internationalisationId}`,
 				);
 			}
-			await setTestUserDetails(page, userDetails, internationalisationId, 3);
+			await setTestUserAddressDetails(
+				page,
+				userDetails,
+				internationalisationId,
+				3,
+			);
 
 			break;
 		default:
