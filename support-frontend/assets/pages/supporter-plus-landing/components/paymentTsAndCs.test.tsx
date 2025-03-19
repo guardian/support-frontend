@@ -20,7 +20,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					contributionType={'MONTHLY'}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
-					supporterPlusPrice={12}
+					thresholdAmount={12}
 				/>,
 			);
 			expect(container).toMatchSnapshot();

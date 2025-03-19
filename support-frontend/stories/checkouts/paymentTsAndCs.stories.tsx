@@ -49,7 +49,7 @@ SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
-	supporterPlusPrice: 12,
+	thresholdAmount: 12,
 };
 
 export const TierThree = Template.bind({});
@@ -57,5 +57,5 @@ TierThree.args = {
 	productKey: 'TierThree',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
-	supporterPlusPrice: 12,
+	thresholdAmount: 12,
 };

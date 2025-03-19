@@ -541,7 +541,11 @@ export function CheckoutComponent({
 			? 'ANNUAL'
 			: 'ONE_OFF';
 
-	const supporterPlusPrice = getLowerProductBenefitThreshold(
+	/*
+  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+          We should revisit this and see if we can remove this prop, pushing it lower down the tree
+  */
+	const thresholdAmount = getLowerProductBenefitThreshold(
 		contributionType,
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
@@ -594,7 +598,7 @@ export function CheckoutComponent({
 							countryGroupId,
 							contributionType,
 							productFields.productType,
-							supporterPlusPrice,
+							thresholdAmount,
 							promotion,
 						)}
 						headerButton={
@@ -1287,7 +1291,7 @@ export function CheckoutComponent({
 							contributionType={contributionType}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
-							supporterPlusPrice={supporterPlusPrice}
+							thresholdAmount={thresholdAmount}
 						/>
 					</BoxContents>
 				</Box>
