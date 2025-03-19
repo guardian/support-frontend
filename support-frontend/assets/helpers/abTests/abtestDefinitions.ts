@@ -24,6 +24,7 @@ export const pageUrlRegexes = {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
+			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
@@ -95,27 +96,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	oneTimeConfirmEmail: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
-		excludeContributionsOnlyCountries: false,
-	},
 	digitalEditionCheckout: {
 		variants: [
 			{
@@ -138,6 +118,30 @@ export const tests: Tests = {
 			// uk will ensure we match the generic checkout
 			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
 		targetPage: '/subscribe$',
+		excludeContributionsOnlyCountries: true,
+	},
+	newspaperGenericCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 9,
+		targetPage: pageUrlRegexes.subscriptions.paper.paperLandingPage,
+		persistPage:
+			// match generic checkout & thank you page
+			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
 };

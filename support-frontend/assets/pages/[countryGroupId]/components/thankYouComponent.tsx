@@ -11,11 +11,6 @@ import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	filterBenefitByRegion,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
-} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -34,7 +29,10 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
+import { getSettings } from '../../../helpers/globalsAndSwitches/globals';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -202,26 +200,35 @@ export function ThankYouComponent({
 	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
 	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
 
-	let benefitsChecklist;
-	if (isTier) {
-		const productDescription = showNewspaperArchiveBenefit
-			? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-			: productCatalogDescription[productKey];
-		benefitsChecklist = [
-			...productDescription.benefits
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (isTier) {
+			const landingPageSettings = getLandingPageVariant(
+				abParticipations,
+				getSettings().landingPageTests,
+			);
+			// Also show SupporterPlus benefits for TierThree
+			const tierThreeAdditionalBenefits =
+				productKey === 'TierThree'
+					? landingPageSettings.products.SupporterPlus.benefits.map(
+							(benefit) => ({
+								isChecked: true,
+								text: benefit.copy,
+							}),
+					  )
+					: [];
+			return [
+				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
 					isChecked: true,
 					text: benefit.copy,
 				})),
-			...(productDescription.benefitsAdditional ?? [])
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-		];
-	}
+				...tierThreeAdditionalBenefits,
+			];
+		}
+		return [];
+	};
+
+	const benefitsChecklist = getBenefits();
 
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,

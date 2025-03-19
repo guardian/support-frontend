@@ -42,10 +42,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import {
-	productCatalog,
-	productCatalogDescriptionNewspaperArchive,
-} from 'helpers/productCatalog';
+import { productCatalog } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -57,6 +54,7 @@ import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
 import { SupportOnce } from '../components/supportOnce';
+import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import { TickerContainer } from './tickerContainer';
@@ -349,13 +347,6 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	const inNewsPaperArchiveBenefit = ['v1', 'v2'].includes(
-		abParticipations.newspaperArchiveBenefit ?? '',
-	);
-	const productCatalogDescription = productCatalogDescriptionNewspaperArchive(
-		inNewsPaperArchiveBenefit ? countryGroupId : undefined,
-	);
-
 	/**
 	 * Tier 1: Contributions
 	 * We use the amounts from RRCP to populate the Contribution tier
@@ -381,15 +372,14 @@ export function ThreeTierLanding({
 	});
 	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
 
-	const tier1Card = {
-		productDescription: productCatalogDescription.Contribution,
+	const tier1Card: CardContent = {
+		product: 'Contribution',
 		price: recurringAmount,
 		link: tier1Link,
 		isUserSelected:
 			urlSearchParamsProduct === 'Contribution' ||
 			isCardUserSelected(recurringAmount),
-		isRecommended: false,
-		ctaCopy: 'Support',
+		...settings.products.Contribution,
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -413,18 +403,16 @@ export function ThreeTierLanding({
 		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
 	}
 	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
-	const tier2Card = {
-		productDescription: productCatalogDescription.SupporterPlus,
+	const tier2Card: CardContent = {
+		product: 'SupporterPlus',
 		price: tier2Pricing,
 		link: tier2Url,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion: promotionTier2,
-		isRecommended: true,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
 			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
-		ctaCopy: 'Support',
-		lozengeText: 'Recommended',
+		...settings.products.SupporterPlus,
 	};
 
 	/**
@@ -479,16 +467,15 @@ export function ThreeTierLanding({
 	if (promotionTier3) {
 		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
 	}
-	const tier3Card = {
-		productDescription: productCatalogDescription.TierThree,
+	const tier3Card: CardContent = {
+		product: 'TierThree',
 		price: tier3Pricing,
 		link: `checkout?${tier3UrlParams.toString()}`,
 		promotion: promotionTier3,
-		isRecommended: false,
 		isUserSelected:
 			urlSearchParamsProduct === 'TierThree' ||
 			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
-		ctaCopy: 'Support',
+		...settings.products.TierThree,
 	};
 
 	const showNewspaperArchiveBanner =
@@ -539,11 +526,11 @@ export function ThreeTierLanding({
 						<ThreeTierTsAndCs
 							tsAndCsContent={[
 								{
-									title: tier1Card.productDescription.label,
+									title: tier1Card.title,
 									planCost: getPlanCost(tier1Card.price, contributionType),
 								},
 								{
-									title: tier2Card.productDescription.label,
+									title: tier2Card.title,
 									planCost: getPlanCost(
 										tier2Card.price,
 										contributionType,
@@ -557,7 +544,7 @@ export function ThreeTierLanding({
 										: undefined,
 								},
 								{
-									title: tier3Card.productDescription.label,
+									title: tier3Card.title,
 									planCost: getPlanCost(
 										tier3Card.price,
 										contributionType,
@@ -629,9 +616,7 @@ export function ThreeTierLanding({
 						<ThreeTierCards
 							cardsContent={[tier1Card, tier2Card, tier3Card]}
 							currencyId={currencyId}
-							countryGroupId={countryGroupId}
 							paymentFrequency={contributionType}
-							abParticipations={abParticipations}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <LandingPageBanners />}
