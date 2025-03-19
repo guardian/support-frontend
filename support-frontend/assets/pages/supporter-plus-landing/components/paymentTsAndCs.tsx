@@ -99,7 +99,7 @@ export function PaymentTsAndCs({
 	contributionType,
 	countryGroupId,
 	promotion,
-	thresholdAmount,
+	thresholdAmount = 0,
 	mobileTheme = 'dark',
 }: PaymentTsAndCsProps): JSX.Element {
 	const inDigitalEdition = productKey === 'DigitalSubscription';
@@ -126,7 +126,7 @@ export function PaymentTsAndCs({
 						countryGroupId,
 						contributionType,
 						' per ',
-						thresholdAmount ?? 0,
+						thresholdAmount,
 						promotion,
 					)}
 					, you will receive the {productLabel} benefits on a subscription
