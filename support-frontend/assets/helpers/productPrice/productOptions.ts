@@ -35,7 +35,13 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday;
 
-const ActivePaperProductTypes = [Everyday, Weekend, Saturday, Sunday] as const;
+const ActivePaperProductTypes = [
+	Everyday,
+	Weekend,
+	Saturday,
+	Sixday,
+	Sunday,
+] as const;
 
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
