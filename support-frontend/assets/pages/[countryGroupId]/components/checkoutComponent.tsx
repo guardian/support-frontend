@@ -1169,10 +1169,10 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
+							productKey={productKey}
 							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
-							productKey={productKey}
 						/>
 						<div
 							css={css`

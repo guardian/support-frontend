@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import type { SerializedStyles } from '@emotion/utils';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
@@ -52,7 +51,6 @@ export interface SummaryTsAndCsProps {
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	amount: number;
-	cssOverrides?: SerializedStyles;
 }
 
 export function SummaryTsAndCs({
@@ -60,10 +58,9 @@ export function SummaryTsAndCs({
 	contributionType,
 	currency,
 	amount,
-	cssOverrides,
 }: SummaryTsAndCsProps): JSX.Element {
 	return (
-		<div css={[containerSummaryTsCs, cssOverrides]}>
+		<div css={containerSummaryTsCs}>
 			<SummaryTsAndCsComponent
 				contributionType={contributionType}
 				currency={currency}
