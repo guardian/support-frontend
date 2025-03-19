@@ -40,6 +40,7 @@ const container = css`
 const termsTierThree = (linkText: string) => (
 	<a href={tierThreeTermsLink}>{linkText}</a>
 );
+
 const termsSupporterPlus = (linkText: string) => (
 	<a href={supporterPlusTermsLink}>{linkText}</a>
 );

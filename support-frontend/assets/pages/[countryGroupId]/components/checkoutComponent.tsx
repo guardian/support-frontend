@@ -5,6 +5,7 @@ import {
 	Label,
 	Radio,
 	RadioGroup,
+	TextArea,
 	TextInput,
 } from '@guardian/source/react-components';
 import {
@@ -51,7 +52,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -78,6 +79,9 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
+import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
+
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -187,6 +191,67 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
+	};
+
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
+			const landingPageSettings = getLandingPageVariant(
+				abParticipations,
+				getSettings().landingPageTests,
+			);
+			if (productKey === 'Contribution') {
+				// Also show SupporterPlus benefits greyed out
+				return [
+					...landingPageSettings.products.Contribution.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: false,
+							text: benefit.copy,
+							maybeGreyedOut: css`
+								color: ${palette.neutral[60]};
+								svg {
+									fill: ${palette.neutral[60]};
+								}
+							`,
+						}),
+					),
+				];
+			} else if (productKey === 'SupporterPlus') {
+				return landingPageSettings.products.SupporterPlus.benefits.map(
+					(benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					}),
+				);
+			} else if (productKey === 'TierThree') {
+				// Also show SupporterPlus benefits
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			}
+		}
+		return productDescription.benefits
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
+			.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
 	};
 
 	/** Delivery agent for National Delivery product */
@@ -303,6 +368,9 @@ export function CheckoutComponent({
 	const [lastName, setLastName] = useState(user?.lastName ?? '');
 	const [email, setEmail] = useState(user?.email ?? '');
 	const [confirmedEmail, setConfirmedEmail] = useState('');
+
+	/** Delivery Instructions */
+	const [deliveryInstructions, setDeliveryInstructions] = useState('');
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -479,6 +547,7 @@ export function CheckoutComponent({
 		countryGroupId,
 		productKey,
 	);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -507,45 +576,7 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={[
-							...productDescription.benefits
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsAdditional ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsMissing ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.map((benefit) => ({
-									isChecked: false,
-									text: benefit.copy,
-									maybeGreyedOut: css`
-										color: ${palette.neutral[60]};
-
-										svg {
-											fill: ${palette.neutral[60]};
-										}
-									`,
-								})),
-						]}
+						checkListData={getBenefits()}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
@@ -734,7 +765,6 @@ export function CheckoutComponent({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
-								requireConfirmedEmail={true}
 								isSignedIn={isSignedIn}
 							/>
 
@@ -872,7 +902,27 @@ export function CheckoutComponent({
 										}}
 									/>
 								</fieldset>
-
+								{productKey === 'HomeDelivery' && (
+									<fieldset
+										css={css`
+											margin-bottom: ${space[6]}px;
+										`}
+									>
+										<TextArea
+											id="deliveryInstructions"
+											data-qm-masking="blocklist"
+											name="deliveryInstructions"
+											label="Delivery instructions"
+											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+											onChange={(event) => {
+												setDeliveryInstructions(event.target.value);
+											}}
+											value={deliveryInstructions}
+											optional
+										/>
+									</fieldset>
+								)}
 								<fieldset
 									css={css`
 										margin-bottom: ${space[6]}px;

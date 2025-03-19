@@ -19,7 +19,7 @@ export const productLegal = (
 
 	if (promotion) {
 		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
-		const promoPrice = promotion.discountedPrice ?? amount;
+		const promoPrice = promotion.discountedPrice ?? thresholdAmount;
 		const promoPriceFormatted = simpleFormatAmount(currency, promoPrice);
 		const discountDuration = promotion.numberOfDiscountedPeriods ?? 0;
 		return `${promoPriceFormatted}${divider}${period} for the first ${

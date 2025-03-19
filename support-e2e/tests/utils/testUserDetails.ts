@@ -1,14 +1,17 @@
 import { Page } from '@playwright/test';
 import { TestFields } from './userFields';
 
-export const setTestUserRequiredDetails = async (
+export const setTestUserDetails = async (
 	page: Page,
 	email: string,
 	firstName?: string,
 	lastName?: string,
+	confirmEmail?: boolean,
 ) => {
 	await page.getByLabel('Email address', { exact: true }).fill(email);
-	await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	if (confirmEmail) {
+		await page.getByLabel('Confirm email address', { exact: true }).fill(email);
+	}
 	if (firstName) {
 		await page.getByLabel('First name').fill(firstName);
 	}
@@ -17,17 +20,18 @@ export const setTestUserRequiredDetails = async (
 	}
 };
 
-export const setTestUserDetails = async (
+export const setTestUserAddressDetails = async (
 	page: Page,
 	testFields: TestFields,
 	internationalisationId: string,
 	tier: number,
 ) => {
-	await setTestUserRequiredDetails(
+	await setTestUserDetails(
 		page,
 		testFields.email,
 		testFields.firstName,
 		testFields.lastName,
+		true, // confirmEmail required
 	);
 
 	if (testFields.addresses && testFields.addresses.length > 1) {
