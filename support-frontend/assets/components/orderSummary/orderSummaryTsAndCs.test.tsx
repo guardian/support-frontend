@@ -1,22 +1,20 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { PaymentTsAndCs } from './paymentTsAndCs';
+import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const paymentProductKeys = [
+		['GuardianAdLite', 'GBPCountries', 0],
 		['Contribution', 'UnitedStates', 0],
 		['SupporterPlus', 'GBPCountries', 12],
-		['TierThree', 'GBPCountries', 27],
-		['OneTimeContribution', 'AUDCountries', 0],
-		['GuardianAdLite', 'GBPCountries', 0],
-		['DigitalSubscription', 'GBPCountries', 0],
+		['TierThree', 'AUDCountries', 27],
 	];
 	it.each(paymentProductKeys)(
-		`paymentTs&Cs render product %s for region %s correctly`,
+		`orderSummaryTs&Cs render product %s for region %s correctly`,
 		(paymentProductKey, countryGroupId, amount) => {
 			const { container } = render(
-				<PaymentTsAndCs
+				<OrderSummaryTsAndCs
 					contributionType={'MONTHLY'}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}

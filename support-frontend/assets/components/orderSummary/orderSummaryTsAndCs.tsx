@@ -36,19 +36,19 @@ export function OrderSummaryStartDate({
 	return orderSummaryStartDate[productKey] ?? <></>;
 }
 
-interface OrderSummaryTsAndCsProps {
+export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
-	thresholdAmount: number;
 	promotion?: Promotion;
+	thresholdAmount?: number;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
 	contributionType,
 	countryGroupId,
-	thresholdAmount,
 	promotion,
+	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element {
 	// Proceeds with RegularContributionType only
 	if (contributionType === 'ONE_OFF') {

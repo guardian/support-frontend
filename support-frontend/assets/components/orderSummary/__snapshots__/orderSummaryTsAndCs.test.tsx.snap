@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region UnitedStates correctly 1`] = `
+<div>
+  <div
+    class="css-y3m96y-OrderSummaryTsAndCs"
+  >
+    <p>
+      Auto renews every 
+      month
+       until you cancel.
+    </p>
+    <p>
+      Cancel or change your support anytime.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-y3m96y-OrderSummaryTsAndCs"
+  >
+    <p>
+      Auto renews every 
+      month
+       until you cancel.
+    </p>
+    <p>
+      Cancel anytime.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-y3m96y-OrderSummaryTsAndCs"
+  >
+    <p>
+      Auto renews every 
+      month
+       until you cancel.
+    </p>
+    <p>
+      Cancel or change your support anytime. If you cancel within the first 14 days, you will receive a full refund.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region AUDCountries correctly 1`] = `
+<div>
+  <div
+    class="css-y3m96y-OrderSummaryTsAndCs"
+  >
+    <p>
+      Auto renews every 
+      month
+      . Cancel anytime.
+    </p>
+  </div>
+</div>
+`;

@@ -1,40 +1,26 @@
 import {
-	PaymentTsAndCs,
-	PaymentTsAndCsProps,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+	OrderSummaryTsAndCs,
+	OrderSummaryTsAndCsProps,
+} from 'components/orderSummary/orderSummaryTsAndCs';
 
 export default {
-	title: 'Checkouts/Ts&Cs Payment',
-	component: PaymentTsAndCs,
+	title: 'Checkouts/Ts&Cs Order Summary',
+	component: OrderSummaryTsAndCs,
 	argTypes: {},
 	decorators: [],
 };
 
-function Template(args: PaymentTsAndCsProps) {
-	return <PaymentTsAndCs {...args} />;
+function Template(args: OrderSummaryTsAndCsProps) {
+	return <OrderSummaryTsAndCs {...args} />;
 }
 
-Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
-
-export const DigitalSubscription = Template.bind({});
-DigitalSubscription.args = {
-	productKey: 'DigitalSubscription',
-	contributionType: 'MONTHLY',
-	countryGroupId: 'GBPCountries',
-};
+Template.args = {} as Omit<OrderSummaryTsAndCsProps, ''>;
 
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
-};
-
-export const OneTimeContribution = Template.bind({});
-OneTimeContribution.args = {
-	productKey: 'OneTimeContribution',
-	contributionType: 'ONE_OFF',
-	countryGroupId: 'AUDCountries',
 };
 
 export const Contribution = Template.bind({});
