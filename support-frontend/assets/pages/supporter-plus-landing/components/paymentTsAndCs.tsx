@@ -113,6 +113,9 @@ export function PaymentTsAndCs({
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
+	const testString = 'test';
+	console.log(testString);
+
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
 		promotion?: Promotion,
