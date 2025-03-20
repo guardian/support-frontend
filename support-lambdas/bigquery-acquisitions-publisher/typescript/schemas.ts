@@ -323,6 +323,9 @@ export const ReaderTypeSchema = z.enum(['Direct', 'Gift']);
 export type ReaderType = z.infer<typeof ReaderTypeSchema>;
 
 // This defines the schema for the data we expect to receive in the acquisition event.
+// It should be kept in sync with the AcquisitionDataRow Scala case class used
+// to generate the event:
+// https://github.com/guardian/support-frontend/blob/main/support-modules/acquisition-events/src/main/scala/com/gu/support/acquisitions/models/AcquisitionDataRow.scala#L15
 export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.string(),
 	country: IsoCountrySchema,
