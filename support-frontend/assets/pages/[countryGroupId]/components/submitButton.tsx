@@ -116,6 +116,18 @@ export function SubmitButton({
 					/>
 				</>
 			) : null;
+
+		case 'StripeHostedCheckout':
+			return (
+				<DefaultPaymentButton
+					buttonText="Continue to payment"
+					onClick={(event) => {
+						event.preventDefault();
+						console.log('StripeHostedCheckout not supported yet');
+					}}
+					type="submit"
+				/>
+			);
 		default:
 			return (
 				<DefaultPaymentButton
