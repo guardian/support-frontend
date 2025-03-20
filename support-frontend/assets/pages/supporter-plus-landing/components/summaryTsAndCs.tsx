@@ -9,7 +9,10 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
-import TsAndCsRenewal from './TsAndCsRenewal';
+import {
+	getDateWithOrdinal,
+	getLongMonth,
+} from 'helpers/utilities/dateFormatting';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -25,6 +28,15 @@ const containerSummaryTsCs = css`
 
 const frequencySingular = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'month' : 'year';
+
+const getRenewalFrequency = (contributionType: ContributionType) => {
+	const today = new Date();
+	return contributionType === 'ANNUAL'
+		? `on the ${getDateWithOrdinal(today)} day of ${getLongMonth(
+				today,
+		  )} every year`
+		: `on the ${getDateWithOrdinal(today)} day of every month`;
+};
 
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
@@ -67,10 +79,10 @@ function SummaryTsAndCsComponent({
 			return (
 				<div>
 					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
+					{getRenewalFrequency(contributionType)}, from now until you cancel
+					your payment. Payments may take up to 6 days to be recorded in your
+					bank account. You can change how much you give or cancel your payment
+					at any time.
 				</div>
 			);
 		case 'SupporterPlus':
