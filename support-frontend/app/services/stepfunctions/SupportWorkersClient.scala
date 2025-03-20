@@ -97,16 +97,15 @@ class SupportWorkersClient(
   private val underlying = Client(arn)
 
   private def referrerAcquisitionDataWithGAFields(
-      request: Request[CreateSupportWorkersRequest],
+      request: CreateSupportWorkersRequest,
+      ipAddress: String,
+      host: String,
+      userAgent: String,
   ): ReferrerAcquisitionData = {
-    val hostname = request.host
-    val gaClientId = request.cookies.get("_ga").map(_.value)
-    val userAgent = request.headers.get("user-agent")
-    val ipAddress = request.remoteAddress
-    request.body.referrerAcquisitionData.copy(
-      hostname = Some(hostname),
-      gaClientId = gaClientId,
-      userAgent = userAgent,
+    request.referrerAcquisitionData.copy(
+      hostname = Some(host),
+      gaClientId = None,
+      userAgent = Some(userAgent),
       ipAddress = Some(ipAddress),
     )
   }
@@ -127,38 +126,40 @@ class SupportWorkersClient(
     }
 
   def createSubscription(
-      request: Request[CreateSupportWorkersRequest],
+      request: CreateSupportWorkersRequest,
       user: User,
       requestId: UUID,
+      ipAddress: String,
+      userAgent: String,
+      host: String,
   ): EitherT[Future, String, StatusResponse] = {
     for {
       giftRecipient <- EitherT.fromEither[Future](
-        request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence,
+        request.giftRecipient.map(getGiftRecipient(_, request.product)).sequence,
       )
       createPaymentMethodState = CreatePaymentMethodState(
         requestId = requestId,
         user = user,
         giftRecipient = giftRecipient,
-        product = request.body.product,
+        product = request.product,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
-          PaymentProvider.fromPaymentFields(request.body.paymentFields),
+          PaymentProvider.fromPaymentFields(request.paymentFields),
         ),
-        paymentFields = request.body.paymentFields,
+        paymentFields = request.paymentFields,
         acquisitionData = Some(
           AcquisitionData(
-            ophanIds = request.body.ophanIds,
-            referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request),
-            supportAbTests = request.body.supportAbTests,
+            ophanIds = request.ophanIds,
+            referrerAcquisitionData = referrerAcquisitionDataWithGAFields(request, ipAddress, host, userAgent),
+            supportAbTests = request.supportAbTests,
           ),
         ),
-        appliedPromotion = request.body.appliedPromotion,
-        csrUsername = request.body.csrUsername,
-        salesforceCaseId = request.body.salesforceCaseId,
-        firstDeliveryDate = request.body.firstDeliveryDate,
-        userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
-        ipAddress =
-          request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+        appliedPromotion = request.appliedPromotion,
+        csrUsername = request.csrUsername,
+        salesforceCaseId = request.salesforceCaseId,
+        firstDeliveryDate = request.firstDeliveryDate,
+        userAgent = userAgent,
+        ipAddress = ipAddress,
       )
       isExistingAccount = createPaymentMethodState.paymentFields match {
         case _: ExistingPaymentFields => true

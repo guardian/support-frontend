@@ -46,6 +46,7 @@ const OrderSchema = object({
 		'StripeExpressCheckoutElement',
 		'PayPal',
 		'DirectDebit',
+		'StripeCheckout',
 		'Sepa',
 		'None',
 	]),
