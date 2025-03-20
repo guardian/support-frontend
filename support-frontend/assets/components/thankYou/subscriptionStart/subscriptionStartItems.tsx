@@ -85,7 +85,7 @@ export function SubscriptionStartItems({
 					<p>
 						Please ensure you are signed in on all your devices to enjoy all
 						your benefits, including unlimited app access and uninterrupted
-						ad-free reading..
+						ad-free reading.
 					</p>
 				</div>
 			</>
