@@ -44,52 +44,48 @@ export interface SummaryTsAndCsProps {
 	currency: IsoCurrency;
 	amount: number;
 }
-
 export function SummaryTsAndCs({
 	productKey,
 	contributionType,
 	currency,
 	amount,
-}: SummaryTsAndCsProps): JSX.Element | null {
+}: SummaryTsAndCsProps): JSX.Element {
 	const amountWithCurrency = formatAmount(
 		currencies[currency],
 		spokenCurrencies[currency],
 		amount,
 		false,
 	);
-	switch (productKey) {
-		case 'Contribution':
-			return (
-				<div css={containerSummaryTsCs}>
-					We will attempt to take payment of {amountWithCurrency},{' '}
-					{getRenewalFrequency(contributionType)}, from now until you cancel
-					your payment. Payments may take up to 6 days to be recorded in your
-					bank account. You can change how much you give or cancel your payment
-					at any time.
-				</div>
-			);
-		case 'SupporterPlus':
-			return (
-				<div css={containerSummaryTsCs}>
-					The {productCatalogDescription[productKey].label} subscription and any
-					contribution will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription and contribution amounts using your chosen payment method
-					at each renewal, at the rate then in effect, unless you cancel.
-				</div>
-			);
-		case 'TierThree':
-		case 'GuardianAdLite':
-			return (
-				<div css={containerSummaryTsCs}>
-					The {productCatalogDescription[productKey].label} subscription
-					{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription amount using your chosen payment method at each renewal,
-					at the rate then in effect, unless you cancel.
-				</div>
-			);
-		default:
-			return null;
-	}
+	const summaryTsAndCsTierThreeGuardianAdLite = (
+		<div css={containerSummaryTsCs}>
+			The {productCatalogDescription[productKey].label} subscription
+			{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
+			{frequencySingular(contributionType)}. You will be charged the
+			subscription amount using your chosen payment method at each renewal, at
+			the rate then in effect, unless you cancel.
+		</div>
+	);
+	const summaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
+		Contribution: (
+			<div css={containerSummaryTsCs}>
+				We will attempt to take payment of {amountWithCurrency},{' '}
+				{getRenewalFrequency(contributionType)}, from now until you cancel your
+				payment. Payments may take up to 6 days to be recorded in your bank
+				account. You can change how much you give or cancel your payment at any
+				time.
+			</div>
+		),
+		SupporterPlus: (
+			<div css={containerSummaryTsCs}>
+				The {productCatalogDescription[productKey].label} subscription and any
+				contribution will auto-renew each {frequencySingular(contributionType)}.
+				You will be charged the subscription and contribution amounts using your
+				chosen payment method at each renewal, at the rate then in effect,
+				unless you cancel.
+			</div>
+		),
+		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
+		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
+	};
+	return summaryTsAndCs[productKey] ?? <></>;
 }
