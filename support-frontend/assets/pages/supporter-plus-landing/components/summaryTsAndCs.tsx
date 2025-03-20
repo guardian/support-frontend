@@ -50,35 +50,18 @@ export function SummaryTsAndCs({
 	contributionType,
 	currency,
 	amount,
-}: SummaryTsAndCsProps): JSX.Element {
-	return (
-		<div css={containerSummaryTsCs}>
-			<SummaryTsAndCsComponent
-				contributionType={contributionType}
-				currency={currency}
-				amount={amount}
-				productKey={productKey}
-			/>
-		</div>
-	);
-}
-function SummaryTsAndCsComponent({
-	contributionType,
-	currency,
-	amount,
-	productKey,
-}: SummaryTsAndCsProps): JSX.Element {
-	const amountCopy = ` of ${formatAmount(
+}: SummaryTsAndCsProps): JSX.Element | null {
+	const amountWithCurrency = formatAmount(
 		currencies[currency],
 		spokenCurrencies[currency],
 		amount,
 		false,
-	)}`;
+	);
 	switch (productKey) {
 		case 'Contribution':
 			return (
-				<div>
-					We will attempt to take payment{amountCopy},{' '}
+				<div css={containerSummaryTsCs}>
+					We will attempt to take payment of {amountWithCurrency},{' '}
 					{getRenewalFrequency(contributionType)}, from now until you cancel
 					your payment. Payments may take up to 6 days to be recorded in your
 					bank account. You can change how much you give or cancel your payment
@@ -87,7 +70,7 @@ function SummaryTsAndCsComponent({
 			);
 		case 'SupporterPlus':
 			return (
-				<div>
+				<div css={containerSummaryTsCs}>
 					The {productCatalogDescription[productKey].label} subscription and any
 					contribution will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
@@ -98,7 +81,7 @@ function SummaryTsAndCsComponent({
 		case 'TierThree':
 		case 'GuardianAdLite':
 			return (
-				<div>
+				<div css={containerSummaryTsCs}>
 					The {productCatalogDescription[productKey].label} subscription
 					{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
@@ -107,6 +90,6 @@ function SummaryTsAndCsComponent({
 				</div>
 			);
 		default:
-			return <></>;
+			return null;
 	}
 }

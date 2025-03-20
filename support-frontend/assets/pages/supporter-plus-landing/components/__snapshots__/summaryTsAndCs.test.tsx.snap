@@ -5,14 +5,12 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      We will attempt to take payment
-       of £0
-      ,
-       
-      on the first day of every month
-      , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-    </div>
+    We will attempt to take payment of 
+    £0
+    ,
+     
+    on the first day of every month
+    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
   </div>
 </div>
 `;
@@ -22,65 +20,30 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      We will attempt to take payment
-       of £0
-      ,
-       
-      on the first day of every month
-      , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-    </div>
+    We will attempt to take payment of 
+    £0
+    ,
+     
+    on the first day of every month
+    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
   </div>
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      We will attempt to take payment
-       of £0
-      ,
-       
-      on the first day of every month
-      , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType MONTHLY renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType MONTHLY renders correctly 1`] = `<div />`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType ANNUALY renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      Guardian Ad-Lite
-       subscription
-       will auto-renew each
-       
-      year
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    Guardian Ad-Lite
+     subscription
+     will auto-renew each
+     
+    year
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
@@ -90,66 +53,30 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      Guardian Ad-Lite
-       subscription
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    Guardian Ad-Lite
+     subscription
+     will auto-renew each
+     
+    month
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      Guardian Ad-Lite
-       subscription
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType MONTHLY renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType MONTHLY renders correctly 1`] = `<div />`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType ANNUALY renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      All-access digital
-       subscription and any contribution will auto-renew each
-       
-      year
-      . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    All-access digital
+     subscription and any contribution will auto-renew each
+     
+    year
+    . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
@@ -159,31 +86,12 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With c
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      All-access digital
-       subscription and any contribution will auto-renew each
-       
-      month
-      . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      All-access digital
-       subscription and any contribution will auto-renew each
-       
-      month
-      . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    All-access digital
+     subscription and any contribution will auto-renew each
+     
+    month
+    . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
@@ -193,16 +101,14 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contr
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      Digital + print
-       subscription
-      s
-       will auto-renew each
-       
-      year
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    Digital + print
+     subscription
+    s
+     will auto-renew each
+     
+    year
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
@@ -212,124 +118,14 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contr
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
-    <div>
-      The 
-      Digital + print
-       subscription
-      s
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree product and contributionType MONTHLY render correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      Digital + print
-       subscription
-      s
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Contribution correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      We will attempt to take payment
-       of £0
-      ,
-       
-      <div>
-        on the first day of every month
-      </div>
-      , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product DigitalSubscription correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianAdLite correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      Guardian Ad-Lite
-       subscription
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product OneTimeContribution correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  />
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product SupporterPlus correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      All-access digital
-       subscription and any contribution will auto-renew each
-       
-      month
-      . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    <div>
-      The 
-      Digital + print
-       subscription
-      s
-       will auto-renew each
-       
-      month
-      . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-    </div>
+    The 
+    Digital + print
+     subscription
+    s
+     will auto-renew each
+     
+    month
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
