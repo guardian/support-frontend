@@ -595,11 +595,11 @@ export function CheckoutComponent({
 								: null
 						}
 						tsAndCs={getTermsConditions(
-							countryGroupId,
+							productKey,
 							contributionType,
-							productFields.productType,
-							thresholdAmount,
+							countryGroupId,
 							promotion,
+							thresholdAmount,
 						)}
 						headerButton={
 							<BackButton path={returnToLandingPage} buttonText={'Change'} />

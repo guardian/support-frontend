@@ -129,7 +129,7 @@ export function PaymentTsAndCs({
 	);
 }
 function PaymentTsAndCsComponent({
-  productKey,
+	productKey,
 	contributionType,
 	countryGroupId,
 	promotion,

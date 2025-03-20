@@ -3,6 +3,7 @@ import { neutral, space } from '@guardian/source/foundations';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const containerSummaryTsCs = css`
@@ -25,19 +26,19 @@ export function getTermsStartDateTier3(startDateTier3: string) {
 }
 
 export function getTermsConditions(
-	countryGroupId: CountryGroupId,
+	productKey: ActiveProductKey,
 	contributionType: ContributionType,
-	productId: string,
-	thresholdAmount: number,
+	countryGroupId: CountryGroupId,
 	promotion?: Promotion,
+	thresholdAmount?: number,
 ) {
 	if (contributionType === 'ONE_OFF') {
 		return;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
-	const isSupporterPlus = productId === 'SupporterPlus';
-	const isTier3 = productId === 'TierThree';
-	const isAdLite = productId === 'GuardianAdLite';
+	const isSupporterPlus = productKey === 'SupporterPlus';
+	const isTier3 = productKey === 'TierThree';
+	const isAdLite = productKey === 'GuardianAdLite';
 
 	if (isSupporterPlus || isTier3) {
 		return (
@@ -49,7 +50,7 @@ export function getTermsConditions(
 							countryGroupId,
 							contributionType,
 							'/',
-							thresholdAmount,
+							thresholdAmount ?? 0,
 							promotion,
 						)}{' '}
 						afterwards unless you cancel. Offer only available to new
