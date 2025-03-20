@@ -26,8 +26,8 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
-	orderSummaryStartDate,
-	orderSummaryTsAndCs,
+	OrderSummaryStartDate,
+	OrderSummaryTsAndCs,
 } from 'components/orderSummary/orderSummaryTsAndCs';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
@@ -587,17 +587,21 @@ export function CheckoutComponent({
 							);
 						}}
 						enableCheckList={true}
-						startDateTierThree={orderSummaryStartDate(
-							productKey,
-							formatUserDate(getTierThreeDeliveryDate()),
-						)}
-						tsAndCs={orderSummaryTsAndCs(
-							productKey,
-							contributionType,
-							countryGroupId,
-							thresholdAmount,
-							promotion,
-						)}
+						startDateTierThree={
+							<OrderSummaryStartDate
+								productKey={productKey}
+								startDate={formatUserDate(getTierThreeDeliveryDate())}
+							/>
+						}
+						tsAndCs={
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								contributionType={contributionType}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+							/>
+						}
 						headerButton={
 							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}

@@ -12,32 +12,44 @@ const containerSummaryTsCs = css`
 	padding: ${space[3]}px;
 `;
 
-export function orderSummaryStartDate(
-	productKey: ActiveProductKey,
-	startDate: string,
-): JSX.Element {
-	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
-		TierThree: (
-			<>
-				<li>Your digital benefits will start today.</li>
-				<li>
-					Your Guardian Weekly subscription will start on {startDate}. Please
-					allow 1 to 7 days after your start date for your magazine to arrive,
-					depending on national post services.
-				</li>
-			</>
-		),
-	};
-	return orderSummaryTsAndCs[productKey] ?? <></>;
+interface OrderSummaryStartDateProps {
+	productKey: ActiveProductKey;
+	startDate: string;
+}
+export function OrderSummaryStartDate({
+	productKey,
+	startDate,
+}: OrderSummaryStartDateProps): JSX.Element {
+	const orderSummaryStartDate: Partial<Record<ActiveProductKey, JSX.Element>> =
+		{
+			TierThree: (
+				<>
+					<li>Your digital benefits will start today.</li>
+					<li>
+						Your Guardian Weekly subscription will start on {startDate}. Please
+						allow 1 to 7 days after your start date for your magazine to arrive,
+						depending on national post services.
+					</li>
+				</>
+			),
+		};
+	return orderSummaryStartDate[productKey] ?? <></>;
 }
 
-export function orderSummaryTsAndCs(
-	productKey: ActiveProductKey,
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-	thresholdAmount: number,
-	promotion?: Promotion,
-): JSX.Element {
+interface OrderSummaryTsAndCsProps {
+	productKey: ActiveProductKey;
+	contributionType: ContributionType;
+	countryGroupId: CountryGroupId;
+	thresholdAmount: number;
+	promotion?: Promotion;
+}
+export function OrderSummaryTsAndCs({
+	productKey,
+	contributionType,
+	countryGroupId,
+	thresholdAmount,
+	promotion,
+}: OrderSummaryTsAndCsProps): JSX.Element {
 	// Proceeds with RegularContributionType only
 	if (contributionType === 'ONE_OFF') {
 		return <></>;
