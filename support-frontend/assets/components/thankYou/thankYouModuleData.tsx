@@ -66,8 +66,8 @@ import {
 import {
 	BenefitsBodyCopy,
 	benefitsHeader,
-	SubscriptionStartBodyCopy,
 	subscriptionStartHeader,
+	SubscriptionStartItems,
 } from './subscriptionStart/subscriptionStartItems';
 import {
 	SupportReminderBodyCopy,
@@ -256,7 +256,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('subscriptionStart'),
 			header: subscriptionStartHeader,
 			bodyCopy: (
-				<SubscriptionStartBodyCopy
+				<SubscriptionStartItems
 					productKey={productKey}
 					startDate={
 						publicationStartDays[0]

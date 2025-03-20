@@ -45,7 +45,7 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
-import { SubscriptionStartBodyCopy } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
+import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -323,7 +323,7 @@ SubscriptionStartPaperDelivery.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
 	bodyCopy: (
-		<SubscriptionStartBodyCopy
+		<SubscriptionStartItems
 			productKey={'NationalDelivery'}
 			startDate={'Friday, March 28, 2025'}
 		/>
@@ -337,7 +337,7 @@ SubscriptionStartPaperSubsCard.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
 	bodyCopy: (
-		<SubscriptionStartBodyCopy
+		<SubscriptionStartItems
 			productKey={'SubscriptionCard'}
 			startDate={'Friday, March 28, 2025'}
 		/>
@@ -351,7 +351,7 @@ SubscriptionStartGuardianWeekly.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
 	bodyCopy: (
-		<SubscriptionStartBodyCopy
+		<SubscriptionStartItems
 			productKey={'GuardianWeeklyDomestic'}
 			startDate={'Friday, March 28, 2025'}
 		/>
@@ -365,7 +365,7 @@ SubscriptionStartTierThree.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
 	bodyCopy: (
-		<SubscriptionStartBodyCopy
+		<SubscriptionStartItems
 			productKey={'TierThree'}
 			startDate={'Friday, March 28, 2025'}
 		/>
