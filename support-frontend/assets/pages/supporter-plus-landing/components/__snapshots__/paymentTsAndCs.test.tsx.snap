@@ -1,0 +1,470 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Contribution for region UnitedStates correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div
+        class="css-mhzvj4-TsAndCsFooterLinks"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions"
+        >
+          Terms and Conditions
+        </a>
+        .
+         
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSubscription for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        Payment taken after the first 14 day free trial. At the end of the free trial period your subscription will auto-renew, and you will be charged, each month at the full price of £14.99 per month or £149 per year unless you cancel. You can cancel at any time before your next renewal date. Cancellation will take effect at the end of your current subscription month. To cancel, go to
+         
+        <a
+          href="http://manage.theguardian.com/"
+        >
+          Manage My Account
+        </a>
+         or see our
+         
+        <a
+          href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+        >
+          Terms
+        </a>
+        .
+      </div>
+      <div
+        class="css-mhzvj4-TsAndCsFooterLinks"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+        >
+          Terms and Conditions
+        </a>
+        .
+         
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianAdLite for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        Your Guardian Ad-Lite subscription will auto-renew each
+         
+        month
+         unless cancelled. Your first payment will be taken on day 15 after signing up but you will start to receive your Guardian Ad-Lite benefits when you sign up. Unless you cancel, subsequent monthly payments will be taken on this date using your chosen payment method. You can cancel your subscription at any time before your next renewal date. If you cancel your Guardian Ad-Lite subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current monthly payment period. To cancel, go to
+         
+        <a
+          href="https://manage.theguardian.com/subscriptions"
+        >
+          Manage My Account
+        </a>
+         or see our Guardian Ad-Lite
+         
+        <a
+          href="https://www.theguardian.com/guardian-ad-lite-tcs"
+        >
+          Terms
+        </a>
+        .
+      </div>
+      <div
+        class="css-mhzvj4-TsAndCsFooterLinks"
+      >
+        By proceeding, you are agreeing to 
+        the Guardian Ad-Lite
+         
+        <a
+          href="https://www.theguardian.com/guardian-ad-lite-tcs"
+        >
+          Terms
+        </a>
+        .
+         
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product OneTimeContribution for region AUDCountries correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div
+        class="css-mhzvj4-TsAndCsFooterLinks"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions"
+        >
+          Terms and Conditions
+        </a>
+        .
+         
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SupporterPlus for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        If you pay at least
+         
+        £12 per month
+        , you will receive the 
+        All-access digital
+         benefits on a subscription basis. If you increase your payments per
+         
+        month
+        , these additional amounts will be separate 
+        monthly
+         voluntary financial contributions to the Guardian. The 
+        All-access digital
+         subscription and any contributions will auto-renew each
+         
+        month
+        . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal unless you cancel. You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a 
+        All-access digital
+         
+        subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current
+         
+        monthly
+         payment period. To cancel, go to
+         
+        <a
+          href="https://manage.theguardian.com/subscriptions"
+        >
+          Manage My Account
+        </a>
+         or see our 
+        <a
+          href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions"
+        >
+          Terms
+        </a>
+        .
+      </div>
+      <div
+        class="css-mhzvj4-TsAndCsFooterLinks"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions"
+        >
+          Terms and Conditions
+        </a>
+        .
+         
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-mhzvj4-TsAndCsFooterLinks"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product TierThree for region GBPCountries correctly 1`] = `
+<div>
+  <div
+    class="css-1002frk-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div
+        class="css-7jiaf8-TierThreeTerms"
+      >
+        <p>
+          By signing up, you are taking out a 
+          Digital + print
+           subscription. Your
+           
+          Digital + print
+           subscription will auto-renew each 
+          month
+           
+          unless cancelled. Your first payment will be taken on the publication date of your first Guardian Weekly magazine (as shown in the checkout) but you will start to receive your digital benefits when you sign up. Unless you cancel, subsequent 
+          monthly
+           payments will be taken on this date using your chosen payment method. You can cancel your Digital + print subscription at any time before your next renewal date. If you cancel your 
+          Digital + print
+           subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current 
+          monthly
+           
+          payment period. To cancel go to 
+          <a
+            href="https://manage.theguardian.com/subscriptions"
+          >
+            Manage My Account
+          </a>
+           or see our 
+          Digital + print
+           
+          <a
+            href="https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Terms
+          </a>
+          .
+        </p>
+        <p>
+          By proceeding, you are agreeing to the 
+          Digital + print
+           
+          <a
+            href="https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Terms
+          </a>
+          .
+        </p>
+        <p>
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p>
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

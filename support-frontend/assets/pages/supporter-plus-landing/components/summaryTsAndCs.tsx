@@ -7,6 +7,7 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import {
@@ -113,6 +114,7 @@ function SummaryTsAndCsComponent({
 					subscription amount using your chosen payment method at each renewal,
 					at the rate then in effect, unless you cancel.
 				</div>
+
 			);
 		default:
 			return <></>;

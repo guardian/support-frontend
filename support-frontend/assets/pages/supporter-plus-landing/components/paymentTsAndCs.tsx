@@ -129,11 +129,11 @@ export function PaymentTsAndCs({
 	);
 }
 function PaymentTsAndCsComponent({
+  productKey,
 	contributionType,
 	countryGroupId,
-	productKey,
-	thresholdAmount = 0,
 	promotion,
+	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
 	const productLabel = productCatalogDescription[productKey].label;
 	switch (productKey) {

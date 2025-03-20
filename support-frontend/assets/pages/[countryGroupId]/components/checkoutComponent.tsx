@@ -1286,11 +1286,11 @@ export function CheckoutComponent({
 							</div>
 						)}
 						<PaymentTsAndCs
-							countryGroupId={countryGroupId}
-							contributionType={contributionType}
-							thresholdAmount={thresholdAmount}
 							productKey={productKey}
+							contributionType={contributionType}
+							countryGroupId={countryGroupId}
 							promotion={promotion}
+							thresholdAmount={thresholdAmount}
 						/>
 					</BoxContents>
 				</Box>
