@@ -3,7 +3,7 @@
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Contribution correctly 1`] = `
 <div>
   <div
-    class="css-1e4uwg6-SummaryTsAndCs"
+    class="css-mlt1i5-SummaryTsAndCs"
   >
     <div>
       We will attempt to take payment
@@ -19,12 +19,18 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Contribut
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product DigitalSubscription correctly 1`] = `<div />`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product DigitalSubscription correctly 1`] = `
+<div>
+  <div
+    class="css-mlt1i5-SummaryTsAndCs"
+  />
+</div>
+`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianAdLite correctly 1`] = `
 <div>
   <div
-    class="css-1e4uwg6-SummaryTsAndCs"
+    class="css-mlt1i5-SummaryTsAndCs"
   >
     <div>
       The 
@@ -42,26 +48,15 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianA
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product OneTimeContribution correctly 1`] = `
 <div>
   <div
-    class="css-1e4uwg6-SummaryTsAndCs"
-  >
-    <div>
-      We will attempt to take payment
-       of £0
-      ,
-       
-      <div>
-        on the first day of every month
-      </div>
-      , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-    </div>
-  </div>
+    class="css-mlt1i5-SummaryTsAndCs"
+  />
 </div>
 `;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product SupporterPlus correctly 1`] = `
 <div>
   <div
-    class="css-1e4uwg6-SummaryTsAndCs"
+    class="css-mlt1i5-SummaryTsAndCs"
   >
     <div>
       The 
@@ -78,7 +73,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Supporter
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree correctly 1`] = `
 <div>
   <div
-    class="css-1e4uwg6-SummaryTsAndCs"
+    class="css-mlt1i5-SummaryTsAndCs"
   >
     <div>
       The 

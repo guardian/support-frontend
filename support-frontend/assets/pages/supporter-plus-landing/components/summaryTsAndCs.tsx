@@ -9,10 +9,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
-import {
-	getDateWithOrdinal,
-	getLongMonth,
-} from 'helpers/utilities/dateFormatting';
+import TsAndCsRenewal from './TsAndCsRenewal';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -28,23 +25,6 @@ const containerSummaryTsCs = css`
 
 const frequencySingular = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'month' : 'year';
-
-function TsAndCsRenewal({
-	contributionType,
-}: {
-	contributionType: ContributionType;
-}): JSX.Element {
-	const today = new Date();
-	if (contributionType === 'ANNUAL') {
-		return (
-			<>
-				on the {getDateWithOrdinal(today)} day of {getLongMonth(today)} every{' '}
-				year
-			</>
-		);
-	}
-	return <>on the {getDateWithOrdinal(today)} day of every month</>;
-}
 
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
