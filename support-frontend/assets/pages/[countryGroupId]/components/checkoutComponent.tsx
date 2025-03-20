@@ -26,9 +26,9 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
-	orderSummaryStartDateTierThree,
+	orderSummaryStartDate,
 	orderSummaryTsAndCs,
-} from 'components/orderSummary/contributionsOrderSummaryContainer';
+} from 'components/orderSummary/orderSummaryTsAndCs';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
@@ -587,13 +587,10 @@ export function CheckoutComponent({
 							);
 						}}
 						enableCheckList={true}
-						startDateTierThree={
-							productKey === 'TierThree'
-								? orderSummaryStartDateTierThree(
-										formatUserDate(getTierThreeDeliveryDate()),
-								  )
-								: null
-						}
+						startDateTierThree={orderSummaryStartDate(
+							productKey,
+							formatUserDate(getTierThreeDeliveryDate()),
+						)}
 						tsAndCs={orderSummaryTsAndCs(
 							productKey,
 							contributionType,
