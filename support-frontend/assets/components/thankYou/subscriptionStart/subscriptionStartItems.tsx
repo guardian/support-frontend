@@ -16,6 +16,9 @@ const subscriptionItems = css`
 const boldText = css`
 	font-weight: bold;
 `;
+const paragraphSpacing = css`
+	margin-bottom: ${space[1]}px;
+`;
 
 export const benefitsHeader = 'What’s included?';
 export function BenefitsBodyCopy(): JSX.Element {
@@ -40,19 +43,17 @@ export function SubscriptionStartItems({
 					css={boldText}
 				>{`You will receive your newspaper from ${startDate}`}</span>
 			</p>
-			<div>
-				{productKey === 'SubscriptionCard' && (
-					<p>
-						You will receive your Subscription Card in your subscriber pack in
-						the post, along with your home delivery letter.
-					</p>
-				)}
-				<p>
-					Visit your chosen participating newsagent to pick up your newspaper
-					using your Subscription Card, or arrange a home delivery using your
-					delivery letter.
+			{productKey === 'SubscriptionCard' && (
+				<p css={paragraphSpacing}>
+					You will receive your Subscription Card in your subscriber pack in the
+					post, along with your home delivery letter.
 				</p>
-			</div>
+			)}
+			<p>
+				Visit your chosen participating newsagent to pick up your newspaper
+				using your Subscription Card, or arrange a home delivery using your
+				delivery letter.
+			</p>
 		</div>
 	);
 	const guardianWeeklyCopy = (
@@ -62,12 +63,10 @@ export function SubscriptionStartItems({
 					css={boldText}
 				>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
 			</p>
-			<div>
-				<p>
-					Please allow one to seven days after the publication date for your
-					copy to be delivered to your door, depending on postal services.
-				</p>
-			</div>
+			<p>
+				Please allow one to seven days after the publication date for your copy
+				to be delivered to your door, depending on postal services.
+			</p>
 		</div>
 	);
 	const copyContent: Partial<Record<ActiveProductKey, JSX.Element>> = {
@@ -77,18 +76,19 @@ export function SubscriptionStartItems({
 		GuardianWeeklyRestOfWorld: guardianWeeklyCopy,
 		GuardianWeeklyDomestic: guardianWeeklyCopy,
 		TierThree: (
-			<div>
-				<p>
-					<span css={boldText}>Your digital benefits start today.</span>
-				</p>
+			<>
+				{guardianWeeklyCopy}
 				<div>
+					<p>
+						<span css={boldText}>Your digital benefits start today.</span>
+					</p>
 					<p>
 						Please ensure you are signed in on all your devices to enjoy all
 						your benefits, including unlimited app access and uninterrupted
 						ad-free reading..
 					</p>
 				</div>
-			</div>
+			</>
 		),
 	};
 	return (
