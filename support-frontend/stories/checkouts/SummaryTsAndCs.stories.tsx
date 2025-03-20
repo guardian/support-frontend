@@ -1,7 +1,7 @@
 import {
 	SummaryTsAndCs,
 	SummaryTsAndCsProps,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+} from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 
 export default {
 	title: 'Checkouts/Ts&Cs Summary',
