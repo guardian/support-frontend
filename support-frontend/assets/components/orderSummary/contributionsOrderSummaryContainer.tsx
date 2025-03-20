@@ -12,7 +12,7 @@ const containerSummaryTsCs = css`
 	padding: ${space[3]}px;
 `;
 
-export function getTermsStartDateTier3(startDateTier3: string) {
+export function orderSummaryStartDateTierThree(startDateTier3: string) {
 	return (
 		<>
 			<li>Your digital benefits will start today.</li>
@@ -25,59 +25,62 @@ export function getTermsStartDateTier3(startDateTier3: string) {
 	);
 }
 
-export function getTermsConditions(
+export function orderSummaryTsAndCs(
 	productKey: ActiveProductKey,
 	contributionType: ContributionType,
 	countryGroupId: CountryGroupId,
+	thresholdAmount: number,
 	promotion?: Promotion,
-	thresholdAmount?: number,
 ) {
+	// Proceeds with RegularContributionType only
 	if (contributionType === 'ONE_OFF') {
 		return;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
-	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTier3 = productKey === 'TierThree';
-	const isAdLite = productKey === 'GuardianAdLite';
-
-	if (isSupporterPlus || isTier3) {
-		return (
-			<div css={containerSummaryTsCs}>
-				{promotion && (
-					<p>
-						You’ll pay{' '}
-						{productLegal(
-							countryGroupId,
-							contributionType,
-							'/',
-							thresholdAmount ?? 0,
-							promotion,
-						)}{' '}
-						afterwards unless you cancel. Offer only available to new
-						subscribers who do not have an existing subscription with the
-						Guardian.
-					</p>
-				)}
-				{isSupporterPlus && (
-					<>
-						<p>Auto renews every {period} until you cancel.</p>
+	switch (productKey) {
+		case 'SupporterPlus':
+		case 'TierThree':
+			return (
+				<div css={containerSummaryTsCs}>
+					{promotion && (
 						<p>
-							Cancel or change your support anytime. If you cancel within the
-							first 14 days, you will receive a full refund.
+							You’ll pay{' '}
+							{productLegal(
+								countryGroupId,
+								contributionType,
+								'/',
+								thresholdAmount,
+								promotion,
+							)}{' '}
+							afterwards unless you cancel. Offer only available to new
+							subscribers who do not have an existing subscription with the
+							Guardian.
 						</p>
-					</>
-				)}
-				{isTier3 && <p>Auto renews every {period}. Cancel anytime.</p>}
-			</div>
-		);
+					)}
+					{productKey === 'SupporterPlus' && (
+						<>
+							<p>Auto renews every {period} until you cancel.</p>
+							<p>
+								Cancel or change your support anytime. If you cancel within the
+								first 14 days, you will receive a full refund.
+							</p>
+						</>
+					)}
+					{productKey === 'TierThree' && (
+						<p>Auto renews every {period}. Cancel anytime.</p>
+					)}
+				</div>
+			);
+		default:
+			return (
+				<div css={containerSummaryTsCs}>
+					<p>Auto renews every {period} until you cancel.</p>
+					<p>
+						{productKey === 'GuardianAdLite'
+							? 'Cancel anytime.'
+							: 'Cancel or change your support anytime.'}
+					</p>
+				</div>
+			);
 	}
-	const cancelCopy = isAdLite
-		? 'Cancel anytime.'
-		: 'Cancel or change your support anytime.';
-	return (
-		<div css={containerSummaryTsCs}>
-			<p>Auto renews every {period} until you cancel.</p>
-			<p>{cancelCopy}</p>
-		</div>
-	);
 }

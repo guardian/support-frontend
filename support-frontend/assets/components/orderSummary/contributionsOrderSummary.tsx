@@ -125,7 +125,7 @@ const termsAndConditions = css`
 	}
 `;
 
-const productStartDates = css`
+const productStartDate = css`
 	display: block;
 	${textSans14};
 	color: #606060;
@@ -152,7 +152,7 @@ export type ContributionsOrderSummaryProps = {
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
-	tsAndCsTier3?: React.ReactNode;
+	startDateTierThree?: React.ReactNode;
 	heading?: string;
 	productDescription?: { description: string; frequency: string };
 };
@@ -171,7 +171,7 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	tsAndCsTier3,
+	startDateTierThree,
 	heading,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
@@ -222,7 +222,9 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!!tsAndCsTier3 && <ul css={productStartDates}>{tsAndCsTier3}</ul>}
+						{!!startDateTierThree && (
+							<ul css={productStartDate}>{startDateTierThree}</ul>
+						)}
 					</>
 				)}
 			</div>
