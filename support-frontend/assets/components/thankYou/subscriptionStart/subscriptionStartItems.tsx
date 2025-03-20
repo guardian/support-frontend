@@ -38,71 +38,74 @@ export function SubscriptionStartBodyCopy({
 	productKey,
 	startDate,
 }: SubscriptionStartProps): JSX.Element {
-	const paperHeading = `You will receive your newspaper from ${startDate}`;
-	const paperBody = `Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.`;
-	const guardianWeeklyBodyHeading = {
-		heading: `Your first issue of Guardian Weekly will be published on ${startDate}`,
-		body: [
-			`Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.`,
-		],
-	};
 	let copy;
 	switch (productKey) {
 		case 'HomeDelivery':
-		case 'NationalDelivery': {
-			copy = [
-				{
-					heading: paperHeading,
-					body: [paperBody],
-				},
-			];
-			break;
-		}
+		case 'NationalDelivery':
 		case 'SubscriptionCard': {
-			copy = [
-				{
-					heading: paperHeading,
-					body: [
-						`You will receive your Subscription Card in your subscriber pack in the post, along with your home delivery letter.`,
-						paperBody,
-					],
-				},
-			];
+			copy = () => (
+				<div>
+					<p>
+						<span
+							css={boldText}
+						>{`You will receive your newspaper from ${startDate}`}</span>
+					</p>
+					<div>
+						{productKey === 'SubscriptionCard' && (
+							<p>
+								You will receive your Subscription Card in your subscriber pack
+								in the post, along with your home delivery letter.
+							</p>
+						)}
+						<p>
+							Visit your chosen participating newsagent to pick up your
+							newspaper using your Subscription Card, or arrange a home delivery
+							using your delivery letter.
+						</p>
+					</div>
+				</div>
+			);
 			break;
 		}
 		case 'TierThree': {
-			copy = [
-				guardianWeeklyBodyHeading,
-				{
-					heading: `Your digital benefits start today.`,
-					body: [
-						`Please ensure you are signed in on all your devices to enjoy all your benefits, including unlimited app access and uninterrupted ad-free reading.`,
-					],
-				},
-			];
+			copy = () => (
+				<div>
+					<p>
+						<span css={boldText}>Your digital benefits start today.</span>
+					</p>
+					<div>
+						<p>
+							Please ensure you are signed in on all your devices to enjoy all
+							your benefits, including unlimited app access and uninterrupted
+							ad-free reading..
+						</p>
+					</div>
+				</div>
+			);
 			break;
 		}
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld': {
-			copy = [guardianWeeklyBodyHeading];
+			copy = () => (
+				<div>
+					<p>
+						<span
+							css={boldText}
+						>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
+					</p>
+					<div>
+						<p>
+							Please allow one to seven days after the publication date for your
+							copy to be delivered to your door, depending on postal services.
+						</p>
+					</div>
+				</div>
+			);
 			break;
 		}
 		default: {
-			copy = [{ heading: '', body: [''] }];
+			copy = () => <></>;
 		}
 	}
-	return (
-		<span css={[downloadCopy, subscriptionItems]}>
-			{copy.map(({ heading, body }) => (
-				<div>
-					<p>
-						<span css={boldText}>{heading}</span>
-					</p>
-					{body.map((body) => (
-						<p>{body}</p>
-					))}
-				</div>
-			))}
-		</span>
-	);
+	return <span css={[downloadCopy, subscriptionItems]}>{copy()}</span>;
 }
