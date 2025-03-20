@@ -5,6 +5,7 @@ import {
 	Label,
 	Radio,
 	RadioGroup,
+	TextArea,
 	TextInput,
 } from '@guardian/source/react-components';
 import {
@@ -51,10 +52,11 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
@@ -65,6 +67,7 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { isProd } from 'helpers/urls/url';
@@ -74,10 +77,10 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	PaymentTsAndCs,
-	SummaryTsAndCs,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
+import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -187,6 +190,67 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
+	};
+
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
+			const landingPageSettings = getLandingPageVariant(
+				abParticipations,
+				getSettings().landingPageTests,
+			);
+			if (productKey === 'Contribution') {
+				// Also show SupporterPlus benefits greyed out
+				return [
+					...landingPageSettings.products.Contribution.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: false,
+							text: benefit.copy,
+							maybeGreyedOut: css`
+								color: ${palette.neutral[60]};
+								svg {
+									fill: ${palette.neutral[60]};
+								}
+							`,
+						}),
+					),
+				];
+			} else if (productKey === 'SupporterPlus') {
+				return landingPageSettings.products.SupporterPlus.benefits.map(
+					(benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					}),
+				);
+			} else if (productKey === 'TierThree') {
+				// Also show SupporterPlus benefits
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			}
+		}
+		return productDescription.benefits
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
+			.map((benefit) => ({
+				isChecked: true,
+				text: benefit.copy,
+			}));
 	};
 
 	/** Delivery agent for National Delivery product */
@@ -304,6 +368,9 @@ export function CheckoutComponent({
 	const [email, setEmail] = useState(user?.email ?? '');
 	const [confirmedEmail, setConfirmedEmail] = useState('');
 
+	/** Delivery Instructions */
+	const [deliveryInstructions, setDeliveryInstructions] = useState('');
+
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
@@ -342,9 +409,12 @@ export function CheckoutComponent({
 				setDeliveryAgents(agents);
 			}
 		} else {
-			// The user's postcode is invalid
+			// The postcode field does not contain a valid postcode, so reset to default state
 			setDeliveryPostcodeIsOutsideM25(false);
 			setDeliveryAgents(undefined);
+			setDeliveryAddressErrors((prevState) =>
+				prevState.filter((error) => error.field !== 'postCode'),
+			);
 		}
 	};
 	useEffect(() => {
@@ -464,6 +534,24 @@ export function CheckoutComponent({
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
 
+	const contributionType =
+		productFields.billingPeriod === 'Monthly'
+			? 'MONTHLY'
+			: productFields.billingPeriod === 'Annual'
+			? 'ANNUAL'
+			: 'ONE_OFF';
+
+	/*
+  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+          We should revisit this and see if we can remove this prop, pushing it lower down the tree
+  */
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+	);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -492,45 +580,7 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={[
-							...productDescription.benefits
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsAdditional ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsMissing ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.map((benefit) => ({
-									isChecked: false,
-									text: benefit.copy,
-									maybeGreyedOut: css`
-										color: ${palette.neutral[60]};
-
-										svg {
-											fill: ${palette.neutral[60]};
-										}
-									`,
-								})),
-						]}
+						checkListData={getBenefits()}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
@@ -546,12 +596,9 @@ export function CheckoutComponent({
 						}
 						tsAndCs={getTermsConditions(
 							countryGroupId,
-							productFields.billingPeriod === 'Monthly'
-								? 'MONTHLY'
-								: productFields.billingPeriod === 'Annual'
-								? 'ANNUAL'
-								: 'ONE_OFF',
+							contributionType,
 							productFields.productType,
+							thresholdAmount,
 							promotion,
 						)}
 						headerButton={
@@ -722,7 +769,6 @@ export function CheckoutComponent({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
-								requireConfirmedEmail={true}
 								isSignedIn={isSignedIn}
 							/>
 
@@ -860,7 +906,27 @@ export function CheckoutComponent({
 										}}
 									/>
 								</fieldset>
-
+								{productKey === 'HomeDelivery' && (
+									<fieldset
+										css={css`
+											margin-bottom: ${space[6]}px;
+										`}
+									>
+										<TextArea
+											id="deliveryInstructions"
+											data-qm-masking="blocklist"
+											name="deliveryInstructions"
+											label="Delivery instructions"
+											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+											onChange={(event) => {
+												setDeliveryInstructions(event.target.value);
+											}}
+											value={deliveryInstructions}
+											optional
+										/>
+									</fieldset>
+								)}
 								<fieldset
 									css={css`
 										margin-bottom: ${space[6]}px;
@@ -1103,13 +1169,7 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
 							productKey={productKey}
@@ -1227,21 +1287,11 @@ export function CheckoutComponent({
 							</div>
 						)}
 						<PaymentTsAndCs
-							countryGroupId={countryGroupId}
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
-							currency={currencyKey}
-							amount={originalAmount}
-							amountIsAboveThreshold={
-								productKey === 'SupporterPlus' || productKey === 'TierThree'
-							}
 							productKey={productKey}
+							contributionType={contributionType}
+							countryGroupId={countryGroupId}
 							promotion={promotion}
+							thresholdAmount={thresholdAmount}
 						/>
 					</BoxContents>
 				</Box>

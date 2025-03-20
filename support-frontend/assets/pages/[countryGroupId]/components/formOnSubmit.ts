@@ -76,6 +76,7 @@ export const submitForm = async ({
 			  }
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
+	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 
 	const createSupportWorkersRequest: RegularPaymentRequest = {
 		...personalData,
@@ -88,6 +89,7 @@ export const submitForm = async ({
 		referrerAcquisitionData,
 		product: productFields,
 		supportAbTests,
+		deliveryInstructions,
 		debugInfo: '',
 	};
 
