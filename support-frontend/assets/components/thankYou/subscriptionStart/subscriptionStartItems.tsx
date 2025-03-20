@@ -104,7 +104,7 @@ export function SubscriptionStartBodyCopy({
 			break;
 		}
 		default: {
-			copy = () => <></>;
+			copy = () => <div></div>;
 		}
 	}
 	return <span css={[downloadCopy, subscriptionItems]}>{copy()}</span>;
