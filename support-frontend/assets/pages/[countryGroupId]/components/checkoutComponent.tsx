@@ -29,9 +29,7 @@ import {
 	OrderSummaryStartDate,
 	OrderSummaryTsAndCs,
 } from 'components/orderSummary/orderSummaryTsAndCs';
-import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
-import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -42,7 +40,6 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	DirectDebit,
@@ -70,7 +67,6 @@ import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
-import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -91,10 +87,6 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
-import {
-	paypalOneClickCheckout,
-	setupPayPalPayment,
-} from '../checkout/helpers/paypal';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -120,6 +112,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
@@ -1181,100 +1174,19 @@ export function CheckoutComponent({
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText={`Pay ${simpleFormatAmount(
-										currency,
-										finalAmount,
-									)} per ${
-										ratePlanDescription.billingPeriod === 'Annual'
-											? 'year'
-											: ratePlanDescription.billingPeriod === 'Monthly'
-											? 'month'
-											: 'quarter'
-									}`}
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the formOnSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
-							{payPalLoaded && paymentMethod === 'PayPal' && (
-								<>
-									<input type="hidden" name="payPalBAID" value={payPalBAID} />
-
-									<PayPalButton
-										env={isProd() && !isTestUser ? 'production' : 'sandbox'}
-										style={{
-											color: 'blue',
-											size: 'responsive',
-											label: 'pay',
-											tagline: false,
-											layout: 'horizontal',
-											fundingicons: false,
-										}}
-										commit={true}
-										validate={({ disable, enable }) => {
-											/** We run this initially to set the button to the correct state */
-											const valid = formRef.current?.checkValidity();
-											if (valid) {
-												enable();
-											} else {
-												disable();
-											}
-
-											/** And then run it on form change */
-											formRef.current?.addEventListener('change', (event) => {
-												const element = event.currentTarget as HTMLFormElement;
-												/* We call this twice because the first time does not
-                           not give us an accurate state of the form.
-                           This seems to be because we use `setCustomValidity` on the elements
-                        */
-												element.checkValidity();
-												const valid = element.checkValidity();
-
-												if (valid) {
-													enable();
-												} else {
-													disable();
-												}
-											});
-										}}
-										funding={{
-											disallowed: [window.paypal.FUNDING.CREDIT],
-										}}
-										onClick={() => {
-											// TODO - add tracking
-										}}
-										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-										payment={(resolve, reject) => {
-											setupPayPalPayment(
-												finalAmount,
-												currencyKey,
-												ratePlanDescription.billingPeriod,
-												csrf,
-											)
-												.then((token) => {
-													resolve(token);
-												})
-												.catch((error) => {
-													console.error(error);
-													reject(error as Error);
-												});
-										}}
-										onAuthorize={(payPalData: Record<string, unknown>) => {
-											void paypalOneClickCheckout(
-												payPalData.paymentToken,
-												csrf,
-											).then((baid) => {
-												// The state below has a useEffect that submits the form
-												setPayPalBAID(baid);
-											});
-										}}
-									/>
-								</>
-							)}
+							<SubmitButton
+								paymentMethod={paymentMethod}
+								payPalLoaded={payPalLoaded}
+								payPalBAID={payPalBAID}
+								setPayPalBAID={setPayPalBAID}
+								formRef={formRef}
+								isTestUser={isTestUser}
+								finalAmount={finalAmount}
+								currencyKey={currencyKey}
+								ratePlanDescription={ratePlanDescription}
+								csrf={csrf}
+								currency={currency}
+							/>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
