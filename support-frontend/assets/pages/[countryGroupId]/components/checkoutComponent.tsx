@@ -77,10 +77,8 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	PaymentTsAndCs,
-	SummaryTsAndCs,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
@@ -543,6 +541,10 @@ export function CheckoutComponent({
 			? 'ANNUAL'
 			: 'ONE_OFF';
 
+	/*
+  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+          We should revisit this and see if we can remove this prop, pushing it lower down the tree
+  */
 	const thresholdAmount = getLowerProductBenefitThreshold(
 		contributionType,
 		fromCountryGroupId(countryGroupId),
@@ -1285,16 +1287,11 @@ export function CheckoutComponent({
 							</div>
 						)}
 						<PaymentTsAndCs
-							countryGroupId={countryGroupId}
-							contributionType={contributionType}
-							thresholdAmount={thresholdAmount}
-							currency={currencyKey}
-							amount={originalAmount}
-							amountIsAboveThreshold={
-								productKey === 'SupporterPlus' || productKey === 'TierThree'
-							}
 							productKey={productKey}
+							contributionType={contributionType}
+							countryGroupId={countryGroupId}
 							promotion={promotion}
+							thresholdAmount={thresholdAmount}
 						/>
 					</BoxContents>
 				</Box>

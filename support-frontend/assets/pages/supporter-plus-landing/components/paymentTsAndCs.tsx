@@ -1,24 +1,13 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import {
-	neutral,
-	space,
-	textSans12,
-	textSans17,
-} from '@guardian/source/foundations';
+import { neutral, textSans12 } from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import TierThreeTerms from 'components/subscriptionCheckouts/tierThreeTerms';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import {
 	contributionsTermsLinks,
 	guardianAdLiteTermsLink,
@@ -31,10 +20,6 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import {
-	getDateWithOrdinal,
-	getLongMonth,
-} from 'helpers/utilities/dateFormatting';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
@@ -52,30 +37,13 @@ const container = css`
 	}
 `;
 
-const containerSummaryTsCs = css`
-	margin-top: ${space[6]}px;
-	border-radius: ${space[2]}px;
-	background-color: ${neutral[97]};
-	padding: ${space[3]}px;
-	${textSans17};
-	color: ${neutral[0]};
-	& a {
-		color: ${neutral[7]};
-	}
-`;
-
-export interface PaymentTsAndCsProps extends SummaryTsAndCsProps {
-	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold: boolean;
-	thresholdAmount?: number;
-}
-export interface SummaryTsAndCsProps {
-	mobileTheme?: FinePrintTheme;
-	contributionType: ContributionType;
-	currency: IsoCurrency;
-	amount: number;
+export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
+	contributionType: ContributionType;
+	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
+	thresholdAmount?: number;
+	mobileTheme?: FinePrintTheme;
 	cssOverrides?: SerializedStyles;
 }
 
@@ -89,40 +57,23 @@ const termsGuardianAdLite = (linkText: string) => (
 const frequencySingular = (contributionType: ContributionType) =>
 	contributionType === 'MONTHLY' ? 'month' : 'year';
 
-function TsAndCsRenewal({
-	contributionType,
-}: {
-	contributionType: ContributionType;
-}): JSX.Element {
-	const today = new Date();
-	if (contributionType === 'ANNUAL') {
-		return (
-			<>
-				on the {getDateWithOrdinal(today)} day of {getLongMonth(today)} every{' '}
-				year
-			</>
-		);
-	}
-	return <>on the {getDateWithOrdinal(today)} day of every month</>;
-}
-
 export function TsAndCsFooterLinks({
 	countryGroupId,
-	amountIsAboveThreshold,
 	productKey,
 }: {
 	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold?: boolean;
-	productKey?: ActiveProductKey;
+	productKey: ActiveProductKey;
 }) {
 	const inAdLite = productKey === 'GuardianAdLite';
+	const inSupporterPlusOrTierThree =
+		productKey === 'SupporterPlus' || productKey === 'TierThree';
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	const termsContributions = (
 		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
 	);
 
-	const terms = amountIsAboveThreshold
+	const terms = inSupporterPlusOrTierThree
 		? termsSupporterPlus('Terms and Conditions')
 		: inAdLite
 		? termsGuardianAdLite('Terms')
@@ -144,20 +95,17 @@ export function TsAndCsFooterLinks({
 }
 
 export function PaymentTsAndCs({
-	mobileTheme = 'dark',
+	productKey,
 	contributionType,
 	countryGroupId,
-	amountIsAboveThreshold,
-	thresholdAmount = 0,
-	productKey,
 	promotion,
+	thresholdAmount = 0,
+	mobileTheme = 'dark',
 }: PaymentTsAndCsProps): JSX.Element {
 	const inDigitalEdition = productKey === 'DigitalSubscription';
 	const inAdLite = productKey === 'GuardianAdLite';
-	const inAllAccessDigital =
-		productKey === 'SupporterPlus' && amountIsAboveThreshold;
-	const inDigitalPlusPrint =
-		productKey === 'TierThree' && amountIsAboveThreshold;
+	const inAllAccessDigital = productKey === 'SupporterPlus';
+	const inDigitalPlusPrint = productKey === 'TierThree';
 	const inSupport =
 		productKey === 'Contribution' ||
 		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite || inDigitalEdition);
@@ -202,7 +150,7 @@ export function PaymentTsAndCs({
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
+					productKey={productKey}
 				/>
 			</>
 		);
@@ -214,7 +162,7 @@ export function PaymentTsAndCs({
 				<FinePrint mobileTheme={mobileTheme}>
 					<TsAndCsFooterLinks
 						countryGroupId={countryGroupId}
-						amountIsAboveThreshold={amountIsAboveThreshold}
+						productKey={productKey}
 					/>
 				</FinePrint>
 			</div>
@@ -228,7 +176,6 @@ export function PaymentTsAndCs({
 		return (
 			<TsAndCsFooterLinks
 				countryGroupId={countryGroupId}
-				amountIsAboveThreshold={amountIsAboveThreshold}
 				productKey={productKey}
 			/>
 		);
@@ -273,7 +220,7 @@ export function PaymentTsAndCs({
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
+					productKey={productKey}
 				/>
 			</>
 		);
@@ -294,90 +241,5 @@ export function PaymentTsAndCs({
 				{inDigitalEdition && copyDigitalEdition()}
 			</FinePrint>
 		</div>
-	);
-}
-
-export function SummaryTsAndCs({
-	contributionType,
-	currency,
-	amount,
-	productKey,
-	cssOverrides,
-}: SummaryTsAndCsProps): JSX.Element {
-	const inDigitalEdition = productKey === 'DigitalSubscription';
-	const inAdLite = productKey === 'GuardianAdLite';
-	const inDigitalPlusPrint = productKey === 'TierThree';
-	const inAllAccessDigital = productKey === 'SupporterPlus';
-	const inSupport =
-		productKey === 'Contribution' ||
-		!(inAllAccessDigital || inDigitalPlusPrint || inAdLite);
-
-	const amountCopy = ` of ${formatAmount(
-		currencies[currency],
-		spokenCurrencies[currency],
-		amount,
-		false,
-	)}`;
-
-	const copyTier1 = (contributionType: ContributionType) => {
-		return (
-			<>
-				<div>
-					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
-				</div>
-			</>
-		);
-	};
-
-	const copyTier2 = (
-		contributionType: ContributionType,
-		productKey: ActiveProductKey,
-	) => {
-		return (
-			<>
-				<div>
-					The {productCatalogDescription[productKey].label} subscription and any
-					contribution will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription and contribution amounts using your chosen payment method
-					at each renewal, at the rate then in effect, unless you cancel.
-				</div>
-			</>
-		);
-	};
-
-	const copyTier3 = (
-		contributionType: ContributionType,
-		productKey: ActiveProductKey,
-		plural: boolean,
-	) => {
-		return (
-			<>
-				<div>
-					The {productCatalogDescription[productKey].label} subscription
-					{plural ? 's' : ''} will auto-renew each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					subscription amount using your chosen payment method at each renewal,
-					at the rate then in effect, unless you cancel.
-				</div>
-			</>
-		);
-	};
-
-	return (
-		<>
-			{!inDigitalEdition && (
-				<div css={[containerSummaryTsCs, cssOverrides]}>
-					{inSupport && copyTier1(contributionType)}
-					{inAllAccessDigital && copyTier2(contributionType, productKey)}
-					{inDigitalPlusPrint && copyTier3(contributionType, productKey, true)}
-					{inAdLite && copyTier3(contributionType, productKey, false)}
-				</div>
-			)}
-		</>
 	);
 }
