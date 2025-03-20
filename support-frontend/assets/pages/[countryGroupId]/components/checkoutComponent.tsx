@@ -50,6 +50,7 @@ import {
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
+	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
@@ -157,6 +158,11 @@ type CheckoutComponentProps = {
 	forcedCountry?: string;
 	abParticipations: Participations;
 };
+
+const shouldUseStripeHostedCheckout = (
+	productKey: ProductKey,
+	ratePlanKey: string,
+) => productKey === 'HomeDelivery' && ratePlanKey === 'Sunday';
 
 export function CheckoutComponent({
 	geoId,
@@ -311,7 +317,9 @@ export function CheckoutComponent({
 		countryGroupId === 'EURCountries' && Sepa,
     */
 		countryId === 'GB' && DirectDebit,
-		Stripe,
+		shouldUseStripeHostedCheckout(productKey, ratePlanKey)
+			? StripeHostedCheckout
+			: Stripe,
 		PayPal,
 	]
 		.filter(isPaymentMethod)
