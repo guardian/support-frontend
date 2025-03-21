@@ -84,10 +84,12 @@ object RecurringPaymentMethodSwitches {
   implicit val recurringPaymentMethodSwitchesCodec: Codec[RecurringPaymentMethodSwitches] = deriveCodec
 }
 
+// Why are these separate from RecurringPaymentMethodSwitches?
 case class SubscriptionsPaymentMethodSwitches(
     directDebit: Option[SwitchState],
     creditCard: Option[SwitchState],
     paypal: Option[SwitchState],
+    stripeHostedCheckout: Option[SwitchState],
 )
 
 object SubscriptionsPaymentMethodSwitches {

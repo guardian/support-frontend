@@ -111,6 +111,9 @@ case class SepaPaymentFields(
     streetName: Option[String],
 ) extends PaymentFields
 
+case class StripeHostedCheckoutPaymentFields(
+) extends PaymentFields
+
 case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
 
 object PaymentFields {
@@ -121,6 +124,9 @@ object PaymentFields {
     discriminatedType.variant[PayPalPaymentFields]("PayPal")
   implicit val stripePaymentMethodPaymentFieldsCodec: discriminatedType.VariantCodec[StripePaymentFields] =
     discriminatedType.variant[StripePaymentFields]("Stripe")
+  implicit val stripeHostedCheckoutPaymentFieldsCodec
+      : discriminatedType.VariantCodec[StripeHostedCheckoutPaymentFields] =
+    discriminatedType.variant[StripeHostedCheckoutPaymentFields]("StripeHostedCheckout")
   implicit val directDebitPaymentFieldsCodec: discriminatedType.VariantCodec[DirectDebitPaymentFields] =
     discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
   implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
@@ -134,6 +140,7 @@ object PaymentFields {
       directDebitPaymentFieldsCodec,
       sepapaymentFieldsCodec,
       existingPaymentFieldsCodec,
+      stripeHostedCheckoutPaymentFieldsCodec,
     ),
   )
 }
