@@ -148,11 +148,11 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
+	tsAndCs: React.ReactNode;
+	startDateTierThree: React.ReactNode;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
-	tsAndCs?: React.ReactNode;
-	startDateTierThree?: React.ReactNode;
 	heading?: string;
 	productDescription?: { description: string; frequency: string };
 };
