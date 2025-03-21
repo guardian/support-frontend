@@ -588,10 +588,11 @@ export function CheckoutComponent({
 						}}
 						enableCheckList={true}
 						startDateTierThree={
-							<OrderSummaryStartDate
-								productKey={productKey}
-								startDate={formatUserDate(getTierThreeDeliveryDate())}
-							/>
+							productKey === 'TierThree' ? (
+								<OrderSummaryStartDate
+									startDate={formatUserDate(getTierThreeDeliveryDate())}
+								/>
+							) : null
 						}
 						tsAndCs={
 							<OrderSummaryTsAndCs

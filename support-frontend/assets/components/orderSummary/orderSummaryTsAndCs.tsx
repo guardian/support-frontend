@@ -34,27 +34,21 @@ const productStartDate = css`
 `;
 
 interface OrderSummaryStartDateProps {
-	productKey: ActiveProductKey;
 	startDate: string;
 }
 export function OrderSummaryStartDate({
-	productKey,
 	startDate,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	const orderSummaryStartDate: Partial<Record<ActiveProductKey, JSX.Element>> =
-		{
-			TierThree: (
-				<ul css={productStartDate}>
-					<li>Your digital benefits will start today.</li>
-					<li>
-						Your Guardian Weekly subscription will start on {startDate}. Please
-						allow 1 to 7 days after your start date for your magazine to arrive,
-						depending on national post services.
-					</li>
-				</ul>
-			),
-		};
-	return orderSummaryStartDate[productKey] ?? null;
+	return (
+		<ul css={productStartDate}>
+			<li>Your digital benefits will start today.</li>
+			<li>
+				Your Guardian Weekly subscription will start on {startDate}. Please
+				allow 1 to 7 days after your start date for your magazine to arrive,
+				depending on national post services.
+			</li>
+		</ul>
+	);
 }
 
 export interface OrderSummaryTsAndCsProps {

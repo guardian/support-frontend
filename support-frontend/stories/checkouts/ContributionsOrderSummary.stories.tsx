@@ -156,12 +156,7 @@ RecurringContribution.args = {
 			countryGroupId={GBPCountries}
 		/>
 	),
-	startDateTierThree: (
-		<OrderSummaryStartDate
-			productKey={'Contribution'}
-			startDate={'Friday, April 11, 2025'}
-		/>
-	),
+	startDateTierThree: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -195,12 +190,7 @@ SupporterPlus.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDateTierThree: (
-		<OrderSummaryStartDate
-			productKey={'SupporterPlus'}
-			startDate={'Friday, April 11, 2025'}
-		/>
-	),
+	startDateTierThree: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -239,10 +229,7 @@ TierThree.args = {
 		/>
 	),
 	startDateTierThree: (
-		<OrderSummaryStartDate
-			productKey={'TierThree'}
-			startDate={'Friday, April 11, 2025'}
-		/>
+		<OrderSummaryStartDate startDate={'Friday, April 11, 2025'} />
 	),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
