@@ -3,7 +3,7 @@ import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { PaymentTsAndCs } from './paymentTsAndCs';
+import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const promotionTierThreUnitedStatesMonthly: Promotion = {
@@ -14,15 +14,13 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		discountedPrice: 37,
 	};
 	const paymentProductKeys = [
-		['GuardianAdLite', 'ANNUAL', 'GBPCountries', 0],
-		['DigitalSubscription', 'MONTHLY', 'GBPCountries', 0],
-		['OneTimeContribution', 'MONTHLY', 'UnitedStates', 0],
+		['GuardianAdLite', 'MONTHLY', 'GBPCountries', 0],
 		['Contribution', 'ANNUAL', 'AUDCountries', 0],
 		['SupporterPlus', 'MONTHLY', 'GBPCountries', 12],
 		['TierThree', 'MONTHLY', 'UnitedStates', 45],
 	];
 	it.each(paymentProductKeys)(
-		`paymentTs&Cs render product %s for region %s correctly`,
+		`orderSummaryTs&Cs render product %s for region %s correctly`,
 		(paymentProductKey, contributionType, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
@@ -31,10 +29,10 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					? promotionTierThreUnitedStatesMonthly
 					: undefined;
 			const { container } = render(
-				<PaymentTsAndCs
+				<OrderSummaryTsAndCs
+					productKey={paymentProductKey as ActiveProductKey}
 					contributionType={contributionType as ContributionType}
 					countryGroupId={countryGroupId as CountryGroupId}
-					productKey={paymentProductKey as ActiveProductKey}
 					thresholdAmount={amount as number}
 					promotion={promo}
 				/>,

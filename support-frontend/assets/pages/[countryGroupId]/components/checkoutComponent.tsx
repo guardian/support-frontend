@@ -26,9 +26,9 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
-	getTermsConditions,
-	getTermsStartDateTier3,
-} from 'components/orderSummary/contributionsOrderSummaryContainer';
+	OrderSummaryStartDate,
+	OrderSummaryTsAndCs,
+} from 'components/orderSummary/orderSummaryTsAndCs';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
@@ -587,20 +587,22 @@ export function CheckoutComponent({
 							);
 						}}
 						enableCheckList={true}
-						tsAndCsTier3={
-							productKey === 'TierThree'
-								? getTermsStartDateTier3(
-										formatUserDate(getTierThreeDeliveryDate()),
-								  )
-								: null
+						startDateTierThree={
+							productKey === 'TierThree' ? (
+								<OrderSummaryStartDate
+									startDate={formatUserDate(getTierThreeDeliveryDate())}
+								/>
+							) : null
 						}
-						tsAndCs={getTermsConditions(
-							countryGroupId,
-							contributionType,
-							productFields.productType,
-							thresholdAmount,
-							promotion,
-						)}
+						tsAndCs={
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								contributionType={contributionType}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+							/>
+						}
 						headerButton={
 							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
@@ -1169,11 +1171,10 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
+							productKey={productKey}
 							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
-							productKey={productKey}
-							promotion={promotion}
 						/>
 						<div
 							css={css`

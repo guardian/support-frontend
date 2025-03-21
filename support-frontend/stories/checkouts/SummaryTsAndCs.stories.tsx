@@ -24,14 +24,6 @@ GuardianAdLite.args = {
 	amount: 0,
 };
 
-export const OneTimeContribution = Template.bind({});
-OneTimeContribution.args = {
-	productKey: 'OneTimeContribution',
-	contributionType: 'ONE_OFF',
-	currency: 'AUD',
-	amount: 5,
-};
-
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
