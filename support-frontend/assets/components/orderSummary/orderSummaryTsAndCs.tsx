@@ -40,7 +40,7 @@ interface OrderSummaryStartDateProps {
 export function OrderSummaryStartDate({
 	productKey,
 	startDate,
-}: OrderSummaryStartDateProps): JSX.Element {
+}: OrderSummaryStartDateProps): JSX.Element | null {
 	const orderSummaryStartDate: Partial<Record<ActiveProductKey, JSX.Element>> =
 		{
 			TierThree: (
@@ -54,7 +54,7 @@ export function OrderSummaryStartDate({
 				</ul>
 			),
 		};
-	return orderSummaryStartDate[productKey] ?? <></>;
+	return orderSummaryStartDate[productKey] ?? null;
 }
 
 export interface OrderSummaryTsAndCsProps {
@@ -70,10 +70,10 @@ export function OrderSummaryTsAndCs({
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
-}: OrderSummaryTsAndCsProps): JSX.Element {
+}: OrderSummaryTsAndCsProps): JSX.Element | null {
 	// Proceeds with RegularContributionType only
 	if (contributionType === 'ONE_OFF') {
-		return <></>;
+		return null;
 	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const tierThreeSupporterPlusTsAndCs = (
@@ -122,5 +122,5 @@ export function OrderSummaryTsAndCs({
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
 	};
-	return orderSummaryTsAndCs[productKey] ?? <></>;
+	return orderSummaryTsAndCs[productKey] ?? null;
 }

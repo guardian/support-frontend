@@ -202,7 +202,7 @@ export function PaymentTsAndCs({
 	return (
 		<div css={container}>
 			<FinePrint mobileTheme={'dark'}>
-				{paymentTsAndCs[productKey] ?? <></>}
+				{paymentTsAndCs[productKey]}
 				<FooterTsAndCs
 					productKey={productKey}
 					countryGroupId={countryGroupId}

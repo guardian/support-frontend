@@ -49,7 +49,7 @@ export function SummaryTsAndCs({
 	contributionType,
 	currency,
 	amount,
-}: SummaryTsAndCsProps): JSX.Element {
+}: SummaryTsAndCsProps): JSX.Element | null {
 	const amountWithCurrency = formatAmount(
 		currencies[currency],
 		spokenCurrencies[currency],
@@ -87,5 +87,5 @@ export function SummaryTsAndCs({
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
 	};
-	return summaryTsAndCs[productKey] ?? <></>;
+	return summaryTsAndCs[productKey] ?? null;
 }
