@@ -569,7 +569,8 @@ export function CheckoutComponent({
 							</div>
 						)}
 					<ContributionsOrderSummary
-						description={productDescription.label}
+						productDescription={productDescription.label}
+						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={
 							ratePlanDescription.billingPeriod === 'Annual'
 								? 'year'
