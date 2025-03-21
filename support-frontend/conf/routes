@@ -138,6 +138,7 @@ GET /postcode-lookup/:postcode                                     controllers.G
 GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
 
 POST /subscribe/create                                             controllers.CreateSubscriptionController.create()
+POST /stripe-checkout-session/create                               controllers.CreateSubscriptionController.createStripeCheckoutSession()
 
 # ----- Authentication ----- #
 

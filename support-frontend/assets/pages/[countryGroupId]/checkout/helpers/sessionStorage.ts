@@ -44,6 +44,7 @@ const OrderSchema = object({
 	paymentMethod: picklist([
 		'Stripe',
 		'StripeExpressCheckoutElement',
+		'StripeHostedCheckout',
 		'PayPal',
 		'DirectDebit',
 		'Sepa',
