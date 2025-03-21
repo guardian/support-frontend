@@ -142,7 +142,8 @@ const productStartDates = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	description: string;
+	productDescription: string;
+	ratePlanDescription?: string;
 	amount: number;
 	promotion?: Promotion;
 	currency: Currency;
@@ -153,8 +154,6 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	heading?: string;
-	productDescription?: { description: string; frequency: string };
 };
 
 const visuallyHiddenCss = css`
@@ -162,7 +161,8 @@ const visuallyHiddenCss = css`
 `;
 
 export function ContributionsOrderSummary({
-	description,
+	productDescription,
+	ratePlanDescription,
 	amount,
 	promotion,
 	currency,
@@ -172,7 +172,6 @@ export function ContributionsOrderSummary({
 	headerButton,
 	tsAndCs,
 	tsAndCsTier3,
-	heading,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
@@ -195,13 +194,16 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>{heading ?? 'Your subscription'}</h2>
+				<h2 css={headingCss}>Your subscription</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>{description}</p>
+					<p>
+						{ratePlanDescription && <div>{ratePlanDescription}</div>}
+						{productDescription}
+					</p>
 					{hasCheckList && (
 						<Button
 							priority="subdued"
