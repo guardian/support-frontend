@@ -172,9 +172,9 @@ RecurringContribution.args = {
 export const SupporterPlus = Template.bind({});
 
 SupporterPlus.args = {
-	description: 'All Access Digital',
+	description: 'All-access Digital',
 	enableCheckList: true,
-	amount: 27,
+	amount: 12,
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
