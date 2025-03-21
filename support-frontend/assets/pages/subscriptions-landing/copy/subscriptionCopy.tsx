@@ -71,7 +71,9 @@ const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
 		: '';
 	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey];
 	const currencyPriceAnnual = priceAnnual
-		? ` ${currency}${fixDecimals(priceAnnual)}/${Annual}`
+		? `${priceMonthly ? ' or ' : ''}${currency}${fixDecimals(
+				priceAnnual,
+		  )}/Annually`
 		: '';
 	return `${currencyPriceMonthly}${currencyPriceAnnual}`;
 };
