@@ -115,18 +115,22 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree
   <span
     class="css-ikw7yp-SubscriptionStartItems"
   >
-    <div>
-      <p>
-        <span
-          class="css-1ekf6lc-SubscriptionStartItems"
-        >
-          Your first issue of Guardian Weekly will be published on 01-01-25
-        </span>
-      </p>
-      <p>
-        Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.
-      </p>
-    </div>
+    <span
+      class="css-ikw7yp-SubscriptionStartItems"
+    >
+      <div>
+        <p>
+          <span
+            class="css-1ekf6lc-SubscriptionStartItems"
+          >
+            Your first issue of Guardian Weekly will be published on 01-01-25
+          </span>
+        </p>
+        <p>
+          Please allow one to seven days after the publication date for your copy to be delivered to your door, depending on postal services.
+        </p>
+      </div>
+    </span>
     <div>
       <p>
         <span

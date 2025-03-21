@@ -373,20 +373,6 @@ SubscriptionStartTierThree.args = {
 	ctas: null,
 };
 
-export const SubscriptionStartEmpty = Template.bind({});
-
-SubscriptionStartEmpty.args = {
-	icon: getThankYouModuleIcon('subscriptionStart'),
-	header: 'When will your subscription start?',
-	bodyCopy: (
-		<SubscriptionStartItems
-			productKey={'SupporterPlus'}
-			startDate={'Friday, March 28, 2025'}
-		/>
-	),
-	ctas: null,
-};
-
 SupportReminder.decorators = [
 	(Story: React.FC): JSX.Element => {
 		const store = createTestStoreForContributions();

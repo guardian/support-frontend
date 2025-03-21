@@ -35,39 +35,43 @@ type SubscriptionStartProps = {
 export function SubscriptionStartItems({
 	productKey,
 	startDate,
-}: SubscriptionStartProps): JSX.Element {
+}: SubscriptionStartProps): JSX.Element | null {
 	const paperCopy = (
-		<div>
-			<p>
-				<span
-					css={boldText}
-				>{`You will receive your newspaper from ${startDate}`}</span>
-			</p>
-			{productKey === 'SubscriptionCard' && (
-				<p css={paragraphSpacing}>
-					You will receive your Subscription Card in your subscriber pack in the
-					post, along with your home delivery letter.
+		<span css={[downloadCopy, subscriptionItems]}>
+			<div>
+				<p>
+					<span
+						css={boldText}
+					>{`You will receive your newspaper from ${startDate}`}</span>
 				</p>
-			)}
-			<p>
-				Visit your chosen participating newsagent to pick up your newspaper
-				using your Subscription Card, or arrange a home delivery using your
-				delivery letter.
-			</p>
-		</div>
+				{productKey === 'SubscriptionCard' && (
+					<p css={paragraphSpacing}>
+						You will receive your Subscription Card in your subscriber pack in
+						the post, along with your home delivery letter.
+					</p>
+				)}
+				<p>
+					Visit your chosen participating newsagent to pick up your newspaper
+					using your Subscription Card, or arrange a home delivery using your
+					delivery letter.
+				</p>
+			</div>
+		</span>
 	);
 	const guardianWeeklyCopy = (
-		<div>
-			<p>
-				<span
-					css={boldText}
-				>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
-			</p>
-			<p>
-				Please allow one to seven days after the publication date for your copy
-				to be delivered to your door, depending on postal services.
-			</p>
-		</div>
+		<span css={[downloadCopy, subscriptionItems]}>
+			<div>
+				<p>
+					<span
+						css={boldText}
+					>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
+				</p>
+				<p>
+					Please allow one to seven days after the publication date for your
+					copy to be delivered to your door, depending on postal services.
+				</p>
+			</div>
+		</span>
 	);
 	const copyContent: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		HomeDelivery: paperCopy,
@@ -76,7 +80,7 @@ export function SubscriptionStartItems({
 		GuardianWeeklyRestOfWorld: guardianWeeklyCopy,
 		GuardianWeeklyDomestic: guardianWeeklyCopy,
 		TierThree: (
-			<>
+			<span css={[downloadCopy, subscriptionItems]}>
 				{guardianWeeklyCopy}
 				<div>
 					<p>
@@ -88,12 +92,8 @@ export function SubscriptionStartItems({
 						ad-free reading.
 					</p>
 				</div>
-			</>
+			</span>
 		),
 	};
-	return (
-		<span css={[downloadCopy, subscriptionItems]}>
-			{copyContent[productKey]}
-		</span>
-	);
+	return copyContent[productKey] ?? null;
 }
