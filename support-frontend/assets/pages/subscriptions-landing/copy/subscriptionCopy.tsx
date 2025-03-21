@@ -61,21 +61,26 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
-const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
+const getDigitalEditionPrice = (
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+): string => {
 	const currencyKey = detect(countryGroupId);
 	const currency = currencies[currencyKey].glyph;
 	const product = productCatalog['DigitalSubscription'];
-	const priceMonthly = product?.ratePlans[Monthly]?.pricing[currencyKey];
-	const currencyPriceMonthly = priceMonthly
-		? `${currency}${fixDecimals(priceMonthly)}/${Monthly}`
+	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
+	return price
+		? `${currency}${fixDecimals(price)}/${
+				billingPeriod === Annual ? 'Annually' : billingPeriod
+		  }`
 		: '';
-	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey];
-	const currencyPriceAnnual = priceAnnual
-		? `${priceMonthly ? ' or ' : ''}${currency}${fixDecimals(
-				priceAnnual,
-		  )}/Annually`
-		: '';
-	return `${currencyPriceMonthly}${currencyPriceAnnual}`;
+};
+const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
+	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
+	return `${priceMonthly}${priceMonthly ? ' or' : ''}${getDigitalEditionPrice(
+		countryGroupId,
+		Annual,
+	)}`;
 };
 
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
@@ -120,7 +125,7 @@ function digitalCheckout(
 		subtitle: getDigitalEditionPrices(countryGroupId),
 		buttons: [
 			{
-				ctaButtonText: 'Subscribe Monthly',
+				ctaButtonText: getDigitalEditionPrice(countryGroupId, Monthly),
 				link: digitalSubscriptionLanding(countryGroupId, 'Monthly'),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_monthly_cta',
@@ -130,7 +135,7 @@ function digitalCheckout(
 				modifierClasses: 'digital',
 			},
 			{
-				ctaButtonText: 'Subscribe Annually',
+				ctaButtonText: getDigitalEditionPrice(countryGroupId, Annual),
 				link: digitalSubscriptionLanding(countryGroupId, 'Annual'),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_annual_cta',
