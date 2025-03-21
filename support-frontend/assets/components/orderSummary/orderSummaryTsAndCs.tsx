@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { neutral, space } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	palette,
+	space,
+	textSans14,
+} from '@guardian/source/foundations';
 import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
@@ -10,6 +16,21 @@ const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
 	background-color: ${neutral[97]};
 	padding: ${space[3]}px;
+`;
+const productStartDate = css`
+	display: block;
+	${textSans14};
+	color: #606060;
+	background-color: ${palette.neutral[97]};
+	border-radius: ${space[3]}px;
+	padding: ${space[3]}px;
+	margin-top: ${space[2]}px;
+	${from.desktop} {
+		margin-top: ${space[4]}px;
+	}
+	li + li {
+		margin-top: ${space[2]}px;
+	}
 `;
 
 interface OrderSummaryStartDateProps {
@@ -23,14 +44,14 @@ export function OrderSummaryStartDate({
 	const orderSummaryStartDate: Partial<Record<ActiveProductKey, JSX.Element>> =
 		{
 			TierThree: (
-				<>
+				<ul css={productStartDate}>
 					<li>Your digital benefits will start today.</li>
 					<li>
 						Your Guardian Weekly subscription will start on {startDate}. Please
 						allow 1 to 7 days after your start date for your magazine to arrive,
 						depending on national post services.
 					</li>
-				</>
+				</ul>
 			),
 		};
 	return orderSummaryStartDate[productKey] ?? <></>;

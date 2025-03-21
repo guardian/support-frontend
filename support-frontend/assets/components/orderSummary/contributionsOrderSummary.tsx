@@ -125,22 +125,6 @@ const termsAndConditions = css`
 	}
 `;
 
-const productStartDate = css`
-	display: block;
-	${textSans14};
-	color: #606060;
-	background-color: ${palette.neutral[97]};
-	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
-	margin-top: ${space[2]}px;
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-	}
-	li + li {
-		margin-top: ${space[2]}px;
-	}
-`;
-
 export type ContributionsOrderSummaryProps = {
 	description: string;
 	amount: number;
@@ -222,9 +206,7 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!!startDateTierThree && (
-							<ul css={productStartDate}>{startDateTierThree}</ul>
-						)}
+						{startDateTierThree}
 					</>
 				)}
 			</div>
