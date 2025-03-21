@@ -13,6 +13,7 @@ export const productLegal = (
 ) => {
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
+
 	const amountFormatted = simpleFormatAmount(currency, thresholdAmount);
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const amountPerPeriod = `${amountFormatted}${divider}${period}`;
