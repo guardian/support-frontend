@@ -302,7 +302,10 @@ function ThankYouModule({
 		: css``;
 
 	return (
-		<section css={[container, maybePaddingRight, hasImagery && imageryPadding]}>
+		<section
+			css={[container, maybePaddingRight, hasImagery && imageryPadding]}
+			data-testid={moduleType}
+		>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
 				<div css={[headerContainer, resizeContainer]}>{header}</div>

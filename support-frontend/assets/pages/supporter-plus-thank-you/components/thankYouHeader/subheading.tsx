@@ -20,9 +20,11 @@ interface SubheadingProps {
 function MarketingCopy({
 	contributionType,
 	isTier3,
+	isPaper,
 }: {
 	contributionType: ContributionType;
 	isTier3: boolean;
+	isPaper: boolean;
 }) {
 	return (
 		<span>
@@ -30,6 +32,8 @@ function MarketingCopy({
 				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
 				: isTier3
 				? 'You can adjust your email preferences and opt out anytime via '
+				: isPaper
+				? 'You can opt out any time via your '
 				: 'Adjust your email preferences at any time via '}
 			<a href="https://manage.theguardian.com">your account</a>.
 		</span>
@@ -108,6 +112,12 @@ function Subheading({
 	identityUserType,
 	paymentStatus,
 }: SubheadingProps): JSX.Element {
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+	];
+	const isPaper = paperProductsKeys.includes(productKey);
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
@@ -120,13 +130,14 @@ function Subheading({
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
-			{isPending && pendingCopy()}
+			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}
 						isTier3={isTier3}
+						isPaper={isPaper}
 					/>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
