@@ -2,8 +2,9 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.workers.Paper
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -16,12 +17,9 @@ class PaperSubscriptionBuilder(
 ) {
 
   def build(
-      state: PaperState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: Paper,
+      state: CreateZuoraSubscriptionState,
   ): Either[PromoError, SubscribeItem] = {
-
-    import state._
 
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
@@ -32,11 +30,12 @@ class PaperSubscriptionBuilder(
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
       readerType = Direct,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
+      csrUsername = state.csrUsername,
+      salesforceCaseId = state.salesforceCaseId,
       deliveryAgent = product.deliveryAgent,
     )
 
+    val user = state.user
     applyPromoCodeIfPresent(
       promotionService,
       state.appliedPromotion,
@@ -52,7 +51,7 @@ class PaperSubscriptionBuilder(
       )
       subscribeItemBuilder.build(
         subscriptionData,
-        state.salesForceContact,
+        state.salesForceContacts.recipient,
         Some(state.paymentMethod),
         Some(soldToContact),
       )

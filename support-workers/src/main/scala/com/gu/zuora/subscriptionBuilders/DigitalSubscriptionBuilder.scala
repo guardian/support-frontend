@@ -1,14 +1,14 @@
 package com.gu.zuora.subscriptionBuilders
 
+import cats.syntax.either._
 import com.gu.helpers.DateGenerator
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
-import com.gu.support.acquisitions.{AbTest, AcquisitionData}
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
-import com.gu.support.promotions.{PromoCode, PromoError, PromotionService}
+import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans.digitalRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.workers.{DigitalPack, Monthly}
-import com.gu.support.zuora.api.ReaderType.Patron
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
@@ -21,26 +21,24 @@ class DigitalSubscriptionBuilder(
 ) {
 
   def build(
-      state: DigitalSubscriptionState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
-      acquisitionData: Option[AcquisitionData],
-  ): Either[PromoError, SubscribeItem] = {
+      product: DigitalPack,
+      state: CreateZuoraSubscriptionState,
+  ): Either[String, SubscribeItem] = {
 
-    val productRatePlanId = validateRatePlan(digitalRatePlan(state.product, environment), state.product.describe)
+    val productRatePlanId = validateRatePlan(digitalRatePlan(product, environment), product.describe)
 
     val todaysDate = dateGenerator.today
     val contractAcceptanceDate = todaysDate.plusDays(config.defaultFreeTrialPeriod + config.paymentGracePeriod)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
-      ratePlanCharges = overridePricingIfRequired(state.product, acquisitionData.map(_.supportAbTests)),
+      ratePlanCharges = overridePricingIfRequired(product, state.acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
-      readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse state.product.readerType,
+      readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse product.readerType,
       initialTermPeriodType = Month,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
+      csrUsername = state.csrUsername,
+      salesforceCaseId = state.salesforceCaseId,
     )
 
     applyPromoCodeIfPresent(
@@ -48,9 +46,9 @@ class DigitalSubscriptionBuilder(
       state.appliedPromotion,
       productRatePlanId,
       subscriptionData,
-    ).map { subscriptionData =>
-      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
-    }
+    ).map(subscriptionData =>
+      subscribeItemBuilder.build(subscriptionData, state.salesForceContacts.recipient, Some(state.paymentMethod), None),
+    ).leftMap(_.toString)
 
   }
 

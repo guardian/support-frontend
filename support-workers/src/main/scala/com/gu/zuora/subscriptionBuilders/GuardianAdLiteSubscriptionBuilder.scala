@@ -2,8 +2,9 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.workers.GuardianAdLite
 import com.gu.support.workers.ProductTypeRatePlans.guardianAdLiteRatePlan
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianAdLiteState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api.SubscribeItem
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
@@ -14,12 +15,11 @@ class GuardianAdLiteSubscriptionBuilder(
     subscribeItemBuilder: SubscribeItemBuilder,
 ) {
   def build(
-      state: GuardianAdLiteState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: GuardianAdLite,
+      state: CreateZuoraSubscriptionState,
   ): SubscribeItem = {
     val productRatePlanId = {
-      validateRatePlan(guardianAdLiteRatePlan(state.product, environment), state.product.describe)
+      validateRatePlan(guardianAdLiteRatePlan(product, environment), product.describe)
     }
 
     val todaysDate = dateGenerator.today
@@ -28,11 +28,11 @@ class GuardianAdLiteSubscriptionBuilder(
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = todaysDate.plusDays(GuardianAdLiteSubscriptionBuilder.gracePeriodInDays),
       readerType = Direct,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
+      csrUsername = state.csrUsername,
+      salesforceCaseId = state.salesforceCaseId,
     )
 
-    subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+    subscribeItemBuilder.build(subscriptionData, state.salesForceContacts.recipient, Some(state.paymentMethod), None)
   }
 }
 

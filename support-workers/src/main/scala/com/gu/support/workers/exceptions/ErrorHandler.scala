@@ -7,7 +7,7 @@ import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
 import com.gu.support.workers.lambdas.StateNotValidException
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
-import com.gu.zuora.productHandlers.BuildSubscribePromoError
+import com.gu.zuora.productHandlers.BuildSubscribeError
 import io.circe.syntax._
 import io.circe.{DecodingFailure, ParsingFailure}
 
@@ -31,7 +31,7 @@ object ErrorHandler extends SafeLogging {
       case e: PayPalError => e.asRetryException
       case e: ZuoraErrorResponse => e.asRetryException
       case e: SalesforceErrorResponse => e.asRetryException
-      case e: BuildSubscribePromoError => new RetryNone(e.cause.msg, cause = e)
+      case e: BuildSubscribeError => new RetryNone(e.cause.msg, cause = e)
       case e: StateNotValidException => new RetryNone(e.message, cause = e)
       case e: BadRequestException => new RetryNone(e.getMessage, cause = e)
       case wshe: WebServiceHelperError[_] if wshe.cause.isInstanceOf[DecodingFailure] =>

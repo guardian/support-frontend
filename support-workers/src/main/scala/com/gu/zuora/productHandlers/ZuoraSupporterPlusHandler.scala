@@ -1,9 +1,9 @@
 package com.gu.zuora.productHandlers
 
 import cats.implicits._
-import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
+import com.gu.support.workers.{SupporterPlus, User}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.SupporterPlusSubcriptionBuilder
 
@@ -16,22 +16,21 @@ class ZuoraSupporterPlusHandler(
     user: User,
 ) {
   def subscribe(
-      state: SupporterPlusState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: SupporterPlus,
+      state: CreateZuoraSubscriptionState,
   ): Future[SendThankYouEmailSupporterPlusState] =
     for {
       subscribeItem <- Future.fromTry(
         supporterPlusSubscriptionBuilder
-          .build(state, csrUsername, salesforceCaseId)
-          .leftMap(BuildSubscribePromoError)
+          .build(product, state)
+          .leftMap(BuildSubscribeError)
           .toTry,
       )
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailSupporterPlusState(
       user,
-      state.product,
+      product,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),

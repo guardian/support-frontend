@@ -4,7 +4,8 @@ import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.TierThreeState
+import com.gu.support.workers.TierThree
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
@@ -16,23 +17,22 @@ class TierThreeSubscriptionBuilder(
 ) {
 
   def build(
-      state: TierThreeState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: TierThree,
+      state: CreateZuoraSubscriptionState,
   ): Either[PromoError, SubscribeItem] = {
 
     val contractEffectiveDate = dateGenerator.today
 
     val productRatePlanId =
-      validateRatePlan(tierThreeRatePlan(state.product, environment), state.product.describe)
+      validateRatePlan(tierThreeRatePlan(product, environment), product.describe)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
       contractAcceptanceDate = state.firstDeliveryDate,
       contractEffectiveDate = contractEffectiveDate,
       readerType = ReaderType.Direct,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
+      csrUsername = state.csrUsername,
+      salesforceCaseId = state.salesforceCaseId,
     )
 
     applyPromoCodeIfPresent(
@@ -52,7 +52,7 @@ class TierThreeSubscriptionBuilder(
 
       subscribeItemBuilder.build(
         subscriptionData,
-        state.salesForceContact,
+        state.salesForceContacts.recipient,
         Some(state.paymentMethod),
         Some(soldToContact),
       )

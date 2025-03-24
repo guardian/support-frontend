@@ -6,7 +6,6 @@ import com.gu.helpers.DateGenerator
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
@@ -20,64 +19,31 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(
-      zuoraSubscriptionState: CreateZuoraSubscriptionState,
+      state: CreateZuoraSubscriptionState,
       requestInfo: RequestInfo,
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
 
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
+    val zuoraProductHandlers = new ZuoraProductHandlers(services, state)
     import zuoraProductHandlers._
 
-    val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
-      case state: SupporterPlusState =>
-        zuoraSupporterPlusHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-      case state: TierThreeState =>
-        zuoraTierThreeHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-      case state: DigitalSubscriptionState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-          zuoraSubscriptionState.acquisitionData,
-        )
-      case state: ContributionState =>
-        zuoraContributionHandler.subscribe(state)
-      case state: PaperState =>
-        zuoraPaperHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-      case state: GuardianWeeklyState =>
-        zuoraGuardianWeeklyHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-      case state: GuardianAdLiteState =>
-        zuoraGuardianAdLiteHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
+    val eventualSendThankYouEmailState = state.product match {
+      case product: SupporterPlus => zuoraSupporterPlusHandler.subscribe(product, state)
+      case product: TierThree => zuoraTierThreeHandler.subscribe(product, state)
+      case product: DigitalPack => zuoraDigitalSubscriptionDirectHandler.subscribe(product, state)
+      case product: Contribution => zuoraContributionHandler.subscribe(product, state)
+      case product: Paper => zuoraPaperHandler.subscribe(product, state)
+      case product: GuardianWeekly => zuoraGuardianWeeklyHandler.subscribe(product, state)
+      case product: GuardianAdLite => zuoraGuardianAdLiteHandler.subscribe(product, state)
     }
-
     eventualSendThankYouEmailState.map { nextState =>
       HandlerResult(
         SendAcquisitionEventState(
-          requestId = zuoraSubscriptionState.requestId,
-          analyticsInfo = zuoraSubscriptionState.analyticsInfo,
+          requestId = state.requestId,
+          analyticsInfo = state.analyticsInfo,
           sendThankYouEmailState = nextState,
-          acquisitionData = zuoraSubscriptionState.acquisitionData,
+          acquisitionData = state.acquisitionData,
         ),
         requestInfo,
       )

@@ -2,9 +2,9 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.Paper
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailPaperState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.PaperSubscriptionBuilder
 
@@ -17,21 +17,20 @@ class ZuoraPaperHandler(
 ) {
 
   def subscribe(
-      state: PaperState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: Paper,
+      state: CreateZuoraSubscriptionState,
   ): Future[SendThankYouEmailState] =
     for {
       subscribeItem <- Future
         .fromTry(
-          paperSubscriptionBuilder.build(state, csrUsername, salesforceCaseId).leftMap(BuildSubscribePromoError).toTry,
+          paperSubscriptionBuilder.build(product, state).leftMap(BuildSubscribeError).toTry,
         )
         .withEventualLogging("subscription data")
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailPaperState(
       state.user,
-      state.product,
+      product,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),

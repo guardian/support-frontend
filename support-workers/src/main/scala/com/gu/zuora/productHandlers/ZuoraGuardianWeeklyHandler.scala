@@ -1,10 +1,11 @@
 package com.gu.zuora.productHandlers
 
 import cats.implicits._
+import scala.util.Try
 import com.gu.WithLoggingSugar._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
-import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.support.workers.GuardianWeekly
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianWeeklyState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders._
 
@@ -17,16 +18,18 @@ class ZuoraGuardianWeeklyHandler(
 ) {
 
   def subscribe(
-      state: GuardianWeeklyState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
-  ): Future[SendThankYouEmailState] =
+      product: GuardianWeekly,
+      state: CreateZuoraSubscriptionState,
+  ): Future[SendThankYouEmailState] = {
+    val firstDeliveryDate =
+      state.firstDeliveryDate.toRight(new IllegalStateException("firstDeliveryDate is required")).toTry
     for {
+      firstDeliveryDate <- Future.fromTry(firstDeliveryDate)
       subscribeItem <- Future
         .fromTry(
           guardianWeeklySubscriptionBuilder
-            .build(state, csrUsername, salesforceCaseId)
-            .leftMap(BuildSubscribePromoError)
+            .build(product, state)
+            .leftMap(BuildSubscribeError)
             .toTry,
         )
         .withEventualLogging("subscription data")
@@ -34,14 +37,15 @@ class ZuoraGuardianWeeklyHandler(
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailGuardianWeeklyState(
       state.user,
-      state.product,
+      product,
       state.giftRecipient,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),
       account.value,
       sub.value,
-      state.firstDeliveryDate,
+      firstDeliveryDate,
     )
+  }
 
 }
