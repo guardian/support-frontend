@@ -66,6 +66,8 @@ object CheckoutValidationRules {
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: SepaPaymentFields =>
       if (switches.sepa.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: StripeHostedCheckoutPaymentFields =>
+      if (switches.stripeHostedCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
     case s: StripePaymentFields =>
       s.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) =>
