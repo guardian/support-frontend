@@ -89,6 +89,10 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
 
+const digitalEditionBenefit = {
+	copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+};
+
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
@@ -220,9 +224,7 @@ export const productCatalogDescription: Record<
 		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
             Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
 		benefits: [
-			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-			},
+			digitalEditionBenefit,
 			{
 				copy: 'Full access to the Guardian app. Read our reporting on the go',
 			},
@@ -386,9 +388,7 @@ export const productCatalogDescription: Record<
 	GuardianPatron: {
 		label: 'Guardian Patron',
 		benefits: [
-			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-			},
+			digitalEditionBenefit,
 			{
 				copy: 'Full access to the Guardian app. Read our reporting on the go',
 			},
