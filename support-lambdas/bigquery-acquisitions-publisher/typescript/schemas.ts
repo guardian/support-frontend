@@ -316,7 +316,7 @@ const PrintProductSchema = z.enum([
 
 export const PrintOptionsSchema = z
 	.object({ product: PrintProductSchema, deliveryCountry: IsoCountrySchema })
-	.nullable();
+	.nullish();
 export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
 
 export const ReaderTypeSchema = z.enum(['Direct', 'Gift']);
@@ -329,31 +329,31 @@ export type ReaderType = z.infer<typeof ReaderTypeSchema>;
 export const AcquisitionProductSchema = z.object({
 	eventTimeStamp: z.string(),
 	country: IsoCountrySchema,
-	componentId: z.string().nullable(),
-	componentType: z.string().nullable(),
-	campaignCode: z.string().nullable(),
-	referrerUrl: z.string().nullable(),
+	componentId: z.string().nullish(),
+	componentType: z.string().nullish(),
+	campaignCode: z.string().nullish(),
+	referrerUrl: z.string().nullish(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
 	paymentFrequency: PaymentFrequencySchema,
-	paymentProvider: PaymentProviderSchema,
+	paymentProvider: PaymentProviderSchema.nullish(),
 	printOptions: PrintOptionsSchema,
-	browserId: z.string().nullable(),
-	identityId: z.string().nullable(),
-	pageViewId: z.string().nullable(),
-	referrerPageViewId: z.string().nullable(),
-	promoCode: z.string().nullable(),
+	browserId: z.string().nullish(),
+	identityId: z.string().nullish(),
+	pageViewId: z.string().nullish(),
+	referrerPageViewId: z.string().nullish(),
+	promoCode: z.string().nullish(),
 	queryParameters: z.object({ name: z.string(), value: z.string() }).array(),
 	reusedExistingPaymentMethod: z.boolean(),
 	acquisitionType: z.string(),
 	readerType: ReaderTypeSchema,
-	zuoraSubscriptionNumber: z.string().nullable(),
-	contributionId: z.string().nullable(),
-	paymentId: z.string().nullable(),
+	zuoraSubscriptionNumber: z.string().nullish(),
+	contributionId: z.string().nullish(),
+	paymentId: z.string().nullish(),
 	product: ProductTypeSchema,
-	amount: z.number().nullable(),
+	amount: z.number().nullish(),
 	currency: IsoCurrencySchema,
-	source: z.string().nullable(),
-	platform: z.string().nullable(),
+	source: z.string().nullish(),
+	platform: z.string().nullish(),
 	labels: z.string().array(),
 });
 export type AcquisitionProduct = z.infer<typeof AcquisitionProductSchema>;
