@@ -243,8 +243,8 @@ function Heading({
 				// Paper
 				default:
 					return isPending
-						? `You have now subscribed to the ${paperRatePlanName} package`
-						: `Your subscription to the ${paperRatePlanName} package is being processed`;
+						? `Your subscription to the ${paperRatePlanName} package is being processed`
+						: `You have now subscribed to the ${paperRatePlanName} package`;
 			}
 		};
 		return (

@@ -166,6 +166,8 @@ const guardianAdLiteBenefits = [
 	{ copy: 'You can cancel at any time.' },
 ];
 
+const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
+
 export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
@@ -245,6 +247,7 @@ export const productCatalogDescription: Record<
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
@@ -317,6 +320,7 @@ export const productCatalogDescription: Record<
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
@@ -351,6 +355,7 @@ export const productCatalogDescription: Record<
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
