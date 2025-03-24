@@ -335,7 +335,7 @@ export const AcquisitionProductSchema = z.object({
 	referrerUrl: z.string().nullish(),
 	abTests: z.object({ name: z.string(), variant: z.string() }).array(),
 	paymentFrequency: PaymentFrequencySchema,
-	paymentProvider: PaymentProviderSchema,
+	paymentProvider: PaymentProviderSchema.nullish(),
 	printOptions: PrintOptionsSchema,
 	browserId: z.string().nullish(),
 	identityId: z.string().nullish(),

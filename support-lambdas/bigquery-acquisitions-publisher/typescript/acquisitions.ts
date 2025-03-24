@@ -21,7 +21,7 @@ export type FactAcquisitionEventRow = {
 	referrer_url?: string | null;
 	ab_tests: { name: string; variant: string }[];
 	payment_frequency: PaymentFrequency;
-	payment_provider: PaymentProvider;
+	payment_provider?: PaymentProvider | null;
 	print_options?: { product: string; delivery_country_code: string } | null;
 	browser_id?: string | null;
 	identity_id?: string | null;
