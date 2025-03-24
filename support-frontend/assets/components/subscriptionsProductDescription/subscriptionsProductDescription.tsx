@@ -182,7 +182,10 @@ function SubscriptionsProductBenefits({
 						></div>
 					</div>
 					<SvgTickRound isAnnouncedByScreenReader size={'small'} />
-					<div>{benefit.copy}</div>
+					<div>
+						{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
+						{benefit.copy}
+					</div>
 				</li>
 			))}
 		</ul>

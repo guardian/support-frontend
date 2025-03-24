@@ -14,6 +14,7 @@ export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
+	copyFirst?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
@@ -90,7 +91,8 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 }
 
 const digitalEditionBenefit = {
-	copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+	copyFirst: 'The Digital Edition app. ',
 };
 
 const appBenefit = {
@@ -226,10 +228,12 @@ export const productCatalogDescription: Record<
 		benefits: [
 			digitalEditionBenefit,
 			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
+				copy: 'Read our reporting on the go',
+				copyFirst: 'Full access to the Guardian app. ',
 			},
 			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+				copy: 'Enjoy a free trial of your subscription, before you pay',
+				copyFirst: 'Free 14 day trial. ',
 			},
 		],
 		ratePlans: {
@@ -388,7 +392,9 @@ export const productCatalogDescription: Record<
 	GuardianPatron: {
 		label: 'Guardian Patron',
 		benefits: [
-			digitalEditionBenefit,
+			{
+				copy: `${digitalEditionBenefit.copyFirst}${digitalEditionBenefit.copy}`,
+			},
 			{
 				copy: 'Full access to the Guardian app. Read our reporting on the go',
 			},
