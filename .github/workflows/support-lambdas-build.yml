@@ -60,3 +60,68 @@ jobs:
           export LAST_TEAMCITY_BUILD=15000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project support-lambdas" riffRaffUpload
+
+  support_lambdas_typescripts_bigquery_acquisition_publisher:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-lambdas-bigquery-acquisition-publisher build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "support-lambdas/bigquery-acquisitions-publisher/.nvmrc"
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
+      - run: yarn install
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn tsc --noEmit
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn prettier -c typescript/*.ts
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn test
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: yarn build
+        working-directory: support-lambdas/bigquery-acquisitions-publisher
+
+      - run: zip -qr index.zip ./*.js
+        working-directory: support-lambdas/bigquery-acquisitions-publisher/target/typescript
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Upload to Riff-Raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          projectName: "support:lambdas:bigquery-acquisitions-publisher"
+          buildNumberOffset: 15000
+          configPath: "support-lambdas/bigquery-acquisitions-publisher/riff-raff.yaml"
+          commentingEnabled: "false"
+          contentDirectories: |
+            cfn:
+              - ./cdk/cdk.out
+            bigquery-acquisitions-publisher:
+              - ./support-lambdas/bigquery-acquisitions-publisher/target/typescript/index.zip

@@ -167,7 +167,7 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
+          "S3Key": "support/PROD/bigquery-acquisitions-publisher/index.zip",
         },
         "Environment": {
           "Variables": {
@@ -177,18 +177,18 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
           },
         },
         "FunctionName": "bigquery-acquisitions-publisher-PROD",
-        "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
+        "Handler": "index.handler",
         "LoggingConfig": {
-          "LogFormat": "JSON",
+          "LogFormat": "Text",
         },
-        "MemorySize": 1024,
+        "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
             "bigquerytos3role8B775EB2",
             "Arn",
           ],
         },
-        "Runtime": "java21",
+        "Runtime": "nodejs20.x",
         "Tags": [
           {
             "Key": "App",
@@ -535,7 +535,7 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
+                      "/support/PROD/bigquery-acquisitions-publisher/index.zip",
                     ],
                   ],
                 },
