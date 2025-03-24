@@ -5,6 +5,12 @@ import type { ContributionsOrderSummaryProps } from 'components/orderSummary/con
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { productCatalogDescription } from 'helpers/productCatalog';
+import {
+	OrderSummaryStartDate,
+	OrderSummaryTsAndCs,
+} from 'components/orderSummary/orderSummaryTsAndCs';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 
 const boldText = css`
 	font-weight: bold;
@@ -86,11 +92,6 @@ Default.args = {
 		isPaddedGlyph: false,
 	},
 	checkListData: checkListData,
-	headerButton: (
-		<Button priority="tertiary" size="xsmall">
-			Change
-		</Button>
-	),
 	tsAndCs: (
 		<>
 			<p>Auto renews every month until you cancel.</p>
@@ -99,6 +100,12 @@ Default.args = {
 				days, you will receive a full refund.
 			</p>
 		</>
+	),
+	startDateTierThree: <></>,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
 	),
 };
 
@@ -115,6 +122,115 @@ SingleContribution.args = {
 		isPaddedGlyph: false,
 	},
 	checkListData: [],
+	tsAndCs: <></>,
+	startDateTierThree: <></>,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const RecurringContribution = Template.bind({});
+
+RecurringContribution.args = {
+	description: 'Support',
+	enableCheckList: true,
+	amount: 3,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.Contribution.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'Contribution'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+		/>
+	),
+	startDateTierThree: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const SupporterPlus = Template.bind({});
+
+SupporterPlus.args = {
+	description: 'All-access Digital',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDateTierThree: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const TierThree = Template.bind({});
+
+TierThree.args = {
+	description: 'Digital + print',
+	enableCheckList: true,
+	amount: 27,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+		...productCatalogDescription.TierThree.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'TierThree'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={27}
+		/>
+	),
+	startDateTierThree: (
+		<OrderSummaryStartDate startDate={'Friday, April 11, 2025'} />
+	),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
