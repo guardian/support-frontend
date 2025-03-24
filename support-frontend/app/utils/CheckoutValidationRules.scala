@@ -51,6 +51,8 @@ object CheckoutValidationRules {
       if (switches.directDebit.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _: StripePaymentFields =>
       if (switches.creditCard.contains(On)) Valid else Invalid("Invalid Payment Method")
+    case _: StripeHostedCheckoutPaymentFields =>
+      if (switches.stripeHostedCheckout.contains(On)) Valid else Invalid("Invalid Payment Method")
     case _ => Invalid("Invalid Payment Method")
   }
 
@@ -225,6 +227,7 @@ object PaidProductValidation {
     case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
       accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
         iban.nonEmpty.otherwise("sepa iban empty")
+    case _: StripeHostedCheckoutPaymentFields => Valid
   }
 
 }

@@ -495,7 +495,9 @@ export function CheckoutComponent({
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');
 			}
-			const thankYouPageUrl = await submitForm({
+			// For StripeHostedCheckout successUrl is a hosted Stripe checkout page
+			// for other payment methods it's the thank you page.
+			const successUrl = await submitForm({
 				geoId,
 				productKey: finalProductKey,
 				ratePlanKey,
@@ -508,7 +510,7 @@ export function CheckoutComponent({
 				promotion,
 				contributionAmount,
 			});
-			window.location.href = thankYouPageUrl;
+			window.location.href = successUrl;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
