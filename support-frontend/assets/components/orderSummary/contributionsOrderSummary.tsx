@@ -126,19 +126,19 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	description: string;
+	productDescription: string;
+	ratePlanDescription?: string;
 	amount: number;
 	promotion?: Promotion;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
-	tsAndCs: React.ReactNode;
 	startDateTierThree: React.ReactNode;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
-	heading?: string;
-	productDescription?: { description: string; frequency: string };
+	tsAndCs?: React.ReactNode;
+	tsAndCsTier3?: React.ReactNode;
 };
 
 const visuallyHiddenCss = css`
@@ -146,7 +146,8 @@ const visuallyHiddenCss = css`
 `;
 
 export function ContributionsOrderSummary({
-	description,
+	productDescription,
+	ratePlanDescription,
 	amount,
 	promotion,
 	currency,
@@ -156,7 +157,6 @@ export function ContributionsOrderSummary({
 	headerButton,
 	tsAndCs,
 	startDateTierThree,
-	heading,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
@@ -179,13 +179,16 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>{heading ?? 'Your subscription'}</h2>
+				<h2 css={headingCss}>Your subscription</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>{description}</p>
+					<p>
+						{ratePlanDescription && <div>{ratePlanDescription}</div>}
+						{productDescription}
+					</p>
 					{hasCheckList && (
 						<Button
 							priority="subdued"

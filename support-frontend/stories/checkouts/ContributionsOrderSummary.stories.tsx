@@ -3,14 +3,14 @@ import { Button, Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
-import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { productCatalogDescription } from 'helpers/productCatalog';
 import {
 	OrderSummaryStartDate,
 	OrderSummaryTsAndCs,
 } from 'components/orderSummary/orderSummaryTsAndCs';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { productCatalogDescription } from 'helpers/productCatalog';
+import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 const boldText = css`
 	font-weight: bold;
@@ -81,7 +81,7 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	description: 'Monthly support',
+	productDescription: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
 	amount: 10,
@@ -112,7 +112,7 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	description: 'One-off contribution',
+	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
 	currency: {
@@ -134,7 +134,7 @@ SingleContribution.args = {
 export const RecurringContribution = Template.bind({});
 
 RecurringContribution.args = {
-	description: 'Support',
+	productDescription: 'Support',
 	enableCheckList: true,
 	amount: 3,
 	currency: {
@@ -167,7 +167,7 @@ RecurringContribution.args = {
 export const SupporterPlus = Template.bind({});
 
 SupporterPlus.args = {
-	description: 'All-access Digital',
+	productDescription: 'All-access Digital',
 	enableCheckList: true,
 	amount: 12,
 	currency: {
@@ -201,7 +201,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 
 TierThree.args = {
-	description: 'Digital + print',
+	productDescription: 'Digital + print',
 	enableCheckList: true,
 	amount: 27,
 	currency: {
