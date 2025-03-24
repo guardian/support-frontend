@@ -81,7 +81,7 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	description: 'Monthly support',
+	productDescription: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
 	amount: 10,
@@ -112,7 +112,7 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	description: 'One-off contribution',
+	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
 	currency: {

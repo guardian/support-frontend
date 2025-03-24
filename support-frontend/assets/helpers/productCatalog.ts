@@ -34,6 +34,7 @@ export type ProductDescription = {
 		string,
 		{
 			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			label?: string;
 		}
 	>;
 };
@@ -245,23 +246,6 @@ export const productCatalogDescription: Record<
 			},
 		},
 	},
-	NationalDelivery: {
-		label: 'National Delivery',
-		thankyouMessage: paperThankyouMessage,
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Annual',
-			},
-			Everyday: {
-				billingPeriod: 'Monthly',
-			},
-		},
-	},
 	SupporterPlus: {
 		label: 'All-access digital',
 		benefits: supporterPlusBenefits,
@@ -319,25 +303,78 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SubscriptionCard: {
-		label: 'Newspaper subscription',
+		label: 'Subscription card',
 		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
 			Everyday: {
 				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
 			},
 			Weekend: {
 				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
+				label: 'Weekend package',
 			},
 			Saturday: {
 				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	HomeDelivery: {
+		label: 'Home delivery',
+		thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package',
+			},
+			Saturday: {
+				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	NationalDelivery: {
+		label: 'National delivery',
+    thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package - The Guardian and The Observer',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package - The Guardian',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package - The Guardian and The Observer',
 			},
 		},
 	},
@@ -350,29 +387,6 @@ export const productCatalogDescription: Record<
 			},
 			Annual: {
 				billingPeriod: 'Annual',
-			},
-		},
-	},
-	HomeDelivery: {
-		label: 'Home Delivery',
-		thankyouMessage: paperThankyouMessage,
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
-			},
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Monthly',
-			},
-			Saturday: {
-				billingPeriod: 'Monthly',
 			},
 		},
 	},
