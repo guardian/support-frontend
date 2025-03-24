@@ -69,10 +69,10 @@ const getDigitalEditionPrice = (
 	const currency = currencies[currencyKey].glyph;
 	const product = productCatalog['DigitalSubscription'];
 	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
-	return price
-		? `${currency}${fixDecimals(price)}/${
-				billingPeriod === Annual ? 'Annually' : billingPeriod
-		  }`
+	if (!price) { return null }
+	const fixedPriceWtihCurrency = `${currency}${fixDecimals(price)}`;
+	const billingFrequency = billingPeriod === Annual ? 'Annually' : billingPeriod;
+	return `${fixedPriceWtihCurrency}/${billingFrequency}`
 		: '';
 };
 const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
