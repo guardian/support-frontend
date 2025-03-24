@@ -1,6 +1,63 @@
+import { css } from '@emotion/react';
+import {
+	brandAlt,
+	from,
+	neutral,
+	palette,
+	textEgyptian14,
+} from '@guardian/source/foundations';
+import { SvgTickRound } from '@guardian/source/react-components';
 import AnchorButton from 'components/button/anchorButton';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+
+const checkListIconCss = css`
+	vertical-align: top;
+	padding-right: ${'10px'};
+	line-height: 0;
+	svg {
+		fill: ${brandAlt[400]};
+	}
+`;
+
+const checkmarkBenefitList = css`
+	display: block;
+	${textEgyptian14}
+	margin: 16px 20px 18px 0;
+	line-height: 16px;
+
+	${from.mobileLandscape} {
+		margin: 27px 20px 25px 0;
+		font-size: 16px;
+		line-height: 18px;
+	}
+
+	${from.desktop} {
+		margin: 45px 20px 25px 0;
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	:before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		border-top: none;
+		margin-top: -6px;
+		margin-left: -52px;
+		${from.tablet} {
+			border-top: 1px solid ${neutral[86]};
+		}
+	}
+
+	> li {
+		padding-top: 4px;
+		${from.mobileLandscape} {
+			padding-top: 6px;
+		}
+	}
+`;
 
 type PropTypes = {
 	title: string;
@@ -52,7 +109,24 @@ function SubscriptionsProductDescription({
 				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
 			)}
 			{benefits ? (
-				<SubscriptionsProductBenefits benefits={benefits} />
+				<>
+					<SubscriptionsProductBenefits
+						benefits={benefits}
+						benefitCopy={'Subscribe below to unlock the following benefits:'}
+					/>
+					<BenefitsCheckList
+						benefitsCheckListData={benefits.map((benefit) => {
+							return {
+								text: benefit.copy,
+								isChecked: true,
+							};
+						})}
+						benefitCopy="Subscribe below to unlock the following benefits:"
+						style={'compact'}
+						iconColor={palette.brandAlt[400]}
+						cssOverrides={checkmarkBenefitList}
+					/>
+				</>
 			) : (
 				<p className="subscriptions__description">{description}</p>
 			)}
@@ -90,14 +164,24 @@ function SubscriptionsProductDescription({
 
 function SubscriptionsProductBenefits({
 	benefits,
+	benefitCopy,
 }: {
 	benefits: ProductBenefit[];
+	benefitCopy: string;
 }): JSX.Element {
 	return (
 		<ul className="subscriptions__list">
+			{<strong>{benefitCopy}</strong>}
 			{benefits.map((benefit) => (
 				<li className="subscriptions__listitem">
-					<div className="subscriptions__listitem__bullet">{`●`}</div>
+					<div css={checkListIconCss}>
+						<div
+							css={css`
+								margin-top: -2px;
+							`}
+						></div>
+					</div>
+					<SvgTickRound isAnnouncedByScreenReader size={'small'} />
 					<div>{benefit.copy}</div>
 				</li>
 			))}

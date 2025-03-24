@@ -87,6 +87,7 @@ type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
+	benefitCopy?: string;
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
@@ -114,9 +115,11 @@ export function BenefitsCheckList({
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
+	benefitCopy,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
+			{benefitCopy && <strong>{benefitCopy}</strong>}
 			{benefitsCheckListData.map((item) => {
 				const pillCopy = item.isNew ? 'New' : item.pill;
 				return (
