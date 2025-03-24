@@ -12,6 +12,10 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
+const boldText = css`
+	font-weight: bold;
+`;
+
 const checkListIconCss = css`
 	vertical-align: top;
 	padding-right: ${'10px'};
@@ -117,7 +121,14 @@ function SubscriptionsProductDescription({
 					<BenefitsCheckList
 						benefitsCheckListData={benefits.map((benefit) => {
 							return {
-								text: benefit.copy,
+								text: (
+									<p>
+										{benefit.copyFirst && (
+											<span css={boldText}>{benefit.copyFirst}</span>
+										)}
+										{benefit.copy}
+									</p>
+								),
 								isChecked: true,
 							};
 						})}
