@@ -74,8 +74,8 @@ import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { CharitableDonationMessage } from 'pages/supporter-plus-landing/components/charitableDonationMessage';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
@@ -199,7 +199,7 @@ export function CheckoutComponent({
 				abParticipations,
 				getSettings().landingPageTests,
 			);
-			if (productKey === 'Contribution') {
+			if (isRecurringContribution) {
 				// Also show SupporterPlus benefits greyed out
 				return [
 					...landingPageSettings.products.Contribution.benefits.map(
@@ -281,7 +281,7 @@ export function CheckoutComponent({
 	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
 	 */
 	let isInvalidAmount = false;
-	if (productKey === 'Contribution') {
+	if (isRecurringContribution) {
 		const supporterPlusRatePlanPrice =
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
@@ -533,6 +533,9 @@ export function CheckoutComponent({
 
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
+	const isRecurringContribution = productKey === 'Contribution';
+
+	console.log('*** isRecurringContribution ***', isRecurringContribution);
 
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
@@ -622,7 +625,7 @@ export function CheckoutComponent({
 				<Box
 					cssOverrides={[
 						shorterBoxMargin,
-						isAdLite ? lengthenBoxMargin : css``,
+						isAdLite || !isRecurringContribution ? lengthenBoxMargin : css``,
 					]}
 				>
 					<BoxContents>
@@ -1298,16 +1301,13 @@ export function CheckoutComponent({
 					</BoxContents>
 				</Box>
 			</form>
-			{!isAdLite && (
+			{isRecurringContribution && (
 				<>
 					<PatronsMessage
 						countryGroupId={countryGroupId}
 						mobileTheme={'light'}
 					/>
-					<GuardianTsAndCs
-						mobileTheme={'light'}
-						displayPatronsCheckout={false}
-					/>
+					<CharitableDonationMessage mobileTheme={'light'} />
 				</>
 			)}
 			{isProcessingPayment && (

@@ -74,10 +74,10 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { CharitableDonationMessage } from 'pages/supporter-plus-landing/components/charitableDonationMessage';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
@@ -886,7 +886,7 @@ export function OneTimeCheckoutComponent({
 				</Box>
 			</form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			<CharitableDonationMessage mobileTheme={'light'} />
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>

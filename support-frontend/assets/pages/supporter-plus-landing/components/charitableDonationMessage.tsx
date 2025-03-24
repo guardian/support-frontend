@@ -4,29 +4,24 @@ import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 
-const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
+const charitableDonationMesageStyles = css`
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		margin-bottom: 64px;
 	}
-	${from.desktop} {
-		${displayPatronsCheckout ? 'margin-top: 100px;' : ''}
-	}
 `;
 
-export function GuardianTsAndCs({
+export function CharitableDonationMessage({
 	mobileTheme = 'dark',
-	displayPatronsCheckout = true,
 	spacing = 'tight',
 }: {
 	mobileTheme?: FinePrintTheme;
-	displayPatronsCheckout: boolean;
 	spacing?: 'tight' | 'loose';
 }): JSX.Element {
 	return (
 		<FinePrint
 			mobileTheme={mobileTheme}
-			cssOverrides={guardianTsAndCsStyles(displayPatronsCheckout)}
+			cssOverrides={charitableDonationMesageStyles}
 		>
 			<CheckoutDivider spacing={spacing} mobileTheme={'light'} />
 			<p>
