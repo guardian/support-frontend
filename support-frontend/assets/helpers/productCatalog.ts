@@ -360,7 +360,7 @@ export const productCatalogDescription: Record<
 	},
 	NationalDelivery: {
 		label: 'National delivery',
-    thankyouMessage: paperThankyouMessage,
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
