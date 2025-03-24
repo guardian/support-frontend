@@ -77,8 +77,9 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const thankYouModuleData = getThankYouModuleData(
-		countryId,
+		'DigitalSubscription',
 		countryGroupId,
+		countryId,
 		csrf,
 		false,
 		amountIsAboveThreshold,

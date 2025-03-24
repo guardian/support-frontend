@@ -45,6 +45,7 @@ import {
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
+import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -314,6 +315,62 @@ SupportReminder.args = {
 			}}
 		/>
 	),
+};
+
+export const SubscriptionStartPaperDelivery = Template.bind({});
+
+SubscriptionStartPaperDelivery.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'When will your subscription start?',
+	bodyCopy: (
+		<SubscriptionStartItems
+			productKey={'NationalDelivery'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartPaperSubsCard = Template.bind({});
+
+SubscriptionStartPaperSubsCard.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'When will your subscription start?',
+	bodyCopy: (
+		<SubscriptionStartItems
+			productKey={'SubscriptionCard'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartGuardianWeekly = Template.bind({});
+
+SubscriptionStartGuardianWeekly.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'When will your subscription start?',
+	bodyCopy: (
+		<SubscriptionStartItems
+			productKey={'GuardianWeeklyDomestic'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
+};
+
+export const SubscriptionStartTierThree = Template.bind({});
+
+SubscriptionStartTierThree.args = {
+	icon: getThankYouModuleIcon('subscriptionStart'),
+	header: 'When will your subscription start?',
+	bodyCopy: (
+		<SubscriptionStartItems
+			productKey={'TierThree'}
+			startDate={'Friday, March 28, 2025'}
+		/>
+	),
+	ctas: null,
 };
 
 SupportReminder.decorators = [
