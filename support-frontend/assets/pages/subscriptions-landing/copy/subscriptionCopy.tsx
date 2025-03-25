@@ -79,11 +79,9 @@ const getDigitalEditionPrice = (
 };
 const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
 	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
-	const priceAnnual = `${priceMonthly ? ' or' : ''}${getDigitalEditionPrice(
-		countryGroupId,
-		Annual,
-	)}`;
-	return `${priceMonthly}${priceAnnual}`;
+	const priceAnnual = getDigitalEditionPrice(countryGroupId,Annual);
+	
+	return [priceMonthly, priceAnnual].join(' or ');
 };
 
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
