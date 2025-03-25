@@ -69,7 +69,7 @@ const listCss = (style: CheckListStyle) => css`
 
 	${from.mobileLandscape} {
 		& li:not(:last-child) {
-			border-bottom: ${space[2]}px solid transparent;
+			border-bottom: ${space[3]}px solid transparent;
 		}
 	}
 `;

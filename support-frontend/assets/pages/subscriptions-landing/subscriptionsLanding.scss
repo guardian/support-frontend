@@ -306,10 +306,10 @@
 	line-height: 115%;
 	@include mq($until: tablet) {
 		font-size: 24px;
+    padding-top: 15px;
 	}
 	@include mq($until: desktop) {
 		font-size: 28px;
-		padding-top: 15px;
 	}
 }
 
