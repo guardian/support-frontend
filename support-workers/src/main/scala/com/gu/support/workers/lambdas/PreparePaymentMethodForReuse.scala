@@ -3,10 +3,10 @@ package com.gu.support.workers.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.gocardless.GoCardlessWorkersService
 import com.gu.i18n.{Country, CountryGroup}
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, SupporterPlusState}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{
@@ -18,6 +18,7 @@ import com.gu.support.zuora.api.response.{
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
+import com.gu.WithLoggingSugar._
 
 class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[PreparePaymentMethodForReuseState, CreateZuoraSubscriptionState](servicesProvider) {
@@ -31,11 +32,21 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       services: Services,
   ) = {
 
-    import com.gu.WithLoggingSugar._
-
     val zuoraService = services.zuoraService
     val accountId = state.paymentFields.billingAccountId
     for {
+      _ <- Future.fromTry(state.product match {
+        case c: Contribution =>
+          Success(c)
+        case sp: SupporterPlus =>
+          Success(sp)
+        case _ =>
+          Failure(
+            new RuntimeException(
+              "Reusing payment methods is not yet supported for products other than contributions or SupporterPlus",
+            ),
+          )
+      })
       account <- zuoraService.getAccount(accountId).withEventualLogging(s"getObjectAccount($accountId)")
       accountIdentityId <- getOrFailWithMessage(
         account.basicInfo.IdentityId__c,
@@ -66,49 +77,19 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         account.billingAndPayment.paymentGateway,
       )
       sfContact = SalesforceContactRecord(sfContactId, account.basicInfo.crmId)
-      (productState, productType) <- Future.fromTry(state.product match {
-        case c: Contribution =>
-          Success(
-            (
-              ContributionState(
-                product = c,
-                paymentMethod = paymentMethod,
-                salesForceContact = sfContact,
-              ),
-            ),
-            c,
-          )
-        case sp: SupporterPlus =>
-          Success(
-            (
-              SupporterPlusState(
-                product = sp,
-                paymentMethod = paymentMethod,
-                appliedPromotion = state.appliedPromotion,
-                salesForceContact = sfContact,
-                billingCountry = state.user.billingAddress.country,
-              ),
-            ),
-            sp,
-          )
-        case _ =>
-          Failure(
-            new RuntimeException(
-              "Reusing payment methods is not yet supported for products other than contributions or SupporterPlus",
-            ),
-          )
-      })
     } yield HandlerResult(
       CreateZuoraSubscriptionState(
-        productSpecificState = productState,
         requestId = state.requestId,
         user = state.user,
-        product = productType,
+        giftRecipient = state.giftRecipient,
+        paymentMethod = paymentMethod,
+        product = state.product,
         analyticsInfo = state.analyticsInfo,
         firstDeliveryDate = None,
         appliedPromotion = state.appliedPromotion,
         csrUsername = None,
         salesforceCaseId = None,
+        salesForceContacts = SalesforceContactRecords(sfContact, None),
         acquisitionData = state.acquisitionData,
       ),
       requestInfo

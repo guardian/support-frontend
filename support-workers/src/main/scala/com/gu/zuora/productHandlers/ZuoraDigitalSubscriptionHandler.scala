@@ -2,11 +2,9 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.acquisitions.{AbTest, AcquisitionData}
-import com.gu.support.workers.{DigitalPack, User}
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.{DigitalPack, User}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionBuilder
 

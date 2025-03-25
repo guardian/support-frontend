@@ -261,23 +261,31 @@ object Fixtures {
   def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
     s"""
           {
-            "productType": "Contribution",
             $requestIdJson,
             $userJson,
+            "analyticsInfo": {
+              "paymentProvider": "PayPal",
+              "isGiftPurchase": false
+            },
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContacts": $salesforceContactsJson
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
     s"""
           {
-            "productType": "DigitalSubscription",
+            $requestIdJson,
+            $userJson,
             "billingCountry": "GB",
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContacts": $salesforceContactsJson,
+            "analyticsInfo": {
+              "paymentProvider": "PayPal",
+              "isGiftPurchase": false
             }
+          }
         """
 
   val zuoraErrorResponse =

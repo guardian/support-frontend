@@ -1,10 +1,11 @@
 package com.gu.zuora.subscriptionBuilders
 
+import cats.syntax.either._
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency
 import com.gu.support.catalog.{CatalogService, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraSupporterPlusConfig}
-import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.ProductTypeRatePlans.supporterPlusRatePlan
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
@@ -25,7 +26,7 @@ class SupporterPlusSubcriptionBuilder(
   def build(
       product: SupporterPlus,
       state: CreateZuoraSubscriptionState,
-  ): Either[PromoError, SubscribeItem] = {
+  ): Either[String, SubscribeItem] = {
     val productRatePlanId =
       validateRatePlan(supporterPlusRatePlan(product, environment), product.describe)
     val contributionRatePlanChargeId =
@@ -63,7 +64,7 @@ class SupporterPlusSubcriptionBuilder(
       subscriptionData,
     ).map { subscriptionData =>
       subscribeItemBuilder.build(subscriptionData, state.salesForceContacts.recipient, Some(state.paymentMethod), None)
-    }
+    }.leftMap(_.toString)
   }
 
   private def getBaseProductPrice(productRatePlanId: ProductRatePlanId, currency: Currency) =

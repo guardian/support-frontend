@@ -1,5 +1,6 @@
 package com.gu.zuora.subscriptionBuilders
 
+import cats.syntax.either._
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.Paper
@@ -19,43 +20,48 @@ class PaperSubscriptionBuilder(
   def build(
       product: Paper,
       state: CreateZuoraSubscriptionState,
-  ): Either[PromoError, SubscribeItem] = {
+  ): Either[String, SubscribeItem] = {
 
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
 
-    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
-      productRatePlanId,
-      contractAcceptanceDate = state.firstDeliveryDate,
-      contractEffectiveDate = contractEffectiveDate,
-      readerType = Direct,
-      csrUsername = state.csrUsername,
-      salesforceCaseId = state.salesforceCaseId,
-      deliveryAgent = product.deliveryAgent,
-    )
-
-    val user = state.user
-    applyPromoCodeIfPresent(
-      promotionService,
-      state.appliedPromotion,
-      productRatePlanId,
-      subscriptionData,
-    ).map { subscriptionData =>
-      val soldToContact = SubscribeItemBuilder.buildContactDetails(
-        Some(user.primaryEmailAddress),
-        user.firstName,
-        user.lastName,
-        user.deliveryAddress.get,
-        user.deliveryInstructions,
+    for {
+      firstDeliveryDate <- state.firstDeliveryDate.toRight(
+        "First delivery date is required for a Paper subscription",
       )
-      subscribeItemBuilder.build(
+      subscriptionData = subscribeItemBuilder.buildProductSubscription(
+        productRatePlanId,
+        contractAcceptanceDate = firstDeliveryDate,
+        contractEffectiveDate = contractEffectiveDate,
+        readerType = Direct,
+        csrUsername = state.csrUsername,
+        salesforceCaseId = state.salesforceCaseId,
+        deliveryAgent = product.deliveryAgent,
+      )
+      subscribeItem <- applyPromoCodeIfPresent(
+        promotionService,
+        state.appliedPromotion,
+        productRatePlanId,
         subscriptionData,
-        state.salesForceContacts.recipient,
-        Some(state.paymentMethod),
-        Some(soldToContact),
-      )
-    }
+      ).map { subscriptionData =>
+        val soldToContact = SubscribeItemBuilder.buildContactDetails(
+          Some(state.user.primaryEmailAddress),
+          state.user.firstName,
+          state.user.lastName,
+          state.user.deliveryAddress.get,
+          state.user.deliveryInstructions,
+        )
+
+        subscribeItemBuilder.build(
+          subscriptionData,
+          state.salesForceContacts.recipient,
+          Some(state.paymentMethod),
+          Some(soldToContact),
+        )
+      }.leftMap(_.toString)
+    } yield subscribeItem
+
   }
 
 }

@@ -21,6 +21,12 @@ class ZuoraPaperHandler(
       state: CreateZuoraSubscriptionState,
   ): Future[SendThankYouEmailState] =
     for {
+      firstDeliveryDate <- Future.fromTry(
+        state.firstDeliveryDate
+          .toRight("First delivery date is required for a Paper subscription")
+          .leftMap(BuildSubscribeError)
+          .toTry,
+      )
       subscribeItem <- Future
         .fromTry(
           paperSubscriptionBuilder.build(product, state).leftMap(BuildSubscribeError).toTry,
@@ -36,7 +42,7 @@ class ZuoraPaperHandler(
       state.appliedPromotion.map(_.promoCode),
       account.value,
       sub.value,
-      state.firstDeliveryDate,
+      firstDeliveryDate,
     )
 
 }

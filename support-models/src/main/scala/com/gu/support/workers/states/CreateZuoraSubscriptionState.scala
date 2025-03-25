@@ -3,7 +3,7 @@ package com.gu.support.workers.states
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec
-import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, encodeCountryAsAlpha2, encodeLocalTime}
+import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.workers._
 import org.joda.time.LocalDate

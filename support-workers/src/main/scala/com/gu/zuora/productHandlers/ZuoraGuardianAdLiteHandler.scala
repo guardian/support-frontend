@@ -1,10 +1,8 @@
 package com.gu.zuora.productHandlers
 
-import com.gu.support.acquisitions.AcquisitionData
-import com.gu.support.workers.{GuardianAdLite, User}
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianAdLiteState
-import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailGuardianAdLiteState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.{GuardianAdLite, User}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.GuardianAdLiteSubscriptionBuilder
 
@@ -21,7 +19,7 @@ class ZuoraGuardianAdLiteHandler(
       product: GuardianAdLite,
       state: CreateZuoraSubscriptionState,
   ): Future[SendThankYouEmailState] = {
-    val subscribeItem = subscriptionBuilder.build(product, state.csrUsername, state.salesforceCaseId)
+    val subscribeItem = subscriptionBuilder.build(product, state)
 
     for {
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
