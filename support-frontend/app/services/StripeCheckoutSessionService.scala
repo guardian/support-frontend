@@ -42,6 +42,7 @@ class StripeCheckoutSessionService(
 )(implicit ec: ExecutionContext)
     extends SafeLogging {
   val baseUrl: String = "https://api.stripe.com/v1"
+  val expirationMillis = 30 * 60 * 1000 // 30 minutes in millis
 
   def createCheckoutSession(
       email: String,
@@ -56,6 +57,7 @@ class StripeCheckoutSessionService(
       "currency" -> Seq(currency.toString.toLowerCase), // Is this the format Stripe expect?
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
+      "expires_at" -> Seq((Math.round((System.currentTimeMillis() + expirationMillis) / 1000)).toString),
     )
     client
       .url(s"$baseUrl/checkout/sessions")
