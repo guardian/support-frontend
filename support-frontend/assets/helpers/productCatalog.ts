@@ -393,7 +393,7 @@ export const productCatalogDescription: Record<
 		label: 'Guardian Patron',
 		benefits: [
 			{
-				copy: `${digitalEditionBenefit.copyFirst}${digitalEditionBenefit.copy}`,
+				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 			},
 			{
 				copy: 'Full access to the Guardian app. Read our reporting on the go',
