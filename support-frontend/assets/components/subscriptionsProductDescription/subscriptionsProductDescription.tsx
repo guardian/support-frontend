@@ -89,7 +89,9 @@ function SubscriptionsProductDescription({
 						return {
 							text: (
 								<p>
-									{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
+									{benefit.copyBoldStart && (
+										<strong>{benefit.copyBoldStart}</strong>
+									)}
 									{benefit.copy}
 								</p>
 							),

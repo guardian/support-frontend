@@ -14,7 +14,7 @@ export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
-	copyFirst?: string;
+	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
@@ -229,11 +229,11 @@ export const productCatalogDescription: Record<
 			digitalEditionBenefit,
 			{
 				copy: 'Read our reporting on the go',
-				copyFirst: 'Full access to the Guardian app. ',
+				copyBoldStart: 'Full access to the Guardian app. ',
 			},
 			{
 				copy: 'Enjoy a free trial of your subscription, before you pay',
-				copyFirst: 'Free 14 day trial. ',
+				copyBoldStart: 'Free 14 day trial. ',
 			},
 		],
 		ratePlans: {
