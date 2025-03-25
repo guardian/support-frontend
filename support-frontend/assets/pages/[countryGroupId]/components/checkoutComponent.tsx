@@ -535,8 +535,6 @@ export function CheckoutComponent({
 	const isAdLite = productKey === 'GuardianAdLite';
 	const isRecurringContribution = productKey === 'Contribution';
 
-	console.log('*** isRecurringContribution ***', isRecurringContribution);
-
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
 			? 'MONTHLY'
