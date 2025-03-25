@@ -1,25 +1,14 @@
 import { css } from '@emotion/react';
 import {
-	brandAlt,
 	from,
 	neutral,
 	palette,
 	textEgyptian14,
 } from '@guardian/source/foundations';
-import { SvgTickRound } from '@guardian/source/react-components';
 import AnchorButton from 'components/button/anchorButton';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
-
-const checkListIconCss = css`
-	vertical-align: top;
-	padding-right: ${'10px'};
-	line-height: 0;
-	svg {
-		fill: ${brandAlt[400]};
-	}
-`;
 
 const checkmarkBenefitList = css`
 	display: block;
@@ -110,10 +99,6 @@ function SubscriptionsProductDescription({
 			)}
 			{benefits ? (
 				<>
-					<SubscriptionsProductBenefits
-						benefits={benefits}
-						benefitCopy={'Subscribe below to unlock the following benefits:'}
-					/>
 					<BenefitsCheckList
 						benefitsCheckListData={benefits.map((benefit) => {
 							return {
@@ -164,36 +149,6 @@ function SubscriptionsProductDescription({
 				))}
 			</div>
 		</div>
-	);
-}
-
-function SubscriptionsProductBenefits({
-	benefits,
-	benefitCopy,
-}: {
-	benefits: ProductBenefit[];
-	benefitCopy: string;
-}): JSX.Element {
-	return (
-		<ul className="subscriptions__list">
-			{<strong>{benefitCopy}</strong>}
-			{benefits.map((benefit) => (
-				<li className="subscriptions__listitem">
-					<div css={checkListIconCss}>
-						<div
-							css={css`
-								margin-top: -2px;
-							`}
-						></div>
-					</div>
-					<SvgTickRound isAnnouncedByScreenReader size={'small'} />
-					<div>
-						{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
-						{benefit.copy}
-					</div>
-				</li>
-			))}
-		</ul>
 	);
 }
 

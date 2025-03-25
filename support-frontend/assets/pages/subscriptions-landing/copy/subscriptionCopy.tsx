@@ -79,8 +79,8 @@ const getDigitalEditionPrice = (
 };
 const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
 	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
-	const priceAnnual = getDigitalEditionPrice(countryGroupId,Annual);
-	
+	const priceAnnual = getDigitalEditionPrice(countryGroupId, Annual);
+
 	return [priceMonthly, priceAnnual].join(' or ');
 };
 
