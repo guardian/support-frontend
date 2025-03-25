@@ -4,7 +4,7 @@ import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 
-const charitableDonationMesageStyles = css`
+const checkoutFinePrintStyles = css`
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		margin-bottom: 64px;
@@ -19,10 +19,7 @@ export function ContributionCheckoutFinePrint({
 	spacing?: 'tight' | 'loose';
 }): JSX.Element {
 	return (
-		<FinePrint
-			mobileTheme={mobileTheme}
-			cssOverrides={charitableDonationMesageStyles}
-		>
+		<FinePrint mobileTheme={mobileTheme} cssOverrides={checkoutFinePrintStyles}>
 			<CheckoutDivider spacing={spacing} mobileTheme={'light'} />
 			<p>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
