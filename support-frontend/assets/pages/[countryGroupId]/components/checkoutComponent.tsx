@@ -192,6 +192,8 @@ export function CheckoutComponent({
 		billingPeriod: 'Monthly',
 	};
 
+	const isRecurringContribution = productKey === 'Contribution';
+
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
@@ -533,7 +535,6 @@ export function CheckoutComponent({
 
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 	const isAdLite = productKey === 'GuardianAdLite';
-	const isRecurringContribution = productKey === 'Contribution';
 
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
