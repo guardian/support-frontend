@@ -15,11 +15,9 @@ const checkmarkBenefitList = css`
 	${textEgyptian17}
 	margin: 16px 20px 18px 0;
 	line-height: 140%;
-
 	${from.mobileLandscape} {
 		margin: 27px 20px 25px 0;
 	}
-
 	${from.desktop} {
 		margin: 45px 20px 25px 0;
 	}
@@ -28,7 +26,6 @@ const checkmarkBenefitList = css`
 		content: '';
 		position: absolute;
 		width: 100%;
-		border-top: none;
 		margin-top: -6px;
 		margin-left: -52px;
 		${from.tablet} {
@@ -87,25 +84,22 @@ function SubscriptionsProductDescription({
 				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
 			)}
 			{benefits ? (
-				<>
-					<BenefitsCheckList
-						benefitsCheckListData={benefits.map((benefit) => {
-							return {
-								text: (
-									<p>
-										{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
-										{benefit.copy}
-									</p>
-								),
-								isChecked: true,
-							};
-						})}
-						benefitsHeading="Subscribe below to unlock the following benefits:"
-						style={'compact'}
-						iconColor={palette.brandAlt[400]}
-						cssOverrides={checkmarkBenefitList}
-					/>
-				</>
+				<BenefitsCheckList
+					benefitsCheckListData={benefits.map((benefit) => {
+						return {
+							text: (
+								<p>
+									{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
+									{benefit.copy}
+								</p>
+							),
+							isChecked: true,
+						};
+					})}
+					benefitsHeading="Subscribe below to unlock the following benefits:"
+					iconColor={palette.brandAlt[400]}
+					cssOverrides={checkmarkBenefitList}
+				/>
 			) : (
 				<p className="subscriptions__description">{description}</p>
 			)}
