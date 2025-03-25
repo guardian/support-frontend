@@ -3,7 +3,7 @@ import {
 	from,
 	neutral,
 	palette,
-	textEgyptian14,
+	textEgyptian17,
 } from '@guardian/source/foundations';
 import AnchorButton from 'components/button/anchorButton';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
@@ -12,20 +12,16 @@ import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptio
 
 const checkmarkBenefitList = css`
 	display: block;
-	${textEgyptian14}
+	${textEgyptian17}
 	margin: 16px 20px 18px 0;
-	line-height: 16px;
+	line-height: 140%;
 
 	${from.mobileLandscape} {
 		margin: 27px 20px 25px 0;
-		font-size: 16px;
-		line-height: 18px;
 	}
 
 	${from.desktop} {
 		margin: 45px 20px 25px 0;
-		font-size: 20px;
-		line-height: 28px;
 	}
 
 	:before {
@@ -37,13 +33,6 @@ const checkmarkBenefitList = css`
 		margin-left: -52px;
 		${from.tablet} {
 			border-top: 1px solid ${neutral[86]};
-		}
-	}
-
-	> li {
-		padding-top: 4px;
-		${from.mobileLandscape} {
-			padding-top: 6px;
 		}
 	}
 `;

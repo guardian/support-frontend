@@ -15,6 +15,11 @@ import Tooltip from 'components/tooltip/Tooltip';
 import { BenefitPill } from './benefitPill';
 import BulletSvg from './bulletSvg';
 
+const benefitHeadingCss = css`
+	font-weight: bold;
+	margin: ${space[2]}px 0px ${space[3]}px;
+`;
+
 const checkListIconCss = (style: CheckListStyle) => css`
 	vertical-align: top;
 	padding-right: ${style === 'compact' ? '4px' : '10px'};
@@ -64,7 +69,7 @@ const listCss = (style: CheckListStyle) => css`
 
 	${from.mobileLandscape} {
 		& li:not(:last-child) {
-			border-bottom: ${space[3]}px solid transparent;
+			border-bottom: ${space[2]}px solid transparent;
 		}
 	}
 `;
@@ -119,7 +124,7 @@ export function BenefitsCheckList({
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
-			{benefitsHeading && <strong>{benefitsHeading}</strong>}
+			{benefitsHeading && <p css={benefitHeadingCss}>{benefitsHeading}</p>}
 			{benefitsCheckListData.map((item) => {
 				const pillCopy = item.isNew ? 'New' : item.pill;
 				return (
