@@ -11,7 +11,7 @@ const charitableDonationMesageStyles = css`
 	}
 `;
 
-export function CharitableDonationMessage({
+export function ContributionCheckoutFinePrint({
 	mobileTheme = 'dark',
 	spacing = 'tight',
 }: {

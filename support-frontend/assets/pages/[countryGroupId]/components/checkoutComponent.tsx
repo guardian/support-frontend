@@ -74,8 +74,8 @@ import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { CharitableDonationMessage } from 'pages/supporter-plus-landing/components/charitableDonationMessage';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
@@ -1305,7 +1305,7 @@ export function CheckoutComponent({
 						countryGroupId={countryGroupId}
 						mobileTheme={'light'}
 					/>
-					<CharitableDonationMessage mobileTheme={'light'} />
+					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
 			{isProcessingPayment && (
