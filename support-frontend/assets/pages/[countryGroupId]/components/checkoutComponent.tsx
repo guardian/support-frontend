@@ -534,7 +534,6 @@ export function CheckoutComponent({
 	);
 
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
-	const isAdLite = productKey === 'GuardianAdLite';
 
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
