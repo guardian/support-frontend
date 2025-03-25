@@ -80,7 +80,6 @@ const getDigitalEditionPrice = (
 const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
 	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
 	const priceAnnual = getDigitalEditionPrice(countryGroupId, Annual);
-
 	return [priceMonthly, priceAnnual].join(' or ');
 };
 
@@ -144,7 +143,6 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
-				primary: true,
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,

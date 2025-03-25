@@ -664,16 +664,25 @@
 	}
 }
 
-.component-button--secondary.component-button--digital {
-	color: gu-colour(neutral-7);
-	background-color: #ffe500;
-}
+.subscriptions__digital.subscriptions__product--feature {
+  .component-button--primary.component-button--digital {
+    color: gu-colour(neutral-7);
+    background-color: #ffe500;
+  }
 
-.component-button--secondary.component-button--digital:hover,
-.component-button--secondary.component-button--digital:focus {
-	background-color: #f3c100;
-}
+  .component-button--primary.component-button--digital:hover,
+  .component-button--primary.component-button--digital:focus {
+    background-color: gu-colour(highlight-dark);
+  }
 
+  .component-button--tertiaryFeature.component-button--digital,
+  .component-button--tertiaryFeature.component-button--digital:hover,
+  .component-button--tertiaryFeature.component-button--digital:focus {
+    color: #ffe500;
+    border: solid 1px #ffe500;
+    background-color: transparent;
+  }
+}
 /****************** premium app ********************/
 
 .subscriptions__premuim-app {
