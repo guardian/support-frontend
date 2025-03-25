@@ -132,7 +132,7 @@ function SubscriptionsProductDescription({
 								isChecked: true,
 							};
 						})}
-						benefitCopy="Subscribe below to unlock the following benefits:"
+						benefitsHeading="Subscribe below to unlock the following benefits:"
 						style={'compact'}
 						iconColor={palette.brandAlt[400]}
 						cssOverrides={checkmarkBenefitList}
