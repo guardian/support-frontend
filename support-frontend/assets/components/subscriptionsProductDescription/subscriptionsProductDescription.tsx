@@ -12,10 +12,6 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
 
-const boldText = css`
-	font-weight: bold;
-`;
-
 const checkListIconCss = css`
 	vertical-align: top;
 	padding-right: ${'10px'};
@@ -123,9 +119,7 @@ function SubscriptionsProductDescription({
 							return {
 								text: (
 									<p>
-										{benefit.copyFirst && (
-											<span css={boldText}>{benefit.copyFirst}</span>
-										)}
+										{benefit.copyFirst && <strong>{benefit.copyFirst}</strong>}
 										{benefit.copy}
 									</p>
 								),
