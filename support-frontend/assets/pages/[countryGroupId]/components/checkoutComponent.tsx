@@ -624,7 +624,7 @@ export function CheckoutComponent({
 				<Box
 					cssOverrides={[
 						shorterBoxMargin,
-						isAdLite || !isRecurringContribution ? lengthenBoxMargin : css``,
+						!isRecurringContribution ? lengthenBoxMargin : css``,
 					]}
 				>
 					<BoxContents>
