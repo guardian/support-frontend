@@ -244,7 +244,7 @@ export function CheckoutComponent({
 			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
 			.map((benefit) => ({
 				isChecked: true,
-				text: benefit.copy,
+				text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
 			}));
 	};
 
