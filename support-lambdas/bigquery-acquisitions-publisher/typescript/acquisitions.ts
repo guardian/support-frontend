@@ -37,6 +37,7 @@ export type FactAcquisitionEventRow = {
 	payment_id?: string | null;
 	platform: string | null;
 	labels: string[];
+	source?: string | null;
 };
 
 const mapPlatformName = (name: string): string => {
@@ -99,5 +100,6 @@ export const transformAcquisitionProductForBigQuery = (
 		payment_id: acquisitionProduct.paymentId,
 		platform: mapPlatformName(acquisitionProduct.platform || 'SUPPORT'),
 		labels: acquisitionProduct.labels,
+		source: acquisitionProduct.source,
 	};
 };
