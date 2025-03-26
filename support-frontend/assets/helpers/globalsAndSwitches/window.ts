@@ -15,6 +15,8 @@ import {
 	union,
 } from 'valibot';
 import { isoCountries } from 'helpers/internationalisation/country';
+import type { LegacyProductType } from 'helpers/legacyTypeConversions';
+import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 
 /**
@@ -222,12 +224,13 @@ const ProductCatalogSchema = object({
  * when creating the valibot schema we get this error
  * `Type instantiation is excessively deep and possibly infinite.`
  */
-const ProductPricesSchema = object({
-	allProductPrices: object({
-		SupporterPlus: looseObject({}),
-		TierThree: looseObject({}),
-	}),
+export const ProductPricesSchema = object({
+	allProductPrices: record(
+		picklist(legacyProductTypes),
+		optional(looseObject({})),
+	),
 });
+
 const AppConfigSchema = intersect([
 	PaymentConfigSchema,
 	ProductCatalogSchema,
@@ -235,16 +238,13 @@ const AppConfigSchema = intersect([
 ]);
 
 export type AppConfig = InferOutput<typeof AppConfigSchema> & {
-	allProductPrices: {
-		SupporterPlus: ProductPrices;
-		TierThree: ProductPrices;
-	};
+	allProductPrices: Partial<Record<LegacyProductType, ProductPrices>>;
 };
 
-export const parseAppConfig = (obj: unknown) => {
+export const parseAppConfig = (obj: unknown): AppConfig => {
 	const appConfig = safeParse(AppConfigSchema, obj);
 	if (appConfig.success) {
-		return appConfig.output;
+		return appConfig.output as AppConfig;
 	} else {
 		// We allow parsing errors through on PROD as they might not be breaking changes
 		// but we should be aware of them.
