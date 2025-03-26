@@ -155,7 +155,9 @@ type CheckoutComponentProps = {
 const shouldUseStripeHostedCheckout = (
 	productKey: ProductKey,
 	ratePlanKey: string,
-) => productKey === 'HomeDelivery' && ratePlanKey === 'Sunday';
+) =>
+	(productKey === 'HomeDelivery' || productKey === 'SubscriptionCard') &&
+	ratePlanKey === 'Sunday';
 
 export function CheckoutComponent({
 	geoId,
