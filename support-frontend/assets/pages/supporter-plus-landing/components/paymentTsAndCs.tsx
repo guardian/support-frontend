@@ -10,6 +10,8 @@ import {
 	contributionsTermsLinks,
 	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
+	guardianWeeklyPromoTermsLink,
+	guardianWeeklyTermsLink,
 	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
@@ -82,6 +84,9 @@ export function FooterTsAndCs({
 			case 'NationalDelivery':
 			case 'SubscriptionCard':
 				return termsLink('Terms & Conditions', paperTermsLink);
+			case 'GuardianWeeklyDomestic':
+			case 'GuardianWeeklyRestOfWorld':
+				return termsLink('Terms & Conditions', guardianWeeklyTermsLink);
 			default:
 				return termsLink(
 					'Terms and Conditions',
@@ -120,6 +125,15 @@ export function PaymentTsAndCs({
 }: PaymentTsAndCsProps): JSX.Element {
 	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
 	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
+	const guardianWeeklyPromo = (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
+			{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
+		</div>
+	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		DigitalSubscription: (
@@ -207,6 +221,8 @@ export function PaymentTsAndCs({
 		HomeDelivery: <div>{paperHomeDeliveryTsAndCs}</div>,
 		NationalDelivery: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
 		SubscriptionCard: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
+		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};
 	return (
 		<div css={container}>

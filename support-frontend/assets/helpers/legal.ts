@@ -1,19 +1,6 @@
 // ----- Imports ----- //
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 // ----- Terms & Conditions ----- //
-const defaultContributionTermsLink =
-	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
-const contributionsTermsLinks: Record<CountryGroupId, string> = {
-	GBPCountries: defaultContributionTermsLink,
-	UnitedStates:
-		'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
-	AUDCountries:
-		'https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions',
-	EURCountries: defaultContributionTermsLink,
-	International: defaultContributionTermsLink,
-	NZDCountries: defaultContributionTermsLink,
-	Canada: defaultContributionTermsLink,
-};
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';
 const copyrightNotice = `\u00A9 ${new Date().getFullYear()} Guardian News and Media Limited or its
@@ -27,6 +14,19 @@ const contributionsEmail: Record<CountryGroupId, string> = {
 	NZDCountries: defaultContributionEmail,
 	Canada: defaultContributionEmail,
 };
+const defaultContributionTermsLink =
+	'https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions';
+const contributionsTermsLinks: Record<CountryGroupId, string> = {
+	GBPCountries: defaultContributionTermsLink,
+	UnitedStates:
+		'https://www.theguardian.com/info/2016/apr/07/us-contribution-terms-and-conditions',
+	AUDCountries:
+		'https://www.theguardian.com/info/2016/apr/08/australia-contribution-terms-and-conditions',
+	EURCountries: defaultContributionTermsLink,
+	International: defaultContributionTermsLink,
+	NZDCountries: defaultContributionTermsLink,
+	Canada: defaultContributionTermsLink,
+};
 const guardianLiveTermsLink =
 	'https://www.theguardian.com/info/2014/sep/09/guardian-live-events-terms-and-conditions';
 const supporterPlusTermsLink =
@@ -38,6 +38,10 @@ const paperTermsLink =
 	'https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions';
 const digitalSubscriptionTermsLink =
 	'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';
+const guardianWeeklyTermsLink =
+	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
+const guardianWeeklyPromoTermsLink =
+	'https://support.thegulocal.com/p/10ANNUAL/terms';
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -50,4 +54,6 @@ export {
 	guardianAdLiteTermsLink,
 	paperTermsLink,
 	digitalSubscriptionTermsLink,
+	guardianWeeklyTermsLink,
+	guardianWeeklyPromoTermsLink,
 };

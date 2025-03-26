@@ -87,3 +87,24 @@ SubscriptionCard.args = {
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 };
+
+export const GuardianWeeklyDomestic = Template.bind({});
+GuardianWeeklyDomestic.args = {
+	productKey: 'GuardianWeeklyDomestic',
+	contributionType: 'MONTHLY',
+	countryGroupId: 'GBPCountries',
+};
+
+export const GuardianWeeklyRestOfWorldInclPromo = Template.bind({});
+GuardianWeeklyRestOfWorldInclPromo.args = {
+	productKey: 'GuardianWeeklyRestOfWorld',
+	contributionType: 'ANNUAL',
+	countryGroupId: 'UnitedStates',
+	promotion: {
+		name: '10% off for 12 months',
+		description: 'Guardian Weekly United States Annual',
+		promoCode: 'ANNUAL10',
+		numberOfDiscountedPeriods: 12,
+		discountedPrice: 324,
+	},
+};
