@@ -67,8 +67,7 @@ object Fixtures {
         "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
-        "readerType": "Direct",
-        "amount": 20
+        "readerType": "Direct"
       }
     """
 

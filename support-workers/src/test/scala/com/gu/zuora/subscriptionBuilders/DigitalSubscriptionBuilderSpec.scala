@@ -51,36 +51,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     csrSubscription.subscription.acquisitionCase shouldBe Some("test_case_id")
   }
 
-  "Valid digital subs from the benefits test" should "have charge overrides" in {
-    validMonthlyBenefitsTest.subscriptionData.ratePlanData shouldBe List(
-      RatePlanData(
-        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
-        List(RatePlanChargeData(RatePlanChargeOverride("monthlyChargeId", 12))),
-        Nil,
-      ),
-    )
-  }
-
-  "Digital subs from the benefits test with amounts which are too low" should "not have charge overrides" in {
-    lowAmountMonthlyBenefitsTest.subscriptionData.ratePlanData shouldBe List(
-      RatePlanData(
-        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
-        Nil,
-        Nil,
-      ),
-    )
-  }
-
-  "Digital subs which are not in the benefits test" should "not have charge overrides even if an amount is present" in {
-    monthlyNotInBenefitsTest.subscriptionData.ratePlanData shouldBe List(
-      RatePlanData(
-        RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"),
-        Nil,
-        Nil,
-      ),
-    )
-  }
-
   "SubscriptionData for a Monthly subscription with a non-Patron PromoCode" should "be correct" in {
     val aPromotion = mock[Promotion]
     val pwc = PromotionWithCode("NOTAPATRONPROMO", aPromotion)
@@ -188,62 +158,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         ),
         None,
         None,
-        None,
-      )
-      .toOption
-      .get
-
-  lazy val validMonthlyBenefitsTest =
-    subscriptionDirectPurchaseBuilder
-      .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly, amount = Some(12)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          None,
-          SalesforceContactRecord("", ""),
-        ),
-        None,
-        None,
-        Some(
-          AcquisitionData(OphanIds(None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
-        ),
-      )
-      .toOption
-      .get
-
-  lazy val lowAmountMonthlyBenefitsTest =
-    subscriptionDirectPurchaseBuilder
-      .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly, amount = Some(1)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          None,
-          SalesforceContactRecord("", ""),
-        ),
-        None,
-        None,
-        Some(
-          AcquisitionData(OphanIds(None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
-        ),
-      )
-      .toOption
-      .get
-
-  lazy val monthlyNotInBenefitsTest =
-    subscriptionDirectPurchaseBuilder
-      .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly, amount = Some(12)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          None,
-          SalesforceContactRecord("", ""),
-        ),
-        None,
-        None,
-        None,
       )
       .toOption
       .get
@@ -259,7 +173,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       ),
       Some("Dan Csr"),
       Some("test_case_id"),
-      None,
     )
     .toOption
     .get
@@ -277,7 +190,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         ),
         None,
         None,
-        None,
       )
       .toOption
       .get
@@ -292,7 +204,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
           Some(AppliedPromotion("FOOPATRON", UK.id)),
           SalesforceContactRecord("", ""),
         ),
-        None,
         None,
         None,
       )
