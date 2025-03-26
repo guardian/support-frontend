@@ -34,6 +34,8 @@ const supporterPlusTermsLink =
 const tierThreeTermsLink =
 	'https://www.theguardian.com/info/article/2024/jul/19/digital-print-terms-and-conditions';
 const guardianAdLiteTermsLink = `https://www.theguardian.com/guardian-ad-lite-tcs`;
+const paperTermsLink =
+	'https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions';
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -44,4 +46,5 @@ export {
 	supporterPlusTermsLink,
 	tierThreeTermsLink,
 	guardianAdLiteTermsLink,
+	paperTermsLink,
 };

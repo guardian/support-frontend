@@ -9,6 +9,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	contributionsTermsLinks,
 	guardianAdLiteTermsLink,
+	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
 	tierThreeTermsLink,
@@ -74,6 +75,11 @@ export function FooterTsAndCs({
 				return termsLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
 				return termsLink('Terms', tierThreeTermsLink);
+			case 'HomeDelivery':
+			case 'NationalDelivery':
+			case 'SubscriptionCard':
+				return termsLink('Terms & Conditions', paperTermsLink);
+			case 'DigitalSubscription':
 			default:
 				return termsLink(
 					'Terms and Conditions',
@@ -110,6 +116,8 @@ export function PaymentTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
+	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
+	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
 	const productLabel = productCatalogDescription[productKey].label;
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		DigitalSubscription: (
@@ -198,6 +206,9 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
+		HomeDelivery: <div>{paperHomeDeliveryTsAndCs}</div>,
+		NationalDelivery: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		SubscriptionCard: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
 	};
 	return (
 		<div css={container}>
