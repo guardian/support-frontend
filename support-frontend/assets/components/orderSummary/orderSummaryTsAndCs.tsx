@@ -100,7 +100,7 @@ export function OrderSummaryTsAndCs({
 			)}
 		</div>
 	);
-	const contributeAdLiteTsAndCs = (
+	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			<p>Auto renews every {period} until you cancel.</p>
 			<p>
@@ -114,5 +114,5 @@ export function OrderSummaryTsAndCs({
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
 	};
-	return orderSummaryTsAndCs[productKey] ?? contributeAdLiteTsAndCs;
+	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;
 }
