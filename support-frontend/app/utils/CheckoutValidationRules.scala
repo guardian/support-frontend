@@ -4,12 +4,10 @@ import admin.settings.{On, RecurringPaymentMethodSwitches, SubscriptionsPaymentM
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.monitoring.SafeLogging
-import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.catalog._
 import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
 import com.gu.support.paperround.{AgentId, PaperRoundAPI}
 import com.gu.support.workers._
-import com.gu.support.zuora.api.ReaderType
 import services.stepfunctions.CreateSupportWorkersRequest
 import utils.CheckoutValidationRules._
 
@@ -315,17 +313,7 @@ object DigitalPackValidation {
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
-    def isValidBenefitsTestSub = {
-      if (
-        isValidBenefitsTestPurchase(
-          digitalPack,
-          Some(supportAbTests),
-        )
-      ) Valid
-      else
-        Invalid("User is not in the benefits test")
-    }
-    isValidBenefitsTestSub or isValidPaidSub(paymentFields)
+    isValidPaidSub(paymentFields)
   }
 }
 
