@@ -93,7 +93,7 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 
 const digitalEditionBenefit = {
 	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-	copyFirst: 'The Digital Edition app. ',
+	copyBoldStart: 'The Digital Edition app. ',
 };
 
 const appBenefit = {
