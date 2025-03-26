@@ -3,12 +3,13 @@ package com.gu.support.workers.createZuoraSubscription
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.{Country, Currency}
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{CatalogServiceSpec, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironments, V2, ZuoraSupporterPlusConfig}
-import com.gu.support.workers.integration.TestData.supporterPlusPromotionService
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
-import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
 import com.gu.support.workers._
+import com.gu.support.workers.integration.TestData.supporterPlusPromotionService
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.{api, domain}
@@ -34,12 +35,28 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
 
   it should "create a supporter plus subscription with promo" in {
 
-    val state = SupporterPlusState(
-      billingCountry = Country.UK,
-      product = SupporterPlus(20, Currency.GBP, Monthly),
+    val product = SupporterPlus(20, Currency.GBP, Monthly)
+    val user = User(
+      "111222",
+      "email@blah.com",
+      None,
+      "bertha",
+      "smith",
+      Address(None, None, None, None, None, Country.UK),
+    )
+    val state = CreateZuoraSubscriptionState(
+      requestId = UUID.randomUUID(),
+      user = user,
+      giftRecipient = None,
+      product = product,
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
+      analyticsInfo = AnalyticsInfo(isGiftPurchase = false, PayPal),
+      firstDeliveryDate = None,
       appliedPromotion = Some(AppliedPromotion("SUPPORTER_PLUS_PROMO", UK.id)),
-      salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      csrUsername = None,
+      salesforceCaseId = None,
+      acquisitionData = None,
+      salesforceContacts = SalesforceContactRecords(SalesforceContactRecord("sfbuy", "sfbuyacid"), None),
     )
 
     val zuora = new ZuoraSubscribeService {
@@ -129,14 +146,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
         TouchPointEnvironments.PROD,
         new SubscribeItemBuilder(
           requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-          user = User(
-            "111222",
-            "email@blah.com",
-            None,
-            "bertha",
-            "smith",
-            Address(None, None, None, None, None, Country.UK),
-          ),
+          user = user,
           Currency.GBP,
         ),
       ),
@@ -144,7 +154,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
         User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     )
 
-    val result = subscriptionCreator.subscribe(state, None, None)
+    val result = subscriptionCreator.subscribe(product, state)
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {

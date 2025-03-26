@@ -49,7 +49,7 @@ class CreateSalesforceContact
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
       acquisitionData = acquisitionData,
-      salesForceContacts = salesforceContactRecords,
+      salesforceContacts = salesforceContactRecords,
     )
   }
 }

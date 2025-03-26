@@ -268,7 +268,7 @@ object Fixtures {
             },
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContacts": $salesforceContactsJson
+            "salesforceContacts": $salesforceContactsJson
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
@@ -279,7 +279,7 @@ object Fixtures {
             "billingCountry": "GB",
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContacts": $salesforceContactsJson,
+            "salesforceContacts": $salesforceContactsJson,
             "analyticsInfo": {
               "paymentProvider": "PayPal",
               "isGiftPurchase": false

@@ -9,7 +9,7 @@ import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.GuardianWeeklyState
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api.ReaderType.{Direct, Patron}
 import com.gu.support.zuora.api.{Day, Month, SubscriptionData}
@@ -132,22 +132,39 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     nonGiftPatron.subscription.readerType shouldBe Patron
   }
 
-  lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
+  val requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")
+  val user = User(
+    "1234",
+    "hi@thegulocal.com",
+    None,
+    "bob",
+    "smith",
+    Address(None, None, None, None, None, Country.UK),
+    Some(Address(None, None, None, None, None, Country.UK)),
+  )
+  lazy val product = GuardianWeekly(GBP, Quarterly, Domestic)
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
+  val salesforceContactRecords = SalesforceContactRecords(SalesforceContactRecord("", ""), None)
+  lazy val state = CreateZuoraSubscriptionState(
+    requestId = requestId,
+    user = user,
+    giftRecipient = None,
+    product = product,
+    paymentMethod = PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+    analyticsInfo = AnalyticsInfo(false, PayPal),
+    firstDeliveryDate = Some(firstDeliveryDate),
+    appliedPromotion = None,
+    csrUsername = None,
+    salesforceCaseId = None,
+    acquisitionData = None,
+    salesforceContacts = salesforceContactRecords,
+  )
 
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
-    UUID.randomUUID(),
-    User(
-      "1234",
-      "hi@thegulocal.com",
-      None,
-      "bob",
-      "smith",
-      Address(None, None, None, None, None, Country.UK),
-      Some(Address(None, None, None, None, None, Country.UK)),
-    ),
+    requestId,
+    user,
     GBP,
   )
 
@@ -157,46 +174,11 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    GuardianWeeklyState(
-      User(
-        "1234",
-        "hi@thegulocal.com",
-        None,
-        "bob",
-        "smith",
-        Address(None, None, None, None, None, Country.UK),
-        Some(Address(None, None, None, None, None, Country.UK)),
-      ),
-      Some(GiftRecipient(None, "bob", "smith", None)),
-      weekly,
-      PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-      firstDeliveryDate,
-      None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    ),
-    None,
-    None,
+    product,
+    state.copy(giftRecipient = Some(GiftRecipient(None, "bob", "smith", None))),
   ).toOption
     .get
     .subscriptionData
-
-  val nonGiftState = GuardianWeeklyState(
-    User(
-      "1234",
-      "hi@thegulocal.com",
-      None,
-      "bob",
-      "smith",
-      Address(None, None, None, None, None, Country.UK),
-      Some(Address(None, None, None, None, None, Country.UK)),
-    ),
-    None,
-    weekly,
-    PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-    firstDeliveryDate,
-    None,
-    SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-  );
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
@@ -204,9 +186,8 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState,
-    None,
-    None,
+    product,
+    state,
   ).toOption
     .get
     .subscriptionData
@@ -217,25 +198,11 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    GuardianWeeklyState(
-      User(
-        "1234",
-        "hi@thegulocal.com",
-        None,
-        "bob",
-        "smith",
-        Address(None, None, None, None, None, Country.UK),
-        Some(Address(None, None, None, None, None, Country.UK)),
-      ),
-      None,
-      weekly,
-      PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-      firstDeliveryDate,
-      None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    product,
+    state.copy(
+      csrUsername = Some("Dan Csr"),
+      salesforceCaseId = Some("test_case_id"),
     ),
-    Some("Dan Csr"),
-    Some("test_case_id"),
   ).toOption
     .get
     .subscriptionData
@@ -246,9 +213,8 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("FOOPATRON", "uk"))),
-    None,
-    None,
+    product,
+    state.copy(appliedPromotion = Some(AppliedPromotion("FOOPATRON", "uk"))),
   ).toOption
     .get
     .subscriptionData
@@ -259,9 +225,8 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
-    nonGiftState.copy(appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", "uk"))),
-    None,
-    None,
+    product,
+    state.copy(appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", "uk"))),
   ).toOption
     .get
     .subscriptionData

@@ -55,7 +55,7 @@ class PaperSubscriptionBuilder(
 
         subscribeItemBuilder.build(
           subscriptionData,
-          state.salesForceContacts.recipient,
+          state.salesforceContacts.recipient,
           Some(state.paymentMethod),
           Some(soldToContact),
         )

@@ -4,12 +4,13 @@ import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.ZuoraDigitalPackConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
 import com.gu.support.zuora.api._
 import com.gu.zuora.Fixtures.blankReferrerAcquisitionData
@@ -146,33 +147,41 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     ),
   )
 
+  val requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5")
+  val product = DigitalPack(GBP, Monthly)
+  val user = User("123", "hi@thegulocal.com", None, "Bob", "Smith", Address(None, None, None, None, None, Country.UK))
+  val analyticsInfo = AnalyticsInfo(isGiftPurchase = false, PayPal)
+  val salesforceContactRecords = SalesforceContactRecords(SalesforceContactRecord("", ""), None)
+  val state = CreateZuoraSubscriptionState(
+    requestId = requestId,
+    user = user,
+    giftRecipient = None,
+    product = product,
+    paymentMethod = PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+    analyticsInfo = analyticsInfo,
+    firstDeliveryDate = None,
+    appliedPromotion = None,
+    csrUsername = None,
+    salesforceCaseId = None,
+    acquisitionData = None,
+    salesforceContacts = salesforceContactRecords,
+  )
   lazy val monthly =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          None,
-          SalesforceContactRecord("", ""),
-        ),
-        None,
-        None,
+        product,
+        state,
       )
       .toOption
       .get
 
   lazy val csrSubscription = subscriptionDirectPurchaseBuilder
     .build(
-      DigitalSubscriptionState(
-        Country.UK,
-        DigitalPack(GBP, Monthly),
-        PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-        None,
-        SalesforceContactRecord("", ""),
+      product,
+      state.copy(
+        csrUsername = Some("Dan Csr"),
+        salesforceCaseId = Some("test_case_id"),
       ),
-      Some("Dan Csr"),
-      Some("test_case_id"),
     )
     .toOption
     .get
@@ -181,15 +190,10 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthlyWithPromo =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          Some(AppliedPromotion("NOTAPATRONPROMO", UK.id)),
-          SalesforceContactRecord("", ""),
+        product,
+        state.copy(
+          appliedPromotion = Some(AppliedPromotion("NOTAPATRONPROMO", UK.id)),
         ),
-        None,
-        None,
       )
       .toOption
       .get
@@ -197,15 +201,10 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val monthlyPatron =
     subscriptionDirectPurchaseBuilder
       .build(
-        DigitalSubscriptionState(
-          Country.UK,
-          DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
-          Some(AppliedPromotion("FOOPATRON", UK.id)),
-          SalesforceContactRecord("", ""),
+        product,
+        state.copy(
+          appliedPromotion = Some(AppliedPromotion("FOOPATRON", UK.id)),
         ),
-        None,
-        None,
       )
       .toOption
       .get

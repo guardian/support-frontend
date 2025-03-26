@@ -45,7 +45,7 @@ class DigitalSubscriptionBuilder(
       productRatePlanId,
       subscriptionData,
     ).map(subscriptionData =>
-      subscribeItemBuilder.build(subscriptionData, state.salesForceContacts.recipient, Some(state.paymentMethod), None),
+      subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None),
     ).leftMap(_.toString)
 
   }

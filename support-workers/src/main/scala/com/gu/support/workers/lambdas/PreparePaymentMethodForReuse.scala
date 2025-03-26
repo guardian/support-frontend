@@ -89,7 +89,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         appliedPromotion = state.appliedPromotion,
         csrUsername = None,
         salesforceCaseId = None,
-        salesForceContacts = SalesforceContactRecords(sfContact, None),
+        salesforceContacts = SalesforceContactRecords(sfContact, None),
         acquisitionData = state.acquisitionData,
       ),
       requestInfo

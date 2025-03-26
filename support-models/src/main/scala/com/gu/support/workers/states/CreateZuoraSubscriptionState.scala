@@ -22,7 +22,7 @@ case class CreateZuoraSubscriptionState(
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
-    salesForceContacts: SalesforceContactRecords,
+    salesforceContacts: SalesforceContactRecords,
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionState {

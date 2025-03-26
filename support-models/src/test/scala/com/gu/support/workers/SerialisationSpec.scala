@@ -106,7 +106,7 @@ object StatesTestData {
     csrUsername = None,
     salesforceCaseId = None,
     acquisitionData = None,
-    salesForceContacts = SalesforceContactRecords(SalesforceContactRecord("sfbuy", "sfbuyacid"), None),
+    salesforceContacts = SalesforceContactRecords(SalesforceContactRecord("sfbuy", "sfbuyacid"), None),
   )
 
   val thankYouEmailProductTypeState: SendThankYouEmailState =

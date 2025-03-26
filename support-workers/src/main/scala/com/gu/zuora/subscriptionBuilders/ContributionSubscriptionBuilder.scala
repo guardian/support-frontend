@@ -25,7 +25,7 @@ class ContributionSubscriptionBuilder(
       ),
       readerType = Direct,
     )
-    subscribeItemBuilder.build(subscriptionData, state.salesForceContacts.recipient, Some(state.paymentMethod), None)
+    subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
   }
 
 }
