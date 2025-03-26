@@ -23,13 +23,12 @@ class ZuoraDigitalSubscriptionHandler(
       state: DigitalSubscriptionState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
-      acquisitionData: Option[AcquisitionData],
   ): Future[SendThankYouEmailState] = {
     for {
       subscribeItem <- Future
         .fromTry(
           digitalSubscriptionBuilder
-            .build(state, csrUsername, salesforceCaseId, acquisitionData)
+            .build(state, csrUsername, salesforceCaseId)
             .leftMap(BuildSubscribePromoError)
             .toTry,
         )

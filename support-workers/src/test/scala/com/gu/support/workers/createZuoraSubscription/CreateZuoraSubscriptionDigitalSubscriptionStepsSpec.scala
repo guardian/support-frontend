@@ -94,7 +94,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
         User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     )
 
-    val result = subscriptionCreator.subscribe(state, None, None, None)
+    val result = subscriptionCreator.subscribe(state, None, None)
 
     result.map { sendThankYouEmailState =>
       withClue(sendThankYouEmailState) {
