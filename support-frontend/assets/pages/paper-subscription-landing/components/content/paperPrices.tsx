@@ -7,7 +7,6 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
-import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
@@ -35,10 +34,18 @@ const pricesHeadline = css`
 `;
 
 const priceBoxes = css`
+	display: flex;
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
-	${from.tablet} {
-		margin-top: 56px;
+	flex-direction: column;
+	margin-top: 56px;
+	${between.tablet.and.leftCol} {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: ${space[5]}px;
+	}
+	${from.leftCol} {
+		flex-direction: row;
 	}
 `;
 
@@ -115,7 +122,7 @@ export function PaperPrices({
 					Subscription card
 				</LinkTo>
 			</div>
-			<FlexContainer cssOverrides={priceBoxes}>
+			<section css={priceBoxes}>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
@@ -133,7 +140,7 @@ export function PaperPrices({
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}
-			</FlexContainer>
+			</section>
 			<div css={pricesInfo}>
 				<ProductInfoChip icon={<SvgInfoRound />}>{infoText}</ProductInfoChip>
 			</div>

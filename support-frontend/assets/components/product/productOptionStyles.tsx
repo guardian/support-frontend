@@ -30,7 +30,7 @@ export const productOption = css`
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
 	padding: ${space[3]}px;
-	${from.tablet} {
+	${from.leftCol} {
 		min-height: 272px;
 		width: 300px;
 		grid-template-columns: none;
@@ -47,13 +47,13 @@ export const specialOfferOption = css`
 `;
 
 export const productOptionUnderline = css`
-	${from.tablet} {
+	${from.leftCol} {
 		border-bottom: 1px solid ${neutral[86]};
 	}
 `;
 
 export const productOptionVerticalLine = css`
-	${until.tablet} {
+	${until.leftCol} {
 		border-right: 1px solid ${neutral[86]};
 		margin-right: ${space[3]}px;
 		padding-right: ${space[3]}px;
@@ -133,13 +133,8 @@ export const buttonDiv = css`
 	align-items: stretch;
 	grid-area: button;
 	padding: ${space[3]}px 0;
-	${between.mobileLandscape.and.tablet} {
-		grid-area: 3 / 1 / span 1 / span 1;
-		border-right: 1px solid ${neutral[86]};
-		margin-right: ${space[3]}px;
-		padding-right: ${space[3]}px;
-	}
-	${from.tablet} {
+
+	${from.leftCol} {
 		grid-area: auto;
 		padding: 0;
 	}
@@ -159,7 +154,7 @@ export const button = css`
 `;
 
 export const priceCopyGridPlacement = css`
-	${until.tablet} {
+	${until.leftCol} {
 		grid-area: priceCopy;
 	}
 `;
