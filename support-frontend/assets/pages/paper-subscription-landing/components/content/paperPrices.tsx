@@ -136,6 +136,7 @@ export function PaperPrices({
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
+						tag={product.tag}
 						label={product.label}
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>

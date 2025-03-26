@@ -50,7 +50,7 @@ const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
+const getPromotionTag = (currency: IsoCurrency, promotion?: Promotion) => {
 	if (!promotion?.discount) {
 		return '';
 	}
@@ -99,7 +99,7 @@ const weeklyProductProps = (
 	const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
 	const isBlackFriday =
 		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
-	const label = getPromotionLabel(productPrice.currency, promotion);
+	const tag = getPromotionTag(productPrice.currency, promotion);
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -109,7 +109,7 @@ const weeklyProductProps = (
 		),
 		buttonCopy: 'Subscribe now',
 		href: getCheckoutUrl(billingPeriod, orderIsAGift),
-		label,
+		tag,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
 		isSpecialOffer: is12for12 || isBlackFriday,
