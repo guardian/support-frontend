@@ -28,7 +28,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     createPaymentMethod(
       state.paymentFields,
       state.user,
-      state.product.currency,
       services,
       state.ipAddress,
       state.userAgent,
@@ -46,14 +45,13 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   private def createPaymentMethod(
       paymentFields: PaymentFields,
       user: User,
-      currency: Currency,
       services: Services,
       ipAddress: String,
       userAgent: String,
   ): Future[PaymentMethod] =
     paymentFields match {
       case stripe: StripePaymentFields =>
-        createStripePaymentMethod(stripe, services.stripeService, currency)
+        createStripePaymentMethod(stripe, services.stripeService)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
@@ -85,15 +83,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   def createStripePaymentMethod(
       stripe: StripePaymentFields,
       stripeService: StripeService,
-      currency: Currency,
   ): Future[CreditCardReferenceTransaction] = {
-    val stripeServiceForCurrency = {
-      stripe.stripePublicKey match {
-        case Some(stripePublicKey) => stripeService.withPublicKey(stripePublicKey)
-        case None => stripeService.withCurrency(currency)
-      }
-
-    }
+    val stripeServiceForCurrency = stripeService.withPublicKey(stripe.stripePublicKey)
 
     for {
       stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(stripe.paymentMethod)

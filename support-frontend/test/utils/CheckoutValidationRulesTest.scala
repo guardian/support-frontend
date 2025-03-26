@@ -63,7 +63,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeApplePay),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -140,7 +140,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         PaymentMethodId("testStripeToken").get,
         stripePaymentType = None,
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -168,7 +168,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -196,7 +196,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeCheckout),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -283,7 +283,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeCheckout),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -338,7 +338,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeApplePay),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -415,7 +415,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         PaymentMethodId("testStripeToken").get,
         stripePaymentType = Some(StripeCheckout),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -443,7 +443,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -471,7 +471,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeCheckout),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -558,7 +558,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
         stripePaymentType = Some(StripePaymentType.StripeCheckout),
-        stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        stripePublicKey = StripePublicKey.get("pk_test_asdf"),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(
@@ -1014,7 +1014,7 @@ object TestData {
   private val stripePaymentFields: StripePaymentFields = StripePaymentFields(
     paymentMethod = PaymentMethodId("test_token").get,
     stripePaymentType = Some(StripePaymentType.StripeCheckout),
-    stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+    stripePublicKey = StripePublicKey.get("pk_test_asdf"),
   )
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
