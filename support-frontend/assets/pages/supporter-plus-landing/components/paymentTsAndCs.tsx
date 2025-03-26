@@ -8,6 +8,7 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	contributionsTermsLinks,
+	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
 	paperTermsLink,
 	privacyLink,
@@ -71,6 +72,8 @@ export function FooterTsAndCs({
 		switch (productKey) {
 			case 'GuardianAdLite':
 				return termsLink('Terms', guardianAdLiteTermsLink);
+			case 'DigitalSubscription':
+				return termsLink('Terms and Conditions', digitalSubscriptionTermsLink);
 			case 'SupporterPlus':
 				return termsLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
@@ -79,7 +82,6 @@ export function FooterTsAndCs({
 			case 'NationalDelivery':
 			case 'SubscriptionCard':
 				return termsLink('Terms & Conditions', paperTermsLink);
-			case 'DigitalSubscription':
 			default:
 				return termsLink(
 					'Terms and Conditions',
@@ -129,11 +131,7 @@ export function PaymentTsAndCs({
 				Cancellation will take effect at the end of your current subscription
 				month. To cancel, go to{' '}
 				<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or see
-				our{' '}
-				<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
-					Terms
-				</a>
-				.
+				our {termsLink('Terms', digitalSubscriptionTermsLink)}.
 			</div>
 		),
 		GuardianAdLite: (

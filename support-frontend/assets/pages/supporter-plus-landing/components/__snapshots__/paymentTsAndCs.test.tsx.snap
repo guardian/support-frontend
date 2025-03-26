@@ -78,10 +78,11 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSu
         >
           Manage My Account
         </a>
-         or see our
-         
+         or see our 
         <a
           href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           Terms
         </a>
@@ -94,7 +95,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSu
         our
          
         <a
-          href="https://www.theguardian.com/info/2016/apr/04/contribution-terms-and-conditions"
+          href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions"
           rel="noopener noreferrer"
           target="_blank"
         >
