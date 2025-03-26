@@ -48,12 +48,13 @@ class StripeCheckoutSessionService(
       email: String,
       currency: Currency,
       isTestUser: Boolean,
+      successUrl: String,
   ): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
     val privateKey = getPrivateKey(isTestUser)
 
     val data = Map(
       "mode" -> Seq("setup"),
-      "success_url" -> Seq("https://support.thegulocal.com/stripe/complete-checkout-session/{CHECKOUT_SESSION_ID}"),
+      "success_url" -> Seq(successUrl),
       "currency" -> Seq(currency.toString.toLowerCase), // Is this the format Stripe expect?
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
@@ -98,5 +99,30 @@ class StripeCheckoutSessionService(
     logger.error(scrub"Response: ${response.body}")
 
     decode[A](response.body).leftMap(_ => "Decode error")
+  }
+}
+
+object StripeCheckoutSessionService {
+  val ALLOWED_SUCCESS_DOMAINS = List(
+    "support.theguardian.com",
+    "support.code.dev-theguardian.com",
+    "support.thegulocal.com",
+  )
+
+  def buildSuccessUrl(refererUrl: String): Option[String] = {
+    try {
+      val uri = new java.net.URI(refererUrl)
+
+      if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
+        None
+      } else {
+        val uriExistingFragmentRemoved =
+          new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, uri.getRawQuery, null).toString
+        // Not adding the fragment in the URI constructor as it gets escaped which we don't want
+        Some(s"$uriExistingFragmentRemoved#{CHECKOUT_SESSION_ID}")
+      }
+    } catch {
+      case _: java.net.URISyntaxException => None
+    }
   }
 }
