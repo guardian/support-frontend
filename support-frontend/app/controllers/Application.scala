@@ -8,7 +8,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{SupporterPlus, TierThree}
+import com.gu.support.catalog.{Collection, HomeDelivery, Paper, SupporterPlus, TierThree}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
@@ -180,7 +180,12 @@ case class PaymentMethodConfigs(
   * @see
   *   https://product-catalog.guardianapis.com/product-catalog.json
   */
-case class AllProductPrices(SupporterPlus: ProductPrices, TierThree: ProductPrices)
+case class AllProductPrices(
+    SupporterPlus: ProductPrices,
+    TierThree: ProductPrices,
+    Paper: ProductPrices,
+)
+
 object AllProductPrices extends InternationalisationCodecs {
   implicit val allProductPricesEncoder: Encoder[AllProductPrices] = deriveEncoder
 }
@@ -212,6 +217,14 @@ class Application(
   import actionRefiners._
 
   implicit val a: AssetsResolver = assets
+
+  def getAllProductPrices(isTestUser: Boolean, queryPromos: List[String]): AllProductPrices = {
+    AllProductPrices(
+      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
+      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
+      Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
+    )
+  }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = buildRegionalisedContributeLink(request.geoData.countryGroup match {
@@ -336,10 +349,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val supporterPlusProductPrices =
-      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
-    val tierThreeProductPrices =
-      priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos)
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
@@ -368,7 +378,7 @@ class Application(
       shareImageUrl = shareImageUrl(settings),
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
-      allProductPrices = AllProductPrices(supporterPlusProductPrices, tierThreeProductPrices),
+      allProductPrices = allProductPrices,
       productCatalog = productCatalog,
       noIndex = stage != PROD,
       canonicalLink = canonicalLink,
@@ -509,10 +519,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val allProductPrices = AllProductPrices(
-      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
-      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
-    )
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     Ok(
       views.html.router(
@@ -553,10 +560,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos = request.queryString.getOrElse("promoCode", Nil).toList
-    val allProductPrices = AllProductPrices(
-      SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
-      TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
-    )
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
 
     val appConfig = AppConfig.fromConfig(
       geoData = request.geoData,
