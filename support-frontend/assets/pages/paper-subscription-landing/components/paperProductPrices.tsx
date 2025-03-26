@@ -174,7 +174,8 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
+		const tag = productOption === 'Everyday' ? 'Best Deal' : '';
+		const label = 'The Guardian';
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -192,7 +193,8 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label: labelText,
+			tag,
+			label,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,

@@ -38,6 +38,7 @@ export type Product = {
 	onClick: () => void;
 	onView: () => void;
 	label?: string;
+	tag?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
@@ -64,14 +65,14 @@ function ProductOption(props: Product): JSX.Element {
 	}, [hasBeenSeen]);
 
 	const productOptionMargin =
-		props.label &&
+		props.tag &&
 		css`
 			${until.tablet} {
 				/* calculation belows are based on productOptionHighlight text size, line height and padding */
 				&:first-of-type {
 					margin-top: calc((20px * 1.5) + 8px) !important;
 				}
-				/* 16px alloted for margin between product options when a label is present */
+				/* 16px alloted for margin between product options when a tag is present */
 				&:not(first-of-type) {
 					margin-top: calc((20px * 1.5) + 8px + 16px) !important;
 				}
@@ -92,14 +93,14 @@ function ProductOption(props: Product): JSX.Element {
 				<h3 css={[productOptionTitle, productOptionUnderline]}>
 					{props.title}
 				</h3>
-				{props.label && (
+				{props.tag && (
 					<span
 						css={[
 							productOptionHighlight,
 							props.isSpecialOffer ? specialOfferHighlight : css``,
 						]}
 					>
-						{props.label}
+						{props.tag}
 					</span>
 				)}
 				{props.children && props.children}

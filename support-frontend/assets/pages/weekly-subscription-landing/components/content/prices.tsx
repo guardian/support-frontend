@@ -112,7 +112,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						label={product.label}
+						tag={product.tag}
 						isSpecialOffer={product.isSpecialOffer}
 					/>
 				))}
