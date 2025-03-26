@@ -225,6 +225,136 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianA
 </div>
 `;
 
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product HomeDelivery for region MONTHLY correctly 1`] = `
+<div>
+  <div
+    class="css-ki6xpt-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        We will share your contact and subscription details with our fulfilment partners.
+      </div>
+      <div
+        class="css-15t9qdk-FooterTsAndCs"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Terms & Conditions
+        </a>
+        .
+         
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product NationalDelivery for region MONTHLY correctly 1`] = `
+<div>
+  <div
+    class="css-ki6xpt-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.
+      </div>
+      <div
+        class="css-15t9qdk-FooterTsAndCs"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Terms & Conditions
+        </a>
+        .
+         
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product OneTimeContribution for region MONTHLY correctly 1`] = `
 <div>
   <div
@@ -245,6 +375,71 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product OneTimeCo
           target="_blank"
         >
           Terms and Conditions
+        </a>
+        .
+         
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          To find out what personal data we collect and how we use it, please visit our 
+          <a
+            href="https://www.theguardian.com/help/privacy-policy"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+        <p
+          class="css-15t9qdk-FooterTsAndCs"
+        >
+          All card payments are powered by Stripe. Read the Stripe
+           
+          <a
+            href="https://stripe.com/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+           
+          and
+           
+          <a
+            href="https://stripe.com/legal/end-users"
+            target="_blank"
+          >
+            Terms and conditions
+          </a>
+          .
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SubscriptionCard for region MONTHLY correctly 1`] = `
+<div>
+  <div
+    class="css-ki6xpt-PaymentTsAndCs"
+  >
+    <div
+      class="css-1w63ndr-FinePrint"
+    >
+      <div>
+        We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.
+      </div>
+      <div
+        class="css-15t9qdk-FooterTsAndCs"
+      >
+        By proceeding, you are agreeing to 
+        our
+         
+        <a
+          href="https://www.theguardian.com/info/2021/aug/04/guardian-and-observer-voucher-subscription-card-and-home-delivery-subscription-services-terms-and-conditions"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Terms & Conditions
         </a>
         .
          

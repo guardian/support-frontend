@@ -20,6 +20,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['Contribution', 'ANNUAL', 'AUDCountries', 0],
 		['SupporterPlus', 'MONTHLY', 'GBPCountries', 12],
 		['TierThree', 'MONTHLY', 'UnitedStates', 45],
+		['HomeDelivery', 'MONTHLY', 'GBPCountries', 0],
+		['NationalDelivery', 'MONTHLY', 'GBPCountries', 0],
+		['SubscriptionCard', 'MONTHLY', 'GBPCountries', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,

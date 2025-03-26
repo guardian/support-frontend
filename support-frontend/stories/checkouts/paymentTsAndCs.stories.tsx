@@ -66,3 +66,24 @@ TierThree.args = {
 		discountedPrice: 37,
 	},
 };
+
+export const HomeDelivery = Template.bind({});
+HomeDelivery.args = {
+	productKey: 'HomeDelivery',
+	contributionType: 'MONTHLY',
+	countryGroupId: 'GBPCountries',
+};
+
+export const NationalDelivery = Template.bind({});
+NationalDelivery.args = {
+	productKey: 'NationalDelivery',
+	contributionType: 'MONTHLY',
+	countryGroupId: 'GBPCountries',
+};
+
+export const SubscriptionCard = Template.bind({});
+SubscriptionCard.args = {
+	productKey: 'SubscriptionCard',
+	contributionType: 'MONTHLY',
+	countryGroupId: 'GBPCountries',
+};
