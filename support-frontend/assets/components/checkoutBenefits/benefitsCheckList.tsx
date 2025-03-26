@@ -15,6 +15,11 @@ import Tooltip from 'components/tooltip/Tooltip';
 import { BenefitPill } from './benefitPill';
 import BulletSvg from './bulletSvg';
 
+const benefitHeadingCss = css`
+	font-weight: bold;
+	margin: ${space[2]}px 0px ${space[3]}px;
+`;
+
 const checkListIconCss = (style: CheckListStyle) => css`
 	vertical-align: top;
 	padding-right: ${style === 'compact' ? '4px' : '10px'};
@@ -87,6 +92,7 @@ type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
+	benefitsHeading?: string;
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
@@ -114,9 +120,11 @@ export function BenefitsCheckList({
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
+	benefitsHeading,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
+			{benefitsHeading && <p css={benefitHeadingCss}>{benefitsHeading}</p>}
 			{benefitsCheckListData.map((item) => {
 				const pillCopy = item.isNew ? 'New' : item.pill;
 				return (

@@ -14,6 +14,7 @@ export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
+	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
@@ -89,6 +90,11 @@ const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
+
+const digitalEditionBenefit = {
+	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+	copyBoldStart: 'The Digital Edition app. ',
+};
 
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
@@ -221,14 +227,14 @@ export const productCatalogDescription: Record<
 		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
             Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
 		benefits: [
+			digitalEditionBenefit,
 			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+				copy: 'Read our reporting on the go',
+				copyBoldStart: 'Full access to the Guardian app. ',
 			},
 			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
-			},
-			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+				copy: 'Enjoy a free trial of your subscription, before you pay',
+				copyBoldStart: 'Free 14 day trial. ',
 			},
 		],
 		ratePlans: {
