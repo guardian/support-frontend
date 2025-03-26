@@ -14,6 +14,7 @@ export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
+	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
@@ -34,6 +35,7 @@ export type ProductDescription = {
 		string,
 		{
 			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			label?: string;
 		}
 	>;
 };
@@ -88,6 +90,11 @@ const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
+
+const digitalEditionBenefit = {
+	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+	copyBoldStart: 'The Digital Edition app. ',
+};
 
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
@@ -166,6 +173,8 @@ const guardianAdLiteBenefits = [
 	{ copy: 'You can cancel at any time.' },
 ];
 
+const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
+
 export const productCatalogDescription: Record<
 	ActiveProductKey,
 	ProductDescription
@@ -218,14 +227,14 @@ export const productCatalogDescription: Record<
 		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
             Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
 		benefits: [
+			digitalEditionBenefit,
 			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+				copy: 'Read our reporting on the go',
+				copyBoldStart: 'Full access to the Guardian app. ',
 			},
 			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
-			},
-			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+				copy: 'Enjoy a free trial of your subscription, before you pay',
+				copyBoldStart: 'Free 14 day trial. ',
 			},
 		],
 		ratePlans: {
@@ -240,22 +249,6 @@ export const productCatalogDescription: Record<
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
-			},
-		},
-	},
-	NationalDelivery: {
-		label: 'National Delivery',
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Annual',
-			},
-			Everyday: {
-				billingPeriod: 'Monthly',
 			},
 		},
 	},
@@ -316,24 +309,78 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SubscriptionCard: {
-		label: 'Newspaper subscription',
+		label: 'Subscription card',
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
 			Everyday: {
 				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
 			},
 			Weekend: {
 				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
+				label: 'Weekend package',
 			},
 			Saturday: {
 				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	HomeDelivery: {
+		label: 'Home delivery',
+		thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package',
+			},
+			Saturday: {
+				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	NationalDelivery: {
+		label: 'National delivery',
+		thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package - The Guardian and The Observer',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package - The Guardian',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package - The Guardian and The Observer',
 			},
 		},
 	},
@@ -346,28 +393,6 @@ export const productCatalogDescription: Record<
 			},
 			Annual: {
 				billingPeriod: 'Annual',
-			},
-		},
-	},
-	HomeDelivery: {
-		label: 'Home Delivery',
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
-			},
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Monthly',
-			},
-			Saturday: {
-				billingPeriod: 'Monthly',
 			},
 		},
 	},

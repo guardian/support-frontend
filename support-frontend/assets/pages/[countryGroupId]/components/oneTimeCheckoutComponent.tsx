@@ -75,11 +75,11 @@ import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
@@ -876,9 +876,9 @@ export function OneTimeCheckoutComponent({
 						)}
 						<div css={tcContainer}>
 							<FinePrint mobileTheme={'dark'}>
-								<TsAndCsFooterLinks
+								<FooterTsAndCs
+									productKey={'OneTimeContribution'}
 									countryGroupId={countryGroupId}
-									productKey="OneTimeContribution"
 								/>
 							</FinePrint>
 						</div>
@@ -886,7 +886,7 @@ export function OneTimeCheckoutComponent({
 				</Box>
 			</form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			<ContributionCheckoutFinePrint mobileTheme={'light'} />
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>

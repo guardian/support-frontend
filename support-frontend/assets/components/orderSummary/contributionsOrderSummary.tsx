@@ -125,36 +125,20 @@ const termsAndConditions = css`
 	}
 `;
 
-const productStartDates = css`
-	display: block;
-	${textSans14};
-	color: #606060;
-	background-color: ${palette.neutral[97]};
-	border-radius: ${space[3]}px;
-	padding: ${space[3]}px;
-	margin-top: ${space[2]}px;
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-	}
-	li + li {
-		margin-top: ${space[2]}px;
-	}
-`;
-
 export type ContributionsOrderSummaryProps = {
-	description: string;
+	productDescription: string;
+	ratePlanDescription?: string;
 	amount: number;
 	promotion?: Promotion;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
+	startDateTierThree: React.ReactNode;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	heading?: string;
-	productDescription?: { description: string; frequency: string };
 };
 
 const visuallyHiddenCss = css`
@@ -162,7 +146,8 @@ const visuallyHiddenCss = css`
 `;
 
 export function ContributionsOrderSummary({
-	description,
+	productDescription,
+	ratePlanDescription,
 	amount,
 	promotion,
 	currency,
@@ -171,8 +156,7 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	tsAndCsTier3,
-	heading,
+	startDateTierThree,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
@@ -195,13 +179,16 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={headingCss}>{heading ?? 'Your subscription'}</h2>
+				<h2 css={headingCss}>Your subscription</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>{description}</p>
+					<p>
+						{ratePlanDescription && <div>{ratePlanDescription}</div>}
+						{productDescription}
+					</p>
 					{hasCheckList && (
 						<Button
 							priority="subdued"
@@ -222,7 +209,7 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{!!tsAndCsTier3 && <ul css={productStartDates}>{tsAndCsTier3}</ul>}
+						{startDateTierThree}
 					</>
 				)}
 			</div>

@@ -16,16 +16,16 @@ function Template(args: PaymentTsAndCsProps) {
 
 Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
 
-export const DigitalSubscription = Template.bind({});
-DigitalSubscription.args = {
-	productKey: 'DigitalSubscription',
+export const GuardianAdLite = Template.bind({});
+GuardianAdLite.args = {
+	productKey: 'GuardianAdLite',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 };
 
-export const GuardianAdLite = Template.bind({});
-GuardianAdLite.args = {
-	productKey: 'GuardianAdLite',
+export const DigitalSubscription = Template.bind({});
+DigitalSubscription.args = {
+	productKey: 'DigitalSubscription',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 };
@@ -34,14 +34,14 @@ export const OneTimeContribution = Template.bind({});
 OneTimeContribution.args = {
 	productKey: 'OneTimeContribution',
 	contributionType: 'ONE_OFF',
-	countryGroupId: 'AUDCountries',
+	countryGroupId: 'UnitedStates',
 };
 
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
-	contributionType: 'MONTHLY',
-	countryGroupId: 'UnitedStates',
+	contributionType: 'ANNUAL',
+	countryGroupId: 'AUDCountries',
 };
 
 export const SupporterPlus = Template.bind({});
@@ -56,6 +56,13 @@ export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
 	contributionType: 'MONTHLY',
-	countryGroupId: 'GBPCountries',
-	thresholdAmount: 12,
+	countryGroupId: 'UnitedStates',
+	thresholdAmount: 45,
+	promotion: {
+		name: '$8 off for 12 months',
+		description: 'Tier Three United States Monthly',
+		promoCode: 'TIER_THREE_USA_MONTHLY',
+		numberOfDiscountedPeriods: 12,
+		discountedPrice: 37,
+	},
 };

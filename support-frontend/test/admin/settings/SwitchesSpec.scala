@@ -57,6 +57,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "sepa" : {
           |        "description" : "SEPA",
           |        "state" : "Off"
+          |      },
+          |      "stripeHostedCheckout" : {
+          |        "description" : "Stripe - Hosted Checkout",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -74,6 +78,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "paypal": {
           |        "description": "Paypal",
           |        "state": "On"
+          |      },
+          |      "stripeHostedCheckout" : {
+          |        "description" : "Stripe - Hosted Checkout",
+          |        "state" : "Off"
           |      }
           |    }
           |  },
@@ -144,15 +152,16 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
         Switches(
           oneOffPaymentMethods = OneOffPaymentMethodSwitches(Some(On), Some(On), Some(On)),
           recurringPaymentMethods = RecurringPaymentMethodSwitches(
-            Some(On),
-            Some(On),
-            Some(On),
-            Some(On),
-            Some(On),
-            Some(On),
-            Some(Off),
+            stripe = Some(On),
+            stripeApplePay = Some(On),
+            stripePaymentRequestButton = Some(On),
+            stripeExpressCheckout = Some(On),
+            payPal = Some(On),
+            directDebit = Some(On),
+            sepa = Some(Off),
+            stripeHostedCheckout = Some(Off),
           ),
-          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On)),
+          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(Some(On), Some(On), Some(On), Some(Off)),
           subscriptionsSwitches = SubscriptionsSwitches(Some(On), Some(On)),
           featureSwitches = FeatureSwitches(None, Some(On), Some(Off), Some(On)),
           campaignSwitches = CampaignSwitches(Some(Off), Some(Off)),

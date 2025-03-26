@@ -1,6 +1,38 @@
+import { css } from '@emotion/react';
+import {
+	from,
+	neutral,
+	palette,
+	textEgyptian17,
+} from '@guardian/source/foundations';
 import AnchorButton from 'components/button/anchorButton';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import type { ProductBenefit } from 'helpers/productCatalog';
 import type { ProductButton } from 'pages/subscriptions-landing/copy/subscriptionCopy';
+
+const checkmarkBenefitList = css`
+	display: block;
+	${textEgyptian17}
+	margin: 16px 20px 18px 0;
+	line-height: 140%;
+	${from.mobileLandscape} {
+		margin: 27px 20px 25px 0;
+	}
+	${from.desktop} {
+		margin: 45px 20px 25px 0;
+	}
+
+	:before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		margin-top: -6px;
+		margin-left: -52px;
+		${from.tablet} {
+			border-top: 1px solid ${neutral[86]};
+		}
+	}
+`;
 
 type PropTypes = {
 	title: string;
@@ -52,7 +84,24 @@ function SubscriptionsProductDescription({
 				<h3 className="subscriptions__product-subtitle--large">{subtitle}</h3>
 			)}
 			{benefits ? (
-				<SubscriptionsProductBenefits benefits={benefits} />
+				<BenefitsCheckList
+					benefitsCheckListData={benefits.map((benefit) => {
+						return {
+							text: (
+								<p>
+									{benefit.copyBoldStart && (
+										<strong>{benefit.copyBoldStart}</strong>
+									)}
+									{benefit.copy}
+								</p>
+							),
+							isChecked: true,
+						};
+					})}
+					benefitsHeading="Subscribe below to unlock the following benefits:"
+					iconColor={palette.brandAlt[400]}
+					cssOverrides={checkmarkBenefitList}
+				/>
 			) : (
 				<p className="subscriptions__description">{description}</p>
 			)}
@@ -85,23 +134,6 @@ function SubscriptionsProductDescription({
 				))}
 			</div>
 		</div>
-	);
-}
-
-function SubscriptionsProductBenefits({
-	benefits,
-}: {
-	benefits: ProductBenefit[];
-}): JSX.Element {
-	return (
-		<ul className="subscriptions__list">
-			{benefits.map((benefit) => (
-				<li className="subscriptions__listitem">
-					<div className="subscriptions__listitem__bullet">{`●`}</div>
-					<div>{benefit.copy}</div>
-				</li>
-			))}
-		</ul>
 	);
 }
 

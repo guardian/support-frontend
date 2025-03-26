@@ -2,7 +2,6 @@ package com.gu.zuora.subscriptionBuilders
 
 import cats.syntax.either._
 import com.gu.helpers.DateGenerator
-import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.config.{TouchPointEnvironment, ZuoraDigitalPackConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
@@ -32,7 +31,6 @@ class DigitalSubscriptionBuilder(
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
-      ratePlanCharges = overridePricingIfRequired(product, state.acquisitionData.map(_.supportAbTests)),
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
       readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse product.readerType,
@@ -52,21 +50,4 @@ class DigitalSubscriptionBuilder(
 
   }
 
-  private def overridePricingIfRequired(product: DigitalPack, maybeAbTests: Option[Set[AbTest]]) =
-    if (isValidBenefitsTestPurchase(product, maybeAbTests)) {
-      product.amount
-        .map { amount =>
-          val ratePlanChargeId =
-            if (product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
-          List(
-            RatePlanChargeData(
-              RatePlanChargeOverride(
-                ratePlanChargeId,
-                price = amount, // Pass the amount the user selected into Zuora
-              ),
-            ),
-          )
-        }
-        .getOrElse(Nil)
-    } else Nil
 }

@@ -14,15 +14,17 @@ const GuardianWeekly = 'GuardianWeekly';
 const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
+export const subscriptionProductTypes = [
+	DigitalPack,
+	PremiumTier,
+	DailyEdition,
+	GuardianWeekly,
+	Paper,
+	PaperAndDigital,
+] as const;
 export const paperProductTypes = [Paper, PaperAndDigital];
 
-export type SubscriptionProduct =
-	| typeof DigitalPack
-	| typeof PremiumTier
-	| typeof DailyEdition
-	| typeof GuardianWeekly
-	| typeof Paper
-	| typeof PaperAndDigital;
+export type SubscriptionProduct = (typeof subscriptionProductTypes)[number];
 
 type OphanSubscriptionsProduct = 'DIGITAL_SUBSCRIPTION' | 'PRINT_SUBSCRIPTION';
 
