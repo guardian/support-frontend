@@ -42,7 +42,6 @@ class StripeCheckoutSessionService(
 )(implicit ec: ExecutionContext)
     extends SafeLogging {
   val baseUrl: String = "https://api.stripe.com/v1"
-  val expirationMillis = 24 * 60 * 60 * 1000 // 24 hours in millis
 
   def createCheckoutSession(
       email: String,
@@ -52,14 +51,15 @@ class StripeCheckoutSessionService(
   ): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
     val privateKey = getPrivateKey(isTestUser)
 
+    // We use the default expiration of 24 hours
     val data = Map(
       "mode" -> Seq("setup"),
       "success_url" -> Seq(successUrl),
       "currency" -> Seq(currency.toString.toLowerCase), // Is this the format Stripe expect?
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
-      "expires_at" -> Seq((Math.round((System.currentTimeMillis() + expirationMillis).toFloat / 1000)).toString),
     )
+
     client
       .url(s"$baseUrl/checkout/sessions")
       .withAuth(privateKey, "", WSAuthScheme.BASIC)
