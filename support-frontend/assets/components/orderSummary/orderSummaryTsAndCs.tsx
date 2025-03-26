@@ -104,7 +104,7 @@ export function OrderSummaryTsAndCs({
 		<div css={containerSummaryTsCs}>
 			<p>Auto renews every {period} until you cancel.</p>
 			<p>
-				{productKey === 'GuardianAdLite'
+				{['GuardianAdLite', 'DigitalSubscription'].includes(productKey)
 					? 'Cancel anytime.'
 					: 'Cancel or change your support anytime.'}
 			</p>
@@ -112,6 +112,7 @@ export function OrderSummaryTsAndCs({
 	);
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		GuardianAdLite: contributeAdLiteTsAndCs,
+		DigitalSubscription: contributeAdLiteTsAndCs,
 		Contribution: contributeAdLiteTsAndCs,
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
