@@ -111,7 +111,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountredAmount` the amount with a discountApplied
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
@@ -172,9 +172,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			billingPeriod,
 		);
 
-		const discountedPrice = promotion?.discountedPrice
-			? promotion.discountedPrice
-			: undefined;
+		const discountedPrice =
+			promotion !== undefined ? promotion.discountedPrice : undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -209,7 +208,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		window.guardian.settings.switches.recurringPaymentMethods
 			.stripeExpressCheckout === 'On';
 
-	let elementsOptions = {};
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
@@ -222,17 +220,17 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'GuardianAdLite' ||
 			productKey === 'DigitalSubscription'
 		) {
-			elementsOptions = {
-				mode: 'payment',
-				/**
-				 * Stripe amounts are in the "smallest currency unit"
-				 * @see https://docs.stripe.com/api/charges/object
-				 * @see https://docs.stripe.com/currencies#zero-decimal
-				 */
-				amount: payment.finalAmount * 100,
-				currency: currencyKey.toLowerCase(),
-				paymentMethodCreation: 'manual',
-			} as const;
+			// elementsOptions = {
+			// 	mode: 'payment',
+			// 	/**
+			// 	 * Stripe amounts are in the "smallest currency unit"
+			// 	 * @see https://docs.stripe.com/api/charges/object
+			// 	 * @see https://docs.stripe.com/currencies#zero-decimal
+			// 	 */
+			// 	amount: payment.finalAmount * 100,
+			// 	currency: currencyKey.toLowerCase(),
+			// 	paymentMethodCreation: 'manual',
+			// } as const;
 			useStripeExpressCheckout = true;
 		}
 	}
@@ -262,7 +260,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		: undefined;
 
 	return (
-		<Elements stripe={stripePromise} options={elementsOptions}>
+		<Elements stripe={stripePromise} options={{}}>
 			<CheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
