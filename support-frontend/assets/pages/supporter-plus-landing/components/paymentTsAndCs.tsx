@@ -8,7 +8,11 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	contributionsTermsLinks,
+	digitalSubscriptionTermsLink,
 	guardianAdLiteTermsLink,
+	guardianWeeklyPromoTermsLink,
+	guardianWeeklyTermsLink,
+	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
 	tierThreeTermsLink,
@@ -70,10 +74,19 @@ export function FooterTsAndCs({
 		switch (productKey) {
 			case 'GuardianAdLite':
 				return termsLink('Terms', guardianAdLiteTermsLink);
+			case 'DigitalSubscription':
+				return termsLink('Terms and Conditions', digitalSubscriptionTermsLink);
 			case 'SupporterPlus':
 				return termsLink('Terms and Conditions', supporterPlusTermsLink);
 			case 'TierThree':
 				return termsLink('Terms', tierThreeTermsLink);
+			case 'HomeDelivery':
+			case 'NationalDelivery':
+			case 'SubscriptionCard':
+				return termsLink('Terms & Conditions', paperTermsLink);
+			case 'GuardianWeeklyDomestic':
+			case 'GuardianWeeklyRestOfWorld':
+				return termsLink('Terms & Conditions', guardianWeeklyTermsLink);
 			default:
 				return termsLink(
 					'Terms and Conditions',
@@ -110,6 +123,17 @@ export function PaymentTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
+	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
+	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
+	const guardianWeeklyPromo = (
+		<div>
+			Offer subject to availability. Guardian News and Media Ltd ("GNM")
+			reserves the right to withdraw this promotion at any time. Full promotion
+			terms and conditions for our{' '}
+			{termsLink('monthly', guardianWeeklyPromoTermsLink)} and{' '}
+			{termsLink('annual', guardianWeeklyPromoTermsLink)} offers.
+		</div>
+	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		DigitalSubscription: (
@@ -121,11 +145,7 @@ export function PaymentTsAndCs({
 				Cancellation will take effect at the end of your current subscription
 				month. To cancel, go to{' '}
 				<a href={'http://manage.theguardian.com/'}>Manage My Account</a> or see
-				our{' '}
-				<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
-					Terms
-				</a>
-				.
+				our {termsLink('Terms', digitalSubscriptionTermsLink)}.
 			</div>
 		),
 		GuardianAdLite: (
@@ -198,6 +218,11 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
+		HomeDelivery: <div>{paperHomeDeliveryTsAndCs}</div>,
+		NationalDelivery: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		SubscriptionCard: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
+		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};
 	return (
 		<div css={container}>

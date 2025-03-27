@@ -6,12 +6,19 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
-	const promotionTierThreUnitedStatesMonthly: Promotion = {
+	const promotionTierThreeUnitedStatesMonthly: Promotion = {
 		name: '$8 off for 12 months',
 		description: 'Tier Three United States Monthly',
 		promoCode: 'TIER_THREE_USA_MONTHLY',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 37,
+	};
+	const promotionGuardianWeeklyUnitedStatesAnnual: Promotion = {
+		name: '10% off for 12 months',
+		description: 'Guardian Weekly United States Annual',
+		promoCode: 'ANNUAL10',
+		numberOfDiscountedPeriods: 12,
+		discountedPrice: 324,
 	};
 	const paymentProductKeys = [
 		['GuardianAdLite', 'ANNUAL', 'GBPCountries', 0],
@@ -20,6 +27,11 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['Contribution', 'ANNUAL', 'AUDCountries', 0],
 		['SupporterPlus', 'MONTHLY', 'GBPCountries', 12],
 		['TierThree', 'MONTHLY', 'UnitedStates', 45],
+		['HomeDelivery', 'MONTHLY', 'GBPCountries', 0],
+		['NationalDelivery', 'MONTHLY', 'GBPCountries', 0],
+		['SubscriptionCard', 'MONTHLY', 'GBPCountries', 0],
+		['GuardianWeeklyDomestic', 'MONTHLY', 'GBPCountries', 0],
+		['GuardianWeeklyRestOfWorld', 'ANNUAL', 'UnitedStates', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
@@ -28,7 +40,11 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 				paymentProductKey === 'TierThree' &&
 				contributionType === 'MONTHLY' &&
 				countryGroupId === 'UnitedStates'
-					? promotionTierThreUnitedStatesMonthly
+					? promotionTierThreeUnitedStatesMonthly
+					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
+					  contributionType === 'ANNUAL' &&
+					  countryGroupId === 'UnitedStates'
+					? promotionGuardianWeeklyUnitedStatesAnnual
 					: undefined;
 			const { container } = render(
 				<PaymentTsAndCs
