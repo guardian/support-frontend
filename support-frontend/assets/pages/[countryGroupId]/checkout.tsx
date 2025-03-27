@@ -207,6 +207,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		window.guardian.settings.switches.recurringPaymentMethods
 			.stripeExpressCheckout === 'On';
 
+	let elementsOptions = {};
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
@@ -219,17 +220,17 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'GuardianAdLite' ||
 			productKey === 'DigitalSubscription'
 		) {
-			// elementsOptions = {
-			// 	mode: 'payment',
-			// 	/**
-			// 	 * Stripe amounts are in the "smallest currency unit"
-			// 	 * @see https://docs.stripe.com/api/charges/object
-			// 	 * @see https://docs.stripe.com/currencies#zero-decimal
-			// 	 */
-			// 	amount: payment.finalAmount * 100,
-			// 	currency: currencyKey.toLowerCase(),
-			// 	paymentMethodCreation: 'manual',
-			// } as const;
+			elementsOptions = {
+				mode: 'subscription',
+				/**
+				 * Stripe amounts are in the "smallest currency unit"
+				 * @see https://docs.stripe.com/api/charges/object
+				 * @see https://docs.stripe.com/currencies#zero-decimal
+				 */
+				amount: payment.finalAmount * 100,
+				currency: currencyKey.toLowerCase(),
+				paymentMethodCreation: 'manual',
+			} as const;
 			useStripeExpressCheckout = true;
 		}
 	}
@@ -254,7 +255,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	}, []);
 
 	return (
-		<Elements stripe={stripePromise} options={{}}>
+		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
 				geoId={geoId}
 				appConfig={appConfig}
