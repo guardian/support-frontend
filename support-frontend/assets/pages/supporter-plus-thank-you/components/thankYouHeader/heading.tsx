@@ -205,21 +205,20 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const printProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'SubscriptionCard',
 	];
+	const printProductsKeys: ActiveProductKey[] = [
+		...paperProductsKeys,
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
 	const isObserverPrint =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
+	const isGuardianPrint =
+		paperProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -228,7 +227,6 @@ function Heading({
 
 	// Print Products Header
 	if (isPrintProduct) {
-		const owner = isObserverPrint ? 'Observer' : 'our';
 		const getPrintHeader = () => {
 			const paperRatePlanName =
 				ratePlanKey === 'Everyday'
@@ -261,9 +259,19 @@ function Heading({
 		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you for supporting {owner} journalism!
-				<br css={printlineBreak} />
+				{isGuardianPrint && (
+					<>
+						Thank you for supporting our journalism!
+						<br css={printlineBreak} />
+					</>
+				)}
 				{getPrintHeader()}
+				{isObserverPrint && (
+					<>
+						<br css={printlineBreak} />
+						Thank you for supporting Observer journalism!
+					</>
+				)}
 			</h1>
 		);
 	}
