@@ -48,11 +48,10 @@ const ActivePaperProductTypes = isProd()
 	? ActivePaperProductTypesProd
 	: ActivePaperProductTypesCode;
 
+type ActivePaperProductOptionsProd =
+	(typeof ActivePaperProductTypesProd)[number];
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
-
-export type ActivePaperProductOptionsProd =
-	(typeof ActivePaperProductTypesProd)[number];
 
 export const isActivePaperProductOption = (
 	productOption: ProductOptions,
