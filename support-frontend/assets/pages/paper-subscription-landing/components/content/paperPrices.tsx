@@ -38,7 +38,9 @@ const priceBoxes = css`
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
 	flex-direction: column;
-	margin-top: 56px;
+	${from.tablet} {
+		margin-top: 56px;
+	}
 	${between.tablet.and.leftCol} {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -71,7 +73,7 @@ const productOverride = css`
 	}
 `;
 
-const productOverrideWithLabel = css`
+const productOverrideWithTag = css`
 	${productOverride}
 	&:not(:first-of-type) {
 		margin-top: ${space[12]}px;
@@ -126,7 +128,7 @@ export function PaperPrices({
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.label ? productOverrideWithLabel : productOverride
+							product.tag ? productOverrideWithTag : productOverride
 						}
 						title={product.title}
 						price={product.price}
