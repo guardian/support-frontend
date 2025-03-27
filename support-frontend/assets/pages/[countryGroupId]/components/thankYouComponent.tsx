@@ -190,10 +190,10 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const isObserverPrint =
+	const isObserverPaper =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const isGuardianPrint =
-		paperProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -293,7 +293,7 @@ export function ThankYouComponent({
 			!isTier3 && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite || isObserverPrint, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || isObserverPaper, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
