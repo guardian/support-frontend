@@ -130,15 +130,16 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			GBPCountries: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage: pageUrlRegexes.subscriptions.paper.paperLandingPage,
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
 		persistPage:
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
