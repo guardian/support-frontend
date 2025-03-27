@@ -177,14 +177,22 @@ export function ThankYouComponent({
 		currencyKey,
 	);
 
-	const printProductsKeys: ActiveProductKey[] = [
+	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'SubscriptionCard',
+	];
+	const guardianWeeklyProductsKeys: ActiveProductKey[] = [
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
+	const printProductsKeys: ActiveProductKey[] = [
+		...paperProductsKeys,
+		...guardianWeeklyProductsKeys,
+	];
 	const isPrint = printProductsKeys.includes(productKey);
+	const isObserverProduct =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -283,7 +291,7 @@ export function ThankYouComponent({
 			!isTier3 && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || isObserverProduct, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
