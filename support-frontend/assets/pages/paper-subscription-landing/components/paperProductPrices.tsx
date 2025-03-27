@@ -27,6 +27,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
+import { isProd } from 'helpers/urls/url';
 import { getLabel, getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
 
@@ -182,7 +183,7 @@ const getPlans = (
 			productOption,
 		);
 		const tag = productOption === 'Everyday' ? 'Best deal' : '';
-		const label = getLabel(productOption);
+		const label = isProd() ? getLabel(productOption) : undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -208,6 +209,7 @@ const getPlans = (
 			),
 		};
 	});
+};
 
 export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;

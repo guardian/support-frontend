@@ -35,7 +35,20 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday;
 
-const ActivePaperProductTypes = [Everyday, Weekend, Saturday, Sunday] as const;
+const ActivePaperProductTypes: readonly ProductOptions[] = [
+	Everyday,
+	Weekend,
+	Saturday,
+	Sunday,
+] as const;
+
+const ExtendedActivePaperProductTypes: readonly ProductOptions[] = [
+	Everyday,
+	Sixday,
+	Weekend,
+	Saturday,
+	Sunday,
+] as const;
 
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
@@ -43,9 +56,7 @@ export type ActivePaperProductOptions =
 export const isActivePaperProductOption = (
 	productOption: ProductOptions,
 ): productOption is ActivePaperProductOptions => {
-	return ActivePaperProductTypes.includes(
-		productOption as ActivePaperProductOptions,
-	);
+	return ActivePaperProductTypes.includes(productOption);
 };
 
 const paperProductsWithDigital = {
@@ -130,6 +141,7 @@ export {
 	Everyday,
 	EverydayPlus,
 	ActivePaperProductTypes,
+	ExtendedActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
 	productOptionIfDigiAddOnChanged,

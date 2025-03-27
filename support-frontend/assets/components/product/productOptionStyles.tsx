@@ -36,8 +36,14 @@ export const productOption = css`
 		min-height: 272px;
 		width: 300px;
 		grid-template-columns: none;
-		grid-template-rows: 100px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+		grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
 		grid-template-areas: none;
+	}
+`;
+
+export const productOptionWithLabel = css`
+	${from.leftCol} {
+		grid-template-rows: 100px minmax(66px, max-content) minmax(100px, 1fr) 72px;
 	}
 `;
 
