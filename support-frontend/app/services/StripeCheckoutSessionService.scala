@@ -98,9 +98,6 @@ class StripeCheckoutSessionService(
   private def decodeResponse[A: Decoder](
       response: WSResponse,
   ): Either[String, A] = {
-    // TODO: remove this logging
-    logger.error(scrub"Response: ${response.body}")
-
     decode[A](response.body).leftMap(_ => "Decode error")
   }
 }
