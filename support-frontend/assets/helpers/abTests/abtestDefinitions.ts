@@ -130,7 +130,7 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			ALL: {
+			GBPCountries: {
 				offset: 0,
 				size: 1,
 			},
