@@ -205,20 +205,15 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const paperProductsKeys: ActiveProductKey[] = [
+	const printProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'SubscriptionCard',
-	];
-	const printProductsKeys: ActiveProductKey[] = [
-		...paperProductsKeys,
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-	const isObserverPrint =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const isGuardianPrint =
-		paperProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -229,11 +224,7 @@ function Heading({
 	if (isPrintProduct) {
 		const getPrintHeader = () => {
 			const paperRatePlanName =
-				ratePlanKey === 'Everyday'
-					? 'Every day'
-					: isObserverPrint
-					? 'Observer'
-					: ratePlanKey;
+				ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
 			const guardianWeeklyRatePlanName =
 				ratePlanKey === 'Annual' ? '/ annual package ' : '';
 			switch (ratePlanKey) {
@@ -257,17 +248,34 @@ function Heading({
 						: `You have now subscribed to the ${paperRatePlanName} package`;
 			}
 		};
+		const getPrintHeaderObserver = (): JSX.Element => {
+			const observerPackageYellow = (
+				<span css={yellowAmountText}>Observer package</span>
+			);
+			return (
+				<>
+					{isPending ? (
+						<>
+							Your subscription to the {observerPackageYellow} is being
+							processed
+						</>
+					) : (
+						<>You have now subscribed to the {observerPackageYellow}</>
+					)}
+				</>
+			);
+		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				{isGuardianPrint && (
+				{isGuardianPrint ? (
 					<>
 						Thank you for supporting our journalism!
 						<br css={printlineBreak} />
+						{getPrintHeader()}
 					</>
-				)}
-				{getPrintHeader()}
-				{isObserverPrint && (
+				) : (
 					<>
+						{getPrintHeaderObserver()}
 						<br css={printlineBreak} />
 						Thank you for supporting Observer journalism!
 					</>
