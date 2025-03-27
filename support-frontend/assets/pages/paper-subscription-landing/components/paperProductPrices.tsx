@@ -6,7 +6,10 @@ import type {
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
+import {
+	ActivePaperProductTypes,
+	ExtendedActivePaperProductTypes,
+} from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -24,6 +27,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
+import { isProd } from 'helpers/urls/url';
 import { getLabel, getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
 
@@ -150,8 +154,12 @@ const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
-): Product[] =>
-	ActivePaperProductTypes.map((productOption) => {
+): Product[] => {
+	const activePaperProductTypes = isProd()
+		? ExtendedActivePaperProductTypes
+		: ActivePaperProductTypes;
+
+	return activePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
@@ -174,7 +182,7 @@ const getPlans = (
 			productOption,
 		);
 		const tag = productOption === 'Everyday' ? 'Best deal' : '';
-		const label = getLabel(productOption);
+		const label = isProd() ? getLabel(productOption) : undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -200,6 +208,7 @@ const getPlans = (
 			),
 		};
 	});
+};
 
 type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;

@@ -7,6 +7,7 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
+import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
@@ -15,6 +16,7 @@ import {
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { isProd } from 'helpers/urls/url';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {
@@ -41,6 +43,10 @@ const priceBoxes = css`
 	${from.tablet} {
 		margin-top: 56px;
 	}
+`;
+
+const pricesBoxesGridLayout = css`
+	flex-direction: column;
 	${between.tablet.and.leftCol} {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -124,7 +130,9 @@ export function PaperPrices({
 					Subscription card
 				</LinkTo>
 			</div>
-			<section css={priceBoxes}>
+			<FlexContainer
+				cssOverrides={[priceBoxes, !isProd() ? pricesBoxesGridLayout : css``]}
+			>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
@@ -143,7 +151,7 @@ export function PaperPrices({
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}
-			</section>
+			</FlexContainer>
 			<div css={pricesInfo}>
 				<ProductInfoChip icon={<SvgInfoRound />}>{infoText}</ProductInfoChip>
 			</div>

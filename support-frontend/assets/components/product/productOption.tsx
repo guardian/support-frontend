@@ -30,6 +30,7 @@ import {
 	productOptionTitleHeading,
 	productOptionUnderline,
 	productOptionVerticalLine,
+	productOptionWithLabel,
 	specialOfferHighlight,
 	specialOfferOption,
 } from './productOptionStyles';
@@ -95,6 +96,7 @@ function ProductOption(props: Product): JSX.Element {
 				props.cssOverrides,
 				productOptionMargin,
 				props.isSpecialOffer ? specialOfferOption : css``,
+				props.label ? productOptionWithLabel : css``,
 			]}
 		>
 			{props.tag && (
