@@ -21,13 +21,6 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def withCurrency(currency: Currency): StripeServiceForCurrency = {
-    logger.warn(s"DEPRECATED FALLBACK - using currency $currency to determine stripe gateway")
-    val gateway = if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
-    val stripeAccountConfig = config.forCurrency(Some(currency)).secretKey
-    new StripeServiceForCurrency(this, stripeAccountConfig, gateway)
-  }
-
   def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForCurrency = {
     val (stripeSecretKey, gateway) = config
       .forPublicKey(stripePublicKey)
