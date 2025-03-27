@@ -31,7 +31,7 @@ const baseAcquisitionProduct: AcquisitionProduct = {
 	product: 'CONTRIBUTION',
 	amount: 1.0,
 	currency: 'GBP',
-	source: null,
+	source: 'EMAIL',
 	platform: 'IOSNATIVEAPP',
 	labels: ['label'],
 };
@@ -72,6 +72,7 @@ describe('The transformAcquisitionProductForBigQuery function', () => {
 			payment_id: '123456789',
 			platform: 'IOS_NATIVE_APP',
 			labels: ['label'],
+			source: 'EMAIL',
 		};
 		expect(got).toEqual(expected);
 	});

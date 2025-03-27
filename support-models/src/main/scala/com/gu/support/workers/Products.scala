@@ -58,7 +58,6 @@ case class DigitalPack(
     currency: Currency,
     billingPeriod: BillingPeriod,
     readerType: ReaderType = Direct,
-    amount: Option[BigDecimal] = None,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-DigitalPack-$currency-$readerType"
 }
