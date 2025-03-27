@@ -213,6 +213,13 @@ function Heading({
 		'GuardianWeeklyRestOfWorld',
 	];
 
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+	];
+	const isObserverPrint =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -221,9 +228,14 @@ function Heading({
 
 	// Print Products Header
 	if (isPrintProduct) {
+		const owner = isObserverPrint ? 'Observer' : 'our';
 		const getPrintHeader = () => {
 			const paperRatePlanName =
-				ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
+				ratePlanKey === 'Everyday'
+					? 'Every day'
+					: isObserverPrint
+					? 'Observer'
+					: ratePlanKey;
 			const guardianWeeklyRatePlanName =
 				ratePlanKey === 'Annual' ? '/ annual package ' : '';
 			switch (ratePlanKey) {
@@ -249,7 +261,7 @@ function Heading({
 		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you for supporting our journalism!
+				Thank you for supporting {owner} journalism!
 				<br css={printlineBreak} />
 				{getPrintHeader()}
 			</h1>
