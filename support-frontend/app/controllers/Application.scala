@@ -8,7 +8,7 @@ import assets.{AssetsResolver, RefPath}
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.support.catalog.{Collection, HomeDelivery, Paper, SupporterPlus, TierThree}
+import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, SupporterPlus, TierThree}
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
@@ -184,6 +184,8 @@ case class AllProductPrices(
     SupporterPlus: ProductPrices,
     TierThree: ProductPrices,
     Paper: ProductPrices,
+    GuardianWeekly: ProductPrices,
+    DigitalPack: ProductPrices,
 )
 
 object AllProductPrices extends InternationalisationCodecs {
@@ -223,6 +225,8 @@ class Application(
       SupporterPlus = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos),
       TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
       Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
+      GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
+      DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
     )
   }
 
