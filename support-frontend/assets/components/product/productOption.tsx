@@ -12,15 +12,22 @@ import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	Channel,
+	type LabelProps,
+} from 'pages/paper-subscription-landing/helpers/products';
+import {
 	button,
 	buttonDiv,
 	priceCopyGridPlacement,
 	productOption,
 	productOptionHighlight,
+	productOptionLabel,
+	productOptionLabelObserver,
 	productOptionOfferCopy,
 	productOptionPrice,
 	productOptionPriceCopy,
 	productOptionTitle,
+	productOptionTitleHeading,
 	productOptionUnderline,
 	productOptionVerticalLine,
 	specialOfferHighlight,
@@ -37,7 +44,7 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
-	label?: string;
+	label?: LabelProps;
 	tag?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
@@ -64,6 +71,7 @@ function ProductOption(props: Product): JSX.Element {
 		}
 	}, [hasBeenSeen]);
 
+	const isObserverChannel = props.label?.channel === Channel.Observer;
 	const productOptionMargin =
 		props.tag &&
 		css`
@@ -89,18 +97,32 @@ function ProductOption(props: Product): JSX.Element {
 				props.isSpecialOffer ? specialOfferOption : css``,
 			]}
 		>
-			<div css={productOptionVerticalLine}>
-				<h3 css={[productOptionTitle, productOptionUnderline]}>
-					{props.title}
-				</h3>
-				{props.tag && (
+			{props.tag && (
+				<span
+					css={[
+						productOptionHighlight,
+						props.isSpecialOffer ? specialOfferHighlight : css``,
+					]}
+				>
+					{props.tag}
+				</span>
+			)}
+			<div
+				css={[
+					productOptionTitle,
+					productOptionVerticalLine,
+					productOptionUnderline,
+				]}
+			>
+				<h3 css={productOptionTitleHeading}>{props.title}</h3>
+				{props.label && (
 					<span
 						css={[
-							productOptionHighlight,
-							props.isSpecialOffer ? specialOfferHighlight : css``,
+							productOptionLabel,
+							isObserverChannel ? productOptionLabelObserver : css``,
 						]}
 					>
-						{props.tag}
+						{props.label.text}
 					</span>
 				)}
 				{props.children && props.children}

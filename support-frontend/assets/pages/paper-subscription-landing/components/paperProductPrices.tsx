@@ -27,7 +27,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
+import { getLabel, getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -69,7 +69,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
-
 const getUnavailableOutsideLondon = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: PaperProductOptions,
@@ -182,8 +181,8 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const tag = productOption === 'Everyday' ? 'Best Deal' : '';
-		const label = 'The Guardian';
+		const tag = productOption === 'Everyday' ? 'Best deal' : '';
+		const label = getLabel(productOption);
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),

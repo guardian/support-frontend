@@ -9,10 +9,12 @@ import {
 	headlineBold28,
 	headlineBold42,
 	neutral,
+	palette,
 	space,
 	textSans14,
 	textSans15,
 	textSans17,
+	textSansBold14,
 	until,
 } from '@guardian/source/foundations';
 
@@ -34,7 +36,7 @@ export const productOption = css`
 		min-height: 272px;
 		width: 300px;
 		grid-template-columns: none;
-		grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
+		grid-template-rows: 100px minmax(66px, max-content) minmax(100px, 1fr) 72px;
 		grid-template-areas: none;
 	}
 `;
@@ -61,14 +63,33 @@ export const productOptionVerticalLine = css`
 `;
 
 export const productOptionTitle = css`
-	${headlineBold24};
 	padding-bottom: ${space[5]}px;
-	${from.tablet} {
-		margin-bottom: ${space[2]}px;
-	}
+`;
+
+export const productOptionTitleHeading = css`
+	${headlineBold24};
+	margin-bottom: ${space[1]}px;
 	${between.tablet.and.leftCol} {
 		${headlineBold17};
 	}
+`;
+
+export const productOptionLabel = css`
+	display: block;
+	width: max-content;
+	max-width: 120px;
+	${textSansBold14}
+	color: ${palette.neutral[100]};
+	background: ${palette.brand[500]};
+	border-radius: ${space[2]}px;
+	padding: ${space[1]}px ${space[3]}px;
+	${between.mobileMedium.and.leftCol} {
+		max-width: unset;
+	}
+`;
+
+export const productOptionLabelObserver = css`
+	background: #963c00;
 `;
 
 export const productOptionOfferCopy = css`
