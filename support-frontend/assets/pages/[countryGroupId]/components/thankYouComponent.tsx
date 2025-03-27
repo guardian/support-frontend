@@ -182,13 +182,10 @@ export function ThankYouComponent({
 		'HomeDelivery',
 		'SubscriptionCard',
 	];
-	const guardianWeeklyProductsKeys: ActiveProductKey[] = [
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
 	const printProductsKeys: ActiveProductKey[] = [
 		...paperProductsKeys,
-		...guardianWeeklyProductsKeys,
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
 	const isObserverProduct =
