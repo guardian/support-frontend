@@ -22,7 +22,7 @@ object getPaymentMethod {
 
   case class StripeCard(brand: StripeBrand, last4: String, exp_month: Int, exp_year: Int, country: String)
 
-  def apply(stripeService: StripeServiceForCurrency)(paymentMethod: PaymentMethodId): Future[StripePaymentMethod] =
+  def apply(stripeService: StripeServiceForAccount)(paymentMethod: PaymentMethodId): Future[StripePaymentMethod] =
     stripeService.get[StripePaymentMethod](s"payment_methods/${paymentMethod.value}")
 
 }

@@ -14,7 +14,7 @@ object createCustomerFromPaymentMethod {
 
   case class Customer(id: String)
 
-  def apply(stripeService: StripeServiceForCurrency)(paymentMethod: PaymentMethodId): Future[Customer] =
+  def apply(stripeService: StripeServiceForAccount)(paymentMethod: PaymentMethodId): Future[Customer] =
     stripeService.postForm[Customer](
       "customers",
       Map(
