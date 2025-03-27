@@ -35,7 +35,6 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday;
 
-// TODO: is it okay to add Sunday here?
 const ActivePaperProductTypes = [Everyday, Weekend, Saturday, Sunday] as const;
 
 export type ActivePaperProductOptions =
