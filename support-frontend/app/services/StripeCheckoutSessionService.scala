@@ -55,7 +55,7 @@ class StripeCheckoutSessionService(
     val data = Map(
       "mode" -> Seq("setup"),
       "success_url" -> Seq(successUrl),
-      "currency" -> Seq(currency.toString.toLowerCase), // Is this the format Stripe expect?
+      "currency" -> Seq(currency.iso.toLowerCase),
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
     )
