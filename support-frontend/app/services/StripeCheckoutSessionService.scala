@@ -89,6 +89,7 @@ class StripeCheckoutSessionService(
   }
 
   private def getPrivateKey(isTestUser: Boolean): String = {
+    // TODO: take a public key and map to a secret key instead of hardcoding this
     configProvider.get(isTestUser).defaultAccount.secretKey.secret
   }
 
