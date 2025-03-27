@@ -222,7 +222,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'DigitalSubscription'
 		) {
 			elementsOptions = {
-				mode: 'payment',
+				mode: 'subscription',
 				/**
 				 * Stripe amounts are in the "smallest currency unit"
 				 * @see https://docs.stripe.com/api/charges/object
