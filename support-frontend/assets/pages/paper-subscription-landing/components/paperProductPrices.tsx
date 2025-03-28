@@ -208,7 +208,7 @@ const getPlans = (
 		};
 	});
 
-type PaperProductPricesProps = {
+export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
