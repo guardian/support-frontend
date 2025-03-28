@@ -229,7 +229,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
-				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}
