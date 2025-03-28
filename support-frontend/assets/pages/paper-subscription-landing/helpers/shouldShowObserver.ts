@@ -1,9 +1,10 @@
-import * as cookie from 'helpers/storage/cookie';
 import { isCode } from 'helpers/urls/url';
 
 const shouldShowObserverCard = () => {
-	const isTestUser = !!cookie.get('_test_username');
-	return isTestUser || isCode();
+	const searchParams = new URLSearchParams(window.location.search);
+	const enableObserver = searchParams.get('enableObserver');
+
+	return enableObserver ?? isCode();
 };
 
 export default shouldShowObserverCard;
