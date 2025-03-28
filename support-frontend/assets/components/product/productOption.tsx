@@ -12,17 +12,25 @@ import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	Channel,
+	type LabelProps,
+} from 'pages/paper-subscription-landing/helpers/products';
+import {
 	button,
 	buttonDiv,
 	priceCopyGridPlacement,
 	productOption,
 	productOptionHighlight,
+	productOptionLabel,
+	productOptionLabelObserver,
 	productOptionOfferCopy,
 	productOptionPrice,
 	productOptionPriceCopy,
 	productOptionTitle,
+	productOptionTitleHeading,
 	productOptionUnderline,
 	productOptionVerticalLine,
+	productOptionWithLabel,
 	specialOfferHighlight,
 	specialOfferOption,
 } from './productOptionStyles';
@@ -37,7 +45,8 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
-	label?: string;
+	label?: LabelProps;
+	tag?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
@@ -63,15 +72,16 @@ function ProductOption(props: Product): JSX.Element {
 		}
 	}, [hasBeenSeen]);
 
+	const isObserverChannel = props.label?.channel === Channel.Observer;
 	const productOptionMargin =
-		props.label &&
+		props.tag &&
 		css`
 			${until.tablet} {
 				/* calculation belows are based on productOptionHighlight text size, line height and padding */
 				&:first-of-type {
 					margin-top: calc((20px * 1.5) + 8px) !important;
 				}
-				/* 16px alloted for margin between product options when a label is present */
+				/* 16px alloted for margin between product options when a tag is present */
 				&:not(first-of-type) {
 					margin-top: calc((20px * 1.5) + 8px + 16px) !important;
 				}
@@ -86,20 +96,35 @@ function ProductOption(props: Product): JSX.Element {
 				props.cssOverrides,
 				productOptionMargin,
 				props.isSpecialOffer ? specialOfferOption : css``,
+				props.label ? productOptionWithLabel : css``,
 			]}
 		>
-			<div css={productOptionVerticalLine}>
-				<h3 css={[productOptionTitle, productOptionUnderline]}>
-					{props.title}
-				</h3>
+			{props.tag && (
+				<span
+					css={[
+						productOptionHighlight,
+						props.isSpecialOffer ? specialOfferHighlight : css``,
+					]}
+				>
+					{props.tag}
+				</span>
+			)}
+			<div
+				css={[
+					productOptionTitle,
+					productOptionVerticalLine,
+					productOptionUnderline,
+				]}
+			>
+				<h3 css={productOptionTitleHeading}>{props.title}</h3>
 				{props.label && (
 					<span
 						css={[
-							productOptionHighlight,
-							props.isSpecialOffer ? specialOfferHighlight : css``,
+							productOptionLabel,
+							isObserverChannel ? productOptionLabelObserver : css``,
 						]}
 					>
-						{props.label}
+						{props.label.text}
 					</span>
 				)}
 				{props.children && props.children}

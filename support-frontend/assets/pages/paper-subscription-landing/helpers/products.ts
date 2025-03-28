@@ -1,4 +1,7 @@
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type {
+	PaperProductOptions,
+	ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import {
 	Everyday,
 	EverydayPlus,
@@ -34,5 +37,36 @@ export const getTitle = (productOption: ProductOptions) => {
 
 		default:
 			return productOption;
+	}
+};
+
+export enum Channel {
+	Observer = 'observer',
+	ObserverAndGuardian = 'gardian_and_observer',
+	Guardian = 'guardian',
+}
+
+export type LabelProps = {
+	text: string;
+	channel: Channel;
+};
+export const getLabel = (productOption: PaperProductOptions): LabelProps => {
+	switch (productOption) {
+		case 'Sunday':
+			return {
+				text: 'The Observer',
+				channel: Channel.Observer,
+			};
+		case 'Weekend':
+		case 'Everyday':
+			return {
+				text: 'The Guardian + the Observer',
+				channel: Channel.ObserverAndGuardian,
+			};
+		default:
+			return {
+				text: 'The Guardian',
+				channel: Channel.Guardian,
+			};
 	}
 };

@@ -6,7 +6,10 @@ import type {
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
+import {
+	ActivePaperProductTypes,
+	ExtendedActivePaperProductTypes,
+} from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -24,7 +27,8 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
+import { getLabel, getTitle } from '../helpers/products';
+import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -66,7 +70,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
-
 const getUnavailableOutsideLondon = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: PaperProductOptions,
@@ -151,8 +154,12 @@ const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
-): Product[] =>
-	ActivePaperProductTypes.map((productOption) => {
+): Product[] => {
+	const activePaperProductTypes = shouldShowObserverCard()
+		? ExtendedActivePaperProductTypes
+		: ActivePaperProductTypes;
+
+	return activePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
@@ -174,7 +181,10 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
+		const tag = productOption === 'Everyday' ? 'Best deal' : '';
+		const label = shouldShowObserverCard()
+			? getLabel(productOption)
+			: undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -192,13 +202,15 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label: labelText,
+			tag,
+			label,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,
 			),
 		};
 	});
+};
 
 type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
