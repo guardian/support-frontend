@@ -212,7 +212,8 @@ function Heading({
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-
+	const isGuardianPrint =
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -247,11 +248,38 @@ function Heading({
 						: `You have now subscribed to the ${paperRatePlanName} package`;
 			}
 		};
+		const getPrintHeaderObserver = (): JSX.Element => {
+			const observerPackageYellow = (
+				<span css={yellowAmountText}>Observer package</span>
+			);
+			return (
+				<>
+					{isPending ? (
+						<>
+							Your subscription to the {observerPackageYellow} is being
+							processed
+						</>
+					) : (
+						<>You have now subscribed to the {observerPackageYellow}</>
+					)}
+				</>
+			);
+		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you for supporting our journalism!
-				<br css={printlineBreak} />
-				{getPrintHeader()}
+				{isGuardianPrint ? (
+					<>
+						Thank you for supporting our journalism!
+						<br css={printlineBreak} />
+						{getPrintHeader()}
+					</>
+				) : (
+					<>
+						{getPrintHeaderObserver()}
+						<br css={printlineBreak} />
+						Thank you for supporting Observer journalism!
+					</>
+				)}
 			</h1>
 		);
 	}

@@ -1,5 +1,6 @@
 // describes options relating to a product itself - only relevant for paper currently
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import { isProd } from 'helpers/urls/url';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -35,8 +36,20 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday;
 
-const ActivePaperProductTypes = [Everyday, Weekend, Saturday] as const;
+const ActivePaperProductTypesCode = [
+	Everyday,
+	Sixday,
+	Weekend,
+	Saturday,
+	Sunday,
+] as const;
+const ActivePaperProductTypesProd = [Everyday, Weekend, Saturday] as const;
+const ActivePaperProductTypes = isProd()
+	? ActivePaperProductTypesProd
+	: ActivePaperProductTypesCode;
 
+type ActivePaperProductOptionsProd =
+	(typeof ActivePaperProductTypesProd)[number];
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
 
@@ -44,7 +57,7 @@ export const isActivePaperProductOption = (
 	productOption: ProductOptions,
 ): productOption is ActivePaperProductOptions => {
 	return ActivePaperProductTypes.includes(
-		productOption as ActivePaperProductOptions,
+		productOption as ActivePaperProductOptionsProd,
 	);
 };
 

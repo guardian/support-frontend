@@ -94,6 +94,8 @@ export function ThankYouComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
+	// TESTING TO REMOVE THIS
+	//const isPending = false;
 	const isPending = order.status === 'pending';
 
 	/**
@@ -177,14 +179,21 @@ export function ThankYouComponent({
 		currencyKey,
 	);
 
-	const printProductsKeys: ActiveProductKey[] = [
+	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
 		'SubscriptionCard',
+	];
+	const printProductsKeys: ActiveProductKey[] = [
+		...paperProductsKeys,
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
+	const isObserverPaper =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
+	const isGuardianPrint =
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -196,6 +205,8 @@ export function ThankYouComponent({
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
+	// TESTING TO REMOVE THIS
+	//const isNotRegistered = false;
 	const isNotRegistered = identityUserType === 'new';
 	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
 	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
@@ -252,14 +263,13 @@ export function ThankYouComponent({
 		condition: boolean,
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
-
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite && !isPrint,
+			!isPending && isNotRegistered && !isGuardianAdLite,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isSignedIn && !isNotRegistered && !isGuardianAdLite && !isPrint,
+			isRegisteredAndNotSignedIn && !isGuardianAdLite,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTier3, 'benefits'),
@@ -267,7 +277,7 @@ export function ThankYouComponent({
 			isTier3 && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3 || isPrint, 'subscriptionStart'),
+		...maybeThankYouModule(isTier3 || isGuardianPrint, 'subscriptionStart'),
 		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
@@ -283,7 +293,7 @@ export function ThankYouComponent({
 			!isTier3 && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || isObserverPaper, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
