@@ -17,7 +17,10 @@ import type { Country } from 'helpers/internationalisation/countries';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type {
+	PaperProductOptions,
+	ProductOptions,
+} from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
 	DigitalPack,
@@ -87,7 +90,7 @@ type PaperSubscription = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
-	productOptions: ProductOptions;
+	productOptions: PaperProductOptions;
 	deliveryAgent?: number;
 };
 type GuardianWeeklySubscription = {

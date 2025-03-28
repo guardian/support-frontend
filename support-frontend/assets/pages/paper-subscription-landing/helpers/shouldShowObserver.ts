@@ -1,10 +1,10 @@
-import { isCode } from 'helpers/urls/url';
+import { isProd } from 'helpers/urls/url';
 
 const shouldShowObserverCard = () => {
 	const searchParams = new URLSearchParams(window.location.search);
 	const enableObserver = searchParams.get('enableObserver');
 
-	return enableObserver ?? isCode();
+	return enableObserver && !isProd();
 };
 
 export default shouldShowObserverCard;
