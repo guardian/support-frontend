@@ -16,7 +16,7 @@ import {
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { isProd } from 'helpers/urls/url';
+import shouldShowObserverCard from 'pages/paper-subscription-landing/helpers/shouldShowObserver';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {
@@ -131,7 +131,10 @@ export function PaperPrices({
 				</LinkTo>
 			</div>
 			<FlexContainer
-				cssOverrides={[priceBoxes, !isProd() ? pricesBoxesGridLayout : css``]}
+				cssOverrides={[
+					priceBoxes,
+					shouldShowObserverCard() ? pricesBoxesGridLayout : css``,
+				]}
 			>
 				{products.map((product) => (
 					<ProductOption
