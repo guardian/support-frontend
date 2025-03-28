@@ -5,6 +5,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, On, Switches}
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.NationalDelivery
 import com.gu.support.paperround.PaperRoundServiceProvider
@@ -29,6 +30,7 @@ import services.{
   IdentityService,
   RecaptchaResponse,
   RecaptchaService,
+  StripeCheckoutSessionService,
   TestUserService,
   UserBenefitsApiService,
   UserBenefitsApiServiceProvider,
@@ -50,15 +52,24 @@ object CreateSubscriptionController {
 
 }
 
+sealed trait CreateResponse
 case class CreateSubscriptionResponse(
     status: Status,
     userType: String,
     trackingUri: String,
     failureReason: Option[CheckoutFailureReason] = None,
-)
+) extends CreateResponse
+
+case class CreateStripeCheckoutSessionResponse(
+    url: String,
+    id: String,
+) extends CreateResponse
 
 object CreateSubscriptionResponse {
   implicit val encoder: Encoder[CreateSubscriptionResponse] = deriveEncoder
+}
+object CreateStripeCheckoutSessionResponse {
+  implicit val encoder: Encoder[CreateStripeCheckoutSessionResponse] = deriveEncoder
 }
 
 class CreateSubscriptionController(
@@ -73,6 +84,7 @@ class CreateSubscriptionController(
     guardianDomain: GuardianDomain,
     paperRoundServiceProvider: PaperRoundServiceProvider,
     userBenefitsApiServiceProvider: UserBenefitsApiServiceProvider,
+    stripeCheckoutSessionService: StripeCheckoutSessionService,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe
@@ -118,6 +130,52 @@ class CreateSubscriptionController(
 
         toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
 
+      }
+    }
+
+  private def createCheckoutSession(
+      email: String,
+      currency: Currency,
+      isTestUser: Boolean,
+      referer: Option[String],
+  ): EitherT[Future, CreateSubscriptionError, CreateStripeCheckoutSessionResponse] = {
+    val successUrl = for {
+      referer <- referer
+      successUrl <- StripeCheckoutSessionService.buildSuccessUrl(referer)
+    } yield successUrl
+
+    successUrl match {
+      case None => EitherT.leftT[Future, CreateStripeCheckoutSessionResponse](ServerError("Invalid referer"))
+      case Some(validSuccessUrl) =>
+        stripeCheckoutSessionService
+          .createCheckoutSession(email, currency, isTestUser, validSuccessUrl)
+          .leftMap[CreateSubscriptionError](ServerError)
+          .map[CreateStripeCheckoutSessionResponse] { response =>
+            CreateStripeCheckoutSessionResponse(url = response.url, id = response.id)
+          }
+    }
+  }
+
+  def createStripeCheckoutSession: EssentialAction =
+    LoggingAndAlarmOnFailure {
+      MaybeAuthenticatedActionOnFormSubmission.async(createRequestBodyParser) { implicit request =>
+        implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+        logDetailedMessage("attempting to initiate Stripe checkout session")
+        val json = request.body.copy(debugInfo = None).asJson
+        logDetailedMessage(json.toString)
+
+        val errorOrStatusResponse = for {
+          _ <- validate(request, settings.switches)
+          result <- createCheckoutSession(
+            email = request.body.email,
+            currency = request.body.product.currency,
+            isTestUser = testUsers.isTestUser(request),
+            referer = request.headers.get("referer"),
+          )
+        } yield result
+
+        toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
       }
     }
 
@@ -326,11 +384,11 @@ class CreateSubscriptionController(
   private val discardIncompleteCheckoutCookie =
     DiscardingCookie(name = "GU_CO_INCOMPLETE", domain = Some(guardianDomain.value))
 
-  private def toHttpResponse(
-      result: EitherT[Future, CreateSubscriptionError, CreateSubscriptionResponse],
+  private def toHttpResponse[A <: CreateResponse](
+      result: EitherT[Future, CreateSubscriptionError, A],
       product: ProductType,
       userEmail: String,
-  )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
+  )(implicit request: CreateRequest, writeable: Writeable[String], encoder: Encoder[A]): Future[Result] = {
     result.value.flatMap {
       case Left(error) =>
         logErrorDetailedMessage(s"create failed due to $error")

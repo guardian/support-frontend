@@ -116,6 +116,18 @@ export function SubmitButton({
 					/>
 				</>
 			) : null;
+
+		case 'StripeHostedCheckout':
+			return (
+				<DefaultPaymentButton
+					buttonText="Continue to payment"
+					onClick={() => {
+						// no-op
+						// This isn't needed because we are now using the formOnSubmit handler
+					}}
+					type="submit"
+				/>
+			);
 		default:
 			return (
 				<DefaultPaymentButton
