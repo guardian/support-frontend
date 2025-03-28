@@ -21,16 +21,16 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForCurrency = {
+  def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForAccount = {
     val (stripeSecretKey, gateway) = config
       .forPublicKey(stripePublicKey)
       .getOrElse(throw StateNotValidException("not a known public key: " + stripePublicKey))
-    new StripeServiceForCurrency(this, stripeSecretKey, gateway)
+    new StripeServiceForAccount(this, stripeSecretKey, gateway)
   }
 
 }
 
-class StripeServiceForCurrency(
+class StripeServiceForAccount(
     stripeService: StripeService,
     stripeSecretKey: StripeSecretKey,
     val paymentIntentGateway: PaymentGateway,
