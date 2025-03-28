@@ -5,7 +5,10 @@ import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type {
+	ActivePaperProductOptions,
+	PaperProductOptions,
+} from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
@@ -147,12 +150,17 @@ const copy: Record<
 	},
 };
 
+// For most purposes we want Sunday to be active so that we can go through the
+// checkout flow, but we don't want to display it as an option to the user.
+const excludingSunday = (productOption: ActivePaperProductOptions) =>
+	productOption !== 'Sunday';
+
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
 ): Product[] =>
-	ActivePaperProductTypes.map((productOption) => {
+	ActivePaperProductTypes.filter(excludingSunday).map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
