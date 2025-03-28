@@ -23,6 +23,7 @@ import {
 } from '../checkout/helpers/formDataExtractors';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { stripeCreateCheckoutSession } from '../checkout/helpers/stripe';
+import { persistFormDetails } from '../checkout/helpers/stripeCheckoutSession';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
@@ -94,29 +95,38 @@ export const submitForm = async ({
 		debugInfo: '',
 	};
 
-	switch (paymentMethod) {
-		case 'StripeHostedCheckout':
-			return createStripeCheckoutSession({
-				personalData,
-				appliedPromotion,
-				productKey,
-				ratePlanKey,
-				contributionAmount,
-				paymentMethod,
-				geoId,
-				paymentRequest,
-			});
-		default:
-			return processSubscription({
-				personalData,
-				appliedPromotion,
-				productKey,
-				ratePlanKey,
-				contributionAmount,
-				paymentMethod,
-				geoId,
-				paymentRequest,
-			});
+	if (paymentMethod === 'StripeHostedCheckout') {
+		const checkoutSession = await createStripeCheckoutSession({
+			personalData,
+			appliedPromotion,
+			productKey,
+			ratePlanKey,
+			contributionAmount,
+			paymentMethod,
+			geoId,
+			paymentRequest,
+		});
+
+		persistFormDetails(checkoutSession.id, {
+			personalData,
+			addressFields: {
+				billingAddress,
+				deliveryAddress,
+			},
+		});
+
+		return checkoutSession.url;
+	} else {
+		return processSubscription({
+			personalData,
+			appliedPromotion,
+			productKey,
+			ratePlanKey,
+			contributionAmount,
+			paymentMethod,
+			geoId,
+			paymentRequest,
+		});
 	}
 };
 
@@ -135,7 +145,7 @@ const createStripeCheckoutSession = async ({
 	const createCheckoutSessionResult = await stripeCreateCheckoutSession(
 		paymentRequest,
 	);
-	return createCheckoutSessionResult.url;
+	return createCheckoutSessionResult;
 };
 
 const processSubscription = async ({
