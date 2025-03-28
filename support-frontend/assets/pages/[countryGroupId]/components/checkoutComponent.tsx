@@ -156,7 +156,7 @@ const shouldUseStripeHostedCheckout = (
 	productKey: ProductKey,
 	ratePlanKey: string,
 ) =>
-	(productKey === 'HomeDelivery' || productKey === 'SubscriptionCard') &&
+	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
 	ratePlanKey === 'Sunday';
 
 export function CheckoutComponent({
