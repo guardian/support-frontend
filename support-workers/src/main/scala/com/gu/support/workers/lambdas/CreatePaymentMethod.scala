@@ -50,6 +50,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       userAgent: String,
   ): Future[PaymentMethod] =
     paymentFields match {
+      case stripeHosted: StripeHostedPaymentFields => ???
       case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService)
       case paypal: PayPalPaymentFields =>
