@@ -1,4 +1,6 @@
 import { storage } from '@guardian/libs';
+import { number, object, optional, picklist, safeParse, string } from 'valibot';
+import { isoCountries } from 'helpers/internationalisation/country';
 import type {
 	FormAddressFields,
 	FormPersonalFields,
@@ -9,8 +11,42 @@ export type PersistableFormFields = {
 	addressFields: FormAddressFields;
 };
 
+const schema = object({
+	formDetails: object({
+		personalData: object({
+			firstName: string(),
+			lastName: string(),
+			email: string(),
+		}),
+		addressFields: object({
+			billingAddress: object({
+				lineOne: optional(string()),
+				lineTwo: optional(string()),
+				city: optional(string()),
+				state: string(),
+				postCode: string(),
+				country: picklist(isoCountries),
+			}),
+			deliveryAddress: optional(
+				object({
+					lineOne: string(),
+					lineTwo: string(),
+					city: string(),
+					state: string(),
+					postCode: string(),
+					country: picklist(isoCountries),
+				}),
+			),
+		}),
+	}),
+	version: number(),
+	checkoutSessionId: string(),
+});
+
 const oneDayInMillis = 24 * 60 * 60 * 1000;
 
+const KEY = 'checkoutSessionFormData';
+// TODO: persist delivery instructions
 export const persistFormDetails = (
 	checkoutSessionId: string,
 	formDetails: PersistableFormFields,
@@ -23,5 +59,27 @@ export const persistFormDetails = (
 
 	const expiry = Date.now() + oneDayInMillis;
 
-	storage.session.set('checkoutSessionFormData', dataToPersist, expiry);
+	storage.session.set(KEY, dataToPersist, expiry);
+};
+
+export const getFormDetails = (
+	checkoutSessionId: string,
+): PersistableFormFields | undefined => {
+	const persistedData = storage.session.get(KEY);
+
+	const parsed = safeParse(schema, persistedData);
+
+	if (!parsed.success) {
+		return undefined;
+	}
+
+	if (parsed.output.checkoutSessionId != checkoutSessionId) {
+		return undefined;
+	}
+
+	return parsed.output.formDetails;
+};
+
+export const deleteFormDetails = (): void => {
+	storage.session.remove(KEY);
 };
