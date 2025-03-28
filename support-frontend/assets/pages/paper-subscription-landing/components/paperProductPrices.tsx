@@ -27,8 +27,8 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { isProd } from 'helpers/urls/url';
 import { getLabel, getTitle } from '../helpers/products';
+import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -155,7 +155,7 @@ const getPlans = (
 	productPrices: ProductPrices,
 	abParticipations: Participations,
 ): Product[] => {
-	const activePaperProductTypes = isProd()
+	const activePaperProductTypes = shouldShowObserverCard()
 		? ExtendedActivePaperProductTypes
 		: ActivePaperProductTypes;
 
@@ -182,7 +182,9 @@ const getPlans = (
 			productOption,
 		);
 		const tag = productOption === 'Everyday' ? 'Best deal' : '';
-		const label = isProd() ? getLabel(productOption) : undefined;
+		const label = shouldShowObserverCard()
+			? getLabel(productOption)
+			: undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
