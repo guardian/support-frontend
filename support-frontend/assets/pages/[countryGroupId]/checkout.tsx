@@ -110,7 +110,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountredAmount` the amount with a discountApplied
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
@@ -171,9 +171,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			billingPeriod,
 		);
 
-		const discountedPrice = promotion?.discountedPrice
-			? promotion.discountedPrice
-			: undefined;
+		const discountedPrice =
+			promotion !== undefined ? promotion.discountedPrice : undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -222,7 +221,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'DigitalSubscription'
 		) {
 			elementsOptions = {
-				mode: 'payment',
+				mode: 'subscription',
 				/**
 				 * Stripe amounts are in the "smallest currency unit"
 				 * @see https://docs.stripe.com/api/charges/object
@@ -230,7 +229,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
-				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}
