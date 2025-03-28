@@ -1,9 +1,11 @@
 package com.gu.zuora.subscriptionBuilders
 
+import cats.syntax.either._
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.workers.Paper
 import com.gu.support.workers.ProductTypeRatePlans._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
@@ -16,47 +18,50 @@ class PaperSubscriptionBuilder(
 ) {
 
   def build(
-      state: PaperState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
-  ): Either[PromoError, SubscribeItem] = {
-
-    import state._
+      product: Paper,
+      state: CreateZuoraSubscriptionState,
+  ): Either[String, SubscribeItem] = {
 
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
 
-    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
-      productRatePlanId,
-      contractAcceptanceDate = state.firstDeliveryDate,
-      contractEffectiveDate = contractEffectiveDate,
-      readerType = Direct,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
-      deliveryAgent = product.deliveryAgent,
-    )
-
-    applyPromoCodeIfPresent(
-      promotionService,
-      state.appliedPromotion,
-      productRatePlanId,
-      subscriptionData,
-    ).map { subscriptionData =>
-      val soldToContact = SubscribeItemBuilder.buildContactDetails(
-        Some(user.primaryEmailAddress),
-        user.firstName,
-        user.lastName,
-        user.deliveryAddress.get,
-        user.deliveryInstructions,
+    for {
+      firstDeliveryDate <- state.firstDeliveryDate.toRight(
+        "First delivery date is required for a Paper subscription",
       )
-      subscribeItemBuilder.build(
+      subscriptionData = subscribeItemBuilder.buildProductSubscription(
+        productRatePlanId,
+        contractAcceptanceDate = firstDeliveryDate,
+        contractEffectiveDate = contractEffectiveDate,
+        readerType = Direct,
+        csrUsername = state.csrUsername,
+        salesforceCaseId = state.salesforceCaseId,
+        deliveryAgent = product.deliveryAgent,
+      )
+      subscribeItem <- applyPromoCodeIfPresent(
+        promotionService,
+        state.appliedPromotion,
+        productRatePlanId,
         subscriptionData,
-        state.salesForceContact,
-        Some(state.paymentMethod),
-        Some(soldToContact),
-      )
-    }
+      ).map { subscriptionData =>
+        val soldToContact = SubscribeItemBuilder.buildContactDetails(
+          Some(state.user.primaryEmailAddress),
+          state.user.firstName,
+          state.user.lastName,
+          state.user.deliveryAddress.get,
+          state.user.deliveryInstructions,
+        )
+
+        subscribeItemBuilder.build(
+          subscriptionData,
+          state.salesforceContacts.recipient,
+          Some(state.paymentMethod),
+          Some(soldToContact),
+        )
+      }.leftMap(_.toString)
+    } yield subscribeItem
+
   }
 
 }
