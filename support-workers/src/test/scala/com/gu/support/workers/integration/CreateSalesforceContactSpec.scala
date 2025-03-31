@@ -5,7 +5,6 @@ import com.gu.support.workers.JsonFixtures.{createSalesForceContactJson, createS
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.lambdas.CreateSalesforceContact
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, GuardianWeeklyState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionState
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
 import com.gu.test.tags.annotations.IntegrationTest
@@ -24,8 +23,8 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     createContact.handleRequestFuture(wrapFixture(createSalesForceContactJson), outStream, context).map { _ =>
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.productSpecificState) { case state: ContributionState =>
-        state.salesForceContact.Id should be("003UD00000Enm1yYAB")
+      inside(result.get._1) { case state: CreateZuoraSubscriptionState =>
+        state.salesforceContacts.buyer.Id should be("003UD00000Enm1yYAB")
       }
     }
   }
@@ -38,7 +37,7 @@ class CreateSalesforceContactSpec extends AsyncLambdaSpec with MockContext {
     createContact.handleRequestFuture(wrapFixture(createSalesForceGiftContactJson), outStream, context).map { _ =>
       val result = Encoding.in[CreateZuoraSubscriptionState](outStream.toInputStream)
       result.isSuccess should be(true)
-      inside(result.get._1.productSpecificState) { case state: GuardianWeeklyState =>
+      inside(result.get._1) { case state: CreateZuoraSubscriptionState =>
         state.salesforceContacts.buyer.Id should be(salesforceId)
         state.salesforceContacts.giftRecipient shouldBe defined
       }

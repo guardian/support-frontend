@@ -1,9 +1,8 @@
 package com.gu.zuora.productHandlers
 
-import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
-import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailContributionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.{Contribution, User}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.ContributionSubscriptionBuilder
 
@@ -16,9 +15,11 @@ class ZuoraContributionHandler(
     user: User,
 ) {
 
-  def subscribe(state: ContributionState): Future[SendThankYouEmailState] =
+  def subscribe(product: Contribution, state: CreateZuoraSubscriptionState): Future[SendThankYouEmailState] =
     for {
-      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(contributionSubscriptionBuilder.build(state))
-    } yield SendThankYouEmailContributionState(user, state.product, state.paymentMethod, account.value, sub.value)
+      (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(
+        contributionSubscriptionBuilder.build(product, state),
+      )
+    } yield SendThankYouEmailContributionState(user, product, state.paymentMethod, account.value, sub.value)
 
 }
