@@ -44,6 +44,11 @@ const formDetailsSchema = object({
 
 export type PersistableFormFields = InferInput<typeof formDetailsSchema>;
 
+export type CheckoutSession = {
+	checkoutSessionId: string;
+	formFields: PersistableFormFields;
+};
+
 const schema = object({
 	formDetails: formDetailsSchema,
 	version: number(),
@@ -71,7 +76,7 @@ export const persistFormDetails = (
 
 export const getFormDetails = (
 	checkoutSessionId: string,
-): PersistableFormFields | undefined => {
+): CheckoutSession | undefined => {
 	const persistedData = storage.session.get(KEY);
 
 	const parsed = safeParse(schema, persistedData);
@@ -84,5 +89,5 @@ export const getFormDetails = (
 		return undefined;
 	}
 
-	return parsed.output.formDetails;
+	return { checkoutSessionId, formFields: parsed.output.formDetails };
 };
