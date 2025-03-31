@@ -383,7 +383,9 @@ export function CheckoutComponent({
 	);
 
 	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] = useState('');
+	const [deliveryInstructions, setDeliveryInstructions] = useState(
+		persistedFormFields?.deliveryInstructions ?? '',
+	);
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState(

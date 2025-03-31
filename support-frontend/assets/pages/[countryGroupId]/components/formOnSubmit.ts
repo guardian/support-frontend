@@ -113,6 +113,7 @@ export const submitForm = async ({
 				billingAddress,
 				deliveryAddress,
 			},
+			deliveryInstructions,
 		});
 
 		return checkoutSession.url;

@@ -27,6 +27,7 @@ const buildData = (): PersistableFormFields => {
 				country: 'GB',
 			},
 		},
+		deliveryInstructions: 'Side entrance, please',
 	};
 };
 

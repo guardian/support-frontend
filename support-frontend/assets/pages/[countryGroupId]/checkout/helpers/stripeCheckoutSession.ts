@@ -17,6 +17,7 @@ import type {
 export type PersistableFormFields = {
 	personalData: FormPersonalFields;
 	addressFields: FormAddressFields;
+	deliveryInstructions?: string;
 };
 
 const schema = object({
@@ -46,6 +47,7 @@ const schema = object({
 				}),
 			),
 		}),
+		deliveryInstructions: optional(string()),
 	}),
 	version: number(),
 	checkoutSessionId: string(),
