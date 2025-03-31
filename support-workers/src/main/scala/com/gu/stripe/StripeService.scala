@@ -58,4 +58,6 @@ class StripeServiceForAccount(
 
   val getPaymentMethod = com.gu.stripe.getPaymentMethod.apply(this) _
 
+  val retrieveCheckoutSession = com.gu.stripe.retrieveCheckoutSession.apply(this) _
+
 }
