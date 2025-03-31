@@ -87,7 +87,3 @@ export const getFormDetails = (
 
 	return parsed.output.formDetails;
 };
-
-export const deleteFormDetails = (): void => {
-	storage.session.remove(KEY);
-};
