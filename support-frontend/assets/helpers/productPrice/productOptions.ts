@@ -48,15 +48,17 @@ const ExtendedActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Weekend,
 	Saturday,
 	Sunday,
-] as const;
+];
 
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
 
 export const isActivePaperProductOption = (
-	productOption: PaperProductOptions,
+	productOption: ProductOptions,
 ): productOption is ActivePaperProductOptions => {
-	return ActivePaperProductTypes.includes(productOption);
+	return ActivePaperProductTypes.includes(
+		productOption as ActivePaperProductOptions,
+	);
 };
 
 const paperProductsWithDigital = {
@@ -90,7 +92,7 @@ function productOptionIfDigiAddOnChanged(
 	return matchingProducLookup[selectedOption];
 }
 
-const getPaperProductOptions = (ratePlanKey: string): PaperProductOptions => {
+const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
 	switch (ratePlanKey) {
 		case 'Saturday':
 		case 'Sunday':
