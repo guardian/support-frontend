@@ -4,8 +4,7 @@ import { until } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
-} from '@guardian/source/react-components';
-import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
+ SvgInfoRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
@@ -21,6 +20,7 @@ import {
 	priceCopyGridPlacement,
 	productOption,
 	productOptionHighlight,
+	productOptionInfo,
 	productOptionLabel,
 	productOptionLabelObserver,
 	productOptionOfferCopy,
@@ -133,13 +133,10 @@ function ProductOption(props: Product): JSX.Element {
 				<p css={[productOptionOfferCopy, productOptionUnderline]}>
 					{props.offerCopy}
 					{props.unavailableOutsideLondon && (
-						<InfoSummary
-							cssOverrides={css`
-								border: 0;
-							`}
-							message=""
-							context="Only available inside Greater London."
-						/>
+						<div css={productOptionInfo}>
+							<SvgInfoRound />
+							<p>Only available inside Greater London.</p>
+						</div>
 					)}
 				</p>
 			</div>

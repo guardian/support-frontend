@@ -90,7 +90,7 @@ function productOptionIfDigiAddOnChanged(
 	return matchingProducLookup[selectedOption];
 }
 
-const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
+const getPaperProductOptions = (ratePlanKey: string): PaperProductOptions => {
 	switch (ratePlanKey) {
 		case 'Saturday':
 		case 'Sunday':

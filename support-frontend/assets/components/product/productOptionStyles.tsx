@@ -3,17 +3,18 @@ import {
 	between,
 	brandAlt,
 	from,
-	headlineBold17,
 	headlineBold20,
 	headlineBold24,
 	headlineBold28,
 	headlineBold42,
 	neutral,
 	palette,
+	size,
 	space,
 	textSans14,
 	textSans15,
 	textSans17,
+	textSansBold12,
 	textSansBold14,
 	until,
 } from '@guardian/source/foundations';
@@ -69,28 +70,28 @@ export const productOptionVerticalLine = css`
 `;
 
 export const productOptionTitle = css`
-	padding-bottom: ${space[5]}px;
+	padding-bottom: ${space[2]}px;
 `;
 
 export const productOptionTitleHeading = css`
 	${headlineBold24};
 	margin-bottom: ${space[1]}px;
-	${between.tablet.and.leftCol} {
-		${headlineBold17};
-	}
 `;
 
 export const productOptionLabel = css`
 	display: block;
 	width: max-content;
 	max-width: 120px;
-	${textSansBold14}
+	${textSansBold12}
 	color: ${palette.neutral[100]};
 	background: ${palette.brand[500]};
 	border-radius: ${space[2]}px;
 	padding: ${space[1]}px ${space[3]}px;
 	${between.mobileMedium.and.leftCol} {
 		max-width: unset;
+	}
+	${from.leftCol} {
+		${textSansBold14}
 	}
 `;
 
@@ -106,6 +107,24 @@ export const productOptionOfferCopy = css`
 	}
 	${between.tablet.and.leftCol} {
 		${textSans15};
+	}
+	${from.leftCol} {
+		margin-top: ${space[1]}px;
+	}
+`;
+
+export const productOptionInfo = css`
+	display: flex;
+	flex: 0 1 auto;
+	svg {
+		fill: ${palette.brand[500]};
+		min-height: ${size.xsmall}px;
+		min-width: ${size.xsmall}px;
+		height: ${size.xsmall}px;
+		width: ${size.xsmall}px;
+	}
+	p {
+		margin-left: 4px;
 	}
 `;
 
@@ -124,12 +143,10 @@ export const productOptionPrice = css`
 
 export const productOptionPriceCopy = css`
 	${textSans14};
+	margin-top: ${space[1]}px;
 	${from.tablet} {
 		height: 100%;
 		margin-bottom: ${space[4]}px;
-	}
-	${between.phablet.and.leftCol} {
-		${textSans15};
 	}
 	${from.leftCol} {
 		${textSans17};
