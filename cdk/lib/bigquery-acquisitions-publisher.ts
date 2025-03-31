@@ -2,8 +2,8 @@ import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import {App, aws_events} from "aws-cdk-lib";
-import { aws_sqs, Duration } from "aws-cdk-lib";
+import type {App} from "aws-cdk-lib";
+import { aws_events, aws_sqs, Duration } from "aws-cdk-lib";
 import {
   ComparisonOperator,
   TreatMissingData,
@@ -94,7 +94,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
               subscriptionId: aws_events.EventField.fromPath('$.detail.zuoraSubscriptionNumber'),
               identityId: aws_events.EventField.fromPath('$.detail.identityId'),
               eventType: "Acquisition",
-              productName: aws_events.EventField.fromPath('$.detail.product'),
+              productName: aws_events.EventField.fromPath('$.detail.ZuoraProductName'),
               previousProductName: null
             }),
           },

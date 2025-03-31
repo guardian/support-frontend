@@ -130,6 +130,14 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
           {
             "Arn": "arn:aws:sqs:eu-west-1:865473395570:soft-opt-in-consent-setter-queue-PROD",
             "Id": "Target0",
+            "InputTransformer": {
+              "InputPathsMap": {
+                "detail-ZuoraProductName": "$.detail.ZuoraProductName",
+                "detail-identityId": "$.detail.identityId",
+                "detail-zuoraSubscriptionNumber": "$.detail.zuoraSubscriptionNumber",
+              },
+              "InputTemplate": "{"subscriptionId":<detail-zuoraSubscriptionNumber>,"identityId":<detail-identityId>,"eventType":"Acquisition","productName":<detail-ZuoraProductName>,"previousProductName":null}",
+            },
           },
         ],
       },
