@@ -116,10 +116,19 @@ object StripeCheckoutSessionService {
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
       } else {
-        val uriExistingFragmentRemoved =
-          new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, uri.getRawQuery, null).toString
-        // Not adding the fragment in the URI constructor as it gets escaped which we don't want
-        Some(s"$uriExistingFragmentRemoved#{CHECKOUT_SESSION_ID}")
+        val existingQuery = uri.getQuery
+        val newQuery =
+          if (existingQuery != "") s"$existingQuery&__CHECKOUT_SESSION_ID_PLACEHOLDER__"
+          else "__CHECKOUT_SESSION_ID_PLACEHOLDER__"
+
+        val successUrlWithPlaceholder =
+          new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, newQuery, uri.getFragment).toString
+
+        // We add the checkout session ID placeholder after the URI build to avoid escaping, which we don't want
+        val qsa = "checkoutSessionId={CHECKOUT_SESSION_ID}"
+        val successUrl = successUrlWithPlaceholder.replace("__CHECKOUT_SESSION_ID_PLACEHOLDER__", qsa)
+
+        Some(successUrl)
       }
     } catch {
       case _: java.net.URISyntaxException => None

@@ -10,7 +10,9 @@ class StripeCheckoutSessionServiceSpec extends AnyFlatSpec with Matchers {
     val successUrl = StripeCheckoutSessionService.buildSuccessUrl(referer)
 
     successUrl should be(
-      Some("https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday#{CHECKOUT_SESSION_ID}"),
+      Some(
+        "https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday&checkoutSessionId={CHECKOUT_SESSION_ID}",
+      ),
     )
   }
 
