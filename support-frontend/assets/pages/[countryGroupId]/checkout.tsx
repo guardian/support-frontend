@@ -23,7 +23,7 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
-import type { PersistableFormFields } from './checkout/helpers/stripeCheckoutSession';
+import type { CheckoutSession } from './checkout/helpers/stripeCheckoutSession';
 import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
@@ -72,7 +72,7 @@ const getPromotionFromProductPrices = (
 
 const attemptToRetrievePersistedFormData = (
 	urlSearchParams: URLSearchParams,
-): PersistableFormFields | undefined => {
+): CheckoutSession | undefined => {
 	const checkoutSessionIdUrlParam = 'checkoutSessionId';
 	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
 
@@ -284,7 +284,7 @@ export function Checkout({
 		);
 	}, []);
 
-	const persistedFormData = attemptToRetrievePersistedFormData(urlSearchParams);
+	const checkoutSession = attemptToRetrievePersistedFormData(urlSearchParams);
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
@@ -305,7 +305,7 @@ export function Checkout({
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
 				landingPageSettings={landingPageSettings}
-				persistedFormFields={persistedFormData}
+				checkoutSession={checkoutSession}
 			/>
 		</Elements>
 	);
