@@ -132,6 +132,7 @@ type RegularSepaPaymentFields = {
 type RegularStripeHostedCheckoutPaymentFields = {
 	paymentType: typeof StripeHostedCheckout;
 	checkoutSessionId?: string;
+	stripePublicKey: string;
 };
 type GiftRedemption = {
 	paymentType: 'GiftRedemption';
