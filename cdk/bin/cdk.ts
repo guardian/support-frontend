@@ -97,11 +97,13 @@ new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
 new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-CODE", {
   stack: "support",
   stage: "CODE",
+  softOptInConsentSetterQueueArn: "", // TODO: add Arn
 });
 
 new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-PROD", {
   stack: "support",
   stage: "PROD",
+  softOptInConsentSetterQueueArn: "", // TODO: add Arn
 });
 
 new SupportWorkers(app, "SupportWorkers-CODE", {

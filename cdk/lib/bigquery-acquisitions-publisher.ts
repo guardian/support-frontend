@@ -2,8 +2,8 @@ import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import type { App } from "aws-cdk-lib";
-import { Duration } from "aws-cdk-lib";
+import type {App} from "aws-cdk-lib";
+import { aws_sqs, Duration } from "aws-cdk-lib";
 import {
   ComparisonOperator,
   TreatMissingData,
@@ -15,10 +15,16 @@ import { LoggingFormat, Runtime } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue } from "aws-cdk-lib/aws-sqs";
 
+export interface BigqueryAcquisitionsPublisherProps extends GuStackProps {
+  stack: string;
+  stage: string;
+  softOptInConsentSetterQueueArn: string;
+}
+
 const appName = "bigquery-acquisitions-publisher";
 
 export class BigqueryAcquisitionsPublisher extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: BigqueryAcquisitionsPublisherProps) {
     super(scope, id, props);
 
     const busName = `acquisitions-bus-${props.stage}`;
@@ -48,12 +54,12 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       retentionPeriod: Duration.days(14),
     });
 
-    const queue = new Queue(this, `${appName}Queue`, {
+    const acquisitionsQueue = new Queue(this, `${appName}Queue`, {
       queueName,
       visibilityTimeout: Duration.minutes(2),
       deadLetterQueue: {
         // The number of times a message can be unsuccessfully dequeued before being moved to the dead-letter queue.
-        // This has been set to 1 to avoid duplicate acquisition events being send to bigquery
+        // This has been set to 1 to avoid duplicate acquisition events being sent to bigquery
         maxReceiveCount: 1,
         queue: deadLetterQueue,
       },
@@ -66,8 +72,22 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         region: ["eu-west-1"],
       },
       eventBus: eventBus,
-      targets: [new SqsQueue(queue)],
+      targets: [new SqsQueue(acquisitionsQueue)],
     });
+
+    const softOptInConsentSetterQueue =
+      aws_sqs.Queue.fromQueueArn(this, "SoftOptInConsentSetterQueue", props.softOptInConsentSetterQueueArn)
+
+    // Rule which passes events from support-workers on to soft opt-in queue
+    new Rule(this, "SoftOptInToSQSRule", {
+      description: "Send all events received via support-workers onto soft opt-in SQS queue",
+      eventPattern: {
+        region: ["eu-west-1"],
+        source: [""],
+      },
+      eventBus: eventBus,
+      targets: [new SqsQueue(softOptInConsentSetterQueue)],
+    })
 
     // Create a custom role because the name needs to be short, otherwise the request to Google Cloud fails
     const role = new Role(this, "bigquery-to-s3-role", {
@@ -105,7 +125,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         : undefined;
 
     // SQS to Lambda event source mapping
-    const eventSource = new SqsEventSource(queue, {
+    const eventSource = new SqsEventSource(acquisitionsQueue, {
       reportBatchItemFailures: true,
     });
 
