@@ -2,7 +2,7 @@ import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
-import type {App} from "aws-cdk-lib";
+import {App, aws_events} from "aws-cdk-lib";
 import { aws_sqs, Duration } from "aws-cdk-lib";
 import {
   ComparisonOperator,
@@ -81,13 +81,26 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     // Rule which passes events from support-workers on to soft opt-in queue
     new Rule(this, "SoftOptInToSQSRule", {
       description: "Send all events received via support-workers onto soft opt-in SQS queue",
+      eventBus: eventBus,
       eventPattern: {
         region: ["eu-west-1"],
         source: ["support-workers.1"],
       },
-      eventBus: eventBus,
-      targets: [new SqsQueue(softOptInConsentSetterQueue)],
-    })
+      targets: [
+        new SqsQueue(
+          softOptInConsentSetterQueue,
+          {
+            message: aws_events.RuleTargetInput.fromObject({
+              subscriptionId: aws_events.EventField.fromPath('$.detail.zuoraSubscriptionNumber'),
+              identityId: aws_events.EventField.fromPath('$.detail.identityId'),
+              eventType: "Acquisition",
+              productName: aws_events.EventField.fromPath('$.detail.product'),
+              previousProductName: null
+            }),
+          },
+        )
+      ],
+    });
 
     // Create a custom role because the name needs to be short, otherwise the request to Google Cloud fails
     const role = new Role(this, "bigquery-to-s3-role", {
