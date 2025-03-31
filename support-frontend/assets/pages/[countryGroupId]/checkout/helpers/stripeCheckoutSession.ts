@@ -1,5 +1,6 @@
 import { storage } from '@guardian/libs';
 import {
+	boolean,
 	nullish,
 	number,
 	object,
@@ -18,6 +19,7 @@ export type PersistableFormFields = {
 	personalData: FormPersonalFields;
 	addressFields: FormAddressFields;
 	deliveryInstructions?: string;
+	billingAddressMatchesDelivery?: boolean;
 };
 
 const schema = object({
@@ -48,6 +50,7 @@ const schema = object({
 			),
 		}),
 		deliveryInstructions: optional(string()),
+		billingAddressMatchesDelivery: optional(boolean()),
 	}),
 	version: number(),
 	checkoutSessionId: string(),

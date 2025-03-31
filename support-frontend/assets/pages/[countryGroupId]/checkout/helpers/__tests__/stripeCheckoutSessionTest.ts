@@ -19,15 +19,16 @@ const buildData = (): PersistableFormFields => {
 				country: 'GB',
 			},
 			deliveryAddress: {
-				lineOne: '123 Main St',
-				lineTwo: 'Apt 1',
-				city: 'Anytown',
+				lineOne: 'Another St',
+				lineTwo: 'Apt 2',
+				city: 'Big City',
 				state: 'Example',
-				postCode: 'N1',
+				postCode: 'N2',
 				country: 'GB',
 			},
 		},
 		deliveryInstructions: 'Side entrance, please',
+		billingAddressMatchesDelivery: false,
 	};
 };
 
