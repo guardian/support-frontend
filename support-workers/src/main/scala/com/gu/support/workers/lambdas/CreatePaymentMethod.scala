@@ -1,7 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.i18n.{CountryGroup, Currency}
+import com.gu.i18n.CountryGroup
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
@@ -50,7 +50,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       userAgent: String,
   ): Future[PaymentMethod] =
     paymentFields match {
-      case stripeHosted: StripeHostedPaymentFields => ???
+      case stripeHosted: StripeHostedPaymentFields =>
+        createStripeHostedPaymentMethod(stripeHosted, services.stripeService)
       case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService)
       case paypal: PayPalPaymentFields =>
@@ -83,15 +84,50 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.acquisitionData,
     )
 
+  private def optionToFuture[T](option: Option[T], errorMessage: String): Future[T] = {
+    option match {
+      case Some(value) => Future.successful(value)
+      case None => Future.failed(new RuntimeException(errorMessage))
+    }
+  }
+
+  private def createStripeHostedPaymentMethod(stripeHosted: StripeHostedPaymentFields, stripeService: StripeService) = {
+    val stripeServiceForAccount = stripeService.withPublicKey(stripeHosted.stripePublicKey)
+    for {
+      paymentMethod <- stripeServiceForAccount
+        .retrieveCheckoutSession(stripeHosted.checkoutSessionId)
+        .map(_.setup_intent.payment_method)
+      paymentMethodId <- optionToFuture(
+        PaymentMethodId(paymentMethod.id),
+        "Invalid PaymentMethodId",
+      )
+      stripeCustomer <- stripeServiceForAccount.createCustomerFromPaymentMethod(paymentMethodId)
+      stripePaymentMethod <- stripeServiceForAccount.getPaymentMethod(paymentMethodId)
+    } yield {
+      val card = stripePaymentMethod.card
+      CreditCardReferenceTransaction(
+        paymentMethodId.value,
+        stripeCustomer.id,
+        card.last4,
+        CountryGroup.countryByCode(card.country),
+        card.exp_month,
+        card.exp_year,
+        card.brand.zuoraCreditCardType,
+        PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
+        StripePaymentType = None,
+      )
+    }
+  }
+
   def createStripePaymentMethod(
       stripe: StripePaymentFields,
       stripeService: StripeService,
   ): Future[CreditCardReferenceTransaction] = {
-    val stripeServiceForCurrency = stripeService.withPublicKey(stripe.stripePublicKey)
+    val stripeServiceForAccount = stripeService.withPublicKey(stripe.stripePublicKey)
 
     for {
-      stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(stripe.paymentMethod)
-      stripePaymentMethod <- stripeServiceForCurrency.getPaymentMethod(stripe.paymentMethod)
+      stripeCustomer <- stripeServiceForAccount.createCustomerFromPaymentMethod(stripe.paymentMethod)
+      stripePaymentMethod <- stripeServiceForAccount.getPaymentMethod(stripe.paymentMethod)
     } yield {
       val card = stripePaymentMethod.card
       CreditCardReferenceTransaction(
@@ -102,11 +138,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         card.exp_month,
         card.exp_year,
         card.brand.zuoraCreditCardType,
-        PaymentGateway = stripeServiceForCurrency.paymentIntentGateway,
+        PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
         StripePaymentType = stripe.stripePaymentType,
       )
     }
-
   }
 
   def createPayPalPaymentMethod(
