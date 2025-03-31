@@ -21,30 +21,6 @@ case class StripeConfig(
 
   def forPublicKey(publicKey: StripePublicKey): Option[(StripeSecretKey, PaymentGateway)] =
     secretForPublic.get(publicKey)
-
-  // fallback for SupportWorkers (recurring products) which don't support a US Stripe account yet.
-  def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
-    maybeCurrency match {
-      case Some(AUD) =>
-        logger.debug(s"StripeConfig: getting AU stripe account for AUD")
-        australiaAccount
-      case _ =>
-        logger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
-        defaultAccount
-    }
-
-  def forCountry(maybeCountry: Option[Country]): StripeAccountConfig =
-    maybeCountry match {
-      case Some(Country.Australia) =>
-        logger.debug(s"StripeConfig: getting AU stripe account for Australia")
-        australiaAccount
-      case Some(Country.US) =>
-        logger.debug(s"StripeConfig: getting US stripe account for United States")
-        unitedStatesAccount
-      case _ =>
-        logger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
-        defaultAccount
-    }
 }
 
 case class StripeAccountConfig(secretKey: StripeSecretKey, publicKey: StripePublicKey)
