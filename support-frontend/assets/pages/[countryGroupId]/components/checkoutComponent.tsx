@@ -454,23 +454,35 @@ export function CheckoutComponent({
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(persistedFormFields?.billingAddressMatchesDelivery ?? true);
 
-	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcode, setBillingPostcode] = useState(
+		persistedFormFields?.addressFields.billingAddress.postCode ?? '',
+	);
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const [billingLineOne, setBillingLineOne] = useState('');
-	const [billingLineTwo, setBillingLineTwo] = useState('');
-	const [billingCity, setBillingCity] = useState('');
+	const [billingLineOne, setBillingLineOne] = useState(
+		persistedFormFields?.addressFields.billingAddress.lineOne ?? '',
+	);
+	const [billingLineTwo, setBillingLineTwo] = useState(
+		persistedFormFields?.addressFields.billingAddress.lineTwo ?? '',
+	);
+	const [billingCity, setBillingCity] = useState(
+		persistedFormFields?.addressFields.billingAddress.city ?? '',
+	);
 	const [billingStateError, setBillingStateError] = useState<string>();
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState('');
+	const [billingState, setBillingState] = useState(
+		persistedFormFields?.addressFields.billingAddress.state ?? '',
+	);
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingCountry, setBillingCountry] = useState(
+		persistedFormFields?.addressFields.billingAddress.country ?? countryId,
+	);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
