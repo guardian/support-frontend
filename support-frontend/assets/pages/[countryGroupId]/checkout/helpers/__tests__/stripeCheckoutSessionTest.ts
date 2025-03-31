@@ -55,7 +55,7 @@ describe('getFormDetails', () => {
 
 		const persistedData = getFormDetails(checkoutSessionId);
 
-		expect(persistedData).toEqual(formFields);
+		expect(persistedData?.formFields).toEqual(formFields);
 	});
 
 	it('returns undefined if the data is not valid according to the schema', () => {
