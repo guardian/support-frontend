@@ -79,8 +79,9 @@ function ThankYouHeader({
 			<p css={headerSupportingText}>
 				{showDirectDebitMessage && <DirectDebitMessage />}
 				<Subheading
-					contributionType={contributionType}
 					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
 					identityUserType={identityUserType}

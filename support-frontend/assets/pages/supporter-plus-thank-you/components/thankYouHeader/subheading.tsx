@@ -9,8 +9,9 @@ import {
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
-	contributionType: ContributionType;
 	productKey: ActiveProductKey;
+	contributionType: ContributionType;
+	ratePlanKey?: string;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
@@ -60,7 +61,15 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
+	ratePlanKey?: string,
 ) => {
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+	];
+	const isObserverPaper =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
 			<span
@@ -71,14 +80,15 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
+		const observerCopy = `You will receive your newspapers from Day / Month / Date / Year `;
+		const thankyouMessage = isObserverPaper
+			? observerCopy
+			: productCatalogDescription[productKey].thankyouMessage;
 		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
 						Guardian journalism.${' '}`;
 		const notSignedInCopy = (
-			<span>
-				{productCatalogDescription[productKey].thankyouMessage ??
-					signedInBelowThreshold}
-			</span>
+			<span>{thankyouMessage ?? signedInBelowThreshold}</span>
 		);
 		const signedInCopy = amountIsAboveThreshold ? (
 			<>
@@ -105,8 +115,9 @@ const getSubHeadingCopy = (
 };
 
 function Subheading({
-	contributionType,
 	productKey,
+	contributionType,
+	ratePlanKey,
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
@@ -126,6 +137,7 @@ function Subheading({
 		contributionType,
 		isSignedIn,
 		identityUserType,
+		ratePlanKey,
 	);
 	const isPending = paymentStatus === 'pending';
 	return (
