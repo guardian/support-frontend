@@ -15,8 +15,8 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	startDate: string;
 	paymentStatus?: PaymentStatus;
-	startDate?: string;
 }
 
 function MarketingCopy({
@@ -62,8 +62,8 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
+	startDate: string,
 	ratePlanKey?: string,
-	startDate?: string,
 ) => {
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
@@ -140,8 +140,8 @@ function Subheading({
 		contributionType,
 		isSignedIn,
 		identityUserType,
-		ratePlanKey,
 		startDate,
+		ratePlanKey,
 	);
 	const isPending = paymentStatus === 'pending';
 	return (

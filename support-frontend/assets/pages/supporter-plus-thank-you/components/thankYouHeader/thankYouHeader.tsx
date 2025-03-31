@@ -40,11 +40,11 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	startDate: string;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
-	startDate?: string;
 };
 
 function ThankYouHeader({
@@ -58,11 +58,11 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	startDate,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
-	startDate,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
