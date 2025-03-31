@@ -255,7 +255,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	}, []);
 
 	const maybeCheckoutSessionId = urlSearchParams.get('checkoutSessionId');
-	const persistedFormData = maybeCheckoutSessionId
+	const checkoutSession = maybeCheckoutSessionId
 		? getFormDetails(maybeCheckoutSessionId)
 		: undefined;
 
@@ -277,7 +277,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
-				persistedFormFields={persistedFormData}
+				checkoutSession={checkoutSession}
 			/>
 		</Elements>
 	);

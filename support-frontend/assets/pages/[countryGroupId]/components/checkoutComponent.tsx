@@ -88,7 +88,7 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
-import type { PersistableFormFields } from '../checkout/helpers/stripeCheckoutSession';
+import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -151,7 +151,7 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
-	persistedFormFields?: PersistableFormFields;
+	checkoutSession?: CheckoutSession;
 };
 
 const shouldUseStripeHostedCheckout = (
@@ -176,7 +176,7 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	abParticipations,
-	persistedFormFields,
+	checkoutSession,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -372,16 +372,16 @@ export function CheckoutComponent({
 
 	/** Personal details */
 	const [firstName, setFirstName] = useState(
-		persistedFormFields?.personalData.firstName ?? user?.firstName ?? '',
+		checkoutSession?.formFields.personalData.firstName ?? user?.firstName ?? '',
 	);
 	const [lastName, setLastName] = useState(
-		persistedFormFields?.personalData.lastName ?? user?.lastName ?? '',
+		checkoutSession?.formFields.personalData.lastName ?? user?.lastName ?? '',
 	);
 	const [email, setEmail] = useState(
-		persistedFormFields?.personalData.email ?? user?.email ?? '',
+		checkoutSession?.formFields.personalData.email ?? user?.email ?? '',
 	);
 	const [confirmedEmail, setConfirmedEmail] = useState(
-		persistedFormFields?.personalData.email ?? '',
+		checkoutSession?.formFields.personalData.email ?? '',
 	);
 
 	/** Delivery Instructions */
@@ -389,26 +389,27 @@ export function CheckoutComponent({
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.postCode ?? '',
+		checkoutSession?.formFields.addressFields.deliveryAddress?.postCode ?? '',
 	);
 	const [deliveryLineOne, setDeliveryLineOne] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.lineOne ?? '',
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne ?? '',
 	);
 	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.lineTwo ?? '',
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo ?? '',
 	);
 	const [deliveryCity, setDeliveryCity] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.city ?? '',
+		checkoutSession?.formFields.addressFields.deliveryAddress?.city ?? '',
 	);
 	const [deliveryState, setDeliveryState] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.state ?? '',
+		checkoutSession?.formFields.addressFields.deliveryAddress?.state ?? '',
 	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] = useState(
-		persistedFormFields?.addressFields.deliveryAddress?.country ?? countryId,
+		checkoutSession?.formFields.addressFields.deliveryAddress?.country ??
+			countryId,
 	);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -516,6 +517,7 @@ export function CheckoutComponent({
 				stripePublicKey,
 				recaptchaToken,
 				formData,
+				checkoutSession?.checkoutSessionId,
 			);
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');

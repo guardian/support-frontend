@@ -14,6 +14,10 @@ import type {
 	FormPersonalFields,
 } from './formDataExtractors';
 
+export type CheckoutSession = {
+	checkoutSessionId: string;
+	formFields: PersistableFormFields;
+};
 export type PersistableFormFields = {
 	personalData: FormPersonalFields;
 	addressFields: FormAddressFields;
@@ -73,7 +77,7 @@ export const persistFormDetails = (
 
 export const getFormDetails = (
 	checkoutSessionId: string,
-): PersistableFormFields | undefined => {
+): CheckoutSession | undefined => {
 	const persistedData = storage.session.get(KEY);
 
 	const parsed = safeParse(schema, persistedData);
@@ -86,5 +90,5 @@ export const getFormDetails = (
 		return undefined;
 	}
 
-	return parsed.output.formDetails;
+	return { checkoutSessionId, formFields: parsed.output.formDetails };
 };

@@ -145,6 +145,7 @@ export const getPaymentFieldsForPaymentMethod = async (
 	stripePublicKey: string,
 	recaptchaToken: string | undefined,
 	formData: FormData,
+	checkoutSessionId: string | undefined,
 ): Promise<RegularPaymentFields | undefined> => {
 	if (paymentMethod === 'Stripe') {
 		return getStripePaymentFields(
@@ -181,6 +182,7 @@ export const getPaymentFieldsForPaymentMethod = async (
 	if (paymentMethod === 'StripeHostedCheckout') {
 		return {
 			paymentType: StripeHostedCheckout,
+			checkoutSessionId,
 		};
 	}
 
