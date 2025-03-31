@@ -197,6 +197,7 @@ function buildRegularPaymentRequest(
 		product,
 		firstDeliveryDate: null,
 		paymentFields: {
+			paymentType: 'GiftRedemption',
 			redemptionCode: userCode,
 		},
 		ophanIds: getOphanIds(),
