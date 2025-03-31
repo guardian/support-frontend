@@ -25,7 +25,8 @@ object retrieveCheckoutSession {
       stripeService: StripeServiceForAccount,
   )(checkoutSessionId: String): Future[RetrieveCheckoutSessionResponseSuccess] = {
     stripeService.get[RetrieveCheckoutSessionResponseSuccess](
-      s"checkout/sessions/$checkoutSessionId?expand[]=setup_intent.payment_method",
+      s"checkout/sessions/$checkoutSessionId",
+      Map("expand[]" -> "setup_intent.payment_method"),
     )
   }
 }
