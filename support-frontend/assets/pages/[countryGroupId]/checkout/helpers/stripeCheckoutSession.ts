@@ -54,6 +54,7 @@ const schema = object({
 const oneDayInMillis = 24 * 60 * 60 * 1000;
 
 const KEY = 'checkoutSessionFormData';
+
 // TODO: persist delivery instructions
 export const persistFormDetails = (
 	checkoutSessionId: string,
