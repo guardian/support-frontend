@@ -11,6 +11,7 @@ import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD,
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 
+import scala.collection.immutable.Map.empty
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 
@@ -38,8 +39,9 @@ class StripeServiceForAccount(
 
   def get[A](
       endpoint: String,
+      params: Map[String, String] = empty,
   )(implicit decoder: Decoder[A], errorDecoder: Decoder[StripeError], ctag: ClassTag[A]): Future[A] =
-    stripeService.get[A](endpoint, getHeaders())
+    stripeService.get[A](endpoint = endpoint, headers = getHeaders(), params = params)
 
   def postForm[A](
       endpoint: String,
