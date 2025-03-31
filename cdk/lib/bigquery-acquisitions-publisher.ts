@@ -83,7 +83,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       description: "Send all events received via support-workers onto soft opt-in SQS queue",
       eventPattern: {
         region: ["eu-west-1"],
-        source: [""],
+        source: ["support-workers.1"],
       },
       eventBus: eventBus,
       targets: [new SqsQueue(softOptInConsentSetterQueue)],
