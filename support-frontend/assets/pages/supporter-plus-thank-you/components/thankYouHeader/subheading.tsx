@@ -16,6 +16,7 @@ interface SubheadingProps {
 	isSignedIn: boolean;
 	identityUserType: UserType;
 	paymentStatus?: PaymentStatus;
+	startDate?: string;
 }
 
 function MarketingCopy({
@@ -62,6 +63,7 @@ const getSubHeadingCopy = (
 	isSignedIn: boolean,
 	identityUserType: UserType,
 	ratePlanKey?: string,
+	startDate?: string,
 ) => {
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
@@ -80,7 +82,7 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
-		const observerCopy = `You will receive your newspapers from Day / Month / Date / Year `;
+		const observerCopy = `You will receive your newspapers from ${startDate}.`;
 		const thankyouMessage = isObserverPaper
 			? observerCopy
 			: productCatalogDescription[productKey].thankyouMessage;
@@ -122,6 +124,7 @@ function Subheading({
 	isSignedIn,
 	identityUserType,
 	paymentStatus,
+	startDate,
 }: SubheadingProps): JSX.Element {
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
@@ -138,6 +141,7 @@ function Subheading({
 		isSignedIn,
 		identityUserType,
 		ratePlanKey,
+		startDate,
 	);
 	const isPending = paymentStatus === 'pending';
 	return (

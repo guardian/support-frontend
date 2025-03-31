@@ -44,6 +44,7 @@ type ThankYouHeaderProps = {
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
+	startDate?: string;
 };
 
 function ThankYouHeader({
@@ -61,6 +62,7 @@ function ThankYouHeader({
 	paymentStatus,
 	promotion,
 	showOffer,
+	startDate,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -86,6 +88,7 @@ function ThankYouHeader({
 					isSignedIn={isSignedIn}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
+					startDate={startDate}
 				/>
 			</p>
 			{showOffer && (
