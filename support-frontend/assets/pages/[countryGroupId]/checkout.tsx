@@ -261,9 +261,9 @@ export function Checkout({
 		);
 	}, []);
 
-	const checkoutSessionId = window.location.hash;
-	const persistedFormData = checkoutSessionId
-		? getFormDetails(checkoutSessionId.substring(1))
+	const maybeCheckoutSessionId = urlSearchParams.get('checkoutSessionId');
+	const persistedFormData = maybeCheckoutSessionId
+		? getFormDetails(maybeCheckoutSessionId)
 		: undefined;
 
 	return (
