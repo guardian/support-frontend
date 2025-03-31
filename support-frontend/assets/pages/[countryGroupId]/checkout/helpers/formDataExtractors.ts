@@ -16,19 +16,19 @@ export const extractPersonalDataFromForm = (
 
 export type FormAddressFields = {
 	billingAddress: {
-		lineOne?: string;
-		lineTwo?: string;
-		city?: string;
-		state: string;
-		postCode: string;
+		lineOne?: string | null;
+		lineTwo?: string | null;
+		city?: string | null;
+		state?: string | null;
+		postCode?: string | null;
 		country: IsoCountry;
 	};
 	deliveryAddress?: {
-		lineOne: string;
-		lineTwo: string;
-		city: string;
-		state: string;
-		postCode: string;
+		lineOne?: string | null;
+		lineTwo?: string | null;
+		city?: string | null;
+		state?: string | null;
+		postCode?: string | null;
 		country: IsoCountry;
 	};
 };

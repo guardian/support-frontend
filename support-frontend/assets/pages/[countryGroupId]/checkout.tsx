@@ -23,6 +23,7 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
@@ -260,6 +261,11 @@ export function Checkout({
 		);
 	}, []);
 
+	const checkoutSessionId = window.location.hash;
+	const persistedFormData = checkoutSessionId
+		? getFormDetails(checkoutSessionId.substring(1))
+		: undefined;
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -279,6 +285,7 @@ export function Checkout({
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
 				landingPageSettings={landingPageSettings}
+				persistedFormFields={persistedFormData}
 			/>
 		</Elements>
 	);

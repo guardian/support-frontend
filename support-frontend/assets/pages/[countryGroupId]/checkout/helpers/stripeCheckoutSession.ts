@@ -1,5 +1,13 @@
 import { storage } from '@guardian/libs';
-import { number, object, optional, picklist, safeParse, string } from 'valibot';
+import {
+	nullish,
+	number,
+	object,
+	optional,
+	picklist,
+	safeParse,
+	string,
+} from 'valibot';
 import { isoCountries } from 'helpers/internationalisation/country';
 import type {
 	FormAddressFields,
@@ -20,20 +28,20 @@ const schema = object({
 		}),
 		addressFields: object({
 			billingAddress: object({
-				lineOne: optional(string()),
-				lineTwo: optional(string()),
-				city: optional(string()),
-				state: string(),
-				postCode: string(),
+				lineOne: nullish(string()),
+				lineTwo: nullish(string()),
+				city: nullish(string()),
+				state: nullish(string()),
+				postCode: nullish(string()),
 				country: picklist(isoCountries),
 			}),
 			deliveryAddress: optional(
 				object({
-					lineOne: string(),
-					lineTwo: string(),
-					city: string(),
-					state: string(),
-					postCode: string(),
+					lineOne: nullish(string()),
+					lineTwo: nullish(string()),
+					city: nullish(string()),
+					state: nullish(string()),
+					postCode: nullish(string()),
 					country: picklist(isoCountries),
 				}),
 			),
