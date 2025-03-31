@@ -22,6 +22,7 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
@@ -255,6 +256,11 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		);
 	}, []);
 
+	const checkoutSessionId = window.location.hash;
+	const persistedFormData = checkoutSessionId
+		? getFormDetails(checkoutSessionId.substring(1))
+		: undefined;
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -273,6 +279,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
+				persistedFormFields={persistedFormData}
 			/>
 		</Elements>
 	);

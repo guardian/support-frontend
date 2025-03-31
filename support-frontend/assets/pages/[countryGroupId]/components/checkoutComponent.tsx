@@ -88,6 +88,7 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PersistableFormFields } from '../checkout/helpers/stripeCheckoutSession';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -150,6 +151,7 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
+	persistedFormFields?: PersistableFormFields;
 };
 
 const shouldUseStripeHostedCheckout = (
@@ -174,6 +176,7 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	abParticipations,
+	persistedFormFields,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -368,25 +371,45 @@ export function CheckoutComponent({
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(user?.firstName ?? '');
-	const [lastName, setLastName] = useState(user?.lastName ?? '');
-	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
+	const [firstName, setFirstName] = useState(
+		persistedFormFields?.personalData.firstName ?? user?.firstName ?? '',
+	);
+	const [lastName, setLastName] = useState(
+		persistedFormFields?.personalData.lastName ?? user?.lastName ?? '',
+	);
+	const [email, setEmail] = useState(
+		persistedFormFields?.personalData.email ?? user?.email ?? '',
+	);
+	const [confirmedEmail, setConfirmedEmail] = useState(
+		persistedFormFields?.personalData.email ?? '',
+	);
 
 	/** Delivery Instructions */
 	const [deliveryInstructions, setDeliveryInstructions] = useState('');
 
 	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] = useState('');
-	const [deliveryLineOne, setDeliveryLineOne] = useState('');
-	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
-	const [deliveryCity, setDeliveryCity] = useState('');
-	const [deliveryState, setDeliveryState] = useState('');
+	const [deliveryPostcode, setDeliveryPostcode] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.postCode ?? '',
+	);
+	const [deliveryLineOne, setDeliveryLineOne] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.lineOne ?? '',
+	);
+	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.lineTwo ?? '',
+	);
+	const [deliveryCity, setDeliveryCity] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.city ?? '',
+	);
+	const [deliveryState, setDeliveryState] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.state ?? '',
+	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
-	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryCountry, setDeliveryCountry] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.country ?? countryId,
+	);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
