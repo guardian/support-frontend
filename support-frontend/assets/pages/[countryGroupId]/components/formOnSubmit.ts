@@ -97,7 +97,7 @@ export const submitForm = async ({
 
 	if (
 		paymentFields.paymentType === 'StripeHostedCheckout' &&
-		paymentFields.checkoutSessionId === undefined
+		!paymentFields.checkoutSessionId
 	) {
 		const checkoutSession = await createStripeCheckoutSession({
 			personalData,
