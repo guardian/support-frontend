@@ -11,6 +11,7 @@ describe("The BigqueryAcquisitionsPublisher stack", () => {
       {
         stack: "support",
         stage: "PROD",
+        softOptInConsentSetterQueueArn: "arn:aws:sqs:eu-west-1:865473395570:soft-opt-in-consent-setter-queue-PROD",
       }
     );
 

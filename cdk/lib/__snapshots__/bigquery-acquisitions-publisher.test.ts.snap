@@ -111,6 +111,30 @@ Logs: https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#
       },
       "Type": "AWS::Events::Rule",
     },
+    "SoftOptInToSQSRuleA7A6FB25": {
+      "Properties": {
+        "Description": "Send all events received via support-workers onto soft opt-in SQS queue",
+        "EventBusName": {
+          "Ref": "acquisitionsbusPROD768AFDE3",
+        },
+        "EventPattern": {
+          "region": [
+            "eu-west-1",
+          ],
+          "source": [
+            "support-workers.1",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": "arn:aws:sqs:eu-west-1:865473395570:soft-opt-in-consent-setter-queue-PROD",
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
     "acquisitionsbusPROD768AFDE3": {
       "Properties": {
         "Name": "acquisitions-bus-PROD",
