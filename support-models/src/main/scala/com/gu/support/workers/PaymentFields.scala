@@ -126,9 +126,8 @@ object PaymentFields {
     discriminatedType.variant[PayPalPaymentFields]("PayPal")
   implicit val stripePaymentMethodPaymentFieldsCodec: discriminatedType.VariantCodec[StripePaymentFields] =
     discriminatedType.variant[StripePaymentFields]("Stripe")
-  implicit val stripeHostedCheckoutPaymentFieldsCodec
-      : discriminatedType.VariantCodec[StripeHostedPaymentFields] =
-    discriminatedType.variant[StripeHostedPaymentFields]("StripeHostedCheckout")
+  implicit val stripeHostedPaymentFieldsCodec: discriminatedType.VariantCodec[StripeHostedPaymentFields] =
+    discriminatedType.variant[StripeHostedPaymentFields]("StripeHosted")
   implicit val directDebitPaymentFieldsCodec: discriminatedType.VariantCodec[DirectDebitPaymentFields] =
     discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
   implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
@@ -142,7 +141,7 @@ object PaymentFields {
       directDebitPaymentFieldsCodec,
       sepapaymentFieldsCodec,
       existingPaymentFieldsCodec,
-      stripeHostedCheckoutPaymentFieldsCodec,
+      stripeHostedPaymentFieldsCodec,
     ),
   )
 }
