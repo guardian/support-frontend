@@ -97,13 +97,13 @@ new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
 new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-CODE", {
   stack: "support",
   stage: "CODE",
-  softOptInConsentSetterQueueArn: "", // TODO: add Arn
+  softOptInConsentSetterQueueArn: "arn:aws:sqs:eu-west-1:865473395570:soft-opt-in-consent-setter-queue-CODE",
 });
 
 new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-PROD", {
   stack: "support",
   stage: "PROD",
-  softOptInConsentSetterQueueArn: "", // TODO: add Arn
+  softOptInConsentSetterQueueArn: "arn:aws:sqs:eu-west-1:865473395570:soft-opt-in-consent-setter-queue-PROD",
 });
 
 new SupportWorkers(app, "SupportWorkers-CODE", {
