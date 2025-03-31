@@ -5,9 +5,9 @@ import {
 	getNextDeliveryDay,
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
-// import { formatMachineDate } from 'helpers/utilities/dateConversions';
-// import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
-// import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -74,34 +74,36 @@ const productDeliveryDate = (
 			return addDays(new Date(), 15);
 		case 'TierThree':
 			return getTierThreeDeliveryDate();
-		// case 'NationalDelivery':
-		// case 'HomeDelivery':
-		// case 'SubscriptionCard':
-		// 	if (paperProductOptions === undefined) {
-		// 		throw new Error(`ratePlan not found for ${productKey}`);
-		// 	}
-		// 	const paperDeliveryDate =
-		// 		productKey === 'SubscriptionCard'
-		// 			? getPaymentStartDate(Date.now(), paperProductOptions)
-		// 			: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
-		// 	if (paperDeliveryDate === undefined) {
-		// 		throw new Error('delivery date not found for Home Delivery');
-		// 	}
-		// 	return paperDeliveryDate;
-		// case 'GuardianWeeklyDomestic':
-		// case 'GuardianWeeklyRestOfWorld':
-		// 	const guardianWeeklyDeliveryDate = getWeeklyDays();
-		// 	const publicationStartDays = guardianWeeklyDeliveryDate.filter((day) => {
-		// 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-		// 		const date = formatMachineDate(day);
-		// 		return !invalidPublicationDates.some((dateSuffix) =>
-		// 			date.endsWith(dateSuffix),
-		// 		);
-		// 	});
-		// 	if (publicationStartDays[0] === undefined) {
-		// 		throw new Error('delivery date not found for Guardian Weekly');
-		// 	}
-		// 	return publicationStartDays[0];
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+		case 'SubscriptionCard': {
+			if (paperProductOptions === undefined) {
+				throw new Error(`ratePlan not found for ${productKey}`);
+			}
+			const paperDeliveryDate =
+				productKey === 'SubscriptionCard'
+					? getPaymentStartDate(Date.now(), paperProductOptions)
+					: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+			if (paperDeliveryDate === undefined) {
+				throw new Error('delivery date not found for Home Delivery');
+			}
+			return paperDeliveryDate;
+		}
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld': {
+			const guardianWeeklyDeliveryDate = getWeeklyDays();
+			const publicationStartDays = guardianWeeklyDeliveryDate.filter((day) => {
+				const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+				const date = formatMachineDate(day);
+				return !invalidPublicationDates.some((dateSuffix) =>
+					date.endsWith(dateSuffix),
+				);
+			});
+			if (publicationStartDays[0] === undefined) {
+				throw new Error('delivery date not found for Guardian Weekly');
+			}
+			return publicationStartDays[0];
+		}
 		default:
 			return undefined;
 	}
