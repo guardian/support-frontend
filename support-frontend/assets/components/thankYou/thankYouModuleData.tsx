@@ -28,6 +28,7 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
+import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -123,6 +124,7 @@ export const getThankYouModuleData = (
 	finalAmount?: number,
 	returnAddress?: string,
 	isSignedIn?: boolean,
+	isObserver?: ObserverPaperType,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -324,7 +326,7 @@ export const getThankYouModuleData = (
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
-					listStyle={'order'}
+					isObserver={isObserver}
 				/>
 			),
 			ctas: null,

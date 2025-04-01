@@ -1,21 +1,20 @@
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
+import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
-
-export type ListStyle = 'bullet' | 'order';
 
 type WhatNextProps = {
 	amount: string;
 	startDate: string;
 	isSignedIn?: boolean;
-	listStyle?: ListStyle;
+	isObserver?: ObserverPaperType;
 };
 
 export function WhatNext({
 	amount,
 	startDate,
 	isSignedIn = false,
-	listStyle = 'bullet',
+	isObserver,
 }: WhatNextProps): JSX.Element {
 	const bulletItems = [
 		'You will receive an email confirming the details of your subscription',
@@ -24,19 +23,28 @@ export function WhatNext({
 	const bulletPointSignedIn = bulletItems.concat([
 		'You can now start reading the Guardian website on all your devices without personalised advertising',
 	]);
+	const observerPaperItems = [
+		'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
+		`Your newspaper will be delivered to your door.`,
+	];
+	const observerSubscriptionCardItems = observerPaperItems.concat([
+		'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.',
+	]);
 	return (
 		<>
-			{listStyle === 'bullet' ? (
+			{isObserver ? (
+				<OrderedList
+					items={
+						isObserver === 'ObserverPaper'
+							? observerPaperItems
+							: observerSubscriptionCardItems
+					}
+				/>
+			) : (
 				<BulletPointedList
 					items={isSignedIn ? bulletPointSignedIn : bulletItems}
 					color={palette.neutral[7]}
 				/>
-			) : (
-				/*
-				 * Used for Observer Sunday Paper Thankyou only
-				 * story and test will flag a difference if this was to change in future
-				 */
-				<OrderedList items={bulletItems} />
 			)}
 		</>
 	);

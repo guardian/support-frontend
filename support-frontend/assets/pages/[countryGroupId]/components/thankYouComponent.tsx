@@ -95,6 +95,11 @@ export type CheckoutComponentProps = {
 	abParticipations: Participations;
 };
 
+export type ObserverPaperType =
+	| 'ObserverPaper'
+	| 'ObserverSubscriptionCard'
+	| undefined;
+
 export function ThankYouComponent({
 	geoId,
 	csrf,
@@ -202,20 +207,25 @@ export function ThankYouComponent({
 		contributionType,
 		currencyKey,
 	);
-
+	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
-		'SubscriptionCard',
 	];
 	const printProductsKeys: ActiveProductKey[] = [
+		...subscriptionCardProductsKey,
 		...paperProductsKeys,
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const isObserverPaper =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
+	const isObserver: ObserverPaperType =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday'
+			? 'ObserverPaper'
+			: subscriptionCardProductsKey.includes(productKey) &&
+			  ratePlanKey === 'Sunday'
+			? 'ObserverSubscriptionCard'
+			: undefined;
 	const isGuardianPrint =
 		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
@@ -288,6 +298,7 @@ export function ThankYouComponent({
 		payment.finalAmount,
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
+		isObserver,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
@@ -323,7 +334,7 @@ export function ThankYouComponent({
 			!isTier3 && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite || isObserverPaper, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || !!isObserver, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
@@ -380,7 +391,7 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
-						{isObserverPaper && (
+						{!!isObserver && (
 							<LinkButton
 								href="https://www.tortoisemedia.com/read"
 								priority="tertiary"

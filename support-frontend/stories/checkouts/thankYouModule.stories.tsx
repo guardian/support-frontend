@@ -314,9 +314,9 @@ WhatNextSignedOut.args = {
 	ctas: <WhatNext amount={'12'} startDate={'Friday, March 28, 2025'} />,
 };
 
-export const WhatNextNumbered = Template.bind({});
+export const WhatNextObserverPaper = Template.bind({});
 
-WhatNextNumbered.args = {
+WhatNextObserverPaper.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
@@ -324,7 +324,22 @@ WhatNextNumbered.args = {
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
-			listStyle={'order'}
+			isObserver={'ObserverPaper'}
+		/>
+	),
+};
+
+export const WhatNextObserverSubsCard = Template.bind({});
+
+WhatNextObserverSubsCard.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isObserver={'ObserverSubscriptionCard'}
 		/>
 	),
 };
