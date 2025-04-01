@@ -258,7 +258,7 @@ export const getThankYouModuleData = (
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: <SignUpBodyCopy isTier3={isTier3} />,
+			bodyCopy: <SignUpBodyCopy isTier3={isTier3} isObserver={isObserver} />,
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},
