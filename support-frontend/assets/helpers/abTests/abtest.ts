@@ -20,7 +20,7 @@ import type {
 	Tests,
 } from './models';
 import { breakpoints } from './models';
-import { getMvtId } from './mvt';
+import { getMvtId, MVT_MAX } from './mvt';
 import {
 	getSessionParticipations,
 	PARTICIPATIONS_KEY,

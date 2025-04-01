@@ -1,7 +1,7 @@
 import * as cookie from '../storage/cookie';
 
 const MVT_COOKIE = 'GU_mvt_id';
-const MVT_MAX = 1_000_000;
+export const MVT_MAX = 1_000_000;
 
 // Attempts to retrieve the MVT id from a cookie, or sets it.
 export function getMvtId(): number {
