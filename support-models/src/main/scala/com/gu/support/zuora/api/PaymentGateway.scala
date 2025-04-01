@@ -29,6 +29,7 @@ object PaymentGateway {
     case ZuoraInstanceDirectDebitGateway.name => ZuoraInstanceDirectDebitGateway
     case StripeGatewayPaymentIntentsDefault.name => StripeGatewayPaymentIntentsDefault
     case StripeGatewayPaymentIntentsAUD.name => StripeGatewayPaymentIntentsAUD
+    case StripeTortoiseMedia.name => StripeTortoiseMedia
   }
 
   implicit val encoder: Encoder[PaymentGateway] = Encoder.encodeString.contramap[PaymentGateway](_.name)
@@ -52,6 +53,10 @@ case object StripeGatewayPaymentIntentsDefault extends PaymentGateway {
 
 case object StripeGatewayPaymentIntentsAUD extends PaymentGateway {
   val name = "Stripe PaymentIntents GNM Membership AUS"
+}
+
+case object StripeTortoiseMedia extends PaymentGateway {
+  val name = "Stripe - Observer - Tortoise Media"
 }
 
 case object PayPalGateway extends PaymentGateway {
