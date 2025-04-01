@@ -65,7 +65,10 @@ class StripeCheckoutSessionService(
       .withBody(data)
       .execute()
       .attemptT
-      .leftMap(error => error.getMessage)
+      .leftMap(error => {
+        logger.error(scrub"Error creating Stripe checkout session: ${error.getMessage}")
+        "Failed to create Stripe checkout session"
+      })
       .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
   }
 
