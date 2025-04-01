@@ -40,7 +40,6 @@ type ABtestInitalizerData = {
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
 	path?: string;
-	settings: Settings;
 };
 
 function init({
