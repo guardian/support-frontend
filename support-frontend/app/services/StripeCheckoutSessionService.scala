@@ -31,10 +31,6 @@ case class CheckoutSetupIntent(id: String, payment_method: CheckoutPaymentMethod
 object CheckoutSetupIntent {
   implicit val decoder: Decoder[CheckoutSetupIntent] = deriveDecoder
 }
-case class RetrieveCheckoutSessionResponseSuccess(setup_intent: CheckoutSetupIntent)
-object RetrieveCheckoutSessionResponseSuccess {
-  implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
-}
 
 class StripeCheckoutSessionService(
     configProvider: StripeConfigProvider,
@@ -71,23 +67,6 @@ class StripeCheckoutSessionService(
       .attemptT
       .leftMap(error => error.getMessage)
       .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
-  }
-
-  def retrieveCheckoutSession(
-      id: String,
-  ): EitherT[Future, String, RetrieveCheckoutSessionResponseSuccess] = {
-    val isTestUser = false
-    val privateKey = getPrivateKey(isTestUser)
-
-    client
-      .url(s"$baseUrl/checkout/sessions/$id?expand[]=setup_intent.payment_method")
-      // Note: auth is done via basic auth. See https://docs.stripe.com/api/authentication
-      .withAuth(privateKey, "", WSAuthScheme.BASIC)
-      .withMethod("GET")
-      .execute()
-      .attemptT
-      .leftMap(error => error.getMessage)
-      .subflatMap(decodeResponse[RetrieveCheckoutSessionResponseSuccess])
   }
 
   private def getPrivateKey(isTestUser: Boolean): String = {
