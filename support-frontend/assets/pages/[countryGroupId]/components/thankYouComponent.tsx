@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import { from, space, sport } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	sport,
+	until,
+} from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -16,7 +22,10 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
-import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
+import {
+	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
+	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
+} from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -54,6 +63,20 @@ const headerContainer = css`
 `;
 const buttonContainer = css`
 	padding: ${space[12]}px 0;
+	& > a:first-child {
+		margin-right: ${space[3]}px;
+	}
+	${until.tablet} {
+		& > a {
+			margin-bottom: ${space[4]}px;
+		}
+	}
+`;
+const buttonColor = css`
+	background-color: ${neutral[100]};
+	${from.tablet} {
+		background-color: ${sport[800]};
+	}
 `;
 
 export type CheckoutComponentProps = {
@@ -357,6 +380,18 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
+						{isObserverPaper && (
+							<LinkButton
+								href="https://www.tortoisemedia.com/read"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
+								}
+								cssOverrides={buttonColor}
+							>
+								Return to the Observer
+							</LinkButton>
+						)}
 						{!isGuardianAdLite && (
 							<LinkButton
 								href="https://www.theguardian.com"
@@ -364,6 +399,7 @@ export function ThankYouComponent({
 								onClick={() =>
 									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
 								}
+								cssOverrides={buttonColor}
 							>
 								Return to the Guardian
 							</LinkButton>

@@ -134,6 +134,8 @@ function Subheading({
 	const isPaper = paperProductsKeys.includes(productKey);
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
+	const isObserverPaper =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,
@@ -148,7 +150,7 @@ function Subheading({
 		<>
 			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
-			{!isGuardianAdLite && !isPending && (
+			{!isGuardianAdLite && !isPending && !isObserverPaper && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}
