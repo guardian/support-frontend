@@ -46,11 +46,13 @@ export enum Channel {
 	Guardian = 'guardian',
 }
 
-export type LabelProps = {
+export type ProductLabelProps = {
 	text: string;
 	channel: Channel;
 };
-export const getLabel = (productOption: PaperProductOptions): LabelProps => {
+export const getProductLabel = (
+	productOption: PaperProductOptions,
+): ProductLabelProps => {
 	switch (productOption) {
 		case 'Sunday':
 			return {

@@ -139,7 +139,7 @@ export function PaperPrices({
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.tag ? productOverrideWithTag : productOverride
+							product.label ? productOverrideWithTag : productOverride
 						}
 						title={product.title}
 						price={product.price}
@@ -149,8 +149,8 @@ export function PaperPrices({
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						tag={product.tag}
 						label={product.label}
+						productLabel={product.productLabel}
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}

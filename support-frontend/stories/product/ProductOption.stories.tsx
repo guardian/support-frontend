@@ -50,7 +50,7 @@ function Template(args: Product) {
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
 			tag={args.tag}
-			label={args.label}
+			productLabel={args.productLabel}
 			isSpecialOffer={args.isSpecialOffer}
 			onClick={() => undefined}
 			onView={() => undefined}

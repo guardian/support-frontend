@@ -27,7 +27,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getLabel, getTitle } from '../helpers/products';
+import { getProductLabel, getTitle } from '../helpers/products';
 import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
@@ -182,9 +182,9 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const tag = productOption === 'Everyday' ? 'Best deal' : '';
-		const label = shouldShowObserverCard()
-			? getLabel(productOption)
+		const label = productOption === 'Everyday' ? 'Best deal' : '';
+		const productLabel = shouldShowObserverCard()
+			? getProductLabel(productOption)
 			: undefined;
 		return {
 			title: getTitle(productOption),
@@ -203,8 +203,8 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			tag,
 			label,
+			productLabel,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,

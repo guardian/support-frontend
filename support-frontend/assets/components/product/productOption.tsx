@@ -13,7 +13,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
-	type LabelProps,
+	type ProductLabelProps,
 } from 'pages/paper-subscription-landing/helpers/products';
 import {
 	button,
@@ -46,8 +46,8 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
-	label?: LabelProps;
-	tag?: string;
+	productLabel?: ProductLabelProps;
+	label?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
@@ -73,9 +73,9 @@ function ProductOption(props: Product): JSX.Element {
 		}
 	}, [hasBeenSeen]);
 
-	const isObserverChannel = props.label?.channel === Channel.Observer;
+	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
 	const productOptionMargin =
-		props.tag &&
+		props.label &&
 		css`
 			${until.tablet} {
 				/* calculation belows are based on productOptionHighlight text size, line height and padding */
@@ -97,17 +97,17 @@ function ProductOption(props: Product): JSX.Element {
 				props.cssOverrides,
 				productOptionMargin,
 				props.isSpecialOffer ? specialOfferOption : css``,
-				props.label ? productOptionWithLabel : css``,
+				props.productLabel ? productOptionWithLabel : css``,
 			]}
 		>
-			{props.tag && (
+			{props.label && (
 				<span
 					css={[
 						productOptionHighlight,
 						props.isSpecialOffer ? specialOfferHighlight : css``,
 					]}
 				>
-					{props.tag}
+					{props.label}
 				</span>
 			)}
 			<div
@@ -118,14 +118,14 @@ function ProductOption(props: Product): JSX.Element {
 				]}
 			>
 				<h3 css={productOptionTitleHeading}>{props.title}</h3>
-				{props.label && (
+				{props.productLabel && (
 					<span
 						css={[
 							productOptionLabel,
 							isObserverChannel ? productOptionLabelObserver : css``,
 						]}
 					>
-						{props.label.text}
+						{props.productLabel.text}
 					</span>
 				)}
 				{props.children && props.children}
