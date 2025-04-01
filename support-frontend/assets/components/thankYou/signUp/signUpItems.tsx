@@ -25,9 +25,7 @@ export function SignUpBodyCopy({
 
 	return (
 		<>
-			<p>
-				{isObserver ? observerCopy : isTier3 ? upperCopyTier3 : upperCopy}
-			</p>
+			<p>{isObserver ? observerCopy : isTier3 ? upperCopyTier3 : upperCopy}</p>
 			{!isObserver && (
 				<>
 					{!isTier3 && (
