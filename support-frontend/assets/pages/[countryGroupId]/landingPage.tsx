@@ -6,28 +6,27 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
-import { getLandingPageVariant } from '../../helpers/abTests/landingPageAbTests';
-import { getSettings } from '../../helpers/globalsAndSwitches/globals';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 
 type Props = {
 	geoId: GeoId;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();
 
-export function LandingPage({ geoId, abParticipations }: Props) {
+export function LandingPage({
+	geoId,
+	abParticipations,
+	landingPageSettings,
+}: Props) {
 	const { countryGroupId } = getGeoIdConfig(geoId);
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		window.guardian.settings,
-	);
-
-	const settings = getLandingPageVariant(
-		abParticipations,
-		getSettings().landingPageTests,
 	);
 
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
@@ -37,7 +36,7 @@ export function LandingPage({ geoId, abParticipations }: Props) {
 			<ThreeTierLanding
 				geoId={geoId}
 				abParticipations={abParticipations}
-				settings={settings}
+				settings={landingPageSettings}
 			/>
 		);
 	} else {

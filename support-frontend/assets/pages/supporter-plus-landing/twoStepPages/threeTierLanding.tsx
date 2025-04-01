@@ -48,7 +48,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
@@ -253,7 +253,7 @@ function getPlanCost(
 
 type ThreeTierLandingProps = {
 	geoId: GeoId;
-	settings: LandingPageSelection;
+	settings: LandingPageVariant;
 	abParticipations: Participations;
 };
 export function ThreeTierLanding({

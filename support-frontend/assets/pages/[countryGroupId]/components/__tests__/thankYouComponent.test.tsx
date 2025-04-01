@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { fallBackLandingPageSelection } from '../../../../helpers/abTests/landingPageAbTests';
 import {
 	type CheckoutComponentProps,
 	ThankYouComponent,
@@ -20,6 +21,7 @@ describe('thankYouComponent', () => {
 		},
 		identityUserType: 'new',
 		abParticipations: {},
+		landingPageSettings: fallBackLandingPageSelection,
 	};
 
 	it('should display the correct thankyou cards for One time contribution', () => {

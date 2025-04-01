@@ -49,7 +49,7 @@ import {
 	Stripe,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -76,10 +76,10 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -149,6 +149,7 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function CheckoutComponent({
@@ -166,6 +167,7 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	abParticipations,
+	landingPageSettings,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -190,10 +192,6 @@ export function CheckoutComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
-			const landingPageSettings = getLandingPageVariant(
-				abParticipations,
-				getSettings().landingPageTests,
-			);
 			if (isRecurringContribution) {
 				// Also show SupporterPlus benefits greyed out
 				return [

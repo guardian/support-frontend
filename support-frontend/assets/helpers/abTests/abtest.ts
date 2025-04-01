@@ -12,7 +12,6 @@ import type {
 } from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
-import { getLandingPageParticipations } from './landingPageAbTests';
 import type {
 	AcquisitionABTest,
 	Audience,
@@ -21,6 +20,7 @@ import type {
 	Tests,
 } from './models';
 import { breakpoints } from './models';
+import { getMvtId, MVT_MAX } from './mvt';
 import {
 	getSessionParticipations,
 	PARTICIPATIONS_KEY,
@@ -41,7 +41,6 @@ type ABtestInitalizerData = {
 	mvt?: number;
 	acquisitionDataTests?: AcquisitionABTest[];
 	path?: string;
-	settings: Settings;
 };
 
 function init({
@@ -52,7 +51,6 @@ function init({
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 	path = window.location.pathname,
-	settings,
 }: ABtestInitalizerData): Participations {
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
@@ -66,46 +64,16 @@ function init({
 		sessionParticipations,
 	);
 
-	// A landing page test config may be passed through from the server, so we handle this separately
-	const landingPageParticipations = getLandingPageParticipations(
-		countryGroupId,
-		path,
-		settings.landingPageTests,
-		mvt,
-	);
-
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
 		...participations,
-		...landingPageParticipations,
 		...serverSideParticipations,
 		...urlParticipations,
 	};
 }
 
 // ----- Helpers ----- //
-
-const MVT_COOKIE = 'GU_mvt_id';
-const MVT_MAX = 1_000_000;
-
-// Attempts to retrieve the MVT id from a cookie, or sets it.
-function getMvtId(): number {
-	const mvtIdCookieValue = cookie.get(MVT_COOKIE);
-	let mvtId = Number(mvtIdCookieValue);
-
-	if (
-		Number.isNaN(mvtId) ||
-		mvtId >= MVT_MAX ||
-		mvtId < 0 ||
-		mvtIdCookieValue === null
-	) {
-		mvtId = Math.floor(Math.random() * MVT_MAX);
-		cookie.set(MVT_COOKIE, String(mvtId));
-	}
-
-	return mvtId;
-}
 
 function getParticipations(
 	abTests: Tests,
