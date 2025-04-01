@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product false correctly 1`] = `
+<div>
+  <ul
+    class="css-1ng3ivo-BulletPointedList"
+  >
+    <li
+      class="css-55fvez-BulletPointedListItem"
+    >
+      <div>
+        <svg
+          fill="none"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="4"
+            cy="4"
+            fill="#121212"
+            r="4"
+          />
+        </svg>
+      </div>
+      <div>
+        You will receive an email confirming the details of your subscription
+      </div>
+    </li>
+    <li
+      class="css-55fvez-BulletPointedListItem"
+    >
+      <div>
+        <svg
+          fill="none"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="4"
+            cy="4"
+            fill="#121212"
+            r="4"
+          />
+        </svg>
+      </div>
+      <div>
+        Your payment of £12/month will be taken on Friday, March 28, 2025
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product true correctly 1`] = `
+<div>
+  <ul
+    class="css-1ng3ivo-BulletPointedList"
+  >
+    <li
+      class="css-55fvez-BulletPointedListItem"
+    >
+      <div>
+        <svg
+          fill="none"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="4"
+            cy="4"
+            fill="#121212"
+            r="4"
+          />
+        </svg>
+      </div>
+      <div>
+        You will receive an email confirming the details of your subscription
+      </div>
+    </li>
+    <li
+      class="css-55fvez-BulletPointedListItem"
+    >
+      <div>
+        <svg
+          fill="none"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="4"
+            cy="4"
+            fill="#121212"
+            r="4"
+          />
+        </svg>
+      </div>
+      <div>
+        Your payment of £12/month will be taken on Friday, March 28, 2025
+      </div>
+    </li>
+    <li
+      class="css-55fvez-BulletPointedListItem"
+    >
+      <div>
+        <svg
+          fill="none"
+          height="8"
+          viewBox="0 0 8 8"
+          width="8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="4"
+            cy="4"
+            fill="#121212"
+            r="4"
+          />
+        </svg>
+      </div>
+      <div>
+        You can now start reading the Guardian website on all your devices without personalised advertising
+      </div>
+    </li>
+  </ul>
+</div>
+`;
