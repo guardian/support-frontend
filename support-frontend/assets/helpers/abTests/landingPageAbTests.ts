@@ -103,7 +103,7 @@ interface LandingPageParticipationsResult {
 export function getLandingPageParticipations(
 	countryGroupId: CountryGroupId = CountryGroup.detect(),
 	path: string = window.location.pathname,
-	tests: LandingPageTest[] = getSettings().landingPageTests,
+	tests: LandingPageTest[] = getSettings().landingPageTests ?? [],
 	mvtId: number = getMvtId(),
 ): LandingPageParticipationsResult {
 	// Is there already a participation in session storage?
