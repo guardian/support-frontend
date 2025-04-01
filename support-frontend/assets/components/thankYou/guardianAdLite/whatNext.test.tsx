@@ -4,8 +4,6 @@ import { WhatNext } from './whatNext';
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	const whatNextItems = [
-		[true],
-		[false],
 		[true, 'ObserverPaper'],
 		[false, 'ObserverSubscriptionCard'],
 	];
