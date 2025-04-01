@@ -314,6 +314,21 @@ WhatNextSignedOut.args = {
 	ctas: <WhatNext amount={'12'} startDate={'Friday, March 28, 2025'} />,
 };
 
+export const WhatNextNumbered = Template.bind({});
+
+WhatNextNumbered.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			listStyle={'order'}
+		/>
+	),
+};
+
 export const SupportReminder = Template.bind({});
 
 SupportReminder.args = {

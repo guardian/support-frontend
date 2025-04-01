@@ -324,6 +324,7 @@ export const getThankYouModuleData = (
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
+					listStyle={'order'}
 				/>
 			),
 			ctas: null,

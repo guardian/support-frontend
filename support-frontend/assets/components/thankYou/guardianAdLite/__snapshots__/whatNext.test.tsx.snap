@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product false correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=false, bullet list) 1`] = `
 <div>
   <ul
     class="css-1ng3ivo-BulletPointedList"
@@ -55,7 +55,26 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product false cor
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product true correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=false, order list) 1`] = `
+<div>
+  <ol
+    class="component-list-ol"
+  >
+    <li
+      class="component-list-ol__li"
+    >
+      You will receive an email confirming the details of your subscription
+    </li>
+    <li
+      class="component-list-ol__li"
+    >
+      Your payment of £12/month will be taken on Friday, March 28, 2025
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=true, bullet list) 1`] = `
 <div>
   <ul
     class="css-1ng3ivo-BulletPointedList"
@@ -130,5 +149,24 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product true corr
       </div>
     </li>
   </ul>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=true, order list) 1`] = `
+<div>
+  <ol
+    class="component-list-ol"
+  >
+    <li
+      class="component-list-ol__li"
+    >
+      You will receive an email confirming the details of your subscription
+    </li>
+    <li
+      class="component-list-ol__li"
+    >
+      Your payment of £12/month will be taken on Friday, March 28, 2025
+    </li>
+  </ol>
 </div>
 `;
