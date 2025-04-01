@@ -317,6 +317,7 @@ export const getThankYouModuleData = (
 			),
 		},
 		whatNext: {
+			icon: getThankYouModuleIcon('whatNext'),
 			header: 'What happens next?',
 			bodyCopy: (
 				<WhatNext
