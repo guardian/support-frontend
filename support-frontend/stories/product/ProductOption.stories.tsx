@@ -11,7 +11,7 @@ export default {
 		offerCopy: { type: 'text' },
 		priceCopy: { type: 'text' },
 		buttonCopy: { type: 'text' },
-		label: { type: 'text' },
+		tag: { type: 'text' },
 		onClick: {
 			table: {
 				disable: true,
@@ -49,6 +49,7 @@ function Template(args: Product) {
 			offerCopy={args.offerCopy}
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
+			tag={args.tag}
 			label={args.label}
 			isSpecialOffer={args.isSpecialOffer}
 			onClick={() => undefined}
@@ -68,7 +69,7 @@ ProductOption.args = {
 	offerCopy: '£6 for the first 6 issues',
 	priceCopy: 'then £37.50 per quarter',
 	buttonCopy: 'Subscribe now',
-	label: 'Best deal',
+	tag: 'Best deal',
 };
 
 export const SpecialOfferProductOption = Template.bind({});
@@ -79,6 +80,6 @@ SpecialOfferProductOption.args = {
 	offerCopy: '£12 for the first 6 issues',
 	priceCopy: 'then £13.50 per month',
 	buttonCopy: 'Subscribe now',
-	label: 'Special offer',
+	tag: 'Special offer',
 	isSpecialOffer: true,
 };
