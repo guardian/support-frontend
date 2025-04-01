@@ -79,7 +79,7 @@ const productOverride = css`
 	}
 `;
 
-const productOverrideWithTag = css`
+const productOverrideWithLabel = css`
 	${productOverride}
 	&:not(:first-of-type) {
 		margin-top: ${space[12]}px;
@@ -139,7 +139,7 @@ export function PaperPrices({
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.label ? productOverrideWithTag : productOverride
+							product.label ? productOverrideWithLabel : productOverride
 						}
 						title={product.title}
 						price={product.price}

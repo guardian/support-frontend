@@ -102,7 +102,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.productLabel ? productOverrideWithLabel : productOverride
+							product.label ? productOverrideWithLabel : productOverride
 						}
 						title={product.title}
 						price={product.price}
