@@ -31,7 +31,7 @@ import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHe
 import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
-import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -68,7 +68,7 @@ export type CheckoutComponentProps = {
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;
-	landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYouComponent({

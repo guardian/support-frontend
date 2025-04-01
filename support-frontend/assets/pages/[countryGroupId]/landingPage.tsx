@@ -6,12 +6,12 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';
 import { ThreeTierLanding } from 'pages/supporter-plus-landing/twoStepPages/threeTierLanding';
-import type { LandingPageSelection } from '../../helpers/abTests/landingPageAbTests';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 
 type Props = {
 	geoId: GeoId;
 	abParticipations: Participations;
-	landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();

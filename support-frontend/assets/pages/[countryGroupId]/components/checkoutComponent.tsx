@@ -76,10 +76,10 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import type { LandingPageSelection } from '../../../helpers/abTests/landingPageAbTests';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -149,7 +149,7 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
-	landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function CheckoutComponent({

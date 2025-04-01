@@ -13,8 +13,6 @@ import {
 	setSessionParticipations,
 } from './sessionStorage';
 
-export type LandingPageSelection = LandingPageVariant & { testName: string };
-
 // Fallback config in case there's an issue getting it from the server
 export const fallBackLandingPageSelection: LandingPageVariant = {
 	name: 'CONTROL',

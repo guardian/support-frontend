@@ -19,8 +19,8 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { LandingPageSelection } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { CheckoutComponent } from './components/checkoutComponent';
@@ -29,7 +29,7 @@ type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
-	landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();

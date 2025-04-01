@@ -8,8 +8,8 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import type { LandingPageSelection } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 
@@ -17,7 +17,7 @@ type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
-	landingPageSettings: LandingPageSelection;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYou({
