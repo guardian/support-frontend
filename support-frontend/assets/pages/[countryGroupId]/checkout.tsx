@@ -261,10 +261,20 @@ export function Checkout({
 		);
 	}, []);
 
-	const maybeCheckoutSessionId = urlSearchParams.get('checkoutSessionId');
-	const persistedFormData = maybeCheckoutSessionId
-		? getFormDetails(maybeCheckoutSessionId)
-		: undefined;
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	let persistedFormData;
+	if (maybeCheckoutSessionId) {
+		persistedFormData = getFormDetails(maybeCheckoutSessionId);
+
+		// If there's no persisted data, remove the checkoutSessionId from the URL
+		if (!persistedFormData) {
+			const url = new URL(window.location.href);
+			url.searchParams.delete(checkoutSessionIdUrlParam);
+			window.location.href = url.toString();
+		}
+	}
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
