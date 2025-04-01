@@ -46,6 +46,7 @@ import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
+import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -287,6 +288,30 @@ AusMap.args = {
 	header: ausMapHeader,
 	bodyCopy: ausMapBodyCopy,
 	ctas: <AusMapCTA />,
+};
+
+export const WhatNextSignedIn = Template.bind({});
+
+WhatNextSignedIn.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={true}
+		/>
+	),
+};
+
+export const WhatNextSignedOut = Template.bind({});
+
+WhatNextSignedOut.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: <WhatNext amount={'12'} startDate={'Friday, March 28, 2025'} />,
 };
 
 export const SupportReminder = Template.bind({});
