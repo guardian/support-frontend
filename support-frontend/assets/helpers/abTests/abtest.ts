@@ -12,7 +12,6 @@ import type {
 } from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
-import { getLandingPageParticipations } from './landingPageAbTests';
 import type {
 	AcquisitionABTest,
 	Audience,
@@ -52,7 +51,6 @@ function init({
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 	path = window.location.pathname,
-	settings,
 }: ABtestInitalizerData): Participations {
 	const sessionParticipations = getSessionParticipations(PARTICIPATIONS_KEY);
 	const participations = getParticipations(
@@ -66,19 +64,10 @@ function init({
 		sessionParticipations,
 	);
 
-	// A landing page test config may be passed through from the server, so we handle this separately
-	const landingPageParticipations = getLandingPageParticipations(
-		countryGroupId,
-		path,
-		settings.landingPageTests,
-		mvt,
-	);
-
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	return {
 		...participations,
-		...landingPageParticipations,
 		...serverSideParticipations,
 		...urlParticipations,
 	};

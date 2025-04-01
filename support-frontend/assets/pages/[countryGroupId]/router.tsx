@@ -8,8 +8,13 @@ import {
 } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
+import { getLandingPageParticipations } from '../../helpers/abTests/landingPageAbTests';
 
-const abParticipations = getAbParticipations();
+const landingPageParticipations = getLandingPageParticipations();
+const abParticipations = {
+	...getAbParticipations(),
+	...landingPageParticipations.participations,
+};
 setUpTrackingAndConsents(abParticipations);
 const appConfig = parseAppConfig(window.guardian);
 
@@ -51,7 +56,11 @@ const router = createBrowserRouter(
 			path: `/${geoId}/contribute/:campaignCode?`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
-					<LandingPage geoId={geoId} abParticipations={abParticipations} />
+					<LandingPage
+						geoId={geoId}
+						abParticipations={abParticipations}
+						landingPageSettings={landingPageParticipations.variant}
+					/>
 				</Suspense>
 			),
 		},
@@ -63,6 +72,7 @@ const router = createBrowserRouter(
 						geoId={geoId}
 						appConfig={appConfig}
 						abParticipations={abParticipations}
+						landingPageSettings={landingPageParticipations.variant}
 					/>
 				</Suspense>
 			),
@@ -87,6 +97,7 @@ const router = createBrowserRouter(
 						geoId={geoId}
 						appConfig={appConfig}
 						abParticipations={abParticipations}
+						landingPageSettings={landingPageParticipations.variant}
 					/>
 				</Suspense>
 			),

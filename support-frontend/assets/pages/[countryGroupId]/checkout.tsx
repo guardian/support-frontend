@@ -19,6 +19,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import type { LandingPageSelection } from '../../helpers/abTests/landingPageAbTests';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
@@ -28,6 +29,7 @@ type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageSelection;
 };
 
 const countryId: IsoCountry = Country.detect();
@@ -66,7 +68,12 @@ const getPromotionFromProductPrices = (
 	);
 };
 
-export function Checkout({ geoId, appConfig, abParticipations }: Props) {
+export function Checkout({
+	geoId,
+	appConfig,
+	abParticipations,
+	landingPageSettings,
+}: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -273,6 +280,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
+				landingPageSettings={landingPageSettings}
 			/>
 		</Elements>
 	);

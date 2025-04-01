@@ -33,7 +33,6 @@ function getAbParticipations(): Participations {
 		countryId,
 		countryGroupId,
 		selectedAmountsVariant,
-		settings,
 	};
 	const participations: Participations = abTest.init(abtestInitalizerData);
 	console.log({ participations });
