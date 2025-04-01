@@ -249,18 +249,18 @@ function Heading({
 			}
 		};
 		const getPrintHeaderObserver = (): JSX.Element => {
-			const observerPackageYellow = (
-				<span css={yellowAmountText}>Observer package</span>
+			const observerPackageYellow = (copy: string) => (
+				<span css={yellowAmountText}>{copy}</span>
 			);
 			return (
 				<>
 					{isPending ? (
 						<>
-							Your subscription to the {observerPackageYellow} is being
+							Your {observerPackageYellow('Observer subscription')} is being
 							processed
 						</>
 					) : (
-						<>You have now subscribed to the {observerPackageYellow}</>
+						<>You are now an {observerPackageYellow('Observer subscriber')}.</>
 					)}
 				</>
 			);
@@ -277,7 +277,7 @@ function Heading({
 					<>
 						{getPrintHeaderObserver()}
 						<br css={printlineBreak} />
-						Thank you for supporting Observer journalism!
+						Welcome and thank you for supporting Observer journalism!
 					</>
 				)}
 			</h1>
