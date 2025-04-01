@@ -4,7 +4,8 @@ import { until } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
- SvgInfoRound } from '@guardian/source/react-components';
+	SvgInfoRound,
+} from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
