@@ -15,6 +15,7 @@ import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getSettings } from '../globalsAndSwitches/globals';
 
 function setUpTrackingAndConsents(participations: Participations): void {
+	console.log({ participations });
 	const countryId: IsoCountry = Country.detect();
 	const acquisitionData = getReferrerAcquisitionData();
 
@@ -35,7 +36,6 @@ function getAbParticipations(): Participations {
 		selectedAmountsVariant,
 	};
 	const participations: Participations = abTest.init(abtestInitalizerData);
-	console.log({ participations });
 
 	return {
 		...participations,

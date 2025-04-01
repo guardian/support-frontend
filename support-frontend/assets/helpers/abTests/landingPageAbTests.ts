@@ -1,4 +1,5 @@
 import seedrandom from 'seedrandom';
+import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	LandingPageTest,
 	LandingPageVariant,
@@ -102,14 +103,17 @@ interface LandingPageParticipationsResult {
 export function getLandingPageParticipations(
 	countryGroupId: CountryGroupId = CountryGroup.detect(),
 	path: string = window.location.pathname,
-	tests: LandingPageTest[] = [],
+	tests: LandingPageTest[] = getSettings().landingPageTests,
 	mvtId: number = getMvtId(),
 ): LandingPageParticipationsResult {
 	// Is there already a participation in session storage?
 	const sessionParticipations = getSessionParticipations(
 		LANDING_PAGE_PARTICIPATIONS_KEY,
 	);
-	if (sessionParticipations) {
+	if (
+		sessionParticipations &&
+		Object.entries(sessionParticipations).length > 0
+	) {
 		const variant = getLandingPageVariant(sessionParticipations, tests);
 		return {
 			participations: sessionParticipations,
