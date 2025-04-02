@@ -83,7 +83,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		csrf,
 		false,
 		amountIsAboveThreshold,
-		'',
+		undefined,
 		email,
 	);
 
