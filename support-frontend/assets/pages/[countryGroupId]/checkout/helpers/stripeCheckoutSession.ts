@@ -22,15 +22,23 @@ export type PersistableFormFields = {
 	billingAddressMatchesDelivery?: boolean;
 };
 
-const schema = object({
-	formDetails: object({
-		personalData: object({
-			firstName: string(),
-			lastName: string(),
-			email: string(),
+const formDetailsSchema = object({
+	personalData: object({
+		firstName: string(),
+		lastName: string(),
+		email: string(),
+	}),
+	addressFields: object({
+		billingAddress: object({
+			lineOne: nullish(string()),
+			lineTwo: nullish(string()),
+			city: nullish(string()),
+			state: nullish(string()),
+			postCode: nullish(string()),
+			country: picklist(isoCountries),
 		}),
-		addressFields: object({
-			billingAddress: object({
+		deliveryAddress: optional(
+			object({
 				lineOne: nullish(string()),
 				lineTwo: nullish(string()),
 				city: nullish(string()),
@@ -38,20 +46,14 @@ const schema = object({
 				postCode: nullish(string()),
 				country: picklist(isoCountries),
 			}),
-			deliveryAddress: optional(
-				object({
-					lineOne: nullish(string()),
-					lineTwo: nullish(string()),
-					city: nullish(string()),
-					state: nullish(string()),
-					postCode: nullish(string()),
-					country: picklist(isoCountries),
-				}),
-			),
-		}),
-		deliveryInstructions: optional(string()),
-		billingAddressMatchesDelivery: optional(boolean()),
+		),
 	}),
+	deliveryInstructions: optional(string()),
+	billingAddressMatchesDelivery: optional(boolean()),
+});
+
+const schema = object({
+	formDetails: formDetailsSchema,
 	version: number(),
 	checkoutSessionId: string(),
 });
