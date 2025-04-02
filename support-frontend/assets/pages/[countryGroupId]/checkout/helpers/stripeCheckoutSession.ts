@@ -1,4 +1,5 @@
 import { storage } from '@guardian/libs';
+import type { InferInput } from 'valibot';
 import {
 	boolean,
 	nullish,
@@ -10,17 +11,6 @@ import {
 	string,
 } from 'valibot';
 import { isoCountries } from 'helpers/internationalisation/country';
-import type {
-	FormAddressFields,
-	FormPersonalFields,
-} from './formDataExtractors';
-
-export type PersistableFormFields = {
-	personalData: FormPersonalFields;
-	addressFields: FormAddressFields;
-	deliveryInstructions?: string;
-	billingAddressMatchesDelivery?: boolean;
-};
 
 const formDetailsSchema = object({
 	personalData: object({
@@ -51,6 +41,8 @@ const formDetailsSchema = object({
 	deliveryInstructions: optional(string()),
 	billingAddressMatchesDelivery: optional(boolean()),
 });
+
+export type PersistableFormFields = InferInput<typeof formDetailsSchema>;
 
 const schema = object({
 	formDetails: formDetailsSchema,

@@ -14,7 +14,7 @@ export const extractPersonalDataFromForm = (
 	email: formData.get('email') as string,
 });
 
-export type FormAddressFields = {
+type FormAddressFields = {
 	billingAddress: {
 		lineOne?: string | null;
 		lineTwo?: string | null;
