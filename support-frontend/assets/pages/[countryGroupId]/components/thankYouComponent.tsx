@@ -232,7 +232,7 @@ export function ThankYouComponent({
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
-	const startDate = deliveryDate ? formatUserDate(deliveryDate) : '';
+	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
 
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,

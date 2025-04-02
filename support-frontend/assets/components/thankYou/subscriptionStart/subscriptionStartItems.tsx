@@ -30,7 +30,7 @@ export const subscriptionStartHeader = 'When will your subscription start?';
 
 type SubscriptionStartProps = {
 	productKey: ActiveProductKey;
-	startDate: string;
+	startDate?: string;
 };
 export function SubscriptionStartItems({
 	productKey,
@@ -39,11 +39,13 @@ export function SubscriptionStartItems({
 	const paperCopy = (
 		<span css={[downloadCopy, subscriptionItems]}>
 			<div>
-				<p>
-					<span
-						css={boldText}
-					>{`You will receive your newspaper from ${startDate}`}</span>
-				</p>
+				{startDate && (
+					<p>
+						<span
+							css={boldText}
+						>{`You will receive your newspaper from ${startDate}`}</span>
+					</p>
+				)}
 				{productKey === 'SubscriptionCard' && (
 					<p css={paragraphSpacing}>
 						You will receive your Subscription Card in your subscriber pack in

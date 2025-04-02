@@ -113,7 +113,7 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
-	startDate: string,
+	startDate?: string,
 	email?: string,
 	campaignCode?: string,
 	isTier3?: boolean,

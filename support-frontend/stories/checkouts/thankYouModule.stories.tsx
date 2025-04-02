@@ -46,6 +46,7 @@ import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
+import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -371,6 +372,39 @@ SubscriptionStartTierThree.args = {
 		/>
 	),
 	ctas: null,
+};
+
+export const WhatNextSignedOut = Template.bind({});
+WhatNextSignedOut.args = {
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What next?',
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={true}
+		/>
+	),
+};
+
+export const WhatNextSignedIn = Template.bind({});
+WhatNextSignedIn.args = {
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What next?',
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+		/>
+	),
+};
+
+export const WhatNextNoStartDate = Template.bind({});
+WhatNextNoStartDate.args = {
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What next?',
+	bodyCopy: <WhatNext amount={'12'} isSignedIn={false} />,
 };
 
 SupportReminder.decorators = [
