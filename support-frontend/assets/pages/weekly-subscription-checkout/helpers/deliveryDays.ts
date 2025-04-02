@@ -64,7 +64,7 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-const productDeliveryDate = (
+const productDeliveryOrStartDate = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
 ): Date | undefined => {
@@ -112,5 +112,5 @@ export {
 	getWeeklyDays,
 	addDays,
 	getTierThreeDeliveryDate,
-	productDeliveryDate,
+	productDeliveryOrStartDate,
 };

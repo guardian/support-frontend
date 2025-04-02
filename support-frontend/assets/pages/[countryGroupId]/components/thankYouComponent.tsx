@@ -29,7 +29,7 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { productDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -228,7 +228,7 @@ export function ThankYouComponent({
 
 	const benefitsChecklist = getBenefits();
 
-	const deliveryDate = productDeliveryDate(
+	const deliveryDate = productDeliveryOrStartDate(
 		productKey,
 		ratePlanKey as ActivePaperProductOptions,
 	);
