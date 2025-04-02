@@ -23,6 +23,7 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import type { PersistableFormFields } from './checkout/helpers/stripeCheckoutSession';
 import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
@@ -67,6 +68,28 @@ const getPromotionFromProductPrices = (
 		fulfilmentOption,
 		productOptions,
 	);
+};
+
+const attemptToRetrievePersistedFormData = (
+	urlSearchParams: URLSearchParams,
+): PersistableFormFields | undefined => {
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	if (maybeCheckoutSessionId) {
+		const persistedFormData = getFormDetails(maybeCheckoutSessionId);
+
+		if (persistedFormData) {
+			return persistedFormData;
+		}
+
+		// If there's no persisted data, remove the checkoutSessionId from the URL
+		const url = new URL(window.location.href);
+		url.searchParams.delete(checkoutSessionIdUrlParam);
+		window.location.href = url.toString();
+	}
+
+	return undefined;
 };
 
 export function Checkout({
@@ -261,20 +284,7 @@ export function Checkout({
 		);
 	}, []);
 
-	const checkoutSessionIdUrlParam = 'checkoutSessionId';
-	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
-
-	let persistedFormData;
-	if (maybeCheckoutSessionId) {
-		persistedFormData = getFormDetails(maybeCheckoutSessionId);
-
-		// If there's no persisted data, remove the checkoutSessionId from the URL
-		if (!persistedFormData) {
-			const url = new URL(window.location.href);
-			url.searchParams.delete(checkoutSessionIdUrlParam);
-			window.location.href = url.toString();
-		}
-	}
+	const persistedFormData = attemptToRetrievePersistedFormData(urlSearchParams);
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
