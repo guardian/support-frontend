@@ -241,6 +241,7 @@ export function ThankYouComponent({
 		csrf,
 		isOneOff,
 		isSupporterPlus,
+		startDate,
 		undefined,
 		undefined,
 		isTier3,
@@ -248,7 +249,6 @@ export function ThankYouComponent({
 		undefined,
 		undefined,
 		payment.finalAmount,
-		startDate,
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 	);
