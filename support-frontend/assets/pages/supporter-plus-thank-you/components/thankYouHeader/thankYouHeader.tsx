@@ -40,7 +40,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	startDate: string;
+	startDate?: string;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;

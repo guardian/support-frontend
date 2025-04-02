@@ -312,13 +312,34 @@ AusMap.args = {
 	ctas: <AusMapCTA />,
 };
 
-export const WhatNextSignedIn = Template.bind({});
+export const WhatNextNoStartDate = Template.bind({});
+WhatNextNoStartDate.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	bodyCopy: <WhatNext amount={'12'} />,
+};
 
+export const WhatNextSignedIn = Template.bind({});
 WhatNextSignedIn.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	ctas: (
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+		/>
+	),
+};
+
+export const WhatNextSignedOut = Template.bind({});
+WhatNextSignedOut.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	bodyCopy: (
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
@@ -327,17 +348,7 @@ WhatNextSignedIn.args = {
 	),
 };
 
-export const WhatNextSignedOut = Template.bind({});
-
-WhatNextSignedOut.args = {
-	moduleType: 'whatNext',
-	icon: getThankYouModuleIcon('whatNext'),
-	header: 'What happens next?',
-	ctas: <WhatNext amount={'12'} startDate={'Friday, March 28, 2025'} />,
-};
-
 export const WhatNextObserverPaper = Template.bind({});
-
 WhatNextObserverPaper.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
@@ -352,7 +363,6 @@ WhatNextObserverPaper.args = {
 };
 
 export const WhatNextObserverSubsCard = Template.bind({});
-
 WhatNextObserverSubsCard.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),

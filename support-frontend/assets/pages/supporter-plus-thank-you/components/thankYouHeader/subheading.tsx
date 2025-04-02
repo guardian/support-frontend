@@ -15,7 +15,7 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	startDate: string;
+	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
 
@@ -62,7 +62,7 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
-	startDate: string,
+	startDate?: string,
 	ratePlanKey?: string,
 ) => {
 	const paperProductsKeys: ActiveProductKey[] = [
@@ -82,7 +82,9 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
-		const observerCopy = `You will receive your newspapers from ${startDate}.`;
+		const observerCopy = startDate
+			? `You will receive your newspapers from ${startDate}.`
+			: ``;
 		const thankyouMessage = isObserverPaper
 			? observerCopy
 			: productCatalogDescription[productKey].thankyouMessage;
