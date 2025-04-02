@@ -8,6 +8,7 @@ import {
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -83,8 +84,10 @@ const productDeliveryOrStartDate = (
 			const paperDeliveryDate =
 				productKey === 'SubscriptionCard'
 					? getPaymentStartDate(Date.now(), paperProductOptions)
-					: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
-			// paper delivery date array empty check
+					: productKey === 'HomeDelivery'
+					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
+					: getVoucherDays(Date.now(), paperProductOptions)[0];
+			// paper home and voucher delivery date array empty check
 			if (paperDeliveryDate === undefined) {
 				return undefined;
 			}
