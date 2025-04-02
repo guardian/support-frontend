@@ -231,6 +231,8 @@ export function Checkout({
 		countryId,
 		currencyKey,
 		isTestUser,
+		productKey,
+		ratePlanKey,
 	);
 	const stripePromise = loadStripe(stripePublicKey);
 

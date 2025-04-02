@@ -1,5 +1,5 @@
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { StripeAccount } from 'helpers/forms/stripe';
+import type { StripeAccountType } from 'helpers/forms/stripe';
 
 type StripePaymentRequestButtonData = {
 	buttonClicked: boolean;
@@ -8,12 +8,12 @@ type StripePaymentRequestButtonData = {
 };
 
 export type PaymentRequestError = {
-	account: StripeAccount;
+	account: StripeAccountType;
 	error: ErrorReason;
 };
 
 export type PaymentRequestButtonState = Record<
-	StripeAccount,
+	StripeAccountType,
 	StripePaymentRequestButtonData
 >;
 
