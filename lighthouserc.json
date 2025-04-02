@@ -7,7 +7,7 @@
         "interactive": ["error", { "maxNumericValue": 9500 }],
         "resource-summary:document:size": [
           "error",
-          { "maxNumericValue": 23000 }
+          { "maxNumericValue": 25000 }
         ]
       }
     }

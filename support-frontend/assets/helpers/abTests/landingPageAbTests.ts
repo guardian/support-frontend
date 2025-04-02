@@ -1,21 +1,21 @@
 import seedrandom from 'seedrandom';
+import { getSettings } from '../globalsAndSwitches/globals';
 import type {
 	LandingPageTest,
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
+import { CountryGroup } from '../internationalisation/classes/countryGroup';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import type { Participations } from './models';
+import { getMvtId } from './mvt';
 import {
 	getSessionParticipations,
 	LANDING_PAGE_PARTICIPATIONS_KEY,
 	setSessionParticipations,
 } from './sessionStorage';
 
-export type LandingPageSelection = LandingPageVariant & { testName: string };
-
 // Fallback config in case there's an issue getting it from the server
-export const fallBackLandingPageSelection: LandingPageSelection = {
-	testName: 'FALLBACK_LANDING_PAGE',
+export const fallBackLandingPageSelection: LandingPageVariant = {
 	name: 'CONTROL',
 	copy: {
 		heading: 'Support fearless, independent journalism',
@@ -84,17 +84,43 @@ function randomNumber(mvtId: number, seed: string): number {
 
 const landingPageRegex = '^/.*/contribute(/.*)?$';
 function isLandingPage(path: string) {
-	return !!path && path.match(landingPageRegex);
+	return !!path && !!path.match(landingPageRegex);
 }
 
+/**
+ * getLandingPageParticipations will always return a landing page variant, regardless of which
+ * page the user is on. We sometimes need these settings on other pages as well.
+ *
+ * If the user is on the landing page, or session storage contains a landing page participation,
+ * then it will also return the participations data for tracking.
+ * Otherwise we assume the user has not arrived via the landing page, and the participations
+ * object will be empty because we do not need to track it.
+ */
+interface LandingPageParticipationsResult {
+	variant: LandingPageVariant;
+	participations: Participations;
+}
 export function getLandingPageParticipations(
-	countryGroupId: CountryGroupId,
-	path: string,
-	tests: LandingPageTest[] = [],
-	mvtId: number,
-): Participations | undefined {
-	if (isLandingPage(path)) {
-		// This is a landing page, assign user to a test + variant
+	countryGroupId: CountryGroupId = CountryGroup.detect(),
+	path: string = window.location.pathname,
+	tests: LandingPageTest[] = getSettings().landingPageTests ?? [],
+	mvtId: number = getMvtId(),
+): LandingPageParticipationsResult {
+	// Is there already a participation in session storage?
+	const sessionParticipations = getSessionParticipations(
+		LANDING_PAGE_PARTICIPATIONS_KEY,
+	);
+	if (
+		sessionParticipations &&
+		Object.entries(sessionParticipations).length > 0
+	) {
+		const variant = getLandingPageVariant(sessionParticipations, tests);
+		return {
+			participations: sessionParticipations,
+			variant,
+		};
+	} else {
+		// No participation in session storage, assign user to a test + variant
 		const test = tests
 			.filter((test) => test.status == 'Live')
 			.find((test) => {
@@ -107,6 +133,9 @@ export function getLandingPageParticipations(
 					return targetedCountryGroups.includes(countryGroupId);
 				}
 			});
+
+		// Only track participation if user is on the landing page
+		const trackParticipation = isLandingPage(path);
 
 		if (test) {
 			const idx = randomNumber(mvtId, test.name) % test.variants.length;
@@ -122,14 +151,19 @@ export function getLandingPageParticipations(
 					LANDING_PAGE_PARTICIPATIONS_KEY,
 				);
 
-				return participations;
+				return {
+					participations: trackParticipation ? participations : {},
+					variant,
+				};
 			}
 		}
-		// No test assigned
-		return;
-	} else {
-		// This is not a landing page, but check if the session has a landing page test participation
-		return getSessionParticipations(LANDING_PAGE_PARTICIPATIONS_KEY);
+		// No test found, use the fallback
+		return {
+			participations: trackParticipation
+				? { FALLBACK_LANDING_PAGE: fallBackLandingPageSelection.name }
+				: ({} as Participations),
+			variant: fallBackLandingPageSelection,
+		};
 	}
 }
 
@@ -137,7 +171,7 @@ export function getLandingPageParticipations(
 export function getLandingPageVariant(
 	participations: Participations,
 	landingPageTests: LandingPageTest[] = [],
-): LandingPageSelection {
+): LandingPageVariant {
 	for (const test of landingPageTests) {
 		// Is the user in this test?
 		const variantName = participations[test.name];
@@ -146,10 +180,7 @@ export function getLandingPageVariant(
 				(variant) => variant.name === variantName,
 			);
 			if (variant) {
-				return {
-					testName: test.name,
-					...variant,
-				};
+				return variant;
 			}
 		}
 	}

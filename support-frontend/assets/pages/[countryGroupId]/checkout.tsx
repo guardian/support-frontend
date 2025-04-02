@@ -20,6 +20,7 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { CheckoutComponent } from './components/checkoutComponent';
@@ -28,6 +29,7 @@ type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();
@@ -66,7 +68,12 @@ const getPromotionFromProductPrices = (
 	);
 };
 
-export function Checkout({ geoId, appConfig, abParticipations }: Props) {
+export function Checkout({
+	geoId,
+	appConfig,
+	abParticipations,
+	landingPageSettings,
+}: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -110,7 +117,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountredAmount` the amount with a discountApplied
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
@@ -171,9 +178,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			billingPeriod,
 		);
 
-		const discountedPrice = promotion?.discountedPrice
-			? promotion.discountedPrice
-			: undefined;
+		const discountedPrice =
+			promotion !== undefined ? promotion.discountedPrice : undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -222,7 +228,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'DigitalSubscription'
 		) {
 			elementsOptions = {
-				mode: 'payment',
+				mode: 'subscription',
 				/**
 				 * Stripe amounts are in the "smallest currency unit"
 				 * @see https://docs.stripe.com/api/charges/object
@@ -230,7 +236,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
-				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}
@@ -273,6 +278,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
+				landingPageSettings={landingPageSettings}
 			/>
 		</Elements>
 	);

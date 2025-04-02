@@ -23,7 +23,7 @@ const nonUsTest: LandingPageTest = {
 		{
 			name: 'CONTROL',
 			copy: {
-				heading: 'Support fearless, independent journalism',
+				heading: 'Support fearless, independent journalism!',
 				subheading:
 					"We're not owned by a billionaire or shareholders - our readers support us. Choose to join with one of the options below. <strong>Cancel anytime.</strong>",
 			},
@@ -39,7 +39,7 @@ const usTest: LandingPageTest = {
 		{
 			name: 'CONTROL',
 			copy: {
-				heading: 'Support fearless, independent journalism',
+				heading: 'Support fearless, independent journalism!',
 				subheading:
 					"We're not owned by a billionaire or profit-driven corporation: our fiercely independent journalism is funded by our readers. Monthly giving makes the most impact (and you can cancel anytime). Thank you.",
 			},
@@ -63,7 +63,10 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toEqual({ [nonUsTest.name]: 'CONTROL' });
+		expect(result).toEqual({
+			variant: nonUsTest.variants[0],
+			participations: { [nonUsTest.name]: 'CONTROL' },
+		});
 	});
 
 	it('assigns a user to the US test on US landing page', () => {
@@ -73,7 +76,10 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toEqual({ [usTest.name]: 'CONTROL' });
+		expect(result).toEqual({
+			variant: usTest.variants[0],
+			participations: { [usTest.name]: 'CONTROL' },
+		});
 	});
 
 	it('assigns a user to the UK test on a checkout page if it is in session storage', () => {
@@ -88,7 +94,10 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toEqual({ [nonUsTest.name]: 'CONTROL' });
+		expect(result).toEqual({
+			variant: nonUsTest.variants[0],
+			participations: { [nonUsTest.name]: 'CONTROL' },
+		});
 	});
 
 	it('does not assign a user to the UK test on a checkout page if it is *not* in session storage', () => {
@@ -98,7 +107,7 @@ describe('getLandingPageParticipations', () => {
 			tests,
 			mvtId,
 		);
-		expect(result).toBeUndefined();
+		expect(result.participations).toEqual({});
 	});
 });
 
@@ -110,10 +119,7 @@ describe('getLandingPageVariant', () => {
 			[nonUsTest.name]: 'CONTROL',
 		};
 		const result = getLandingPageVariant(participations, tests);
-		expect(result).toEqual({
-			...nonUsTest.variants[0],
-			testName: nonUsTest.name,
-		});
+		expect(result).toEqual(nonUsTest.variants[0]);
 	});
 
 	it('falls back on default settings if no landing page test matches', () => {

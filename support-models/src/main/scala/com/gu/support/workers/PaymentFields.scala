@@ -17,7 +17,7 @@ case class PayPalPaymentFields(baid: String) extends PaymentFields
 case class StripePaymentFields(
     paymentMethod: PaymentMethodId,
     stripePaymentType: Option[StripePaymentType],
-    stripePublicKey: Option[StripePublicKey], // this is only optional until all checkouts are updated
+    stripePublicKey: StripePublicKey,
 ) extends PaymentFields {
   override def describe: String =
     stripePaymentType.map(_.getClass.getSimpleName.replaceAll("\\$", "")).getOrElse("Stripe")

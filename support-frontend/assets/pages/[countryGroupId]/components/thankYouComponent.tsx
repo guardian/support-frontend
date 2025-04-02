@@ -41,8 +41,7 @@ import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHe
 import { productDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
-import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
-import { getSettings } from '../../../helpers/globalsAndSwitches/globals';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -93,6 +92,7 @@ export type CheckoutComponentProps = {
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 export type ObserverPaperType =
@@ -109,6 +109,7 @@ export function ThankYouComponent({
 	promotion,
 	identityUserType,
 	abParticipations,
+	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
@@ -248,10 +249,6 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			const landingPageSettings = getLandingPageVariant(
-				abParticipations,
-				getSettings().landingPageTests,
-			);
 			// Also show SupporterPlus benefits for TierThree
 			const tierThreeAdditionalBenefits =
 				productKey === 'TierThree'
