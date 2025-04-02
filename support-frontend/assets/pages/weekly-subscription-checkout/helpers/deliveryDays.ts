@@ -76,15 +76,17 @@ const productDeliveryOrStartDate = (
 		case 'NationalDelivery':
 		case 'HomeDelivery':
 		case 'SubscriptionCard': {
+			// paper productOption undefined check
 			if (paperProductOptions === undefined) {
-				throw new Error(`ratePlan not found for ${productKey}`);
+				return undefined;
 			}
 			const paperDeliveryDate =
 				productKey === 'SubscriptionCard'
 					? getPaymentStartDate(Date.now(), paperProductOptions)
 					: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+			// paper delivery date array empty check
 			if (paperDeliveryDate === undefined) {
-				throw new Error('delivery date not found for Home Delivery');
+				return undefined;
 			}
 			return paperDeliveryDate;
 		}
@@ -98,8 +100,9 @@ const productDeliveryOrStartDate = (
 					date.endsWith(dateSuffix),
 				);
 			});
+			// guardian weekly delivery date array empty check
 			if (publicationStartDays[0] === undefined) {
-				throw new Error('delivery date not found for Guardian Weekly');
+				return undefined;
 			}
 			return publicationStartDays[0];
 		}
