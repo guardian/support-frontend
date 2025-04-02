@@ -87,6 +87,20 @@ function isLandingPage(path: string) {
 	return !!path && !!path.match(landingPageRegex);
 }
 
+function getParticipationFromQueryString(
+	queryString: string,
+): Participations | undefined {
+	const params = new URLSearchParams(queryString);
+	const value = params.get(`force-landing-page`);
+	if (value) {
+		const [testName, variantName] = value.split(':');
+		if (testName && variantName) {
+			return { [testName]: variantName };
+		}
+	}
+	return;
+}
+
 /**
  * getLandingPageParticipations will always return a landing page variant, regardless of which
  * page the user is on. We sometimes need these settings on other pages as well.
@@ -105,7 +119,18 @@ export function getLandingPageParticipations(
 	path: string = window.location.pathname,
 	tests: LandingPageTest[] = getSettings().landingPageTests ?? [],
 	mvtId: number = getMvtId(),
+	queryString: string = window.location.search,
 ): LandingPageParticipationsResult {
+	// Is the participation forced in the url querystring?
+	const urlParticipations = getParticipationFromQueryString(queryString);
+	if (urlParticipations) {
+		const variant = getLandingPageVariant(urlParticipations, tests);
+		return {
+			participations: urlParticipations,
+			variant,
+		};
+	}
+
 	// Is there already a participation in session storage?
 	const sessionParticipations = getSessionParticipations(
 		LANDING_PAGE_PARTICIPATIONS_KEY,
