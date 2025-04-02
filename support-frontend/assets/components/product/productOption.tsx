@@ -82,7 +82,7 @@ function ProductOption(props: Product): JSX.Element {
 				&:first-of-type {
 					margin-top: calc((20px * 1.5) + 8px) !important;
 				}
-				/* 16px alloted for margin between product options when a tag is present */
+				/* 16px alloted for margin between product options when a label is present */
 				&:not(first-of-type) {
 					margin-top: calc((20px * 1.5) + 8px + 16px) !important;
 				}

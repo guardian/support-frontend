@@ -46,7 +46,6 @@ const priceBoxes = css`
 `;
 
 const pricesBoxesGridLayout = css`
-	flex-direction: column;
 	${between.tablet.and.leftCol} {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
