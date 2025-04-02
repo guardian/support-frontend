@@ -329,7 +329,7 @@ WhatNextSignedIn.args = {
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
-			isSignedIn={false}
+			isSignedIn={true}
 		/>
 	),
 };
@@ -343,7 +343,7 @@ WhatNextSignedOut.args = {
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
-			isSignedIn={true}
+			isSignedIn={false}
 		/>
 	),
 };
@@ -357,6 +357,7 @@ WhatNextObserverPaper.args = {
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
 			isObserver={'ObserverPaper'}
 		/>
 	),
@@ -371,6 +372,7 @@ WhatNextObserverSubsCard.args = {
 		<WhatNext
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
 			isObserver={'ObserverSubscriptionCard'}
 		/>
 	),

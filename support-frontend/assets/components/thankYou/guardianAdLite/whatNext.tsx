@@ -27,11 +27,11 @@ export function WhatNext({
 	const displayBulletItems: string[] = bulletAllItems.filter((item, index) => {
 		switch (index) {
 			case 0:
-				return item;
+				return !isObserver && item;
 			case 1:
-				return !!startDate;
+				return !isObserver && !!startDate;
 			case 2:
-				return isSignedIn;
+				return !isObserver && isSignedIn;
 			case 3:
 			case 4:
 				return !!isObserver;

@@ -8,6 +8,7 @@ import {
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -64,7 +65,7 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-const productDeliveryDate = (
+const productDeliveryOrStartDate = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
 ): Date | undefined => {
@@ -77,15 +78,19 @@ const productDeliveryDate = (
 		case 'NationalDelivery':
 		case 'HomeDelivery':
 		case 'SubscriptionCard': {
+			// paper productOption undefined check
 			if (paperProductOptions === undefined) {
-				throw new Error(`ratePlan not found for ${productKey}`);
+				return undefined;
 			}
 			const paperDeliveryDate =
 				productKey === 'SubscriptionCard'
 					? getPaymentStartDate(Date.now(), paperProductOptions)
-					: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+					: productKey === 'HomeDelivery'
+					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
+					: getVoucherDays(Date.now(), paperProductOptions)[0];
+			// paper home and voucher delivery date array empty check
 			if (paperDeliveryDate === undefined) {
-				throw new Error('delivery date not found for Home Delivery');
+				return undefined;
 			}
 			return paperDeliveryDate;
 		}
@@ -99,8 +104,9 @@ const productDeliveryDate = (
 					date.endsWith(dateSuffix),
 				);
 			});
+			// guardian weekly delivery date array empty check
 			if (publicationStartDays[0] === undefined) {
-				throw new Error('delivery date not found for Guardian Weekly');
+				return undefined;
 			}
 			return publicationStartDays[0];
 		}
@@ -113,5 +119,5 @@ export {
 	getWeeklyDays,
 	addDays,
 	getTierThreeDeliveryDate,
-	productDeliveryDate,
+	productDeliveryOrStartDate,
 };
