@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import {
-	getStripeKey,
+	getStripeKeyForCountry,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
 import {
@@ -38,7 +38,7 @@ export function ContributionsStripe({
 
 	useEffect(() => {
 		const stripeAccount = stripeAccountForContributionType[contributionType];
-		const publicKey = getStripeKey(
+		const publicKey = getStripeKeyForCountry(
 			stripeAccount,
 			countryId,
 			currencyId,

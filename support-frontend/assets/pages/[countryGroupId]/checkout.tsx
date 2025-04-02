@@ -2,7 +2,10 @@ import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
-import { getStripeKey } from 'helpers/forms/stripe';
+import {
+	getStripeKeyForCountry,
+	getStripeKeyForProduct,
+} from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -226,14 +229,9 @@ export function Checkout({
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
-	const stripePublicKey = getStripeKey(
-		'REGULAR',
-		countryId,
-		currencyKey,
-		isTestUser,
-		productKey,
-		ratePlanKey,
-	);
+	const stripePublicKey =
+		getStripeKeyForProduct('REGULAR', productKey, ratePlanKey, isTestUser) ??
+		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
 	const stripePromise = loadStripe(stripePublicKey);
 
 	const stripeExpressCheckoutSwitch =

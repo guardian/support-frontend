@@ -2,7 +2,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
-import { getStripeKey } from 'helpers/forms/stripe';
+import { getStripeKeyForCountry } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -26,7 +26,7 @@ function StripeProviderForCountry(props: PropTypes): JSX.Element {
 	const [stripeObject, setStripeObject] = useState<stripeJs.Stripe | null>(
 		null,
 	);
-	const stripeKey = getStripeKey(
+	const stripeKey = getStripeKeyForCountry(
 		'REGULAR',
 		props.country,
 		props.currency,

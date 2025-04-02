@@ -21,24 +21,7 @@ const stripeAccountForContributionType: Record<
 	ANNUAL: 'REGULAR',
 };
 
-function getStripeKey(
-	stripeAccountType: StripeAccountType,
-	country: IsoCountry,
-	currency: IsoCurrency,
-	isTestUser: boolean,
-	productKey: ActiveProductKey,
-	ratePlanKey: string,
-): string {
-	return (
-		getStripeKeyForProduct(
-			stripeAccountType,
-			productKey,
-			ratePlanKey,
-			isTestUser,
-		) ?? getStripeKeyForRegion(stripeAccountType, country, currency, isTestUser)
-	);
-}
-function getStripeKeyForRegion(
+function getStripeKeyForCountry(
 	stripeAccountType: StripeAccountType,
 	country: IsoCountry,
 	currency: IsoCurrency,
@@ -106,4 +89,8 @@ export function useStripeAccount(stripeKey: string): StripeJs | null {
 	return stripeSdk;
 }
 
-export { stripeAccountForContributionType, getStripeKey };
+export {
+	stripeAccountForContributionType,
+	getStripeKeyForCountry,
+	getStripeKeyForProduct,
+};
