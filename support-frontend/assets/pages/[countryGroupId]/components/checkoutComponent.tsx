@@ -153,12 +153,20 @@ type CheckoutComponentProps = {
 	landingPageSettings: LandingPageVariant;
 };
 
-const shouldUseStripeHostedCheckout = (
+const isSundayOnlyNewspaperSub = (
 	productKey: ProductKey,
 	ratePlanKey: string,
 ) =>
 	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
 	ratePlanKey === 'Sunday';
+
+const shouldUseStripeHostedCheckout = (
+	productKey: ProductKey,
+	ratePlanKey: string,
+) => isSundayOnlyNewspaperSub(productKey, ratePlanKey);
+
+const shouldOfferPayPal = (productKey: ProductKey, ratePlanKey: string) =>
+	!isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 
 export function CheckoutComponent({
 	geoId,
@@ -315,7 +323,7 @@ export function CheckoutComponent({
 		shouldUseStripeHostedCheckout(productKey, ratePlanKey)
 			? StripeHostedCheckout
 			: Stripe,
-		PayPal,
+		shouldOfferPayPal(productKey, ratePlanKey) && PayPal,
 	]
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
