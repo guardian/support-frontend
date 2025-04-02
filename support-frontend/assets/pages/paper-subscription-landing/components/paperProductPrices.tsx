@@ -150,17 +150,21 @@ const copy: Record<
 	},
 };
 
-// For most purposes we want Sunday to be active so that we can go through the
+// For most purposes we want Sunday and Sixday to be active so that we can go through the
 // checkout flow, but we don't want to display it as an option to the user.
-const excludingSunday = (productOption: ActivePaperProductOptions) =>
-	productOption !== 'Sunday';
+const excludeSundayAndSixday = (productOption: ActivePaperProductOptions) =>
+	!['Sunday', 'Sixday'].includes(productOption);
 
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
-): Product[] =>
-	ActivePaperProductTypes.filter(excludingSunday).map((productOption) => {
+): Product[] => {
+	const visiablePaperProductTypes = shouldShowObserverCard()
+		? ActivePaperProductTypes
+		: ActivePaperProductTypes.filter(excludeSundayAndSixday);
+
+	return visiablePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',

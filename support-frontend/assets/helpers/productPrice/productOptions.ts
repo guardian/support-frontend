@@ -37,18 +37,11 @@ export type PaperProductOptions =
 
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Everyday,
-	Weekend,
-	Saturday,
-	Sunday,
-] as const;
-
-const ExtendedActivePaperProductTypes: readonly PaperProductOptions[] = [
-	Everyday,
 	Sixday,
 	Weekend,
 	Saturday,
 	Sunday,
-];
+] as const;
 
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
@@ -143,7 +136,6 @@ export {
 	Everyday,
 	EverydayPlus,
 	ActivePaperProductTypes,
-	ExtendedActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
 	productOptionIfDigiAddOnChanged,
