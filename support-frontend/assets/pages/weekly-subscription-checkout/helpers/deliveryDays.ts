@@ -1,8 +1,13 @@
+import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -59,14 +64,54 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-function getGuardianAdLiteDate(today?: number) {
-	const firstValidDate = addDays(new Date(today ?? new Date()), 15);
-	return firstValidDate;
-}
+const productDeliveryDate = (
+	productKey: ActiveProductKey,
+	paperProductOptions?: ActivePaperProductOptions,
+): Date | undefined => {
+	console.log(paperProductOptions);
+	switch (productKey) {
+		case 'GuardianAdLite':
+			return addDays(new Date(), 15);
+		case 'TierThree':
+			return getTierThreeDeliveryDate();
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+		case 'SubscriptionCard': {
+			if (paperProductOptions === undefined) {
+				throw new Error(`ratePlan not found for ${productKey}`);
+			}
+			const paperDeliveryDate =
+				productKey === 'SubscriptionCard'
+					? getPaymentStartDate(Date.now(), paperProductOptions)
+					: getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+			if (paperDeliveryDate === undefined) {
+				throw new Error('delivery date not found for Home Delivery');
+			}
+			return paperDeliveryDate;
+		}
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld': {
+			const guardianWeeklyDeliveryDate = getWeeklyDays();
+			const publicationStartDays = guardianWeeklyDeliveryDate.filter((day) => {
+				const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+				const date = formatMachineDate(day);
+				return !invalidPublicationDates.some((dateSuffix) =>
+					date.endsWith(dateSuffix),
+				);
+			});
+			if (publicationStartDays[0] === undefined) {
+				throw new Error('delivery date not found for Guardian Weekly');
+			}
+			return publicationStartDays[0];
+		}
+		default:
+			return undefined;
+	}
+};
 
 export {
 	getWeeklyDays,
 	addDays,
 	getTierThreeDeliveryDate,
-	getGuardianAdLiteDate,
+	productDeliveryDate,
 };

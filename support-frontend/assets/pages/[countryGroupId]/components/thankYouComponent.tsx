@@ -11,6 +11,7 @@ import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -28,7 +29,7 @@ import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { productDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -227,6 +228,12 @@ export function ThankYouComponent({
 
 	const benefitsChecklist = getBenefits();
 
+	const deliveryDate = productDeliveryDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+	);
+	const startDate = deliveryDate ? formatUserDate(deliveryDate) : '';
+
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
 		countryGroupId,
@@ -241,7 +248,7 @@ export function ThankYouComponent({
 		undefined,
 		undefined,
 		payment.finalAmount,
-		formatUserDate(getGuardianAdLiteDate()),
+		startDate,
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
 	);
