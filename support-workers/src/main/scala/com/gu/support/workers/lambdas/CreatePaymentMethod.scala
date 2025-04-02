@@ -58,6 +58,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createDirectDebitPaymentMethod(dd, user)
       case sepa: SepaPaymentFields =>
         createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
+      case _: StripeHostedCheckoutPaymentFields =>
+        Future.failed(new RuntimeException("Stripe hosted checkout not implemented on the backend yet!"))
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }

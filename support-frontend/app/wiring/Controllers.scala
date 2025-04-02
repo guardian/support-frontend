@@ -165,6 +165,7 @@ trait Controllers {
     appConfig.guardianDomain,
     paperRoundServiceProvider,
     userBenefitsApiServiceProvider,
+    stripeCheckoutSessionService,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

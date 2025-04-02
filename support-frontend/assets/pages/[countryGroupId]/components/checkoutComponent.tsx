@@ -47,6 +47,7 @@ import {
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
+	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
@@ -151,6 +152,13 @@ type CheckoutComponentProps = {
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
+
+const shouldUseStripeHostedCheckout = (
+	productKey: ProductKey,
+	ratePlanKey: string,
+) =>
+	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
+	ratePlanKey === 'Sunday';
 
 export function CheckoutComponent({
 	geoId,
@@ -304,7 +312,9 @@ export function CheckoutComponent({
 		countryGroupId === 'EURCountries' && Sepa,
     */
 		countryId === 'GB' && DirectDebit,
-		Stripe,
+		shouldUseStripeHostedCheckout(productKey, ratePlanKey)
+			? StripeHostedCheckout
+			: Stripe,
 		PayPal,
 	]
 		.filter(isPaymentMethod)
@@ -485,7 +495,9 @@ export function CheckoutComponent({
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');
 			}
-			const thankYouPageUrl = await submitForm({
+			// For StripeHostedCheckout successUrl is a hosted Stripe checkout page
+			// for other payment methods it's the thank you page.
+			const successUrl = await submitForm({
 				geoId,
 				productKey: finalProductKey,
 				ratePlanKey,
@@ -498,7 +510,7 @@ export function CheckoutComponent({
 				promotion,
 				contributionAmount,
 			});
-			window.location.href = thankYouPageUrl;
+			window.location.href = successUrl;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
