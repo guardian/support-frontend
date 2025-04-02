@@ -62,6 +62,7 @@ describe('getLandingPageParticipations', () => {
 			'/uk/contribute',
 			tests,
 			mvtId,
+			'',
 		);
 		expect(result).toEqual({
 			variant: nonUsTest.variants[0],
@@ -75,6 +76,7 @@ describe('getLandingPageParticipations', () => {
 			'/us/contribute',
 			tests,
 			mvtId,
+			'',
 		);
 		expect(result).toEqual({
 			variant: usTest.variants[0],
@@ -93,6 +95,7 @@ describe('getLandingPageParticipations', () => {
 			'/uk/one-time-checkout',
 			tests,
 			mvtId,
+			'',
 		);
 		expect(result).toEqual({
 			variant: nonUsTest.variants[0],
@@ -106,8 +109,23 @@ describe('getLandingPageParticipations', () => {
 			'/uk/one-time-checkout',
 			tests,
 			mvtId,
+			'',
 		);
 		expect(result.participations).toEqual({});
+	});
+
+	it('uses the force-landing-page url querystring parameter to force participation', () => {
+		const result = getLandingPageParticipations(
+			'GBPCountries',
+			'/uk/contribute',
+			tests,
+			mvtId,
+			'force-landing-page=LP_DEFAULT_US:CONTROL',
+		);
+		expect(result).toEqual({
+			variant: usTest.variants[0],
+			participations: { [usTest.name]: 'CONTROL' },
+		});
 	});
 });
 
