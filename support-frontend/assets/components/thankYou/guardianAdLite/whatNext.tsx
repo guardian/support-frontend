@@ -16,40 +16,33 @@ export function WhatNext({
 	isSignedIn = false,
 	isObserver,
 }: WhatNextProps): JSX.Element {
-	const bulletAllItems = [
-		'You will receive an email confirming the details of your subscription',
-		`Your payment of £${amount}/month will be taken on ${startDate}`,
-		'You can now start reading the Guardian website on all your devices without personalised advertising',
-		'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
-		`Your newspaper will be delivered to your door.`,
-		'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.',
+	const whatNextItems = [
+		!isObserver
+			? 'You will receive an email confirming the details of your subscription'
+			: '',
+		!isObserver && !!startDate
+			? `Your payment of £${amount}/month will be taken on ${startDate}`
+			: '',
+		!isObserver && isSignedIn
+			? 'You can now start reading the Guardian website on all your devices without personalised advertising'
+			: '',
+		isObserver
+			? 'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.'
+			: '',
+		isObserver ? `Your newspaper will be delivered to your door.` : '',
+		isObserver === 'ObserverSubscriptionCard'
+			? 'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.'
+			: '',
 	];
-	const displayBulletItems: string[] = bulletAllItems.filter((item, index) => {
-		switch (index) {
-			case 0:
-				return !isObserver && item;
-			case 1:
-				return !isObserver && !!startDate;
-			case 2:
-				return !isObserver && isSignedIn;
-			case 3:
-			case 4:
-				return !!isObserver;
-			case 5:
-				return isObserver === 'ObserverSubscriptionCard';
-			default:
-				return false;
-		}
-	});
+
+	const bulletItems: string[] = whatNextItems.filter((item) => item);
+
 	return (
 		<>
 			{isObserver ? (
-				<OrderedList items={displayBulletItems} />
+				<OrderedList items={bulletItems} />
 			) : (
-				<BulletPointedList
-					items={displayBulletItems}
-					color={palette.neutral[7]}
-				/>
+				<BulletPointedList items={bulletItems} color={palette.neutral[7]} />
 			)}
 		</>
 	);
