@@ -28,11 +28,6 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from 'helpers/utilities/dateConversions';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -118,6 +113,7 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	startDate?: string,
 	email?: string,
 	campaignCode?: string,
 	isTier3?: boolean,
@@ -125,7 +121,6 @@ export const getThankYouModuleData = (
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 	finalAmount?: number,
-	startDate?: string,
 	returnAddress?: string,
 	isSignedIn?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
@@ -137,15 +132,6 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
-
-	const days = getWeeklyDays();
-	const publicationStartDays = days.filter((day) => {
-		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-		const date = formatMachineDate(day);
-		return !invalidPublicationDates.some((dateSuffix) =>
-			date.endsWith(dateSuffix),
-		);
-	});
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -256,14 +242,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('subscriptionStart'),
 			header: subscriptionStartHeader,
 			bodyCopy: (
-				<SubscriptionStartItems
-					productKey={productKey}
-					startDate={
-						publicationStartDays[0]
-							? formatUserDate(publicationStartDays[0])
-							: ''
-					}
-				/>
+				<SubscriptionStartItems productKey={productKey} startDate={startDate} />
 			),
 			ctas: null,
 		},
@@ -342,7 +321,7 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<WhatNext
 					amount={(finalAmount ?? '').toString()}
-					startDate={startDate ?? ''}
+					startDate={startDate}
 					isSignedIn={isSignedIn}
 				/>
 			),
