@@ -17,7 +17,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
-import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
 
 const bodyText = css`
 	${textEgyptian15};
@@ -58,10 +58,7 @@ type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-export const signInHeader = (
-	isTier3?: boolean,
-	isObserver?: ObserverPaperType,
-) => {
+export const signInHeader = (isTier3?: boolean, isObserver?: ObserverPrint) => {
 	return isObserver
 		? 'Sign in to access to your account'
 		: isTier3
@@ -74,7 +71,7 @@ export function SignInBodyCopy({
 	isObserver,
 }: {
 	isTierThree?: boolean;
-	isObserver?: ObserverPaperType;
+	isObserver?: ObserverPrint;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 

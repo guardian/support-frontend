@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
 import { WhatNext } from './whatNext';
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
@@ -15,7 +15,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					amount={'12'}
 					startDate={'Friday, March 28, 2025'}
 					isSignedIn={signIn as boolean}
-					isObserver={observerPaperType as ObserverPaperType}
+					isObserver={observerPaperType as ObserverPrint}
 				/>,
 			);
 			expect(container).toMatchSnapshot();

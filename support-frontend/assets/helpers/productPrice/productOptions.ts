@@ -43,7 +43,12 @@ const ActivePaperProductTypesCode = [
 	Saturday,
 	Sunday,
 ] as const;
-const ActivePaperProductTypesProd = [Everyday, Weekend, Saturday] as const;
+const ActivePaperProductTypesProd = [
+	Everyday,
+	Weekend,
+	Saturday,
+	Sunday,
+] as const;
 const ActivePaperProductTypes = isProd()
 	? ActivePaperProductTypesProd
 	: ActivePaperProductTypesCode;

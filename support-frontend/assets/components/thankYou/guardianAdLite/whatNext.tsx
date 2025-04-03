@@ -1,13 +1,13 @@
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
-import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 
 type WhatNextProps = {
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
-	isObserver?: ObserverPaperType;
+	isObserver?: ObserverPrint;
 };
 
 export function WhatNext({

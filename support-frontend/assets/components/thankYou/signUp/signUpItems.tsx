@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
-import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
 
 export const signUpHeader = 'Complete your Guardian account';
 
@@ -10,7 +10,7 @@ export function SignUpBodyCopy({
 	isObserver,
 }: {
 	isTierThree?: boolean;
-	isObserver?: ObserverPaperType;
+	isObserver?: ObserverPrint;
 }): JSX.Element {
 	const upperCopy =
 		'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
