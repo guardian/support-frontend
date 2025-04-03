@@ -363,6 +363,7 @@ export function CheckoutComponent({
 	}, [payPalBAID]);
 	/**
 	 * Checkout session ID forces formOnSubmit
+	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
 	 */
 	useEffect(() => {
 		if (checkoutSession?.checkoutSessionId) {
