@@ -88,10 +88,6 @@ const productDeliveryOrStartDate = (
 					: productKey === 'HomeDelivery'
 					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
 					: getVoucherDays(Date.now(), paperProductOptions)[0];
-			// paper home and voucher delivery date array empty check
-			if (paperDeliveryDate === undefined) {
-				return undefined;
-			}
 			return paperDeliveryDate;
 		}
 		case 'GuardianWeeklyDomestic':
@@ -104,10 +100,6 @@ const productDeliveryOrStartDate = (
 					date.endsWith(dateSuffix),
 				);
 			});
-			// guardian weekly delivery date array empty check
-			if (publicationStartDays[0] === undefined) {
-				return undefined;
-			}
 			return publicationStartDays[0];
 		}
 		default:
