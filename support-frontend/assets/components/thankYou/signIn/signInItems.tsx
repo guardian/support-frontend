@@ -80,7 +80,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	const isTierThreeOrObserver = isTierThree ?? !!isObserver;
+	const isTierThreeOrObserver = isObserver ?? isTierThree ?? false;
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;

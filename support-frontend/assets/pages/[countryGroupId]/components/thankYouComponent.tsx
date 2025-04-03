@@ -95,10 +95,7 @@ export type CheckoutComponentProps = {
 	landingPageSettings: LandingPageVariant;
 };
 
-export type ObserverPrint =
-	| 'ObserverPaper'
-	| 'ObserverSubscriptionCard'
-	| undefined;
+export type ObserverPrint = 'ObserverPaper' | 'ObserverSubscriptionCard';
 
 export function ThankYouComponent({
 	geoId,
@@ -220,7 +217,7 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const isObserver: ObserverPrint =
+	const isObserver: ObserverPrint | undefined =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday'
 			? 'ObserverPaper'
 			: subscriptionCardProductsKey.includes(productKey) &&
