@@ -63,17 +63,13 @@ export const signInHeader = (
 	isTier3?: boolean,
 	observerPrint?: ObserverPrint,
 ) => {
-  if(observerPrint) {
-    return 'Sign in to access to your account';
-  }
-  
-    if(isTier3) {
-   ...
-  }
-  
-  return default
-		? 'Sign in to access all your benefits'
-		: 'Continue to your account';
+	if (observerPrint) {
+		return 'Sign in to access to your account';
+	}
+	if (isTier3) {
+		return 'Sign in to access all your benefits';
+	}
+	return 'Continue to your account';
 };
 
 export function SignInBodyCopy({
