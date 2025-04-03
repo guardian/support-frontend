@@ -88,6 +88,7 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { PersistableFormFields } from '../checkout/helpers/stripeCheckoutSession';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -151,6 +152,7 @@ type CheckoutComponentProps = {
 	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
+	persistedFormFields?: PersistableFormFields;
 };
 
 const shouldUseStripeHostedCheckout = (
@@ -176,6 +178,7 @@ export function CheckoutComponent({
 	forcedCountry,
 	abParticipations,
 	landingPageSettings,
+	persistedFormFields,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -366,25 +369,47 @@ export function CheckoutComponent({
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(user?.firstName ?? '');
-	const [lastName, setLastName] = useState(user?.lastName ?? '');
-	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
+	const [firstName, setFirstName] = useState(
+		persistedFormFields?.personalData.firstName ?? user?.firstName ?? '',
+	);
+	const [lastName, setLastName] = useState(
+		persistedFormFields?.personalData.lastName ?? user?.lastName ?? '',
+	);
+	const [email, setEmail] = useState(
+		persistedFormFields?.personalData.email ?? user?.email ?? '',
+	);
+	const [confirmedEmail, setConfirmedEmail] = useState(
+		persistedFormFields?.personalData.email ?? '',
+	);
 
 	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] = useState('');
+	const [deliveryInstructions, setDeliveryInstructions] = useState(
+		persistedFormFields?.deliveryInstructions ?? '',
+	);
 
 	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] = useState('');
-	const [deliveryLineOne, setDeliveryLineOne] = useState('');
-	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
-	const [deliveryCity, setDeliveryCity] = useState('');
-	const [deliveryState, setDeliveryState] = useState('');
+	const [deliveryPostcode, setDeliveryPostcode] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.postCode ?? '',
+	);
+	const [deliveryLineOne, setDeliveryLineOne] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.lineOne ?? '',
+	);
+	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.lineTwo ?? '',
+	);
+	const [deliveryCity, setDeliveryCity] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.city ?? '',
+	);
+	const [deliveryState, setDeliveryState] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.state ?? '',
+	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
-	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryCountry, setDeliveryCountry] = useState(
+		persistedFormFields?.addressFields.deliveryAddress?.country ?? countryId,
+	);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -427,25 +452,37 @@ export function CheckoutComponent({
 	}, [deliveryPostcode]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useState(true);
+		useState(persistedFormFields?.billingAddressMatchesDelivery ?? true);
 
-	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcode, setBillingPostcode] = useState(
+		persistedFormFields?.addressFields.billingAddress.postCode ?? '',
+	);
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const [billingLineOne, setBillingLineOne] = useState('');
-	const [billingLineTwo, setBillingLineTwo] = useState('');
-	const [billingCity, setBillingCity] = useState('');
+	const [billingLineOne, setBillingLineOne] = useState(
+		persistedFormFields?.addressFields.billingAddress.lineOne ?? '',
+	);
+	const [billingLineTwo, setBillingLineTwo] = useState(
+		persistedFormFields?.addressFields.billingAddress.lineTwo ?? '',
+	);
+	const [billingCity, setBillingCity] = useState(
+		persistedFormFields?.addressFields.billingAddress.city ?? '',
+	);
 	const [billingStateError, setBillingStateError] = useState<string>();
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState('');
+	const [billingState, setBillingState] = useState(
+		persistedFormFields?.addressFields.billingAddress.state ?? '',
+	);
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingCountry, setBillingCountry] = useState(
+		persistedFormFields?.addressFields.billingAddress.country ?? countryId,
+	);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
