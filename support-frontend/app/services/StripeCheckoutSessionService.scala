@@ -32,10 +32,6 @@ case class CheckoutSetupIntent(id: String, payment_method: CheckoutPaymentMethod
 object CheckoutSetupIntent {
   implicit val decoder: Decoder[CheckoutSetupIntent] = deriveDecoder
 }
-case class RetrieveCheckoutSessionResponseSuccess(setup_intent: CheckoutSetupIntent)
-object RetrieveCheckoutSessionResponseSuccess {
-  implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
-}
 
 class StripeCheckoutSessionService(
     configProvider: StripeConfigProvider,
