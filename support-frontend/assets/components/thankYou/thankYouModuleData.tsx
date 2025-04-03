@@ -28,7 +28,7 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
-import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';

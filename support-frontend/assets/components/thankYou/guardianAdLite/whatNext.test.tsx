@@ -1,11 +1,11 @@
 import { render } from '@testing-library/react';
-import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import { WhatNext } from './whatNext';
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	const whatNextItems = [
-		[true, 'ObserverPaper'],
-		[false, 'ObserverSubscriptionCard'],
+		[true, ObserverPrint.Paper],
+		[false, ObserverPrint.SubscriptionCard],
 	];
 	it.each(whatNextItems)(
 		`whatNext renders correctly (signedIn=%s, %s list)`,

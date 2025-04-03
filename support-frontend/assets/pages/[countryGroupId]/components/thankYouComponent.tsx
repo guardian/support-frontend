@@ -36,6 +36,7 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
@@ -94,8 +95,6 @@ export type CheckoutComponentProps = {
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 };
-
-export type ObserverPrint = 'ObserverPaper' | 'ObserverSubscriptionCard';
 
 export function ThankYouComponent({
 	geoId,
@@ -217,10 +216,10 @@ export function ThankYouComponent({
 	const isPrint = printProductsKeys.includes(productKey);
 	const observerPrint: ObserverPrint | undefined =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday'
-			? 'ObserverPaper'
+			? ObserverPrint.Paper
 			: subscriptionCardProductsKey.includes(productKey) &&
 			  ratePlanKey === 'Sunday'
-			? 'ObserverSubscriptionCard'
+			? ObserverPrint.SubscriptionCard
 			: undefined;
 	const isGuardianPrint =
 		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';

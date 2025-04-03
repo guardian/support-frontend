@@ -1,6 +1,6 @@
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
-import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 
 type WhatNextProps = {
@@ -30,7 +30,7 @@ export function WhatNext({
 			? 'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.'
 			: '',
 		observerPrint ? `Your newspaper will be delivered to your door.` : '',
-		observerPrint === 'ObserverSubscriptionCard'
+		observerPrint === ObserverPrint.SubscriptionCard
 			? 'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.'
 			: '',
 	];

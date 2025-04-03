@@ -47,6 +47,7 @@ import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -252,7 +253,7 @@ SignUpObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signUp'),
 	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy observerPrint="ObserverPaper" />,
+	bodyCopy: <SignUpBodyCopy observerPrint={ObserverPrint.Paper} />,
 	ctas: null,
 };
 
@@ -284,14 +285,14 @@ SignInObserver.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true, 'ObserverPaper'),
-	bodyCopy: <SignInBodyCopy observerPrint={'ObserverPaper'} />,
+	header: signInHeader(true, ObserverPrint.Paper),
+	bodyCopy: <SignInBodyCopy observerPrint={ObserverPrint.Paper} />,
 	ctas: (
 		<SignInCTA
 			email={''}
 			csrf={{ token: undefined }}
 			isTierThree={false}
-			observerPrint="ObserverPaper"
+			observerPrint={ObserverPrint.Paper}
 		/>
 	),
 };
@@ -365,7 +366,7 @@ WhatNextObserverPaper.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			observerPrint={'ObserverPaper'}
+			observerPrint={ObserverPrint.Paper}
 		/>
 	),
 };
@@ -380,7 +381,7 @@ WhatNextObserverSubsCard.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			observerPrint={'ObserverSubscriptionCard'}
+			observerPrint={ObserverPrint.SubscriptionCard}
 		/>
 	),
 };

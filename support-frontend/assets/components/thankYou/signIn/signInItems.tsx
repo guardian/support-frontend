@@ -17,7 +17,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
-import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const bodyText = css`
 	${textEgyptian15};
@@ -86,7 +86,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	const isTierThreeOrObserver = observerPrint ?? isTierThree ?? false;
+	const isTierThreeOrObserver = isTierThree ?? observerPrint ?? false;
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
@@ -153,7 +153,7 @@ export function SignInCTA({
 	observerPrint,
 }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
-	const isTierThreeOrObserver = observerPrint ?? isTierThree ?? false;
+	const isTierThreeOrObserver = isTierThree ?? observerPrint ?? false;
 	function fetchSignInLink(payload: { email: string }) {
 		if (!isCodeOrProd()) {
 			return;

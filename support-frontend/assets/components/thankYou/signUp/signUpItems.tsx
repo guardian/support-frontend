@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
-import type { ObserverPrint } from 'pages/[countryGroupId]/components/thankYouComponent';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 export const signUpHeader = 'Complete your Guardian account';
 
