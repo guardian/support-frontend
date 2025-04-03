@@ -286,7 +286,14 @@ SignInObserver.args = {
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true, 'ObserverPaper'),
 	bodyCopy: <SignInBodyCopy isObserver={'ObserverPaper'} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
+	ctas: (
+		<SignInCTA
+			email={''}
+			csrf={{ token: undefined }}
+			isTierThree={false}
+			isObserver="ObserverPaper"
+		/>
+	),
 };
 
 SignIn.decorators = [

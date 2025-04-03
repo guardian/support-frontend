@@ -52,6 +52,7 @@ type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
 	isTierThree?: boolean;
+	isObserver?: ObserverPrint;
 };
 
 type CreateSignInUrlResponse = {
@@ -146,9 +147,10 @@ export function SignInCTA({
 	email,
 	csrf,
 	isTierThree,
+	isObserver,
 }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
-
+	const isTierThreeOrObserver = isObserver ?? isTierThree ?? false;
 	function fetchSignInLink(payload: { email: string }) {
 		if (!isCodeOrProd()) {
 			return;
@@ -193,7 +195,7 @@ export function SignInCTA({
 			iconSide="right"
 			nudgeIcon
 		>
-			{isTierThree ? 'Sign in' : 'Continue'}
+			{isTierThreeOrObserver ? 'Sign in' : 'Continue'}
 		</LinkButton>
 	);
 }

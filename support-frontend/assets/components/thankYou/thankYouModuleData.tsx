@@ -254,7 +254,14 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<SignInBodyCopy isTierThree={isTierThree} isObserver={isObserver} />
 			),
-			ctas: <SignInCTA email={email} csrf={csrf} isTierThree={isTierThree} />,
+			ctas: (
+				<SignInCTA
+					email={email}
+					csrf={csrf}
+					isTierThree={isTierThree}
+					isObserver={isObserver}
+				/>
+			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
 		},
 		signUp: {
