@@ -160,11 +160,11 @@ const getPlans = (
 	productPrices: ProductPrices,
 	abParticipations: Participations,
 ): Product[] => {
-	const visiablePaperProductTypes = shouldShowObserverCard()
+	const visiblePaperProductTypes = shouldShowObserverCard()
 		? ActivePaperProductTypes
 		: ActivePaperProductTypes.filter(excludeSundayAndSixday);
 
-	return visiablePaperProductTypes.map((productOption) => {
+	return visiblePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
