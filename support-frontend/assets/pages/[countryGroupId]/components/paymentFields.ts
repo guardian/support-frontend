@@ -182,7 +182,7 @@ export const getPaymentFieldsForPaymentMethod = async (
 	if (paymentMethod === 'StripeHostedCheckout') {
 		return {
 			paymentType: StripeHostedCheckout,
-			checkoutSessionId: checkoutSessionId ?? '',
+			checkoutSessionId: checkoutSessionId,
 			stripePublicKey,
 		};
 	}

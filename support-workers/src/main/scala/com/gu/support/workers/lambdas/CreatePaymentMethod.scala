@@ -92,8 +92,12 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   private def createStripeHostedPaymentMethod(stripeHosted: StripeHostedPaymentFields, stripeService: StripeService) = {
     val stripeServiceForAccount = stripeService.withPublicKey(stripeHosted.stripePublicKey)
     for {
+      checkoutSessionId <- optionToFuture(
+        stripeHosted.checkoutSessionId,
+        "Missing checkout session id",
+      )
       paymentMethod <- stripeServiceForAccount
-        .retrieveCheckoutSession(stripeHosted.checkoutSessionId)
+        .retrieveCheckoutSession(checkoutSessionId)
         .map(_.setup_intent.payment_method)
       paymentMethodId <- optionToFuture(
         PaymentMethodId(paymentMethod.id),
