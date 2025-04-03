@@ -214,13 +214,21 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const observerPrint: ObserverPrint | undefined =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday'
-			? ObserverPrint.Paper
-			: subscriptionCardProductsKey.includes(productKey) &&
-			  ratePlanKey === 'Sunday'
-			? ObserverPrint.SubscriptionCard
-			: undefined;
+
+	const getObserver = (): ObserverPrint | undefined => {
+		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
+			return ObserverPrint.Paper;
+		}
+		if (
+			subscriptionCardProductsKey.includes(productKey) &&
+			ratePlanKey === 'Sunday'
+		) {
+			return ObserverPrint.SubscriptionCard;
+		}
+		return undefined;
+	};
+	const observerPrint = getObserver();
+
 	const isGuardianPrint =
 		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
@@ -261,7 +269,6 @@ export function ThankYouComponent({
 		}
 		return [];
 	};
-
 	const benefitsChecklist = getBenefits();
 
 	const deliveryDate = productDeliveryOrStartDate(
