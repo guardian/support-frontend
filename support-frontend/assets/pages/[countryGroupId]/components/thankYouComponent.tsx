@@ -237,8 +237,6 @@ export function ThankYouComponent({
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
-	// TESTING TO REMOVE THIS
-	//const isNotRegistered = false;
 	const isNotRegistered = identityUserType === 'new';
 	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
 	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
