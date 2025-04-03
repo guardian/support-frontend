@@ -90,6 +90,11 @@ export function SignInBodyCopy({
 
 	return (
 		<>
+			{isTierThreeOrObserver && (
+				<p>
+					<span>{isTierThree ? upperCopyTier3 : observerCopy}</span>
+				</p>
+			)}
 			{!isTierThreeOrObserver && (
 				<>
 					<p>
@@ -133,11 +138,6 @@ export function SignInBodyCopy({
 						</div>
 					</div>
 				</>
-			)}
-			{isTierThreeOrObserver && (
-				<p>
-					<span>{isTierThree ? upperCopyTier3 : observerCopy}</span>
-				</p>
 			)}
 		</>
 	);
