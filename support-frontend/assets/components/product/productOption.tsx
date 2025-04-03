@@ -4,25 +4,34 @@ import { until } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
+	SvgInfoRound,
 } from '@guardian/source/react-components';
-import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	Channel,
+	type ProductLabelProps,
+} from 'pages/paper-subscription-landing/helpers/products';
+import {
 	button,
 	buttonDiv,
 	priceCopyGridPlacement,
 	productOption,
 	productOptionHighlight,
+	productOptionInfo,
+	productOptionLabel,
+	productOptionLabelObserver,
 	productOptionOfferCopy,
 	productOptionPrice,
 	productOptionPriceCopy,
 	productOptionTitle,
+	productOptionTitleHeading,
 	productOptionUnderline,
 	productOptionVerticalLine,
+	productOptionWithLabel,
 	specialOfferHighlight,
 	specialOfferOption,
 } from './productOptionStyles';
@@ -37,6 +46,7 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
+	productLabel?: ProductLabelProps;
 	label?: string;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
@@ -63,6 +73,7 @@ function ProductOption(props: Product): JSX.Element {
 		}
 	}, [hasBeenSeen]);
 
+	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
 	const productOptionMargin =
 		props.label &&
 		css`
@@ -86,20 +97,35 @@ function ProductOption(props: Product): JSX.Element {
 				props.cssOverrides,
 				productOptionMargin,
 				props.isSpecialOffer ? specialOfferOption : css``,
+				props.productLabel ? productOptionWithLabel : css``,
 			]}
 		>
-			<div css={productOptionVerticalLine}>
-				<h3 css={[productOptionTitle, productOptionUnderline]}>
-					{props.title}
-				</h3>
-				{props.label && (
+			{props.label && (
+				<span
+					css={[
+						productOptionHighlight,
+						props.isSpecialOffer ? specialOfferHighlight : css``,
+					]}
+				>
+					{props.label}
+				</span>
+			)}
+			<div
+				css={[
+					productOptionTitle,
+					productOptionVerticalLine,
+					productOptionUnderline,
+				]}
+			>
+				<h3 css={productOptionTitleHeading}>{props.title}</h3>
+				{props.productLabel && (
 					<span
 						css={[
-							productOptionHighlight,
-							props.isSpecialOffer ? specialOfferHighlight : css``,
+							productOptionLabel,
+							isObserverChannel ? productOptionLabelObserver : css``,
 						]}
 					>
-						{props.label}
+						{props.productLabel.text}
 					</span>
 				)}
 				{props.children && props.children}
@@ -108,13 +134,10 @@ function ProductOption(props: Product): JSX.Element {
 				<p css={[productOptionOfferCopy, productOptionUnderline]}>
 					{props.offerCopy}
 					{props.unavailableOutsideLondon && (
-						<InfoSummary
-							cssOverrides={css`
-								border: 0;
-							`}
-							message=""
-							context="Only available inside Greater London."
-						/>
+						<div css={productOptionInfo}>
+							<SvgInfoRound />
+							<p>Only available inside Greater London.</p>
+						</div>
 					)}
 				</p>
 			</div>

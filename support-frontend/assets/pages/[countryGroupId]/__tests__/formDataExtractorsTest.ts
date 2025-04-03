@@ -1,4 +1,5 @@
 import {
+	extractBillingAddressMatchesDeliveryFromForm,
 	extractDeliverableAddressDataFromForm,
 	extractNonDeliverableAddressDataFromForm,
 	extractPersonalDataFromForm,
@@ -107,5 +108,27 @@ describe('extractNonDeliverableAddressDataFromForm', () => {
 			country: 'UK',
 		});
 		expect(deliveryAddress).toBeUndefined();
+	});
+});
+
+describe('extractBillingAddressMatchesDeliveryFromForm', () => {
+	it('returns true if the checkbox is checked', () => {
+		const formData = new FormData();
+		formData.append('billingAddressMatchesDelivery', 'yes');
+
+		const billingAddressMatchesDelivery =
+			extractBillingAddressMatchesDeliveryFromForm(formData);
+
+		expect(billingAddressMatchesDelivery).toEqual(true);
+	});
+
+	it('returns false if the checkbox is not checked', () => {
+		// If unchecked this just won't appear in the form data
+		const formData = new FormData();
+
+		const billingAddressMatchesDelivery =
+			extractBillingAddressMatchesDeliveryFromForm(formData);
+
+		expect(billingAddressMatchesDelivery).toEqual(false);
 	});
 });

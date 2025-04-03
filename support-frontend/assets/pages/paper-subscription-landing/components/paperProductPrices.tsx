@@ -27,7 +27,8 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
+import { getProductLabel, getTitle } from '../helpers/products';
+import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -69,7 +70,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
-
 const getUnavailableOutsideLondon = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: PaperProductOptions,
@@ -150,17 +150,21 @@ const copy: Record<
 	},
 };
 
-// For most purposes we want Sunday to be active so that we can go through the
+// For most purposes we want Sunday and Sixday to be active so that we can go through the
 // checkout flow, but we don't want to display it as an option to the user.
-const excludingSunday = (productOption: ActivePaperProductOptions) =>
-	productOption !== 'Sunday';
+const excludeSundayAndSixday = (productOption: ActivePaperProductOptions) =>
+	!['Sunday', 'Sixday'].includes(productOption);
 
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
-): Product[] =>
-	ActivePaperProductTypes.filter(excludingSunday).map((productOption) => {
+): Product[] => {
+	const visiblePaperProductTypes = shouldShowObserverCard()
+		? ActivePaperProductTypes
+		: ActivePaperProductTypes.filter(excludeSundayAndSixday);
+
+	return visiblePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
@@ -182,7 +186,10 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
+		const label = productOption === 'Everyday' ? 'Best deal' : '';
+		const productLabel = shouldShowObserverCard()
+			? getProductLabel(productOption)
+			: undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -200,13 +207,15 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label: labelText,
+			label,
+			productLabel,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,
 			),
 		};
 	});
+};
 
 export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
