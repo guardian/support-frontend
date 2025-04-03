@@ -121,8 +121,6 @@ export function ThankYouComponent({
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
-	// TESTING TO REMOVE THIS
-	//const isPending = false;
 	const isPending = order.status === 'pending';
 
 	/**
@@ -298,11 +296,11 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite,
+			!isPending && isNotRegistered && !isGuardianAdLite && !isGuardianPrint,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			isRegisteredAndNotSignedIn && !isGuardianAdLite,
+			isRegisteredAndNotSignedIn && !isGuardianAdLite && !isGuardianPrint,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
