@@ -383,7 +383,7 @@ export function ThankYouComponent({
 					<div css={buttonContainer}>
 						{!!isObserver && (
 							<LinkButton
-								href="https://www.tortoisemedia.com/read"
+								href="https://www.observer.co.uk/welcome"
 								priority="tertiary"
 								onClick={() =>
 									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
