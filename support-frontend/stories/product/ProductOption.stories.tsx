@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Product } from 'components/product/productOption';
 import ProductOptionComponent from 'components/product/productOption';
+import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 
 export default {
 	title: 'Product/Product Option',
@@ -50,6 +51,7 @@ function Template(args: Product) {
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
 			label={args.label}
+			productLabel={args.productLabel}
 			isSpecialOffer={args.isSpecialOffer}
 			onClick={() => undefined}
 			onView={() => undefined}
@@ -81,4 +83,19 @@ SpecialOfferProductOption.args = {
 	buttonCopy: 'Subscribe now',
 	label: 'Special offer',
 	isSpecialOffer: true,
+};
+
+export const ProductOptionWithProductLabel = Template.bind({});
+
+ProductOptionWithProductLabel.args = {
+	title: '6 for 6',
+	price: '£6',
+	offerCopy: '£6 for the first 6 issues',
+	priceCopy: 'then £37.50 per quarter',
+	buttonCopy: 'Subscribe now',
+	label: 'Best deal',
+	productLabel: {
+		text: 'The Guardian',
+		channel: Channel.Guardian,
+	},
 };
