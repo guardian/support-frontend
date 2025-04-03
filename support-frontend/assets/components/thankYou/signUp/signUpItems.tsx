@@ -7,10 +7,10 @@ export const signUpHeader = 'Complete your Guardian account';
 
 export function SignUpBodyCopy({
 	isTierThree,
-	isObserver,
+	observerPrint,
 }: {
 	isTierThree?: boolean;
-	isObserver?: ObserverPrint;
+	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	const upperCopy =
 		'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
@@ -26,9 +26,13 @@ export function SignUpBodyCopy({
 	return (
 		<>
 			<p>
-				{isObserver ? observerCopy : isTierThree ? upperCopyTier3 : upperCopy}
+				{observerPrint
+					? observerCopy
+					: isTierThree
+					? upperCopyTier3
+					: upperCopy}
 			</p>
-			{!isObserver && (
+			{!observerPrint && (
 				<>
 					{!isTierThree && (
 						<div

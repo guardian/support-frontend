@@ -252,7 +252,7 @@ SignUpObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signUp'),
 	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isObserver="ObserverPaper" />,
+	bodyCopy: <SignUpBodyCopy observerPrint="ObserverPaper" />,
 	ctas: null,
 };
 
@@ -285,13 +285,13 @@ SignInObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true, 'ObserverPaper'),
-	bodyCopy: <SignInBodyCopy isObserver={'ObserverPaper'} />,
+	bodyCopy: <SignInBodyCopy observerPrint={'ObserverPaper'} />,
 	ctas: (
 		<SignInCTA
 			email={''}
 			csrf={{ token: undefined }}
 			isTierThree={false}
-			isObserver="ObserverPaper"
+			observerPrint="ObserverPaper"
 		/>
 	),
 };
@@ -365,7 +365,7 @@ WhatNextObserverPaper.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			isObserver={'ObserverPaper'}
+			observerPrint={'ObserverPaper'}
 		/>
 	),
 };
@@ -380,7 +380,7 @@ WhatNextObserverSubsCard.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			isObserver={'ObserverSubscriptionCard'}
+			observerPrint={'ObserverSubscriptionCard'}
 		/>
 	),
 };

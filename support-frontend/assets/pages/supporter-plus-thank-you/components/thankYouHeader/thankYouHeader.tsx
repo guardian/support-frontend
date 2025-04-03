@@ -69,7 +69,7 @@ function ThankYouHeader({
 		'HomeDelivery',
 		'SubscriptionCard',
 	];
-	const isObserverPaper =
+	const isObserverPrint =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	return (
 		<header css={header}>
@@ -81,7 +81,7 @@ function ThankYouHeader({
 				amount={amount}
 				currency={currency}
 				contributionType={contributionType}
-				isObserverPaper={isObserverPaper}
+				isObserverPrint={isObserverPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
@@ -90,11 +90,10 @@ function ThankYouHeader({
 				{showDirectDebitMessage && <DirectDebitMessage />}
 				<Subheading
 					productKey={productKey}
-					ratePlanKey={ratePlanKey}
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
-					isObserverPaper={isObserverPaper}
+					isObserverPrint={isObserverPrint}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
 					startDate={startDate}

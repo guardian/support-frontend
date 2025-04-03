@@ -15,7 +15,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					amount={'12'}
 					startDate={'Friday, March 28, 2025'}
 					isSignedIn={signIn as boolean}
-					isObserver={observerPaperType as ObserverPrint}
+					observerPrint={observerPaperType as ObserverPrint}
 				/>,
 			);
 			expect(container).toMatchSnapshot();

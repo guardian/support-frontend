@@ -186,7 +186,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
-	isObserverPaper: boolean;
+	isObserverPrint: boolean;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
@@ -198,7 +198,7 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
-	isObserverPaper,
+	isObserverPrint,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
@@ -267,7 +267,7 @@ function Heading({
 		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				{isObserverPaper ? (
+				{isObserverPrint ? (
 					<>
 						{getPrintHeaderObserver()}
 						<br css={printlineBreak} />

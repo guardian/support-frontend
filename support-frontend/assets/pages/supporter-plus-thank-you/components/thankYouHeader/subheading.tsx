@@ -11,11 +11,10 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 interface SubheadingProps {
 	productKey: ActiveProductKey;
 	contributionType: ContributionType;
-	ratePlanKey?: string;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	isObserverPaper: boolean;
+	isObserverPrint: boolean;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
@@ -63,16 +62,9 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
+	isObserverPrint: boolean,
 	startDate?: string,
-	ratePlanKey?: string,
 ) => {
-	const paperProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-	];
-	const isObserverPaper =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
 			<span
@@ -86,7 +78,7 @@ const getSubHeadingCopy = (
 		const observerCopy = startDate
 			? `You will receive your newspapers from ${startDate}.`
 			: ``;
-		const thankyouMessage = isObserverPaper
+		const thankyouMessage = isObserverPrint
 			? observerCopy
 			: productCatalogDescription[productKey].thankyouMessage;
 		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
@@ -122,10 +114,9 @@ const getSubHeadingCopy = (
 function Subheading({
 	productKey,
 	contributionType,
-	ratePlanKey,
 	amountIsAboveThreshold,
 	isSignedIn,
-	isObserverPaper,
+	isObserverPrint,
 	identityUserType,
 	paymentStatus,
 	startDate,
@@ -144,15 +135,15 @@ function Subheading({
 		contributionType,
 		isSignedIn,
 		identityUserType,
+		isObserverPrint,
 		startDate,
-		ratePlanKey,
 	);
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
 			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
-			{!isGuardianAdLite && !isPending && !isObserverPaper && (
+			{!isGuardianAdLite && !isPending && !isObserverPrint && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}

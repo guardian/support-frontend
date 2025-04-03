@@ -52,15 +52,18 @@ type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
 	isTierThree?: boolean;
-	isObserver?: ObserverPrint;
+	observerPrint?: ObserverPrint;
 };
 
 type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-export const signInHeader = (isTier3?: boolean, isObserver?: ObserverPrint) => {
-	return isObserver
+export const signInHeader = (
+	isTier3?: boolean,
+	observerPrint?: ObserverPrint,
+) => {
+	return observerPrint
 		? 'Sign in to access to your account'
 		: isTier3
 		? 'Sign in to access all your benefits'
@@ -69,10 +72,10 @@ export const signInHeader = (isTier3?: boolean, isObserver?: ObserverPrint) => {
 
 export function SignInBodyCopy({
 	isTierThree,
-	isObserver,
+	observerPrint,
 }: {
 	isTierThree?: boolean;
-	isObserver?: ObserverPrint;
+	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -81,7 +84,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	const isTierThreeOrObserver = isObserver ?? isTierThree ?? false;
+	const isTierThreeOrObserver = observerPrint ?? isTierThree ?? false;
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
@@ -147,10 +150,10 @@ export function SignInCTA({
 	email,
 	csrf,
 	isTierThree,
-	isObserver,
+	observerPrint,
 }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
-	const isTierThreeOrObserver = isObserver ?? isTierThree ?? false;
+	const isTierThreeOrObserver = observerPrint ?? isTierThree ?? false;
 	function fetchSignInLink(payload: { email: string }) {
 		if (!isCodeOrProd()) {
 			return;

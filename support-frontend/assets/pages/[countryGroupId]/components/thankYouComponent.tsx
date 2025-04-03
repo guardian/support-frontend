@@ -215,7 +215,7 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const isObserver: ObserverPrint | undefined =
+	const observerPrint: ObserverPrint | undefined =
 		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday'
 			? 'ObserverPaper'
 			: subscriptionCardProductsKey.includes(productKey) &&
@@ -288,7 +288,7 @@ export function ThankYouComponent({
 		payment.finalAmount,
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
-		isObserver,
+		observerPrint,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
@@ -324,7 +324,7 @@ export function ThankYouComponent({
 			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite || !!isObserver, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || !!observerPrint, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
@@ -381,7 +381,7 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
-						{!!isObserver && (
+						{!!observerPrint && (
 							<LinkButton
 								href="https://www.observer.co.uk/welcome"
 								priority="tertiary"

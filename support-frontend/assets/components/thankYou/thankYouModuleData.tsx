@@ -124,7 +124,7 @@ export const getThankYouModuleData = (
 	finalAmount?: number,
 	returnAddress?: string,
 	isSignedIn?: boolean,
-	isObserver?: ObserverPrint,
+	observerPrint?: ObserverPrint,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -250,16 +250,19 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, isObserver),
+			header: signInHeader(isTierThree, observerPrint),
 			bodyCopy: (
-				<SignInBodyCopy isTierThree={isTierThree} isObserver={isObserver} />
+				<SignInBodyCopy
+					isTierThree={isTierThree}
+					observerPrint={observerPrint}
+				/>
 			),
 			ctas: (
 				<SignInCTA
 					email={email}
 					csrf={csrf}
 					isTierThree={isTierThree}
-					isObserver={isObserver}
+					observerPrint={observerPrint}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
@@ -268,7 +271,10 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
 			bodyCopy: (
-				<SignUpBodyCopy isTierThree={isTierThree} isObserver={isObserver} />
+				<SignUpBodyCopy
+					isTierThree={isTierThree}
+					observerPrint={observerPrint}
+				/>
 			),
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
@@ -337,7 +343,7 @@ export const getThankYouModuleData = (
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
-					isObserver={isObserver}
+					observerPrint={observerPrint}
 				/>
 			),
 			ctas: null,
