@@ -117,7 +117,7 @@ export const getThankYouModuleData = (
 	startDate?: string,
 	email?: string,
 	campaignCode?: string,
-	isTier3?: boolean,
+	isTierThree?: boolean,
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
@@ -250,15 +250,19 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTier3, isObserver),
-			bodyCopy: <SignInBodyCopy isTier3={isTier3} isObserver={isObserver} />,
-			ctas: <SignInCTA email={email} csrf={csrf} isTier3={isTier3} />,
+			header: signInHeader(isTierThree, isObserver),
+			bodyCopy: (
+				<SignInBodyCopy isTierThree={isTierThree} isObserver={isObserver} />
+			),
+			ctas: <SignInCTA email={email} csrf={csrf} isTierThree={isTierThree} />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: <SignUpBodyCopy isTier3={isTier3} isObserver={isObserver} />,
+			bodyCopy: (
+				<SignUpBodyCopy isTierThree={isTierThree} isObserver={isObserver} />
+			),
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},

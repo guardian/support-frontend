@@ -233,7 +233,7 @@ export function ThankYouComponent({
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTier3 = productKey === 'TierThree';
+	const isTierThree = productKey === 'TierThree';
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -288,7 +288,7 @@ export function ThankYouComponent({
 		startDate,
 		undefined,
 		undefined,
-		isTier3,
+		isTierThree,
 		benefitsChecklist,
 		undefined,
 		undefined,
@@ -310,17 +310,17 @@ export function ThankYouComponent({
 			isRegisteredAndNotSignedIn && !isGuardianAdLite,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTier3 && showNewspaperArchiveBenefit,
+			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3 || isGuardianPrint, 'subscriptionStart'),
-		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isTierThree || isGuardianPrint, 'subscriptionStart'),
+		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
-				(!(isTier3 && showNewspaperArchiveBenefit) &&
+				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
 					!isGuardianAdLite),
 			'feedback',
@@ -328,7 +328,7 @@ export function ThankYouComponent({
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTier3 && !isGuardianAdLite && !isPrint,
+			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
 		...maybeThankYouModule(isGuardianAdLite || !!isObserver, 'whatNext'), // All

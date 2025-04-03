@@ -6,10 +6,10 @@ import type { ObserverPaperType } from 'pages/[countryGroupId]/components/thankY
 export const signUpHeader = 'Complete your Guardian account';
 
 export function SignUpBodyCopy({
-	isTier3,
+	isTierThree,
 	isObserver,
 }: {
-	isTier3?: boolean;
+	isTierThree?: boolean;
 	isObserver?: ObserverPaperType;
 }): JSX.Element {
 	const upperCopy =
@@ -25,10 +25,12 @@ export function SignUpBodyCopy({
 
 	return (
 		<>
-			<p>{isObserver ? observerCopy : isTier3 ? upperCopyTier3 : upperCopy}</p>
+			<p>
+				{isObserver ? observerCopy : isTierThree ? upperCopyTier3 : upperCopy}
+			</p>
 			{!isObserver && (
 				<>
-					{!isTier3 && (
+					{!isTierThree && (
 						<div
 							css={css`
 								margin-top: ${space[4]}px;
@@ -47,7 +49,7 @@ export function SignUpBodyCopy({
 							margin-top: ${space[4]}px;
 						`}
 					>
-						{isTier3 ? lowerCopyTier3 : lowerCopy}
+						{isTierThree ? lowerCopyTier3 : lowerCopy}
 					</p>
 				</>
 			)}

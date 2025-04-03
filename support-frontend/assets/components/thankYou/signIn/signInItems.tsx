@@ -51,7 +51,7 @@ const hideBeforeTablet = css`
 type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
-	isTier3?: boolean;
+	isTierThree?: boolean;
 };
 
 type CreateSignInUrlResponse = {
@@ -70,10 +70,10 @@ export const signInHeader = (
 };
 
 export function SignInBodyCopy({
-	isTier3,
+	isTierThree,
 	isObserver,
 }: {
-	isTier3?: boolean;
+	isTierThree?: boolean;
 	isObserver?: ObserverPaperType;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -83,75 +83,63 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
+	const isTierThreeOrObserver = isTierThree ?? !!isObserver;
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
 	const observerCopy =
 		'Make sure you’re signed in on all your devices when browsing our website and app. This will allow you to manage your subscription.';
+
 	return (
 		<>
-			{!isObserver && (
-				<>
-					{!isTier3 && (
-						<>
-							<p>
-								<span css={hideAfterTablet}>
-									This means we can recognise you as a supporter and remove
-									unnecessary messages asking for financial support.{' '}
-									{!isExpanded && (
-										<ButtonLink
-											cssOverrides={bodyText}
-											priority="secondary"
-											onClick={onReadMoreClick}
-										>
-											Read more
-										</ButtonLink>
-									)}
-								</span>
-
-								<span css={hideBeforeTablet}>{upperCopy}</span>
-							</p>
-							<div css={hideAfterTablet}>
-								<ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
-									<div css={expandableContainer}>
-										<p>
-											You will be able to easily manage your account in one
-											place.
-										</p>
-
-										<p>{lowerCopy}</p>
-									</div>
-								</ExpandableContainer>
-							</div>
-							<div css={hideBeforeTablet}>
-								<div css={expandableContainer}>
-									<BulletPointedList
-										items={[
-											'Show you far fewer requests for financial support',
-											'Offer you a simple way to manage your support payments and newsletter subscriptions',
-										]}
-									/>
-
-									<p>{lowerCopy}</p>
-								</div>
-							</div>
-						</>
-					)}
-					{isTier3 && (
-						<>
-							<p>
-								<span>{upperCopyTier3}</span>
-							</p>
-						</>
-					)}
-				</>
-			)}
-			{isObserver && (
+			{!isTierThreeOrObserver && (
 				<>
 					<p>
-						<span>{observerCopy}</span>
+						<span css={hideAfterTablet}>
+							This means we can recognise you as a supporter and remove
+							unnecessary messages asking for financial support.{' '}
+							{!isExpanded && (
+								<ButtonLink
+									cssOverrides={bodyText}
+									priority="secondary"
+									onClick={onReadMoreClick}
+								>
+									Read more
+								</ButtonLink>
+							)}
+						</span>
+
+						<span css={hideBeforeTablet}>{upperCopy}</span>
 					</p>
+					<div css={hideAfterTablet}>
+						<ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
+							<div css={expandableContainer}>
+								<p>
+									You will be able to easily manage your account in one place.
+								</p>
+
+								<p>{lowerCopy}</p>
+							</div>
+						</ExpandableContainer>
+					</div>
+					<div css={hideBeforeTablet}>
+						<div css={expandableContainer}>
+							<BulletPointedList
+								items={[
+									'Show you far fewer requests for financial support',
+									'Offer you a simple way to manage your support payments and newsletter subscriptions',
+								]}
+							/>
+
+							<p>{lowerCopy}</p>
+						</div>
+					</div>
 				</>
+			)}
+			{isTierThreeOrObserver && (
+				<p>
+					<span>{isTierThree ? upperCopyTier3 : observerCopy}</span>
+				</p>
 			)}
 		</>
 	);
@@ -160,7 +148,7 @@ export function SignInBodyCopy({
 export function SignInCTA({
 	email,
 	csrf,
-	isTier3,
+	isTierThree,
 }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
@@ -208,7 +196,7 @@ export function SignInCTA({
 			iconSide="right"
 			nudgeIcon
 		>
-			{isTier3 ? 'Sign in' : 'Continue'}
+			{isTierThree ? 'Sign in' : 'Continue'}
 		</LinkButton>
 	);
 }

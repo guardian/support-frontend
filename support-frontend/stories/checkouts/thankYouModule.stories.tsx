@@ -241,7 +241,7 @@ SignUpTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signUp'),
 	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isTier3={true} />,
+	bodyCopy: <SignUpBodyCopy isTierThree={true} />,
 	ctas: null,
 };
 
@@ -252,7 +252,7 @@ SignUpObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signUp'),
 	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isTier3={true} isObserver="ObserverPaper" />,
+	bodyCopy: <SignUpBodyCopy isObserver="ObserverPaper" />,
 	ctas: null,
 };
 
@@ -274,8 +274,8 @@ SignInTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTier3={true} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTier3={true} />,
+	bodyCopy: <SignInBodyCopy isTierThree={true} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
 };
 
 export const SignInObserver = Template.bind({});
@@ -285,8 +285,8 @@ SignInObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true, 'ObserverPaper'),
-	bodyCopy: <SignInBodyCopy isTier3={true} isObserver={'ObserverPaper'} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTier3={true} />,
+	bodyCopy: <SignInBodyCopy isObserver={'ObserverPaper'} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
 };
 
 SignIn.decorators = [
