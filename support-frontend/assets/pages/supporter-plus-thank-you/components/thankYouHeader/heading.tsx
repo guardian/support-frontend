@@ -186,6 +186,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
+	isObserverPaper: boolean;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
@@ -197,6 +198,7 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
+	isObserverPaper,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
@@ -212,8 +214,6 @@ function Heading({
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-	const isGuardianPrint =
-		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -267,17 +267,17 @@ function Heading({
 		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				{isGuardianPrint ? (
-					<>
-						Thank you for supporting our journalism!
-						<br css={printlineBreak} />
-						{getPrintHeader()}
-					</>
-				) : (
+				{isObserverPaper ? (
 					<>
 						{getPrintHeaderObserver()}
 						<br css={printlineBreak} />
 						Welcome and thank you for supporting Observer journalism!
+					</>
+				) : (
+					<>
+						Thank you for supporting our journalism!
+						<br css={printlineBreak} />
+						{getPrintHeader()}
 					</>
 				)}
 			</h1>

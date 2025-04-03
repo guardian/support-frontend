@@ -15,6 +15,7 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	isObserverPaper: boolean;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
@@ -124,6 +125,7 @@ function Subheading({
 	ratePlanKey,
 	amountIsAboveThreshold,
 	isSignedIn,
+	isObserverPaper,
 	identityUserType,
 	paymentStatus,
 	startDate,
@@ -136,8 +138,6 @@ function Subheading({
 	const isPaper = paperProductsKeys.includes(productKey);
 	const isTier3 = productKey === 'TierThree';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isObserverPaper =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,

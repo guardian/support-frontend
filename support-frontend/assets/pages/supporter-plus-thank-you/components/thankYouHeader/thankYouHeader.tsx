@@ -64,6 +64,13 @@ function ThankYouHeader({
 	promotion,
 	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+	];
+	const isObserverPaper =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	return (
 		<header css={header}>
 			<Heading
@@ -74,6 +81,7 @@ function ThankYouHeader({
 				amount={amount}
 				currency={currency}
 				contributionType={contributionType}
+				isObserverPaper={isObserverPaper}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
@@ -86,6 +94,7 @@ function ThankYouHeader({
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
+					isObserverPaper={isObserverPaper}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
 					startDate={startDate}
