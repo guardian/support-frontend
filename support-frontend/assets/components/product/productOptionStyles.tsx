@@ -3,16 +3,19 @@ import {
 	between,
 	brandAlt,
 	from,
-	headlineBold17,
 	headlineBold20,
 	headlineBold24,
 	headlineBold28,
 	headlineBold42,
 	neutral,
+	palette,
+	size,
 	space,
 	textSans14,
 	textSans15,
 	textSans17,
+	textSansBold12,
+	textSansBold14,
 	until,
 } from '@guardian/source/foundations';
 
@@ -30,12 +33,22 @@ export const productOption = css`
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
 	padding: ${space[3]}px;
-	${from.tablet} {
+	${from.leftCol} {
 		min-height: 272px;
 		width: 300px;
 		grid-template-columns: none;
 		grid-template-rows: 48px minmax(66px, max-content) minmax(100px, 1fr) 72px;
 		grid-template-areas: none;
+	}
+`;
+
+export const productOptionWithLabel = css`
+	${from.leftCol} {
+		grid-template-rows: 96px minmax(80px, max-content) minmax(100px, 1fr) 72px;
+	}
+
+	${from.wide} {
+		grid-template-rows: 80px minmax(66px, max-content) minmax(100px, 1fr) 72px;
 	}
 `;
 
@@ -47,13 +60,13 @@ export const specialOfferOption = css`
 `;
 
 export const productOptionUnderline = css`
-	${from.tablet} {
+	${from.leftCol} {
 		border-bottom: 1px solid ${neutral[86]};
 	}
 `;
 
 export const productOptionVerticalLine = css`
-	${until.tablet} {
+	${until.leftCol} {
 		border-right: 1px solid ${neutral[86]};
 		margin-right: ${space[3]}px;
 		padding-right: ${space[3]}px;
@@ -61,14 +74,35 @@ export const productOptionVerticalLine = css`
 `;
 
 export const productOptionTitle = css`
+	padding-bottom: ${space[2]}px;
+`;
+
+export const productOptionTitleHeading = css`
 	${headlineBold24};
-	padding-bottom: ${space[5]}px;
-	${from.tablet} {
-		margin-bottom: ${space[2]}px;
+	margin-bottom: ${space[1]}px;
+`;
+
+export const productOptionLabel = css`
+	display: block;
+	width: max-content;
+	${textSansBold12}
+	color: ${palette.neutral[100]};
+	background: ${palette.brand[500]};
+	border-radius: ${space[1]}px;
+	padding: 2.5px ${space[2]}px;
+	${until.mobileMedium} {
+		max-width: 98px;
 	}
-	${between.tablet.and.leftCol} {
-		${headlineBold17};
+	${between.leftCol.and.wide} {
+		max-width: 112px;
 	}
+	${from.leftCol} {
+		${textSansBold14}
+	}
+`;
+
+export const productOptionLabelObserver = css`
+	background: #963c00;
 `;
 
 export const productOptionOfferCopy = css`
@@ -79,6 +113,24 @@ export const productOptionOfferCopy = css`
 	}
 	${between.tablet.and.leftCol} {
 		${textSans15};
+	}
+	${from.leftCol} {
+		margin-top: ${space[1]}px;
+	}
+`;
+
+export const productOptionInfo = css`
+	display: flex;
+	flex: 0 1 auto;
+	svg {
+		fill: ${palette.brand[500]};
+		min-height: ${size.xsmall}px;
+		min-width: ${size.xsmall}px;
+		height: ${size.xsmall}px;
+		width: ${size.xsmall}px;
+	}
+	p {
+		margin-left: 4px;
 	}
 `;
 
@@ -97,12 +149,10 @@ export const productOptionPrice = css`
 
 export const productOptionPriceCopy = css`
 	${textSans14};
+	margin-top: ${space[1]}px;
 	${from.tablet} {
 		height: 100%;
 		margin-bottom: ${space[4]}px;
-	}
-	${between.phablet.and.leftCol} {
-		${textSans15};
 	}
 	${from.leftCol} {
 		${textSans17};
@@ -133,13 +183,8 @@ export const buttonDiv = css`
 	align-items: stretch;
 	grid-area: button;
 	padding: ${space[3]}px 0;
-	${between.mobileLandscape.and.tablet} {
-		grid-area: 3 / 1 / span 1 / span 1;
-		border-right: 1px solid ${neutral[86]};
-		margin-right: ${space[3]}px;
-		padding-right: ${space[3]}px;
-	}
-	${from.tablet} {
+
+	${from.leftCol} {
 		grid-area: auto;
 		padding: 0;
 	}
@@ -159,7 +204,7 @@ export const button = css`
 `;
 
 export const priceCopyGridPlacement = css`
-	${until.tablet} {
+	${until.leftCol} {
 		grid-area: priceCopy;
 	}
 `;

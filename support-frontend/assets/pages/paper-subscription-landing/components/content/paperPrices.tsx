@@ -16,6 +16,7 @@ import {
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import shouldShowObserverCard from 'pages/paper-subscription-landing/helpers/shouldShowObserver';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {
@@ -35,10 +36,23 @@ const pricesHeadline = css`
 `;
 
 const priceBoxes = css`
+	display: flex;
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
+	flex-direction: column;
 	${from.tablet} {
 		margin-top: 56px;
+	}
+`;
+
+const pricesBoxesGridLayout = css`
+	${between.tablet.and.leftCol} {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: ${space[5]}px;
+	}
+	${from.leftCol} {
+		flex-direction: row;
 	}
 `;
 
@@ -115,7 +129,12 @@ export function PaperPrices({
 					Subscription card
 				</LinkTo>
 			</div>
-			<FlexContainer cssOverrides={priceBoxes}>
+			<FlexContainer
+				cssOverrides={[
+					priceBoxes,
+					shouldShowObserverCard() ? pricesBoxesGridLayout : css``,
+				]}
+			>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
@@ -130,6 +149,7 @@ export function PaperPrices({
 						onClick={product.onClick}
 						onView={product.onView}
 						label={product.label}
+						productLabel={product.productLabel}
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}

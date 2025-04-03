@@ -69,7 +69,6 @@ const productDeliveryOrStartDate = (
 	productKey: ActiveProductKey,
 	paperProductOptions?: ActivePaperProductOptions,
 ): Date | undefined => {
-	console.log(paperProductOptions);
 	switch (productKey) {
 		case 'GuardianAdLite':
 			return addDays(new Date(), 15);
