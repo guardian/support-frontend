@@ -11,6 +11,7 @@ import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
+import { observerLinks } from 'helpers/legal';
 import {
 	Collection,
 	HomeDelivery,
@@ -110,8 +111,9 @@ export function PaperPrices({
 	const infoTextMessages = {
 		delivery: 'Delivery is included.',
 		cancel_subscripton: 'You can cancel your subscription at any time.',
-		sunday_subscription:
-			'Sunday only subscriptions for The Observer are offered by Tortoise Media Ltd. Tortoise Media\'s <a href="https://www.tortoisemedia.com/observer/terms">terms and conditions</a> and <a href="https://www.tortoisemedia.com/observer/privacy">privacy policy</a> will apply.',
+		sunday_subscription: `Sunday only subscriptions for The Observer are offered by Tortoise Media Ltd. \
+							  Tortoise Media's <a href="${observerLinks.TERMS}">terms and conditions</a> and \
+							   <a href="${observerLinks.PRIVACY}">privacy policy</a> will apply.`,
 	};
 
 	const infoText = [
