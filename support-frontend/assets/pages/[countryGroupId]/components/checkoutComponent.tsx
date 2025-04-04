@@ -155,12 +155,26 @@ type CheckoutComponentProps = {
 	checkoutSession?: CheckoutSession;
 };
 
-const shouldUseStripeHostedCheckout = (
+const isSundayOnlyNewspaperSub = (
 	productKey: ProductKey,
 	ratePlanKey: string,
 ) =>
 	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
 	ratePlanKey === 'Sunday';
+
+const getPaymentMethods = (
+	countryId: IsoCountry,
+	productKey: ProductKey,
+	ratePlanKey: string,
+) => {
+	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
+
+	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
+		return [maybeDirectDebit, StripeHostedCheckout];
+	}
+
+	return [maybeDirectDebit, Stripe, PayPal];
+};
 
 export function CheckoutComponent({
 	geoId,
@@ -310,16 +324,11 @@ export function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const validPaymentMethods = [
-		/* NOT YET IMPLEMENTED
-		countryGroupId === 'EURCountries' && Sepa,
-    */
-		countryId === 'GB' && DirectDebit,
-		shouldUseStripeHostedCheckout(productKey, ratePlanKey)
-			? StripeHostedCheckout
-			: Stripe,
-		PayPal,
-	]
+	const validPaymentMethods = getPaymentMethods(
+		countryId,
+		productKey,
+		ratePlanKey,
+	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
