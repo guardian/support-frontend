@@ -9,11 +9,13 @@ import {
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
-	contributionType: ContributionType;
 	productKey: ActiveProductKey;
+	contributionType: ContributionType;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	isObserverPrint: boolean;
+	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
 
@@ -60,6 +62,8 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
+	isObserverPrint: boolean,
+	startDate?: string,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
 		const signedInAboveThreshold = (
@@ -71,14 +75,17 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
+		const observerCopy = startDate
+			? `You will receive your newspapers from ${startDate}.`
+			: ``;
+		const thankyouMessage = isObserverPrint
+			? observerCopy
+			: productCatalogDescription[productKey].thankyouMessage;
 		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
 						Guardian journalism.${' '}`;
 		const notSignedInCopy = (
-			<span>
-				{productCatalogDescription[productKey].thankyouMessage ??
-					signedInBelowThreshold}
-			</span>
+			<span>{thankyouMessage ?? signedInBelowThreshold}</span>
 		);
 		const signedInCopy = amountIsAboveThreshold ? (
 			<>
@@ -105,12 +112,14 @@ const getSubHeadingCopy = (
 };
 
 function Subheading({
-	contributionType,
 	productKey,
+	contributionType,
 	amountIsAboveThreshold,
 	isSignedIn,
+	isObserverPrint,
 	identityUserType,
 	paymentStatus,
+	startDate,
 }: SubheadingProps): JSX.Element {
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
@@ -126,13 +135,15 @@ function Subheading({
 		contributionType,
 		isSignedIn,
 		identityUserType,
+		isObserverPrint,
+		startDate,
 	);
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
 			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
-			{!isGuardianAdLite && !isPending && (
+			{!isGuardianAdLite && !isPending && !isObserverPrint && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}

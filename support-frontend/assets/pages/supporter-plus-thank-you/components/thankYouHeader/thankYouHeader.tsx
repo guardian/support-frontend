@@ -40,6 +40,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	startDate?: string;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
@@ -57,11 +58,19 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	startDate,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+		'SubscriptionCard',
+	];
+	const isObserverPrint =
+		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	return (
 		<header css={header}>
 			<Heading
@@ -72,6 +81,7 @@ function ThankYouHeader({
 				amount={amount}
 				currency={currency}
 				contributionType={contributionType}
+				isObserverPrint={isObserverPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
@@ -79,12 +89,14 @@ function ThankYouHeader({
 			<p css={headerSupportingText}>
 				{showDirectDebitMessage && <DirectDebitMessage />}
 				<Subheading
-					contributionType={contributionType}
 					productKey={productKey}
+					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
+					isObserverPrint={isObserverPrint}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
+					startDate={startDate}
 				/>
 			</p>
 			{showOffer && (

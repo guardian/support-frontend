@@ -1,46 +1,58 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 export const signUpHeader = 'Complete your Guardian account';
 
 export function SignUpBodyCopy({
-	isTier3,
+	isTierThree,
+	observerPrint,
 }: {
-	isTier3?: boolean;
+	isTierThree?: boolean;
+	observerPrint?: ObserverPrint;
 }): JSX.Element {
-	const upperCopy =
-		'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
-	const upperCopyTier3 =
-		'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup.';
+	const upperCopy = (isTier3?: boolean, observerPrint?: ObserverPrint) => {
+		if (observerPrint) {
+			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup and will allow you to manage your subscription.';
+		}
+		if (isTier3) {
+			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup.';
+		}
+		return 'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
+	};
 	const lowerCopy =
 		'Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.';
 	const lowerCopyTier3 =
 		'Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.';
 	return (
 		<>
-			<p>{isTier3 ? upperCopyTier3 : upperCopy}</p>
-			{!isTier3 && (
-				<div
-					css={css`
-						margin-top: ${space[4]}px;
-					`}
-				>
-					<BulletPointedList
-						items={[
-							'Show you far fewer requests for financial support',
-							'Offer you a simple way to manage your support payments and newsletter subscriptions',
-						]}
-					/>
-				</div>
+			<p>{upperCopy(isTierThree, observerPrint)}</p>
+			{!observerPrint && (
+				<>
+					{!isTierThree && (
+						<div
+							css={css`
+								margin-top: ${space[4]}px;
+							`}
+						>
+							<BulletPointedList
+								items={[
+									'Show you far fewer requests for financial support',
+									'Offer you a simple way to manage your support payments and newsletter subscriptions',
+								]}
+							/>
+						</div>
+					)}
+					<p
+						css={css`
+							margin-top: ${space[4]}px;
+						`}
+					>
+						{isTierThree ? lowerCopyTier3 : lowerCopy}
+					</p>
+				</>
 			)}
-			<p
-				css={css`
-					margin-top: ${space[4]}px;
-				`}
-			>
-				{isTier3 ? lowerCopyTier3 : lowerCopy}
-			</p>
 		</>
 	);
 }

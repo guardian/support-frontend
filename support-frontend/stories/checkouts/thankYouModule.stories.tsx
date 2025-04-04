@@ -47,6 +47,7 @@ import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
 import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const container = css`
 	padding: ${space[9]}px 0;
@@ -223,17 +224,6 @@ Feedback.decorators = [
 	},
 ];
 
-export const SignUpTier3 = Template.bind({});
-
-SignUpTier3.args = {
-	moduleType: 'signUp',
-	isSignedIn: false,
-	icon: getThankYouModuleIcon('signUp'),
-	header: signUpHeader,
-	bodyCopy: <SignUpBodyCopy isTier3={true} />,
-	ctas: null,
-};
-
 export const SignUp = Template.bind({});
 
 SignUp.args = {
@@ -245,15 +235,26 @@ SignUp.args = {
 	ctas: null,
 };
 
-export const SignInTier3 = Template.bind({});
+export const SignUpTier3 = Template.bind({});
 
-SignInTier3.args = {
-	moduleType: 'signIn',
+SignUpTier3.args = {
+	moduleType: 'signUp',
 	isSignedIn: false,
-	icon: getThankYouModuleIcon('signIn'),
-	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTier3={true} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTier3={true} />,
+	icon: getThankYouModuleIcon('signUp'),
+	header: signUpHeader,
+	bodyCopy: <SignUpBodyCopy isTierThree={true} />,
+	ctas: null,
+};
+
+export const SignUpObserver = Template.bind({});
+
+SignUpObserver.args = {
+	moduleType: 'signUp',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signUp'),
+	header: signUpHeader,
+	bodyCopy: <SignUpBodyCopy observerPrint={ObserverPrint.Paper} />,
+	ctas: null,
 };
 
 export const SignIn = Template.bind({});
@@ -265,6 +266,35 @@ SignIn.args = {
 	header: signInHeader(),
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+};
+
+export const SignInTier3 = Template.bind({});
+
+SignInTier3.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signInHeader(true),
+	bodyCopy: <SignInBodyCopy isTierThree={true} />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
+};
+
+export const SignInObserver = Template.bind({});
+
+SignInObserver.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signInHeader(true, ObserverPrint.Paper),
+	bodyCopy: <SignInBodyCopy observerPrint={ObserverPrint.Paper} />,
+	ctas: (
+		<SignInCTA
+			email={''}
+			csrf={{ token: undefined }}
+			isTierThree={false}
+			observerPrint={ObserverPrint.Paper}
+		/>
+	),
 };
 
 SignIn.decorators = [
@@ -288,6 +318,72 @@ AusMap.args = {
 	header: ausMapHeader,
 	bodyCopy: ausMapBodyCopy,
 	ctas: <AusMapCTA />,
+};
+
+export const WhatNextNoStartDate = Template.bind({});
+WhatNextNoStartDate.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	bodyCopy: <WhatNext amount={'12'} />,
+};
+
+export const WhatNextSignedIn = Template.bind({});
+WhatNextSignedIn.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={true}
+		/>
+	),
+};
+
+export const WhatNextSignedOut = Template.bind({});
+WhatNextSignedOut.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+		/>
+	),
+};
+
+export const WhatNextObserverPaper = Template.bind({});
+WhatNextObserverPaper.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+			observerPrint={ObserverPrint.Paper}
+		/>
+	),
+};
+
+export const WhatNextObserverSubsCard = Template.bind({});
+WhatNextObserverSubsCard.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			amount={'12'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+			observerPrint={ObserverPrint.SubscriptionCard}
+		/>
+	),
 };
 
 export const SupportReminder = Template.bind({});
@@ -372,39 +468,6 @@ SubscriptionStartTierThree.args = {
 		/>
 	),
 	ctas: null,
-};
-
-export const WhatNextSignedOut = Template.bind({});
-WhatNextSignedOut.args = {
-	icon: getThankYouModuleIcon('whatNext'),
-	header: 'What next?',
-	bodyCopy: (
-		<WhatNext
-			amount={'12'}
-			startDate={'Friday, March 28, 2025'}
-			isSignedIn={true}
-		/>
-	),
-};
-
-export const WhatNextSignedIn = Template.bind({});
-WhatNextSignedIn.args = {
-	icon: getThankYouModuleIcon('whatNext'),
-	header: 'What next?',
-	bodyCopy: (
-		<WhatNext
-			amount={'12'}
-			startDate={'Friday, March 28, 2025'}
-			isSignedIn={false}
-		/>
-	),
-};
-
-export const WhatNextNoStartDate = Template.bind({});
-WhatNextNoStartDate.args = {
-	icon: getThankYouModuleIcon('whatNext'),
-	header: 'What next?',
-	bodyCopy: <WhatNext amount={'12'} isSignedIn={false} />,
 };
 
 SupportReminder.decorators = [

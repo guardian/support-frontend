@@ -40,10 +40,8 @@ export function SubscriptionStartItems({
 		<span css={[downloadCopy, subscriptionItems]}>
 			<div>
 				{startDate && (
-					<p>
-						<span
-							css={boldText}
-						>{`You will receive your newspaper from ${startDate}`}</span>
+					<p css={boldText}>
+						{`You will receive your newspaper from ${startDate}`}
 					</p>
 				)}
 				{productKey === 'SubscriptionCard' && (
@@ -63,10 +61,8 @@ export function SubscriptionStartItems({
 	const guardianWeeklyCopy = (
 		<span css={[downloadCopy, subscriptionItems]}>
 			<div>
-				<p>
-					<span
-						css={boldText}
-					>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
+				<p css={boldText}>
+					{`Your first issue of Guardian Weekly will be published on ${startDate}`}
 				</p>
 				<p>
 					Please allow one to seven days after the publication date for your
@@ -85,9 +81,7 @@ export function SubscriptionStartItems({
 			<span css={[downloadCopy, subscriptionItems]}>
 				{guardianWeeklyCopy}
 				<div>
-					<p>
-						<span css={boldText}>Your digital benefits start today.</span>
-					</p>
+					<p css={boldText}>Your digital benefits start today.</p>
 					<p>
 						Please ensure you are signed in on all your devices to enjoy all
 						your benefits, including unlimited app access and uninterrupted

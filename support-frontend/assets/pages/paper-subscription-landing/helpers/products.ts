@@ -45,6 +45,10 @@ export enum Channel {
 	ObserverAndGuardian = 'gardian_and_observer',
 	Guardian = 'guardian',
 }
+export enum ObserverPrint {
+	Paper = 'ObserverPaper',
+	SubscriptionCard = 'ObserverSubscriptionCard',
+}
 
 export type ProductLabelProps = {
 	text: string;
