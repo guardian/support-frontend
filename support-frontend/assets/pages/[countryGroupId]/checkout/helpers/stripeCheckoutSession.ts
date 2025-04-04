@@ -38,7 +38,7 @@ const formDetailsSchema = object({
 			}),
 		),
 	}),
-	deliveryInstructions: optional(string()),
+	deliveryInstructions: nullish(string()),
 	billingAddressMatchesDelivery: optional(boolean()),
 });
 
