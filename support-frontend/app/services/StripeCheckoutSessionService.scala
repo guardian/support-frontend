@@ -58,8 +58,7 @@ class StripeCheckoutSessionService(
 
     client
       .url(s"$baseUrl/checkout/sessions")
-      // Note: auth is done via basic auth. See https://docs.stripe.com/api/authentication
-      .withAuth(privateKey, "", WSAuthScheme.BASIC)
+      .withHttpHeaders("Authorization" -> s"Bearer $privateKey")
       .withMethod("POST")
       // https: //www.playframework.com/documentation/3.0.x/ScalaWS#Submitting-form-data
       .withBody(data)
