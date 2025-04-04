@@ -6,7 +6,13 @@ import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, StripeGatewayPaymentIntentsAUD, SubscribeRequest}
+import com.gu.support.zuora.api.{
+  DirectDebitGateway,
+  DirectDebitTortoiseMediaGateway,
+  PreviewSubscribeRequest,
+  StripeGatewayPaymentIntentsAUD,
+  SubscribeRequest,
+}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
 import org.joda.time.{DateTime, DateTimeZone}
@@ -129,7 +135,11 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
     Right(creditCardSubscriptionRequest(AUD, StripeGatewayPaymentIntentsAUD)),
   )
 
-  it should "work with Direct Debit" in doRequest(Right(directDebitSubscriptionRequest))
+  it should "work with Direct Debit" in doRequest(Right(directDebitSubscriptionRequest(DirectDebitGateway)))
+
+  it should "work with Direct Debit for an Observer subscription" in doRequest(
+    Right(directDebitSubscriptionRequest(DirectDebitTortoiseMediaGateway)),
+  )
 
   it should "work for a paper subscription" in doRequest(Right(directDebitSubscriptionRequestPaper))
 

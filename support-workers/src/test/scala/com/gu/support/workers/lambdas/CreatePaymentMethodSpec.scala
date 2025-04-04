@@ -15,7 +15,7 @@ import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInpu
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
-import com.gu.support.zuora.api.StripeGatewayPaymentIntentsDefault
+import com.gu.support.zuora.api.{DirectDebitTortoiseMediaGateway, StripeGatewayPaymentIntentsDefault}
 import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -64,6 +64,29 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
             withClue("stripe: " + stripe) {
               stripe.SecondTokenId should be("12345")
               stripe.CreditCardNumber should be("1234")
+            }
+          case _ => fail()
+        }
+      }
+  }
+
+  it should "retrieve a valid DirectDebitPaymentMethod when given valid DD fields" in {
+
+    val createPaymentMethod = new CreatePaymentMethod(mockServices)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createPaymentMethod
+      .handleRequestFuture(wrapFixture(createDirectDebitObserverJson), outStream, context)
+      .map { _ =>
+        // Check the output
+        val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+
+        createSalesforceContactState.isSuccess should be(true)
+        createSalesforceContactState.get._1.paymentMethod match {
+          case dd: DirectDebitPaymentMethod =>
+            withClue("direct debit: " + dd) {
+              dd.PaymentGateway should be(DirectDebitTortoiseMediaGateway)
             }
           case _ => fail()
         }
