@@ -13,10 +13,11 @@ const footer = css`
 	}
 `;
 
-interface ThankYouFooterProps {
+function ThankYouFooter({
+	observerPrint,
+}: {
 	observerPrint?: ObserverPrint;
-}
-function ThankYouFooter({ observerPrint }: ThankYouFooterProps): JSX.Element {
+}): JSX.Element {
 	return (
 		<div css={footer}>
 			{!observerPrint
