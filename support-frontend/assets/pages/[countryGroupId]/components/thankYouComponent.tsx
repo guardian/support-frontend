@@ -355,7 +355,7 @@ export function ThankYouComponent({
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter />
+					{<ThankYouFooter observerPrint={observerPrint} />}
 				</FooterWithContents>
 			}
 		>
