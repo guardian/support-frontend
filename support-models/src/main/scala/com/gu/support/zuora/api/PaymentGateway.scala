@@ -25,6 +25,7 @@ object PaymentGateway {
     case StripeGatewayAUD.name => StripeGatewayAUD
     case PayPalGateway.name => PayPalGateway
     case DirectDebitGateway.name => DirectDebitGateway
+    case DirectDebitTortoiseMediaGateway.name => DirectDebitTortoiseMediaGateway
     case SepaGateway.name => SepaGateway
     case ZuoraInstanceDirectDebitGateway.name => ZuoraInstanceDirectDebitGateway
     case StripeGatewayPaymentIntentsDefault.name => StripeGatewayPaymentIntentsDefault
@@ -65,6 +66,10 @@ case object PayPalGateway extends PaymentGateway {
 
 case object DirectDebitGateway extends PaymentGateway {
   val name = "GoCardless"
+}
+
+case object DirectDebitTortoiseMediaGateway extends PaymentGateway {
+  val name = "GoCardless - Observer - Tortoise Media"
 }
 
 case object SepaGateway extends PaymentGateway {

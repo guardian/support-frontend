@@ -5,7 +5,15 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
+import com.gu.support.catalog.{
+  Domestic,
+  Everyday,
+  FulfilmentOptions,
+  HomeDelivery,
+  NationalDelivery,
+  RestOfWorld,
+  Sunday,
+}
 import com.gu.support.paperround.AgentId
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
@@ -18,15 +26,14 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   SupporterPlusState,
   TierThreeState,
 }
-import com.gu.support.zuora.api.StripeGatewayDefault
-import com.gu.zuora.Fixtures.deliveryAgentId
+import com.gu.support.zuora.api.{DirectDebitTortoiseMediaGateway, StripeGatewayDefault}
+import com.gu.zuora.Fixtures.{deliveryAgentId, directDebitPaymentMethod}
 import io.circe.parser
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
 
 import java.io.ByteArrayInputStream
 import java.util.UUID
-import com.gu.support.catalog.FulfilmentOptions
 
 //noinspection TypeAnnotation
 object JsonFixtures {
@@ -246,6 +253,17 @@ object JsonFixtures {
       }
     """
 
+  val sundayPaperJson =
+    """
+      {
+        "productType": "Paper",
+        "currency": "GBP",
+        "billingPeriod" : "Monthly",
+        "fulfilmentOptions" : "HomeDelivery",
+        "productOptions" : "Sunday"
+      }
+    """
+
   val weeklyJson = GuardianWeekly(GBP, Monthly, Domestic).asJson.spaces2
 
   val digitalPackProductJson =
@@ -295,7 +313,8 @@ object JsonFixtures {
         "paymentType": "DirectDebit",
         "accountHolderName": "$mickeyMouse",
         "sortCode": "111111",
-        "accountNumber": "99999999"
+        "accountNumber": "99999999",
+        "recaptchaToken": "recaptchaToken"
       }
     """
 
@@ -370,7 +389,23 @@ object JsonFixtures {
             "paymentProvider": "DirectDebit",
             "isGiftPurchase": false
           },
-          "paymentFields": $directDebitJson
+          "paymentFields": $directDebitJson,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
+        }"""
+
+  val createDirectDebitObserverJson =
+    s"""{
+          $requestIdJson,
+          ${userJson()},
+          "product": $sundayPaperJson,
+          "analyticsInfo": {
+            "paymentProvider": "DirectDebit",
+            "isGiftPurchase": false
+          },
+          "paymentFields": $directDebitJson,
+          "ipAddress": "127.0.0.1",
+          "userAgent": "Test"
         }"""
 
   val createSalesForceContactJson =
