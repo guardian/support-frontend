@@ -21,7 +21,7 @@ import com.gu.support.workers.integration.util.EmailQueueName
 import com.gu.support.workers.integration.util.EmailQueueName.emailQueueName
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.SendThankYouEmailState._
-import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.{DirectDebitGateway, ReaderType}
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
@@ -383,6 +383,7 @@ object TestData {
     State = None,
     StreetName = Some("streetname"),
     StreetNumber = Some("123"),
+    PaymentGateway = DirectDebitGateway,
   )
 
   val digitalPackEmailFields = new DigitalPackEmailFields(

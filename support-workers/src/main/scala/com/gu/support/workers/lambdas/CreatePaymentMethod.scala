@@ -6,9 +6,11 @@ import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
+import com.gu.support.catalog.Sunday
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
 import com.gu.support.workers.states.{CreatePaymentMethodState, CreateSalesforceContactState}
+import com.gu.support.zuora.api.{DirectDebitGateway, DirectDebitTortoiseMediaGateway, PaymentGateway}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -26,11 +28,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ): FutureHandlerResult = {
     logger.debug(s"CreatePaymentMethod state: $state")
     createPaymentMethod(
-      state.paymentFields,
-      state.user,
+      state,
       services,
-      state.ipAddress,
-      state.userAgent,
     )
       .map(paymentMethod =>
         HandlerResult(
@@ -43,13 +42,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   }
 
   private def createPaymentMethod(
-      paymentFields: PaymentFields,
-      user: User,
+      state: CreatePaymentMethodState,
       services: Services,
-      ipAddress: String,
-      userAgent: String,
   ): Future[PaymentMethod] =
-    paymentFields match {
+    state.paymentFields match {
       case stripeHosted: StripeHostedPaymentFields =>
         createStripeHostedPaymentMethod(stripeHosted, services.stripeService)
       case stripe: StripePaymentFields =>
@@ -57,9 +53,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case paypal: PayPalPaymentFields =>
         createPayPalPaymentMethod(paypal, services.payPalService)
       case dd: DirectDebitPaymentFields =>
-        createDirectDebitPaymentMethod(dd, user)
+        createDirectDebitPaymentMethod(dd, state)
       case sepa: SepaPaymentFields =>
-        createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
+        createSepaPaymentMethod(sepa, state.user, state.ipAddress, state.userAgent)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
@@ -154,7 +150,16 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       .retrieveEmail(payPal.baid)
       .map(PayPalReferenceTransaction(payPal.baid, _))
 
-  def createDirectDebitPaymentMethod(dd: DirectDebitPaymentFields, user: User): Future[DirectDebitPaymentMethod] = {
+  def createDirectDebitPaymentMethod(
+      dd: DirectDebitPaymentFields,
+      state: CreatePaymentMethodState,
+  ): Future[DirectDebitPaymentMethod] = {
+    import state.user
+
+    val paymentGateway = state.product match {
+      case paper: Paper if paper.productOptions == Sunday => DirectDebitTortoiseMediaGateway
+      case _ => DirectDebitGateway
+    }
     val addressLine =
       AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
 
@@ -171,6 +176,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         State = user.billingAddress.state,
         StreetName = addressLine.map(_.streetName),
         StreetNumber = addressLine.flatMap(_.streetNumber),
+        PaymentGateway = paymentGateway,
       ),
     )
   }

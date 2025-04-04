@@ -166,6 +166,7 @@ object Fixtures {
     State = None,
     StreetName = Some("easy street"),
     StreetNumber = None,
+    PaymentGateway = DirectDebitGateway,
   )
   val productRatePlanId = "12345"
   val productRatePlanChargeId = "67890"

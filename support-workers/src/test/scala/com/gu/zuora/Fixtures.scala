@@ -78,18 +78,20 @@ object Fixtures {
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
   val payPalPaymentMethod = PayPalReferenceTransaction(payPalBaid, "test@paypal.com")
-  val directDebitPaymentMethod = DirectDebitPaymentMethod(
-    "Barry",
-    "Humphreys",
-    "Barry Humphreys",
-    "200000",
-    "55779911",
-    City = Some("Edited city"),
-    PostalCode = Some("n19gu"),
-    State = Some("blah"),
-    StreetName = Some("easy street"),
-    StreetNumber = Some("123"),
-  )
+  def directDebitPaymentMethod(paymentGateway: PaymentGateway = DirectDebitGateway): DirectDebitPaymentMethod =
+    DirectDebitPaymentMethod(
+      "Barry",
+      "Humphreys",
+      "Barry Humphreys",
+      "200000",
+      "55779911",
+      City = Some("Edited city"),
+      PostalCode = Some("n19gu"),
+      State = Some("blah"),
+      StreetName = Some("easy street"),
+      StreetNumber = Some("123"),
+      PaymentGateway = paymentGateway,
+    )
 
   val config = Configuration.load().zuoraConfigProvider.get()
   val monthlySubscriptionData = SubscriptionData(
@@ -154,14 +156,14 @@ object Fixtures {
       ),
     )
 
-  def directDebitSubscriptionRequest: SubscribeRequest =
+  def directDebitSubscriptionRequest(paymentGateway: PaymentGateway): SubscribeRequest =
     SubscribeRequest(
       List(
         SubscribeItem(
-          account(paymentGateway = DirectDebitGateway),
+          account(paymentGateway = paymentGateway),
           contactDetails,
           None,
-          Some(directDebitPaymentMethod),
+          Some(directDebitPaymentMethod()),
           monthlySubscriptionData,
           SubscribeOptions(),
         ),
@@ -175,7 +177,7 @@ object Fixtures {
           account(paymentGateway = DirectDebitGateway),
           contactDetails,
           Some(differentContactDetails),
-          Some(directDebitPaymentMethod),
+          Some(directDebitPaymentMethod()),
           everydayPaperSubscriptionData,
           SubscribeOptions(),
         ),
@@ -189,7 +191,7 @@ object Fixtures {
           account(paymentGateway = DirectDebitGateway),
           contactDetails,
           Some(differentContactDetailsOutsideLondon),
-          Some(directDebitPaymentMethod),
+          Some(directDebitPaymentMethod()),
           everydayNationalDeliveryPaperSubscriptionData,
           SubscribeOptions(),
         ),
