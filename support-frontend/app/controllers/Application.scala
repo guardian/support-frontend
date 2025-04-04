@@ -37,6 +37,7 @@ case class AppConfig private (
     stripeKeyDefaultCurrencies: AppConfig.StripeKeyConfig,
     stripeKeyAustralia: AppConfig.StripeKeyConfig,
     stripeKeyUnitedStates: AppConfig.StripeKeyConfig,
+    stripeKeyTortoiseMedia: AppConfig.StripeKeyConfig,
     payPalEnvironment: AppConfig.ConfigKeyValues,
     paymentApiUrl: String,
     paymentApiPayPalEndpoint: String,
@@ -129,6 +130,16 @@ object AppConfig extends InternationalisationCodecs {
           ),
         )
       },
+      stripeKeyTortoiseMedia = StripeKeyConfig(
+        ONE_OFF = ConfigKeyValues(
+          default = paymentMethodConfigs.oneOffDefaultStripeConfig.tortoiseMediaAccount.rawPublicKey,
+          test = paymentMethodConfigs.oneOffTestStripeConfig.tortoiseMediaAccount.rawPublicKey,
+        ),
+        REGULAR = ConfigKeyValues(
+          default = paymentMethodConfigs.regularDefaultStripeConfig.tortoiseMediaAccount.rawPublicKey,
+          test = paymentMethodConfigs.regularTestStripeConfig.tortoiseMediaAccount.rawPublicKey,
+        ),
+      ),
       ConfigKeyValues(
         default = paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment,
         test = paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment,

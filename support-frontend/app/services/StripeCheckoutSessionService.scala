@@ -5,6 +5,7 @@ import cats.implicits.{catsSyntaxApplicativeError, toBifunctorOps}
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.StripeConfigProvider
+import com.gu.support.workers.StripePublicKey
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
@@ -40,12 +41,13 @@ class StripeCheckoutSessionService(
   val baseUrl: String = "https://api.stripe.com/v1"
 
   def createCheckoutSession(
+      stripePublicKey: StripePublicKey,
       email: String,
       currency: Currency,
       isTestUser: Boolean,
       successUrl: String,
   ): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
-    val privateKey = getPrivateKey(isTestUser)
+    val privateKey = getPrivateKey(stripePublicKey, isTestUser)
 
     // We use the default expiration of 24 hours
     val data = Map(
@@ -71,9 +73,12 @@ class StripeCheckoutSessionService(
       .subflatMap(decodeResponse[CreateCheckoutSessionResponseSuccess])
   }
 
-  private def getPrivateKey(isTestUser: Boolean): String = {
-    // TODO: take a public key and map to a secret key instead of hardcoding this
-    configProvider.get(isTestUser).defaultAccount.secretKey.secret
+  private def getPrivateKey(stripePublicKey: StripePublicKey, isTestUser: Boolean) = {
+    configProvider.get(isTestUser).forPublicKey(stripePublicKey) match {
+      case Some(config) => config._1.secret
+      case None =>
+        throw new RuntimeException(s"Stripe public key $stripePublicKey not found in config")
+    }
   }
 
   private def decodeResponse[A: Decoder](

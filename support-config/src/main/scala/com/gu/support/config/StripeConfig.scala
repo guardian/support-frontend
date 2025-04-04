@@ -4,19 +4,26 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.AUD
 import com.gu.monitoring.SafeLogging
 import com.gu.support.workers.{StripePublicKey, StripeSecretKey}
-import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
+import com.gu.support.zuora.api.{
+  PaymentGateway,
+  StripeGatewayPaymentIntentsAUD,
+  StripeGatewayPaymentIntentsDefault,
+  StripeTortoiseMedia,
+}
 import com.typesafe.config.Config
 
 case class StripeConfig(
     defaultAccount: StripeAccountConfig,
     australiaAccount: StripeAccountConfig,
     unitedStatesAccount: StripeAccountConfig,
+    tortoiseMediaAccount: StripeAccountConfig,
     version: Option[String],
 ) extends SafeLogging {
   private val secretForPublic: Map[StripePublicKey, (StripeSecretKey, PaymentGateway)] = Map(
     defaultAccount.publicKey -> (defaultAccount.secretKey, StripeGatewayPaymentIntentsDefault),
     australiaAccount.publicKey -> (australiaAccount.secretKey, StripeGatewayPaymentIntentsAUD),
     unitedStatesAccount.publicKey -> (unitedStatesAccount.secretKey, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
+    tortoiseMediaAccount.publicKey -> (tortoiseMediaAccount.secretKey, StripeTortoiseMedia),
   )
 
   def forPublicKey(publicKey: StripePublicKey): Option[(StripeSecretKey, PaymentGateway)] =
@@ -31,6 +38,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
     accountFromConfig(config, prefix, Country.US.alpha2),
+    accountFromConfig(config, prefix, "tortoiseMedia"),
     version = stripeVersion(config),
   )
 

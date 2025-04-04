@@ -134,6 +134,7 @@ class CreateSubscriptionController(
     }
 
   private def createCheckoutSession(
+      stripePublicKey: StripePublicKey,
       email: String,
       currency: Currency,
       isTestUser: Boolean,
@@ -148,7 +149,7 @@ class CreateSubscriptionController(
       case None => EitherT.leftT[Future, CreateStripeCheckoutSessionResponse](ServerError("Invalid referer"))
       case Some(validSuccessUrl) =>
         stripeCheckoutSessionService
-          .createCheckoutSession(email, currency, isTestUser, validSuccessUrl)
+          .createCheckoutSession(stripePublicKey, email, currency, isTestUser, validSuccessUrl)
           .leftMap[CreateSubscriptionError](ServerError)
           .map[CreateStripeCheckoutSessionResponse] { response =>
             CreateStripeCheckoutSessionResponse(url = response.url, id = response.id)
@@ -164,10 +165,16 @@ class CreateSubscriptionController(
         logDetailedMessage("attempting to initiate Stripe checkout session")
         val json = request.body.copy(debugInfo = None).asJson
         logDetailedMessage(json.toString)
+        val stripePublicKey = request.body.paymentFields match {
+          case stripeHosted: StripeHostedPaymentFields => stripeHosted.stripePublicKey
+          case _ =>
+            throw new RuntimeException("Stripe checkout session can only be created with StripeHostedPaymentFields")
+        }
 
         val errorOrStatusResponse = for {
           _ <- validate(request, settings.switches)
           result <- createCheckoutSession(
+            stripePublicKey = stripePublicKey,
             email = request.body.email,
             currency = request.body.product.currency,
             isTestUser = testUsers.isTestUser(request),

@@ -44,6 +44,10 @@ const PaymentConfigSchema = object({
 		ONE_OFF: object({ default: string(), test: string() }),
 		REGULAR: object({ default: string(), test: string() }),
 	}),
+	stripeKeyTortoiseMedia: object({
+		ONE_OFF: object({ default: string(), test: string() }),
+		REGULAR: object({ default: string(), test: string() }),
+	}),
 	payPalEnvironment: object({
 		default: string(),
 		test: string(),

@@ -22,7 +22,7 @@ import {
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { DirectDebit, Sepa, Stripe } from 'helpers/forms/paymentMethods';
 import {
-	getStripeKey,
+	getStripeKeyForCountry,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
 import type {
@@ -99,7 +99,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
 	publicKey:
-		/* why don't we use state.page.checkoutForm.payment.stripeAccountDetails.publicKey ?*/ getStripeKey(
+		/* why don't we use state.page.checkoutForm.payment.stripeAccountDetails.publicKey ?*/ getStripeKeyForCountry(
 			stripeAccountForContributionType[getContributionType(state)],
 			state.common.internationalisation.countryId,
 			state.common.internationalisation.currencyId,

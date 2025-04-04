@@ -1,7 +1,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { config } from 'helpers/contributions';
-import { getStripeKey } from 'helpers/forms/stripe';
+import { getStripeKeyForCountry } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import * as cookie from 'helpers/storage/cookie';
@@ -28,7 +28,7 @@ export function OneTimeCheckout({
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const isTestUser = !!cookie.get('_test_username');
 
-	const stripePublicKey = getStripeKey(
+	const stripePublicKey = getStripeKeyForCountry(
 		'ONE_OFF',
 		countryId,
 		currencyKey,
