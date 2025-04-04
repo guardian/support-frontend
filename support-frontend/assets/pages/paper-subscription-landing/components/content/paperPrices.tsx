@@ -92,6 +92,9 @@ const productOverrideWithLabel = css`
 
 const pricesInfo = css`
 	margin-top: ${space[6]}px;
+	a {
+		color: ${palette.brand[500]};
+	}
 `;
 const pricesTabs = css`
 	margin-bottom: 13px;
@@ -104,9 +107,18 @@ export function PaperPrices({
 	setTabAction,
 	products,
 }: PaperPricesPropTypes): JSX.Element {
-	const infoText = `${
-		activeTab === HomeDelivery ? 'Delivery is included. ' : ''
-	}You can cancel your subscription at any time`;
+	const infoTextMessages = {
+		delivery: 'Delivery is included.',
+		cancel_subscripton: 'You can cancel your subscription at any time.',
+		sunday_subscription:
+			'Sunday only subscriptions for The Observer are offered by Tortoise Media Ltd. Tortoise Media\'s <a href="https://www.tortoisemedia.com/observer/terms">terms and conditions</a> and <a href="https://www.tortoisemedia.com/observer/privacy">privacy policy</a> will apply.',
+	};
+
+	const infoText = [
+		activeTab === HomeDelivery ? infoTextMessages.delivery : '',
+		infoTextMessages.cancel_subscripton,
+		shouldShowObserverCard() ? infoTextMessages.sunday_subscription : '',
+	].join(' ');
 
 	return (
 		<section css={pricesSection}>
@@ -155,7 +167,9 @@ export function PaperPrices({
 				))}
 			</FlexContainer>
 			<div css={pricesInfo}>
-				<ProductInfoChip icon={<SvgInfoRound />}>{infoText}</ProductInfoChip>
+				<ProductInfoChip icon={<SvgInfoRound />}>
+					<p dangerouslySetInnerHTML={{ __html: infoText }}></p>
+				</ProductInfoChip>
 			</div>
 		</section>
 	);
