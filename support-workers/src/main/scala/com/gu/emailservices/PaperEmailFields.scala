@@ -32,8 +32,8 @@ class PaperEmailFields(
     )
 
     val dataExtension: String = (paper.product.fulfilmentOptions, paper.product.productOptions) match {
-      case (HomeDelivery, Sunday) => "TBD"
-      case (Collection, Sunday) => "TBD"
+      case (HomeDelivery, Sunday) => "sunday-paper-delivery"
+      case (Collection, Sunday) => "sunday-paper-subscription-card"
       case (HomeDelivery, _) => "paper-delivery"
       case (NationalDelivery, _) => "paper-national-delivery"
       case _ => "paper-subscription-card"
