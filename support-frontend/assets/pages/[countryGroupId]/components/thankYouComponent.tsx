@@ -321,7 +321,8 @@ export function ThankYouComponent({
 			isOneOff ||
 				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
-					!isGuardianAdLite),
+					!isGuardianAdLite &&
+					!observerPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
