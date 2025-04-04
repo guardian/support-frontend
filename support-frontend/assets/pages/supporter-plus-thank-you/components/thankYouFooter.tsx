@@ -8,6 +8,7 @@ const footer = css`
 	margin-bottom: 28px;
 
 	${from.desktop} {
+		min-height: 15px;
 		margin-bottom: ${space[2]}px;
 	}
 `;
