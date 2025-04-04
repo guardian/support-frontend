@@ -12,8 +12,13 @@ import {
 	SvgTickRound,
 } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
+import { BenefitPill } from './benefitPill';
 import BulletSvg from './bulletSvg';
-import { NewBenefitPill } from './newBenefitPill';
+
+const benefitHeadingCss = css`
+	font-weight: bold;
+	margin: ${space[2]}px 0px ${space[3]}px;
+`;
 
 const checkListIconCss = (style: CheckListStyle) => css`
 	vertical-align: top;
@@ -80,12 +85,14 @@ export type BenefitsCheckListData = {
 	strong?: boolean;
 	isNew?: boolean;
 	hideBullet?: boolean;
+	pill?: string;
 };
 
 type CheckListStyle = 'standard' | 'compact' | 'hidden' | 'bullet';
 
 export type BenefitsCheckListProps = {
 	benefitsCheckListData: BenefitsCheckListData[];
+	benefitsHeading?: string;
 	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
@@ -113,58 +120,59 @@ export function BenefitsCheckList({
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
+	benefitsHeading,
 }: BenefitsCheckListProps): JSX.Element {
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
-			{benefitsCheckListData.map((item) => (
-				<li
-					css={css`
-						display: flex;
-					`}
-				>
-					{style !== 'hidden' && (
-						<div
-							css={[
-								checkListIconCss(style),
-								checkListIconColor(iconColor),
-								item.maybeGreyedOut,
-							]}
-						>
+			{benefitsHeading && <p css={benefitHeadingCss}>{benefitsHeading}</p>}
+			{benefitsCheckListData.map((item) => {
+				const pillCopy = item.isNew ? 'New' : item.pill;
+				return (
+					<li
+						css={css`
+							display: flex;
+						`}
+					>
+						{style !== 'hidden' && (
 							<div
 								css={[
-									style === 'standard' ? iconContainerCss : css``,
-									item.hideBullet ? opaqueCss : css``,
+									checkListIconCss(style),
+									checkListIconColor(iconColor),
+									item.maybeGreyedOut,
 								]}
 							>
-								<ChecklistItemIcon checked={item.isChecked} style={style} />
+								<div
+									css={[
+										style === 'standard' ? iconContainerCss : css``,
+										item.hideBullet ? opaqueCss : css``,
+									]}
+								>
+									<ChecklistItemIcon checked={item.isChecked} style={style} />
+								</div>
 							</div>
-						</div>
-					)}
-					<div css={[checkListTextCss, item.maybeGreyedOut]}>
-						{typeof item.text === 'string' ? (
-							<span css={checkListTextItemCss}>
-								{item.isNew && (
-									<>
-										<NewBenefitPill />{' '}
-									</>
-								)}
-								{item.strong ? <strong>{item.text}</strong> : item.text}
-								{item.toolTip && (
-									<Tooltip
-										children={<p>{item.toolTip}</p>}
-										xAxisOffset={108}
-										yAxisOffset={12}
-										placement="bottom"
-										desktopOnly={true}
-									></Tooltip>
-								)}
-							</span>
-						) : (
-							item.text
 						)}
-					</div>
-				</li>
-			))}
+						<div css={[checkListTextCss, item.maybeGreyedOut]}>
+							{typeof item.text === 'string' ? (
+								<span css={checkListTextItemCss}>
+									{pillCopy && <BenefitPill copy={pillCopy} />}{' '}
+									{item.strong ? <strong>{item.text}</strong> : item.text}
+									{item.toolTip && (
+										<Tooltip
+											children={<p>{item.toolTip}</p>}
+											xAxisOffset={108}
+											yAxisOffset={12}
+											placement="bottom"
+											desktopOnly={true}
+										></Tooltip>
+									)}
+								</span>
+							) : (
+								item.text
+							)}
+						</div>
+					</li>
+				);
+			})}
 		</ul>
 	);
 }

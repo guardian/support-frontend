@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=false, ObserverSubscriptionCard list) 1`] = `
+<div>
+  <ol
+    class="component-list-ol"
+  >
+    <li
+      class="component-list-ol__li"
+    >
+      Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.
+    </li>
+    <li
+      class="component-list-ol__li"
+    >
+      Your newspaper will be delivered to your door.
+    </li>
+    <li
+      class="component-list-ol__li"
+    >
+      Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=true, ObserverPaper list) 1`] = `
+<div>
+  <ol
+    class="component-list-ol"
+  >
+    <li
+      class="component-list-ol__li"
+    >
+      Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.
+    </li>
+    <li
+      class="component-list-ol__li"
+    >
+      Your newspaper will be delivered to your door.
+    </li>
+  </ol>
+</div>
+`;

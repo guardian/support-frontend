@@ -1,10 +1,14 @@
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/models';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type {
+	ActivePaperProductOptions,
+	PaperProductOptions,
+} from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
@@ -15,15 +19,16 @@ import {
 	getProductPrice,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
-import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import {
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
-import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
+import { getProductLabel, getTitle } from '../helpers/products';
+import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -65,7 +70,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
-
 const getUnavailableOutsideLondon = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: PaperProductOptions,
@@ -146,11 +150,21 @@ const copy: Record<
 	},
 };
 
+// For most purposes we want Sunday and Sixday to be active so that we can go through the
+// checkout flow, but we don't want to display it as an option to the user.
+const excludeSundayAndSixday = (productOption: ActivePaperProductOptions) =>
+	!['Sunday', 'Sixday'].includes(productOption);
+
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
-): Product[] =>
-	ActivePaperProductTypes.map((productOption) => {
+	abParticipations: Participations,
+): Product[] => {
+	const visiblePaperProductTypes = shouldShowObserverCard()
+		? ActivePaperProductTypes
+		: ActivePaperProductTypes.filter(excludeSundayAndSixday);
+
+	return visiblePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
@@ -172,11 +186,19 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
+		const label = productOption === 'Everyday' ? 'Best deal' : '';
+		const productLabel = shouldShowObserverCard()
+			? getProductLabel(productOption)
+			: undefined;
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+			href: paperCheckoutUrl(
+				fulfilmentOption,
+				productOption,
+				abParticipations,
+				promoCode,
+			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe',
@@ -185,30 +207,34 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label: labelText,
+			label,
+			productLabel,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,
 			),
 		};
 	});
+};
 
-type PaperProductPricesProps = {
+export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	abParticipations: Participations;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
+	abParticipations,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(tab, productPrices);
+	const products = getPlans(tab, productPrices, abParticipations);
 	return (
 		<PaperPrices
 			activeTab={tab}

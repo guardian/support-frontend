@@ -67,8 +67,7 @@ object Fixtures {
         "productType": "DigitalPack",
         "currency": "GBP",
         "billingPeriod" : "Annual",
-        "readerType": "Direct",
-        "amount": 20
+        "readerType": "Direct"
       }
     """
 
@@ -135,11 +134,13 @@ object Fixtures {
     """
 
   val stripePM = "pm_AXY4M16p60c2sg"
+  val stripePK = "pk_example_public_key"
   val stripeJson =
     s"""
       {
         "paymentType": "Stripe",
-        "paymentMethod": "$stripePM"
+        "paymentMethod": "$stripePM",
+        "stripePublicKey": "$stripePK"
       }
     """
 

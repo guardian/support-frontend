@@ -14,6 +14,7 @@ export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
 	copy: string;
+	copyBoldStart?: string;
 	tooltip?: string;
 	specificToRegions?: CountryGroupId[];
 	specificToAbTest?: Array<{
@@ -29,16 +30,12 @@ export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
-	benefitsAdditional?: ProductBenefit[];
-	benefitsMissing?: ProductBenefit[];
-	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
-	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
-	offersSummary?: Array<string | { strong: boolean; copy: string }>;
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
 		{
 			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			label?: string;
 		}
 	>;
 };
@@ -94,6 +91,11 @@ export function isProductKey(val: unknown): val is ActiveProductKey {
 	return productKeys.includes(val as ActiveProductKey);
 }
 
+const digitalEditionBenefit = {
+	copy: 'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+	copyBoldStart: 'The Digital Edition app. ',
+};
+
 const appBenefit = {
 	copy: 'Unlimited access to the Guardian app',
 	tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
@@ -143,16 +145,6 @@ const guardianWeeklyBenefit = {
 	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
-const newspaperArchiveBenefitUK = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed in the UK, since 1821.`,
-};
-const newspaperArchiveBenefitROW = {
-	copy: `Unlimited access to the Guardian's 200-year newspaper archive`,
-	isNew: true,
-	tooltip: `Look back on more than 200 years of world history with the Guardian newspaper archive. Get digital access to every front page, article and advertisement, as it was printed, since 1821.`,
-};
 
 const feastBenefit = {
 	copy: 'Unlimited access to the Guardian Feast app',
@@ -171,16 +163,6 @@ const supporterPlusBenefits = [
 	feastBenefit,
 ];
 
-const tierThreeBenefits = [guardianWeeklyBenefit];
-const tierThreeInclArchiveBenefitsUK = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitUK,
-];
-const tierThreeInclArchiveBenefitsROW = [
-	guardianWeeklyBenefit,
-	newspaperArchiveBenefitROW,
-];
-
 const guardianAdLiteBenefits = [
 	{
 		copy: 'A Guardian Ad-Lite subscription enables you to read the Guardian website without personalised advertising.',
@@ -190,6 +172,8 @@ const guardianAdLiteBenefits = [
 	},
 	{ copy: 'You can cancel at any time.' },
 ];
+
+const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
 
 export const productCatalogDescription: Record<
 	ActiveProductKey,
@@ -208,13 +192,8 @@ export const productCatalogDescription: Record<
 	TierThree: {
 		label: 'Digital + print',
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
-		benefitsSummary: [
-			'The rewards from ',
-			{ strong: true, copy: 'All-access digital' },
-		],
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
-		benefitsAdditional: supporterPlusBenefits,
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
@@ -248,14 +227,14 @@ export const productCatalogDescription: Record<
 		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
             Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
 		benefits: [
+			digitalEditionBenefit,
 			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
+				copy: 'Read our reporting on the go',
+				copyBoldStart: 'Full access to the Guardian app. ',
 			},
 			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
-			},
-			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
+				copy: 'Enjoy a free trial of your subscription, before you pay',
+				copyBoldStart: 'Free 14 day trial. ',
 			},
 		],
 		ratePlans: {
@@ -273,25 +252,8 @@ export const productCatalogDescription: Record<
 			},
 		},
 	},
-	NationalDelivery: {
-		label: 'National Delivery',
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Annual',
-			},
-			Everyday: {
-				billingPeriod: 'Monthly',
-			},
-		},
-	},
 	SupporterPlus: {
 		label: 'All-access digital',
-		/** These are duplicated in the TierThree benefitsAdditional */
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
@@ -347,66 +309,90 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SubscriptionCard: {
-		label: 'Newspaper subscription',
+		label: 'Subscription card',
+		thankyouMessage: paperThankyouMessage,
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
 			Everyday: {
 				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
 			},
 			Weekend: {
 				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
+				label: 'Weekend package',
 			},
 			Saturday: {
 				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	HomeDelivery: {
+		label: 'Home delivery',
+		thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package',
+			},
+			Saturday: {
+				billingPeriod: 'Monthly',
+				label: 'Saturday package',
+			},
+			Sunday: {
+				billingPeriod: 'Monthly',
+				label: 'The Observer package',
+			},
+		},
+	},
+	NationalDelivery: {
+		label: 'National delivery',
+		thankyouMessage: paperThankyouMessage,
+		benefits: [],
+		deliverableTo: newspaperCountries,
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Monthly',
+				label: 'Every day package - The Guardian and The Observer',
+			},
+			Sixday: {
+				billingPeriod: 'Monthly',
+				label: 'Six day package - The Guardian',
+			},
+			Weekend: {
+				billingPeriod: 'Monthly',
+				label: 'Weekend package - The Guardian and The Observer',
 			},
 		},
 	},
 	Contribution: {
 		label: 'Support',
 		benefits: [supportBenefit, newsletterBenefitUS],
-		benefitsMissing: [
-			appBenefit,
-			addFreeBenefit,
-			newsletterBenefit,
-			fewerAsksBenefit,
-			partnerOffersBenefit,
-			feastBenefit,
-		],
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
 			},
 			Annual: {
 				billingPeriod: 'Annual',
-			},
-		},
-	},
-	HomeDelivery: {
-		label: 'Home Delivery',
-		benefits: [],
-		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: 'Monthly',
-			},
-			Sunday: {
-				billingPeriod: 'Monthly',
-			},
-			Sixday: {
-				billingPeriod: 'Monthly',
-			},
-			Weekend: {
-				billingPeriod: 'Monthly',
-			},
-			Saturday: {
-				billingPeriod: 'Monthly',
 			},
 		},
 	},
@@ -437,24 +423,6 @@ export const productCatalogDescription: Record<
 		},
 	},
 };
-
-export function productCatalogDescriptionNewspaperArchive(
-	countryGroupId?: CountryGroupId,
-) {
-	const newsPaperArchiveBenefit = countryGroupId
-		? countryGroupId === 'GBPCountries'
-			? tierThreeInclArchiveBenefitsUK
-			: tierThreeInclArchiveBenefitsROW
-		: tierThreeBenefits;
-
-	return {
-		...productCatalogDescription,
-		TierThree: {
-			...productCatalogDescription.TierThree,
-			benefits: newsPaperArchiveBenefit,
-		},
-	};
-}
 
 export function productCatalogDescriptionNewBenefits(
 	countryGroupId: CountryGroupId,

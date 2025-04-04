@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import { from, space, sport } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	sport,
+	until,
+} from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -9,18 +15,17 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
-import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	filterBenefitByRegion,
-	productCatalogDescription,
-	productCatalogDescriptionNewBenefits,
-} from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
-import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
+import {
+	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
+	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
+} from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -31,10 +36,13 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getReturnAddress,
 	getThankYouOrder,
@@ -55,11 +63,25 @@ const headerContainer = css`
 `;
 const buttonContainer = css`
 	padding: ${space[12]}px 0;
+	& > a:first-child {
+		margin-right: ${space[3]}px;
+	}
+	${until.tablet} {
+		& > a {
+			margin-bottom: ${space[4]}px;
+		}
+	}
+`;
+const buttonColor = css`
+	background-color: ${neutral[100]};
+	${from.tablet} {
+		background-color: ${sport[800]};
+	}
 `;
 
-type CheckoutComponentProps = {
+export type CheckoutComponentProps = {
 	geoId: GeoId;
-	appConfig: AppConfig;
+	csrf: CsrfState;
 	payment: {
 		originalAmount: number;
 		discountedAmount?: number;
@@ -71,21 +93,23 @@ type CheckoutComponentProps = {
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYouComponent({
 	geoId,
+	csrf,
 	payment,
-	productKey,
+	productKey = 'Contribution',
 	ratePlanKey,
 	promotion,
 	identityUserType,
 	abParticipations,
+	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
-	const csrf = { token: window.guardian.csrf.token };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)
@@ -106,7 +130,7 @@ export function ThankYouComponent({
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
-	let contributionType: ContributionType | undefined;
+	let contributionType: ContributionType;
 	switch (ratePlanKey) {
 		case 'Monthly':
 		case 'RestOfWorldMonthly':
@@ -128,69 +152,90 @@ export function ThankYouComponent({
 			contributionType = 'ANNUAL';
 			break;
 		default:
-			if (!productKey && !ratePlanKey) {
-				// A one-off contribution indicated by the absence of product and ratePlan
-				contributionType = 'ONE_OFF';
-			}
+			// A one-off contribution indicated by the absence of product and ratePlan
+			contributionType = 'ONE_OFF';
 			break;
 	}
 
 	const isOneOff = contributionType === 'ONE_OFF';
 
-	if (contributionType) {
-		// track conversion with GTM
-		const paymentMethod =
-			order.paymentMethod === 'StripeExpressCheckoutElement'
-				? 'Stripe'
-				: order.paymentMethod;
+	// track conversion with GTM
+	const paymentMethod =
+		order.paymentMethod === 'StripeExpressCheckoutElement'
+			? 'Stripe'
+			: order.paymentMethod;
 
-		successfulContributionConversion(
-			payment.finalAmount, // This is the final amount after discounts
-			contributionType,
-			currencyKey,
-			paymentMethod,
-			productKey ?? 'Contribution', // One-off is labelled Contribution in Tag Manager
-		);
+	successfulContributionConversion(
+		payment.finalAmount, // This is the final amount after discounts
+		contributionType,
+		currencyKey,
+		paymentMethod,
+		productKey,
+	);
 
-		/**
-		 * This is some annoying transformation we need from
-		 * Product API => Contributions work we need to do
-		 */
-		const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-		if (isOneOff) {
-			// track conversion with QM
-			sendEventOneTimeCheckoutValue(
-				payment.originalAmount, // This is the amount before discounts
-				currencyKey,
-				true,
-			);
-		} else if (productKey) {
-			// track conversion with QM
-			sendEventCheckoutValue(
-				payment.originalAmount, // This is the amount before discounts
-				productKey,
-				billingPeriod,
-				currencyKey,
-				true,
-			);
-		}
-
+	/**
+	 * This is some annoying transformation we need from
+	 * Product API => Contributions work we need to do
+	 */
+	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	if (isOneOff) {
 		// track conversion with QM
-		sendEventContributionCheckoutConversion(
+		sendEventOneTimeCheckoutValue(
 			payment.originalAmount, // This is the amount before discounts
-			contributionType,
 			currencyKey,
+			true,
+		);
+	} else {
+		// track conversion with QM
+		sendEventCheckoutValue(
+			payment.originalAmount, // This is the amount before discounts
+			productKey,
+			billingPeriod,
+			currencyKey,
+			true,
 		);
 	}
-	if (!contributionType) {
-		return <div>Unable to find contribution type {contributionType}</div>;
-	}
 
+	// track conversion with QM
+	sendEventContributionCheckoutConversion(
+		payment.originalAmount, // This is the amount before discounts
+		contributionType,
+		currencyKey,
+	);
+	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
+	const paperProductsKeys: ActiveProductKey[] = [
+		'NationalDelivery',
+		'HomeDelivery',
+	];
+	const printProductsKeys: ActiveProductKey[] = [
+		...subscriptionCardProductsKey,
+		...paperProductsKeys,
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
+	const isPrint = printProductsKeys.includes(productKey);
+
+	const getObserver = (): ObserverPrint | undefined => {
+		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
+			return ObserverPrint.Paper;
+		}
+		if (
+			subscriptionCardProductsKey.includes(productKey) &&
+			ratePlanKey === 'Sunday'
+		) {
+			return ObserverPrint.SubscriptionCard;
+		}
+		return undefined;
+	};
+	const observerPrint = getObserver();
+
+	const isGuardianPrint =
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTier3 = productKey === 'TierThree';
+	const isTierThree = productKey === 'TierThree';
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -201,77 +246,91 @@ export function ThankYouComponent({
 	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
 	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
 
-	let benefitsChecklist;
-	if (isTier) {
-		const productDescription = showNewspaperArchiveBenefit
-			? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
-			: productCatalogDescription[productKey];
-		benefitsChecklist = [
-			...productDescription.benefits
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (isTier) {
+			// Also show SupporterPlus benefits for TierThree
+			const tierThreeAdditionalBenefits =
+				productKey === 'TierThree'
+					? landingPageSettings.products.SupporterPlus.benefits.map(
+							(benefit) => ({
+								isChecked: true,
+								text: benefit.copy,
+							}),
+					  )
+					: [];
+			return [
+				...landingPageSettings.products[productKey].benefits.map((benefit) => ({
 					isChecked: true,
 					text: benefit.copy,
 				})),
-			...(productDescription.benefitsAdditional ?? [])
-				.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-				.map((benefit) => ({
-					isChecked: true,
-					text: benefit.copy,
-				})),
-		];
-	}
+				...tierThreeAdditionalBenefits,
+			];
+		}
+		return [];
+	};
+	const benefitsChecklist = getBenefits();
+
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+	);
+	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
 
 	const thankYouModuleData = getThankYouModuleData(
-		countryId,
+		productKey,
 		countryGroupId,
+		countryId,
 		csrf,
 		isOneOff,
 		isSupporterPlus,
+		startDate,
 		undefined,
 		undefined,
-		isTier3,
+		isTierThree,
 		benefitsChecklist,
 		undefined,
 		undefined,
 		payment.finalAmount,
-		formatUserDate(getGuardianAdLiteDate()),
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
+		observerPrint,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
-
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite,
+			!isPending && isNotRegistered && !isGuardianAdLite && !isGuardianPrint,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isNotRegistered && !isSignedIn && !isGuardianAdLite,
+			isRegisteredAndNotSignedIn && !isGuardianAdLite && !isGuardianPrint,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTier3 && showNewspaperArchiveBenefit,
+			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3, 'subscriptionStart'),
-		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isTierThree || isGuardianPrint, 'subscriptionStart'),
+		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
-				(!(isTier3 && showNewspaperArchiveBenefit) &&
+				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
 					!isGuardianAdLite),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
-		...maybeThankYouModule(!isTier3 && !isGuardianAdLite, 'socialShare'),
-		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(
+			!isTierThree && !isGuardianAdLite && !isPrint,
+			'socialShare',
+		),
+		...maybeThankYouModule(isGuardianAdLite || !!observerPrint, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
@@ -304,7 +363,8 @@ export function ThankYouComponent({
 					<div css={headerContainer}>
 						<ThankYouHeader
 							isSignedIn={isSignedIn}
-							productKey={productKey ?? 'Contribution'}
+							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
 							contributionType={contributionType}
@@ -315,6 +375,7 @@ export function ThankYouComponent({
 							promotion={promotion}
 							identityUserType={identityUserType}
 							paymentStatus={order.status}
+							startDate={startDate}
 						/>
 					</div>
 
@@ -326,6 +387,18 @@ export function ThankYouComponent({
 					/>
 
 					<div css={buttonContainer}>
+						{!!observerPrint && (
+							<LinkButton
+								href="https://www.observer.co.uk/welcome"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
+								}
+								cssOverrides={buttonColor}
+							>
+								Return to the Observer
+							</LinkButton>
+						)}
 						{!isGuardianAdLite && (
 							<LinkButton
 								href="https://www.theguardian.com"
@@ -333,6 +406,7 @@ export function ThankYouComponent({
 								onClick={() =>
 									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
 								}
+								cssOverrides={buttonColor}
 							>
 								Return to the Guardian
 							</LinkButton>

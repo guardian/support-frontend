@@ -75,11 +75,11 @@ import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/coverTransactionCost';
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import { TsAndCsFooterLinks } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
@@ -333,8 +333,6 @@ export function OneTimeCheckoutComponent({
 
 	/** Personal details **/
 	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
-
 	const [billingPostcode, setBillingPostcode] = useState('');
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 
@@ -350,9 +348,6 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
-
-	const inOneTimeConfirmEmailVariant =
-		abParticipations.oneTimeConfirmEmail === 'variant';
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -680,8 +675,6 @@ export function OneTimeCheckoutComponent({
 										);
 										event.billingDetails?.email &&
 											setEmail(event.billingDetails.email);
-										event.billingDetails?.email &&
-											setConfirmedEmail(event.billingDetails.email);
 
 										/**
 										 * There is a useEffect that listens to this and submits the form
@@ -734,12 +727,7 @@ export function OneTimeCheckoutComponent({
 							<PersonalEmailFields
 								email={email}
 								setEmail={(email) => setEmail(email)}
-								confirmedEmail={confirmedEmail}
-								setConfirmedEmail={(confirmedEmail) =>
-									setConfirmedEmail(confirmedEmail)
-								}
 								isEmailAddressReadOnly={isSignedIn}
-								requireConfirmedEmail={inOneTimeConfirmEmailVariant}
 								isSignedIn={isSignedIn}
 							/>
 
@@ -888,14 +876,17 @@ export function OneTimeCheckoutComponent({
 						)}
 						<div css={tcContainer}>
 							<FinePrint mobileTheme={'dark'}>
-								<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+								<FooterTsAndCs
+									productKey={'OneTimeContribution'}
+									countryGroupId={countryGroupId}
+								/>
 							</FinePrint>
 						</div>
 					</BoxContents>
 				</Box>
 			</form>
 			<PatronsMessage countryGroupId={countryGroupId} mobileTheme={'light'} />
-			<GuardianTsAndCs mobileTheme={'light'} displayPatronsCheckout={false} />
+			<ContributionCheckoutFinePrint mobileTheme={'light'} />
 			{isProcessingPayment && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { email, firstName, lastName } from '../utils/users';
 import { setupPage } from '../utils/page';
-import { setTestUserRequiredDetails } from '../utils/testUserDetails';
+import { setTestUserDetails } from '../utils/testUserDetails';
 import { fillInPayPalDetails } from '../utils/paypal';
 import {
 	fillInCardDetails,
@@ -28,11 +28,10 @@ export const testOneTimeCheckout = (testDetails: TestDetails) => {
 		baseURL,
 	}) => {
 		// Temporary, assumes confirm email required
-		const url = `/${internationalisationId}/one-time-checkout#ab-oneTimeConfirmEmail=variant`;
+		const url = `/${internationalisationId}/one-time-checkout`;
 		const page = await context.newPage();
-		const testEmail = email();
 		await setupPage(page, context, baseURL, url);
-		await setTestUserRequiredDetails(page, testEmail);
+		await setTestUserDetails(page, email());
 		await page.getByRole('radio', { name: paymentType }).check();
 
 		if (paymentType === 'Credit/Debit card') {

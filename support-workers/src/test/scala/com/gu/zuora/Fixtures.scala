@@ -3,7 +3,7 @@ package com.gu.zuora
 import com.gu.config.Configuration
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.stripe.StripeServiceForCurrency
+import com.gu.stripe.StripeServiceForAccount
 import com.gu.support.acquisitions.ReferrerAcquisitionData
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery, NationalDelivery}

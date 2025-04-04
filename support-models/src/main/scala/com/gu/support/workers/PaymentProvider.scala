@@ -18,6 +18,8 @@ case object Sepa extends PaymentProvider("Sepa")
 
 case object Existing extends PaymentProvider("Existing")
 
+case object StripeHostedCheckout extends PaymentProvider("StripeHostedCheckout")
+
 case object RedemptionNoProvider extends PaymentProvider("Redemption")
 
 object PaymentProvider {
@@ -30,6 +32,7 @@ object PaymentProvider {
     Sepa,
     Existing,
     RedemptionNoProvider,
+    StripeHostedCheckout,
   )
 
   def fromString(code: String): Option[PaymentProvider] = {
@@ -53,6 +56,7 @@ object PaymentProvider {
     case _: DirectDebitPaymentFields => DirectDebit
     case _: SepaPaymentFields => Sepa
     case _: ExistingPaymentFields => Existing
+    case _: StripeHostedPaymentFields => StripeHostedCheckout
   }
 
 }

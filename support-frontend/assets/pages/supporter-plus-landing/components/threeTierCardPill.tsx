@@ -20,7 +20,7 @@ const container = (isSubdued?: boolean) => css`
 	${textSansBold15};
 `;
 
-export function ThreeTierLozenge({
+export function ThreeTierCardPill({
 	title,
 	subdue,
 }: ThreeTierLozengeProps): JSX.Element {

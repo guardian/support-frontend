@@ -1,3 +1,4 @@
+import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -6,6 +7,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
@@ -18,17 +20,84 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
+import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
+import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import type { CheckoutSession } from './checkout/helpers/stripeCheckoutSession';
+import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();
 
-export function Checkout({ geoId, appConfig, abParticipations }: Props) {
+const getPromotionFromProductPrices = (
+	appConfig: AppConfig,
+	productKey: ActiveProductKey,
+	ratePlanKey: string,
+	countryId: IsoCountry,
+	billingPeriod: BillingPeriod,
+) => {
+	/**
+	 * Get any promotions.
+	 * These come from the productPrices object for the particular product on window.guardian.
+	 */
+	const productPriceKey: LegacyProductType = getLegacyProductType(productKey);
+
+	const productPrices = appConfig.allProductPrices[productPriceKey];
+
+	if (productPrices === undefined) {
+		return undefined;
+	}
+
+	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
+	const productOptions: ProductOptions = getProductOptionFromProductAndRatePlan(
+		productKey,
+		ratePlanKey,
+	);
+
+	return getPromotion(
+		productPrices,
+		countryId,
+		billingPeriod,
+		fulfilmentOption,
+		productOptions,
+	);
+};
+
+const attemptToRetrievePersistedFormData = (
+	urlSearchParams: URLSearchParams,
+): CheckoutSession | undefined => {
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	if (maybeCheckoutSessionId) {
+		const persistedFormData = getFormDetails(maybeCheckoutSessionId);
+
+		if (persistedFormData) {
+			return persistedFormData;
+		}
+
+		// If there's no persisted data, remove the checkoutSessionId from the URL
+		const url = new URL(window.location.href);
+		url.searchParams.delete(checkoutSessionIdUrlParam);
+		window.location.href = url.toString();
+	}
+
+	return undefined;
+};
+
+export function Checkout({
+	geoId,
+	appConfig,
+	abParticipations,
+	landingPageSettings,
+}: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -72,7 +141,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountredAmount` the amount with a discountApplied
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
@@ -125,32 +194,16 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			return <div>Price not found in product catalog</div>;
 		}
 
-		/**
-		 * Get any promotions.
-		 * Promos are only available on SupporterPlus and TierThree and we only use this value to determine promotion values
-		 */
-		const productPrices =
-			productKey === 'SupporterPlus' || productKey === 'TierThree'
-				? appConfig.allProductPrices[productKey]
-				: undefined;
+		promotion = getPromotionFromProductPrices(
+			appConfig,
+			productKey,
+			ratePlanKey,
+			countryId,
+			billingPeriod,
+		);
 
-		const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
-
-		const productOptions: ProductOptions =
-			getProductOptionFromProductAndRatePlan(productKey, ratePlanKey);
-
-		promotion = productPrices
-			? getPromotion(
-					productPrices,
-					countryId,
-					billingPeriod,
-					fulfilmentOption,
-					productOptions,
-			  )
-			: undefined;
-		const discountedPrice = promotion?.discountedPrice
-			? promotion.discountedPrice
-			: undefined;
+		const discountedPrice =
+			promotion !== undefined ? promotion.discountedPrice : undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -199,7 +252,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			productKey === 'DigitalSubscription'
 		) {
 			elementsOptions = {
-				mode: 'payment',
+				mode: 'subscription',
 				/**
 				 * Stripe amounts are in the "smallest currency unit"
 				 * @see https://docs.stripe.com/api/charges/object
@@ -207,7 +260,6 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
-				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}
@@ -232,6 +284,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		);
 	}, []);
 
+	const checkoutSession = attemptToRetrievePersistedFormData(urlSearchParams);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -250,6 +304,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
+				landingPageSettings={landingPageSettings}
+				checkoutSession={checkoutSession}
 			/>
 		</Elements>
 	);

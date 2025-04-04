@@ -3,6 +3,12 @@ import { Button, Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
+import {
+	OrderSummaryStartDate,
+	OrderSummaryTsAndCs,
+} from 'components/orderSummary/orderSummaryTsAndCs';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
@@ -75,7 +81,7 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	description: 'Monthly support',
+	productDescription: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
 	amount: 10,
@@ -86,11 +92,6 @@ Default.args = {
 		isPaddedGlyph: false,
 	},
 	checkListData: checkListData,
-	headerButton: (
-		<Button priority="tertiary" size="xsmall">
-			Change
-		</Button>
-	),
 	tsAndCs: (
 		<>
 			<p>Auto renews every month until you cancel.</p>
@@ -100,12 +101,18 @@ Default.args = {
 			</p>
 		</>
 	),
+	startDateTierThree: <></>,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
 };
 
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	description: 'One-off contribution',
+	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
 	currency: {
@@ -115,6 +122,115 @@ SingleContribution.args = {
 		isPaddedGlyph: false,
 	},
 	checkListData: [],
+	tsAndCs: <></>,
+	startDateTierThree: <></>,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const RecurringContribution = Template.bind({});
+
+RecurringContribution.args = {
+	productDescription: 'Support',
+	enableCheckList: true,
+	amount: 3,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.Contribution.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'Contribution'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+		/>
+	),
+	startDateTierThree: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const SupporterPlus = Template.bind({});
+
+SupporterPlus.args = {
+	productDescription: 'All-access Digital',
+	enableCheckList: true,
+	amount: 12,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDateTierThree: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+};
+
+export const TierThree = Template.bind({});
+
+TierThree.args = {
+	productDescription: 'Digital + print',
+	enableCheckList: true,
+	amount: 27,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+		...productCatalogDescription.TierThree.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'TierThree'}
+			contributionType={'MONTHLY'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={27}
+		/>
+	),
+	startDateTierThree: (
+		<OrderSummaryStartDate startDate={'Friday, April 11, 2025'} />
+	),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change

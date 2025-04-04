@@ -67,7 +67,7 @@ class CreatePaymentMethodStateDecoderSpec extends AnyFlatSpec with Matchers with
         StripePaymentFields(
           stripeToken,
           Some(StripePaymentType.StripeCheckout),
-          Some(StripePublicKey("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")),
+          StripePublicKey("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"),
         ),
       ),
     )

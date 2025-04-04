@@ -6,6 +6,7 @@ import {
 } from 'helpers/async/fetch';
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
 import {
 	DirectDebit,
 	PayPal,
@@ -128,7 +129,13 @@ type RegularSepaPaymentFields = {
 	country?: Option<Country>;
 	streetName?: Option<string>;
 };
+type RegularStripeHostedCheckoutPaymentFields = {
+	paymentType: typeof StripeHostedCheckout;
+	checkoutSessionId?: string;
+	stripePublicKey: string;
+};
 type GiftRedemption = {
+	paymentType: 'GiftRedemption';
 	redemptionCode: string;
 };
 export type RegularPaymentFields =
@@ -136,6 +143,7 @@ export type RegularPaymentFields =
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
+	| RegularStripeHostedCheckoutPaymentFields
 	| GiftRedemption;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;

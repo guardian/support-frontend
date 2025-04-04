@@ -1,8 +1,14 @@
+import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,
 	numberOfWeeksWeDeliverTo,
 } from 'helpers/subscriptionsForms/deliveryDays';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
@@ -59,14 +65,50 @@ function getTierThreeDeliveryDate(today?: number) {
 	return result;
 }
 
-function getGuardianAdLiteDate(today?: number) {
-	const firstValidDate = addDays(new Date(today ?? new Date()), 15);
-	return firstValidDate;
-}
+const productDeliveryOrStartDate = (
+	productKey: ActiveProductKey,
+	paperProductOptions?: ActivePaperProductOptions,
+): Date | undefined => {
+	switch (productKey) {
+		case 'GuardianAdLite':
+			return addDays(new Date(), 15);
+		case 'TierThree':
+			return getTierThreeDeliveryDate();
+		case 'NationalDelivery':
+		case 'HomeDelivery':
+		case 'SubscriptionCard': {
+			// paper productOption undefined check
+			if (paperProductOptions === undefined) {
+				return undefined;
+			}
+			const paperDeliveryDate =
+				productKey === 'SubscriptionCard'
+					? getPaymentStartDate(Date.now(), paperProductOptions)
+					: productKey === 'HomeDelivery'
+					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
+					: getVoucherDays(Date.now(), paperProductOptions)[0];
+			return paperDeliveryDate;
+		}
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld': {
+			const guardianWeeklyDeliveryDate = getWeeklyDays();
+			const publicationStartDays = guardianWeeklyDeliveryDate.filter((day) => {
+				const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+				const date = formatMachineDate(day);
+				return !invalidPublicationDates.some((dateSuffix) =>
+					date.endsWith(dateSuffix),
+				);
+			});
+			return publicationStartDays[0];
+		}
+		default:
+			return undefined;
+	}
+};
 
 export {
 	getWeeklyDays,
 	addDays,
 	getTierThreeDeliveryDate,
-	getGuardianAdLiteDate,
+	productDeliveryOrStartDate,
 };

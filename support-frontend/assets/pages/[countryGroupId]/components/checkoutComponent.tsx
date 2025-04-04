@@ -5,6 +5,7 @@ import {
 	Label,
 	Radio,
 	RadioGroup,
+	TextArea,
 	TextInput,
 } from '@guardian/source/react-components';
 import {
@@ -25,12 +26,10 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
-	getTermsConditions,
-	getTermsStartDateTier3,
-} from 'components/orderSummary/contributionsOrderSummaryContainer';
-import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
+	OrderSummaryStartDate,
+	OrderSummaryTsAndCs,
+} from 'components/orderSummary/orderSummaryTsAndCs';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
-import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -41,7 +40,6 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	DirectDebit,
@@ -49,12 +47,14 @@ import {
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
+	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
@@ -65,22 +65,22 @@ import {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
-import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
-import {
-	PaymentTsAndCs,
-	SummaryTsAndCs,
-} from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -88,10 +88,7 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
-import {
-	paypalOneClickCheckout,
-	setupPayPalPayment,
-} from '../checkout/helpers/paypal';
+import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -117,6 +114,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
@@ -153,7 +151,16 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	checkoutSession?: CheckoutSession;
 };
+
+const shouldUseStripeHostedCheckout = (
+	productKey: ProductKey,
+	ratePlanKey: string,
+) =>
+	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
+	ratePlanKey === 'Sunday';
 
 export function CheckoutComponent({
 	geoId,
@@ -170,6 +177,8 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	abParticipations,
+	landingPageSettings,
+	checkoutSession,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -187,6 +196,65 @@ export function CheckoutComponent({
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
+	};
+
+	const isRecurringContribution = productKey === 'Contribution';
+
+	const getBenefits = (): BenefitsCheckListData[] => {
+		// Three Tier products get their config from the Landing Page tool
+		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
+			if (isRecurringContribution) {
+				// Also show SupporterPlus benefits greyed out
+				return [
+					...landingPageSettings.products.Contribution.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: false,
+							text: benefit.copy,
+							maybeGreyedOut: css`
+								color: ${palette.neutral[60]};
+								svg {
+									fill: ${palette.neutral[60]};
+								}
+							`,
+						}),
+					),
+				];
+			} else if (productKey === 'SupporterPlus') {
+				return landingPageSettings.products.SupporterPlus.benefits.map(
+					(benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					}),
+				);
+			} else if (productKey === 'TierThree') {
+				// Also show SupporterPlus benefits
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
+					...landingPageSettings.products.SupporterPlus.benefits.map(
+						(benefit) => ({
+							isChecked: true,
+							text: benefit.copy,
+						}),
+					),
+				];
+			}
+		}
+		return productDescription.benefits
+			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
+			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
+			.map((benefit) => ({
+				isChecked: true,
+				text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
+			}));
 	};
 
 	/** Delivery agent for National Delivery product */
@@ -217,7 +285,7 @@ export function CheckoutComponent({
 	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
 	 */
 	let isInvalidAmount = false;
-	if (productKey === 'Contribution') {
+	if (isRecurringContribution) {
 		const supporterPlusRatePlanPrice =
 			productCatalog.SupporterPlus?.ratePlans[ratePlanKey]?.pricing[
 				currencyKey
@@ -247,7 +315,9 @@ export function CheckoutComponent({
 		countryGroupId === 'EURCountries' && Sepa,
     */
 		countryId === 'GB' && DirectDebit,
-		Stripe,
+		shouldUseStripeHostedCheckout(productKey, ratePlanKey)
+			? StripeHostedCheckout
+			: Stripe,
 		PayPal,
 	]
 		.filter(isPaymentMethod)
@@ -299,22 +369,48 @@ export function CheckoutComponent({
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(user?.firstName ?? '');
-	const [lastName, setLastName] = useState(user?.lastName ?? '');
-	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
+	const [firstName, setFirstName] = useState(
+		checkoutSession?.formFields.personalData.firstName ?? user?.firstName ?? '',
+	);
+	const [lastName, setLastName] = useState(
+		checkoutSession?.formFields.personalData.lastName ?? user?.lastName ?? '',
+	);
+	const [email, setEmail] = useState(
+		checkoutSession?.formFields.personalData.email ?? user?.email ?? '',
+	);
+	const [confirmedEmail, setConfirmedEmail] = useState(
+		checkoutSession?.formFields.personalData.email ?? '',
+	);
+
+	/** Delivery Instructions */
+	const [deliveryInstructions, setDeliveryInstructions] = useState(
+		checkoutSession?.formFields.deliveryInstructions ?? '',
+	);
 
 	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] = useState('');
-	const [deliveryLineOne, setDeliveryLineOne] = useState('');
-	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
-	const [deliveryCity, setDeliveryCity] = useState('');
-	const [deliveryState, setDeliveryState] = useState('');
+	const [deliveryPostcode, setDeliveryPostcode] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.postCode ?? '',
+	);
+	const [deliveryLineOne, setDeliveryLineOne] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne ?? '',
+	);
+	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo ?? '',
+	);
+	const [deliveryCity, setDeliveryCity] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.city ?? '',
+	);
+	const [deliveryState, setDeliveryState] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.state ?? '',
+	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
-	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryCountry, setDeliveryCountry] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.country ??
+			countryId,
+	);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -357,25 +453,38 @@ export function CheckoutComponent({
 	}, [deliveryPostcode]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useState(true);
+		useState(checkoutSession?.formFields.billingAddressMatchesDelivery ?? true);
 
-	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcode, setBillingPostcode] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.postCode ?? '',
+	);
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const [billingLineOne, setBillingLineOne] = useState('');
-	const [billingLineTwo, setBillingLineTwo] = useState('');
-	const [billingCity, setBillingCity] = useState('');
+	const [billingLineOne, setBillingLineOne] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.lineOne ?? '',
+	);
+	const [billingLineTwo, setBillingLineTwo] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.lineTwo ?? '',
+	);
+	const [billingCity, setBillingCity] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.city ?? '',
+	);
 	const [billingStateError, setBillingStateError] = useState<string>();
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState('');
+	const [billingState, setBillingState] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.state ?? '',
+	);
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingCountry, setBillingCountry] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.country ??
+			countryId,
+	);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -421,11 +530,14 @@ export function CheckoutComponent({
 				stripePublicKey,
 				recaptchaToken,
 				formData,
+				checkoutSession?.checkoutSessionId,
 			);
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');
 			}
-			const thankYouPageUrl = await submitForm({
+			// For StripeHostedCheckout successUrl is a hosted Stripe checkout page
+			// for other payment methods it's the thank you page.
+			const successUrl = await submitForm({
 				geoId,
 				productKey: finalProductKey,
 				ratePlanKey,
@@ -438,7 +550,7 @@ export function CheckoutComponent({
 				promotion,
 				contributionAmount,
 			});
-			window.location.href = thankYouPageUrl;
+			window.location.href = successUrl;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
@@ -465,7 +577,24 @@ export function CheckoutComponent({
 	);
 
 	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
-	const isAdLite = productKey === 'GuardianAdLite';
+
+	const contributionType =
+		productFields.billingPeriod === 'Monthly'
+			? 'MONTHLY'
+			: productFields.billingPeriod === 'Annual'
+			? 'ANNUAL'
+			: 'ONE_OFF';
+
+	/*
+  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+          We should revisit this and see if we can remove this prop, pushing it lower down the tree
+  */
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+	);
 
 	return (
 		<CheckoutLayout>
@@ -484,7 +613,8 @@ export function CheckoutComponent({
 							</div>
 						)}
 					<ContributionsOrderSummary
-						description={productDescription.label}
+						productDescription={productDescription.label}
+						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={
 							ratePlanDescription.billingPeriod === 'Annual'
 								? 'year'
@@ -495,68 +625,29 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={[
-							...productDescription.benefits
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsAdditional ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.filter((benefit) =>
-									filterBenefitByABTest(benefit, abParticipations),
-								)
-								.map((benefit) => ({
-									isChecked: true,
-									text: benefit.copy,
-								})),
-							...(productDescription.benefitsMissing ?? [])
-								.filter((benefit) =>
-									filterBenefitByRegion(benefit, countryGroupId),
-								)
-								.map((benefit) => ({
-									isChecked: false,
-									text: benefit.copy,
-									maybeGreyedOut: css`
-										color: ${palette.neutral[60]};
-
-										svg {
-											fill: ${palette.neutral[60]};
-										}
-									`,
-								})),
-						]}
+						checkListData={getBenefits()}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
 							);
 						}}
 						enableCheckList={true}
-						tsAndCsTier3={
-							productKey === 'TierThree'
-								? getTermsStartDateTier3(
-										formatUserDate(getTierThreeDeliveryDate()),
-								  )
-								: null
+						startDateTierThree={
+							productKey === 'TierThree' ? (
+								<OrderSummaryStartDate
+									startDate={formatUserDate(getTierThreeDeliveryDate())}
+								/>
+							) : null
 						}
-						tsAndCs={getTermsConditions(
-							countryGroupId,
-							productFields.billingPeriod === 'Monthly'
-								? 'MONTHLY'
-								: productFields.billingPeriod === 'Annual'
-								? 'ANNUAL'
-								: 'ONE_OFF',
-							productFields.productType,
-							promotion,
-						)}
+						tsAndCs={
+							<OrderSummaryTsAndCs
+								productKey={productKey}
+								contributionType={contributionType}
+								countryGroupId={countryGroupId}
+								thresholdAmount={thresholdAmount}
+								promotion={promotion}
+							/>
+						}
 						headerButton={
 							<BackButton path={returnToLandingPage} buttonText={'Change'} />
 						}
@@ -575,7 +666,7 @@ export function CheckoutComponent({
 				<Box
 					cssOverrides={[
 						shorterBoxMargin,
-						isAdLite ? lengthenBoxMargin : css``,
+						!isRecurringContribution ? lengthenBoxMargin : css``,
 					]}
 				>
 					<BoxContents>
@@ -725,7 +816,6 @@ export function CheckoutComponent({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
-								requireConfirmedEmail={true}
 								isSignedIn={isSignedIn}
 							/>
 
@@ -863,7 +953,27 @@ export function CheckoutComponent({
 										}}
 									/>
 								</fieldset>
-
+								{productKey === 'HomeDelivery' && (
+									<fieldset
+										css={css`
+											margin-bottom: ${space[6]}px;
+										`}
+									>
+										<TextArea
+											id="deliveryInstructions"
+											data-qm-masking="blocklist"
+											name="deliveryInstructions"
+											label="Delivery instructions"
+											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+											onChange={(event) => {
+												setDeliveryInstructions(event.target.value);
+											}}
+											value={deliveryInstructions}
+											optional
+										/>
+									</fieldset>
+								)}
 								<fieldset
 									css={css`
 										margin-bottom: ${space[6]}px;
@@ -1106,117 +1216,29 @@ export function CheckoutComponent({
 							</RadioGroup>
 						</FormSection>
 						<SummaryTsAndCs
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
+							productKey={productKey}
+							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
-							productKey={productKey}
-							promotion={promotion}
 						/>
 						<div
 							css={css`
 								margin: ${space[8]}px 0;
 							`}
 						>
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText={`Pay ${simpleFormatAmount(
-										currency,
-										finalAmount,
-									)} per ${
-										ratePlanDescription.billingPeriod === 'Annual'
-											? 'year'
-											: ratePlanDescription.billingPeriod === 'Monthly'
-											? 'month'
-											: 'quarter'
-									}`}
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the formOnSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
-							{payPalLoaded && paymentMethod === 'PayPal' && (
-								<>
-									<input type="hidden" name="payPalBAID" value={payPalBAID} />
-
-									<PayPalButton
-										env={isProd() && !isTestUser ? 'production' : 'sandbox'}
-										style={{
-											color: 'blue',
-											size: 'responsive',
-											label: 'pay',
-											tagline: false,
-											layout: 'horizontal',
-											fundingicons: false,
-										}}
-										commit={true}
-										validate={({ disable, enable }) => {
-											/** We run this initially to set the button to the correct state */
-											const valid = formRef.current?.checkValidity();
-											if (valid) {
-												enable();
-											} else {
-												disable();
-											}
-
-											/** And then run it on form change */
-											formRef.current?.addEventListener('change', (event) => {
-												const element = event.currentTarget as HTMLFormElement;
-												/* We call this twice because the first time does not
-                           not give us an accurate state of the form.
-                           This seems to be because we use `setCustomValidity` on the elements
-                        */
-												element.checkValidity();
-												const valid = element.checkValidity();
-
-												if (valid) {
-													enable();
-												} else {
-													disable();
-												}
-											});
-										}}
-										funding={{
-											disallowed: [window.paypal.FUNDING.CREDIT],
-										}}
-										onClick={() => {
-											// TODO - add tracking
-										}}
-										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-										payment={(resolve, reject) => {
-											setupPayPalPayment(
-												finalAmount,
-												currencyKey,
-												ratePlanDescription.billingPeriod,
-												csrf,
-											)
-												.then((token) => {
-													resolve(token);
-												})
-												.catch((error) => {
-													console.error(error);
-													reject(error as Error);
-												});
-										}}
-										onAuthorize={(payPalData: Record<string, unknown>) => {
-											void paypalOneClickCheckout(
-												payPalData.paymentToken,
-												csrf,
-											).then((baid) => {
-												// The state below has a useEffect that submits the form
-												setPayPalBAID(baid);
-											});
-										}}
-									/>
-								</>
-							)}
+							<SubmitButton
+								paymentMethod={paymentMethod}
+								payPalLoaded={payPalLoaded}
+								payPalBAID={payPalBAID}
+								setPayPalBAID={setPayPalBAID}
+								formRef={formRef}
+								isTestUser={isTestUser}
+								finalAmount={finalAmount}
+								currencyKey={currencyKey}
+								ratePlanDescription={ratePlanDescription}
+								csrf={csrf}
+								currency={currency}
+							/>
 						</div>
 						{errorMessage && (
 							<div role="alert" data-qm-error>
@@ -1230,35 +1252,22 @@ export function CheckoutComponent({
 							</div>
 						)}
 						<PaymentTsAndCs
-							countryGroupId={countryGroupId}
-							contributionType={
-								productFields.billingPeriod === 'Monthly'
-									? 'MONTHLY'
-									: productFields.billingPeriod === 'Annual'
-									? 'ANNUAL'
-									: 'ONE_OFF'
-							}
-							currency={currencyKey}
-							amount={originalAmount}
-							amountIsAboveThreshold={
-								productKey === 'SupporterPlus' || productKey === 'TierThree'
-							}
 							productKey={productKey}
+							contributionType={contributionType}
+							countryGroupId={countryGroupId}
 							promotion={promotion}
+							thresholdAmount={thresholdAmount}
 						/>
 					</BoxContents>
 				</Box>
 			</form>
-			{!isAdLite && (
+			{isRecurringContribution && (
 				<>
 					<PatronsMessage
 						countryGroupId={countryGroupId}
 						mobileTheme={'light'}
 					/>
-					<GuardianTsAndCs
-						mobileTheme={'light'}
-						displayPatronsCheckout={false}
-					/>
+					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
 			{isProcessingPayment && (

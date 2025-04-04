@@ -358,6 +358,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 			logException('Paypal one-off has no authorisation handler');
 			return Promise.resolve(error);
 		},
+		StripeHostedCheckout: () => {
+			logException('Stripe hosted checkout not supported here');
+			return Promise.resolve(error);
+		},
 		Stripe: (
 			dispatch: Dispatch<Action>,
 			state: ContributionsState,
@@ -413,6 +417,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 	},
 	ANNUAL: {
 		...recurringPaymentAuthorisationHandlers,
+		StripeHostedCheckout: () => {
+			logException('Stripe hosted checkout not supported here');
+			return Promise.resolve(error);
+		},
 		None: () => {
 			logInvalidCombination('ANNUAL', 'None');
 			return Promise.resolve(error);
@@ -420,6 +428,10 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 	},
 	MONTHLY: {
 		...recurringPaymentAuthorisationHandlers,
+		StripeHostedCheckout: () => {
+			logException('Stripe hosted checkout not supported here');
+			return Promise.resolve(error);
+		},
 		None: () => {
 			logInvalidCombination('MONTHLY', 'None');
 			return Promise.resolve(error);

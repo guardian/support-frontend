@@ -11,6 +11,7 @@ import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD,
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 
+import scala.collection.immutable.Map.empty
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 
@@ -21,23 +22,16 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def withCurrency(currency: Currency): StripeServiceForCurrency = {
-    logger.warn(s"DEPRECATED FALLBACK - using currency $currency to determine stripe gateway")
-    val gateway = if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
-    val stripeAccountConfig = config.forCurrency(Some(currency)).secretKey
-    new StripeServiceForCurrency(this, stripeAccountConfig, gateway)
-  }
-
-  def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForCurrency = {
+  def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForAccount = {
     val (stripeSecretKey, gateway) = config
       .forPublicKey(stripePublicKey)
       .getOrElse(throw StateNotValidException("not a known public key: " + stripePublicKey))
-    new StripeServiceForCurrency(this, stripeSecretKey, gateway)
+    new StripeServiceForAccount(this, stripeSecretKey, gateway)
   }
 
 }
 
-class StripeServiceForCurrency(
+class StripeServiceForAccount(
     stripeService: StripeService,
     stripeSecretKey: StripeSecretKey,
     val paymentIntentGateway: PaymentGateway,
@@ -45,8 +39,9 @@ class StripeServiceForCurrency(
 
   def get[A](
       endpoint: String,
+      params: Map[String, String] = empty,
   )(implicit decoder: Decoder[A], errorDecoder: Decoder[StripeError], ctag: ClassTag[A]): Future[A] =
-    stripeService.get[A](endpoint, getHeaders())
+    stripeService.get[A](endpoint = endpoint, headers = getHeaders(), params = params)
 
   def postForm[A](
       endpoint: String,
@@ -64,5 +59,7 @@ class StripeServiceForCurrency(
   val createCustomerFromPaymentMethod = com.gu.stripe.createCustomerFromPaymentMethod.apply(this) _
 
   val getPaymentMethod = com.gu.stripe.getPaymentMethod.apply(this) _
+
+  val retrieveCheckoutSession = com.gu.stripe.retrieveCheckoutSession.apply(this) _
 
 }

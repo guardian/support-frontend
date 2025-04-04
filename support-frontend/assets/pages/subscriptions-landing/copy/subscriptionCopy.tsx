@@ -61,19 +61,26 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
-const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
+const getDigitalEditionPrice = (
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+): string => {
 	const currencyKey = detect(countryGroupId);
 	const currency = currencies[currencyKey].glyph;
 	const product = productCatalog['DigitalSubscription'];
-	const priceMonthly = product?.ratePlans[Monthly]?.pricing[currencyKey];
-	const currencyPriceMonthly = priceMonthly
-		? `${currency}${fixDecimals(priceMonthly)}/${Monthly}`
-		: '';
-	const priceAnnual = product?.ratePlans[Annual]?.pricing[currencyKey];
-	const currencyPriceAnnual = priceAnnual
-		? ` ${currency}${fixDecimals(priceAnnual)}/${Annual}`
-		: '';
-	return `${currencyPriceMonthly}${currencyPriceAnnual}`;
+	const price = product?.ratePlans[billingPeriod]?.pricing[currencyKey];
+	if (!price) {
+		return '';
+	}
+	const fixedPriceWtihCurrency = `${currency}${fixDecimals(price)}`;
+	const billingFrequency =
+		billingPeriod === Annual ? 'Annually' : billingPeriod;
+	return `${fixedPriceWtihCurrency}/${billingFrequency}`;
+};
+const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
+	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
+	const priceAnnual = getDigitalEditionPrice(countryGroupId, Annual);
+	return [priceMonthly, priceAnnual].join(' or ');
 };
 
 function getGuardianWeeklyOfferCopy(discountCopy: string) {
@@ -118,7 +125,7 @@ function digitalCheckout(
 		subtitle: getDigitalEditionPrices(countryGroupId),
 		buttons: [
 			{
-				ctaButtonText: 'Subscribe Monthly',
+				ctaButtonText: getDigitalEditionPrice(countryGroupId, Monthly),
 				link: digitalSubscriptionLanding(countryGroupId, 'Monthly'),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_monthly_cta',
@@ -128,7 +135,7 @@ function digitalCheckout(
 				modifierClasses: 'digital',
 			},
 			{
-				ctaButtonText: 'Subscribe Annually',
+				ctaButtonText: getDigitalEditionPrice(countryGroupId, Annual),
 				link: digitalSubscriptionLanding(countryGroupId, 'Annual'),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_annual_cta',
@@ -136,7 +143,6 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
-				primary: true,
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,

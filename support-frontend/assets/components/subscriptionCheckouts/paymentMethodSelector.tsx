@@ -68,6 +68,11 @@ const paymentMethodData = {
 		label: 'Credit/Debit card',
 		icon: <SvgCreditCard />,
 	},
+	StripeHostedCheckout: {
+		id: 'qa-stripe-hosted-checkout',
+		label: 'Stripe hosted checkout',
+		icon: <></>,
+	},
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',

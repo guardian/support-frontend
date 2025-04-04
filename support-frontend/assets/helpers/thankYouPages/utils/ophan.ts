@@ -14,6 +14,8 @@ export const OPHAN_COMPONENT_ID_SOCIAL_EMAIL =
 export const OPHAN_COMPONENT_ID_AUS_MAP = 'contribution-thankyou-aus-map';
 export const OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN =
 	'contribution-thankyou-return-to-guardian';
+export const OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER =
+	'contribution-thankyou-return-to-observer';
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
 	'contribution-thankyou-read-more-sign-in';
 
