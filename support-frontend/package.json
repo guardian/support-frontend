@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "Frontend for the supporter platform.",
 	"scripts": {
+		"start": "./devrun.sh",
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
 		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
