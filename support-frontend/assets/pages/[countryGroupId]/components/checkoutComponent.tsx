@@ -23,7 +23,6 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	OrderSummaryStartDate,
@@ -95,6 +94,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
 	Legend,
@@ -1279,12 +1279,10 @@ export function CheckoutComponent({
 					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
-			{isProcessingPayment && (
-				<LoadingOverlay>
-					<p>Processing transaction</p>
-					<p>Please wait</p>
-				</LoadingOverlay>
-			)}
+			<CheckoutLoadingOverlay
+				showOverlay={isProcessingPayment}
+				showCopy={!isSundayOnlyNewspaperSub(productKey, ratePlanKey)}
+			/>
 		</CheckoutLayout>
 	);
 }
