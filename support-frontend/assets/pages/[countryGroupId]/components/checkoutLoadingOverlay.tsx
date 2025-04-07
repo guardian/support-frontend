@@ -1,6 +1,6 @@
 import { LoadingOverlay } from '../../../components/loadingOverlay/loadingOverlay';
 
-export type CheckoutLoadingOverlayProps = {
+type CheckoutLoadingOverlayProps = {
 	showOverlay: boolean;
 	showCopy: boolean;
 };
