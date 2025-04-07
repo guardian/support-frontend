@@ -1287,7 +1287,12 @@ export function CheckoutComponent({
 			)}
 			<CheckoutLoadingOverlay
 				showOverlay={isProcessingPayment}
-				showCopy={!isSundayOnlyNewspaperSub(productKey, ratePlanKey)}
+				showCopy={
+					!(
+						isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
+						checkoutSession === undefined
+					)
+				}
 			/>
 		</CheckoutLayout>
 	);
