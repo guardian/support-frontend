@@ -332,7 +332,9 @@ export function CheckoutComponent({
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(
+		checkoutSession ? StripeHostedCheckout : undefined,
+	);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
 	/** Payment methods: Stripe */
@@ -368,6 +370,17 @@ export function CheckoutComponent({
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	/**
+	 * Checkout session ID forces formOnSubmit
+	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
+	 */
+	useEffect(() => {
+		if (checkoutSession?.checkoutSessionId) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [checkoutSession?.checkoutSessionId]);
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
