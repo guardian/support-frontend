@@ -30,6 +30,7 @@ export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
+	landingPagePath: string;
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
 		string,
@@ -182,6 +183,7 @@ export const productCatalogDescription: Record<
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
 		thankyouMessage: `Your subscription powers our journalism.`,
+		landingPagePath: '/guardian-ad-lite',
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
@@ -192,6 +194,7 @@ export const productCatalogDescription: Record<
 	TierThree: {
 		label: 'Digital + print',
 		thankyouMessage: `You'll receive a confirmation email containing everything you need to know about your subscription, including additional emails on how to make the most of your subscription.${' '}`,
+		landingPagePath: '/contribute',
 		benefits: [guardianWeeklyBenefit],
 		/** These are just the SupporterPlus benefits */
 		deliverableTo: gwDeliverableCountries,
@@ -226,6 +229,7 @@ export const productCatalogDescription: Record<
 		label: 'The Guardian Digital Edition',
 		thankyouMessage: `You have now unlocked access to the Guardian and Observer newspapers, which you can enjoy across all your devices, wherever you are in the world.
             Soon, you will receive weekly newsletters from our supporter editor. We'll also be in touch with other ways to get closer to our journalism. ${' '}`,
+		landingPagePath: '/subscribe',
 		benefits: [
 			digitalEditionBenefit,
 			{
@@ -254,6 +258,7 @@ export const productCatalogDescription: Record<
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
+		landingPagePath: '/contribute',
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
@@ -266,6 +271,7 @@ export const productCatalogDescription: Record<
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
+		landingPagePath: '/subscribe/weekly',
 		benefits: [],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
@@ -288,6 +294,7 @@ export const productCatalogDescription: Record<
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
+		landingPagePath: '/subscribe/weekly',
 		benefits: [],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
@@ -311,6 +318,7 @@ export const productCatalogDescription: Record<
 	SubscriptionCard: {
 		label: 'Subscription card',
 		thankyouMessage: paperThankyouMessage,
+		landingPagePath: '/subscribe/paper#Collection',
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
@@ -339,6 +347,7 @@ export const productCatalogDescription: Record<
 	HomeDelivery: {
 		label: 'Home delivery',
 		thankyouMessage: paperThankyouMessage,
+		landingPagePath: '/subscribe/paper',
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
@@ -367,6 +376,7 @@ export const productCatalogDescription: Record<
 	NationalDelivery: {
 		label: 'National delivery',
 		thankyouMessage: paperThankyouMessage,
+		landingPagePath: '/subscribe/paper',
 		benefits: [],
 		deliverableTo: newspaperCountries,
 		ratePlans: {
@@ -386,6 +396,7 @@ export const productCatalogDescription: Record<
 	},
 	Contribution: {
 		label: 'Support',
+		landingPagePath: '/contribute',
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
 			Monthly: {
@@ -398,6 +409,7 @@ export const productCatalogDescription: Record<
 	},
 	OneTimeContribution: {
 		label: 'One-time contribution',
+		landingPagePath: '/contribute',
 		benefits: [fewerAsksBenefit],
 		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
 		// can't handle a billingPeriod of OneTime.
@@ -405,6 +417,7 @@ export const productCatalogDescription: Record<
 	},
 	GuardianPatron: {
 		label: 'Guardian Patron',
+		landingPagePath: '/contribute',
 		benefits: [
 			{
 				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',

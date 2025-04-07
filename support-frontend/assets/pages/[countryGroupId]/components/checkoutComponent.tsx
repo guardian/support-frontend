@@ -124,17 +124,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-const productLanding = (product: ProductKey) => {
-	switch (product) {
-		case 'GuardianAdLite':
-			return '/guardian-ad-lite';
-		case 'DigitalSubscription':
-			return `/subscribe`;
-		default:
-			return `/contribute`;
-	}
-};
-
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -585,8 +574,6 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
-
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
 			? 'MONTHLY'
@@ -658,7 +645,10 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton path={returnToLandingPage} buttonText={'Change'} />
+							<BackButton
+								path={`/${geoId}${productDescription.landingPagePath}`}
+								buttonText={'Change'}
+							/>
 						}
 					/>
 				</BoxContents>
