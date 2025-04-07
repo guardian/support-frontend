@@ -457,6 +457,9 @@ export function CheckoutComponent({
 				// The users postcode is outside the M25 and they have selected a valid rate plan
 				setDeliveryPostcodeIsOutsideM25(true);
 				const agents = await getDeliveryAgents(postcode);
+				if (agents.agents?.length === 1 && agents.agents[0]) {
+					setChosenDeliveryAgent(agents.agents[0].agentId);
+				}
 				setDeliveryAgents(agents);
 			}
 		} else {
