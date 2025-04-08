@@ -1,18 +1,18 @@
 package com.gu.zuora.subscriptionBuilders
 
+import cats.syntax.either._
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency
 import com.gu.support.catalog.{CatalogService, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraSupporterPlusConfig}
-import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.workers.Monthly
+import com.gu.support.promotions.PromotionService
 import com.gu.support.workers.ProductTypeRatePlans.supporterPlusRatePlan
 import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
+import com.gu.support.workers.states.CreateZuoraSubscriptionState
+import com.gu.support.workers.{Monthly, SupporterPlus}
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
-import com.gu.support.catalog.NoFulfilmentOptions
 
 class SupporterPlusSubcriptionBuilder(
     config: ZuoraSupporterPlusConfig,
@@ -24,18 +24,17 @@ class SupporterPlusSubcriptionBuilder(
 ) {
 
   def build(
-      state: SupporterPlusState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
-  ): Either[PromoError, SubscribeItem] = {
+      product: SupporterPlus,
+      state: CreateZuoraSubscriptionState,
+  ): Either[String, SubscribeItem] = {
     val productRatePlanId =
-      validateRatePlan(supporterPlusRatePlan(state.product, environment), state.product.describe)
+      validateRatePlan(supporterPlusRatePlan(product, environment), product.describe)
     val contributionRatePlanChargeId =
-      if (state.product.billingPeriod == Monthly) config.v2.monthlyContributionChargeId
+      if (product.billingPeriod == Monthly) config.v2.monthlyContributionChargeId
       else config.v2.annualContributionChargeId
     val todaysDate = dateGenerator.today
 
-    val contributionAmount = state.product.amount - getBaseProductPrice(productRatePlanId, state.product.currency)
+    val contributionAmount = product.amount - getBaseProductPrice(productRatePlanId, product.currency)
     if (contributionAmount < 0)
       throw new BadRequestException(
         s"The contribution amount of a supporter plus subscription cannot be less than zero, but here it would be $contributionAmount",
@@ -54,8 +53,8 @@ class SupporterPlusSubcriptionBuilder(
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = todaysDate,
       readerType = Direct,
-      csrUsername = csrUsername,
-      salesforceCaseId = salesforceCaseId,
+      csrUsername = state.csrUsername,
+      salesforceCaseId = state.salesforceCaseId,
     )
 
     applyPromoCodeIfPresent(
@@ -64,8 +63,8 @@ class SupporterPlusSubcriptionBuilder(
       productRatePlanId,
       subscriptionData,
     ).map { subscriptionData =>
-      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
-    }
+      subscribeItemBuilder.build(subscriptionData, state.salesforceContacts.recipient, Some(state.paymentMethod), None)
+    }.leftMap(_.toString)
   }
 
   private def getBaseProductPrice(productRatePlanId: ProductRatePlanId, currency: Currency) =

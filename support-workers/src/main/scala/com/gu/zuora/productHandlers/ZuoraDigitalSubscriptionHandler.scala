@@ -2,11 +2,9 @@ package com.gu.zuora.productHandlers
 
 import cats.implicits._
 import com.gu.WithLoggingSugar._
-import com.gu.support.acquisitions.{AbTest, AcquisitionData}
-import com.gu.support.workers.User
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionState
-import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionState
+import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendThankYouEmailState}
+import com.gu.support.workers.{DigitalPack, User}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.subscriptionBuilders.DigitalSubscriptionBuilder
 
@@ -20,16 +18,15 @@ class ZuoraDigitalSubscriptionHandler(
 ) {
 
   def subscribe(
-      state: DigitalSubscriptionState,
-      csrUsername: Option[String],
-      salesforceCaseId: Option[String],
+      product: DigitalPack,
+      state: CreateZuoraSubscriptionState,
   ): Future[SendThankYouEmailState] = {
     for {
       subscribeItem <- Future
         .fromTry(
           digitalSubscriptionBuilder
-            .build(state, csrUsername, salesforceCaseId)
-            .leftMap(BuildSubscribePromoError)
+            .build(product, state)
+            .leftMap(BuildSubscribeError)
             .toTry,
         )
         .withEventualLogging("subscription data")
@@ -37,7 +34,7 @@ class ZuoraDigitalSubscriptionHandler(
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailDigitalSubscriptionState(
       user,
-      state.product,
+      product,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),
