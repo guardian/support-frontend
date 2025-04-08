@@ -203,6 +203,14 @@ export function CheckoutComponent({
 
 	const isRecurringContribution = productKey === 'Contribution';
 
+	const isRedirectingToStripeHostedCheckout = (
+		productKey: ProductKey,
+		ratePlanKey: string,
+	) =>
+		isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
+		checkoutSession === undefined &&
+		paymentMethod === StripeHostedCheckout;
+
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
@@ -1285,10 +1293,14 @@ export function CheckoutComponent({
 					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
-			<CheckoutLoadingOverlay
-				showOverlay={isProcessingPayment}
-				showCopy={!isSundayOnlyNewspaperSub(productKey, ratePlanKey)}
-			/>
+			{isProcessingPayment && (
+				<CheckoutLoadingOverlay
+					hideProcessingMessage={isRedirectingToStripeHostedCheckout(
+						productKey,
+						ratePlanKey,
+					)}
+				/>
+			)}
 		</CheckoutLayout>
 	);
 }

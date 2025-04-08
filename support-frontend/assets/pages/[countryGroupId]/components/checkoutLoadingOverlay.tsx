@@ -1,22 +1,17 @@
 import { LoadingOverlay } from '../../../components/loadingOverlay/loadingOverlay';
 
 type CheckoutLoadingOverlayProps = {
-	showOverlay: boolean;
-	showCopy: boolean;
+	hideProcessingMessage: boolean;
 };
 export function CheckoutLoadingOverlay({
-	showOverlay,
-	showCopy,
+	hideProcessingMessage,
 }: CheckoutLoadingOverlayProps) {
-	if (!showOverlay) {
-		return null;
-	}
-	const copy = showCopy ? (
+	const copy = hideProcessingMessage ? null : (
 		<div>
 			<p>Processing transaction</p>
 			<p>Please wait</p>
 		</div>
-	) : null;
+	);
 
 	return (
 		<div className="checkoutLoadingOverlay">
