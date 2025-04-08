@@ -1285,15 +1285,16 @@ export function CheckoutComponent({
 					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
-			<CheckoutLoadingOverlay
-				showOverlay={isProcessingPayment}
-				showCopy={
-					!(
-						isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
-						checkoutSession === undefined
-					)
-				}
-			/>
+			{isProcessingPayment && (
+				<CheckoutLoadingOverlay
+					showCopy={
+						!(
+							isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
+							checkoutSession === undefined
+						)
+					}
+				/>
+			)}
 		</CheckoutLayout>
 	);
 }
