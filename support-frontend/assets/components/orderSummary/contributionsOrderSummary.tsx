@@ -13,6 +13,7 @@ import {
 	Button,
 	SvgChevronDownSingle,
 } from '@guardian/source/react-components';
+import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
@@ -21,6 +22,7 @@ import {
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 const componentStyles = css`
 	${textSans17}
@@ -117,6 +119,15 @@ const detailsSection = css`
 	}
 `;
 
+const orderSummarySundayDetails = css`
+	${textSans14};
+	color: ${neutral[38]};
+	background-color: ${neutral[97]};
+	margin-top: ${space[6]}px;
+	padding: ${space[3]}px;
+	border-radius: ${space[3]}px;
+`;
+
 const termsAndConditions = css`
 	${textSans17};
 	color: ${neutral[0]};
@@ -126,7 +137,9 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
+	productKey: ProductKey;
 	productDescription: string;
+	ratePlanKey: string;
 	ratePlanDescription?: string;
 	amount: number;
 	promotion?: Promotion;
@@ -146,7 +159,9 @@ const visuallyHiddenCss = css`
 `;
 
 export function ContributionsOrderSummary({
+	productKey,
 	productDescription,
+	ratePlanKey,
 	ratePlanDescription,
 	amount,
 	promotion,
@@ -160,6 +175,10 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
+	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
+		productKey,
+		ratePlanKey,
+	);
 
 	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
@@ -189,7 +208,7 @@ export function ContributionsOrderSummary({
 						{ratePlanDescription && <div>{ratePlanDescription}</div>}
 						{productDescription}
 					</p>
-					{hasCheckList && (
+					{(hasCheckList || isSundayOnlyNewspaperSubscription) && (
 						<Button
 							priority="subdued"
 							aria-expanded={showCheckList ? 'true' : 'false'}
@@ -211,6 +230,13 @@ export function ContributionsOrderSummary({
 						<div css={checklistContainer}>{checkList}</div>
 						{startDateTierThree}
 					</>
+				)}
+				{isSundayOnlyNewspaperSubscription && showCheckList && (
+					<div css={orderSummarySundayDetails}>
+						{productKey === 'HomeDelivery'
+							? 'Print edition, delivered every Sunday and access to exclusive slow news digital newsletters, thought-provoking podcasts and Think-Ins, discussions with journalists.'
+							: 'Print edition every Sunday and access to exclusive slow news digital newsletters, thought-provoking podcasts and Think-Ins, discussions with journalists.'}
+					</div>
 				)}
 			</div>
 
