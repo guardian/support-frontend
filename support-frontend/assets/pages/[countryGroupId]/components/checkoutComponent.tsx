@@ -23,7 +23,6 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	OrderSummaryStartDate,
@@ -95,6 +94,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
 	Legend,
@@ -123,17 +123,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 		`recurringPaymentMethods.${toPaymentMethodSwitchNaming(paymentMethod)}`,
 	);
 }
-
-const productLanding = (product: ProductKey) => {
-	switch (product) {
-		case 'GuardianAdLite':
-			return '/guardian-ad-lite';
-		case 'DigitalSubscription':
-			return `/subscribe`;
-		default:
-			return `/contribute`;
-	}
-};
 
 type CheckoutComponentProps = {
 	geoId: GeoId;
@@ -601,8 +590,6 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
-
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
 			? 'MONTHLY'
@@ -674,7 +661,10 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton path={returnToLandingPage} buttonText={'Change'} />
+							<BackButton
+								path={`/${geoId}${productDescription.landingPagePath}`}
+								buttonText={'Change'}
+							/>
 						}
 					/>
 				</BoxContents>
@@ -1295,12 +1285,10 @@ export function CheckoutComponent({
 					<ContributionCheckoutFinePrint mobileTheme={'light'} />
 				</>
 			)}
-			{isProcessingPayment && (
-				<LoadingOverlay>
-					<p>Processing transaction</p>
-					<p>Please wait</p>
-				</LoadingOverlay>
-			)}
+			<CheckoutLoadingOverlay
+				showOverlay={isProcessingPayment}
+				showCopy={!isSundayOnlyNewspaperSub(productKey, ratePlanKey)}
+			/>
 		</CheckoutLayout>
 	);
 }
