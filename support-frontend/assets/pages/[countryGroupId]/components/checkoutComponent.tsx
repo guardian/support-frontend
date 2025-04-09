@@ -658,7 +658,6 @@ export function CheckoutComponent({
 						tsAndCs={
 							<OrderSummaryTsAndCs
 								productKey={productKey}
-								ratePlanKey={ratePlanKey}
 								contributionType={contributionType}
 								countryGroupId={countryGroupId}
 								thresholdAmount={thresholdAmount}
