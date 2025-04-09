@@ -340,7 +340,7 @@ export const productCatalogDescription: Record<
 			},
 			Sunday: {
 				billingPeriod: 'Monthly',
-				label: 'The Observer package',
+				label: 'The Observer',
 			},
 		},
 	},
@@ -369,7 +369,7 @@ export const productCatalogDescription: Record<
 			},
 			Sunday: {
 				billingPeriod: 'Monthly',
-				label: 'The Observer package',
+				label: 'The Observer',
 			},
 		},
 	},

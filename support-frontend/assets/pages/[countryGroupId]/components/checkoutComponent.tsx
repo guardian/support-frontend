@@ -88,6 +88,7 @@ import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgen
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
+import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -143,13 +144,6 @@ type CheckoutComponentProps = {
 	landingPageSettings: LandingPageVariant;
 	checkoutSession?: CheckoutSession;
 };
-
-const isSundayOnlyNewspaperSub = (
-	productKey: ProductKey,
-	ratePlanKey: string,
-) =>
-	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
-	ratePlanKey === 'Sunday';
 
 const getPaymentMethods = (
 	countryId: IsoCountry,
@@ -633,7 +627,9 @@ export function CheckoutComponent({
 							</div>
 						)}
 					<ContributionsOrderSummary
+						productKey={productKey}
 						productDescription={productDescription.label}
+						ratePlanKey={ratePlanKey}
 						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={
 							ratePlanDescription.billingPeriod === 'Annual'
@@ -1240,6 +1236,7 @@ export function CheckoutComponent({
 						</FormSection>
 						<SummaryTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1276,6 +1273,7 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
