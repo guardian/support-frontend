@@ -19,5 +19,6 @@ There are also some other commands defined in `package.json`, including:
 - `yarn lint --fix` attempt to autofix any linter errors
 - `yarn format` format the code using Prettier
 - `yarn watch` watch for changes and compile
+- `yarn test -u` to update the snapshots
 
 However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.

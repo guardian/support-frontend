@@ -23,7 +23,6 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	OrderSummaryStartDate,
@@ -89,12 +88,14 @@ import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgen
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
+import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
 	Legend,
@@ -124,17 +125,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-const productLanding = (product: ProductKey) => {
-	switch (product) {
-		case 'GuardianAdLite':
-			return '/guardian-ad-lite';
-		case 'DigitalSubscription':
-			return `/subscribe`;
-		default:
-			return `/contribute`;
-	}
-};
-
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -154,13 +144,6 @@ type CheckoutComponentProps = {
 	landingPageSettings: LandingPageVariant;
 	checkoutSession?: CheckoutSession;
 };
-
-const isSundayOnlyNewspaperSub = (
-	productKey: ProductKey,
-	ratePlanKey: string,
-) =>
-	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
-	ratePlanKey === 'Sunday';
 
 const getPaymentMethods = (
 	countryId: IsoCountry,
@@ -213,6 +196,14 @@ export function CheckoutComponent({
 	};
 
 	const isRecurringContribution = productKey === 'Contribution';
+
+	const isRedirectingToStripeHostedCheckout = (
+		productKey: ProductKey,
+		ratePlanKey: string,
+	) =>
+		isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
+		checkoutSession === undefined &&
+		paymentMethod === StripeHostedCheckout;
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -332,7 +323,9 @@ export function CheckoutComponent({
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(
+		checkoutSession ? StripeHostedCheckout : undefined,
+	);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
 	/** Payment methods: Stripe */
@@ -368,6 +361,17 @@ export function CheckoutComponent({
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	/**
+	 * Checkout session ID forces formOnSubmit
+	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
+	 */
+	useEffect(() => {
+		if (checkoutSession?.checkoutSessionId) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [checkoutSession?.checkoutSessionId]);
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
@@ -444,6 +448,9 @@ export function CheckoutComponent({
 				// The users postcode is outside the M25 and they have selected a valid rate plan
 				setDeliveryPostcodeIsOutsideM25(true);
 				const agents = await getDeliveryAgents(postcode);
+				if (agents.agents?.length === 1 && agents.agents[0]) {
+					setChosenDeliveryAgent(agents.agents[0].agentId);
+				}
 				setDeliveryAgents(agents);
 			}
 		} else {
@@ -585,8 +592,6 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
-
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
 			? 'MONTHLY'
@@ -622,7 +627,9 @@ export function CheckoutComponent({
 							</div>
 						)}
 					<ContributionsOrderSummary
+						productKey={productKey}
 						productDescription={productDescription.label}
+						ratePlanKey={ratePlanKey}
 						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={
 							ratePlanDescription.billingPeriod === 'Annual'
@@ -658,7 +665,10 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton path={returnToLandingPage} buttonText={'Change'} />
+							<BackButton
+								path={`/${geoId}${productDescription.landingPagePath}`}
+								buttonText={'Change'}
+							/>
 						}
 					/>
 				</BoxContents>
@@ -1226,6 +1236,7 @@ export function CheckoutComponent({
 						</FormSection>
 						<SummaryTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1262,6 +1273,7 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
@@ -1280,10 +1292,12 @@ export function CheckoutComponent({
 				</>
 			)}
 			{isProcessingPayment && (
-				<LoadingOverlay>
-					<p>Processing transaction</p>
-					<p>Please wait</p>
-				</LoadingOverlay>
+				<CheckoutLoadingOverlay
+					hideProcessingMessage={isRedirectingToStripeHostedCheckout(
+						productKey,
+						ratePlanKey,
+					)}
+				/>
 			)}
 		</CheckoutLayout>
 	);

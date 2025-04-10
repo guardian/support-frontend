@@ -12,6 +12,7 @@ import {
 	guardianAdLiteTermsLink,
 	guardianWeeklyPromoTermsLink,
 	guardianWeeklyTermsLink,
+	observerLinks,
 	paperTermsLink,
 	privacyLink,
 	supporterPlusTermsLink,
@@ -23,6 +24,7 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -111,6 +113,7 @@ export function FooterTsAndCs({
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
+	ratePlanKey: string;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
@@ -118,11 +121,31 @@ export interface PaymentTsAndCsProps {
 }
 export function PaymentTsAndCs({
 	productKey,
+	ratePlanKey,
 	contributionType,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
+	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+		productKey,
+		ratePlanKey,
+	);
+
+	if (isSundayOnlynewsletterSubscription) {
+		return (
+			<div css={container}>
+				The Observer is owned by Tortoise Media. By proceeding, you agree to
+				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
+				We will share your contact and subscription details with our fulfilment
+				partners to provide you with your subscription card. To find out more
+				about what personal data Tortoise Media will collect and how it will be
+				used, please visit Tortoise Media’s{' '}
+				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
+			</div>
+		);
+	}
+
 	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
 	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
 	const guardianWeeklyPromo = (

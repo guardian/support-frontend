@@ -29,6 +29,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 				<SummaryTsAndCs
 					contributionType={contributionType as ContributionType}
 					productKey={productKey as ActiveProductKey}
+					ratePlanKey=""
 					currency={'GBP'}
 					amount={0}
 				/>,
