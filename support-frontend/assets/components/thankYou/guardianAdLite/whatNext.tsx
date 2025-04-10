@@ -22,12 +22,7 @@ export function WhatNext({
 			'Your newspaper will be delivered to your door.',
 			observerPrint === ObserverPrint.SubscriptionCard &&
 				'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.',
-			<span>
-				The Observer team will be in touch shortly via email to welcome you.
-				Check your spam folder or add the{' '}
-				<a href="https://www.observer.co.uk">observer.co.uk</a> domain to your
-				preferred sender list.
-			</span>,
+			'The Observer team will be in touch shortly via email to welcome you. Check your spam folder or add the observer.co.uk domain to your preferred sender list.',
 		];
 		return <OrderedList items={observerListItems.filter(Boolean)} />;
 	}
