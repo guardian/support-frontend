@@ -69,7 +69,8 @@ case class DirectDebitPaymentMethod(
     StreetNumber: Option[String],
     BankTransferType: String = "DirectDebitUK",
     Type: String = "BankTransfer",
-    PaymentGateway: PaymentGateway = DirectDebitGateway,
+    PaymentGateway: PaymentGateway,
+    Email: Option[String] = None,
 ) extends PaymentMethod
 
 case class ClonedDirectDebitPaymentMethod(
