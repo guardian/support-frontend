@@ -67,9 +67,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         exitHandler(
           state,
           checkoutFailureReason,
-          if (message.contains("postal_code is required if any address fields are provided"))
-            updatedRequestInfo.copy(failed = true)
-          else updatedRequestInfo,
+          updatedRequestInfo.copy(failed = true),
         )
       case Some(se @ StripeError("card_error", _, _, _, _)) =>
         val checkoutFailureReason = toCheckoutFailureReason(se)
