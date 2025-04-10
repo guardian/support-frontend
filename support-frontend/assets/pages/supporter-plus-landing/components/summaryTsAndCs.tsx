@@ -13,6 +13,7 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
+import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -40,16 +41,33 @@ const getRenewalFrequency = (contributionType: ContributionType) => {
 
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
+	ratePlanKey: string;
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	amount: number;
 }
 export function SummaryTsAndCs({
 	productKey,
+	ratePlanKey,
 	contributionType,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
+	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+		productKey,
+		ratePlanKey,
+	);
+
+	if (isSundayOnlynewsletterSubscription) {
+		return (
+			<div css={containerSummaryTsCs}>
+				The Observer subscription will auto renew each month. You will be
+				charged the subscription amounts using your chosen payment method at
+				each renewal, at the rate then in effect, unless you cancel.
+			</div>
+		);
+	}
+
 	const amountWithCurrency = formatAmount(
 		currencies[currency],
 		spokenCurrencies[currency],
