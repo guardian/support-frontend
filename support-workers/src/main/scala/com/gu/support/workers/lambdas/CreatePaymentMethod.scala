@@ -156,9 +156,11 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ): Future[DirectDebitPaymentMethod] = {
     import state.user
 
-    val paymentGateway = state.product match {
-      case paper: Paper if paper.productOptions == Sunday => DirectDebitTortoiseMediaGateway
-      case _ => DirectDebitGateway
+    // We only want to send the email address to the Tortoise Media gateway, the GNM gateway doesn't need it
+    val (email, paymentGateway) = state.product match {
+      case paper: Paper if paper.productOptions == Sunday =>
+        (Some(state.user.primaryEmailAddress), DirectDebitTortoiseMediaGateway)
+      case _ => (None, DirectDebitGateway)
     }
     val addressLine =
       AddressLineTransformer.combinedAddressLine(user.billingAddress.lineOne, user.billingAddress.lineTwo)
@@ -177,6 +179,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         StreetName = addressLine.map(_.streetName),
         StreetNumber = addressLine.flatMap(_.streetNumber),
         PaymentGateway = paymentGateway,
+        Email = email,
       ),
     )
   }

@@ -91,6 +91,7 @@ object Fixtures {
       StreetName = Some("easy street"),
       StreetNumber = Some("123"),
       PaymentGateway = paymentGateway,
+      Email = Some("test@thegulocal.com"),
     )
 
   val config = Configuration.load().zuoraConfigProvider.get()
