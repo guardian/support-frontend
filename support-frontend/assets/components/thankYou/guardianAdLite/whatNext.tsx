@@ -16,34 +16,36 @@ export function WhatNext({
 	isSignedIn = false,
 	observerPrint,
 }: WhatNextProps): JSX.Element {
-	const whatNextItems = [
-		!observerPrint
-			? 'You will receive an email confirming the details of your subscription'
-			: '',
-		!observerPrint && !!startDate
+	if (observerPrint) {
+		const observerListItems = [
+			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
+			'Your newspaper will be delivered to your door.',
+			observerPrint === ObserverPrint.SubscriptionCard &&
+				'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.',
+			<span>
+				The Observer team will be in touch shortly via email to welcome you.
+				Check your spam folder or add the{' '}
+				<a href="https://www.observer.co.uk">observer.co.uk</a> domain to your
+				preferred sender list.
+			</span>,
+		];
+		return <OrderedList items={observerListItems.filter(Boolean)} />;
+	}
+
+	const listItems = [
+		'You will receive an email confirming the details of your subscription',
+		startDate
 			? `Your payment of £${amount}/month will be taken on ${startDate}`
 			: '',
-		!observerPrint && isSignedIn
+		isSignedIn
 			? 'You can now start reading the Guardian website on all your devices without personalised advertising'
-			: '',
-		observerPrint
-			? 'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.'
-			: '',
-		observerPrint ? `Your newspaper will be delivered to your door.` : '',
-		observerPrint === ObserverPrint.SubscriptionCard
-			? 'Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.'
 			: '',
 	];
 
-	const bulletItems: string[] = whatNextItems.filter((item) => item);
-
 	return (
-		<>
-			{observerPrint ? (
-				<OrderedList items={bulletItems} />
-			) : (
-				<BulletPointedList items={bulletItems} color={palette.neutral[7]} />
-			)}
-		</>
+		<BulletPointedList
+			items={listItems.filter(Boolean)}
+			color={palette.neutral[7]}
+		/>
 	);
 }
