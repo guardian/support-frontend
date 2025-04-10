@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
-export const orderedListItem = css`
+const orderedListItem = css`
 	position: relative;
 	list-style: none;
 	counter-increment: step-counter;
