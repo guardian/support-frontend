@@ -247,8 +247,8 @@ export default function Tooltip({
 						style={{
 							// Positioning styles
 							position: strategy,
-							top: y ?? 0,
-							left: x ?? 0,
+							top: y,
+							left: x,
 						}}
 						{...getFloatingProps()}
 					>
