@@ -2,23 +2,26 @@
 
 exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=false, ObserverSubscriptionCard list) 1`] = `
 <div>
-  <ol
-    class="component-list-ol"
-  >
+  <ol>
     <li
-      class="component-list-ol__li"
+      class="css-k6etrx"
     >
       Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.
     </li>
     <li
-      class="component-list-ol__li"
+      class="css-k6etrx"
     >
       Your newspaper will be delivered to your door.
     </li>
     <li
-      class="component-list-ol__li"
+      class="css-k6etrx"
     >
       Visit your chosen participating newsagent to pick up your newspaper using your Subscription Card, or arrange a home delivery using your delivery letter.
+    </li>
+    <li
+      class="css-k6etrx"
+    >
+      The Observer team will be in touch shortly via email to welcome you. Check your spam folder or add the observer.co.uk domain to your preferred sender list.
     </li>
   </ol>
 </div>
@@ -26,18 +29,21 @@ exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=
 
 exports[`Summary Ts&Cs Snapshot comparison whatNext renders correctly (signedIn=true, ObserverPaper list) 1`] = `
 <div>
-  <ol
-    class="component-list-ol"
-  >
+  <ol>
     <li
-      class="component-list-ol__li"
+      class="css-k6etrx"
     >
       Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.
     </li>
     <li
-      class="component-list-ol__li"
+      class="css-k6etrx"
     >
       Your newspaper will be delivered to your door.
+    </li>
+    <li
+      class="css-k6etrx"
+    >
+      The Observer team will be in touch shortly via email to welcome you. Check your spam folder or add the observer.co.uk domain to your preferred sender list.
     </li>
   </ol>
 </div>
