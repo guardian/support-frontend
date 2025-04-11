@@ -123,9 +123,6 @@ export const tests: Tests = {
 	newspaperGenericCheckout: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
