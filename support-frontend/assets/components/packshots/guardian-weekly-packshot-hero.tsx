@@ -1,6 +1,29 @@
 import GridPicture from 'components/gridPicture/gridPicture';
+import shouldShowObserverCard from 'pages/paper-subscription-landing/helpers/shouldShowObserver';
 
 function GuardianWeeklyPackShotHero(): JSX.Element {
+	if (shouldShowObserverCard()) {
+		return (
+			<div className="subscriptions-feature-packshot">
+				<GridPicture
+					sources={[
+						{
+							gridId: 'subscriptionGuardianWeeklyWithObserverHeroPackShot',
+							srcSizes: [500, 1000],
+							imgType: 'png',
+							sizes: '100vw',
+							media: '(max-width: 739px) 500px, (min-width: 740px) 1000px',
+						},
+					]}
+					fallback="subscriptionGuardianWeeklyWithObserverHeroPackShot"
+					fallbackSize={1000}
+					altText=""
+					fallbackImgType="png"
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<div className="subscriptions-feature-packshot">
 			<GridPicture
