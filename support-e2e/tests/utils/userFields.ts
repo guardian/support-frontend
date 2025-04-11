@@ -77,13 +77,13 @@ export const ukWithBillingAndPostalAddress: TestFieldsGenerator = () => ({
 	],
 });
 
-export const ukWithPostalAddressOnly: TestFieldsGenerator = () => ({
+export const ukWithPostalAddressOnly = (postCode: string = 'N1 9GU') => ({
 	email: email(),
 	firstName: firstName(),
 	lastName: lastName(),
 	addresses: [
 		{
-			postCode: 'N1 9GU',
+			postCode: postCode,
 			firstLine: '90 York Way',
 			city: 'London',
 		},
