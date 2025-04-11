@@ -87,7 +87,9 @@ function ThankYouHeader({
 			/>
 
 			<p css={headerSupportingText}>
-				{showDirectDebitMessage && <DirectDebitMessage />}
+				{showDirectDebitMessage && (
+					<DirectDebitMessage isObserverPrint={isObserverPrint} />
+				)}
 				<Subheading
 					productKey={productKey}
 					contributionType={contributionType}
