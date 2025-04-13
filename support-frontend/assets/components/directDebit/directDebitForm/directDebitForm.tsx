@@ -3,8 +3,7 @@ import {
 	InlineError,
 	TextInput,
 } from '@guardian/source/react-components';
-import * as React from 'react';
-import { useState } from 'react';
+import type { ReactNode } from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -23,11 +22,12 @@ export type DirectDebitFormProps = {
 	accountHolderConfirmation: boolean;
 	sortCode: string;
 	recaptchaCompleted: boolean;
+	isSundayOnly: boolean;
 	updateAccountHolderName: (name: string) => void;
 	updateAccountNumber: (number: string) => void;
 	updateSortCode: (sortCode: string) => void;
 	updateAccountHolderConfirmation: (confirmation: boolean) => void;
-	recaptcha: React.ReactNode;
+	recaptcha: ReactNode;
 	formError: string;
 	errors: DirectDebitFormDisplayErrors;
 };
@@ -36,8 +36,6 @@ export type DirectDebitFormProps = {
 export default function DirectDebitForm(
 	props: DirectDebitFormProps,
 ): JSX.Element {
-	const [guaranteeOpen, setGuaranteeOpen] = useState(false);
-
 	return (
 		<div>
 			{props.formError && (
@@ -123,18 +121,44 @@ export default function DirectDebitForm(
 				</div>
 			)}
 
-			<LegalNotice countryGroupId={props.countryGroupId} />
-
-			<DirectDebitGuarantee
-				isDDGuaranteeOpen={guaranteeOpen}
-				openDirectDebitGuarantee={() => setGuaranteeOpen(true)}
-				closeDirectDebitGuarantee={() => setGuaranteeOpen(false)}
+			<LegalNotice
+				countryGroupId={props.countryGroupId}
+				isSundayOnly={props.isSundayOnly}
 			/>
+			<DirectDebitGuarantee />
 		</div>
 	);
 }
 
-function LegalNotice(props: { countryGroupId: CountryGroupId }) {
+function LegalNotice(props: {
+	countryGroupId: CountryGroupId;
+	isSundayOnly: boolean;
+}) {
+	if (props.isSundayOnly) {
+		return (
+			<div css={legalNotice}>
+				<p>
+					<strong>Payments by GoCardless</strong>
+					<br />
+					Read the{' '}
+					<a href="https://gocardless.com/privacy">GoCardless privacy notice</a>
+				</p>
+				<p>
+					<strong>Advance notice</strong>
+					<br />
+					The details of your Direct Debit instruction including payment
+					schedule, due date, frequency and amount will be sent to you within
+					three working days. All the normal Direct Debit safeguards and
+					guarantees apply, protected by the Direct Debit guarantee.
+				</p>
+				<p>
+					Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
+					8am-6pm at weekends (GMT/BST){' '}
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<div css={legalNotice}>
 			<p>

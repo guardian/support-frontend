@@ -194,16 +194,8 @@ export function CheckoutComponent({
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
 	};
-
+	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-
-	const isRedirectingToStripeHostedCheckout = (
-		productKey: ProductKey,
-		ratePlanKey: string,
-	) =>
-		isSundayOnlyNewspaperSub(productKey, ratePlanKey) &&
-		checkoutSession === undefined &&
-		paymentMethod === StripeHostedCheckout;
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -327,6 +319,11 @@ export function CheckoutComponent({
 		checkoutSession ? StripeHostedCheckout : undefined,
 	);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+
+	const isRedirectingToStripeHostedCheckout =
+		isSundayOnly &&
+		checkoutSession === undefined &&
+		paymentMethod === StripeHostedCheckout;
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
@@ -1198,6 +1195,7 @@ export function CheckoutComponent({
 														}
 														sortCode={sortCode}
 														recaptchaCompleted={false}
+														isSundayOnly={isSundayOnly}
 														updateAccountHolderName={(name: string) => {
 															setAccountHolderName(name);
 														}}
@@ -1293,10 +1291,7 @@ export function CheckoutComponent({
 			)}
 			{isProcessingPayment && (
 				<CheckoutLoadingOverlay
-					hideProcessingMessage={isRedirectingToStripeHostedCheckout(
-						productKey,
-						ratePlanKey,
-					)}
+					hideProcessingMessage={isRedirectingToStripeHostedCheckout}
 				/>
 			)}
 		</CheckoutLayout>

@@ -1,38 +1,33 @@
 // ----- Imports ----- //
+
+import { useState } from 'react';
 import {
 	guarantee,
 	guaranteeList,
-	guaranteeListClosed,
+	guaranteeListOpen,
 	guaranteeListOpenLink,
 } from './directDebitFormStyles';
 
-type PropTypes = {
-	isDDGuaranteeOpen: boolean;
-	openDirectDebitGuarantee: () => void;
-	closeDirectDebitGuarantee: () => void;
-};
+function DirectDebitGuarantee(): JSX.Element {
+	const [guaranteeOpen, setGuaranteeOpen] = useState(false);
 
-function DirectDebitGuarantee(props: PropTypes): JSX.Element {
-	const onClick = props.isDDGuaranteeOpen
-		? props.closeDirectDebitGuarantee
-		: props.openDirectDebitGuarantee;
+	const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		return setGuaranteeOpen((state) => !state);
+	};
+
 	return (
 		<div css={guarantee}>
 			<p>
 				<span>
-					Your payments are protected by the&nbsp;
+					Your payments are protected by the{' '}
 					<button css={guaranteeListOpenLink} onClick={onClick}>
 						Direct Debit guarantee
 					</button>
 					.
 				</span>
 				<div>
-					<ul
-						css={[
-							guaranteeList,
-							!props.isDDGuaranteeOpen && guaranteeListClosed,
-						]}
-					>
+					<ul css={[guaranteeList, guaranteeOpen && guaranteeListOpen]}>
 						<li>
 							The Guarantee is offered by all banks and building societies that
 							accept instructions to pay Direct Debits

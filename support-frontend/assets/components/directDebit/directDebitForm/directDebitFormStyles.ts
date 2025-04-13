@@ -57,11 +57,16 @@ export const guarantee = css`
 
 export const guaranteeList = css`
 	list-style-type: disc;
-	margin-left: ${space[4]}px;
+	padding-left: ${space[4]}px;
+	padding-top: ${space[2]}px;
+	visibility: collapse;
+	max-height: 0px;
+	transition: max-height 0.25s ease-in-out;
 `;
 
-export const guaranteeListClosed = css`
-	display: none;
+export const guaranteeListOpen = css`
+	visibility: visible;
+	max-height: 100vh;
 `;
 
 export const guaranteeListOpenLink = css`
