@@ -13,7 +13,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
@@ -33,14 +33,15 @@ import type {
 } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
+  AUDCountries,
+  Canada,
+  EURCountries,
+  GBPCountries,
+  International,
+  NZDCountries,
+  UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import type{ CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -289,6 +290,28 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode,
 	);
 
+  const getCountDownSettings = (countryGroupId: CountryGroupId,
+                                urlSearchParamsPromoCode?: string | null,):CountdownSetting | null  => {
+
+    const countdownParams ={
+      countdownStartInMillis: Date.parse('Apr 14, 2025 00:00:01'),
+      countdownDeadlineInMillis: Date.parse('Apr 22, 2025 00:00:00'),
+      label: 'Just a few days left',
+      theme: {
+        backgroundColor: '#1e3e72',
+        foregroundColor: '#ffffff',
+      }
+    }
+
+    if(urlSearchParamsPromoCode === '30OFF3APRIL' && countryGroupId !== UnitedStates){
+      return countdownParams;
+    }
+    return null;
+  }
+
+  const countdownSettings = getCountDownSettings(countryGroupId, urlSearchParamsPromoCode,);
+
+
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
@@ -313,28 +336,16 @@ export function ThreeTierLanding({
 		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 
-	const memoizedCurrentCountdownCampaign = useMemo(() => {
-		if (!campaignSettings?.countdownSettings) {
-			return undefined;
-		}
-
-		const now = Date.now();
-		return campaignSettings.countdownSettings.find(
-			(c) =>
-				c.countdownStartInMillis < now && c.countdownDeadlineInMillis > now,
-		);
-	}, [campaignSettings?.countdownSettings]);
-
 	useEffect(() => {
-		if (memoizedCurrentCountdownCampaign) {
-			setCurrentCountdownSettings(memoizedCurrentCountdownCampaign);
+    if (!countdownSettings) {
+      return undefined;
+    }
+    const now = Date.now();
+		if (countdownSettings.countdownStartInMillis < now && countdownSettings.countdownDeadlineInMillis > now) {
+			setCurrentCountdownSettings(countdownSettings);
 			setShowCountdown(true);
 		}
-	}, [memoizedCurrentCountdownCampaign]);
-
-	/*
-	 * /////////////// END US EOY 2024 Campaign
-	 */
+	}, []);
 
 	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
 		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
@@ -581,9 +592,16 @@ export function ThreeTierLanding({
 							setShowCountdown={setShowCountdown}
 						/>
 					)}
-					<h1 css={heading}>
-						<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
+         {/*TODO :Check with the team about the heading*/}
+          { countdownSettings && (
+            <h1 css={heading}>
+            <span dangerouslySetInnerHTML={{ __html: countdownSettings.label }} />
+            </h1>)
+          }
+          { !countdownSettings && (<h1 css={heading}>
+					 <span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
 					</h1>
+          )}
 					<p
 						css={standFirst}
 						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
