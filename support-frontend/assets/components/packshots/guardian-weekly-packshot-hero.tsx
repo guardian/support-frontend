@@ -9,10 +9,10 @@ function GuardianWeeklyPackShotHero(): JSX.Element {
 					sources={[
 						{
 							gridId: 'subscriptionGuardianWeeklyWithObserverHeroPackShot',
-							srcSizes: [500, 1000],
+							srcSizes: [500],
 							imgType: 'png',
 							sizes: '100vw',
-							media: '(max-width: 739px) 500px, (min-width: 740px) 1000px',
+							media: '(max-width: 739px) 500px',
 						},
 					]}
 					fallback="subscriptionGuardianWeeklyWithObserverHeroPackShot"
