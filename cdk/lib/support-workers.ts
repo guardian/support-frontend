@@ -27,7 +27,7 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
-type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
+type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal" | "StripeApplePay" | "StripePaymentRequestButton";
 
 type ProductType =
   | "Contribution"
@@ -420,6 +420,38 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
 
+    const stripeExpressMetricDuration = Duration.minutes(5);
+    const stripeExpressEvaluationPeriods = 72; // The number of 5 minute periods in 6 hours
+    const stripeExpressAlarmPeriod = Duration.minutes(
+      stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods
+    );
+    new GuAlarm(this, "NoStripeExpressRecurringAlarm", {
+      app,
+      actionsEnabled: isProd,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `support-workers ${this.stage} No successful recurring Stripe Express payments in ${stripeExpressAlarmPeriod.toHumanString()}.`,
+      metric: new MathExpression({
+        expression: "SUM([FILL(m1,0),FILL(m2,0)])",
+        label: "AllRecurringStripeExpressPayments",
+        usingMetrics: {
+          m1: this.buildPaymentSuccessMetric(
+            "StripeApplePay",
+            "*",
+            stripeExpressMetricDuration,
+          ),
+          m2: this.buildPaymentSuccessMetric(
+            "StripePaymentRequestButton",
+            "*",
+            stripeExpressMetricDuration,
+          ),
+        },
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: stripeExpressEvaluationPeriods,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
+
     // This alarm is for the PaymentSuccess metric where
     // ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
     new GuAlarm(this, "NoPaperAcquisitionInOneDayAlarm", {
@@ -571,7 +603,7 @@ export class SupportWorkers extends GuStack {
   // End of an lite
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
-    productType: ProductType,
+    productType: ProductType | '*',
     period: Duration
   ) => {
     return new Metric({
