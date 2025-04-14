@@ -22,7 +22,6 @@ export type DirectDebitFormProps = {
 	accountHolderConfirmation: boolean;
 	sortCode: string;
 	recaptchaCompleted: boolean;
-	isSundayOnly: boolean;
 	updateAccountHolderName: (name: string) => void;
 	updateAccountNumber: (number: string) => void;
 	updateSortCode: (sortCode: string) => void;
@@ -30,6 +29,7 @@ export type DirectDebitFormProps = {
 	recaptcha: ReactNode;
 	formError: string;
 	errors: DirectDebitFormDisplayErrors;
+	isSundayOnly?: boolean;
 };
 
 // ----- Component ----- //
@@ -132,7 +132,7 @@ export default function DirectDebitForm(
 
 function LegalNotice(props: {
 	countryGroupId: CountryGroupId;
-	isSundayOnly: boolean;
+	isSundayOnly?: boolean;
 }) {
 	if (props.isSundayOnly) {
 		return (
