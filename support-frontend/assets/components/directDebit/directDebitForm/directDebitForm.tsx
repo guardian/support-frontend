@@ -4,15 +4,10 @@ import {
 	TextInput,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
-import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { contributionsEmail } from 'helpers/legal';
-import {
-	accountNumberSortCodeContainer,
-	legalNotice,
-	recaptcha,
-} from './directDebitFormStyles';
+import * as styles from './directDebitFormStyles';
+import LegalNotice from './legalNotice';
 import type { DirectDebitFormDisplayErrors } from './selectors';
 
 export type DirectDebitFormProps = {
@@ -61,7 +56,7 @@ export default function DirectDebitForm(
 				name="accountHolderName"
 			/>
 
-			<div css={accountNumberSortCodeContainer}>
+			<div css={styles.accountNumberSortCodeContainer}>
 				<div>
 					<TextInput
 						label="Sort code"
@@ -111,7 +106,7 @@ export default function DirectDebitForm(
 			/>
 
 			{props.recaptcha && (
-				<div css={recaptcha}>
+				<div css={styles.recaptcha}>
 					<ElementDecorator
 						id="robot-checkbox"
 						text="Security check"
@@ -125,72 +120,6 @@ export default function DirectDebitForm(
 				countryGroupId={props.countryGroupId}
 				isSundayOnly={props.isSundayOnly}
 			/>
-			<DirectDebitGuarantee />
-		</div>
-	);
-}
-
-function LegalNotice(props: {
-	countryGroupId: CountryGroupId;
-	isSundayOnly?: boolean;
-}) {
-	if (props.isSundayOnly) {
-		return (
-			<div css={legalNotice}>
-				<p>
-					<strong>Payments by GoCardless</strong>
-					<br />
-					Read the{' '}
-					<a href="https://gocardless.com/privacy">GoCardless privacy notice</a>
-				</p>
-				<p>
-					<strong>Advance notice</strong>
-					<br />
-					The details of your Direct Debit instruction including payment
-					schedule, due date, frequency and amount will be sent to you within
-					three working days. All the normal Direct Debit safeguards and
-					guarantees apply, protected by the Direct Debit guarantee.
-				</p>
-				<p>
-					Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
-					8am-6pm at weekends (GMT/BST){' '}
-				</p>
-			</div>
-		);
-	}
-
-	return (
-		<div css={legalNotice}>
-			<p>
-				<strong>Payments by GoCardless </strong>
-				<a
-					href="https://gocardless.com/legal/privacy/"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					read the GoCardless privacy notice.
-				</a>
-			</p>
-			<p>
-				<strong>Advance notice</strong> The details of your Direct Debit
-				instruction including payment schedule, due date, frequency and amount
-				will be sent to you within three working days. All the normal Direct
-				Debit safeguards and guarantees apply.
-			</p>
-			<p>
-				<strong>Direct Debit</strong>
-				<address>
-					The Guardian, Mease Mill, Westminster Industrial Estate, Measham,
-					Swadlincote, DE12 7DS
-				</address>
-				<br />
-				Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
-				9am-6pm at weekends (GMT/BST)
-				<br />
-				<a href={contributionsEmail[props.countryGroupId]}>
-					{contributionsEmail[props.countryGroupId].replace('mailto:', '')}
-				</a>
-			</p>
 		</div>
 	);
 }
