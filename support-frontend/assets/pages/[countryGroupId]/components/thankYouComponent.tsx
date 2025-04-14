@@ -375,6 +375,7 @@ export function ThankYouComponent({
 							currency={currencyKey}
 							promotion={promotion}
 							identityUserType={identityUserType}
+							observerPrint={observerPrint}
 							paymentStatus={order.status}
 							startDate={startDate}
 						/>

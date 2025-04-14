@@ -7,6 +7,7 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 interface SubheadingProps {
 	productKey: ActiveProductKey;
@@ -14,7 +15,7 @@ interface SubheadingProps {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	isObserverPrint: boolean;
+	observerPrint?: ObserverPrint;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
@@ -62,7 +63,7 @@ const getSubHeadingCopy = (
 	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
-	isObserverPrint: boolean,
+	observerPrint?: ObserverPrint,
 	startDate?: string,
 ) => {
 	const recurringCopy = (amountIsAboveThreshold: boolean) => {
@@ -75,12 +76,20 @@ const getSubHeadingCopy = (
 				{`You have unlocked your exclusive supporter extras – we hope you	enjoy them.${' '}`}
 			</span>
 		);
-		const observerCopy = startDate
-			? `You will receive your newspapers from ${startDate}.`
-			: ``;
-		const thankyouMessage = isObserverPrint
-			? observerCopy
-			: productCatalogDescription[productKey].thankyouMessage;
+
+		const getThankyouMessage = (): string | undefined => {
+			if (observerPrint === ObserverPrint.SubscriptionCard) {
+				return 'You should receive your subscription card in 1-2 weeks, but look out for an email landing in your inbox later today containing details of how you can pick up your newspaper before then.';
+			}
+			if (observerPrint === ObserverPrint.Paper) {
+				return startDate
+					? `You will receive your newspapers from ${startDate}.`
+					: undefined;
+			}
+			return productCatalogDescription[productKey].thankyouMessage;
+		};
+		const thankyouMessage = getThankyouMessage();
+
 		const signedInBelowThreshold = `Look out for your exclusive newsletter from our supporter editor.
 						We’ll also be in touch with other great ways to get closer to
 						Guardian journalism.${' '}`;
@@ -116,7 +125,7 @@ function Subheading({
 	contributionType,
 	amountIsAboveThreshold,
 	isSignedIn,
-	isObserverPrint,
+	observerPrint,
 	identityUserType,
 	paymentStatus,
 	startDate,
@@ -135,7 +144,7 @@ function Subheading({
 		contributionType,
 		isSignedIn,
 		identityUserType,
-		isObserverPrint,
+		observerPrint,
 		startDate,
 	);
 	const isPending = paymentStatus === 'pending';
@@ -143,7 +152,7 @@ function Subheading({
 		<>
 			{isPending && !isPaper && pendingCopy()}
 			{subheadingCopy}
-			{!isGuardianAdLite && !isPending && !isObserverPrint && (
+			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
 					<MarketingCopy
 						contributionType={contributionType}
