@@ -34,7 +34,7 @@ export function WhatNext({
 			observerPrint === ObserverPrint.Paper
 				? observerPaperItems
 				: observerSubscriptionCardItems;
-		return <OrderedList items={observerListItems.filter(Boolean)} />;
+		return <OrderedList items={observerListItems} />;
 	}
 
 	const listItems = [
