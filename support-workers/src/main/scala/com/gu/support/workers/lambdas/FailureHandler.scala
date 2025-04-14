@@ -60,6 +60,9 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     logger.info(s"Attempting to handle error $error")
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
+    val cardDeclinedMessage =
+      "Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined."
+
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
         val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
@@ -67,7 +70,10 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         exitHandler(
           state,
           checkoutFailureReason,
-          updatedRequestInfo.copy(failed = true),
+          if (message.contains(cardDeclinedMessage))
+            updatedRequestInfo
+          else
+            updatedRequestInfo.copy(failed = true),
         )
       case Some(se @ StripeError("card_error", _, _, _, _)) =>
         val checkoutFailureReason = toCheckoutFailureReason(se)
