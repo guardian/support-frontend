@@ -268,7 +268,6 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
-  const now = Date.now();
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
@@ -296,8 +295,8 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode?: string | null,
 	): CountdownSetting | null => {
 		const countdownParams = {
-			countdownStartInMillis: Date.parse('Apr 14, 2025 00:00:01'),
-			countdownDeadlineInMillis: Date.parse('Apr 22, 2025 00:00:00'),
+			countdownStartInMillis: Date.parse('Apr 15, 2025 00:00:01'),
+			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 07:42:00'),
 			label: 'Just a few days left',
 			theme: {
 				backgroundColor: '#1e3e72',
@@ -318,6 +317,8 @@ export function ThreeTierLanding({
 		countryGroupId,
 		urlSearchParamsPromoCode,
 	);
+
+	const now = Date.now();
 
 	const enableSingleContributionsTab =
 		campaignSettings?.enableSingleContributions ??
@@ -602,11 +603,15 @@ export function ThreeTierLanding({
 						/>
 					)}
 					{/*TODO :Check with the team about the heading*/}
-					{countdownSettings && countdownSettings.countdownStartInMillis < now &&
-            countdownSettings.countdownDeadlineInMillis > now &&  (
+					{countdownSettings && (
 						<h1 css={heading}>
 							<span
-								dangerouslySetInnerHTML={{ __html: countdownSettings.label }}
+								dangerouslySetInnerHTML={{
+									__html:
+										countdownSettings.countdownDeadlineInMillis > now
+											? countdownSettings.label
+											: sanitisedHeading,
+								}}
 							/>
 						</h1>
 					)}
