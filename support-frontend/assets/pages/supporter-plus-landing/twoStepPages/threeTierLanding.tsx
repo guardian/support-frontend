@@ -268,6 +268,7 @@ export function ThreeTierLanding({
 	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
+  const now = Date.now();
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
@@ -346,7 +347,6 @@ export function ThreeTierLanding({
 		if (!countdownSettings) {
 			return undefined;
 		}
-		const now = Date.now();
 		if (
 			countdownSettings.countdownStartInMillis < now &&
 			countdownSettings.countdownDeadlineInMillis > now
