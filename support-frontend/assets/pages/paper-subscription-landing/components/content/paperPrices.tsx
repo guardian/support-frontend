@@ -94,7 +94,7 @@ const productOverrideWithLabel = css`
 const pricesInfo = css`
 	margin-top: ${space[6]}px;
 	a {
-		color: ${palette.brand[500]};
+		color: ${palette.neutral[100]};
 	}
 `;
 const pricesTabs = css`
