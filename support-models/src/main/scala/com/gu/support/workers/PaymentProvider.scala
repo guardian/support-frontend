@@ -27,6 +27,7 @@ object PaymentProvider {
   val all = List(
     Stripe,
     StripeApplePay,
+    StripePaymentRequestButton,
     PayPal,
     DirectDebit,
     Sepa,
@@ -50,6 +51,7 @@ object PaymentProvider {
     case stripe: StripePaymentFields =>
       stripe.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) => StripeApplePay
+        case Some(StripePaymentType.StripePaymentRequestButton) => StripePaymentRequestButton
         case _ => Stripe
       }
     case _: PayPalPaymentFields => PayPal
