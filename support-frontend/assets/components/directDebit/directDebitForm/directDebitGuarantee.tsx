@@ -1,11 +1,12 @@
 // ----- Imports ----- //
 
 import { useState } from 'react';
+import type { MediaGroup } from 'helpers/legal';
 import * as styles from './directDebitGuaranteeStyles';
 
 type Props = {
 	preText: string;
-	mediaGroup: string;
+	mediaGroup: MediaGroup;
 };
 
 function DirectDebitGuarantee({ preText, mediaGroup }: Props): JSX.Element {
