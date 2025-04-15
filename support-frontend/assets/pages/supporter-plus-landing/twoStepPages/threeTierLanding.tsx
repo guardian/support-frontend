@@ -41,7 +41,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -291,7 +290,6 @@ export function ThreeTierLanding({
 	);
 
 	const getCountDownSettings = (
-		countryGroupId: CountryGroupId,
 		urlSearchParamsPromoCode?: string | null,
 	): CountdownSetting | null => {
 		const countdownParams = {
@@ -304,19 +302,17 @@ export function ThreeTierLanding({
 			},
 		};
 
-		if (
-			urlSearchParamsPromoCode === '30OFFAPRIL' &&
-			countryGroupId !== UnitedStates
-		) {
-			return countdownParams;
+    const targetPromoCodes = ['30OFFAPRIL','30OFF3APRIL'];
+
+    if(urlSearchParamsPromoCode){
+      if(targetPromoCodes.includes(urlSearchParamsPromoCode)) {
+        return countdownParams;
+      }
 		}
 		return null;
 	};
 
-	const countdownSettings = getCountDownSettings(
-		countryGroupId,
-		urlSearchParamsPromoCode,
-	);
+	const countdownSettings = getCountDownSettings(urlSearchParamsPromoCode);
 
 	const now = Date.now();
 
