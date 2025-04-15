@@ -296,7 +296,7 @@ export function ThreeTierLanding({
 	): CountdownSetting | null => {
 		const countdownParams = {
 			countdownStartInMillis: Date.parse('Apr 15, 2025 09:00:01'),
-			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 12:19:00'),
+			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 12:41:00'),
 			label: 'Last chance to claim your 30% discount offer',
 			theme: {
 				backgroundColor: '#1e3e72',
@@ -344,6 +344,9 @@ export function ThreeTierLanding({
 		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 	const shouldShowCountdown = () => {
+		if (!currentCountdownSettings) {
+			return false;
+		}
 		return countdownSwitchOn() && showCountdown && currentCountdownSettings;
 	};
 
@@ -610,7 +613,9 @@ export function ThreeTierLanding({
 						<h1 css={heading}>
 							<span
 								dangerouslySetInnerHTML={{
-									__html: currentCountdownSettings.label,
+									__html: currentCountdownSettings
+										? currentCountdownSettings.label
+										: sanitisedHeading,
 								}}
 							/>
 						</h1>
