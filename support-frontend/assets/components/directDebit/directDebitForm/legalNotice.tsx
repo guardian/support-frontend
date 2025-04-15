@@ -1,6 +1,6 @@
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { contributionsEmail } from 'helpers/legal';
+import { contributionsEmail, MediaGroup } from 'helpers/legal';
 import * as styles from './legalNoticeStyles';
 
 function LegalNotice(props: {
@@ -25,6 +25,7 @@ function LegalNotice(props: {
 					<DirectDebitGuarantee
 						preText="All the normal Direct Debit safeguards and
 					guarantees apply, protected by the "
+						mediaGroup={MediaGroup.TORTOISE}
 					/>
 				</p>
 				<p>
@@ -68,7 +69,10 @@ function LegalNotice(props: {
 				</a>
 			</p>
 			<br />
-			<DirectDebitGuarantee preText="Your payments are protected by the " />
+			<DirectDebitGuarantee
+				preText="Your payments are protected by the "
+				mediaGroup={MediaGroup.GUARDIAN}
+			/>
 		</div>
 	);
 }

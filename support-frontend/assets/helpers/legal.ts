@@ -46,6 +46,10 @@ const observerLinks = {
 	TERMS: 'https://www.tortoisemedia.com/observer/terms',
 	PRIVACY: 'https://www.tortoisemedia.com/observer/privacy',
 };
+enum MediaGroup {
+	GUARDIAN = 'Guardian News & Media Ltd',
+	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
+}
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -61,4 +65,5 @@ export {
 	guardianWeeklyTermsLink,
 	guardianWeeklyPromoTermsLink,
 	observerLinks,
+	MediaGroup,
 };
