@@ -302,12 +302,12 @@ export function ThreeTierLanding({
 			},
 		};
 
-    const targetPromoCodes = ['30OFFAPRIL','30OFF3APRIL'];
+		const targetPromoCodes = ['30OFFAPRIL', '30OFF3APRIL'];
 
-    if(urlSearchParamsPromoCode){
-      if(targetPromoCodes.includes(urlSearchParamsPromoCode)) {
-        return countdownParams;
-      }
+		if (urlSearchParamsPromoCode) {
+			if (targetPromoCodes.includes(urlSearchParamsPromoCode)) {
+				return countdownParams;
+			}
 		}
 		return null;
 	};
