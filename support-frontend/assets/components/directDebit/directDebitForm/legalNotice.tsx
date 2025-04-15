@@ -14,7 +14,13 @@ function LegalNotice(props: {
 					<strong>Payments by GoCardless</strong>
 					<br />
 					Read the{' '}
-					<a href="https://gocardless.com/privacy">GoCardless privacy notice</a>
+					<a
+						href="https://gocardless.com/privacy"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						GoCardless privacy notice
+					</a>
 				</p>
 				<p>
 					<strong>Advance notice</strong>
@@ -39,13 +45,15 @@ function LegalNotice(props: {
 	return (
 		<div css={styles.legalNotice}>
 			<p>
-				<strong>Payments by GoCardless </strong>
+				<strong>Payments by GoCardless</strong>
+				<br />
+				Read the{' '}
 				<a
-					href="https://gocardless.com/legal/privacy/"
+					href="https://gocardless.com/privacy"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					read the GoCardless privacy notice.
+					GoCardless privacy notice
 				</a>
 			</p>
 			<p>
