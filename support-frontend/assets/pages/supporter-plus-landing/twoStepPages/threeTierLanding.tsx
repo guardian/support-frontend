@@ -295,9 +295,9 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode?: string | null,
 	): CountdownSetting | null => {
 		const countdownParams = {
-			countdownStartInMillis: Date.parse('Apr 15, 2025 00:00:01'),
-			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 07:42:00'),
-			label: 'Just a few days left',
+			countdownStartInMillis: Date.parse('Apr 19, 2025 09:00:01'),
+			countdownDeadlineInMillis: Date.parse('Apr 21, 2025 23:59:59'),
+			label: 'Last chance to claim your 30% discount offer',
 			theme: {
 				backgroundColor: '#1e3e72',
 				foregroundColor: '#ffffff',
@@ -305,7 +305,7 @@ export function ThreeTierLanding({
 		};
 
 		if (
-			urlSearchParamsPromoCode === '30OFF3APRIL' &&
+			urlSearchParamsPromoCode === '30OFFAPRIL' &&
 			countryGroupId !== UnitedStates
 		) {
 			return countdownParams;
@@ -602,20 +602,18 @@ export function ThreeTierLanding({
 							setShowCountdown={setShowCountdown}
 						/>
 					)}
-					{/*TODO :Check with the team about the heading*/}
-					{countdownSettings && (
-						<h1 css={heading}>
-							<span
-								dangerouslySetInnerHTML={{
-									__html:
-										countdownSettings.countdownDeadlineInMillis > now
-											? countdownSettings.label
-											: sanitisedHeading,
-								}}
-							/>
-						</h1>
-					)}
-					{!countdownSettings && (
+
+					{(countdownSwitchOn() &&
+						showCountdown &&
+						currentCountdownSettings && (
+							<h1 css={heading}>
+								<span
+									dangerouslySetInnerHTML={{
+										__html: currentCountdownSettings.label,
+									}}
+								/>
+							</h1>
+						)) ?? (
 						<h1 css={heading}>
 							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
 						</h1>
