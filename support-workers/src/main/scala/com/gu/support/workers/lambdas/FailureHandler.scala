@@ -64,6 +64,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       "Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.",
       "Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.",
       "Transaction declined.402 - [card_error/card_declined/try_again_later] Your card was declined.",
+      "Transaction declined.402 - [card_error/card_declined/transaction_not_allowed] Your card does not support this type of purchase.",
     )
 
     error.flatMap(extractUnderlyingError) match {
