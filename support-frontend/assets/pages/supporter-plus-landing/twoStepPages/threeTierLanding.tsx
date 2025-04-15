@@ -295,8 +295,8 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode?: string | null,
 	): CountdownSetting | null => {
 		const countdownParams = {
-			countdownStartInMillis: Date.parse('Apr 15, 2025 09:00:01'),
-			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 12:41:00'),
+			countdownStartInMillis: Date.parse('Apr 19, 2025 09:00:00'),
+			countdownDeadlineInMillis: Date.parse('Apr 21, 2025 23:59:59'),
 			label: 'Last chance to claim your 30% discount offer',
 			theme: {
 				backgroundColor: '#1e3e72',
