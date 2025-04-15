@@ -295,8 +295,8 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode?: string | null,
 	): CountdownSetting | null => {
 		const countdownParams = {
-			countdownStartInMillis: Date.parse('Apr 19, 2025 09:00:01'),
-			countdownDeadlineInMillis: Date.parse('Apr 21, 2025 23:59:59'),
+			countdownStartInMillis: Date.parse('Apr 15, 2025 09:00:01'),
+			countdownDeadlineInMillis: Date.parse('Apr 15, 2025 12:19:00'),
 			label: 'Last chance to claim your 30% discount offer',
 			theme: {
 				backgroundColor: '#1e3e72',
@@ -343,6 +343,9 @@ export function ThreeTierLanding({
 	const [currentCountdownSettings, setCurrentCountdownSettings] =
 		useState<CountdownSetting>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
+	const shouldShowCountdown = () => {
+		return countdownSwitchOn() && showCountdown && currentCountdownSettings;
+	};
 
 	useEffect(() => {
 		if (!countdownSettings) {
@@ -603,17 +606,16 @@ export function ThreeTierLanding({
 						/>
 					)}
 
-					{(countdownSwitchOn() &&
-						showCountdown &&
-						currentCountdownSettings && (
-							<h1 css={heading}>
-								<span
-									dangerouslySetInnerHTML={{
-										__html: currentCountdownSettings.label,
-									}}
-								/>
-							</h1>
-						)) ?? (
+					{shouldShowCountdown() && (
+						<h1 css={heading}>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: currentCountdownSettings.label,
+								}}
+							/>
+						</h1>
+					)}
+					{!shouldShowCountdown() && (
 						<h1 css={heading}>
 							<span dangerouslySetInnerHTML={{ __html: sanitisedHeading }} />
 						</h1>
