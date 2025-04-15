@@ -140,20 +140,21 @@ class CreateSubscriptionController(
       isTestUser: Boolean,
       referer: Option[String],
   ): EitherT[Future, CreateSubscriptionError, CreateStripeCheckoutSessionResponse] = {
-    val successUrl = for {
+    val urls = for {
       referer <- referer
       successUrl <- StripeCheckoutSessionService.buildSuccessUrl(referer)
-    } yield successUrl
+      cancelUrl <- StripeCheckoutSessionService.validateCancelUrl(referer)
+    } yield (successUrl, cancelUrl)
 
-    successUrl match {
-      case None => EitherT.leftT[Future, CreateStripeCheckoutSessionResponse](ServerError("Invalid referer"))
-      case Some(validSuccessUrl) =>
+    urls match {
+      case Some((validSuccessUrl, validCancelUrl)) =>
         stripeCheckoutSessionService
-          .createCheckoutSession(stripePublicKey, email, currency, isTestUser, validSuccessUrl)
+          .createCheckoutSession(stripePublicKey, email, currency, isTestUser, validSuccessUrl, validCancelUrl)
           .leftMap[CreateSubscriptionError](ServerError)
           .map[CreateStripeCheckoutSessionResponse] { response =>
             CreateStripeCheckoutSessionResponse(url = response.url, id = response.id)
           }
+      case _ => EitherT.leftT[Future, CreateStripeCheckoutSessionResponse](ServerError("Invalid referer"))
     }
   }
 

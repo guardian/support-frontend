@@ -46,6 +46,7 @@ class StripeCheckoutSessionService(
       currency: Currency,
       isTestUser: Boolean,
       successUrl: String,
+      cancelUrl: String,
   ): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
     val privateKey = getPrivateKey(stripePublicKey, isTestUser)
 
@@ -53,6 +54,7 @@ class StripeCheckoutSessionService(
     val data = Map(
       "mode" -> Seq("setup"),
       "success_url" -> Seq(successUrl),
+      "cancel_url" -> Seq(cancelUrl),
       "currency" -> Seq(currency.iso.toLowerCase),
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
@@ -115,6 +117,20 @@ object StripeCheckoutSessionService {
         val successUrl = successUrlWithPlaceholder.replace("__CHECKOUT_SESSION_ID_PLACEHOLDER__", qsa)
 
         Some(successUrl)
+      }
+    } catch {
+      case _: java.net.URISyntaxException => None
+    }
+  }
+
+  def validateCancelUrl(refererUrl: String): Option[String] = {
+    try {
+      val uri = new java.net.URI(refererUrl)
+
+      if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
+        None
+      } else {
+        Some(refererUrl)
       }
     } catch {
       case _: java.net.URISyntaxException => None
