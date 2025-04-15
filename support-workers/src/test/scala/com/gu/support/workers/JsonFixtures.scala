@@ -258,9 +258,9 @@ object JsonFixtures {
       {
         "productType": "Paper",
         "currency": "GBP",
-        "billingPeriod" : "Monthly",
-        "fulfilmentOptions" : "HomeDelivery",
-        "productOptions" : "Sunday"
+        "billingPeriod": "Monthly",
+        "fulfilmentOptions": "HomeDelivery",
+        "productOptions": "Sunday"
       }
     """
 
