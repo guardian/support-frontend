@@ -41,7 +41,7 @@ import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFo
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
+import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getReturnAddress,
