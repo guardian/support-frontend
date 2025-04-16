@@ -348,53 +348,43 @@ export class SupportWorkers extends GuStack {
       group by 1,2,3
       order by 1,2,3
     */
-    new GuAlarm(this, "NoPaypalContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        PayPal,
-        Contribution,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 4,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    // Begin recurring contribution alarms (by payment method)
+    const contributionAlarmConfig: Array<{ paymentProvider: PaymentProvider; evaluationPeriods: number; periodDuration: Duration }> = [
+      {
+        paymentProvider: PayPal,
+        evaluationPeriods: 4,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: Stripe,
+        evaluationPeriods: 3,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: DirectDebit,
+        evaluationPeriods: 18,
+        periodDuration: Duration.seconds(3600),
+      },
+    ];
 
-    new GuAlarm(this, "NoStripeContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        Stripe,
-        Contribution,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 3,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoGocardlessContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        DirectDebit,
-        Contribution,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 18,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    contributionAlarmConfig.forEach(({ paymentProvider, evaluationPeriods, periodDuration }) => {
+      new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
+        app,
+        actionsEnabled: isProd,
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
+        alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
+        metric: this.buildPaymentSuccessMetric(
+          paymentProvider,
+          Contribution,
+          periodDuration,
+        ),
+        comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+        evaluationPeriods,
+        treatMissingData: TreatMissingData.BREACHING,
+        threshold: 0,
+      }).node.addDependency(stateMachine);
+    });
+    // End recurring contribution alarms (by payment method)
 
     new GuAlarm(this, "NoPaypalSupporterPlusAlarm", {
       app,

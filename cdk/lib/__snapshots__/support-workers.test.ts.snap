@@ -1485,7 +1485,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoGocardlessContributionsAlarmD9872C48": {
+    "NoDirectDebitContributionsAlarm6BE82F22": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -1511,7 +1511,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring gocardless contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring DirectDebit contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1977,7 +1977,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPaypalContributionsAlarm79AF8B4B": {
+    "NoPayPalContributionsAlarm3674D829": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -2003,7 +2003,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring paypal contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring PayPal contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -2143,7 +2143,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring stripe contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring Stripe contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
