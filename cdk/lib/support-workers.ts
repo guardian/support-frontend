@@ -52,11 +52,11 @@ const allProducts: ProductType[] = [
 ];
 
 const PaymentProviders = {
-  Stripe: 'Stripe',
-  DirectDebit: 'DirectDebit',
-  PayPal: 'PayPal',
-  StripeApplePay: 'StripeApplePay',
-  StripePaymentRequestButton: 'StripePaymentRequestButton',
+  Stripe: "Stripe",
+  DirectDebit: "DirectDebit",
+  PayPal: "PayPal",
+  StripeApplePay: "StripeApplePay",
+  StripePaymentRequestButton: "StripePaymentRequestButton",
 } as const;
 
 type PaymentProvider = keyof typeof PaymentProviders;
