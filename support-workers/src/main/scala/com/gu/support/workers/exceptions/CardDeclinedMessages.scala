@@ -9,6 +9,8 @@ object CardDeclinedMessages {
     "Transaction declined.402 - [card_error/card_declined/pickup_card] Your card was declined.",
     "Transaction declined.10417 - Instruct the customer to retry the transaction using an alternative payment method from the customers PayPal wallet.",
     "Transaction declined.validation_failed - account_number did not pass modulus check",
+    "Transaction declined.validation_failed - account_number is the wrong length (should be 8 characters)",
+    "Transaction declined.validation_failed - account_number does not match sort code",
   )
   def alarmShouldBeSuppressedForErrorMessage(message: String): Boolean = {
     errorMessages.exists(messageToIgnore => message.contains(messageToIgnore))
