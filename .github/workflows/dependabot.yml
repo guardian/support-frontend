@@ -8,7 +8,6 @@ env:
 
 jobs:
   run_node_tests:
-    if: github.actor == 'dependabot[bot]'
     name: test dependabot
     runs-on: ubuntu-latest
     steps:
