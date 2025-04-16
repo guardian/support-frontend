@@ -27,15 +27,36 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
-type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal";
+const Contribution = "Contribution";
+const Paper = "Paper";
+const GuardianWeekly = "GuardianWeekly";
+const SupporterPlus = "SupporterPlus";
+const TierThree = "TierThree";
+const GuardianAdLite = "GuardianAdLite";
 
 type ProductType =
-  | "Contribution"
-  | "Paper"
-  | "GuardianWeekly"
-  | "SupporterPlus"
-  | "TierThree"
-  | "GuardianAdLite";
+  | typeof Contribution
+  | typeof Paper
+  | typeof GuardianWeekly
+  | typeof SupporterPlus
+  | typeof TierThree
+  | typeof GuardianAdLite;
+
+const allProducts: ProductType[] = [
+  Contribution,
+  Paper,
+  GuardianWeekly,
+  SupporterPlus,
+  TierThree,
+  GuardianAdLite,
+];
+
+type PaymentProvider =
+  | "Stripe"
+  | "DirectDebit"
+  | "PayPal"
+  | "StripeApplePay"
+  | "StripePaymentRequestButton";
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -419,6 +440,82 @@ export class SupportWorkers extends GuStack {
       treatMissingData: TreatMissingData.BREACHING,
       threshold: 0,
     }).node.addDependency(stateMachine);
+
+    // Begin Apple Pay alarm
+    const applePayMetricDuration = Duration.minutes(5);
+    const applePayEvaluationPeriods = 96; // The number of 5 minute periods in 8 hours
+    const applePayAlarmPeriod = Duration.minutes(
+      applePayMetricDuration.toMinutes() * applePayEvaluationPeriods
+    );
+    const applePayMetrics = Object.fromEntries(
+      allProducts.map((product, idx) => [
+        `m${idx}`,
+        this.buildPaymentSuccessMetric(
+          "StripeApplePay",
+          product,
+          applePayMetricDuration
+        ),
+      ])
+    );
+    const applePayExpression = `SUM([${Object.keys(applePayMetrics)
+      .map((m) => `FILL(${m},0)`)
+      .join(",")}])`;
+    new GuAlarm(this, "NoApplePayRecurringAlarm", {
+      app,
+      actionsEnabled: isProd,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `support-workers ${
+        this.stage
+      } No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
+      metric: new MathExpression({
+        expression: applePayExpression,
+        label: "AllRecurringApplePayPayments",
+        usingMetrics: applePayMetrics,
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: applePayEvaluationPeriods,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
+    // End Apple Pay alarm
+
+    // Begin Google Pay alarm
+    const googlePayMetricDuration = Duration.minutes(5);
+    const googlePayEvaluationPeriods = 180; // The number of 5 minute periods in 15 hours
+    const googlePayAlarmPeriod = Duration.minutes(
+      googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods
+    );
+    const googlePayMetrics = Object.fromEntries(
+      allProducts.map((product, idx) => [
+        `m${idx}`,
+        this.buildPaymentSuccessMetric(
+          "StripePaymentRequestButton",
+          product,
+          googlePayMetricDuration
+        ),
+      ])
+    );
+    const googlePayExpression = `SUM([${Object.keys(googlePayMetrics)
+      .map((m) => `FILL(${m},0)`)
+      .join(",")}])`;
+    new GuAlarm(this, "NoGooglePayRecurringAlarm", {
+      app,
+      actionsEnabled: isProd,
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
+      alarmName: `support-workers ${
+        this.stage
+      } No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
+      metric: new MathExpression({
+        expression: googlePayExpression,
+        label: "AllRecurringGooglePayPayments",
+        usingMetrics: googlePayMetrics,
+      }),
+      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+      evaluationPeriods: googlePayEvaluationPeriods,
+      treatMissingData: TreatMissingData.BREACHING,
+      threshold: 0,
+    }).node.addDependency(stateMachine);
+    // End Google Pay alarm
 
     // This alarm is for the PaymentSuccess metric where
     // ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
