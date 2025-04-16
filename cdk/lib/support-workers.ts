@@ -42,7 +42,7 @@ type ProductType =
   | typeof TierThree
   | typeof GuardianAdLite;
 
-const allProducts: ProductType[]  = [
+const allProducts: ProductType[] = [
   Contribution,
   Paper,
   GuardianWeekly,
@@ -51,7 +51,12 @@ const allProducts: ProductType[]  = [
   GuardianAdLite,
 ];
 
-type PaymentProvider = "Stripe" | "DirectDebit" | "PayPal" | "StripeApplePay" | "StripePaymentRequestButton";
+type PaymentProvider =
+  | "Stripe"
+  | "DirectDebit"
+  | "PayPal"
+  | "StripeApplePay"
+  | "StripePaymentRequestButton";
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -442,19 +447,26 @@ export class SupportWorkers extends GuStack {
     const applePayAlarmPeriod = Duration.minutes(
       applePayMetricDuration.toMinutes() * applePayEvaluationPeriods
     );
-    const applePayMetrics = Object.fromEntries(allProducts.map((product, idx) =>
-    [`m${idx}`, this.buildPaymentSuccessMetric(
-        "StripeApplePay",
-        product,
-        applePayMetricDuration
-      )]
-    ));
-    const applePayExpression = `SUM([${Object.keys(applePayMetrics).map(m => `FILL(${m},0)`).join(",")}])`;
+    const applePayMetrics = Object.fromEntries(
+      allProducts.map((product, idx) => [
+        `m${idx}`,
+        this.buildPaymentSuccessMetric(
+          "StripeApplePay",
+          product,
+          applePayMetricDuration
+        ),
+      ])
+    );
+    const applePayExpression = `SUM([${Object.keys(applePayMetrics)
+      .map((m) => `FILL(${m},0)`)
+      .join(",")}])`;
     new GuAlarm(this, "NoApplePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
+      alarmName: `support-workers ${
+        this.stage
+      } No successful recurring Apple Pay payments in ${applePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
         expression: applePayExpression,
         label: "AllRecurringApplePayPayments",
@@ -473,19 +485,26 @@ export class SupportWorkers extends GuStack {
     const googlePayAlarmPeriod = Duration.minutes(
       googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods
     );
-    const googlePayMetrics = Object.fromEntries(allProducts.map((product, idx) =>
-    [`m${idx}`, this.buildPaymentSuccessMetric(
-        "StripePaymentRequestButton",
-        product,
-        googlePayMetricDuration
-      )]
-    ));
-    const googlePayExpression = `SUM([${Object.keys(googlePayMetrics).map(m => `FILL(${m},0)`).join(",")}])`;
+    const googlePayMetrics = Object.fromEntries(
+      allProducts.map((product, idx) => [
+        `m${idx}`,
+        this.buildPaymentSuccessMetric(
+          "StripePaymentRequestButton",
+          product,
+          googlePayMetricDuration
+        ),
+      ])
+    );
+    const googlePayExpression = `SUM([${Object.keys(googlePayMetrics)
+      .map((m) => `FILL(${m},0)`)
+      .join(",")}])`;
     new GuAlarm(this, "NoGooglePayRecurringAlarm", {
       app,
       actionsEnabled: isProd,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
+      alarmName: `support-workers ${
+        this.stage
+      } No successful recurring Google Pay payments in ${googlePayAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
         expression: googlePayExpression,
         label: "AllRecurringGooglePayPayments",
