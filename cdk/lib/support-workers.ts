@@ -649,7 +649,7 @@ export class SupportWorkers extends GuStack {
   // End of an lite
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
-    productType: ProductType | '*',
+    productType: ProductType,
     period: Duration
   ) => {
     return new Metric({
