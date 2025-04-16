@@ -51,26 +51,15 @@ const allProducts: ProductType[] = [
   GuardianAdLite,
 ];
 
-const Stripe = "Stripe";
-const DirectDebit = "DirectDebit";
-const PayPal = "PayPal";
-const StripeApplePay = "StripeApplePay";
-const StripePaymentRequestButton = "StripePaymentRequestButton";
+const PaymentProviders = {
+  Stripe: 'Stripe',
+  DirectDebit: 'DirectDebit',
+  PayPal: 'PayPal',
+  StripeApplePay: 'StripeApplePay',
+  StripePaymentRequestButton: 'StripePaymentRequestButton',
+} as const;
 
-type PaymentProvider =
-  | typeof Stripe
-  | typeof DirectDebit
-  | typeof PayPal
-  | typeof StripeApplePay
-  | typeof StripePaymentRequestButton;
-
-const allPaymentProviders: PaymentProvider[] = [
-  Stripe,
-  DirectDebit,
-  PayPal,
-  StripeApplePay,
-  StripePaymentRequestButton,
-];
+type PaymentProvider = keyof typeof PaymentProviders;
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -643,7 +632,7 @@ export class SupportWorkers extends GuStack {
       adLiteMetricDuration.toMinutes() * adLiteEvaluationPeriods
     );
     const adLiteMetrics = Object.fromEntries(
-      allPaymentProviders.map((paymentProvider, idx) => [
+      Object.values(PaymentProviders).map((paymentProvider, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           paymentProvider,
