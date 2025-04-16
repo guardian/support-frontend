@@ -60,8 +60,12 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     logger.info(s"Attempting to handle error $error")
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
-    val cardDeclinedMessage =
-      "Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined."
+    val cardDeclinedMessages = List(
+      "Transaction declined.402 - [card_error/card_declined/do_not_honor] Your card was declined.",
+      "Transaction declined.402 - [card_error/card_declined/insufficient_funds] Your card has insufficient funds.",
+      "Transaction declined.402 - [card_error/card_declined/try_again_later] Your card was declined.",
+      "Transaction declined.402 - [card_error/card_declined/transaction_not_allowed] Your card does not support this type of purchase.",
+    )
 
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
@@ -70,7 +74,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         exitHandler(
           state,
           checkoutFailureReason,
-          if (message.contains(cardDeclinedMessage))
+          if (cardDeclinedMessages.exists(messageToIgnore => message.contains(messageToIgnore)))
             updatedRequestInfo
           else
             updatedRequestInfo.copy(failed = true),
