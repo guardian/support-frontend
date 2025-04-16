@@ -1,13 +1,6 @@
 // ----- Imports ----- //
-import type {
-	PaymentMethod,
-	PaymentMethodMap,
-} from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
@@ -24,17 +17,6 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
-export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
-
-export const logInvalidCombination = (
-	contributionType: ContributionType,
-	paymentMethod: PaymentMethod,
-): void => {
-	logException(
-		`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`,
-	);
-};
-
 export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
@@ -72,7 +54,7 @@ export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
 
-export type ContributionTypeSetting = {
+type ContributionTypeSetting = {
 	contributionType: ContributionType;
 	isDefault?: boolean;
 };
@@ -271,57 +253,6 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-function toContributionType(
-	s: string | null | undefined,
-): ContributionType | null | undefined {
-	if (s) {
-		switch (s.toUpperCase()) {
-			case 'ANNUAL':
-				return 'ANNUAL';
-
-			case 'MONTHLY':
-				return 'MONTHLY';
-
-			case 'ONE_OFF':
-				return 'ONE_OFF';
-
-			case 'SINGLE':
-				return 'ONE_OFF';
-
-			default:
-				return null;
-		}
-	}
-
-	return null;
-}
-
-function generateContributionTypes(
-	contributionTypes: ContributionTypeSetting[],
-): ContributionTypes {
-	return {
-		GBPCountries: contributionTypes,
-		UnitedStates: contributionTypes,
-		AUDCountries: contributionTypes,
-		EURCountries: contributionTypes,
-		NZDCountries: contributionTypes,
-		Canada: contributionTypes,
-		International: contributionTypes,
-	};
-}
-
-function billingPeriodFromContrib(
-	contributionType: ContributionType,
-): BillingPeriod {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return Annual;
-
-		default:
-			return Monthly;
-	}
-}
-
 const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
 
 const isContributionsOnlyCountry = (
@@ -334,9 +265,6 @@ const isContributionsOnlyCountry = (
 // ----- Exports ----- //
 export {
 	config,
-	toContributionType,
-	generateContributionTypes,
-	billingPeriodFromContrib,
 	getAmount,
 	contributionsOnlyAmountsTestName,
 	isContributionsOnlyCountry,

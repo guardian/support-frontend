@@ -1,12 +1,11 @@
 import { css } from '@emotion/react';
-import {palette} from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import GridImage from 'components/gridImage/gridImage';
 import { Container } from 'components/layout/container';
-import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -45,9 +44,6 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: (
-		<LandingPageHeading heading="Support fearless, independent journalism" />
-	),
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering

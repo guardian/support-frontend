@@ -1,14 +1,6 @@
 import { recaptchaRequiredPaymentMethods } from 'helpers/forms/paymentMethods';
-import {
-	hasPaymentRequestButtonBeenClicked,
-	hasPaymentRequestInterfaceClosed,
-	hasPaymentRequestPaymentFailed,
-} from 'helpers/redux/checkout/payment/paymentRequestButton/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
-import { getPersonalDetailsErrors } from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
-import { errorCollectionHasErrors } from './utils';
 
 export function getStripeFormErrors(
 	state: ContributionsState,
@@ -22,44 +14,6 @@ export function getStripeFormErrors(
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 
-function getDirectDebitFormErrors(state: ContributionsState): ErrorCollection {
-	const { errors, formError } = state.page.checkoutForm.payment.directDebit;
-	const recaptchaErrors = getRecaptchaError(state);
-
-	if (formError) {
-		return {
-			...errors,
-			robot_checkbox: recaptchaErrors,
-			directDebitDetails: [formError],
-		};
-	}
-
-	return {
-		...errors,
-		robot_checkbox: recaptchaErrors,
-	};
-}
-
-export function getPaymentMethodErrors(
-	state: ContributionsState,
-): ErrorCollection {
-	const { payment } = state.page.checkoutForm;
-
-	switch (payment.paymentMethod.name) {
-		case 'Stripe':
-			return getStripeFormErrors(state);
-
-		case 'DirectDebit':
-			return getDirectDebitFormErrors(state);
-
-		case 'Sepa':
-			return payment.sepa.errors;
-
-		default:
-			return {};
-	}
-}
-
 function getRecaptchaError(state: ContributionsState): string[] | undefined {
 	const { paymentMethod } = state.page.checkoutForm.payment;
 
@@ -68,35 +22,4 @@ function getRecaptchaError(state: ContributionsState): string[] | undefined {
 	}
 
 	return;
-}
-
-export function getPaymentRequestButtonErrors(
-	state: ContributionsState,
-): ErrorCollection | null {
-	const hasBeenClicked = hasPaymentRequestButtonBeenClicked(state);
-	const hasBeenCompleted = hasPaymentRequestInterfaceClosed(state);
-
-	const otherAmount = getOtherAmountErrors(state);
-
-	if (hasBeenClicked && hasBeenCompleted) {
-		const hasFailed = hasPaymentRequestPaymentFailed(state);
-		const personalDetailsErrors = getPersonalDetailsErrors(state);
-
-		// Either the payment itself has failed, or the personal details on the user's Apple/Google Pay account failed validation-
-		// eg. they signed up with an emoji in their name
-		// We can't meaningfully recover from this, so the best option is to try another payment method
-		if (hasFailed || errorCollectionHasErrors(personalDetailsErrors)) {
-			return {
-				maincontent: [
-					'Sorry, something went wrong. Please try another payment method',
-				],
-			};
-		}
-	}
-
-	if (hasBeenClicked) {
-		return { otherAmount };
-	}
-
-	return null;
 }
