@@ -51,12 +51,26 @@ const allProducts: ProductType[] = [
   GuardianAdLite,
 ];
 
+const Stripe = "Stripe";
+const DirectDebit = "DirectDebit";
+const PayPal = "PayPal";
+const StripeApplePay = "StripeApplePay";
+const StripePaymentRequestButton = "StripePaymentRequestButton";
+
 type PaymentProvider =
-  | "Stripe"
-  | "DirectDebit"
-  | "PayPal"
-  | "StripeApplePay"
-  | "StripePaymentRequestButton";
+  | typeof Stripe
+  | typeof DirectDebit
+  | typeof PayPal
+  | typeof StripeApplePay
+  | typeof StripePaymentRequestButton;
+
+const allPaymentProviders: PaymentProvider[] = [
+  Stripe,
+  DirectDebit,
+  PayPal,
+  StripeApplePay,
+  StripePaymentRequestButton,
+];
 
 interface SupportWorkersProps extends GuStackProps {
   promotionsDynamoTables: string[];
@@ -622,14 +636,25 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
 
-    // begining of Ad lite
-
+    // Begining of Ad-Lite
     const adLiteMetricDuration = Duration.minutes(5);
     const adLiteEvaluationPeriods = 144; // The number of 5 minute periods in 12 hours
     const adLiteAlarmPeriod = Duration.minutes(
       adLiteMetricDuration.toMinutes() * adLiteEvaluationPeriods
     );
-
+    const adLiteMetrics = Object.fromEntries(
+      allPaymentProviders.map((paymentProvider, idx) => [
+        `m${idx}`,
+        this.buildPaymentSuccessMetric(
+          paymentProvider,
+          GuardianAdLite,
+          adLiteMetricDuration
+        ),
+      ])
+    );
+    const adLiteExpression = `SUM([${Object.keys(adLiteMetrics)
+      .map((m) => `FILL(${m},0)`)
+      .join(",")}])`;
     new GuAlarm(this, `NoAdLiteAcquisitionInPeriodAlarm`, {
       app,
       actionsEnabled: isProd,
@@ -639,24 +664,8 @@ export class SupportWorkers extends GuStack {
       } support-workers No successful Ad-Lite checkouts in ${adLiteAlarmPeriod.toHumanString()}.`,
       metric: new MathExpression({
         label: "AllGuardianAdLiteConversions",
-        expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
-        usingMetrics: {
-          m1: this.buildPaymentSuccessMetric(
-            "Stripe",
-            "GuardianAdLite",
-            adLiteMetricDuration
-          ),
-          m2: this.buildPaymentSuccessMetric(
-            "DirectDebit",
-            "GuardianAdLite",
-            adLiteMetricDuration
-          ),
-          m3: this.buildPaymentSuccessMetric(
-            "PayPal",
-            "GuardianAdLite",
-            adLiteMetricDuration
-          ),
-        },
+        expression: adLiteExpression,
+        usingMetrics: adLiteMetrics,
       }),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: adLiteEvaluationPeriods,
@@ -664,8 +673,8 @@ export class SupportWorkers extends GuStack {
       threshold: 0,
     }).node.addDependency(stateMachine);
   }
+  // End of Ad-Lite
 
-  // End of an lite
   buildPaymentSuccessMetric = (
     paymentProvider: PaymentProvider,
     productType: ProductType,
