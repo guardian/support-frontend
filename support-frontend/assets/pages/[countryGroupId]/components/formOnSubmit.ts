@@ -23,7 +23,10 @@ import {
 } from '../checkout/helpers/formDataExtractors';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { stripeCreateCheckoutSession } from '../checkout/helpers/stripe';
-import { persistFormDetails } from '../checkout/helpers/stripeCheckoutSession';
+import {
+	deleteFormDetails,
+	persistFormDetails,
+} from '../checkout/helpers/stripeCheckoutSession';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
@@ -52,7 +55,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
-}) => {
+}): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
 		? extractDeliverableAddressDataFromForm(formData)
@@ -121,7 +124,7 @@ export const submitForm = async ({
 
 		return checkoutSession.url;
 	} else {
-		return processSubscription({
+		const thankYouUrl = await processSubscription({
 			personalData,
 			appliedPromotion,
 			productKey,
@@ -131,6 +134,13 @@ export const submitForm = async ({
 			geoId,
 			paymentRequest,
 		});
+
+		// If Stripe hosted checkout, delete previously persisted form details
+		if (paymentFields.paymentType === 'StripeHostedCheckout') {
+			deleteFormDetails();
+		}
+
+		return thankYouUrl;
 	}
 };
 

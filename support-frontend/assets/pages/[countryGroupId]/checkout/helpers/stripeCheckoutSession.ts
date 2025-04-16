@@ -74,6 +74,10 @@ export const persistFormDetails = (
 	storage.session.set(KEY, dataToPersist, expiry);
 };
 
+export const deleteFormDetails = (): void => {
+	storage.session.remove(KEY);
+};
+
 export const getFormDetails = (
 	checkoutSessionId: string,
 ): CheckoutSession | undefined => {
