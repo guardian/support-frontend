@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PaperRoundServiceProvider(configProvider: PaperRoundConfigProvider)(implicit ec: ExecutionContext)
     extends TouchpointServiceProvider[PaperRoundService, PaperRoundConfig](configProvider) {
   override protected def createService(config: PaperRoundConfig) = {
-    new PaperRoundService(config, configurableFutureRunner(20.seconds))
+    new PaperRoundService(config, configurableFutureRunner(30.seconds))
   }
 }
 
