@@ -144,7 +144,7 @@ export function Checkout({
 
 	/**
 	 * - `originalAmount` the amount pre any discounts or contributions
-	 * - `discountredAmount` the amount with a discountApplied
+	 * - `discountedAmount` the amount with a discountApplied
 	 * - `finalAmount` is the amount a person will pay
 	 */
 	let payment: {
@@ -205,9 +205,7 @@ export function Checkout({
 			billingPeriod,
 		);
 
-		const discountedPrice = promotion?.discountedPrice
-			? promotion.discountedPrice
-			: undefined;
+		const discountedPrice = promotion?.discountedPrice ?? undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -243,8 +241,8 @@ export function Checkout({
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
-		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
-		 * which then needs this configuration.
+		 * Currently we're only using the stripe ExpressCheckoutElement (Google and Apple Pay) for some
+		 * product types - those which don't need an address. This requires some extra configuration.
 		 */
 		if (
 			productKey === 'Contribution' ||
@@ -253,7 +251,7 @@ export function Checkout({
 			productKey === 'DigitalSubscription'
 		) {
 			elementsOptions = {
-				mode: 'payment',
+				mode: 'subscription',
 				/**
 				 * Stripe amounts are in the "smallest currency unit"
 				 * @see https://docs.stripe.com/api/charges/object
