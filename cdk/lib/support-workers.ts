@@ -411,6 +411,16 @@ export class SupportWorkers extends GuStack {
         evaluationPeriods: 18,
         periodDuration: Duration.seconds(3600),
       },
+      {
+        paymentProvider: PaymentProviders.StripeApplePay,
+        evaluationPeriods: 96,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripePaymentRequestButton,
+        evaluationPeriods: 192,
+        periodDuration: Duration.seconds(3600),
+      },
     ];
     supporterPlusAlarmConfig.forEach(
       ({ paymentProvider, evaluationPeriods, periodDuration }) => {

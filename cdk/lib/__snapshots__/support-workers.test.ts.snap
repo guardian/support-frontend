@@ -29,6 +29,8 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -2189,6 +2191,76 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
+    "NoStripeApplePaySupporterPlusAlarm1C517FD9": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful StripeApplePay supporter plus subscriptions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripeApplePay",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 96,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "NoStripeContributionsAlarm26D25B46": {
       "DependsOn": [
         "SupportWorkersPROD",
@@ -2295,6 +2367,76 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           {
             "Name": "ProductType",
             "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 192,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripePaymentRequestButtonSupporterPlusAlarm826B7E0B": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful StripePaymentRequestButton supporter plus subscriptions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripePaymentRequestButton",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
           },
           {
             "Name": "Stage",
