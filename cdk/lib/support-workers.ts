@@ -390,53 +390,49 @@ export class SupportWorkers extends GuStack {
     );
     // End recurring contribution alarms (by payment method)
 
-    new GuAlarm(this, "NoPaypalSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        PaymentProviders.PayPal,
-        ProductTypes.SupporterPlus,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 6,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoStripeSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        PaymentProviders.Stripe,
-        ProductTypes.SupporterPlus,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 3,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoGocardlessSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        PaymentProviders.DirectDebit,
-        ProductTypes.SupporterPlus,
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 18,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    // Begin S+ alarms (by payment method)
+    const supporterPlusAlarmConfig: Array<{
+      paymentProvider: PaymentProvider;
+      evaluationPeriods: number;
+      periodDuration: Duration;
+    }> = [
+      {
+        paymentProvider: PaymentProviders.PayPal,
+        evaluationPeriods: 6,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.Stripe,
+        evaluationPeriods: 3,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.DirectDebit,
+        evaluationPeriods: 18,
+        periodDuration: Duration.seconds(3600),
+      },
+    ];
+    supporterPlusAlarmConfig.forEach(
+      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
+        new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
+          app,
+          actionsEnabled: isProd,
+          snsTopicName: `alarms-handler-topic-${this.stage}`,
+          alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
+          metric: this.buildPaymentSuccessMetric(
+            paymentProvider,
+            ProductTypes.SupporterPlus,
+            periodDuration
+          ),
+          comparisonOperator:
+            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+          evaluationPeriods,
+          treatMissingData: TreatMissingData.BREACHING,
+          threshold: 0,
+        }).node.addDependency(stateMachine);
+      }
+    );
+    // End S+ alarms (by payment method)
 
     // Begin Apple Pay alarm
     const applePayMetricDuration = Duration.minutes(5);
