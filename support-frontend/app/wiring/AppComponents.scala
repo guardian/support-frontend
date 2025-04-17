@@ -66,7 +66,6 @@ class AppComponents(context: Context)
     stripeController,
     identityController,
     subscriptionsController,
-    digitalPackController,
     digitalPackFormController,
     weeklyController,
     weeklyFormController,

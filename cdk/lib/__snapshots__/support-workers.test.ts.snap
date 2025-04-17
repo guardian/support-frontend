@@ -1112,12 +1112,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 144,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])",
             "Id": "expr_1",
             "Label": "AllGuardianAdLiteConversions",
           },
           {
-            "Id": "m1",
+            "Id": "m0",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -1143,7 +1143,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
           {
-            "Id": "m2",
+            "Id": "m1",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -1169,13 +1169,65 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
           {
-            "Id": "m3",
+            "Id": "m2",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
                   {
                     "Name": "PaymentProvider",
                     "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
                   },
                   {
                     "Name": "ProductType",
