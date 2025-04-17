@@ -118,6 +118,8 @@ class PaypalBackend(
               Some(identityUserDetails.userType),
               capturePaymentData.acquisitionData,
               clientBrowserInfo,
+              similarProductsConsent =
+                false, // TODO: this is not available in the capturePaymentData object, do we want to get the Android app to start sending it?
             )
             EnrichedPaypalPayment(payment, Some(email), Some(identityUserDetails.userType))
           }
@@ -151,6 +153,7 @@ class PaypalBackend(
               identityUserDetails.map(_.id),
               executePaymentData.acquisitionData,
               clientBrowserInfo,
+              executePaymentData.similarProductsConsent,
             )
 
             EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityUserDetails.map(_.userType))
@@ -174,8 +177,9 @@ class PaypalBackend(
       identityId: Option[String],
       acquisitionData: AcquisitionData,
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Boolean,
   ): Unit = {
-    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
+    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo, similarProductsConsent)
       .map(errors =>
         cloudWatchService.recordPostPaymentTasksErrors(
           PaymentProvider.Paypal,
@@ -206,6 +210,7 @@ class PaypalBackend(
       email: String,
       identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Boolean,
   ): Future[List[BackendError]] = {
     ContributionData.fromPaypalCharge(
       payment,
@@ -220,7 +225,8 @@ class PaypalBackend(
           PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
 
         track(
-          acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
+          acquisition = AcquisitionDataRowBuilder
+            .buildFromPayPal(paypalAcquisition, contributionData, similarProductsConsent),
           contributionData,
         )
     }

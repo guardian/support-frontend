@@ -25,7 +25,6 @@ case class CreateZuoraSubscriptionState(
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
-    similarProductsConsent: Boolean,
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionState {
@@ -66,6 +65,7 @@ object CreateZuoraSubscriptionProductState {
       product: GuardianAdLite,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class DigitalSubscriptionState(
@@ -74,6 +74,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class PaperState(
@@ -83,6 +84,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class GuardianWeeklyState(
@@ -93,6 +95,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   import ExecutionTypeDiscriminators._

@@ -19,7 +19,11 @@ import model.stripe.StripePaymentMethod
 import org.joda.time.{DateTime, DateTimeZone}
 
 object AcquisitionDataRowBuilder {
-  def buildFromStripe(acquisition: StripeAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
+  def buildFromStripe(
+      acquisition: StripeAcquisition,
+      contributionData: ContributionData,
+      similarProductsConsent: Boolean,
+  ): AcquisitionDataRow = {
     val paymentData = acquisition.stripeChargeData.paymentData
     val acquisitionData = acquisition.stripeChargeData.acquisitionData
     val paymentProvider = mapStripePaymentProvider(acquisition.stripeChargeData.paymentData.stripePaymentMethod)
@@ -57,10 +61,15 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
+      similarProductsConsent = similarProductsConsent,
     )
   }
 
-  def buildFromPayPal(acquisition: PaypalAcquisition, contributionData: ContributionData): AcquisitionDataRow = {
+  def buildFromPayPal(
+      acquisition: PaypalAcquisition,
+      contributionData: ContributionData,
+      similarProductsConsent: Boolean,
+  ): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
     val country =
@@ -98,6 +107,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
+      similarProductsConsent = similarProductsConsent,
     )
   }
 

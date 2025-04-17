@@ -80,6 +80,7 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -87,10 +88,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       None,
       None,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextSupporterPlus(
@@ -105,6 +105,7 @@ class NextState(state: CreateSalesforceContactState) {
         purchase,
         appliedPromotion,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -112,10 +113,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       None,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextTierThree(
@@ -131,6 +131,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -138,10 +139,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextGuardianAdLite(
@@ -154,6 +154,7 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -161,10 +162,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextWeekly(
@@ -181,6 +181,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecords,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -188,10 +189,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextPaper(
@@ -207,6 +207,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecord,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -214,10 +215,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextDSDirect(
@@ -232,6 +232,7 @@ class NextState(state: CreateSalesforceContactState) {
         purchase,
         appliedPromotion,
         salesforceContactRecord,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -239,10 +240,9 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
 }

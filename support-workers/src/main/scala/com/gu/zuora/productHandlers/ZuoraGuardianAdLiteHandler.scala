@@ -34,6 +34,7 @@ class ZuoraGuardianAdLiteHandler(
       paymentSchedule,
       account.value,
       sub.value,
+      state.similarProductsConsent,
     )
 
   }

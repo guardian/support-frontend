@@ -299,7 +299,12 @@ class StripeBackend(
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
 
     track(
-      acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
+      acquisition = AcquisitionDataRowBuilder.buildFromStripe(
+        stripeAcquisition,
+        contributionData,
+        similarProductsConsent =
+          false, // TODO: Work out how to get this from the front end taking account of mobile clients
+      ),
       contributionData,
     )
   }
