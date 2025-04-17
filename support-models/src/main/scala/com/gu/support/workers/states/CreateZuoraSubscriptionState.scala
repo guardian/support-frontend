@@ -25,6 +25,7 @@ case class CreateZuoraSubscriptionState(
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
+    similarProductsConsent: Boolean,
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionState {
