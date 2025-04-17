@@ -91,38 +91,15 @@ function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	return '';
 }
 
-const digitalEdition = (
-	countryGroupId: CountryGroupId,
-	priceCopy: PriceCopy,
-): ProductCopy => ({
-	title: 'The Guardian Digital Edition',
-	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
-	description:
-		'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-	buttons: [
-		{
-			ctaButtonText: 'Find out more',
-			link: digitalSubscriptionLanding(countryGroupId),
-			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'digipack_cta',
-				product: 'DigitalPack',
-				componentType: 'ACQUISITIONS_BUTTON',
-			}),
-			modifierClasses: 'digital',
-		},
-	],
-	productImage: <DigitalPackshotHero />,
-	classModifier: ['subscriptions__digital'],
-	offer: priceCopy.discountCopy,
-});
-
 function digitalCheckout(
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
 ): ProductCopy {
 	return {
-		...digitalEdition(countryGroupId, priceCopy),
+		title: 'The Guardian Digital Edition',
 		subtitle: getDigitalEditionPrices(countryGroupId),
+		description:
+			'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 		buttons: [
 			{
 				ctaButtonText: getDigitalEditionPrice(countryGroupId, Monthly),
@@ -146,6 +123,9 @@ function digitalCheckout(
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,
+		productImage: <DigitalPackshotHero />,
+		classModifier: ['subscriptions__digital'],
+		offer: priceCopy.discountCopy,
 	};
 }
 
@@ -214,20 +194,13 @@ const getSubscriptionCopy = (
 	pricingCopy: PricingCopy,
 	participations: Participations,
 ): ProductCopy[] => {
-	const inDigitalEditionCheckout =
-		participations.digitalEditionCheckout === 'variant';
-
 	const productcopy: ProductCopy[] = [
 		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
 	];
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
 	}
-	productcopy.push(
-		inDigitalEditionCheckout
-			? digitalCheckout(countryGroupId, pricingCopy[DigitalPack])
-			: digitalEdition(countryGroupId, pricingCopy[DigitalPack]),
-	);
+	productcopy.push(digitalCheckout(countryGroupId, pricingCopy[DigitalPack]));
 	return productcopy;
 };
 
