@@ -520,6 +520,18 @@ class Application(
     }
   }
 
+  def redirectContributionsCheckoutDigital(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+    val queryString = qsWithoutTypeAndAmount ++ Map(
+      "product" -> Seq("DigitalSubscription"),
+      "ratePlan" -> Seq("Monthly"),
+    )
+
+    Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
+  }
+
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
