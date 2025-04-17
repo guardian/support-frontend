@@ -6,6 +6,7 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import Subheading, { OfferHeading } from './subheading';
@@ -40,6 +41,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	observerPrint?: ObserverPrint;
 	startDate?: string;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
@@ -58,19 +60,13 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	observerPrint,
 	startDate,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
-	const paperProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-	];
-	const isObserverPrint =
-		paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday';
 	return (
 		<header css={header}>
 			<Heading
@@ -81,19 +77,21 @@ function ThankYouHeader({
 				amount={amount}
 				currency={currency}
 				contributionType={contributionType}
-				isObserverPrint={isObserverPrint}
+				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
 
 			<p css={headerSupportingText}>
-				{showDirectDebitMessage && <DirectDebitMessage />}
+				{showDirectDebitMessage && (
+					<DirectDebitMessage isObserverPrint={!!observerPrint} />
+				)}
 				<Subheading
 					productKey={productKey}
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
-					isObserverPrint={isObserverPrint}
+					observerPrint={observerPrint}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
 					startDate={startDate}

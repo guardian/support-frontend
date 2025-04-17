@@ -99,9 +99,6 @@ export const tests: Tests = {
 	digitalEditionCheckout: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
@@ -122,9 +119,6 @@ export const tests: Tests = {
 	},
 	newspaperGenericCheckout: {
 		variants: [
-			{
-				id: 'control',
-			},
 			{
 				id: 'variant',
 			},

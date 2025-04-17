@@ -205,8 +205,7 @@ export function Checkout({
 			billingPeriod,
 		);
 
-		const discountedPrice =
-			promotion !== undefined ? promotion.discountedPrice : undefined;
+		const discountedPrice = promotion?.discountedPrice ?? undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -242,8 +241,8 @@ export function Checkout({
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
-		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
-		 * which then needs this configuration.
+		 * Currently we're only using the stripe ExpressCheckoutElement (Google and Apple Pay) for some
+		 * product types - those which don't need an address. This requires some extra configuration.
 		 */
 		if (
 			productKey === 'Contribution' ||
@@ -260,6 +259,7 @@ export function Checkout({
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
+				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}

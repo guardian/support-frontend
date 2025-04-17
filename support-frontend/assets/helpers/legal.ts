@@ -43,9 +43,13 @@ const guardianWeeklyTermsLink =
 const guardianWeeklyPromoTermsLink =
 	'https://support.thegulocal.com/p/10ANNUAL/terms';
 const observerLinks = {
-	TERMS: 'https://www.tortoisemedia.com/observer/terms',
-	PRIVACY: 'https://www.tortoisemedia.com/observer/privacy',
+	TERMS: 'https://www.observer.co.uk/policy/terms',
+	PRIVACY: 'https://www.observer.co.uk/policy/privacy',
 };
+enum MediaGroup {
+	GUARDIAN = 'Guardian News & Media Ltd',
+	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
+}
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -61,4 +65,5 @@ export {
 	guardianWeeklyTermsLink,
 	guardianWeeklyPromoTermsLink,
 	observerLinks,
+	MediaGroup,
 };
