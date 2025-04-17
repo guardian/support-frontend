@@ -44,6 +44,7 @@ case class AcquisitionDataRow(
     postalCode: Option[String],
     state: Option[String],
     email: Option[String],
+    similarProductsConsent: Boolean,
 )
 
 object AcquisitionDataRow {

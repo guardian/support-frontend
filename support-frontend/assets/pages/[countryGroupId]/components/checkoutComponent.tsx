@@ -1239,6 +1239,10 @@ export function CheckoutComponent({
 							currency={currencyKey}
 							amount={originalAmount}
 						/>
+						<Checkbox
+							name="similarProductsConsent"
+							label="I am happy to be contacted by The Guardian about similar products and services"
+						/>
 						<div
 							css={css`
 								margin: ${space[8]}px 0;

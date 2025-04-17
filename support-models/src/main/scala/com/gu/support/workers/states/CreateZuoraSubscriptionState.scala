@@ -25,6 +25,7 @@ case class CreateZuoraSubscriptionState(
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
+    similarProductsConsent: Boolean,
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionState {
@@ -39,6 +40,7 @@ object CreateZuoraSubscriptionProductState {
       product: Contribution,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class SupporterPlusState(
@@ -47,6 +49,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class TierThreeState(
@@ -56,6 +59,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class GuardianAdLiteState(

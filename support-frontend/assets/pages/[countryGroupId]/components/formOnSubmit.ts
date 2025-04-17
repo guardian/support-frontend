@@ -82,6 +82,8 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
+	const similarProductsConsent =
+		formData.get('similarProductsConsent') === 'on';
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
@@ -96,6 +98,7 @@ export const submitForm = async ({
 		supportAbTests,
 		deliveryInstructions,
 		debugInfo: '',
+		similarProductsConsent,
 	};
 
 	if (
