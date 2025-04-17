@@ -99,9 +99,6 @@ export const tests: Tests = {
 	digitalEditionCheckout: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
