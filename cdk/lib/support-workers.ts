@@ -336,7 +336,11 @@ export class SupportWorkers extends GuStack {
       order by 1,2,3
     */
     // Begin recurring contribution alarms (by payment method)
-    const contributionAlarmConfig: Array<{ paymentProvider: PaymentProvider; evaluationPeriods: number; periodDuration: Duration }> = [
+    const contributionAlarmConfig: Array<{
+      paymentProvider: PaymentProvider;
+      evaluationPeriods: number;
+      periodDuration: Duration;
+    }> = [
       {
         paymentProvider: PaymentProviders.PayPal,
         evaluationPeriods: 4,
@@ -352,25 +356,38 @@ export class SupportWorkers extends GuStack {
         evaluationPeriods: 18,
         periodDuration: Duration.seconds(3600),
       },
+      {
+        paymentProvider: PaymentProviders.StripeApplePay,
+        evaluationPeriods: 96,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripePaymentRequestButton,
+        evaluationPeriods: 192,
+        periodDuration: Duration.seconds(3600),
+      },
     ];
 
-    contributionAlarmConfig.forEach(({ paymentProvider, evaluationPeriods, periodDuration }) => {
-      new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
-        app,
-        actionsEnabled: isProd,
-        snsTopicName: `alarms-handler-topic-${this.stage}`,
-        alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
-        metric: this.buildPaymentSuccessMetric(
-          paymentProvider,
-          ProductTypes.Contribution,
-          periodDuration,
-        ),
-        comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-        evaluationPeriods,
-        treatMissingData: TreatMissingData.BREACHING,
-        threshold: 0,
-      }).node.addDependency(stateMachine);
-    });
+    contributionAlarmConfig.forEach(
+      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
+        new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
+          app,
+          actionsEnabled: isProd,
+          snsTopicName: `alarms-handler-topic-${this.stage}`,
+          alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
+          metric: this.buildPaymentSuccessMetric(
+            paymentProvider,
+            ProductTypes.Contribution,
+            periodDuration
+          ),
+          comparisonOperator:
+            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+          evaluationPeriods,
+          treatMissingData: TreatMissingData.BREACHING,
+          threshold: 0,
+        }).node.addDependency(stateMachine);
+      }
+    );
     // End recurring contribution alarms (by payment method)
 
     new GuAlarm(this, "NoPaypalSupporterPlusAlarm", {
