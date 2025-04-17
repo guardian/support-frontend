@@ -523,10 +523,7 @@ class Application(
   def redirectContributionsCheckoutDigital(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-    val isTestUser = testUserService.isTestUser(request)
-    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
-
     val queryString = qsWithoutTypeAndAmount ++ Map(
       "product" -> Seq("DigitalSubscription"),
       "ratePlan" -> Seq("Monthly"),
