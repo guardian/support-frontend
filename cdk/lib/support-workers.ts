@@ -351,17 +351,17 @@ export class SupportWorkers extends GuStack {
     // Begin recurring contribution alarms (by payment method)
     const contributionAlarmConfig: Array<{ paymentProvider: PaymentProvider; evaluationPeriods: number; periodDuration: Duration }> = [
       {
-        paymentProvider: PayPal,
+        paymentProvider: PaymentProviders.PayPal,
         evaluationPeriods: 4,
         periodDuration: Duration.seconds(3600),
       },
       {
-        paymentProvider: Stripe,
+        paymentProvider: PaymentProviders.Stripe,
         evaluationPeriods: 3,
         periodDuration: Duration.seconds(3600),
       },
       {
-        paymentProvider: DirectDebit,
+        paymentProvider: PaymentProviders.DirectDebit,
         evaluationPeriods: 18,
         periodDuration: Duration.seconds(3600),
       },
@@ -392,7 +392,7 @@ export class SupportWorkers extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
-        PayPal,
+        PaymentProviders.PayPal,
         SupporterPlus,
         Duration.seconds(3600)
       ),
@@ -408,7 +408,7 @@ export class SupportWorkers extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
-        Stripe,
+        PaymentProviders.Stripe,
         SupporterPlus,
         Duration.seconds(3600)
       ),
@@ -424,7 +424,7 @@ export class SupportWorkers extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
       alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
-        DirectDebit,
+        PaymentProviders.DirectDebit,
         SupporterPlus,
         Duration.seconds(3600)
       ),
@@ -444,7 +444,7 @@ export class SupportWorkers extends GuStack {
       allProducts.map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
-          StripeApplePay,
+          PaymentProviders.StripeApplePay,
           product,
           applePayMetricDuration
         ),
@@ -482,7 +482,7 @@ export class SupportWorkers extends GuStack {
       allProducts.map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
-          StripePaymentRequestButton,
+          PaymentProviders.StripePaymentRequestButton,
           product,
           googlePayMetricDuration
         ),
@@ -522,17 +522,17 @@ export class SupportWorkers extends GuStack {
         label: "AllPaperConversions",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            Stripe,
+            PaymentProviders.Stripe,
             Paper,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
-            DirectDebit,
+            PaymentProviders.DirectDebit,
             Paper,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
-            PayPal,
+            PaymentProviders.PayPal,
             Paper,
             Duration.seconds(300)
           ),
@@ -554,17 +554,17 @@ export class SupportWorkers extends GuStack {
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            Stripe,
+            PaymentProviders.Stripe,
             GuardianWeekly,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
-            DirectDebit,
+            PaymentProviders.DirectDebit,
             GuardianWeekly,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
-            PayPal,
+            PaymentProviders.PayPal,
             GuardianWeekly,
             Duration.seconds(300)
           ),
@@ -593,17 +593,17 @@ export class SupportWorkers extends GuStack {
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            Stripe,
+            PaymentProviders.Stripe,
             TierThree,
             tierThreeMetricDuration
           ),
           m2: this.buildPaymentSuccessMetric(
-            DirectDebit,
+            PaymentProviders.DirectDebit,
             TierThree,
             tierThreeMetricDuration
           ),
           m3: this.buildPaymentSuccessMetric(
-            PayPal,
+            PaymentProviders.PayPal,
             TierThree,
             tierThreeMetricDuration
           ),
