@@ -27,29 +27,16 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
-const Contribution = "Contribution";
-const Paper = "Paper";
-const GuardianWeekly = "GuardianWeekly";
-const SupporterPlus = "SupporterPlus";
-const TierThree = "TierThree";
-const GuardianAdLite = "GuardianAdLite";
+const ProductTypes = {
+  Contribution: "Contribution",
+  Paper: "Paper",
+  GuardianWeekly: "GuardianWeekly",
+  SupporterPlus: "SupporterPlus",
+  TierThree: "TierThree",
+  GuardianAdLite: "GuardianAdLite",
+} as const;
 
-type ProductType =
-  | typeof Contribution
-  | typeof Paper
-  | typeof GuardianWeekly
-  | typeof SupporterPlus
-  | typeof TierThree
-  | typeof GuardianAdLite;
-
-const allProducts: ProductType[] = [
-  Contribution,
-  Paper,
-  GuardianWeekly,
-  SupporterPlus,
-  TierThree,
-  GuardianAdLite,
-];
+type ProductType = keyof typeof ProductTypes;
 
 const PaymentProviders = {
   Stripe: "Stripe",
@@ -375,7 +362,7 @@ export class SupportWorkers extends GuStack {
         alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
         metric: this.buildPaymentSuccessMetric(
           paymentProvider,
-          Contribution,
+          ProductTypes.Contribution,
           periodDuration,
         ),
         comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -393,7 +380,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
         PaymentProviders.PayPal,
-        SupporterPlus,
+        ProductTypes.SupporterPlus,
         Duration.seconds(3600)
       ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -409,7 +396,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
         PaymentProviders.Stripe,
-        SupporterPlus,
+        ProductTypes.SupporterPlus,
         Duration.seconds(3600)
       ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -425,7 +412,7 @@ export class SupportWorkers extends GuStack {
       alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
       metric: this.buildPaymentSuccessMetric(
         PaymentProviders.DirectDebit,
-        SupporterPlus,
+        ProductTypes.SupporterPlus,
         Duration.seconds(3600)
       ),
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
@@ -441,7 +428,7 @@ export class SupportWorkers extends GuStack {
       applePayMetricDuration.toMinutes() * applePayEvaluationPeriods
     );
     const applePayMetrics = Object.fromEntries(
-      allProducts.map((product, idx) => [
+      Object.values(ProductTypes).map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripeApplePay,
@@ -479,7 +466,7 @@ export class SupportWorkers extends GuStack {
       googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods
     );
     const googlePayMetrics = Object.fromEntries(
-      allProducts.map((product, idx) => [
+      Object.values(ProductTypes).map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           PaymentProviders.StripePaymentRequestButton,
@@ -523,17 +510,17 @@ export class SupportWorkers extends GuStack {
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            Paper,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            Paper,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            Paper,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
         },
@@ -555,17 +542,17 @@ export class SupportWorkers extends GuStack {
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            GuardianWeekly,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            GuardianWeekly,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            GuardianWeekly,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
         },
@@ -594,17 +581,17 @@ export class SupportWorkers extends GuStack {
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
             PaymentProviders.Stripe,
-            TierThree,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
           m2: this.buildPaymentSuccessMetric(
             PaymentProviders.DirectDebit,
-            TierThree,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
           m3: this.buildPaymentSuccessMetric(
             PaymentProviders.PayPal,
-            TierThree,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
         },
@@ -626,7 +613,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           paymentProvider,
-          GuardianAdLite,
+          ProductTypes.GuardianAdLite,
           adLiteMetricDuration
         ),
       ])
