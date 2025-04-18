@@ -48,7 +48,8 @@ import {
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
 
-const checkoutContainer = css`
+const thankYouContainer = css`
+	position: relative;
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
@@ -62,7 +63,8 @@ const headerContainer = css`
 	}
 `;
 const buttonContainer = css`
-	padding: ${space[12]}px 0;
+	position: absolute;
+	bottom: ${space[8]}px;
 	& > a:first-child {
 		margin-right: ${space[3]}px;
 	}
@@ -359,7 +361,7 @@ export function ThankYouComponent({
 				</FooterWithContents>
 			}
 		>
-			<div css={checkoutContainer}>
+			<div css={thankYouContainer}>
 				<Container>
 					<div css={headerContainer}>
 						<ThankYouHeader
@@ -383,7 +385,6 @@ export function ThankYouComponent({
 
 					<ThankYouModules
 						isSignedIn={isSignedIn}
-						showNewspaperArchiveBenefit={showNewspaperArchiveBenefit}
 						thankYouModules={thankYouModules}
 						thankYouModulesData={thankYouModuleData}
 					/>

@@ -13,6 +13,7 @@ type ThankYouModulesProps = {
 const mansory = css`
 	column-count: 1;
 	column-gap: ${space[4]}px;
+	margin-bottom: 184px;
 	> section {
 		break-inside: avoid;
 		margin-bottom: ${space[4]}px;
@@ -21,6 +22,10 @@ const mansory = css`
 	${from.desktop} {
 		column-count: 2;
 	}
+
+	${from.phablet} {
+		margin-bottom: 108px;
+	}
 `;
 
 function ThankYouModules({
@@ -28,15 +33,17 @@ function ThankYouModules({
 	thankYouModules,
 	thankYouModulesData,
 }: ThankYouModulesProps) {
-  return <div css={mansory}>
-		{thankYouModules.map((moduleType) => (
-			<ThankYouModule
-				moduleType={moduleType}
-				isSignedIn={isSignedIn}
-				{...thankYouModulesData[moduleType]}
-			/>
-		))}
-	</div>
+	return (
+		<div css={mansory}>
+			{thankYouModules.map((moduleType) => (
+				<ThankYouModule
+					moduleType={moduleType}
+					isSignedIn={isSignedIn}
+					{...thankYouModulesData[moduleType]}
+				/>
+			))}
+		</div>
+	);
 }
 
 export default ThankYouModules;
