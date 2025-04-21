@@ -17,7 +17,6 @@ import {
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import shouldShowObserverCard from 'pages/paper-subscription-landing/helpers/shouldShowObserver';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {
@@ -119,7 +118,7 @@ export function PaperPrices({
 	const infoText = [
 		activeTab === HomeDelivery ? infoTextMessages.delivery : '',
 		infoTextMessages.cancel_subscripton,
-		shouldShowObserverCard() ? infoTextMessages.sunday_subscription : '',
+		infoTextMessages.sunday_subscription,
 	].join(' ');
 
 	return (
@@ -143,12 +142,7 @@ export function PaperPrices({
 					Subscription card
 				</LinkTo>
 			</div>
-			<FlexContainer
-				cssOverrides={[
-					priceBoxes,
-					shouldShowObserverCard() ? pricesBoxesGridLayout : css``,
-				]}
-			>
+			<FlexContainer cssOverrides={[priceBoxes, pricesBoxesGridLayout]}>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={

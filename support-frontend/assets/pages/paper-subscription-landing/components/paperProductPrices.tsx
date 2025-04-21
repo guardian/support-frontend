@@ -5,10 +5,7 @@ import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type {
-	ActivePaperProductOptions,
-	PaperProductOptions,
-} from 'helpers/productPrice/productOptions';
+import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
@@ -28,7 +25,6 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getProductLabel, getTitle } from '../helpers/products';
-import shouldShowObserverCard from '../helpers/shouldShowObserver';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -150,21 +146,12 @@ const copy: Record<
 	},
 };
 
-// For most purposes we want Sunday and Sixday to be active so that we can go through the
-// checkout flow, but we don't want to display it as an option to the user.
-const excludeSundayAndSixday = (productOption: ActivePaperProductOptions) =>
-	!['Sunday', 'Sixday'].includes(productOption);
-
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	abParticipations: Participations,
-): Product[] => {
-	const visiblePaperProductTypes = shouldShowObserverCard()
-		? ActivePaperProductTypes
-		: ActivePaperProductTypes.filter(excludeSundayAndSixday);
-
-	return visiblePaperProductTypes.map((productOption) => {
+): Product[] =>
+	ActivePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
@@ -187,9 +174,7 @@ const getPlans = (
 			productOption,
 		);
 		const label = productOption === 'Everyday' ? 'Best deal' : '';
-		const productLabel = shouldShowObserverCard()
-			? getProductLabel(productOption)
-			: undefined;
+		const productLabel = getProductLabel(productOption);
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -215,7 +200,6 @@ const getPlans = (
 			),
 		};
 	});
-};
 
 export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
