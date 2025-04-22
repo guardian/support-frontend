@@ -137,7 +137,7 @@ const guardianWeekly = (
 	title: 'Guardian Weekly',
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
 	description:
-		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
+		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian, delivered for free to wherever you are in the world.',
 	offer: getGuardianWeeklyOfferCopy(priceCopy.discountCopy),
 	buttons: [
 		{
