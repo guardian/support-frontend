@@ -11,7 +11,7 @@ import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import Subheading, { OfferHeading } from './subheading';
 
-export const header = css`
+const header = css`
 	background: white;
 	padding: ${space[4]}px 10px ${space[5]}px;
 	${from.tablet} {
@@ -21,7 +21,7 @@ export const header = css`
 	}
 `;
 
-export const headerSupportingText = css`
+const headerSupportingText = css`
 	${textEgyptian15};
 	padding-top: ${space[3]}px;
 
