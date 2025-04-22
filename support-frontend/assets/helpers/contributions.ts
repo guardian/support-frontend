@@ -57,7 +57,7 @@ export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
 
-export type ContributionTypeSetting = {
+type ContributionTypeSetting = {
 	contributionType: ContributionType;
 	isDefault?: boolean;
 };
