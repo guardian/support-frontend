@@ -1,11 +1,5 @@
 // ----- Imports ----- //
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type {
-	IsoCountry,
-	StateProvince,
-} from 'helpers/internationalisation/country';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import type { Option } from 'helpers/types/option';
 
 export type Action =
 	| {
@@ -30,22 +24,4 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	paymentError,
 });
 
-function getBillingCountryAndState(state: ContributionsState): {
-	billingCountry: IsoCountry;
-	billingState: Option<StateProvince>;
-	postCode: string;
-} {
-	const {
-		country: formCountry,
-		state: formState,
-		postCode,
-	} = state.page.checkoutForm.billingAddress.fields;
-
-	return {
-		billingCountry: formCountry,
-		billingState: formState,
-		postCode,
-	};
-}
-
-export { paymentFailure, paymentWaiting, getBillingCountryAndState };
+export { paymentFailure, paymentWaiting };
