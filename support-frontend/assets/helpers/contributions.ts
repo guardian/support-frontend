@@ -1,10 +1,8 @@
 // ----- Imports ----- //
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
@@ -21,15 +19,6 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
-
-export const logInvalidCombination = (
-	contributionType: ContributionType,
-	paymentMethod: PaymentMethod,
-): void => {
-	logException(
-		`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`,
-	);
-};
 
 export interface AmountValuesObject {
 	amounts: number[];
