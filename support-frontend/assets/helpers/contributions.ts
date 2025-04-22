@@ -1,8 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
@@ -256,18 +254,6 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-function billingPeriodFromContrib(
-	contributionType: ContributionType,
-): BillingPeriod {
-	switch (contributionType) {
-		case 'ANNUAL':
-			return Annual;
-
-		default:
-			return Monthly;
-	}
-}
-
 const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
 
 const isContributionsOnlyCountry = (
@@ -280,7 +266,6 @@ const isContributionsOnlyCountry = (
 // ----- Exports ----- //
 export {
 	config,
-	billingPeriodFromContrib,
 	getAmount,
 	contributionsOnlyAmountsTestName,
 	isContributionsOnlyCountry,
