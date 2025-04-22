@@ -154,7 +154,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		seed: 99,
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
