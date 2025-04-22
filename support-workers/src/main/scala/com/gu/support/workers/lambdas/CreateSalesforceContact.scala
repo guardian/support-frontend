@@ -91,7 +91,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextSupporterPlus(
@@ -117,7 +116,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextTierThree(
@@ -144,7 +142,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextGuardianAdLite(
@@ -168,7 +165,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextWeekly(
@@ -196,7 +192,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextPaper(
@@ -223,7 +218,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
   def toNextDSDirect(
@@ -249,7 +243,6 @@ class NextState(state: CreateSalesforceContactState) {
       csrUsername,
       salesforceCaseId,
       acquisitionData,
-      state.similarProductsConsent,
     )
 
 }
