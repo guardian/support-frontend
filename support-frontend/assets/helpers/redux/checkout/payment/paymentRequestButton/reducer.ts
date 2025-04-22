@@ -5,7 +5,7 @@ import { resetValidation, validateForm } from '../../checkoutActions';
 import type { PaymentRequestError } from './state';
 import { initialPaymentRequestButtonState } from './state';
 
-export const paymentRequestButtonSlice = createSlice({
+const paymentRequestButtonSlice = createSlice({
 	name: 'paymentRequestButton',
 	initialState: initialPaymentRequestButtonState,
 	reducers: {
