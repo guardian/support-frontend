@@ -37,7 +37,7 @@ class Promotions(
     maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
-        case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect().url
+        case DigitalPack => routes.Application.geoRedirectToPath("subscribe/digitaledition").url
         case Paper => routes.PaperSubscriptionController.paper().url
         case _ => routes.Application.contributeGeoRedirect("").url
       }
