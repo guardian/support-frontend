@@ -626,8 +626,8 @@ export function ThreeTierLanding({
 						dangerouslySetInnerHTML={{ __html: sanitisedSubheading }}
 					/>
 
-					{campaignSettings?.tickerSettings && (
-						<TickerContainer tickerSettings={campaignSettings.tickerSettings} />
+					{settings.tickerSettings && (
+						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
