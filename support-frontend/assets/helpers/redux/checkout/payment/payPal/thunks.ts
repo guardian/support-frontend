@@ -10,9 +10,8 @@ import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getContributionType } from '../../product/selectors/productType';
 
-export type PayPalTokenResolve = (token: string) => void;
-export type PayPalTokenReject = (err: Error) => void;
-
+type PayPalTokenResolve = (token: string) => void;
+type PayPalTokenReject = (err: Error) => void;
 type PayPalLoadFns = {
 	resolve: PayPalTokenResolve;
 	reject: PayPalTokenReject;
