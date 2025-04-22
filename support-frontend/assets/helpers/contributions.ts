@@ -256,45 +256,6 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-function toContributionType(
-	s: string | null | undefined,
-): ContributionType | null | undefined {
-	if (s) {
-		switch (s.toUpperCase()) {
-			case 'ANNUAL':
-				return 'ANNUAL';
-
-			case 'MONTHLY':
-				return 'MONTHLY';
-
-			case 'ONE_OFF':
-				return 'ONE_OFF';
-
-			case 'SINGLE':
-				return 'ONE_OFF';
-
-			default:
-				return null;
-		}
-	}
-
-	return null;
-}
-
-function generateContributionTypes(
-	contributionTypes: ContributionTypeSetting[],
-): ContributionTypes {
-	return {
-		GBPCountries: contributionTypes,
-		UnitedStates: contributionTypes,
-		AUDCountries: contributionTypes,
-		EURCountries: contributionTypes,
-		NZDCountries: contributionTypes,
-		Canada: contributionTypes,
-		International: contributionTypes,
-	};
-}
-
 function billingPeriodFromContrib(
 	contributionType: ContributionType,
 ): BillingPeriod {
@@ -319,8 +280,6 @@ const isContributionsOnlyCountry = (
 // ----- Exports ----- //
 export {
 	config,
-	toContributionType,
-	generateContributionTypes,
 	billingPeriodFromContrib,
 	getAmount,
 	contributionsOnlyAmountsTestName,

@@ -1,13 +1,5 @@
 // ----- Imports ----- //
-import {
-	generateContributionTypes,
-	toContributionType,
-} from 'helpers/contributions';
-import type {
-	ContributionType,
-	ContributionTypes,
-	ContributionTypeSetting,
-} from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
@@ -24,8 +16,6 @@ import type {
 	Currency,
 	SpokenCurrency,
 } from 'helpers/internationalisation/currency';
-import * as storage from 'helpers/storage/storage';
-import { getQueryParameter } from 'helpers/urls/url';
 
 // ----- Types ----- //
 export type PaymentMethodSwitch =
@@ -58,50 +48,6 @@ function toPaymentMethodSwitchNaming(
 		default:
 			return null;
 	}
-}
-
-function getValidContributionTypesFromUrlOrElse(
-	fallback: ContributionTypes,
-): ContributionTypes {
-	const contributionTypesFromUrl = getQueryParameter('contribution-types');
-
-	if (contributionTypesFromUrl) {
-		return generateContributionTypes(
-			contributionTypesFromUrl
-				.split(',')
-				.map(toContributionType)
-				.filter(Boolean)
-				.map((contributionType) => ({
-					contributionType,
-				})) as ContributionTypeSetting[],
-		);
-	}
-
-	return fallback;
-}
-
-function getContributionTypeFromSession(): ContributionType | null | undefined {
-	return toContributionType(storage.getSession('selectedContributionType'));
-}
-
-function getContributionTypeFromUrl(): ContributionType | null | undefined {
-	return toContributionType(getQueryParameter('selected-contribution-type'));
-}
-
-function getAmountFromUrl(): number | 'other' | null {
-	const selected = getQueryParameter('selected-amount');
-
-	if (selected === 'other') {
-		return 'other';
-	}
-
-	const amount = parseInt(selected, 10);
-
-	if (!Number.isNaN(amount)) {
-		return amount;
-	}
-
-	return null;
 }
 
 // Returns an array of Payment Methods, in the order of preference,
@@ -145,19 +91,6 @@ function getValidPaymentMethods(
 				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
 			),
 	);
-}
-
-function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
-	const pm: string | null | undefined = storage.getSession(
-		'selectedPaymentMethod',
-	);
-	const paymentMethodNames = ['DirectDebit', 'Stripe', 'PayPal'];
-
-	if (pm && paymentMethodNames.includes(pm)) {
-		return pm as PaymentMethod;
-	}
-
-	return null;
 }
 
 function round(amount: number) {
@@ -205,13 +138,4 @@ const formatAmount = (
 };
 
 // ----- Exports ----- //
-export {
-	simpleFormatAmount,
-	formatAmount,
-	getValidContributionTypesFromUrlOrElse,
-	getContributionTypeFromSession,
-	getContributionTypeFromUrl,
-	getAmountFromUrl,
-	getValidPaymentMethods,
-	getPaymentMethodFromSession,
-};
+export { simpleFormatAmount, formatAmount, getValidPaymentMethods };
