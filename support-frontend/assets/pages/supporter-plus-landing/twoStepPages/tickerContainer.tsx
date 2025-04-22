@@ -38,7 +38,7 @@ export function TickerContainer({
 }: TickerContainerProps): JSX.Element {
 	const [tickerData, setTickerData] = useState<TickerData | undefined>();
 	const tickerStylingSettings = {
-		headlineColour: '#000000',
+		headlineColour: '#FFFFFF',
 		totalColour: '#64B7C4',
 		goalColour: '#FFFFFF',
 		filledProgressColour: '#64B7C4',
