@@ -358,12 +358,12 @@ export class SupportWorkers extends GuStack {
       },
       {
         paymentProvider: PaymentProviders.StripeApplePay,
-        evaluationPeriods: 96,
+        evaluationPeriods: 8,
         periodDuration: Duration.seconds(3600),
       },
       {
         paymentProvider: PaymentProviders.StripePaymentRequestButton,
-        evaluationPeriods: 192,
+        evaluationPeriods: 24,
         periodDuration: Duration.seconds(3600),
       },
     ];
@@ -413,12 +413,12 @@ export class SupportWorkers extends GuStack {
       },
       {
         paymentProvider: PaymentProviders.StripeApplePay,
-        evaluationPeriods: 96,
+        evaluationPeriods: 12,
         periodDuration: Duration.seconds(3600),
       },
       {
         paymentProvider: PaymentProviders.StripePaymentRequestButton,
-        evaluationPeriods: 192,
+        evaluationPeriods: 24,
         periodDuration: Duration.seconds(3600),
       },
     ];
