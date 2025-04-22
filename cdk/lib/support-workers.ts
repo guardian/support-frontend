@@ -27,29 +27,16 @@ import {
 } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 
-const Contribution = "Contribution";
-const Paper = "Paper";
-const GuardianWeekly = "GuardianWeekly";
-const SupporterPlus = "SupporterPlus";
-const TierThree = "TierThree";
-const GuardianAdLite = "GuardianAdLite";
+const ProductTypes = {
+  Contribution: "Contribution",
+  Paper: "Paper",
+  GuardianWeekly: "GuardianWeekly",
+  SupporterPlus: "SupporterPlus",
+  TierThree: "TierThree",
+  GuardianAdLite: "GuardianAdLite",
+} as const;
 
-type ProductType =
-  | typeof Contribution
-  | typeof Paper
-  | typeof GuardianWeekly
-  | typeof SupporterPlus
-  | typeof TierThree
-  | typeof GuardianAdLite;
-
-const allProducts: ProductType[] = [
-  Contribution,
-  Paper,
-  GuardianWeekly,
-  SupporterPlus,
-  TierThree,
-  GuardianAdLite,
-];
+type ProductType = keyof typeof ProductTypes;
 
 const PaymentProviders = {
   Stripe: "Stripe",
@@ -348,101 +335,114 @@ export class SupportWorkers extends GuStack {
       group by 1,2,3
       order by 1,2,3
     */
-    new GuAlarm(this, "NoPaypalContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "PayPal",
-        "Contribution",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 4,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    // Begin recurring contribution alarms (by payment method)
+    const contributionAlarmConfig: Array<{
+      paymentProvider: PaymentProvider;
+      evaluationPeriods: number;
+      periodDuration: Duration;
+    }> = [
+      {
+        paymentProvider: PaymentProviders.PayPal,
+        evaluationPeriods: 4,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.Stripe,
+        evaluationPeriods: 3,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.DirectDebit,
+        evaluationPeriods: 18,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripeApplePay,
+        evaluationPeriods: 8,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripePaymentRequestButton,
+        evaluationPeriods: 24,
+        periodDuration: Duration.seconds(3600),
+      },
+    ];
 
-    new GuAlarm(this, "NoStripeContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "Stripe",
-        "Contribution",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 3,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    contributionAlarmConfig.forEach(
+      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
+        new GuAlarm(this, `No${paymentProvider}ContributionsAlarm`, {
+          app,
+          actionsEnabled: isProd,
+          snsTopicName: `alarms-handler-topic-${this.stage}`,
+          alarmName: `support-workers ${this.stage} No successful recurring ${paymentProvider} contributions recently.`,
+          metric: this.buildPaymentSuccessMetric(
+            paymentProvider,
+            ProductTypes.Contribution,
+            periodDuration
+          ),
+          comparisonOperator:
+            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+          evaluationPeriods,
+          treatMissingData: TreatMissingData.BREACHING,
+          threshold: 0,
+        }).node.addDependency(stateMachine);
+      }
+    );
+    // End recurring contribution alarms (by payment method)
 
-    new GuAlarm(this, "NoGocardlessContributionsAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "DirectDebit",
-        "Contribution",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 18,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoPaypalSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring paypal supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "PayPal",
-        "SupporterPlus",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 6,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoStripeSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring stripe supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "Stripe",
-        "SupporterPlus",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 3,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
-
-    new GuAlarm(this, "NoGocardlessSupporterPlusAlarm", {
-      app,
-      actionsEnabled: isProd,
-      snsTopicName: `alarms-handler-topic-${this.stage}`,
-      alarmName: `support-workers ${this.stage} No successful recurring gocardless supporter plus contributions recently.`,
-      metric: this.buildPaymentSuccessMetric(
-        "DirectDebit",
-        "SupporterPlus",
-        Duration.seconds(3600)
-      ),
-      comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
-      evaluationPeriods: 18,
-      treatMissingData: TreatMissingData.BREACHING,
-      threshold: 0,
-    }).node.addDependency(stateMachine);
+    // Begin S+ alarms (by payment method)
+    const supporterPlusAlarmConfig: Array<{
+      paymentProvider: PaymentProvider;
+      evaluationPeriods: number;
+      periodDuration: Duration;
+    }> = [
+      {
+        paymentProvider: PaymentProviders.PayPal,
+        evaluationPeriods: 6,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.Stripe,
+        evaluationPeriods: 3,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.DirectDebit,
+        evaluationPeriods: 18,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripeApplePay,
+        evaluationPeriods: 12,
+        periodDuration: Duration.seconds(3600),
+      },
+      {
+        paymentProvider: PaymentProviders.StripePaymentRequestButton,
+        evaluationPeriods: 24,
+        periodDuration: Duration.seconds(3600),
+      },
+    ];
+    supporterPlusAlarmConfig.forEach(
+      ({ paymentProvider, evaluationPeriods, periodDuration }) => {
+        new GuAlarm(this, `No${paymentProvider}SupporterPlusAlarm`, {
+          app,
+          actionsEnabled: isProd,
+          snsTopicName: `alarms-handler-topic-${this.stage}`,
+          alarmName: `support-workers ${this.stage} No successful ${paymentProvider} supporter plus subscriptions recently.`,
+          metric: this.buildPaymentSuccessMetric(
+            paymentProvider,
+            ProductTypes.SupporterPlus,
+            periodDuration
+          ),
+          comparisonOperator:
+            ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
+          evaluationPeriods,
+          treatMissingData: TreatMissingData.BREACHING,
+          threshold: 0,
+        }).node.addDependency(stateMachine);
+      }
+    );
+    // End S+ alarms (by payment method)
 
     // Begin Apple Pay alarm
     const applePayMetricDuration = Duration.minutes(5);
@@ -451,10 +451,10 @@ export class SupportWorkers extends GuStack {
       applePayMetricDuration.toMinutes() * applePayEvaluationPeriods
     );
     const applePayMetrics = Object.fromEntries(
-      allProducts.map((product, idx) => [
+      Object.values(ProductTypes).map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
-          "StripeApplePay",
+          PaymentProviders.StripeApplePay,
           product,
           applePayMetricDuration
         ),
@@ -489,10 +489,10 @@ export class SupportWorkers extends GuStack {
       googlePayMetricDuration.toMinutes() * googlePayEvaluationPeriods
     );
     const googlePayMetrics = Object.fromEntries(
-      allProducts.map((product, idx) => [
+      Object.values(ProductTypes).map((product, idx) => [
         `m${idx}`,
         this.buildPaymentSuccessMetric(
-          "StripePaymentRequestButton",
+          PaymentProviders.StripePaymentRequestButton,
           product,
           googlePayMetricDuration
         ),
@@ -532,18 +532,18 @@ export class SupportWorkers extends GuStack {
         label: "AllPaperConversions",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            "Stripe",
-            "Paper",
+            PaymentProviders.Stripe,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
-            "DirectDebit",
-            "Paper",
+            PaymentProviders.DirectDebit,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
-            "PayPal",
-            "Paper",
+            PaymentProviders.PayPal,
+            ProductTypes.Paper,
             Duration.seconds(300)
           ),
         },
@@ -564,18 +564,18 @@ export class SupportWorkers extends GuStack {
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            "Stripe",
-            "GuardianWeekly",
+            PaymentProviders.Stripe,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
           m2: this.buildPaymentSuccessMetric(
-            "DirectDebit",
-            "GuardianWeekly",
+            PaymentProviders.DirectDebit,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
           m3: this.buildPaymentSuccessMetric(
-            "PayPal",
-            "GuardianWeekly",
+            PaymentProviders.PayPal,
+            ProductTypes.GuardianWeekly,
             Duration.seconds(300)
           ),
         },
@@ -603,18 +603,18 @@ export class SupportWorkers extends GuStack {
         expression: "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
         usingMetrics: {
           m1: this.buildPaymentSuccessMetric(
-            "Stripe",
-            "TierThree",
+            PaymentProviders.Stripe,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
           m2: this.buildPaymentSuccessMetric(
-            "DirectDebit",
-            "TierThree",
+            PaymentProviders.DirectDebit,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
           m3: this.buildPaymentSuccessMetric(
-            "PayPal",
-            "TierThree",
+            PaymentProviders.PayPal,
+            ProductTypes.TierThree,
             tierThreeMetricDuration
           ),
         },
@@ -636,7 +636,7 @@ export class SupportWorkers extends GuStack {
         `m${idx}`,
         this.buildPaymentSuccessMetric(
           paymentProvider,
-          GuardianAdLite,
+          ProductTypes.GuardianAdLite,
           adLiteMetricDuration
         ),
       ])
