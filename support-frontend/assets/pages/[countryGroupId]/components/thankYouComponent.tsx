@@ -391,7 +391,7 @@ export function ThankYouComponent({
 					<div css={buttonContainer}>
 						{!!observerPrint && (
 							<LinkButton
-								href="https://www.observer.co.uk/welcome"
+								href="https://observer.co.uk/welcome"
 								priority="tertiary"
 								onClick={() =>
 									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
