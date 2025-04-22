@@ -188,7 +188,7 @@ export type RegularPaymentRequest = {
 	recaptchaToken?: string;
 	debugInfo: string;
 };
-export type StripePaymentIntentAuthorisation = {
+type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
 	stripePaymentMethod: StripePaymentMethod;
 	paymentMethodId: string | PaymentMethod;

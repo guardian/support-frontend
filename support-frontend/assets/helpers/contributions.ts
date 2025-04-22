@@ -1,8 +1,5 @@
 // ----- Imports ----- //
-import type {
-	PaymentMethod,
-	PaymentMethodMap,
-} from 'helpers/forms/paymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -24,7 +21,6 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 
 export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
-export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
 export const logInvalidCombination = (
 	contributionType: ContributionType,

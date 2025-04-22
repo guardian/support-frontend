@@ -61,7 +61,7 @@ export type CreatePayPalPaymentResponse = PaymentApiResponse<
 // Data that should be posted to the payment API to create a Stripe charge.
 // https://github.com/guardian/payment-api/blob/master/src/main/scala/model/stripe/StripeChargeData.scala#L82
 // TODO: are we deprecating signed-in email?
-export type StripeChargeData = {
+type StripeChargeData = {
 	paymentData: {
 		currency: IsoCurrency;
 		amount: number;
