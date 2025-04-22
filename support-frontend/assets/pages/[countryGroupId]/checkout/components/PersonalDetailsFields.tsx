@@ -1,4 +1,4 @@
-import { TextInput } from '@guardian/source/react-components';
+import { Checkbox, TextInput } from '@guardian/source/react-components';
 import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -17,6 +17,7 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
+	showSimilarProductsConsent: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -30,6 +31,7 @@ export function PersonalDetailsFields({
 	confirmedEmail,
 	setConfirmedEmail,
 	isSignedIn,
+	showSimilarProductsConsent,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -44,6 +46,13 @@ export function PersonalDetailsFields({
 				setConfirmedEmail={setConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
+			{showSimilarProductsConsent && (
+				<Checkbox
+					name="similarProductsConsent"
+					label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
+					checked={true}
+				/>
+			)}
 			<div>
 				<TextInput
 					id="firstName"

@@ -833,6 +833,9 @@ export function CheckoutComponent({
 									setConfirmedEmail(confirmedEmail)
 								}
 								isSignedIn={isSignedIn}
+								showSimilarProductsConsent={
+									abParticipations.similarProductsConsent === 'VariantA'
+								}
 							/>
 
 							{/**
@@ -900,9 +903,7 @@ export function CheckoutComponent({
 								</div>
 							)}
 						</FormSection>
-
 						<CheckoutDivider spacing="loose" />
-
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
@@ -1099,7 +1100,6 @@ export function CheckoutComponent({
 								/>
 							</FormSection>
 						)}
-
 						<FormSection>
 							<Legend>
 								{productDescription.deliverableTo
@@ -1239,10 +1239,19 @@ export function CheckoutComponent({
 							currency={currencyKey}
 							amount={originalAmount}
 						/>
-						<Checkbox
-							name="similarProductsConsent"
-							label="I am happy to be contacted by The Guardian about similar products and services"
-						/>
+						<div
+							css={css`
+								margin: ${space[6]}px 0;
+							`}
+						>
+							{abParticipations.similarProductsConsent === 'VariantB' && (
+								<Checkbox
+									name="similarProductsConsent"
+									label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
+									checked={true}
+								/>
+							)}
+						</div>
 						<div
 							css={css`
 								margin: ${space[8]}px 0;

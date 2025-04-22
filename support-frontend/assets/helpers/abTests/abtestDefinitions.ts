@@ -139,4 +139,25 @@ export const tests: Tests = {
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
+	similarProductsConsent: {
+		variants: [
+			{
+				id: 'VariantA',
+			},
+			{
+				id: 'VariantB',
+			},
+		],
+		audiences: {
+			GBPCountries: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		seed: 99,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
+	},
 };
