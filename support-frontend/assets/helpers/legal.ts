@@ -43,8 +43,8 @@ const guardianWeeklyTermsLink =
 const guardianWeeklyPromoTermsLink =
 	'https://support.thegulocal.com/p/10ANNUAL/terms';
 const observerLinks = {
-	TERMS: 'https://www.observer.co.uk/policy/terms',
-	PRIVACY: 'https://www.observer.co.uk/policy/privacy',
+	TERMS: 'https://observer.co.uk/policy/terms',
+	PRIVACY: 'https://observer.co.uk/policy/privacy',
 };
 enum MediaGroup {
 	GUARDIAN = 'Guardian News & Media Ltd',
