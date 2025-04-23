@@ -5,7 +5,6 @@ import ThankYouModule from 'components/thankYou/thankYouModule';
 import type { ThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 
 type ThankYouModulesProps = {
-type ThankYouModulesProps = {
 	isSignedIn: boolean;
 	thankYouModules: ThankYouModuleType[];
 	thankYouModulesData: Record<ThankYouModuleType, ThankYouModuleData>;
