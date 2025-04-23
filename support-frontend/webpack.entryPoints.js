@@ -14,8 +14,6 @@ module.exports = {
 			'pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx',
 		weeklySubscriptionCheckoutPage:
 			'pages/weekly-subscription-checkout/weeklySubscriptionCheckout.tsx',
-		subscriptionsRedemptionPage:
-			'pages/subscriptions-redemption/subscriptionsRedemption.tsx',
 		digitalSubscriptionLandingPage:
 			'pages/digital-subscriber-checkout/digitalSubscriptionRouter.tsx',
 		payPalErrorPage: 'pages/paypal-error/payPalError.tsx',

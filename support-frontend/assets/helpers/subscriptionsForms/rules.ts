@@ -4,7 +4,6 @@ import {
 	isValidEmail,
 } from 'helpers/forms/formValidation';
 import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
-import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { FormField, FormFields } from './formFields';
 import {
 	formError,
@@ -21,71 +20,6 @@ type CheckoutRule = {
 	rule: boolean;
 	error: FormError<FormField>;
 };
-
-function applyPersonalDetailsRules(
-	fields: PersonalDetailsState,
-): Array<FormError<FormField>> {
-	const personalDetailsRules: CheckoutRule[] = [
-		{
-			rule: nonEmptyString(fields.firstName),
-			error: formError('firstName', 'Please enter a first name.'),
-		},
-		{
-			rule: zuoraCompatibleString(fields.firstName),
-			error: formError(
-				'firstName',
-				'Please use only letters, numbers and punctuation.',
-			),
-		},
-		{
-			rule: notLongerThan(fields.firstName, 40),
-			error: formError('firstName', 'First name is too long.'),
-		},
-		{
-			rule: nonEmptyString(fields.lastName),
-			error: formError('lastName', 'Please enter a last name.'),
-		},
-		{
-			rule: zuoraCompatibleString(fields.lastName),
-			error: formError(
-				'lastName',
-				'Please use only letters, numbers and punctuation.',
-			),
-		},
-		{
-			rule: notLongerThan(fields.lastName, 40),
-			error: formError('lastName', 'Last name is too long'),
-		},
-		{
-			rule: zuoraCompatibleString(fields.telephone),
-			error: formError(
-				'telephone',
-				'Please use only letters, numbers and punctuation.',
-			),
-		},
-		{
-			rule: nonEmptyString(fields.email),
-			error: formError('email', 'Please enter an email address.'),
-		},
-		{
-			rule: isValidEmail(fields.email),
-			error: formError('email', 'Please enter a valid email address.'),
-		},
-		{
-			rule: notLongerThan(fields.email, 80),
-			error: formError('email', 'Email address is too long.'),
-		},
-		{
-			rule: emailAddressesMatch(
-				fields.isSignedIn,
-				fields.email,
-				fields.confirmEmail,
-			),
-			error: formError('confirmEmail', 'The email addresses do not match.'),
-		},
-	];
-	return validate(personalDetailsRules);
-}
 
 function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 	const { orderIsAGift, product, isSignedIn } = fields;
@@ -277,4 +211,4 @@ function applyDeliveryRules(
 	return validate(deliveryRules).concat(applyCheckoutRules(fields));
 }
 
-export { applyCheckoutRules, applyDeliveryRules, applyPersonalDetailsRules };
+export { applyCheckoutRules, applyDeliveryRules };
