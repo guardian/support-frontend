@@ -69,7 +69,6 @@ class AppComponents(context: Context)
     digitalPackFormController,
     weeklyController,
     weeklyFormController,
-    paperFormController,
     getAddressController,
     paperRoundController,
     loginController,

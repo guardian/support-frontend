@@ -96,20 +96,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val paperFormController = new PaperSubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
-    appConfig.stage,
-  )
-
   lazy val weeklyFormController = new WeeklySubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
