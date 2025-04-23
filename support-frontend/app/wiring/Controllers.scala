@@ -70,18 +70,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val paperController = new PaperSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
-    assetsResolver,
-    actionBuilders,
-    controllerComponents,
-    stringsConfig,
-    allSettingsProvider,
-    appConfig.supportUrl,
-    appConfig.stage,
-  )
-
   lazy val weeklyController = new WeeklySubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
