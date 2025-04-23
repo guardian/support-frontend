@@ -1232,13 +1232,6 @@ export function CheckoutComponent({
 								})}
 							</RadioGroup>
 						</FormSection>
-						<SummaryTsAndCs
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							contributionType={contributionType}
-							currency={currencyKey}
-							amount={originalAmount}
-						/>
 						<div
 							css={css`
 								margin: ${space[6]}px 0;
@@ -1252,6 +1245,13 @@ export function CheckoutComponent({
 								/>
 							)}
 						</div>
+						<SummaryTsAndCs
+							productKey={productKey}
+							ratePlanKey={ratePlanKey}
+							contributionType={contributionType}
+							currency={currencyKey}
+							amount={originalAmount}
+						/>
 						<div
 							css={css`
 								margin: ${space[8]}px 0;
