@@ -8,8 +8,6 @@ module.exports = {
 			'pages/subscriptions-landing/subscriptionsLanding.tsx',
 		paperSubscriptionLandingPage:
 			'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
-		paperSubscriptionCheckoutPage:
-			'pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx',
 		weeklySubscriptionLandingPage:
 			'pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx',
 		weeklySubscriptionCheckoutPage:
