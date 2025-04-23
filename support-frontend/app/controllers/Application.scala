@@ -520,28 +520,25 @@ class Application(
     }
   }
 
-  def redirectContributionsCheckoutDigital(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-
-    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
-    val queryString = qsWithoutTypeAndAmount ++ Map(
-      "product" -> Seq("DigitalSubscription"),
-      "ratePlan" -> Seq("Monthly"),
-    )
-
-    Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
+  def redirectContributionsCheckoutDigital(countryGroupId: String) = {
+    redirectToCheckout(countryGroupId, "DigitalSubscription", "Monthly")
   }
 
-  def redirectCheckoutPaper() = MaybeAuthenticatedAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+  def redirectCheckoutPaper() = {
+    redirectToCheckout("uk", "SubscriptionCard", "Everyday")
+  }
 
-    val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
-    val queryString = qsWithoutTypeAndAmount ++ Map(
-      "product" -> Seq("SubscriptionCard"),
-      "ratePlan" -> Seq("Everyday"),
-    )
+  def redirectToCheckout(countryGroupId: String, product: String, ratePlan: String) = MaybeAuthenticatedAction {
+    implicit request =>
+      implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-    Redirect(s"/uk/checkout", queryString, MOVED_PERMANENTLY)
+      val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+      val queryString = qsWithoutTypeAndAmount ++ Map(
+        "product" -> Seq(product),
+        "ratePlan" -> Seq(ratePlan),
+      )
+
+      Redirect(s"/$countryGroupId/checkout", queryString, MOVED_PERMANENTLY)
   }
 
   def productCheckoutRouter(countryGroupId: String) = MaybeAuthenticatedAction { implicit request =>
