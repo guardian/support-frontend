@@ -13,6 +13,7 @@ type ThankYouModulesProps = {
 const mansory = css`
 	column-count: 1;
 	column-gap: ${space[4]}px;
+	margin-top: ${space[4]}px;
 	margin-bottom: 184px;
 	> section {
 		break-inside: avoid;
