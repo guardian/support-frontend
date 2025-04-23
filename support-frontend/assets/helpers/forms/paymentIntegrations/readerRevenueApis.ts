@@ -134,17 +134,12 @@ type RegularStripeHostedCheckoutPaymentFields = {
 	checkoutSessionId?: string;
 	stripePublicKey: string;
 };
-type GiftRedemption = {
-	paymentType: 'GiftRedemption';
-	redemptionCode: string;
-};
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| RegularStripeHostedCheckoutPaymentFields
-	| GiftRedemption;
+	| RegularStripeHostedCheckoutPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
 	state?: UsState | null;
