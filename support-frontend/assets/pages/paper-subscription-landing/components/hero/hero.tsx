@@ -24,7 +24,6 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import shouldShowObserverCard from 'pages/paper-subscription-landing/helpers/shouldShowObserver';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { getDiscountCopy } from './discountCopy';
 
@@ -94,9 +93,6 @@ export function PaperHero({
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
 	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
-	const gridId = shouldShowObserverCard()
-		? 'printCampaignWithObserverHeroHD'
-		: 'printCampaignHeroHD';
 
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy =
@@ -115,7 +111,7 @@ export function PaperHero({
 				<Hero
 					image={
 						<GridImage
-							gridId={gridId}
+							gridId="printCampaignWithObserverHeroHD"
 							srcSizes={[1000, 500, 140]}
 							sizes="(max-width: 740px) 100%,
             (max-width: 1067px) 150%,
