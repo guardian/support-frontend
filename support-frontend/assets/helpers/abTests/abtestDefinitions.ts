@@ -142,6 +142,9 @@ export const tests: Tests = {
 	similarProductsConsent: {
 		variants: [
 			{
+				id: 'control',
+			},
+			{
 				id: 'VariantA',
 			},
 			{
