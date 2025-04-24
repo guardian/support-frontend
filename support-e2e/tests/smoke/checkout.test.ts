@@ -9,38 +9,51 @@ test.describe('Checkout', () => {
 		{
 			product: 'GuardianAdLite',
 			ratePlan: 'Monthly',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
 			internationalisationId: 'UK',
 		},
 		{
 			product: 'SupporterPlus',
 			ratePlan: 'Annual',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
 			internationalisationId: 'EU',
 		},
 		{
 			product: 'TierThree',
 			ratePlan: 'DomesticMonthly',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
 			internationalisationId: 'UK',
 		},
 		{
 			product: 'HomeDelivery',
 			ratePlan: 'Everyday',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
+			paymentMethod: 'Credit/Debit card',
+			internationalisationId: 'UK',
+		},
+		{
+			product: 'HomeDelivery',
+			ratePlan: 'Sunday',
+			paymentType: 'StripeHostedCheckout',
+			internationalisationId: 'UK',
+		},
+		{
+			product: 'SubscriptionCard',
+			ratePlan: 'Sunday',
+			paymentType: 'StripeHostedCheckout',
 			internationalisationId: 'UK',
 		},
 		{
 			product: 'NationalDelivery',
 			ratePlan: 'Weekend',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
 			internationalisationId: 'UK',
 			postCode: 'BN44 3QG', // This postcode only has one delivery agent
 		},
 		{
 			product: 'NationalDelivery',
 			ratePlan: 'Weekend',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'Stripe',
 			internationalisationId: 'UK',
 			postCode: 'BS6 6QY', // This postcode has multiple delivery agents
 		},
