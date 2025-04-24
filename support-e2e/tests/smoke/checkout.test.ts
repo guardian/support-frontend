@@ -31,18 +31,6 @@ test.describe('Checkout', () => {
 			internationalisationId: 'UK',
 		},
 		{
-			product: 'HomeDelivery',
-			ratePlan: 'Sunday',
-			paymentType: 'StripeHostedCheckout',
-			internationalisationId: 'UK',
-		},
-		{
-			product: 'SubscriptionCard',
-			ratePlan: 'Sunday',
-			paymentType: 'StripeHostedCheckout',
-			internationalisationId: 'UK',
-		},
-		{
 			product: 'NationalDelivery',
 			ratePlan: 'Weekend',
 			paymentType: 'Credit/Debit card',

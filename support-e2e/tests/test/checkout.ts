@@ -51,7 +51,6 @@ const setUserDetailsForProduct = async (
 
 			break;
 		case 'HomeDelivery':
-		case 'SubscriptionCard':
 			if (internationalisationId !== 'UK') {
 				throw new Error(
 					`Home delivery is only available in the UK, but got ${internationalisationId}`,
@@ -131,12 +130,8 @@ export const testCheckout = (testDetails: TestDetails) => {
 		if (internationalisationId === 'AU') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		}
-		const paymentTypeName =
-			paymentType === 'StripeHostedCheckout'
-				? 'Credit/Debit card'
-				: paymentType;
 
-		await page.getByRole('radio', { name: paymentTypeName }).check();
+		await page.getByRole('radio', { name: paymentType }).check();
 		switch (paymentType) {
 			case 'PayPal':
 				const popupPagePromise = page.waitForEvent('popup');
@@ -151,8 +146,6 @@ export const testCheckout = (testDetails: TestDetails) => {
 					.click({ delay: 2000 });
 				const popupPage = await popupPagePromise;
 				fillInPayPalDetails(popupPage);
-				break;
-			case 'StripeHostedCheckout':
 				break;
 			case 'Credit/Debit card':
 			default:
@@ -169,20 +162,8 @@ export const testCheckout = (testDetails: TestDetails) => {
 				.click();
 		}
 
-		if (paymentType === 'StripeHostedCheckout') {
-			await page
-				.getByRole('button', {
-					name: `Pay`,
-				})
-				.click();
-			await page.waitForURL('https://checkout.stripe.com/**');
-			await expect(page.getByText('Enter payment details')).toBeVisible();
-		} else {
-			await expect(
-				page.getByRole('heading', { name: 'Thank you' }),
-			).toBeVisible({
-				timeout: 600000,
-			});
-		}
+		await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
+			timeout: 600000,
+		});
 	});
 };
