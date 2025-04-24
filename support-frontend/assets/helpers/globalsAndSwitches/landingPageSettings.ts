@@ -1,5 +1,21 @@
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 
+enum TickerName {
+	US = 'US',
+	AU = 'AU',
+	GLOBAL = 'global',
+}
+
+interface TickerCopy {
+	countLabel: string;
+}
+
+export interface TickerSettings {
+	currencySymbol: string;
+	copy: TickerCopy;
+	name: TickerName;
+}
+
 interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
@@ -35,6 +51,7 @@ export interface LandingPageVariant {
 	name: string;
 	copy: LandingPageCopy;
 	products: LandingPageProducts;
+	tickerSettings?: TickerSettings;
 }
 
 interface RegionTargeting {

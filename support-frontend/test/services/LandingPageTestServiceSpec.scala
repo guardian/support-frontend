@@ -11,6 +11,8 @@ import admin.settings.{
   Products,
   RegionTargeting,
   Status,
+  TickerCopy,
+  TickerSettings,
 }
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -175,6 +177,13 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   ),
                 ),
               ),
+              "tickerSettings" -> mapAttr(
+                Map(
+                  "currencySymbol" -> stringAttr("$"),
+                  "copy" -> mapAttr(Map("countLabel" -> stringAttr("test copy"))),
+                  "name" -> stringAttr("US"),
+                ),
+              ),
             ),
           ),
         ),
@@ -200,6 +209,15 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               subheading = "test subheading",
             ),
             products = products,
+            tickerSettings = {
+              Some(
+                TickerSettings(
+                  currencySymbol = "$",
+                  copy = TickerCopy(countLabel = "test copy"),
+                  name = "US",
+                ),
+              )
+            },
           ),
         ),
       ),
