@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
@@ -37,11 +36,6 @@ function isTestUser(): boolean {
 	return isDefined(testMode) || isDefined(testCookie);
 }
 
-function getUserStateField(): string | undefined {
-	const user = getGlobal<User>('user');
-	return user?.address4;
-}
-
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
@@ -50,4 +44,4 @@ const signOut = (): void => {
 };
 
 // ----- Exports ----- //
-export { getUser, isTestUser, isPostDeployUser, getUserStateField, signOut };
+export { getUser, isTestUser, isPostDeployUser, signOut };

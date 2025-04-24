@@ -53,6 +53,20 @@ case class Cta(
     copy: String,
 )
 
+case class TickerCopy(
+    countLabel: String,
+)
+object TickerCopy {
+  implicit val codec: Codec[TickerCopy] = deriveCodec
+}
+case class TickerSettings(
+    currencySymbol: String,
+    copy: TickerCopy,
+    name: String,
+)
+object TickerSettings {
+  implicit val tickerCodec: Codec[TickerSettings] = deriveCodec
+}
 case class Products(
     Contribution: LandingPageProductDescription,
     SupporterPlus: LandingPageProductDescription,
@@ -71,6 +85,7 @@ case class LandingPageVariant(
     name: String,
     copy: LandingPageCopy,
     products: Products,
+    tickerSettings: Option[TickerSettings],
 )
 
 object LandingPageVariant {

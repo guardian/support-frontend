@@ -86,9 +86,9 @@ function digitalSubscriptionLanding(
 	countryGroupId: CountryGroupId,
 	billingPeriod?: BillingPeriod,
 ) {
-	const routeDigitalSubscription = billingPeriod
-		? `${routes.checkout}?product=DigitalSubscription&ratePlan=${billingPeriod}`
-		: routes.digitalSubscriptionLanding;
+	const routeDigitalSubscription = `${
+		routes.checkout
+	}?product=DigitalSubscription&ratePlan=${billingPeriod ?? 'Monthly'}`;
 	return `${getOrigin()}/${countryPath(
 		countryGroupId,
 	)}${routeDigitalSubscription}`;
