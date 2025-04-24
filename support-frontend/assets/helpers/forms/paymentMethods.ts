@@ -11,15 +11,6 @@ const None = 'None';
 const Success = 'success';
 const Pending = 'pending';
 
-export type PaymentMethodMap<T> = {
-	Stripe: T;
-	PayPal: T;
-	DirectDebit: T;
-	StripeHostedCheckout: T;
-	Sepa: T;
-	None: T;
-};
-
 export type PaymentMethod =
 	| typeof Stripe
 	| typeof PayPal
