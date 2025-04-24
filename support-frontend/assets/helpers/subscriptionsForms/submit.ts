@@ -228,7 +228,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		similarProductsConsent: false, // TODO: We are only implementing this on the generic checkout for now
+		similarProductsConsent: true, // TODO: We are only implementing this on the generic checkout for now, setting this to true for other checkouts keeps the behaviour the same as previously
 	};
 }
 

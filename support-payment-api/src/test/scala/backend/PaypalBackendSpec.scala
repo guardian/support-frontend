@@ -51,7 +51,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     ExecutePaymentData("paymentId", "payerId"),
     acquisitionData,
     "email@email.com",
-    similarProductsConsent = false,
   )
   val paypalRefundWebHookData = PaypalRefundWebHookData(
     body = PaypalRefundWebHookBody("parent_payment_id", "{}"),

@@ -22,7 +22,6 @@ object AcquisitionDataRowBuilder {
   def buildFromStripe(
       acquisition: StripeAcquisition,
       contributionData: ContributionData,
-      similarProductsConsent: Boolean,
   ): AcquisitionDataRow = {
     val paymentData = acquisition.stripeChargeData.paymentData
     val acquisitionData = acquisition.stripeChargeData.acquisitionData
@@ -61,14 +60,13 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = similarProductsConsent,
+      similarProductsConsent = true, // TODO: We are going to leave this as true for now to keep the behaviour unchanged
     )
   }
 
   def buildFromPayPal(
       acquisition: PaypalAcquisition,
       contributionData: ContributionData,
-      similarProductsConsent: Boolean,
   ): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
@@ -107,7 +105,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = similarProductsConsent,
+      similarProductsConsent = true, // TODO: We are going to leave this as true for now to keep the behaviour unchanged
     )
   }
 
