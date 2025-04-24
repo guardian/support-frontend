@@ -232,7 +232,7 @@ function regularPaymentRequestFromAuthorisation(
 		},
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
 		debugInfo: actionHistory,
-		similarProductsConsent: false, // TODO: We are only implementing this on the generic checkout for now
+		similarProductsConsent: true, // TODO: We are only implementing this on the generic checkout for now, setting the value to true keeps the behaviour unchanged
 	};
 }
 
