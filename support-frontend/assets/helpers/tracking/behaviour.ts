@@ -54,20 +54,9 @@ const trackComponentLoad = (componentId: string): void => {
 	});
 };
 
-const trackComponentInsert = (componentId: string): void => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-			id: componentId,
-		},
-		action: 'INSERT',
-	});
-};
-
 export {
 	trackThankYouPageLoaded,
 	trackComponentClick,
 	trackCheckoutSubmitAttempt,
 	trackComponentLoad,
-	trackComponentInsert,
 };

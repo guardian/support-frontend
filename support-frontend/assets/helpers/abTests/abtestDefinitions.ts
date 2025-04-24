@@ -96,27 +96,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	digitalEditionCheckout: {
-		variants: [
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 7,
-		persistPage:
-			// uk will ensure we match the generic checkout
-			'/uk/(subscribe/digitaledition$|subscribe/digitaledition/thankyou$|checkout|thank-you)',
-		targetPage: '/subscribe$',
-		excludeContributionsOnlyCountries: true,
-	},
 	newspaperGenericCheckout: {
 		variants: [
 			{
