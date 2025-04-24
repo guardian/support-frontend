@@ -5,16 +5,16 @@
 import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 import type { ImageId, ImageType } from 'helpers/images/theGrid';
 // ----- Types ----- //
-export type GridImage = {
+type GridImage = {
 	gridId: ImageId;
 	srcSizes: number[];
 	imgType: ImageType;
 };
-export type GridSlot = {
+type GridSlot = {
 	sizes: string;
 	media: string;
 };
-export type Source = GridImage & GridSlot;
+type Source = GridImage & GridSlot;
 export type PropTypes = {
 	sources: Source[];
 	fallback: string;
