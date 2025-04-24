@@ -154,7 +154,6 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         salesforceContactRecords.buyer,
-        similarProductsConsent,
       ),
       requestId,
       user,

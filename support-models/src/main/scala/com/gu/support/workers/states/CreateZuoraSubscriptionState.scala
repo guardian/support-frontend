@@ -65,7 +65,7 @@ object CreateZuoraSubscriptionProductState {
       product: GuardianAdLite,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
-      similarProductsConsent: Boolean,
+      // similarProductsConsent: Boolean,
   ) extends CreateZuoraSubscriptionProductState
 
   case class DigitalSubscriptionState(

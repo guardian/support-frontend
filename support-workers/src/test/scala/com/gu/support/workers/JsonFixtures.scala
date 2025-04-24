@@ -713,7 +713,6 @@ object JsonFixtures {
         GuardianAdLite(GBP),
         stripePaymentMethodObj,
         salesforceContact,
-        similarProductsConsent = false,
       ),
       UUID.randomUUID(),
       user(),
