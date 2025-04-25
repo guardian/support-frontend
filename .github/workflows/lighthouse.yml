@@ -15,7 +15,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://support.theguardian.com/uk/contribute
+            https://support.theguardian.com/uk/contribute?${{ secrets.LIGHTHOUSE_QUERY_STRING }}
           configPath: ./lighthouserc.json
           uploadArtifacts: true # save results as an action artifacts
       - name: Notify on failure
