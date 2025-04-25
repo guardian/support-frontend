@@ -58,7 +58,7 @@ case class CreateSupportWorkersRequest(
     telephoneNumber: Option[String],
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
-    similarProductsConsent: Boolean,
+    similarProductsConsent: Option[Boolean],
 )
 
 object SupportWorkersClient {

@@ -101,7 +101,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
         None,
         "acno",
         "A-S00045678",
-        similarProductsConsent = false,
+        similarProductsConsent = None,
       ),
     ).map(ef => parse(ef.payload))
     actual.map(inside(_) { case actualJson =>
@@ -159,7 +159,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
       None,
       "acno",
       "A-S00045678",
-      similarProductsConsent = false,
+      similarProductsConsent = None,
     )
 
     val actual = new SupporterPlusEmailFields(
@@ -231,7 +231,7 @@ class TierThreeEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
       "acno",
       "A-S00045678",
       today,
-      similarProductsConsent = false,
+      similarProductsConsent = None,
     )
 
     val actual = new TierThreeEmailFields(

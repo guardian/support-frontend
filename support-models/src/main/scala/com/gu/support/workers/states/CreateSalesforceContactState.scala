@@ -19,7 +19,7 @@ case class CreateSalesforceContactState(
     csrUsername: Option[String],
     salesforceCaseId: Option[String],
     acquisitionData: Option[AcquisitionData],
-    similarProductsConsent: Boolean,
+    similarProductsConsent: Option[Boolean],
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

@@ -33,7 +33,7 @@ object ProductTypeCreatedTestData {
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     "acno",
     "subno",
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
   val digitalSubscriptionCreated = SendThankYouEmailDigitalSubscriptionState(
@@ -44,7 +44,7 @@ object ProductTypeCreatedTestData {
     None,
     "acno",
     "subno",
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
   val paperCreated = SendThankYouEmailPaperState(
@@ -60,7 +60,7 @@ object ProductTypeCreatedTestData {
     "acno",
     "subno",
     new LocalDate(2020, 10, 22),
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
@@ -73,7 +73,7 @@ object ProductTypeCreatedTestData {
     "acno",
     "subno",
     new LocalDate(2020, 10, 22),
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
 }

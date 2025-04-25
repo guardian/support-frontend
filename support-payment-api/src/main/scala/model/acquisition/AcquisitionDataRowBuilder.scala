@@ -60,7 +60,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = true, // TODO: We are going to leave this as true for now to keep the behaviour unchanged
+      similarProductsConsent = None, // TODO: We are going to leave this unset for now to keep the behaviour unchanged
     )
   }
 
@@ -105,7 +105,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = true, // TODO: We are going to leave this as true for now to keep the behaviour unchanged
+      similarProductsConsent = None, // TODO: We are going to leave this unset for now to keep the behaviour unchanged
     )
   }
 

@@ -173,7 +173,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-      similarProductsConsent = false,
+      similarProductsConsent = None,
     ),
     None,
     None,
@@ -197,7 +197,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     firstDeliveryDate,
     None,
     SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   );
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
@@ -235,7 +235,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
-      similarProductsConsent = false,
+      similarProductsConsent = None,
     ),
     Some("Dan Csr"),
     Some("test_case_id"),

@@ -78,7 +78,7 @@ object StatesTestData {
     acquisitionData = None,
     ipAddress = "127.0.0.1",
     userAgent = "TestAgent",
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
   val createSalesforceContactState = CreateSalesforceContactState(
@@ -93,7 +93,7 @@ object StatesTestData {
     csrUsername = None,
     salesforceCaseId = None,
     acquisitionData = None,
-    similarProductsConsent = false,
+    similarProductsConsent = None,
   )
 
   val createZuoraSubscriptionState: CreateZuoraSubscriptionState = CreateZuoraSubscriptionState(
@@ -103,7 +103,7 @@ object StatesTestData {
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
-      similarProductsConsent = false,
+      similarProductsConsent = None,
     ),
     UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
     User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -135,6 +135,5 @@ object StatesTestData {
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None,
     appliedPromotion = None,
-    similarProductsConsent = false,
   )
 }
