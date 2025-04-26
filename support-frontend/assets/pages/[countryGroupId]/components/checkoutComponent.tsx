@@ -78,10 +78,7 @@ import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryT
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
-import {
-	isValidDirectDebit,
-	isValidPostcode,
-} from '../../../helpers/forms/formValidation';
+import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
@@ -534,15 +531,6 @@ export function CheckoutComponent({
 		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
 			setDeliveryAgentError('Please select a delivery agent');
 			return;
-		}
-		if (paymentMethod === 'DirectDebit') {
-			if (!isValidDirectDebit(sortCode, accountNumber)) {
-				setErrorMessage('Invalid Direct Debit');
-				setErrorContext(
-					'Please enter an 8-digit account number and 6-digit sort code',
-				);
-				return;
-			}
 		}
 		setIsProcessingPayment(true);
 		try {
