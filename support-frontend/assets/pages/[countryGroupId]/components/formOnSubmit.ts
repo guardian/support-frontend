@@ -82,8 +82,12 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
+
+	const similarProductsCheckbox = formData.get('similarProductsConsent');
 	const similarProductsConsent =
-		formData.get('similarProductsConsent') === 'on';
+		similarProductsCheckbox !== null
+			? similarProductsCheckbox === 'on'
+			: undefined;
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
