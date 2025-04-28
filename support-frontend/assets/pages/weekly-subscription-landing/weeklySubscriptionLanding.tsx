@@ -88,6 +88,7 @@ function WeeklyLPContent({
 					<WeeklyProductPrices
 						countryId={countryId}
 						productPrices={productPrices}
+						abParticipations={abParticipations}
 						orderIsAGift={orderIsAGift}
 					/>
 				</CentredContainer>
