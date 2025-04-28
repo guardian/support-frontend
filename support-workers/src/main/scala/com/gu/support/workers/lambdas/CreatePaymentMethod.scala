@@ -76,6 +76,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       state.csrUsername,
       state.salesforceCaseId,
       state.acquisitionData,
+      state.similarProductsConsent,
     )
 
   private def optionToFuture[T](option: Option[T], errorMessage: String): Future[T] = {

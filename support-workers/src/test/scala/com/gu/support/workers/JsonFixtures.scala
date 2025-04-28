@@ -3,7 +3,7 @@ package com.gu.support.workers
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.{emailAddress, idId}
+import com.gu.salesforce.Fixtures.{emailAddress, idId, state}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{
   Domestic,
@@ -343,7 +343,8 @@ object JsonFixtures {
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
+          "userAgent": "Test",
+          "similarProductsConsent": false
         }"""
 
   def createStripePaymentMethodContributionJson(
@@ -363,7 +364,8 @@ object JsonFixtures {
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
+          "userAgent": "Test",
+          "similarProductsConsent": false
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =
@@ -377,7 +379,8 @@ object JsonFixtures {
           },
           "paymentFields": $payPalJson,
           "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
+          "userAgent": "Test",
+          "similarProductsConsent": false
         }"""
 
   val createDirectDebitDigitalPackJson =
@@ -391,7 +394,8 @@ object JsonFixtures {
           },
           "paymentFields": $directDebitJson,
           "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
+          "userAgent": "Test",
+          "similarProductsConsent": false
         }"""
 
   val createDirectDebitObserverJson =
@@ -405,7 +409,8 @@ object JsonFixtures {
           },
           "paymentFields": $directDebitJson,
           "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
+          "userAgent": "Test",
+          "similarProductsConsent": false
         }"""
 
   val createSalesForceContactJson =
@@ -414,11 +419,12 @@ object JsonFixtures {
             $requestIdJson,
             ${userJson("200001969")},
             "product": ${contribution()},
-          "analyticsInfo": {
-            "paymentProvider": "PayPal",
-            "isGiftPurchase": false
-          },
-            "paymentMethod": $payPalPaymentMethod
+            "analyticsInfo": {
+              "paymentProvider": "PayPal",
+              "isGiftPurchase": false
+            },
+            "paymentMethod": $payPalPaymentMethod,
+            "similarProductsConsent": false
           }
         """
 
@@ -440,7 +446,8 @@ object JsonFixtures {
               "lastName": "McRecipent",
               "email": "gift.recipient@thegulocal.com",
               "giftRecipientType": "Weekly"
-            }
+            },
+            "similarProductsConsent": false
           }
         """
 
@@ -491,6 +498,7 @@ object JsonFixtures {
         Contribution(amount, GBP, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       user(),
@@ -516,6 +524,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         None,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       user("9999998", country),
@@ -542,6 +551,7 @@ object JsonFixtures {
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       requestId = UUID.randomUUID(),
       user = user("9999998", country),
@@ -562,6 +572,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         None,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       user(),
@@ -582,6 +593,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         Some(AppliedPromotion("DJP8L27FY", CountryGroup.UK.id)),
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       user(),
@@ -603,6 +615,7 @@ object JsonFixtures {
         LocalDate.now(DateTimeZone.UTC),
         None,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -625,6 +638,7 @@ object JsonFixtures {
         LocalDate.now(DateTimeZone.UTC),
         None,
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddressOutsideLondon,
@@ -650,6 +664,7 @@ object JsonFixtures {
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
         salesforceContacts,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -679,6 +694,7 @@ object JsonFixtures {
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
         salesforceContacts,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
@@ -798,7 +814,7 @@ object JsonFixtures {
   val wrapperWithMessages =
     """
       {
-        "state": {"requestId":"a64ad98e-5d39-4ffc-a4a9-217357dc2b19","user":{"id":"9999999","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Monthly"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"PaypalBaid":"B-23637766K5365543J","PaypalEmail":"test@paypal.com","PaypalType":"ExpressCheckout","Type":"PayPal","PaymentGateway":"PayPal Express"},"giftRecipient":{"title":"Mr","firstName":"Gifty","lastName":"McRecipent","email":"gift.recipient@thegulocal.com","giftRecipientType":"Weekly"}},
+        "state": {"requestId":"a64ad98e-5d39-4ffc-a4a9-217357dc2b19","user":{"id":"9999999","primaryEmailAddress":"integration-test@thegulocal.com","firstName":"test","lastName":"user","country":"GB","billingAddress":{"country":"GB"},"isTestUser":false},"product":{"productType":"Contribution","amount":5,"currency":"GBP","billingPeriod":"Monthly"},"analyticsInfo":{"paymentProvider": "Stripe","isGiftPurchase":false},"paymentMethod":{"PaypalBaid":"B-23637766K5365543J","PaypalEmail":"test@paypal.com","PaypalType":"ExpressCheckout","Type":"PayPal","PaymentGateway":"PayPal Express"},"giftRecipient":{"title":"Mr","firstName":"Gifty","lastName":"McRecipent","email":"gift.recipient@thegulocal.com","giftRecipientType":"Weekly"}, "similarProductsConsent": false},
         "error": null,
         "requestInfo": {
           "testUser": false,
@@ -995,6 +1011,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         Some(AppliedPromotion("DJRHYMDS8", CountryGroup.UK.id)),
         salesforceContact,
+        similarProductsConsent = None,
       ),
       UUID.randomUUID(),
       user(),

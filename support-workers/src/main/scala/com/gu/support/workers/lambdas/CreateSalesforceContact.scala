@@ -80,6 +80,7 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -87,8 +88,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       None,
       None,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -104,6 +105,7 @@ class NextState(state: CreateSalesforceContactState) {
         purchase,
         appliedPromotion,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -111,8 +113,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       None,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -129,6 +131,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecords.buyer,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -136,8 +139,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -158,8 +161,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -177,6 +180,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecords,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -184,8 +188,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -202,6 +206,7 @@ class NextState(state: CreateSalesforceContactState) {
         firstDeliveryDate.get,
         appliedPromotion,
         salesforceContactRecord,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -209,8 +214,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
@@ -226,6 +231,7 @@ class NextState(state: CreateSalesforceContactState) {
         purchase,
         appliedPromotion,
         salesforceContactRecord,
+        similarProductsConsent,
       ),
       requestId,
       user,
@@ -233,8 +239,8 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       firstDeliveryDate,
       appliedPromotion,
-      state.csrUsername,
-      state.salesforceCaseId,
+      csrUsername,
+      salesforceCaseId,
       acquisitionData,
     )
 
