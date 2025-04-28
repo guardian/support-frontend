@@ -90,6 +90,7 @@ object AcquisitionDataRowBuilder {
       postalCode = commonState.user.billingAddress.postCode,
       state = commonState.user.billingAddress.state,
       email = Some(commonState.user.primaryEmailAddress),
+      similarProductsConsent = commonState.similarProductsConsent,
     )
   }
 

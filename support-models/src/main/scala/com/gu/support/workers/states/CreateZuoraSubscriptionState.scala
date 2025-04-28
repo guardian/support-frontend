@@ -39,6 +39,7 @@ object CreateZuoraSubscriptionProductState {
       product: Contribution,
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   case class SupporterPlusState(
@@ -47,6 +48,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   case class TierThreeState(
@@ -56,6 +58,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   case class GuardianAdLiteState(
@@ -70,6 +73,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   case class PaperState(
@@ -79,6 +83,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesForceContact: SalesforceContactRecord,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   case class GuardianWeeklyState(
@@ -89,6 +94,7 @@ object CreateZuoraSubscriptionProductState {
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
       salesforceContacts: SalesforceContactRecords,
+      similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 
   import ExecutionTypeDiscriminators._

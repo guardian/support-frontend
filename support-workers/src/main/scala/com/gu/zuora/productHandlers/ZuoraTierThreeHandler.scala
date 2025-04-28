@@ -41,6 +41,7 @@ class ZuoraTierThreeHandler(
       account.value,
       sub.value,
       state.firstDeliveryDate,
+      state.similarProductsConsent,
     )
 
 }

@@ -58,6 +58,7 @@ case class CreateSupportWorkersRequest(
     telephoneNumber: Option[String],
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
+    similarProductsConsent: Option[Boolean],
 )
 
 object SupportWorkersClient {
@@ -159,6 +160,7 @@ class SupportWorkersClient(
         userAgent = request.headers.get("user-agent").getOrElse("Unknown"),
         ipAddress =
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
+        similarProductsConsent = request.body.similarProductsConsent,
       )
       isExistingAccount = createPaymentMethodState.paymentFields match {
         case _: ExistingPaymentFields => true
