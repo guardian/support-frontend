@@ -497,7 +497,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             |        }
             |      ]
             |  },
-            | "email": "a@b.com"
+            | "email": "a@b.com",
+            | "similarProductsConsent": false
             |}
           """.stripMargin))
 
@@ -555,7 +556,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
               |    "componentType": "AcquisitionsOther",
               |    "source": "GuardianWeb"
               |  },
-              |  "email": "a@b.com"
+              |  "email": "a@b.com",
+              |  "similarProductsConsent": false
               |}
             """.stripMargin))
 
@@ -592,7 +594,8 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
               |    "componentType": "AcquisitionsOther",
               |    "source": "GuardianWeb"
               |  },
-              |  "email": "a@b.com"
+              |  "email": "a@b.com",
+              |  "similarProductsConsent": false
               |}
             """.stripMargin))
           .withHeaders("origin" -> "https://cors.com")

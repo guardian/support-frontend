@@ -156,7 +156,8 @@ object Fixtures {
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "TestAgent"
+          "userAgent": "TestAgent",
+          "similarProductsConsent": false
         }"""
 
   def createStripePaymentMethodContributionJson(
@@ -175,7 +176,8 @@ object Fixtures {
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "TestAgent"
+          "userAgent": "TestAgent",
+          "similarProductsConsent": false
         }"""
 
   val createPayPalPaymentMethodDigitalPackJson =
@@ -190,7 +192,8 @@ object Fixtures {
           "paymentFields": $payPalJson,
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "TestAgent"
+          "userAgent": "TestAgent",
+          "similarProductsConsent": false
         }"""
 
   val createDirectDebitDigitalPackJson =
@@ -205,7 +208,8 @@ object Fixtures {
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "TestAgent"
+          "userAgent": "TestAgent",
+          "similarProductsConsent": false
         }"""
 
   val createDirectDebitGuardianWeeklyJson =
@@ -220,7 +224,8 @@ object Fixtures {
           "paymentFields": $directDebitJson,
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",
-          "userAgent": "TestAgent"
+          "userAgent": "TestAgent",
+          "similarProductsConsent": false
         }"""
 
   val createSalesforceContactJson =
@@ -234,7 +239,8 @@ object Fixtures {
               "isGiftPurchase": false
             },
             "paymentMethod": $payPalPaymentMethod,
-            "acquisitionData": $acquisitionData
+            "acquisitionData": $acquisitionData,
+            "similarProductsConsent": false
           }
         """
 
@@ -267,7 +273,8 @@ object Fixtures {
             $userJson,
             "product": ${contribution(billingPeriod = billingPeriod)},
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            "similarProductsConsent": false
             }
         """
   def createDigiPackZuoraSubscriptionJson: String =
@@ -277,7 +284,8 @@ object Fixtures {
             "billingCountry": "GB",
             "product": $digitalPackJson,
             "paymentMethod": $stripePaymentMethod,
-            "salesForceContact": $salesforceContactJson
+            "salesForceContact": $salesforceContactJson,
+            "similarProductsConsent": false
             }
         """
 

@@ -12,6 +12,7 @@ import org.joda.time.LocalDate
 
 sealed trait SendThankYouEmailState extends StepFunctionUserState {
   def product: ProductType
+  def similarProductsConsent: Option[Boolean]
 }
 
 object SendThankYouEmailState {
@@ -22,6 +23,7 @@ object SendThankYouEmailState {
       paymentMethod: PaymentMethod,
       accountNumber: String,
       subscriptionNumber: String,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailSupporterPlusState(
@@ -32,6 +34,7 @@ object SendThankYouEmailState {
       promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailTierThreeState(
@@ -43,6 +46,7 @@ object SendThankYouEmailState {
       accountNumber: String,
       subscriptionNumber: String,
       firstDeliveryDate: LocalDate,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailGuardianAdLiteState(
@@ -52,6 +56,7 @@ object SendThankYouEmailState {
       paymentSchedule: PaymentSchedule,
       accountNumber: String,
       subscriptionNumber: String,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailDigitalSubscriptionState(
@@ -62,6 +67,7 @@ object SendThankYouEmailState {
       promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailPaperState(
@@ -73,6 +79,7 @@ object SendThankYouEmailState {
       accountNumber: String,
       subscriptionNumber: String,
       firstDeliveryDate: LocalDate,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailGuardianWeeklyState(
@@ -85,6 +92,7 @@ object SendThankYouEmailState {
       accountNumber: String,
       subscriptionNumber: String,
       firstDeliveryDate: LocalDate,
+      similarProductsConsent: Option[Boolean],
   ) extends SendThankYouEmailState
 
   case class TermDates(

@@ -30,6 +30,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
+      similarProductsConsent = None,
     )
 
     val zuora = new ZuoraSubscribeService {

@@ -96,4 +96,28 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
+	similarProductsConsent: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'VariantA',
+			},
+			{
+				id: 'VariantB',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		seed: 99,
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
+	},
 };
