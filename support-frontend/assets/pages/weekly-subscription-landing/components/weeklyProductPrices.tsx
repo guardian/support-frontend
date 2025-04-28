@@ -55,6 +55,7 @@ const getCheckoutUrl = (
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
+	// Gifting will be supported last
 	if (
 		abParticipations.guardianWeeklyGenericCheckout === 'variant' &&
 		!orderIsGift
