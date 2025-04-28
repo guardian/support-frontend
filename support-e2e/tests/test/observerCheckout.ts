@@ -41,7 +41,7 @@ export const testObserverCheckout = (testDetails: TestDetails) => {
 		// goto Stripe checkout page
 		await expectToLandOnStripeCheckoutPage(page);
 
-		// fill in Stripe chekout form and sumbit
+		// fill in Stripe checkout form and sumbit
 		await fillStripeCheckoutForm(page);
 		await submitStripeCheckoutForm(page);
 
