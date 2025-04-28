@@ -82,8 +82,8 @@ export default function DirectDebitForm(
 						value={props.accountNumber}
 						onChange={(e) => props.updateAccountNumber(e.target.value)}
 						pattern="[0-9]*"
-						minLength={8}
-						maxLength={8}
+						minLength={6}
+						maxLength={10}
 						inputMode="numeric"
 						error={props.errors.accountNumber?.[0]}
 						name="accountNumber"
