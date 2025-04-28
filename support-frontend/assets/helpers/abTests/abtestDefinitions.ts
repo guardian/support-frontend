@@ -25,6 +25,8 @@ export const pageUrlRegexes = {
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
 			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
+			weeklyLandingPage:
+				/\/subscribe\/weekly(\/checkout|\/checkout\/gift)?(\?.*)?$/,
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
@@ -113,6 +115,30 @@ export const tests: Tests = {
 		seed: 9,
 		targetPage:
 			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
+		persistPage:
+			// match generic checkout & thank you page
+			'^/uk/(checkout|thank-you)',
+		excludeContributionsOnlyCountries: true,
+	},
+	guardianWeeklyGenericCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 9,
+		targetPage: pageUrlRegexes.subscriptions.paper.weeklyLandingPage,
 		persistPage:
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
