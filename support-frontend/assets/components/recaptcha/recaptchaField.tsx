@@ -1,16 +1,20 @@
-import { compose } from 'redux';
 import type { PropsForHoc as WithErrorProps } from 'components/forms/customFields/error';
+import { Error } from 'components/forms/customFields/error';
 import type { PropsForHoc as WithLabelProps } from 'components/forms/label';
-import { withError } from 'hocs/withError';
-import { withLabel } from 'hocs/withLabel';
+import { Label } from 'components/forms/label';
 import type { RecaptchaProps } from './recaptcha';
 import { Recaptcha } from './recaptcha';
 
-type WithErrorAndLabelProps = WithErrorProps & WithLabelProps;
+type CombinedProps = WithErrorProps & WithLabelProps & RecaptchaProps;
 
-export const RecaptchaField = compose<
-	React.FC<RecaptchaProps & WithErrorAndLabelProps>
->(
-	withLabel,
-	withError,
-)(Recaptcha);
+export function RecaptchaField(props: CombinedProps) {
+	const { error, label, id, optional, footer, ...rest } = props;
+
+	return (
+		<Label label={label} id={id} optional={optional} footer={footer}>
+			<Error error={error}>
+				<Recaptcha {...rest} />
+			</Error>
+		</Label>
+	);
+}
