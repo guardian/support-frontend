@@ -55,6 +55,7 @@ case class Cta(
 
 case class TickerCopy(
     countLabel: String,
+    goalCopy: String,
 )
 object TickerCopy {
   implicit val codec: Codec[TickerCopy] = deriveCodec
