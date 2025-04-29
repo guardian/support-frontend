@@ -32,6 +32,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					}
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey=""
+					countryGroupId="GBPCountries"
 					currency={'GBP'}
 					amount={0}
 				/>,

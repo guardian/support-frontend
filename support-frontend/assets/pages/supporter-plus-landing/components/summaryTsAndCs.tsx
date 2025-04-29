@@ -5,6 +5,7 @@ import {
 	type RegularContributionTypeQuarterly,
 } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
@@ -53,6 +54,7 @@ export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	contributionType: RegularContributionTypeQuarterly;
+	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
 }
@@ -60,11 +62,12 @@ export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
 	contributionType,
+	countryGroupId,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const frequencySingular =
-		config['GBPCountries'][contributionType].frequencySingular; // TODO : CountryGroupId
+		config[countryGroupId][contributionType].frequencySingular;
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,

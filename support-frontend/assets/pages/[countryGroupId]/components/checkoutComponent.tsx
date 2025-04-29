@@ -1276,6 +1276,7 @@ export function CheckoutComponent({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
+							countryGroupId={countryGroupId}
 							currency={currencyKey}
 							amount={originalAmount}
 						/>
