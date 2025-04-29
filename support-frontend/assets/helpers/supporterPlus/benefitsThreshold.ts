@@ -1,13 +1,20 @@
-import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
+import {
+	config,
+	type RegularContributionTypeQuarterly,
+} from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 
+function capitalise(any: string): string {
+	return any.charAt(0).toUpperCase() + any.slice(1);
+}
+
 export function getLowerProductBenefitThreshold(
-	contributionType: ContributionType,
+	contributionType: RegularContributionTypeQuarterly,
 	currencyId: IsoCurrency,
-	countryGroupId: CountryGroup,
+	countryGroupId: CountryGroupId,
 	product: ActiveProductKey,
 ): number {
 	const ratePlanTier3 =
@@ -18,11 +25,10 @@ export function getLowerProductBenefitThreshold(
 			: contributionType === 'ANNUAL'
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
-	const ratePlanSupporterPlus =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	return (
-		productCatalog[product]?.ratePlans[
-			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
-		]?.pricing[currencyId] ?? 0
+	const ratePlanRegularContribution = capitalise(
+		config[countryGroupId][contributionType].frequencyPlural,
 	);
+	const ratePlan =
+		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
+	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;
 }

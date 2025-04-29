@@ -6,7 +6,8 @@ import {
 	space,
 	textSans14,
 } from '@guardian/source/foundations';
-import { type ContributionType } from 'helpers/contributions';
+import { config } from 'helpers/contributions';
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import type { ActiveProductKey } from 'helpers/productCatalog';
@@ -73,10 +74,11 @@ export function OrderSummaryStartDate({
 
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
-	contributionType: ContributionType;
+	contributionType: RegularContributionTypeQuarterly;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	ratePlanKey?: string;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -85,11 +87,8 @@ export function OrderSummaryTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
-	// Proceeds with RegularContributionType only
-	if (contributionType === 'ONE_OFF') {
-		return null;
-	}
-	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
+	const frequencySingular =
+		config[countryGroupId][contributionType].frequencySingular;
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -108,21 +107,23 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {period} until you cancel.</p>
+					<p>Auto renews every {frequencySingular} until you cancel.</p>
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
 					</p>
 				</>
 			)}
-			{productKey === 'TierThree' && (
-				<p>Auto renews every {period}. Cancel anytime.</p>
+			{(productKey === 'TierThree' ||
+				productKey === 'GuardianWeeklyDomestic' ||
+				productKey === 'GuardianWeeklyRestOfWorld') && (
+				<p>Auto renews every {frequencySingular}. Cancel anytime.</p>
 			)}
 		</div>
 	);
 	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
-			<p>Auto renews every {period} until you cancel.</p>
+			<p>Auto renews every {frequencySingular} until you cancel.</p>
 			<p>
 				{['Contribution', 'OneTimeContribution'].includes(productKey)
 					? 'Cancel or change your support anytime.'
@@ -133,6 +134,8 @@ export function OrderSummaryTsAndCs({
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
+		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
+		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;
 }

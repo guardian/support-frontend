@@ -38,6 +38,7 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -61,6 +62,7 @@ import {
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
@@ -607,12 +609,20 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const contributionType =
-		productFields.billingPeriod === 'Monthly'
-			? 'MONTHLY'
-			: productFields.billingPeriod === 'Annual'
-			? 'ANNUAL'
-			: 'ONE_OFF';
+	const billingPeriodToContributionType = (
+		billingPeriod: BillingPeriod,
+	): RegularContributionTypeQuarterly => {
+		if (billingPeriod === 'Monthly') {
+			return 'MONTHLY';
+		}
+		if (billingPeriod === 'Quarterly') {
+			return 'QUARTERLY';
+		}
+		return 'ANNUAL';
+	};
+	const contributionType = billingPeriodToContributionType(
+		productFields.billingPeriod,
+	);
 
 	/*
   TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story

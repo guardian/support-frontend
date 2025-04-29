@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import type { ContributionType } from 'helpers/contributions';
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
@@ -27,7 +27,9 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		({ productKey, contributionType }) => {
 			const { container } = render(
 				<SummaryTsAndCs
-					contributionType={contributionType as ContributionType}
+					contributionType={
+						contributionType as RegularContributionTypeQuarterly
+					}
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey=""
 					currency={'GBP'}

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import type { ContributionType } from 'helpers/contributions';
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -31,7 +31,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 			const { container } = render(
 				<OrderSummaryTsAndCs
 					productKey={paymentProductKey as ActiveProductKey}
-					contributionType={contributionType as ContributionType}
+					contributionType={
+						contributionType as RegularContributionTypeQuarterly
+					}
 					countryGroupId={countryGroupId as CountryGroupId}
 					thresholdAmount={amount as number}
 					promotion={promo}

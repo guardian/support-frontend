@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import type { ContributionType } from 'helpers/contributions';
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -23,7 +23,6 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 	const paymentProductKeys = [
 		['GuardianAdLite', 'ANNUAL', 'GBPCountries', 0],
 		['DigitalSubscription', 'MONTHLY', 'GBPCountries', 0],
-		['OneTimeContribution', 'MONTHLY', 'UnitedStates', 0],
 		['Contribution', 'ANNUAL', 'AUDCountries', 0],
 		['SupporterPlus', 'MONTHLY', 'GBPCountries', 12],
 		['TierThree', 'MONTHLY', 'UnitedStates', 45],
@@ -48,7 +47,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					: undefined;
 			const { container } = render(
 				<PaymentTsAndCs
-					contributionType={contributionType as ContributionType}
+					contributionType={
+						contributionType as RegularContributionTypeQuarterly
+					}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
 					ratePlanKey={contributionType as string}

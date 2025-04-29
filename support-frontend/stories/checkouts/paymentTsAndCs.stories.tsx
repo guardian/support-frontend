@@ -32,14 +32,6 @@ DigitalSubscription.args = {
 	countryGroupId: 'GBPCountries',
 };
 
-export const OneTimeContribution = Template.bind({});
-OneTimeContribution.args = {
-	productKey: 'OneTimeContribution',
-	ratePlanKey: '',
-	contributionType: 'ONE_OFF',
-	countryGroupId: 'UnitedStates',
-};
-
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',

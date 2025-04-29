@@ -10,13 +10,25 @@ type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
 };
-
 type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
-
 export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
+
+type RegularContributionTypeQuarterlyMap<T> = {
+	MONTHLY: T;
+	QUARTERLY: T;
+	ANNUAL: T;
+};
+type ContributionTypeMapQuarterly<T> =
+	RegularContributionTypeQuarterlyMap<T> & {
+		ONE_OFF: T;
+	};
+export type RegularContributionTypeQuarterly =
+	keyof RegularContributionTypeQuarterlyMap<null>;
+export type ContributionTypeQuarterly =
+	keyof ContributionTypeMapQuarterly<null>;
 
 export interface AmountValuesObject {
 	amounts: number[];
@@ -66,12 +78,14 @@ export type ContributionTypes = Record<
 >;
 
 type Config = Record<
-	ContributionType,
+	ContributionTypeQuarterly,
 	{
 		min: number;
 		minInWords: string;
 		max: number;
 		maxInWords: string;
+		frequencySingular: string;
+		frequencyPlural: string;
 		default: number; // TODO - remove this field once old payment flow has gone
 	}
 >;
@@ -152,13 +166,26 @@ const defaultConfig: Config = {
 		minInWords: numbersInWords['10'],
 		max: 2000,
 		maxInWords: numbersInWords['2000'],
+		frequencySingular: 'year',
+		frequencyPlural: 'annual',
 		default: 50,
+	},
+	QUARTERLY: {
+		min: 10,
+		minInWords: numbersInWords['10'],
+		max: 166,
+		maxInWords: numbersInWords['166'],
+		frequencySingular: 'quarter',
+		frequencyPlural: 'Quarterly',
+		default: 45,
 	},
 	MONTHLY: {
 		min: 2,
 		minInWords: numbersInWords['2'],
 		max: 166,
 		maxInWords: numbersInWords['166'],
+		frequencySingular: 'month',
+		frequencyPlural: 'months',
 		default: 5,
 	},
 	ONE_OFF: {
@@ -166,6 +193,8 @@ const defaultConfig: Config = {
 		minInWords: numbersInWords['1'],
 		max: 2000,
 		maxInWords: numbersInWords['2000'],
+		frequencySingular: 'once',
+		frequencyPlural: 'once',
 		default: 50,
 	},
 };
@@ -174,7 +203,9 @@ const config: Record<CountryGroupId, Config> = {
 	GBPCountries: defaultConfig,
 	AUDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 200,
@@ -182,6 +213,7 @@ const config: Record<CountryGroupId, Config> = {
 			default: 20,
 		},
 		ONE_OFF: {
+			...defaultConfig.ONE_OFF,
 			min: 1,
 			minInWords: numbersInWords['1'],
 			max: 16000,
@@ -191,7 +223,9 @@ const config: Record<CountryGroupId, Config> = {
 	},
 	EURCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
@@ -206,7 +240,9 @@ const config: Record<CountryGroupId, Config> = {
 			max: 10000,
 			maxInWords: numbersInWords['10000'],
 		},
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 800,
@@ -221,7 +257,9 @@ const config: Record<CountryGroupId, Config> = {
 	},
 	International: {
 		ANNUAL: defaultConfig.ANNUAL,
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
@@ -232,7 +270,9 @@ const config: Record<CountryGroupId, Config> = {
 	},
 	NZDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 200,
@@ -243,7 +283,9 @@ const config: Record<CountryGroupId, Config> = {
 	},
 	Canada: {
 		ANNUAL: defaultConfig.ANNUAL,
+		QUARTERLY: defaultConfig.QUARTERLY,
 		MONTHLY: {
+			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
