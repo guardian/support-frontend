@@ -160,6 +160,7 @@ export class PaymentApi extends GuStack {
               this.stage === "PROD"
                 ? [
                     `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,
+                    `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-CODE`,
                   ]
                 : [
                     `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-CODE`,

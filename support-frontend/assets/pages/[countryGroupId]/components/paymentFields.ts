@@ -10,7 +10,11 @@ import type {
 	StripePaymentMethod,
 } from '../../../helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod as LegacyPaymentMethod } from '../../../helpers/forms/paymentMethods';
-import { DirectDebit, PayPal } from '../../../helpers/forms/paymentMethods';
+import {
+	DirectDebit,
+	PayPal,
+	StripeHostedCheckout,
+} from '../../../helpers/forms/paymentMethods';
 import {
 	stripeCreateSetupIntentPrb,
 	stripeCreateSetupIntentRecaptcha,
@@ -141,6 +145,7 @@ export const getPaymentFieldsForPaymentMethod = async (
 	stripePublicKey: string,
 	recaptchaToken: string | undefined,
 	formData: FormData,
+	checkoutSessionId: string | undefined,
 ): Promise<RegularPaymentFields | undefined> => {
 	if (paymentMethod === 'Stripe') {
 		return getStripePaymentFields(
@@ -174,5 +179,13 @@ export const getPaymentFieldsForPaymentMethod = async (
 			recaptchaToken,
 		};
 	}
+	if (paymentMethod === 'StripeHostedCheckout') {
+		return {
+			paymentType: StripeHostedCheckout,
+			checkoutSessionId: checkoutSessionId,
+			stripePublicKey,
+		};
+	}
+
 	return;
 };

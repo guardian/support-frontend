@@ -6,11 +6,12 @@ import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import Subheading, { OfferHeading } from './subheading';
 
-export const header = css`
+const header = css`
 	background: white;
 	padding: ${space[4]}px 10px ${space[5]}px;
 	${from.tablet} {
@@ -20,7 +21,7 @@ export const header = css`
 	}
 `;
 
-export const headerSupportingText = css`
+const headerSupportingText = css`
 	${textEgyptian15};
 	padding-top: ${space[3]}px;
 
@@ -40,6 +41,8 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
+	observerPrint?: ObserverPrint;
+	startDate?: string;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
@@ -57,6 +60,8 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
+	observerPrint,
+	startDate,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
@@ -72,19 +77,24 @@ function ThankYouHeader({
 				amount={amount}
 				currency={currency}
 				contributionType={contributionType}
+				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
 
 			<p css={headerSupportingText}>
-				{showDirectDebitMessage && <DirectDebitMessage />}
+				{showDirectDebitMessage && (
+					<DirectDebitMessage isObserverPrint={!!observerPrint} />
+				)}
 				<Subheading
-					contributionType={contributionType}
 					productKey={productKey}
+					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
+					observerPrint={observerPrint}
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
+					startDate={startDate}
 				/>
 			</p>
 			{showOffer && (

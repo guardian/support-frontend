@@ -24,7 +24,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { getTitle } from '../helpers/products';
+import { getProductLabel, getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
@@ -66,7 +66,6 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
-
 const getUnavailableOutsideLondon = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: PaperProductOptions,
@@ -174,7 +173,8 @@ const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const labelText = productOption === 'Everyday' ? 'Best Deal' : '';
+		const label = productOption === 'Everyday' ? 'Best deal' : '';
+		const productLabel = getProductLabel(productOption);
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
@@ -192,7 +192,8 @@ const getPlans = (
 				copy[fulfilmentOption][productOption],
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label: labelText,
+			label,
+			productLabel,
 			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,
@@ -200,7 +201,7 @@ const getPlans = (
 		};
 	});
 
-type PaperProductPricesProps = {
+export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;

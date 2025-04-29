@@ -8,6 +8,7 @@ case class StripePublicConfig(
     defaultAccount: StripePublicKey,
     australiaAccount: StripePublicKey,
     unitedStatesAccount: StripePublicKey,
+    tortoiseMediaAccount: StripePublicKey,
 )
 
 class StripePublicConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe")
@@ -16,6 +17,7 @@ class StripePublicConfigProvider(config: Config, defaultStage: Stage, prefix: St
     accountFromConfig(config, prefix, "default"),
     accountFromConfig(config, prefix, Country.Australia.alpha2),
     accountFromConfig(config, prefix, Country.US.alpha2),
+    accountFromConfig(config, prefix, "tortoiseMedia"),
   )
 
   private def accountFromConfig(config: Config, prefix: String, country: String): StripePublicKey =

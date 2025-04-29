@@ -70,23 +70,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val digitalPackController = new DigitalSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
-    assetsResolver,
-    actionBuilders,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
-    cachedProductCatalogServiceProvider,
-    appConfig.stage,
-    testUsers,
-    appConfig.supportUrl,
-  )
-
   lazy val paperController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
@@ -165,6 +148,7 @@ trait Controllers {
     appConfig.guardianDomain,
     paperRoundServiceProvider,
     userBenefitsApiServiceProvider,
+    stripeCheckoutSessionService,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

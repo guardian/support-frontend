@@ -6,6 +6,7 @@ import {
 } from 'helpers/async/fetch';
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { StripeHostedCheckout } from 'helpers/forms/paymentMethods';
 import {
 	DirectDebit,
 	PayPal,
@@ -128,15 +129,17 @@ type RegularSepaPaymentFields = {
 	country?: Option<Country>;
 	streetName?: Option<string>;
 };
-type GiftRedemption = {
-	redemptionCode: string;
+type RegularStripeHostedCheckoutPaymentFields = {
+	paymentType: typeof StripeHostedCheckout;
+	checkoutSessionId?: string;
+	stripePublicKey: string;
 };
 export type RegularPaymentFields =
 	| RegularPayPalPaymentFields
 	| RegularStripePaymentIntentFields
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
-	| GiftRedemption;
+	| RegularStripeHostedCheckoutPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
 	state?: UsState | null;
@@ -179,8 +182,9 @@ export type RegularPaymentRequest = {
 	salesforceCaseId?: string;
 	recaptchaToken?: string;
 	debugInfo: string;
+	similarProductsConsent?: boolean;
 };
-export type StripePaymentIntentAuthorisation = {
+type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
 	stripePaymentMethod: StripePaymentMethod;
 	paymentMethodId: string | PaymentMethod;

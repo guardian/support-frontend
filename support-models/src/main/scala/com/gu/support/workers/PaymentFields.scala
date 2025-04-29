@@ -14,6 +14,11 @@ sealed trait PaymentFields {
 
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
+case class StripeHostedPaymentFields(
+    checkoutSessionId: Option[String],
+    stripePublicKey: StripePublicKey,
+) extends PaymentFields
+
 case class StripePaymentFields(
     paymentMethod: PaymentMethodId,
     stripePaymentType: Option[StripePaymentType],
@@ -121,6 +126,8 @@ object PaymentFields {
     discriminatedType.variant[PayPalPaymentFields]("PayPal")
   implicit val stripePaymentMethodPaymentFieldsCodec: discriminatedType.VariantCodec[StripePaymentFields] =
     discriminatedType.variant[StripePaymentFields]("Stripe")
+  implicit val stripeHostedPaymentFieldsCodec: discriminatedType.VariantCodec[StripeHostedPaymentFields] =
+    discriminatedType.variant[StripeHostedPaymentFields]("StripeHostedCheckout")
   implicit val directDebitPaymentFieldsCodec: discriminatedType.VariantCodec[DirectDebitPaymentFields] =
     discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
   implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
@@ -134,6 +141,7 @@ object PaymentFields {
       directDebitPaymentFieldsCodec,
       sepapaymentFieldsCodec,
       existingPaymentFieldsCodec,
+      stripeHostedPaymentFieldsCodec,
     ),
   )
 }

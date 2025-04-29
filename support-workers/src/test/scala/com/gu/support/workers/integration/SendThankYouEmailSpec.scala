@@ -21,7 +21,7 @@ import com.gu.support.workers.integration.util.EmailQueueName
 import com.gu.support.workers.integration.util.EmailQueueName.emailQueueName
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.SendThankYouEmailState._
-import com.gu.support.zuora.api.ReaderType
+import com.gu.support.zuora.api.{DirectDebitGateway, ReaderType}
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
@@ -61,6 +61,7 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
         directDebitPaymentMethod,
         "acno",
         "subno",
+        similarProductsConsent = None,
       ),
     ).map { ef =>
       val resultJson = parse(ef.payload)
@@ -129,6 +130,7 @@ object SendContributionEmail extends App {
       directDebitPaymentMethod,
       acno,
       subno,
+      similarProductsConsent = None,
     ),
   )
   sendSingle(ef)
@@ -162,6 +164,7 @@ object SendSupporterPlusEmail extends App {
       Some("SUPPORTER_PLUS_PROMO"),
       acno,
       subno,
+      similarProductsConsent = None,
     ),
   )
   sendSingle(ef)
@@ -199,6 +202,7 @@ object SendTierThreeEmail extends App {
       accountNumber = acno,
       subscriptionNumber = subno,
       firstDeliveryDate = new LocalDate(2019, 3, 26),
+      similarProductsConsent = None,
     ),
   )
   sendSingle(ef)
@@ -217,6 +221,7 @@ object SendDigitalPackEmail extends App {
         None,
         acno,
         subno,
+        similarProductsConsent = None,
       ),
     ),
   )
@@ -236,6 +241,7 @@ object SendPaperSubscriptionEmail extends App {
         acno,
         subno,
         firstDeliveryDate = new LocalDate(2019, 3, 26),
+        similarProductsConsent = None,
       ),
       Some(
         AgentDetails(
@@ -276,6 +282,7 @@ object SendWeeklySubscriptionEmail extends App {
         acno,
         subno,
         new LocalDate(2019, 3, 26),
+        similarProductsConsent = None,
       ),
     ),
   )
@@ -300,6 +307,7 @@ object SendWeeklySubscriptionGiftEmail extends App {
         acno,
         subno,
         new LocalDate(2019, 3, 26),
+        similarProductsConsent = None,
       ),
     ),
   )
@@ -383,6 +391,7 @@ object TestData {
     State = None,
     StreetName = Some("streetname"),
     StreetNumber = Some("123"),
+    PaymentGateway = DirectDebitGateway,
   )
 
   val digitalPackEmailFields = new DigitalPackEmailFields(

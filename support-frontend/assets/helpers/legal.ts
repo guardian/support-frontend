@@ -42,6 +42,14 @@ const guardianWeeklyTermsLink =
 	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
 const guardianWeeklyPromoTermsLink =
 	'https://support.thegulocal.com/p/10ANNUAL/terms';
+const observerLinks = {
+	TERMS: 'https://observer.co.uk/policy/terms',
+	PRIVACY: 'https://observer.co.uk/policy/privacy',
+};
+enum MediaGroup {
+	GUARDIAN = 'Guardian News & Media Ltd',
+	TORTOISE = 'GC re Tortoise Media Ltd t/a The Observer',
+}
 // ----- Exports ----- //
 export {
 	contributionsTermsLinks,
@@ -56,4 +64,6 @@ export {
 	digitalSubscriptionTermsLink,
 	guardianWeeklyTermsLink,
 	guardianWeeklyPromoTermsLink,
+	observerLinks,
+	MediaGroup,
 };

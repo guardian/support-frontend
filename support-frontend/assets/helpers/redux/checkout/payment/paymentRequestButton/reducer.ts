@@ -1,24 +1,27 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { StripeAccount } from 'helpers/forms/stripe';
+import type { StripeAccountType } from 'helpers/forms/stripe';
 import { resetValidation, validateForm } from '../../checkoutActions';
 import type { PaymentRequestError } from './state';
 import { initialPaymentRequestButtonState } from './state';
 
-export const paymentRequestButtonSlice = createSlice({
+const paymentRequestButtonSlice = createSlice({
 	name: 'paymentRequestButton',
 	initialState: initialPaymentRequestButtonState,
 	reducers: {
-		clickPaymentRequestButton(state, action: PayloadAction<StripeAccount>) {
+		clickPaymentRequestButton(state, action: PayloadAction<StripeAccountType>) {
 			state[action.payload].buttonClicked = true;
 			if (state[action.payload].completed) {
 				state[action.payload].completed = false;
 			}
 		},
-		unClickPaymentRequestButton(state, action: PayloadAction<StripeAccount>) {
+		unClickPaymentRequestButton(
+			state,
+			action: PayloadAction<StripeAccountType>,
+		) {
 			state[action.payload].buttonClicked = false;
 		},
-		completePaymentRequest(state, action: PayloadAction<StripeAccount>) {
+		completePaymentRequest(state, action: PayloadAction<StripeAccountType>) {
 			state[action.payload].completed = true;
 		},
 		setPaymentRequestError(state, action: PayloadAction<PaymentRequestError>) {

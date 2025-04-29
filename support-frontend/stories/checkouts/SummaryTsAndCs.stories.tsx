@@ -19,6 +19,7 @@ Template.args = {} as Omit<SummaryTsAndCsProps, ''>;
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
+	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
 	currency: 'GBP',
 	amount: 0,
@@ -27,6 +28,7 @@ GuardianAdLite.args = {
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
+	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
 	currency: 'USD',
 	amount: 5,
@@ -35,6 +37,7 @@ Contribution.args = {
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
+	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
 	currency: 'GBP',
 	amount: 12,
@@ -43,6 +46,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
+	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
 	currency: 'GBP',
 	amount: 27,

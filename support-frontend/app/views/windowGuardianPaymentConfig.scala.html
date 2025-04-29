@@ -58,6 +58,17 @@
     REGULAR: window.guardian.stripeKeyDefaultCurrencies.REGULAR
   };
 
+  window.guardian.stripeKeyTortoiseMedia = {
+    ONE_OFF: {
+      default: "unused", // We will never need one-off payments for Tortoise Media
+      test: "unused"
+    },
+    REGULAR: {
+      default: "@paymentMethodConfigs.regularDefaultStripeConfig.tortoiseMediaAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.regularTestStripeConfig.tortoiseMediaAccount.rawPublicKey"
+    }
+  }
+
   window.guardian.payPalEnvironment = {
     default: "@paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment",
     test: "@paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment"

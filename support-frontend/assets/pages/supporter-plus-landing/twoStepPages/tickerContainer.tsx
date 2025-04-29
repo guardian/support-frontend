@@ -4,7 +4,7 @@ import type { TickerData } from '@guardian/source-development-kitchen/dist/react
 import { Ticker } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useState } from 'react';
 import { fetchJson } from '../../../helpers/async/fetch';
-import type { CampaignTickerSettings } from '../../../helpers/campaigns/campaigns';
+import type { TickerSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { isCodeOrProd } from '../../../helpers/urls/url';
 
 const containerStyle = css`
@@ -30,16 +30,23 @@ async function getInitialTickerValues(tickerId: string): Promise<TickerData> {
 }
 
 interface TickerContainerProps {
-	tickerSettings: CampaignTickerSettings;
+	tickerSettings: TickerSettings;
 }
 
 export function TickerContainer({
 	tickerSettings,
 }: TickerContainerProps): JSX.Element {
 	const [tickerData, setTickerData] = useState<TickerData | undefined>();
+	const tickerStylingSettings = {
+		headlineColour: '#FFFFFF',
+		totalColour: '#64B7C4',
+		goalColour: '#FFFFFF',
+		filledProgressColour: '#64B7C4',
+		progressBarBackgroundColour: 'rgba(100, 183, 196, 0.3)',
+	};
 
 	useEffect(() => {
-		void getInitialTickerValues(tickerSettings.id).then(setTickerData);
+		void getInitialTickerValues(tickerSettings.name).then(setTickerData);
 	}, []);
 
 	if (tickerData) {
@@ -48,19 +55,18 @@ export function TickerContainer({
 				<Ticker
 					currencySymbol={tickerSettings.currencySymbol}
 					copy={{
-						headline: tickerSettings.copy.headline,
+						headline: tickerSettings.copy.countLabel,
 					}}
 					tickerData={tickerData}
 					tickerStylingSettings={{
-						headlineColour: tickerSettings.tickerStylingSettings.headlineColour,
-						totalColour: tickerSettings.tickerStylingSettings.totalColour,
-						goalColour: tickerSettings.tickerStylingSettings.goalColour,
-						filledProgressColour:
-							tickerSettings.tickerStylingSettings.filledProgressColour,
+						headlineColour: tickerStylingSettings.headlineColour,
+						totalColour: tickerStylingSettings.totalColour,
+						goalColour: tickerStylingSettings.goalColour,
+						filledProgressColour: tickerStylingSettings.filledProgressColour,
 						progressBarBackgroundColour:
-							tickerSettings.tickerStylingSettings.progressBarBackgroundColour,
+							tickerStylingSettings.progressBarBackgroundColour,
 					}}
-					size={tickerSettings.size}
+					size={'large'}
 				/>
 			</div>
 		);

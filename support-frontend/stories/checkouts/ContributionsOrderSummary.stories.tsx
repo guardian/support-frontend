@@ -81,6 +81,8 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
+	productKey: 'SupporterMembership',
+	ratePlanKey: 'Monthly',
 	productDescription: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
@@ -112,6 +114,8 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
+	productKey: 'Contribution',
+	ratePlanKey: '',
 	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
@@ -134,6 +138,8 @@ SingleContribution.args = {
 export const RecurringContribution = Template.bind({});
 
 RecurringContribution.args = {
+	productKey: 'SupporterMembership',
+	ratePlanKey: 'Monthly',
 	productDescription: 'Support',
 	enableCheckList: true,
 	amount: 3,
@@ -167,6 +173,8 @@ RecurringContribution.args = {
 export const SupporterPlus = Template.bind({});
 
 SupporterPlus.args = {
+	productKey: 'TierThree',
+	ratePlanKey: 'Monthly',
 	productDescription: 'All-access Digital',
 	enableCheckList: true,
 	amount: 12,
@@ -201,6 +209,8 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 
 TierThree.args = {
+	productKey: 'TierThree',
+	ratePlanKey: 'Montly',
 	productDescription: 'Digital + print',
 	enableCheckList: true,
 	amount: 27,

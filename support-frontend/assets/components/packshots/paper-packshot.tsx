@@ -4,7 +4,7 @@ function PaperPackshot() {
 	return (
 		<div className="subscriptions__paper-packshot">
 			<GridImage
-				gridId="subscriptionPrint"
+				gridId="subscriptionPrintObserver"
 				srcSizes={[500, 140]}
 				sizes="(max-width: 739px) 140px,
              (max-width: 979px) 500px,

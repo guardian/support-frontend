@@ -1,7 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.salesforce.Salesforce.SfContactId
-import com.gu.support.catalog.{HomeDelivery, NationalDelivery, Paper}
+import com.gu.support.catalog.{Collection, HomeDelivery, NationalDelivery, Paper, Sunday}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.workers.ProductTypeRatePlans.paperRatePlan
@@ -31,9 +31,11 @@ class PaperEmailFields(
       "delivery_agent_postcode" -> deliveryAgentDetails.map(_.postcode).getOrElse(""),
     )
 
-    val dataExtension: String = paper.product.fulfilmentOptions match {
-      case HomeDelivery => "paper-delivery"
-      case NationalDelivery => "paper-national-delivery"
+    val dataExtension: String = (paper.product.fulfilmentOptions, paper.product.productOptions) match {
+      case (HomeDelivery, Sunday) => "sunday-paper-delivery"
+      case (Collection, Sunday) => "sunday-paper-subscription-card"
+      case (HomeDelivery, _) => "paper-delivery"
+      case (NationalDelivery, _) => "paper-national-delivery"
       case _ => "paper-subscription-card"
     }
 

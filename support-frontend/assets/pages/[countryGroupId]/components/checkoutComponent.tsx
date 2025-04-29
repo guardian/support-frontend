@@ -23,7 +23,6 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
-import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	OrderSummaryStartDate,
@@ -47,9 +46,10 @@ import {
 	type PaymentMethod as LegacyPaymentMethod,
 	PayPal,
 	Stripe,
+	StripeHostedCheckout,
 	toPaymentMethodSwitchNaming,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -76,10 +76,10 @@ import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsM
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -87,12 +87,15 @@ import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFie
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
+import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
 	Legend,
@@ -122,17 +125,6 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-const productLanding = (product: ProductKey) => {
-	switch (product) {
-		case 'GuardianAdLite':
-			return '/guardian-ad-lite';
-		case 'DigitalSubscription':
-			return `/subscribe`;
-		default:
-			return `/contribute`;
-	}
-};
-
 type CheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -149,6 +141,22 @@ type CheckoutComponentProps = {
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
+	checkoutSession?: CheckoutSession;
+};
+
+const getPaymentMethods = (
+	countryId: IsoCountry,
+	productKey: ProductKey,
+	ratePlanKey: string,
+) => {
+	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
+
+	if (isSundayOnlyNewspaperSub(productKey, ratePlanKey)) {
+		return [maybeDirectDebit, StripeHostedCheckout];
+	}
+
+	return [maybeDirectDebit, Stripe, PayPal];
 };
 
 export function CheckoutComponent({
@@ -166,6 +174,8 @@ export function CheckoutComponent({
 	countryId,
 	forcedCountry,
 	abParticipations,
+	landingPageSettings,
+	checkoutSession,
 }: CheckoutComponentProps) {
 	const csrf = appConfig.csrf.token;
 	const user = appConfig.user;
@@ -184,16 +194,12 @@ export function CheckoutComponent({
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: 'Monthly',
 	};
-
+	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
-			const landingPageSettings = getLandingPageVariant(
-				abParticipations,
-				getSettings().landingPageTests,
-			);
 			if (isRecurringContribution) {
 				// Also show SupporterPlus benefits greyed out
 				return [
@@ -301,19 +307,23 @@ export function CheckoutComponent({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const validPaymentMethods = [
-		/* NOT YET IMPLEMENTED
-		countryGroupId === 'EURCountries' && Sepa,
-    */
-		countryId === 'GB' && DirectDebit,
-		Stripe,
-		PayPal,
-	]
+	const validPaymentMethods = getPaymentMethods(
+		countryId,
+		productKey,
+		ratePlanKey,
+	)
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(
+		checkoutSession ? StripeHostedCheckout : undefined,
+	);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+
+	const isRedirectingToStripeHostedCheckout =
+		isSundayOnly &&
+		checkoutSession === undefined &&
+		paymentMethod === StripeHostedCheckout;
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
@@ -348,6 +358,17 @@ export function CheckoutComponent({
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	/**
+	 * Checkout session ID forces formOnSubmit
+	 * This happens when the user returns from the Stripe hosted checkout with a checkout session ID in the URL
+	 */
+	useEffect(() => {
+		if (checkoutSession?.checkoutSessionId) {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [checkoutSession?.checkoutSessionId]);
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
@@ -358,25 +379,48 @@ export function CheckoutComponent({
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(user?.firstName ?? '');
-	const [lastName, setLastName] = useState(user?.lastName ?? '');
-	const [email, setEmail] = useState(user?.email ?? '');
-	const [confirmedEmail, setConfirmedEmail] = useState('');
+	const [firstName, setFirstName] = useState(
+		checkoutSession?.formFields.personalData.firstName ?? user?.firstName ?? '',
+	);
+	const [lastName, setLastName] = useState(
+		checkoutSession?.formFields.personalData.lastName ?? user?.lastName ?? '',
+	);
+	const [email, setEmail] = useState(
+		checkoutSession?.formFields.personalData.email ?? user?.email ?? '',
+	);
+	const [confirmedEmail, setConfirmedEmail] = useState(
+		checkoutSession?.formFields.personalData.email ?? '',
+	);
 
 	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] = useState('');
+	const [deliveryInstructions, setDeliveryInstructions] = useState(
+		checkoutSession?.formFields.deliveryInstructions ?? '',
+	);
 
 	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] = useState('');
-	const [deliveryLineOne, setDeliveryLineOne] = useState('');
-	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
-	const [deliveryCity, setDeliveryCity] = useState('');
-	const [deliveryState, setDeliveryState] = useState('');
+	const [deliveryPostcode, setDeliveryPostcode] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.postCode ?? '',
+	);
+	const [deliveryLineOne, setDeliveryLineOne] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne ?? '',
+	);
+	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo ?? '',
+	);
+	const [deliveryCity, setDeliveryCity] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.city ?? '',
+	);
+	const [deliveryState, setDeliveryState] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.state ?? '',
+	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
-	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
+	const [deliveryCountry, setDeliveryCountry] = useState(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.country ??
+			countryId,
+	);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -401,6 +445,9 @@ export function CheckoutComponent({
 				// The users postcode is outside the M25 and they have selected a valid rate plan
 				setDeliveryPostcodeIsOutsideM25(true);
 				const agents = await getDeliveryAgents(postcode);
+				if (agents.agents?.length === 1 && agents.agents[0]) {
+					setChosenDeliveryAgent(agents.agents[0].agentId);
+				}
 				setDeliveryAgents(agents);
 			}
 		} else {
@@ -419,25 +466,38 @@ export function CheckoutComponent({
 	}, [deliveryPostcode]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useState(true);
+		useState(checkoutSession?.formFields.billingAddressMatchesDelivery ?? true);
 
-	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcode, setBillingPostcode] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.postCode ?? '',
+	);
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const [billingLineOne, setBillingLineOne] = useState('');
-	const [billingLineTwo, setBillingLineTwo] = useState('');
-	const [billingCity, setBillingCity] = useState('');
+	const [billingLineOne, setBillingLineOne] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.lineOne ?? '',
+	);
+	const [billingLineTwo, setBillingLineTwo] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.lineTwo ?? '',
+	);
+	const [billingCity, setBillingCity] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.city ?? '',
+	);
 	const [billingStateError, setBillingStateError] = useState<string>();
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState('');
+	const [billingState, setBillingState] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.state ?? '',
+	);
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] = useState(countryId);
+	const [billingCountry, setBillingCountry] = useState(
+		checkoutSession?.formFields.addressFields.billingAddress.country ??
+			countryId,
+	);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -483,11 +543,14 @@ export function CheckoutComponent({
 				stripePublicKey,
 				recaptchaToken,
 				formData,
+				checkoutSession?.checkoutSessionId,
 			);
 			if (paymentFields === undefined) {
 				throw new Error('paymentFields is undefined');
 			}
-			const thankYouPageUrl = await submitForm({
+			// For StripeHostedCheckout successUrl is a hosted Stripe checkout page
+			// for other payment methods it's the thank you page.
+			const successUrl = await submitForm({
 				geoId,
 				productKey: finalProductKey,
 				ratePlanKey,
@@ -500,7 +563,7 @@ export function CheckoutComponent({
 				promotion,
 				contributionAmount,
 			});
-			window.location.href = thankYouPageUrl;
+			window.location.href = successUrl;
 		} catch (error) {
 			if (error instanceof FormSubmissionError) {
 				setErrorMessage(error.message);
@@ -525,8 +588,6 @@ export function CheckoutComponent({
 		supportInternationalisationId,
 		abParticipations.abandonedBasket === 'variant',
 	);
-
-	const returnToLandingPage = `/${geoId}${productLanding(productKey)}`;
 
 	const contributionType =
 		productFields.billingPeriod === 'Monthly'
@@ -563,7 +624,9 @@ export function CheckoutComponent({
 							</div>
 						)}
 					<ContributionsOrderSummary
+						productKey={productKey}
 						productDescription={productDescription.label}
+						ratePlanKey={ratePlanKey}
 						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={
 							ratePlanDescription.billingPeriod === 'Annual'
@@ -599,7 +662,10 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton path={returnToLandingPage} buttonText={'Change'} />
+							<BackButton
+								path={`/${geoId}${productDescription.landingPagePath}`}
+								buttonText={'Change'}
+							/>
 						}
 					/>
 				</BoxContents>
@@ -767,6 +833,9 @@ export function CheckoutComponent({
 									setConfirmedEmail(confirmedEmail)
 								}
 								isSignedIn={isSignedIn}
+								showSimilarProductsConsent={
+									abParticipations.similarProductsConsent === 'VariantA'
+								}
 							/>
 
 							{/**
@@ -834,9 +903,7 @@ export function CheckoutComponent({
 								</div>
 							)}
 						</FormSection>
-
 						<CheckoutDivider spacing="loose" />
-
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
@@ -1033,7 +1100,6 @@ export function CheckoutComponent({
 								/>
 							</FormSection>
 						)}
-
 						<FormSection>
 							<Legend>
 								{productDescription.deliverableTo
@@ -1129,6 +1195,7 @@ export function CheckoutComponent({
 														}
 														sortCode={sortCode}
 														recaptchaCompleted={false}
+														isSundayOnly={isSundayOnly}
 														updateAccountHolderName={(name: string) => {
 															setAccountHolderName(name);
 														}}
@@ -1165,8 +1232,22 @@ export function CheckoutComponent({
 								})}
 							</RadioGroup>
 						</FormSection>
+						<div
+							css={css`
+								margin: ${space[6]}px 0;
+							`}
+						>
+							{abParticipations.similarProductsConsent === 'VariantB' && (
+								<Checkbox
+									name="similarProductsConsent"
+									label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
+									checked={true}
+								/>
+							)}
+						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1203,6 +1284,7 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
@@ -1221,10 +1303,9 @@ export function CheckoutComponent({
 				</>
 			)}
 			{isProcessingPayment && (
-				<LoadingOverlay>
-					<p>Processing transaction</p>
-					<p>Please wait</p>
-				</LoadingOverlay>
+				<CheckoutLoadingOverlay
+					hideProcessingMessage={isRedirectingToStripeHostedCheckout}
+				/>
 			)}
 		</CheckoutLayout>
 	);

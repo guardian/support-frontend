@@ -25,6 +25,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -1110,12 +1116,12 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "EvaluationPeriods": 144,
         "Metrics": [
           {
-            "Expression": "SUM([FILL(m1,0),FILL(m2,0),FILL(m3,0)])",
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0)])",
             "Id": "expr_1",
             "Label": "AllGuardianAdLiteConversions",
           },
           {
-            "Id": "m1",
+            "Id": "m0",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -1141,7 +1147,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
           {
-            "Id": "m2",
+            "Id": "m1",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
@@ -1167,13 +1173,65 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "ReturnData": false,
           },
           {
-            "Id": "m3",
+            "Id": "m2",
             "MetricStat": {
               "Metric": {
                 "Dimensions": [
                   {
                     "Name": "PaymentProvider",
                     "Value": "PayPal",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
                   },
                   {
                     "Name": "ProductType",
@@ -1216,7 +1274,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoGocardlessContributionsAlarmD9872C48": {
+    "NoApplePayRecurringAlarmBF134839": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -1242,7 +1300,222 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring gocardless contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring Apple Pay payments in 8 hours.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 96,
+        "Metrics": [
+          {
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
+            "Id": "expr_1",
+            "Label": "AllRecurringApplePayPayments",
+          },
+          {
+            "Id": "m0",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Contribution",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "SupporterPlus",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "TierThree",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m5",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripeApplePay",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoDirectDebitContributionsAlarm6BE82F22": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring DirectDebit contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1286,7 +1559,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoGocardlessSupporterPlusAlarm93796A8F": {
+    "NoDirectDebitSupporterPlusAlarmD591FC2E": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -1312,7 +1585,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring gocardless supporter plus contributions recently.",
+        "AlarmName": "support-workers PROD No successful DirectDebit supporter plus subscriptions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1333,6 +1606,221 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Namespace": "support-frontend",
         "Period": 3600,
         "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoGooglePayRecurringAlarm3A098926": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring Google Pay payments in 15 hours.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 180,
+        "Metrics": [
+          {
+            "Expression": "SUM([FILL(m0,0),FILL(m1,0),FILL(m2,0),FILL(m3,0),FILL(m4,0),FILL(m5,0)])",
+            "Id": "expr_1",
+            "Label": "AllRecurringGooglePayPayments",
+          },
+          {
+            "Id": "m0",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Contribution",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "Paper",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianWeekly",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m3",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "SupporterPlus",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m4",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "TierThree",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m5",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "PaymentProvider",
+                    "Value": "StripePaymentRequestButton",
+                  },
+                  {
+                    "Name": "ProductType",
+                    "Value": "GuardianAdLite",
+                  },
+                  {
+                    "Name": "Stage",
+                    "Value": "PROD",
+                  },
+                ],
+                "MetricName": "PaymentSuccess",
+                "Namespace": "support-frontend",
+              },
+              "Period": 300,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -1493,7 +1981,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPaypalContributionsAlarm79AF8B4B": {
+    "NoPayPalContributionsAlarm3674D829": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -1519,7 +2007,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring paypal contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring PayPal contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1563,7 +2051,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPaypalSupporterPlusAlarmFA5D91A9": {
+    "NoPayPalSupporterPlusAlarm3A1EEE12": {
       "DependsOn": [
         "SupportWorkersPROD",
         "SupportWorkersRoleDefaultPolicyCB757939",
@@ -1589,7 +2077,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring paypal supporter plus contributions recently.",
+        "AlarmName": "support-workers PROD No successful PayPal supporter plus subscriptions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1606,6 +2094,146 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         ],
         "EvaluationPeriods": 6,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripeApplePayContributionsAlarm90DEE946": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring StripeApplePay contributions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripeApplePay",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 8,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripeApplePaySupporterPlusAlarm1C517FD9": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful StripeApplePay supporter plus subscriptions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripeApplePay",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 12,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
         "Period": 3600,
@@ -1659,7 +2287,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring stripe contributions recently.",
+        "AlarmName": "support-workers PROD No successful recurring Stripe contributions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {
@@ -1676,6 +2304,146 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         ],
         "EvaluationPeriods": 3,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripePaymentRequestButtonContributionsAlarm1EC30DCF": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful recurring StripePaymentRequestButton contributions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripePaymentRequestButton",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "Contribution",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 24,
+        "MetricName": "PaymentSuccess",
+        "Namespace": "support-frontend",
+        "Period": 3600,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "NoStripePaymentRequestButtonSupporterPlusAlarm826B7E0B": {
+      "DependsOn": [
+        "SupportWorkersPROD",
+        "SupportWorkersRoleDefaultPolicyCB757939",
+        "SupportWorkersRole33385BA0",
+      ],
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "support-workers PROD No successful StripePaymentRequestButton supporter plus subscriptions recently.",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "PaymentProvider",
+            "Value": "StripePaymentRequestButton",
+          },
+          {
+            "Name": "ProductType",
+            "Value": "SupporterPlus",
+          },
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 24,
         "MetricName": "PaymentSuccess",
         "Namespace": "support-frontend",
         "Period": 3600,
@@ -1729,7 +2497,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmName": "support-workers PROD No successful recurring stripe supporter plus contributions recently.",
+        "AlarmName": "support-workers PROD No successful Stripe supporter plus subscriptions recently.",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": [
           {

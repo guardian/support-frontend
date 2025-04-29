@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, textSans15 } from '@guardian/source/foundations';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const footer = css`
 	${textSans15};
@@ -7,15 +8,21 @@ const footer = css`
 	margin-bottom: 28px;
 
 	${from.desktop} {
+		min-height: ${space[5]}px;
 		margin-bottom: ${space[2]}px;
 	}
 `;
 
-function ThankYouFooter(): JSX.Element {
+function ThankYouFooter({
+	observerPrint,
+}: {
+	observerPrint?: ObserverPrint;
+}): JSX.Element {
 	return (
 		<div css={footer}>
-			If you have any questions about supporting the Guardian, please contact
-			our customer service team.
+			{!observerPrint
+				? 'If you have any questions about supporting the Guardian, please contact	our customer service team.'
+				: ''}
 		</div>
 	);
 }

@@ -1,4 +1,3 @@
-import type { TickerSettings } from '@guardian/source-development-kitchen/dist/react-components/ticker/Ticker';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 
@@ -24,10 +23,6 @@ interface CampaignCopy {
 	punctuation?: JSX.Element;
 }
 
-export type CampaignTickerSettings = Omit<TickerSettings, 'tickerData'> & {
-	id: string;
-};
-
 type CampaignSettings = {
 	isEligible: (
 		countryGroupId: CountryGroupId,
@@ -36,7 +31,6 @@ type CampaignSettings = {
 	enableSingleContributions: boolean;
 	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
-	tickerSettings?: CampaignTickerSettings;
 };
 
 const campaigns: Record<string, CampaignSettings> = {};

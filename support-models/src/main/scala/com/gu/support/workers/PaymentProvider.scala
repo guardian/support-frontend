@@ -18,6 +18,8 @@ case object Sepa extends PaymentProvider("Sepa")
 
 case object Existing extends PaymentProvider("Existing")
 
+case object StripeHostedCheckout extends PaymentProvider("StripeHostedCheckout")
+
 case object RedemptionNoProvider extends PaymentProvider("Redemption")
 
 object PaymentProvider {
@@ -25,11 +27,13 @@ object PaymentProvider {
   val all = List(
     Stripe,
     StripeApplePay,
+    StripePaymentRequestButton,
     PayPal,
     DirectDebit,
     Sepa,
     Existing,
     RedemptionNoProvider,
+    StripeHostedCheckout,
   )
 
   def fromString(code: String): Option[PaymentProvider] = {
@@ -47,12 +51,14 @@ object PaymentProvider {
     case stripe: StripePaymentFields =>
       stripe.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) => StripeApplePay
+        case Some(StripePaymentType.StripePaymentRequestButton) => StripePaymentRequestButton
         case _ => Stripe
       }
     case _: PayPalPaymentFields => PayPal
     case _: DirectDebitPaymentFields => DirectDebit
     case _: SepaPaymentFields => Sepa
     case _: ExistingPaymentFields => Existing
+    case _: StripeHostedPaymentFields => StripeHostedCheckout
   }
 
 }

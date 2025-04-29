@@ -416,18 +416,6 @@ function sendEventPaymentMethodSelected(
 	}
 }
 
-function sendEventConversionPaymentMethod(paymentMethod: PaymentMethod): void {
-	void ifQmPermitted(() => {
-		sendEventWhenReadyTrigger(() =>
-			sendEvent(
-				SendEventContributionPaymentMethodUpdate.PaymentMethodAtConversion,
-				false,
-				paymentMethod.toString(),
-			),
-		);
-	});
-}
-
 function sendEventABTestParticipations(participations: Participations): void {
 	const sendEventABTestId: SendEventTestParticipationId = 30;
 	const valueQueue: string[] = [];
@@ -513,7 +501,6 @@ export {
 	sendEventContributionCheckoutConversion,
 	sendEventContributionCartValue,
 	sendEventPaymentMethodSelected,
-	sendEventConversionPaymentMethod,
 	sendEventCheckoutValue,
 	sendEventOneTimeCheckoutValue,
 };

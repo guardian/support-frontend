@@ -28,11 +28,7 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from 'helpers/utilities/dateConversions';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -118,16 +114,17 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	startDate?: string,
 	email?: string,
 	campaignCode?: string,
-	isTier3?: boolean,
+	isTierThree?: boolean,
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 	finalAmount?: number,
-	startDate?: string,
 	returnAddress?: string,
 	isSignedIn?: boolean,
+	observerPrint?: ObserverPrint,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const initialFeedbackSurveyHasBeenCompleted =
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
@@ -137,15 +134,6 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
-
-	const days = getWeeklyDays();
-	const publicationStartDays = days.filter((day) => {
-		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-		const date = formatMachineDate(day);
-		return !invalidPublicationDates.some((dateSuffix) =>
-			date.endsWith(dateSuffix),
-		);
-	});
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -256,28 +244,38 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('subscriptionStart'),
 			header: subscriptionStartHeader,
 			bodyCopy: (
-				<SubscriptionStartItems
-					productKey={productKey}
-					startDate={
-						publicationStartDays[0]
-							? formatUserDate(publicationStartDays[0])
-							: ''
-					}
-				/>
+				<SubscriptionStartItems productKey={productKey} startDate={startDate} />
 			),
 			ctas: null,
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTier3),
-			bodyCopy: <SignInBodyCopy isTier3={isTier3} />,
-			ctas: <SignInCTA email={email} csrf={csrf} isTier3={isTier3} />,
+			header: signInHeader(isTierThree, observerPrint),
+			bodyCopy: (
+				<SignInBodyCopy
+					isTierThree={isTierThree}
+					observerPrint={observerPrint}
+				/>
+			),
+			ctas: (
+				<SignInCTA
+					email={email}
+					csrf={csrf}
+					isTierThree={isTierThree}
+					observerPrint={observerPrint}
+				/>
+			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
 			header: signUpHeader,
-			bodyCopy: <SignUpBodyCopy isTier3={isTier3} />,
+			bodyCopy: (
+				<SignUpBodyCopy
+					isTierThree={isTierThree}
+					observerPrint={observerPrint}
+				/>
+			),
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},
@@ -338,12 +336,14 @@ export const getThankYouModuleData = (
 			),
 		},
 		whatNext: {
+			icon: getThankYouModuleIcon('whatNext'),
 			header: 'What happens next?',
 			bodyCopy: (
 				<WhatNext
 					amount={(finalAmount ?? '').toString()}
-					startDate={startDate ?? ''}
+					startDate={startDate}
 					isSignedIn={isSignedIn}
+					observerPrint={observerPrint}
 				/>
 			),
 			ctas: null,

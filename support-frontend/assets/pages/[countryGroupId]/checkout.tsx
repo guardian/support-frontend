@@ -2,7 +2,10 @@ import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
-import { getStripeKey } from 'helpers/forms/stripe';
+import {
+	getStripeKeyForCountry,
+	getStripeKeyForProduct,
+} from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -20,14 +23,18 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import type { CheckoutSession } from './checkout/helpers/stripeCheckoutSession';
+import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 const countryId: IsoCountry = Country.detect();
@@ -66,7 +73,34 @@ const getPromotionFromProductPrices = (
 	);
 };
 
-export function Checkout({ geoId, appConfig, abParticipations }: Props) {
+const attemptToRetrievePersistedFormData = (
+	urlSearchParams: URLSearchParams,
+): CheckoutSession | undefined => {
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	if (maybeCheckoutSessionId) {
+		const persistedFormData = getFormDetails(maybeCheckoutSessionId);
+
+		if (persistedFormData) {
+			return persistedFormData;
+		}
+
+		// If there's no persisted data, remove the checkoutSessionId from the URL
+		const url = new URL(window.location.href);
+		url.searchParams.delete(checkoutSessionIdUrlParam);
+		window.location.href = url.toString();
+	}
+
+	return undefined;
+};
+
+export function Checkout({
+	geoId,
+	appConfig,
+	abParticipations,
+	landingPageSettings,
+}: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -171,8 +205,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 			billingPeriod,
 		);
 
-		const discountedPrice =
-			promotion !== undefined ? promotion.discountedPrice : undefined;
+		const discountedPrice = promotion?.discountedPrice ?? undefined;
 
 		const price = discountedPrice ?? productPrice;
 
@@ -195,12 +228,9 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	}
 
 	const isTestUser = !!cookie.get('_test_username');
-	const stripePublicKey = getStripeKey(
-		'REGULAR',
-		countryId,
-		currencyKey,
-		isTestUser,
-	);
+	const stripePublicKey =
+		getStripeKeyForProduct('REGULAR', productKey, ratePlanKey, isTestUser) ??
+		getStripeKeyForCountry('REGULAR', countryId, currencyKey, isTestUser);
 	const stripePromise = loadStripe(stripePublicKey);
 
 	const stripeExpressCheckoutSwitch =
@@ -211,8 +241,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 	let useStripeExpressCheckout = false;
 	if (stripeExpressCheckoutSwitch) {
 		/**
-		 * Currently we're only using the stripe ExpressCheckoutElement on Contribution purchases
-		 * which then needs this configuration.
+		 * Currently we're only using the stripe ExpressCheckoutElement (Google and Apple Pay) for some
+		 * product types - those which don't need an address. This requires some extra configuration.
 		 */
 		if (
 			productKey === 'Contribution' ||
@@ -229,6 +259,7 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				 */
 				amount: payment.finalAmount * 100,
 				currency: currencyKey.toLowerCase(),
+				paymentMethodCreation: 'manual',
 			} as const;
 			useStripeExpressCheckout = true;
 		}
@@ -253,6 +284,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 		);
 	}, []);
 
+	const checkoutSession = attemptToRetrievePersistedFormData(urlSearchParams);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutComponent
@@ -271,6 +304,8 @@ export function Checkout({ geoId, appConfig, abParticipations }: Props) {
 				countryId={countryId}
 				forcedCountry={forcedCountry}
 				abParticipations={abParticipations}
+				landingPageSettings={landingPageSettings}
+				checkoutSession={checkoutSession}
 			/>
 		</Elements>
 	);

@@ -15,20 +15,20 @@ export const extractPersonalDataFromForm = (
 });
 
 type FormAddressFields = {
-	deliveryAddress?: {
-		lineOne: string;
-		lineTwo: string;
-		city: string;
-		state: string;
-		postCode: string;
+	billingAddress: {
+		lineOne?: string | null;
+		lineTwo?: string | null;
+		city?: string | null;
+		state?: string | null;
+		postCode?: string | null;
 		country: IsoCountry;
 	};
-	billingAddress: {
-		lineOne?: string;
-		lineTwo?: string;
-		city?: string;
-		state: string;
-		postCode: string;
+	deliveryAddress?: {
+		lineOne?: string | null;
+		lineTwo?: string | null;
+		city?: string | null;
+		state?: string | null;
+		postCode?: string | null;
 		country: IsoCountry;
 	};
 };
@@ -45,10 +45,7 @@ export const extractDeliverableAddressDataFromForm = (
 		country: formData.get('delivery-country') as IsoCountry,
 	};
 
-	const billingAddressMatchesDelivery =
-		formData.get('billingAddressMatchesDelivery') === 'yes';
-
-	const billingAddress = !billingAddressMatchesDelivery
+	const billingAddress = !extractBillingAddressMatchesDeliveryFromForm(formData)
 		? {
 				lineOne: formData.get('billing-lineOne') as string,
 				lineTwo: formData.get('billing-lineTwo') as string,
@@ -75,3 +72,7 @@ export const extractNonDeliverableAddressDataFromForm = (
 	},
 	deliveryAddress: undefined,
 });
+
+export const extractBillingAddressMatchesDeliveryFromForm = (
+	formData: FormData,
+) => formData.get('billingAddressMatchesDelivery') === 'yes';

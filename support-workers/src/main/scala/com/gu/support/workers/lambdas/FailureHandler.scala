@@ -8,6 +8,7 @@ import com.gu.stripe.StripeError
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
 import com.gu.support.workers._
+import com.gu.support.workers.exceptions.CardDeclinedMessages.{errorMessages, alarmShouldBeSuppressedForErrorMessage}
 import com.gu.support.workers.lambdas.FailureHandler.{extractUnderlyingError, toCheckoutFailureReason}
 import com.gu.support.workers.states.{CheckoutFailureState, FailureHandlerState}
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
@@ -60,6 +61,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     logger.info(s"Attempting to handle error $error")
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
+
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
         val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
@@ -67,9 +69,10 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         exitHandler(
           state,
           checkoutFailureReason,
-          if (message.contains("postal_code is required if any address fields are provided"))
-            updatedRequestInfo.copy(failed = true)
-          else updatedRequestInfo,
+          if (alarmShouldBeSuppressedForErrorMessage(message))
+            updatedRequestInfo
+          else
+            updatedRequestInfo.copy(failed = true),
         )
       case Some(se @ StripeError("card_error", _, _, _, _)) =>
         val checkoutFailureReason = toCheckoutFailureReason(se)

@@ -22,6 +22,11 @@ import {
 	extractPersonalDataFromForm,
 } from '../checkout/helpers/formDataExtractors';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
+import { stripeCreateCheckoutSession } from '../checkout/helpers/stripe';
+import {
+	deleteFormDetails,
+	persistFormDetails,
+} from '../checkout/helpers/stripeCheckoutSession';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
@@ -50,7 +55,7 @@ export const submitForm = async ({
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
-}) => {
+}): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
 		? extractDeliverableAddressDataFromForm(formData)
@@ -78,7 +83,13 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 
-	const createSupportWorkersRequest: RegularPaymentRequest = {
+	const similarProductsCheckbox = formData.get('similarProductsConsent');
+	const similarProductsConsent =
+		similarProductsCheckbox !== null
+			? similarProductsCheckbox === 'on'
+			: undefined;
+
+	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
 		billingAddress,
 		deliveryAddress,
@@ -91,11 +102,93 @@ export const submitForm = async ({
 		supportAbTests,
 		deliveryInstructions,
 		debugInfo: '',
+		similarProductsConsent,
 	};
 
-	const createSubscriptionResult = await createSubscription(
-		createSupportWorkersRequest,
+	if (
+		paymentFields.paymentType === 'StripeHostedCheckout' &&
+		!paymentFields.checkoutSessionId
+	) {
+		const checkoutSession = await createStripeCheckoutSession({
+			personalData,
+			appliedPromotion,
+			productKey,
+			ratePlanKey,
+			contributionAmount,
+			paymentMethod,
+			geoId,
+			paymentRequest,
+		});
+
+		persistFormDetails(checkoutSession.id, {
+			personalData,
+			addressFields: {
+				billingAddress,
+				deliveryAddress,
+			},
+			deliveryInstructions,
+		});
+
+		return checkoutSession.url;
+	} else {
+		const thankYouUrl = await processSubscription({
+			personalData,
+			appliedPromotion,
+			productKey,
+			ratePlanKey,
+			contributionAmount,
+			paymentMethod,
+			geoId,
+			paymentRequest,
+		});
+
+		// If Stripe hosted checkout, delete previously persisted form details
+		if (paymentFields.paymentType === 'StripeHostedCheckout') {
+			deleteFormDetails();
+		}
+
+		return thankYouUrl;
+	}
+};
+
+const createStripeCheckoutSession = async ({
+	paymentRequest,
+}: {
+	personalData: FormPersonalFields;
+	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
+	productKey: ActiveProductKey;
+	ratePlanKey: string;
+	contributionAmount: number | undefined;
+	paymentMethod: PaymentMethod;
+	geoId: GeoId;
+	paymentRequest: RegularPaymentRequest;
+}) => {
+	const createCheckoutSessionResult = await stripeCreateCheckoutSession(
+		paymentRequest,
 	);
+	return createCheckoutSessionResult;
+};
+
+const processSubscription = async ({
+	personalData,
+	appliedPromotion,
+	productKey,
+	ratePlanKey,
+	contributionAmount,
+	paymentMethod,
+	geoId,
+	paymentRequest,
+}: {
+	personalData: FormPersonalFields;
+	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
+	productKey: ActiveProductKey;
+	ratePlanKey: string;
+	contributionAmount: number | undefined;
+	paymentMethod: PaymentMethod;
+	geoId: GeoId;
+	paymentRequest: RegularPaymentRequest;
+}) => {
+	const createSubscriptionResult = await createSubscription(paymentRequest);
 
 	if (
 		createSubscriptionResult.status === 'success' ||
@@ -104,7 +197,7 @@ export const submitForm = async ({
 		return buildThankYouPageUrl(
 			productKey,
 			ratePlanKey,
-			promoCode,
+			appliedPromotion?.promoCode,
 			createSubscriptionResult.userType,
 			contributionAmount,
 			personalData,

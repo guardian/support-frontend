@@ -22,6 +22,7 @@ case class CreatePaymentMethodState(
     acquisitionData: Option[AcquisitionData],
     ipAddress: String,
     userAgent: String,
+    similarProductsConsent: Option[Boolean],
 ) extends FailureHandlerState
 
 import com.gu.support.encoding.Codec

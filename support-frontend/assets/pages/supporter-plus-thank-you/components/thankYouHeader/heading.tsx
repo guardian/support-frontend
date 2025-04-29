@@ -186,6 +186,7 @@ type HeadingProps = {
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
+	isObserverPrint: boolean;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
@@ -197,6 +198,7 @@ function Heading({
 	amount,
 	currency,
 	contributionType,
+	isObserverPrint,
 	ratePlanKey,
 	paymentStatus,
 	promotion,
@@ -212,7 +214,6 @@ function Heading({
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
-
 	const isPrintProduct = printProductsKeys.includes(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
@@ -247,11 +248,38 @@ function Heading({
 						: `You have now subscribed to the ${paperRatePlanName} package`;
 			}
 		};
+		const getPrintHeaderObserver = (): JSX.Element => {
+			const observerPackageYellow = (copy: string) => (
+				<span css={yellowAmountText}>{copy}</span>
+			);
+			return (
+				<>
+					{isPending ? (
+						<>
+							Your {observerPackageYellow('Observer subscription')} is being
+							processed
+						</>
+					) : (
+						<>You are now an {observerPackageYellow('Observer subscriber')}.</>
+					)}
+				</>
+			);
+		};
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you for supporting our journalism!
-				<br css={printlineBreak} />
-				{getPrintHeader()}
+				{isObserverPrint ? (
+					<>
+						{getPrintHeaderObserver()}
+						<br css={printlineBreak} />
+						Welcome and thank you for supporting Observer journalism!
+					</>
+				) : (
+					<>
+						Thank you for supporting our journalism!
+						<br css={printlineBreak} />
+						{getPrintHeader()}
+					</>
+				)}
 			</h1>
 		);
 	}

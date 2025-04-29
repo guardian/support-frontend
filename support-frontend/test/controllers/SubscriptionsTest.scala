@@ -118,7 +118,9 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val stripe = mock[StripePublicConfigProvider]
       val stripeAccountConfig = StripePublicKey.get("pk_test_asdf")
       when(stripe.get(any[Boolean]))
-        .thenReturn(StripePublicConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig))
+        .thenReturn(
+          StripePublicConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, stripeAccountConfig),
+        )
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
       val recaptchaConfigProvider = mock[RecaptchaConfigProvider]

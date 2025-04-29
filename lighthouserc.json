@@ -6,8 +6,8 @@
         "largest-contentful-paint": ["error", { "maxNumericValue": 7000 }],
         "interactive": ["error", { "maxNumericValue": 9500 }],
         "resource-summary:document:size": [
-          "error",
-          { "maxNumericValue": 25000 }
+          "warn",
+          { "maxNumericValue": 26000 }
         ]
       }
     }

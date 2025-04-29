@@ -24,6 +24,10 @@ const container = css`
 	padding-top: ${space[2]}px;
 	padding-bottom: ${space[5]}px;
 	border-bottom: 1px solid ${neutral[86]};
+	break-inside: avoid;
+	:not(:first-child) {
+		margin-top: ${space[4]}px;
+	}
 
 	${from.tablet} {
 		max-width: 620px;

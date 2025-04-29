@@ -9,6 +9,7 @@ import { logException } from 'helpers/utilities/logger';
 import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import type { Participations } from '../../helpers/abTests/models';
+import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import { setHideSupportMessaginCookie } from '../../helpers/storage/contributionsCookies';
 import { ThankYouComponent } from './components/thankYouComponent';
 
@@ -16,12 +17,14 @@ type ThankYouProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYou({
 	geoId,
 	appConfig,
 	abParticipations,
+	landingPageSettings,
 }: ThankYouProps) {
 	const countryId = Country.detect();
 	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -165,6 +168,7 @@ export function ThankYou({
 			promotion={promotion}
 			identityUserType={userType}
 			abParticipations={abParticipations}
+			landingPageSettings={landingPageSettings}
 		/>
 	);
 }

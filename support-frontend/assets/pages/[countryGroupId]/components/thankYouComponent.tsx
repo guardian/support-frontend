@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import { from, space, sport } from '@guardian/source/foundations';
+import {
+	from,
+	neutral,
+	space,
+	sport,
+	until,
+} from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -11,11 +17,15 @@ import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { get } from 'helpers/storage/cookie';
-import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
+import {
+	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
+	OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER,
+} from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import {
@@ -26,19 +36,20 @@ import {
 import { getUser } from 'helpers/user/user';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { getGuardianAdLiteDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
-import { ThankYouModules } from '../../../components/thankYou/thankyouModules';
-import { getLandingPageVariant } from '../../../helpers/abTests/landingPageAbTests';
-import { getSettings } from '../../../helpers/globalsAndSwitches/globals';
+import ThankYouModules from '../../../components/thankYou/thankyouModules';
+import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import {
 	getReturnAddress,
 	getThankYouOrder,
 } from '../checkout/helpers/sessionStorage';
 
-const checkoutContainer = css`
+const thankYouContainer = css`
+	position: relative;
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
@@ -52,7 +63,22 @@ const headerContainer = css`
 	}
 `;
 const buttonContainer = css`
-	padding: ${space[12]}px 0;
+	position: absolute;
+	bottom: ${space[8]}px;
+	& > a:first-child {
+		margin-right: ${space[3]}px;
+	}
+	${until.tablet} {
+		& > a {
+			margin-bottom: ${space[4]}px;
+		}
+	}
+`;
+const buttonColor = css`
+	background-color: ${neutral[100]};
+	${from.tablet} {
+		background-color: ${sport[800]};
+	}
 `;
 
 export type CheckoutComponentProps = {
@@ -69,6 +95,7 @@ export type CheckoutComponentProps = {
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;
+	landingPageSettings: LandingPageVariant;
 };
 
 export function ThankYouComponent({
@@ -80,6 +107,7 @@ export function ThankYouComponent({
 	promotion,
 	identityUserType,
 	abParticipations,
+	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
@@ -176,20 +204,40 @@ export function ThankYouComponent({
 		contributionType,
 		currencyKey,
 	);
-
-	const printProductsKeys: ActiveProductKey[] = [
+	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
+	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
 		'HomeDelivery',
-		'SubscriptionCard',
+	];
+	const printProductsKeys: ActiveProductKey[] = [
+		...subscriptionCardProductsKey,
+		...paperProductsKeys,
 		'GuardianWeeklyDomestic',
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
+
+	const getObserver = (): ObserverPrint | undefined => {
+		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
+			return ObserverPrint.Paper;
+		}
+		if (
+			subscriptionCardProductsKey.includes(productKey) &&
+			ratePlanKey === 'Sunday'
+		) {
+			return ObserverPrint.SubscriptionCard;
+		}
+		return undefined;
+	};
+	const observerPrint = getObserver();
+
+	const isGuardianPrint =
+		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isTier3 = productKey === 'TierThree';
+	const isTierThree = productKey === 'TierThree';
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
@@ -203,10 +251,6 @@ export function ThankYouComponent({
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
 		if (isTier) {
-			const landingPageSettings = getLandingPageVariant(
-				abParticipations,
-				getSettings().landingPageTests,
-			);
 			// Also show SupporterPlus benefits for TierThree
 			const tierThreeAdditionalBenefits =
 				productKey === 'TierThree'
@@ -227,8 +271,13 @@ export function ThankYouComponent({
 		}
 		return [];
 	};
-
 	const benefitsChecklist = getBenefits();
+
+	const deliveryDate = productDeliveryOrStartDate(
+		productKey,
+		ratePlanKey as ActivePaperProductOptions,
+	);
+	const startDate = deliveryDate ? formatUserDate(deliveryDate) : undefined;
 
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
@@ -237,53 +286,54 @@ export function ThankYouComponent({
 		csrf,
 		isOneOff,
 		isSupporterPlus,
+		startDate,
 		undefined,
 		undefined,
-		isTier3,
+		isTierThree,
 		benefitsChecklist,
 		undefined,
 		undefined,
 		payment.finalAmount,
-		formatUserDate(getGuardianAdLiteDate()),
 		getReturnAddress(), // Session storage returnAddress (from GuardianAdLiteLanding)
 		isSignedIn,
+		observerPrint,
 	);
 	const maybeThankYouModule = (
 		condition: boolean,
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
-
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite && !isPrint,
+			!isPending && isNotRegistered && !isGuardianAdLite && !isGuardianPrint,
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			!isSignedIn && !isNotRegistered && !isGuardianAdLite && !isPrint,
+			isRegisteredAndNotSignedIn && !isGuardianAdLite && !isGuardianPrint,
 			'signIn',
 		), // Sign in to access your benefits
-		...maybeThankYouModule(isTier3, 'benefits'),
+		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
-			isTier3 && showNewspaperArchiveBenefit,
+			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTier3 || isPrint, 'subscriptionStart'),
-		...maybeThankYouModule(isTier3 || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isTierThree || isGuardianPrint, 'subscriptionStart'),
+		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
-				(!(isTier3 && showNewspaperArchiveBenefit) &&
+				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
-					!isGuardianAdLite),
+					!isGuardianAdLite &&
+					!observerPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		...maybeThankYouModule(
-			!isTier3 && !isGuardianAdLite && !isPrint,
+			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite, 'whatNext'), // All
+		...maybeThankYouModule(isGuardianAdLite || !!observerPrint, 'whatNext'), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && isRegisteredAndNotSignedIn,
 			'signInToActivate',
@@ -307,11 +357,11 @@ export function ThankYouComponent({
 			header={<Header />}
 			footer={
 				<FooterWithContents>
-					<ThankYouFooter />
+					{<ThankYouFooter observerPrint={observerPrint} />}
 				</FooterWithContents>
 			}
 		>
-			<div css={checkoutContainer}>
+			<div css={thankYouContainer}>
 				<Container>
 					<div css={headerContainer}>
 						<ThankYouHeader
@@ -327,18 +377,31 @@ export function ThankYouComponent({
 							currency={currencyKey}
 							promotion={promotion}
 							identityUserType={identityUserType}
+							observerPrint={observerPrint}
 							paymentStatus={order.status}
+							startDate={startDate}
 						/>
 					</div>
 
 					<ThankYouModules
 						isSignedIn={isSignedIn}
-						showNewspaperArchiveBenefit={showNewspaperArchiveBenefit}
 						thankYouModules={thankYouModules}
 						thankYouModulesData={thankYouModuleData}
 					/>
 
 					<div css={buttonContainer}>
+						{!!observerPrint && (
+							<LinkButton
+								href="https://www.observer.co.uk/welcome"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_OBSERVER)
+								}
+								cssOverrides={buttonColor}
+							>
+								Return to the Observer
+							</LinkButton>
+						)}
 						{!isGuardianAdLite && (
 							<LinkButton
 								href="https://www.theguardian.com"
@@ -346,6 +409,7 @@ export function ThankYouComponent({
 								onClick={() =>
 									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
 								}
+								cssOverrides={buttonColor}
 							>
 								Return to the Guardian
 							</LinkButton>

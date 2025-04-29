@@ -111,7 +111,7 @@ export function PaperHero({
 				<Hero
 					image={
 						<GridImage
-							gridId="printCampaignHeroHD"
+							gridId="printCampaignWithObserverHeroHD"
 							srcSizes={[1000, 500, 140]}
 							sizes="(max-width: 740px) 100%,
             (max-width: 1067px) 150%,

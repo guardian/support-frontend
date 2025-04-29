@@ -30,7 +30,7 @@ export const subscriptionStartHeader = 'When will your subscription start?';
 
 type SubscriptionStartProps = {
 	productKey: ActiveProductKey;
-	startDate: string;
+	startDate?: string;
 };
 export function SubscriptionStartItems({
 	productKey,
@@ -39,11 +39,11 @@ export function SubscriptionStartItems({
 	const paperCopy = (
 		<span css={[downloadCopy, subscriptionItems]}>
 			<div>
-				<p>
-					<span
-						css={boldText}
-					>{`You will receive your newspaper from ${startDate}`}</span>
-				</p>
+				{startDate && (
+					<p css={boldText}>
+						{`You will receive your newspaper from ${startDate}`}
+					</p>
+				)}
 				{productKey === 'SubscriptionCard' && (
 					<p css={paragraphSpacing}>
 						You will receive your Subscription Card in your subscriber pack in
@@ -61,10 +61,8 @@ export function SubscriptionStartItems({
 	const guardianWeeklyCopy = (
 		<span css={[downloadCopy, subscriptionItems]}>
 			<div>
-				<p>
-					<span
-						css={boldText}
-					>{`Your first issue of Guardian Weekly will be published on ${startDate}`}</span>
+				<p css={boldText}>
+					{`Your first issue of Guardian Weekly will be published on ${startDate}`}
 				</p>
 				<p>
 					Please allow one to seven days after the publication date for your
@@ -83,9 +81,7 @@ export function SubscriptionStartItems({
 			<span css={[downloadCopy, subscriptionItems]}>
 				{guardianWeeklyCopy}
 				<div>
-					<p>
-						<span css={boldText}>Your digital benefits start today.</span>
-					</p>
+					<p css={boldText}>Your digital benefits start today.</p>
 					<p>
 						Please ensure you are signed in on all your devices to enjoy all
 						your benefits, including unlimited app access and uninterrupted

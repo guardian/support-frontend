@@ -51,6 +51,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					contributionType={contributionType as ContributionType}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
+					ratePlanKey={contributionType as string}
 					thresholdAmount={amount as number}
 					promotion={promo}
 				/>,

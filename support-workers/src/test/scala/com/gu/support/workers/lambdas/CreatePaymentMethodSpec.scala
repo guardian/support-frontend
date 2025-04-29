@@ -1,25 +1,25 @@
 package com.gu.support.workers.lambdas
 
-import java.io.ByteArrayOutputStream
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.config.Configuration
-import com.gu.i18n.Currency
-import com.gu.i18n.Currency.GBP
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.Stripe.StripeList
 import com.gu.stripe._
-import com.gu.support.workers.JsonFixtures.{validBaid, _}
+import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInputStreamConversions}
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateSalesforceContactState
-import com.gu.support.zuora.api.StripeGatewayPaymentIntentsDefault
+import com.gu.support.zuora.api.{
+  DirectDebitGateway,
+  DirectDebitTortoiseMediaGateway,
+  StripeGatewayPaymentIntentsDefault,
+}
 import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
 
+import java.io.ByteArrayOutputStream
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
@@ -64,6 +64,52 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
             withClue("stripe: " + stripe) {
               stripe.SecondTokenId should be("12345")
               stripe.CreditCardNumber should be("1234")
+            }
+          case _ => fail()
+        }
+      }
+  }
+
+  it should "retrieve a valid DirectDebitPaymentMethod when given valid DD fields" in {
+
+    val createPaymentMethod = new CreatePaymentMethod(mockServices)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createPaymentMethod
+      .handleRequestFuture(wrapFixture(createDirectDebitDigitalPackJson), outStream, context)
+      .map { _ =>
+        // Check the output
+        val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+
+        createSalesforceContactState.isSuccess should be(true)
+        createSalesforceContactState.get._1.paymentMethod match {
+          case dd: DirectDebitPaymentMethod =>
+            withClue("direct debit: " + dd) {
+              dd.PaymentGateway should be(DirectDebitGateway)
+            }
+          case _ => fail()
+        }
+      }
+  }
+
+  it should "use the Tortoise Media payment gateway for Observer DD subs" in {
+
+    val createPaymentMethod = new CreatePaymentMethod(mockServices)
+
+    val outStream = new ByteArrayOutputStream()
+
+    createPaymentMethod
+      .handleRequestFuture(wrapFixture(createDirectDebitObserverJson), outStream, context)
+      .map { _ =>
+        // Check the output
+        val createSalesforceContactState = Encoding.in[CreateSalesforceContactState](outStream.toInputStream)
+
+        createSalesforceContactState.isSuccess should be(true)
+        createSalesforceContactState.get._1.paymentMethod match {
+          case dd: DirectDebitPaymentMethod =>
+            withClue("direct debit: " + dd) {
+              dd.PaymentGateway should be(DirectDebitTortoiseMediaGateway)
             }
           case _ => fail()
         }
