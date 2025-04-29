@@ -27,8 +27,7 @@ type ContributionTypeMapQuarterly<T> =
 	};
 export type RegularContributionTypeQuarterly =
 	keyof RegularContributionTypeQuarterlyMap<null>;
-export type ContributionTypeQuarterly =
-	keyof ContributionTypeMapQuarterly<null>;
+type ContributionTypeQuarterly = keyof ContributionTypeMapQuarterly<null>;
 
 export interface AmountValuesObject {
 	amounts: number[];
