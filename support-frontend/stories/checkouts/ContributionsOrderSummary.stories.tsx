@@ -103,7 +103,7 @@ Default.args = {
 			</p>
 		</>
 	),
-	startDateTierThree: <></>,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -127,7 +127,7 @@ SingleContribution.args = {
 	},
 	checkListData: [],
 	tsAndCs: <></>,
-	startDateTierThree: <></>,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -162,7 +162,7 @@ RecurringContribution.args = {
 			countryGroupId={GBPCountries}
 		/>
 	),
-	startDateTierThree: null,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -198,7 +198,7 @@ SupporterPlus.args = {
 			thresholdAmount={12}
 		/>
 	),
-	startDateTierThree: null,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -238,8 +238,11 @@ TierThree.args = {
 			thresholdAmount={27}
 		/>
 	),
-	startDateTierThree: (
-		<OrderSummaryStartDate startDate={'Friday, April 11, 2025'} />
+	startDate: (
+		<OrderSummaryStartDate
+			startDate={'Friday, April 11, 2025'}
+			productKey="TierThree"
+		/>
 	),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">

@@ -35,20 +35,41 @@ const productStartDate = css`
 
 interface OrderSummaryStartDateProps {
 	startDate: string;
+	productKey: ActiveProductKey;
 }
 export function OrderSummaryStartDate({
 	startDate,
+	productKey,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	return (
-		<ul css={productStartDate}>
-			<li>Your digital benefits will start today.</li>
-			<li>
-				Your Guardian Weekly subscription will start on {startDate}. Please
-				allow 1 to 7 days after your start date for your magazine to arrive,
-				depending on national post services.
-			</li>
-		</ul>
-	);
+	const validProduct = [
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+		'TierThree',
+	].includes(productKey);
+	if (validProduct) {
+		console.log('*** productKey', productKey);
+		const digitalBenefit =
+			productKey === 'TierThree' ? (
+				<li>Your digital benefits will start today.</li>
+			) : null;
+		const guardianWeeklyBenefit =
+			productKey === 'TierThree' ||
+			productKey === 'GuardianWeeklyDomestic' ||
+			productKey === 'GuardianWeeklyRestOfWorld' ? (
+				<li>
+					Your Guardian Weekly subscription will start on {startDate}. Please
+					allow 1 to 7 days after your start date for your magazine to arrive,
+					depending on national post services.
+				</li>
+			) : null;
+		return (
+			<ul css={productStartDate}>
+				{digitalBenefit}
+				{guardianWeeklyBenefit}
+			</ul>
+		);
+	}
+	return null;
 }
 
 export interface OrderSummaryTsAndCsProps {

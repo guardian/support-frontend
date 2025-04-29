@@ -146,7 +146,7 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: BenefitsCheckListData[];
-	startDateTierThree: React.ReactNode;
+	startDate: React.ReactNode;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -171,7 +171,7 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	startDateTierThree,
+	startDate,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
@@ -228,7 +228,7 @@ export function ContributionsOrderSummary({
 				{hasCheckList && showCheckList && (
 					<>
 						<div css={checklistContainer}>{checkList}</div>
-						{startDateTierThree}
+						{startDate}
 					</>
 				)}
 				{isSundayOnlyNewspaperSubscription && showCheckList && (

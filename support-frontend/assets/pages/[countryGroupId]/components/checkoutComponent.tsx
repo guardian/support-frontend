@@ -663,12 +663,11 @@ export function CheckoutComponent({
 							);
 						}}
 						enableCheckList={true}
-						startDateTierThree={
-							productKey === 'TierThree' ? (
-								<OrderSummaryStartDate
-									startDate={formatUserDate(getTierThreeDeliveryDate())}
-								/>
-							) : null
+						startDate={
+							<OrderSummaryStartDate
+								productKey={productKey}
+								startDate={formatUserDate(getTierThreeDeliveryDate())}
+							/>
 						}
 						tsAndCs={
 							<OrderSummaryTsAndCs
