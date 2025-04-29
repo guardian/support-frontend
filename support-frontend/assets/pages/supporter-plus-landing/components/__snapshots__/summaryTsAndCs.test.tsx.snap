@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType ANNUAL renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -9,7 +9,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
     £0
     ,
      
-    on the first day of every month
+    on the first day of March every year
     , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
   </div>
 </div>
@@ -32,7 +32,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType MONTHLY renders correctly 1`] = `<div />`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType ANNUAL renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -66,7 +66,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType MONTHLY renders correctly 1`] = `<div />`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType ANNUAL renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -94,7 +94,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With c
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType ANNUAL renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"

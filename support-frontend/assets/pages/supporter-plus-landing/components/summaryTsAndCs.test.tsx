@@ -13,14 +13,14 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
 		productKey               | contributionType
 		${'Contribution'}        | ${'MONTHLY'}
-		${'Contribution'}        | ${'ANNUALY'}
+		${'Contribution'}        | ${'ANNUAL'}
 		${'SupporterPlus'}       | ${'MONTHLY'}
-		${'SupporterPlus'}       | ${'ANNUALY'}
+		${'SupporterPlus'}       | ${'ANNUAL'}
 		${'TierThree'}           | ${'MONTHLY'}
-		${'TierThree'}           | ${'ANNUALY'}
+		${'TierThree'}           | ${'ANNUAL'}
 		${'OneTimeContribution'} | ${'MONTHLY'}
 		${'GuardianAdLite'}      | ${'MONTHLY'}
-		${'GuardianAdLite'}      | ${'ANNUALY'}
+		${'GuardianAdLite'}      | ${'ANNUAL'}
 		${'DigitalSubscription'} | ${'MONTHLY'}
 	`(
 		`summaryTs&Cs for $productKey With contributionType $contributionType renders correctly`,
