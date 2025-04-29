@@ -184,7 +184,7 @@ const defaultConfig: Config = {
 		max: 166,
 		maxInWords: numbersInWords['166'],
 		frequencySingular: 'month',
-		frequencyPlural: 'months',
+		frequencyPlural: 'monthly',
 		default: 5,
 	},
 	ONE_OFF: {
