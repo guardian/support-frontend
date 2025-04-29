@@ -199,7 +199,15 @@ export function CheckoutComponent({
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
-		if (['TierThree', 'SupporterPlus', 'Contribution'].includes(productKey)) {
+		if (
+			[
+				'TierThree',
+				'SupporterPlus',
+				'Contribution',
+				'GuardianWeeklyDomestic',
+				'GuardianWeeklyRestOfWorld',
+			].includes(productKey)
+		) {
 			if (isRecurringContribution) {
 				// Also show SupporterPlus benefits greyed out
 				return [
@@ -242,6 +250,16 @@ export function CheckoutComponent({
 							text: benefit.copy,
 						}),
 					),
+				];
+			} else if (
+				productKey === 'GuardianWeeklyDomestic' ||
+				productKey === 'GuardianWeeklyRestOfWorld'
+			) {
+				return [
+					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+						isChecked: true,
+						text: benefit.copy,
+					})),
 				];
 			}
 		}
