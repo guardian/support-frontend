@@ -47,7 +47,6 @@ export function OrderSummaryStartDate({
 		'TierThree',
 	].includes(productKey);
 	if (validProduct) {
-		console.log('*** productKey', productKey);
 		const digitalBenefit =
 			productKey === 'TierThree' ? (
 				<li>Your digital benefits will start today.</li>
