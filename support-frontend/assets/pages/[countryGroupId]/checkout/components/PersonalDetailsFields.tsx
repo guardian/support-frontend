@@ -1,9 +1,10 @@
-import { Checkbox, TextInput } from '@guardian/source/react-components';
+import { TextInput } from '@guardian/source/react-components';
 import { useState } from 'react';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
+import { SimilarProductsConsent } from '../../components/SimilarProductsConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
@@ -46,13 +47,7 @@ export function PersonalDetailsFields({
 				setConfirmedEmail={setConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
-			{showSimilarProductsConsent && (
-				<Checkbox
-					name="similarProductsConsent"
-					label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
-					checked={true}
-				/>
-			)}
+			{showSimilarProductsConsent && <SimilarProductsConsent />}
 			<div>
 				<TextInput
 					id="firstName"
