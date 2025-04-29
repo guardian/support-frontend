@@ -524,15 +524,16 @@ class Application(
     redirectToCheckout(countryGroupId, "DigitalSubscription", "Monthly")
   }
 
-  def redirectCheckoutPaper() = {
-    redirectToCheckout("uk", "SubscriptionCard", "Everyday")
+  def redirectCheckoutPaper(fulfilment: String, product: String) = {
+    redirectToCheckout("uk", fulfilment, product)
   }
 
   def redirectToCheckout(countryGroupId: String, product: String, ratePlan: String) = MaybeAuthenticatedAction {
     implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
-      val qsWithoutTypeAndAmount = request.queryString - "selected-contribution-type" - "selected-amount"
+      val qsWithoutTypeAndAmount =
+        request.queryString - "selected-contribution-type" - "selected-amount" - "fulfilment"
       val queryString = qsWithoutTypeAndAmount ++ Map(
         "product" -> Seq(product),
         "ratePlan" -> Seq(ratePlan),
