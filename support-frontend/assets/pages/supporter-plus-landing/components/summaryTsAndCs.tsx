@@ -53,11 +53,11 @@ export function SummaryTsAndCs({
 		].frequencySingular;
 
 	const today = new Date();
-	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of`;
-	const renewalDateEnd = ` every ${frequencySingular}`;
-	const renewalFrequency = `${renewalDateStart} ${
-		billingPeriod === 'Annual' ? getLongMonth(today) : ''
-	} ${renewalDateEnd}`;
+	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
+	const renewalDateEnd = `every ${frequencySingular}`;
+	const renewalFrequency = `${renewalDateStart}${
+		billingPeriod === 'Annual' ? getLongMonth(today) + ' ' : ''
+	}${renewalDateEnd}`;
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
