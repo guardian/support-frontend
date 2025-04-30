@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
-import {
-	config,
-	type RegularContributionTypeQuarterly,
-} from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
@@ -13,7 +8,10 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	billingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -35,7 +33,6 @@ export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	billingPeriod: BillingPeriod;
-	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
 }
@@ -43,18 +40,13 @@ export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
 	billingPeriod,
-	countryGroupId,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
-	const frequencySingular =
-		config[countryGroupId][
-			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
-		].frequencySingular;
-
+	const periodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
 	const today = new Date();
 	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
-	const renewalDateEnd = `every ${frequencySingular}`;
+	const renewalDateEnd = `every ${periodSingular}`;
 	const renewalFrequency = `${renewalDateStart}${
 		billingPeriod === 'Annual' ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
@@ -84,9 +76,9 @@ export function SummaryTsAndCs({
 		<div css={containerSummaryTsCs}>
 			The {productCatalogDescription[productKey].label} subscription
 			{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
-			{frequencySingular}. You will be charged the subscription amount using
-			your chosen payment method at each renewal, at the rate then in effect,
-			unless you cancel.
+			{periodSingular}. You will be charged the subscription amount using your
+			chosen payment method at each renewal, at the rate then in effect, unless
+			you cancel.
 		</div>
 	);
 	const summaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
@@ -101,10 +93,9 @@ export function SummaryTsAndCs({
 		SupporterPlus: (
 			<div css={containerSummaryTsCs}>
 				The {productCatalogDescription[productKey].label} subscription and any
-				contribution will auto-renew each {frequencySingular}. You will be
-				charged the subscription and contribution amounts using your chosen
-				payment method at each renewal, at the rate then in effect, unless you
-				cancel.
+				contribution will auto-renew each {periodSingular}. You will be charged
+				the subscription and contribution amounts using your chosen payment
+				method at each renewal, at the rate then in effect, unless you cancel.
 			</div>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,

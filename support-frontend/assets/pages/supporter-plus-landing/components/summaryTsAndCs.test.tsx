@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
-import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -12,28 +11,25 @@ jest.mock('helpers/utilities/dateFormatting', () => ({
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
-		productKey               | contributionType
-		${'Contribution'}        | ${'MONTHLY'}
-		${'Contribution'}        | ${'ANNUAL'}
-		${'SupporterPlus'}       | ${'MONTHLY'}
-		${'SupporterPlus'}       | ${'ANNUAL'}
-		${'TierThree'}           | ${'MONTHLY'}
-		${'TierThree'}           | ${'ANNUAL'}
-		${'OneTimeContribution'} | ${'MONTHLY'}
-		${'GuardianAdLite'}      | ${'MONTHLY'}
-		${'GuardianAdLite'}      | ${'ANNUAL'}
-		${'DigitalSubscription'} | ${'MONTHLY'}
+		productKey               | billingPeriod
+		${'Contribution'}        | ${'Monthly'}
+		${'Contribution'}        | ${'Annual'}
+		${'SupporterPlus'}       | ${'Monthly'}
+		${'SupporterPlus'}       | ${'Annual'}
+		${'TierThree'}           | ${'Monthly'}
+		${'TierThree'}           | ${'Annual'}
+		${'OneTimeContribution'} | ${'Monthly'}
+		${'GuardianAdLite'}      | ${'Monthly'}
+		${'GuardianAdLite'}      | ${'Annual'}
+		${'DigitalSubscription'} | ${'Monthly'}
 	`(
 		`summaryTs&Cs for $productKey With contributionType $contributionType renders correctly`,
-		({ productKey, contributionType }) => {
+		({ productKey, billingPeriod }) => {
 			const { container } = render(
 				<SummaryTsAndCs
-					billingPeriod={contributionTypeToBillingPeriod(
-						contributionType as RegularContributionTypeQuarterly,
-					)}
+					billingPeriod={billingPeriod as BillingPeriod}
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey=""
-					countryGroupId="GBPCountries"
 					currency={'GBP'}
 					amount={0}
 				/>,

@@ -21,7 +21,6 @@ GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
 	billingPeriod: 'Monthly',
-	countryGroupId: 'GBPCountries',
 	currency: 'GBP',
 	amount: 0,
 };
@@ -31,7 +30,6 @@ Contribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Monthly',
 	billingPeriod: 'Monthly',
-	countryGroupId: 'UnitedStates',
 	currency: 'USD',
 	amount: 5,
 };
@@ -41,7 +39,6 @@ SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	billingPeriod: 'Monthly',
-	countryGroupId: 'GBPCountries',
 	currency: 'GBP',
 	amount: 12,
 };
@@ -51,7 +48,6 @@ TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	billingPeriod: 'Monthly',
-	countryGroupId: 'GBPCountries',
 	currency: 'GBP',
 	amount: 27,
 };

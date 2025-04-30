@@ -1286,7 +1286,6 @@ export function CheckoutComponent({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							billingPeriod={billingPeriod}
-							countryGroupId={countryGroupId}
 							currency={currencyKey}
 							amount={originalAmount}
 						/>

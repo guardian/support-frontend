@@ -1,21 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType ANNUAL renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    We will attempt to take payment of 
-    £0
-    ,
-     
-    on the first day of March every year
-    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType $contributionType renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -30,9 +15,40 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType MONTHLY renders correctly 1`] = `<div />`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType $contributionType renders correctly 2`] = `
+<div>
+  <div
+    class="css-mlt1i5-SummaryTsAndCs"
+  >
+    We will attempt to take payment of 
+    £0
+    ,
+     
+    on the first day of March every year
+    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
+  </div>
+</div>
+`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType ANNUAL renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType $contributionType renders correctly 1`] = `<div />`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType $contributionType renders correctly 1`] = `
+<div>
+  <div
+    class="css-mlt1i5-SummaryTsAndCs"
+  >
+    The 
+    Guardian Ad-Lite
+     subscription
+     will auto-renew each
+     
+    month
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
+  </div>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType $contributionType renders correctly 2`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -48,39 +64,9 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType MONTHLY renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    The 
-    Guardian Ad-Lite
-     subscription
-     will auto-renew each
-     
-    month
-    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-  </div>
-</div>
-`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType $contributionType renders correctly 1`] = `<div />`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType MONTHLY renders correctly 1`] = `<div />`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType ANNUAL renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    The 
-    All-access digital
-     subscription and any contribution will auto-renew each 
-    year
-    . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
-  </div>
-</div>
-`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType $contributionType renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -94,24 +80,21 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With c
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType ANNUAL renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType $contributionType renders correctly 2`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
   >
     The 
-    Digital + print
-     subscription
-    s
-     will auto-renew each
-     
+    All-access digital
+     subscription and any contribution will auto-renew each 
     year
-    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
+    . You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType $contributionType renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -123,6 +106,23 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contr
      will auto-renew each
      
     month
+    . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
+  </div>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType $contributionType renders correctly 2`] = `
+<div>
+  <div
+    class="css-mlt1i5-SummaryTsAndCs"
+  >
+    The 
+    Digital + print
+     subscription
+    s
+     will auto-renew each
+     
+    year
     . You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel.
   </div>
 </div>
