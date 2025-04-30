@@ -1,5 +1,7 @@
 package com.gu.support.catalog
 
+import io.circe.Encoder
+
 sealed abstract class ZuoraProductName (val productName: String)
 
 object ZuoraProductName {
@@ -19,5 +21,7 @@ object ZuoraProductName {
 
   case object TierThree extends ZuoraProductName("Tier Three")
 
-  case object AdLite extends ZuoraProductName("Guardian Ad-Lite")
+  case object GuardianAdLite extends ZuoraProductName("Guardian Ad-Lite")
+
+  implicit val encoder: Encoder[ZuoraProductName] = Encoder.encodeString.contramap[ZuoraProductName](_.productName)
 }

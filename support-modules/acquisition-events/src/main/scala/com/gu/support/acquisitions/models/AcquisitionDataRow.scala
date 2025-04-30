@@ -2,6 +2,7 @@ package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import com.gu.support.catalog.ZuoraProductName
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
@@ -15,6 +16,7 @@ import scala.util.{Failure, Success, Try}
 case class AcquisitionDataRow(
     eventTimeStamp: DateTime,
     product: AcquisitionProduct,
+    zuoraProductName: ZuoraProductName,
     amount: Option[BigDecimal],
     country: Country,
     currency: Currency,

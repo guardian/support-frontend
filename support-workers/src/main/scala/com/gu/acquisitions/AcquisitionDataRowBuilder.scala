@@ -54,15 +54,15 @@ import com.gu.support.zuora.api.ReaderType
 object AcquisitionDataRowBuilder {
   def buildFromState(state: SendAcquisitionEventState, requestInfo: RequestInfo): AcquisitionDataRow = {
     val commonState = state.sendThankYouEmailState
-    val (acquisitionProduct, amount) = productTypeAndAmount(commonState.product)
+    val productInformation = getProductInformation(commonState.product)
     val acquisitionTypeDetails = getAcquisitionTypeDetails(commonState)
     val printOptions = printOptionsFromProduct(commonState.product, commonState.user.deliveryAddress.map(_.country))
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
-      product = acquisitionProduct,
-      zuoraProductName = acquisitionProduct,
-      amount = amount,
+      product = productInformation.ophanProductName,
+      zuoraProductName = productInformation.zuoraProductName,
+      amount = productInformation.amount,
       country = commonState.user.billingAddress.country,
       currency = commonState.product.currency,
       componentId = state.acquisitionData.flatMap(_.referrerAcquisitionData.componentId),
@@ -118,15 +118,19 @@ object AcquisitionDataRowBuilder {
   private def getAbTests(data: AcquisitionData): List[AbTest] =
     (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())).toList
 
-  private def productTypeAndAmount(product: ProductType): (AcquisitionProduct, Option[BigDecimal]) = product match {
-    case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
+  case class ProductInformation(zuoraProductName: ZuoraProductName, ophanProductName: AcquisitionProduct, amount: Option[BigDecimal] = None)
+
+  private def getProductInformation(product: ProductType): ProductInformation = product match {
+    case c: Contribution => ProductInformation(ZuoraProductName.RecurringContribution, AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
     case s: SupporterPlus =>
-      (AcquisitionProduct.SupporterPlus, None) // we don't send S+ amount because it may be discounted
-    case _: TierThree => (AcquisitionProduct.TierThree, None)
-    case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
-    case _: Paper => (AcquisitionProduct.Paper, None)
-    case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
-    case _: GuardianAdLite => (AcquisitionProduct.GuardianAdLite, None)
+      ProductInformation(ZuoraProductName.SupporterPlus, AcquisitionProduct.SupporterPlus) // we don't send S+ amount because it may be discounted
+    case _: TierThree => ProductInformation(ZuoraProductName.TierThree, AcquisitionProduct.TierThree)
+    case _: DigitalPack => ProductInformation(ZuoraProductName.DigitalSubscription, AcquisitionProduct.DigitalSubscription)
+    case _: GuardianWeekly => ProductInformation(ZuoraProductName.GuardianWeekly, AcquisitionProduct.GuardianWeekly)
+    case _: GuardianAdLite => ProductInformation(ZuoraProductName.GuardianAdLite, AcquisitionProduct.GuardianAdLite)
+    case paper: Paper if paper.fulfilmentOptions == Collection => ProductInformation(ZuoraProductName.DigitalVoucher, AcquisitionProduct.Paper)
+    case paper: Paper if paper.fulfilmentOptions == NationalDelivery => ProductInformation(ZuoraProductName.NationalDelivery, AcquisitionProduct.Paper)
+    case paper: Paper if paper.fulfilmentOptions == HomeDelivery => ProductInformation(ZuoraProductName.HomeDelivery, AcquisitionProduct.Paper)
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
