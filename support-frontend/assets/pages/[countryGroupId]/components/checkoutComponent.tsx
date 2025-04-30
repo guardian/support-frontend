@@ -117,6 +117,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { SimilarProductsConsent } from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
@@ -1255,11 +1256,7 @@ export function CheckoutComponent({
 							`}
 						>
 							{abParticipations.similarProductsConsent === 'VariantB' && (
-								<Checkbox
-									name="similarProductsConsent"
-									label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
-									checked={true}
-								/>
+								<SimilarProductsConsent />
 							)}
 						</div>
 						<SummaryTsAndCs
