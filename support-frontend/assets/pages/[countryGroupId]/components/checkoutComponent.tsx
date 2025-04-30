@@ -60,6 +60,7 @@ import {
 	type ActiveProductKey,
 	filterBenefitByABTest,
 	filterBenefitByRegion,
+	type ProductBenefit,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
@@ -259,12 +260,12 @@ export function CheckoutComponent({
 				productKey === 'GuardianWeeklyDomestic' ||
 				productKey === 'GuardianWeeklyRestOfWorld'
 			) {
-				return [
-					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
+				return productCatalogDescription[productKey].benefits.map(
+					(benefit: ProductBenefit) => ({
 						isChecked: true,
 						text: benefit.copy,
-					})),
-				];
+					}),
+				);
 			}
 		}
 		return productDescription.benefits

@@ -143,7 +143,7 @@ const partnerOffersBenefit = {
 	specificToRegions: ['AUDCountries'],
 };
 const guardianWeeklyBenefit = {
-	copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+	copy: 'Guardian Weekly print magazine delivered to your door every week',
 	tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 };
 
@@ -272,7 +272,7 @@ export const productCatalogDescription: Record<
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
 		landingPagePath: '/subscribe/weekly',
-		benefits: [],
+		benefits: [guardianWeeklyBenefit],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
@@ -295,7 +295,7 @@ export const productCatalogDescription: Record<
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
 		landingPagePath: '/subscribe/weekly',
-		benefits: [],
+		benefits: [guardianWeeklyBenefit],
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
