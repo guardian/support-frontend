@@ -64,7 +64,6 @@ import {
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -627,20 +626,11 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const billingPeriodToContributionType = (
-		billingPeriod: BillingPeriod,
-	): RegularContributionTypeQuarterly => {
-		if (billingPeriod === 'Monthly') {
-			return 'MONTHLY';
-		}
-		if (billingPeriod === 'Quarterly') {
-			return 'QUARTERLY';
-		}
-		return 'ANNUAL';
-	};
-	const contributionType = billingPeriodToContributionType(
-		productFields.billingPeriod,
-	);
+	const billingPeriodToContributionType =
+		(): RegularContributionTypeQuarterly => {
+			return productFields.billingPeriod.toUpperCase() as RegularContributionTypeQuarterly;
+		};
+	const contributionType = billingPeriodToContributionType();
 
 	/*
   TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
