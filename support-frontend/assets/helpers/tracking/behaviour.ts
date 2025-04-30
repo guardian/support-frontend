@@ -34,13 +34,14 @@ const trackThankYouPageLoaded = (
 	}
 };
 
-const trackComponentClick = (componentId: string): void => {
+const trackComponentClick = (componentId: string, value?: string): void => {
 	trackComponentEvents({
 		component: {
 			componentType: 'ACQUISITIONS_OTHER',
 			id: componentId,
 		},
 		action: 'CLICK',
+		value,
 	});
 };
 
