@@ -197,7 +197,6 @@ const links = [
 const paymentFrequencyMap = {
 	ONE_OFF: 'One-time',
 	MONTHLY: 'Monthly',
-	QUARTERLY: 'Quarterly',
 	ANNUAL: 'Annual',
 };
 const isCardUserSelected = (
