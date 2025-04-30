@@ -84,7 +84,6 @@ export interface OrderSummaryTsAndCsProps {
 }
 export function OrderSummaryTsAndCs({
 	productKey,
-	contributionType,
 	billingPeriod,
 	countryGroupId,
 	promotion,
@@ -101,7 +100,7 @@ export function OrderSummaryTsAndCs({
 					You’ll pay{' '}
 					{productLegal(
 						countryGroupId,
-						contributionType,
+						billingPeriod,
 						'/',
 						thresholdAmount,
 						promotion,

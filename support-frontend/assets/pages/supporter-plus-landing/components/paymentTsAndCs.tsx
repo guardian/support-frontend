@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, textSans12 } from '@guardian/source/foundations';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
-import { config } from 'helpers/contributions';
-import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	contributionsTermsLinks,
@@ -21,7 +19,11 @@ import {
 	type ActiveProductKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	billingPeriodNoun,
+	billingPeriodTitle,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import { FinePrint } from './finePrint';
@@ -107,8 +109,6 @@ export function FooterTsAndCs({
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
-	contributionType: RegularContributionTypeQuarterly;
 	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
@@ -116,26 +116,18 @@ export interface PaymentTsAndCsProps {
 }
 export function PaymentTsAndCs({
 	productKey,
-	ratePlanKey,
-	contributionType,
 	billingPeriod,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
-	const frequencySingular =
-		config[countryGroupId][
-			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
-		].frequencySingular;
-	const frequencyPlural =
-		config[countryGroupId][
-			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
-		].frequencyPlural;
+	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
+	const billingPeriodPlural = billingPeriodTitle(billingPeriod).toLowerCase();
+
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
-		ratePlanKey,
+		billingPeriod,
 	);
-
 	if (isSundayOnlynewsletterSubscription) {
 		return (
 			<div css={container}>
@@ -178,17 +170,17 @@ export function PaymentTsAndCs({
 		GuardianAdLite: (
 			<div>
 				Your Guardian Ad-Lite subscription will auto-renew each{' '}
-				{frequencySingular} unless cancelled. Your first payment will be taken
-				on day 15 after signing up but you will start to receive your Guardian
-				Ad-Lite benefits when you sign up. Unless you cancel, subsequent monthly
-				payments will be taken on this date using your chosen payment method.
-				You can cancel your subscription at any time before your next renewal
-				date. If you cancel your Guardian Ad-Lite subscription within 14 days of
-				signing up, your subscription will stop immediately and we will not take
-				the first payment from you. Cancellation of your subscription after 14
-				days will take effect at the end of your current monthly payment period.
-				To cancel, go to {ManageMyAccountLink} or see our Guardian Ad-Lite{' '}
-				{termsLink('Terms', guardianAdLiteTermsLink)}.
+				{billingPeriodSingular} unless cancelled. Your first payment will be
+				taken on day 15 after signing up but you will start to receive your
+				Guardian Ad-Lite benefits when you sign up. Unless you cancel,
+				subsequent monthly payments will be taken on this date using your chosen
+				payment method. You can cancel your subscription at any time before your
+				next renewal date. If you cancel your Guardian Ad-Lite subscription
+				within 14 days of signing up, your subscription will stop immediately
+				and we will not take the first payment from you. Cancellation of your
+				subscription after 14 days will take effect at the end of your current
+				monthly payment period. To cancel, go to {ManageMyAccountLink} or see
+				our Guardian Ad-Lite {termsLink('Terms', guardianAdLiteTermsLink)}.
 			</div>
 		),
 		SupporterPlus: (
@@ -196,25 +188,25 @@ export function PaymentTsAndCs({
 				If you pay at least{' '}
 				{productLegal(
 					countryGroupId,
-					contributionType,
+					billingPeriod,
 					' per ',
 					thresholdAmount,
 					promotion,
 				)}
 				, you will receive the {productLabel} benefits on a subscription basis.
-				If you increase your payments per {frequencySingular}, these additional
-				amounts will be separate {frequencyPlural} voluntary financial
-				contributions to the Guardian. The {productLabel} subscription and any
-				contributions will auto-renew each {frequencySingular}. You will be
-				charged the subscription and contribution amounts using your chosen
-				payment method at each renewal unless you cancel. You can cancel your
-				subscription or change your contributions at any time before your next
-				renewal date. If you cancel within 14 days of taking out a{' '}
+				If you increase your payments per {billingPeriodSingular}, these
+				additional amounts will be separate {billingPeriodPlural} voluntary
+				financial contributions to the Guardian. The {productLabel} subscription
+				and any contributions will auto-renew each {billingPeriodSingular}. You
+				will be charged the subscription and contribution amounts using your
+				chosen payment method at each renewal unless you cancel. You can cancel
+				your subscription or change your contributions at any time before your
+				next renewal date. If you cancel within 14 days of taking out a{' '}
 				{productLabel} subscription, you’ll receive a full refund (including of
 				any contributions) and your subscription and any contribution will stop
 				immediately. Cancellation of your subscription (which will also cancel
 				any contribution) or cancellation of your contribution made after 14
-				days will take effect at the end of your current {frequencyPlural}{' '}
+				days will take effect at the end of your current {billingPeriodPlural}{' '}
 				payment period. To cancel, go to {ManageMyAccountLink} or see our{' '}
 				{termsLink('Terms', supporterPlusTermsLink)}.
 			</div>
@@ -223,18 +215,19 @@ export function PaymentTsAndCs({
 			<div>
 				<p>
 					By signing up, you are taking out a Digital + print subscription. Your
-					Digital + print subscription will auto-renew each {frequencySingular}{' '}
-					unless cancelled. Your first payment will be taken on the publication
-					date of your first Guardian Weekly magazine (as shown in the checkout)
-					but you will start to receive your digital benefits when you sign up.
-					Unless you cancel, subsequent {frequencyPlural} payments will be taken
-					on this date using your chosen payment method. You can cancel your
-					Digital + print subscription at any time before your next renewal
-					date. If you cancel your Digital + print subscription within 14 days
-					of signing up, your subscription will stop immediately and we will not
-					take the first payment from you. Cancellation of your subscription
-					after 14 days will take effect at the end of your current{' '}
-					{frequencyPlural} payment period. To cancel go to&nbsp;
+					Digital + print subscription will auto-renew each{' '}
+					{billingPeriodSingular} unless cancelled. Your first payment will be
+					taken on the publication date of your first Guardian Weekly magazine
+					(as shown in the checkout) but you will start to receive your digital
+					benefits when you sign up. Unless you cancel, subsequent{' '}
+					{billingPeriodPlural} payments will be taken on this date using your
+					chosen payment method. You can cancel your Digital + print
+					subscription at any time before your next renewal date. If you cancel
+					your Digital + print subscription within 14 days of signing up, your
+					subscription will stop immediately and we will not take the first
+					payment from you. Cancellation of your subscription after 14 days will
+					take effect at the end of your current {billingPeriodPlural} payment
+					period. To cancel go to&nbsp;
 					{ManageMyAccountLink} or see our Digital + print{' '}
 					{termsLink('Terms', tierThreeTermsLink)}.
 				</p>

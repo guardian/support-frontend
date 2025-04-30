@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Contribution for region ANNUAL correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Contribution for region Annual correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -62,7 +62,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Contribut
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSubscription for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSubscription for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -142,7 +142,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product DigitalSu
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianAdLite for region ANNUAL correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianAdLite for region Annual correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -160,8 +160,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianA
         >
           Manage My Account
         </a>
-         or see our Guardian Ad-Lite
-         
+         or see our Guardian Ad-Lite 
         <a
           href="https://www.theguardian.com/guardian-ad-lite-tcs"
           rel="noopener noreferrer"
@@ -225,7 +224,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianA
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianWeeklyDomestic for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianWeeklyDomestic for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -288,7 +287,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianW
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianWeeklyRestOfWorld for region ANNUAL correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianWeeklyRestOfWorld for region Annual correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -297,27 +296,6 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianW
       class="css-1w63ndr-FinePrint"
     >
        
-      <div>
-        Offer subject to availability. Guardian News and Media Ltd ("GNM") reserves the right to withdraw this promotion at any time. Full promotion terms and conditions for our
-         
-        <a
-          href="https://support.thegulocal.com/p/10ANNUAL/terms"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          monthly
-        </a>
-         and
-         
-        <a
-          href="https://support.thegulocal.com/p/10ANNUAL/terms"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          annual
-        </a>
-         offers.
-      </div>
       <div
         class="css-15t9qdk-FooterTsAndCs"
       >
@@ -372,7 +350,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product GuardianW
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product HomeDelivery for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product HomeDelivery for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -437,7 +415,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product HomeDeliv
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product NationalDelivery for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product NationalDelivery for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -502,7 +480,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product NationalD
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SubscriptionCard for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SubscriptionCard for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -567,7 +545,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Subscript
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SupporterPlus for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -666,7 +644,7 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product Supporter
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product TierThree for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product TierThree for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-ki6xpt-PaymentTsAndCs"
@@ -676,13 +654,13 @@ exports[`Payment Ts&Cs Snapshot comparison paymentTs&Cs render product TierThree
     >
       <div>
         <p>
-          By signing up, you are taking out a Digital + print subscription. Your Digital + print subscription will auto-renew each 
+          By signing up, you are taking out a Digital + print subscription. Your Digital + print subscription will auto-renew each
+           
           month
+           unless cancelled. Your first payment will be taken on the publication date of your first Guardian Weekly magazine (as shown in the checkout) but you will start to receive your digital benefits when you sign up. Unless you cancel, subsequent
            
-          unless cancelled. Your first payment will be taken on the publication date of your first Guardian Weekly magazine (as shown in the checkout) but you will start to receive your digital benefits when you sign up. Unless you cancel, subsequent 
           monthly
-           payments will be taken on this date using your chosen payment method. You can cancel your Digital + print subscription at any time before your next renewal date. If you cancel your Digital + print subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current
-           
+           payments will be taken on this date using your chosen payment method. You can cancel your Digital + print subscription at any time before your next renewal date. If you cancel your Digital + print subscription within 14 days of signing up, your subscription will stop immediately and we will not take the first payment from you. Cancellation of your subscription after 14 days will take effect at the end of your current 
           monthly
            payment period. To cancel go to 
           <a
