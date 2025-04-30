@@ -6,7 +6,6 @@ import type {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { Option } from 'helpers/types/option';
-import type { Participations } from '../abTests/models';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { countryGroups } from '../internationalisation/countryGroup';
 import {
@@ -109,25 +108,14 @@ const promotionTermsUrl = (promoCode: string) =>
 function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
-	abParticipations: Participations,
 	promoCode?: Option<string>,
 ) {
-	if (abParticipations.newspaperGenericCheckout === 'variant') {
-		const url = `${getOrigin()}/uk/checkout`;
-		return addQueryParamsToURL(url, {
-			promoCode,
-			product:
-				fulfilmentOption === 'Collection'
-					? 'SubscriptionCard'
-					: fulfilmentOption,
-			ratePlan: productOptions,
-		});
-	}
-	const url = `${getOrigin()}/subscribe/paper/checkout`;
+	const url = `${getOrigin()}/uk/checkout`;
 	return addQueryParamsToURL(url, {
 		promoCode,
-		fulfilment: fulfilmentOption,
-		product: productOptions,
+		product:
+			fulfilmentOption === 'Collection' ? 'SubscriptionCard' : fulfilmentOption,
+		ratePlan: productOptions,
 	});
 }
 

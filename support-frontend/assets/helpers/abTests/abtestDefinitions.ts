@@ -96,28 +96,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeContributionsOnlyCountries: true,
 	},
-	newspaperGenericCheckout: {
-		variants: [
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			GBPCountries: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 9,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-		persistPage:
-			// match generic checkout & thank you page
-			'^/uk/(checkout|thank-you)',
-		excludeContributionsOnlyCountries: true,
-	},
 	similarProductsConsent: {
 		variants: [
 			{

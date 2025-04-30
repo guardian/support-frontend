@@ -132,7 +132,7 @@ GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.W
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
-GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
+GET  /subscribe/paper/checkout                                     controllers.Application.redirectCheckoutPaper(fulfilment: String, product: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
 GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
