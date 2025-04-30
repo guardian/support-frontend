@@ -94,7 +94,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
               subscriptionId: aws_events.EventField.fromPath('$.detail.zuoraSubscriptionNumber'),
               identityId: aws_events.EventField.fromPath('$.detail.identityId'),
               eventType: "Acquisition",
-              productName: aws_events.EventField.fromPath('$.detail.ZuoraProductName'),
+              productName: aws_events.EventField.fromPath('$.detail.productName'),
               previousProductName: null
             }),
           },
