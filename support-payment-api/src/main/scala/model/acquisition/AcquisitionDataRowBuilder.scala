@@ -4,6 +4,7 @@ import com.gu.i18n.Currency._
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.acquisitions.models.PaymentProvider.{PayPal, Stripe, StripeApplePay, StripePaymentRequestButton}
 import com.gu.support.acquisitions.models._
+import com.gu.support.catalog.ProductName
 import com.gu.support.zuora.api.ReaderType
 import model.{Currency => ModelCurrency}
 import model.Currency.{
@@ -30,6 +31,7 @@ object AcquisitionDataRowBuilder {
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
+      productName = ProductName.Contribution,
       amount = Some(paymentData.amount),
       country =
         StripeCharge.getCountryCode(acquisition.charge).flatMap(CountryGroup.countryByCode).getOrElse(Country.UK),
@@ -44,7 +46,7 @@ object AcquisitionDataRowBuilder {
       paymentProvider = Some(paymentProvider),
       printOptions = None,
       browserId = acquisitionData.browserId,
-      identityId = acquisition.identityId.map(_.toString),
+      identityId = acquisition.identityId,
       pageViewId = acquisitionData.pageviewId,
       referrerPageViewId = acquisitionData.referrerPageviewId,
       labels = acquisitionData.labels.map(_.toList).getOrElse(Nil),
@@ -76,6 +78,7 @@ object AcquisitionDataRowBuilder {
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = AcquisitionProduct.Contribution,
+      productName = ProductName.Contribution,
       amount = Some(transaction.getAmount.getTotal.toDouble),
       country = country,
       currency = Currency.fromString(transaction.getAmount.getCurrency).getOrElse(GBP),
@@ -89,7 +92,7 @@ object AcquisitionDataRowBuilder {
       paymentProvider = Some(PayPal),
       printOptions = None,
       browserId = acquisitionData.browserId,
-      identityId = acquisition.identityId.map(_.toString),
+      identityId = acquisition.identityId,
       pageViewId = acquisitionData.pageviewId,
       referrerPageViewId = acquisitionData.referrerPageviewId,
       labels = acquisitionData.labels.map(_.toList).getOrElse(Nil),
