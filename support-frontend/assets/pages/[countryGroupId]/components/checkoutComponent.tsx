@@ -39,7 +39,6 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
-import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
@@ -627,18 +626,12 @@ export function CheckoutComponent({
 	);
 
 	const billingPeriod = productFields.billingPeriod;
-	const billingPeriodToContributionType =
-		(): RegularContributionTypeQuarterly => {
-			return productFields.billingPeriod.toUpperCase() as RegularContributionTypeQuarterly;
-		};
-	const contributionType = billingPeriodToContributionType();
-
 	/*
   TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
           We should revisit this and see if we can remove this prop, pushing it lower down the tree
   */
 	const thresholdAmount = getLowerProductBenefitThreshold(
-		contributionType,
+		billingPeriod,
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
 		productKey,

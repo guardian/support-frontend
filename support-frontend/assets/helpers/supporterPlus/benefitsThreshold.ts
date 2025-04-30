@@ -1,33 +1,28 @@
-import {
-	config,
-	type RegularContributionTypeQuarterly,
-} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
-
-function capitalise(any: string): string {
-	return any.charAt(0).toUpperCase() + any.slice(1);
-}
+import type {
+	BillingPeriod} from 'helpers/productPrice/billingPeriods';
+import {
+	billingPeriodTitle,
+} from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
-	contributionType: RegularContributionTypeQuarterly,
+	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroupId,
 	product: ActiveProductKey,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
+			? billingPeriod === 'Annual'
 				? 'RestOfWorldAnnual'
 				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
+			: billingPeriod === 'Annual'
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
-	const ratePlanRegularContribution = capitalise(
-		config[countryGroupId][contributionType].frequencyPlural,
-	);
+	const ratePlanRegularContribution = billingPeriodTitle(billingPeriod);
 	const ratePlan =
 		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
 	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;
