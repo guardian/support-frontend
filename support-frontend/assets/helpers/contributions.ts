@@ -10,11 +10,14 @@ type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;
 };
+
 type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
+
 export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
+
 export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
@@ -172,7 +175,6 @@ const config: Record<CountryGroupId, Config> = {
 	AUDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 200,
@@ -180,7 +182,6 @@ const config: Record<CountryGroupId, Config> = {
 			default: 20,
 		},
 		ONE_OFF: {
-			...defaultConfig.ONE_OFF,
 			min: 1,
 			minInWords: numbersInWords['1'],
 			max: 16000,
@@ -191,7 +192,6 @@ const config: Record<CountryGroupId, Config> = {
 	EURCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
@@ -207,7 +207,6 @@ const config: Record<CountryGroupId, Config> = {
 			maxInWords: numbersInWords['10000'],
 		},
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 800,
@@ -223,7 +222,6 @@ const config: Record<CountryGroupId, Config> = {
 	International: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
@@ -235,7 +233,6 @@ const config: Record<CountryGroupId, Config> = {
 	NZDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 200,
@@ -247,7 +244,6 @@ const config: Record<CountryGroupId, Config> = {
 	Canada: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			...defaultConfig.MONTHLY,
 			min: 2,
 			minInWords: numbersInWords['2'],
 			max: 166,
