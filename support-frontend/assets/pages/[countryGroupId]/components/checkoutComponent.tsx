@@ -23,6 +23,7 @@ import type { ExpressPaymentType } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
+import { checkAccount } from 'components/directDebit/helpers/ajax';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
 	OrderSummaryStartDate,
@@ -63,6 +64,7 @@ import {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -115,6 +117,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import { SimilarProductsConsent } from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
@@ -177,7 +180,7 @@ export function CheckoutComponent({
 	landingPageSettings,
 	checkoutSession,
 }: CheckoutComponentProps) {
-	const csrf = appConfig.csrf.token;
+	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
@@ -531,6 +534,21 @@ export function CheckoutComponent({
 		if (finalProductKey == 'NationalDelivery' && !chosenDeliveryAgent) {
 			setDeliveryAgentError('Please select a delivery agent');
 			return;
+		}
+		if (paymentMethod === 'DirectDebit') {
+			const response = await checkAccount(
+				sortCode,
+				accountNumber,
+				isTestUser,
+				csrf,
+			);
+			if (!response.ok) {
+				setErrorMessage('Sorry, we could not process your payment');
+				setErrorContext(
+					'The transaction was temporarily declined. Please try entering you payment details again. Alternatively try another payment method.',
+				);
+				return;
+			}
 		}
 		setIsProcessingPayment(true);
 		try {
@@ -1238,11 +1256,7 @@ export function CheckoutComponent({
 							`}
 						>
 							{abParticipations.similarProductsConsent === 'VariantB' && (
-								<Checkbox
-									name="similarProductsConsent"
-									label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
-									checked={true}
-								/>
+								<SimilarProductsConsent />
 							)}
 						</div>
 						<SummaryTsAndCs
@@ -1267,7 +1281,7 @@ export function CheckoutComponent({
 								finalAmount={finalAmount}
 								currencyKey={currencyKey}
 								ratePlanDescription={ratePlanDescription}
-								csrf={csrf}
+								csrf={csrf.token ?? ''}
 								currency={currency}
 							/>
 						</div>
