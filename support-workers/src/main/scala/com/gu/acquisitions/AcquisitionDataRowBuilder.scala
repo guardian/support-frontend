@@ -61,6 +61,7 @@ object AcquisitionDataRowBuilder {
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
       product = acquisitionProduct,
+      zuoraProductName = acquisitionProduct,
       amount = amount,
       country = commonState.user.billingAddress.country,
       currency = commonState.product.currency,
