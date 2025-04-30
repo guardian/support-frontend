@@ -46,7 +46,7 @@ function addQueryParamsToURL(
 	const [baseUrl, ...oldParams] = urlString.split('?');
 	const searchParams = new URLSearchParams(oldParams.join('&'));
 	Object.keys(params).forEach(
-		(key) => params[key] && searchParams.set(key, params[key] as string),
+		(key) => params[key] && searchParams.set(key, params[key]),
 	);
 	return `${baseUrl}?${searchParams.toString()}`;
 }
