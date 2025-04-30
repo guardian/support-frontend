@@ -159,10 +159,8 @@ export function WeeklyHero({
 					image={
 						<GridImage
 							gridId="weeklyCampaignHeroImg"
-							srcSizes={[1000, 500, 140]}
-							sizes="(max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            500px"
+							srcSizes={[500, 140]}
+							sizes="(max-width: 740px) 100%, 500px"
 							imgType="png"
 							altText="A collection of Guardian Weekly magazines"
 						/>
