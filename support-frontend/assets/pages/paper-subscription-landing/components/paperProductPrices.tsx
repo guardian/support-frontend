@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
-import type { Participations } from 'helpers/abTests/models';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
@@ -149,7 +148,6 @@ const copy: Record<
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
-	abParticipations: Participations,
 ): Product[] =>
 	ActivePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
@@ -178,12 +176,7 @@ const getPlans = (
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(
-				fulfilmentOption,
-				productOption,
-				abParticipations,
-				promoCode,
-			),
+			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe',
@@ -205,20 +198,18 @@ export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	abParticipations: Participations;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-	abParticipations,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(tab, productPrices, abParticipations);
+	const products = getPlans(tab, productPrices);
 	return (
 		<PaperPrices
 			activeTab={tab}

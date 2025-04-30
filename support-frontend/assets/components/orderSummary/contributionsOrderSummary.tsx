@@ -204,10 +204,10 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>
-						{ratePlanDescription && <div>{ratePlanDescription}</div>}
-						{productDescription}
-					</p>
+					<div>
+						{ratePlanDescription && <p>{ratePlanDescription}</p>}
+						<p>{productDescription}</p>
+					</div>
 					{(hasCheckList || isSundayOnlyNewspaperSubscription) && (
 						<Button
 							priority="subdued"
