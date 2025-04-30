@@ -118,19 +118,36 @@ object AcquisitionDataRowBuilder {
   private def getAbTests(data: AcquisitionData): List[AbTest] =
     (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())).toList
 
-  case class ProductInformation(zuoraProductName: ZuoraProductName, ophanProductName: AcquisitionProduct, amount: Option[BigDecimal] = None)
+  case class ProductInformation(
+      zuoraProductName: ZuoraProductName,
+      ophanProductName: AcquisitionProduct,
+      amount: Option[BigDecimal] = None,
+  )
 
   private def getProductInformation(product: ProductType): ProductInformation = product match {
-    case c: Contribution => ProductInformation(ZuoraProductName.RecurringContribution, AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
+    case c: Contribution =>
+      ProductInformation(
+        ZuoraProductName.RecurringContribution,
+        AcquisitionProduct.RecurringContribution,
+        Some(c.amount.toDouble),
+      )
     case s: SupporterPlus =>
-      ProductInformation(ZuoraProductName.SupporterPlus, AcquisitionProduct.SupporterPlus) // we don't send S+ amount because it may be discounted
+      ProductInformation(
+        ZuoraProductName.SupporterPlus,
+        AcquisitionProduct.SupporterPlus,
+      ) // we don't send S+ amount because it may be discounted
     case _: TierThree => ProductInformation(ZuoraProductName.TierThree, AcquisitionProduct.TierThree)
-    case _: DigitalPack => ProductInformation(ZuoraProductName.DigitalSubscription, AcquisitionProduct.DigitalSubscription)
+    case _: DigitalPack =>
+      ProductInformation(ZuoraProductName.DigitalSubscription, AcquisitionProduct.DigitalSubscription)
     case _: GuardianWeekly => ProductInformation(ZuoraProductName.GuardianWeekly, AcquisitionProduct.GuardianWeekly)
     case _: GuardianAdLite => ProductInformation(ZuoraProductName.GuardianAdLite, AcquisitionProduct.GuardianAdLite)
-    case paper: Paper if paper.fulfilmentOptions == Collection => ProductInformation(ZuoraProductName.DigitalVoucher, AcquisitionProduct.Paper)
-    case paper: Paper if paper.fulfilmentOptions == NationalDelivery => ProductInformation(ZuoraProductName.NationalDelivery, AcquisitionProduct.Paper)
-    case paper: Paper if paper.fulfilmentOptions == HomeDelivery => ProductInformation(ZuoraProductName.HomeDelivery, AcquisitionProduct.Paper)
+    case paper: Paper if paper.fulfilmentOptions == Collection =>
+      ProductInformation(ZuoraProductName.DigitalVoucher, AcquisitionProduct.Paper)
+    case paper: Paper if paper.fulfilmentOptions == NationalDelivery =>
+      ProductInformation(ZuoraProductName.NationalDelivery, AcquisitionProduct.Paper)
+    case paper: Paper if paper.fulfilmentOptions == HomeDelivery =>
+      ProductInformation(ZuoraProductName.HomeDelivery, AcquisitionProduct.Paper)
+    case paper: Paper => throw new RuntimeException(s"Unknown newspaper fulfilment option: '$paper'")
   }
 
   private def printOptionsFromProduct(product: ProductType, deliveryCountry: Option[Country]): Option[PrintOptions] = {
