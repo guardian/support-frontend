@@ -18,12 +18,12 @@ type WithErrorAndLabelProps = WithErrorProps & WithLabelProps;
 export function CardNumberWithError(
 	props: stripeJs.CardNumberElementProps & WithErrorAndLabelProps,
 ) {
-	const { error, label, id, optional, footer, ...rest } = props;
+	const { error, label, id, optional, footer } = props;
 
 	return (
-		<Label label={label} id={id} optional={optional} footer={footer}>
+		<Label label={label} htmlFor={id} optional={optional} footer={footer}>
 			<Error error={error}>
-				<CardNumberElement {...rest} />
+				<CardNumberElement {...props} />
 			</Error>
 		</Label>
 	);
@@ -32,12 +32,12 @@ export function CardNumberWithError(
 export function CardExpiryWithError(
 	props: stripeJs.CardExpiryElementProps & WithErrorAndLabelProps,
 ) {
-	const { error, label, id, optional, footer, ...rest } = props;
+	const { error, label, id, optional, footer } = props;
 
 	return (
-		<Label label={label} id={id} optional={optional} footer={footer}>
+		<Label label={label} htmlFor={id} optional={optional} footer={footer}>
 			<Error error={error}>
-				<CardExpiryElement {...rest} />
+				<CardExpiryElement {...props} />
 			</Error>
 		</Label>
 	);
@@ -46,12 +46,12 @@ export function CardExpiryWithError(
 export function CardCvcWithError(
 	props: stripeJs.CardCvcElementProps & WithErrorAndLabelProps,
 ) {
-	const { error, label, id, optional, footer, ...rest } = props;
+	const { error, label, id, optional, footer } = props;
 
 	return (
-		<Label label={label} id={id} optional={optional} footer={footer}>
+		<Label label={label} htmlFor={id} optional={optional} footer={footer}>
 			<Error error={error}>
-				<CardCvcElement {...rest} />
+				<CardCvcElement {...props} />
 			</Error>
 		</Label>
 	);
@@ -60,12 +60,12 @@ export function CardCvcWithError(
 export function RecaptchaWithError(
 	props: RecaptchaProps & WithErrorAndLabelProps,
 ) {
-	const { error, label, id, optional, footer, ...rest } = props;
+	const { error, label, id, optional, footer } = props;
 
 	return (
-		<Label label={label} id={id} optional={optional} footer={footer}>
+		<Label label={label} htmlFor={id} optional={optional} footer={footer}>
 			<Error error={error}>
-				<Recaptcha {...rest} />
+				<Recaptcha {...props} />
 			</Error>
 		</Label>
 	);
