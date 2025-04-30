@@ -691,7 +691,6 @@ export function CheckoutComponent({
 						tsAndCs={
 							<OrderSummaryTsAndCs
 								productKey={productKey}
-								contributionType={contributionType}
 								billingPeriod={billingPeriod}
 								countryGroupId={countryGroupId}
 								thresholdAmount={thresholdAmount}

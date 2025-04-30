@@ -6,12 +6,13 @@ import {
 	space,
 	textSans14,
 } from '@guardian/source/foundations';
-import { config } from 'helpers/contributions';
-import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	billingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const containerSummaryTsCs = css`
@@ -75,12 +76,10 @@ export function OrderSummaryStartDate({
 
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
-	contributionType: RegularContributionTypeQuarterly;
 	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
-	ratePlanKey?: string;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -89,10 +88,7 @@ export function OrderSummaryTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
-	const frequencySingular =
-		config[countryGroupId][
-			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
-		].frequencySingular;
+	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -111,7 +107,7 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {frequencySingular} until you cancel.</p>
+					<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
@@ -121,13 +117,13 @@ export function OrderSummaryTsAndCs({
 			{(productKey === 'TierThree' ||
 				productKey === 'GuardianWeeklyDomestic' ||
 				productKey === 'GuardianWeeklyRestOfWorld') && (
-				<p>Auto renews every {frequencySingular}. Cancel anytime.</p>
+				<p>Auto renews every {billingPeriodSingular}. Cancel anytime.</p>
 			)}
 		</div>
 	);
 	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
-			<p>Auto renews every {frequencySingular} until you cancel.</p>
+			<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
 			<p>
 				{['Contribution', 'OneTimeContribution'].includes(productKey)
 					? 'Cancel or change your support anytime.'

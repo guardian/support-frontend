@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region ANNUAL correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region Annual correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -17,7 +17,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Cont
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -34,7 +34,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Guar
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -51,7 +51,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Supp
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region MONTHLY correctly 1`] = `
+exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
