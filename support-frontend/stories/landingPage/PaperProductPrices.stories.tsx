@@ -43,5 +43,4 @@ Default.args = {
 	productPrices: paperProducts,
 	tab: 'HomeDelivery',
 	setTabAction: () => {},
-	abParticipations: {},
 };

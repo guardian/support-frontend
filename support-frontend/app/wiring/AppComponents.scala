@@ -70,7 +70,6 @@ class AppComponents(context: Context)
     weeklyController,
     weeklyFormController,
     paperController,
-    paperFormController,
     getAddressController,
     paperRoundController,
     loginController,

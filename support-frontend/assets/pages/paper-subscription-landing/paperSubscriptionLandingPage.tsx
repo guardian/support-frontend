@@ -104,7 +104,6 @@ function PaperLandingPage({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={handleSetTabAction}
-						abParticipations={abParticipations}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
