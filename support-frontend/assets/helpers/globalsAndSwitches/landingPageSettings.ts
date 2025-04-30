@@ -8,6 +8,7 @@ enum TickerName {
 
 interface TickerCopy {
 	countLabel: string;
+	goalCopy: string;
 }
 
 export interface TickerSettings {

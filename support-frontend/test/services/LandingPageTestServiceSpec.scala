@@ -180,7 +180,9 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               "tickerSettings" -> mapAttr(
                 Map(
                   "currencySymbol" -> stringAttr("$"),
-                  "copy" -> mapAttr(Map("countLabel" -> stringAttr("test copy"))),
+                  "copy" -> mapAttr(
+                    Map("countLabel" -> stringAttr("test copy"), "goalCopy" -> stringAttr("test goal copy")),
+                  ),
                   "name" -> stringAttr("US"),
                 ),
               ),
@@ -213,7 +215,7 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               Some(
                 TickerSettings(
                   currencySymbol = "$",
-                  copy = TickerCopy(countLabel = "test copy"),
+                  copy = TickerCopy(countLabel = "test copy", goalCopy = "test goal copy"),
                   name = "US",
                 ),
               )
