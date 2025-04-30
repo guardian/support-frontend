@@ -60,8 +60,8 @@ object AcquisitionDataRowBuilder {
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
-      product = productInformation.ophanProductName,
-      productName = productInformation.zuoraProductName,
+      product = productInformation.product,
+      productName = productInformation.productName,
       amount = productInformation.amount,
       country = commonState.user.billingAddress.country,
       currency = commonState.product.currency,
@@ -119,8 +119,8 @@ object AcquisitionDataRowBuilder {
     (data.supportAbTests ++ data.referrerAcquisitionData.abTests.getOrElse(Set())).toList
 
   case class ProductInformation(
-                                 zuoraProductName: ProductName,
-                                 ophanProductName: AcquisitionProduct,
+                                 productName: ProductName,
+                                 product: AcquisitionProduct,
                                  amount: Option[BigDecimal] = None,
   )
 
