@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
@@ -34,6 +35,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					contributionType={
 						contributionType as RegularContributionTypeQuarterly
 					}
+					billingPeriod={contributionTypeToBillingPeriod(
+						contributionType as RegularContributionTypeQuarterly,
+					)}
 					countryGroupId={countryGroupId as CountryGroupId}
 					thresholdAmount={amount as number}
 					promotion={promo}

@@ -21,6 +21,7 @@ GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Montly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -29,6 +30,7 @@ DigitalSubscription.args = {
 	productKey: 'DigitalSubscription',
 	ratePlanKey: 'Montly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -37,6 +39,7 @@ Contribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Annual',
 	contributionType: 'ANNUAL',
+	billingPeriod: 'Annual',
 	countryGroupId: 'AUDCountries',
 };
 
@@ -45,6 +48,7 @@ SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
 };
@@ -54,6 +58,7 @@ TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
 	promotion: {
@@ -70,6 +75,7 @@ HomeDelivery.args = {
 	productKey: 'HomeDelivery',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -78,6 +84,7 @@ NationalDelivery.args = {
 	productKey: 'NationalDelivery',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -86,6 +93,7 @@ SubscriptionCard.args = {
 	productKey: 'SubscriptionCard',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -94,6 +102,7 @@ GuardianWeeklyDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
 	ratePlanKey: 'Monthly',
 	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
@@ -102,6 +111,7 @@ GuardianWeeklyRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
 	ratePlanKey: 'Annual',
 	contributionType: 'ANNUAL',
+	billingPeriod: 'Annual',
 	countryGroupId: 'UnitedStates',
 	promotion: {
 		name: '10% off for 12 months',

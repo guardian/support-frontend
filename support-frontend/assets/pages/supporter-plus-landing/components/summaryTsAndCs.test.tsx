@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -27,9 +28,9 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		({ productKey, contributionType }) => {
 			const { container } = render(
 				<SummaryTsAndCs
-					contributionType={
-						contributionType as RegularContributionTypeQuarterly
-					}
+					billingPeriod={contributionTypeToBillingPeriod(
+						contributionType as RegularContributionTypeQuarterly,
+					)}
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey=""
 					countryGroupId="GBPCountries"

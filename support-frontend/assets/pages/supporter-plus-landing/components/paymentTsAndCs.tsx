@@ -21,6 +21,7 @@ import {
 	type ActiveProductKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import { FinePrint } from './finePrint';
@@ -108,6 +109,7 @@ export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: string;
 	contributionType: RegularContributionTypeQuarterly;
+	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -116,14 +118,19 @@ export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
 	contributionType,
+	billingPeriod,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
 	const frequencySingular =
-		config[countryGroupId][contributionType].frequencySingular;
+		config[countryGroupId][
+			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
+		].frequencySingular;
 	const frequencyPlural =
-		config[countryGroupId][contributionType].frequencyPlural;
+		config[countryGroupId][
+			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
+		].frequencyPlural;
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,

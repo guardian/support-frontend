@@ -1,3 +1,5 @@
+import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
+
 const Annual = 'Annual';
 const Monthly = 'Monthly';
 const Quarterly = 'Quarterly';
@@ -47,6 +49,15 @@ function billingPeriodTitle(
 	}
 }
 
+function contributionTypeToBillingPeriod(
+	contributionType: RegularContributionTypeQuarterly,
+): BillingPeriod {
+	const billingString =
+		contributionType.charAt(0).toUpperCase() +
+		contributionType.slice(1).toLowerCase();
+	return billingString as BillingPeriod;
+}
+
 export {
 	Annual,
 	Monthly,
@@ -55,4 +66,5 @@ export {
 	billingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
+	contributionTypeToBillingPeriod,
 };

@@ -11,6 +11,7 @@ import type { RegularContributionTypeQuarterly } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const containerSummaryTsCs = css`
@@ -75,6 +76,7 @@ export function OrderSummaryStartDate({
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	contributionType: RegularContributionTypeQuarterly;
+	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -83,12 +85,15 @@ export interface OrderSummaryTsAndCsProps {
 export function OrderSummaryTsAndCs({
 	productKey,
 	contributionType,
+	billingPeriod,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const frequencySingular =
-		config[countryGroupId][contributionType].frequencySingular;
+		config[countryGroupId][
+			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
+		].frequencySingular;
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (

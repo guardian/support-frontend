@@ -626,6 +626,7 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const billingPeriod = productFields.billingPeriod;
 	const billingPeriodToContributionType =
 		(): RegularContributionTypeQuarterly => {
 			return productFields.billingPeriod.toUpperCase() as RegularContributionTypeQuarterly;
@@ -691,6 +692,7 @@ export function CheckoutComponent({
 							<OrderSummaryTsAndCs
 								productKey={productKey}
 								contributionType={contributionType}
+								billingPeriod={billingPeriod}
 								countryGroupId={countryGroupId}
 								thresholdAmount={thresholdAmount}
 								promotion={promotion}
@@ -1283,7 +1285,7 @@ export function CheckoutComponent({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							contributionType={contributionType}
+							billingPeriod={billingPeriod}
 							countryGroupId={countryGroupId}
 							currency={currencyKey}
 							amount={originalAmount}
@@ -1322,6 +1324,7 @@ export function CheckoutComponent({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							contributionType={contributionType}
+							billingPeriod={billingPeriod}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}

@@ -13,6 +13,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -30,30 +31,10 @@ const containerSummaryTsCs = css`
 		color: ${neutral[7]};
 	}
 `;
-
-const getRenewalFrequency = (
-	contributionType: RegularContributionTypeQuarterly,
-) => {
-	const today = new Date();
-	const renewalDateCopy = `on the ${getDateWithOrdinal(today)} day of`;
-	const renewalCopy = (
-		contributionType: RegularContributionTypeQuarterly,
-	): string => {
-		if (contributionType === 'MONTHLY') {
-			return `${renewalDateCopy} every month`;
-		}
-		if (contributionType === 'QUARTERLY') {
-			return `${renewalDateCopy} every quarter`;
-		}
-		return `${renewalDateCopy} ${getLongMonth(today)} every year`;
-	};
-	return renewalCopy(contributionType);
-};
-
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: string;
-	contributionType: RegularContributionTypeQuarterly;
+	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
@@ -61,13 +42,23 @@ export interface SummaryTsAndCsProps {
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
-	contributionType,
+	billingPeriod,
 	countryGroupId,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const frequencySingular =
-		config[countryGroupId][contributionType].frequencySingular;
+		config[countryGroupId][
+			billingPeriod.toUpperCase() as RegularContributionTypeQuarterly
+		].frequencySingular;
+
+	const today = new Date();
+	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of`;
+	const renewalDateEnd = ` every ${frequencySingular}`;
+	const renewalFrequency = `${renewalDateStart} ${
+		billingPeriod === 'Annual' ? getLongMonth(today) : ''
+	} ${renewalDateEnd}`;
+
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
@@ -102,10 +93,9 @@ export function SummaryTsAndCs({
 		Contribution: (
 			<div css={containerSummaryTsCs}>
 				We will attempt to take payment of {amountWithCurrency},{' '}
-				{getRenewalFrequency(contributionType)}, from now until you cancel your
-				payment. Payments may take up to 6 days to be recorded in your bank
-				account. You can change how much you give or cancel your payment at any
-				time.
+				{renewalFrequency}, from now until you cancel your payment. Payments may
+				take up to 6 days to be recorded in your bank account. You can change
+				how much you give or cancel your payment at any time.
 			</div>
 		),
 		SupporterPlus: (
