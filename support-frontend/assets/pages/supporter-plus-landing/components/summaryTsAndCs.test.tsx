@@ -23,7 +23,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		${'GuardianAdLite'}      | ${'Annual'}
 		${'DigitalSubscription'} | ${'Monthly'}
 	`(
-		`summaryTs&Cs for $productKey With contributionType $contributionType renders correctly`,
+		`summaryTs&Cs for $productKey With billingPeriod $billingPeriod renders correctly`,
 		({ productKey, billingPeriod }) => {
 			const { container } = render(
 				<SummaryTsAndCs
