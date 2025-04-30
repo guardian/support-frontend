@@ -36,6 +36,14 @@ const productStartDate = css`
 	}
 `;
 
+const guardianWeeklyOrTierThreeProduct = (productKey: ActiveProductKey) => {
+	return [
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+		'TierThree',
+	].includes(productKey);
+};
+
 interface OrderSummaryStartDateProps {
 	startDate: string;
 	productKey: ActiveProductKey;
@@ -44,30 +52,17 @@ export function OrderSummaryStartDate({
 	startDate,
 	productKey,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	const validProduct = [
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-		'TierThree',
-	].includes(productKey);
-	if (validProduct) {
-		const digitalBenefit =
-			productKey === 'TierThree' ? (
-				<li>Your digital benefits will start today.</li>
-			) : null;
-		const guardianWeeklyBenefit =
-			productKey === 'TierThree' ||
-			productKey === 'GuardianWeeklyDomestic' ||
-			productKey === 'GuardianWeeklyRestOfWorld' ? (
+	if (guardianWeeklyOrTierThreeProduct(productKey)) {
+		return (
+			<ul css={productStartDate}>
+				{productKey === 'TierThree' && (
+					<li>Your digital benefits will start today.</li>
+				)}
 				<li>
 					Your Guardian Weekly subscription will start on {startDate}. Please
 					allow 1 to 7 days after your start date for your magazine to arrive,
 					depending on national post services.
 				</li>
-			) : null;
-		return (
-			<ul css={productStartDate}>
-				{digitalBenefit}
-				{guardianWeeklyBenefit}
 			</ul>
 		);
 	}
@@ -114,9 +109,7 @@ export function OrderSummaryTsAndCs({
 					</p>
 				</>
 			)}
-			{(productKey === 'TierThree' ||
-				productKey === 'GuardianWeeklyDomestic' ||
-				productKey === 'GuardianWeeklyRestOfWorld') && (
+			{guardianWeeklyOrTierThreeProduct(productKey) && (
 				<p>Auto renews every {billingPeriodSingular}. Cancel anytime.</p>
 			)}
 		</div>
