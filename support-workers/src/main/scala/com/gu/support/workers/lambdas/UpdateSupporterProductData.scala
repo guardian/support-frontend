@@ -76,7 +76,7 @@ object UpdateSupporterProductData {
       catalogService: CatalogService,
   ): Either[String, Option[SupporterRatePlanItem]] =
     state match {
-      case SendThankYouEmailContributionState(user, product, _, _, subscriptionNumber) =>
+      case SendThankYouEmailContributionState(user, product, _, _, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(Contribution, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
@@ -92,7 +92,7 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailSupporterPlusState(user, product, _, _, _, _, subscriptionNumber) =>
+      case SendThankYouEmailSupporterPlusState(user, product, _, _, _, _, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
@@ -108,7 +108,7 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailTierThreeState(user, product, _, _, _, _, subscriptionNumber, _) =>
+      case SendThankYouEmailTierThreeState(user, product, _, _, _, _, subscriptionNumber, _, _) =>
         catalogService
           .getProductRatePlan(TierThree, product.billingPeriod, product.fulfilmentOptions, product.productOptions)
           .map(productRatePlan =>
@@ -124,7 +124,7 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailDigitalSubscriptionState(user, product, _, _, _, _, subscriptionNumber) =>
+      case SendThankYouEmailDigitalSubscriptionState(user, product, _, _, _, _, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
@@ -138,7 +138,7 @@ object UpdateSupporterProductData {
             ),
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-      case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
+      case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _, _) =>
         val readerType = if (giftRecipient.isDefined) Gift else Direct
         catalogService
           .getProductRatePlan(
@@ -159,7 +159,7 @@ object UpdateSupporterProductData {
             ),
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-      case SendThankYouEmailPaperState(user, product, _, _, _, _, subscriptionNumber, _) =>
+      case SendThankYouEmailPaperState(user, product, _, _, _, _, subscriptionNumber, _, _) =>
         catalogService
           .getProductRatePlan(Paper, product.billingPeriod, product.fulfilmentOptions, product.productOptions)
           .map(productRatePlan =>
@@ -173,7 +173,7 @@ object UpdateSupporterProductData {
             ),
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-      case SendThankYouEmailGuardianAdLiteState(user, product, _, _, _, subscriptionNumber) =>
+      case SendThankYouEmailGuardianAdLiteState(user, product, _, _, _, subscriptionNumber, _) =>
         catalogService
           .getProductRatePlan(GuardianAdLite, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>

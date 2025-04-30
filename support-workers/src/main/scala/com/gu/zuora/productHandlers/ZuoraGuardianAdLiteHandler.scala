@@ -34,6 +34,7 @@ class ZuoraGuardianAdLiteHandler(
       paymentSchedule,
       account.value,
       sub.value,
+      similarProductsConsent = None, // Guardian Ad Lite does not ask for similar products consent
     )
 
   }

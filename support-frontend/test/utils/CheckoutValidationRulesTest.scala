@@ -1040,6 +1040,7 @@ object TestData {
     giftRecipient = None,
     deliveryInstructions = None,
     debugInfo = None,
+    similarProductsConsent = None,
   )
   val validSupporterPlusRequest = validDigitalPackRequest.copy(
     product = SupporterPlus(50, Currency.USD, Monthly),
@@ -1075,6 +1076,7 @@ object TestData {
     giftRecipient = None,
     deliveryInstructions = None,
     debugInfo = None,
+    similarProductsConsent = None,
   )
 
   val validWeeklyRequest = CreateSupportWorkersRequest(
@@ -1098,6 +1100,7 @@ object TestData {
     giftRecipient = None,
     deliveryInstructions = None,
     debugInfo = None,
+    similarProductsConsent = None,
   )
 
 }

@@ -38,6 +38,7 @@ class ZuoraPaperHandler(
       account.value,
       sub.value,
       state.firstDeliveryDate,
+      state.similarProductsConsent,
     )
 
 }

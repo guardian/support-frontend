@@ -42,6 +42,7 @@ class ZuoraGuardianWeeklyHandler(
       account.value,
       sub.value,
       state.firstDeliveryDate,
+      state.similarProductsConsent,
     )
 
 }

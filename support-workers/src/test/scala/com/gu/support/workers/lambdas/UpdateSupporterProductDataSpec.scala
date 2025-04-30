@@ -3,20 +3,16 @@ package com.gu.support.workers.lambdas
 import com.gu.support.catalog.{CatalogService, SimpleJsonProvider}
 import com.gu.support.config.TouchPointEnvironments.PROD
 import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
-  digitalSubscriptionGiftRedemptionState,
-  digitalSusbcriptionGiftPurchaseState,
   guardianAdLiteState,
   serviceWithFixtures,
   supporterPlusState,
 }
 import com.gu.support.workers.states.SendThankYouEmailState
-import com.gu.supporterdata.model.ContributionAmount
 import io.circe.parser._
 import org.scalatest.EitherValues
-import org.scalatest.Inside.inside
+import org.scalatest.OptionValues._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import org.scalatest.OptionValues._
 
 import scala.io.Source
 
@@ -91,7 +87,8 @@ object UpdateSupporterProductDataSpec {
           },
           "accountNumber": "A00485141",
           "subscriptionNumber": "A-S00489451",
-          "productType": "SupporterPlus"
+          "productType": "SupporterPlus",
+          "similarProductsConsent": false
         }
     """
 
@@ -146,7 +143,8 @@ object UpdateSupporterProductDataSpec {
         },
         "accountNumber": "A00485141",
         "subscriptionNumber": "A-S00489451",
-        "productType": "GuardianAdLite"
+        "productType": "GuardianAdLite",
+        "similarProductsConsent": false
       }
   """
 
@@ -183,7 +181,8 @@ object UpdateSupporterProductDataSpec {
         "giftEndDate": "2029-04-29",
         "months": 12
       },
-      "productType": "DigitalSubscriptionGiftRedemption"
+      "productType": "DigitalSubscriptionGiftRedemption",
+      "similarProductsConsent": false
     }
   """
 
@@ -248,7 +247,8 @@ object UpdateSupporterProductDataSpec {
       "promoCode": null,
       "accountNumber": "A0XXXXXXXX",
       "subscriptionNumber": "A-S014XXXXXX",
-      "productType": "DigitalSubscriptionGiftPurchase"
+      "productType": "DigitalSubscriptionGiftPurchase",
+      "similarProductsConsent": false
     }
   """
   lazy val catalogSource = Source.fromURL(getClass.getResource("/catalog.json"))

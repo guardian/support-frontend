@@ -43,6 +43,7 @@ class ZuoraDigitalSubscriptionHandler(
       state.appliedPromotion.map(_.promoCode),
       account.value,
       sub.value,
+      state.similarProductsConsent,
     )
   }
 
