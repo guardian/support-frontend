@@ -8,6 +8,7 @@ const selectors = {
 	billingName: 'input[name="billingName"]',
 	billingCountry: 'select[name="billingCountry"]',
 	billingPostalCode: 'input[name="billingPostalCode"]',
+	submitButtonTestId: 'hosted-payment-submit-button',
 };
 
 export const expectToLandOnStripeCheckoutPage = async (stripePage: Page) => {
@@ -27,5 +28,5 @@ export const fillStripeCheckoutForm = async (stripePage: Page) => {
 };
 
 export const submitStripeCheckoutForm = async (stripePage: Page) => {
-	await stripePage.getByRole('button').click();
+	await stripePage.getByTestId(selectors.submitButtonTestId).click();
 };
