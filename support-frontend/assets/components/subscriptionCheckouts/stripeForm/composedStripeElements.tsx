@@ -4,41 +4,69 @@ import {
 	CardExpiryElement,
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
-import type React from 'react';
-import { compose } from 'redux';
 import type { PropsForHoc as WithErrorProps } from 'components/forms/customFields/error';
-import type { PropsForHoc as WithLabelProps } from 'components/forms/label';
+import { Error } from 'components/forms/customFields/error';
+import {
+	Label,
+	type PropsForHoc as WithLabelProps,
+} from 'components/forms/label';
 import type { RecaptchaProps } from 'components/recaptcha/recaptcha';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-import { withError } from 'hocs/withError';
-import { withLabel } from 'hocs/withLabel';
 
 type WithErrorAndLabelProps = WithErrorProps & WithLabelProps;
 
-export const CardNumberWithError = compose<
-	React.FC<stripeJs.CardNumberElementProps & WithErrorAndLabelProps>
->(
-	withLabel,
-	withError,
-)(CardNumberElement);
+export function CardNumberWithError(
+	props: stripeJs.CardNumberElementProps & WithErrorAndLabelProps,
+) {
+	const { error, label, id, optional, footer, ...rest } = props;
 
-export const CardExpiryWithError = compose<
-	React.FC<stripeJs.CardExpiryElementProps & WithErrorAndLabelProps>
->(
-	withLabel,
-	withError,
-)(CardExpiryElement);
+	return (
+		<Label label={label} id={id} optional={optional} footer={footer}>
+			<Error error={error}>
+				<CardNumberElement {...rest} />
+			</Error>
+		</Label>
+	);
+}
 
-export const CardCvcWithError = compose<
-	React.FC<stripeJs.CardCvcElementProps & WithErrorAndLabelProps>
->(
-	withLabel,
-	withError,
-)(CardCvcElement);
+export function CardExpiryWithError(
+	props: stripeJs.CardExpiryElementProps & WithErrorAndLabelProps,
+) {
+	const { error, label, id, optional, footer, ...rest } = props;
 
-export const RecaptchaWithError = compose<
-	React.FC<RecaptchaProps & WithErrorAndLabelProps>
->(
-	withLabel,
-	withError,
-)(Recaptcha);
+	return (
+		<Label label={label} id={id} optional={optional} footer={footer}>
+			<Error error={error}>
+				<CardExpiryElement {...rest} />
+			</Error>
+		</Label>
+	);
+}
+
+export function CardCvcWithError(
+	props: stripeJs.CardCvcElementProps & WithErrorAndLabelProps,
+) {
+	const { error, label, id, optional, footer, ...rest } = props;
+
+	return (
+		<Label label={label} id={id} optional={optional} footer={footer}>
+			<Error error={error}>
+				<CardCvcElement {...rest} />
+			</Error>
+		</Label>
+	);
+}
+
+export function RecaptchaWithError(
+	props: RecaptchaProps & WithErrorAndLabelProps,
+) {
+	const { error, label, id, optional, footer, ...rest } = props;
+
+	return (
+		<Label label={label} id={id} optional={optional} footer={footer}>
+			<Error error={error}>
+				<Recaptcha {...rest} />
+			</Error>
+		</Label>
+	);
+}
