@@ -3,6 +3,12 @@ import ReactDOM, { render } from 'react-dom';
 import { logException } from 'helpers/utilities/logger';
 import { isSafari } from 'helpers/utilities/userAgent';
 
+declare global {
+	// eslint-disable-next-line no-var -- this has to be a var
+	var EMOTION_RUNTIME_AUTO_LABEL: boolean;
+}
+globalThis.EMOTION_RUNTIME_AUTO_LABEL = process.env.NODE_ENV === 'development';
+
 // Without this the build-time pre-rendering breaks, because fetch is undefined when running with node
 const safeFetch = (url: string, opts?: Record<string, string>) => {
 	if (typeof fetch !== 'undefined') {
