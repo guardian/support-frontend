@@ -2,11 +2,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { simpleFormatAmount } from './forms/checkouts';
-import type {
-	BillingPeriod} from './productPrice/billingPeriods';
-import {
-	billingPeriodNoun,
-} from './productPrice/billingPeriods';
+import type { BillingPeriod } from './productPrice/billingPeriods';
+import { billingPeriodNoun } from './productPrice/billingPeriods';
 
 export const productLegal = (
 	countryGroupId: CountryGroupId,
