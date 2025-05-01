@@ -25,8 +25,7 @@ export const pageUrlRegexes = {
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
 			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
-			weeklyLandingPage:
-				/\/subscribe\/weekly(\/checkout|\/checkout\/gift)?(\?.*)?$/,
+			weeklyLandingPage: /\/subscribe\/weekly\/checkout?(\?.*)?$/,
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
