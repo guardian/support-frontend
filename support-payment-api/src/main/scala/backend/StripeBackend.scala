@@ -78,7 +78,8 @@ class StripeBackend(
   def createCharge(
       chargeData: LegacyStripeChargeRequest,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] = {
+    cloudWatchService.put("createCharge-called", PaymentProvider.Stripe)
     stripeService
       .createCharge(chargeData)
       .leftMap(err => {
@@ -102,6 +103,7 @@ class StripeBackend(
           StripeCreateChargeResponse.fromCharge(charge, identityUserDetails.map(_.userType))
         }
       }
+  }
 
   def processRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] = {
     for {
@@ -114,7 +116,7 @@ class StripeBackend(
       request: StripePaymentIntentRequest.CreatePaymentIntent,
       clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
-
+    cloudWatchService.put("createPaymentIntent-called", PaymentProvider.Stripe)
     def isApplePayOrPaymentRequestButton = request.paymentData.stripePaymentMethod match {
       case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
       case _ => false
