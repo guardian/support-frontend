@@ -181,7 +181,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
-  val mockMetricService: MetricService = mock[MetricService]
   implicit val mockWsClient: WSClient = mock[WSClient]
   implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
   implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
@@ -201,7 +200,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockSupporterProductDataService,
     mockSoftOptInsService,
     mockSwitchService,
-    mockMetricService,
     Live,
   )(DefaultThreadPool(ec), mockWsClient)
 

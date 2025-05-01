@@ -142,7 +142,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
-  val mockMetricService: MetricService = mock[MetricService]
 
   // -- test obj
   val paypalBackend = new PaypalBackend(
@@ -155,7 +154,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockSupporterProductDataService,
     mockSoftOptInsService,
     mockSwitchService,
-    mockMetricService,
   )(DefaultThreadPool(ec))
 
   // This is only needed if testing code which depends on extracting data from Payment object
