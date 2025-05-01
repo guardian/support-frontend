@@ -37,9 +37,15 @@ export type ProductDescription = {
 		{
 			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
 			label?: string;
+			hideSimilarProductsConsent?: boolean;
 		}
 	>;
 };
+
+export const showSimilarProductsConsentForRatePlan = (
+	productDescription: ProductDescription,
+	ratePlanKey: string,
+) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
 
 export function filterBenefitByRegion(
 	benefit: {
@@ -187,6 +193,7 @@ export const productCatalogDescription: Record<
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
+				hideSimilarProductsConsent: true,
 			},
 		},
 		benefits: guardianAdLiteBenefits,
@@ -341,6 +348,7 @@ export const productCatalogDescription: Record<
 			Sunday: {
 				billingPeriod: 'Monthly',
 				label: 'The Observer',
+				hideSimilarProductsConsent: true,
 			},
 		},
 	},
@@ -370,6 +378,7 @@ export const productCatalogDescription: Record<
 			Sunday: {
 				billingPeriod: 'Monthly',
 				label: 'The Observer',
+				hideSimilarProductsConsent: true,
 			},
 		},
 	},

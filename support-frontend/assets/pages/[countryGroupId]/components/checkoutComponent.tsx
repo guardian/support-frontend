@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Checkbox,
 	Label,
@@ -57,11 +57,9 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
-	filterBenefitByABTest,
-	filterBenefitByRegion,
-	type ProductBenefit,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
+	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -78,7 +76,6 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
-import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -87,6 +84,10 @@ import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import {
+	getBenefitsChecklistFromLandingPageTool,
+	getBenefitsChecklistFromProductDescription,
+} from '../checkout/helpers/benefitsChecklist';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
@@ -200,81 +201,6 @@ export function CheckoutComponent({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-
-	const getBenefits = (): BenefitsCheckListData[] => {
-		// Three Tier products get their config from the Landing Page tool
-		if (
-			[
-				'TierThree',
-				'SupporterPlus',
-				'Contribution',
-				'GuardianWeeklyDomestic',
-				'GuardianWeeklyRestOfWorld',
-			].includes(productKey)
-		) {
-			if (isRecurringContribution) {
-				// Also show SupporterPlus benefits greyed out
-				return [
-					...landingPageSettings.products.Contribution.benefits.map(
-						(benefit) => ({
-							isChecked: true,
-							text: benefit.copy,
-						}),
-					),
-					...landingPageSettings.products.SupporterPlus.benefits.map(
-						(benefit) => ({
-							isChecked: false,
-							text: benefit.copy,
-							maybeGreyedOut: css`
-								color: ${palette.neutral[60]};
-								svg {
-									fill: ${palette.neutral[60]};
-								}
-							`,
-						}),
-					),
-				];
-			} else if (productKey === 'SupporterPlus') {
-				return landingPageSettings.products.SupporterPlus.benefits.map(
-					(benefit) => ({
-						isChecked: true,
-						text: benefit.copy,
-					}),
-				);
-			} else if (productKey === 'TierThree') {
-				// Also show SupporterPlus benefits
-				return [
-					...landingPageSettings.products.TierThree.benefits.map((benefit) => ({
-						isChecked: true,
-						text: benefit.copy,
-					})),
-					...landingPageSettings.products.SupporterPlus.benefits.map(
-						(benefit) => ({
-							isChecked: true,
-							text: benefit.copy,
-						}),
-					),
-				];
-			} else if (
-				productKey === 'GuardianWeeklyDomestic' ||
-				productKey === 'GuardianWeeklyRestOfWorld'
-			) {
-				return productCatalogDescription[productKey].benefits.map(
-					(benefit: ProductBenefit) => ({
-						isChecked: true,
-						text: benefit.copy,
-					}),
-				);
-			}
-		}
-		return productDescription.benefits
-			.filter((benefit) => filterBenefitByRegion(benefit, countryGroupId))
-			.filter((benefit) => filterBenefitByABTest(benefit, abParticipations))
-			.map((benefit) => ({
-				isChecked: true,
-				text: `${benefit.copyBoldStart ?? ''}${benefit.copy}`,
-			}));
-	};
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -669,7 +595,17 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={getBenefits()}
+						checkListData={
+							getBenefitsChecklistFromLandingPageTool(
+								productKey,
+								landingPageSettings,
+							) ??
+							getBenefitsChecklistFromProductDescription(
+								productDescription,
+								countryGroupId,
+								abParticipations,
+							)
+						}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
@@ -864,7 +800,11 @@ export function CheckoutComponent({
 								}
 								isSignedIn={isSignedIn}
 								showSimilarProductsConsent={
-									abParticipations.similarProductsConsent === 'VariantA'
+									abParticipations.similarProductsConsent === 'VariantA' &&
+									showSimilarProductsConsentForRatePlan(
+										productDescription,
+										ratePlanKey,
+									)
 								}
 							/>
 
@@ -1267,9 +1207,11 @@ export function CheckoutComponent({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{abParticipations.similarProductsConsent === 'VariantB' && (
-								<SimilarProductsConsent />
-							)}
+							{abParticipations.similarProductsConsent === 'VariantB' &&
+								showSimilarProductsConsentForRatePlan(
+									productDescription,
+									ratePlanKey,
+								) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
