@@ -9,6 +9,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
@@ -61,10 +62,12 @@ const getCheckoutUrl = (
 		!orderIsGift
 	) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
-		const productGuardianWeekly =
-			countryGroupId === 'GBPCountries'
-				? 'GuardianWeeklyDomestic'
-				: 'GuardianWeeklyRestOfWorld';
+		const { productKey: productGuardianWeekly } =
+			internationaliseProductAndRatePlan(
+				countryGroups[countryGroupId].supportInternationalisationId,
+				'GuardianWeeklyDomestic',
+				billingPeriod,
+			);
 		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
 		return addQueryParamsToURL(url, {
 			promoCode: promotion?.promoCode,
