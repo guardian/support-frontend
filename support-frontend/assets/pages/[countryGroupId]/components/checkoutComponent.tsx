@@ -59,6 +59,7 @@ import {
 	type ActiveProductKey,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
+	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -806,7 +807,11 @@ export function CheckoutComponent({
 								}
 								isSignedIn={isSignedIn}
 								showSimilarProductsConsent={
-									abParticipations.similarProductsConsent === 'VariantA'
+									abParticipations.similarProductsConsent === 'VariantA' &&
+									showSimilarProductsConsentForRatePlan(
+										productDescription,
+										ratePlanKey,
+									)
 								}
 							/>
 
@@ -1209,9 +1214,11 @@ export function CheckoutComponent({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{abParticipations.similarProductsConsent === 'VariantB' && (
-								<SimilarProductsConsent />
-							)}
+							{abParticipations.similarProductsConsent === 'VariantB' &&
+								showSimilarProductsConsentForRatePlan(
+									productDescription,
+									ratePlanKey,
+								) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
