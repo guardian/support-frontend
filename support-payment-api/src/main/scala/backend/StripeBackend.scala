@@ -41,6 +41,7 @@ class StripeBackend(
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
     val switchService: SwitchService,
+    val metricService: MetricService,
     environment: Environment,
 )(implicit pool: DefaultThreadPool, WSClient: WSClient)
     extends StrictLogging
@@ -78,7 +79,8 @@ class StripeBackend(
   def createCharge(
       chargeData: LegacyStripeChargeRequest,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
+  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] = {
+    metricService.metricPut("StripeBackend.createCharge")
     stripeService
       .createCharge(chargeData)
       .leftMap(err => {
@@ -102,6 +104,7 @@ class StripeBackend(
           StripeCreateChargeResponse.fromCharge(charge, identityUserDetails.map(_.userType))
         }
       }
+  }
 
   def processRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] = {
     for {
@@ -357,6 +360,7 @@ object StripeBackend {
       supporterProductDataService: SupporterProductDataService,
       softOptInsService: SoftOptInsService,
       switchService: SwitchService,
+      metricService: MetricService,
       environment: Environment,
   )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: AmazonS3): StripeBackend = {
     new StripeBackend(
@@ -370,6 +374,7 @@ object StripeBackend {
       supporterProductDataService,
       softOptInsService,
       switchService,
+      metricService,
       environment,
     )
   }
@@ -406,6 +411,7 @@ object StripeBackend {
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
       new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
+      new MetricService(env).valid: InitializationResult[MetricService],
       env.valid: InitializationResult[Environment],
     ).mapN(StripeBackend.apply)
   }

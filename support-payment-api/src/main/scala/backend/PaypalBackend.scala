@@ -8,6 +8,15 @@ import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricPut.{
+  MetricDimensionName,
+  MetricDimensionValue,
+  MetricName,
+  MetricNamespace,
+  MetricRequest,
+}
+import com.gu.aws.AwsCloudWatchMetricSetup.getMetricRequest
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
@@ -41,6 +50,7 @@ class PaypalBackend(
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
     val switchService: SwitchService,
+    val metricService: MetricService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
@@ -64,6 +74,9 @@ class PaypalBackend(
     }
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
+    metricService.metricPut(
+      "PaypalBackend.createPayment",
+    ) // Not particularly interested in this metric but it shows us that metrics are working
     for {
       email <- extractEmail(c.returnURL)
       _ <-
@@ -94,7 +107,8 @@ class PaypalBackend(
   def capturePayment(
       capturePaymentData: CapturePaypalPaymentData,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] = {
+    metricService.metricPut("PaypalBackend.capturePayment")
     paypalService
       .capturePayment(capturePaymentData)
       .biflatMap(
@@ -129,6 +143,7 @@ class PaypalBackend(
             .recover { case _ => EnrichedPaypalPayment(payment, maybeEmail, None) }
         },
       )
+  }
 
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,
@@ -294,6 +309,7 @@ object PaypalBackend {
       supporterProductDataService: SupporterProductDataService,
       softOptInsService: SoftOptInsService,
       switchService: SwitchService,
+      metricService: MetricService,
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(
       paypalService,
@@ -305,6 +321,7 @@ object PaypalBackend {
       supporterProductDataService,
       softOptInsService,
       switchService,
+      metricService,
     )
   }
 
@@ -337,6 +354,7 @@ object PaypalBackend {
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
       new SwitchService(env)(awsClient, system, paypalThreadPool).valid: InitializationResult[SwitchService],
+      new MetricService(env).valid: InitializationResult[MetricService],
     ).mapN(PaypalBackend.apply)
   }
 }
