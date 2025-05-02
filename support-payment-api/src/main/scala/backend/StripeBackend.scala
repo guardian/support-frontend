@@ -84,7 +84,6 @@ class StripeBackend(
       request: StripePaymentIntentRequest.CreatePaymentIntent,
       clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
-    cloudWatchService.put("createPaymentIntent-called", PaymentProvider.Stripe)
     def isApplePayOrPaymentRequestButton = request.paymentData.stripePaymentMethod match {
       case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
       case _ => false
