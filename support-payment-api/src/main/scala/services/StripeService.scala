@@ -16,7 +16,6 @@ import model.stripe._
 
 trait StripeService {
 
-  def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge]
   def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit]
 
   def createPaymentIntent(
@@ -34,30 +33,6 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   // Don't set the secret API key globally (i.e. Stripe.apiKey = "api_key")
   // since charges in AUD and other currencies (respectively) will be made against different accounts.
   private val requestOptions = RequestOptions.builder().setApiKey(config.secretKey).build()
-
-  // https://stripe.com/docs/api/java#create_charge
-  private def getChargeParams(data: LegacyStripeChargeRequest) =
-    Map[String, AnyRef](
-      "amount" -> new Integer((data.paymentData.amount * 100).toInt), // -- stripe amount must be in pence
-      "currency" -> data.paymentData.currency.entryName,
-      "source" -> data.paymentData.token.value,
-      "receipt_email" -> data.paymentData.email.value,
-    ).asJava
-
-  def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] = {
-    if (model.Currency.isAmountOutOfBounds(data.paymentData.amount, data.paymentData.currency)) {
-      Left(StripeApiError.fromString("Amount is outside the allowed range ", Some(config.publicKey))).toEitherT[Future]
-    } else {
-      Future(Charge.create(getChargeParams(data), requestOptions)).attemptT
-        .bimap(
-          err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
-          charge => {
-            logger.info(s"Stripe charge with id ${charge.getId} created")
-            charge
-          },
-        )
-    }
-  }
 
   def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     Future(Event.retrieve(stripeHook.id, requestOptions)).attemptT
@@ -167,9 +142,6 @@ class CountryBasedStripeService(
 
   private def validateRefundHookForUSD(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] =
     us.validateRefundHook(stripeHook) orElse default.validateRefundHook(stripeHook)
-
-  override def createCharge(data: LegacyStripeChargeRequest): EitherT[Future, StripeApiError, Charge] =
-    getAccountToUse(data).createCharge(data)
 
   override def createPaymentIntent(
       data: StripePaymentIntentRequest.CreatePaymentIntent,

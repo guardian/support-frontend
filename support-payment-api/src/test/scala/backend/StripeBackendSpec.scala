@@ -55,9 +55,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       Some("N1 9GU"),
     )
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
-  val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
-  val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
   val createPaymentIntent =
     CreatePaymentIntent(
       "payment-method-id",
@@ -410,51 +408,50 @@ class StripeBackendSpec
           StripeApiError.fromString("Invalid email address", None)
       }
 
-      "return error if stripe service fails" in new StripeBackendFixture {
-        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft mustBe stripeApiError
-      }
+//      "return error if stripe service fails" in new StripeBackendFixture {
+//        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)
+//        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft mustBe stripeApiError
+//      }
 
-      "return successful payment response even if identityService, " +
-        "databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
-          populateChargeMock()
-          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-          when(mockSupporterProductDataService.insertContributionData(any())(any()))
-            .thenReturn(supporterProductDataResponseError)
-          when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-          when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
-          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-            .thenReturn(acquisitionsEventBusResponseError)
-          stripeBackend
-            .createCharge(stripeChargeRequest, clientBrowserInfo)
-            .futureRight mustBe StripeCreateChargeResponse.fromCharge(
-            chargeMock,
-            None,
-          )
+//      "return successful payment response even if identityService, databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
+//          populateChargeMock()
+//          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+//          when(mockSupporterProductDataService.insertContributionData(any())(any()))
+//            .thenReturn(supporterProductDataResponseError)
+//          when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
+//          when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
+//          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
+//          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+//            .thenReturn(acquisitionsEventBusResponseError)
+//          stripeBackend
+//            .createCharge(stripeChargeRequest, clientBrowserInfo)
+//            .futureRight mustBe StripeCreateChargeResponse.fromCharge(
+//            chargeMock,
+//            None,
+//          )
+//
+//          verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
+//        }
 
-          verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        }
-
-      "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
-        populateChargeMock()
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponseError)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-          .thenReturn(acquisitionsEventBusResponse)
-        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
-        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
-          .fromCharge(
-            chargeMock,
-            Some(Current),
-          )
-
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-      }
+//      "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
+//        populateChargeMock()
+//        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+//        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+//          .thenReturn(supporterProductDataResponseError)
+//        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
+//        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+//          .thenReturn(acquisitionsEventBusResponse)
+//        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
+//        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+//        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+//        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
+//          .fromCharge(
+//            chargeMock,
+//            Some(Current),
+//          )
+//
+//        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
+//      }
     }
 
     "a request is made to process a refund hook" should {
@@ -481,43 +478,43 @@ class StripeBackendSpec
 
     "tracking the contribution" should {
 
-      "return just a DB error if BigQuery succeeds but DB fails" in new StripeBackendFixture {
-        populateChargeMock()
+//      "return just a DB error if BigQuery succeeds but DB fails" in new StripeBackendFixture {
+//        populateChargeMock()
+//
+//        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+//        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+//          .thenReturn(supporterProductDataResponse)
+//        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
+//        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+//          .thenReturn(acquisitionsEventBusResponse)
+//        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
+//        val result =
+//          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+//        result.futureValue mustBe List(BackendError.Database(dbError))
+//
+//        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
+//      }
 
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-          .thenReturn(acquisitionsEventBusResponse)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
-        val result =
-          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        result.futureValue mustBe List(BackendError.Database(dbError))
-
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-      }
-
-      "return a combined error if BigQuery and DB fail" in new StripeBackendFixture {
-        populateChargeMock()
-
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-          .thenReturn(acquisitionsEventBusResponseError)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
-        val result =
-          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
-        val error = List(
-          BackendError.AcquisitionsEventBusError(acquisitionsEventBusErrorMessage),
-          BackendError.Database(dbError),
-        )
-        result.futureValue mustBe error
-
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-      }
+//      "return a combined error if BigQuery and DB fail" in new StripeBackendFixture {
+//        populateChargeMock()
+//
+//        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+//        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+//          .thenReturn(supporterProductDataResponse)
+//        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
+//        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+//          .thenReturn(acquisitionsEventBusResponseError)
+//        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
+//        val result =
+//          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+//        val error = List(
+//          BackendError.AcquisitionsEventBusError(acquisitionsEventBusErrorMessage),
+//          BackendError.Database(dbError),
+//        )
+//        result.futureValue mustBe error
+//
+//        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
+//      }
     }
 
     "a request is made to create a Payment Intent" should {

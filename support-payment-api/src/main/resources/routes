@@ -13,10 +13,6 @@ GET      /acquisition/a.gif                                   controllers.AppCon
 # STRIPE
 #############################################
 
-# Execute a pre-authorised Stripe payment
-POST     /contribute/one-off/stripe/execute-payment           controllers.StripeController.executePayment
-OPTIONS  /contribute/one-off/stripe/execute-payment           controllers.AppController.corsOptions
-
 # This endpoint is called by Stripe via a webhook to notify us of refunds
 POST     /contribute/one-off/stripe/refund                    controllers.StripeController.processRefund
 

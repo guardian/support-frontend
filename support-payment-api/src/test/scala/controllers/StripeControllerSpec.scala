@@ -1,29 +1,37 @@
 package controllers
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.{ActorMaterializer, Materializer}
+import model.stripe.{
+  NonEmptyString,
+  StripeApiError,
+  StripePaymentData,
+  StripePaymentIntentsApiResponse,
+  StripePaymentMethod,
+  StripePublicKey,
+}
 import backend._
 import cats.data.EitherT
 import cats.implicits._
 import com.stripe.exception.{CardException, InvalidRequestException}
 import com.stripe.model.{Charge, Event}
-import model.DefaultThreadPool
-import model.stripe.{StripeApiError, StripeCreateChargeResponse}
-import org.mockito.Mockito._
+import io.circe.syntax.EncoderOps
+import model.Currency.GBP
+import model.stripe.StripePaymentIntentRequest.CreatePaymentIntent
+import model.{AcquisitionData, DefaultThreadPool, UserType}
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.{ActorMaterializer, Materializer}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api._
 import play.api.http.Status
-import play.api.inject.DefaultApplicationLifecycle
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
 import play.api.mvc._
 import play.api.routing.Router
 import play.api.test.Helpers._
 import play.api.test._
-import play.core.DefaultWebCommands
 import router.Routes
 import services.CloudWatchService
 import util.RequestBasedProvider
@@ -34,38 +42,17 @@ class StripeControllerFixture(implicit ec: ExecutionContext, context: Applicatio
     extends BuiltInComponentsFromContext(context)
     with MockitoSugar {
 
-  val mockCharge: Charge =
-    mock[Charge]
-
-  when(mockCharge.getCurrency).thenReturn("GBP")
-  when(mockCharge.getAmount).thenReturn(1L)
-
   val mockStripeBackend: StripeBackend =
     mock[StripeBackend]
 
   val mockStripeRequestBasedProvider: RequestBasedProvider[StripeBackend] =
     mock[RequestBasedProvider[StripeBackend]]
 
-  val stripeChargeSuccessMock: StripeCreateChargeResponse = StripeCreateChargeResponse.fromCharge(mockCharge, None)
+  val stripePaymentIntentsSuccessMock: StripePaymentIntentsApiResponse =
+    StripePaymentIntentsApiResponse.Success(Some(UserType.New))
 
-  val stripeServiceResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.right(Future.successful(stripeChargeSuccessMock))
-
-  val stripeServiceInvalidRequestErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](
-      StripeApiError.fromThrowable(
-        new InvalidRequestException("failure", "param1", "id12345", "code", 500, new Throwable),
-        None,
-      ),
-    )
-
-  val stripeServiceCardErrorResponse: EitherT[Future, StripeApiError, StripeCreateChargeResponse] =
-    EitherT.leftT[Future, StripeCreateChargeResponse](
-      StripeApiError.fromStripeException(
-        new CardException("failure", "id12345", "001", "param1", "card_not_supported", "charge1", 400, new Throwable),
-        None,
-      ),
-    )
+  val stripeServiceResponse: EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
+    EitherT.right(Future.successful(stripePaymentIntentsSuccessMock))
 
   val mockEvent: Event = mock[Event]
 
@@ -107,263 +94,94 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
   implicit val executionContext: ExecutionContext = ExecutionContext.global
 
   val context = ApplicationLoader.Context.create(Environment.simple())
+  val createPaymentIntent = CreatePaymentIntent(
+    paymentMethodId = "test_id",
+    paymentData = StripePaymentData(
+      currency = GBP,
+      amount = 1,
+      email = NonEmptyString("email@theguardian.com"),
+      stripePaymentMethod = Some(StripePaymentMethod.StripeCheckout),
+    ),
+    acquisitionData = AcquisitionData(
+      platform = Some("android"),
+      browserId = Some("ophanBrowserId"),
+      pageviewId = Some("ophanPageviewId"),
+      referrerPageviewId = Some("refererPageviewId"),
+      referrerUrl = Some("refererUrl"),
+      componentId = Some("componentId"),
+      campaignCodes = Some(Set("code", "code2")),
+      componentType = Some("AcquisitionsOther"),
+      source = Some("GuardianWeb"),
+      abTests = None,
+      gaId = None,
+      labels = None,
+      queryParameters = None,
+      postalCode = None,
+    ),
+    publicKey = Some(StripePublicKey("pk_test_FOO")),
+    recaptchaToken = "recaptchaToken",
+  )
 
   "StripeController" when {
 
     "a request is made to create a payment" should {
 
-      "return a 200 response if the request is valid and sent using the old format - full request" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "currency": "GBP",
-              |  "amount": 1,
-              |  "token": "token",
-              |  "email": "email",
-              |  "ophanBrowserId": "ophanBrowserId",
-              |  "ophanPageviewId": "jducx5kjl3u7cwf5ocud",
-              |  "refererPageviewId": "refererPageviewId",
-              |  "refererUrl": "refererUrl",
-              |  "platform": "android",
-              |  "cmp": "cmp",
-              |  "intCmp": "intCmp",
-              |  "componentId": "componentId",
-              |  "componentType": "AcquisitionsEditorialLink",
-              |  "source": "GuardianWeb",
-              |  "idUser": "idUser",
-              |  "abTest": {
-              |    "name":"abTest-checkout",
-              |    "variant":"abTest-stripe"
-              |  },
-              |  "refererAbTest": {
-              |    "name":"refererAbTest-checkout",
-              |    "variant":"refererAbTest-stripe"
-              |  },
-              |  "nativeAbTests":[
-              |    {
-              |      "name":"a-checkout",
-              |      "variant":"a-stripe"
-              |    },
-              |    {
-              |      "name":"b-checkout",
-              |      "variant":"b-stripe"
-              |    }
-              |  ],
-              |  "queryParameters": [
-              |   {
-              |      "name":"param1",
-              |      "value":"val1"
-              |    },
-              |    {
-              |      "name":"param2",
-              |      "value":"val2"
-              |    }
-              |  ],
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(200)
-      }
-
-      "return a 200 response if the request is valid and sent using the old format with the minimal params" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "currency": "GBP",
-              |  "amount": 1,
-              |  "token": "token",
-              |  "email": "email@theguardian.com"
-              |}
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(200)
-      }
-
       "return a 200 response if the request is valid and sent using the new format - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
+          when(mockStripeBackend.createPaymentIntent(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "paymentData": {
-              |    "currency": "GBP",
-              |    "amount": 1,
-              |    "token": "token",
-              |    "email": "email@theguardian.com"
-              |  },
-              |  "acquisitionData": {
-              |    "platform": "android",
-              |    "browserId": "ophanBrowserId",
-              |    "pageviewId": "ophanPageviewId",
-              |    "referrerPageviewId": "refererPageviewId",
-              |    "referrerUrl": "refererUrl",
-              |    "componentId": "componentId",
-              |    "campaignCodes" : ["code", "code2"],
-              |    "componentType": "AcquisitionsOther",
-              |    "source": "GuardianWeb",
-              |    "nativeAbTests":[
-              |       {
-              |         "name":"a-checkout",
-              |         "variant":"a-stripe"
-              |       },
-              |       {
-              |         "name":"b-checkout",
-              |         "variant":"b-stripe"
-              |       }
-              |     ]
-              |  },
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
+        val json = parse(createPaymentIntent.asJson.noSpaces)
+
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create-payment")
+          .withJsonBody(json)
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(200)
+          Helpers.call(fixture.stripeController.createPayment, createStripeRequest)
+        val resultStatus = status(stripeControllerResult)
+        resultStatus.mustBe(200)
       }
 
       "return a 200 response if the request is valid and the amount contains a decimal point - full request" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
+          when(mockStripeBackend.createPaymentIntent(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "paymentData": {
-              |    "currency": "GBP",
-              |    "amount": 1.23,
-              |    "token": "token",
-              |    "email": "email@theguardian.com"
-              |  },
-              |  "acquisitionData": {
-              |    "platform": "android",
-              |    "browserId": "ophanBrowserId",
-              |    "pageviewId": "ophanPageviewId",
-              |    "referrerPageviewId": "refererPageviewId",
-              |    "referrerUrl": "refererUrl",
-              |    "componentId": "componentId",
-              |    "campaignCodes" : ["code", "code2"],
-              |    "componentType": "AcquisitionsOther",
-              |    "source": "GuardianWeb",
-              |    "nativeAbTests":[
-              |       {
-              |         "name":"a-checkout",
-              |         "variant":"a-stripe"
-              |       },
-              |       {
-              |         "name":"b-checkout",
-              |         "variant":"b-stripe"
-              |       }
-              |     ]
-              |  },
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
+        val json = parse(
+          createPaymentIntent
+            .copy(
+              paymentData = createPaymentIntent.paymentData.copy(amount = 1.23),
+            )
+            .asJson
+            .noSpaces,
+        )
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create-payment")
+          .withJsonBody(json)
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(200)
-      }
-
-      "return a 200 response if the request is valid and no publicKey is passed in - backwards compatible request" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "paymentData": {
-              |    "currency": "GBP",
-              |    "amount": 1.23,
-              |    "token": "token",
-              |    "email": "email@theguardian.com"
-              |  },
-              |  "acquisitionData": {
-              |    "platform": "android",
-              |    "browserId": "ophanBrowserId",
-              |    "pageviewId": "ophanPageviewId",
-              |    "referrerPageviewId": "refererPageviewId",
-              |    "referrerUrl": "refererUrl",
-              |    "componentId": "componentId",
-              |    "campaignCodes" : ["code", "code2"],
-              |    "componentType": "AcquisitionsOther",
-              |    "source": "GuardianWeb",
-              |    "nativeAbTests":[
-              |       {
-              |         "name":"a-checkout",
-              |         "variant":"a-stripe"
-              |       },
-              |       {
-              |         "name":"b-checkout",
-              |         "variant":"b-stripe"
-              |       }
-              |     ]
-              |  }
-              |}
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+          Helpers.call(fixture.stripeController.createPayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(200)
       }
 
       "return cors headers if origin matches existing config definition" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
+          when(mockStripeBackend.createPaymentIntent(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "paymentData": {
-              |    "currency": "GBP",
-              |    "amount": 1.23,
-              |    "token": "token",
-              |    "email": "email@theguardian.com"
-              |  },
-              |  "acquisitionData": {
-              |    "platform": "android"
-              |  },
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
+
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create-payment")
+          .withJsonBody(parse(createPaymentIntent.asJson.noSpaces))
           .withHeaders("origin" -> "https://cors.com")
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+          Helpers.call(fixture.stripeController.createPayment, createStripeRequest)
 
         val headerResponse = headers(stripeControllerResult)
         headerResponse.get("Access-Control-Allow-Origin").mustBe(Some("https://cors.com"))
@@ -373,12 +191,12 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
 
       "return a 400 response if the request contains an invalid JSON" in {
         val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
+          when(mockStripeBackend.createPaymentIntent(any(), any()))
             .thenReturn(stripeServiceResponse)
           when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
             .thenReturn(mockStripeBackend)
         }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
+        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/create-payment")
           .withJsonBody(parse("""
               |{
               |  "paymentData": {
@@ -392,101 +210,9 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
             """.stripMargin))
 
         val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
+          Helpers.call(fixture.stripeController.createPayment, createStripeRequest)
 
         status(stripeControllerResult).mustBe(400)
-      }
-
-      "return a 400 response with an appropriate failure reason if the request contains an empty token" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-            {
-              "paymentData": {
-                "currency": "GBP",
-                "amount": 1.23,
-                "token": "",
-                "email": "email@theguardian.com"
-              },
-              "acquisitionData": {
-                "platform": "android"
-              }
-            }
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(400)
-
-        val expectedBody =
-          Json.obj(
-            "type" -> "error",
-            "error" -> "DecodingFailure at .paymentData.token: Empty string is not permitted for this field",
-          )
-        contentAsJson(stripeControllerResult).mustBe(expectedBody)
-
-      }
-
-      "return a 402 response with an appropriate failure reason if the response from the service contains a CardException" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceCardErrorResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "currency": "GBP",
-              |  "amount": 1,
-              |  "token": "token",
-              |  "email": "email@theguardian.com",
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(402)
-
-        val expectedBody =
-          Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "payment_method_unacceptable"))
-        contentAsJson(stripeControllerResult).mustBe(expectedBody)
-
-      }
-
-      "return a 500 response if the response from the service contains an error (other than a CardException)" in {
-        val fixture = new StripeControllerFixture()(executionContext, context) {
-          when(mockStripeBackend.createCharge(any(), any()))
-            .thenReturn(stripeServiceInvalidRequestErrorResponse)
-          when(mockStripeRequestBasedProvider.getInstanceFor(any())(any()))
-            .thenReturn(mockStripeBackend)
-        }
-        val createStripeRequest = FakeRequest("POST", "/contribute/one-off/stripe/execute-payment")
-          .withJsonBody(parse("""
-              |{
-              |  "currency": "GBP",
-              |  "amount": 1,
-              |  "token": "token",
-              |  "email": "email@theguardian.com",
-              |  "publicKey": "pk_test_FOO"
-              |}
-            """.stripMargin))
-
-        val stripeControllerResult: Future[play.api.mvc.Result] =
-          Helpers.call(fixture.stripeController.executePayment, createStripeRequest)
-
-        status(stripeControllerResult).mustBe(500)
-
-        val expectedBody = Json.obj("type" -> "error", "error" -> Json.obj("failureReason" -> "unknown"))
-        contentAsJson(stripeControllerResult).mustBe(expectedBody)
       }
     }
 

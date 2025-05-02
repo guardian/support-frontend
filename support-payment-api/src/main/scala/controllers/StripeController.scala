@@ -27,7 +27,6 @@ class StripeController(
     with CorsActionProvider {
 
   import model.CheckoutError.checkoutErrorEncoder
-  import model.stripe.StripeJsonDecoder._
   import util.RequestTypeDecoder.instances._
 
   private val RateLimitingAction = new RateLimitingAction(
@@ -40,22 +39,6 @@ class StripeController(
   )
 
   lazy val CorsAndRateLimitAction = CorsAction andThen RateLimitingAction
-
-  // Stripe Checkout handler, still required for mobile apps payments
-  def executePayment: Action[LegacyStripeChargeRequest] = CorsAndRateLimitAction
-    .async(circe.json[LegacyStripeChargeRequest]) { request =>
-      stripeBackendProvider
-        .getInstanceFor(request)
-        .createCharge(request.body, ClientBrowserInfo.fromRequest(request, request.body.acquisitionData.gaId))
-        .fold(
-          err => {
-            val errorResponse = CheckoutErrorResponse.fromStripeApiError(err)
-            new Status(errorResponse.statusCode)(ResultBody.Error(errorResponse.checkoutError))
-          },
-          charge => Ok(ResultBody.Success(charge)),
-        )
-    }
-    .withLogging(this.getClass.getCanonicalName, "executePayment")
 
   def processRefund: Action[StripeRefundHook] = Action(circe.json[StripeRefundHook])
     .async { request =>
