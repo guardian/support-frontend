@@ -39,11 +39,6 @@ OPTIONS  /contribute/one-off/paypal/create-payment            controllers.AppCon
 POST     /contribute/one-off/paypal/execute-payment           controllers.PaypalController.executePayment
 OPTIONS  /contribute/one-off/paypal/execute-payment           controllers.AppController.corsOptions
 
-# Captures the funds from a payment which has been created & authorised directly via
-# the PayPal API (not via /contribute/one-off/paypal/create-payment in this API).
-# This is only used by the mobile app.
-POST     /contribute/one-off/paypal/capture-payment           controllers.PaypalController.capturePayment
-
 # This endpoint is called by PayPal via a webhook to notify us of refunds
 POST     /contribute/one-off/paypal/refund                    controllers.PaypalController.processRefund
 

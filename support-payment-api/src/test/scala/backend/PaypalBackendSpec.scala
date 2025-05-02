@@ -43,8 +43,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       Some("N1 9GU"),
     )
-  val capturePaypalPaymentData =
-    CapturePaypalPaymentData(CapturePaymentData("paymentId"), acquisitionData, Some("email@email.com"))
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
   val executePaypalPaymentData = ExecutePaypalPaymentData(
@@ -256,33 +254,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         paypalBackend.createPayment(createPaypalPaymentDataWithInvalidEmail).futureLeft mustBe
           PaypalApiError(None, None, "Invalid email address")
       }
-    }
-
-    "a request is made to capture a payment" should {
-
-      "return error if paypal service fails" in new PaypalBackendFixture {
-        when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponseError)
-        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
-        paypalBackend.capturePayment(capturePaypalPaymentData, clientBrowserInfo).futureLeft mustBe
-          paymentError
-
-      }
-
-      "return successful payment response even if identityService, " +
-        "databaseService and emailService fail" in new PaypalBackendFixture {
-          populatePaymentMock()
-          val enrichedPaypalPaymentMock =
-            EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail), None)
-          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
-          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-            .thenReturn(acquisitionsEventBusResponseError)
-          when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponse)
-          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-          paypalBackend
-            .capturePayment(capturePaypalPaymentData, clientBrowserInfo)
-            .futureRight mustBe enrichedPaypalPaymentMock
-        }
     }
 
     "a request is made to execute a payment" should {

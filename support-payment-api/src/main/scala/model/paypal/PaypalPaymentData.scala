@@ -12,62 +12,6 @@ object PaypalJsonDecoder {
 
   implicit val executePaypalPaymentDataDecoder: Decoder[ExecutePaypalPaymentData] =
     deriveDecoder[ExecutePaypalPaymentData]
-
-  private val legacyCapturePaypalPaymentDataDecoder: Decoder[CapturePaypalPaymentData] = Decoder.instance { cursor =>
-    import cursor._
-    for {
-      paymentId <- downField("paymentId").as[String]
-      browserId <- downField("ophanBrowserId").as[Option[String]]
-      platform <- downField("platform").as[Option[String]]
-      cmp <- downField("cmp").as[Option[String]]
-      intcmp <- downField("intCmp").as[Option[String]]
-      refererPageviewId <- downField("refererPageviewId").as[Option[String]]
-      refererUrl <- downField("refererUrl").as[Option[String]]
-      ophanPageviewId <- downField("ophanPageviewId").as[Option[String]]
-      componentId <- downField("componentId").as[Option[String]]
-      componentType <- downField("componentType").as[Option[String]]
-      source <- downField("source").as[Option[String]]
-      identityId <- downField("idUser").as[Option[String]]
-      abTest <- downField("abTest").as[Option[AbTest]]
-      refererAbTest <- downField("refererAbTest").as[Option[AbTest]]
-      nativeAbTests <- downField("nativeAbTests").as[Option[Set[AbTest]]]
-      queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
-      gaId <- downField("gaId").as[Option[String]]
-      labels <- downField("labels").as[Option[Set[String]]]
-      postalCode <- downField("postalCode").as[Option[String]]
-    } yield {
-      CapturePaypalPaymentData(
-        paymentData = CapturePaymentData(
-          paymentId = paymentId,
-        ),
-        acquisitionData = AcquisitionData(
-          platform = platform,
-          browserId = browserId,
-          pageviewId = ophanPageviewId,
-          referrerPageviewId = refererPageviewId,
-          referrerUrl = refererUrl,
-          componentId = componentId,
-          campaignCodes = Option(Set(cmp, intcmp).flatten).filter(_.nonEmpty),
-          componentType = componentType,
-          source = source,
-          abTests = Option(
-            Set(abTest, refererAbTest).flatten ++ nativeAbTests
-              .getOrElse(Set[AbTest]()),
-          )
-            .filter(_.nonEmpty),
-          queryParameters = queryParameters,
-          gaId = gaId,
-          labels = labels,
-          postalCode = postalCode,
-        ),
-        signedInUserEmail = None,
-      )
-    }
-  }
-
-  implicit val capturePaypalPaymentDataDecoder: Decoder[CapturePaypalPaymentData] =
-    legacyCapturePaypalPaymentDataDecoder.or(deriveDecoder[CapturePaypalPaymentData])
-
 }
 
 /*
@@ -81,16 +25,6 @@ object PaypalJsonDecoder {
     amount: BigDecimal,
     returnURL: String,
     cancelURL: String,
-)
-
-@JsonCodec case class CapturePaymentData(
-    paymentId: String,
-)
-
-case class CapturePaypalPaymentData(
-    paymentData: CapturePaymentData,
-    acquisitionData: AcquisitionData,
-    signedInUserEmail: Option[String],
 )
 
 @JsonCodec case class ExecutePaymentData(

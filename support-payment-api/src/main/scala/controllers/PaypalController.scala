@@ -41,21 +41,6 @@ class PaypalController(
     }
     .withLogging(this.getClass.getCanonicalName, "createPayment")
 
-  def capturePayment(): Action[CapturePaypalPaymentData] = Action
-    .async(circe.json[CapturePaypalPaymentData]) { captureRequest =>
-      paypalBackendProvider
-        .getInstanceFor(captureRequest)
-        .capturePayment(
-          captureRequest.body,
-          ClientBrowserInfo.fromRequest(captureRequest, captureRequest.body.acquisitionData.gaId),
-        )
-        .fold(
-          err => toErrorResult(err),
-          _ => Ok(ResultBody.Success(())),
-        )
-    }
-    .withLogging(this.getClass.getCanonicalName, "capturePayment")
-
   // We return the email that we track the acquisition with so that we can offer the user the chance to sign up
   // to marketing emails with the same email that we associate with the acquisition in our database
   def executePayment: Action[ExecutePaypalPaymentData] = CorsAction
