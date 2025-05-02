@@ -3,14 +3,14 @@ import type { ReactNode } from 'react';
 import 'helpers/types/option';
 import './label.scss';
 // ----- Types ----- //
-export type PropsForHoc = {
+export type WithLabelProps = {
 	label: string;
 	id?: string;
 	optional?: boolean;
 	footer?: ReactNode;
 	labelId?: string;
 };
-type Props = PropsForHoc & {
+type Props = WithLabelProps & {
 	htmlFor?: string;
 	children: ReactNode;
 };

@@ -4,12 +4,9 @@ import {
 	CardExpiryElement,
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
-import type { PropsForHoc as WithErrorProps } from 'components/forms/customFields/error';
+import type { WithErrorProps } from 'components/forms/customFields/error';
 import { Error } from 'components/forms/customFields/error';
-import {
-	Label,
-	type PropsForHoc as WithLabelProps,
-} from 'components/forms/label';
+import { Label, type WithLabelProps } from 'components/forms/label';
 import type { RecaptchaProps } from 'components/recaptcha/recaptcha';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 
