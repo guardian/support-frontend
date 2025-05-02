@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
-import type { ContributionType } from 'helpers/contributions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -11,23 +11,23 @@ jest.mock('helpers/utilities/dateFormatting', () => ({
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
-		productKey               | contributionType
-		${'Contribution'}        | ${'MONTHLY'}
-		${'Contribution'}        | ${'ANNUALY'}
-		${'SupporterPlus'}       | ${'MONTHLY'}
-		${'SupporterPlus'}       | ${'ANNUALY'}
-		${'TierThree'}           | ${'MONTHLY'}
-		${'TierThree'}           | ${'ANNUALY'}
-		${'OneTimeContribution'} | ${'MONTHLY'}
-		${'GuardianAdLite'}      | ${'MONTHLY'}
-		${'GuardianAdLite'}      | ${'ANNUALY'}
-		${'DigitalSubscription'} | ${'MONTHLY'}
+		productKey               | billingPeriod
+		${'Contribution'}        | ${'Monthly'}
+		${'Contribution'}        | ${'Annual'}
+		${'SupporterPlus'}       | ${'Monthly'}
+		${'SupporterPlus'}       | ${'Annual'}
+		${'TierThree'}           | ${'Monthly'}
+		${'TierThree'}           | ${'Annual'}
+		${'OneTimeContribution'} | ${'Monthly'}
+		${'GuardianAdLite'}      | ${'Monthly'}
+		${'GuardianAdLite'}      | ${'Annual'}
+		${'DigitalSubscription'} | ${'Monthly'}
 	`(
-		`summaryTs&Cs for $productKey With contributionType $contributionType renders correctly`,
-		({ productKey, contributionType }) => {
+		`summaryTs&Cs for $productKey With billingPeriod $billingPeriod renders correctly`,
+		({ productKey, billingPeriod }) => {
 			const { container } = render(
 				<SummaryTsAndCs
-					contributionType={contributionType as ContributionType}
+					billingPeriod={billingPeriod as BillingPeriod}
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey=""
 					currency={'GBP'}

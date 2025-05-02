@@ -1,7 +1,15 @@
 import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/models';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	countryGroups,
+	GBPCountries,
+} from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
@@ -31,13 +39,43 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import type { OphanComponentType } from 'helpers/tracking/trackingOphan';
-import { getOrigin, getQueryParameter } from 'helpers/urls/url';
+import {
+	addQueryParamsToURL,
+	getOrigin,
+	getQueryParameter,
+} from 'helpers/urls/url';
 import Prices from './content/prices';
 
+const countryPath = (countryGroupId: CountryGroupId) =>
+	countryGroups[countryGroupId].supportInternationalisationId;
+
 const getCheckoutUrl = (
+	countryId: IsoCountry,
 	billingPeriod: WeeklyBillingPeriod,
+	abParticipations: Participations,
 	orderIsGift: boolean,
+	promotion?: Promotion,
 ): string => {
+	// Gifting will be supported last
+	if (
+		abParticipations.guardianWeeklyGenericCheckout === 'variant' &&
+		!orderIsGift
+	) {
+		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
+		const { productKey: productGuardianWeekly } =
+			internationaliseProductAndRatePlan(
+				countryGroups[countryGroupId].supportInternationalisationId,
+				'GuardianWeeklyDomestic',
+				billingPeriod,
+			);
+		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
+		return addQueryParamsToURL(url, {
+			promoCode: promotion?.promoCode,
+			product: productGuardianWeekly,
+			ratePlan: billingPeriod.toString(),
+		});
+	}
+
 	const promoCode = getQueryParameter(promoQueryParam);
 	const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
 	const gift = orderIsGift ? '/gift' : '';
@@ -81,8 +119,10 @@ const getMainDisplayPrice = (
 };
 
 const weeklyProductProps = (
+	countryId: IsoCountry,
 	billingPeriod: WeeklyBillingPeriod,
 	productPrice: ProductPrice,
+	abParticipations: Participations,
 	orderIsAGift = false,
 ) => {
 	const promotion = getAppliedPromo(productPrice.promotions);
@@ -108,7 +148,13 @@ const weeklyProductProps = (
 			<span>{getSimplifiedPriceDescription(productPrice, billingPeriod)}</span>
 		),
 		buttonCopy: 'Subscribe now',
-		href: getCheckoutUrl(billingPeriod, orderIsAGift),
+		href: getCheckoutUrl(
+			countryId,
+			billingPeriod,
+			abParticipations,
+			orderIsAGift,
+			promotion,
+		),
 		label,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
@@ -119,12 +165,14 @@ const weeklyProductProps = (
 type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
+	abParticipations: Participations;
 	orderIsAGift: boolean;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
+	abParticipations,
 	orderIsAGift,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
@@ -145,13 +193,20 @@ const getProducts = ({
 					currency: 'GBP' as IsoCurrency,
 			  };
 
-		return weeklyProductProps(billingPeriod, productPrice, orderIsAGift);
+		return weeklyProductProps(
+			countryId,
+			billingPeriod,
+			productPrice,
+			abParticipations,
+			orderIsAGift,
+		);
 	});
 };
 
 function WeeklyProductPrices({
 	countryId,
 	productPrices,
+	abParticipations,
 	orderIsAGift,
 }: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
@@ -161,6 +216,7 @@ function WeeklyProductPrices({
 	const products = getProducts({
 		countryId,
 		productPrices,
+		abParticipations,
 		orderIsAGift,
 	});
 

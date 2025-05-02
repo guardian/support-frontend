@@ -552,19 +552,13 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const contributionType =
-		productFields.billingPeriod === 'Monthly'
-			? 'MONTHLY'
-			: productFields.billingPeriod === 'Annual'
-			? 'ANNUAL'
-			: 'ONE_OFF';
-
+	const billingPeriod = productFields.billingPeriod;
 	/*
   TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
           We should revisit this and see if we can remove this prop, pushing it lower down the tree
   */
 	const thresholdAmount = getLowerProductBenefitThreshold(
-		contributionType,
+		billingPeriod,
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
 		productKey,
@@ -618,17 +612,16 @@ export function CheckoutComponent({
 							);
 						}}
 						enableCheckList={true}
-						startDateTierThree={
-							productKey === 'TierThree' ? (
-								<OrderSummaryStartDate
-									startDate={formatUserDate(getTierThreeDeliveryDate())}
-								/>
-							) : null
+						startDate={
+							<OrderSummaryStartDate
+								productKey={productKey}
+								startDate={formatUserDate(getTierThreeDeliveryDate())}
+							/>
 						}
 						tsAndCs={
 							<OrderSummaryTsAndCs
 								productKey={productKey}
-								contributionType={contributionType}
+								billingPeriod={billingPeriod}
 								countryGroupId={countryGroupId}
 								thresholdAmount={thresholdAmount}
 								promotion={promotion}
@@ -1223,7 +1216,7 @@ export function CheckoutComponent({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							contributionType={contributionType}
+							billingPeriod={billingPeriod}
 							currency={currencyKey}
 							amount={originalAmount}
 						/>
@@ -1259,8 +1252,7 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							contributionType={contributionType}
+							billingPeriod={billingPeriod}
 							countryGroupId={countryGroupId}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}

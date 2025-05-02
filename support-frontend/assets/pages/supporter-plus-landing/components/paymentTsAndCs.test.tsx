@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
-import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
@@ -21,37 +21,35 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		discountedPrice: 324,
 	};
 	const paymentProductKeys = [
-		['GuardianAdLite', 'ANNUAL', 'GBPCountries', 0],
-		['DigitalSubscription', 'MONTHLY', 'GBPCountries', 0],
-		['OneTimeContribution', 'MONTHLY', 'UnitedStates', 0],
-		['Contribution', 'ANNUAL', 'AUDCountries', 0],
-		['SupporterPlus', 'MONTHLY', 'GBPCountries', 12],
-		['TierThree', 'MONTHLY', 'UnitedStates', 45],
-		['HomeDelivery', 'MONTHLY', 'GBPCountries', 0],
-		['NationalDelivery', 'MONTHLY', 'GBPCountries', 0],
-		['SubscriptionCard', 'MONTHLY', 'GBPCountries', 0],
-		['GuardianWeeklyDomestic', 'MONTHLY', 'GBPCountries', 0],
-		['GuardianWeeklyRestOfWorld', 'ANNUAL', 'UnitedStates', 0],
+		['GuardianAdLite', 'Annual', 'GBPCountries', 0],
+		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
+		['Contribution', 'Annual', 'AUDCountries', 0],
+		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
+		['TierThree', 'Monthly', 'UnitedStates', 45],
+		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
+		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
+		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
+		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
+		['GuardianWeeklyRestOfWorld', 'Annual', 'UnitedStates', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
-		(paymentProductKey, contributionType, countryGroupId, amount) => {
+		(paymentProductKey, billingPeriod, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				contributionType === 'MONTHLY' &&
+				billingPeriod === 'MONTHLY' &&
 				countryGroupId === 'UnitedStates'
 					? promotionTierThreeUnitedStatesMonthly
 					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
-					  contributionType === 'ANNUAL' &&
+					  billingPeriod === 'ANNUAL' &&
 					  countryGroupId === 'UnitedStates'
 					? promotionGuardianWeeklyUnitedStatesAnnual
 					: undefined;
 			const { container } = render(
 				<PaymentTsAndCs
-					contributionType={contributionType as ContributionType}
+					billingPeriod={billingPeriod as BillingPeriod}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
-					ratePlanKey={contributionType as string}
 					thresholdAmount={amount as number}
 					promotion={promo}
 				/>,

@@ -20,7 +20,7 @@ export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
-	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	currency: 'GBP',
 	amount: 0,
 };
@@ -29,7 +29,7 @@ export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Monthly',
-	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	currency: 'USD',
 	amount: 5,
 };
@@ -38,7 +38,7 @@ export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	currency: 'GBP',
 	amount: 12,
 };
@@ -47,7 +47,7 @@ export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
-	contributionType: 'MONTHLY',
+	billingPeriod: 'Monthly',
 	currency: 'GBP',
 	amount: 27,
 };

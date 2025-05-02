@@ -103,7 +103,7 @@ Default.args = {
 			</p>
 		</>
 	),
-	startDateTierThree: <></>,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -127,7 +127,7 @@ SingleContribution.args = {
 	},
 	checkListData: [],
 	tsAndCs: <></>,
-	startDateTierThree: <></>,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -158,11 +158,11 @@ RecurringContribution.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'Contribution'}
-			contributionType={'MONTHLY'}
+			billingPeriod={'Monthly'}
 			countryGroupId={GBPCountries}
 		/>
 	),
-	startDateTierThree: null,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -193,12 +193,12 @@ SupporterPlus.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
-			contributionType={'MONTHLY'}
+			billingPeriod={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={12}
 		/>
 	),
-	startDateTierThree: null,
+	startDate: null,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -233,13 +233,16 @@ TierThree.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'TierThree'}
-			contributionType={'MONTHLY'}
+			billingPeriod={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
 		/>
 	),
-	startDateTierThree: (
-		<OrderSummaryStartDate startDate={'Friday, April 11, 2025'} />
+	startDate: (
+		<OrderSummaryStartDate
+			startDate={'Friday, April 11, 2025'}
+			productKey="TierThree"
+		/>
 	),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">

@@ -1,28 +1,26 @@
-import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { billingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
-	countryGroupId: CountryGroup,
+	countryGroupId: CountryGroupId,
 	product: ActiveProductKey,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'
-			? contributionType === 'ANNUAL'
+			? billingPeriod === 'Annual'
 				? 'RestOfWorldAnnual'
 				: 'RestOfWorldMonthly'
-			: contributionType === 'ANNUAL'
+			: billingPeriod === 'Annual'
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
-	const ratePlanSupporterPlus =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	return (
-		productCatalog[product]?.ratePlans[
-			product === 'SupporterPlus' ? ratePlanSupporterPlus : ratePlanTier3
-		]?.pricing[currencyId] ?? 0
-	);
+	const ratePlanRegularContribution = billingPeriodTitle(billingPeriod);
+	const ratePlan =
+		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
+	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;
 }

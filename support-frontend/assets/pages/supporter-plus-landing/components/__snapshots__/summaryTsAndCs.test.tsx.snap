@@ -1,6 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With billingPeriod Annual renders correctly 1`] = `
+<div>
+  <div
+    class="css-mlt1i5-SummaryTsAndCs"
+  >
+    We will attempt to take payment of 
+    £0
+    ,
+     
+    on the first day of March every year
+    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
+  </div>
+</div>
+`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With billingPeriod Monthly renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -15,24 +30,9 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With co
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for Contribution With contributionType MONTHLY renders correctly 1`] = `
-<div>
-  <div
-    class="css-mlt1i5-SummaryTsAndCs"
-  >
-    We will attempt to take payment of 
-    £0
-    ,
-     
-    on the first day of every month
-    , from now until you cancel your payment. Payments may take up to 6 days to be recorded in your bank account. You can change how much you give or cancel your payment at any time.
-  </div>
-</div>
-`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With billingPeriod Monthly renders correctly 1`] = `<div />`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for DigitalSubscription With contributionType MONTHLY renders correctly 1`] = `<div />`;
-
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With billingPeriod Annual renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -48,7 +48,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With billingPeriod Monthly renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -64,9 +64,9 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With contributionType MONTHLY renders correctly 1`] = `<div />`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With billingPeriod Monthly renders correctly 1`] = `<div />`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With billingPeriod Annual renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -80,7 +80,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With c
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With billingPeriod Monthly renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -94,7 +94,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With c
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType ANNUALY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With billingPeriod Annual renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"
@@ -111,7 +111,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contr
 </div>
 `;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With contributionType MONTHLY renders correctly 1`] = `
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With billingPeriod Monthly renders correctly 1`] = `
 <div>
   <div
     class="css-mlt1i5-SummaryTsAndCs"

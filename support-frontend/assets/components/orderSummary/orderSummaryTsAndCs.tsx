@@ -6,10 +6,13 @@ import {
 	space,
 	textSans14,
 } from '@guardian/source/foundations';
-import { type ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import {
+	type BillingPeriod,
+	billingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const containerSummaryTsCs = css`
@@ -33,43 +36,54 @@ const productStartDate = css`
 	}
 `;
 
+const guardianWeeklyOrTierThreeProduct = (productKey: ActiveProductKey) => {
+	return [
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+		'TierThree',
+	].includes(productKey);
+};
+
 interface OrderSummaryStartDateProps {
 	startDate: string;
+	productKey: ActiveProductKey;
 }
 export function OrderSummaryStartDate({
 	startDate,
+	productKey,
 }: OrderSummaryStartDateProps): JSX.Element | null {
-	return (
-		<ul css={productStartDate}>
-			<li>Your digital benefits will start today.</li>
-			<li>
-				Your Guardian Weekly subscription will start on {startDate}. Please
-				allow 1 to 7 days after your start date for your magazine to arrive,
-				depending on national post services.
-			</li>
-		</ul>
-	);
+	if (guardianWeeklyOrTierThreeProduct(productKey)) {
+		return (
+			<ul css={productStartDate}>
+				{productKey === 'TierThree' && (
+					<li>Your digital benefits will start today.</li>
+				)}
+				<li>
+					Your Guardian Weekly subscription will start on {startDate}. Please
+					allow 1 to 7 days after your start date for your magazine to arrive,
+					depending on national post services.
+				</li>
+			</ul>
+		);
+	}
+	return null;
 }
 
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
-	contributionType,
+	billingPeriod,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
-	// Proceeds with RegularContributionType only
-	if (contributionType === 'ONE_OFF') {
-		return null;
-	}
-	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
+	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -77,7 +91,7 @@ export function OrderSummaryTsAndCs({
 					You’ll pay{' '}
 					{productLegal(
 						countryGroupId,
-						contributionType,
+						billingPeriod,
 						'/',
 						thresholdAmount,
 						promotion,
@@ -88,21 +102,21 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {period} until you cancel.</p>
+					<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
 					</p>
 				</>
 			)}
-			{productKey === 'TierThree' && (
-				<p>Auto renews every {period}. Cancel anytime.</p>
+			{guardianWeeklyOrTierThreeProduct(productKey) && (
+				<p>Auto renews every {billingPeriodSingular}. Cancel anytime.</p>
 			)}
 		</div>
 	);
 	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
-			<p>Auto renews every {period} until you cancel.</p>
+			<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
 			<p>
 				{['Contribution', 'OneTimeContribution'].includes(productKey)
 					? 'Cancel or change your support anytime.'
@@ -113,6 +127,8 @@ export function OrderSummaryTsAndCs({
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
+		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
+		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;
 }
