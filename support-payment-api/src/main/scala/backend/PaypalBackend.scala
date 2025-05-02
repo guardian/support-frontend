@@ -94,7 +94,8 @@ class PaypalBackend(
   def capturePayment(
       capturePaymentData: CapturePaypalPaymentData,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
+  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] = {
+    cloudWatchService.put("capturePayment-called", PaymentProvider.Paypal)
     paypalService
       .capturePayment(capturePaymentData)
       .biflatMap(
@@ -129,6 +130,7 @@ class PaypalBackend(
             .recover { case _ => EnrichedPaypalPayment(payment, maybeEmail, None) }
         },
       )
+  }
 
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,

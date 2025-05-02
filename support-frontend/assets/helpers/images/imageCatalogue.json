@@ -23,10 +23,10 @@
 	"printCampaignHeroHD": "df976520ffa6ca4fb6095ffb73fd1ea6952d8478/0_0_1000_600",
 	"printCampaignWithObserverHeroHD": "65ae2ccf2d4eb6640ad2a6983bef9c849d7723e1/0_0_500_300",
 	"printFeaturePackshot": "017a2f5c27394635b53c414962bbb775ce9b131d/5_39_1572_861",
-	"subscriptionGuardianWeeklyHeroMobile": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
-	"subscriptionGuardianWeeklyHeroPackShot": "0c865ebe66b792738c7444d6fb0cd8dc7f9a1f2f/0_0_6505_3663",
+	"subscriptionGuardianWeeklyHeroMobile": "fb0d39da2b9364dc6f62860a2db0eec0d26b00a3/0_0_645_363",
+	"subscriptionGuardianWeeklyHeroPackShot": "fb0d39da2b9364dc6f62860a2db0eec0d26b00a3/0_0_645_363",
 	"subscriptionGuardianWeeklyWithObserverHeroPackShot": "65ae2ccf2d4eb6640ad2a6983bef9c849d7723e1/0_0_500_300",
-	"subscriptionGuardianWeeklyHeroTablet": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
+	"subscriptionGuardianWeeklyHeroTablet": "fb0d39da2b9364dc6f62860a2db0eec0d26b00a3/0_0_645_363",
 	"subscriptionGuardianWeeklyMobile": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
 	"subscriptionGuardianWeeklyPackShot": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
 	"subscriptionGuardianWeeklyTablet": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
@@ -36,6 +36,6 @@
 	"digitalEditionLanding": "3581b392c306308dc5770d26cff80fef71c9761a/0_0_1680_2080",
 	"supporterPlusLandingUnitedStates": "527b59919012a7666ccd067a3c82ad63682d2418/0_0_420_165",
 	"weeklyCampaignBenefitsImg": "a9fb03da0efd8e4bc19c48cdcbacc659d887ae4a/0_0_900_600",
-	"weeklyCampaignHeroImg": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600",
+	"weeklyCampaignHeroImg": "c7d642f416d735403c2aab9083eafe4cbd4bd3da/0_0_500_333",
 	"weeklyLandingHero": "e4ce5980efc3d43b00c2cbb6f193d4070d12a543/0_0_900_600"
 }
