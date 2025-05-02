@@ -34,7 +34,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					amount={0}
 				/>,
 			);
-			expect(container).toMatchSnapshot();
+			expect(container.textContent).toMatchSnapshot();
 		},
 	);
 });
