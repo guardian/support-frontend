@@ -64,7 +64,7 @@ object StripePublicKey {
 sealed trait StripeRequest {
   val paymentData: BaseStripePaymentData // data required to create a Stripe payment
   val acquisitionData: AcquisitionData // data required to create an acquisition event (used for analytics)
-  val publicKey: Option[StripePublicKey] // required to determine which Stripe service to use
+  val publicKey: StripePublicKey // required to determine which Stripe service to use
 }
 
 // Models for the Stripe Payment Intents API
@@ -74,7 +74,7 @@ object StripePaymentIntentRequest {
       paymentMethodId: String,
       paymentData: StripePaymentData,
       acquisitionData: AcquisitionData,
-      publicKey: Option[StripePublicKey],
+      publicKey: StripePublicKey,
       recaptchaToken: String,
   ) extends StripeRequest
 
@@ -82,7 +82,7 @@ object StripePaymentIntentRequest {
       paymentIntentId: String,
       paymentData: StripePaymentData,
       acquisitionData: AcquisitionData,
-      publicKey: Option[StripePublicKey],
+      publicKey: StripePublicKey,
   ) extends StripeRequest
 
   import controllers.JsonReadableOps._

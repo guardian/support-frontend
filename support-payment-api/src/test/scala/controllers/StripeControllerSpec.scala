@@ -118,7 +118,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
       queryParameters = None,
       postalCode = None,
     ),
-    publicKey = Some(StripePublicKey("pk_test_FOO")),
+    publicKey = StripePublicKey("pk_test_FOO"),
     recaptchaToken = "recaptchaToken",
   )
 

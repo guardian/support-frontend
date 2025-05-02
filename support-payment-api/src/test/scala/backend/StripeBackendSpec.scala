@@ -61,11 +61,11 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       "payment-method-id",
       stripePaymentData,
       acquisitionData,
-      Some(stripePublicKey),
+      stripePublicKey,
       recaptchaToken,
     )
   val confirmPaymentIntent =
-    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
+    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, stripePublicKey)
 
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
@@ -251,7 +251,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -267,7 +267,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithApplePay,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -283,7 +283,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -300,7 +300,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -332,7 +332,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripeApplePay,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -363,7 +363,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -400,7 +400,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()

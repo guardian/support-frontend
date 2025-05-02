@@ -131,14 +131,8 @@ class CountryBasedStripeService(
 ) extends StripeService
     with StrictLogging {
 
-  private def getBackwardsCompatibleAccount(data: StripeRequest) =
-    if (data.paymentData.currency == Currency.AUD) au else default
-
   private def getAccountForPublicKey(publicKey: StripePublicKey): StripeService =
     Seq(au, us).find(_.iAmForThisPublicKey(publicKey)) getOrElse default
-
-  private def getAccountToUse(data: StripeRequest): StripeService =
-    data.publicKey.map(getAccountForPublicKey) getOrElse getBackwardsCompatibleAccount(data)
 
   private def validateRefundHookForUSD(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] =
     us.validateRefundHook(stripeHook) orElse default.validateRefundHook(stripeHook)
@@ -146,12 +140,12 @@ class CountryBasedStripeService(
   override def createPaymentIntent(
       data: StripePaymentIntentRequest.CreatePaymentIntent,
   ): EitherT[Future, StripeApiError, PaymentIntent] =
-    getAccountToUse(data).createPaymentIntent(data)
+    getAccountForPublicKey(data.publicKey).createPaymentIntent(data)
 
   override def confirmPaymentIntent(
       data: StripePaymentIntentRequest.ConfirmPaymentIntent,
   ): EitherT[Future, StripeApiError, PaymentIntent] =
-    getAccountToUse(data).confirmPaymentIntent(data)
+    getAccountForPublicKey(data.publicKey).confirmPaymentIntent(data)
 
   override def validateRefundHook(stripeHook: StripeRefundHook): EitherT[Future, StripeApiError, Unit] = {
     val stripeCurrency = stripeHook.data.`object`.currency.toUpperCase
