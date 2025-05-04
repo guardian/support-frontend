@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "SR Devs Extension",
+  "description": "Lets you know when you're in CODE or DEV",
+  "version": "1.0",
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "hello_extensions.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/banner.js",
+        "scripts/dev.js"
+      ],
+      "matches": [
+        "https://*.thegulocal.com/*"
+      ]
+    },
+    {
+      "js": [
+        "scripts/banner.js",
+        "scripts/code.js"
+      ],
+      "matches": [
+        "https://*.code.dev-theguardian.com/*",
+        "https://*.code.dev-gutools.co.uk/*",
+        "https://*.code.dev-guardianapis.com/*"
+      ]
+    }
+  ]
+}
