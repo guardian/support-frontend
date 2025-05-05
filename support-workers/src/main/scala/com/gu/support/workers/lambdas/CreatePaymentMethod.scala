@@ -5,7 +5,7 @@ import com.gu.i18n.CountryGroup
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.stripe.StripeService
+import com.gu.stripe.{RetrieveCheckoutSessionResponseSuccess, StripeService}
 import com.gu.support.catalog.Sunday
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
@@ -47,7 +47,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
   ): Future[PaymentMethod] =
     state.paymentFields match {
       case stripeHosted: StripeHostedPaymentFields =>
-        createStripeHostedPaymentMethod(stripeHosted, services.stripeService)
+        createStripeHostedPaymentMethod(stripeHosted, services.stripeService, state.user)
       case stripe: StripePaymentFields =>
         createStripePaymentMethod(stripe, services.stripeService)
       case paypal: PayPalPaymentFields =>
@@ -86,18 +86,49 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     }
   }
 
-  private def createStripeHostedPaymentMethod(stripeHosted: StripeHostedPaymentFields, stripeService: StripeService) = {
+  private def booleanToFuture(boolean: Boolean, errorMessage: String): Future[Unit] = {
+    if (boolean) {
+      Future.successful(())
+    } else {
+      Future.failed(new RuntimeException(errorMessage))
+    }
+  }
+
+  private def doesCheckoutSessionFormFieldsHashMatch(
+      user: User,
+      checkoutSession: RetrieveCheckoutSessionResponseSuccess,
+  ): Boolean = {
+    val expectedFormFieldsHash = FormFieldsHash.create(
+      email = user.primaryEmailAddress,
+      firstName = user.firstName,
+      lastName = user.lastName,
+      telephoneNumber = user.telephoneNumber,
+      billingAddress = user.billingAddress,
+      deliveryAddress = user.deliveryAddress,
+      deliveryInstructions = user.deliveryInstructions,
+    )
+    checkoutSession.meta_data.get("formFieldsHash") == Some(expectedFormFieldsHash)
+  }
+
+  private def createStripeHostedPaymentMethod(
+      stripeHosted: StripeHostedPaymentFields,
+      stripeService: StripeService,
+      user: User,
+  ) = {
     val stripeServiceForAccount = stripeService.withPublicKey(stripeHosted.stripePublicKey)
     for {
       checkoutSessionId <- optionToFuture(
         stripeHosted.checkoutSessionId,
         "Missing checkout session id",
       )
-      paymentMethod <- stripeServiceForAccount
+      checkoutSession <- stripeServiceForAccount
         .retrieveCheckoutSession(checkoutSessionId)
-        .map(_.setup_intent.payment_method)
+      _ <- booleanToFuture(
+        doesCheckoutSessionFormFieldsHashMatch(user, checkoutSession),
+        "Checkout session formFields hash does not match",
+      )
       paymentMethodId <- optionToFuture(
-        PaymentMethodId(paymentMethod.id),
+        PaymentMethodId(checkoutSession.setup_intent.payment_method.id),
         "Invalid PaymentMethodId",
       )
       stripeCustomer <- stripeServiceForAccount.createCustomerFromPaymentMethod(paymentMethodId)
