@@ -16,6 +16,9 @@ Mappings:
     Alarm:
       Process: See the wiki at https://github.com/guardian/support-frontend/wiki/Automated-IT-Tests
 
+Conditions:
+  IsProd: !Equals [!Ref Stage, PROD]
+
 Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
@@ -93,7 +96,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
-      ActionsEnabled: !Equals [ !Ref Stage, "PROD" ]
+      ActionsEnabled: !If [IsProd, true, false]
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
@@ -130,7 +133,7 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
-      ActionsEnabled: !Equals [ !Ref Stage, "PROD" ]
+      ActionsEnabled: !If [IsProd, true, false]
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
