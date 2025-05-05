@@ -5,7 +5,7 @@ import cats.implicits.{catsSyntaxApplicativeError, toBifunctorOps}
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.StripeConfigProvider
-import com.gu.support.workers.StripePublicKey
+import com.gu.support.workers.{FormFieldsHash, StripePublicKey}
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
@@ -59,7 +59,7 @@ class StripeCheckoutSessionService(
       "currency" -> Seq(currency.iso.toLowerCase),
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
-      "metadata[fields_hash]" -> Seq(fieldsHash),
+      s"metadata[${FormFieldsHash.fieldName}]" -> Seq(fieldsHash),
     )
 
     client

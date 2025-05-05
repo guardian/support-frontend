@@ -3,6 +3,8 @@ package com.gu.support.workers
 import java.security.MessageDigest
 
 object FormFieldsHash {
+  val fieldName = "form_fields_hash"
+
   def create(
       email: String,
       firstName: String,

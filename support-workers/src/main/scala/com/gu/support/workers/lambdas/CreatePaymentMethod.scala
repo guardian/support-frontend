@@ -107,7 +107,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       deliveryAddress = user.deliveryAddress,
       deliveryInstructions = user.deliveryInstructions,
     )
-    checkoutSession.metadata.get("formFieldsHash") == Some(expectedFormFieldsHash)
+    checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(expectedFormFieldsHash)
   }
 
   private def createStripeHostedPaymentMethod(
