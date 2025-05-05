@@ -150,7 +150,7 @@ class CreateSubscriptionController(
 
     urls match {
       case Some((validSuccessUrl, validCancelUrl)) =>
-        val fieldsHash = FormFieldsHash.create(requestBody)
+        val fieldsHash = FormFieldsHash.createFromSupportWorkersRequest(requestBody)
         stripeCheckoutSessionService
           .createCheckoutSession(
             stripePublicKey,
