@@ -1,23 +1,8 @@
-package models
-
-import com.gu.support.workers.Address
-import services.stepfunctions.CreateSupportWorkersRequest
+package com.gu.support.workers
 
 import java.security.MessageDigest
 
 object FormFieldsHash {
-  def createFromSupportWorkersRequest(supportWorkersRequest: CreateSupportWorkersRequest): String = {
-    create(
-      email = supportWorkersRequest.email,
-      firstName = supportWorkersRequest.firstName,
-      lastName = supportWorkersRequest.lastName,
-      telephoneNumber = supportWorkersRequest.telephoneNumber,
-      billingAddress = supportWorkersRequest.billingAddress,
-      deliveryAddress = supportWorkersRequest.deliveryAddress,
-      deliveryInstructions = supportWorkersRequest.deliveryInstructions,
-    )
-  }
-
   def create(
       email: String,
       firstName: String,
