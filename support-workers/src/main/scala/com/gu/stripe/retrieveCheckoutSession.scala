@@ -15,7 +15,7 @@ object CheckoutSetupIntent {
   implicit val decoder: Decoder[CheckoutSetupIntent] = deriveDecoder
 }
 
-case class RetrieveCheckoutSessionResponseSuccess(setup_intent: CheckoutSetupIntent, meta_data: Map[String, String])
+case class RetrieveCheckoutSessionResponseSuccess(setup_intent: CheckoutSetupIntent, metadata: Map[String, String])
 object RetrieveCheckoutSessionResponseSuccess {
   implicit val decoder: Decoder[RetrieveCheckoutSessionResponseSuccess] = deriveDecoder
 }
