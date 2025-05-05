@@ -18,7 +18,6 @@ import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
-import models.FormFieldsHash
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.joda.time.DateTime
@@ -33,7 +32,6 @@ import services.{
   RecaptchaService,
   StripeCheckoutSessionService,
   TestUserService,
-  UserBenefitsApiService,
   UserBenefitsApiServiceProvider,
   UserBenefitsResponse,
   UserDetails,
@@ -134,6 +132,20 @@ class CreateSubscriptionController(
       }
     }
 
+  private def createFormFieldsHash(
+      requestBody: CreateSupportWorkersRequest,
+  ): String = {
+    FormFieldsHash.create(
+      email = requestBody.email,
+      firstName = requestBody.firstName,
+      lastName = requestBody.lastName,
+      telephoneNumber = requestBody.telephoneNumber,
+      billingAddress = requestBody.billingAddress,
+      deliveryAddress = requestBody.deliveryAddress,
+      deliveryInstructions = requestBody.deliveryInstructions,
+    )
+  }
+
   private def createCheckoutSession(
       stripePublicKey: StripePublicKey,
       email: String,
@@ -150,7 +162,7 @@ class CreateSubscriptionController(
 
     urls match {
       case Some((validSuccessUrl, validCancelUrl)) =>
-        val fieldsHash = FormFieldsHash.createFromSupportWorkersRequest(requestBody)
+        val fieldsHash = createFormFieldsHash(requestBody)
         stripeCheckoutSessionService
           .createCheckoutSession(
             stripePublicKey,
