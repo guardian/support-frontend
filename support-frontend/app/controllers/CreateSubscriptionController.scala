@@ -18,6 +18,7 @@ import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
+import models.FormFieldsHash
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.joda.time.DateTime
@@ -139,6 +140,7 @@ class CreateSubscriptionController(
       currency: Currency,
       isTestUser: Boolean,
       referer: Option[String],
+      requestBody: CreateSupportWorkersRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateStripeCheckoutSessionResponse] = {
     val urls = for {
       referer <- referer
@@ -148,8 +150,17 @@ class CreateSubscriptionController(
 
     urls match {
       case Some((validSuccessUrl, validCancelUrl)) =>
+        val fieldsHash = FormFieldsHash.create(requestBody)
         stripeCheckoutSessionService
-          .createCheckoutSession(stripePublicKey, email, currency, isTestUser, validSuccessUrl, validCancelUrl)
+          .createCheckoutSession(
+            stripePublicKey,
+            email,
+            currency,
+            isTestUser,
+            validSuccessUrl,
+            validCancelUrl,
+            fieldsHash,
+          )
           .leftMap[CreateSubscriptionError](ServerError)
           .map[CreateStripeCheckoutSessionResponse] { response =>
             CreateStripeCheckoutSessionResponse(url = response.url, id = response.id)
@@ -180,6 +191,7 @@ class CreateSubscriptionController(
             currency = request.body.product.currency,
             isTestUser = testUsers.isTestUser(request),
             referer = request.headers.get("referer"),
+            requestBody = request.body,
           )
         } yield result
 
