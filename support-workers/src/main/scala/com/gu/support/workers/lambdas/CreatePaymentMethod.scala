@@ -107,6 +107,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       deliveryAddress = user.deliveryAddress,
       deliveryInstructions = user.deliveryInstructions,
     )
+    logger.info(
+      s"Comparing got: ${checkoutSession.metadata.get(FormFieldsHash.fieldName)} with expected: $expectedFormFieldsHash",
+    )
     checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(expectedFormFieldsHash)
   }
 
