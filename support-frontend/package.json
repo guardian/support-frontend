@@ -155,7 +155,7 @@
 		"chromatic": "^10.9.6",
 		"concurrently": "^9.1.0",
 		"css-loader": "^6.7.1",
-		"css-minimizer-webpack-plugin": "^4.2.2",
+		"css-minimizer-webpack-plugin": "^7.0.2",
 		"dayjs": "^1.11.11",
 		"eslint": "^8.57.0",
 		"eslint-import-resolver-typescript": "^3.6.1",
