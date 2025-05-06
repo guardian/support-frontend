@@ -84,7 +84,7 @@ function ratePlanToBillingPeriod(
 }
 
 /*
-  Awaiting 2-step checkout fully deprecation
+  Awaiting 2-step checkout full deprecation
 */
 function contributionTypeToBillingPeriod(
 	contributionType: ContributionType,
@@ -102,6 +102,7 @@ function contributionTypeToBillingPeriod(
 }
 
 export {
+	OneTime,
 	Annual,
 	Monthly,
 	Quarterly,

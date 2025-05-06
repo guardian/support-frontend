@@ -3,14 +3,14 @@ import { from, palette, space } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import React from 'react';
 import { Box } from 'components/checkoutBox/checkoutBox';
-import type { PaymentFrequencyButtonsProps } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import type { BillingFrequencyButtonsProps } from 'components/billingFrequencyButtons/billingFrequencyButtons';
+import { BillingFrequencyButtons } from 'components/billingFrequencyButtons/billingFrequencyButtons';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
 	title: 'LandingPage/Payment Frequency Buttons',
-	component: PaymentFrequencyButtons,
+	component: BillingFrequencyButtons,
 	argTypes: { buttonClickHandler: { action: 'payment frequency changed' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
@@ -43,7 +43,7 @@ export default {
 	},
 };
 
-function Template(args: PaymentFrequencyButtonsProps) {
+function Template(args: BillingFrequencyButtonsProps) {
 	const paymentFrequencyButtonsCss = css`
 		margin: ${space[4]}px auto 32px;
 		${from.desktop} {
@@ -51,7 +51,7 @@ function Template(args: PaymentFrequencyButtonsProps) {
 		}
 	`;
 	return (
-		<PaymentFrequencyButtons
+		<BillingFrequencyButtons
 			{...args}
 			additionalStyles={paymentFrequencyButtonsCss}
 		/>

@@ -13,15 +13,18 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import type { RegularContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import {
+	Annual,
+	type BillingPeriod,
+	billingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
 
@@ -39,7 +42,7 @@ export type ThreeTierCardProps = {
 	promoCount: number;
 	isSubdued: boolean;
 	currencyId: IsoCurrency;
-	paymentFrequency: RegularContributionType;
+	billingPeriod: BillingPeriod;
 };
 
 const container = (
@@ -160,7 +163,7 @@ const discountSummaryCopy = (
 	promoCount: number,
 	price: number,
 	promotion: Promotion,
-	paymentFrequency: RegularContributionType,
+	billingPeriod: BillingPeriod,
 ) => {
 	/**
 	 * EXAMPLE:
@@ -174,9 +177,9 @@ const discountSummaryCopy = (
 		currency,
 		promotion.discountedPrice ?? 0,
 	);
-	const period = paymentFrequency === 'ANNUAL' ? 'year' : 'month';
+	const period = billingPeriodNoun(billingPeriod).toLowerCase();
 	const duration =
-		paymentFrequency === 'ANNUAL' ? durationMonths / 12 : durationMonths;
+		billingPeriod === Annual ? durationMonths / 12 : durationMonths;
 
 	return `${formattedPromotionPrice}/${period} for ${
 		period === 'year' || duration === 1 ? 'the first' : ''
@@ -191,7 +194,7 @@ export function ThreeTierCard({
 	promoCount,
 	isSubdued,
 	currencyId,
-	paymentFrequency,
+	billingPeriod,
 }: ThreeTierCardProps): JSX.Element {
 	const {
 		title,
@@ -204,7 +207,7 @@ export function ThreeTierCard({
 		product,
 	} = cardContent;
 	const currency = currencies[currencyId];
-	const period = recurringContributionPeriodMap[paymentFrequency];
+	const period = billingPeriodNoun(billingPeriod).toLowerCase();
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
@@ -233,7 +236,7 @@ export function ThreeTierCard({
 								promoCount,
 								price,
 								promotion,
-								paymentFrequency,
+								billingPeriod,
 							)}
 						</span>
 					</>
