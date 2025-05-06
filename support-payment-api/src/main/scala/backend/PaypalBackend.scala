@@ -86,52 +86,6 @@ class PaypalBackend(
     } yield payment
   }
 
-  /*
-   * Used by Android app clients.
-   * The Android app creates and approves the payment directly via PayPal.
-   * Funds are captured via this endpoint.
-   */
-  def capturePayment(
-      capturePaymentData: CapturePaypalPaymentData,
-      clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] = {
-    cloudWatchService.put("capturePayment-called", PaymentProvider.Paypal)
-    paypalService
-      .capturePayment(capturePaymentData)
-      .biflatMap(
-        err => {
-          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-          EitherT.leftT(err)
-        },
-        payment => {
-          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
-
-          val maybeEmail = capturePaymentData.signedInUserEmail.orElse(
-            Try(payment.getPayer.getPayerInfo.getEmail).toOption.filterNot(_.isEmpty),
-          )
-          val maybeEnrichedPayPalPayment = for {
-            email <- OptionT.fromOption(maybeEmail)
-            identityUserDetails <- OptionT(getOrCreateIdentityIdFromEmail(email))
-          } yield {
-            postPaymentTasks(
-              payment,
-              email,
-              Some(identityUserDetails.userType),
-              capturePaymentData.acquisitionData,
-              clientBrowserInfo,
-            )
-            EnrichedPaypalPayment(payment, Some(email), Some(identityUserDetails.userType))
-          }
-
-          maybeEnrichedPayPalPayment
-            .toRight(
-              PaypalApiError.fromString("Unable to get email address"),
-            )
-            .recover { case _ => EnrichedPaypalPayment(payment, maybeEmail, None) }
-        },
-      )
-  }
-
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,
       clientBrowserInfo: ClientBrowserInfo,

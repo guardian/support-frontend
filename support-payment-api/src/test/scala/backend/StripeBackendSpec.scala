@@ -54,20 +54,18 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       None,
       Some("N1 9GU"),
     )
-  val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
-  val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
+  val stripePaymentData = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
-  val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
   val createPaymentIntent =
     CreatePaymentIntent(
       "payment-method-id",
       stripePaymentData,
       acquisitionData,
-      Some(stripePublicKey),
+      stripePublicKey,
       recaptchaToken,
     )
   val confirmPaymentIntent =
-    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
+    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, stripePublicKey)
 
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
@@ -94,10 +92,10 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   // -- service responses
   val paymentServiceResponse: EitherT[Future, StripeApiError, Charge] =
     EitherT.right(Future.successful(chargeMock))
-  val paymentServiceResponseError: EitherT[Future, StripeApiError, Charge] =
-    EitherT.left(Future.successful(stripeApiError))
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
+  val paymentServiceIntentErrorResponse: EitherT[Future, StripeApiError, PaymentIntent] =
+    EitherT.left(Future.successful(stripeApiError))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
     EitherT.right(Future.successful(IdentityUserDetails("1", Current)))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, IdentityUserDetails] =
@@ -253,7 +251,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -269,7 +267,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithApplePay,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -285,7 +283,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
@@ -302,7 +300,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -334,7 +332,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripeApplePay,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -365,7 +363,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripePaymentRequest,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -402,7 +400,7 @@ class StripeBackendSpec
             "payment-method-id",
             stripePaymentDataWithStripe,
             acquisitionData,
-            Some(stripePublicKey),
+            stripePublicKey,
             recaptchaToken,
           )
         populateChargeMock()
@@ -410,51 +408,6 @@ class StripeBackendSpec
           StripeApiError.fromString("Invalid email address", None)
       }
 
-      "return error if stripe service fails" in new StripeBackendFixture {
-        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureLeft mustBe stripeApiError
-      }
-
-      "return successful payment response even if identityService, " +
-        "databaseService, bigQueryService and emailService all fail" in new StripeBackendFixture {
-          populateChargeMock()
-          when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-          when(mockSupporterProductDataService.insertContributionData(any())(any()))
-            .thenReturn(supporterProductDataResponseError)
-          when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-          when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
-          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-            .thenReturn(acquisitionsEventBusResponseError)
-          stripeBackend
-            .createCharge(stripeChargeRequest, clientBrowserInfo)
-            .futureRight mustBe StripeCreateChargeResponse.fromCharge(
-            chargeMock,
-            None,
-          )
-
-          verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        }
-
-      "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
-        populateChargeMock()
-        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponseError)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
-          .thenReturn(acquisitionsEventBusResponse)
-        when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
-        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
-        stripeBackend.createCharge(stripeChargeRequest, clientBrowserInfo).futureRight mustBe StripeCreateChargeResponse
-          .fromCharge(
-            chargeMock,
-            Some(Current),
-          )
-
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-      }
     }
 
     "a request is made to process a refund hook" should {
@@ -492,7 +445,7 @@ class StripeBackendSpec
           .thenReturn(acquisitionsEventBusResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result =
-          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+          stripeBackend invokePrivate trackContribution(chargeMock, createPaymentIntent, None, clientBrowserInfo)
         result.futureValue mustBe List(BackendError.Database(dbError))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
@@ -509,7 +462,7 @@ class StripeBackendSpec
           .thenReturn(acquisitionsEventBusResponseError)
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result =
-          stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
+          stripeBackend invokePrivate trackContribution(chargeMock, createPaymentIntent, None, clientBrowserInfo)
         val error = List(
           BackendError.AcquisitionsEventBusError(acquisitionsEventBusErrorMessage),
           BackendError.Database(dbError),

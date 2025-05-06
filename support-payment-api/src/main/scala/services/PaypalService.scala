@@ -17,7 +17,6 @@ import scala.jdk.CollectionConverters._
 trait Paypal {
   type PaypalResult[A] = EitherT[Future, PaypalApiError, A]
   def createPayment(createPaypalPaymentData: CreatePaypalPaymentData): PaypalResult[Payment]
-  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment]
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment]
   def validateWebhookEvent(headers: Map[String, String], body: String): PaypalResult[Unit]
 }
@@ -55,16 +54,6 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
         .toEitherT[Future]
     }
   }
-
-  def capturePayment(capturePaypalPaymentData: CapturePaypalPaymentData): PaypalResult[Payment] =
-    (for {
-      paypalPayment <- getPayment(capturePaypalPaymentData.paymentData.paymentId)
-      transaction <- getTransaction(paypalPayment)
-      relatedResources <- getRelatedResources(transaction)
-      capture <- getCapture(relatedResources, transaction)
-      captureResult <- validateCapture(capture)
-      payment <- getPayment(captureResult.getParentPayment)
-    } yield payment).toEitherT[Future]
 
   def executePayment(executePaymentData: ExecutePaypalPaymentData): PaypalResult[Payment] =
     (for {

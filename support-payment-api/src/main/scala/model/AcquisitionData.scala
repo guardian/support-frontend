@@ -1,6 +1,7 @@
 package model
 
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import com.gu.support.encoding.Codec
 
 //-- common for stripe, paypal, and amazon pay
 case class AcquisitionData(
@@ -19,3 +20,7 @@ case class AcquisitionData(
     labels: Option[Set[String]],
     postalCode: Option[String],
 )
+
+object AcquisitionData {
+  implicit val codec: Codec[AcquisitionData] = Codec.deriveCodec[AcquisitionData]
+}

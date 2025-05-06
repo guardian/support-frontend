@@ -73,38 +73,6 @@ class StripeBackend(
   private def stripeExpressCheckoutEnabled =
     switchService.allSwitches.map(_.oneOffPaymentMethods.exists(_.switches.stripeExpressCheckout.exists(_.state.isOn)))
 
-  // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
-  // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
-  def createCharge(
-      chargeData: LegacyStripeChargeRequest,
-      clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, StripeApiError, StripeCreateChargeResponse] = {
-    cloudWatchService.put("createCharge-called", PaymentProvider.Stripe)
-    stripeService
-      .createCharge(chargeData)
-      .leftMap(err => {
-        logger.info(s"unable to create Stripe charge ($chargeData)")
-        cloudWatchService.recordFailedPayment(err, PaymentProvider.Stripe)
-        err
-      })
-      .semiflatMap { charge =>
-        val paymentProvider = PaymentProvider.fromStripePaymentMethod(chargeData.paymentData.stripePaymentMethod)
-        cloudWatchService.recordPaymentSuccess(paymentProvider)
-
-        getOrCreateIdentityIdFromEmail(chargeData.paymentData.email.value).map { identityUserDetails =>
-          postPaymentTasks(
-            chargeData.paymentData.email.value,
-            chargeData,
-            charge,
-            clientBrowserInfo,
-            identityUserDetails.map(_.id),
-          )
-
-          StripeCreateChargeResponse.fromCharge(charge, identityUserDetails.map(_.userType))
-        }
-      }
-  }
-
   def processRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] = {
     for {
       _ <- validateRefundHook(refundHook)
@@ -116,7 +84,6 @@ class StripeBackend(
       request: StripePaymentIntentRequest.CreatePaymentIntent,
       clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
-    cloudWatchService.put("createPaymentIntent-called", PaymentProvider.Stripe)
     def isApplePayOrPaymentRequestButton = request.paymentData.stripePaymentMethod match {
       case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
       case _ => false
