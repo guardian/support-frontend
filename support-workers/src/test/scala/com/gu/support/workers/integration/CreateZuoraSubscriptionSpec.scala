@@ -37,20 +37,23 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   "CreateZuoraSubscription lambda" should "create a monthly contribution" in {
     createZuoraHelper
       .createSubscription(createContributionZuoraSubscriptionJson(amount = 20, billingPeriod = Monthly))
-      .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
+      .flatMap(createZuoraHelper.deleteAccount)
+      .map(_ should matchPattern { case _: SendThankYouEmailContributionState =>
       })
   }
 
   it should "create an annual contribution" in {
     createZuoraHelper
       .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
-      .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
+      .flatMap(createZuoraHelper.deleteAccount)
+      .map(_ should matchPattern { case _: SendThankYouEmailContributionState =>
       })
   }
 
   it should "create a monthly Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP, Monthly))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -58,6 +61,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a monthly TierThree subscription" in {
     createZuoraHelper
       .createSubscription(createTierThreeZuoraSubscriptionJson(GBP, Monthly, Domestic))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern { case _: SendThankYouEmailTierThreeState =>
       })
   }
@@ -65,6 +69,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create an annual Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(120, GBP, Annual))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -73,6 +78,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
     val austria = CountryGroup.Europe.countries.find(_.alpha2 == "AT").get // Fail here if we can't find it
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(12, EUR, Monthly, country = austria))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -91,27 +97,31 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Digital Pack subscription" in {
     createZuoraHelper
       .createSubscription(createDigiPackZuoraSubscriptionJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
+      .flatMap(createZuoraHelper.deleteAccount)
+      .map(_ should matchPattern { case _: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount" in {
     createZuoraHelper
       .createSubscription(createDigiPackSubscriptionWithPromoJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
+      .flatMap(createZuoraHelper.deleteAccount)
+      .map(_ should matchPattern { case _: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create a Digital Pack subscription with a discount and free trial" in {
     createZuoraHelper
       .createSubscription(digipackSubscriptionWithDiscountAndFreeTrialJson)
-      .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionState =>
+      .flatMap(createZuoraHelper.deleteAccount)
+      .map(_ should matchPattern { case _: SendThankYouEmailDigitalSubscriptionState =>
       })
   }
 
   it should "create an everyday paper subscription" in {
     createZuoraHelper
       .createSubscription(createEverydayPaperSubscriptionJson)
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern {
         case s: SendThankYouEmailPaperState if s.product.productOptions == Everyday =>
       })
@@ -122,6 +132,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   ignore should "create an everyday national-delivery paper subscription" in {
     createZuoraHelper
       .createSubscription(createEverydayNationalDeliveryPaperSubscriptionJson)
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern {
         case s: SendThankYouEmailPaperState
             if s.product.productOptions == Everyday && s.product.fulfilmentOptions == NationalDelivery =>
@@ -131,6 +142,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create an Annual Guardian Weekly subscription" in {
     createZuoraHelper
       .createSubscription(createGuardianWeeklySubscriptionJson(Annual))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern {
         case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Annual =>
       })
@@ -139,6 +151,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create an Quarterly Guardian Weekly subscription" in {
     createZuoraHelper
       .createSubscription(createGuardianWeeklySubscriptionJson(Quarterly))
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern {
         case s: SendThankYouEmailGuardianWeeklyState if s.product.billingPeriod == Quarterly =>
       })
@@ -147,6 +160,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create an Guardian Weekly gift subscription" in {
     createZuoraHelper
       .createSubscription(guardianWeeklyGiftJson)
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern {
         case s: SendThankYouEmailGuardianWeeklyState if s.giftRecipient.isDefined =>
       })
@@ -155,6 +169,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Guardian Ad-Lite monthly subscription" in {
     createZuoraHelper
       .createSubscription(createGuardianAdLiteZuoraSubscriptionJson)
+      .flatMap(createZuoraHelper.deleteAccount)
       .map(_ should matchPattern { case s: SendThankYouEmailGuardianAdLiteState =>
       })
   }
@@ -174,6 +189,20 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     createZuora.handleRequestFuture(wrapFixture(json), outStream, context).map { _ =>
       Encoding.in[SendAcquisitionEventState](outStream.toInputStream).get._1.sendThankYouEmailState
     }
+  }
+
+  def deleteAccount(state: SendThankYouEmailState): Future[SendThankYouEmailState] = {
+    val accountNumber = state match {
+      case s: SendThankYouEmailSupporterPlusState => s.accountNumber
+      case s: SendThankYouEmailDigitalSubscriptionState => s.accountNumber
+      case s: SendThankYouEmailContributionState => s.accountNumber
+      case s: SendThankYouEmailGuardianWeeklyState => s.accountNumber
+      case s: SendThankYouEmailPaperState => s.accountNumber
+      case s: SendThankYouEmailGuardianAdLiteState => s.accountNumber
+      case s: SendThankYouEmailTierThreeState => s.accountNumber
+      case _ => throw new Exception("Unknown state")
+    }
+    realZuoraService.deleteAccount(accountNumber).map(_ => state) // return the state so we can use it in the test
   }
 
   def createSubscriptionError(

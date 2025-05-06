@@ -42,6 +42,9 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     "apiAccessKeyId" -> config.username,
   )
 
+  def deleteAccount(accountNumber: String): Future[DeleteAccountResponse] =
+    delete[DeleteAccountResponse](s"accounts/$accountNumber", authHeaders)
+
   def getAccount(accountNumber: String): Future[GetAccountResponse] =
     get[GetAccountResponse](s"accounts/$accountNumber", authHeaders)
 

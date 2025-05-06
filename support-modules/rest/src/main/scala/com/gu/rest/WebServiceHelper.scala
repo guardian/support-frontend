@@ -147,6 +147,12 @@ trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
   )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
     request[A](buildRequest(endpoint, headers, params))
 
+  def delete[A](
+      endpoint: String,
+      headers: ParamMap = empty,
+  )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] =
+    request[A](buildRequest(endpoint, headers, empty).delete())
+
   def postJson[A](
       endpoint: String,
       data: Json,

@@ -90,6 +90,12 @@ object GetAccountResponse {
 case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo, billingAndPayment: BillingAndPayment)
     extends ZuoraResponse
 
+case class DeleteAccountResponse(success: Boolean) extends ZuoraResponse
+
+object DeleteAccountResponse {
+  implicit val codec: Codec[DeleteAccountResponse] = deriveCodec
+}
+
 sealed trait GetPaymentMethodResponse {
   def `type`: String
   def paymentMethodStatus: String
