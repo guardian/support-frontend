@@ -1,6 +1,11 @@
 import { isAnyOf } from '@reduxjs/toolkit';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
+import {
+	Annual,
+	contributionTypeToBillingPeriod,
+	Monthly,
+} from 'helpers/productPrice/billingPeriods';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -37,14 +42,13 @@ export function addProductSideEffects(
 		effect(_, listenerApi) {
 			const { contributionAmount, contributionType, contributionCurrency } =
 				getContributionCartValueData(listenerApi.getState());
+			const billingPeriod = contributionTypeToBillingPeriod(contributionType);
 
-			if (!contributionAmount) {
+			if (!contributionAmount || !billingPeriod) {
 				return;
 			}
 
-			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
-				contributionType,
-			);
+			const isMonthlyOrAnnual = [Monthly, Annual].includes(billingPeriod);
 
 			const commonState = listenerApi.getState().common;
 
@@ -60,7 +64,7 @@ export function addProductSideEffects(
 
 			sendEventContributionCartValue(
 				contributionAmount.toString(),
-				contributionType,
+				billingPeriod,
 				contributionCurrency,
 			);
 		},

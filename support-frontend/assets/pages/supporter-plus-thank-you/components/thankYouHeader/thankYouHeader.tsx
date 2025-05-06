@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
@@ -35,7 +35,7 @@ type ThankYouHeaderProps = {
 	productKey: ActiveProductKey;
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	amountIsAboveThreshold: boolean;
@@ -54,7 +54,7 @@ function ThankYouHeader({
 	productKey,
 	showDirectDebitMessage,
 	isOneOffPayPal,
-	contributionType,
+	billingPeriod,
 	amount,
 	currency,
 	amountIsAboveThreshold,
@@ -76,7 +76,7 @@ function ThankYouHeader({
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}
-				contributionType={contributionType}
+				billingPeriod={billingPeriod}
 				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
@@ -88,7 +88,7 @@ function ThankYouHeader({
 				)}
 				<Subheading
 					productKey={productKey}
-					contributionType={contributionType}
+					billingPeriod={billingPeriod}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
