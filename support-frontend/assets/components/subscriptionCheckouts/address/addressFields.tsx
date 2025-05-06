@@ -30,7 +30,6 @@ import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import { canShow } from 'hocs/canShow';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -68,8 +67,21 @@ const selectStateStyles = css`
 	}
 `;
 
-const MaybeSelect = canShow(Select);
-const MaybeInput = canShow(TextInput);
+type MaybeSelectProps = {
+	isShown: boolean;
+} & React.ComponentProps<typeof Select>;
+function MaybeSelect(props: MaybeSelectProps) {
+	const { isShown, ...rest } = props;
+	return isShown ? <Select {...rest} /> : null;
+}
+
+type MaybeInputProps = {
+	isShown: boolean;
+} & React.ComponentProps<typeof TextInput>;
+function MaybeInput(props: MaybeInputProps) {
+	const { isShown, ...rest } = props;
+	return isShown ? <TextInput {...rest} /> : null;
+}
 
 function shouldShowStateDropdown(country: Option<IsoCountry>): boolean {
 	return country === 'US' || country === 'CA' || country === 'AU';

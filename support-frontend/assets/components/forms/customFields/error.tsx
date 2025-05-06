@@ -4,10 +4,10 @@ import type { ReactNode } from 'react';
 import type { Option } from 'helpers/types/option';
 import './error.scss';
 // ----- Types ----- //
-export type PropsForHoc = {
+export type WithErrorProps = {
 	error?: string;
 };
-type Props = PropsForHoc & {
+type Props = WithErrorProps & {
 	children?: Option<ReactNode>;
 };
 

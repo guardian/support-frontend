@@ -22,4 +22,9 @@ module.exports = merge(common('[name].css', '[name].js', false), {
 	resolve: {
 		fallback: { crypto: false },
 	},
+	plugins: [
+		new webpack.DefinePlugin({
+			'globalThis.EMOTION_RUNTIME_AUTO_LABEL': JSON.stringify(true),
+		}),
+	],
 });
