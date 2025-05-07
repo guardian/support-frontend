@@ -86,7 +86,7 @@ export const submitForm = async ({
 	const similarProductsCheckbox = formData.get('similarProductsConsent');
 	const similarProductsConsent =
 		similarProductsCheckbox !== null
-			? similarProductsCheckbox === 'on'
+			? similarProductsCheckbox === 'true'
 			: undefined;
 
 	const paymentRequest: RegularPaymentRequest = {
