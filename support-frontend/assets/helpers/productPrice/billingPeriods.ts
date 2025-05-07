@@ -1,28 +1,28 @@
 import type { ContributionType } from 'helpers/contributions';
 
-const Annual = 'Annual';
-const Monthly = 'Monthly';
-const Quarterly = 'Quarterly';
-const OneTime = 'One_Off';
+export const Annual = 'Annual';
+export const Monthly = 'Monthly';
+export const Quarterly = 'Quarterly';
+export const OneTime = 'One_Off';
 
-export type BillingPeriod =
+export type BillingPeriod = RegularBillingPeriod | OneTimeBillingPeriod;
+export type RegularBillingPeriod =
 	| typeof Annual
 	| typeof Monthly
-	| typeof Quarterly
-	| typeof OneTime;
+	| typeof Quarterly;
+type OneTimeBillingPeriod = typeof OneTime;
 
-export type WeeklyBillingPeriod =
-	| typeof Monthly
-	| typeof Quarterly
-	| typeof Annual;
+export const weeklyBillingPeriods: RegularBillingPeriod[] = [
+	Monthly,
+	Quarterly,
+	Annual,
+];
+export const weeklyGiftBillingPeriods: RegularBillingPeriod[] = [
+	Quarterly,
+	Annual,
+];
 
-const weeklyBillingPeriods = (): WeeklyBillingPeriod[] => {
-	return [Monthly, Quarterly, Annual];
-};
-
-const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
-
-function billingPeriodNoun(
+export function billingPeriodNoun(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
@@ -38,7 +38,7 @@ function billingPeriodNoun(
 	}
 }
 
-function billingPeriodTitle(
+export function billingPeriodTitle(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
@@ -54,7 +54,7 @@ function billingPeriodTitle(
 	}
 }
 
-function ratePlanToBillingPeriod(
+export function ratePlanToBillingPeriod(
 	ratePlanKey: string | undefined,
 ): BillingPeriod {
 	switch (ratePlanKey) {
@@ -86,7 +86,19 @@ function ratePlanToBillingPeriod(
 /*
   Awaiting 2-step checkout full deprecation
 */
-function contributionTypeToBillingPeriod(
+export function regularBillingPeriod(
+	regularBillingString: string,
+	fallback: RegularBillingPeriod,
+): RegularBillingPeriod {
+	const regularBillingPeriods: BillingPeriod[] = [Annual, Monthly, Quarterly];
+	if (
+		regularBillingPeriods.includes(regularBillingString as RegularBillingPeriod)
+	) {
+		return regularBillingString as RegularBillingPeriod;
+	}
+	return fallback;
+}
+export function contributionTypeToBillingPeriod(
 	contributionType: ContributionType,
 ): BillingPeriod | undefined {
 	switch (contributionType) {
@@ -100,7 +112,7 @@ function contributionTypeToBillingPeriod(
 			return undefined;
 	}
 }
-function billingPeriodToContributionType(
+export function billingPeriodToContributionType(
 	billingPeriod: BillingPeriod,
 ): ContributionType | undefined {
 	switch (billingPeriod) {
@@ -114,17 +126,3 @@ function billingPeriodToContributionType(
 			return undefined;
 	}
 }
-
-export {
-	OneTime,
-	Annual,
-	Monthly,
-	Quarterly,
-	billingPeriodNoun,
-	billingPeriodTitle,
-	weeklyBillingPeriods,
-	weeklyGiftBillingPeriods,
-	ratePlanToBillingPeriod,
-	contributionTypeToBillingPeriod,
-	billingPeriodToContributionType,
-};

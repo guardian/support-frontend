@@ -2,7 +2,6 @@ import { isAnyOf } from '@reduxjs/toolkit';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
-	Annual,
 	contributionTypeToBillingPeriod,
 	Monthly,
 } from 'helpers/productPrice/billingPeriods';
@@ -42,15 +41,16 @@ export function addProductSideEffects(
 		effect(_, listenerApi) {
 			const { contributionAmount, contributionType, contributionCurrency } =
 				getContributionCartValueData(listenerApi.getState());
-			const billingPeriod = contributionTypeToBillingPeriod(contributionType);
 
-			if (!contributionAmount || !billingPeriod) {
+			if (!contributionAmount) {
 				return;
 			}
 
-			const isMonthlyOrAnnual = [Monthly, Annual].includes(billingPeriod);
-
 			const commonState = listenerApi.getState().common;
+
+			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
+				contributionType,
+			);
 
 			if (
 				threeTierCheckoutEnabled(
@@ -64,7 +64,7 @@ export function addProductSideEffects(
 
 			sendEventContributionCartValue(
 				contributionAmount.toString(),
-				billingPeriod,
+				contributionTypeToBillingPeriod(contributionType) ?? Monthly,
 				contributionCurrency,
 			);
 		},

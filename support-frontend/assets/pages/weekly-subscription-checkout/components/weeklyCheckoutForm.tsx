@@ -337,7 +337,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<BillingPeriodSelector
 						fulfilmentOption={props.fulfilmentOption}
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
-						billingPeriods={weeklyBillingPeriods()}
+						billingPeriods={weeklyBillingPeriods}
 						pricingCountry={props.deliveryCountry}
 						productPrices={props.productPrices}
 						selected={props.billingPeriod}

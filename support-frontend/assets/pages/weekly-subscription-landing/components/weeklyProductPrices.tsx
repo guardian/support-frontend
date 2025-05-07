@@ -10,7 +10,8 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type {
+	RegularBillingPeriod} from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
 	weeklyBillingPeriods,
@@ -51,7 +52,7 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
-	billingPeriod: WeeklyBillingPeriod,
+	billingPeriod: RegularBillingPeriod,
 	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
@@ -120,7 +121,7 @@ const getMainDisplayPrice = (
 
 const weeklyProductProps = (
 	countryId: IsoCountry,
-	billingPeriod: WeeklyBillingPeriod,
+	billingPeriod: RegularBillingPeriod,
 	productPrice: ProductPrice,
 	abParticipations: Participations,
 	orderIsAGift = false,
@@ -177,7 +178,7 @@ const getProducts = ({
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods();
+		: weeklyBillingPeriods;
 
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices
