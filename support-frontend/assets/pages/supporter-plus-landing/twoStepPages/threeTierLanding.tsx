@@ -364,9 +364,9 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
+	const monthlyRecurringAmount = amounts.amountsCardData['MONTHLY']
 		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
+	const annualRecurringAmount = amounts.amountsCardData['ANNUAL']
 		.amounts[0] as number;
 	const recurringAmount =
 		billingPeriod === Monthly ? monthlyRecurringAmount : annualRecurringAmount;

@@ -74,7 +74,7 @@ export function OneOffCard({
 	currencyId,
 	heading,
 }: Props) {
-	const oneOffAmounts = amounts.amountsCardData.ONE_OFF;
+	const oneOffAmounts = amounts.amountsCardData['ONE_OFF'];
 	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
 		oneOffAmounts.defaultAmount,
 	);
@@ -96,8 +96,6 @@ export function OneOffCard({
 					amounts={oneOffAmounts.amounts}
 					selectedAmount={selectedAmount}
 					currency={currencyId}
-					// This is always undefined as we're ONE_OFF
-					paymentInterval={undefined}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
 							setSelectedAmount(amount);

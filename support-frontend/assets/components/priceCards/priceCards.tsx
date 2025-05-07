@@ -4,7 +4,7 @@ import { ChoiceCardGroup } from '@guardian/source/react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { PriceCardPaymentInterval } from './priceCard';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { PriceCard } from './priceCard';
 
 const cardStyles = css`
@@ -65,7 +65,7 @@ export type PriceCardsProps = {
 	selectedAmount: number | 'other';
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
-	paymentInterval?: PriceCardPaymentInterval;
+	billingPeriod?: BillingPeriod;
 	otherAmountField?: React.ReactNode;
 	hideChooseYourAmount?: boolean;
 };
@@ -75,7 +75,7 @@ export function PriceCards({
 	selectedAmount,
 	currency,
 	onAmountChange,
-	paymentInterval,
+	billingPeriod,
 	otherAmountField,
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
@@ -104,11 +104,11 @@ export function PriceCards({
 							)}
 							isSelected={amount === selectedAmount}
 							onClick={onAmountChange}
-							paymentInterval={paymentInterval}
+							billingPeriod={billingPeriod}
 							alternateLabel={`${simpleFormatAmount(
 								currencies[currency],
 								amount,
-							)}${paymentInterval ? ' per ' + paymentInterval : ''}`}
+							)}${billingPeriod ? ' per ' + billingPeriod : ''}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (

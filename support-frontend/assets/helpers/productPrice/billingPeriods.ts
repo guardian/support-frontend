@@ -100,6 +100,20 @@ function contributionTypeToBillingPeriod(
 			return undefined;
 	}
 }
+function billingPeriodToContributionType(
+	billingPeriod: BillingPeriod,
+): ContributionType | undefined {
+	switch (billingPeriod) {
+		case OneTime:
+			return 'ONE_OFF';
+		case Monthly:
+			return 'MONTHLY';
+		case Annual:
+			return 'ANNUAL';
+		default:
+			return undefined;
+	}
+}
 
 export {
 	OneTime,
@@ -112,4 +126,5 @@ export {
 	weeklyGiftBillingPeriods,
 	ratePlanToBillingPeriod,
 	contributionTypeToBillingPeriod,
+	billingPeriodToContributionType,
 };
