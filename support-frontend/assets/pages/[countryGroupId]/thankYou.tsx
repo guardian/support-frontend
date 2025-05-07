@@ -1,6 +1,10 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import {
+	Annual,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -103,17 +107,10 @@ export function ThankYou({
 				productKey === 'SupporterPlus' || productKey === 'TierThree'
 					? appConfig.allProductPrices[productKey]
 					: undefined;
-
-			/**
-			 * This is some annoying transformation we need from
-			 * Product API => Contributions work we need to do
-			 */
-			const billingPeriod =
-				ratePlan.billingPeriod === 'Quarter'
-					? 'Quarterly'
-					: ratePlan.billingPeriod === 'Month'
-					? 'Monthly'
-					: 'Annual';
+			const billingPeriod = toRegularBillingPeriod(
+				ratePlan.billingPeriod as string,
+				Annual,
+			);
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {

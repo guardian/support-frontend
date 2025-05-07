@@ -56,14 +56,14 @@ export const getProductFields = ({
 			return {
 				productType: 'GuardianAdLite',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 			};
 
 		case 'TierThree':
 			return {
 				productType: 'TierThree',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 				fulfilmentOptions: fulfilmentOption,
 				productOptions: productOption,
 			};
@@ -72,7 +72,7 @@ export const getProductFields = ({
 			return {
 				productType: 'Contribution',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 				amount: finalAmount,
 			};
 
@@ -80,7 +80,7 @@ export const getProductFields = ({
 			return {
 				productType: 'SupporterPlus',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *
@@ -99,7 +99,7 @@ export const getProductFields = ({
 				productType: 'GuardianWeekly',
 				currency: currencyKey,
 				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 			};
 
 		case 'GuardianWeeklyRestOfWorld':
@@ -107,14 +107,14 @@ export const getProductFields = ({
 				productType: 'GuardianWeekly',
 				fulfilmentOptions: 'RestOfWorld',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 			};
 
 		case 'DigitalSubscription':
 			return {
 				productType: 'DigitalPack',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 				readerType: 'Direct',
 			};
 
@@ -128,7 +128,7 @@ export const getProductFields = ({
 			return {
 				productType: 'Paper',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				regularBillingPeriod: ratePlanDescription.billingPeriod,
 				fulfilmentOptions: finalFulfilmentOption,
 				productOptions: productOption,
 				deliveryAgent,

@@ -10,7 +10,11 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	Annual,
+	type BillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
@@ -158,17 +162,10 @@ export function Checkout({
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
-
-	/**
-	 * This is some annoying transformation we need from
-	 * Product API => Contributions work we need to do
-	 */
-	const billingPeriod =
-		ratePlan.billingPeriod === 'Quarter'
-			? 'Quarterly'
-			: ratePlan.billingPeriod === 'Month'
-			? 'Monthly'
-			: 'Annual';
+	const billingPeriod = toRegularBillingPeriod(
+		ratePlan.billingPeriod as string,
+		Annual,
+	);
 
 	let promotion;
 	if (productKey === 'Contribution') {

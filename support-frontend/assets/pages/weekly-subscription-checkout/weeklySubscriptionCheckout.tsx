@@ -7,7 +7,7 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import {
 	Monthly,
-	regularBillingPeriod,
+	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -24,7 +24,7 @@ import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
-const initialBillingPeriod = regularBillingPeriod(
+const initialBillingPeriod = toRegularBillingPeriod(
 	getQueryParameter('period'),
 	Monthly,
 );

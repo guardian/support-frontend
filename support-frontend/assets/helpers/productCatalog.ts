@@ -7,6 +7,12 @@ import type {
 	SupportInternationalisationId,
 } from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
+import {
+	Annual,
+	Monthly,
+	Quarterly,
+	type RegularBillingPeriod,
+} from './productPrice/billingPeriods';
 
 export type { ActiveProductKey };
 
@@ -35,7 +41,7 @@ export type ProductDescription = {
 	ratePlans: Record<
 		string,
 		{
-			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			billingPeriod: RegularBillingPeriod;
 			label?: string;
 			hideSimilarProductsConsent?: boolean;
 		}
@@ -192,7 +198,7 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/guardian-ad-lite',
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				hideSimilarProductsConsent: true,
 			},
 		},
@@ -207,28 +213,28 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			DomesticAnnual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			RestOfWorldMonthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			RestOfWorldAnnual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			DomesticMonthlyV2: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			DomesticAnnualV2: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			RestOfWorldMonthlyV2: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			RestOfWorldAnnualV2: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 		},
 	},
@@ -250,16 +256,16 @@ export const productCatalogDescription: Record<
 		],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 		},
 	},
@@ -269,10 +275,10 @@ export const productCatalogDescription: Record<
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 		},
 	},
@@ -283,19 +289,19 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			Quarterly: {
-				billingPeriod: 'Quarterly',
+				billingPeriod: Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 		},
 	},
@@ -306,19 +312,19 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 			Quarterly: {
-				billingPeriod: 'Quarterly',
+				billingPeriod: Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 		},
 	},
@@ -330,23 +336,23 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Every day package',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Six day package',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Weekend package',
 			},
 			Saturday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Saturday package',
 			},
 			Sunday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'The Observer',
 				hideSimilarProductsConsent: true,
 			},
@@ -360,23 +366,23 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Every day package',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Six day package',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Weekend package',
 			},
 			Saturday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Saturday package',
 			},
 			Sunday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'The Observer',
 				hideSimilarProductsConsent: true,
 			},
@@ -390,15 +396,15 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Every day package - The Guardian and The Observer',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Six day package - The Guardian',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 				label: 'Weekend package - The Guardian and The Observer',
 			},
 		},
@@ -409,10 +415,10 @@ export const productCatalogDescription: Record<
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: Annual,
 			},
 		},
 	},
@@ -440,7 +446,7 @@ export const productCatalogDescription: Record<
 		],
 		ratePlans: {
 			GuardianPatron: {
-				billingPeriod: 'Monthly',
+				billingPeriod: Monthly,
 			},
 		},
 	},

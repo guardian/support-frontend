@@ -1,7 +1,11 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	Annual,
+	type BillingPeriod,
+	Monthly,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
@@ -21,16 +25,16 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		discountedPrice: 324,
 	};
 	const paymentProductKeys = [
-		['GuardianAdLite', 'Annual', 'GBPCountries', 0],
-		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
-		['Contribution', 'Annual', 'AUDCountries', 0],
-		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
-		['TierThree', 'Monthly', 'UnitedStates', 45],
-		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
-		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
-		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
-		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
-		['GuardianWeeklyRestOfWorld', 'Annual', 'UnitedStates', 0],
+		['GuardianAdLite', Annual, 'GBPCountries', 0],
+		['DigitalSubscription', Monthly, 'GBPCountries', 0],
+		['Contribution', Annual, 'AUDCountries', 0],
+		['SupporterPlus', Monthly, 'GBPCountries', 12],
+		['TierThree', Monthly, 'UnitedStates', 45],
+		['HomeDelivery', Monthly, 'GBPCountries', 0],
+		['NationalDelivery', Monthly, 'GBPCountries', 0],
+		['SubscriptionCard', Monthly, 'GBPCountries', 0],
+		['GuardianWeeklyDomestic', Monthly, 'GBPCountries', 0],
+		['GuardianWeeklyRestOfWorld', Annual, 'UnitedStates', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,

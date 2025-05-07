@@ -41,10 +41,13 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import {
 	Annual,
-	type BillingPeriod,
 	Monthly,
 	OneTime,
 	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
+import type {
+	BillingPeriod,
+	RegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -218,10 +221,10 @@ const isCardUserSelected = (
  */
 function getPlanCost(
 	pricing: number,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RegularBillingPeriod,
 	promotion?: Promotion,
 ) {
-	const promotionDurationPeriod: BillingPeriod =
+	const promotionDurationPeriod: RegularBillingPeriod =
 		billingPeriod === Annual && promotion?.discount?.durationMonths === 12
 			? Annual
 			: Monthly;
@@ -322,6 +325,7 @@ export function ThreeTierLanding({
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),
 	);
+	const regularBillingPeriod = billingPeriod as RegularBillingPeriod;
 
 	// Handle which countdown to show (if any).
 	const [currentCountdownSettings, setCurrentCountdownSettings] =
@@ -523,13 +527,13 @@ export function ThreeTierLanding({
 							tsAndCsContent={[
 								{
 									title: tier1Card.title,
-									planCost: getPlanCost(tier1Card.price, billingPeriod),
+									planCost: getPlanCost(tier1Card.price, regularBillingPeriod),
 								},
 								{
 									title: tier2Card.title,
 									planCost: getPlanCost(
 										tier2Card.price,
-										billingPeriod,
+										regularBillingPeriod,
 										promotionTier2,
 									),
 									starts: promotionTier2?.starts
@@ -543,7 +547,7 @@ export function ThreeTierLanding({
 									title: tier3Card.title,
 									planCost: getPlanCost(
 										tier3Card.price,
-										billingPeriod,
+										regularBillingPeriod,
 										promotionTier3,
 									),
 									starts: promotionTier3?.starts

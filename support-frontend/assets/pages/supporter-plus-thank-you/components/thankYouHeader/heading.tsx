@@ -8,7 +8,10 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	OneTime,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -331,7 +334,7 @@ function Heading({
 	}
 
 	switch (billingPeriod) {
-		case 'One_Off':
+		case OneTime:
 			return (
 				<h1 css={headerTitleText}>
 					Thank you for supporting us today with{' '}

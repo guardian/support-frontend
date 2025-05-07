@@ -86,7 +86,7 @@ export function ratePlanToBillingPeriod(
 /*
   Awaiting 2-step checkout full deprecation
 */
-export function regularBillingPeriod(
+export function toRegularBillingPeriod(
 	regularBillingString: string,
 	fallback: RegularBillingPeriod,
 ): RegularBillingPeriod {
@@ -96,7 +96,13 @@ export function regularBillingPeriod(
 	) {
 		return regularBillingString as RegularBillingPeriod;
 	}
-	return fallback;
+	const regularBillingPeriod =
+		regularBillingString === 'Quarter'
+			? Quarterly
+			: regularBillingString === 'Month'
+			? Monthly
+			: fallback;
+	return regularBillingPeriod;
 }
 export function contributionTypeToBillingPeriod(
 	contributionType: ContributionType,

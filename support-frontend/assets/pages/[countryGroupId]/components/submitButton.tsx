@@ -5,6 +5,10 @@ import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import {
+	billingPeriodNoun,
+	type RegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -21,7 +25,7 @@ type SubmitButtonProps = {
 	finalAmount: number;
 	currencyKey: IsoCurrency;
 	ratePlanDescription: {
-		billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+		billingPeriod: RegularBillingPeriod;
 	};
 	csrf: string;
 	currency: Currency;
@@ -132,11 +136,8 @@ export function SubmitButton({
 			return (
 				<DefaultPaymentButton
 					buttonText={`Pay ${simpleFormatAmount(currency, finalAmount)} per ${
-						ratePlanDescription.billingPeriod === 'Annual'
-							? 'year'
-							: ratePlanDescription.billingPeriod === 'Monthly'
-							? 'month'
-							: 'quarter'
+						ratePlanDescription.billingPeriod ===
+						billingPeriodNoun(ratePlanDescription.billingPeriod).toLowerCase()
 					}`}
 					onClick={() => {
 						// no-op
