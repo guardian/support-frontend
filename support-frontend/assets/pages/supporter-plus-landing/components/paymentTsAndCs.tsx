@@ -122,7 +122,7 @@ export function PaymentTsAndCs({
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
 	const billingPeriodSingular = billingPeriodNoun(billingPeriod);
-	const billingPeriodPlural = billingPeriodTitle(billingPeriod);
+	const billingPeriodPlural = billingPeriodTitle(billingPeriod).toLowerCase();
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,

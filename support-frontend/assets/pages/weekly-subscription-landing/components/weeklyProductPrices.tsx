@@ -186,12 +186,12 @@ const getProducts = ({
 					countryId,
 					billingPeriod,
 					getWeeklyFulfilmentOption(countryId),
-				)
+			  )
 			: {
 					price: 0,
 					fixedTerm: false,
 					currency: 'GBP' as IsoCurrency,
-				};
+			  };
 
 		return weeklyProductProps(
 			countryId,
