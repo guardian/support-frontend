@@ -3,6 +3,7 @@ import type {
 	DirectDebitPaymentFields,
 	PaymentFields,
 	PayPalPaymentFields,
+	StripeHostedPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
 import type {
@@ -65,6 +66,8 @@ export function createPaymentMethod(
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
 			return createStripePaymentMethod(user.isTestUser, paymentFields);
+		case 'StripeHostedCheckout':
+			return createStripeHostedPaymentMethod(user.isTestUser, paymentFields);
 		case 'PayPal':
 			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'DirectDebit':
@@ -151,6 +154,51 @@ export async function createStripePaymentMethod(
 		),
 		Type: 'CreditCardReferenceTransaction',
 		StripePaymentType: paymentFields.stripePaymentType,
+	};
+}
+
+async function createStripeHostedPaymentMethod(
+	isTestUser: boolean,
+	{ stripePublicKey, checkoutSessionId }: StripeHostedPaymentFields,
+): Promise<StripePaymentMethod> {
+	const stripeService = await stripeServiceHandler.getServiceForUser(
+		isTestUser,
+	);
+	if (!checkoutSessionId) {
+		throw new Error(
+			'Checkout session ID is required for Stripe hosted checkout',
+		);
+	}
+	const paymentMethodId = getIfDefined(
+		await stripeService.retrievePaymentMethodIdFromCheckoutSession(
+			stripePublicKey,
+			checkoutSessionId,
+		),
+		"Couldn't retrieve payment method ID from Stripe",
+	);
+	const customer = await stripeService.createCustomer(
+		stripePublicKey,
+		paymentMethodId,
+	);
+	const paymentMethod = await stripeService.getPaymentMethod(
+		stripePublicKey,
+		paymentMethodId,
+	);
+	const card = getIfDefined(
+		paymentMethod.card,
+		'Card was missing from payment method',
+	);
+
+	return {
+		TokenId: paymentMethodId,
+		SecondTokenId: customer.id,
+		CreditCardNumber: card.last4,
+		CreditCardCountry: card.country,
+		CreditCardExpirationMonth: card.exp_month,
+		CreditCardExpirationYear: card.exp_year,
+		CreditCardType: zuoraCardTypeFromStripe(card.brand),
+		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
+		Type: 'CreditCardReferenceTransaction',
 	};
 }
 
