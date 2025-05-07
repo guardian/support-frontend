@@ -31,20 +31,12 @@ import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
 
-const getConsentValue = (
-	formData: FormData,
-	abParticipations: Participations,
-) => {
+const getConsentValue = (formData: FormData, userWasShownCheckbox: boolean) => {
 	const similarProductsCheckbox = formData.get('similarProductsConsent');
 	if (similarProductsCheckbox) {
 		return similarProductsCheckbox === 'on';
 	}
-
-	if (
-		['VariantA', 'VariantB'].includes(
-			abParticipations.similarProductsConsent ?? '',
-		)
-	) {
+	if (userWasShownCheckbox) {
 		return false;
 	}
 	return;
@@ -58,6 +50,7 @@ export const submitForm = async ({
 	paymentFields,
 	productFields,
 	hasDeliveryAddress,
+	userWasShownCheckbox,
 	abParticipations,
 	promotion,
 	contributionAmount,
@@ -70,6 +63,7 @@ export const submitForm = async ({
 	paymentFields: RegularPaymentFields;
 	productFields: ProductFields;
 	hasDeliveryAddress: boolean;
+	userWasShownCheckbox: boolean;
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
@@ -90,7 +84,10 @@ export const submitForm = async ({
 		productFields,
 	);
 
-	const similarProductsConsent = getConsentValue(formData, abParticipations);
+	const similarProductsConsent = getConsentValue(
+		formData,
+		userWasShownCheckbox,
+	);
 
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
