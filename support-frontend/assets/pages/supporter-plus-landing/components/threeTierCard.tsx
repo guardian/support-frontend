@@ -177,15 +177,15 @@ const discountSummaryCopy = (
 		currency,
 		promotion.discountedPrice ?? 0,
 	);
-	const period = billingPeriodNoun(billingPeriod).toLowerCase();
+	const periodNoun = billingPeriodNoun(billingPeriod);
 	const duration =
 		billingPeriod === Annual ? durationMonths / 12 : durationMonths;
 
-	return `${formattedPromotionPrice}/${period} for ${
-		period === 'year' || duration === 1 ? 'the first' : ''
-	}${duration > 1 ? duration : ''} ${period}${
+	return `${formattedPromotionPrice}/${periodNoun} for ${
+		periodNoun === 'year' || duration === 1 ? 'the first' : ''
+	}${duration > 1 ? duration : ''} ${periodNoun}${
 		duration > 1 ? 's' : ''
-	}, then ${formattedPrice}/${period}${'*'.repeat(promoCount)}`;
+	}, then ${formattedPrice}/${periodNoun}${'*'.repeat(promoCount)}`;
 };
 
 export function ThreeTierCard({
@@ -207,7 +207,7 @@ export function ThreeTierCard({
 		product,
 	} = cardContent;
 	const currency = currencies[currencyId];
-	const period = billingPeriodNoun(billingPeriod).toLowerCase();
+	const periodNoun = billingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;
@@ -229,7 +229,7 @@ export function ThreeTierCard({
 						{`${simpleFormatAmount(
 							currency,
 							promotion.discountedPrice ?? price,
-						)}/${period}`}
+						)}/${periodNoun}`}
 						<span css={discountSummaryCss}>
 							{discountSummaryCopy(
 								currency,
@@ -241,7 +241,7 @@ export function ThreeTierCard({
 						</span>
 					</>
 				)}
-				{!promotion && `${formattedPrice}/${period}`}
+				{!promotion && `${formattedPrice}/${periodNoun}`}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton

@@ -112,9 +112,7 @@ export function PriceCards({
 								currencies[currency],
 								amount,
 							)}${
-								billingPeriod
-									? ' per ' + billingPeriodNoun(billingPeriod).toLowerCase()
-									: ''
+								billingPeriod ? ' per ' + billingPeriodNoun(billingPeriod) : ''
 							}`}
 						/>
 					))}

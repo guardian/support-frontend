@@ -28,13 +28,11 @@ export function billingPeriodNoun(
 ): string {
 	switch (billingPeriod) {
 		case Annual:
-			return fixedTerm ? '12 months' : 'Year';
-
+			return fixedTerm ? '12 months' : 'year';
 		case Quarterly:
-			return fixedTerm ? '3 months' : 'Quarter';
-
+			return fixedTerm ? '3 months' : 'quarter';
 		default:
-			return 'Month';
+			return 'month';
 	}
 }
 

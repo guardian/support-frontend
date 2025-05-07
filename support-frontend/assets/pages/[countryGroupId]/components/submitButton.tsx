@@ -137,7 +137,7 @@ export function SubmitButton({
 				<DefaultPaymentButton
 					buttonText={`Pay ${simpleFormatAmount(currency, finalAmount)} per ${
 						ratePlanDescription.billingPeriod ===
-						billingPeriodNoun(ratePlanDescription.billingPeriod).toLowerCase()
+						billingPeriodNoun(ratePlanDescription.billingPeriod)
 					}`}
 					onClick={() => {
 						// no-op

@@ -44,10 +44,10 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
-	const periodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
+	const periodNoun = billingPeriodNoun(billingPeriod);
 	const today = new Date();
 	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
-	const renewalDateEnd = `every ${periodSingular}`;
+	const renewalDateEnd = `every ${periodNoun}`;
 	const renewalFrequency = `${renewalDateStart}${
 		billingPeriod === Annual ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
@@ -76,10 +76,9 @@ export function SummaryTsAndCs({
 	const summaryTsAndCsTierThreeGuardianAdLite = (
 		<div css={containerSummaryTsCs}>
 			The {productCatalogDescription[productKey].label} subscription
-			{productKey === 'TierThree' ? 's' : ''} will auto-renew each{' '}
-			{periodSingular}. You will be charged the subscription amount using your
-			chosen payment method at each renewal, at the rate then in effect, unless
-			you cancel.
+			{productKey === 'TierThree' ? 's' : ''} will auto-renew each {periodNoun}.
+			You will be charged the subscription amount using your chosen payment
+			method at each renewal, at the rate then in effect, unless you cancel.
 		</div>
 	);
 	const summaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
@@ -94,9 +93,9 @@ export function SummaryTsAndCs({
 		SupporterPlus: (
 			<div css={containerSummaryTsCs}>
 				The {productCatalogDescription[productKey].label} subscription and any
-				contribution will auto-renew each {periodSingular}. You will be charged
-				the subscription and contribution amounts using your chosen payment
-				method at each renewal, at the rate then in effect, unless you cancel.
+				contribution will auto-renew each {periodNoun}. You will be charged the
+				subscription and contribution amounts using your chosen payment method
+				at each renewal, at the rate then in effect, unless you cancel.
 			</div>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,

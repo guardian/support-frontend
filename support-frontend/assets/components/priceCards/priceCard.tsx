@@ -20,9 +20,7 @@ function getPriceCardLabel(
 		return alternateLabel;
 	}
 	if (billingPeriod) {
-		return `${amountWithCurrency} per ${billingPeriodNoun(
-			billingPeriod,
-		).toLowerCase()}`;
+		return `${amountWithCurrency} per ${billingPeriodNoun(billingPeriod)}`;
 	}
 
 	return amountWithCurrency;

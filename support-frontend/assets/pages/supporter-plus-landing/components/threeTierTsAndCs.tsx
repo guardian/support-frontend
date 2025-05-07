@@ -48,18 +48,15 @@ const discountSummaryCopy = (
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
 		const period = planCost.discount.duration.period;
+		const periodNoun = billingPeriodNoun(period);
 		const promoPrice = planCost.discount.price;
 		const promoPriceRounded =
 			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
-		return `${currency}${promoPriceRounded}/${billingPeriodNoun(
-			period,
-		).toLowerCase()} for the first ${
+		return `${currency}${promoPriceRounded}/${periodNoun} for the first ${
 			duration > 1 ? duration : ''
-		} ${billingPeriodNoun(period).toLowerCase()}${
-			duration > 1 ? 's' : ''
-		}, then ${currency}${planCost.price}/${billingPeriodNoun(
-			period,
-		).toLowerCase()}`;
+		} ${periodNoun}${duration > 1 ? 's' : ''}, then ${currency}${
+			planCost.price
+		}/${periodNoun}`;
 	}
 
 	return;

@@ -591,7 +591,7 @@ export function CheckoutComponent({
 						ratePlanDescription={ratePlanDescription.label}
 						paymentFrequency={billingPeriodNoun(
 							ratePlanDescription.billingPeriod,
-						).toLowerCase()}
+						)}
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
