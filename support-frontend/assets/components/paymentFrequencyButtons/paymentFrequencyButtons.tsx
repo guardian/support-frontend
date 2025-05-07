@@ -7,16 +7,18 @@ import {
 	textSansBold17,
 } from '@guardian/source/foundations';
 import { useState } from 'react';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	billingPeriodTitle,
+} from 'helpers/productPrice/billingPeriods';
 
-interface BillingFrequencyButtonObj {
-	billingFrequencyLabel: string;
-	billingFrequencyId: BillingPeriod;
+interface PaymentFrequencyButtonObj {
+	billingPeriod: BillingPeriod;
 	isPreSelected?: boolean;
 }
 
-export interface BillingFrequencyButtonsProps {
-	billingFrequencies: BillingFrequencyButtonObj[];
+export interface PaymentFrequencyButtonsProps {
+	paymentFrequencies: PaymentFrequencyButtonObj[];
 	buttonClickHandler: (buttonIndex: number) => void;
 	additionalStyles?: SerializedStyles;
 }
@@ -55,38 +57,38 @@ const button = (isSelected: boolean) => css`
 	}
 `;
 
-export function BillingFrequencyButtons({
-	billingFrequencies,
+export function PaymentFrequencyButtons({
+	paymentFrequencies,
 	buttonClickHandler,
 	additionalStyles,
-}: BillingFrequencyButtonsProps): JSX.Element {
+}: PaymentFrequencyButtonsProps): JSX.Element {
 	const [selectedButton, setSelectedButton] = useState(
 		Math.max(
-			billingFrequencies.findIndex(
-				(billingFrequency) => billingFrequency.isPreSelected,
+			paymentFrequencies.findIndex(
+				(paymentFrequency) => paymentFrequency.isPreSelected,
 			),
 			0,
 		),
 	);
 	return (
 		<div
-			css={[container(billingFrequencies.length), additionalStyles]}
+			css={[container(paymentFrequencies.length), additionalStyles]}
 			role="tablist"
 			aria-label="Billing frequency options"
 		>
-			{billingFrequencies.map((billingFrequency, buttonIndex) => (
+			{paymentFrequencies.map((paymentFrequency, buttonIndex) => (
 				<button
 					css={button(buttonIndex === selectedButton)}
 					role="tab"
-					id={billingFrequency.billingFrequencyId}
-					aria-controls={`${billingFrequency.billingFrequencyId}-tab`}
+					id={paymentFrequency.billingPeriod}
+					aria-controls={`${paymentFrequency.billingPeriod}-tab`}
 					aria-selected={buttonIndex === selectedButton}
 					onClick={() => {
 						setSelectedButton(buttonIndex);
 						buttonClickHandler(buttonIndex);
 					}}
 				>
-					{billingFrequency.billingFrequencyLabel}
+					{billingPeriodTitle(paymentFrequency.billingPeriod)}
 				</button>
 			))}
 		</div>

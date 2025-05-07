@@ -13,9 +13,9 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'preact/hooks';
-import { BillingFrequencyButtons } from 'components/billingFrequencyButtons/billingFrequencyButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -204,8 +204,8 @@ export function ContributionsOnlyLanding({
 						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
-					<BillingFrequencyButtons
-						billingFrequencies={paymentFrequencies.map(
+					<PaymentFrequencyButtons
+						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
 								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
 								paymentFrequencyId: paymentFrequency,

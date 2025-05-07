@@ -14,12 +14,12 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useState } from 'preact/hooks';
-import { BillingFrequencyButtons } from 'components/billingFrequencyButtons/billingFrequencyButtons';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import {
@@ -42,7 +42,6 @@ import { productCatalog } from 'helpers/productCatalog';
 import {
 	Annual,
 	type BillingPeriod,
-	billingPeriodTitle,
 	Monthly,
 	OneTime,
 	ratePlanToBillingPeriod,
@@ -348,12 +347,12 @@ export function ThreeTierLanding({
 		}
 	}, []);
 
-	const billingFrequencies: BillingPeriod[] = enableSingleContributionsTab
+	const paymentFrequencies: BillingPeriod[] = enableSingleContributionsTab
 		? [OneTime, Monthly, Annual]
 		: [Monthly, Annual];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setBillingPeriod(billingFrequencies[buttonIndex] as BillingPeriod);
+		setBillingPeriod(paymentFrequencies[buttonIndex] as BillingPeriod);
 	};
 
 	/**
@@ -603,12 +602,11 @@ export function ThreeTierLanding({
 					{settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
-					<BillingFrequencyButtons
-						billingFrequencies={billingFrequencies.map(
-							(billingFrequency, index) => ({
-								billingFrequencyLabel: billingPeriodTitle(billingFrequency),
-								billingFrequencyId: billingFrequency,
-								isPreSelected: billingFrequencies[index] === billingPeriod,
+					<PaymentFrequencyButtons
+						paymentFrequencies={paymentFrequencies.map(
+							(paymentFrequency, index) => ({
+								billingPeriod: paymentFrequency,
+								isPreSelected: paymentFrequencies[index] === billingPeriod,
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}

@@ -3,14 +3,15 @@ import { from, palette, space } from '@guardian/source/foundations';
 import { Column, Columns } from '@guardian/source/react-components';
 import React from 'react';
 import { Box } from 'components/checkoutBox/checkoutBox';
-import type { BillingFrequencyButtonsProps } from 'components/billingFrequencyButtons/billingFrequencyButtons';
-import { BillingFrequencyButtons } from 'components/billingFrequencyButtons/billingFrequencyButtons';
+import type { PaymentFrequencyButtonsProps } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'LandingPage/Payment Frequency Buttons',
-	component: BillingFrequencyButtons,
+	component: PaymentFrequencyButtons,
 	argTypes: { buttonClickHandler: { action: 'payment frequency changed' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
@@ -43,7 +44,7 @@ export default {
 	},
 };
 
-function Template(args: BillingFrequencyButtonsProps) {
+function Template(args: PaymentFrequencyButtonsProps) {
 	const paymentFrequencyButtonsCss = css`
 		margin: ${space[4]}px auto 32px;
 		${from.desktop} {
@@ -51,7 +52,7 @@ function Template(args: BillingFrequencyButtonsProps) {
 		}
 	`;
 	return (
-		<BillingFrequencyButtons
+		<PaymentFrequencyButtons
 			{...args}
 			additionalStyles={paymentFrequencyButtonsCss}
 		/>
@@ -65,13 +66,11 @@ export const Default = Template.bind({});
 Default.args = {
 	paymentFrequencies: [
 		{
-			paymentFrequencyLabel: 'Monthly',
-			paymentFrequencyId: 'MONTHLY',
+			billingPeriod: Monthly,
 			isPreSelected: true,
 		},
 		{
-			paymentFrequencyLabel: 'Annual',
-			paymentFrequencyId: 'ANNUAL',
+			billingPeriod: Annual,
 			isPreSelected: false,
 		},
 	],
