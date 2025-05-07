@@ -31,6 +31,24 @@ import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
 
+const getConsentValue = (
+	formData: FormData,
+	abParticipations: Participations,
+) => {
+	const similarProductsCheckbox = formData.get('similarProductsConsent');
+	if (similarProductsCheckbox) {
+		return similarProductsCheckbox === 'on';
+	}
+
+	if (
+		['VariantA', 'VariantB'].includes(
+			abParticipations.similarProductsConsent ?? '',
+		)
+	) {
+		return false;
+	}
+	return;
+};
 export const submitForm = async ({
 	geoId,
 	productKey,
@@ -72,6 +90,8 @@ export const submitForm = async ({
 		productFields,
 	);
 
+	const similarProductsConsent = getConsentValue(formData, abParticipations);
+
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
 		promoCode !== undefined
@@ -82,12 +102,6 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
-
-	const similarProductsCheckbox = formData.get('similarProductsConsent');
-	const similarProductsConsent =
-		similarProductsCheckbox !== null
-			? similarProductsCheckbox === 'on'
-			: undefined;
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
