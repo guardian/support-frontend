@@ -4,7 +4,10 @@ import { ChoiceCardGroup } from '@guardian/source/react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	billingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import { PriceCard } from './priceCard';
 
 const cardStyles = css`
@@ -108,7 +111,11 @@ export function PriceCards({
 							alternateLabel={`${simpleFormatAmount(
 								currencies[currency],
 								amount,
-							)}${billingPeriod ? ' per ' + billingPeriod : ''}`}
+							)}${
+								billingPeriod
+									? ' per ' + billingPeriodNoun(billingPeriod).toLowerCase()
+									: ''
+							}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (
