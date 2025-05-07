@@ -74,6 +74,23 @@ export class StripeService {
 		return customer;
 	};
 
+	retrievePaymentMethodIdFromCheckoutSession = async (
+		publicKey: string,
+		checkoutSessionId: string,
+	) => {
+		const stripe = this.stripeForPublicKey(publicKey);
+		const session = await stripe.checkout.sessions.retrieve(checkoutSessionId, {
+			expand: ['setup_intent.payment_method'],
+		});
+		const setupIntent = session.setup_intent;
+		if (setupIntent) {
+			const paymentMethod = (setupIntent as Stripe.SetupIntent)
+				.payment_method as Stripe.PaymentMethod;
+			return paymentMethod.id;
+		}
+		return;
+	};
+
 	getPaymentMethod = async (publicKey: string, paymentMethodId: string) => {
 		const stripe = this.stripeForPublicKey(publicKey);
 		const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);

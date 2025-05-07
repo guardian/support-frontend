@@ -40,7 +40,7 @@ const stripePaymentMethodSchema = z.object({
 	CreditCardType: z.string().optional(),
 	PaymentGateway: stripePaymentGatewaySchema,
 	Type: z.literal('CreditCardReferenceTransaction'),
-	StripePaymentType: stripePaymentTypeSchema,
+	StripePaymentType: stripePaymentTypeSchema.optional(),
 });
 export type StripePaymentMethod = z.infer<typeof stripePaymentMethodSchema>;
 

@@ -3,12 +3,14 @@ import { z } from 'zod';
 // payment methods which are the activated payment details which are passed into Zuora
 
 const stripePaymentProviderSchema = z.literal('Stripe');
+const stripeHostedPaymentProviderSchema = z.literal('StripeHostedCheckout');
 const payPalPaymentProviderSchema = z.literal('PayPal');
 const directDebitPaymentProviderSchema = z.literal('DirectDebit');
 const existingPaymentProviderSchema = z.literal('Existing');
 
 export const paymentProviderSchema = z.union([
 	stripePaymentProviderSchema,
+	stripeHostedPaymentProviderSchema,
 	z.literal('StripeApplePay'),
 	z.literal('StripePaymentRequestButton'),
 	payPalPaymentProviderSchema,
@@ -32,6 +34,14 @@ const stripePaymentFieldsSchema = z.object({
 	stripePublicKey: z.string(),
 });
 export type StripePaymentFields = z.infer<typeof stripePaymentFieldsSchema>;
+const stripeHostedPaymentFieldsSchema = z.object({
+	paymentType: stripeHostedPaymentProviderSchema,
+	checkoutSessionId: z.string().nullable(),
+	stripePublicKey: z.string(),
+});
+export type StripeHostedPaymentFields = z.infer<
+	typeof stripeHostedPaymentFieldsSchema
+>;
 const directDebitPaymentFieldsSchema = z.object({
 	paymentType: directDebitPaymentProviderSchema,
 	accountHolderName: z.string(),
@@ -49,6 +59,7 @@ const existingPaymentFieldsSchema = z.object({
 export const paymentFieldsSchema = z.discriminatedUnion('paymentType', [
 	payPalPaymentFieldsSchema,
 	stripePaymentFieldsSchema,
+	stripeHostedPaymentFieldsSchema,
 	directDebitPaymentFieldsSchema,
 	existingPaymentFieldsSchema,
 ]);
