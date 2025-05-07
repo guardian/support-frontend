@@ -6,6 +6,7 @@ import { stripePaymentTypeSchema } from './paymentFields';
 export const stripePaymentGatewaySchema = z.union([
 	z.literal('Stripe PaymentIntents GNM Membership'),
 	z.literal('Stripe PaymentIntents GNM Membership AUS'),
+	z.literal('Stripe - Observer - Tortoise Media'),
 ]);
 export type StripePaymentGateway = z.infer<typeof stripePaymentGatewaySchema>;
 
