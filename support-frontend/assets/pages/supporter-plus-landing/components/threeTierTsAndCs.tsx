@@ -1,10 +1,7 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
-import type {
-	BillingPeriod} from 'helpers/productPrice/billingPeriods';
-import {
-	billingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
