@@ -1,9 +1,6 @@
 import { ChoiceCard } from '@guardian/source/react-components';
-import type {
-	BillingPeriod} from 'helpers/productPrice/billingPeriods';
-import {
-	billingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 
 export type PriceCardProps = {
 	amount: number | 'other';
