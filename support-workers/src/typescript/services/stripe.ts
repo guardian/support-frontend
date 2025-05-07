@@ -23,6 +23,11 @@ const stripeConfigSchema = z.object({
 			publicKey: z.string(),
 			paymentGateway: stripePaymentGatewaySchema,
 		}),
+		tortoiseMediaAccount: z.object({
+			secretKey: z.string(),
+			publicKey: z.string(),
+			paymentGateway: stripePaymentGatewaySchema,
+		}),
 	}),
 });
 type StripeConfig = z.infer<typeof stripeConfigSchema>;
