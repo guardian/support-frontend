@@ -10,8 +10,7 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type {
-	RegularBillingPeriod} from 'helpers/productPrice/billingPeriods';
+import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
 	weeklyBillingPeriods,
@@ -187,12 +186,12 @@ const getProducts = ({
 					countryId,
 					billingPeriod,
 					getWeeklyFulfilmentOption(countryId),
-			  )
+				)
 			: {
 					price: 0,
 					fixedTerm: false,
 					currency: 'GBP' as IsoCurrency,
-			  };
+				};
 
 		return weeklyProductProps(
 			countryId,
