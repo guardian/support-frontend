@@ -6,7 +6,10 @@ export const Quarterly = 'Quarterly';
 export const OneTime = 'One_Off';
 
 export type BillingPeriod = RegularBillingPeriod | OneTimeBillingPeriod;
-type RegularBillingPeriod = typeof Annual | typeof Monthly | typeof Quarterly;
+export type RegularBillingPeriod =
+	| typeof Annual
+	| typeof Monthly
+	| typeof Quarterly;
 type OneTimeBillingPeriod = typeof OneTime;
 
 export const weeklyBillingPeriods: RegularBillingPeriod[] = [

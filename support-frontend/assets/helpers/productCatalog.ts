@@ -9,9 +9,9 @@ import type {
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 import {
 	Annual,
-	type BillingPeriod,
 	Monthly,
 	Quarterly,
+	type RegularBillingPeriod,
 } from './productPrice/billingPeriods';
 
 export type { ActiveProductKey };
@@ -41,7 +41,7 @@ export type ProductDescription = {
 	ratePlans: Record<
 		string,
 		{
-			billingPeriod: BillingPeriod;
+			billingPeriod: RegularBillingPeriod;
 			label?: string;
 			hideSimilarProductsConsent?: boolean;
 		}
