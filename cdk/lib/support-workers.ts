@@ -271,7 +271,7 @@ export class SupportWorkers extends GuStack {
     ]);
 
     // Just to check that we can create a typescript lambda
-    createTypescriptLambda("DummyTypescriptLambda");
+    createTypescriptLambda("DummyTypescript");
 
     const shouldClonePaymentMethodChoice = new Choice(
       this,
