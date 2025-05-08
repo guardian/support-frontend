@@ -5,7 +5,7 @@ import type { PriceCardsProps } from 'components/priceCards/priceCards';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { Annual, Monthly, OneTime } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'Checkouts/Price Cards',
@@ -65,6 +65,7 @@ SingleContribution.args = {
 	amounts: [5, 12, 15, 20],
 	selectedAmount: 12,
 	currency: 'GBP',
+	billingPeriod: OneTime,
 };
 
 export const RecurringContribution = Template.bind({});

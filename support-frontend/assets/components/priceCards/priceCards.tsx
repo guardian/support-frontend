@@ -7,6 +7,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	type BillingPeriod,
 	billingPeriodNoun,
+	OneTime,
 } from 'helpers/productPrice/billingPeriods';
 import { PriceCard } from './priceCard';
 
@@ -68,7 +69,7 @@ export type PriceCardsProps = {
 	selectedAmount: number | 'other';
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
-	billingPeriod?: BillingPeriod;
+	billingPeriod: BillingPeriod;
 	otherAmountField?: React.ReactNode;
 	hideChooseYourAmount?: boolean;
 };
@@ -101,30 +102,21 @@ export function PriceCards({
 					{amounts.map((amount) => (
 						<PriceCard
 							amount={amount}
-							amountWithCurrency={simpleFormatAmount(
-								currencies[currency],
-								amount,
-							)}
 							isSelected={amount === selectedAmount}
 							onClick={onAmountChange}
-							billingPeriod={billingPeriod}
-							alternateLabel={`${simpleFormatAmount(
-								currencies[currency],
-								amount,
-							)}${
-								billingPeriod ? ' per ' + billingPeriodNoun(billingPeriod) : ''
+							label={`${simpleFormatAmount(currencies[currency], amount)}${
+								billingPeriod !== OneTime
+									? ' per ' + billingPeriodNoun(billingPeriod)
+									: ''
 							}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (
 						<PriceCard
 							amount="other"
-							amountWithCurrency="other"
 							isSelected={selectedAmount === 'other'}
 							onClick={onAmountChange}
-							alternateLabel={
-								!lastButtonFullWidth ? 'Other' : 'Choose your amount'
-							}
+							label={!lastButtonFullWidth ? 'Other' : 'Choose your amount'}
 						/>
 					)}
 				</>

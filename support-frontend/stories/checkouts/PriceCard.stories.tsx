@@ -2,7 +2,6 @@ import type { PriceCardProps } from 'components/priceCards/priceCard';
 import { PriceCard } from 'components/priceCards/priceCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'Checkouts/Price Card',
@@ -24,15 +23,14 @@ export const WithFrequency = Template.bind({});
 
 WithFrequency.args = {
 	amount: 10,
-	amountWithCurrency: '£10',
+	label: '£10 per month',
 	isSelected: true,
-	billingPeriod: Monthly,
 };
 
 export const WithoutFrequency = Template.bind({});
 
 WithoutFrequency.args = {
 	amount: 30,
-	amountWithCurrency: '$30',
+	label: '$30 per month',
 	isSelected: false,
 };
