@@ -246,7 +246,7 @@ export class SupportWorkers extends GuStack {
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createTypescriptLambda(
+    const createPaymentMethodLambda = createScalaLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
@@ -269,6 +269,9 @@ export class SupportWorkers extends GuStack {
     const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
     ]);
+
+    // Just to check that we can create a typescript lambda
+    createTypescriptLambda("DummyTypescriptLambda");
 
     const shouldClonePaymentMethodChoice = new Choice(
       this,
