@@ -5,7 +5,10 @@ import {
 	type ActiveProductKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	OneTime,
+} from 'helpers/productPrice/billingPeriods';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -88,7 +91,7 @@ const getSubHeadingCopy = (
 	};
 
 	return (
-		billingPeriod !== 'One_Off' &&
+		billingPeriod !== OneTime &&
 		recurringCopy(amountIsAboveThreshold)[
 			identityUserType === 'current' || isSignedIn
 				? 'isSignedIn'
@@ -132,7 +135,7 @@ function Subheading({
 			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
 					<span>
-						{billingPeriod === 'One_Off'
+						{billingPeriod === OneTime
 							? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
 							: isTier3
 							? 'You can adjust your email preferences and opt out anytime via '
@@ -143,7 +146,7 @@ function Subheading({
 					</span>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
-						billingPeriod !== 'One_Off' && (
+						billingPeriod !== OneTime && (
 							<span
 								css={css`
 									font-weight: bold;
