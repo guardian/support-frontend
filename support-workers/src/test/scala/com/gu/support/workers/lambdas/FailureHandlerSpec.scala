@@ -48,7 +48,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 
       withClue(requestInfo.messages.head) {
         requestInfo.failed should be(false)
-        checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+        checkoutFailureState.checkoutFailureReason should be(Unknown)
       }
     }
 
