@@ -74,7 +74,7 @@ export function PaymentFrequencyButtons({
 		<div
 			css={[container(paymentFrequencies.length), additionalStyles]}
 			role="tablist"
-			aria-label="Billing frequency options"
+			aria-label="Payment frequency options"
 		>
 			{paymentFrequencies.map((paymentFrequency, buttonIndex) => (
 				<button
