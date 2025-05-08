@@ -61,7 +61,6 @@ import {
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
-	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -524,11 +523,6 @@ export function CheckoutComponent({
 				paymentFields,
 				productFields,
 				hasDeliveryAddress: !!productDescription.deliverableTo,
-				userWasShownCheckbox: userShouldSeeConsentCheckbox(
-					productDescription,
-					ratePlanKey,
-					abParticipations,
-				),
 				abParticipations,
 				promotion,
 				contributionAmount,
