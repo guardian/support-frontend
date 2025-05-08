@@ -31,6 +31,6 @@ export const WithoutFrequency = Template.bind({});
 
 WithoutFrequency.args = {
 	amount: 30,
-	label: '$30 per month',
+	label: '$30',
 	isSelected: false,
 };

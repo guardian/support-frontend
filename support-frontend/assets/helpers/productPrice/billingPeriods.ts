@@ -44,6 +44,9 @@ export function billingPeriodTitle(
 		case Quarterly:
 			return fixedTerm ? '3 months' : billingPeriod;
 
+		case OneTime:
+			return 'One-time';
+
 		default:
 			return billingPeriod;
 	}
