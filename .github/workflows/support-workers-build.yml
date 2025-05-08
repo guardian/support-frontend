@@ -93,6 +93,7 @@ jobs:
                 type: aws-lambda
                 parameters:
                   functionNames:
+                    - "-CreatePaymentMethodLambda-"
                     - "-CreateSalesforceContactLambda-"
                     - "-CreateZuoraSubscriptionLambda-"
                     - "-SendThankYouEmailLambda-"
@@ -106,7 +107,7 @@ jobs:
                 type: aws-lambda
                 parameters:
                   functionNames:
-                    - "-CreatePaymentMethodLambda-"
+                    - "-DummyTypescriptLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:
