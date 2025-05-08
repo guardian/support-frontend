@@ -95,6 +95,7 @@ const getProduct = (
 		state.page.checkoutForm.product;
 	const product = getSubscriptionType(state);
 	const readerType = orderIsAGift ? Gift : Direct;
+
 	if (product === DigitalPack) {
 		return {
 			productType: DigitalPack,

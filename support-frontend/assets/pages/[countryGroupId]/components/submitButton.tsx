@@ -135,10 +135,10 @@ export function SubmitButton({
 		default:
 			return (
 				<DefaultPaymentButton
-					buttonText={`Pay ${simpleFormatAmount(currency, finalAmount)} per ${
-						ratePlanDescription.billingPeriod ===
-						billingPeriodNoun(ratePlanDescription.billingPeriod)
-					}`}
+					buttonText={`Pay ${simpleFormatAmount(
+						currency,
+						finalAmount,
+					)} per ${billingPeriodNoun(ratePlanDescription.billingPeriod)}`}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler
