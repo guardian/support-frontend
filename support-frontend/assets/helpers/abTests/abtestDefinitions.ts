@@ -145,4 +145,28 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: false,
 	},
+	oneTimeContributionConsent: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'VariantA',
+			},
+			{
+				id: 'VariantB',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		seed: 99,
+		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
+		excludeContributionsOnlyCountries: false,
+	},
 };
