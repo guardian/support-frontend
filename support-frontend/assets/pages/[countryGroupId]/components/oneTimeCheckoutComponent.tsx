@@ -95,7 +95,6 @@ import {
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
-import SoftOptInCheckoutConsent from './GenericCheckoutConsent';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -103,6 +102,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import SoftOptInCheckoutConsent from './SoftOptInCheckoutConsent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
