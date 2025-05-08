@@ -3,13 +3,13 @@ import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 import SoftOptInCheckoutConsent, {
 	type ProductConsent,
 	productConsents,
-} from './GenericCheckoutConsent';
+} from './SoftOptInCheckoutConsent';
 
 jest.mock('../../../helpers/tracking/behaviour', () => ({
 	trackComponentClick: jest.fn(),
 }));
 
-describe('GenericCheckoutConsent', () => {
+describe('SoftOptInCheckoutConsent', () => {
 	const consentKey: ProductConsent = 'similarProductsConsent';
 
 	beforeEach(() => {

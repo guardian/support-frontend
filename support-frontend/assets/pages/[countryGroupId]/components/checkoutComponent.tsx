@@ -107,7 +107,6 @@ import {
 	shorterBoxMargin,
 } from './form';
 import { submitForm } from './formOnSubmit';
-import SoftOptInCheckoutConsent from './GenericCheckoutConsent';
 import type { PaymentMethod } from './paymentFields';
 import {
 	FormSubmissionError,
@@ -120,6 +119,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import SoftOptInCheckoutConsent from './SoftOptInCheckoutConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];

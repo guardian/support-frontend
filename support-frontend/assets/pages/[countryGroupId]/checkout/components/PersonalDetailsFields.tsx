@@ -4,7 +4,7 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import SoftOptInCheckoutConsent from '../../components/GenericCheckoutConsent';
+import SoftOptInCheckoutConsent from '../../components/SoftOptInCheckoutConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
