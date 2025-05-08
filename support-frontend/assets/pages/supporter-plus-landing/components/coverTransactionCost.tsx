@@ -20,7 +20,7 @@ const coverTransactionDivider = css`
 `;
 
 const coverTransactionCheckboxContainer = css`
-	padding: ${space[4]}px;
+	padding: 10px ${space[4]}px;
 	background-color: ${neutral[97]};
 	border-radius: 12px;
 	margin: ${space[4]}px 0px ${space[2]}px;
