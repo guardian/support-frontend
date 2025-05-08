@@ -409,7 +409,7 @@ export function OneTimeCheckoutComponent({
 						'/paypal/rest/returnOneTime',
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
-					softOptInConsent: oneTimeContributionConsent,
+					oneTimeContributionConsent,
 				});
 				const acquisitionData = getAcquisitionData(
 					abParticipations,
