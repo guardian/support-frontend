@@ -28,7 +28,7 @@ Resources:
         !Sub support-it-tests-${Stage}
       Handler: com.gu.RunITTests::handleRequest
       CodeUri:
-        Bucket: membership-dist
+        Bucket: support-workers-dist
         Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar
       MemorySize: 2048
       Runtime: java21
