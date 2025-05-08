@@ -12,8 +12,7 @@
     "clean-target": "rm -rf target && mkdir -p target",
     "install-runtime-dependencies": "yarn install --modules-folder target/typescript/node_modules --production",
     "build-and-zip": "yarn clean-target && yarn install-runtime-dependencies && yarn build && cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
-    "package": "yarn check-formatting && yarn lint && yarn test && yarn build-and-zip",
-    "deploy-to-code": "yarn build-and-zip && ./deploy-to-code.sh"
+    "package": "yarn check-formatting && yarn lint && yarn test && yarn build-and-zip"
   },
   "repository": {
     "type": "git",
