@@ -13,7 +13,10 @@ import {
 } from '@guardian/source/react-components';
 import { useState } from 'react';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { OneTime } from 'helpers/productPrice/billingPeriods';
+import {
+	billingPeriodToContributionType,
+	OneTime,
+} from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { AmountValuesObject } from '../../../helpers/contributions';
@@ -132,7 +135,9 @@ export function AmountsCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
 							trackComponentClick(
-								`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriod}`,
+								`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriodToContributionType(
+									billingPeriod,
+								)}`,
 							);
 						}}
 					>

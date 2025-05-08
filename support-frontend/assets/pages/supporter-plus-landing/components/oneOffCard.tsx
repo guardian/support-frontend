@@ -75,7 +75,7 @@ export function OneOffCard({
 	currencyId,
 	heading,
 }: Props) {
-	const oneOffAmounts = amounts.amountsCardData['ONE_OFF'];
+	const oneOffAmounts = amounts.amountsCardData.ONE_OFF;
 	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
 		oneOffAmounts.defaultAmount,
 	);

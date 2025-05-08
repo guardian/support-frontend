@@ -98,7 +98,7 @@ export function billingPeriodToContributionType(
 		case Annual:
 			return 'ANNUAL';
 		default:
-			return undefined;
+			return undefined; // quarterly has no mapping
 	}
 }
 

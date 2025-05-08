@@ -16,7 +16,10 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	OneTime,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -133,7 +136,7 @@ export function ThankYouComponent({
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
-	const isOneOff = billingPeriod === 'One_Off';
+	const isOneOff = billingPeriod === OneTime;
 
 	// track conversion with GTM
 	const paymentMethod =
