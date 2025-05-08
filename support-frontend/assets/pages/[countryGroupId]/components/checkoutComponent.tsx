@@ -107,7 +107,7 @@ import {
 	shorterBoxMargin,
 } from './form';
 import { submitForm } from './formOnSubmit';
-import GenericCheckoutConsent from './GenericCheckoutConsent';
+import SoftOptInCheckoutConsent from './GenericCheckoutConsent';
 import type { PaymentMethod } from './paymentFields';
 import {
 	FormSubmissionError,
@@ -1215,7 +1215,7 @@ export function CheckoutComponent({
 									productDescription,
 									ratePlanKey,
 								) && (
-									<GenericCheckoutConsent productConsent="similarProductsConsent" />
+									<SoftOptInCheckoutConsent productConsent="similarProductsConsent" />
 								)}
 						</div>
 						<SummaryTsAndCs
