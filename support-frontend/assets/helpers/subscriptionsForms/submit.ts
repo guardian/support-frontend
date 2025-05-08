@@ -14,11 +14,7 @@ import {
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import {
-	Monthly,
-	Quarterly,
-	toRegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { Quarterly } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	HomeDelivery,
@@ -99,23 +95,18 @@ const getProduct = (
 		state.page.checkoutForm.product;
 	const product = getSubscriptionType(state);
 	const readerType = orderIsAGift ? Gift : Direct;
-	const regularBillingPeriod = toRegularBillingPeriod(
-		billingPeriod as string,
-		Monthly,
-	);
-
 	if (product === DigitalPack) {
 		return {
 			productType: DigitalPack,
 			currency: currencyId ?? state.common.internationalisation.currencyId,
-			regularBillingPeriod,
+			billingPeriod,
 			readerType,
 		};
 	} else if (product === GuardianWeekly) {
 		return {
 			productType: GuardianWeekly,
 			currency: currencyId ?? state.common.internationalisation.currencyId,
-			regularBillingPeriod,
+			billingPeriod,
 			fulfilmentOptions: fulfilmentOption,
 		};
 	}
@@ -124,7 +115,7 @@ const getProduct = (
 	return {
 		productType: Paper,
 		currency: currencyId ?? state.common.internationalisation.currencyId,
-		regularBillingPeriod,
+		billingPeriod,
 		fulfilmentOptions: getPaperFulfilmentOption(fulfilmentOption, state),
 		productOptions: productOption,
 		deliveryAgent,

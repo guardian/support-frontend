@@ -10,7 +10,7 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	billingPeriodTitle,
 	weeklyBillingPeriods,
@@ -51,7 +51,7 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
-	billingPeriod: RegularBillingPeriod,
+	billingPeriod: BillingPeriod,
 	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
@@ -120,7 +120,7 @@ const getMainDisplayPrice = (
 
 const weeklyProductProps = (
 	countryId: IsoCountry,
-	billingPeriod: RegularBillingPeriod,
+	billingPeriod: BillingPeriod,
 	productPrice: ProductPrice,
 	abParticipations: Participations,
 	orderIsAGift = false,

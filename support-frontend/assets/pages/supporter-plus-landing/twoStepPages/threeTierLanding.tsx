@@ -45,10 +45,7 @@ import {
 	OneTime,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type {
-	BillingPeriod,
-	RegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -221,10 +218,10 @@ const isCardUserSelected = (
  */
 function getPlanCost(
 	pricing: number,
-	billingPeriod: RegularBillingPeriod,
+	billingPeriod: BillingPeriod,
 	promotion?: Promotion,
 ) {
-	const promotionDurationPeriod: RegularBillingPeriod =
+	const promotionDurationPeriod: BillingPeriod =
 		billingPeriod === Annual && promotion?.discount?.durationMonths === 12
 			? Annual
 			: Monthly;
@@ -325,7 +322,6 @@ export function ThreeTierLanding({
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),
 	);
-	const regularBillingPeriod = billingPeriod as RegularBillingPeriod;
 
 	// Handle which countdown to show (if any).
 	const [currentCountdownSettings, setCurrentCountdownSettings] =
@@ -527,13 +523,13 @@ export function ThreeTierLanding({
 							tsAndCsContent={[
 								{
 									title: tier1Card.title,
-									planCost: getPlanCost(tier1Card.price, regularBillingPeriod),
+									planCost: getPlanCost(tier1Card.price, billingPeriod),
 								},
 								{
 									title: tier2Card.title,
 									planCost: getPlanCost(
 										tier2Card.price,
-										regularBillingPeriod,
+										billingPeriod,
 										promotionTier2,
 									),
 									starts: promotionTier2?.starts
@@ -547,7 +543,7 @@ export function ThreeTierLanding({
 									title: tier3Card.title,
 									planCost: getPlanCost(
 										tier3Card.price,
-										regularBillingPeriod,
+										billingPeriod,
 										promotionTier3,
 									),
 									starts: promotionTier3?.starts

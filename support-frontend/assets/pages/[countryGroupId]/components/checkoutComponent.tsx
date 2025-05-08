@@ -562,7 +562,7 @@ export function CheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const billingPeriod = productFields.regularBillingPeriod;
+	const billingPeriod = productFields.billingPeriod;
 	/*
   TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
           We should revisit this and see if we can remove this prop, pushing it lower down the tree

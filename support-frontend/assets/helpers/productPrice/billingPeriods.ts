@@ -6,10 +6,7 @@ export const Quarterly = 'Quarterly';
 export const OneTime = 'One_Off';
 
 export type BillingPeriod = RegularBillingPeriod | OneTimeBillingPeriod;
-export type RegularBillingPeriod =
-	| typeof Annual
-	| typeof Monthly
-	| typeof Quarterly;
+type RegularBillingPeriod = typeof Annual | typeof Monthly | typeof Quarterly;
 type OneTimeBillingPeriod = typeof OneTime;
 
 export const weeklyBillingPeriods: RegularBillingPeriod[] = [
@@ -81,41 +78,7 @@ export function ratePlanToBillingPeriod(
 	}
 }
 
-/*
-  Awaiting 2-step checkout full deprecation
-*/
-export function toRegularBillingPeriod(
-	regularBillingString: string,
-	fallback: RegularBillingPeriod,
-): RegularBillingPeriod {
-	const regularBillingPeriods: BillingPeriod[] = [Annual, Monthly, Quarterly];
-	if (
-		regularBillingPeriods.includes(regularBillingString as RegularBillingPeriod)
-	) {
-		return regularBillingString as RegularBillingPeriod;
-	}
-	const regularBillingPeriod =
-		regularBillingString === 'Quarter'
-			? Quarterly
-			: regularBillingString === 'Month'
-			? Monthly
-			: fallback;
-	return regularBillingPeriod;
-}
-export function contributionTypeToBillingPeriod(
-	contributionType: ContributionType,
-): BillingPeriod | undefined {
-	switch (contributionType) {
-		case 'ONE_OFF':
-			return OneTime;
-		case 'MONTHLY':
-			return Monthly;
-		case 'ANNUAL':
-			return Annual;
-		default:
-			return undefined;
-	}
-}
+// for contribution only landing page
 export function billingPeriodToContributionType(
 	billingPeriod: BillingPeriod,
 ): ContributionType | undefined {
@@ -126,6 +89,44 @@ export function billingPeriodToContributionType(
 			return 'MONTHLY';
 		case Annual:
 			return 'ANNUAL';
+		default:
+			return undefined;
+	}
+}
+
+export function toRegularBillingPeriod(
+	regularBillingString: string,
+	fallback: RegularBillingPeriod,
+): RegularBillingPeriod {
+	// for weeklySubscriptionCheckout (to be deprecated)
+	const regularBillingPeriods: BillingPeriod[] = [Annual, Monthly, Quarterly];
+	if (
+		regularBillingPeriods.includes(regularBillingString as RegularBillingPeriod)
+	) {
+		return regularBillingString as RegularBillingPeriod;
+	}
+
+	// for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
+	const regularBillingPeriod =
+		regularBillingString === 'Quarter'
+			? Quarterly
+			: regularBillingString === 'Month'
+			? Monthly
+			: fallback;
+	return regularBillingPeriod;
+}
+
+//  for redux (to be deprecated)
+export function contributionTypeToBillingPeriod(
+	contributionType: ContributionType,
+): BillingPeriod | undefined {
+	switch (contributionType) {
+		case 'ONE_OFF':
+			return OneTime;
+		case 'MONTHLY':
+			return Monthly;
+		case 'ANNUAL':
+			return Annual;
 		default:
 			return undefined;
 	}

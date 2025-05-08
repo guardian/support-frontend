@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
-import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
@@ -26,7 +26,7 @@ interface TierPlanCosts {
 	discount?: {
 		percentage: number;
 		price: number;
-		duration: { value: number; period: RegularBillingPeriod };
+		duration: { value: number; period: BillingPeriod };
 	};
 }
 

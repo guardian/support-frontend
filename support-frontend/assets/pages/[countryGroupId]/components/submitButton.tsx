@@ -6,8 +6,8 @@ import type {
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import {
+	type BillingPeriod,
 	billingPeriodNoun,
-	type RegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
@@ -25,7 +25,7 @@ type SubmitButtonProps = {
 	finalAmount: number;
 	currencyKey: IsoCurrency;
 	ratePlanDescription: {
-		billingPeriod: RegularBillingPeriod;
+		billingPeriod: BillingPeriod;
 	};
 	csrf: string;
 	currency: Currency;

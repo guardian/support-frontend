@@ -13,7 +13,7 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
@@ -55,7 +55,7 @@ type ProductCopy = {
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	price: number,
-	billingPeriod: RegularBillingPeriod = Monthly,
+	billingPeriod = Monthly,
 ): string => {
 	const currency = currencies[detect(countryGroupId)].glyph;
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
@@ -63,7 +63,7 @@ const getDisplayPrice = (
 
 const getDigitalEditionPrice = (
 	countryGroupId: CountryGroupId,
-	billingPeriod: RegularBillingPeriod,
+	billingPeriod: BillingPeriod,
 ): string => {
 	const currencyKey = detect(countryGroupId);
 	const currency = currencies[currencyKey].glyph;

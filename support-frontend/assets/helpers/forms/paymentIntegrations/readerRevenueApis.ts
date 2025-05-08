@@ -15,7 +15,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { Country } from 'helpers/internationalisation/countries';
 import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
-import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
@@ -55,37 +55,37 @@ type RegularContribution = {
 	productType: 'Contribution';
 	amount: number;
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 };
 type SupporterPlus = {
 	productType: 'SupporterPlus';
 	amount: number;
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 };
 type TierThree = {
 	productType: 'TierThree';
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 };
 type GuardianAdLite = {
 	productType: 'GuardianAdLite';
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 };
 type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
 	amount?: number;
 };
 type PaperSubscription = {
 	productType: typeof Paper;
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
 	deliveryAgent?: number;
@@ -93,7 +93,7 @@ type PaperSubscription = {
 type GuardianWeeklySubscription = {
 	productType: typeof GuardianWeekly;
 	currency: string;
-	regularBillingPeriod: RegularBillingPeriod;
+	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 };
 export type SubscriptionProductFields =
