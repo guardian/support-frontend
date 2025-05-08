@@ -28,7 +28,7 @@ Resources:
         !Sub support-it-tests-${Stage}
       Handler: com.gu.RunITTests::handleRequest
       CodeUri:
-        Bucket: support-workers-dist
+        Bucket: membership-dist
         Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar
       MemorySize: 2048
       Runtime: java21
@@ -56,7 +56,7 @@ Resources:
         - Statement:
             - Effect: Allow
               Action: s3:GetObject
-              Resource: !Sub arn:aws:s3:::support-workers-dist/support/${Stage}/it-tests/support-workers-it.jar
+              Resource: !Sub arn:aws:s3:::membership-dist/support/${Stage}/it-tests/support-workers-it.jar
         - Statement:
             - Effect: Allow
               Action: cloudwatch:PutMetricData
