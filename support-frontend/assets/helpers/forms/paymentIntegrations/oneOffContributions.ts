@@ -75,6 +75,7 @@ type StripeChargeData = {
 
 export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	paymentMethodId: string | PaymentMethod;
+	softOptInConsent?: boolean;
 };
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
@@ -88,6 +89,7 @@ type CreatePaypalPaymentData = {
 	returnURL: string;
 	// Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
 	cancelURL: string;
+	softOptInConsent?: boolean;
 };
 
 type CreateIntentResponse = {
