@@ -1,4 +1,4 @@
-import type { ProductConsent } from '../components/GenericCheckoutConsent';
+import type { ProductConsent } from '../components/SoftOptInCheckoutConsent';
 
 function getConsentValue(
 	formData: FormData,
