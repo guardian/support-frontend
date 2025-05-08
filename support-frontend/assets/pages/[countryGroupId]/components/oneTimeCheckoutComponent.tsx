@@ -384,7 +384,14 @@ export function OneTimeCheckoutComponent({
 		}
 	};
 
-	const formOnSubmit = async () => {
+	const formOnSubmit = async (formData: FormData) => {
+		const oneTimeContributionConsentValue = formData.get(
+			'oneTimeContributionConsent',
+		);
+
+		const softOptInConsent = oneTimeContributionConsentValue
+			? oneTimeContributionConsentValue === 'true'
+			: undefined;
 		if (finalAmount) {
 			setIsProcessingPayment(true);
 
@@ -403,6 +410,7 @@ export function OneTimeCheckoutComponent({
 						'/paypal/rest/returnOneTime',
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
+					softOptInConsent,
 				});
 				const acquisitionData = getAcquisitionData(
 					abParticipations,
@@ -493,6 +501,7 @@ export function OneTimeCheckoutComponent({
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
+						softOptInConsent,
 					};
 					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
@@ -626,8 +635,10 @@ export function OneTimeCheckoutComponent({
 				ref={formRef}
 				onSubmit={(event) => {
 					event.preventDefault();
+					const form = event.currentTarget;
+					const formData = new FormData(form);
 					/** we defer this to an external function as a lot of the payment methods use async */
-					void formOnSubmit();
+					void formOnSubmit(formData);
 
 					return false;
 				}}
