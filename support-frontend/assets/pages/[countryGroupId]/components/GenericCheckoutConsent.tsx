@@ -9,7 +9,7 @@ export const productConsents = {
 
 export type ProductConsent = keyof typeof productConsents;
 
-export default function GenericCheckoutConsent({
+export default function SoftOptInCheckoutConsent({
 	productConsent,
 }: {
 	productConsent: ProductConsent;
@@ -21,10 +21,10 @@ export default function GenericCheckoutConsent({
 				type="hidden"
 				name={productConsent}
 				value={consentValue.toString()}
-				data-testid="genericConsentValue"
+				data-testid="consentValue"
 			/>
 			<Checkbox
-				name="genericConsentCheckbox"
+				name="consentCheckbox"
 				label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
 				defaultChecked
 				onClick={(event) => {

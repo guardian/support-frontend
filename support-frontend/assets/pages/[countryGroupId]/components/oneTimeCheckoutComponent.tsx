@@ -95,7 +95,7 @@ import {
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
-import GenericCheckoutConsent from './GenericCheckoutConsent';
+import SoftOptInCheckoutConsent from './GenericCheckoutConsent';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -755,7 +755,7 @@ export function OneTimeCheckoutComponent({
 								isSignedIn={isSignedIn}
 							/>
 							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
-								<GenericCheckoutConsent productConsent="oneTimeContributionConsent" />
+								<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
 							)}
 
 							{countryId === 'US' && (
@@ -878,7 +878,7 @@ export function OneTimeCheckoutComponent({
 						/>
 						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
 							<div css={genericCheckoutConsentCheckboxContainer}>
-								<GenericCheckoutConsent productConsent="oneTimeContributionConsent" />
+								<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
 							</div>
 						)}
 						<div
