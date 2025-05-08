@@ -773,10 +773,10 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DummyTypescriptLambdaLambda": {
+    "DummyTypescriptLambda": {
       "DependsOn": [
-        "DummyTypescriptLambdaLambdaServiceRoleDefaultPolicy9C297F78",
-        "DummyTypescriptLambdaLambdaServiceRoleC8073854",
+        "DummyTypescriptLambdaServiceRoleDefaultPolicy0F6487BF",
+        "DummyTypescriptLambdaServiceRole82C60999",
       ],
       "Properties": {
         "Architectures": [
@@ -801,15 +801,15 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "STAGE": "PROD",
           },
         },
-        "FunctionName": "support-DummyTypescriptLambdaLambda-PROD",
-        "Handler": "lambdas/dummyTypescriptLambdaLambda.handler",
+        "FunctionName": "support-DummyTypescriptLambda-PROD",
+        "Handler": "lambdas/dummyTypescriptLambda.handler",
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
         "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
-            "DummyTypescriptLambdaLambdaServiceRoleC8073854",
+            "DummyTypescriptLambdaServiceRole82C60999",
             "Arn",
           ],
         },
@@ -840,7 +840,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "DummyTypescriptLambdaLambdaServiceRoleC8073854": {
+    "DummyTypescriptLambdaServiceRole82C60999": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -893,7 +893,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "DummyTypescriptLambdaLambdaServiceRoleDefaultPolicy9C297F78": {
+    "DummyTypescriptLambdaServiceRoleDefaultPolicy0F6487BF": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -1023,10 +1023,10 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "DummyTypescriptLambdaLambdaServiceRoleDefaultPolicy9C297F78",
+        "PolicyName": "DummyTypescriptLambdaServiceRoleDefaultPolicy0F6487BF",
         "Roles": [
           {
-            "Ref": "DummyTypescriptLambdaLambdaServiceRoleC8073854",
+            "Ref": "DummyTypescriptLambdaServiceRole82C60999",
           },
         ],
       },
