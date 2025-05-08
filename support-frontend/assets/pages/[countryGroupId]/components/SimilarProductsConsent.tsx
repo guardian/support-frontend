@@ -6,7 +6,7 @@ export function SimilarProductsConsent() {
 		<Checkbox
 			name="similarProductsConsent"
 			label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
-			checked={true}
+			defaultChecked={true}
 			onClick={(event) => {
 				const checked = event.currentTarget.checked;
 				trackComponentClick(

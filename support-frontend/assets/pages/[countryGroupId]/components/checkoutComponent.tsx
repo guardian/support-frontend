@@ -60,6 +60,7 @@ import {
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
+	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
 import {
 	billingPeriodNoun,
@@ -526,6 +527,11 @@ export function CheckoutComponent({
 				paymentFields,
 				productFields,
 				hasDeliveryAddress: !!productDescription.deliverableTo,
+				userWasShownCheckbox: userShouldSeeConsentCheckbox(
+					productDescription,
+					ratePlanKey,
+					abParticipations,
+				),
 				abParticipations,
 				promotion,
 				contributionAmount,

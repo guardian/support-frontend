@@ -53,6 +53,18 @@ export const showSimilarProductsConsentForRatePlan = (
 	ratePlanKey: string,
 ) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
 
+export const userShouldSeeConsentCheckbox = (
+	productDescription: ProductDescription,
+	ratePlanKey: string,
+	abParticipations: Participations,
+) => {
+	return (
+		['VariantA', 'VariantB'].includes(
+			abParticipations.similarProductsConsent ?? '',
+		) && showSimilarProductsConsentForRatePlan(productDescription, ratePlanKey)
+	);
+};
+
 export function filterBenefitByRegion(
 	benefit: {
 		specificToRegions?: CountryGroupId[];
