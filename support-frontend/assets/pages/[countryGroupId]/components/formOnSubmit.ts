@@ -27,6 +27,7 @@ import {
 	deleteFormDetails,
 	persistFormDetails,
 } from '../checkout/helpers/stripeCheckoutSession';
+import getConsentValue from '../helpers/getConsentValue';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
@@ -82,10 +83,10 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
-	const similarProductsConsentValue = formData.get('similarProductsConsent');
-	const similarProductsConsent = similarProductsConsentValue
-		? similarProductsConsentValue === 'true'
-		: undefined;
+	const similarProductsConsent = getConsentValue(
+		formData,
+		'similarProductsConsent',
+	);
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,

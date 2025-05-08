@@ -87,6 +87,7 @@ import {
 } from '../../../helpers/storage/abandonedBasketCookies';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
+import getConsentValue from '../helpers/getConsentValue';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -385,13 +386,11 @@ export function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async (formData: FormData) => {
-		const oneTimeContributionConsentValue = formData.get(
+		const oneTimeContributionConsent = getConsentValue(
+			formData,
 			'oneTimeContributionConsent',
 		);
 
-		const softOptInConsent = oneTimeContributionConsentValue
-			? oneTimeContributionConsentValue === 'true'
-			: undefined;
 		if (finalAmount) {
 			setIsProcessingPayment(true);
 
@@ -410,7 +409,7 @@ export function OneTimeCheckoutComponent({
 						'/paypal/rest/returnOneTime',
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
-					softOptInConsent,
+					softOptInConsent: oneTimeContributionConsent,
 				});
 				const acquisitionData = getAcquisitionData(
 					abParticipations,
@@ -501,7 +500,7 @@ export function OneTimeCheckoutComponent({
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
-						softOptInConsent,
+						softOptInConsent: oneTimeContributionConsent,
 					};
 					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
