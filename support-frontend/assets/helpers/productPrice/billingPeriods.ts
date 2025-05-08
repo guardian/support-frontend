@@ -86,7 +86,6 @@ export function ratePlanToBillingPeriod(
 	}
 }
 
-// for contribution only landing page
 export function billingPeriodToContributionType(
 	billingPeriod: BillingPeriod,
 ): ContributionType | undefined {
@@ -124,7 +123,7 @@ export function toRegularBillingPeriod(
 	return regularBillingPeriod;
 }
 
-//  for redux (to be deprecated)
+// for redux (to be deprecated)
 export function contributionTypeToBillingPeriod(
 	contributionType: ContributionType,
 ): BillingPeriod | undefined {
