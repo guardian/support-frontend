@@ -41,6 +41,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import {
 	Annual,
+	billingPeriodToContributionType,
 	Monthly,
 	OneTime,
 	ratePlanToBillingPeriod,
@@ -364,12 +365,9 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData['MONTHLY']
-		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData['ANNUAL']
-		.amounts[0] as number;
-	const recurringAmount =
-		billingPeriod === Monthly ? monthlyRecurringAmount : annualRecurringAmount;
+	const recurringAmount = amounts.amountsCardData[
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY'
+	].amounts[0] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: billingPeriod,
