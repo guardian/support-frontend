@@ -46,11 +46,11 @@ export function addProductSideEffects(
 				return;
 			}
 
-			const commonState = listenerApi.getState().common;
-
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);
+
+			const commonState = listenerApi.getState().common;
 
 			if (
 				threeTierCheckoutEnabled(
