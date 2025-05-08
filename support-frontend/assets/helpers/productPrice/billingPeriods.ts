@@ -31,6 +31,8 @@ export function billingPeriodNoun(
 			return fixedTerm ? '12 months' : 'year';
 		case Quarterly:
 			return fixedTerm ? '3 months' : 'quarter';
+		case OneTime:
+			return 'one-time';
 		default:
 			return 'month';
 	}
