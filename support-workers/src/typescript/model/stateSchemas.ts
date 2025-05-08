@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
@@ -96,6 +96,7 @@ const baseStateSchema = z.object({
 	csrUsername: z.string().nullable(),
 	salesforceCaseId: z.string().nullable(),
 	acquisitionData: acquisitionDataSchema.nullable(),
+	similarProductsConsent: boolean().nullable(),
 });
 
 export const createPaymentMethodStateSchema = baseStateSchema.merge(
