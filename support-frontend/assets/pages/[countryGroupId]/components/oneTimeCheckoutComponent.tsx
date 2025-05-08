@@ -94,6 +94,7 @@ import {
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
 import { FormSection, Legend, shorterBoxMargin } from './form';
+import GenericCheckoutConsent from './GenericCheckoutConsent';
 import {
 	checkedRadioLabelColour,
 	defaultRadioLabelColour,
@@ -137,6 +138,19 @@ const tcContainer = css`
 	color: ${neutral[20]};
 	& a {
 		color: ${neutral[20]};
+	}
+`;
+
+const genericCheckoutConsentCheckboxContainer = css`
+	padding: ${space[4]}px;
+	background-color: ${neutral[97]};
+	border-radius: 12px;
+	margin: ${space[4]}px 0px ${space[2]}px;
+	${from.tablet} {
+		margin-top: ${space[5]}px 0px 0px;
+	}
+	> div > input {
+		background-color: ${neutral[100]};
 	}
 `;
 
@@ -730,6 +744,9 @@ export function OneTimeCheckoutComponent({
 								isEmailAddressReadOnly={isSignedIn}
 								isSignedIn={isSignedIn}
 							/>
+							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
+								<GenericCheckoutConsent productConsent="oneTimeContributionConsent" />
+							)}
 
 							{countryId === 'US' && (
 								<div>
@@ -849,6 +866,11 @@ export function OneTimeCheckoutComponent({
 								finalAmount ? finalAmount : 0,
 							)}
 						/>
+						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
+							<div css={genericCheckoutConsentCheckboxContainer}>
+								<GenericCheckoutConsent productConsent="oneTimeContributionConsent" />
+							</div>
+						)}
 						<div
 							css={css`
 								margin: ${space[8]}px 0 ${space[6]}px;

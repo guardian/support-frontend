@@ -108,6 +108,7 @@ import {
 	shorterBoxMargin,
 } from './form';
 import { submitForm } from './formOnSubmit';
+import GenericCheckoutConsent from './GenericCheckoutConsent';
 import type { PaymentMethod } from './paymentFields';
 import {
 	FormSubmissionError,
@@ -120,7 +121,6 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { SimilarProductsConsent } from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
@@ -812,6 +812,9 @@ export function CheckoutComponent({
 										ratePlanKey,
 									)
 								}
+								showOneTimeContributionConsent={
+									abParticipations.oneTimeContributionConsent === 'VariantA'
+								}
 							/>
 
 							{/**
@@ -1217,7 +1220,9 @@ export function CheckoutComponent({
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,
-								) && <SimilarProductsConsent />}
+								) && (
+									<GenericCheckoutConsent productConsent="similarProductsConsent" />
+								)}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
