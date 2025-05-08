@@ -18,8 +18,8 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
-	showSimilarProductsConsent: boolean;
-	showOneTimeContributionConsent: boolean;
+	showSimilarProductsConsent?: boolean;
+	showOneTimeContributionConsent?: boolean;
 };
 
 export function PersonalDetailsFields({

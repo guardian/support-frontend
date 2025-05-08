@@ -807,9 +807,6 @@ export function CheckoutComponent({
 										ratePlanKey,
 									)
 								}
-								showOneTimeContributionConsent={
-									abParticipations.oneTimeContributionConsent === 'VariantA'
-								}
 							/>
 
 							{/**
