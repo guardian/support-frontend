@@ -49,6 +49,7 @@ object RunITTests {
         "-q",
         "Spec", // otherwise we get an out of memory metaspace error - the jar is way too big
         "-C",
+        "--version",
         "com.gu.ITTestReporter",
       )
       _ <- Try(Runner.main(a)) // unfortunately calls System.exit(1) if any tests fail...
