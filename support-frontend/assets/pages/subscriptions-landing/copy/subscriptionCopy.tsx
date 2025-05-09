@@ -55,7 +55,7 @@ type ProductCopy = {
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	price: number,
-	billingPeriod: BillingPeriod = Monthly,
+	billingPeriod = Monthly,
 ): string => {
 	const currency = currencies[detect(countryGroupId)].glyph;
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
@@ -103,7 +103,7 @@ function digitalCheckout(
 		buttons: [
 			{
 				ctaButtonText: getDigitalEditionPrice(countryGroupId, Monthly),
-				link: digitalSubscriptionLanding(countryGroupId, 'Monthly'),
+				link: digitalSubscriptionLanding(countryGroupId, Monthly),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_monthly_cta',
 					product: 'DigitalPack',
@@ -113,7 +113,7 @@ function digitalCheckout(
 			},
 			{
 				ctaButtonText: getDigitalEditionPrice(countryGroupId, Annual),
-				link: digitalSubscriptionLanding(countryGroupId, 'Annual'),
+				link: digitalSubscriptionLanding(countryGroupId, Annual),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_annual_cta',
 					product: 'DigitalPack',

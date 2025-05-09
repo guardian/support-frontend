@@ -121,7 +121,7 @@ export function PaymentTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
-	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
+	const billingPeriodSingular = billingPeriodNoun(billingPeriod);
 	const billingPeriodPlural = billingPeriodTitle(billingPeriod).toLowerCase();
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(

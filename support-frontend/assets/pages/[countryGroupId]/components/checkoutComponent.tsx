@@ -62,6 +62,10 @@ import {
 	showSimilarProductsConsentForRatePlan,
 	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
+import {
+	billingPeriodNoun,
+	Monthly,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -198,7 +202,7 @@ export function CheckoutComponent({
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
-		billingPeriod: 'Monthly',
+		billingPeriod: Monthly,
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
@@ -591,13 +595,9 @@ export function CheckoutComponent({
 						productDescription={productDescription.label}
 						ratePlanKey={ratePlanKey}
 						ratePlanDescription={ratePlanDescription.label}
-						paymentFrequency={
-							ratePlanDescription.billingPeriod === 'Annual'
-								? 'year'
-								: ratePlanDescription.billingPeriod === 'Monthly'
-								? 'month'
-								: 'quarter'
-						}
+						paymentFrequency={billingPeriodNoun(
+							ratePlanDescription.billingPeriod,
+						)}
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -9,6 +8,10 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
+import {
+	type BillingPeriod,
+	OneTime,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -185,7 +188,7 @@ type HeadingProps = {
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 	isObserverPrint: boolean;
 	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
@@ -197,7 +200,7 @@ function Heading({
 	isOneOffPayPal,
 	amount,
 	currency,
-	contributionType,
+	billingPeriod,
 	isObserverPrint,
 	ratePlanKey,
 	paymentStatus,
@@ -330,8 +333,8 @@ function Heading({
 		);
 	}
 
-	switch (contributionType) {
-		case 'ONE_OFF':
+	switch (billingPeriod) {
+		case OneTime:
 			return (
 				<h1 css={headerTitleText}>
 					Thank you for supporting us today with{' '}
@@ -339,7 +342,7 @@ function Heading({
 				</h1>
 			);
 
-		case 'MONTHLY':
+		case 'Monthly':
 			return (
 				<Monthly
 					amount={amount}
@@ -349,7 +352,7 @@ function Heading({
 				/>
 			);
 
-		case 'ANNUAL':
+		case 'Annual':
 			return (
 				<Annual
 					amount={amount}

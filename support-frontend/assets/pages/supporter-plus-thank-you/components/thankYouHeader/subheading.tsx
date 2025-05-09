@@ -1,46 +1,26 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
 	type ActiveProductKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
+import {
+	type BillingPeriod,
+	OneTime,
+} from 'helpers/productPrice/billingPeriods';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 interface SubheadingProps {
 	productKey: ActiveProductKey;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
-}
-
-function MarketingCopy({
-	contributionType,
-	isTier3,
-	isPaper,
-}: {
-	contributionType: ContributionType;
-	isTier3: boolean;
-	isPaper: boolean;
-}) {
-	return (
-		<span>
-			{contributionType === 'ONE_OFF'
-				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
-				: isTier3
-				? 'You can adjust your email preferences and opt out anytime via '
-				: isPaper
-				? 'You can opt out any time via your '
-				: 'Adjust your email preferences at any time via '}
-			<a href="https://manage.theguardian.com">your account</a>.
-		</span>
-	);
 }
 
 const pendingCopy = () => {
@@ -60,7 +40,7 @@ const pendingCopy = () => {
 const getSubHeadingCopy = (
 	productKey: ActiveProductKey,
 	amountIsAboveThreshold: boolean,
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	isSignedIn: boolean,
 	identityUserType: UserType,
 	observerPrint?: ObserverPrint,
@@ -111,7 +91,7 @@ const getSubHeadingCopy = (
 	};
 
 	return (
-		contributionType !== 'ONE_OFF' &&
+		billingPeriod !== OneTime &&
 		recurringCopy(amountIsAboveThreshold)[
 			identityUserType === 'current' || isSignedIn
 				? 'isSignedIn'
@@ -122,7 +102,7 @@ const getSubHeadingCopy = (
 
 function Subheading({
 	productKey,
-	contributionType,
+	billingPeriod,
 	amountIsAboveThreshold,
 	isSignedIn,
 	observerPrint,
@@ -141,7 +121,7 @@ function Subheading({
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,
-		contributionType,
+		billingPeriod,
 		isSignedIn,
 		identityUserType,
 		observerPrint,
@@ -154,14 +134,19 @@ function Subheading({
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
-					<MarketingCopy
-						contributionType={contributionType}
-						isTier3={isTier3}
-						isPaper={isPaper}
-					/>
+					<span>
+						{billingPeriod === OneTime
+							? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+							: isTier3
+							? 'You can adjust your email preferences and opt out anytime via '
+							: isPaper
+							? 'You can opt out any time via your '
+							: 'Adjust your email preferences at any time via '}
+						<a href="https://manage.theguardian.com">your account</a>.
+					</span>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
-						contributionType !== 'ONE_OFF' && (
+						billingPeriod !== OneTime && (
 							<span
 								css={css`
 									font-weight: bold;

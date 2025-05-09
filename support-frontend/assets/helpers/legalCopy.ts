@@ -15,19 +15,17 @@ export const productLegal = (
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
 	const amountFormatted = simpleFormatAmount(currency, thresholdAmount);
-	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
-	const amountPerPeriod = `${amountFormatted}${divider}${billingPeriodSingular}`;
+	const periodNoun = billingPeriodNoun(billingPeriod);
+	const amountPerPeriod = `${amountFormatted}${divider}${periodNoun}`;
 
 	if (promotion) {
 		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
 		const promoPrice = promotion.discountedPrice ?? thresholdAmount;
 		const promoPriceFormatted = simpleFormatAmount(currency, promoPrice);
 		const discountDuration = promotion.numberOfDiscountedPeriods ?? 0;
-		return `${promoPriceFormatted}${divider}${billingPeriodSingular} for the first ${
+		return `${promoPriceFormatted}${divider}${periodNoun} for the first ${
 			discountDuration > 1 ? discountDuration : ''
-		} ${billingPeriodSingular}${
-			discountDuration > 1 ? 's' : ''
-		}, then ${amountPerPeriod}`;
+		} ${periodNoun}${discountDuration > 1 ? 's' : ''}, then ${amountPerPeriod}`;
 	}
 
 	return amountPerPeriod;

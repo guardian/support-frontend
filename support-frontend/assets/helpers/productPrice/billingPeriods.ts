@@ -1,37 +1,44 @@
-const Annual = 'Annual';
-const Monthly = 'Monthly';
-const Quarterly = 'Quarterly';
+import type { ContributionType } from 'helpers/contributions';
 
-export type BillingPeriod = typeof Annual | typeof Monthly | typeof Quarterly;
+export const Annual = 'Annual';
+export const Monthly = 'Monthly';
+export const Quarterly = 'Quarterly';
+export const OneTime = 'One_Off';
 
-export type WeeklyBillingPeriod =
+export type BillingPeriod = RegularBillingPeriod | OneTimeBillingPeriod;
+export type RegularBillingPeriod =
+	| typeof Annual
 	| typeof Monthly
-	| typeof Quarterly
-	| typeof Annual;
+	| typeof Quarterly;
+type OneTimeBillingPeriod = typeof OneTime;
 
-const weeklyBillingPeriods = (): WeeklyBillingPeriod[] => {
-	return [Monthly, Quarterly, Annual];
-};
+export const weeklyBillingPeriods: RegularBillingPeriod[] = [
+	Monthly,
+	Quarterly,
+	Annual,
+];
+export const weeklyGiftBillingPeriods: RegularBillingPeriod[] = [
+	Quarterly,
+	Annual,
+];
 
-const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
-
-function billingPeriodNoun(
+export function billingPeriodNoun(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
 	switch (billingPeriod) {
 		case Annual:
-			return fixedTerm ? '12 months' : 'Year';
-
+			return fixedTerm ? '12 months' : 'year';
 		case Quarterly:
-			return fixedTerm ? '3 months' : 'Quarter';
-
+			return fixedTerm ? '3 months' : 'quarter';
+		case OneTime:
+			return 'one-time';
 		default:
-			return 'Month';
+			return 'month';
 	}
 }
 
-function billingPeriodTitle(
+export function billingPeriodTitle(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
@@ -42,17 +49,92 @@ function billingPeriodTitle(
 		case Quarterly:
 			return fixedTerm ? '3 months' : billingPeriod;
 
+		case OneTime:
+			return 'One-time';
+
 		default:
 			return billingPeriod;
 	}
 }
 
-export {
-	Annual,
-	Monthly,
-	Quarterly,
-	billingPeriodNoun,
-	billingPeriodTitle,
-	weeklyBillingPeriods,
-	weeklyGiftBillingPeriods,
-};
+export function ratePlanToBillingPeriod(
+	ratePlanKey: string | undefined,
+): BillingPeriod {
+	switch (ratePlanKey) {
+		case 'Annual':
+		case 'RestOfWorldAnnual':
+		case 'DomesticAnnual':
+		case 'RestOfWorldAnnualV2':
+		case 'DomesticAnnualV2':
+			return Annual;
+		case 'RestOfWorldQuarterly':
+		case 'DomesticQuarterly':
+			return Quarterly;
+		case 'Monthly':
+		case 'RestOfWorldMonthly':
+		case 'DomesticMonthly':
+		case 'RestOfWorldMonthlyV2':
+		case 'DomesticMonthlyV2':
+		case 'Everyday':
+		case 'Sixday':
+		case 'Weekend':
+		case 'Saturday':
+		case 'Sunday':
+			return Monthly;
+		default:
+			return OneTime;
+	}
+}
+
+export function billingPeriodToContributionType(
+	billingPeriod: BillingPeriod,
+): ContributionType | undefined {
+	switch (billingPeriod) {
+		case OneTime:
+			return 'ONE_OFF';
+		case Monthly:
+			return 'MONTHLY';
+		case Annual:
+			return 'ANNUAL';
+		default:
+			return undefined; // quarterly has no mapping
+	}
+}
+
+export function toRegularBillingPeriod(
+	regularBillingString: string,
+	fallback: RegularBillingPeriod,
+): RegularBillingPeriod {
+	// for weeklySubscriptionCheckout (to be deprecated)
+	const regularBillingPeriods: BillingPeriod[] = [Annual, Monthly, Quarterly];
+	if (
+		regularBillingPeriods.includes(regularBillingString as RegularBillingPeriod)
+	) {
+		return regularBillingString as RegularBillingPeriod;
+	}
+
+	// for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
+	const regularBillingPeriod =
+		regularBillingString === 'Quarter'
+			? Quarterly
+			: regularBillingString === 'Month'
+			? Monthly
+			: fallback;
+	return regularBillingPeriod;
+}
+
+// for redux (to be deprecated)
+export function contributionTypeToBillingPeriod(
+	contributionType: ContributionType,
+): BillingPeriod | undefined {
+	switch (contributionType) {
+		case 'ONE_OFF':
+			return OneTime;
+		case 'MONTHLY':
+			return Monthly;
+		case 'ANNUAL':
+			return Annual;
+		default:
+			return undefined;
+	}
+}

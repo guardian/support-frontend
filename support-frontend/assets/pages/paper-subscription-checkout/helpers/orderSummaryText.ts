@@ -49,5 +49,5 @@ export function getPriceSummary(
 	price: string,
 	billingPeriod: BillingPeriod,
 ): string {
-	return `${price}/${billingPeriodNoun(billingPeriod).toLowerCase()}`;
+	return `${price}/${billingPeriodNoun(billingPeriod)}`;
 }
