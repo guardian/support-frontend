@@ -55,12 +55,12 @@ object RunITTests {
     } yield ()
     result match {
       case Failure(exception) =>
-//        log(s"Failed with exception ${exception.toString}")
+        log(s"Failed with exception ${exception.toString}")
         exception.printStackTrace(System.out)
         System.exit(9)
         "not possible"
       case _ =>
-//        log("RAN OK!")
+        log("RAN OK!")
         "Finished and RAN OK!" // this won't happen because Runner calls System.exit
     }
   }
