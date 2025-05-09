@@ -5,7 +5,7 @@ import cats.implicits.{catsSyntaxApplicativeError, toBifunctorOps}
 import com.gu.i18n.Currency
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.StripeConfigProvider
-import com.gu.support.workers.StripePublicKey
+import com.gu.support.workers.{FormFieldsHash, StripePublicKey}
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import play.api.libs.ws.{WSAuthScheme, WSClient, WSResponse}
@@ -47,6 +47,7 @@ class StripeCheckoutSessionService(
       isTestUser: Boolean,
       successUrl: String,
       cancelUrl: String,
+      fieldsHash: String,
   ): EitherT[Future, String, CreateCheckoutSessionResponseSuccess] = {
     val privateKey = getPrivateKey(stripePublicKey, isTestUser)
 
@@ -58,13 +59,14 @@ class StripeCheckoutSessionService(
       "currency" -> Seq(currency.iso.toLowerCase),
       "payment_method_types[]" -> Seq("card"),
       "customer_email" -> Seq(email),
+      s"metadata[${FormFieldsHash.fieldName}]" -> Seq(fieldsHash),
     )
 
     client
       .url(s"$baseUrl/checkout/sessions")
       .withHttpHeaders("Authorization" -> s"Bearer $privateKey")
       .withMethod("POST")
-      // https: //www.playframework.com/documentation/3.0.x/ScalaWS#Submitting-form-data
+      // https://www.playframework.com/documentation/3.0.x/ScalaWS#Submitting-form-data
       .withBody(data)
       .execute()
       .attemptT
