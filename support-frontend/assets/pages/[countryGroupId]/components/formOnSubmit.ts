@@ -27,20 +27,11 @@ import {
 	deleteFormDetails,
 	persistFormDetails,
 } from '../checkout/helpers/stripeCheckoutSession';
+import getConsentValue from '../helpers/getConsentValue';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
 
-const getConsentValue = (formData: FormData, userWasShownCheckbox: boolean) => {
-	const similarProductsCheckbox = formData.get('similarProductsConsent');
-	if (similarProductsCheckbox) {
-		return similarProductsCheckbox === 'on';
-	}
-	if (userWasShownCheckbox) {
-		return false;
-	}
-	return;
-};
 export const submitForm = async ({
 	geoId,
 	productKey,
@@ -50,7 +41,6 @@ export const submitForm = async ({
 	paymentFields,
 	productFields,
 	hasDeliveryAddress,
-	userWasShownCheckbox,
 	abParticipations,
 	promotion,
 	contributionAmount,
@@ -63,7 +53,6 @@ export const submitForm = async ({
 	paymentFields: RegularPaymentFields;
 	productFields: ProductFields;
 	hasDeliveryAddress: boolean;
-	userWasShownCheckbox: boolean;
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
@@ -84,11 +73,6 @@ export const submitForm = async ({
 		productFields,
 	);
 
-	const similarProductsConsent = getConsentValue(
-		formData,
-		userWasShownCheckbox,
-	);
-
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
 		promoCode !== undefined
@@ -99,6 +83,10 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
+	const similarProductsConsent = getConsentValue(
+		formData,
+		'similarProductsConsent',
+	);
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,

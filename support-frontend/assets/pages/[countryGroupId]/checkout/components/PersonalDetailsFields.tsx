@@ -4,7 +4,7 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import { SimilarProductsConsent } from '../../components/SimilarProductsConsent';
+import SoftOptInCheckoutConsent from '../../components/SoftOptInCheckoutConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
@@ -18,7 +18,8 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
-	showSimilarProductsConsent: boolean;
+	showSimilarProductsConsent?: boolean;
+	showOneTimeContributionConsent?: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -33,6 +34,7 @@ export function PersonalDetailsFields({
 	setConfirmedEmail,
 	isSignedIn,
 	showSimilarProductsConsent,
+	showOneTimeContributionConsent,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -47,7 +49,12 @@ export function PersonalDetailsFields({
 				setConfirmedEmail={setConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
-			{showSimilarProductsConsent && <SimilarProductsConsent />}
+			{showSimilarProductsConsent && (
+				<SoftOptInCheckoutConsent productConsent="similarProductsConsent" />
+			)}
+			{showOneTimeContributionConsent && (
+				<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
+			)}
 			<div>
 				<TextInput
 					id="firstName"
