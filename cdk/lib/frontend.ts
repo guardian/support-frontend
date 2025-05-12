@@ -154,7 +154,8 @@ export class Frontend extends GuStack {
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
     });
 
-    (ec2App.listener.node.defaultChild as CfnListener).sslPolicy = SslPolicy.TLS13_RES;
+    (ec2App.listener.node.defaultChild as CfnListener).sslPolicy =
+      SslPolicy.TLS13_RES;
 
     // ---- Alarms ---- //
     if (shouldCreateAlarms) {

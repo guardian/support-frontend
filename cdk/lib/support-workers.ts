@@ -179,7 +179,7 @@ export class SupportWorkers extends GuStack {
         ...lambdaDefaultConfig,
         app: "support-workers-typescript",
         fileName: `support-workers.zip`,
-        runtime: Runtime.NODEJS_20_X,
+        runtime: Runtime.NODEJS_22_X,
         handler: `lambdas/${lambdaTSFile}.handler`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
