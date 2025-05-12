@@ -105,7 +105,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     logger.info(
       s"Comparing got: ${checkoutSession.metadata.get(FormFieldsHash.fieldName)} with expected: $expectedFormFieldsHash",
     )
-    val hashesDidMatch = checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(s"${expectedFormFieldsHash}-x")
+    val hashesDidMatch = checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(expectedFormFieldsHash)
 
     if (!hashesDidMatch) {
       val cloudwatchEvent = stripeHostedFormFieldsHashMismatch(Configuration.stage)
