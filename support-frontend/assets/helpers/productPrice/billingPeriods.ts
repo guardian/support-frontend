@@ -81,6 +81,7 @@ export function ratePlanToBillingPeriod(
 		case 'Saturday':
 		case 'Sunday':
 			return Monthly;
+		case 'One_Off':
 		default:
 			return OneTime;
 	}
