@@ -17,7 +17,7 @@ Mappings:
       Process: See the wiki at https://github.com/guardian/support-frontend/wiki/Automated-IT-Tests
 
 Conditions:
-  ProdOnlyResource: !Equals [!Ref Stage, PROD]
+  IsProd: !Equals [!Ref Stage, PROD]
 
 Resources:
   LambdaFunction:
@@ -93,14 +93,15 @@ Resources:
 
   ITTestFailureAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: ProdOnlyResource
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
+      ActionsEnabled: !If [IsProd, true, false]
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
           - 'IT Tests are failing'
+          - !Ref Stage
       AlarmDescription: !Join
         - ' '
         - - 'Impact - There may be improperly tested code in PROD or CODE test data is broken.'
@@ -123,20 +124,21 @@ Resources:
             Unit: Count
       ComparisonOperator: GreaterThanThreshold
       Threshold: 0
-      EvaluationPeriods: 9
-      DatapointsToAlarm: 3
+      EvaluationPeriods: 25 # 25 = 6 hours in 15 minute intervals plus an extra 15 minutes buffer (these tests run every 6 hours)
+      DatapointsToAlarm: 1
       TreatMissingData: breaching
 
   ITTestNotRunningAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: ProdOnlyResource
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
+      ActionsEnabled: !If [IsProd, true, false]
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
           - 'IT Tests are not running'
+          - !Ref Stage
       AlarmDescription: !Join
         - ' '
         - - 'Impact - we are not aware of integration test pass/fail status'
