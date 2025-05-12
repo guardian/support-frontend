@@ -1,6 +1,9 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.aws.AwsCloudWatchMetricPut
+import com.gu.aws.AwsCloudWatchMetricSetup.stripeHostedFormFieldsHashMismatch
+import com.gu.config.Configuration
 import com.gu.i18n.CountryGroup
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
@@ -86,14 +89,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     }
   }
 
-  private def booleanToFuture(boolean: Boolean, errorMessage: String): Future[Unit] = {
-    if (boolean) {
-      Future.successful(())
-    } else {
-      Future.failed(new RuntimeException(errorMessage))
-    }
-  }
-
   private def doesCheckoutSessionFormFieldsHashMatch(
       user: User,
       checkoutSession: RetrieveCheckoutSessionResponseSuccess,
@@ -110,7 +105,14 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     logger.info(
       s"Comparing got: ${checkoutSession.metadata.get(FormFieldsHash.fieldName)} with expected: $expectedFormFieldsHash",
     )
-    checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(expectedFormFieldsHash)
+    val hashesDidMatch = checkoutSession.metadata.get(FormFieldsHash.fieldName) == Some(expectedFormFieldsHash)
+
+    if (!hashesDidMatch) {
+      val cloudwatchEvent = stripeHostedFormFieldsHashMismatch(Configuration.stage)
+      AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
+    }
+
+    hashesDidMatch
   }
 
   private def createStripeHostedPaymentMethod(
@@ -126,10 +128,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       )
       checkoutSession <- stripeServiceForAccount
         .retrieveCheckoutSession(checkoutSessionId)
-      _ <- booleanToFuture(
-        doesCheckoutSessionFormFieldsHashMatch(user, checkoutSession),
-        "Checkout session formFields hash does not match",
-      )
+      _ = doesCheckoutSessionFormFieldsHashMatch(user, checkoutSession)
       paymentMethodId <- optionToFuture(
         PaymentMethodId(checkoutSession.setup_intent.payment_method.id),
         "Invalid PaymentMethodId",
