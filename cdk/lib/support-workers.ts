@@ -1,10 +1,7 @@
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
-import {
-  type GuFunctionProps,
-  GuLambdaFunction,
-} from "@guardian/cdk/lib/constructs/lambda";
+import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import { type App, Duration, Fn } from "aws-cdk-lib";
 import {
   ComparisonOperator,
@@ -98,22 +95,16 @@ export class SupportWorkers extends GuStack {
         Fn.importValue(table)
       ),
     });
+    const parameterStorePolicy = new PolicyStatement({
+      actions: ["ssm:GetParameter"],
+      resources: [
+        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
+      ],
+    });
 
     // Lambdas
-    const lambdaDefaultConfig: Pick<
-      GuFunctionProps,
-      | "app"
-      | "memorySize"
-      | "fileName"
-      | "runtime"
-      | "timeout"
-      | "environment"
-      | "architecture"
-    > = {
-      app,
+    const lambdaDefaultConfig = {
       memorySize: 1536,
-      fileName: `support-workers.jar`,
-      runtime: Runtime.JAVA_21,
       timeout: Duration.seconds(300),
       architecture: Architecture.ARM_64,
       environment: {
@@ -128,18 +119,18 @@ export class SupportWorkers extends GuStack {
       },
     };
 
-    const createLambda = (
+    const createScalaLambda = (
       lambdaName: string,
       additionalPolicies: PolicyStatement[] = []
     ) => {
       const lambdaId = `${lambdaName}Lambda`;
       const lambda = new GuLambdaFunction(this, lambdaId, {
         ...lambdaDefaultConfig,
+        app: "support-workers-scala",
+        fileName: `support-workers.jar`,
+        runtime: Runtime.JAVA_21,
         handler: `com.gu.support.workers.lambdas.${lambdaName}::handleRequest`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
-        environment: {
-          ...lambdaDefaultConfig.environment,
-        },
         initialPolicy: [
           s3Policy,
           cloudWatchLoggingPolicy,
@@ -178,6 +169,58 @@ export class SupportWorkers extends GuStack {
         });
     };
 
+    const createTypescriptLambda = (
+      lambdaName: string,
+      additionalPolicies: PolicyStatement[] = []
+    ) => {
+      const lambdaId = `${lambdaName}Lambda`;
+      const lambdaTSFile = lambdaId.charAt(0).toLowerCase() + lambdaId.slice(1);
+      const lambda = new GuLambdaFunction(this, lambdaId, {
+        ...lambdaDefaultConfig,
+        app: "support-workers-typescript",
+        fileName: `support-workers.zip`,
+        runtime: Runtime.NODEJS_22_X,
+        handler: `lambdas/${lambdaTSFile}.handler`,
+        functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
+        initialPolicy: [
+          s3Policy,
+          cloudWatchLoggingPolicy,
+          parameterStorePolicy,
+          ...additionalPolicies,
+        ],
+      });
+      this.overrideLogicalId(lambda, {
+        logicalId: lambdaId,
+        reason: "Moving existing lambda to CDK",
+      });
+      return new LambdaInvoke(this, lambdaName, {
+        lambdaFunction: lambda,
+        outputPath: "$.Payload", // Without this, LambdaInvoke wraps the output state as described here: https://github.com/aws/aws-cdk/issues/29473
+      })
+        .addRetry({
+          errors: ["RetryNone"],
+          maxAttempts: 0,
+        })
+        .addRetry({
+          errors: ["RetryLimited"],
+          maxAttempts: 5,
+          interval: Duration.seconds(1),
+          backoffRate: 10, // Retry after 1 sec, 10 sec, 100 sec, 16 mins and 2 hours 46 mins
+        })
+        .addRetry({
+          errors: ["RetryUnlimited"],
+          maxAttempts: 999999, //If we don't provide a value here it defaults to 3
+          interval: Duration.seconds(1),
+          backoffRate: 2,
+        })
+        .addRetry({
+          errors: [Errors.ALL], // Wildcard to capture any error which originates from outside of our code (e.g. an exception from AWS)
+          maxAttempts: 999999,
+          interval: Duration.seconds(3),
+          backoffRate: 2,
+        });
+    };
+
     // State Machine
     const checkoutFailure = new Pass(this, "CheckoutFailure"); // This is a failed execution we don't want to alert on
     const failState = new Fail(this, "FailState"); // This is a failed execution we do want to alert on
@@ -190,7 +233,7 @@ export class SupportWorkers extends GuStack {
       .when(Condition.booleanEquals("$.requestInfo.failed", true), failState)
       .otherwise(checkoutFailure);
 
-    const failureHandler = createLambda("FailureHandler", [
+    const failureHandler = createScalaLambda("FailureHandler", [
       emailSqsPolicy,
     ]).next(succeedOrFailChoice);
 
@@ -199,32 +242,36 @@ export class SupportWorkers extends GuStack {
       errors: ["States.TaskFailed"],
     };
 
-    const preparePaymentMethodForReuse = createLambda(
+    const preparePaymentMethodForReuse = createScalaLambda(
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createLambda(
+    const createPaymentMethodLambda = createScalaLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
-    const createSalesforceContactLambda = createLambda(
+    const createSalesforceContactLambda = createScalaLambda(
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscription = createLambda("CreateZuoraSubscription", [
-      promotionsDynamoTablePolicy,
-    ]).addCatch(failureHandler, catchProps);
+    const createZuoraSubscription = createScalaLambda(
+      "CreateZuoraSubscription",
+      [promotionsDynamoTablePolicy]
+    ).addCatch(failureHandler, catchProps);
 
-    const sendThankYouEmail = createLambda("SendThankYouEmail", [
+    const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
       emailSqsPolicy,
     ]);
-    const updateSupporterProductData = createLambda(
+    const updateSupporterProductData = createScalaLambda(
       "UpdateSupporterProductData",
       [supporterProductDataTablePolicy]
     );
-    const sendAcquisitionEvent = createLambda("SendAcquisitionEvent", [
+    const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
     ]);
+
+    // Just to check that we can create a typescript lambda
+    createTypescriptLambda("DummyTypescript");
 
     const shouldClonePaymentMethodChoice = new Choice(
       this,
