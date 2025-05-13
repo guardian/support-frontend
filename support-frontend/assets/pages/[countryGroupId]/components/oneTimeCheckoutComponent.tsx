@@ -756,7 +756,7 @@ export function OneTimeCheckoutComponent({
 								isSignedIn={isSignedIn}
 							/>
 							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
-								<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
+								<SimilarProductsConsent />
 							)}
 
 							{countryId === 'US' && (
@@ -879,7 +879,7 @@ export function OneTimeCheckoutComponent({
 						/>
 						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
 							<div css={genericCheckoutConsentCheckboxContainer}>
-								<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
+								<SimilarProductsConsent />
 							</div>
 						)}
 						<div

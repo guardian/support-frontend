@@ -1211,9 +1211,7 @@ export function CheckoutComponent({
 								showSimilarProductsConsentForRatePlan(
 									productDescription,
 									ratePlanKey,
-								) && (
-									<SimilarProductsConsent productConsent="similarProductsConsent" />
-								)}
+								) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
