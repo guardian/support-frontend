@@ -1,4 +1,7 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type {
+	ActiveProductKey,
+	ProductRatePlanKey,
+} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
@@ -16,6 +19,28 @@ import {
 
 export type { ActiveProductKey };
 
+type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
+type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
+type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
+type DigitalSubscriptioRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
+type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
+type SupporterPlusRatePlanKey = ProductRatePlanKey<'SupporterPlus'>;
+type GuardianWeeklyRestOfWorldRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyRestOfWorld'>;
+type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
+type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
+type GuardianPatronRatePlanKey = ProductRatePlanKey<'GuardianPatron'>;
+export type ActiveRatePlanKey =
+	| OneTimeContributionRatePlanKey
+	| GuardianAdLiteRatePlanKey
+	| TierThreeRatePlanKey
+	| DigitalSubscriptioRatePlanKey
+	| NationalDeliveryRatePlanKey
+	| SupporterPlusRatePlanKey
+	| GuardianWeeklyRestOfWorldRatePlanKey
+	| SubscriptionCardRatePlanKey
+	| ContributionRatePlanKey
+	| GuardianPatronRatePlanKey;
 export const productCatalog = window.guardian.productCatalog;
 
 export type ProductBenefit = {
