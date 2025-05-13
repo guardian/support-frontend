@@ -7,7 +7,10 @@ import type {
 	RegularPaymentFields,
 	RegularPaymentRequest,
 } from '../../../helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { ActiveProductKey } from '../../../helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from '../../../helpers/productCatalog';
 import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
 import {
 	getOphanIds,
@@ -57,7 +60,7 @@ export const submitForm = async ({
 }: {
 	geoId: GeoId;
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	formData: FormData;
 	paymentMethod: PaymentMethod;
 	paymentFields: RegularPaymentFields;
@@ -168,7 +171,7 @@ const createStripeCheckoutSession = async ({
 	personalData: FormPersonalFields;
 	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
 	geoId: GeoId;
@@ -193,7 +196,7 @@ const processSubscription = async ({
 	personalData: FormPersonalFields;
 	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
 	geoId: GeoId;
