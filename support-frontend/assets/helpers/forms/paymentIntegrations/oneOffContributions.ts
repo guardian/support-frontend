@@ -159,7 +159,7 @@ const postToPaymentApi = (
 	path: string,
 ): Promise<Record<string, unknown>> =>
 	fetchJson(
-		paymentApiEndpointWithMode(`http://localhost:9000${path}`),
+		paymentApiEndpointWithMode(`${window.guardian.paymentApiUrl}${path}`),
 		requestOptions(data, 'omit', 'POST', null),
 	);
 
@@ -253,9 +253,7 @@ async function postOneOffPayPalCreatePaymentRequest(
 	try {
 		const res = await logPromise(
 			fetchJson(
-				paymentApiEndpointWithMode(
-					'http://localhost:9000/contribute/one-off/paypal/create-payment',
-				),
+				paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
 				requestOptions(data, 'omit', 'POST', null),
 			),
 		);
