@@ -386,7 +386,7 @@ export function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async (formData: FormData) => {
-		const oneTimeContributionConsent = getConsentValue(formData, CONSENT_ID);
+		const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
 		if (finalAmount) {
 			setIsProcessingPayment(true);
@@ -422,7 +422,7 @@ export function OneTimeCheckoutComponent({
 				);
 				cookie.set(
 					'gu_similar_procucts_consent',
-					JSON.stringify(oneTimeContributionConsent),
+					JSON.stringify(similarProductsConsent),
 					1, // daysToLive
 				);
 			}
@@ -501,7 +501,7 @@ export function OneTimeCheckoutComponent({
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
-						similarProductsConsent: oneTimeContributionConsent,
+						similarProductsConsent,
 					};
 					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
