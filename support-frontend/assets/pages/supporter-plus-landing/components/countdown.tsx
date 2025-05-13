@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { from, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
+import type { CountdownSetting } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+
 /**
  * This is used during the annual US End of Year Campaign.
  * Beware that this is only accurate to less than a second and is locale specific.

@@ -53,6 +53,22 @@ case class Cta(
     copy: String,
 )
 
+case class CountdownTheme(
+    backgroundColor: String,
+    foregroundColor: String,
+)
+object CountdownTheme {
+  implicit val codec: Codec[CountdownTheme] = deriveCodec
+}
+case class CountdownSettings(
+    label: String,
+    countdownStartInMillis: String,
+    countdownDeadlineInMillis: String,
+    theme: CountdownTheme,
+)
+object CountdownSettings {
+  implicit val countdownCodec: Codec[CountdownSettings] = deriveCodec
+}
 case class TickerCopy(
     countLabel: String,
     goalCopy: String,
@@ -87,6 +103,7 @@ case class LandingPageVariant(
     copy: LandingPageCopy,
     products: Products,
     tickerSettings: Option[TickerSettings],
+    countdownSettings: Option[CountdownSettings],
 )
 
 object LandingPageVariant {

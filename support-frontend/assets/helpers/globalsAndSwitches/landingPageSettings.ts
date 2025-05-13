@@ -17,6 +17,28 @@ export interface TickerSettings {
 	name: TickerName;
 }
 
+interface CountdownTheme {
+	backgroundColor: string;
+	foregroundColor: string;
+}
+export interface CountdownSettings {
+	label: string;
+	countdownStartInMillis: string;
+	countdownDeadlineInMillis: string;
+	theme: CountdownTheme;
+}
+
+export type CountdownSetting = {
+	// This is the date parsed version of the above
+	label: string;
+	countdownStartInMillis: number;
+	countdownDeadlineInMillis: number;
+	theme: {
+		backgroundColor: string;
+		foregroundColor: string;
+	};
+};
+
 interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
@@ -53,6 +75,7 @@ export interface LandingPageVariant {
 	copy: LandingPageCopy;
 	products: LandingPageProducts;
 	tickerSettings?: TickerSettings;
+	countdownSettings?: CountdownSettings;
 }
 
 interface RegionTargeting {

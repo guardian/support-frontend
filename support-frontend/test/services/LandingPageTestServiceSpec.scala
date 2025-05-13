@@ -1,6 +1,8 @@
 package services
 
 import admin.settings.{
+  CountdownSettings,
+  CountdownTheme,
   Cta,
   Label,
   LandingPageCopy,
@@ -186,6 +188,19 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   "name" -> stringAttr("US"),
                 ),
               ),
+              "countdownSettings" -> mapAttr(
+                Map(
+                  "label" -> stringAttr("test"),
+                  "countdownStartInMillis" -> stringAttr("1747070598000"),
+                  "countdownDeadlineInMillis" -> stringAttr("1747070598000"),
+                  "theme" -> mapAttr(
+                    Map(
+                      "backgroundColor" -> stringAttr("#1e3e72"),
+                      "foregroundColor" -> stringAttr("#ffffff"),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
@@ -217,6 +232,19 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
                   currencySymbol = "$",
                   copy = TickerCopy(countLabel = "test copy", goalCopy = "test goal copy"),
                   name = "US",
+                ),
+              )
+            },
+            countdownSettings = {
+              Some(
+                CountdownSettings(
+                  label = "test",
+                  countdownStartInMillis = "1747070598000",
+                  countdownDeadlineInMillis = "1747070598000",
+                  theme = CountdownTheme(
+                    backgroundColor = "#1e3e72",
+                    foregroundColor = "#ffffff",
+                  ),
                 ),
               )
             },

@@ -26,7 +26,6 @@ import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -48,7 +47,10 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type {
+	CountdownSetting,
+	LandingPageVariant,
+} from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
@@ -289,30 +291,28 @@ export function ThreeTierLanding({
 		urlSearchParamsPromoCode,
 	);
 
-	const getCountDownSettings = (
-		urlSearchParamsPromoCode?: string | null,
+	const getCountdownSettings = (
+		settings: LandingPageVariant,
 	): CountdownSetting | null => {
-		const countdownParams = {
-			countdownStartInMillis: Date.parse('Apr 19, 2025 09:00:00'),
-			countdownDeadlineInMillis: Date.parse('Apr 21, 2025 23:59:59'),
-			label: 'Last chance to claim your 30% discount offer',
+		if (!settings.countdownSettings) {
+			return null;
+		}
+		return {
+			countdownStartInMillis: Date.parse(
+				settings.countdownSettings.countdownStartInMillis,
+			),
+			countdownDeadlineInMillis: Date.parse(
+				settings.countdownSettings.countdownDeadlineInMillis,
+			),
+			label: settings.countdownSettings.label,
 			theme: {
-				backgroundColor: '#1e3e72',
-				foregroundColor: '#ffffff',
+				backgroundColor: settings.countdownSettings.theme.backgroundColor,
+				foregroundColor: settings.countdownSettings.theme.foregroundColor,
 			},
 		};
-
-		const targetPromoCodes = ['30OFFAPRIL', '30OFF3APRIL'];
-
-		if (urlSearchParamsPromoCode) {
-			if (targetPromoCodes.includes(urlSearchParamsPromoCode)) {
-				return countdownParams;
-			}
-		}
-		return null;
 	};
 
-	const countdownSettings = getCountDownSettings(urlSearchParamsPromoCode);
+	const countdownSettings = getCountdownSettings(settings);
 
 	const now = Date.now();
 
