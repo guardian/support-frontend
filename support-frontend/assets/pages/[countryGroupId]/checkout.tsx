@@ -9,7 +9,11 @@ import {
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import {
+	type ActiveRatePlanKey,
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -125,7 +129,7 @@ export function Checkout({
 	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
