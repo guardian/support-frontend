@@ -13,6 +13,9 @@ import { gwDeliverableCountries } from './internationalisation/gwDeliverableCoun
 
 export type { ActiveProductKey };
 
+/*
+ * Ideally, would prefer to loop the ActiveProductKey's generating an ActiveRatePlanKey
+ */
 type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
 type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
 type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
