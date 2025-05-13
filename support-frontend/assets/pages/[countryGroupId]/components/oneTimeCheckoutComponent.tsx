@@ -409,7 +409,6 @@ export function OneTimeCheckoutComponent({
 						'/paypal/rest/returnOneTime',
 					),
 					cancelURL: payPalCancelUrl(countryGroupId),
-					oneTimeContributionConsent,
 				});
 				const acquisitionData = getAcquisitionData(
 					abParticipations,
@@ -423,6 +422,11 @@ export function OneTimeCheckoutComponent({
 				cookie.set(
 					'acquisition_data',
 					encodeURIComponent(JSON.stringify(acquisitionData)),
+				);
+				cookie.set(
+					'gu_similar_procucts_consent',
+					JSON.stringify(oneTimeContributionConsent),
+					1, // daysToLive
 				);
 			}
 
@@ -500,7 +504,7 @@ export function OneTimeCheckoutComponent({
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
-						oneTimeContributionConsent,
+						similarProductsConsent: oneTimeContributionConsent,
 					};
 					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,

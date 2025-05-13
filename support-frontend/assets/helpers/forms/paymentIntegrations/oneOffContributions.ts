@@ -75,7 +75,7 @@ type StripeChargeData = {
 
 export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	paymentMethodId: string | PaymentMethod;
-	oneTimeContributionConsent?: boolean;
+	similarProductsConsent?: boolean;
 };
 
 // Data that should be posted to the payment API to get a url for the PayPal UI
@@ -89,7 +89,6 @@ type CreatePaypalPaymentData = {
 	returnURL: string;
 	// Specifies the url that PayPal should make a GET request to, should the user not authorize the payment.
 	cancelURL: string;
-	oneTimeContributionConsent?: boolean;
 };
 
 type CreateIntentResponse = {
@@ -160,7 +159,7 @@ const postToPaymentApi = (
 	path: string,
 ): Promise<Record<string, unknown>> =>
 	fetchJson(
-		paymentApiEndpointWithMode(`${window.guardian.paymentApiUrl}${path}`),
+		paymentApiEndpointWithMode(`http://localhost:9000${path}`),
 		requestOptions(data, 'omit', 'POST', null),
 	);
 
@@ -254,7 +253,9 @@ async function postOneOffPayPalCreatePaymentRequest(
 	try {
 		const res = await logPromise(
 			fetchJson(
-				paymentApiEndpointWithMode(window.guardian.paymentApiPayPalEndpoint),
+				paymentApiEndpointWithMode(
+					'http://localhost:9000/contribute/one-off/paypal/create-payment',
+				),
 				requestOptions(data, 'omit', 'POST', null),
 			),
 		);
