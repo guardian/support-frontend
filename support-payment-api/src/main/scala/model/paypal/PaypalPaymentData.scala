@@ -36,4 +36,5 @@ case class ExecutePaypalPaymentData(
     paymentData: ExecutePaymentData,
     acquisitionData: AcquisitionData,
     email: String,
+    similarProductsConsent: Option[Boolean],
 )

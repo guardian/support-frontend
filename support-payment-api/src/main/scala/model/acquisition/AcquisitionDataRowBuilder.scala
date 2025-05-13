@@ -26,7 +26,6 @@ object AcquisitionDataRowBuilder {
     val paymentData = acquisition.stripeChargeData.paymentData
     val acquisitionData = acquisition.stripeChargeData.acquisitionData
     val paymentProvider = mapStripePaymentProvider(acquisition.stripeChargeData.paymentData.stripePaymentMethod)
-    println(Console.GREEN + s"similarProductsConsent: ${acquisition.stripeChargeData.similarProductsConsent}")
 
     AcquisitionDataRow(
       eventTimeStamp = DateTime.now(DateTimeZone.UTC),
@@ -68,6 +67,7 @@ object AcquisitionDataRowBuilder {
   def buildFromPayPal(
       acquisition: PaypalAcquisition,
       contributionData: ContributionData,
+      similarProductsConsent: Option[Boolean],
   ): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
@@ -106,7 +106,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = None, // TODO: We are going to leave this unset for now to keep the behaviour unchanged
+      similarProductsConsent = similarProductsConsent,
     )
   }
 

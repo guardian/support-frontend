@@ -41,6 +41,7 @@ case class ExecutePaymentBody(
     email: String,
     acquisitionData: JsValue,
     paymentData: JsObject,
+    similarProductsConsent: Option[Boolean],
 )
 
 object ExecutePaymentBody {
@@ -55,7 +56,6 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
-
   private def postPaypalData[A](
       data: ExecutePaymentBody,
       isTestUser: Boolean,
@@ -98,8 +98,9 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
       email: String,
       isTestUser: Boolean,
       userAgent: Option[String],
+      similarProductsConsent: Option[Boolean],
   )(implicit ec: ExecutionContext): EitherT[Future, PaymentAPIResponseError[PayPalError], PayPalSuccess] = {
-    val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON)
+    val data = ExecutePaymentBody(Some(email), email, acquisitionData, paymentJSON, similarProductsConsent)
     postPaypalData(data, isTestUser, userAgent).subflatMap(decodePaymentAPIResponse[PayPalError, PayPalSuccess])
   }
 }

@@ -102,11 +102,21 @@ class PayPalOneOff(
         "payerId" -> PayerID,
       )
 
+      val similarProductsConsentCookie = request.cookies.get("gu_similar_procucts_consent")
+
+      val similarProductsConsent = similarProductsConsentCookie.flatMap { cookie =>
+        cookie.value.toLowerCase match {
+          case "true" => Some(true)
+          case "false" => Some(false)
+          case _ => None
+        }
+      }
+
       val isTestUser = testUsers.isTestUser(request)
       val userAgent = request.headers.get("user-agent")
 
       paymentAPIService
-        .executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent)
+        .executePaypalPayment(paymentJSON, acquisitionData, email, isTestUser, userAgent, similarProductsConsent)
         .fold(resultFromPaymentAPIError, success => resultFromPaypalSuccess(success, country, thankyou))
     }
 }
