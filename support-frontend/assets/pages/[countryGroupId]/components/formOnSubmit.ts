@@ -235,7 +235,7 @@ const processSubscription = async ({
 
 const buildThankYouPageUrl = (
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	promoCode: string | undefined,
 	userType: UserType | undefined,
 	contributionAmount: number | undefined,

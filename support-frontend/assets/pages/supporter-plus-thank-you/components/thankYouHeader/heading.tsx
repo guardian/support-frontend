@@ -8,7 +8,10 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -187,7 +190,7 @@ type HeadingProps = {
 	currency: IsoCurrency;
 	contributionType: ContributionType;
 	isObserverPrint: boolean;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };

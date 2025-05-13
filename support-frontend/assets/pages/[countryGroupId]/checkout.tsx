@@ -46,7 +46,7 @@ const countryId: IsoCountry = Country.detect();
 const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	countryId: IsoCountry,
 	billingPeriod: BillingPeriod,
 ) => {

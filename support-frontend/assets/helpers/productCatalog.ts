@@ -70,12 +70,12 @@ export type ProductDescription = {
 
 export const showSimilarProductsConsentForRatePlan = (
 	productDescription: ProductDescription,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
 
 export const userShouldSeeConsentCheckbox = (
 	productDescription: ProductDescription,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	abParticipations: Participations,
 ) => {
 	return (
@@ -547,8 +547,8 @@ export function productCatalogGuardianAdLite(): Record<
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
-): { productKey: ActiveProductKey; ratePlanKey: string } {
+	ratePlanKey: ActiveRatePlanKey,
+): { productKey: ActiveProductKey; ratePlanKey: ActiveRatePlanKey } {
 	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 

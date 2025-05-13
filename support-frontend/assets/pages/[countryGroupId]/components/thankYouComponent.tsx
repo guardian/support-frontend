@@ -16,7 +16,10 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -91,7 +94,7 @@ export type CheckoutComponentProps = {
 		finalAmount: number;
 	};
 	productKey?: ActiveProductKey;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;

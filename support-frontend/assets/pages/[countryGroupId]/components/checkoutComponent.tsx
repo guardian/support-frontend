@@ -155,7 +155,7 @@ type CheckoutComponentProps = {
 const getPaymentMethods = (
 	countryId: IsoCountry,
 	productKey: ProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => {
 	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
 

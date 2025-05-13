@@ -3,7 +3,10 @@ import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
@@ -43,7 +46,7 @@ type ThankYouHeaderProps = {
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
