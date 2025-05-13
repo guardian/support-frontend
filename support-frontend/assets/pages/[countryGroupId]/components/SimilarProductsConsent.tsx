@@ -2,24 +2,15 @@ import { Checkbox } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 
-export const productConsents = {
-	similarProductsConsent: 'similar-products-consent-checkbox',
-	oneTimeContributionConsent: 'one-time-contribution-consent-checkbox',
-} satisfies Record<string, string>;
+export const CONSENT_ID = 'similar-products-consent-checkbox';
 
-export type ProductConsent = keyof typeof productConsents;
-
-export default function SoftOptInCheckoutConsent({
-	productConsent,
-}: {
-	productConsent: ProductConsent;
-}) {
+export default function SimilarProductsConsent() {
 	const [consentValue, setConsentValue] = useState(true);
 	return (
 		<>
 			<input
 				type="hidden"
-				name={productConsent}
+				name={CONSENT_ID}
 				value={consentValue.toString()}
 				data-testid="consentValue"
 			/>
@@ -30,10 +21,7 @@ export default function SoftOptInCheckoutConsent({
 				onClick={(event) => {
 					const checked = event.currentTarget.checked;
 					setConsentValue(checked);
-					trackComponentClick(
-						productConsents[productConsent],
-						checked.toString(),
-					);
+					trackComponentClick(CONSENT_ID, checked.toString());
 				}}
 			/>
 		</>

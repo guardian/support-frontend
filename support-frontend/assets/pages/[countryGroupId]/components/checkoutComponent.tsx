@@ -119,7 +119,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import SoftOptInCheckoutConsent from './SoftOptInCheckoutConsent';
+import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
@@ -1212,7 +1212,7 @@ export function CheckoutComponent({
 									productDescription,
 									ratePlanKey,
 								) && (
-									<SoftOptInCheckoutConsent productConsent="similarProductsConsent" />
+									<SimilarProductsConsent productConsent="similarProductsConsent" />
 								)}
 						</div>
 						<SummaryTsAndCs

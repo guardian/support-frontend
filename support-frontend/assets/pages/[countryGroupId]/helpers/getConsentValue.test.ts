@@ -1,29 +1,27 @@
-import type { ProductConsent } from '../components/SoftOptInCheckoutConsent';
+import { CONSENT_ID } from '../components/SimilarProductsConsent';
 import getConsentValue from './getConsentValue';
 
 describe('getConsentValue', () => {
-	const consentKey: ProductConsent = 'similarProductsConsent';
-
 	it('returns true when consent is explicitly "true"', () => {
 		const formData = new FormData();
-		formData.set(consentKey, 'true');
+		formData.set(CONSENT_ID, 'true');
 
-		const result = getConsentValue(formData, consentKey);
+		const result = getConsentValue(formData, CONSENT_ID);
 		expect(result).toBe(true);
 	});
 
 	it('returns false when consent is explicitly "false"', () => {
 		const formData = new FormData();
-		formData.set(consentKey, 'false');
+		formData.set(CONSENT_ID, 'false');
 
-		const result = getConsentValue(formData, consentKey);
+		const result = getConsentValue(formData, CONSENT_ID);
 		expect(result).toBe(false);
 	});
 
 	it('returns undefined when the key is not present', () => {
 		const formData = new FormData();
 
-		const result = getConsentValue(formData, consentKey);
+		const result = getConsentValue(formData, CONSENT_ID);
 		expect(result).toBeUndefined();
 	});
 });

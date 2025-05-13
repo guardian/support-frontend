@@ -31,6 +31,7 @@ import getConsentValue from '../helpers/getConsentValue';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
+import { CONSENT_ID } from './SimilarProductsConsent';
 
 export const submitForm = async ({
 	geoId,
@@ -83,10 +84,7 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
-	const similarProductsConsent = getConsentValue(
-		formData,
-		'similarProductsConsent',
-	);
+	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,

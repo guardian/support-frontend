@@ -4,7 +4,7 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import SoftOptInCheckoutConsent from '../../components/SoftOptInCheckoutConsent';
+import SimilarProductsConsent from '../../components/SimilarProductsConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
@@ -50,10 +50,10 @@ export function PersonalDetailsFields({
 				isSignedIn={isSignedIn}
 			/>
 			{showSimilarProductsConsent && (
-				<SoftOptInCheckoutConsent productConsent="similarProductsConsent" />
+				<SimilarProductsConsent productConsent="similarProductsConsent" />
 			)}
 			{showOneTimeContributionConsent && (
-				<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
+				<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
 			)}
 			<div>
 				<TextInput

@@ -1,8 +1,6 @@
-import type { ProductConsent } from '../components/SoftOptInCheckoutConsent';
-
 function getConsentValue(
 	formData: FormData,
-	productConsent: ProductConsent,
+	productConsent: string,
 ): boolean | undefined {
 	const consentValue = formData.get(productConsent);
 
