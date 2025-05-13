@@ -1,32 +1,27 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
-import SoftOptInCheckoutConsent, {
-	type ProductConsent,
-	productConsents,
-} from './SoftOptInCheckoutConsent';
+import SimilarProductsConsent, { CONSENT_ID } from './SimilarProductsConsent';
 
 jest.mock('../../../helpers/tracking/behaviour', () => ({
 	trackComponentClick: jest.fn(),
 }));
 
-describe('SoftOptInCheckoutConsent', () => {
-	const consentKey: ProductConsent = 'similarProductsConsent';
-
+describe('SimilarProductsConsent', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it('renders a hidden input with the correct name and default value "true"', () => {
-		render(<SoftOptInCheckoutConsent productConsent={consentKey} />);
+		render(<SimilarProductsConsent />);
 
 		const consentInput = screen.getByTestId('consentValue');
 
-		expect(consentInput).toHaveAttribute('name', consentKey);
+		expect(consentInput).toHaveAttribute('name', CONSENT_ID);
 		expect(consentInput).toHaveAttribute('value', 'true');
 	});
 
 	it('calls trackComponentClick with "false" when checkbox is unchecked', () => {
-		render(<SoftOptInCheckoutConsent productConsent={consentKey} />);
+		render(<SimilarProductsConsent />);
 		const checkbox = screen.getByRole('checkbox');
 
 		// Uncheck the checkbox
@@ -35,14 +30,11 @@ describe('SoftOptInCheckoutConsent', () => {
 		const consentInput = screen.getByTestId('consentValue');
 		expect(consentInput).toHaveAttribute('value', 'false');
 
-		expect(trackComponentClick).toHaveBeenCalledWith(
-			productConsents[consentKey],
-			'false',
-		);
+		expect(trackComponentClick).toHaveBeenCalledWith(CONSENT_ID, 'false');
 	});
 
 	it('toggles the checkbox back to checked and tracks with "true"', () => {
-		render(<SoftOptInCheckoutConsent productConsent={consentKey} />);
+		render(<SimilarProductsConsent />);
 		const checkbox = screen.getByRole('checkbox');
 
 		// Uncheck and then re-check
@@ -52,9 +44,6 @@ describe('SoftOptInCheckoutConsent', () => {
 		const consentInput = screen.getByTestId('consentValue');
 		expect(consentInput).toHaveAttribute('value', 'true');
 
-		expect(trackComponentClick).toHaveBeenLastCalledWith(
-			productConsents[consentKey],
-			'true',
-		);
+		expect(trackComponentClick).toHaveBeenLastCalledWith(CONSENT_ID, 'true');
 	});
 });

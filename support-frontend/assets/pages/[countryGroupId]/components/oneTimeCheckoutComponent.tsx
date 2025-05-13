@@ -102,7 +102,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import SoftOptInCheckoutConsent from './SoftOptInCheckoutConsent';
+import SimilarProductsConsent, { CONSENT_ID } from './SimilarProductsConsent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -386,10 +386,7 @@ export function OneTimeCheckoutComponent({
 	};
 
 	const formOnSubmit = async (formData: FormData) => {
-		const oneTimeContributionConsent = getConsentValue(
-			formData,
-			'oneTimeContributionConsent',
-		);
+		const oneTimeContributionConsent = getConsentValue(formData, CONSENT_ID);
 
 		if (finalAmount) {
 			setIsProcessingPayment(true);
@@ -759,7 +756,7 @@ export function OneTimeCheckoutComponent({
 								isSignedIn={isSignedIn}
 							/>
 							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
-								<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
+								<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
 							)}
 
 							{countryId === 'US' && (
@@ -882,7 +879,7 @@ export function OneTimeCheckoutComponent({
 						/>
 						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
 							<div css={genericCheckoutConsentCheckboxContainer}>
-								<SoftOptInCheckoutConsent productConsent="oneTimeContributionConsent" />
+								<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
 							</div>
 						)}
 						<div
