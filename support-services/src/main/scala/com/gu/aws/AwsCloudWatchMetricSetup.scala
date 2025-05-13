@@ -79,6 +79,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def stripeHostedFormFieldsHashMismatch(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("StripeHostedFormFieldsHashMismatch"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   def getDeliveryAgentsSuccess(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("GetDeliveryAgentsSuccess"),

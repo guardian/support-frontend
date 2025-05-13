@@ -32,7 +32,6 @@ import services.{
   RecaptchaService,
   StripeCheckoutSessionService,
   TestUserService,
-  UserBenefitsApiService,
   UserBenefitsApiServiceProvider,
   UserBenefitsResponse,
   UserDetails,
@@ -133,12 +132,27 @@ class CreateSubscriptionController(
       }
     }
 
+  private def createFormFieldsHash(
+      requestBody: CreateSupportWorkersRequest,
+  ): String = {
+    FormFieldsHash.create(
+      email = requestBody.email,
+      firstName = requestBody.firstName,
+      lastName = requestBody.lastName,
+      telephoneNumber = requestBody.telephoneNumber,
+      billingAddress = requestBody.billingAddress,
+      deliveryAddress = requestBody.deliveryAddress,
+      deliveryInstructions = requestBody.deliveryInstructions,
+    )
+  }
+
   private def createCheckoutSession(
       stripePublicKey: StripePublicKey,
       email: String,
       currency: Currency,
       isTestUser: Boolean,
       referer: Option[String],
+      requestBody: CreateSupportWorkersRequest,
   ): EitherT[Future, CreateSubscriptionError, CreateStripeCheckoutSessionResponse] = {
     val urls = for {
       referer <- referer
@@ -148,8 +162,17 @@ class CreateSubscriptionController(
 
     urls match {
       case Some((validSuccessUrl, validCancelUrl)) =>
+        val fieldsHash = createFormFieldsHash(requestBody)
         stripeCheckoutSessionService
-          .createCheckoutSession(stripePublicKey, email, currency, isTestUser, validSuccessUrl, validCancelUrl)
+          .createCheckoutSession(
+            stripePublicKey,
+            email,
+            currency,
+            isTestUser,
+            validSuccessUrl,
+            validCancelUrl,
+            fieldsHash,
+          )
           .leftMap[CreateSubscriptionError](ServerError)
           .map[CreateStripeCheckoutSessionResponse] { response =>
             CreateStripeCheckoutSessionResponse(url = response.url, id = response.id)
@@ -180,6 +203,7 @@ class CreateSubscriptionController(
             currency = request.body.product.currency,
             isTestUser = testUsers.isTestUser(request),
             referer = request.headers.get("referer"),
+            requestBody = request.body,
           )
         } yield result
 
