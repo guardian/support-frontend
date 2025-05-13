@@ -366,6 +366,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           "a@b.com",
           None,
           clientBrowserInfo,
+          None,
         )
 
         result.futureValue mustBe List(BackendError.Database(dbError))
@@ -394,6 +395,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           "a@b.com",
           None,
           clientBrowserInfo,
+          None,
         )
         result.futureValue mustEqual errors
 
