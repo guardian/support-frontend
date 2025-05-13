@@ -9,7 +9,12 @@ import {
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import type {
+	ActiveRatePlanKey} from 'helpers/productCatalog';
+import {
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
 import {
 	Annual,
 	type BillingPeriod,
@@ -129,7 +134,7 @@ export function Checkout({
 	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
