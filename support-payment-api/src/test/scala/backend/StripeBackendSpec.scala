@@ -63,9 +63,16 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
       acquisitionData,
       stripePublicKey,
       recaptchaToken,
+      similarProductsConsent = Some(false),
     )
   val confirmPaymentIntent =
-    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, stripePublicKey)
+    ConfirmPaymentIntent(
+      "id",
+      stripePaymentData,
+      acquisitionData,
+      stripePublicKey,
+      similarProductsConsent = Some(false),
+    )
 
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
@@ -253,6 +260,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
 
@@ -269,6 +277,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
 
@@ -285,6 +294,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
 
@@ -302,6 +312,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         populateChargeMock()
         when(paymentIntentMock.getStatus).thenReturn("succeeded")
@@ -334,6 +345,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         populateChargeMock()
         when(paymentIntentMock.getStatus).thenReturn("succeeded")
@@ -365,6 +377,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         populateChargeMock()
         when(paymentIntentMock.getStatus).thenReturn("succeeded")
@@ -402,6 +415,7 @@ class StripeBackendSpec
             acquisitionData,
             stripePublicKey,
             recaptchaToken,
+            similarProductsConsent = Some(false),
           )
         populateChargeMock()
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureLeft mustBe
