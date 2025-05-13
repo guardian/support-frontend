@@ -3,11 +3,11 @@
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianWeeklyDomestic correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         Your first issue of Guardian Weekly will be published on 01-01-25
       </p>
@@ -22,11 +22,11 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianW
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianWeeklyRestOfWorld correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         Your first issue of Guardian Weekly will be published on 01-01-25
       </p>
@@ -41,11 +41,11 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product GuardianW
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product HomeDelivery correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         You will receive your newspaper from 01-01-25
       </p>
@@ -60,11 +60,11 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product HomeDeliv
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product NationalDelivery correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         You will receive your newspaper from 01-01-25
       </p>
@@ -79,16 +79,16 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product NationalD
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product SubscriptionCard correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         You will receive your newspaper from 01-01-25
       </p>
       <p
-        class="css-16xuyv1-SubscriptionStartItems"
+        class="css-c5d9qv"
       >
         You will receive your Subscription Card in your subscriber pack in the post, along with your home delivery letter.
       </p>
@@ -103,14 +103,14 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product Subscript
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree correctly 1`] = `
 <div>
   <span
-    class="css-ikw7yp-SubscriptionStartItems"
+    class="css-1p5gon9"
   >
     <span
-      class="css-ikw7yp-SubscriptionStartItems"
+      class="css-1p5gon9"
     >
       <div>
         <p
-          class="css-1ekf6lc-SubscriptionStartItems"
+          class="css-1378exm"
         >
           Your first issue of Guardian Weekly will be published on 01-01-25
         </p>
@@ -121,7 +121,7 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs render product TierThree
     </span>
     <div>
       <p
-        class="css-1ekf6lc-SubscriptionStartItems"
+        class="css-1378exm"
       >
         Your digital benefits start today.
       </p>

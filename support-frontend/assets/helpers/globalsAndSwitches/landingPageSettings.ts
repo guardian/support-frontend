@@ -21,7 +21,7 @@ interface CountdownTheme {
 	backgroundColor: string;
 	foregroundColor: string;
 }
-export interface CountdownSettings {
+interface CountdownSettings {
 	label: string;
 	countdownStartInMillis: string;
 	countdownDeadlineInMillis: string;
