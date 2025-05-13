@@ -421,7 +421,7 @@ export function OneTimeCheckoutComponent({
 					encodeURIComponent(JSON.stringify(acquisitionData)),
 				);
 				cookie.set(
-					'gu_similar_procucts_consent',
+					'gu_similar_products_consent',
 					JSON.stringify(similarProductsConsent),
 					1, // daysToLive
 				);
