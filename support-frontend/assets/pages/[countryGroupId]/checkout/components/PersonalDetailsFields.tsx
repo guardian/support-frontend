@@ -19,7 +19,6 @@ type PersonalDetailsFieldsProps = {
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
 	showSimilarProductsConsent?: boolean;
-	showOneTimeContributionConsent?: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -34,7 +33,6 @@ export function PersonalDetailsFields({
 	setConfirmedEmail,
 	isSignedIn,
 	showSimilarProductsConsent,
-	showOneTimeContributionConsent,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -49,12 +47,7 @@ export function PersonalDetailsFields({
 				setConfirmedEmail={setConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
-			{showSimilarProductsConsent && (
-				<SimilarProductsConsent productConsent="similarProductsConsent" />
-			)}
-			{showOneTimeContributionConsent && (
-				<SimilarProductsConsent productConsent="oneTimeContributionConsent" />
-			)}
+			{showSimilarProductsConsent && <SimilarProductsConsent />}
 			<div>
 				<TextInput
 					id="firstName"
