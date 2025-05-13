@@ -102,7 +102,7 @@ class PayPalOneOff(
         "payerId" -> PayerID,
       )
 
-      val similarProductsConsentCookie = request.cookies.get("gu_similar_procucts_consent")
+      val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")
 
       val similarProductsConsent = similarProductsConsentCookie.flatMap { cookie =>
         cookie.value.toLowerCase match {
