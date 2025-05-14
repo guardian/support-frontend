@@ -3,7 +3,7 @@ import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { simpleFormatAmount } from './forms/checkouts';
 import type { BillingPeriod } from './productPrice/billingPeriods';
-import { billingPeriodNoun } from './productPrice/billingPeriods';
+import { getBillingPeriodNoun } from './productPrice/billingPeriods';
 
 export const productLegal = (
 	countryGroupId: CountryGroupId,
@@ -15,7 +15,7 @@ export const productLegal = (
 	const isoCurrency = detect(countryGroupId);
 	const currency = currencies[isoCurrency];
 	const amountFormatted = simpleFormatAmount(currency, thresholdAmount);
-	const periodNoun = billingPeriodNoun(billingPeriod);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const amountPerPeriod = `${amountFormatted}${divider}${periodNoun}`;
 
 	if (promotion) {

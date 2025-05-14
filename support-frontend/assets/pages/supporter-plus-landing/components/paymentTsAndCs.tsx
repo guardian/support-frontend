@@ -21,8 +21,8 @@ import {
 } from 'helpers/productCatalog';
 import {
 	type BillingPeriod,
-	billingPeriodNoun,
-	billingPeriodTitle,
+	getBillingPeriodNoun,
+	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
@@ -121,8 +121,9 @@ export function PaymentTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
-	const billingPeriodSingular = billingPeriodNoun(billingPeriod);
-	const billingPeriodPlural = billingPeriodTitle(billingPeriod).toLowerCase();
+	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
+	const billingPeriodPlural =
+		getBillingPeriodTitle(billingPeriod).toLowerCase();
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,

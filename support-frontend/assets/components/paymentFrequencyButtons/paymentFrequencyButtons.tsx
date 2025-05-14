@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import {
 	type BillingPeriod,
-	billingPeriodTitle,
+	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 
 interface PaymentFrequencyButtonObj {
@@ -88,7 +88,7 @@ export function PaymentFrequencyButtons({
 						buttonClickHandler(buttonIndex);
 					}}
 				>
-					{billingPeriodTitle(paymentFrequency.billingPeriod)}
+					{getBillingPeriodTitle(paymentFrequency.billingPeriod)}
 				</button>
 			))}
 		</div>

@@ -7,7 +7,7 @@ import type {
 } from 'helpers/internationalisation/currency';
 import {
 	type BillingPeriod,
-	billingPeriodNoun,
+	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
@@ -138,7 +138,7 @@ export function SubmitButton({
 					buttonText={`Pay ${simpleFormatAmount(
 						currency,
 						finalAmount,
-					)} per ${billingPeriodNoun(ratePlanDescription.billingPeriod)}`}
+					)} per ${getBillingPeriodNoun(ratePlanDescription.billingPeriod)}`}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler

@@ -5,7 +5,7 @@ import { productCatalog } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Annual,
-	billingPeriodTitle,
+	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
@@ -22,7 +22,7 @@ export function getLowerProductBenefitThreshold(
 			: billingPeriod === Annual
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
-	const ratePlanRegularContribution = billingPeriodTitle(billingPeriod);
+	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);
 	const ratePlan =
 		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
 	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;

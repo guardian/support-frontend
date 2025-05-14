@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
@@ -48,7 +48,7 @@ const discountSummaryCopy = (
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
 		const period = planCost.discount.duration.period;
-		const periodNoun = billingPeriodNoun(period);
+		const periodNoun = getBillingPeriodNoun(period);
 		const promoPrice = planCost.discount.price;
 		const promoPriceRounded =
 			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);

@@ -11,7 +11,7 @@ import { productLegal } from 'helpers/legalCopy';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import {
 	type BillingPeriod,
-	billingPeriodNoun,
+	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
@@ -83,7 +83,7 @@ export function OrderSummaryTsAndCs({
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
-	const periodNoun = billingPeriodNoun(billingPeriod);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (

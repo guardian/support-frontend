@@ -22,7 +22,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	Annual,
 	type BillingPeriod,
-	billingPeriodNoun,
+	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
@@ -177,7 +177,7 @@ const discountSummaryCopy = (
 		currency,
 		promotion.discountedPrice ?? 0,
 	);
-	const periodNoun = billingPeriodNoun(billingPeriod);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const duration =
 		billingPeriod === Annual ? durationMonths / 12 : durationMonths;
 
@@ -207,7 +207,7 @@ export function ThreeTierCard({
 		product,
 	} = cardContent;
 	const currency = currencies[currencyId];
-	const periodNoun = billingPeriodNoun(billingPeriod);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const pillCopy = promotion?.landingPage?.roundel ?? cardContent.label?.copy;

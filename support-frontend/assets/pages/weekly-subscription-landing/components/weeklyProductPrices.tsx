@@ -12,7 +12,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	billingPeriodTitle,
+	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
@@ -141,7 +141,7 @@ const weeklyProductProps = (
 		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
 	const label = getPromotionLabel(productPrice.currency, promotion);
 	return {
-		title: billingPeriodTitle(billingPeriod, orderIsAGift),
+		title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
 		offerCopy,
 		priceCopy: (

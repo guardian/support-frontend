@@ -63,7 +63,7 @@ import {
 	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
 import {
-	billingPeriodNoun,
+	getBillingPeriodNoun,
 	Monthly,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -595,7 +595,7 @@ export function CheckoutComponent({
 						productDescription={productDescription.label}
 						ratePlanKey={ratePlanKey}
 						ratePlanDescription={ratePlanDescription.label}
-						paymentFrequency={billingPeriodNoun(
+						paymentFrequency={getBillingPeriodNoun(
 							ratePlanDescription.billingPeriod,
 						)}
 						amount={originalAmount}

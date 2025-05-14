@@ -11,7 +11,7 @@ import { productCatalogDescription } from 'helpers/productCatalog';
 import {
 	Annual,
 	type BillingPeriod,
-	billingPeriodNoun,
+	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
@@ -44,7 +44,7 @@ export function SummaryTsAndCs({
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
-	const periodNoun = billingPeriodNoun(billingPeriod);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const today = new Date();
 	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
 	const renewalDateEnd = `every ${periodNoun}`;

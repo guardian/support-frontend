@@ -1,5 +1,5 @@
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { billingPeriodNoun } from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -49,5 +49,5 @@ export function getPriceSummary(
 	price: string,
 	billingPeriod: BillingPeriod,
 ): string {
-	return `${price}/${billingPeriodNoun(billingPeriod)}`;
+	return `${price}/${getBillingPeriodNoun(billingPeriod)}`;
 }

@@ -22,7 +22,7 @@ export const weeklyGiftBillingPeriods: RegularBillingPeriod[] = [
 	Annual,
 ];
 
-export function billingPeriodNoun(
+export function getBillingPeriodNoun(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
@@ -38,7 +38,7 @@ export function billingPeriodNoun(
 	}
 }
 
-export function billingPeriodTitle(
+export function getBillingPeriodTitle(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
 ): string {
