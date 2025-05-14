@@ -19,7 +19,7 @@ export type { ActiveProductKey };
 type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
 type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
 type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
-type DigitalSubscriptioRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
+type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
 type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
 type SupporterPlusRatePlanKey = ProductRatePlanKey<'SupporterPlus'>;
 type GuardianWeeklyRestOfWorldRatePlanKey =
@@ -27,11 +27,16 @@ type GuardianWeeklyRestOfWorldRatePlanKey =
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 type GuardianPatronRatePlanKey = ProductRatePlanKey<'GuardianPatron'>;
+/*
+ * Duplicate rate plans that cannot be unioned listed below ->
+ * GuardianWeeklyDomestic  = GuardianWeeklyRestOfWorld
+ * HomeDelivery = SubscriptionCardRatePlan
+ */
 export type ActiveRatePlanKey =
 	| OneTimeContributionRatePlanKey
 	| GuardianAdLiteRatePlanKey
 	| TierThreeRatePlanKey
-	| DigitalSubscriptioRatePlanKey
+	| DigitalSubscriptionRatePlanKey
 	| NationalDeliveryRatePlanKey
 	| SupporterPlusRatePlanKey
 	| GuardianWeeklyRestOfWorldRatePlanKey
