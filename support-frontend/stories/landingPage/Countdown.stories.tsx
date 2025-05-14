@@ -39,7 +39,13 @@ Template.args = {} as CountdownProps;
 export const Default = Template.bind({});
 Default.args = {
 	countdownCampaign: {
-		label: 'default',
+    overwriteHeadingLabel: 'default',
+    countdownStartTimestamp: (Date.now()- 1 * millisecondsInDay + 1 * millisecondsInHour).toString(),
+    countdownDeadlineTimestamp: (Date.now() +
+   (2 * millisecondsInDay +
+    1 * millisecondsInHour +
+    45 * millisecondsInMinute +
+    30 * millisecondsInSecond)).toString(),
 		countdownStartInMillis:
 			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
 		countdownDeadlineInMillis:
@@ -48,6 +54,7 @@ Default.args = {
 				1 * millisecondsInHour +
 				45 * millisecondsInMinute +
 				30 * millisecondsInSecond),
+    useLocalTime: false,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
@@ -60,9 +67,12 @@ Default.args = {
 export const DeadlineNear = Template.bind({});
 DeadlineNear.args = {
 	countdownCampaign: {
-		label: 'deadline near',
+    overwriteHeadingLabel: 'deadline near',
+    countdownStartTimestamp: (Date.now() - 1 * millisecondsInDay).toString(),
+    countdownDeadlineTimestamp: (Date.now() + 5 * millisecondsInSecond).toString(),
 		countdownStartInMillis: Date.now() - 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() + 5 * millisecondsInSecond,
+    useLocalTime: false,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
@@ -75,9 +85,12 @@ DeadlineNear.args = {
 export const DeadlinePassedHidden = Template.bind({});
 DeadlinePassedHidden.args = {
 	countdownCampaign: {
-		label: 'deadline passed',
+    overwriteHeadingLabel: 'deadline passed',
+    countdownStartTimestamp: (Date.now() - 1 * millisecondsInDay).toString(),
+    countdownDeadlineTimestamp: (Date.now() - 5 * millisecondsInSecond).toString(),
 		countdownStartInMillis: Date.now() - 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() - 5 * millisecondsInSecond,
+    useLocalTime: false,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
@@ -90,9 +103,12 @@ DeadlinePassedHidden.args = {
 export const NotYetAvailableHidden = Template.bind({});
 NotYetAvailableHidden.args = {
 	countdownCampaign: {
-		label: 'start date well in future',
+    overwriteHeadingLabel: 'start date well in future',
+    countdownStartTimestamp: (Date.now() + 1 * millisecondsInDay).toString(),
+    countdownDeadlineTimestamp: (Date.now() + 5 * millisecondsInDay).toString(),
 		countdownStartInMillis: Date.now() + 1 * millisecondsInDay,
 		countdownDeadlineInMillis: Date.now() + 5 * millisecondsInDay,
+    useLocalTime: false,
 		theme: {
 			backgroundColor: '#1e3e72',
 			foregroundColor: '#ffffff',
@@ -105,7 +121,15 @@ NotYetAvailableHidden.args = {
 export const ThemedSubCampaign = Template.bind({});
 ThemedSubCampaign.args = {
 	countdownCampaign: {
-		label: 'change colour theme',
+    overwriteHeadingLabel: 'change colour theme',
+    countdownStartTimestamp:
+      (Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour).toString(),
+    countdownDeadlineTimestamp:
+      (Date.now() +
+      (2 * millisecondsInDay +
+        1 * millisecondsInHour +
+        45 * millisecondsInMinute +
+        30 * millisecondsInSecond)).toString(),
 		countdownStartInMillis:
 			Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
 		countdownDeadlineInMillis:
@@ -114,6 +138,7 @@ ThemedSubCampaign.args = {
 				1 * millisecondsInHour +
 				45 * millisecondsInMinute +
 				30 * millisecondsInSecond),
+    useLocalTime: false,
 		theme: {
 			backgroundColor: '#ab0613',
 			foregroundColor: '#ffffff',
