@@ -48,8 +48,7 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type {
-	CountdownSetting,
-	LandingPageVariant,
+  LandingPageVariant,ParsedCountdownSettings,
 } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
@@ -293,18 +292,21 @@ export function ThreeTierLanding({
 
 	const getCountdownSettings = (
 		settings: LandingPageVariant,
-	): CountdownSetting | null => {
+	): ParsedCountdownSettings | null => {
 		if (!settings.countdownSettings) {
 			return null;
 		}
 		return {
+      countdownStartTimestamp:settings.countdownSettings.countdownStartTimestamp,
+      countdownDeadlineTimestamp: settings.countdownSettings.countdownDeadlineTimestamp,
+      useLocalTime: settings.countdownSettings.useLocalTime,
 			countdownStartInMillis: Date.parse(
-				settings.countdownSettings.countdownStartInMillis,
+				settings.countdownSettings.countdownStartTimestamp,
 			),
 			countdownDeadlineInMillis: Date.parse(
-				settings.countdownSettings.countdownDeadlineInMillis,
+				settings.countdownSettings.countdownDeadlineTimestamp,
 			),
-			label: settings.countdownSettings.label,
+      overwriteHeadingLabel: settings.countdownSettings.overwriteHeadingLabel,
 			theme: {
 				backgroundColor: settings.countdownSettings.theme.backgroundColor,
 				foregroundColor: settings.countdownSettings.theme.foregroundColor,
@@ -337,7 +339,7 @@ export function ThreeTierLanding({
 
 	// Handle which countdown to show (if any).
 	const [currentCountdownSettings, setCurrentCountdownSettings] =
-		useState<CountdownSetting>();
+		useState<ParsedCountdownSettings>();
 	const [showCountdown, setShowCountdown] = useState<boolean>(false);
 	const shouldShowCountdown = () => {
 		if (!currentCountdownSettings) {
@@ -610,7 +612,7 @@ export function ThreeTierLanding({
 							<span
 								dangerouslySetInnerHTML={{
 									__html: currentCountdownSettings
-										? currentCountdownSettings.label
+										? currentCountdownSettings.overwriteHeadingLabel
 										: sanitisedHeading,
 								}}
 							/>

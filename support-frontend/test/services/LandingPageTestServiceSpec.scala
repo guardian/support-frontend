@@ -25,6 +25,7 @@ import scala.jdk.CollectionConverters.{MapHasAsJava, SeqHasAsJava}
 class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
 
   private def stringAttr(value: String): AttributeValue = AttributeValue.builder().s(value).build()
+  private def booleanAttr(value: Boolean): AttributeValue = AttributeValue.builder().bool(value).build()
   private def numberAttr(value: Int): AttributeValue = AttributeValue.builder().n(value.toString).build()
   private def mapAttr(value: Map[String, AttributeValue]): AttributeValue =
     AttributeValue.builder().m(value.asJava).build()
@@ -190,9 +191,10 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
               ),
               "countdownSettings" -> mapAttr(
                 Map(
-                  "label" -> stringAttr("test"),
-                  "countdownStartInMillis" -> stringAttr("1747070598000"),
-                  "countdownDeadlineInMillis" -> stringAttr("1747070598000"),
+                  "overwriteHeadingLabel" -> stringAttr("test"),
+                  "countdownStartTimestamp" -> stringAttr("2025-05-14T14:56:18"),
+                  "countdownDeadlineTimestamp" -> stringAttr("2025-05-15T14:00"),
+                  "useLocalTime" -> booleanAttr(false),
                   "theme" -> mapAttr(
                     Map(
                       "backgroundColor" -> stringAttr("#1e3e72"),
@@ -238,9 +240,10 @@ class LandingPageTestServiceSpec extends AsyncFlatSpec with Matchers {
             countdownSettings = {
               Some(
                 CountdownSettings(
-                  label = "test",
-                  countdownStartInMillis = "1747070598000",
-                  countdownDeadlineInMillis = "1747070598000",
+                  overwriteHeadingLabel = "test",
+                  countdownStartTimestamp = "2025-05-14T14:56:18",
+                  countdownDeadlineTimestamp = "2025-05-15T14:00",
+                  useLocalTime = false,
                   theme = CountdownTheme(
                     backgroundColor = "#1e3e72",
                     foregroundColor = "#ffffff",

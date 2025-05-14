@@ -61,9 +61,10 @@ object CountdownTheme {
   implicit val codec: Codec[CountdownTheme] = deriveCodec
 }
 case class CountdownSettings(
-    label: String,
-    countdownStartInMillis: String,
-    countdownDeadlineInMillis: String,
+    overwriteHeadingLabel: String,
+    countdownStartTimestamp: String,
+    countdownDeadlineTimestamp: String,
+    useLocalTime: Boolean,
     theme: CountdownTheme,
 )
 object CountdownSettings {

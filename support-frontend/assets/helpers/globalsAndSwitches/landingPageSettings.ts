@@ -22,22 +22,17 @@ interface CountdownTheme {
 	foregroundColor: string;
 }
 interface CountdownSettings {
-	label: string;
-	countdownStartInMillis: string;
-	countdownDeadlineInMillis: string;
+  overwriteHeadingLabel: string;
+	countdownStartTimestamp: string;
+	countdownDeadlineTimestamp: string;
+  useLocalTime: boolean;
 	theme: CountdownTheme;
 }
 
-export type CountdownSetting = {
-	// This is the date parsed version of the above
-	label: string;
-	countdownStartInMillis: number;
-	countdownDeadlineInMillis: number;
-	theme: {
-		backgroundColor: string;
-		foregroundColor: string;
-	};
-};
+export type ParsedCountdownSettings = CountdownSettings & {
+  countdownStartInMillis: number;
+  countdownDeadlineInMillis: number;
+}
 
 interface ProductBenefit {
 	copy: string;
