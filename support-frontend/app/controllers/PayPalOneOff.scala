@@ -104,13 +104,7 @@ class PayPalOneOff(
 
       val similarProductsConsentCookie = request.cookies.get("gu_similar_products_consent")
 
-      val similarProductsConsent = similarProductsConsentCookie.flatMap { cookie =>
-        cookie.value.toLowerCase match {
-          case "true" => Some(true)
-          case "false" => Some(false)
-          case _ => None
-        }
-      }
+      val similarProductsConsent = similarProductsConsentCookie.flatMap(_.value.toBooleanOption)
 
       val isTestUser = testUsers.isTestUser(request)
       val userAgent = request.headers.get("user-agent")
