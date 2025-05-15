@@ -297,6 +297,12 @@ export function ThreeTierLanding({
 		if (!settings.countdownSettings) {
 			return null;
 		}
+		if (!countdownSwitchOn()) {
+			return null;
+		}
+		const finalDeadlineTimestamp = settings.countdownSettings.useLocalTime
+			? settings.countdownSettings.countdownDeadlineTimestamp
+			: settings.countdownSettings.countdownDeadlineTimestamp + 'Z';
 		return {
 			countdownStartTimestamp:
 				settings.countdownSettings.countdownStartTimestamp,
@@ -306,9 +312,7 @@ export function ThreeTierLanding({
 			countdownStartInMillis: Date.parse(
 				settings.countdownSettings.countdownStartTimestamp,
 			),
-			countdownDeadlineInMillis: Date.parse(
-				settings.countdownSettings.countdownDeadlineTimestamp,
-			),
+			countdownDeadlineInMillis: Date.parse(finalDeadlineTimestamp),
 			overwriteHeadingLabel: settings.countdownSettings.overwriteHeadingLabel,
 			theme: {
 				backgroundColor: settings.countdownSettings.theme.backgroundColor,
