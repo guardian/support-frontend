@@ -48,7 +48,8 @@ import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type {
-  LandingPageVariant,ParsedCountdownSettings,
+	LandingPageVariant,
+	ParsedCountdownSettings,
 } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
@@ -297,16 +298,18 @@ export function ThreeTierLanding({
 			return null;
 		}
 		return {
-      countdownStartTimestamp:settings.countdownSettings.countdownStartTimestamp,
-      countdownDeadlineTimestamp: settings.countdownSettings.countdownDeadlineTimestamp,
-      useLocalTime: settings.countdownSettings.useLocalTime,
+			countdownStartTimestamp:
+				settings.countdownSettings.countdownStartTimestamp,
+			countdownDeadlineTimestamp:
+				settings.countdownSettings.countdownDeadlineTimestamp,
+			useLocalTime: settings.countdownSettings.useLocalTime,
 			countdownStartInMillis: Date.parse(
 				settings.countdownSettings.countdownStartTimestamp,
 			),
 			countdownDeadlineInMillis: Date.parse(
 				settings.countdownSettings.countdownDeadlineTimestamp,
 			),
-      overwriteHeadingLabel: settings.countdownSettings.overwriteHeadingLabel,
+			overwriteHeadingLabel: settings.countdownSettings.overwriteHeadingLabel,
 			theme: {
 				backgroundColor: settings.countdownSettings.theme.backgroundColor,
 				foregroundColor: settings.countdownSettings.theme.foregroundColor,

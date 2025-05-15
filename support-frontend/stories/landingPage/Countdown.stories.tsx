@@ -64,6 +64,35 @@ Default.args = {
 	setShowCountdown: () => {return true},
 };
 
+
+export const UseLocalTime = Template.bind({});
+UseLocalTime.args = {
+  countdownCampaign: {
+    overwriteHeadingLabel: 'useLocalTime',
+    countdownStartTimestamp: (Date.now()- 1 * millisecondsInDay + 1 * millisecondsInHour).toString(),
+    countdownDeadlineTimestamp: (Date.now() +
+      (2 * millisecondsInDay +
+        1 * millisecondsInHour +
+        45 * millisecondsInMinute +
+        30 * millisecondsInSecond)).toString(),
+    countdownStartInMillis:
+      Date.now() - 1 * millisecondsInDay + 1 * millisecondsInHour,
+    countdownDeadlineInMillis:
+      Date.now() +
+      (2 * millisecondsInDay +
+        1 * millisecondsInHour +
+        45 * millisecondsInMinute +
+        30 * millisecondsInSecond),
+    useLocalTime: false,
+    theme: {
+      backgroundColor: '#1e3e72',
+      foregroundColor: '#ffffff',
+    },
+  },
+  showCountdown: true,
+  setShowCountdown: () => {return true},
+};
+
 export const DeadlineNear = Template.bind({});
 DeadlineNear.args = {
 	countdownCampaign: {
@@ -96,7 +125,7 @@ DeadlinePassedHidden.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
-	showCountdown: false,
+	showCountdown: true,
 	setShowCountdown: () => {return true},
 };
 
@@ -114,7 +143,7 @@ NotYetAvailableHidden.args = {
 			foregroundColor: '#ffffff',
 		},
 	},
-	showCountdown: false,
+	showCountdown: true,
 	setShowCountdown: () => {return true},
 };
 
