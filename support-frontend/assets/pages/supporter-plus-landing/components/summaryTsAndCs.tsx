@@ -6,7 +6,10 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import {
 	BillingPeriod,
@@ -31,7 +34,7 @@ const containerSummaryTsCs = css`
 `;
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	billingPeriod: BillingPeriod;
 	currency: IsoCurrency;
 	amount: number;

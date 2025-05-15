@@ -15,7 +15,10 @@ import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	ratePlanToBillingPeriod,
@@ -94,7 +97,7 @@ export type CheckoutComponentProps = {
 		finalAmount: number;
 	};
 	productKey?: ActiveProductKey;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;

@@ -75,6 +75,7 @@ type StripeChargeData = {
 
 export type CreateStripePaymentIntentRequest = StripeChargeData & {
 	paymentMethodId: string | PaymentMethod;
+	similarProductsConsent?: boolean;
 };
 
 // Data that should be posted to the payment API to get a url for the PayPal UI

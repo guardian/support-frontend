@@ -1,5 +1,6 @@
 // describes options relating to a product itself - only relevant for paper currently
 import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -85,7 +86,9 @@ function productOptionIfDigiAddOnChanged(
 	return matchingProducLookup[selectedOption];
 }
 
-const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
+const getPaperProductOptions = (
+	ratePlanKey: ActiveRatePlanKey,
+): ProductOptions => {
 	switch (ratePlanKey) {
 		case 'Saturday':
 		case 'Sunday':
@@ -100,7 +103,7 @@ const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
 };
 export const getProductOptionFromProductAndRatePlan = (
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ): ProductOptions => {
 	switch (productKey) {
 		case 'SupporterPlus':

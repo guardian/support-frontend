@@ -1,6 +1,10 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import {
+	type ActiveRatePlanKey,
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	toRegularBillingPeriod,
@@ -44,7 +48,7 @@ export function ThankYou({
 	const ratePlanParam = searchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && product && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan =
 		ratePlanKey && product ? product.ratePlans[ratePlanKey] : undefined;

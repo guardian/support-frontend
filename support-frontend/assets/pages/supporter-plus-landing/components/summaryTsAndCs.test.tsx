@@ -1,5 +1,8 @@
 import { render } from '@testing-library/react';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
@@ -29,7 +32,7 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 				<SummaryTsAndCs
 					billingPeriod={billingPeriod as BillingPeriod}
 					productKey={productKey as ActiveProductKey}
-					ratePlanKey=""
+					ratePlanKey={billingPeriod as ActiveRatePlanKey}
 					currency={'GBP'}
 					amount={0}
 				/>,

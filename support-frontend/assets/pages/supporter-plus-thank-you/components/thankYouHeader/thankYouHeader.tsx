@@ -2,7 +2,10 @@ import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -43,7 +46,7 @@ type ThankYouHeaderProps = {
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;

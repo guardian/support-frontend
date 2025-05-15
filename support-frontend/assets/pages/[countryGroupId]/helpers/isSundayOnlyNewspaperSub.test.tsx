@@ -1,4 +1,7 @@
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { isSundayOnlyNewspaperSub } from './isSundayOnlyNewspaperSub';
 
 describe('isSundayOnlyNewspaperSub', () => {
@@ -13,7 +16,7 @@ describe('isSundayOnlyNewspaperSub', () => {
 		({ productKey, ratePlanKey, expected }) => {
 			const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
 				productKey as ActiveProductKey,
-				ratePlanKey as string,
+				ratePlanKey as ActiveRatePlanKey,
 			);
 
 			expect(isSundayOnlyNewspaperSubscription).toEqual(expected);

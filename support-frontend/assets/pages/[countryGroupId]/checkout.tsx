@@ -9,7 +9,11 @@ import {
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import {
+	type ActiveRatePlanKey,
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	toRegularBillingPeriod,
@@ -45,7 +49,7 @@ const countryId: IsoCountry = Country.detect();
 const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	countryId: IsoCountry,
 	billingPeriod: BillingPeriod,
 ) => {
@@ -118,17 +122,11 @@ export function Checkout({
 		return <div>Product not found</div>;
 	}
 
-	/**
-	 * Get and validate ratePlan
-	 * TODO: This type should be more specific e.g. `ProductRatePlanKey<P>`.
-	 * Annoyingly the TypeScript for this is a little fiddly due to the
-	 * API being completely based on literals, so we've left it as `string`
-	 * although we do validate it is a valid ratePlan for this product
-	 */
+	/** Get and validate active ratePlan */
 	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {

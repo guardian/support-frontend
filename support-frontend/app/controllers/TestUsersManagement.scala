@@ -28,7 +28,7 @@ class TestUsersManagement(
         Cookie(
           "_test_username",
           testUser.token,
-          maxAge = Some(2 * 24 * 60 * 60),// in seconds
+          maxAge = Some(2 * 24 * 60 * 60), // in seconds
           httpOnly = false,
           domain = Some(cookieDomain.value),
         ),

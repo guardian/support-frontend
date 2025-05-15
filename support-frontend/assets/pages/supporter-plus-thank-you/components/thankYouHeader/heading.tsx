@@ -7,7 +7,10 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
@@ -187,7 +190,7 @@ type HeadingProps = {
 	currency: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	isObserverPrint: boolean;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };

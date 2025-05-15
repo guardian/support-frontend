@@ -1,4 +1,7 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type {
+	ActiveProductKey,
+	ProductRatePlanKey,
+} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
 import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
@@ -13,6 +16,42 @@ import {
 } from './productPrice/billingPeriods';
 
 export type { ActiveProductKey };
+
+/*
+ * Ideally, would prefer to loop the ActiveProductKey's generating an ActiveRatePlanKey
+ */
+type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
+type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
+type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
+type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
+type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
+type HomeDeliveryRatePlanKey = ProductRatePlanKey<'HomeDelivery'>;
+type SupporterPlusRatePlanKey = ProductRatePlanKey<'SupporterPlus'>;
+type GuardianWeeklyRestOfWorldRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyRestOfWorld'>;
+type GuardianWeeklyDomesticRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
+type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
+type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
+type GuardianPatronRatePlanKey = ProductRatePlanKey<'GuardianPatron'>;
+
+/* eslint-disable @typescript-eslint/no-duplicate-type-constituents -- HomeDelivery matches SubscriptionCard GuardianWeeklyDomestic matches GuardianWeeklyRestOfWorld */
+export type ActiveRatePlanKey = keyof {
+	[Key in
+		| OneTimeContributionRatePlanKey
+		| GuardianAdLiteRatePlanKey
+		| TierThreeRatePlanKey
+		| DigitalSubscriptionRatePlanKey
+		| NationalDeliveryRatePlanKey
+		| HomeDeliveryRatePlanKey
+		| SupporterPlusRatePlanKey
+		| GuardianWeeklyRestOfWorldRatePlanKey
+		| GuardianWeeklyDomesticRatePlanKey
+		| SubscriptionCardRatePlanKey
+		| ContributionRatePlanKey
+		| GuardianPatronRatePlanKey]: true;
+};
+/* eslint-enable @typescript-eslint/no-duplicate-type-constituents -- enabled */
 
 export const productCatalog = window.guardian.productCatalog;
 
@@ -48,20 +87,8 @@ export type ProductDescription = {
 
 export const showSimilarProductsConsentForRatePlan = (
 	productDescription: ProductDescription,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
-
-export const userShouldSeeConsentCheckbox = (
-	productDescription: ProductDescription,
-	ratePlanKey: string,
-	abParticipations: Participations,
-) => {
-	return (
-		['VariantA', 'VariantB'].includes(
-			abParticipations.similarProductsConsent ?? '',
-		) && showSimilarProductsConsentForRatePlan(productDescription, ratePlanKey)
-	);
-};
 
 export function filterBenefitByRegion(
 	benefit: {
@@ -525,8 +552,8 @@ export function productCatalogGuardianAdLite(): Record<
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
-): { productKey: ActiveProductKey; ratePlanKey: string } {
+	ratePlanKey: ActiveRatePlanKey,
+): { productKey: ActiveProductKey; ratePlanKey: ActiveRatePlanKey } {
 	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 

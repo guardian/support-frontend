@@ -4,7 +4,7 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import { SimilarProductsConsent } from '../../components/SimilarProductsConsent';
+import SimilarProductsConsent from '../../components/SimilarProductsConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
@@ -18,7 +18,7 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
-	showSimilarProductsConsent: boolean;
+	showSimilarProductsConsent?: boolean;
 };
 
 export function PersonalDetailsFields({

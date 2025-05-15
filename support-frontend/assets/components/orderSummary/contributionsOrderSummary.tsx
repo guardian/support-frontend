@@ -21,6 +21,7 @@ import {
 } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
@@ -139,7 +140,7 @@ const termsAndConditions = css`
 export type ContributionsOrderSummaryProps = {
 	productKey: ProductKey;
 	productDescription: string;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	ratePlanDescription?: string;
 	amount: number;
 	promotion?: Promotion;
