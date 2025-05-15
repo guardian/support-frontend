@@ -21,28 +21,33 @@ type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
 type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
 type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
 type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
+type HomeDeliveryRatePlanKey = ProductRatePlanKey<'HomeDelivery'>;
 type SupporterPlusRatePlanKey = ProductRatePlanKey<'SupporterPlus'>;
 type GuardianWeeklyRestOfWorldRatePlanKey =
 	ProductRatePlanKey<'GuardianWeeklyRestOfWorld'>;
+type GuardianWeeklyDomesticRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 type GuardianPatronRatePlanKey = ProductRatePlanKey<'GuardianPatron'>;
-/*
- * Duplicate rate plans that cannot be unioned listed below ->
- * GuardianWeeklyDomestic  = GuardianWeeklyRestOfWorld
- * HomeDelivery = SubscriptionCardRatePlan
- */
-export type ActiveRatePlanKey =
-	| OneTimeContributionRatePlanKey
-	| GuardianAdLiteRatePlanKey
-	| TierThreeRatePlanKey
-	| DigitalSubscriptionRatePlanKey
-	| NationalDeliveryRatePlanKey
-	| SupporterPlusRatePlanKey
-	| GuardianWeeklyRestOfWorldRatePlanKey
-	| SubscriptionCardRatePlanKey
-	| ContributionRatePlanKey
-	| GuardianPatronRatePlanKey;
+
+/* eslint-disable @typescript-eslint/no-duplicate-type-constituents -- HomeDelivery matches SubscriptionCard GuardianWeeklyDomestic matches GuardianWeeklyRestOfWorld */
+export type ActiveRatePlanKey = keyof {
+	[Key in
+		| OneTimeContributionRatePlanKey
+		| GuardianAdLiteRatePlanKey
+		| TierThreeRatePlanKey
+		| DigitalSubscriptionRatePlanKey
+		| NationalDeliveryRatePlanKey
+		| HomeDeliveryRatePlanKey
+		| SupporterPlusRatePlanKey
+		| GuardianWeeklyRestOfWorldRatePlanKey
+		| GuardianWeeklyDomesticRatePlanKey
+		| SubscriptionCardRatePlanKey
+		| ContributionRatePlanKey
+		| GuardianPatronRatePlanKey]: true;
+};
+/* eslint-enable @typescript-eslint/no-duplicate-type-constituents -- enabled */
 
 export const productCatalog = window.guardian.productCatalog;
 
