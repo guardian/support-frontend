@@ -298,6 +298,9 @@ export function ThreeTierLanding({
 		if (!settings.countdownSettings) {
 			return null;
 		}
+		if (!countdownSwitchOn()) {
+			return null;
+		}
 		return parseCountdownSettings(settings.countdownSettings);
 	};
 
