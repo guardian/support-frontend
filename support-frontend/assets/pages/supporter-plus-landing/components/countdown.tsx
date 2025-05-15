@@ -105,24 +105,9 @@ export default function Countdown({
 		setShow(false);
 	};
 
-	const convertToUTC = (dateNumber: number) => {
-		const date = new Date(dateNumber);
-		const utcDate = Date.UTC(
-			date.getUTCFullYear(),
-			date.getUTCMonth(),
-			date.getUTCDate(),
-			date.getUTCHours(),
-			date.getUTCMinutes(),
-			date.getUTCSeconds(),
-		);
-		return utcDate;
-	};
 	useEffect(() => {
 		const getTotalMillisRemaining = (targetDate: number) => {
-			if (campaign.useLocalTime) {
-				return targetDate - Date.now();
-			}
-			return convertToUTC(targetDate) - convertToUTC(Date.now());
+			return targetDate - Date.now();
 		};
 		const canDisplayCountdown = () => {
 			const now = Date.now();
