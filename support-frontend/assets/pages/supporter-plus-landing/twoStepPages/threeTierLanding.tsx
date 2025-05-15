@@ -51,6 +51,7 @@ import type {
 	LandingPageVariant,
 	ParsedCountdownSettings,
 } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import { parseCountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
@@ -300,25 +301,7 @@ export function ThreeTierLanding({
 		if (!countdownSwitchOn()) {
 			return null;
 		}
-		const finalDeadlineTimestamp = settings.countdownSettings.useLocalTime
-			? settings.countdownSettings.countdownDeadlineTimestamp
-			: settings.countdownSettings.countdownDeadlineTimestamp + 'Z';
-		return {
-			countdownStartTimestamp:
-				settings.countdownSettings.countdownStartTimestamp,
-			countdownDeadlineTimestamp:
-				settings.countdownSettings.countdownDeadlineTimestamp,
-			useLocalTime: settings.countdownSettings.useLocalTime,
-			countdownStartInMillis: Date.parse(
-				settings.countdownSettings.countdownStartTimestamp,
-			),
-			countdownDeadlineInMillis: Date.parse(finalDeadlineTimestamp),
-			overwriteHeadingLabel: settings.countdownSettings.overwriteHeadingLabel,
-			theme: {
-				backgroundColor: settings.countdownSettings.theme.backgroundColor,
-				foregroundColor: settings.countdownSettings.theme.foregroundColor,
-			},
-		};
+		return parseCountdownSettings(settings.countdownSettings);
 	};
 
 	const countdownSettings = getCountdownSettings(settings);

@@ -34,6 +34,24 @@ export type ParsedCountdownSettings = CountdownSettings & {
 	countdownDeadlineInMillis: number;
 };
 
+export const parseCountdownSettings = (
+	countdownSettings: CountdownSettings,
+): ParsedCountdownSettings => {
+	const { useLocalTime, countdownStartTimestamp, countdownDeadlineTimestamp } =
+		countdownSettings;
+	return {
+		...countdownSettings,
+		countdownStartInMillis: Date.parse(
+			useLocalTime ? countdownStartTimestamp : `${countdownStartTimestamp}Z`,
+		),
+		countdownDeadlineInMillis: Date.parse(
+			useLocalTime
+				? countdownDeadlineTimestamp
+				: `${countdownDeadlineTimestamp}Z`,
+		),
+	};
+};
+
 interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
