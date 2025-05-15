@@ -18,7 +18,10 @@ import {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
 import type {
 	AddressFieldsState,
@@ -231,7 +234,9 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 							const product = urlSearchParams.get(
 								'product',
 							) as ActiveProductKey;
-							const ratePlan = urlSearchParams.get('ratePlan') as string;
+							const ratePlan = urlSearchParams.get(
+								'ratePlan',
+							) as ActiveRatePlanKey;
 							const { productKey, ratePlanKey } =
 								internationaliseProductAndRatePlan(
 									selectedInternationalisationId,

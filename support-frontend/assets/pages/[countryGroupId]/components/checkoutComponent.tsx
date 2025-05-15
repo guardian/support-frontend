@@ -57,6 +57,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
+	type ActiveRatePlanKey,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
@@ -137,7 +138,7 @@ type CheckoutComponentProps = {
 	stripePublicKey: string;
 	isTestUser: boolean;
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
 	discountedAmount?: number;
 	contributionAmount?: number;
@@ -154,7 +155,7 @@ type CheckoutComponentProps = {
 const getPaymentMethods = (
 	countryId: IsoCountry,
 	productKey: ProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => {
 	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
 

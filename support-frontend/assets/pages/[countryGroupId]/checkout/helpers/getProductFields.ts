@@ -2,6 +2,7 @@ import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/re
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
+	ActiveRatePlanKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
@@ -12,7 +13,7 @@ type GetProductFieldsParams = {
 	product: {
 		productKey: ActiveProductKey;
 		productDescription: ProductDescription;
-		ratePlanKey: string;
+		ratePlanKey: ActiveRatePlanKey;
 		deliveryAgent: number | undefined;
 	};
 	financial: {
