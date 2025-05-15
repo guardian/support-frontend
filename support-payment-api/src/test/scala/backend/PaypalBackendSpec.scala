@@ -139,7 +139,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
-  val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
@@ -151,7 +150,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockEmailService,
     mockCloudWatchService,
     mockSupporterProductDataService,
-    mockSoftOptInsService,
     mockSwitchService,
   )(DefaultThreadPool(ec))
 
@@ -275,8 +273,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockSupporterProductDataService.insertContributionData(any())(any()))
             .thenReturn(supporterProductDataResponseError)
-          when(mockSoftOptInsService.sendMessage(any(), any())(any()))
-            .thenReturn(softOptInsServiceResponseError)
           when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
             .thenReturn(acquisitionsEventBusResponseError)
           when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
@@ -286,7 +282,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
             .executePayment(executePaypalPaymentData, clientBrowserInfo)
             .futureRight mustBe enrichedPaypalPaymentMock
 
-          verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
@@ -297,8 +292,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any()))
-          .thenReturn(softOptInsServiceResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponseError)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
@@ -307,8 +300,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         paypalBackend
           .executePayment(executePaypalPaymentData, clientBrowserInfo)
           .futureRight mustBe enrichedPaypalPaymentMock
-
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
 
       "return error if email address has a comma" in new PaypalBackendFixture {
@@ -349,7 +340,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
     "tracking the contribution" should {
 
-      "return just a DB error if BigQuery and SupporterProductData and SoftOptInsService succeed but DB fails" in new PaypalBackendFixture {
+      "return just a DB error if BigQuery and SupporterProductData succeed but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
@@ -357,7 +348,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsServiceResponse)
 
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result = paypalBackend invokePrivate trackContribution(
@@ -371,7 +361,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
         result.futureValue mustBe List(BackendError.Database(dbError))
 
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
 
       "return a combined error if stream and BigQuery fail" in new PaypalBackendFixture {
@@ -380,8 +369,6 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any(), any())(any()))
-          .thenReturn(softOptInsServiceResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponseError)
 
@@ -399,10 +386,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         )
         result.futureValue mustEqual errors
 
-        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
 
     }
-
   }
 }
