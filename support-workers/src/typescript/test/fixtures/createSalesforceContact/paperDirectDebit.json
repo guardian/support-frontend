@@ -1,0 +1,114 @@
+{
+  "requestId": "ef47f2da-7c19-56cf-0000-000000017334",
+  "user": {
+    "id": "9999999999999",
+    "primaryEmailAddress": "test@test.com",
+    "title": "Dr",
+    "firstName": "Test",
+    "lastName": "User",
+    "billingAddress": {
+      "lineOne": "123 Test Street",
+      "lineTwo": null,
+      "city": "Sheffield",
+      "state": "",
+      "postCode": "S10 4XX",
+      "country": "GB"
+    },
+    "deliveryAddress": {
+      "lineOne": "123 Test Street",
+      "lineTwo": null,
+      "city": "Sheffield",
+      "state": "",
+      "postCode": "S10 4XX",
+      "country": "GB"
+    },
+    "telephoneNumber": "+4478000000000",
+    "isTestUser": false,
+    "deliveryInstructions": null
+  },
+  "giftRecipient": null,
+  "product": {
+    "currency": "GBP",
+    "billingPeriod": "Monthly",
+    "fulfilmentOptions": "Collection",
+    "productOptions": "Everyday",
+    "deliveryAgent": null,
+    "productType": "Paper"
+  },
+  "analyticsInfo": {
+    "isGiftPurchase": false,
+    "paymentProvider": "DirectDebit"
+  },
+  "paymentMethod": {
+    "FirstName": "Test",
+    "LastName": "User",
+    "BankTransferAccountName": "Dr T User",
+    "BankCode": "999999",
+    "BankTransferAccountNumber": "00000000",
+    "Country": "GB",
+    "City": "Sheffield",
+    "PostalCode": "S10 4XX",
+    "State": "",
+    "StreetName": "Test Street",
+    "StreetNumber": "123",
+    "BankTransferType": "DirectDebitUK",
+    "Type": "BankTransfer",
+    "PaymentGateway": "GoCardless"
+  },
+  "firstDeliveryDate": "2024-10-17",
+  "appliedPromotion": {
+    "promoCode": "PRINT_EVERYDAY",
+    "countryGroupId": "uk"
+  },
+  "csrUsername": null,
+  "salesforceCaseId": null,
+  "acquisitionData": {
+    "ophanIds": {
+      "pageviewId": "9999999999999",
+      "browserId": "9999999999999"
+    },
+    "referrerAcquisitionData": {
+      "campaignCode": null,
+      "referrerPageviewId": "",
+      "referrerUrl": null,
+      "componentId": null,
+      "componentType": null,
+      "source": null,
+      "abTests": null,
+      "queryParameters": [
+        {
+          "name": "promoCode",
+          "value": "PRINT_EVERYDAY"
+        },
+        {
+          "name": "fulfilment",
+          "value": "Collection"
+        },
+        {
+          "name": "product",
+          "value": "Everyday"
+        },
+        {
+          "name": "pre-auth-ref",
+          "value": "https%3A%2F%2Fsupport.theguardian.com%2Fuk%2Fsubscribe%2Fpaper%3FREFPVID%3Dm21v52dov2kj7cpl1619%26INTCMP%3Dundefined%26acquisitionData%3D%257B%2522source%2522%253A%2522GUARDIAN_WEB%2522%252C%2522componentId%2522%253A%2522PrintSubscriptionsHeaderLink%2522%252C%2522componentType%2522%253A%2522ACQUISITIONS_HEADER%2522%252C%2522referrerPageviewId%2522%253A%2522m21v52dov2kj7cpl1619%2522%252C%2522referrerUrl%2522%253A%2522https%253A%252F%252Fwww.theguardian.com%252Fuk%2522%257D"
+        }
+      ],
+      "hostname": "support.theguardian.com",
+      "gaClientId": null,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+      "ipAddress": "127.0.0.1",
+      "labels": null
+    },
+    "supportAbTests": [
+      {
+        "name": "abandonedBasket",
+        "variant": "variant"
+      },
+      {
+        "name": "auPartnerBenefit",
+        "variant": "control"
+      }
+    ]
+  },
+  "similarProductsConsent": false
+}
