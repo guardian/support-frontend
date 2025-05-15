@@ -12,6 +12,7 @@ import {
 	showPrice,
 } from 'helpers/productPrice/productPrices';
 import { finalPrice } from 'helpers/productPrice/promotions';
+import { BillingPeriod } from '../billingPeriods';
 
 // ----- Tests ----- //
 jest.mock('ophan', () => () => ({}));
@@ -85,7 +86,13 @@ describe('getProductPrice', () => {
 
 	it('should return product price information for a given currency', () => {
 		expect(
-			getProductPrice(productPrices, 'US', 'Monthly', 'Collection', 'Weekend'),
+			getProductPrice(
+				productPrices,
+				'US',
+				BillingPeriod.Monthly,
+				'Collection',
+				'Weekend',
+			),
 		).toEqual({
 			currency: 'USD',
 			fixedTerm: false,
@@ -95,7 +102,13 @@ describe('getProductPrice', () => {
 		});
 
 		expect(
-			getProductPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Weekend'),
+			getProductPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
+				'Collection',
+				'Weekend',
+			),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -105,7 +118,7 @@ describe('getProductPrice', () => {
 		});
 
 		expect(
-			getProductPrice(productPrices, 'GB', 'Monthly', 'Collection'),
+			getProductPrice(productPrices, 'GB', BillingPeriod.Monthly, 'Collection'),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -114,13 +127,15 @@ describe('getProductPrice', () => {
 			savingVsRetail: 5,
 		});
 
-		expect(getProductPrice(productPrices, 'GB', 'Monthly')).toEqual({
-			currency: 'GBP',
-			fixedTerm: false,
-			price: 15.95,
-			promotions: [],
-			savingVsRetail: 10,
-		});
+		expect(getProductPrice(productPrices, 'GB', BillingPeriod.Monthly)).toEqual(
+			{
+				currency: 'GBP',
+				fixedTerm: false,
+				price: 15.95,
+				promotions: [],
+				savingVsRetail: 10,
+			},
+		);
 	});
 });
 
@@ -155,7 +170,13 @@ describe('finalPrice', () => {
 
 	it('should return the final price with any discounts applied', () => {
 		expect(
-			finalPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Sunday'),
+			finalPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
+				'Collection',
+				'Sunday',
+			),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,

@@ -20,8 +20,7 @@ import type {
 } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
-	Annual,
-	type BillingPeriod,
+	BillingPeriod,
 	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -179,7 +178,9 @@ const discountSummaryCopy = (
 	);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const duration =
-		billingPeriod === Annual ? durationMonths / 12 : durationMonths;
+		billingPeriod === BillingPeriod.Annual
+			? durationMonths / 12
+			: durationMonths;
 
 	return `${formattedPromotionPrice}/${periodNoun} for ${
 		periodNoun === 'year' || duration === 1 ? 'the first' : ''

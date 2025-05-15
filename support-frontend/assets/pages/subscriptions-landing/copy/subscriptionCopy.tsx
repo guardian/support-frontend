@@ -13,8 +13,7 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -55,7 +54,7 @@ type ProductCopy = {
 const getDisplayPrice = (
 	countryGroupId: CountryGroupId,
 	price: number,
-	billingPeriod = Monthly,
+	billingPeriod = BillingPeriod.Monthly,
 ): string => {
 	const currency = currencies[detect(countryGroupId)].glyph;
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
@@ -74,12 +73,18 @@ const getDigitalEditionPrice = (
 	}
 	const fixedPriceWtihCurrency = `${currency}${fixDecimals(price)}`;
 	const billingFrequency =
-		billingPeriod === Annual ? 'Annually' : billingPeriod;
+		billingPeriod === BillingPeriod.Annual ? 'Annually' : billingPeriod;
 	return `${fixedPriceWtihCurrency}/${billingFrequency}`;
 };
 const getDigitalEditionPrices = (countryGroupId: CountryGroupId): string => {
-	const priceMonthly = getDigitalEditionPrice(countryGroupId, Monthly);
-	const priceAnnual = getDigitalEditionPrice(countryGroupId, Annual);
+	const priceMonthly = getDigitalEditionPrice(
+		countryGroupId,
+		BillingPeriod.Monthly,
+	);
+	const priceAnnual = getDigitalEditionPrice(
+		countryGroupId,
+		BillingPeriod.Annual,
+	);
 	return [priceMonthly, priceAnnual].join(' or ');
 };
 
@@ -102,8 +107,11 @@ function digitalCheckout(
 			'Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
 		buttons: [
 			{
-				ctaButtonText: getDigitalEditionPrice(countryGroupId, Monthly),
-				link: digitalSubscriptionLanding(countryGroupId, Monthly),
+				ctaButtonText: getDigitalEditionPrice(
+					countryGroupId,
+					BillingPeriod.Monthly,
+				),
+				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Monthly),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_monthly_cta',
 					product: 'DigitalPack',
@@ -112,8 +120,11 @@ function digitalCheckout(
 				modifierClasses: 'digital',
 			},
 			{
-				ctaButtonText: getDigitalEditionPrice(countryGroupId, Annual),
-				link: digitalSubscriptionLanding(countryGroupId, Annual),
+				ctaButtonText: getDigitalEditionPrice(
+					countryGroupId,
+					BillingPeriod.Annual,
+				),
+				link: digitalSubscriptionLanding(countryGroupId, BillingPeriod.Annual),
 				analyticsTracking: sendTrackingEventsOnClick({
 					id: 'digipack_annual_cta',
 					product: 'DigitalPack',

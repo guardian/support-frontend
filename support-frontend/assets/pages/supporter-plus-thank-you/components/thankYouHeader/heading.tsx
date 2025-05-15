@@ -8,10 +8,7 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	type BillingPeriod,
-	OneTime,
-} from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -334,7 +331,7 @@ function Heading({
 	}
 
 	switch (billingPeriod) {
-		case OneTime:
+		case BillingPeriod.OneTime:
 			return (
 				<h1 css={headerTitleText}>
 					Thank you for supporting us today with{' '}
@@ -342,7 +339,7 @@ function Heading({
 				</h1>
 			);
 
-		case 'Monthly':
+		case BillingPeriod.Monthly:
 			return (
 				<Monthly
 					amount={amount}
@@ -352,7 +349,7 @@ function Heading({
 				/>
 			);
 
-		case 'Annual':
+		case BillingPeriod.Annual:
 			return (
 				<Annual
 					amount={amount}

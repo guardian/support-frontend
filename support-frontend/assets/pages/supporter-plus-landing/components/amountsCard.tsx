@@ -12,10 +12,9 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
+	BillingPeriod,
 	billingPeriodToContributionType,
-	OneTime,
 } from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
@@ -86,7 +85,7 @@ export function AmountsCard({
 	const [otherAmount, setOtherAmount] = useState('');
 	const amount = selectedAmount === 'other' ? otherAmount : selectedAmount;
 	const checkoutLink =
-		billingPeriod === OneTime
+		billingPeriod === BillingPeriod.OneTime
 			? `one-time-checkout?contribution=${amount}`
 			: `checkout?product=Contribution&ratePlan=${billingPeriod}&contribution=${amount}`;
 

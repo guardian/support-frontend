@@ -4,10 +4,7 @@ import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	type BillingPeriod,
-	OneTime,
-} from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
@@ -358,7 +355,7 @@ function sendEventContributionCheckoutConversion(
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId =
-				billingPeriod === OneTime
+				billingPeriod === BillingPeriod.OneTime
 					? SendEventContributionCheckoutConversion.SingleContribution
 					: SendEventContributionCheckoutConversion.RecurringContribution;
 			const convertedValue = getContributionAnnualValue(
@@ -386,7 +383,7 @@ function sendEventContributionCartValue(
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId =
-				billingPeriod === OneTime
+				billingPeriod === BillingPeriod.OneTime
 					? SendEventContributionAmountUpdate.SingleContribution
 					: SendEventContributionAmountUpdate.RecurringContribution;
 			const convertedValue = getContributionAnnualValue(

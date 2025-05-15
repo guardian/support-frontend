@@ -63,8 +63,8 @@ import {
 	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
 import {
+	BillingPeriod,
 	getBillingPeriodNoun,
-	Monthly,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -202,7 +202,7 @@ export function CheckoutComponent({
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
-		billingPeriod: Monthly,
+		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';

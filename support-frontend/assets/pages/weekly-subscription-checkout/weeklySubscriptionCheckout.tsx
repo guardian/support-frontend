@@ -6,7 +6,7 @@ import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import {
-	Monthly,
+	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
@@ -26,7 +26,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 // ----- Redux Store ----- //
 const initialBillingPeriod = toRegularBillingPeriod(
 	getQueryParameter('period'),
-	Monthly,
+	BillingPeriod.Monthly,
 );
 const startDate = formatMachineDate(getWeeklyDays()[0] as Date);
 

@@ -2,7 +2,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import {
-	Annual,
+	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -109,7 +109,7 @@ export function ThankYou({
 					: undefined;
 			const billingPeriod = toRegularBillingPeriod(
 				ratePlan.billingPeriod as string,
-				Annual,
+				BillingPeriod.Annual,
 			);
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {

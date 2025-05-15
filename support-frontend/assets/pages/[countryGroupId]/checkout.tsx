@@ -11,8 +11,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { isProductKey, productCatalog } from 'helpers/productCatalog';
 import {
-	Annual,
-	type BillingPeriod,
+	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
@@ -164,7 +163,7 @@ export function Checkout({
 		: undefined;
 	const billingPeriod = toRegularBillingPeriod(
 		ratePlan.billingPeriod as string,
-		Annual,
+		BillingPeriod.Annual,
 	);
 
 	let promotion;

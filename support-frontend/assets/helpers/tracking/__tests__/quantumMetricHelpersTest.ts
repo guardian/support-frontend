@@ -1,4 +1,4 @@
-import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getSubscriptionAnnualValue } from '../quantumMetricHelpers';
 
@@ -19,7 +19,9 @@ describe('Quantum Metric Helpers', () => {
 				},
 			],
 		};
-		expect(getSubscriptionAnnualValue(productPrice, Monthly)).toBe(12588);
+		expect(
+			getSubscriptionAnnualValue(productPrice, BillingPeriod.Monthly),
+		).toBe(12588);
 	});
 	it('should get a monthly subscriptions annual value without a promotion', () => {
 		const productPrice: ProductPrice = {
@@ -27,7 +29,9 @@ describe('Quantum Metric Helpers', () => {
 			currency: 'GBP',
 			fixedTerm: false,
 		};
-		expect(getSubscriptionAnnualValue(productPrice, Monthly)).toBe(14388);
+		expect(
+			getSubscriptionAnnualValue(productPrice, BillingPeriod.Monthly),
+		).toBe(14388);
 	});
 	it('should get an annual subscriptions annual value with a promotion', () => {
 		const productPrice: ProductPrice = {
@@ -45,7 +49,9 @@ describe('Quantum Metric Helpers', () => {
 				},
 			],
 		};
-		expect(getSubscriptionAnnualValue(productPrice, Annual)).toBe(9900);
+		expect(getSubscriptionAnnualValue(productPrice, BillingPeriod.Annual)).toBe(
+			9900,
+		);
 	});
 	it('should get an annual subscriptions annual value without a promotion', () => {
 		const productPrice: ProductPrice = {
@@ -53,7 +59,9 @@ describe('Quantum Metric Helpers', () => {
 			currency: 'GBP',
 			fixedTerm: false,
 		};
-		expect(getSubscriptionAnnualValue(productPrice, Annual)).toBe(11900);
+		expect(getSubscriptionAnnualValue(productPrice, BillingPeriod.Annual)).toBe(
+			11900,
+		);
 	});
 	it('should get a fixed term subscriptions value', () => {
 		const productPrice: ProductPrice = {
@@ -61,6 +69,8 @@ describe('Quantum Metric Helpers', () => {
 			currency: 'GBP',
 			fixedTerm: true,
 		};
-		expect(getSubscriptionAnnualValue(productPrice, Monthly)).toBe(3600);
+		expect(
+			getSubscriptionAnnualValue(productPrice, BillingPeriod.Monthly),
+		).toBe(3600);
 	});
 });

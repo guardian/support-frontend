@@ -1,11 +1,7 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import {
-	Annual,
-	type BillingPeriod,
-	Monthly,
-} from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
@@ -18,10 +14,10 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		discountedPrice: 37,
 	};
 	const paymentProductKeys = [
-		['GuardianAdLite', Monthly, 'GBPCountries', 0],
-		['Contribution', Annual, 'AUDCountries', 0],
-		['SupporterPlus', Monthly, 'GBPCountries', 12],
-		['TierThree', Monthly, 'UnitedStates', 45],
+		['GuardianAdLite', BillingPeriod.Monthly, 'GBPCountries', 0],
+		['Contribution', BillingPeriod.Annual, 'AUDCountries', 0],
+		['SupporterPlus', BillingPeriod.Monthly, 'GBPCountries', 12],
+		['TierThree', BillingPeriod.Monthly, 'UnitedStates', 45],
 	];
 	it.each(paymentProductKeys)(
 		`orderSummaryTs&Cs render product %s for region %s correctly`,

@@ -17,7 +17,7 @@ import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import {
-	OneTime,
+	BillingPeriod,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
@@ -136,7 +136,7 @@ export function ThankYouComponent({
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
-	const isOneOff = billingPeriod === OneTime;
+	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
 	// track conversion with GTM
 	const paymentMethod =

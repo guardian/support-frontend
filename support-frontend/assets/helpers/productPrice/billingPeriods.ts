@@ -1,25 +1,24 @@
 import type { ContributionType } from 'helpers/contributions';
 
-export const Annual = 'Annual';
-export const Monthly = 'Monthly';
-export const Quarterly = 'Quarterly';
-export const OneTime = 'One_Off';
-
-export type BillingPeriod = RegularBillingPeriod | OneTimeBillingPeriod;
+export enum BillingPeriod {
+	Annual = 'Annual',
+	Monthly = 'Monthly',
+	Quarterly = 'Quarterly',
+	OneTime = 'One_Off',
+}
 export type RegularBillingPeriod =
-	| typeof Annual
-	| typeof Monthly
-	| typeof Quarterly;
-type OneTimeBillingPeriod = typeof OneTime;
+	| typeof BillingPeriod.Annual
+	| typeof BillingPeriod.Monthly
+	| typeof BillingPeriod.Quarterly;
 
 export const weeklyBillingPeriods: RegularBillingPeriod[] = [
-	Monthly,
-	Quarterly,
-	Annual,
+	BillingPeriod.Monthly,
+	BillingPeriod.Quarterly,
+	BillingPeriod.Annual,
 ];
 export const weeklyGiftBillingPeriods: RegularBillingPeriod[] = [
-	Quarterly,
-	Annual,
+	BillingPeriod.Quarterly,
+	BillingPeriod.Annual,
 ];
 
 export function getBillingPeriodNoun(
@@ -27,11 +26,11 @@ export function getBillingPeriodNoun(
 	fixedTerm = false,
 ): string {
 	switch (billingPeriod) {
-		case Annual:
+		case BillingPeriod.Annual:
 			return fixedTerm ? '12 months' : 'year';
-		case Quarterly:
+		case BillingPeriod.Quarterly:
 			return fixedTerm ? '3 months' : 'quarter';
-		case OneTime:
+		case BillingPeriod.OneTime:
 			return 'one-time';
 		default:
 			return 'month';
@@ -43,13 +42,13 @@ export function getBillingPeriodTitle(
 	fixedTerm = false,
 ): string {
 	switch (billingPeriod) {
-		case Annual:
+		case BillingPeriod.Annual:
 			return fixedTerm ? '12 months' : billingPeriod;
 
-		case Quarterly:
+		case BillingPeriod.Quarterly:
 			return fixedTerm ? '3 months' : billingPeriod;
 
-		case OneTime:
+		case BillingPeriod.OneTime:
 			return 'One-time';
 
 		default:
@@ -66,10 +65,10 @@ export function ratePlanToBillingPeriod(
 		case 'DomesticAnnual':
 		case 'RestOfWorldAnnualV2':
 		case 'DomesticAnnualV2':
-			return Annual;
+			return BillingPeriod.Annual;
 		case 'RestOfWorldQuarterly':
 		case 'DomesticQuarterly':
-			return Quarterly;
+			return BillingPeriod.Quarterly;
 		case 'Monthly':
 		case 'RestOfWorldMonthly':
 		case 'DomesticMonthly':
@@ -80,10 +79,10 @@ export function ratePlanToBillingPeriod(
 		case 'Weekend':
 		case 'Saturday':
 		case 'Sunday':
-			return Monthly;
+			return BillingPeriod.Monthly;
 		case 'One_Off':
 		default:
-			return OneTime;
+			return BillingPeriod.OneTime;
 	}
 }
 
@@ -91,11 +90,11 @@ export function billingPeriodToContributionType(
 	billingPeriod: BillingPeriod,
 ): ContributionType | undefined {
 	switch (billingPeriod) {
-		case OneTime:
+		case BillingPeriod.OneTime:
 			return 'ONE_OFF';
-		case Monthly:
+		case BillingPeriod.Monthly:
 			return 'MONTHLY';
-		case Annual:
+		case BillingPeriod.Annual:
 			return 'ANNUAL';
 		default:
 			return undefined; // quarterly has no mapping
@@ -107,7 +106,11 @@ export function toRegularBillingPeriod(
 	fallback: RegularBillingPeriod,
 ): RegularBillingPeriod {
 	// for weeklySubscriptionCheckout (to be deprecated)
-	const regularBillingPeriods: BillingPeriod[] = [Annual, Monthly, Quarterly];
+	const regularBillingPeriods: BillingPeriod[] = [
+		BillingPeriod.Annual,
+		BillingPeriod.Monthly,
+		BillingPeriod.Quarterly,
+	];
 	if (
 		regularBillingPeriods.includes(regularBillingString as RegularBillingPeriod)
 	) {
@@ -117,9 +120,9 @@ export function toRegularBillingPeriod(
 	// for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
 	const regularBillingPeriod =
 		regularBillingString === 'Quarter'
-			? Quarterly
+			? BillingPeriod.Quarterly
 			: regularBillingString === 'Month'
-			? Monthly
+			? BillingPeriod.Monthly
 			: fallback;
 	return regularBillingPeriod;
 }
@@ -130,11 +133,11 @@ export function contributionTypeToBillingPeriod(
 ): BillingPeriod | undefined {
 	switch (contributionType) {
 		case 'ONE_OFF':
-			return OneTime;
+			return BillingPeriod.OneTime;
 		case 'MONTHLY':
-			return Monthly;
+			return BillingPeriod.Monthly;
 		case 'ANNUAL':
-			return Annual;
+			return BillingPeriod.Annual;
 		default:
 			return undefined;
 	}

@@ -2,8 +2,8 @@ import { isAnyOf } from '@reduxjs/toolkit';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
+	BillingPeriod,
 	contributionTypeToBillingPeriod,
-	Monthly,
 } from 'helpers/productPrice/billingPeriods';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
@@ -64,7 +64,8 @@ export function addProductSideEffects(
 
 			sendEventContributionCartValue(
 				contributionAmount.toString(),
-				contributionTypeToBillingPeriod(contributionType) ?? Monthly,
+				contributionTypeToBillingPeriod(contributionType) ??
+					BillingPeriod.Monthly,
 				contributionCurrency,
 			);
 		},

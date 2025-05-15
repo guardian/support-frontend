@@ -5,7 +5,7 @@ import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
-import { Annual } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
@@ -81,7 +81,7 @@ describe('Direct debit form', () => {
 				checkoutForm: {
 					product: {
 						productType: GuardianWeekly,
-						billingPeriod: Annual,
+						billingPeriod: BillingPeriod.Annual,
 						productOption: 'NoProductOptions',
 						fulfilmentOption: 'Domestic',
 						productPrices: weeklyProducts,

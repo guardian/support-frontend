@@ -5,9 +5,8 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
-	type BillingPeriod,
+	BillingPeriod,
 	getBillingPeriodNoun,
-	OneTime,
 } from 'helpers/productPrice/billingPeriods';
 import { PriceCard } from './priceCard';
 
@@ -105,7 +104,7 @@ export function PriceCards({
 							isSelected={amount === selectedAmount}
 							onClick={onAmountChange}
 							label={`${simpleFormatAmount(currencies[currency], amount)}${
-								billingPeriod !== OneTime
+								billingPeriod !== BillingPeriod.OneTime
 									? ' per ' + getBillingPeriodNoun(billingPeriod)
 									: ''
 							}`}

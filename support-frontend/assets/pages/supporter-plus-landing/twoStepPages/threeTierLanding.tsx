@@ -40,13 +40,10 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import {
-	Annual,
+	BillingPeriod,
 	billingPeriodToContributionType,
-	Monthly,
-	OneTime,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -223,12 +220,13 @@ function getPlanCost(
 	promotion?: Promotion,
 ) {
 	const promotionDurationPeriod: BillingPeriod =
-		billingPeriod === Annual && promotion?.discount?.durationMonths === 12
-			? Annual
-			: Monthly;
+		billingPeriod === BillingPeriod.Annual &&
+		promotion?.discount?.durationMonths === 12
+			? BillingPeriod.Annual
+			: BillingPeriod.Monthly;
 
 	const promotionDurationValue =
-		promotionDurationPeriod === Annual
+		promotionDurationPeriod === BillingPeriod.Annual
 			? 1
 			: promotion?.discount?.durationMonths;
 
@@ -349,8 +347,8 @@ export function ThreeTierLanding({
 	}, []);
 
 	const paymentFrequencies: BillingPeriod[] = enableSingleContributionsTab
-		? [OneTime, Monthly, Annual]
-		: [Monthly, Annual];
+		? [BillingPeriod.OneTime, BillingPeriod.Monthly, BillingPeriod.Annual]
+		: [BillingPeriod.Monthly, BillingPeriod.Annual];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setBillingPeriod(paymentFrequencies[buttonIndex] as BillingPeriod);
@@ -431,10 +429,10 @@ export function ThreeTierLanding({
 	const getTier3RatePlan = () => {
 		const ratePlan =
 			countryGroupId === 'International'
-				? billingPeriod === Annual
+				? billingPeriod === BillingPeriod.Annual
 					? 'RestOfWorldAnnual'
 					: 'RestOfWorldMonthly'
-				: billingPeriod === Annual
+				: billingPeriod === BillingPeriod.Annual
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
 		return abParticipations.newspaperArchiveBenefit === undefined
@@ -610,7 +608,7 @@ export function ThreeTierLanding({
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					{billingPeriod === OneTime && (
+					{billingPeriod === BillingPeriod.OneTime && (
 						<OneOffCard
 							amounts={amounts}
 							currencyGlyph={currencies[currencyId].glyph}
@@ -619,7 +617,7 @@ export function ThreeTierLanding({
 							heading={campaignSettings?.copy.oneTimeHeading}
 						/>
 					)}
-					{billingPeriod !== OneTime && (
+					{billingPeriod !== BillingPeriod.OneTime && (
 						<ThreeTierCards
 							cardsContent={[tier1Card, tier2Card, tier3Card]}
 							currencyId={currencyId}

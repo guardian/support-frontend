@@ -9,8 +9,7 @@ import {
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import {
-	Annual,
-	type BillingPeriod,
+	BillingPeriod,
 	getBillingPeriodNoun,
 } from 'helpers/productPrice/billingPeriods';
 import {
@@ -49,7 +48,7 @@ export function SummaryTsAndCs({
 	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;
 	const renewalDateEnd = `every ${periodNoun}`;
 	const renewalFrequency = `${renewalDateStart}${
-		billingPeriod === Annual ? getLongMonth(today) + ' ' : ''
+		billingPeriod === BillingPeriod.Annual ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(

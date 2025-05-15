@@ -2,9 +2,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	Annual,
+	BillingPeriod,
 	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 
@@ -16,10 +15,10 @@ export function getLowerProductBenefitThreshold(
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'
-			? billingPeriod === Annual
+			? billingPeriod === BillingPeriod.Annual
 				? 'RestOfWorldAnnual'
 				: 'RestOfWorldMonthly'
-			: billingPeriod === Annual
+			: billingPeriod === BillingPeriod.Annual
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
 	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);

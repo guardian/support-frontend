@@ -19,11 +19,8 @@ import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paym
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
-	Annual,
-	type BillingPeriod,
+	BillingPeriod,
 	billingPeriodToContributionType,
-	Monthly,
-	OneTime,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -155,7 +152,11 @@ export function ContributionsOnlyLanding({
 		getInitialBillingPeriod(),
 	);
 
-	const paymentFrequencies: BillingPeriod[] = [OneTime, Monthly, Annual];
+	const paymentFrequencies: BillingPeriod[] = [
+		BillingPeriod.OneTime,
+		BillingPeriod.Monthly,
+		BillingPeriod.Annual,
+	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		setBillingPeriod(paymentFrequencies[buttonIndex] as BillingPeriod);
