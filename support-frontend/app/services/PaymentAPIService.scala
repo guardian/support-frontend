@@ -56,6 +56,7 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
+
   private def postPaypalData[A](
       data: ExecutePaymentBody,
       isTestUser: Boolean,
