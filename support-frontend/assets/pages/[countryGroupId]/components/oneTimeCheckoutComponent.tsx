@@ -87,6 +87,7 @@ import {
 } from '../../../helpers/storage/abandonedBasketCookies';
 import { PersonalEmailFields } from '../checkout/components/PersonalEmailFields';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
+import getConsentValue from '../helpers/getConsentValue';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -101,6 +102,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
+import SimilarProductsConsent, { CONSENT_ID } from './SimilarProductsConsent';
 
 /**
  * We have not added StripeExpressCheckoutElement to the old PaymentMethod
@@ -137,6 +139,19 @@ const tcContainer = css`
 	color: ${neutral[20]};
 	& a {
 		color: ${neutral[20]};
+	}
+`;
+
+const similarProductsConsentCheckboxContainer = css`
+	padding: 6px ${space[4]}px;
+	background-color: ${neutral[97]};
+	border-radius: 12px;
+	margin: ${space[4]}px 0px ${space[2]}px;
+	${from.tablet} {
+		margin-top: ${space[5]}px 0px 0px;
+	}
+	> div > input {
+		background-color: ${neutral[100]};
 	}
 `;
 
@@ -370,7 +385,9 @@ export function OneTimeCheckoutComponent({
 		}
 	};
 
-	const formOnSubmit = async () => {
+	const formOnSubmit = async (formData: FormData) => {
+		const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
+
 		if (finalAmount) {
 			setIsProcessingPayment(true);
 
@@ -402,6 +419,11 @@ export function OneTimeCheckoutComponent({
 				cookie.set(
 					'acquisition_data',
 					encodeURIComponent(JSON.stringify(acquisitionData)),
+				);
+				cookie.set(
+					'gu_similar_products_consent',
+					JSON.stringify(similarProductsConsent),
+					1, // daysToLive
 				);
 			}
 
@@ -479,6 +501,7 @@ export function OneTimeCheckoutComponent({
 						publicKey: stripePublicKey,
 						recaptchaToken: recaptchaToken ?? '',
 						paymentMethodId: paymentMethodResult.paymentMethod.id,
+						similarProductsConsent,
 					};
 					paymentResult = await processStripePaymentIntentRequest(
 						stripeData,
@@ -612,8 +635,10 @@ export function OneTimeCheckoutComponent({
 				ref={formRef}
 				onSubmit={(event) => {
 					event.preventDefault();
+					const form = event.currentTarget;
+					const formData = new FormData(form);
 					/** we defer this to an external function as a lot of the payment methods use async */
-					void formOnSubmit();
+					void formOnSubmit(formData);
 
 					return false;
 				}}
@@ -730,6 +755,9 @@ export function OneTimeCheckoutComponent({
 								isEmailAddressReadOnly={isSignedIn}
 								isSignedIn={isSignedIn}
 							/>
+							{abParticipations.oneTimeContributionConsent === 'VariantA' && (
+								<SimilarProductsConsent />
+							)}
 
 							{countryId === 'US' && (
 								<div>
@@ -849,6 +877,11 @@ export function OneTimeCheckoutComponent({
 								finalAmount ? finalAmount : 0,
 							)}
 						/>
+						{abParticipations.oneTimeContributionConsent === 'VariantB' && (
+							<div css={similarProductsConsentCheckboxContainer}>
+								<SimilarProductsConsent />
+							</div>
+						)}
 						<div
 							css={css`
 								margin: ${space[8]}px 0 ${space[6]}px;

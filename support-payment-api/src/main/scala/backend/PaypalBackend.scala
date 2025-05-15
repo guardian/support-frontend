@@ -107,6 +107,7 @@ class PaypalBackend(
               identityUserDetails.map(_.id),
               executePaymentData.acquisitionData,
               clientBrowserInfo,
+              executePaymentData.similarProductsConsent,
             )
 
             EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityUserDetails.map(_.userType))
@@ -130,8 +131,9 @@ class PaypalBackend(
       identityId: Option[String],
       acquisitionData: AcquisitionData,
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Option[Boolean],
   ): Unit = {
-    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
+    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo, similarProductsConsent)
       .map(errors =>
         cloudWatchService.recordPostPaymentTasksErrors(
           PaymentProvider.Paypal,
@@ -162,6 +164,7 @@ class PaypalBackend(
       email: String,
       identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Option[Boolean],
   ): Future[List[BackendError]] = {
     ContributionData.fromPaypalCharge(
       payment,
@@ -176,7 +179,8 @@ class PaypalBackend(
           PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
 
         track(
-          acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
+          acquisition =
+            AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData, similarProductsConsent),
           contributionData,
         )
     }
