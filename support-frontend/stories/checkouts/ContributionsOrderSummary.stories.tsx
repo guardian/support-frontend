@@ -115,7 +115,7 @@ export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
 	productKey: 'Contribution',
-	ratePlanKey: '',
+	ratePlanKey: 'OneTime',
 	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
@@ -210,7 +210,7 @@ export const TierThree = Template.bind({});
 
 TierThree.args = {
 	productKey: 'TierThree',
-	ratePlanKey: 'Montly',
+	ratePlanKey: 'Monthly',
 	productDescription: 'Digital + print',
 	enableCheckList: true,
 	amount: 27,

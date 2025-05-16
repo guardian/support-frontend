@@ -1,19 +1,29 @@
 import { Checkbox } from '@guardian/source/react-components';
+import { useState } from 'react';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 
-export function SimilarProductsConsent() {
+export const CONSENT_ID = 'similar-products-consent-checkbox';
+
+export default function SimilarProductsConsent() {
+	const [consentValue, setConsentValue] = useState(true);
 	return (
-		<Checkbox
-			name="similarProductsConsent"
-			label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
-			defaultChecked={true}
-			onClick={(event) => {
-				const checked = event.currentTarget.checked;
-				trackComponentClick(
-					'similar-products-consent-checkbox',
-					checked.toString(),
-				);
-			}}
-		/>
+		<>
+			<input
+				type="hidden"
+				name={CONSENT_ID}
+				value={consentValue.toString()}
+				data-testid="consentValue"
+			/>
+			<Checkbox
+				name="consentCheckbox"
+				label="Receive information on our products and ways to support and enjoy our journalism. Untick to opt out."
+				defaultChecked
+				onClick={(event) => {
+					const checked = event.currentTarget.checked;
+					setConsentValue(checked);
+					trackComponentClick(CONSENT_ID, checked.toString());
+				}}
+			/>
+		</>
 	);
 }

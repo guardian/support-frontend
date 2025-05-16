@@ -57,10 +57,10 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
+	type ActiveRatePlanKey,
 	productCatalogDescription,
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
-	userShouldSeeConsentCheckbox,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -120,7 +120,7 @@ import {
 	PaymentMethodRadio,
 	PaymentMethodSelector,
 } from './paymentMethod';
-import { SimilarProductsConsent } from './SimilarProductsConsent';
+import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
@@ -137,7 +137,7 @@ type CheckoutComponentProps = {
 	stripePublicKey: string;
 	isTestUser: boolean;
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
 	discountedAmount?: number;
 	contributionAmount?: number;
@@ -154,7 +154,7 @@ type CheckoutComponentProps = {
 const getPaymentMethods = (
 	countryId: IsoCountry,
 	productKey: ProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => {
 	const maybeDirectDebit = countryId === 'GB' && DirectDebit;
 
@@ -523,11 +523,6 @@ export function CheckoutComponent({
 				paymentFields,
 				productFields,
 				hasDeliveryAddress: !!productDescription.deliverableTo,
-				userWasShownCheckbox: userShouldSeeConsentCheckbox(
-					productDescription,
-					ratePlanKey,
-					abParticipations,
-				),
 				abParticipations,
 				promotion,
 				contributionAmount,

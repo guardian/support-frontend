@@ -39,7 +39,6 @@ class PaypalBackend(
     emailService: EmailService,
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
-    val softOptInsService: SoftOptInsService,
     val switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
@@ -107,6 +106,7 @@ class PaypalBackend(
               identityUserDetails.map(_.id),
               executePaymentData.acquisitionData,
               clientBrowserInfo,
+              executePaymentData.similarProductsConsent,
             )
 
             EnrichedPaypalPayment(payment, Some(executePaymentData.email), identityUserDetails.map(_.userType))
@@ -130,8 +130,9 @@ class PaypalBackend(
       identityId: Option[String],
       acquisitionData: AcquisitionData,
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Option[Boolean],
   ): Unit = {
-    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo)
+    trackContribution(payment, acquisitionData, email, identityId, clientBrowserInfo, similarProductsConsent)
       .map(errors =>
         cloudWatchService.recordPostPaymentTasksErrors(
           PaymentProvider.Paypal,
@@ -162,6 +163,7 @@ class PaypalBackend(
       email: String,
       identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
+      similarProductsConsent: Option[Boolean],
   ): Future[List[BackendError]] = {
     ContributionData.fromPaypalCharge(
       payment,
@@ -176,7 +178,8 @@ class PaypalBackend(
           PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
 
         track(
-          acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
+          acquisition =
+            AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData, similarProductsConsent),
           contributionData,
         )
     }
@@ -248,7 +251,6 @@ object PaypalBackend {
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
-      softOptInsService: SoftOptInsService,
       switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(
@@ -259,7 +261,6 @@ object PaypalBackend {
       emailService,
       cloudWatchService,
       supporterProductDataService,
-      softOptInsService,
       switchService,
     )
   }
@@ -291,7 +292,6 @@ object PaypalBackend {
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
-      SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
       new SwitchService(env)(awsClient, system, paypalThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(PaypalBackend.apply)
   }
