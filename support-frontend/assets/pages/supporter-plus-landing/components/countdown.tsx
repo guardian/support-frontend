@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { from, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
-import type { ParsedCountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { CountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import { parseCountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 
 /**
  * This is used during the annual US End of Year Campaign.
@@ -19,7 +20,7 @@ const outer = css`
 	}
 `;
 
-const container = (colours?: ParsedCountdownSettings) => css`
+const container = (colours?: CountdownSettings) => css`
 	width: 100%;
 	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'};
 	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
@@ -71,9 +72,8 @@ const timeLabelStyle = css`
 
 // props
 export type CountdownProps = {
-	showCountdown: boolean;
-	setShowCountdown: (b: boolean) => void;
-	countdownCampaign: ParsedCountdownSettings;
+	countdownSettings: CountdownSettings;
+	setHeadingOverride: (headingOverride: string | undefined) => void;
 };
 
 // create countdown logic
@@ -91,18 +91,22 @@ const ensureRoundedDoubleDigits = (timeSection: number): string => {
 
 // return the countdown component
 export default function Countdown({
-	showCountdown: show,
-	setShowCountdown: setShow,
-	countdownCampaign: campaign,
+	countdownSettings,
+	setHeadingOverride,
 }: CountdownProps): JSX.Element {
+	const [canShow, setCanShow] = useState<boolean>(false);
 	// one for each timepart to reduce DOM updates where unnecessary.
 	const [seconds, setSeconds] = useState<string>(initialTimePart);
 	const [minutes, setMinutes] = useState<string>(initialTimePart);
 	const [hours, setHours] = useState<string>(initialTimePart);
 	const [days, setDays] = useState<string>(initialTimePart);
 
+	const { countdownStartInMillis, countdownDeadlineInMillis } =
+		parseCountdownSettings(countdownSettings);
+
 	const hideCountdown = () => {
-		setShow(false);
+		setCanShow(false);
+		setHeadingOverride(undefined);
 	};
 
 	useEffect(() => {
@@ -111,17 +115,11 @@ export default function Countdown({
 		};
 		const canDisplayCountdown = () => {
 			const now = Date.now();
-			const isActive =
-				campaign.countdownStartInMillis < now &&
-				campaign.countdownDeadlineInMillis > now;
-			setShow(isActive);
-			return isActive;
+			return countdownStartInMillis < now && countdownDeadlineInMillis > now;
 		};
 
 		function updateTimeParts() {
-			const timeRemaining = getTotalMillisRemaining(
-				campaign.countdownDeadlineInMillis,
-			);
+			const timeRemaining = getTotalMillisRemaining(countdownDeadlineInMillis);
 			if (timeRemaining < -1) {
 				hideCountdown();
 			}
@@ -148,25 +146,24 @@ export default function Countdown({
 		}
 
 		if (canDisplayCountdown()) {
+			setCanShow(true);
+			setHeadingOverride(countdownSettings.overwriteHeadingLabel);
 			updateTimeParts(); // called first
 			const id = setInterval(updateTimeParts, 1000); // run once per second
 			return () => clearInterval(id); // clear on on unmount
 		} else {
 			// deadline already passed on page load
-			setSeconds(ensureRoundedDoubleDigits(0));
-			setMinutes(ensureRoundedDoubleDigits(0));
-			setHours(ensureRoundedDoubleDigits(0));
-			setDays(ensureRoundedDoubleDigits(0));
+			hideCountdown();
 		}
 
 		return;
-	}, [campaign]);
+	}, [countdownSettings]);
 
 	return (
 		<>
-			{show && (
+			{canShow && (
 				<div id="timer" role="timer" css={outer}>
-					<div css={container(campaign)}>
+					<div css={container(countdownSettings)}>
 						<TimePart timePart={days} label={'days'} />
 						<div css={[flexItem, colon]}>:</div>
 						<TimePart timePart={hours} label={'hrs'} />
