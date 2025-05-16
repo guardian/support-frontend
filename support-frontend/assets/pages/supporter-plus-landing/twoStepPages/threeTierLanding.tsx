@@ -300,30 +300,6 @@ export function ThreeTierLanding({
 		getInitialBillingPeriod(),
 	);
 
-	// Handle which countdown to show (if any).
-	const [currentCountdownSettings, setCurrentCountdownSettings] =
-		useState<ParsedCountdownSettings>();
-	const [showCountdown, setShowCountdown] = useState<boolean>(false);
-	const shouldShowCountdown = () => {
-		if (!currentCountdownSettings) {
-			return false;
-		}
-		return countdownSwitchOn() && showCountdown && currentCountdownSettings;
-	};
-
-	useEffect(() => {
-		if (!countdownSettings) {
-			return undefined;
-		}
-		if (
-			countdownSettings.countdownStartInMillis < now &&
-			countdownSettings.countdownDeadlineInMillis > now
-		) {
-			setCurrentCountdownSettings(countdownSettings);
-			setShowCountdown(true);
-		}
-	}, []);
-
 	const paymentFrequencies: BillingPeriod[] = enableSingleContributionsTab
 		? [BillingPeriod.OneTime, BillingPeriod.Monthly, BillingPeriod.Annual]
 		: [BillingPeriod.Monthly, BillingPeriod.Annual];
