@@ -20,6 +20,7 @@ Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -27,6 +28,7 @@ GuardianAdLite.args = {
 export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: 'DigitalSubscription',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -34,6 +36,7 @@ DigitalSubscription.args = {
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
+	ratePlanKey: 'Annual',
 	billingPeriod: BillingPeriod.Annual,
 	countryGroupId: 'AUDCountries',
 };
@@ -41,6 +44,7 @@ Contribution.args = {
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
@@ -49,6 +53,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
@@ -64,6 +69,7 @@ TierThree.args = {
 export const HomeDelivery = Template.bind({});
 HomeDelivery.args = {
 	productKey: 'HomeDelivery',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -71,6 +77,7 @@ HomeDelivery.args = {
 export const NationalDelivery = Template.bind({});
 NationalDelivery.args = {
 	productKey: 'NationalDelivery',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -78,6 +85,7 @@ NationalDelivery.args = {
 export const SubscriptionCard = Template.bind({});
 SubscriptionCard.args = {
 	productKey: 'SubscriptionCard',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -85,6 +93,7 @@ SubscriptionCard.args = {
 export const GuardianWeeklyDomestic = Template.bind({});
 GuardianWeeklyDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
+	ratePlanKey: 'Monthly',
 	billingPeriod: BillingPeriod.Monthly,
 	countryGroupId: 'GBPCountries',
 };
@@ -92,6 +101,7 @@ GuardianWeeklyDomestic.args = {
 export const GuardianWeeklyRestOfWorldInclPromo = Template.bind({});
 GuardianWeeklyRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
+	ratePlanKey: 'Annual',
 	billingPeriod: BillingPeriod.Annual,
 	countryGroupId: 'UnitedStates',
 	promotion: {

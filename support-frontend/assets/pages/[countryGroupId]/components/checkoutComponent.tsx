@@ -1253,6 +1253,7 @@ export function CheckoutComponent({
 						)}
 						<PaymentTsAndCs
 							productKey={productKey}
+							ratePlanKey={ratePlanKey}
 							billingPeriod={billingPeriod}
 							countryGroupId={countryGroupId}
 							promotion={promotion}

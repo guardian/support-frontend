@@ -66,7 +66,6 @@ const getCheckoutUrl = (
 			internationaliseProductAndRatePlan(
 				countryGroups[countryGroupId].supportInternationalisationId,
 				'GuardianWeeklyDomestic',
-				billingPeriod,
 			);
 		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
 		return addQueryParamsToURL(url, {

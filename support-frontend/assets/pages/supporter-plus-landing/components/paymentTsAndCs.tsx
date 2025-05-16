@@ -15,9 +15,10 @@ import {
 	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
-import {
-	type ActiveProductKey,
-	productCatalogDescription,
+import { productCatalogDescription } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
 	type BillingPeriod,
@@ -109,6 +110,7 @@ export function FooterTsAndCs({
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
@@ -116,6 +118,7 @@ export interface PaymentTsAndCsProps {
 }
 export function PaymentTsAndCs({
 	productKey,
+	ratePlanKey,
 	billingPeriod,
 	countryGroupId,
 	promotion,
@@ -127,7 +130,7 @@ export function PaymentTsAndCs({
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
-		billingPeriod,
+		ratePlanKey,
 	);
 	if (isSundayOnlynewsletterSubscription) {
 		return (

@@ -552,8 +552,11 @@ export function productCatalogGuardianAdLite(): Record<
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-): { productKey: ActiveProductKey; ratePlanKey: ActiveRatePlanKey } {
+	ratePlanKey?: ActiveRatePlanKey,
+): {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey | undefined;
+} {
 	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 

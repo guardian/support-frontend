@@ -1,6 +1,9 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
@@ -48,6 +51,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 			const { container } = render(
 				<PaymentTsAndCs
 					billingPeriod={billingPeriod as BillingPeriod}
+					ratePlanKey={BillingPeriod.Monthly as ActiveRatePlanKey}
 					countryGroupId={countryGroupId as CountryGroupId}
 					productKey={paymentProductKey as ActiveProductKey}
 					thresholdAmount={amount as number}
