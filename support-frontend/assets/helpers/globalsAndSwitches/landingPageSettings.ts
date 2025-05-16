@@ -21,7 +21,7 @@ interface CountdownTheme {
 	backgroundColor: string;
 	foregroundColor: string;
 }
-interface CountdownSettings {
+export interface CountdownSettings {
 	overwriteHeadingLabel: string;
 	countdownStartTimestamp: string;
 	countdownDeadlineTimestamp: string;
@@ -29,7 +29,7 @@ interface CountdownSettings {
 	theme: CountdownTheme;
 }
 
-export type ParsedCountdownSettings = CountdownSettings & {
+type ParsedCountdownSettings = {
 	countdownStartInMillis: number;
 	countdownDeadlineInMillis: number;
 };
@@ -40,7 +40,6 @@ export const parseCountdownSettings = (
 	const { useLocalTime, countdownStartTimestamp, countdownDeadlineTimestamp } =
 		countdownSettings;
 	return {
-		...countdownSettings,
 		countdownStartInMillis: Date.parse(
 			useLocalTime ? countdownStartTimestamp : `${countdownStartTimestamp}Z`,
 		),
