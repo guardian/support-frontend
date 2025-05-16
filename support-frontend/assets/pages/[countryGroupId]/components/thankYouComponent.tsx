@@ -21,6 +21,7 @@ import type {
 } from 'helpers/productCatalog';
 import {
 	BillingPeriod,
+	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
@@ -149,7 +150,7 @@ export function ThankYouComponent({
 
 	successfulContributionConversion(
 		payment.finalAmount, // This is the final amount after discounts
-		billingPeriod,
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY', // ToDo : Quarterly's temporarily marked as monthly to
 		currencyKey,
 		paymentMethod,
 		productKey,
