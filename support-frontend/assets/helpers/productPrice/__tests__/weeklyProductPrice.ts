@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { Annual, Quarterly } from 'helpers/productPrice/billingPeriods';
 import {
 	Domestic,
 	getWeeklyFulfilmentOption,
@@ -7,6 +6,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { BillingPeriod } from '../billingPeriods';
 
 jest.mock('ophan', () => () => ({}));
 
@@ -401,7 +401,7 @@ describe('getPrice', () => {
 		const euroPriceQuarterly = getProductPrice(
 			productPrices,
 			'FR',
-			Quarterly,
+			BillingPeriod.Quarterly,
 			Domestic,
 		);
 
@@ -414,7 +414,7 @@ describe('getPrice', () => {
 		const gbpPriceAnnual = getProductPrice(
 			productPrices,
 			'GB',
-			Annual,
+			BillingPeriod.Annual,
 			Domestic,
 		);
 
@@ -439,7 +439,7 @@ describe('getPrice', () => {
 		const intPriceAnnual = getProductPrice(
 			productPrices,
 			'CG',
-			Annual,
+			BillingPeriod.Annual,
 			RestOfWorld,
 		);
 

@@ -1,10 +1,5 @@
 // ----- Imports ----- //
-import {
-	Annual,
-	Monthly,
-	Quarterly,
-} from 'helpers/productPrice/billingPeriods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	getPriceDescription,
 	getSimplifiedPriceDescription,
@@ -14,7 +9,7 @@ import 'helpers/productPrice/productPrices';
 
 jest.mock('ophan', () => () => ({}));
 
-const monthlyBillingPeriod: BillingPeriod = 'Monthly';
+const monthlyBillingPeriod = BillingPeriod.Monthly;
 
 const productPrice: ProductPrice = {
 	price: 11.99,
@@ -44,7 +39,7 @@ describe('getPriceDescription', () => {
 			],
 			fixedTerm: false,
 		};
-		expect(getPriceDescription(gwAnnual, Annual)).toEqual(
+		expect(getPriceDescription(gwAnnual, BillingPeriod.Annual)).toEqual(
 			"You'll pay £135 for 1 year, then £150 per year",
 		);
 
@@ -55,7 +50,7 @@ describe('getPriceDescription', () => {
 			fixedTerm: false,
 		};
 
-		expect(getPriceDescription(gwQuarterly, Quarterly)).toEqual(
+		expect(getPriceDescription(gwQuarterly, BillingPeriod.Quarterly)).toEqual(
 			'£37.50 per quarter',
 		);
 
@@ -66,7 +61,9 @@ describe('getPriceDescription', () => {
 			fixedTerm: false,
 		};
 
-		expect(getPriceDescription(gwMonthly, Monthly)).toEqual('£12.50 per month');
+		expect(getPriceDescription(gwMonthly, BillingPeriod.Monthly)).toEqual(
+			'£12.50 per month',
+		);
 
 		const gwQuarterlyWithPromo: ProductPrice = {
 			price: 37.5,
@@ -87,9 +84,9 @@ describe('getPriceDescription', () => {
 			fixedTerm: false,
 		};
 
-		expect(getPriceDescription(gwQuarterlyWithPromo, Quarterly)).toEqual(
-			"You'll pay £31.87 for 1 quarter, then £37.50 per quarter",
-		);
+		expect(
+			getPriceDescription(gwQuarterlyWithPromo, BillingPeriod.Quarterly),
+		).toEqual("You'll pay £31.87 for 1 quarter, then £37.50 per quarter");
 	});
 });
 

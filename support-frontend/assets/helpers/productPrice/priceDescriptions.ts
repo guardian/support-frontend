@@ -3,7 +3,7 @@ import {
 	glyph as shortGlyph,
 } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { billingPeriodNoun as upperCaseNoun } from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
@@ -25,9 +25,6 @@ const billingPeriodQuantifier = (
 		: ` for 1 ${noun}`;
 };
 
-const billingPeriodNoun = (billingPeriod: BillingPeriod, fixedTerm = false) =>
-	upperCaseNoun(billingPeriod, fixedTerm).toLowerCase();
-
 const standardRate = (
 	glyph: string,
 	price: number,
@@ -35,10 +32,10 @@ const standardRate = (
 	fixedTerm: boolean,
 ) => {
 	const termPrepositon = fixedTerm ? 'for' : 'per';
-	return `${displayPrice(glyph, price)} ${termPrepositon} ${billingPeriodNoun(
-		billingPeriod,
-		fixedTerm,
-	)}`;
+	return `${displayPrice(
+		glyph,
+		price,
+	)} ${termPrepositon} ${getBillingPeriodNoun(billingPeriod, fixedTerm)}`;
 };
 
 const getStandardRateCopy = (
@@ -63,8 +60,6 @@ function getDiscountDescription(
 	numberOfDiscountedPeriods: number | null | undefined,
 	billingPeriod: BillingPeriod,
 ) {
-	const noun = billingPeriodNoun(billingPeriod, fixedTerm);
-
 	const minNumberOfDiscountedPeriodsForPatrons = 100;
 
 	if (
@@ -78,7 +73,11 @@ function getDiscountDescription(
 		const discountCopy = `You'll pay ${displayPrice(
 			glyph,
 			discountedPrice,
-		)}${billingPeriodQuantifier(numberOfDiscountedPeriods, noun, fixedTerm)}`;
+		)}${billingPeriodQuantifier(
+			numberOfDiscountedPeriods,
+			getBillingPeriodNoun(billingPeriod, fixedTerm),
+			fixedTerm,
+		)}`;
 		const standardCopy = getStandardRateCopy(
 			glyph,
 			price,
@@ -126,24 +125,16 @@ function getSimplifiedPriceDescription(
 	const glyph = extendedGlyph(productPrice.currency);
 	const promotion = getAppliedPromo(productPrice.promotions);
 	const termPrepositon = productPrice.fixedTerm ? 'for' : 'per';
-
-	if (hasDiscount(promotion)) {
-		const standardCopy = getStandardRateCopy(
-			glyph,
-			productPrice.price,
-			billingPeriod,
-			productPrice.fixedTerm,
-		);
-		return `${termPrepositon} ${billingPeriodNoun(
-			billingPeriod,
-			productPrice.fixedTerm,
-		)}${standardCopy}`;
-	}
-
-	return `${termPrepositon} ${billingPeriodNoun(
+	const promoRateCopy = getStandardRateCopy(
+		glyph,
+		productPrice.price,
 		billingPeriod,
 		productPrice.fixedTerm,
-	)}`;
+	);
+	return `${termPrepositon} ${getBillingPeriodNoun(
+		billingPeriod,
+		productPrice.fixedTerm,
+	)}${hasDiscount(promotion) ? promoRateCopy : ''}`;
 }
 
 export { displayPrice, getPriceDescription, getSimplifiedPriceDescription };

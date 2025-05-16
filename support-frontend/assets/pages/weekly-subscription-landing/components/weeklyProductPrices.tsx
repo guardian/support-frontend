@@ -10,9 +10,9 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProductAndRatePlan } from 'helpers/productCatalog';
-import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	billingPeriodTitle,
+	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
@@ -51,7 +51,7 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
-	billingPeriod: WeeklyBillingPeriod,
+	billingPeriod: BillingPeriod,
 	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
@@ -66,7 +66,6 @@ const getCheckoutUrl = (
 			internationaliseProductAndRatePlan(
 				countryGroups[countryGroupId].supportInternationalisationId,
 				'GuardianWeeklyDomestic',
-				billingPeriod,
 			);
 		const url = `${getOrigin()}/${countryPath(countryGroupId)}/checkout`;
 		return addQueryParamsToURL(url, {
@@ -120,7 +119,7 @@ const getMainDisplayPrice = (
 
 const weeklyProductProps = (
 	countryId: IsoCountry,
-	billingPeriod: WeeklyBillingPeriod,
+	billingPeriod: BillingPeriod,
 	productPrice: ProductPrice,
 	abParticipations: Participations,
 	orderIsAGift = false,
@@ -141,7 +140,7 @@ const weeklyProductProps = (
 		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
 	const label = getPromotionLabel(productPrice.currency, promotion);
 	return {
-		title: billingPeriodTitle(billingPeriod, orderIsAGift),
+		title: getBillingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
 		offerCopy,
 		priceCopy: (
@@ -177,7 +176,7 @@ const getProducts = ({
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods();
+		: weeklyBillingPeriods;
 
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices

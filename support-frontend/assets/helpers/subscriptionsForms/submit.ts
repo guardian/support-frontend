@@ -14,7 +14,7 @@ import {
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { Quarterly } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	HomeDelivery,
@@ -406,7 +406,7 @@ function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 	);
 
 	// This is a small hack to make sure we show quarterly pricing until we have promos tooling
-	if (billingPeriod === Quarterly && priceDetails.price === 6) {
+	if (billingPeriod === BillingPeriod.Quarterly && priceDetails.price === 6) {
 		priceDetails = getProductPrice(
 			productPrices,
 			pricingCountry,

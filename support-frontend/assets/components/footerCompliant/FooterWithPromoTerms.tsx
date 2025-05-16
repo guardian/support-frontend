@@ -1,11 +1,6 @@
 import type { ReactNode } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Annual,
-	Monthly,
-	Quarterly,
-} from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
@@ -52,13 +47,13 @@ function RegularLinks(props: LinkTypes) {
 	const annualUrl = getPromoUrl(
 		props.productPrices,
 		props.country,
-		Annual,
+		BillingPeriod.Annual,
 		props.fulfillmentOption,
 	);
 	const monthlyUrl = getPromoUrl(
 		props.productPrices,
 		props.country,
-		Monthly,
+		BillingPeriod.Monthly,
 		props.fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && monthlyUrl);
@@ -82,13 +77,13 @@ function GiftLinks(props: LinkTypes) {
 	const annualUrl = getPromoUrl(
 		props.productPrices,
 		props.country,
-		Annual,
+		BillingPeriod.Annual,
 		props.fulfillmentOption,
 	);
 	const quarterlyUrl = getPromoUrl(
 		props.productPrices,
 		props.country,
-		Quarterly,
+		BillingPeriod.Quarterly,
 		props.fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && quarterlyUrl);

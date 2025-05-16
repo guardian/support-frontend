@@ -12,13 +12,13 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
-import type { PriceCardPaymentInterval } from 'components/priceCards/priceCard';
+import {
+	BillingPeriod,
+	billingPeriodToContributionType,
+} from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
-import type {
-	AmountValuesObject,
-	ContributionType,
-} from '../../../helpers/contributions';
+import type { AmountValuesObject } from '../../../helpers/contributions';
 import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
@@ -68,7 +68,7 @@ interface AmountsCardProps {
 	currencyId: IsoCurrency;
 	heading?: JSX.Element;
 	standFirst?: JSX.Element;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 }
 
 export function AmountsCard({
@@ -77,26 +77,17 @@ export function AmountsCard({
 	currencyId,
 	heading,
 	standFirst,
-	contributionType,
+	billingPeriod,
 }: AmountsCardProps) {
 	const [selectedAmount, setSelectedAmount] = useState<number | 'other'>(
 		amountsData.defaultAmount,
 	);
 	const [otherAmount, setOtherAmount] = useState('');
-
-	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	const amount = selectedAmount === 'other' ? otherAmount : selectedAmount;
 	const checkoutLink =
-		contributionType === 'ONE_OFF'
+		billingPeriod === BillingPeriod.OneTime
 			? `one-time-checkout?contribution=${amount}`
 			: `checkout?product=Contribution&ratePlan=${billingPeriod}&contribution=${amount}`;
-
-	const contributionTypeToPaymentInterval: Partial<
-		Record<ContributionType, PriceCardPaymentInterval>
-	> = {
-		MONTHLY: 'month',
-		ANNUAL: 'year',
-	};
 
 	return (
 		<section css={sectionStyle}>
@@ -111,7 +102,7 @@ export function AmountsCard({
 					amounts={amountsData.amounts}
 					selectedAmount={selectedAmount}
 					currency={currencyId}
-					paymentInterval={contributionTypeToPaymentInterval[contributionType]}
+					billingPeriod={billingPeriod}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
 							setSelectedAmount(amount);
@@ -143,7 +134,9 @@ export function AmountsCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
 							trackComponentClick(
-								`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}`,
+								`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriodToContributionType(
+									billingPeriod,
+								)}`,
 							);
 						}}
 					>

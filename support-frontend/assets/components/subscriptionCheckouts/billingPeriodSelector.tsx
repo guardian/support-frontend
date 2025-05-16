@@ -2,7 +2,7 @@ import { Radio, RadioGroup } from '@guardian/source/react-components';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { billingPeriodTitle } from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
@@ -35,8 +35,8 @@ function BillingPeriodSelector(props: PropTypes): JSX.Element {
 					);
 					return (
 						<Radio
-							label={billingPeriodTitle(billingPeriod)}
-							value={billingPeriodTitle(billingPeriod)}
+							label={getBillingPeriodTitle(billingPeriod)}
+							value={getBillingPeriodTitle(billingPeriod)}
 							supporting={getPriceDescription(productPrice, billingPeriod)}
 							name="billingPeriod"
 							checked={billingPeriod === props.selected}

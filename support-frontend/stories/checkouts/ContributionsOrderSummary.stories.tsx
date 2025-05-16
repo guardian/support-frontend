@@ -11,6 +11,7 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 const boldText = css`
 	font-weight: bold;
@@ -158,7 +159,7 @@ RecurringContribution.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'Contribution'}
-			billingPeriod={'Monthly'}
+			billingPeriod={BillingPeriod.Monthly}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -193,7 +194,7 @@ SupporterPlus.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
-			billingPeriod={'Monthly'}
+			billingPeriod={BillingPeriod.Monthly}
 			countryGroupId={GBPCountries}
 			thresholdAmount={12}
 		/>
@@ -233,7 +234,7 @@ TierThree.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'TierThree'}
-			billingPeriod={'Monthly'}
+			billingPeriod={BillingPeriod.Monthly}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
 		/>

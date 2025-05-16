@@ -5,6 +5,7 @@ import type {
 	ActiveRatePlanKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
+import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import { getProductOptionFromProductAndRatePlan } from 'helpers/productPrice/productOptions';
 import { logException } from 'helpers/utilities/logger';
@@ -57,14 +58,16 @@ export const getProductFields = ({
 			return {
 				productType: 'GuardianAdLite',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 			};
 
 		case 'TierThree':
 			return {
 				productType: 'TierThree',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 				fulfilmentOptions: fulfilmentOption,
 				productOptions: productOption,
 			};
@@ -73,7 +76,8 @@ export const getProductFields = ({
 			return {
 				productType: 'Contribution',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 				amount: finalAmount,
 			};
 
@@ -81,7 +85,8 @@ export const getProductFields = ({
 			return {
 				productType: 'SupporterPlus',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *
@@ -100,7 +105,8 @@ export const getProductFields = ({
 				productType: 'GuardianWeekly',
 				currency: currencyKey,
 				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 			};
 
 		case 'GuardianWeeklyRestOfWorld':
@@ -108,14 +114,16 @@ export const getProductFields = ({
 				productType: 'GuardianWeekly',
 				fulfilmentOptions: 'RestOfWorld',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 			};
 
 		case 'DigitalSubscription':
 			return {
 				productType: 'DigitalPack',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 				readerType: 'Direct',
 			};
 
@@ -129,7 +137,8 @@ export const getProductFields = ({
 			return {
 				productType: 'Paper',
 				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
+				billingPeriod:
+					ratePlanDescription.billingPeriod as RegularBillingPeriod,
 				fulfilmentOptions: finalFulfilmentOption,
 				productOptions: productOption,
 				deliveryAgent,

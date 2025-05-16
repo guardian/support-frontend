@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
-import type { RegularContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 export type ThreeTierCardsProps = {
 	cardsContent: CardContent[];
 	currencyId: IsoCurrency;
-	paymentFrequency: RegularContributionType;
+	billingPeriod: BillingPeriod;
 };
 
 const container = (cardCount: number) => css`
@@ -46,7 +46,7 @@ const cardIndexToTier = (index: number): 1 | 2 | 3 => {
 export function ThreeTierCards({
 	cardsContent,
 	currencyId,
-	paymentFrequency,
+	billingPeriod,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveLabelAndSelectedCards =
 		cardsContent.filter((card) => !!card.label || card.isUserSelected).length >
@@ -56,8 +56,8 @@ export function ThreeTierCards({
 		<div
 			css={container(cardsContent.length)}
 			role="tabpanel"
-			id={`${paymentFrequency}-tab`}
-			aria-labelledby={`${paymentFrequency}`}
+			id={`${billingPeriod}-tab`}
+			aria-labelledby={`${billingPeriod}`}
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
 				if (cardContent.promotion) {
@@ -71,7 +71,7 @@ export function ThreeTierCards({
 						promoCount={promoCount}
 						isSubdued={haveLabelAndSelectedCards}
 						currencyId={currencyId}
-						paymentFrequency={paymentFrequency}
+						billingPeriod={billingPeriod}
 					/>
 				);
 			})}

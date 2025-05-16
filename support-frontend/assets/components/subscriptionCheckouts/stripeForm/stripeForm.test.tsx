@@ -7,6 +7,7 @@ import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
 import { renderWithStore } from '__test-utils__/render';
 import { createTestStoreForSubscriptions } from '__test-utils__/testStore';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
 import type { PropTypes } from './stripeProviderForCountry';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
@@ -77,7 +78,7 @@ describe('Stripe Form', () => {
 
 		store = createTestStoreForSubscriptions(
 			'GuardianWeekly',
-			'Monthly',
+			BillingPeriod.Monthly,
 			'2022-09-01',
 		);
 

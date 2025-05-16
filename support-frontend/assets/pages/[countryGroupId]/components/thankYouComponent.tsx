@@ -14,12 +14,16 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
-import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -135,34 +139,8 @@ export function ThankYouComponent({
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
-	let contributionType: ContributionType;
-	switch (ratePlanKey) {
-		case 'Monthly':
-		case 'RestOfWorldMonthly':
-		case 'DomesticMonthly':
-		case 'RestOfWorldMonthlyV2':
-		case 'DomesticMonthlyV2':
-		case 'Everyday':
-		case 'Sixday':
-		case 'Weekend':
-		case 'Saturday':
-		case 'Sunday':
-			contributionType = 'MONTHLY';
-			break;
-		case 'Annual':
-		case 'RestOfWorldAnnual':
-		case 'DomesticAnnual':
-		case 'RestOfWorldAnnualV2':
-		case 'DomesticAnnualV2':
-			contributionType = 'ANNUAL';
-			break;
-		default:
-			// A one-off contribution indicated by the absence of product and ratePlan
-			contributionType = 'ONE_OFF';
-			break;
-	}
-
-	const isOneOff = contributionType === 'ONE_OFF';
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
 	// track conversion with GTM
 	const paymentMethod =
@@ -172,7 +150,7 @@ export function ThankYouComponent({
 
 	successfulContributionConversion(
 		payment.finalAmount, // This is the final amount after discounts
-		contributionType,
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY', // ToDo : Quarterly's temporarily marked as monthly to
 		currencyKey,
 		paymentMethod,
 		productKey,
@@ -182,7 +160,6 @@ export function ThankYouComponent({
 	 * This is some annoying transformation we need from
 	 * Product API => Contributions work we need to do
 	 */
-	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	if (isOneOff) {
 		// track conversion with QM
 		sendEventOneTimeCheckoutValue(
@@ -204,7 +181,7 @@ export function ThankYouComponent({
 	// track conversion with QM
 	sendEventContributionCheckoutConversion(
 		payment.originalAmount, // This is the amount before discounts
-		contributionType,
+		billingPeriod,
 		currencyKey,
 	);
 	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
@@ -373,7 +350,7 @@ export function ThankYouComponent({
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							contributionType={contributionType}
+							billingPeriod={billingPeriod}
 							amountIsAboveThreshold={isSupporterPlus}
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}

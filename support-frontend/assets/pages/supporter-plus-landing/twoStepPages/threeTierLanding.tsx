@@ -26,10 +26,6 @@ import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type {
-	ContributionType,
-	RegularContributionType,
-} from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
@@ -42,7 +38,11 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	BillingPeriod,
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -193,11 +193,6 @@ const links = [
 	},
 ];
 
-const paymentFrequencyMap = {
-	ONE_OFF: 'One-time',
-	MONTHLY: 'Monthly',
-	ANNUAL: 'Annual',
-};
 const isCardUserSelected = (
 	cardPrice: number,
 	cardPriceDiscount?: number,
@@ -220,16 +215,17 @@ const isCardUserSelected = (
  */
 function getPlanCost(
 	pricing: number,
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	promotion?: Promotion,
 ) {
-	const promotionDurationPeriod: RegularContributionType =
-		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
-			? 'ANNUAL'
-			: 'MONTHLY';
+	const promotionDurationPeriod: BillingPeriod =
+		billingPeriod === BillingPeriod.Annual &&
+		promotion?.discount?.durationMonths === 12
+			? BillingPeriod.Annual
+			: BillingPeriod.Monthly;
 
 	const promotionDurationValue =
-		promotionDurationPeriod === 'ANNUAL'
+		promotionDurationPeriod === BillingPeriod.Annual
 			? 1
 			: promotion?.discount?.durationMonths;
 
@@ -263,7 +259,6 @@ export function ThreeTierLanding({
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
 	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
@@ -298,31 +293,20 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
-	const getInitialContributionType = () => {
-		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
-			return 'ONE_OFF';
-		}
-		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+	const getInitialBillingPeriod = () => {
+		return ratePlanToBillingPeriod(urlSearchParamsRatePlan ?? 'Monthly');
 	};
-
-	const [contributionType, setContributionType] = useState<ContributionType>(
-		getInitialContributionType(),
+	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
+		getInitialBillingPeriod(),
 	);
 
-	const tierPlanPeriod = contributionType.toLowerCase();
-	const billingPeriod = (tierPlanPeriod[0]?.toUpperCase() +
-		tierPlanPeriod.slice(1)) as BillingPeriod;
-
-	const paymentFrequencies: ContributionType[] = enableSingleContributionsTab
-		? ['ONE_OFF', 'MONTHLY', 'ANNUAL']
-		: ['MONTHLY', 'ANNUAL'];
+	const paymentFrequencies: BillingPeriod[] = enableSingleContributionsTab
+		? [BillingPeriod.OneTime, BillingPeriod.Monthly, BillingPeriod.Annual]
+		: [BillingPeriod.Monthly, BillingPeriod.Annual];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex] as ContributionType);
+		setBillingPeriod(paymentFrequencies[buttonIndex] as BillingPeriod);
 	};
-
-	const selectedContributionRatePlan =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	/**
 	 * Tier 1: Contributions
@@ -333,22 +317,15 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
-		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
-		.amounts[0] as number;
-	const recurringAmount =
-		contributionType === 'MONTHLY'
-			? monthlyRecurringAmount
-			: annualRecurringAmount;
-
+	const recurringAmount = amounts.amountsCardData[
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY'
+	].amounts[0] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlan: selectedContributionRatePlan,
+		ratePlan: billingPeriod,
 		contribution: recurringAmount.toString(),
 	});
 	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
-
 	const tier1Card: CardContent = {
 		product: 'Contribution',
 		price: recurringAmount,
@@ -360,17 +337,12 @@ export function ThreeTierLanding({
 	};
 
 	/** Tier 2: SupporterPlus */
-	const supporterPlusRatePlan =
-		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
-		supporterPlusRatePlan
-	]?.pricing[currencyId] as number;
-
+	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[billingPeriod]
+		?.pricing[currencyId] as number;
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: supporterPlusRatePlan,
+		ratePlan: billingPeriod,
 	});
-
 	const promotionTier2 = getPromotion(
 		window.guardian.allProductPrices.SupporterPlus,
 		countryId,
@@ -411,22 +383,19 @@ export function ThreeTierLanding({
 	const getTier3RatePlan = () => {
 		const ratePlan =
 			countryGroupId === 'International'
-				? contributionType === 'ANNUAL'
+				? billingPeriod === BillingPeriod.Annual
 					? 'RestOfWorldAnnual'
 					: 'RestOfWorldMonthly'
-				: contributionType === 'ANNUAL'
+				: billingPeriod === BillingPeriod.Annual
 				? 'DomesticAnnual'
 				: 'DomesticMonthly';
-
 		return abParticipations.newspaperArchiveBenefit === undefined
 			? ratePlan
 			: `${ratePlan}V2`;
 	};
-
 	const tier3RatePlan = getTier3RatePlan();
 	const tier3Pricing = productCatalog.TierThree?.ratePlans[tier3RatePlan]
 		?.pricing[currencyId] as number;
-
 	const tier3UrlParams = new URLSearchParams({
 		product: 'TierThree',
 		ratePlan: tier3RatePlan,
@@ -504,13 +473,13 @@ export function ThreeTierLanding({
 							tsAndCsContent={[
 								{
 									title: tier1Card.title,
-									planCost: getPlanCost(tier1Card.price, contributionType),
+									planCost: getPlanCost(tier1Card.price, billingPeriod),
 								},
 								{
 									title: tier2Card.title,
 									planCost: getPlanCost(
 										tier2Card.price,
-										contributionType,
+										billingPeriod,
 										promotionTier2,
 									),
 									starts: promotionTier2?.starts
@@ -524,7 +493,7 @@ export function ThreeTierLanding({
 									title: tier3Card.title,
 									planCost: getPlanCost(
 										tier3Card.price,
-										contributionType,
+										billingPeriod,
 										promotionTier3,
 									),
 									starts: promotionTier3?.starts
@@ -583,15 +552,14 @@ export function ThreeTierLanding({
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
-								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
-								paymentFrequencyId: paymentFrequency,
-								isPreSelected: paymentFrequencies[index] === contributionType,
+								billingPeriod: paymentFrequency,
+								isPreSelected: paymentFrequencies[index] === billingPeriod,
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					{contributionType === 'ONE_OFF' && (
+					{billingPeriod === BillingPeriod.OneTime && (
 						<OneOffCard
 							amounts={amounts}
 							currencyGlyph={currencies[currencyId].glyph}
@@ -600,11 +568,11 @@ export function ThreeTierLanding({
 							heading={campaignSettings?.copy.oneTimeHeading}
 						/>
 					)}
-					{contributionType !== 'ONE_OFF' && (
+					{billingPeriod !== BillingPeriod.OneTime && (
 						<ThreeTierCards
 							cardsContent={[tier1Card, tier2Card, tier3Card]}
 							currencyId={currencyId}
-							paymentFrequency={contributionType}
+							billingPeriod={billingPeriod}
 						/>
 					)}
 					{showNewspaperArchiveBanner && <LandingPageBanners />}

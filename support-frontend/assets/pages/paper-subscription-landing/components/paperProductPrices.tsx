@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
@@ -153,7 +154,7 @@ const getPlans = (
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
 			'GB',
-			'Monthly',
+			BillingPeriod.Monthly,
 			fulfilmentOption,
 			productOption,
 		);
@@ -167,7 +168,7 @@ const getPlans = (
 		const nonDiscountedPrice = getProductPrice(
 			productPrices,
 			'GB',
-			'Monthly',
+			BillingPeriod.Monthly,
 			fulfilmentOption,
 			productOption,
 		);

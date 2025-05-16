@@ -5,6 +5,7 @@ import type { PriceCardsProps } from 'components/priceCards/priceCards';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'Checkouts/Price Cards',
@@ -64,6 +65,7 @@ SingleContribution.args = {
 	amounts: [5, 12, 15, 20],
 	selectedAmount: 12,
 	currency: 'GBP',
+	billingPeriod: BillingPeriod.OneTime,
 };
 
 export const RecurringContribution = Template.bind({});
@@ -72,7 +74,7 @@ RecurringContribution.args = {
 	amounts: [5, 12, 15, 20],
 	selectedAmount: 12,
 	currency: 'GBP',
-	paymentInterval: 'month',
+	billingPeriod: BillingPeriod.Monthly,
 };
 
 export const OddAmountOfOptions = Template.bind({});
@@ -81,5 +83,5 @@ OddAmountOfOptions.args = {
 	amounts: [5, 12, 15, 20, 30],
 	selectedAmount: 12,
 	currency: 'GBP',
-	paymentInterval: 'year',
+	billingPeriod: BillingPeriod.Annual,
 };

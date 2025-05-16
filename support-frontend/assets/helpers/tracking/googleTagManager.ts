@@ -17,9 +17,9 @@ type ConversionData = ContributionConversionData | SubscriptionConversionData;
 
 type ContributionConversionData = {
 	value: number;
-	contributionType: ContributionType;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
+	contributionType: ContributionType;
 	productType: ActiveProductKey;
 };
 
@@ -260,9 +260,9 @@ function successfulContributionConversion(
 ): void {
 	const contributionConversionData: ContributionConversionData = {
 		value: amount,
-		contributionType,
 		currency: sourceCurrency,
 		paymentMethod,
+		contributionType,
 		productType: productKey,
 	};
 

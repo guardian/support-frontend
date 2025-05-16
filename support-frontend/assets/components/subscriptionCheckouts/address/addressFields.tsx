@@ -244,7 +244,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 									ratePlan,
 								);
 							urlSearchParams.set('product', productKey);
-							urlSearchParams.set('ratePlan', ratePlanKey);
+							urlSearchParams.set('ratePlan', ratePlanKey as string);
 
 							const location = `${redirectPathname}?${urlSearchParams.toString()}${
 								window.location.hash

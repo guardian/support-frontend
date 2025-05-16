@@ -7,7 +7,7 @@ import type {
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
@@ -65,7 +65,7 @@ export const initialProductState: ProductState = {
 	productType: 'NoProduct',
 	productOption: 'NoProductOptions',
 	fulfilmentOption: 'NoFulfilmentOptions',
-	billingPeriod: 'Monthly',
+	billingPeriod: BillingPeriod.Monthly,
 	productPrices: getGlobal('productPrices') ?? {},
 	allProductPrices: window.guardian.allProductPrices,
 	selectedAmounts: {

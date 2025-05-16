@@ -7,6 +7,7 @@ import type { PaymentFrequencyButtonsProps } from 'components/paymentFrequencyBu
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'LandingPage/Payment Frequency Buttons',
@@ -65,13 +66,11 @@ export const Default = Template.bind({});
 Default.args = {
 	paymentFrequencies: [
 		{
-			paymentFrequencyLabel: 'Monthly',
-			paymentFrequencyId: 'MONTHLY',
+			billingPeriod: BillingPeriod.Monthly,
 			isPreSelected: true,
 		},
 		{
-			paymentFrequencyLabel: 'Annual',
-			paymentFrequencyId: 'ANNUAL',
+			billingPeriod: BillingPeriod.Annual,
 			isPreSelected: false,
 		},
 	],
