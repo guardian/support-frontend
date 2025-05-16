@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { from, palette } from '@guardian/source/foundations';
 import { useEffect, useState } from 'react';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
+import type { ParsedCountdownSettings } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+
 /**
  * This is used during the annual US End of Year Campaign.
  * Beware that this is only accurate to less than a second and is locale specific.
@@ -18,7 +19,7 @@ const outer = css`
 	}
 `;
 
-const container = (colours?: CountdownSetting) => css`
+const container = (colours?: ParsedCountdownSettings) => css`
 	width: 100%;
 	background-color: ${colours ? colours.theme.backgroundColor : '#1e3e72'};
 	color: ${colours ? colours.theme.foregroundColor : palette.neutral[100]};
@@ -72,7 +73,7 @@ const timeLabelStyle = css`
 export type CountdownProps = {
 	showCountdown: boolean;
 	setShowCountdown: (b: boolean) => void;
-	countdownCampaign: CountdownSetting;
+	countdownCampaign: ParsedCountdownSettings;
 };
 
 // create countdown logic
