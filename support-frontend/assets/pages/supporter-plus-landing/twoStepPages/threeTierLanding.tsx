@@ -26,7 +26,6 @@ import {
 	countdownSwitchOn,
 	getCampaignSettings,
 } from 'helpers/campaigns/campaigns';
-import type { CountdownSetting } from 'helpers/campaigns/campaigns';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
 	AUDCountries,
