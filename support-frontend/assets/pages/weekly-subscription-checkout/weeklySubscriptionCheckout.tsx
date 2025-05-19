@@ -24,10 +24,8 @@ import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
-const initialBillingPeriod = toRegularBillingPeriod(
-	getQueryParameter('period'),
-	BillingPeriod.Monthly,
-);
+const initialBillingPeriod =
+	toRegularBillingPeriod(getQueryParameter('period')) ?? BillingPeriod.Monthly;
 const startDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 const store = initReduxForSubscriptions(

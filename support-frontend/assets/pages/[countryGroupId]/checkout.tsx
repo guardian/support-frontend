@@ -159,10 +159,8 @@ export function Checkout({
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
-	const billingPeriod = toRegularBillingPeriod(
-		ratePlan.billingPeriod as string,
-		BillingPeriod.Annual,
-	);
+	const billingPeriod =
+		toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 	let promotion;
 	if (productKey === 'Contribution') {

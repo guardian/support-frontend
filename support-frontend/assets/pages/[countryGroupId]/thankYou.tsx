@@ -111,10 +111,9 @@ export function ThankYou({
 				productKey === 'SupporterPlus' || productKey === 'TierThree'
 					? appConfig.allProductPrices[productKey]
 					: undefined;
-			const billingPeriod = toRegularBillingPeriod(
-				ratePlan.billingPeriod as string,
-				BillingPeriod.Annual,
-			);
+			const billingPeriod =
+				toRegularBillingPeriod(ratePlan.billingPeriod as string) ??
+				BillingPeriod.Annual;
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {
