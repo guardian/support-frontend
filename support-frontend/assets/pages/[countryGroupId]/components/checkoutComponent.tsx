@@ -1235,7 +1235,7 @@ export function CheckoutComponent({
 								isTestUser={isTestUser}
 								finalAmount={finalAmount}
 								currencyKey={currencyKey}
-								ratePlanDescription={ratePlanDescription}
+								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
 								currency={currency}
 							/>

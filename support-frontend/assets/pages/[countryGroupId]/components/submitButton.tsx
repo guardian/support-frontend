@@ -24,9 +24,7 @@ type SubmitButtonProps = {
 	isTestUser: boolean;
 	finalAmount: number;
 	currencyKey: IsoCurrency;
-	ratePlanDescription: {
-		billingPeriod: BillingPeriod;
-	};
+	billingPeriod: BillingPeriod;
 	csrf: string;
 	currency: Currency;
 	formRef: React.RefObject<HTMLFormElement>;
@@ -41,7 +39,7 @@ export function SubmitButton({
 	isTestUser,
 	finalAmount,
 	currencyKey,
-	ratePlanDescription,
+	billingPeriod,
 	csrf,
 	currency,
 }: SubmitButtonProps) {
@@ -95,12 +93,7 @@ export function SubmitButton({
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
-							setupPayPalPayment(
-								finalAmount,
-								currencyKey,
-								ratePlanDescription.billingPeriod,
-								csrf,
-							)
+							setupPayPalPayment(finalAmount, currencyKey, billingPeriod, csrf)
 								.then((token) => {
 									resolve(token);
 								})
@@ -138,7 +131,7 @@ export function SubmitButton({
 					buttonText={`Pay ${simpleFormatAmount(
 						currency,
 						finalAmount,
-					)} per ${getBillingPeriodNoun(ratePlanDescription.billingPeriod)}`}
+					)} per ${getBillingPeriodNoun(billingPeriod)}`}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler
