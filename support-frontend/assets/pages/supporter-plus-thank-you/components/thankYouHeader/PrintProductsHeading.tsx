@@ -38,7 +38,9 @@ export default function PrintProductsHeading({
 		);
 	}
 
-	if (!ratePlanKey) {return;}
+	if (!ratePlanKey) {
+		return;
+	}
 
 	const thankYouText = 'Thank you for supporting our journalism!';
 	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
