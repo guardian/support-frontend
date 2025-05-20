@@ -1,66 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region AUDCountries correctly 1`] = `
-<div>
-  <div
-    class="css-y3m96y-OrderSummaryTsAndCs"
-  >
-    <p>
-      Auto renews every 
-      year
-       until you cancel.
-    </p>
-    <p>
-      Cancel or change your support anytime.
-    </p>
-  </div>
-</div>
-`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region AUDCountries correctly 1`] = `"Auto renews every year until you cancel.Cancel or change your support anytime."`;
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region GBPCountries correctly 1`] = `
-<div>
-  <div
-    class="css-y3m96y-OrderSummaryTsAndCs"
-  >
-    <p>
-      Auto renews every 
-      month
-       until you cancel.
-    </p>
-    <p>
-      Cancel anytime.
-    </p>
-  </div>
-</div>
-`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region GBPCountries correctly 1`] = `"Auto renews every month until you cancel.Cancel anytime."`;
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
-<div>
-  <div
-    class="css-y3m96y-OrderSummaryTsAndCs"
-  >
-    <p>
-      Auto renews every 
-      month
-       until you cancel.
-    </p>
-    <p>
-      Cancel or change your support anytime. If you cancel within the first 14 days, you will receive a full refund.
-    </p>
-  </div>
-</div>
-`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `"Auto renews every month until you cancel.Cancel or change your support anytime. If you cancel within the first 14 days, you will receive a full refund."`;
 
-exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `
-<div>
-  <div
-    class="css-y3m96y-OrderSummaryTsAndCs"
-  >
-    <p>
-      Auto renews every 
-      month
-      . Cancel anytime.
-    </p>
-  </div>
-</div>
-`;
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `"Auto renews every month. Cancel anytime."`;

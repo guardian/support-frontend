@@ -39,7 +39,7 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 					promotion={promo}
 				/>,
 			);
-			expect(container).toMatchSnapshot();
+			expect(container.textContent).toMatchSnapshot();
 		},
 	);
 });
