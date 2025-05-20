@@ -18,6 +18,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	billingPeriodToContributionType,
@@ -140,13 +141,20 @@ export function ContributionsOnlyLanding({
 	geoId,
 }: ContributionsOnlyLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
 	const getInitialBillingPeriod = () => {
-		return ratePlanToBillingPeriod(urlSearchParamsRatePlan ?? 'Monthly');
+		if (urlSearchParams.has('oneTime')) {
+			return BillingPeriod.OneTime;
+		}
+		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
+			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
+		} else {
+			return BillingPeriod.Monthly;
+		}
 	};
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),

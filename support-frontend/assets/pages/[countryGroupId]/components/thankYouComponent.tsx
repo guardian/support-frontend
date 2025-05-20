@@ -110,7 +110,7 @@ export function ThankYouComponent({
 	csrf,
 	payment,
 	productKey = 'Contribution',
-	ratePlanKey,
+	ratePlanKey = 'OneTime',
 	promotion,
 	identityUserType,
 	abParticipations,

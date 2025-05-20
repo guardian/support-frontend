@@ -1,4 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 export enum BillingPeriod {
 	Annual = 'Annual',
@@ -57,7 +58,7 @@ export function getBillingPeriodTitle(
 }
 
 export function ratePlanToBillingPeriod(
-	ratePlanKey: string | undefined,
+	ratePlanKey: ActiveRatePlanKey,
 ): BillingPeriod {
 	switch (ratePlanKey) {
 		case 'Annual':
@@ -65,9 +66,11 @@ export function ratePlanToBillingPeriod(
 		case 'DomesticAnnual':
 		case 'RestOfWorldAnnualV2':
 		case 'DomesticAnnualV2':
+		case 'OneYearGift':
+		case 'V1DeprecatedAnnual':
 			return BillingPeriod.Annual;
-		case 'RestOfWorldQuarterly':
-		case 'DomesticQuarterly':
+		case 'ThreeMonthGift':
+		case 'Quarterly':
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
 		case 'RestOfWorldMonthly':
@@ -79,8 +82,14 @@ export function ratePlanToBillingPeriod(
 		case 'Weekend':
 		case 'Saturday':
 		case 'Sunday':
+		case 'Everyday+':
+		case 'Sixday+':
+		case 'Weekend+':
+		case 'Saturday+':
+		case 'Sunday+':
+		case 'V1DeprecatedMonthly':
 			return BillingPeriod.Monthly;
-		case 'One_Off':
+		case 'OneTime':
 		default:
 			return BillingPeriod.OneTime;
 	}

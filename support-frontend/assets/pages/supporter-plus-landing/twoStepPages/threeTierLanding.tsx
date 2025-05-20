@@ -37,7 +37,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { productCatalog } from 'helpers/productCatalog';
+import { type ActiveRatePlanKey, productCatalog } from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	billingPeriodToContributionType,
@@ -258,7 +258,7 @@ export function ThreeTierLanding({
 }: ThreeTierLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
 	const urlSearchParamsProduct = urlSearchParams.get('product');
-	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
+	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 	const urlSearchParamsPromoCode = urlSearchParams.get('promoCode');
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
@@ -294,7 +294,11 @@ export function ThreeTierLanding({
 		urlSearchParams.has('enableOneTime');
 
 	const getInitialBillingPeriod = () => {
-		return ratePlanToBillingPeriod(urlSearchParamsRatePlan ?? 'Monthly');
+		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
+			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
+		} else {
+			return BillingPeriod.Monthly;
+		}
 	};
 	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
 		getInitialBillingPeriod(),
