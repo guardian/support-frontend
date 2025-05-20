@@ -21,9 +21,9 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
-	type BillingPeriod,
 	getBillingPeriodNoun,
 	getBillingPeriodTitle,
+	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
@@ -111,7 +111,6 @@ export function FooterTsAndCs({
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	billingPeriod: BillingPeriod;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -119,11 +118,11 @@ export interface PaymentTsAndCsProps {
 export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
-	billingPeriod,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
 	const billingPeriodPlural =
 		getBillingPeriodTitle(billingPeriod).toLowerCase();

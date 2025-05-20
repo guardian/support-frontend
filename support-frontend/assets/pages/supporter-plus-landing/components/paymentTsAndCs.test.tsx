@@ -4,7 +4,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
@@ -26,52 +25,33 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 
 	type PaymentProductTestParams = [
 		ActiveProductKey,
-		BillingPeriod,
 		ActiveRatePlanKey,
 		CountryGroupId,
 		number,
 	];
 
 	const paymentProductKeys: PaymentProductTestParams[] = [
-		['GuardianAdLite', BillingPeriod.Annual, 'Annual', 'GBPCountries', 0],
-		[
-			'DigitalSubscription',
-			BillingPeriod.Monthly,
-			'Monthly',
-			'GBPCountries',
-			0,
-		],
-		['Contribution', BillingPeriod.Annual, 'Annual', 'AUDCountries', 0],
-		['SupporterPlus', BillingPeriod.Monthly, 'Monthly', 'GBPCountries', 12],
-		['TierThree', BillingPeriod.Monthly, 'Monthly', 'UnitedStates', 45],
-		['HomeDelivery', BillingPeriod.Monthly, 'Monthly', 'GBPCountries', 0],
-		['NationalDelivery', BillingPeriod.Monthly, 'Monthly', 'GBPCountries', 0],
-		['SubscriptionCard', BillingPeriod.Monthly, 'Monthly', 'GBPCountries', 0],
-		[
-			'GuardianWeeklyDomestic',
-			BillingPeriod.Monthly,
-			'Monthly',
-			'GBPCountries',
-			0,
-		],
-		[
-			'GuardianWeeklyRestOfWorld',
-			BillingPeriod.Annual,
-			'Annual',
-			'International',
-			0,
-		],
+		['GuardianAdLite', 'Annual', 'GBPCountries', 0],
+		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
+		['Contribution', 'Annual', 'AUDCountries', 0],
+		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
+		['TierThree', 'Monthly', 'UnitedStates', 45],
+		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
+		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
+		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
+		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
+		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
-		(paymentProductKey, billingPeriod, ratePlanKey, countryGroupId, amount) => {
+		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				billingPeriod === BillingPeriod.Monthly &&
+				ratePlanKey === 'Monthly' &&
 				countryGroupId === 'UnitedStates'
 					? promotionTierThreeUnitedStatesMonthly
 					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
-					  billingPeriod === BillingPeriod.Annual &&
+					  ratePlanKey === 'Annual' &&
 					  countryGroupId === 'UnitedStates'
 					? promotionGuardianWeeklyUnitedStatesAnnual
 					: undefined;
@@ -79,7 +59,6 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 				<PaymentTsAndCs
 					productKey={paymentProductKey}
 					ratePlanKey={ratePlanKey}
-					billingPeriod={billingPeriod}
 					countryGroupId={countryGroupId}
 					thresholdAmount={amount}
 					promotion={promo}
