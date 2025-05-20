@@ -167,7 +167,10 @@ export function ContributionsOnlyLanding({
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setBillingPeriod(paymentFrequencies[buttonIndex] as BillingPeriod);
+		const billingPeriod = paymentFrequencies[buttonIndex];
+		if (billingPeriod) {
+			setBillingPeriod(billingPeriod);
+		}
 	};
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
