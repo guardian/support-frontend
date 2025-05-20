@@ -12,7 +12,7 @@ import type {
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
 import {
 	BillingPeriod,
-	type RegularBillingPeriod,
+	type RecurringBillingPeriod,
 } from './productPrice/billingPeriods';
 
 export type { ActiveProductKey };
@@ -78,7 +78,7 @@ export type ProductDescription = {
 	ratePlans: Record<
 		string,
 		{
-			billingPeriod: RegularBillingPeriod;
+			billingPeriod: RecurringBillingPeriod;
 			label?: string;
 			hideSimilarProductsConsent?: boolean;
 		}

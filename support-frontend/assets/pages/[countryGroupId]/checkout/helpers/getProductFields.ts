@@ -5,7 +5,7 @@ import type {
 	ActiveRatePlanKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
-import type { RegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { RecurringBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import { getProductOptionFromProductAndRatePlan } from 'helpers/productPrice/productOptions';
 import { logException } from 'helpers/utilities/logger';
@@ -59,7 +59,7 @@ export const getProductFields = ({
 				productType: 'GuardianAdLite',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 			};
 
 		case 'TierThree':
@@ -67,7 +67,7 @@ export const getProductFields = ({
 				productType: 'TierThree',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 				fulfilmentOptions: fulfilmentOption,
 				productOptions: productOption,
 			};
@@ -77,7 +77,7 @@ export const getProductFields = ({
 				productType: 'Contribution',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 				amount: finalAmount,
 			};
 
@@ -86,7 +86,7 @@ export const getProductFields = ({
 				productType: 'SupporterPlus',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *
@@ -106,7 +106,7 @@ export const getProductFields = ({
 				currency: currencyKey,
 				fulfilmentOptions: 'Domestic',
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 			};
 
 		case 'GuardianWeeklyRestOfWorld':
@@ -115,7 +115,7 @@ export const getProductFields = ({
 				fulfilmentOptions: 'RestOfWorld',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 			};
 
 		case 'DigitalSubscription':
@@ -123,7 +123,7 @@ export const getProductFields = ({
 				productType: 'DigitalPack',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 				readerType: 'Direct',
 			};
 
@@ -138,7 +138,7 @@ export const getProductFields = ({
 				productType: 'Paper',
 				currency: currencyKey,
 				billingPeriod:
-					ratePlanDescription.billingPeriod as RegularBillingPeriod,
+					ratePlanDescription.billingPeriod as RecurringBillingPeriod,
 				fulfilmentOptions: finalFulfilmentOption,
 				productOptions: productOption,
 				deliveryAgent,
