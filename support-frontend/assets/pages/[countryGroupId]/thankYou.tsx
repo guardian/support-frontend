@@ -112,8 +112,7 @@ export function ThankYou({
 					? appConfig.allProductPrices[productKey]
 					: undefined;
 			const billingPeriod =
-				toRegularBillingPeriod(ratePlan.billingPeriod as string) ??
-				BillingPeriod.Annual;
+				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {
