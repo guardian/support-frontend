@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region Annual correctly 1`] = `
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region AUDCountries correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -17,7 +17,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Cont
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region Monthly correctly 1`] = `
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region GBPCountries correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -34,7 +34,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Guar
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
@@ -51,18 +51,11 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Supp
 </div>
 `;
 
-exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `
+exports[`orderSummaryTs&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `
 <div>
   <div
     class="css-y3m96y-OrderSummaryTsAndCs"
   >
-    <p>
-      You’ll pay
-       
-      $37/month for the first 12 months, then $45/month
-       
-      afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian.
-    </p>
     <p>
       Auto renews every 
       month

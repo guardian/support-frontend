@@ -622,7 +622,7 @@ export function CheckoutComponent({
 						tsAndCs={
 							<OrderSummaryTsAndCs
 								productKey={productKey}
-								billingPeriod={billingPeriod}
+								ratePlanKey={ratePlanKey}
 								countryGroupId={countryGroupId}
 								thresholdAmount={thresholdAmount}
 								promotion={promotion}

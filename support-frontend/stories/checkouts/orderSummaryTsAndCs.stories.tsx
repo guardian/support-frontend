@@ -2,7 +2,6 @@ import {
 	OrderSummaryTsAndCs,
 	OrderSummaryTsAndCsProps,
 } from 'components/orderSummary/orderSummaryTsAndCs';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 
 export default {
 	title: 'Checkouts/Ts&Cs Order Summary',
@@ -20,21 +19,21 @@ Template.args = {} as Omit<OrderSummaryTsAndCsProps, ''>;
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
-	billingPeriod: BillingPeriod.Monthly,
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
-	billingPeriod: BillingPeriod.Annual,
+	ratePlanKey: 'Annual',
 	countryGroupId: 'AUDCountries',
 };
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
-	billingPeriod: BillingPeriod.Monthly,
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
 };
@@ -42,7 +41,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
-	billingPeriod: BillingPeriod.Monthly,
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
 	promotion: {
