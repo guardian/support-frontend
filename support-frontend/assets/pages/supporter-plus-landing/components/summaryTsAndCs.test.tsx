@@ -14,7 +14,7 @@ jest.mock('helpers/utilities/dateFormatting', () => ({
 
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
-		productKey               | billingPeriod
+		productKey               | activeRatePlanKey
 		${'Contribution'}        | ${BillingPeriod.Monthly}
 		${'Contribution'}        | ${BillingPeriod.Annual}
 		${'SupporterPlus'}       | ${BillingPeriod.Monthly}
@@ -27,12 +27,11 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		${'DigitalSubscription'} | ${BillingPeriod.Monthly}
 	`(
 		`summaryTs&Cs for $productKey With billingPeriod $billingPeriod renders correctly`,
-		({ productKey, billingPeriod }) => {
+		({ productKey, activeRatePlanKey }) => {
 			const { container } = render(
 				<SummaryTsAndCs
-					billingPeriod={billingPeriod as BillingPeriod}
 					productKey={productKey as ActiveProductKey}
-					ratePlanKey={billingPeriod as ActiveRatePlanKey}
+					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
 					currency={'GBP'}
 					amount={0}
 				/>,

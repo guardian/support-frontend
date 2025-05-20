@@ -1,4 +1,3 @@
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	SummaryTsAndCs,
 	SummaryTsAndCsProps,
@@ -21,7 +20,6 @@ export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
 	ratePlanKey: 'Monthly',
-	billingPeriod: BillingPeriod.Monthly,
 	currency: 'GBP',
 	amount: 0,
 };
@@ -30,7 +28,6 @@ export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'Monthly',
-	billingPeriod: BillingPeriod.Monthly,
 	currency: 'USD',
 	amount: 5,
 };
@@ -39,7 +36,6 @@ export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
-	billingPeriod: BillingPeriod.Monthly,
 	currency: 'GBP',
 	amount: 12,
 };
@@ -48,7 +44,6 @@ export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
-	billingPeriod: BillingPeriod.Monthly,
 	currency: 'GBP',
 	amount: 27,
 };

@@ -3,7 +3,7 @@
 exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Contribution for region Annual correctly 1`] = `
 <div>
   <div
-    class="css-1kz5wx7"
+    class="css-y3m96y-OrderSummaryTsAndCs"
   >
     <p>
       Auto renews every 
@@ -20,7 +20,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Cont
 exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product GuardianAdLite for region Monthly correctly 1`] = `
 <div>
   <div
-    class="css-1kz5wx7"
+    class="css-y3m96y-OrderSummaryTsAndCs"
   >
     <p>
       Auto renews every 
@@ -37,7 +37,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Guar
 exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product SupporterPlus for region Monthly correctly 1`] = `
 <div>
   <div
-    class="css-1kz5wx7"
+    class="css-y3m96y-OrderSummaryTsAndCs"
   >
     <p>
       Auto renews every 
@@ -54,7 +54,7 @@ exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product Supp
 exports[`Payment Ts&Cs Snapshot comparison orderSummaryTs&Cs render product TierThree for region Monthly correctly 1`] = `
 <div>
   <div
-    class="css-1kz5wx7"
+    class="css-y3m96y-OrderSummaryTsAndCs"
   >
     <p>
       You’ll pay

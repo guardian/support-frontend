@@ -14,6 +14,7 @@ import { productCatalogDescription } from 'helpers/productCatalog';
 import {
 	BillingPeriod,
 	getBillingPeriodNoun,
+	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
@@ -35,17 +36,16 @@ const containerSummaryTsCs = css`
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	billingPeriod: BillingPeriod;
 	currency: IsoCurrency;
 	amount: number;
 }
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
-	billingPeriod,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const today = new Date();
 	const renewalDateStart = `on the ${getDateWithOrdinal(today)} day of `;

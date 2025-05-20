@@ -1217,7 +1217,6 @@ export function CheckoutComponent({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
-							billingPeriod={billingPeriod}
 							currency={currencyKey}
 							amount={originalAmount}
 						/>
