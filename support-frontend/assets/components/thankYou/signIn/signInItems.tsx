@@ -62,8 +62,9 @@ type CreateSignInUrlResponse = {
 export const signInHeader = (
 	isTier3?: boolean,
 	observerPrint?: ObserverPrint,
+	isPrintProduct?: boolean,
 ) => {
-	if (observerPrint) {
+	if (observerPrint ?? isPrintProduct) {
 		return 'Sign in to access to your account';
 	}
 	if (isTier3) {
@@ -75,9 +76,11 @@ export const signInHeader = (
 export function SignInBodyCopy({
 	isTierThree,
 	observerPrint,
+	isPrintProduct,
 }: {
 	isTierThree?: boolean;
 	observerPrint?: ObserverPrint;
+	isPrintProduct?: boolean;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -86,7 +89,9 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	const isTierThreeOrObserver = Boolean(observerPrint ?? isTierThree);
+	const isTierThreeOrObserverOrPrintProduct =
+		observerPrint ?? isTierThree ?? isPrintProduct;
+
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
 	const lowerCopy = `Make sure you sign in on each of the devices you use to read our journalism – either today or next time you use them.`;
@@ -95,10 +100,10 @@ export function SignInBodyCopy({
 
 	return (
 		<>
-			{isTierThreeOrObserver && (
-				<p>{isTierThree ? upperCopyTier3 : observerCopy}</p>
+			{isTierThreeOrObserverOrPrintProduct && (
+				<p>{isTierThree ?? isPrintProduct ? upperCopyTier3 : observerCopy}</p>
 			)}
-			{!isTierThreeOrObserver && (
+			{!isTierThreeOrObserverOrPrintProduct && (
 				<>
 					<p>
 						<span css={hideAfterTablet}>

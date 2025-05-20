@@ -29,6 +29,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/isPrintProduct';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -134,6 +135,7 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
+	const printProduct = isPrintProduct(productKey);
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -250,11 +252,12 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, observerPrint),
+			header: signInHeader(isTierThree, observerPrint, printProduct),
 			bodyCopy: (
 				<SignInBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
+					isPrintProduct={printProduct}
 				/>
 			),
 			ctas: (
@@ -274,6 +277,7 @@ export const getThankYouModuleData = (
 				<SignUpBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
+					isPrintProduct={printProduct}
 				/>
 			),
 			ctas: null,
@@ -344,6 +348,7 @@ export const getThankYouModuleData = (
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
+					isPrintProduct={printProduct}
 				/>
 			),
 			ctas: null,

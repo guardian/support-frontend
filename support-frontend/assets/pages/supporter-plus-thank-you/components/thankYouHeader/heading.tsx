@@ -16,7 +16,8 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { PrintProductsHeading } from './PrintProductsHeading';
+import PrintProductsHeading from './PrintProductsHeading';
+import { isPrintProduct } from './utils/isPrintProduct';
 
 const supCss = css`
 	font-size: 60%;
@@ -213,21 +214,15 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const printProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-	const isPrintProduct = printProductsKeys.includes(productKey);
+
+	const printProduct = isPrintProduct(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
 
 	// Print Products Header
-	if (isPrintProduct) {
+	if (printProduct) {
 		return (
 			<h1 css={longHeaderTitleText}>
 				<PrintProductsHeading

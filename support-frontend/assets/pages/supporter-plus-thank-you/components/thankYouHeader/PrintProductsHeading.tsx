@@ -1,5 +1,5 @@
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import { css } from '@emotion/react';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 const yellowHighlightText = css`
 	background-color: #ffe500;
@@ -10,7 +10,7 @@ export function YellowHighlightText({ text }: { text: string }) {
 	return <span css={yellowHighlightText}>{text}</span>;
 }
 
-export function PrintProductsHeading({
+export default function PrintProductsHeading({
 	isObserverPrint,
 	ratePlanKey,
 	isPending,
@@ -18,7 +18,7 @@ export function PrintProductsHeading({
 	isObserverPrint: boolean;
 	ratePlanKey?: ActiveRatePlanKey;
 	isPending: boolean;
-}) {
+}): JSX.Element {
 	if (isObserverPrint) {
 		const statusText = isPending ? (
 			<>
@@ -38,24 +38,20 @@ export function PrintProductsHeading({
 		);
 	}
 
-	if (!ratePlanKey) return;
+	if (!ratePlanKey) {return;}
 
 	const thankYouText = 'Thank you for supporting our journalism!';
 	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
 		ratePlanKey,
 	);
 	if (guardianWeekly) {
-		const statusText = isPending ? (
-			<>
-				Your subscription to <YellowHighlightText text="the Guardian Weekly" />{' '}
-				is being processed
-			</>
-		) : (
+		const statusText = (
 			<>
 				You have now subscribed to{' '}
 				<YellowHighlightText text="the Guardian Weekly" />
 			</>
 		);
+
 		return (
 			<>
 				{thankYouText}

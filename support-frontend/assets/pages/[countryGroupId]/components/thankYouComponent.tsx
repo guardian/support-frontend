@@ -46,6 +46,7 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/isPrintProduct';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
@@ -208,6 +209,7 @@ export function ThankYouComponent({
 		) {
 			return ObserverPrint.SubscriptionCard;
 		}
+
 		return undefined;
 	};
 	const observerPrint = getObserver();
@@ -223,11 +225,15 @@ export function ThankYouComponent({
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
+	const ligitimateInterest = ['VariantA', 'VariantB'].includes(
+		abParticipations.similarProductsConsent ?? '',
+	);
 
+	const printProduct = isPrintProduct(productKey);
 	// Clarify Guardian Ad-lite thankyou page states
-	const isNotRegistered = identityUserType === 'new';
-	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
-	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
+	const guestUser = identityUserType === 'new';
+	const signedInUser = !guestUser && isSignedIn;
+	const userNotSignedIn = !guestUser && !isSignedIn;
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -285,11 +291,13 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite && !isGuardianPrint,
+			(printProduct && guestUser) ||
+				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			isRegisteredAndNotSignedIn && !isGuardianAdLite && !isGuardianPrint,
+			(userNotSignedIn && !isGuardianAdLite && !isGuardianPrint) ||
+				(printProduct && userNotSignedIn),
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
@@ -297,7 +305,10 @@ export function ThankYouComponent({
 			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTierThree || isGuardianPrint, 'subscriptionStart'),
+		...maybeThankYouModule(
+			(isTierThree || isGuardianPrint) && !printProduct,
+			'subscriptionStart',
+		),
 		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
@@ -305,7 +316,8 @@ export function ThankYouComponent({
 				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
 					!isGuardianAdLite &&
-					!observerPrint),
+					!observerPrint &&
+					!printProduct),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
@@ -314,21 +326,24 @@ export function ThankYouComponent({
 			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite || !!observerPrint, 'whatNext'), // All
 		...maybeThankYouModule(
-			isGuardianAdLite && isRegisteredAndNotSignedIn,
+			isGuardianAdLite || isPrint || !!observerPrint,
+			'whatNext',
+		), // All
+		...maybeThankYouModule(
+			isGuardianAdLite && userNotSignedIn && printProduct,
 			'signInToActivate',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && isRegisteredAndSignedIn,
+			isGuardianAdLite && signedInUser,
 			'reminderToSignIn',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && isNotRegistered,
+			isGuardianAdLite && guestUser,
 			'reminderToActivateSubscription',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && (isRegisteredAndSignedIn || isNotRegistered),
+			isGuardianAdLite && (signedInUser || guestUser),
 			'headlineReturn',
 		),
 	];
@@ -360,6 +375,7 @@ export function ThankYouComponent({
 							observerPrint={observerPrint}
 							paymentStatus={order.status}
 							startDate={startDate}
+							ligitimateInterest={ligitimateInterest}
 						/>
 					</div>
 

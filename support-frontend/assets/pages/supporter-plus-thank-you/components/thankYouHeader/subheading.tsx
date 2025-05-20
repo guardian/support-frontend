@@ -7,6 +7,7 @@ import {
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 interface SubheadingProps {
@@ -18,6 +19,7 @@ interface SubheadingProps {
 	observerPrint?: ObserverPrint;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
+	legitimateInterest: boolean;
 }
 
 function MarketingCopy({
@@ -120,6 +122,25 @@ const getSubHeadingCopy = (
 	);
 };
 
+function LegitimateInterest({
+	startDate,
+}: {
+	startDate?: string;
+}): JSX.Element {
+	const publishDate = startDate && formatUserDate(new Date(startDate));
+	return (
+		<>
+			{startDate && `Your first issue will be published on ${publishDate}.`}
+			<p>
+				Your payment is being processed. Look out for your exclusive newsletter
+				from our supporter editor, plus emails to help you manage and get the
+				most out of your support. Adjust your email preferences at any time via{' '}
+				<a href="https://manage.theguardian.com/">your account</a>
+			</p>
+		</>
+	);
+}
+
 function Subheading({
 	productKey,
 	ratePlanKey,
@@ -129,6 +150,7 @@ function Subheading({
 	identityUserType,
 	paymentStatus,
 	startDate,
+	legitimateInterest,
 }: SubheadingProps): JSX.Element {
 	const paperProductsKeys: ActiveProductKey[] = [
 		'NationalDelivery',
@@ -147,6 +169,10 @@ function Subheading({
 		observerPrint,
 		startDate,
 	);
+
+	if (legitimateInterest) {
+		return <LegitimateInterest startDate={startDate} />;
+	}
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
