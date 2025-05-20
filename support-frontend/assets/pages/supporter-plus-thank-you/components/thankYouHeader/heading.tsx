@@ -144,9 +144,6 @@ const tier3lineBreak = css`
 		display: inline-block;
 	}
 `;
-export const printlineBreak = css`
-	display: inline-block;
-`;
 
 const yellowHighlightText = css`
 	background-color: #ffe500;

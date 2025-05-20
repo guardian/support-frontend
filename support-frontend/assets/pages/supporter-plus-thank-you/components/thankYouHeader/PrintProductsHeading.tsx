@@ -6,7 +6,7 @@ const yellowHighlightText = css`
 	padding: 0 5px;
 `;
 
-export function YellowHighlightText({ text }: { text: string }) {
+function YellowHighlightText({ text }: { text: string }) {
 	return <span css={yellowHighlightText}>{text}</span>;
 }
 
