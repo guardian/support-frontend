@@ -148,9 +148,10 @@ export function ThankYouComponent({
 			? 'Stripe'
 			: order.paymentMethod;
 
+	// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
 	successfulContributionConversion(
 		payment.finalAmount, // This is the final amount after discounts
-		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY', // ToDo : Quarterly's temporarily marked as monthly to
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
 		currencyKey,
 		paymentMethod,
 		productKey,

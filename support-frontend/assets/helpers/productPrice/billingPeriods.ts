@@ -88,9 +88,9 @@ export function ratePlanToBillingPeriod(
 		case 'Saturday+':
 		case 'Sunday+':
 		case 'V1DeprecatedMonthly':
+		case 'GuardianPatron':
 			return BillingPeriod.Monthly;
 		case 'OneTime':
-		default:
 			return BillingPeriod.OneTime;
 	}
 }
