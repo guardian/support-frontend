@@ -321,6 +321,7 @@ export function ThreeTierLanding({
 		countryGroupId,
 		window.guardian.settings,
 	);
+	// unused quarterly would default to monthly.
 	const recurringAmount = amounts.amountsCardData[
 		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY'
 	].amounts[0] as number;
