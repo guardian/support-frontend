@@ -3,15 +3,15 @@ import { space } from '@guardian/source/foundations';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
 	type ActiveProductKey,
+	type ActiveRatePlanKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 interface SubheadingProps {
 	productKey: ActiveProductKey;
-	billingPeriod: BillingPeriod;
+	ratePlanKey: ActiveRatePlanKey;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
@@ -37,7 +37,7 @@ const pendingCopy = () => {
 const getSubHeadingCopy = (
 	productKey: ActiveProductKey,
 	amountIsAboveThreshold: boolean,
-	billingPeriod: BillingPeriod,
+	ratePlanKey: ActiveRatePlanKey,
 	isSignedIn: boolean,
 	identityUserType: UserType,
 	observerPrint?: ObserverPrint,
@@ -88,7 +88,7 @@ const getSubHeadingCopy = (
 	};
 
 	return (
-		billingPeriod !== BillingPeriod.OneTime &&
+		ratePlanKey !== 'OneTime' &&
 		recurringCopy(amountIsAboveThreshold)[
 			identityUserType === 'current' || isSignedIn
 				? 'isSignedIn'
@@ -99,7 +99,7 @@ const getSubHeadingCopy = (
 
 function Subheading({
 	productKey,
-	billingPeriod,
+	ratePlanKey,
 	amountIsAboveThreshold,
 	isSignedIn,
 	observerPrint,
@@ -118,7 +118,7 @@ function Subheading({
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		amountIsAboveThreshold,
-		billingPeriod,
+		ratePlanKey,
 		isSignedIn,
 		identityUserType,
 		observerPrint,
@@ -132,7 +132,7 @@ function Subheading({
 			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
 					<span>
-						{billingPeriod === BillingPeriod.OneTime
+						{ratePlanKey === 'OneTime'
 							? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
 							: isTier3
 							? 'You can adjust your email preferences and opt out anytime via '
@@ -143,7 +143,7 @@ function Subheading({
 					</span>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
-						billingPeriod !== BillingPeriod.OneTime && (
+						ratePlanKey !== 'OneTime' && (
 							<span
 								css={css`
 									font-weight: bold;

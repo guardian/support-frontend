@@ -6,7 +6,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
@@ -36,9 +35,9 @@ const headerSupportingText = css`
 type ThankYouHeaderProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
-	billingPeriod: BillingPeriod;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	amountIsAboveThreshold: boolean;
@@ -46,7 +45,6 @@ type ThankYouHeaderProps = {
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
@@ -55,9 +53,9 @@ type ThankYouHeaderProps = {
 function ThankYouHeader({
 	name,
 	productKey,
+	ratePlanKey,
 	showDirectDebitMessage,
 	isOneOffPayPal,
-	billingPeriod,
 	amount,
 	currency,
 	amountIsAboveThreshold,
@@ -65,7 +63,6 @@ function ThankYouHeader({
 	identityUserType,
 	observerPrint,
 	startDate,
-	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
@@ -79,7 +76,6 @@ function ThankYouHeader({
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}
-				billingPeriod={billingPeriod}
 				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
@@ -91,7 +87,7 @@ function ThankYouHeader({
 				)}
 				<Subheading
 					productKey={productKey}
-					billingPeriod={billingPeriod}
+					ratePlanKey={ratePlanKey}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}

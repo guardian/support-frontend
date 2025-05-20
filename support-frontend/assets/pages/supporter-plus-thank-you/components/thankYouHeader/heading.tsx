@@ -11,7 +11,10 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	BillingPeriod,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const supCss = css`
@@ -188,9 +191,8 @@ type HeadingProps = {
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	billingPeriod: BillingPeriod;
 	isObserverPrint: boolean;
-	ratePlanKey?: ActiveRatePlanKey;
+	ratePlanKey: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
@@ -200,7 +202,6 @@ function Heading({
 	isOneOffPayPal,
 	amount,
 	currency,
-	billingPeriod,
 	isObserverPrint,
 	ratePlanKey,
 	paymentStatus,
@@ -333,7 +334,7 @@ function Heading({
 		);
 	}
 
-	switch (billingPeriod) {
+	switch (ratePlanToBillingPeriod(ratePlanKey)) {
 		case BillingPeriod.OneTime:
 			return (
 				<h1 css={headerTitleText}>

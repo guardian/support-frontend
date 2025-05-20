@@ -351,7 +351,6 @@ export function ThankYouComponent({
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							billingPeriod={billingPeriod}
 							amountIsAboveThreshold={isSupporterPlus}
 							isOneOffPayPal={isOneOffPayPal}
 							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
