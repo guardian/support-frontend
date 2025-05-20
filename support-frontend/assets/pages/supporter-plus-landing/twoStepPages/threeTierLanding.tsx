@@ -293,25 +293,26 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
-	const getInitialBillingPeriod = () => {
+	const getInitialRatePlanKey = () => {
 		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
-			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
+			return ratePlanParam as ActiveRatePlanKey;
 		} else {
-			return BillingPeriod.Monthly;
+			return 'Monthly';
 		}
 	};
-	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
-		getInitialBillingPeriod(),
+	const [ratePlanKey, setRatePlanKey] = useState<ActiveRatePlanKey>(
+		getInitialRatePlanKey(),
 	);
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 
-	const paymentFrequencies: BillingPeriod[] = enableSingleContributionsTab
-		? [BillingPeriod.OneTime, BillingPeriod.Monthly, BillingPeriod.Annual]
-		: [BillingPeriod.Monthly, BillingPeriod.Annual];
+	const paymentFrequencies: ActiveRatePlanKey[] = enableSingleContributionsTab
+		? ['OneTime', 'Monthly', 'Annual']
+		: ['Monthly', 'Annual'];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		const billingPeriod = paymentFrequencies[buttonIndex];
-		if (billingPeriod) {
-			setBillingPeriod(billingPeriod);
+		const ratePlanKey = paymentFrequencies[buttonIndex];
+		if (ratePlanKey) {
+			setRatePlanKey(ratePlanKey);
 		}
 	};
 
@@ -330,7 +331,7 @@ export function ThreeTierLanding({
 	].amounts[0] as number;
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlan: billingPeriod,
+		ratePlan: ratePlanKey,
 		contribution: recurringAmount.toString(),
 	});
 	const tier1Link = `checkout?${tier1UrlParams.toString()}`;
@@ -349,15 +350,15 @@ export function ThreeTierLanding({
 		?.pricing[currencyId] as number;
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: billingPeriod,
+		ratePlan: ratePlanKey,
 	});
-	const promotionTier2 = getPromotion(
+	const tier2Promotion = getPromotion(
 		window.guardian.allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
-	if (promotionTier2) {
-		tier2UrlParams.set('promoCode', promotionTier2.promoCode);
+	if (tier2Promotion) {
+		tier2UrlParams.set('promoCode', tier2Promotion.promoCode);
 	}
 	const tier2Url = `checkout?${tier2UrlParams.toString()}`;
 	const tier2Card: CardContent = {
@@ -365,10 +366,10 @@ export function ThreeTierLanding({
 		price: tier2Pricing,
 		link: tier2Url,
 		/** The promotion from the querystring is for the SupporterPlus product only */
-		promotion: promotionTier2,
+		promotion: tier2Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === 'SupporterPlus' ||
-			isCardUserSelected(tier2Pricing, promotionTier2?.discount?.amount),
+			isCardUserSelected(tier2Pricing, tier2Promotion?.discount?.amount),
 		...settings.products.SupporterPlus,
 	};
 
@@ -388,27 +389,18 @@ export function ThreeTierLanding({
 	 *
 	 * This should only exist as long as the Tier three hack is in place.
 	 */
-	const getTier3RatePlan = () => {
-		const ratePlan =
-			countryGroupId === 'International'
-				? billingPeriod === BillingPeriod.Annual
-					? 'RestOfWorldAnnual'
-					: 'RestOfWorldMonthly'
-				: billingPeriod === BillingPeriod.Annual
-				? 'DomesticAnnual'
-				: 'DomesticMonthly';
+	const tier3RatePlanKey = () => {
 		return abParticipations.newspaperArchiveBenefit === undefined
-			? ratePlan
-			: `${ratePlan}V2`;
+			? ratePlanKey
+			: `${ratePlanKey}V2`;
 	};
-	const tier3RatePlan = getTier3RatePlan();
-	const tier3Pricing = productCatalog.TierThree?.ratePlans[tier3RatePlan]
+	const tier3Price = productCatalog.TierThree?.ratePlans[tier3RatePlanKey()]
 		?.pricing[currencyId] as number;
 	const tier3UrlParams = new URLSearchParams({
 		product: 'TierThree',
-		ratePlan: tier3RatePlan,
+		ratePlan: tier3RatePlanKey(),
 	});
-	const promotionTier3 = getPromotion(
+	const tier3Promotion = getPromotion(
 		window.guardian.allProductPrices.TierThree,
 		countryId,
 		billingPeriod,
@@ -418,17 +410,17 @@ export function ThreeTierLanding({
 			? 'NoProductOptions'
 			: 'NewspaperArchive',
 	);
-	if (promotionTier3) {
-		tier3UrlParams.set('promoCode', promotionTier3.promoCode);
+	if (tier3Promotion) {
+		tier3UrlParams.set('promoCode', tier3Promotion.promoCode);
 	}
 	const tier3Card: CardContent = {
 		product: 'TierThree',
-		price: tier3Pricing,
+		price: tier3Price,
 		link: `checkout?${tier3UrlParams.toString()}`,
-		promotion: promotionTier3,
+		promotion: tier3Promotion,
 		isUserSelected:
 			urlSearchParamsProduct === 'TierThree' ||
-			isCardUserSelected(tier3Pricing, promotionTier3?.discount?.amount),
+			isCardUserSelected(tier3Price, tier3Promotion?.discount?.amount),
 		...settings.products.TierThree,
 	};
 
@@ -488,13 +480,13 @@ export function ThreeTierLanding({
 									planCost: getPlanCost(
 										tier2Card.price,
 										billingPeriod,
-										promotionTier2,
+										tier2Promotion,
 									),
-									starts: promotionTier2?.starts
-										? new Date(promotionTier2.starts)
+									starts: tier2Promotion?.starts
+										? new Date(tier2Promotion.starts)
 										: undefined,
-									expires: promotionTier2?.expires
-										? new Date(promotionTier2.expires)
+									expires: tier2Promotion?.expires
+										? new Date(tier2Promotion.expires)
 										: undefined,
 								},
 								{
@@ -502,13 +494,13 @@ export function ThreeTierLanding({
 									planCost: getPlanCost(
 										tier3Card.price,
 										billingPeriod,
-										promotionTier3,
+										tier3Promotion,
 									),
-									starts: promotionTier3?.starts
-										? new Date(promotionTier3.starts)
+									starts: tier3Promotion?.starts
+										? new Date(tier3Promotion.starts)
 										: undefined,
-									expires: promotionTier3?.expires
-										? new Date(promotionTier3.expires)
+									expires: tier3Promotion?.expires
+										? new Date(tier3Promotion.expires)
 										: undefined,
 								},
 							]}
@@ -559,15 +551,15 @@ export function ThreeTierLanding({
 					)}
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod: paymentFrequency,
+							(ratePlanKey, index) => ({
+								billingPeriod: ratePlanToBillingPeriod(ratePlanKey),
 								isPreSelected: paymentFrequencies[index] === billingPeriod,
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
-					{billingPeriod === BillingPeriod.OneTime && (
+					{ratePlanKey === 'OneTime' && (
 						<OneOffCard
 							amounts={amounts}
 							currencyGlyph={currencies[currencyId].glyph}
@@ -576,7 +568,7 @@ export function ThreeTierLanding({
 							heading={campaignSettings?.copy.oneTimeHeading}
 						/>
 					)}
-					{billingPeriod !== BillingPeriod.OneTime && (
+					{ratePlanKey !== 'OneTime' && (
 						<ThreeTierCards
 							cardsContent={[tier1Card, tier2Card, tier3Card]}
 							currencyId={currencyId}
