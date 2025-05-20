@@ -18,7 +18,7 @@ export default function PrintProductsHeading({
 	isObserverPrint: boolean;
 	ratePlanKey?: ActiveRatePlanKey;
 	isPending: boolean;
-}): JSX.Element {
+}) {
 	if (isObserverPrint) {
 		const statusText = isPending ? (
 			<>
@@ -39,7 +39,7 @@ export default function PrintProductsHeading({
 	}
 
 	if (!ratePlanKey) {
-		return;
+		return <></>;
 	}
 
 	const thankYouText = 'Thank you for supporting our journalism!';
