@@ -294,7 +294,7 @@ export function ThreeTierLanding({
 		urlSearchParams.has('enableOneTime');
 
 	const getInitialRatePlanKey = () => {
-		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
+		if (ratePlanParam === 'Annual') {
 			return ratePlanParam as ActiveRatePlanKey;
 		} else {
 			return 'Monthly';
