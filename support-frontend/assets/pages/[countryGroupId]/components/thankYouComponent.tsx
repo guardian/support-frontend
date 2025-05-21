@@ -46,7 +46,7 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { isguardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
@@ -198,7 +198,7 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
-	const isGuardianWeekly = isguardianWeeklyProduct(productKey);
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const getObserver = (): ObserverPrint | undefined => {
 		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
@@ -225,9 +225,6 @@ export function ThankYouComponent({
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
-	);
-	const ligitimateInterest = ['VariantA', 'VariantB'].includes(
-		abParticipations.similarProductsConsent ?? '',
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
@@ -376,7 +373,6 @@ export function ThankYouComponent({
 							observerPrint={observerPrint}
 							paymentStatus={order.status}
 							startDate={startDate}
-							ligitimateInterest={ligitimateInterest}
 						/>
 					</div>
 

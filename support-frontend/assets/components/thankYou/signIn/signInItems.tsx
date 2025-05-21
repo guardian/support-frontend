@@ -62,9 +62,9 @@ type CreateSignInUrlResponse = {
 export const signInHeader = (
 	isTier3?: boolean,
 	observerPrint?: ObserverPrint,
-	isPrintProduct?: boolean,
+	isGuardianWeekly?: boolean,
 ) => {
-	if (observerPrint ?? isPrintProduct) {
+	if (observerPrint ?? isGuardianWeekly) {
 		return 'Sign in to access to your account';
 	}
 	if (isTier3) {
@@ -76,11 +76,11 @@ export const signInHeader = (
 export function SignInBodyCopy({
 	isTierThree,
 	observerPrint,
-	isPrintProduct,
+	isGuardianWeekly,
 }: {
 	isTierThree?: boolean;
 	observerPrint?: ObserverPrint;
-	isPrintProduct?: boolean;
+	isGuardianWeekly?: boolean;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -90,7 +90,7 @@ export function SignInBodyCopy({
 	};
 
 	const isTierThreeOrObserverOrPrintProduct =
-		observerPrint ?? isTierThree ?? isPrintProduct;
+		observerPrint ?? isTierThree ?? isGuardianWeekly;
 
 	const upperCopy = `By signing in, you help us to recognise you as a valued supporter when you visit our website or app. This means we can:`;
 	const upperCopyTier3 = `Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.`;
@@ -101,7 +101,7 @@ export function SignInBodyCopy({
 	return (
 		<>
 			{isTierThreeOrObserverOrPrintProduct && (
-				<p>{isTierThree ?? isPrintProduct ? upperCopyTier3 : observerCopy}</p>
+				<p>{isTierThree ?? isGuardianWeekly ? upperCopyTier3 : observerCopy}</p>
 			)}
 			{!isTierThreeOrObserverOrPrintProduct && (
 				<>

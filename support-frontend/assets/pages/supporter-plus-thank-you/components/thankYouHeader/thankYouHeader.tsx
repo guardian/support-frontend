@@ -43,7 +43,6 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
-	ligitimateInterest: boolean;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
@@ -62,7 +61,6 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	identityUserType,
-	ligitimateInterest,
 	observerPrint,
 	startDate,
 	paymentStatus,
@@ -96,7 +94,6 @@ function ThankYouHeader({
 					identityUserType={identityUserType}
 					paymentStatus={paymentStatus}
 					startDate={startDate}
-					legitimateInterest={ligitimateInterest}
 				/>
 			</p>
 			{showOffer && (

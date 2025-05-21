@@ -325,7 +325,7 @@ WhatNextNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} isPrintProduct={false} />,
+	bodyCopy: <WhatNext amount={'12'} isGuardianWeekly={false} />,
 };
 
 export const WhatNextSignedIn = Template.bind({});
@@ -338,7 +338,7 @@ WhatNextSignedIn.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
-			isPrintProduct={false}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -353,7 +353,7 @@ WhatNextSignedOut.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			isPrintProduct={false}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -369,7 +369,7 @@ WhatNextObserverPaper.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.Paper}
-			isPrintProduct={false}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -385,7 +385,7 @@ WhatNextObserverSubsCard.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.SubscriptionCard}
-			isPrintProduct={false}
+			isGuardianWeekly={false}
 		/>
 	),
 };

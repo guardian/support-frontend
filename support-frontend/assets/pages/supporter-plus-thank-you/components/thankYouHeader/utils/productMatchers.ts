@@ -20,6 +20,6 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 	return printProductsKeys.includes(productKey);
 }
 
-export function isguardianWeeklyProduct(productKey: ActiveProductKey): boolean {
+export function isGuardianWeeklyProduct(productKey: ActiveProductKey): boolean {
 	return guardianWeeklyKeys.includes(productKey);
 }

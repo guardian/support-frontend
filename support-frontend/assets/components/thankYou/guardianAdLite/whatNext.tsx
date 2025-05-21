@@ -13,7 +13,7 @@ type WhatNextProps = {
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
-	isPrintProduct: boolean;
+	isGuardianWeekly: boolean;
 	observerPrint?: ObserverPrint;
 };
 
@@ -22,7 +22,7 @@ export function WhatNext({
 	startDate,
 	isSignedIn = false,
 	observerPrint,
-	isPrintProduct,
+	isGuardianWeekly,
 }: WhatNextProps): JSX.Element {
 	if (observerPrint) {
 		const observerPrintItem =
@@ -45,7 +45,7 @@ export function WhatNext({
 		return <OrderedList items={observerListItems} />;
 	}
 
-	if (isPrintProduct) {
+	if (isGuardianWeekly) {
 		const myAccountLink = (
 			<a
 				css={neutralFontColor}
