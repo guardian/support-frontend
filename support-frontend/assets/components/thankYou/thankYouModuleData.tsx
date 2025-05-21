@@ -29,7 +29,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/isPrintProduct';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';

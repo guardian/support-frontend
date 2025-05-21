@@ -17,7 +17,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import PrintProductsHeading from './PrintProductsHeading';
-import { isPrintProduct } from './utils/isPrintProduct';
+import { isPrintProduct } from './utils/productMatchers';
 
 const supCss = css`
 	font-size: 60%;
