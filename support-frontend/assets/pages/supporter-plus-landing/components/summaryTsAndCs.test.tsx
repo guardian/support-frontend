@@ -3,7 +3,6 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { SummaryTsAndCs } from './summaryTsAndCs';
 
 // Mocking price retrieval from productCatalog (not available in window at runtime)
@@ -15,16 +14,16 @@ jest.mock('helpers/utilities/dateFormatting', () => ({
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
 		productKey               | activeRatePlanKey
-		${'Contribution'}        | ${BillingPeriod.Monthly}
-		${'Contribution'}        | ${BillingPeriod.Annual}
-		${'SupporterPlus'}       | ${BillingPeriod.Monthly}
-		${'SupporterPlus'}       | ${BillingPeriod.Annual}
-		${'TierThree'}           | ${BillingPeriod.Monthly}
-		${'TierThree'}           | ${BillingPeriod.Annual}
-		${'OneTimeContribution'} | ${BillingPeriod.Monthly}
-		${'GuardianAdLite'}      | ${BillingPeriod.Monthly}
-		${'GuardianAdLite'}      | ${BillingPeriod.Annual}
-		${'DigitalSubscription'} | ${BillingPeriod.Monthly}
+		${'Contribution'}        | ${'Monthly'}
+		${'Contribution'}        | ${'Annual'}
+		${'SupporterPlus'}       | ${'Monthly'}
+		${'SupporterPlus'}       | ${'Annual'}
+		${'TierThree'}           | ${'DomesticMonthly'}
+		${'TierThree'}           | ${'DomesticAnnual'}
+		${'OneTimeContribution'} | ${'OneTime'}
+		${'GuardianAdLite'}      | ${'Monthly'}
+		${'GuardianAdLite'}      | ${'Annual'}
+		${'DigitalSubscription'} | ${'Monthly'}
 	`(
 		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey renders correctly`,
 		({ productKey, activeRatePlanKey }) => {

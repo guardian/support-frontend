@@ -10,12 +10,12 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With ratePlanKey Monthly renders correctly 1`] = `"The Guardian Ad-Lite subscription will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With ratePlanKey Monthly renders correctly 1`] = `""`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With ratePlanKey OneTime renders correctly 1`] = `""`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With ratePlanKey Annual renders correctly 1`] = `"The All-access digital subscription and any contribution will auto-renew each year. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With ratePlanKey Monthly renders correctly 1`] = `"The All-access digital subscription and any contribution will auto-renew each month. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey Annual renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey DomesticAnnual renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each year. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
-exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey Monthly renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for TierThree With ratePlanKey DomesticMonthly renders correctly 1`] = `"The Digital + print subscriptions will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
