@@ -98,7 +98,7 @@ export function SignInBodyCopy({
 		);
 	}
 
-	if (isTierThree ?? isGuardianWeekly) {
+	if (isTierThree || isGuardianWeekly) {
 		return (
 			<p>
 				Make sure you sign in on all your devices when browsing our website and

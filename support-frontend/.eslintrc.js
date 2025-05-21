@@ -22,6 +22,12 @@ module.exports = {
 						ignoreRestSiblings: true,
 					},
 				],
+				'@typescript-eslint/prefer-nullish-coalescing': [
+					'error',
+					{
+						ignoreConditionalTests: true,
+					},
+				],
 			},
 		},
 	],
