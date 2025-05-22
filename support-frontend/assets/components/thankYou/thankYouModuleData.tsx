@@ -264,9 +264,11 @@ export const getThankYouModuleData = (
 				<SignInCTA
 					email={email}
 					csrf={csrf}
-					isTierThree={isTierThree}
-					isGuardianWeekly={isGuardianWeekly}
-					observerPrint={observerPrint}
+					buttonLabel={
+						observerPrint ?? (isTierThree || isGuardianWeekly)
+							? 'Sign in'
+							: 'Continue'
+					}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,

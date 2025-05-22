@@ -50,9 +50,7 @@ const hideBeforeTablet = css`
 type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
-	isTierThree: boolean;
-	isGuardianWeekly: boolean;
-	observerPrint?: ObserverPrint;
+	buttonLabel: string;
 };
 
 type CreateSignInUrlResponse = {
@@ -157,9 +155,7 @@ export function SignInBodyCopy({
 export function SignInCTA({
 	email,
 	csrf,
-	isTierThree,
-	isGuardianWeekly,
-	observerPrint,
+	buttonLabel,
 }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://manage.theguardian.com');
 
@@ -203,9 +199,7 @@ export function SignInCTA({
 			iconSide="right"
 			nudgeIcon
 		>
-			{observerPrint ?? (isTierThree || isGuardianWeekly)
-				? 'Sign in'
-				: 'Continue'}
+			{buttonLabel}
 		</LinkButton>
 	);
 }
