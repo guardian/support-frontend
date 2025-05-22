@@ -243,12 +243,18 @@ case object Paper extends Product {
     nationalDelivery("8ad096ca8992481d018992a36256175e", Weekend, "National Delivery Weekend"),
     nationalDelivery("8ad096ca8992481d018992a35f60171b", Sixday, "National Delivery Sixday"),
     nationalDelivery("8ad096ca8992481d018992a363bd17ad", Everyday, "National Delivery Everyday"),
+    nationalDelivery("71a1166283a96ab11606b50ebbb50381", WeekendPlus, "National Delivery Weekend+"),
+    nationalDelivery("71a1383e2a796aafcb16b527842001ca", SixdayPlus, "National Delivery Sixday+"),
+    nationalDelivery("71a116628be96ab11606b51ec6060555", EverydayPlus, "National Delivery Everyday+"),
   )
 
   private val prodNationalDelivery: List[ProductRatePlan[Paper.type]] = List(
     nationalDelivery("8a12999f8a268c57018a27ebe868150c", Weekend, "National Delivery Weekend"),
     nationalDelivery("8a12999f8a268c57018a27ebfd721883", Sixday, "National Delivery Sixday"),
     nationalDelivery("8a12999f8a268c57018a27ebe31414a4", Everyday, "National Delivery Everyday"),
+    nationalDelivery("8a1280be96d33dbf0196d487b55c1283", WeekendPlus, "National Delivery Weekend+"),
+    nationalDelivery("8a12994696d3587b0196d484491e3beb", SixdayPlus, "National Delivery Sixday+"),
+    nationalDelivery("8a1280be96d33dbf0196d48a632616f4", EverydayPlus, "National Delivery Everyday+"),
   )
 
   private val codeHomeDelivery: List[ProductRatePlan[Paper.type]] = List(

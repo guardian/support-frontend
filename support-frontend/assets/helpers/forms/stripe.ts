@@ -1,6 +1,8 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { IsoCurrency } from '../internationalisation/currency';
 
 export type StripeAccountType = 'ONE_OFF' | 'REGULAR';

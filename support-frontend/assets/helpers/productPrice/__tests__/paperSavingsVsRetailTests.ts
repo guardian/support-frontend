@@ -240,6 +240,6 @@ jest.mock('ophan', () => () => ({}));
 
 describe('getMaxSavingVsRetail', () => {
 	it('should return the maximum savings for a fulfilment option vs retail', () => {
-		expect(getMaxSavingVsRetail(productPrices)).toEqual(29);
+		expect(getMaxSavingVsRetail(productPrices)).toEqual(41);
 	});
 });

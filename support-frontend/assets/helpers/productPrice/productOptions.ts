@@ -1,6 +1,8 @@
 // describes options relating to a product itself - only relevant for paper currently
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -34,14 +36,25 @@ export type PaperProductOptions =
 	| typeof Sunday
 	| typeof Weekend
 	| typeof Sixday
-	| typeof Everyday;
+	| typeof Everyday
+	| typeof SaturdayPlus
+	| typeof SundayPlus
+	| typeof WeekendPlus
+	| typeof SixdayPlus
+	| typeof EverydayPlus;
 
+// TODO: Can we use ratePlanKey here somehow?
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Everyday,
 	Sixday,
 	Weekend,
 	Saturday,
 	Sunday,
+	EverydayPlus,
+	SixdayPlus,
+	WeekendPlus,
+	SaturdayPlus,
+	SundayPlus,
 ] as const;
 
 export type ActivePaperProductOptions =
@@ -95,6 +108,11 @@ const getPaperProductOptions = (
 		case 'Weekend':
 		case 'Sixday':
 		case 'Everyday':
+		case 'WeekendPlus':
+		case 'SaturdayPlus':
+		case 'SundayPlus':
+		case 'SixdayPlus':
+		case 'EverydayPlus':
 			return ratePlanKey;
 	}
 	throw new Error(
@@ -111,7 +129,6 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
-		case 'GuardianPatron':
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
 			return 'NoProductOptions';
