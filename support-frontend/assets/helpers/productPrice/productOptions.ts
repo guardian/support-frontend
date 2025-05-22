@@ -43,7 +43,6 @@ export type PaperProductOptions =
 	| typeof SixdayPlus
 	| typeof EverydayPlus;
 
-// TODO: Can we use ratePlanKey here somehow?
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Everyday,
 	Sixday,

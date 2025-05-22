@@ -89,7 +89,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
       .find(_.promoCode == discountPromoCode)
       .value
       .discountedPrice shouldBe Some(166.50)
-    guardianWeekly(Europe)(RestOfWorld)(NoProductOptions)(Annual)(EUR).price shouldBe 270
+    guardianWeekly(Europe)(Domestic)(NoProductOptions)(Annual)(EUR).price shouldBe 318
 
     guardianWeekly(UK)(Domestic)(NoProductOptions)(Annual)(GBP).promotions
       .find(_.promoCode == tenAnnual)
