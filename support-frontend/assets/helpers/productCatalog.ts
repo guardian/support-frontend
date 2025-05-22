@@ -557,32 +557,16 @@ export function internationaliseProductAndRatePlan(
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 } {
-	let ratePlanToUse = ratePlanKey;
-
-	if (productKey === 'TierThree') {
-		if (supportInternationalisationId === 'int') {
-			if (ratePlanKey === 'DomesticAnnual') {
-				ratePlanToUse = 'RestOfWorldAnnual';
-			}
-			if (ratePlanKey === 'DomesticMonthly') {
-				ratePlanToUse = 'RestOfWorldMonthly';
-			}
-		} else {
-			if (ratePlanKey === 'RestOfWorldAnnual') {
-				ratePlanToUse = 'DomesticAnnual';
-			}
-			if (ratePlanKey === 'RestOfWorldMonthly') {
-				ratePlanToUse = 'DomesticMonthly';
-			}
-		}
-	}
-
 	return {
 		productKey: internationaliseProduct(
 			supportInternationalisationId,
 			productKey,
 		),
-		ratePlanKey: ratePlanToUse,
+		ratePlanKey: internationaliseRatePlan(
+			supportInternationalisationId,
+			productKey,
+			ratePlanKey,
+		),
 	};
 }
 
@@ -590,18 +574,43 @@ export function internationaliseProduct(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
 ): ActiveProductKey {
-	let productKeyToUse = productKey;
+	const productKeyToUse = productKey;
 
 	if (
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
 	) {
 		if (supportInternationalisationId === 'int') {
-			productKeyToUse = 'GuardianWeeklyRestOfWorld';
+			return 'GuardianWeeklyRestOfWorld';
 		} else {
-			productKeyToUse = 'GuardianWeeklyDomestic';
+			return 'GuardianWeeklyDomestic';
 		}
 	}
 
 	return productKeyToUse;
+}
+
+export function internationaliseRatePlan(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): ActiveRatePlanKey {
+	if (productKey === 'TierThree') {
+		if (supportInternationalisationId === 'int') {
+			if (ratePlanKey === 'DomesticAnnual') {
+				return 'RestOfWorldAnnual';
+			}
+			if (ratePlanKey === 'DomesticMonthly') {
+				return 'RestOfWorldMonthly';
+			}
+		} else {
+			if (ratePlanKey === 'RestOfWorldAnnual') {
+				return 'DomesticAnnual';
+			}
+			if (ratePlanKey === 'RestOfWorldMonthly') {
+				return 'DomesticMonthly';
+			}
+		}
+	}
+	return ratePlanKey;
 }
