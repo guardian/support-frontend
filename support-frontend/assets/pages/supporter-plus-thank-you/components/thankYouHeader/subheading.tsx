@@ -20,6 +20,29 @@ interface SubheadingProps {
 	paymentStatus?: PaymentStatus;
 }
 
+function MarketingCopy({
+	ratePlanKey,
+	isTier3,
+	isPaper,
+}: {
+	ratePlanKey: ActiveRatePlanKey;
+	isTier3: boolean;
+	isPaper: boolean;
+}) {
+	return (
+		<span>
+			{ratePlanKey === 'OneTime'
+				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+				: isTier3
+				? 'You can adjust your email preferences and opt out anytime via '
+				: isPaper
+				? 'You can opt out any time via your '
+				: 'Adjust your email preferences at any time via '}
+			<a href="https://manage.theguardian.com">your account</a>.
+		</span>
+	);
+}
+
 const pendingCopy = () => {
 	return (
 		<p
@@ -36,8 +59,8 @@ const pendingCopy = () => {
 
 const getSubHeadingCopy = (
 	productKey: ActiveProductKey,
-	amountIsAboveThreshold: boolean,
 	ratePlanKey: ActiveRatePlanKey,
+	amountIsAboveThreshold: boolean,
 	isSignedIn: boolean,
 	identityUserType: UserType,
 	observerPrint?: ObserverPrint,
@@ -117,8 +140,8 @@ function Subheading({
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
-		amountIsAboveThreshold,
 		ratePlanKey,
+		amountIsAboveThreshold,
 		isSignedIn,
 		identityUserType,
 		observerPrint,
@@ -131,16 +154,11 @@ function Subheading({
 			{subheadingCopy}
 			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
-					<span>
-						{ratePlanKey === 'OneTime'
-							? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
-							: isTier3
-							? 'You can adjust your email preferences and opt out anytime via '
-							: isPaper
-							? 'You can opt out any time via your '
-							: 'Adjust your email preferences at any time via '}
-						<a href="https://manage.theguardian.com">your account</a>.
-					</span>
+					<MarketingCopy
+						ratePlanKey={ratePlanKey}
+						isTier3={isTier3}
+						isPaper={isPaper}
+					/>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
 						ratePlanKey !== 'OneTime' && (
