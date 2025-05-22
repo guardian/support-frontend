@@ -35,7 +35,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
 		['Contribution', 'Annual', 'AUDCountries', 0],
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
-		['TierThree', 'Monthly', 'UnitedStates', 45],
+		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
 		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
 		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
 		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
@@ -47,7 +47,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				ratePlanKey === 'Monthly' &&
+				ratePlanKey === 'RestOfWorldMonthly' &&
 				countryGroupId === 'UnitedStates'
 					? promotionTierThreeUnitedStatesMonthly
 					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&

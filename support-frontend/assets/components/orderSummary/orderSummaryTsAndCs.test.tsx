@@ -27,14 +27,14 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 		['GuardianAdLite', 'GBPCountries', 'Monthly', 0],
 		['Contribution', 'AUDCountries', 'Annual', 0],
 		['SupporterPlus', 'GBPCountries', 'Monthly', 12],
-		['TierThree', 'UnitedStates', 'Monthly', 45],
+		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', 45],
 	];
 	it.each(orderSummaryProductKeys)(
 		`orderSummaryTs&Cs render product %s for region %s correctly`,
 		(paymentProductKey, countryGroupId, activeRatePlanKey, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				activeRatePlanKey === 'Monthly' &&
+				activeRatePlanKey === 'RestOfWorldMonthly' &&
 				countryGroupId === 'UnitedStates'
 					? promotionTierThreeUnitedStatesMonthly
 					: undefined;
