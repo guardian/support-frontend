@@ -590,7 +590,7 @@ export function internationaliseProduct(
 	return productKeyToUse;
 }
 
-export function internationaliseRatePlan(
+function internationaliseRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
 	ratePlanKey: ActiveRatePlanKey,
