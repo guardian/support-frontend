@@ -33,6 +33,7 @@ export default function PrintProductsHeading({
 		return (
 			<>
 				{statusText}
+				<br />
 				Welcome and thank you for supporting Observer journalism!
 			</>
 		);
@@ -57,6 +58,7 @@ export default function PrintProductsHeading({
 		return (
 			<>
 				{thankYouText}
+				<br />
 				{statusText}
 			</>
 		);
@@ -72,6 +74,7 @@ export default function PrintProductsHeading({
 		return (
 			<>
 				{thankYouText}
+				<br />
 				{statusText}
 			</>
 		);
@@ -82,6 +85,7 @@ export default function PrintProductsHeading({
 	return (
 		<>
 			{thankYouText}
+			<br />
 			{isPending
 				? `Your subscription to the ${paperRatePlanName} package is being processed`
 				: `You have now subscribed to the ${paperRatePlanName} package`}
