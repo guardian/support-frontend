@@ -147,7 +147,6 @@ function Subheading({
 		observerPrint,
 		startDate,
 	);
-
 	const isPending = paymentStatus === 'pending';
 	return (
 		<>
