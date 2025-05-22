@@ -552,12 +552,11 @@ export function productCatalogGuardianAdLite(): Record<
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
-	ratePlanKey?: ActiveRatePlanKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): {
 	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey | undefined;
+	ratePlanKey: ActiveRatePlanKey;
 } {
-	let productKeyToUse = productKey;
 	let ratePlanToUse = ratePlanKey;
 
 	if (productKey === 'TierThree') {
@@ -578,6 +577,21 @@ export function internationaliseProductAndRatePlan(
 		}
 	}
 
+	return {
+		productKey: internationaliseProduct(
+			supportInternationalisationId,
+			productKey,
+		),
+		ratePlanKey: ratePlanToUse,
+	};
+}
+
+export function internationaliseProduct(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ActiveProductKey,
+): ActiveProductKey {
+	let productKeyToUse = productKey;
+
 	if (
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
@@ -589,5 +603,5 @@ export function internationaliseProductAndRatePlan(
 		}
 	}
 
-	return { productKey: productKeyToUse, ratePlanKey: ratePlanToUse };
+	return productKeyToUse;
 }
