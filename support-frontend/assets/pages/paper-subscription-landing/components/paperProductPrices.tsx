@@ -111,6 +111,38 @@ const copy: Record<
 				for <strong>the Observer</strong>, delivered
 			</>
 		),
+		EverydayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>,
+				delivered
+			</>
+		),
+		SixdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>, delivered
+			</>
+		),
+		WeekendPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>,
+				delivered
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>, delivered
+			</>
+		),
+		SundayPlus: (
+			<>
+				{' '}
+				for <strong>the Observer</strong>, delivered
+			</>
+		),
 	},
 	Collection: {
 		Everyday: (
@@ -138,6 +170,36 @@ const copy: Record<
 			</>
 		),
 		Sunday: (
+			<>
+				{' '}
+				for <strong>the Observer</strong>
+			</>
+		),
+		EverydayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>
+			</>
+		),
+		SixdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>
+			</>
+		),
+		WeekendPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>
+			</>
+		),
+		SundayPlus: (
 			<>
 				{' '}
 				for <strong>the Observer</strong>
