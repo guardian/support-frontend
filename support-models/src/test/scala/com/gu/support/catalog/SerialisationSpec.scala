@@ -16,18 +16,20 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     val supporterPlusAnnualId = "8a128ed885fc6ded01860228f77e3d5a"
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
-    val numberOfPriceLists =
-      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly
-        .ratePlans(PROD)
-        .length + SupporterPlus.ratePlans(PROD).length
+    val numberOfPriceLists = DigitalPack.ratePlans(PROD).length +
+      Paper.ratePlans(PROD).length +
+      GuardianWeekly.ratePlans(PROD).length +
+      SupporterPlus.ratePlans(PROD).length +
+      TierThree.ratePlans(PROD).length +
+      GuardianAdLite.ratePlans(PROD).length
 
     testDecoding[ZuoraCatalog](
       Fixtures.loadCatalog,
       zuoraCatalog => {
         val catalog = Catalog.convert(zuoraCatalog)
         catalog.prices.length shouldBe numberOfPriceLists
-        checkPrice(catalog, supporterPlusMonthlyId, GBP, 10)
-        checkPrice(catalog, supporterPlusAnnualId, GBP, 95)
+        checkPrice(catalog, supporterPlusMonthlyId, GBP, 12)
+        checkPrice(catalog, supporterPlusAnnualId, GBP, 120)
         checkPrice(catalog, digitalPackId, GBP, 14.99)
         checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 180)
       },
