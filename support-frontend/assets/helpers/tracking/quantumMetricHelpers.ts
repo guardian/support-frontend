@@ -6,7 +6,7 @@ import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
 const periodMultipliers: Record<BillingPeriod, number> = {
-	One_Off: 1,
+	OneTime: 1,
 	Annual: 1,
 	Quarterly: 4,
 	Monthly: 12,

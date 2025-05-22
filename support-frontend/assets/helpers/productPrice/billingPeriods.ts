@@ -5,7 +5,7 @@ export enum BillingPeriod {
 	Annual = 'Annual',
 	Monthly = 'Monthly',
 	Quarterly = 'Quarterly',
-	OneTime = 'One_Off',
+	OneTime = 'OneTime',
 }
 export type RecurringBillingPeriod =
 	| typeof BillingPeriod.Annual
