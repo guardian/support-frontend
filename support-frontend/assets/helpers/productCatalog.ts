@@ -574,8 +574,6 @@ export function internationaliseProduct(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
 ): ActiveProductKey {
-	const productKeyToUse = productKey;
-
 	if (
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
@@ -586,8 +584,7 @@ export function internationaliseProduct(
 			return 'GuardianWeeklyDomestic';
 		}
 	}
-
-	return productKeyToUse;
+	return productKey;
 }
 
 function internationaliseRatePlan(
