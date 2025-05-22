@@ -15,7 +15,6 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
-import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -51,7 +50,8 @@ const hideBeforeTablet = css`
 type SignInBodyCopyProps = {
 	email?: string;
 	csrf: CsrfState;
-	isTierThree?: boolean;
+	isTierThree: boolean;
+	isGuardianWeekly: boolean;
 	observerPrint?: ObserverPrint;
 };
 
@@ -75,12 +75,12 @@ export const signInHeader = (
 
 export function SignInBodyCopy({
 	isTierThree,
-	observerPrint,
 	isGuardianWeekly,
+	observerPrint,
 }: {
-	isTierThree?: boolean;
+	isTierThree: boolean;
+	isGuardianWeekly: boolean;
 	observerPrint?: ObserverPrint;
-	isGuardianWeekly?: boolean;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
@@ -89,7 +89,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	if (observerPrint) {
+	if (observerPrint ?? isGuardianWeekly) {
 		return (
 			<p>
 				Make sure you’re signed in on all your devices when browsing our website
@@ -98,7 +98,7 @@ export function SignInBodyCopy({
 		);
 	}
 
-	if (isTierThree || isGuardianWeekly) {
+	if (isTierThree) {
 		return (
 			<p>
 				Make sure you sign in on all your devices when browsing our website and
@@ -158,15 +158,12 @@ export function SignInCTA({
 	email,
 	csrf,
 	isTierThree,
+	isGuardianWeekly,
 	observerPrint,
 }: SignInBodyCopyProps): JSX.Element {
-	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
-	const isTierThreeOrObserver = Boolean(observerPrint ?? isTierThree);
-	function fetchSignInLink(payload: { email: string }) {
-		if (!isCodeOrProd()) {
-			return;
-		}
+	const [signInUrl, setSignInUrl] = useState('https://manage.theguardian.com');
 
+	function fetchSignInLink(payload: { email: string }) {
 		fetch(routes.createSignInUrl, {
 			method: 'post',
 			headers: {
@@ -206,7 +203,9 @@ export function SignInCTA({
 			iconSide="right"
 			nudgeIcon
 		>
-			{isTierThreeOrObserver ? 'Sign in' : 'Continue'}
+			{observerPrint ?? (isTierThree || isGuardianWeekly)
+				? 'Sign in'
+				: 'Continue'}
 		</LinkButton>
 	);
 }

@@ -56,7 +56,7 @@ export function WhatNext({
 					componentType: 'ACQUISITIONS_BUTTON',
 				})}
 			>
-				Manage My Account
+				Manage my account
 			</a>
 		);
 
@@ -70,7 +70,7 @@ export function WhatNext({
 					componentType: 'ACQUISITIONS_BUTTON',
 				})}
 			>
-				Help Centre
+				Help centre
 			</a>
 		);
 

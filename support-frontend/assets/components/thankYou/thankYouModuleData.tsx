@@ -115,10 +115,10 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	isTierThree: boolean,
 	startDate?: string,
 	email?: string,
 	campaignCode?: string,
-	isTierThree?: boolean,
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
@@ -265,6 +265,7 @@ export const getThankYouModuleData = (
 					email={email}
 					csrf={csrf}
 					isTierThree={isTierThree}
+					isGuardianWeekly={isGuardianWeekly}
 					observerPrint={observerPrint}
 				/>
 			),
