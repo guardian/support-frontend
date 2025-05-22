@@ -264,8 +264,10 @@ SignIn.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+	bodyCopy: <SignInBodyCopy isGuardianWeekly={false} isTierThree={false} />,
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
+	),
 };
 
 export const SignInTier3 = Template.bind({});
@@ -275,8 +277,10 @@ SignInTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
+	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianWeekly={false} />,
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
+	),
 };
 
 export const SignInObserver = Template.bind({});
@@ -286,14 +290,15 @@ SignInObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true, ObserverPrint.Paper),
-	bodyCopy: <SignInBodyCopy observerPrint={ObserverPrint.Paper} />,
-	ctas: (
-		<SignInCTA
-			email={''}
-			csrf={{ token: undefined }}
-			isTierThree={false}
+	bodyCopy: (
+		<SignInBodyCopy
 			observerPrint={ObserverPrint.Paper}
+			isTierThree={false}
+			isGuardianWeekly={false}
 		/>
+	),
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
 	),
 };
 
