@@ -97,6 +97,7 @@ import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgen
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
+import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
@@ -153,6 +154,7 @@ type CheckoutComponentProps = {
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	checkoutSession?: CheckoutSession;
+	clearCheckoutSession: () => void;
 };
 
 const getPaymentMethods = (
@@ -186,10 +188,13 @@ export function CheckoutComponent({
 	abParticipations,
 	landingPageSettings,
 	checkoutSession,
+	clearCheckoutSession,
 }: CheckoutComponentProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
+
+	console.log('checkoutSession inner component', checkoutSession);
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -268,9 +273,9 @@ export function CheckoutComponent({
 		.filter(isPaymentMethod)
 		.filter(paymentMethodIsActive);
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(
-		checkoutSession ? StripeHostedCheckout : undefined,
-	);
+	const [paymentMethod, setPaymentMethod] = useStateWithCheckoutSession<
+		PaymentMethod | undefined
+	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 
 	const isRedirectingToStripeHostedCheckout =
@@ -332,48 +337,64 @@ export function CheckoutComponent({
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState(
-		checkoutSession?.formFields.personalData.firstName ?? user?.firstName ?? '',
+	const [firstName, setFirstName] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.personalData.firstName,
+		user?.firstName ?? '',
 	);
-	const [lastName, setLastName] = useState(
-		checkoutSession?.formFields.personalData.lastName ?? user?.lastName ?? '',
+	const [lastName, setLastName] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.personalData.lastName,
+		user?.lastName ?? '',
 	);
-	const [email, setEmail] = useState(
-		checkoutSession?.formFields.personalData.email ?? user?.email ?? '',
+	const [email, setEmail] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.personalData.email,
+		user?.email ?? '',
 	);
-	const [confirmedEmail, setConfirmedEmail] = useState(
-		checkoutSession?.formFields.personalData.email ?? '',
-	);
+	const [confirmedEmail, setConfirmedEmail] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.personalData.email,
+			'',
+		);
 
 	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] = useState(
-		checkoutSession?.formFields.deliveryInstructions ?? '',
-	);
+	const [deliveryInstructions, setDeliveryInstructions] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.deliveryInstructions,
+			'',
+		);
 
 	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.postCode ?? '',
+	const [deliveryPostcode, setDeliveryPostcode] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.deliveryAddress?.postCode,
+			'',
+		);
+	const [deliveryLineOne, setDeliveryLineOne] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne,
+			'',
+		);
+	const [deliveryLineTwo, setDeliveryLineTwo] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo,
+			'',
+		);
+	const [deliveryCity, setDeliveryCity] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.city,
+		'',
 	);
-	const [deliveryLineOne, setDeliveryLineOne] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne ?? '',
-	);
-	const [deliveryLineTwo, setDeliveryLineTwo] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo ?? '',
-	);
-	const [deliveryCity, setDeliveryCity] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.city ?? '',
-	);
-	const [deliveryState, setDeliveryState] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.state ?? '',
+	const [deliveryState, setDeliveryState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.deliveryAddress?.state,
+		'',
 	);
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
-	const [deliveryCountry, setDeliveryCountry] = useState(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.country ??
+	const [deliveryCountry, setDeliveryCountry] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.deliveryAddress?.country,
 			countryId,
-	);
+		);
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -419,20 +440,30 @@ export function CheckoutComponent({
 	}, [deliveryPostcode]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useState(checkoutSession?.formFields.billingAddressMatchesDelivery ?? true);
+		useStateWithCheckoutSession<boolean>(
+			checkoutSession?.formFields.billingAddressMatchesDelivery,
+			true,
+		);
 
-	const [billingPostcode, setBillingPostcode] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.postCode ?? '',
-	);
+	const [billingPostcode, setBillingPostcode] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.billingAddress.postCode,
+			'',
+		);
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const [billingLineOne, setBillingLineOne] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.lineOne ?? '',
-	);
-	const [billingLineTwo, setBillingLineTwo] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.lineTwo ?? '',
-	);
-	const [billingCity, setBillingCity] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.city ?? '',
+	const [billingLineOne, setBillingLineOne] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
+			'',
+		);
+	const [billingLineTwo, setBillingLineTwo] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.billingAddress.lineTwo,
+			'',
+		);
+	const [billingCity, setBillingCity] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.city,
+		'',
 	);
 	const [billingStateError, setBillingStateError] = useState<string>();
 	/**
@@ -440,17 +471,19 @@ export function CheckoutComponent({
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.state ?? '',
+	const [billingState, setBillingState] = useStateWithCheckoutSession<string>(
+		checkoutSession?.formFields.addressFields.billingAddress.state,
+		'',
 	);
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
-	const [billingCountry, setBillingCountry] = useState(
-		checkoutSession?.formFields.addressFields.billingAddress.country ??
+	const [billingCountry, setBillingCountry] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.billingAddress.country,
 			countryId,
-	);
+		);
 	const [billingAddressErrors, setBillingAddressErrors] = useState<
 		AddressFormFieldError[]
 	>([]);
@@ -469,6 +502,14 @@ export function CheckoutComponent({
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
+
+	// If we get an error, and we've already got a checkout session, clear the checkout session
+	// so that the user restarts the checkout process
+	useEffect(() => {
+		if (errorMessage && checkoutSession) {
+			clearCheckoutSession();
+		}
+	}, [errorMessage]);
 
 	const { supportInternationalisationId } = countryGroups[countryGroupId];
 
