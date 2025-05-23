@@ -47,6 +47,7 @@ export const getFulfilmentOptionFromProductKey = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
+			return 'NoFulfilmentOptions';
 		case 'TierThree':
 		case 'GuardianWeeklyDomestic':
 			return 'Domestic';

@@ -82,13 +82,12 @@ export function ratePlanToBillingPeriod(
 		case 'Weekend':
 		case 'Saturday':
 		case 'Sunday':
-		case 'Everyday+':
-		case 'Sixday+':
-		case 'Weekend+':
-		case 'Saturday+':
-		case 'Sunday+':
+		case 'EverydayPlus':
+		case 'SixdayPlus':
+		case 'WeekendPlus':
+		case 'SaturdayPlus':
+		case 'SundayPlus':
 		case 'V1DeprecatedMonthly':
-		case 'GuardianPatron':
 			return BillingPeriod.Monthly;
 		case 'OneTime':
 			return BillingPeriod.OneTime;
