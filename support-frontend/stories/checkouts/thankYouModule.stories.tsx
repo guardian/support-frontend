@@ -266,7 +266,7 @@ SignIn.args = {
 	header: signInHeader(),
 	bodyCopy: <SignInBodyCopy isGuardianWeekly={false} isTierThree={false} />,
 	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
 	),
 };
 
@@ -279,7 +279,7 @@ SignInTier3.args = {
 	header: signInHeader(true),
 	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianWeekly={false} />,
 	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign In" />
 	),
 };
 
@@ -298,7 +298,7 @@ SignInObserver.args = {
 		/>
 	),
 	ctas: (
-		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="label" />
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign In" />
 	),
 };
 
