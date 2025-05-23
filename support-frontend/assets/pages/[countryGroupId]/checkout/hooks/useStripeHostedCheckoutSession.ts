@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
-import { getFormDetails } from '../helpers/stripeCheckoutSession';
+import {
+	deleteFormDetails,
+	getFormDetails,
+} from '../helpers/stripeCheckoutSession';
 
 export function useStripeHostedCheckoutSession(
 	checkoutSessionId: string | null,
@@ -23,5 +26,11 @@ export function useStripeHostedCheckoutSession(
 		}
 	}, [checkoutSessionId]);
 
-	return [checkoutSession, () => setCheckoutSession(undefined)];
+	return [
+		checkoutSession,
+		() => {
+			deleteFormDetails();
+			setCheckoutSession(undefined);
+		},
+	];
 }
