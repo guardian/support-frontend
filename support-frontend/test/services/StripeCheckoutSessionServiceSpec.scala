@@ -61,6 +61,19 @@ class StripeCheckoutSessionServiceSpec extends AnyFlatSpec with Matchers {
     cancelUrl should be(Some(referer))
   }
 
+  it should "remove any existing checkoutSessionId query parameter" in {
+    val referer =
+      "https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday&checkoutSessionId=12345"
+
+    val successUrl = StripeCheckoutSessionService.validateCancelUrl(referer)
+
+    successUrl should be(
+      Some(
+        "https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday",
+      ),
+    )
+  }
+
   it should "return None if the referer is not a valid domain" in {
     val referer = "https://www.example.com?product=HomeDelivery&ratePlan=Sunday"
 

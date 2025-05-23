@@ -134,7 +134,13 @@ object StripeCheckoutSessionService {
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
       } else {
-        Some(refererUrl)
+        val existingQueryArgs = uri.getQuery.split("&").toList
+        val newQuery =
+          if (existingQueryArgs.nonEmpty) {
+            existingQueryArgs.filterNot(_.startsWith("checkoutSessionId=")).mkString("&")
+          } else ""
+
+        Some(new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, newQuery, uri.getFragment).toString)
       }
     } catch {
       case _: java.net.URISyntaxException => None
