@@ -13,9 +13,7 @@ export function useStripeHostedCheckoutSession(
 		if (checkoutSessionId) {
 			const persistedFormData = getFormDetails(checkoutSessionId);
 
-			console.log('getting data for checkout session', checkoutSessionId);
 			if (persistedFormData) {
-				console.log('found persisted form data', persistedFormData);
 				setCheckoutSession(persistedFormData);
 			} else {
 				setCheckoutSession(undefined);
