@@ -194,8 +194,6 @@ export function CheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
-	console.log('checkoutSession inner component', checkoutSession);
-
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
