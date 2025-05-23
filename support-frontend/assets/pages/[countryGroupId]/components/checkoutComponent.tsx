@@ -389,7 +389,7 @@ export function CheckoutComponent({
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
 	const [deliveryCountry, setDeliveryCountry] =
-		useStateWithCheckoutSession<string>(
+		useStateWithCheckoutSession<IsoCountry>(
 			checkoutSession?.formFields.addressFields.deliveryAddress?.country,
 			countryId,
 		);
@@ -478,7 +478,7 @@ export function CheckoutComponent({
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<string>(
+		useStateWithCheckoutSession<IsoCountry>(
 			checkoutSession?.formFields.addressFields.billingAddress.country,
 			countryId,
 		);
