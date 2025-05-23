@@ -17,8 +17,13 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
-import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { AmountsCard } from '../components/amountsCard';
@@ -129,12 +134,6 @@ const links = [
 	},
 ];
 
-const paymentFrequencyMap = {
-	ONE_OFF: 'One-time',
-	MONTHLY: 'Monthly',
-	ANNUAL: 'Annual',
-};
-
 type ContributionsOnlyLandingProps = {
 	geoId: GeoId;
 };
@@ -142,31 +141,36 @@ export function ContributionsOnlyLanding({
 	geoId,
 }: ContributionsOnlyLandingProps): JSX.Element {
 	const urlSearchParams = new URLSearchParams(window.location.search);
-	const urlSearchParamsRatePlan = urlSearchParams.get('ratePlan');
-	const urlSearchParamsOneTime = urlSearchParams.has('oneTime');
+	const ratePlanParam = urlSearchParams.get('ratePlan') ?? '';
 
 	const { currencyKey: currencyId, countryGroupId } = getGeoIdConfig(geoId);
 	const countryId = Country.detect();
 
-	const getInitialContributionType = () => {
-		if (urlSearchParamsOneTime) {
-			return 'ONE_OFF';
+	const getInitialBillingPeriod = () => {
+		if (urlSearchParams.has('oneTime')) {
+			return BillingPeriod.OneTime;
 		}
-		return urlSearchParamsRatePlan === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+		if (['Annual', 'OneTime'].includes(ratePlanParam)) {
+			return ratePlanToBillingPeriod(ratePlanParam as ActiveRatePlanKey);
+		} else {
+			return BillingPeriod.Monthly;
+		}
 	};
-
-	const [contributionType, setContributionType] = useState<ContributionType>(
-		getInitialContributionType(),
+	const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>(
+		getInitialBillingPeriod(),
 	);
 
-	const paymentFrequencies: ContributionType[] = [
-		'ONE_OFF',
-		'MONTHLY',
-		'ANNUAL',
+	const paymentFrequencies: BillingPeriod[] = [
+		BillingPeriod.OneTime,
+		BillingPeriod.Monthly,
+		BillingPeriod.Annual,
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		setContributionType(paymentFrequencies[buttonIndex] ?? contributionType);
+		const billingPeriod = paymentFrequencies[buttonIndex];
+		if (billingPeriod) {
+			setBillingPeriod(billingPeriod);
+		}
 	};
 
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
@@ -207,19 +211,22 @@ export function ContributionsOnlyLanding({
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
-								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
-								paymentFrequencyId: paymentFrequency,
-								isPreSelected: paymentFrequencies[index] === contributionType,
+								billingPeriod: paymentFrequency,
+								isPreSelected: paymentFrequencies[index] === billingPeriod,
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtons}
 					/>
 					<AmountsCard
-						amountsData={amounts.amountsCardData[contributionType]}
+						amountsData={
+							amounts.amountsCardData[
+								billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY'
+							]
+						}
 						countryGroupId={countryGroupId}
 						currencyId={currencyId}
-						contributionType={contributionType}
+						billingPeriod={billingPeriod}
 					/>
 				</div>
 			</Container>

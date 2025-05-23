@@ -19,28 +19,28 @@ Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	productKey: 'GuardianAdLite',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const DigitalSubscription = Template.bind({});
 DigitalSubscription.args = {
 	productKey: 'DigitalSubscription',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const Contribution = Template.bind({});
 Contribution.args = {
 	productKey: 'Contribution',
-	billingPeriod: 'Annual',
+	ratePlanKey: 'Annual',
 	countryGroupId: 'AUDCountries',
 };
 
 export const SupporterPlus = Template.bind({});
 SupporterPlus.args = {
 	productKey: 'SupporterPlus',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
 };
@@ -48,7 +48,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 TierThree.args = {
 	productKey: 'TierThree',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'UnitedStates',
 	thresholdAmount: 45,
 	promotion: {
@@ -63,35 +63,35 @@ TierThree.args = {
 export const HomeDelivery = Template.bind({});
 HomeDelivery.args = {
 	productKey: 'HomeDelivery',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const NationalDelivery = Template.bind({});
 NationalDelivery.args = {
 	productKey: 'NationalDelivery',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const SubscriptionCard = Template.bind({});
 SubscriptionCard.args = {
 	productKey: 'SubscriptionCard',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const GuardianWeeklyDomestic = Template.bind({});
 GuardianWeeklyDomestic.args = {
 	productKey: 'GuardianWeeklyDomestic',
-	billingPeriod: 'Monthly',
+	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 };
 
 export const GuardianWeeklyRestOfWorldInclPromo = Template.bind({});
 GuardianWeeklyRestOfWorldInclPromo.args = {
 	productKey: 'GuardianWeeklyRestOfWorld',
-	billingPeriod: 'Annual',
+	ratePlanKey: 'Annual',
 	countryGroupId: 'UnitedStates',
 	promotion: {
 		name: '10% off for 12 months',

@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
-import type { RegularContributionType } from 'helpers/contributions';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
 	getNumericYear,
 } from 'helpers/utilities/dateFormatting';
-import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 
 interface TsAndCsProps {
 	title: string;
@@ -26,7 +26,7 @@ interface TierPlanCosts {
 	discount?: {
 		percentage: number;
 		price: number;
-		duration: { value: number; period: RegularContributionType };
+		duration: { value: number; period: BillingPeriod };
 	};
 }
 
@@ -48,16 +48,15 @@ const discountSummaryCopy = (
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
 		const period = planCost.discount.duration.period;
+		const periodNoun = getBillingPeriodNoun(period);
 		const promoPrice = planCost.discount.price;
 		const promoPriceRounded =
 			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
-		return `${currency}${promoPriceRounded}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
-			recurringContributionPeriodMap[period]
-		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		}`;
+		return `${currency}${promoPriceRounded}/${periodNoun} for the first ${
+			duration > 1 ? duration : ''
+		} ${periodNoun}${duration > 1 ? 's' : ''}, then ${currency}${
+			planCost.price
+		}/${periodNoun}`;
 	}
 
 	return;

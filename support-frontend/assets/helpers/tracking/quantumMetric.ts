@@ -1,11 +1,10 @@
 import { loadScript } from '@guardian/libs';
 import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/models';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
@@ -350,17 +349,17 @@ function sendEventCheckoutValue(
 // TODO: To be deleted with the 2-step checkout
 function sendEventContributionCheckoutConversion(
 	amount: number,
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId =
-				contributionType === 'ONE_OFF'
+				billingPeriod === BillingPeriod.OneTime
 					? SendEventContributionCheckoutConversion.SingleContribution
 					: SendEventContributionCheckoutConversion.RecurringContribution;
 			const convertedValue = getContributionAnnualValue(
-				contributionType,
+				billingPeriod,
 				amount,
 				sourceCurrency,
 			);
@@ -375,7 +374,7 @@ function sendEventContributionCheckoutConversion(
 // TODO: To be deleted with the 2-step checkout
 function sendEventContributionCartValue(
 	amount: string,
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	sourceCurrency: IsoCurrency,
 ): void {
 	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
@@ -384,11 +383,11 @@ function sendEventContributionCartValue(
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
 			const sendEventId =
-				contributionType === 'ONE_OFF'
+				billingPeriod === BillingPeriod.OneTime
 					? SendEventContributionAmountUpdate.SingleContribution
 					: SendEventContributionAmountUpdate.RecurringContribution;
 			const convertedValue = getContributionAnnualValue(
-				contributionType,
+				billingPeriod,
 				parseInt(amount),
 				sourceCurrency,
 			);

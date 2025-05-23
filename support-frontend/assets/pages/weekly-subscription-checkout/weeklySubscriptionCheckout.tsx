@@ -5,7 +5,10 @@ import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
-import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	BillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
@@ -21,13 +24,8 @@ import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';
 import 'stylesheets/skeleton/skeleton.scss';
 
 // ----- Redux Store ----- //
-const billingPeriodInUrl = getQueryParameter('period');
-const initialBillingPeriod: WeeklyBillingPeriod =
-	billingPeriodInUrl === 'Monthly' ||
-	billingPeriodInUrl === 'Quarterly' ||
-	billingPeriodInUrl === 'Annual'
-		? billingPeriodInUrl
-		: 'Monthly';
+const initialBillingPeriod =
+	toRegularBillingPeriod(getQueryParameter('period')) ?? BillingPeriod.Monthly;
 const startDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 const store = initReduxForSubscriptions(

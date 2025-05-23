@@ -15,14 +15,15 @@ import {
 	tierThreeTermsLink,
 } from 'helpers/legal';
 import { productLegal } from 'helpers/legalCopy';
-import {
-	type ActiveProductKey,
-	productCatalogDescription,
+import { productCatalogDescription } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
-	type BillingPeriod,
-	billingPeriodNoun,
-	billingPeriodTitle,
+	getBillingPeriodNoun,
+	getBillingPeriodTitle,
+	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
@@ -109,24 +110,26 @@ export function FooterTsAndCs({
 
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
-	billingPeriod: BillingPeriod;
+	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
 export function PaymentTsAndCs({
 	productKey,
-	billingPeriod,
+	ratePlanKey,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
-	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
-	const billingPeriodPlural = billingPeriodTitle(billingPeriod).toLowerCase();
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
+	const billingPeriodPlural =
+		getBillingPeriodTitle(billingPeriod).toLowerCase();
 
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
-		billingPeriod,
+		ratePlanKey,
 	);
 	if (isSundayOnlynewsletterSubscription) {
 		return (

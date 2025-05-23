@@ -158,7 +158,7 @@ RecurringContribution.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'Contribution'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -193,7 +193,7 @@ SupporterPlus.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={12}
 		/>
@@ -233,7 +233,7 @@ TierThree.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'TierThree'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
 		/>

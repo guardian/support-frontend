@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
 	type ActiveProductKey,
+	type ActiveRatePlanKey,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -11,7 +11,7 @@ import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products
 
 interface SubheadingProps {
 	productKey: ActiveProductKey;
-	contributionType: ContributionType;
+	ratePlanKey: ActiveRatePlanKey;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	identityUserType: UserType;
@@ -21,17 +21,17 @@ interface SubheadingProps {
 }
 
 function MarketingCopy({
-	contributionType,
+	ratePlanKey,
 	isTier3,
 	isPaper,
 }: {
-	contributionType: ContributionType;
+	ratePlanKey: ActiveRatePlanKey;
 	isTier3: boolean;
 	isPaper: boolean;
 }) {
 	return (
 		<span>
-			{contributionType === 'ONE_OFF'
+			{ratePlanKey === 'OneTime'
 				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
 				: isTier3
 				? 'You can adjust your email preferences and opt out anytime via '
@@ -59,8 +59,8 @@ const pendingCopy = () => {
 
 const getSubHeadingCopy = (
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 	amountIsAboveThreshold: boolean,
-	contributionType: ContributionType,
 	isSignedIn: boolean,
 	identityUserType: UserType,
 	observerPrint?: ObserverPrint,
@@ -111,7 +111,7 @@ const getSubHeadingCopy = (
 	};
 
 	return (
-		contributionType !== 'ONE_OFF' &&
+		ratePlanKey !== 'OneTime' &&
 		recurringCopy(amountIsAboveThreshold)[
 			identityUserType === 'current' || isSignedIn
 				? 'isSignedIn'
@@ -122,7 +122,7 @@ const getSubHeadingCopy = (
 
 function Subheading({
 	productKey,
-	contributionType,
+	ratePlanKey,
 	amountIsAboveThreshold,
 	isSignedIn,
 	observerPrint,
@@ -140,8 +140,8 @@ function Subheading({
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
+		ratePlanKey,
 		amountIsAboveThreshold,
-		contributionType,
 		isSignedIn,
 		identityUserType,
 		observerPrint,
@@ -155,13 +155,13 @@ function Subheading({
 			{!isGuardianAdLite && !isPending && !observerPrint && (
 				<>
 					<MarketingCopy
-						contributionType={contributionType}
+						ratePlanKey={ratePlanKey}
 						isTier3={isTier3}
 						isPaper={isPaper}
 					/>
 					{identityUserType !== 'current' &&
 						!isTier3 &&
-						contributionType !== 'ONE_OFF' && (
+						ratePlanKey !== 'OneTime' && (
 							<span
 								css={css`
 									font-weight: bold;

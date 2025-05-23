@@ -12,6 +12,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { useState } from 'react';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';
@@ -96,8 +97,7 @@ export function OneOffCard({
 					amounts={oneOffAmounts.amounts}
 					selectedAmount={selectedAmount}
 					currency={currencyId}
-					// This is always undefined as we're ONE_OFF
-					paymentInterval={undefined}
+					billingPeriod={BillingPeriod.OneTime}
 					onAmountChange={(amount: string) => {
 						if (amount === 'other') {
 							setSelectedAmount(amount);

@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type {
@@ -36,9 +35,9 @@ const headerSupportingText = css`
 type ThankYouHeaderProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
-	contributionType: ContributionType;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	amountIsAboveThreshold: boolean;
@@ -46,7 +45,6 @@ type ThankYouHeaderProps = {
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	ratePlanKey?: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 	showOffer?: boolean;
@@ -55,9 +53,9 @@ type ThankYouHeaderProps = {
 function ThankYouHeader({
 	name,
 	productKey,
+	ratePlanKey,
 	showDirectDebitMessage,
 	isOneOffPayPal,
-	contributionType,
 	amount,
 	currency,
 	amountIsAboveThreshold,
@@ -65,7 +63,6 @@ function ThankYouHeader({
 	identityUserType,
 	observerPrint,
 	startDate,
-	ratePlanKey,
 	paymentStatus,
 	promotion,
 	showOffer,
@@ -79,7 +76,6 @@ function ThankYouHeader({
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}
-				contributionType={contributionType}
 				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
@@ -91,7 +87,7 @@ function ThankYouHeader({
 				)}
 				<Subheading
 					productKey={productKey}
-					contributionType={contributionType}
+					ratePlanKey={ratePlanKey}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}

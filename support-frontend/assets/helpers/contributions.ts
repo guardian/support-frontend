@@ -15,7 +15,6 @@ type ContributionTypeMap<T> = RegularContributionTypeMap<T> & {
 	ONE_OFF: T;
 };
 
-export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
 
 export interface AmountValuesObject {

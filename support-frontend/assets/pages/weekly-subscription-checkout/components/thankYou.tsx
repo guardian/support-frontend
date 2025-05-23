@@ -10,7 +10,7 @@ import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscripti
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
@@ -43,10 +43,10 @@ type PropTypes = ConnectedProps<typeof connector> & {
 // ----- Helper ----- //
 const getPackageTitle = (billingPeriod: BillingPeriod) => {
 	switch (billingPeriod) {
-		case 'Quarterly':
+		case BillingPeriod.Quarterly:
 			return ' / quarterly package ';
 
-		case 'Annual':
+		case BillingPeriod.Annual:
 			return ' / annual package ';
 
 		default:

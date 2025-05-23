@@ -1,43 +1,53 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
-describe('Payment Ts&Cs Snapshot comparison', () => {
-	const promotionTierThreUnitedStatesMonthly: Promotion = {
+describe('orderSummaryTs&Cs Snapshot comparison', () => {
+	const promotionTierThreeUnitedStatesMonthly: Promotion = {
 		name: '$8 off for 12 months',
 		description: 'Tier Three United States Monthly',
 		promoCode: 'TIER_THREE_USA_MONTHLY',
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 37,
 	};
-	const paymentProductKeys = [
-		['GuardianAdLite', 'Monthly', 'GBPCountries', 0],
-		['Contribution', 'Annual', 'AUDCountries', 0],
-		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
-		['TierThree', 'Monthly', 'UnitedStates', 45],
+
+	type OrderSummaryTestParams = [
+		ActiveProductKey,
+		CountryGroupId,
+		ActiveRatePlanKey,
+		number,
 	];
-	it.each(paymentProductKeys)(
+
+	const orderSummaryProductKeys: OrderSummaryTestParams[] = [
+		['GuardianAdLite', 'GBPCountries', 'Monthly', 0],
+		['Contribution', 'AUDCountries', 'Annual', 0],
+		['SupporterPlus', 'GBPCountries', 'Monthly', 12],
+		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', 45],
+	];
+	it.each(orderSummaryProductKeys)(
 		`orderSummaryTs&Cs render product %s for region %s correctly`,
-		(paymentProductKey, billingPeriod, countryGroupId, amount) => {
+		(paymentProductKey, countryGroupId, activeRatePlanKey, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				billingPeriod === 'Monthly' &&
+				activeRatePlanKey === 'RestOfWorldMonthly' &&
 				countryGroupId === 'UnitedStates'
-					? promotionTierThreUnitedStatesMonthly
+					? promotionTierThreeUnitedStatesMonthly
 					: undefined;
 			const { container } = render(
 				<OrderSummaryTsAndCs
-					productKey={paymentProductKey as ActiveProductKey}
-					billingPeriod={billingPeriod as BillingPeriod}
-					countryGroupId={countryGroupId as CountryGroupId}
-					thresholdAmount={amount as number}
+					productKey={paymentProductKey}
+					ratePlanKey={activeRatePlanKey}
+					countryGroupId={countryGroupId}
+					thresholdAmount={amount}
 					promotion={promo}
 				/>,
 			);
-			expect(container).toMatchSnapshot();
+			expect(container.textContent).toMatchSnapshot();
 		},
 	);
 });

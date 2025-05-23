@@ -7,11 +7,13 @@ import {
 	textSansBold17,
 } from '@guardian/source/foundations';
 import { useState } from 'react';
-import type { ContributionType } from 'helpers/contributions';
+import {
+	type BillingPeriod,
+	getBillingPeriodTitle,
+} from 'helpers/productPrice/billingPeriods';
 
 interface PaymentFrequencyButtonObj {
-	paymentFrequencyLabel: string;
-	paymentFrequencyId: ContributionType;
+	billingPeriod: BillingPeriod;
 	isPreSelected?: boolean;
 }
 
@@ -78,15 +80,15 @@ export function PaymentFrequencyButtons({
 				<button
 					css={button(buttonIndex === selectedButton)}
 					role="tab"
-					id={paymentFrequency.paymentFrequencyId}
-					aria-controls={`${paymentFrequency.paymentFrequencyId}-tab`}
+					id={paymentFrequency.billingPeriod}
+					aria-controls={`${paymentFrequency.billingPeriod}-tab`}
 					aria-selected={buttonIndex === selectedButton}
 					onClick={() => {
 						setSelectedButton(buttonIndex);
 						buttonClickHandler(buttonIndex);
 					}}
 				>
-					{paymentFrequency.paymentFrequencyLabel}
+					{getBillingPeriodTitle(paymentFrequency.billingPeriod)}
 				</button>
 			))}
 		</div>

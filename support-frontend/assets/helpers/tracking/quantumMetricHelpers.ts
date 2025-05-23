@@ -1,10 +1,16 @@
 import { getConsentFor, onConsent } from '@guardian/libs';
-import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+
+const periodMultipliers: Record<BillingPeriod, number> = {
+	OneTime: 1,
+	Annual: 1,
+	Quarterly: 4,
+	Monthly: 12,
+};
 
 export function getSubscriptionAnnualValue(
 	productPrice: ProductPrice,
@@ -13,20 +19,13 @@ export function getSubscriptionAnnualValue(
 	const fullPrice = productPrice.price;
 	const promotion = getAppliedPromo(productPrice.promotions);
 
-	const periodMultipliers: Record<BillingPeriod, number> = {
-		Annual: 1,
-		Monthly: 12,
-		Quarterly: 4,
-	};
-
-	const periodMultiplier = periodMultipliers[billingPeriod];
-
 	/**
 	 * This catches the event that the SixWeekly BillingPeriod is used
 	 * and returns immediately. We shouldn't have to handle at runtime as the SixWeekly billing
 	 * period is deprecated. We should look into whether we want to retain/remove logic
 	 * to handle it in our code.
 	 */
+	const periodMultiplier = periodMultipliers[billingPeriod];
 	if (periodMultiplier === 0) {
 		return;
 	}
@@ -54,12 +53,7 @@ export function getConvertedAnnualValue(
 	amount: number,
 	sourceCurrency: IsoCurrency,
 ): number | undefined {
-	const billingMultiplier = {
-		Annual: 1,
-		Monthly: 12,
-		Quarterly: 4,
-	} as const satisfies Record<BillingPeriod, number>;
-	const annualAmount = amount * billingMultiplier[billingPeriod];
+	const annualAmount = amount * periodMultipliers[billingPeriod];
 	return getConvertedValue(annualAmount, sourceCurrency);
 }
 
@@ -83,14 +77,11 @@ export function getConvertedValue(
 
 // TODO: To be deleted with the 2-step checkout
 export function getContributionAnnualValue(
-	contributionType: ContributionType,
+	billingPeriod: BillingPeriod,
 	amount: number,
 	sourceCurrency: IsoCurrency,
 ): number | undefined {
-	const valueInPence =
-		contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
-			? amount * 100
-			: amount * 100 * 12;
+	const valueInPence = amount * 100 * periodMultipliers[billingPeriod];
 	const targetCurrency: IsoCurrency = 'GBP';
 
 	if (window.QuantumMetricAPI?.isOn()) {

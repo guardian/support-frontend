@@ -14,7 +14,10 @@ import {
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	BillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
@@ -156,17 +159,8 @@ export function Checkout({
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
-
-	/**
-	 * This is some annoying transformation we need from
-	 * Product API => Contributions work we need to do
-	 */
 	const billingPeriod =
-		ratePlan.billingPeriod === 'Quarter'
-			? 'Quarterly'
-			: ratePlan.billingPeriod === 'Month'
-			? 'Monthly'
-			: 'Annual';
+		toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 	let promotion;
 	if (productKey === 'Contribution') {
