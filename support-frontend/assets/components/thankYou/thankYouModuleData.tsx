@@ -29,6 +29,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -114,10 +115,10 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	isTierThree: boolean,
 	startDate?: string,
 	email?: string,
 	campaignCode?: string,
-	isTierThree?: boolean,
 	checklistData?: BenefitsCheckListData[],
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
@@ -134,6 +135,7 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -250,19 +252,23 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, observerPrint),
+			header: signInHeader(isTierThree, observerPrint, isGuardianWeekly),
 			bodyCopy: (
 				<SignInBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
+					isGuardianWeekly={isGuardianWeekly}
 				/>
 			),
 			ctas: (
 				<SignInCTA
 					email={email}
 					csrf={csrf}
-					isTierThree={isTierThree}
-					observerPrint={observerPrint}
+					buttonLabel={
+						observerPrint ?? (isTierThree || isGuardianWeekly)
+							? 'Sign in'
+							: 'Continue'
+					}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
@@ -274,6 +280,7 @@ export const getThankYouModuleData = (
 				<SignUpBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
+					isGuardianWeekly={isGuardianWeekly}
 				/>
 			),
 			ctas: null,
@@ -344,6 +351,7 @@ export const getThankYouModuleData = (
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
+					isGuardianWeekly={isGuardianWeekly}
 				/>
 			),
 			ctas: null,

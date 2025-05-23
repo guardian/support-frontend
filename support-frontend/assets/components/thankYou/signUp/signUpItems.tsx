@@ -8,15 +8,17 @@ export const signUpHeader = 'Complete your Guardian account';
 export function SignUpBodyCopy({
 	isTierThree,
 	observerPrint,
+	isGuardianWeekly,
 }: {
 	isTierThree?: boolean;
+	isGuardianWeekly?: boolean;
 	observerPrint?: ObserverPrint;
 }): JSX.Element {
-	const upperCopy = (isTier3?: boolean, observerPrint?: ObserverPrint) => {
-		if (observerPrint) {
+	const upperCopy = () => {
+		if (observerPrint ?? isGuardianWeekly) {
 			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup and will allow you to manage your subscription.';
 		}
-		if (isTier3) {
+		if (isTierThree) {
 			return 'To finish creating your account, please check your inbox for an email from us. This step will complete your account setup.';
 		}
 		return 'Please validate your email address today so we can recognise you as a valued supporter when you visit our website or app. This means we will:';
@@ -27,8 +29,8 @@ export function SignUpBodyCopy({
 		'Make sure you sign in on all your devices when browsing our website and app. This helps us recognise you as a valued subscriber so you can enjoy all the benefits included in your subscription.';
 	return (
 		<>
-			<p>{upperCopy(isTierThree, observerPrint)}</p>
-			{!observerPrint && (
+			<p>{upperCopy()}</p>
+			{!observerPrint && !isGuardianWeekly && (
 				<>
 					{!isTierThree && (
 						<div
