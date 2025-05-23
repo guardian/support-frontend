@@ -16,6 +16,19 @@ class StripeCheckoutSessionServiceSpec extends AnyFlatSpec with Matchers {
     )
   }
 
+  it should "remove any existing checkoutSessionId query parameter" in {
+    val referer =
+      "https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday&checkoutSessionId=12345"
+
+    val successUrl = StripeCheckoutSessionService.buildSuccessUrl(referer)
+
+    successUrl should be(
+      Some(
+        "https://support.theguardian.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday&checkoutSessionId={CHECKOUT_SESSION_ID}",
+      ),
+    )
+  }
+
   it should "return None for domains which aren't in the allow-list" in {
     val referer = "https://www.example.com/uk/checkout?product=HomeDelivery&ratePlan=Sunday"
 
