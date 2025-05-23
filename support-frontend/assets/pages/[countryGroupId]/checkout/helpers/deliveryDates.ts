@@ -1,5 +1,5 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { ActiveProductKey } from '../../../../helpers/productCatalog';
 import { isActivePaperProductOption } from '../../../../helpers/productPrice/productOptions';
 import { formatMachineDate } from '../../../../helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from '../../../paper-subscription-checkout/helpers/homeDeliveryDays';

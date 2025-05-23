@@ -30,8 +30,8 @@ importers:
         specifier: 18.1.0
         version: 18.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.0.0(tslib@2.6.2)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
-        specifier: guardian/support-service-lambdas#954a612fbce077790fa2d00c6e159b8d384f3e14
-        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/954a612fbce077790fa2d00c6e159b8d384f3e14
+        specifier: guardian/support-service-lambdas#7c47d02f232c455163f12ab9fab25722d29af7ff
+        version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff
       '@guardian/tsconfig':
         specifier: ^0.2.0
         version: 0.2.0
@@ -1477,8 +1477,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/954a612fbce077790fa2d00c6e159b8d384f3e14':
-    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/954a612fbce077790fa2d00c6e159b8d384f3e14}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff':
+    resolution: {tarball: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff}
     version: 1.0.0
 
   '@guardian/tsconfig@0.2.0':
@@ -8006,7 +8006,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/954a612fbce077790fa2d00c6e159b8d384f3e14': {}
+  '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff': {}
 
   '@guardian/tsconfig@0.2.0': {}
 

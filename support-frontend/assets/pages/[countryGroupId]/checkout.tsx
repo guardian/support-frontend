@@ -1,4 +1,3 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -10,6 +9,7 @@ import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
+	type ActiveProductKey,
 	type ActiveRatePlanKey,
 	isProductKey,
 	productCatalog,

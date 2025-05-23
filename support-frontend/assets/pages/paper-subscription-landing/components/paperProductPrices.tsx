@@ -111,6 +111,38 @@ const copy: Record<
 				for <strong>the Observer</strong>, delivered
 			</>
 		),
+		EverydayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>,
+				delivered
+			</>
+		),
+		SixdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>, delivered
+			</>
+		),
+		WeekendPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>,
+				delivered
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>, delivered
+			</>
+		),
+		SundayPlus: (
+			<>
+				{' '}
+				for <strong>the Observer</strong>, delivered
+			</>
+		),
 	},
 	Collection: {
 		Everyday: (
@@ -143,6 +175,36 @@ const copy: Record<
 				for <strong>the Observer</strong>
 			</>
 		),
+		EverydayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>
+			</>
+		),
+		SixdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>
+			</>
+		),
+		WeekendPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong> and <strong>the Observer</strong>
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				{' '}
+				for <strong>the Guardian</strong>
+			</>
+		),
+		SundayPlus: (
+			<>
+				{' '}
+				for <strong>the Observer</strong>
+			</>
+		),
 	},
 };
 
@@ -150,50 +212,53 @@ const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 ): Product[] =>
-	ActivePaperProductTypes.map((productOption) => {
-		const priceAfterPromosApplied = finalPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-		const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
-		const promoCode = promotion ? promotion.promoCode : null;
-		const trackingProperties: TrackingProperties = {
-			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-			product: 'Paper',
-			componentType: 'ACQUISITIONS_BUTTON',
-		};
-		const nonDiscountedPrice = getProductPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-		const label = productOption === 'Everyday' ? 'Best deal' : '';
-		const productLabel = getProductLabel(productOption);
-		return {
-			title: getTitle(productOption),
-			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-			onClick: sendTrackingEventsOnClick(trackingProperties),
-			onView: sendTrackingEventsOnView(trackingProperties),
-			buttonCopy: 'Subscribe',
-			priceCopy: getPriceCopyString(
-				nonDiscountedPrice,
-				copy[fulfilmentOption][productOption],
-			),
-			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label,
-			productLabel,
-			unavailableOutsideLondon: getUnavailableOutsideLondon(
+	ActivePaperProductTypes.filter(
+		(productOption) => !productOption.endsWith('Plus'),
+	) //Don't show Plus options on the landing page for now
+		.map((productOption) => {
+			const priceAfterPromosApplied = finalPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
 				fulfilmentOption,
 				productOption,
-			),
-		};
-	});
+			);
+			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+			const promoCode = promotion ? promotion.promoCode : null;
+			const trackingProperties: TrackingProperties = {
+				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+				product: 'Paper',
+				componentType: 'ACQUISITIONS_BUTTON',
+			};
+			const nonDiscountedPrice = getProductPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
+				fulfilmentOption,
+				productOption,
+			);
+			const label = productOption === 'Everyday' ? 'Best deal' : '';
+			const productLabel = getProductLabel(productOption);
+			return {
+				title: getTitle(productOption),
+				price: showPrice(priceAfterPromosApplied),
+				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+				onClick: sendTrackingEventsOnClick(trackingProperties),
+				onView: sendTrackingEventsOnView(trackingProperties),
+				buttonCopy: 'Subscribe',
+				priceCopy: getPriceCopyString(
+					nonDiscountedPrice,
+					copy[fulfilmentOption][productOption],
+				),
+				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+				label,
+				productLabel,
+				unavailableOutsideLondon: getUnavailableOutsideLondon(
+					fulfilmentOption,
+					productOption,
+				),
+			};
+		});
 
 export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;

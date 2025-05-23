@@ -1,8 +1,7 @@
 import type {
-	ActiveProductKey,
+	ProductKey,
 	ProductRatePlanKey,
-} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
+} from '@modules/product-catalog/productCatalog';
 import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
 import type {
@@ -15,7 +14,24 @@ import {
 	type RecurringBillingPeriod,
 } from './productPrice/billingPeriods';
 
-export type { ActiveProductKey };
+const activeProductKeys = [
+	'GuardianWeeklyDomestic',
+	'GuardianWeeklyRestOfWorld',
+	'GuardianAdLite',
+	'TierThree',
+	'DigitalSubscription',
+	'NationalDelivery',
+	'HomeDelivery',
+	'SupporterPlus',
+	'SubscriptionCard',
+	'Contribution',
+	'OneTimeContribution',
+] as const;
+
+export type ActiveProductKey = Extract<
+	ProductKey,
+	(typeof activeProductKeys)[number]
+>;
 
 /*
  * Ideally, would prefer to loop the ActiveProductKey's generating an ActiveRatePlanKey
@@ -33,7 +49,6 @@ type GuardianWeeklyDomesticRatePlanKey =
 	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
-type GuardianPatronRatePlanKey = ProductRatePlanKey<'GuardianPatron'>;
 
 /* eslint-disable @typescript-eslint/no-duplicate-type-constituents -- HomeDelivery matches SubscriptionCard GuardianWeeklyDomestic matches GuardianWeeklyRestOfWorld */
 export type ActiveRatePlanKey = keyof {
@@ -48,8 +63,7 @@ export type ActiveRatePlanKey = keyof {
 		| GuardianWeeklyRestOfWorldRatePlanKey
 		| GuardianWeeklyDomesticRatePlanKey
 		| SubscriptionCardRatePlanKey
-		| ContributionRatePlanKey
-		| GuardianPatronRatePlanKey]: true;
+		| ContributionRatePlanKey]: true;
 };
 /* eslint-enable @typescript-eslint/no-duplicate-type-constituents -- enabled */
 
@@ -136,9 +150,8 @@ function displayBenefitByABTestVariant(
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
-const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
-	return productKeys.includes(val as ActiveProductKey);
+	return activeProductKeys.includes(val as ActiveProductKey);
 }
 
 const digitalEditionBenefit = {
@@ -466,26 +479,6 @@ export const productCatalogDescription: Record<
 		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
 		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
-	},
-	GuardianPatron: {
-		label: 'Guardian Patron',
-		landingPagePath: '/contribute',
-		benefits: [
-			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-			},
-			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
-			},
-			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
-			},
-		],
-		ratePlans: {
-			GuardianPatron: {
-				billingPeriod: BillingPeriod.Monthly,
-			},
-		},
 	},
 };
 
