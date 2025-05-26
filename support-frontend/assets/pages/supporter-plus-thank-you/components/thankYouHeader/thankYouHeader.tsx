@@ -11,6 +11,8 @@ import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
+import LegitimateInterestMessage from './LegitimateInterestMessage';
+import StartDateMessage from './StartDateMessage';
 import Subheading, { OfferHeading } from './subheading';
 
 const header = css`
@@ -67,6 +69,18 @@ function ThankYouHeader({
 	promotion,
 	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
+	const printProductsKeys: ActiveProductKey[] = [
+		'SubscriptionCard',
+		'NationalDelivery',
+		'HomeDelivery',
+		'GuardianWeeklyDomestic',
+		'GuardianWeeklyRestOfWorld',
+	];
+	const isPrint = printProductsKeys.includes(productKey);
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
+	const showLegitimateInterestMessage = !isGuardianAdLite || !observerPrint;
+	const showStartDateMessage = showLegitimateInterestMessage && isPrint;
+
 	return (
 		<header css={header}>
 			<Heading
@@ -81,21 +95,28 @@ function ThankYouHeader({
 				promotion={promotion}
 			/>
 
-			<p css={headerSupportingText}>
+			<div css={headerSupportingText}>
 				{showDirectDebitMessage && (
 					<DirectDebitMessage isObserverPrint={!!observerPrint} />
 				)}
-				<Subheading
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-					isSignedIn={isSignedIn}
-					observerPrint={observerPrint}
-					identityUserType={identityUserType}
-					paymentStatus={paymentStatus}
-					startDate={startDate}
-				/>
-			</p>
+
+				{showStartDateMessage && <StartDateMessage startDate={startDate} />}
+
+				{showLegitimateInterestMessage && <LegitimateInterestMessage />}
+
+				{!showLegitimateInterestMessage && (
+					<Subheading
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						amountIsAboveThreshold={amountIsAboveThreshold}
+						isSignedIn={isSignedIn}
+						observerPrint={observerPrint}
+						identityUserType={identityUserType}
+						paymentStatus={paymentStatus}
+						startDate={startDate}
+					/>
+				)}
+			</div>
 			{showOffer && (
 				<p css={headerSupportingText}>
 					<OfferHeading />
