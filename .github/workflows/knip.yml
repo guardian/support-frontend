@@ -21,8 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          # cache: 'yarn'
-          # cache-dependency-path: support-frontend/yarn.lock
 
       - name: Install
         run: pnpm install
