@@ -27,7 +27,7 @@ export default function PrintProductsHeading({
 			</>
 		) : (
 			<>
-				You are now an <YellowHighlightText text="Observer subscription" />.
+				You are now an <YellowHighlightText text="Observer subscriber" />.
 			</>
 		);
 		return (
