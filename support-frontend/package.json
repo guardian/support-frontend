@@ -196,6 +196,5 @@
 	},
 	"lint-staged": {
 		"./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
-	},
-	"packageManager": "pnpm@10.9.0+sha256.ea53ab747ac8b7921de63b42eab1adf021e1fe6ded05f62f00885cc33a46118d"
+	}
 }
