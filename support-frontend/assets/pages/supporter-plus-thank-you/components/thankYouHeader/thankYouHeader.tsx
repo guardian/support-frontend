@@ -13,7 +13,8 @@ import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import LegitimateInterestMessage from './LegitimateInterestMessage';
 import StartDateMessage from './StartDateMessage';
-import Subheading, { OfferHeading } from './subheading';
+import Subheading from './subheading';
+import { isPrintProduct } from './utils/productMatchers';
 
 const header = css`
 	background: white;
@@ -49,7 +50,6 @@ type ThankYouHeaderProps = {
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
-	showOffer?: boolean;
 };
 
 function ThankYouHeader({
@@ -67,16 +67,8 @@ function ThankYouHeader({
 	startDate,
 	paymentStatus,
 	promotion,
-	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
-	const printProductsKeys: ActiveProductKey[] = [
-		'SubscriptionCard',
-		'NationalDelivery',
-		'HomeDelivery',
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-	const isPrint = printProductsKeys.includes(productKey);
+	const isPrint = isPrintProduct(productKey);
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const showLegitimateInterestMessage = !isGuardianAdLite || !observerPrint;
 	const showStartDateMessage = showLegitimateInterestMessage && isPrint;
@@ -97,7 +89,9 @@ function ThankYouHeader({
 
 			<div css={headerSupportingText}>
 				{showDirectDebitMessage && (
-					<DirectDebitMessage isObserverPrint={!!observerPrint} />
+					<DirectDebitMessage
+						mediaGroup={observerPrint ? 'The Observer' : 'Guardian Media Group'}
+					/>
 				)}
 
 				{showStartDateMessage && <StartDateMessage startDate={startDate} />}
@@ -117,11 +111,6 @@ function ThankYouHeader({
 					/>
 				)}
 			</div>
-			{showOffer && (
-				<p css={headerSupportingText}>
-					<OfferHeading />
-				</p>
-			)}
 		</header>
 	);
 }

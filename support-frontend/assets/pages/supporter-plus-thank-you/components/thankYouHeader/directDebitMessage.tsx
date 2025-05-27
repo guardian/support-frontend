@@ -10,11 +10,10 @@ const directDebitMessage = css`
 `;
 
 function DirectDebitMessage({
-	isObserverPrint = false,
+	mediaGroup,
 }: {
-	isObserverPrint?: boolean;
+	mediaGroup: string;
 }): JSX.Element {
-	const mediaGroup = isObserverPrint ? 'The Observer' : 'Guardian Media Group';
 	return (
 		<div css={directDebitMessage}>
 			<span css={directDebitSetupText}>

@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import {
 	type ActiveProductKey,
@@ -19,43 +18,6 @@ interface SubheadingProps {
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
 }
-
-function MarketingCopy({
-	ratePlanKey,
-	isTier3,
-	isPaper,
-}: {
-	ratePlanKey: ActiveRatePlanKey;
-	isTier3: boolean;
-	isPaper: boolean;
-}) {
-	return (
-		<span>
-			{ratePlanKey === 'OneTime'
-				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
-				: isTier3
-				? 'You can adjust your email preferences and opt out anytime via '
-				: isPaper
-				? 'You can opt out any time via your '
-				: 'Adjust your email preferences at any time via '}
-			<a href="https://manage.theguardian.com">your account</a>.
-		</span>
-	);
-}
-
-const pendingCopy = () => {
-	return (
-		<p
-			css={css`
-				padding-bottom: ${space[3]}px;
-			`}
-		>
-			Thank you for subscribing to a recurring subscription. Your subscription
-			is being processed and you will receive an email when your account is
-			live.
-		</p>
-	);
-};
 
 const getSubHeadingCopy = (
 	productKey: ActiveProductKey,
@@ -127,17 +89,8 @@ function Subheading({
 	isSignedIn,
 	observerPrint,
 	identityUserType,
-	paymentStatus,
 	startDate,
 }: SubheadingProps): JSX.Element {
-	const paperProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-	];
-	const isPaper = paperProductsKeys.includes(productKey);
-	const isTier3 = productKey === 'TierThree';
-	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const subheadingCopy = getSubHeadingCopy(
 		productKey,
 		ratePlanKey,
@@ -148,58 +101,7 @@ function Subheading({
 		startDate,
 	);
 
-	const isPending = paymentStatus === 'pending';
-	return (
-		<>
-			{isPending && !isPaper && pendingCopy()}
-			{subheadingCopy}
-			{!isGuardianAdLite && !isPending && !observerPrint && (
-				<>
-					<MarketingCopy
-						ratePlanKey={ratePlanKey}
-						isTier3={isTier3}
-						isPaper={isPaper}
-					/>
-					{identityUserType !== 'current' &&
-						!isTier3 &&
-						ratePlanKey !== 'OneTime' && (
-							<span
-								css={css`
-									font-weight: bold;
-								`}
-							>
-								{' '}
-								In the meantime, please sign in to get the best supporter
-								experience.
-							</span>
-						)}
-				</>
-			)}
-		</>
-	);
-}
-
-export function OfferHeading(): JSX.Element {
-	return (
-		<>
-			<div
-				css={css`
-					font-weight: bold;
-				`}
-			>
-				We will email you within 24 hours with a unique promo code and
-				instructions for how to redeem your free book from Tertulia.
-			</div>
-			<span>
-				To preview the list of books, click{' '}
-				<a href="https://tertulia.com/editorial-list/guardian-editors-gift-books-for-supporters">
-					here.
-				</a>{' '}
-				(Remember, you will not be able to claim your free book until you
-				receive your promo code.)
-			</span>
-		</>
-	);
+	return <>{subheadingCopy}</>;
 }
 
 export default Subheading;
