@@ -1,4 +1,4 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type { ActiveProductKey } from './productCatalog';
 import { subscriptionProductTypes } from './productPrice/subscriptions';
 
 /**
@@ -32,10 +32,6 @@ export const getLegacyProductType = (
 		case 'OneTimeContribution':
 			throw new Error(
 				'OneTimeContribution does not exist in the old product catalog',
-			);
-		case 'GuardianPatron':
-			throw new Error(
-				'GuardianPatron does not exist in the old product catalog',
 			);
 		default:
 			return productKey;
