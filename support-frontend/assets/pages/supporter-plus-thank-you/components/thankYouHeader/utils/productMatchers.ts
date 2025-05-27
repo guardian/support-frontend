@@ -1,15 +1,15 @@
-import type { ActiveProductKey } from '@modules/product-catalog/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 
 const paperProductsKeys: ActiveProductKey[] = [
 	'NationalDelivery',
 	'HomeDelivery',
 	'SubscriptionCard',
-];
+] as const;
 
 const guardianWeeklyKeys: ActiveProductKey[] = [
 	'GuardianWeeklyDomestic',
 	'GuardianWeeklyRestOfWorld',
-];
+] as const;
 
 const printProductsKeys: ActiveProductKey[] = [
 	...paperProductsKeys,
