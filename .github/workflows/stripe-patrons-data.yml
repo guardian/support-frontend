@@ -30,7 +30,6 @@ jobs:
 
       - run: corepack enable
         shell: bash
-        working-directory: support-frontend
 
       - name: Setup Node for CDK
         uses: actions/setup-node@v4
