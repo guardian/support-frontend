@@ -134,7 +134,6 @@ export const getProductFields = ({
 				deliveryAgent,
 			};
 		}
-		case 'GuardianPatron':
 		case 'OneTimeContribution':
 			logException(unsupportedProductMessage);
 			throw new Error(unsupportedProductMessage);

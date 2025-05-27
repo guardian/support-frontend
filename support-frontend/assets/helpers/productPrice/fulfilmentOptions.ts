@@ -1,7 +1,7 @@
 // Fulfilment options describe the various ways that a user can receive a product
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { ActiveProductKey } from '../productCatalog';
 
 const HomeDelivery = 'HomeDelivery';
 const NationalDelivery = 'NationalDelivery';
@@ -47,7 +47,6 @@ export const getFulfilmentOptionFromProductKey = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
-		case 'GuardianPatron':
 			return 'NoFulfilmentOptions';
 		case 'TierThree':
 		case 'GuardianWeeklyDomestic':
