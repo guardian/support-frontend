@@ -1,12 +1,19 @@
+import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { helpCentreUrl, manageSubsUrl } from 'helpers/urls/externalLinks';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 
+const neutralFontColor = css`
+	color: ${palette.neutral[0]};
+`;
 type WhatNextProps = {
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
+	isGuardianWeekly: boolean;
 	observerPrint?: ObserverPrint;
 };
 
@@ -15,6 +22,7 @@ export function WhatNext({
 	startDate,
 	isSignedIn = false,
 	observerPrint,
+	isGuardianWeekly,
 }: WhatNextProps): JSX.Element {
 	if (observerPrint) {
 		const observerPrintItem =
@@ -35,6 +43,47 @@ export function WhatNext({
 				? observerPaperItems
 				: observerSubscriptionCardItems;
 		return <OrderedList items={observerListItems} />;
+	}
+
+	if (isGuardianWeekly) {
+		const myAccountLink = (
+			<a
+				css={neutralFontColor}
+				href={manageSubsUrl}
+				onClick={sendTrackingEventsOnClick({
+					id: 'checkout_my_account',
+					product: 'Paper',
+					componentType: 'ACQUISITIONS_BUTTON',
+				})}
+			>
+				Manage my account
+			</a>
+		);
+
+		const helpCenterLink = (
+			<a
+				css={neutralFontColor}
+				href={helpCentreUrl}
+				onClick={sendTrackingEventsOnClick({
+					id: 'checkout_help_centre',
+					product: 'Paper',
+					componentType: 'ACQUISITIONS_BUTTON',
+				})}
+			>
+				Help centre
+			</a>
+		);
+
+		const printProductItems = [
+			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
+			'Your magazine will be delivered to your door. Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.',
+			<>
+				You can manage your subscription by visiting {myAccountLink}. For any
+				other queries please visit the {helpCenterLink}.
+			</>,
+		];
+
+		return <OrderedList items={printProductItems} />;
 	}
 
 	const listItems = [

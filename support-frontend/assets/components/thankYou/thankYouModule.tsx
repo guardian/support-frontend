@@ -142,11 +142,11 @@ const bodyStyle = css`
 	}
 `;
 
-const bodyCopyStyle = (isGuardianAdLite: boolean) => css`
+const bodyCopyStyle = css`
 	${textEgyptian15};
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
-		${isGuardianAdLite ? textEgyptian15 : textEgyptian17};
+		${textEgyptian17};
 	}
 `;
 const bodyCopyMarginTop = css`
@@ -271,13 +271,6 @@ function ThankYouModule({
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
-	const isGuardianAdLite = [
-		'whatNext',
-		'reminderToSignIn',
-		'reminderToActivateSubscription',
-		'headlineReturn',
-		'signInToActivate',
-	].includes(moduleType);
 	const hasQrCodes = moduleType === 'appDownload';
 	const isDownloadModules = moduleType === 'appsDownload';
 	const hasImagery = ['appDownload', 'newspaperArchiveBenefit'].includes(
@@ -318,7 +311,7 @@ function ThankYouModule({
 						<>
 							<div css={[bodyApps, bodyAppsTop]}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle(isGuardianAdLite)}>{bodyCopy}</p>
+									<p css={bodyCopyStyle}>{bodyCopy}</p>
 									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
 								</div>
 								<span css={appContainer}>
@@ -327,7 +320,7 @@ function ThankYouModule({
 							</div>
 							<div css={bodyApps}>
 								<div css={bodyStyle}>
-									<p css={bodyCopyStyle(isGuardianAdLite)}>{bodyCopySecond}</p>
+									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
 									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
 								</div>
 								<span css={appContainer}>
@@ -337,9 +330,7 @@ function ThankYouModule({
 						</>
 					) : (
 						<>
-							<p css={[bodyCopyStyle(isGuardianAdLite), bodyCopyMarginTop]}>
-								{bodyCopy}
-							</p>
+							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
 							<div css={resizeMarginTop}>{ctas}</div>
 						</>
 					)}
