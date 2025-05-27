@@ -43,8 +43,6 @@ type ThankYouHeaderProps = {
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	amountIsAboveThreshold: boolean;
-	isSignedIn: boolean;
 	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
@@ -60,9 +58,6 @@ function ThankYouHeader({
 	isOneOffPayPal,
 	amount,
 	currency,
-	amountIsAboveThreshold,
-	isSignedIn,
-	identityUserType,
 	observerPrint,
 	startDate,
 	paymentStatus,
@@ -70,7 +65,8 @@ function ThankYouHeader({
 }: ThankYouHeaderProps): JSX.Element {
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const showLegitimateInterestMessage = !isGuardianAdLite || !observerPrint;
+	const showLegitimateInterestMessage = !(isGuardianAdLite || observerPrint);
+
 	const showStartDateMessage = showLegitimateInterestMessage && isPrint;
 
 	return (
@@ -101,12 +97,7 @@ function ThankYouHeader({
 				{!showLegitimateInterestMessage && (
 					<Subheading
 						productKey={productKey}
-						ratePlanKey={ratePlanKey}
-						amountIsAboveThreshold={amountIsAboveThreshold}
-						isSignedIn={isSignedIn}
 						observerPrint={observerPrint}
-						identityUserType={identityUserType}
-						paymentStatus={paymentStatus}
 						startDate={startDate}
 					/>
 				)}
