@@ -28,12 +28,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - run: npm install --global corepack@0.31.0
+
+      - run: corepack enable
+        shell: bash
+
       - name: Setup Node for CDK
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: "yarn"
-          cache-dependency-path: cdk/yarn.lock
+          node-version-file: ".nvmrc"
 
       - name: Build CFN from CDK
         run: ./script/ci
@@ -78,16 +81,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - run: npm install --global corepack@0.31.0
+
+      - run: corepack enable
+        shell: bash
+
+      - name: Setup Node for CDK
         uses: actions/setup-node@v4
         with:
-          node-version-file: "support-lambdas/bigquery-acquisitions-publisher/.nvmrc"
+          node-version-file: ".nvmrc"
 
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
 
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
         working-directory: support-lambdas/bigquery-acquisitions-publisher
 
       - run: yarn tsc --noEmit
