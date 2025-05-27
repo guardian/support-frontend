@@ -15,6 +15,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
+import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
@@ -160,6 +161,9 @@ export function SignInCTA({
 	const [signInUrl, setSignInUrl] = useState('https://manage.theguardian.com');
 
 	function fetchSignInLink(payload: { email: string }) {
+		if (!isCodeOrProd()) {
+			return;
+		}
 		fetch(routes.createSignInUrl, {
 			method: 'post',
 			headers: {
