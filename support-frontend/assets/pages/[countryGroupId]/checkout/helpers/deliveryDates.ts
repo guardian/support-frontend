@@ -12,6 +12,8 @@ export const getFirstDeliveryDateForProduct = (
 ): string | null => {
 	switch (productKey) {
 		case 'TierThree':
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
 			return formatMachineDate(getTierThreeDeliveryDate());
 		case 'NationalDelivery':
 		case 'HomeDelivery':
