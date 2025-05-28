@@ -27,7 +27,7 @@ test.describe('Checkout', () => {
 		{
 			product: 'GuardianWeeklyDomestic',
 			ratePlan: 'Monthly',
-			paymentType: 'PayPal',
+			paymentType: 'Credit/Debit card',
 			internationalisationId: 'US',
 			postCode: '60601',
 		},
@@ -42,8 +42,8 @@ test.describe('Checkout', () => {
 			product: 'GuardianWeeklyDomestic',
 			ratePlan: 'Quarterly',
 			paymentType: 'PayPal',
-			internationalisationId: 'AU',
-			postCode: '2000',
+			internationalisationId: 'UK',
+			postCode: 'BN44 3QG',
 		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
