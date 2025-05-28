@@ -1,24 +1,30 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
-import { formatUserDate } from 'helpers/utilities/dateConversions';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 
 const startDateStyle = css`
 	margin-bottom: ${space[2]}px;
 `;
 
 export default function StartDateMessage({
+	productKey,
 	startDate,
 }: {
 	startDate?: string;
+	productKey: ActiveProductKey;
 }) {
-	if (!startDate) {return null;}
+	if (!startDate) {
+		return null;
+	}
+
+	const deliveryMessage =
+		productKey === 'GuardianWeeklyDomestic'
+			? 'Your first issue will be published on'
+			: 'You will receive your newspapers from';
 
 	return (
 		<p css={startDateStyle}>
-			{startDate &&
-				`Your first issue will be published on ${formatUserDate(
-					new Date(startDate),
-				)}.`}
+			{deliveryMessage} {startDate}.
 		</p>
 	);
 }

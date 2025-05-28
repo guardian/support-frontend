@@ -7,13 +7,13 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
-import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import DirectDebitMessage from './directDebitMessage';
+import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
 import LegitimateInterestMessage from './LegitimateInterestMessage';
+import ObserverMessage from './ObserverMessage';
+import ProductCatalogMessage from './ProductCatalogMessage';
 import StartDateMessage from './StartDateMessage';
-import Subheading from './subheading';
 import { isPrintProduct } from './utils/productMatchers';
 
 const header = css`
@@ -39,11 +39,10 @@ type ThankYouHeaderProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
-	showDirectDebitMessage: boolean;
+	isDirectDebitPayment: boolean;
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
 	paymentStatus?: PaymentStatus;
@@ -54,7 +53,7 @@ function ThankYouHeader({
 	name,
 	productKey,
 	ratePlanKey,
-	showDirectDebitMessage,
+	isDirectDebitPayment,
 	isOneOffPayPal,
 	amount,
 	currency,
@@ -66,8 +65,9 @@ function ThankYouHeader({
 	const isPrint = isPrintProduct(productKey);
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const showLegitimateInterestMessage = !(isGuardianAdLite || observerPrint);
-
-	const showStartDateMessage = showLegitimateInterestMessage && isPrint;
+	const showProductCatalogMessage = isGuardianAdLite && !observerPrint;
+	const showStartDateMessage =
+		isPrint && observerPrint !== ObserverPrint.SubscriptionCard;
 
 	return (
 		<header css={header}>
@@ -84,22 +84,26 @@ function ThankYouHeader({
 			/>
 
 			<div css={headerSupportingText}>
-				{showDirectDebitMessage && (
+				{showStartDateMessage && (
+					<StartDateMessage productKey={productKey} startDate={startDate} />
+				)}
+
+				{isDirectDebitPayment && (
 					<DirectDebitMessage
 						mediaGroup={observerPrint ? 'The Observer' : 'Guardian Media Group'}
 					/>
 				)}
 
-				{showStartDateMessage && <StartDateMessage startDate={startDate} />}
-
-				{showLegitimateInterestMessage && <LegitimateInterestMessage />}
-
-				{!showLegitimateInterestMessage && (
-					<Subheading
-						productKey={productKey}
-						observerPrint={observerPrint}
-						startDate={startDate}
+				{showLegitimateInterestMessage && (
+					<LegitimateInterestMessage
+						showPaymentStatus={!isDirectDebitPayment}
 					/>
+				)}
+
+				{observerPrint && <ObserverMessage observerPrint={observerPrint} />}
+
+				{showProductCatalogMessage && (
+					<ProductCatalogMessage productKey={productKey} />
 				)}
 			</div>
 		</header>
