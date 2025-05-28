@@ -4,7 +4,13 @@ import { setupPage } from '../utils/page';
 import { fillInPayPalDetails } from '../utils/paypal';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { checkRecaptcha } from '../utils/recaptcha';
-import { TestFields, ukWithPostalAddressOnly } from '../utils/userFields';
+import {
+	ausWithFullAddress,
+	intWithPostalAddressOnly,
+	TestFields,
+	ukWithPostalAddressOnly,
+	usWithPostalAddressOnly,
+} from '../utils/userFields';
 import {
 	setTestUserAddressDetails,
 	setTestUserDetails,
@@ -32,19 +38,28 @@ const setUserDetailsForProduct = async (
 			await setTestUserDetails(page, email(), firstName(), lastName(), true);
 
 			break;
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
 		case 'TierThree':
-			let userDetails: TestFields | undefined;
-			if (internationalisationId === 'UK') {
-				userDetails = ukWithPostalAddressOnly();
-			}
-			if (!userDetails) {
-				throw new Error(
-					`Couldn't find user details for ${product} in ${internationalisationId}`,
-				);
-			}
+			const userDetails = (): TestFields => {
+				switch (internationalisationId) {
+					case 'UK':
+						return ukWithPostalAddressOnly();
+					case 'US':
+						return usWithPostalAddressOnly();
+					case 'AU':
+						return ausWithFullAddress();
+					case 'INT':
+						return intWithPostalAddressOnly();
+					default:
+						throw new Error(
+							`Couldn't find user details for ${product} in ${internationalisationId}`,
+						);
+				}
+			};
 			await setTestUserAddressDetails(
 				page,
-				userDetails,
+				userDetails(),
 				internationalisationId,
 				3,
 			);
@@ -127,8 +142,12 @@ export const testCheckout = (testDetails: TestDetails) => {
 			postCode,
 		);
 
+		// State mandatory for AU and US
 		if (internationalisationId === 'AU') {
 			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
+		}
+		if (internationalisationId === 'US') {
+			await page.getByLabel('State').selectOption({ label: 'Illinois' });
 		}
 
 		await page.getByRole('radio', { name: paymentType }).check();

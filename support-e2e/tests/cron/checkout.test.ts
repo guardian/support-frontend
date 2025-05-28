@@ -24,6 +24,27 @@ test.describe('Checkout', () => {
 			paymentType: 'PayPal',
 			internationalisationId: 'UK',
 		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Monthly',
+			paymentType: 'PayPal',
+			internationalisationId: 'US',
+			postCode: '60601',
+		},
+		{
+			product: 'GuardianWeeklyRestOfWorld',
+			ratePlan: 'Annual',
+			paymentType: 'PayPal',
+			internationalisationId: 'INT',
+			postCode: '8001',
+		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Quarterly',
+			paymentType: 'PayPal',
+			internationalisationId: 'AU',
+			postCode: '2000',
+		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
 	});
