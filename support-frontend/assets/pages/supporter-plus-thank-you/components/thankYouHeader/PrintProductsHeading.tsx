@@ -58,7 +58,7 @@ export default function PrintProductsHeading({
 			{thankYouText}
 			<br />
 			You have now subscribed to the{' '}
-			<YellowHighlightText>{paperRatePlanName}</YellowHighlightText> package
+			<YellowHighlightText>{paperRatePlanName} package</YellowHighlightText>
 		</>
 	);
 }
