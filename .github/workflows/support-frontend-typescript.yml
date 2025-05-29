@@ -17,5 +17,4 @@ jobs:
         uses: ./.github/actions/setup-node-and-install
 
       - name: Type check
-        run: pnpm tsc
-        working-directory: support-frontend
+        run: pnpm --filter support-frontend typecheck

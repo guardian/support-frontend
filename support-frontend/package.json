@@ -6,6 +6,7 @@
 		"start": "./devrun.sh",
 		"clean": "echo 'Cleaning Public Folder' && rimraf public/compiled-assets",
 		"validate": "echo 'Validating TS' && npm-run-all 'lint:fix' && pnpm tsc && pnpm knip",
+    "typecheck": "tsc --noEmit",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
 		"lint:fix": "pnpm lint:check --fix",
