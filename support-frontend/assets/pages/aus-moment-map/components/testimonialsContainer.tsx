@@ -5,7 +5,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import * as React from 'react';
-import type { ReactNode , RefObject } from 'react';
+import type { ReactNode, RefObject } from 'react';
 import type { AuState } from 'helpers/internationalisation/country';
 import { auStates } from 'helpers/internationalisation/country';
 import type {
