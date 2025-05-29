@@ -9,9 +9,6 @@ jobs:
   compressed_size:
     if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     name: Compressed Size
-    defaults:
-      run:
-        working-directory: support-frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
