@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node and Install Dependencies
-        uses: ./.github/workflows/setup-node-and-install.yml
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build the html used for SSR pages
         run: pnpm --filter support-frontend build-ssr
