@@ -26,6 +26,26 @@ type TestDetails = {
 	postCode?: string;
 };
 
+const userDetails = (
+	product: string,
+	internationalisationId: string,
+): TestFields => {
+	switch (internationalisationId) {
+		case 'UK':
+			return ukWithPostalAddressOnly();
+		case 'US':
+			return usWithPostalAddressOnly();
+		case 'AU':
+			return ausWithFullAddress();
+		case 'INT':
+			return intWithPostalAddressOnly();
+		default:
+			throw new Error(
+				`Couldn't find user details for ${product} in ${internationalisationId}`,
+			);
+	}
+};
+
 const setUserDetailsForProduct = async (
 	page,
 	product,
@@ -41,25 +61,9 @@ const setUserDetailsForProduct = async (
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld':
 		case 'TierThree':
-			const userDetails = (): TestFields => {
-				switch (internationalisationId) {
-					case 'UK':
-						return ukWithPostalAddressOnly();
-					case 'US':
-						return usWithPostalAddressOnly();
-					case 'AU':
-						return ausWithFullAddress();
-					case 'INT':
-						return intWithPostalAddressOnly();
-					default:
-						throw new Error(
-							`Couldn't find user details for ${product} in ${internationalisationId}`,
-						);
-				}
-			};
 			await setTestUserAddressDetails(
 				page,
-				userDetails(),
+				userDetails(product, internationalisationId),
 				internationalisationId,
 				3,
 			);
