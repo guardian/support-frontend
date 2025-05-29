@@ -1,38 +1,18 @@
-import { css } from '@emotion/react';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-
-const yellowHighlightText = css`
-	background-color: #ffe500;
-	padding: 0 5px;
-`;
-
-function YellowHighlightText({ text }: { text: string }) {
-	return <span css={yellowHighlightText}>{text}</span>;
-}
+import YellowHighlightText from './YellowHighlightText';
 
 export default function PrintProductsHeading({
 	isObserverPrint,
 	ratePlanKey,
-	isPending,
 }: {
 	isObserverPrint: boolean;
 	ratePlanKey?: ActiveRatePlanKey;
-	isPending: boolean;
 }) {
 	if (isObserverPrint) {
-		const statusText = isPending ? (
-			<>
-				Your <YellowHighlightText text="Observer subscription" /> is being
-				processed
-			</>
-		) : (
-			<>
-				You are now an <YellowHighlightText text="Observer subscriber" />.
-			</>
-		);
 		return (
 			<>
-				{statusText}
+				You are now an{' '}
+				<YellowHighlightText>Observer subscriber</YellowHighlightText>.
 				<br />
 				Welcome and thank you for supporting Observer journalism!
 			</>
@@ -40,7 +20,7 @@ export default function PrintProductsHeading({
 	}
 
 	if (!ratePlanKey) {
-		return <></>;
+		return null;
 	}
 
 	const thankYouText = 'Thank you for supporting our journalism!';
@@ -48,18 +28,12 @@ export default function PrintProductsHeading({
 		ratePlanKey,
 	);
 	if (guardianWeekly) {
-		const statusText = (
-			<>
-				You have now subscribed to{' '}
-				<YellowHighlightText text="the Guardian Weekly" />
-			</>
-		);
-
 		return (
 			<>
 				{thankYouText}
 				<br />
-				{statusText}
+				You have now subscribed to{' '}
+				<YellowHighlightText>the Guardian Weekly</YellowHighlightText>
 			</>
 		);
 	}
@@ -68,14 +42,11 @@ export default function PrintProductsHeading({
 		ratePlanKey,
 	);
 	if (guardianWeeklyGifting) {
-		const statusText = isPending
-			? 'Your Guardian Weekly gift subscription is being processed'
-			: 'Your purchase of a Guardian Weekly gift subscription is now complete';
 		return (
 			<>
 				{thankYouText}
 				<br />
-				{statusText}
+				Your purchase of a Guardian Weekly gift subscription is now complete
 			</>
 		);
 	}
@@ -86,9 +57,8 @@ export default function PrintProductsHeading({
 		<>
 			{thankYouText}
 			<br />
-			{isPending
-				? `Your subscription to the ${paperRatePlanName} package is being processed`
-				: `You have now subscribed to the ${paperRatePlanName} package`}
+			You have now subscribed to the{' '}
+			<YellowHighlightText>{paperRatePlanName}</YellowHighlightText> package
 		</>
 	);
 }
