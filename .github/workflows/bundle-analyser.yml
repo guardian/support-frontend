@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node and Install Dependencies
-        uses: ./.github/workflows/setup-node-and-install.yml
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Generate production build for github action
         run: pnpm build-github-action
