@@ -68,8 +68,8 @@ export default function ContributionHeading({
 	return (
 		<>
 			<h1 css={headerTitleText}>
-				Thank you <span data-qm-masking="blocklist">{name}</span> for supporting
-				us with{' '}
+				Thank you <span data-qm-masking="blocklist">{name} </span> for
+				supporting us with{' '}
 				<YellowHighlightText>
 					{promotion ? promotionPriceWithCurrency : amountWithCurrency}
 				</YellowHighlightText>{' '}
