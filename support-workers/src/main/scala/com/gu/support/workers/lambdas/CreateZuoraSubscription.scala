@@ -11,6 +11,7 @@ import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisit
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
 import com.gu.zuora.subscriptionBuilders._
+import org.joda.time.{DateTimeZone, LocalDate}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -26,7 +27,8 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       services: Services,
   ): FutureHandlerResult = {
 
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
+    val zuoraProductHandlers =
+      new ZuoraProductHandlers(services, zuoraSubscriptionState, LocalDate.now(DateTimeZone.UTC))
     import zuoraProductHandlers._
 
     val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
@@ -84,11 +86,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
   }
 }
 
-class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
+class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState, today: LocalDate) {
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     state.requestId,
     state.user,
     state.product.currency,
+    today,
   )
   lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionHandler(
     zuoraSubscriptionCreator,

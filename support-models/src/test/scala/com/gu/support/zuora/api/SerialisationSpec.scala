@@ -63,7 +63,8 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
           |    "RenewalTerm" : 12,
           |    "TermType" : "TERMED",
           |    "ReaderType__c" : "Direct",
-          |    "CreatedRequestId__c" : "requestId"
+          |    "CreatedRequestId__c" : "requestId",
+          |    "LastPlanAddedDate__c" : "2020-12-01"
           |  }
           |}""".stripMargin).toTry.get
     json.mapObject(_.mapValues(_.dropNullValues)) should be(expected)
