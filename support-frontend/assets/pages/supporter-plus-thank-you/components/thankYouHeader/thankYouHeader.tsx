@@ -38,7 +38,7 @@ type ThankYouHeaderProps = {
 	ratePlanKey: ActiveRatePlanKey;
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
-	amount: number | undefined;
+	amount: number;
 	currency: IsoCurrency;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
