@@ -7,8 +7,8 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import PrintProductsHeading from './PrintProductsHeading';
 import ContributionHeading from './ContributionHeading';
+import PrintProductsHeading from './PrintProductsHeading';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
@@ -61,10 +61,7 @@ function Heading({
 	const contributionProduct = isContributionProduct(productKey);
 	const printProduct = isPrintProduct(productKey);
 
-	const maybeNameAndTrailingSpace: string =
-		name && name.length < 10 ? `${name} ` : '';
-	const maybeNameAndCommaSpace: string =
-		name && name.length < 10 ? `, ${name}, ` : '';
+	const maybeName = name && name.length < 10 ? name : '';
 
 	if (printProduct) {
 		return (
@@ -81,7 +78,7 @@ function Heading({
 		return (
 			<ContributionHeading
 				amount={amount}
-				name={maybeNameAndTrailingSpace}
+				name={maybeName}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
 				isoCurrency={currency}
@@ -93,8 +90,9 @@ function Heading({
 		return (
 			<h1 css={headerTitleText}>
 				Thank you
-				<span data-qm-masking="blocklist">{maybeNameAndCommaSpace}</span>
-				{'for subscribing to the Digital Edition'}
+				<span data-qm-masking="blocklist">{`, ${maybeName},`}</span> for
+				subscribing to the{' '}
+				<YellowHighlightText>Digital Edition</YellowHighlightText>
 			</h1>
 		);
 	}
@@ -102,8 +100,7 @@ function Heading({
 	if (isTier3 || isGuardianAdLite) {
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you{' '}
-				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>for
+				Thank you <span data-qm-masking="blocklist">{maybeName}</span> for
 				subscribing to{' '}
 				<YellowHighlightText>
 					{isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite.'}
@@ -120,8 +117,7 @@ function Heading({
 
 	return (
 		<h1 css={headerTitleText}>
-			Thank you{' '}
-			<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span> your
+			Thank you <span data-qm-masking="blocklist">{maybeName}</span> your
 			valuable contribution
 		</h1>
 	);
