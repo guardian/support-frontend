@@ -40,7 +40,7 @@ const getFrequencyFromRatePlanKey = (
 	}
 };
 
-export default function SupportHeading({
+export default function ContributionHeading({
 	name,
 	amount,
 	ratePlanKey,

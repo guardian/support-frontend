@@ -11,6 +11,12 @@ const guardianWeeklyKeys: ActiveProductKey[] = [
 	'GuardianWeeklyRestOfWorld',
 ] as const;
 
+const contributionProductKeys: ActiveProductKey[] = [
+	'SupporterPlus',
+	'Contribution',
+	'OneTimeContribution',
+] as const;
+
 const printProductsKeys: ActiveProductKey[] = [
 	...paperProductsKeys,
 	...guardianWeeklyKeys,
@@ -22,4 +28,8 @@ export function isPrintProduct(productKey: ActiveProductKey): boolean {
 
 export function isGuardianWeeklyProduct(productKey: ActiveProductKey): boolean {
 	return guardianWeeklyKeys.includes(productKey);
+}
+
+export function isContributionProduct(productKey: ActiveProductKey): boolean {
+	return contributionProductKeys.includes(productKey);
 }

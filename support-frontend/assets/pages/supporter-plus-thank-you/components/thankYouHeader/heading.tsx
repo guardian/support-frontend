@@ -8,8 +8,8 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import PrintProductsHeading from './PrintProductsHeading';
-import SupportHeading from './SupportHeading';
-import { isPrintProduct } from './utils/productMatchers';
+import ContributionHeading from './ContributionHeading';
+import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
 const tier3lineBreak = css`
@@ -48,7 +48,6 @@ type HeadingProps = {
 function Heading({
 	name,
 	productKey,
-	isOneOffPayPal,
 	amount,
 	currency,
 	isObserverPrint,
@@ -59,12 +58,14 @@ function Heading({
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
 
+	const contributionProduct = isContributionProduct(productKey);
 	const printProduct = isPrintProduct(productKey);
+
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
-	// Print Products Header
+
 	if (printProduct) {
 		return (
 			<h1 css={longHeaderTitleText}>
@@ -76,14 +77,15 @@ function Heading({
 		);
 	}
 
-	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
-	if (isOneOffPayPal || !amount) {
+	if (contributionProduct) {
 		return (
-			<h1 css={headerTitleText}>
-				Thank you{' '}
-				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>{' '}
-				your valuable contribution
-			</h1>
+			<ContributionHeading
+				amount={amount}
+				name={maybeNameAndTrailingSpace}
+				ratePlanKey={ratePlanKey}
+				promotion={promotion}
+				isoCurrency={currency}
+			/>
 		);
 	}
 
@@ -117,24 +119,12 @@ function Heading({
 	}
 
 	return (
-		<SupportHeading
-			amount={amount}
-			name={maybeNameAndTrailingSpace}
-			ratePlanKey={ratePlanKey}
-			promotion={promotion}
-			isoCurrency={currency}
-		/>
+		<h1 css={headerTitleText}>
+			Thank you{' '}
+			<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span> your
+			valuable contribution
+		</h1>
 	);
-
-	// 	default:
-	// 		return (
-	// 			<h1 css={headerTitleText}>
-	// 				Thank you{' '}
-	// 				<span data-qm-masking="blocklist">{maybeNameAndTrailingSpace}</span>
-	// 				for your valuable contribution
-	// 			</h1>
-	// 		);
-	// }
 }
 
 export default Heading;
