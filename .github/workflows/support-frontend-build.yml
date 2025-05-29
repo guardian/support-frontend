@@ -30,18 +30,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - run: npm install --global corepack@0.31.0
-
-      - run: corepack enable
-        shell: bash
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-
-      - name: Install
-        run: pnpm install
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/workflows/setup-node-and-install.yml
 
       - name: Build the html used for SSR pages
         run: pnpm --filter support-frontend build-ssr
