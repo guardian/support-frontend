@@ -1,1 +1,1 @@
-cd cdk && yarn check-formatting && yarn test
+pnpm --filter cdk check-formatting && pnpm --filter cdk test

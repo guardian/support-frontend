@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import * as React from 'preact/compat';
+import * as React from 'react';
 import type { ReactNode } from 'react';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import ActSvg from './territories/actSvg';

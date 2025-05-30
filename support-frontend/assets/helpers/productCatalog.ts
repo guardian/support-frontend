@@ -50,7 +50,6 @@ type GuardianWeeklyDomesticRatePlanKey =
 type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
 type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
 
-/* eslint-disable @typescript-eslint/no-duplicate-type-constituents -- HomeDelivery matches SubscriptionCard GuardianWeeklyDomestic matches GuardianWeeklyRestOfWorld */
 export type ActiveRatePlanKey = keyof {
 	[Key in
 		| OneTimeContributionRatePlanKey
@@ -65,7 +64,6 @@ export type ActiveRatePlanKey = keyof {
 		| SubscriptionCardRatePlanKey
 		| ContributionRatePlanKey]: true;
 };
-/* eslint-enable @typescript-eslint/no-duplicate-type-constituents -- enabled */
 
 export const productCatalog = window.guardian.productCatalog;
 
