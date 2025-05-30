@@ -3,5 +3,6 @@ packages:
   - 'cdk'
   - 'support-lambdas/bigquery-acquisitions-publisher'
   - 'support-e2e'
+  - 'support-workers'
 catalog:
   zod: ^3.23.8
