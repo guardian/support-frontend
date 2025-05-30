@@ -17,8 +17,9 @@ function DirectDebitMessage({
 	return (
 		<div css={directDebitMessage}>
 			<strong css={bold}>Your Direct Debit has been set up. </strong>
-			Look out for an email within three business days confirming your recurring
-			payment. This will appear as '{mediaGroup}' on your bank statements.
+			You will receive an email within three business days confirming your
+			recurring payment. This will appear as '{mediaGroup}' on your bank
+			statements.
 		</div>
 	);
 }
