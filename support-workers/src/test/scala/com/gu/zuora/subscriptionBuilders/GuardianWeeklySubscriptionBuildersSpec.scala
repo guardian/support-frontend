@@ -149,6 +149,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       Some(Address(None, None, None, None, None, Country.UK)),
     ),
     GBP,
+    saleDate,
   )
 
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
