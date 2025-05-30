@@ -61,7 +61,7 @@ function Heading({
 	const contributionProduct = isContributionProduct(productKey);
 	const printProduct = isPrintProduct(productKey);
 
-	const maybeName = name && name.length < 10 ? name : '';
+	const contributorName = name && name.length < 10 ? name : '';
 
 	if (printProduct) {
 		return (
@@ -78,7 +78,7 @@ function Heading({
 		return (
 			<ContributionHeading
 				amount={amount}
-				name={maybeName}
+				name={contributorName}
 				ratePlanKey={ratePlanKey}
 				promotion={promotion}
 				isoCurrency={currency}
@@ -89,8 +89,7 @@ function Heading({
 	if (isDigitalEdition) {
 		return (
 			<h1 css={headerTitleText}>
-				Thank you
-				<span data-qm-masking="blocklist">{`, ${maybeName},`}</span> for
+				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
 				subscribing to the{' '}
 				<YellowHighlightText>Digital Edition</YellowHighlightText>
 			</h1>
@@ -100,7 +99,7 @@ function Heading({
 	if (isTier3 || isGuardianAdLite) {
 		return (
 			<h1 css={longHeaderTitleText}>
-				Thank you <span data-qm-masking="blocklist">{maybeName}</span> for
+				Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
 				subscribing to{' '}
 				<YellowHighlightText>
 					{isTier3 ? 'Digital + print.' : 'Guardian Ad-Lite.'}
@@ -117,7 +116,7 @@ function Heading({
 
 	return (
 		<h1 css={headerTitleText}>
-			Thank you <span data-qm-masking="blocklist">{maybeName}</span> your
+			Thank you <span data-qm-masking="blocklist">{contributorName}</span> your
 			valuable contribution
 		</h1>
 	);

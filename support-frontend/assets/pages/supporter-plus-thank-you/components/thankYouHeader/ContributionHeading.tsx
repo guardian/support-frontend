@@ -72,7 +72,8 @@ export default function ContributionHeading({
 				us with{' '}
 				<YellowHighlightText>
 					{promotion ? promotionPriceWithCurrency : amountWithCurrency}
-				</YellowHighlightText>{' '}
+				</YellowHighlightText>
+				&nbsp;
 				{frequency}
 				{promotion && <sup css={supCss}>*</sup>}
 			</h1>
