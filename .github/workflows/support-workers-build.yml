@@ -38,9 +38,7 @@ jobs:
         working-directory: cdk
 
       - name: Build TypeScript lambdas
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm --filter support-workers package
+        run: pnpm --filter support-workers package
 
       - uses: sbt/setup-sbt@v1
 
