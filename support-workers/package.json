@@ -10,15 +10,14 @@
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
     "clean-target": "rm -rf target && mkdir -p target",
-    "install-runtime-dependencies": "yarn install --modules-folder target/typescript/node_modules --production",
-    "build-and-zip": "yarn clean-target && yarn install-runtime-dependencies && yarn build && cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
-    "package": "yarn check-formatting && yarn lint && yarn test && yarn build-and-zip"
+    "install-runtime-dependencies": "pnpm install --modules-dir target/typescript/node_modules --production",
+    "build-and-zip": "pnpm clean-target && pnpm install-runtime-dependencies && pnpm build && cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
+    "package": "pnpm check-formatting && pnpm lint && pnpm test && pnpm build-and-zip"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/guardian/support-frontend.git"
   },
-  "packageManager": "yarn@1.22.22",
   "private": true,
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.679.0",
