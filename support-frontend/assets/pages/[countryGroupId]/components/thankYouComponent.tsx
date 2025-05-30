@@ -359,17 +359,14 @@ export function ThankYouComponent({
 				<Container>
 					<div css={headerContainer}>
 						<ThankYouHeader
-							isSignedIn={isSignedIn}
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							amountIsAboveThreshold={isSupporterPlus}
 							isOneOffPayPal={isOneOffPayPal}
-							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
+							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							identityUserType={identityUserType}
 							observerPrint={observerPrint}
 							paymentStatus={order.status}
 							startDate={startDate}
