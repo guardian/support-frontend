@@ -61,9 +61,9 @@ type CreateSignInUrlResponse = {
 export const signInHeader = (
 	isTier3?: boolean,
 	observerPrint?: ObserverPrint,
-	isGuardianWeekly?: boolean,
+	isGuardianPrint?: boolean,
 ) => {
-	if (observerPrint ?? isGuardianWeekly) {
+	if (observerPrint ?? isGuardianPrint) {
 		return 'Sign in to access to your account';
 	}
 	if (isTier3) {
@@ -74,11 +74,11 @@ export const signInHeader = (
 
 export function SignInBodyCopy({
 	isTierThree,
-	isGuardianWeekly,
+	isGuardianPrint,
 	observerPrint,
 }: {
 	isTierThree: boolean;
-	isGuardianWeekly: boolean;
+	isGuardianPrint: boolean;
 	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -88,7 +88,7 @@ export function SignInBodyCopy({
 		setIsExpanded(true);
 	};
 
-	if (observerPrint ?? isGuardianWeekly) {
+	if (observerPrint ?? isGuardianPrint) {
 		return (
 			<p>
 				Make sure you’re signed in on all your devices when browsing our website

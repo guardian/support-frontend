@@ -46,7 +46,10 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
@@ -191,13 +194,8 @@ export function ThankYouComponent({
 		'NationalDelivery',
 		'HomeDelivery',
 	];
-	const printProductsKeys: ActiveProductKey[] = [
-		...subscriptionCardProductsKey,
-		...paperProductsKeys,
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-	const isPrint = printProductsKeys.includes(productKey);
+
+	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const getObserver = (): ObserverPrint | undefined => {
@@ -215,8 +213,7 @@ export function ThankYouComponent({
 	};
 	const observerPrint = getObserver();
 
-	const isGuardianPrint =
-		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
+	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
@@ -288,14 +285,12 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			(isGuardianWeekly && guestUser) ||
+			(isGuardianPrint && guestUser) ||
 				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			userNotSignedIn &&
-				!isGuardianAdLite &&
-				(!isGuardianPrint || isGuardianWeekly),
+			userNotSignedIn && !isGuardianAdLite && isPrint,
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
@@ -303,11 +298,15 @@ export function ThankYouComponent({
 			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
+		...maybeThankYouModule(isTierThree, 'subscriptionStart'),
 		...maybeThankYouModule(
-			isTierThree || (isGuardianPrint && !isGuardianWeekly),
-			'subscriptionStart',
+			isGuardianAdLite || isGuardianWeekly || isPrint,
+			'whatNext',
 		),
-		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(
+			isTierThree || isSupporterPlus || isGuardianPrint,
+			'appsDownload',
+		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
@@ -315,7 +314,7 @@ export function ThankYouComponent({
 					isSignedIn &&
 					!isGuardianAdLite &&
 					!observerPrint &&
-					!isGuardianWeekly),
+					!isGuardianPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
@@ -324,10 +323,6 @@ export function ThankYouComponent({
 			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(
-			isGuardianAdLite || isGuardianWeekly || !!observerPrint,
-			'whatNext',
-		), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && userNotSignedIn,
 			'signInToActivate',

@@ -29,7 +29,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -135,7 +135,7 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
+	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -252,12 +252,12 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: signInHeader(isTierThree, observerPrint, isGuardianWeekly),
+			header: signInHeader(isTierThree, observerPrint, isGuardianPrint),
 			bodyCopy: (
 				<SignInBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
+					isGuardianPrint={isGuardianPrint}
 				/>
 			),
 			ctas: (
@@ -265,7 +265,7 @@ export const getThankYouModuleData = (
 					email={email}
 					csrf={csrf}
 					buttonLabel={
-						observerPrint ?? (isTierThree || isGuardianWeekly)
+						observerPrint ?? (isTierThree || isGuardianPrint)
 							? 'Sign in'
 							: 'Continue'
 					}
@@ -280,7 +280,7 @@ export const getThankYouModuleData = (
 				<SignUpBodyCopy
 					isTierThree={isTierThree}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
+					isGuardianPrint={isGuardianPrint}
 				/>
 			),
 			ctas: null,
@@ -351,7 +351,7 @@ export const getThankYouModuleData = (
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
-					isGuardianWeekly={isGuardianWeekly}
+					isGuardianPrint={isGuardianPrint}
 				/>
 			),
 			ctas: null,
