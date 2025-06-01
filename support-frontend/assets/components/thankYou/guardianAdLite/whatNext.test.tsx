@@ -17,6 +17,8 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					isSignedIn={signIn as boolean}
 					observerPrint={observerPaperType as ObserverPrint}
 					isGuardianWeekly={false}
+					isGuardianPrint={false}
+					isSubscriptionCard={false}
 				/>,
 			);
 			expect(container).toMatchSnapshot();

@@ -1,13 +1,19 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source/react-components';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { helpCentreUrl, manageSubsUrl } from 'helpers/urls/externalLinks';
 
 const btnStyleOverrides = css`
 	justify-content: left;
 	margin-bottom: ${space[5]}px;
+`;
+
+const neutralFontColor = css`
+	color: ${palette.neutral[0]};
 `;
 
 type AddressCtaProp = {
@@ -48,3 +54,31 @@ export function AddressCta({
 		</>
 	);
 }
+
+export const myAccountCta = (
+	<a
+		css={neutralFontColor}
+		href={manageSubsUrl}
+		onClick={sendTrackingEventsOnClick({
+			id: 'checkout_my_account',
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})}
+	>
+		Manage my account
+	</a>
+);
+
+export const helpCenterCta = (
+	<a
+		css={neutralFontColor}
+		href={helpCentreUrl}
+		onClick={sendTrackingEventsOnClick({
+			id: 'checkout_help_centre',
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})}
+	>
+		Help centre
+	</a>
+);

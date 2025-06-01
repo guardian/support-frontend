@@ -29,7 +29,10 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -51,8 +54,8 @@ import {
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
 import { ActivateSubscriptionReminder } from './guardianAdLite/activateSubscriptionReminder';
-import { AddressCta } from './guardianAdLite/addressCta';
 import { WhatNext } from './guardianAdLite/whatNext';
+import { AddressCta } from './guardianAdLite/whatNextCta';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -135,7 +138,10 @@ export const getThankYouModuleData = (
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
+
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
+	const isSubscriptionCard = productKey === 'SubscriptionCard';
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -352,6 +358,8 @@ export const getThankYouModuleData = (
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
 					isGuardianPrint={isGuardianPrint}
+					isGuardianWeekly={isGuardianWeekly}
+					isSubscriptionCard={isSubscriptionCard}
 				/>
 			),
 			ctas: null,

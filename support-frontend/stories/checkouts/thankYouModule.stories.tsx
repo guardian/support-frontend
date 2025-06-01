@@ -264,7 +264,7 @@ SignIn.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy isGuardianWeekly={false} isTierThree={false} />,
+	bodyCopy: <SignInBodyCopy isGuardianPrint={false} isTierThree={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
 	),
@@ -277,7 +277,7 @@ SignInTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianWeekly={false} />,
+	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianPrint={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
@@ -294,7 +294,7 @@ SignInObserver.args = {
 		<SignInBodyCopy
 			observerPrint={ObserverPrint.Paper}
 			isTierThree={false}
-			isGuardianWeekly={false}
+			isGuardianPrint={false}
 		/>
 	),
 	ctas: (
@@ -330,7 +330,14 @@ WhatNextNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} isGuardianWeekly={false} />,
+	bodyCopy: (
+		<WhatNext
+			amount={'12'}
+			isGuardianWeekly={false}
+			isGuardianPrint={false}
+			isSubscriptionCard={false}
+		/>
+	),
 };
 
 export const WhatNextSignedIn = Template.bind({});
@@ -344,6 +351,8 @@ WhatNextSignedIn.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
 			isGuardianWeekly={false}
+			isGuardianPrint={false}
+			isSubscriptionCard={false}
 		/>
 	),
 };
@@ -359,6 +368,8 @@ WhatNextSignedOut.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			isGuardianWeekly={false}
+			isGuardianPrint={false}
+			isSubscriptionCard={false}
 		/>
 	),
 };
@@ -375,6 +386,8 @@ WhatNextObserverPaper.args = {
 			isSignedIn={false}
 			observerPrint={ObserverPrint.Paper}
 			isGuardianWeekly={false}
+			isGuardianPrint={false}
+			isSubscriptionCard={false}
 		/>
 	),
 };
@@ -391,6 +404,8 @@ WhatNextObserverSubsCard.args = {
 			isSignedIn={false}
 			observerPrint={ObserverPrint.SubscriptionCard}
 			isGuardianWeekly={false}
+			isGuardianPrint={false}
+			isSubscriptionCard={false}
 		/>
 	),
 };

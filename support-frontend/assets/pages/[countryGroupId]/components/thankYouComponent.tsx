@@ -121,8 +121,7 @@ export function ThankYouComponent({
 	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const user = getUser();
-	const isSignedIn = user.isSignedIn;
+	const { isSignedIn } = getUser();
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)
@@ -219,15 +218,16 @@ export function ThankYouComponent({
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
+	const isNationalDelivery = productKey === 'NationalDelivery';
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const guestUser = identityUserType === 'new';
-	const signedInUser = !guestUser && isSignedIn;
-	const userNotSignedIn = !guestUser && !isSignedIn;
+	const signedInUser = isSignedIn;
+	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
+	const guestUser = !isSignedIn && identityUserType === 'new';
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -289,22 +289,22 @@ export function ThankYouComponent({
 				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
-		...maybeThankYouModule(
-			userNotSignedIn && !isGuardianAdLite && isPrint,
-			'signIn',
-		), // Sign in to access your benefits
+		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
 			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTierThree, 'subscriptionStart'),
+		...maybeThankYouModule(
+			isTierThree || isNationalDelivery,
+			'subscriptionStart',
+		),
 		...maybeThankYouModule(
 			isGuardianAdLite || isGuardianWeekly || isPrint,
 			'whatNext',
 		),
 		...maybeThankYouModule(
-			isTierThree || isSupporterPlus || isGuardianPrint,
+			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
 		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
