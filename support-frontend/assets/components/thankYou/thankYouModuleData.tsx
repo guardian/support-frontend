@@ -53,9 +53,9 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import { ActivateSubscriptionReminder } from './guardianAdLite/activateSubscriptionReminder';
-import { WhatNext } from './guardianAdLite/whatNext';
-import { AddressCta } from './guardianAdLite/whatNextCta';
+import { ActivateSubscriptionReminder } from './whatNext/activateSubscriptionReminder';
+import { WhatNext } from './whatNext/whatNext';
+import { AddressCta } from './whatNext/whatNextCta';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {

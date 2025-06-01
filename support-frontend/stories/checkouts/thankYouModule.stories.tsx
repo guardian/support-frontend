@@ -46,7 +46,7 @@ import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
-import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
+import { WhatNext } from 'components/thankYou/whatNext/whatNext';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const container = css`
