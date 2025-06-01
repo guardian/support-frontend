@@ -53,9 +53,6 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import { ActivateSubscriptionReminder } from './whatNext/activateSubscriptionReminder';
-import { WhatNext } from './whatNext/whatNext';
-import { AddressCta } from './whatNext/whatNextCta';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -75,6 +72,9 @@ import {
 } from './supportReminder/supportReminderItems';
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
+import { ActivateSubscriptionReminder } from './whatNext/activateSubscriptionReminder';
+import { WhatNext } from './whatNext/whatNext';
+import { AddressCta } from './whatNext/whatNextCta';
 
 export interface ThankYouModuleData {
 	header: string;
