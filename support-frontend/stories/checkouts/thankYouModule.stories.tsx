@@ -405,7 +405,7 @@ WhatNextObserverSubsCard.args = {
 			observerPrint={ObserverPrint.SubscriptionCard}
 			isGuardianWeekly={false}
 			isGuardianPrint={false}
-			isSubscriptionCard={false}
+			isSubscriptionCard={true}
 		/>
 	),
 };
