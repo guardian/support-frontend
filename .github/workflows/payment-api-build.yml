@@ -30,12 +30,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node for CDK
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "yarn"
-          cache-dependency-path: cdk/yarn.lock
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
