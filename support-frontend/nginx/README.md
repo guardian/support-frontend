@@ -1,13 +1,15 @@
 # Support™ NGINX
+
 #### Installing NGINX
 
-- nginx will be installed and configured by running [setup.sh](setup.sh) script from the root of the `support-frontend` project:
+- nginx will be installed and configured by running the setup script from the root the project:
 
 ```
-./setup.sh
+pnpm setup
 ```
 
 #### Running nginx
+
 ```
 sudo nginx
 ```
@@ -17,6 +19,7 @@ sudo nginx
 nginx has some unhelpful error messages. Here are some translations:
 
 ###### When stopping/reloading nginx
+
 ```
 nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or directory)
 ```
@@ -24,6 +27,7 @@ nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or 
 This means nginx is **not running**. And `nginx -s reload` will not automatically start nginx if it's not running.
 
 ###### When starting nginx
+
 ```
 nginx: [emerg] bind() to 0.0.0.0:8080 failed (48: Address already in use)
 ```

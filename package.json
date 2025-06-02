@@ -1,7 +1,11 @@
 {
   "license": "Apache-2.0",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "./support-frontend/devrun.sh", 
+    "setup":  "./support-frontend/setup.sh",
+    "fetch-config":  "./support-frontend/fetch-config.sh",
+    "bootstrap":  "pnpm setup && pnpm fetch-config"
   },
   "devDependencies": {
     "husky": "^9.0.11"
