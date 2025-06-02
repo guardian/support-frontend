@@ -4,9 +4,8 @@ import {
 	buttonThemeBrandAlt,
 	LinkButton,
 } from '@guardian/source/react-components';
-import type { RefObject } from 'preact';
-import * as React from 'preact/compat';
-import type { ReactNode } from 'react';
+import * as React from 'react';
+import type { ReactNode, RefObject } from 'react';
 import type { AuState } from 'helpers/internationalisation/country';
 import { auStates } from 'helpers/internationalisation/country';
 import type {
