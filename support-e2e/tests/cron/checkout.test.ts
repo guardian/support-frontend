@@ -27,7 +27,7 @@ test.describe('Checkout', () => {
 		{
 			product: 'GuardianWeeklyDomestic',
 			ratePlan: 'Monthly',
-			paymentType: 'Credit/Debit card',
+			paymentType: 'PayPal',
 			internationalisationId: 'US',
 			postCode: '60601',
 		},
