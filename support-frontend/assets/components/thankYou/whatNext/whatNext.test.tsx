@@ -18,7 +18,9 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					observerPrint={observerPaperType as ObserverPrint}
 					isGuardianWeekly={false}
 					isGuardianPrint={false}
-					isSubscriptionCard={false}
+					isSubscriptionCard={
+						observerPaperType === ObserverPrint.SubscriptionCard
+					}
 				/>,
 			);
 			expect(container).toMatchSnapshot();
