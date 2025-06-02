@@ -27,8 +27,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)
       '@guardian/source-development-kitchen':
-        specifier: 18.1.0
-        version: 18.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.0.0(tslib@2.6.2)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)
+        specifier: 18.1.1
+        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.0.0(tslib@2.6.2)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: guardian/support-service-lambdas#7c47d02f232c455163f12ab9fab25722d29af7ff
         version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff
@@ -1439,8 +1439,8 @@ packages:
     peerDependencies:
       prettier: ^2.4.0
 
-  '@guardian/source-development-kitchen@18.1.0':
-    resolution: {integrity: sha512-1b/jBabT14GZ7um0ODlnguh9VmgxwPSM+wxGx2KYCpf9YEwWOI1GRbjcqjQG3FuGrB/wSgLi6jSk5+v7v5+P3A==}
+  '@guardian/source-development-kitchen@18.1.1':
+    resolution: {integrity: sha512-wuMULnVjValyEz6YjrOPt054tXJkutkAbPdeV/KQHoSCSjAJnd0Cp3SZeoVog77HE/iZ0mnKaiVkK+QXpRVtCQ==}
     peerDependencies:
       '@emotion/react': ^11.11.4
       '@guardian/libs': ^22.0.0
@@ -7985,7 +7985,7 @@ snapshots:
     dependencies:
       prettier: 2.8.8
 
-  '@guardian/source-development-kitchen@18.1.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.0.0(tslib@2.6.2)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)':
+  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.0.0(tslib@2.6.2)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)':
     dependencies:
       '@guardian/libs': 22.0.0(tslib@2.6.2)(typescript@5.5.4)
       '@guardian/source': 8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.6.2)(typescript@5.5.4)
