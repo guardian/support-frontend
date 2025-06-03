@@ -27,8 +27,9 @@ export const pageUrlRegexes = {
 			paperLandingPage: /^\/uk\/subscribe\/paper?(\?.*)?$/,
 			weeklyLandingPage: /\/subscribe\/weekly\/checkout?(\?.*)?$/,
 		},
+		// Includes landing, original & generic checkout/thankyou pages
 		subsWeeklyPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
+			'(/subscribe/weekly/checkout)(/.*)?$|(?:/(uk|us|ca|eu|nz|int))(?:/(subscribe/weekly|checkout|thankyou|thank-you))(/.*)?$',
 	},
 };
 
@@ -112,10 +113,10 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 9,
-		targetPage: pageUrlRegexes.subscriptions.paper.weeklyLandingPage,
+		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		persistPage:
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
