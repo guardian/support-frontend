@@ -500,12 +500,20 @@ export function CheckoutComponent({
 	/** General error that can occur via fetch validations */
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const [errorContext, setErrorContext] = useState<string>();
+	const [postStripeCheckoutErrorMessage, setPostStripeCheckoutErrorMessage] =
+		useState<string>();
 
 	// If we get an error, and we've already got a checkout session, clear the checkout session
 	// so that the user restarts the checkout process
 	useEffect(() => {
 		if (errorMessage && checkoutSession) {
 			clearCheckoutSession();
+			// Clear the standard error message
+			setErrorMessage(undefined);
+			// Set a specific generic message which will appear at the top of the page
+			setPostStripeCheckoutErrorMessage(
+				'Please try submitting the form again.',
+			);
 		}
 	}, [errorMessage]);
 
@@ -821,6 +829,17 @@ export function CheckoutComponent({
 										`}
 									/>
 								)}
+							</div>
+						)}
+						{postStripeCheckoutErrorMessage && (
+							<div role="alert" data-qm-error>
+								<ErrorSummary
+									cssOverrides={css`
+										margin-bottom: ${space[6]}px;
+									`}
+									message={'Sorry, something went wrong'}
+									context={postStripeCheckoutErrorMessage}
+								/>
 							</div>
 						)}
 						<FormSection>
