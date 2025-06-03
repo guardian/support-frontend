@@ -1,26 +1,32 @@
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
+import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import BulletPointedList from '../utilityComponents/BulletPointedList';
 import { helpCenterCta, myAccountCta } from './whatNextCta';
 
 export function WhatNext({
+	productKey,
 	amount,
-	isGuardianPrint,
-	isGuardianWeekly,
-	isSubscriptionCard,
 	observerPrint,
 	startDate,
 	isSignedIn = false,
 }: {
+	productKey: ActiveProductKey;
 	amount: string;
-	isGuardianPrint: boolean;
-	isGuardianWeekly: boolean;
-	isSubscriptionCard: boolean;
 	startDate?: string;
 	isSignedIn?: boolean;
 	observerPrint?: ObserverPrint;
-}): JSX.Element {
+}) {
+	const isSubscriptionCard = productKey === 'SubscriptionCard';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
+	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
+
 	if (isGuardianWeekly) {
 		const guardianWeeklyItems = [
 			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
@@ -55,20 +61,24 @@ export function WhatNext({
 		return <OrderedList items={allItems.filter(Boolean)} />;
 	}
 
-	const fallbackItems = [
-		'You will receive an email confirming the details of your subscription',
-		startDate
-			? `Your payment of £${amount}/month will be taken on ${startDate}`
-			: '',
-		isSignedIn
-			? 'You can now start reading the Guardian website on all your devices without personalised advertising'
-			: '',
-	];
+	if (isGuardianAdLite) {
+		const guardianAdLiteItems = [
+			'You will receive an email confirming the details of your subscription',
+			startDate
+				? `Your payment of £${amount}/month will be taken on ${startDate}`
+				: '',
+			isSignedIn
+				? 'You can now start reading the Guardian website on all your devices without personalised advertising'
+				: '',
+		];
 
-	return (
-		<BulletPointedList
-			items={fallbackItems.filter(Boolean)}
-			color={palette.neutral[7]}
-		/>
-	);
+		return (
+			<BulletPointedList
+				items={guardianAdLiteItems.filter(Boolean)}
+				color={palette.neutral[7]}
+			/>
+		);
+	}
+
+	return null;
 }

@@ -29,10 +29,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import {
-	isGuardianWeeklyProduct,
-	isPrintProduct,
-} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { isPrintProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -139,9 +136,7 @@ export const getThankYouModuleData = (
 			supportReminder ?? defaultSupportReminder,
 		);
 
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
-	const isSubscriptionCard = productKey === 'SubscriptionCard';
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
@@ -353,13 +348,11 @@ export const getThankYouModuleData = (
 			header: 'What happens next?',
 			bodyCopy: (
 				<WhatNext
+					productKey={productKey}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}
 					observerPrint={observerPrint}
-					isGuardianPrint={isGuardianPrint}
-					isGuardianWeekly={isGuardianWeekly}
-					isSubscriptionCard={isSubscriptionCard}
 				/>
 			),
 			ctas: null,
