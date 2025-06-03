@@ -299,10 +299,7 @@ export function ThankYouComponent({
 			isTierThree || isNationalDelivery,
 			'subscriptionStart',
 		),
-		...maybeThankYouModule(
-			isGuardianAdLite || isGuardianWeekly || isPrint,
-			'whatNext',
-		),
+		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
 		...maybeThankYouModule(
 			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
 			'appsDownload',
