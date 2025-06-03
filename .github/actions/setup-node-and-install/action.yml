@@ -1,0 +1,19 @@
+name: Setup Node and Install Dependencies
+description: Sets up Node, enables corepack, and installs dependencies with pnpm
+runs:
+  using: "composite"
+  steps:
+    - run: npm install --global corepack@0.31.0
+      shell: bash
+
+    - run: corepack enable
+      shell: bash
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ".nvmrc"
+
+    - name: Install
+      run: pnpm install
+      shell: bash
