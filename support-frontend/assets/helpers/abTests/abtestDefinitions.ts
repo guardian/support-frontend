@@ -29,7 +29,7 @@ export const pageUrlRegexes = {
 		},
 		// Includes landing, original & generic checkout/thankyou pages
 		subsWeeklyPages:
-			'(/subscribe/weekly/checkout$)(/.*)?$|(?:/(uk|us|ca|eu|nz|int))(?:/(subscribe/weekly|checkout|one-time-checkout|contribute|thankyou|thank-you))(/.*)?$',
+			'(/subscribe/weekly/checkout$)(/.*)?$|(?:/(uk|us|ca|eu|nz|int))(?:/(subscribe/weekly|checkout|thankyou|thank-you))(/.*)?$',
 	},
 };
 
