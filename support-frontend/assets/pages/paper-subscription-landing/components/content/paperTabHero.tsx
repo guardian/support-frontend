@@ -24,15 +24,12 @@ export function PaperTabHero({
 }: PaperTabHeroProps): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
-			PaperTabHero
 			<div>
-				<div>
-					<p>{topParagraph}</p>
-					<p>{bottomParagraph}</p>
-					<p>drop down</p>
-				</div>
-				<div>image</div>
+				<p>{topParagraph}</p>
+				<p>{bottomParagraph}</p>
+				<p>drop down</p>
 			</div>
+			<div>image</div>
 		</FlexContainer>
 	);
 }
