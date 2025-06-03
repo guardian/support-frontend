@@ -800,13 +800,6 @@ export function CheckoutComponent({
 									setConfirmedEmail(confirmedEmail)
 								}
 								isSignedIn={isSignedIn}
-								showSimilarProductsConsent={
-									abParticipations.similarProductsConsent === 'VariantA' &&
-									showSimilarProductsConsentForRatePlan(
-										productDescription,
-										ratePlanKey,
-									)
-								}
 							/>
 
 							{/**
@@ -1208,11 +1201,10 @@ export function CheckoutComponent({
 								margin: ${space[6]}px 0;
 							`}
 						>
-							{abParticipations.similarProductsConsent === 'VariantB' &&
-								showSimilarProductsConsentForRatePlan(
-									productDescription,
-									ratePlanKey,
-								) && <SimilarProductsConsent />}
+							{showSimilarProductsConsentForRatePlan(
+								productDescription,
+								ratePlanKey,
+							) && <SimilarProductsConsent />}
 						</div>
 						<SummaryTsAndCs
 							productKey={productKey}
