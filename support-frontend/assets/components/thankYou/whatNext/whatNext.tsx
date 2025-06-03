@@ -22,7 +22,7 @@ export function WhatNext({
 	observerPrint?: ObserverPrint;
 }): JSX.Element {
 	if (isGuardianWeekly) {
-		const printProductItems = [
+		const guardianWeeklyItems = [
 			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
 			'Your magazine will be delivered to your door. Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.',
 			<>
