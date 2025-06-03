@@ -19,7 +19,10 @@ const flexContainerOverride = css`
 export function PaperSubsCardTab(): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
-			<PaperTabHero />
+			<PaperTabHero
+				topParagraph={`The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks in the UK such as McColl's, Co-op, One Stop and selected SPAR stores.`}
+				bottomParagraph={`You can collect the newspaper from your local store or have your copies delivered by your newsagent.`}
+			/>
 			<PaperCarouselTab />
 			<PaperTabTsAndCs />
 		</FlexContainer>

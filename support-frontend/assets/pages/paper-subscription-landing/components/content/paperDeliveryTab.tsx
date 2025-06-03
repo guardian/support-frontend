@@ -18,9 +18,14 @@ const flexContainerOverride = css`
 export function PaperDeliveryTab(): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
-			<PaperTabHero></PaperTabHero>
-			<PaperCarouselTab></PaperCarouselTab>
-			<PaperTabTsAndCs></PaperTabTsAndCs>
+			<PaperTabHero
+				topParagraph={
+					'Use the Guardian’s home delivery service to get our newspaper direct to your door.'
+				}
+				bottomParagraph={`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`}
+			/>
+			<PaperCarouselTab />
+			<PaperTabTsAndCs />
 		</FlexContainer>
 	);
 }

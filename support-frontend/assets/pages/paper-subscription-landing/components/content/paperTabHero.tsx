@@ -13,14 +13,22 @@ const flexContainerOverride = css`
 	}
 `;
 
-export function PaperTabHero(): JSX.Element {
+type PaperTabHeroProps = {
+	topParagraph: string;
+	bottomParagraph: string;
+};
+
+export function PaperTabHero({
+	topParagraph,
+	bottomParagraph,
+}: PaperTabHeroProps): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			PaperTabHero
 			<div>
 				<div>
-					<p>text block1</p>
-					<p>text block2</p>
+					<p>{topParagraph}</p>
+					<p>{bottomParagraph}</p>
 					<p>drop down</p>
 				</div>
 				<div>image</div>
