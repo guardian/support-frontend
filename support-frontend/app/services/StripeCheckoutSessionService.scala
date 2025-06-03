@@ -135,10 +135,7 @@ object StripeCheckoutSessionService {
         None
       } else {
         val existingQueryArgs = uri.getQuery.split("&").toList
-        val newQuery =
-          if (existingQueryArgs.nonEmpty) {
-            existingQueryArgs.filterNot(_.startsWith("checkoutSessionId=")).mkString("&")
-          } else ""
+        val newQuery = existingQueryArgs.filterNot(_.startsWith("checkoutSessionId=")).mkString("&")
 
         Some(new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, newQuery, uri.getFragment).toString)
       }
