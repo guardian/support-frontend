@@ -65,12 +65,10 @@ function Heading({
 
 	if (printProduct) {
 		return (
-			<h1 css={longHeaderTitleText}>
-				<PrintProductsHeading
-					isObserverPrint={isObserverPrint}
-					ratePlanKey={ratePlanKey}
-				/>
-			</h1>
+			<PrintProductsHeading
+				isObserverPrint={isObserverPrint}
+				ratePlanKey={ratePlanKey}
+			/>
 		);
 	}
 
