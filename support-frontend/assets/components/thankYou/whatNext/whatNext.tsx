@@ -31,7 +31,7 @@ export function WhatNext({
 			</>,
 		];
 
-		return <OrderedList items={printProductItems} />;
+		return <OrderedList items={guardianWeeklyItems} />;
 	}
 
 	if (observerPrint ?? isGuardianPrint) {
