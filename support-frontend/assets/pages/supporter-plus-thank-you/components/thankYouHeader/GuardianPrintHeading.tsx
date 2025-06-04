@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, titlepiece42 } from '@guardian/source/dist/foundations';
+import { from, titlepiece42 } from '@guardian/source/foundations';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import YellowHighlightText from './YellowHighlightText';
 
