@@ -487,6 +487,11 @@ export function CheckoutComponent({
 	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
+	const scrollToViewRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
+	}, [scrollToViewRef.current]);
 
 	/** Direct debit details */
 	const [accountHolderName, setAccountHolderName] = useState('');
@@ -832,7 +837,7 @@ export function CheckoutComponent({
 							</div>
 						)}
 						{postStripeCheckoutErrorMessage && (
-							<div role="alert" data-qm-error>
+							<div role="alert" data-qm-error ref={scrollToViewRef}>
 								<ErrorSummary
 									cssOverrides={css`
 										margin-bottom: ${space[6]}px;
