@@ -246,7 +246,7 @@ export class SupportWorkers extends GuStack {
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createScalaLambda(
+    const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
