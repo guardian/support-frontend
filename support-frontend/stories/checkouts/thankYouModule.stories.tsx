@@ -325,16 +325,16 @@ AusMap.args = {
 	ctas: <AusMapCTA />,
 };
 
-export const WhatNextNoStartDate = Template.bind({});
-WhatNextNoStartDate.args = {
+export const WhatNextGuardianAdLiteNoStartDate = Template.bind({});
+WhatNextGuardianAdLiteNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} productKey="Contribution" />,
+	bodyCopy: <WhatNext amount={'12'} productKey="GuardianAdLite" />,
 };
 
-export const WhatNextSignedIn = Template.bind({});
-WhatNextSignedIn.args = {
+export const WhatNextGuardianAdLiteSignedIn = Template.bind({});
+WhatNextGuardianAdLiteSignedIn.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
@@ -343,13 +343,13 @@ WhatNextSignedIn.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
-			productKey="Contribution"
+			productKey="GuardianAdLite"
 		/>
 	),
 };
 
-export const WhatNextSignedOut = Template.bind({});
-WhatNextSignedOut.args = {
+export const WhatNextGuardianAdLiteSignedOut = Template.bind({});
+WhatNextGuardianAdLiteSignedOut.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
@@ -358,7 +358,7 @@ WhatNextSignedOut.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			productKey="Contribution"
+			productKey="GuardianAdLite"
 		/>
 	),
 };
