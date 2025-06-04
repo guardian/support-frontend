@@ -8,7 +8,7 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import ContributionHeading from './ContributionHeading';
-import PrintProductsHeading from './PrintProductsHeading';
+import GuardianPrintHeading from './GuardianPrintHeading';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
@@ -53,23 +53,18 @@ function Heading({
 	isObserverPrint,
 	ratePlanKey,
 	promotion,
-}: HeadingProps): JSX.Element {
+}: HeadingProps) {
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
 
 	const contributionProduct = isContributionProduct(productKey);
-	const printProduct = isPrintProduct(productKey);
+	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
 
 	const contributorName = name && name.length < 10 ? name : '';
 
-	if (printProduct) {
-		return (
-			<PrintProductsHeading
-				isObserverPrint={isObserverPrint}
-				ratePlanKey={ratePlanKey}
-			/>
-		);
+	if (isGuardianPrint) {
+		return <GuardianPrintHeading ratePlanKey={ratePlanKey} />;
 	}
 
 	if (contributionProduct) {
@@ -108,6 +103,17 @@ function Heading({
 						Your valued support powers our journalism.
 					</>
 				)}
+			</h1>
+		);
+	}
+
+	if (isObserverPrint) {
+		return (
+			<h1 css={headerTitleText}>
+				You are now an{' '}
+				<YellowHighlightText>Observer subscriber</YellowHighlightText>.
+				<br />
+				Welcome and thank you for supporting Observer journalism!
 			</h1>
 		);
 	}

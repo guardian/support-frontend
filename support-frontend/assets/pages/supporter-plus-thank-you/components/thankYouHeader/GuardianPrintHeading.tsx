@@ -11,28 +11,11 @@ const heading = css`
 	}
 `;
 
-export default function PrintProductsHeading({
-	isObserverPrint,
+export default function GuardianPrintHeading({
 	ratePlanKey,
 }: {
-	isObserverPrint: boolean;
-	ratePlanKey?: ActiveRatePlanKey;
+	ratePlanKey: ActiveRatePlanKey;
 }) {
-	if (isObserverPrint) {
-		return (
-			<h1 css={heading}>
-				You are now an{' '}
-				<YellowHighlightText>Observer subscriber</YellowHighlightText>.
-				<br />
-				Welcome and thank you for supporting Observer journalism!
-			</h1>
-		);
-	}
-
-	if (!ratePlanKey) {
-		return null;
-	}
-
 	const thankYouText = 'Thank you for supporting our journalism!';
 	const guardianWeekly = ['Monthly', 'Annual', 'Quarterly'].includes(
 		ratePlanKey,
