@@ -14,9 +14,16 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { Participations } from 'helpers/abTests/models';
-import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	billingPeriodToContributionType,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -39,6 +46,7 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
@@ -91,7 +99,7 @@ export type CheckoutComponentProps = {
 		finalAmount: number;
 	};
 	productKey?: ActiveProductKey;
-	ratePlanKey?: string;
+	ratePlanKey?: ActiveRatePlanKey;
 	promotion?: Promotion;
 	identityUserType: UserType;
 	abParticipations: Participations;
@@ -103,7 +111,7 @@ export function ThankYouComponent({
 	csrf,
 	payment,
 	productKey = 'Contribution',
-	ratePlanKey,
+	ratePlanKey = 'OneTime',
 	promotion,
 	identityUserType,
 	abParticipations,
@@ -132,34 +140,8 @@ export function ThankYouComponent({
 		productKey === 'Contribution' ||
 		productKey === 'SupporterPlus' ||
 		productKey === 'TierThree';
-	let contributionType: ContributionType;
-	switch (ratePlanKey) {
-		case 'Monthly':
-		case 'RestOfWorldMonthly':
-		case 'DomesticMonthly':
-		case 'RestOfWorldMonthlyV2':
-		case 'DomesticMonthlyV2':
-		case 'Everyday':
-		case 'Sixday':
-		case 'Weekend':
-		case 'Saturday':
-		case 'Sunday':
-			contributionType = 'MONTHLY';
-			break;
-		case 'Annual':
-		case 'RestOfWorldAnnual':
-		case 'DomesticAnnual':
-		case 'RestOfWorldAnnualV2':
-		case 'DomesticAnnualV2':
-			contributionType = 'ANNUAL';
-			break;
-		default:
-			// A one-off contribution indicated by the absence of product and ratePlan
-			contributionType = 'ONE_OFF';
-			break;
-	}
-
-	const isOneOff = contributionType === 'ONE_OFF';
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const isOneOff = billingPeriod === BillingPeriod.OneTime;
 
 	// track conversion with GTM
 	const paymentMethod =
@@ -167,9 +149,10 @@ export function ThankYouComponent({
 			? 'Stripe'
 			: order.paymentMethod;
 
+	// quarterly needs support in future for GW products (when they are enabled). So not needed currently, defaults to monthly.
 	successfulContributionConversion(
 		payment.finalAmount, // This is the final amount after discounts
-		contributionType,
+		billingPeriodToContributionType(billingPeriod) ?? 'MONTHLY',
 		currencyKey,
 		paymentMethod,
 		productKey,
@@ -179,7 +162,6 @@ export function ThankYouComponent({
 	 * This is some annoying transformation we need from
 	 * Product API => Contributions work we need to do
 	 */
-	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	if (isOneOff) {
 		// track conversion with QM
 		sendEventOneTimeCheckoutValue(
@@ -201,7 +183,7 @@ export function ThankYouComponent({
 	// track conversion with QM
 	sendEventContributionCheckoutConversion(
 		payment.originalAmount, // This is the amount before discounts
-		contributionType,
+		billingPeriod,
 		currencyKey,
 	);
 	const subscriptionCardProductsKey: ActiveProductKey[] = ['SubscriptionCard'];
@@ -216,6 +198,7 @@ export function ThankYouComponent({
 		'GuardianWeeklyRestOfWorld',
 	];
 	const isPrint = printProductsKeys.includes(productKey);
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const getObserver = (): ObserverPrint | undefined => {
 		if (paperProductsKeys.includes(productKey) && ratePlanKey === 'Sunday') {
@@ -227,6 +210,7 @@ export function ThankYouComponent({
 		) {
 			return ObserverPrint.SubscriptionCard;
 		}
+
 		return undefined;
 	};
 	const observerPrint = getObserver();
@@ -244,9 +228,9 @@ export function ThankYouComponent({
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const isNotRegistered = identityUserType === 'new';
-	const isRegisteredAndSignedIn = !isNotRegistered && isSignedIn;
-	const isRegisteredAndNotSignedIn = !isNotRegistered && !isSignedIn;
+	const guestUser = identityUserType === 'new';
+	const signedInUser = !guestUser && isSignedIn;
+	const userNotSignedIn = !guestUser && !isSignedIn;
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -286,10 +270,10 @@ export function ThankYouComponent({
 		csrf,
 		isOneOff,
 		isSupporterPlus,
+		isTierThree,
 		startDate,
 		undefined,
 		undefined,
-		isTierThree,
 		benefitsChecklist,
 		undefined,
 		undefined,
@@ -304,11 +288,14 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			!isPending && isNotRegistered && !isGuardianAdLite && !isGuardianPrint,
+			(isGuardianWeekly && guestUser) ||
+				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
 		...maybeThankYouModule(
-			isRegisteredAndNotSignedIn && !isGuardianAdLite && !isGuardianPrint,
+			userNotSignedIn &&
+				!isGuardianAdLite &&
+				(!isGuardianPrint || isGuardianWeekly),
 			'signIn',
 		), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
@@ -316,7 +303,10 @@ export function ThankYouComponent({
 			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
-		...maybeThankYouModule(isTierThree || isGuardianPrint, 'subscriptionStart'),
+		...maybeThankYouModule(
+			isTierThree || (isGuardianPrint && !isGuardianWeekly),
+			'subscriptionStart',
+		),
 		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
@@ -324,7 +314,8 @@ export function ThankYouComponent({
 				(!(isTierThree && showNewspaperArchiveBenefit) &&
 					isSignedIn &&
 					!isGuardianAdLite &&
-					!observerPrint),
+					!observerPrint &&
+					!isGuardianWeekly),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
@@ -333,21 +324,24 @@ export function ThankYouComponent({
 			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(isGuardianAdLite || !!observerPrint, 'whatNext'), // All
 		...maybeThankYouModule(
-			isGuardianAdLite && isRegisteredAndNotSignedIn,
+			isGuardianAdLite || isGuardianWeekly || !!observerPrint,
+			'whatNext',
+		), // All
+		...maybeThankYouModule(
+			isGuardianAdLite && userNotSignedIn,
 			'signInToActivate',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && isRegisteredAndSignedIn,
+			isGuardianAdLite && signedInUser,
 			'reminderToSignIn',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && isNotRegistered,
+			isGuardianAdLite && guestUser,
 			'reminderToActivateSubscription',
 		),
 		...maybeThankYouModule(
-			isGuardianAdLite && (isRegisteredAndSignedIn || isNotRegistered),
+			isGuardianAdLite && (signedInUser || guestUser),
 			'headlineReturn',
 		),
 	];
@@ -365,18 +359,14 @@ export function ThankYouComponent({
 				<Container>
 					<div css={headerContainer}>
 						<ThankYouHeader
-							isSignedIn={isSignedIn}
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							name={order.firstName}
 							amount={payment.originalAmount}
-							contributionType={contributionType}
-							amountIsAboveThreshold={isSupporterPlus}
 							isOneOffPayPal={isOneOffPayPal}
-							showDirectDebitMessage={order.paymentMethod === 'DirectDebit'}
+							isDirectDebitPayment={order.paymentMethod === 'DirectDebit'}
 							currency={currencyKey}
 							promotion={promotion}
-							identityUserType={identityUserType}
 							observerPrint={observerPrint}
 							paymentStatus={order.status}
 							startDate={startDate}

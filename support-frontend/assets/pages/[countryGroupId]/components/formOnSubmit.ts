@@ -7,7 +7,10 @@ import type {
 	RegularPaymentFields,
 	RegularPaymentRequest,
 } from '../../../helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { ActiveProductKey } from '../../../helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from '../../../helpers/productCatalog';
 import type { UserType } from '../../../helpers/redux/checkout/personalDetails/state';
 import {
 	getOphanIds,
@@ -27,20 +30,12 @@ import {
 	deleteFormDetails,
 	persistFormDetails,
 } from '../checkout/helpers/stripeCheckoutSession';
+import getConsentValue from '../helpers/getConsentValue';
 import { createSubscription } from './createSubscription';
 import type { PaymentMethod } from './paymentFields';
 import { FormSubmissionError } from './paymentFields';
+import { CONSENT_ID } from './SimilarProductsConsent';
 
-const getConsentValue = (formData: FormData, userWasShownCheckbox: boolean) => {
-	const similarProductsCheckbox = formData.get('similarProductsConsent');
-	if (similarProductsCheckbox) {
-		return similarProductsCheckbox === 'on';
-	}
-	if (userWasShownCheckbox) {
-		return false;
-	}
-	return;
-};
 export const submitForm = async ({
 	geoId,
 	productKey,
@@ -50,20 +45,18 @@ export const submitForm = async ({
 	paymentFields,
 	productFields,
 	hasDeliveryAddress,
-	userWasShownCheckbox,
 	abParticipations,
 	promotion,
 	contributionAmount,
 }: {
 	geoId: GeoId;
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	formData: FormData;
 	paymentMethod: PaymentMethod;
 	paymentFields: RegularPaymentFields;
 	productFields: ProductFields;
 	hasDeliveryAddress: boolean;
-	userWasShownCheckbox: boolean;
 	abParticipations: Participations;
 	promotion: Promotion | undefined;
 	contributionAmount: number | undefined;
@@ -84,11 +77,6 @@ export const submitForm = async ({
 		productFields,
 	);
 
-	const similarProductsConsent = getConsentValue(
-		formData,
-		userWasShownCheckbox,
-	);
-
 	const promoCode = promotion?.promoCode;
 	const appliedPromotion =
 		promoCode !== undefined
@@ -99,6 +87,7 @@ export const submitForm = async ({
 			: undefined;
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
+	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
@@ -168,7 +157,7 @@ const createStripeCheckoutSession = async ({
 	personalData: FormPersonalFields;
 	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
 	geoId: GeoId;
@@ -193,7 +182,7 @@ const processSubscription = async ({
 	personalData: FormPersonalFields;
 	appliedPromotion?: { promoCode: string; countryGroupId: GeoId };
 	productKey: ActiveProductKey;
-	ratePlanKey: string;
+	ratePlanKey: ActiveRatePlanKey;
 	contributionAmount: number | undefined;
 	paymentMethod: PaymentMethod;
 	geoId: GeoId;
@@ -232,7 +221,7 @@ const processSubscription = async ({
 
 const buildThankYouPageUrl = (
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	promoCode: string | undefined,
 	userType: UserType | undefined,
 	contributionAmount: number | undefined,

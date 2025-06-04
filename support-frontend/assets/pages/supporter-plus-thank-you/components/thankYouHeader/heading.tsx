@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -8,8 +7,17 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import PrintProductsHeading from './PrintProductsHeading';
+import { isPrintProduct } from './utils/productMatchers';
 
 const supCss = css`
 	font-size: 60%;
@@ -136,11 +144,8 @@ const tier3lineBreak = css`
 		display: inline-block;
 	}
 `;
-const printlineBreak = css`
-	display: inline-block;
-`;
 
-const yellowAmountText = css`
+const yellowHighlightText = css`
 	background-color: #ffe500;
 	padding: 0 5px;
 `;
@@ -149,9 +154,10 @@ type YellowAmountProps = {
 	currency: IsoCurrency;
 	productName?: string;
 };
+
 function YellowHighlight({ amount, currency, productName }: YellowAmountProps) {
 	return (
-		<span css={yellowAmountText}>
+		<span css={yellowHighlightText}>
 			{!productName &&
 				formatAmount(
 					currencies[currency],
@@ -185,9 +191,8 @@ type HeadingProps = {
 	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	contributionType: ContributionType;
 	isObserverPrint: boolean;
-	ratePlanKey?: string;
+	ratePlanKey: ActiveRatePlanKey;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
 };
@@ -197,7 +202,6 @@ function Heading({
 	isOneOffPayPal,
 	amount,
 	currency,
-	contributionType,
 	isObserverPrint,
 	ratePlanKey,
 	paymentStatus,
@@ -207,79 +211,22 @@ function Heading({
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isTier3 = productKey === 'TierThree';
-	const printProductsKeys: ActiveProductKey[] = [
-		'NationalDelivery',
-		'HomeDelivery',
-		'SubscriptionCard',
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-	const isPrintProduct = printProductsKeys.includes(productKey);
+
+	const printProduct = isPrintProduct(productKey);
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < 10 ? `${name} ` : '';
 	const maybeNameAndCommaSpace: string =
 		name && name.length < 10 ? `, ${name}, ` : '';
 
 	// Print Products Header
-	if (isPrintProduct) {
-		const getPrintHeader = () => {
-			const paperRatePlanName =
-				ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
-			const guardianWeeklyRatePlanName =
-				ratePlanKey === 'Annual' ? '/ annual package ' : '';
-			switch (ratePlanKey) {
-				// Guardian Weekly
-				case 'Monthly':
-				case 'Annual':
-				case 'Quarterly':
-					return isPending
-						? `Your subscription to the Guardian Weekly ${guardianWeeklyRatePlanName}is being processed`
-						: `You have now subscribed to the Guardian Weekly ${guardianWeeklyRatePlanName}`;
-				// GuardianWeekly Gifting
-				case 'ThreeMonthGift':
-				case 'OneYearGift':
-					return isPending
-						? 'Your Guardian Weekly gift subscription is being processed'
-						: 'Your purchase of a Guardian Weekly gift subscription is now complete';
-				// Paper
-				default:
-					return isPending
-						? `Your subscription to the ${paperRatePlanName} package is being processed`
-						: `You have now subscribed to the ${paperRatePlanName} package`;
-			}
-		};
-		const getPrintHeaderObserver = (): JSX.Element => {
-			const observerPackageYellow = (copy: string) => (
-				<span css={yellowAmountText}>{copy}</span>
-			);
-			return (
-				<>
-					{isPending ? (
-						<>
-							Your {observerPackageYellow('Observer subscription')} is being
-							processed
-						</>
-					) : (
-						<>You are now an {observerPackageYellow('Observer subscriber')}.</>
-					)}
-				</>
-			);
-		};
+	if (printProduct) {
 		return (
 			<h1 css={longHeaderTitleText}>
-				{isObserverPrint ? (
-					<>
-						{getPrintHeaderObserver()}
-						<br css={printlineBreak} />
-						Welcome and thank you for supporting Observer journalism!
-					</>
-				) : (
-					<>
-						Thank you for supporting our journalism!
-						<br css={printlineBreak} />
-						{getPrintHeader()}
-					</>
-				)}
+				<PrintProductsHeading
+					isObserverPrint={isObserverPrint}
+					ratePlanKey={ratePlanKey}
+					isPending={isPending}
+				/>
 			</h1>
 		);
 	}
@@ -330,8 +277,8 @@ function Heading({
 		);
 	}
 
-	switch (contributionType) {
-		case 'ONE_OFF':
+	switch (ratePlanToBillingPeriod(ratePlanKey)) {
+		case BillingPeriod.OneTime:
 			return (
 				<h1 css={headerTitleText}>
 					Thank you for supporting us today with{' '}
@@ -339,7 +286,7 @@ function Heading({
 				</h1>
 			);
 
-		case 'MONTHLY':
+		case BillingPeriod.Monthly:
 			return (
 				<Monthly
 					amount={amount}
@@ -349,7 +296,7 @@ function Heading({
 				/>
 			);
 
-		case 'ANNUAL':
+		case BillingPeriod.Annual:
 			return (
 				<Annual
 					amount={amount}

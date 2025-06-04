@@ -60,13 +60,14 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = None, // TODO: We are going to leave this unset for now to keep the behaviour unchanged
+      similarProductsConsent = acquisition.stripeChargeData.similarProductsConsent,
     )
   }
 
   def buildFromPayPal(
       acquisition: PaypalAcquisition,
       contributionData: ContributionData,
+      similarProductsConsent: Option[Boolean],
   ): AcquisitionDataRow = {
     val acquisitionData = acquisition.acquisitionData
     val transaction = acquisition.payment.getTransactions.get(0)
@@ -105,7 +106,7 @@ object AcquisitionDataRowBuilder {
       postalCode = contributionData.postalCode,
       state = contributionData.countrySubdivisionCode,
       email = Some(contributionData.email),
-      similarProductsConsent = None, // TODO: We are going to leave this unset for now to keep the behaviour unchanged
+      similarProductsConsent = similarProductsConsent,
     )
   }
 

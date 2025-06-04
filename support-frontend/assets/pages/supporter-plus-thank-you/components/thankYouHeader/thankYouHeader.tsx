@@ -1,15 +1,20 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
-import type { ContributionType } from 'helpers/contributions';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import { type IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
-import DirectDebitMessage from './directDebitMessage';
+import DirectDebitMessage from './DirectDebitMessage';
 import Heading from './heading';
-import Subheading, { OfferHeading } from './subheading';
+import LegitimateInterestMessage from './LegitimateInterestMessage';
+import ObserverMessage from './ObserverMessage';
+import ProductCatalogMessage from './ProductCatalogMessage';
+import StartDateMessage from './StartDateMessage';
+import { isPrintProduct } from './utils/productMatchers';
 
 const header = css`
 	background: white;
@@ -33,40 +38,37 @@ const headerSupportingText = css`
 type ThankYouHeaderProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
-	showDirectDebitMessage: boolean;
+	ratePlanKey: ActiveRatePlanKey;
+	isDirectDebitPayment: boolean;
 	isOneOffPayPal: boolean;
-	contributionType: ContributionType;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	amountIsAboveThreshold: boolean;
-	isSignedIn: boolean;
-	identityUserType: UserType;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
-	ratePlanKey?: string;
 	paymentStatus?: PaymentStatus;
 	promotion?: Promotion;
-	showOffer?: boolean;
 };
 
 function ThankYouHeader({
 	name,
 	productKey,
-	showDirectDebitMessage,
+	ratePlanKey,
+	isDirectDebitPayment,
 	isOneOffPayPal,
-	contributionType,
 	amount,
 	currency,
-	amountIsAboveThreshold,
-	isSignedIn,
-	identityUserType,
 	observerPrint,
 	startDate,
-	ratePlanKey,
 	paymentStatus,
 	promotion,
-	showOffer,
 }: ThankYouHeaderProps): JSX.Element {
+	const isPrint = isPrintProduct(productKey);
+	const isSubscriptionCard = productKey === 'SubscriptionCard';
+	const isGuardianAdLite = productKey === 'GuardianAdLite';
+	const showLegitimateInterestMessage = !(isGuardianAdLite || observerPrint);
+	const showProductCatalogMessage = isGuardianAdLite && !observerPrint;
+	const showStartDateMessage = isPrint && !isSubscriptionCard;
+
 	return (
 		<header css={header}>
 			<Heading
@@ -76,32 +78,34 @@ function ThankYouHeader({
 				isOneOffPayPal={isOneOffPayPal}
 				amount={amount}
 				currency={currency}
-				contributionType={contributionType}
 				isObserverPrint={!!observerPrint}
 				paymentStatus={paymentStatus}
 				promotion={promotion}
 			/>
 
-			<p css={headerSupportingText}>
-				{showDirectDebitMessage && (
-					<DirectDebitMessage isObserverPrint={!!observerPrint} />
+			<div css={headerSupportingText}>
+				{showStartDateMessage && (
+					<StartDateMessage productKey={productKey} startDate={startDate} />
 				)}
-				<Subheading
-					productKey={productKey}
-					contributionType={contributionType}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-					isSignedIn={isSignedIn}
-					observerPrint={observerPrint}
-					identityUserType={identityUserType}
-					paymentStatus={paymentStatus}
-					startDate={startDate}
-				/>
-			</p>
-			{showOffer && (
-				<p css={headerSupportingText}>
-					<OfferHeading />
-				</p>
-			)}
+
+				{isDirectDebitPayment && (
+					<DirectDebitMessage
+						mediaGroup={observerPrint ? 'The Observer' : 'Guardian Media Group'}
+					/>
+				)}
+
+				{showLegitimateInterestMessage && (
+					<LegitimateInterestMessage
+						showPaymentStatus={!isDirectDebitPayment}
+					/>
+				)}
+
+				{observerPrint && <ObserverMessage observerPrint={observerPrint} />}
+
+				{showProductCatalogMessage && (
+					<ProductCatalogMessage productKey={productKey} />
+				)}
+			</div>
 		</header>
 	);
 }

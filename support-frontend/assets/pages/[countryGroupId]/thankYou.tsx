@@ -1,6 +1,14 @@
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
+import {
+	type ActiveRatePlanKey,
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -40,7 +48,7 @@ export function ThankYou({
 	const ratePlanParam = searchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && product && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan =
 		ratePlanKey && product ? product.ratePlans[ratePlanKey] : undefined;
@@ -103,17 +111,8 @@ export function ThankYou({
 				productKey === 'SupporterPlus' || productKey === 'TierThree'
 					? appConfig.allProductPrices[productKey]
 					: undefined;
-
-			/**
-			 * This is some annoying transformation we need from
-			 * Product API => Contributions work we need to do
-			 */
 			const billingPeriod =
-				ratePlan.billingPeriod === 'Quarter'
-					? 'Quarterly'
-					: ratePlan.billingPeriod === 'Month'
-					? 'Monthly'
-					: 'Annual';
+				toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 			const getFulfilmentOptions = (productKey: string): FulfilmentOptions => {
 				switch (productKey) {

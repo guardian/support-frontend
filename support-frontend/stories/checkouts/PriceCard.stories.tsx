@@ -23,15 +23,14 @@ export const WithFrequency = Template.bind({});
 
 WithFrequency.args = {
 	amount: 10,
-	amountWithCurrency: '£10',
+	label: '£10 per month',
 	isSelected: true,
-	paymentInterval: 'month',
 };
 
 export const WithoutFrequency = Template.bind({});
 
 WithoutFrequency.args = {
 	amount: 30,
-	amountWithCurrency: '$30',
+	label: '$30',
 	isSelected: false,
 };

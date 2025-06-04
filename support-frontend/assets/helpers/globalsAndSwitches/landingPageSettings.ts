@@ -17,6 +17,40 @@ export interface TickerSettings {
 	name: TickerName;
 }
 
+interface CountdownTheme {
+	backgroundColor: string;
+	foregroundColor: string;
+}
+export interface CountdownSettings {
+	overwriteHeadingLabel: string;
+	countdownStartTimestamp: string;
+	countdownDeadlineTimestamp: string;
+	useLocalTime: boolean;
+	theme: CountdownTheme;
+}
+
+type ParsedCountdownSettings = {
+	countdownStartInMillis: number;
+	countdownDeadlineInMillis: number;
+};
+
+export const parseCountdownSettings = (
+	countdownSettings: CountdownSettings,
+): ParsedCountdownSettings => {
+	const { useLocalTime, countdownStartTimestamp, countdownDeadlineTimestamp } =
+		countdownSettings;
+	return {
+		countdownStartInMillis: Date.parse(
+			useLocalTime ? countdownStartTimestamp : `${countdownStartTimestamp}Z`,
+		),
+		countdownDeadlineInMillis: Date.parse(
+			useLocalTime
+				? countdownDeadlineTimestamp
+				: `${countdownDeadlineTimestamp}Z`,
+		),
+	};
+};
+
 interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
@@ -53,6 +87,7 @@ export interface LandingPageVariant {
 	copy: LandingPageCopy;
 	products: LandingPageProducts;
 	tickerSettings?: TickerSettings;
+	countdownSettings?: CountdownSettings;
 }
 
 interface RegionTargeting {

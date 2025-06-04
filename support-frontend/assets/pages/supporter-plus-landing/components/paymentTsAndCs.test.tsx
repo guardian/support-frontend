@@ -1,7 +1,9 @@
 import { render } from '@testing-library/react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
@@ -20,37 +22,45 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		numberOfDiscountedPeriods: 12,
 		discountedPrice: 324,
 	};
-	const paymentProductKeys = [
+
+	type PaymentProductTestParams = [
+		ActiveProductKey,
+		ActiveRatePlanKey,
+		CountryGroupId,
+		number,
+	];
+
+	const paymentProductKeys: PaymentProductTestParams[] = [
 		['GuardianAdLite', 'Annual', 'GBPCountries', 0],
 		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
 		['Contribution', 'Annual', 'AUDCountries', 0],
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
-		['TierThree', 'Monthly', 'UnitedStates', 45],
+		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
 		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
 		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
 		['SubscriptionCard', 'Monthly', 'GBPCountries', 0],
 		['GuardianWeeklyDomestic', 'Monthly', 'GBPCountries', 0],
-		['GuardianWeeklyRestOfWorld', 'Annual', 'UnitedStates', 0],
+		['GuardianWeeklyRestOfWorld', 'Annual', 'International', 0],
 	];
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
-		(paymentProductKey, billingPeriod, countryGroupId, amount) => {
+		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
-				billingPeriod === 'MONTHLY' &&
+				ratePlanKey === 'RestOfWorldMonthly' &&
 				countryGroupId === 'UnitedStates'
 					? promotionTierThreeUnitedStatesMonthly
 					: paymentProductKey === 'GuardianWeeklyRestOfWorld' &&
-					  billingPeriod === 'ANNUAL' &&
+					  ratePlanKey === 'Annual' &&
 					  countryGroupId === 'UnitedStates'
 					? promotionGuardianWeeklyUnitedStatesAnnual
 					: undefined;
 			const { container } = render(
 				<PaymentTsAndCs
-					billingPeriod={billingPeriod as BillingPeriod}
-					countryGroupId={countryGroupId as CountryGroupId}
-					productKey={paymentProductKey as ActiveProductKey}
-					thresholdAmount={amount as number}
+					productKey={paymentProductKey}
+					ratePlanKey={ratePlanKey}
+					countryGroupId={countryGroupId}
+					thresholdAmount={amount}
 					promotion={promo}
 				/>,
 			);

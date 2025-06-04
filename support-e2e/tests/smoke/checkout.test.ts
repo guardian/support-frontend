@@ -44,6 +44,48 @@ test.describe('Checkout', () => {
 			internationalisationId: 'UK',
 			postCode: 'BS6 6QY', // This postcode has multiple delivery agents
 		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Monthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
+			postCode: 'BS6 6QY',
+		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Annual',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
+			postCode: 'BS6 6QY',
+		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Quarterly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'UK',
+			postCode: 'BN44 3QG',
+		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Monthly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'US',
+			postCode: '60601',
+		},
+		{
+			product: 'GuardianWeeklyRestOfWorld',
+			ratePlan: 'Annual',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'INT',
+			postCode: '8001',
+		},
+		{
+			product: 'GuardianWeeklyDomestic',
+			ratePlan: 'Quarterly',
+			paymentType: 'Credit/Debit card',
+			internationalisationId: 'AU',
+			postCode: '2000',
+		},
 	].forEach((testDetails) => {
 		testCheckout(testDetails);
 	});

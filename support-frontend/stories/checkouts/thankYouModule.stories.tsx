@@ -264,8 +264,10 @@ SignIn.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+	bodyCopy: <SignInBodyCopy isGuardianWeekly={false} isTierThree={false} />,
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
+	),
 };
 
 export const SignInTier3 = Template.bind({});
@@ -275,8 +277,10 @@ SignInTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} />,
-	ctas: <SignInCTA email={''} csrf={{ token: undefined }} isTierThree={true} />,
+	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianWeekly={false} />,
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
+	),
 };
 
 export const SignInObserver = Template.bind({});
@@ -286,14 +290,15 @@ SignInObserver.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true, ObserverPrint.Paper),
-	bodyCopy: <SignInBodyCopy observerPrint={ObserverPrint.Paper} />,
-	ctas: (
-		<SignInCTA
-			email={''}
-			csrf={{ token: undefined }}
-			isTierThree={false}
+	bodyCopy: (
+		<SignInBodyCopy
 			observerPrint={ObserverPrint.Paper}
+			isTierThree={false}
+			isGuardianWeekly={false}
 		/>
+	),
+	ctas: (
+		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
 };
 
@@ -325,7 +330,7 @@ WhatNextNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} />,
+	bodyCopy: <WhatNext amount={'12'} isGuardianWeekly={false} />,
 };
 
 export const WhatNextSignedIn = Template.bind({});
@@ -338,6 +343,7 @@ WhatNextSignedIn.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -352,6 +358,7 @@ WhatNextSignedOut.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -367,6 +374,7 @@ WhatNextObserverPaper.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.Paper}
+			isGuardianWeekly={false}
 		/>
 	),
 };
@@ -382,6 +390,7 @@ WhatNextObserverSubsCard.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.SubscriptionCard}
+			isGuardianWeekly={false}
 		/>
 	),
 };

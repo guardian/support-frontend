@@ -1,16 +1,6 @@
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 
-export type CountdownSetting = {
-	label: string;
-	countdownStartInMillis: number;
-	countdownDeadlineInMillis: number;
-	theme: {
-		backgroundColor: string;
-		foregroundColor: string;
-	};
-};
-
 export function countdownSwitchOn(): boolean {
 	const isOn = isSwitchOn('featureSwitches.enableCampaignCountdown');
 	return isOn;
@@ -29,7 +19,6 @@ type CampaignSettings = {
 		promoCode?: string | null,
 	) => boolean;
 	enableSingleContributions: boolean;
-	countdownSettings?: CountdownSetting[];
 	copy: CampaignCopy;
 };
 

@@ -2,14 +2,16 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
+import com.gu.lambdas.ProcessSupporterRatePlanItemLambda.{contributionIds, discountIds}
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.sqs.SqsEvent
+import com.gu.model.zuora.response.MinimalZuoraSubscription
 import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{AlarmService, ConfigService, DiscountService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{CODE, PROD}
-import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
+import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
@@ -51,7 +53,9 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
 
   private def addAmountIfContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     if (isRecurringContribution(supporterRatePlanItem)) {
-      logger.info(s"Supporter ${supporterRatePlanItem.identityId} is a recurring contributor")
+      logger.info(
+        s"Subscription ${supporterRatePlanItem.subscriptionName} of supporter ${supporterRatePlanItem.identityId} is a recurring contribution",
+      )
       contributionAmountFetcher.fetchContributionAmountFromZuora(supporterRatePlanItem)
     } else
       Future.successful(supporterRatePlanItem)
@@ -91,14 +95,22 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
 class ContributionAmountFetcher(config: ZuoraQuerierConfig) extends SafeLogging {
   lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
 
-  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem) =
+  private def contributionAmountFromZuoraSubscription(subscription: MinimalZuoraSubscription) =
+    for {
+      contributionRatePlan <- subscription.ratePlans.find(ratePlan => contributionIds.contains(ratePlan.id))
+      charges <- contributionRatePlan.ratePlanCharges.headOption
+      amount <- charges.price
+    } yield ContributionAmount(amount, charges.currency)
+
+  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem): Future[SupporterRatePlanItem] =
     zuoraService
       .getSubscription(supporterRatePlanItem.subscriptionName)
       .map { sub =>
+        val contributionAmount = contributionAmountFromZuoraSubscription(sub)
         logger.info(
-          s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.contributionAmount}",
+          s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${contributionAmount}",
         )
-        supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)
+        supporterRatePlanItem.copy(contributionAmount = contributionAmount)
       }
 
 }

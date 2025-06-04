@@ -30,17 +30,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # (Respects .nvmrc)
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: "yarn"
-          cache-dependency-path: cdk/yarn.lock
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
+
+      - name: Build TypeScript lambdas
+        run: pnpm --filter support-workers package
 
       - uses: sbt/setup-sbt@v1
 
@@ -83,7 +81,7 @@ jobs:
                   templateStagePaths:
                     CODE: SupportWorkers-CODE.template.json
                     PROD: SupportWorkers-PROD.template.json
-              support-workers:
+              support-workers-scala:
                 type: aws-lambda
                 parameters:
                   functionNames:
@@ -97,6 +95,13 @@ jobs:
                     - "-PreparePaymentMethodForReuseLambda-"
                   fileName: support-workers.jar
                 dependencies: [cfn]
+              support-workers-typescript:
+                type: aws-lambda
+                parameters:
+                  functionNames:
+                    - "-DummyTypescriptLambda-"
+                  fileName: support-workers.zip
+                dependencies: [cfn]
               it-tests:
                 type: aws-s3
                 parameters:
@@ -106,7 +111,9 @@ jobs:
               cfn:
                 - cdk/cdk.out/SupportWorkers-CODE.template.json
                 - cdk/cdk.out/SupportWorkers-PROD.template.json
-              support-workers:
+              support-workers-scala:
                 - support-workers/target/scala-2.13/support-workers.jar
+              support-workers-typescript:
+                - support-workers/target/typescript/support-workers.zip
               it-tests:
                 - support-workers/target/scala-2.13/support-workers-it.jar

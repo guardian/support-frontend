@@ -163,16 +163,38 @@ describe('thankYouComponent', () => {
 		expect(subscriptionStart).toBeInTheDocument();
 	});
 
-	it('should display the correct thankyou cards for Guardian Weekly Domestic users', () => {
-		render(
-			<ThankYouComponent
-				{...defaultProps}
-				productKey="GuardianWeeklyDomestic"
-				ratePlanKey="Monthly"
-				identityUserType="current"
-			/>,
-		);
-		const subscriptionStart = screen.getByTestId('subscriptionStart');
-		expect(subscriptionStart).toBeInTheDocument();
+	describe('GuardianWeeklyDomestic', () => {
+		const guardianWeeklyDomestic = 'GuardianWeeklyDomestic';
+
+		it('should display the correct thankyou cards for know user not logged in', () => {
+			render(
+				<ThankYouComponent
+					{...defaultProps}
+					productKey={guardianWeeklyDomestic}
+					ratePlanKey="Monthly"
+					identityUserType="current"
+				/>,
+			);
+
+			const whatNext = screen.getByTestId('whatNext');
+			const signIn = screen.getByTestId('signIn');
+			expect(whatNext).toBeInTheDocument();
+			expect(signIn).toBeInTheDocument();
+		});
+
+		it('should display the correct thankyou cards for guest users', () => {
+			render(
+				<ThankYouComponent
+					{...defaultProps}
+					productKey={guardianWeeklyDomestic}
+					ratePlanKey="Monthly"
+					identityUserType="new"
+				/>,
+			);
+			const whatNext = screen.getByTestId('whatNext');
+			const signUp = screen.getByTestId('signUp');
+			expect(whatNext).toBeInTheDocument();
+			expect(signUp).toBeInTheDocument();
+		});
 	});
 });

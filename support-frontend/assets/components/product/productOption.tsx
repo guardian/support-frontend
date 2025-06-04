@@ -9,8 +9,7 @@ import {
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
 	type ProductLabelProps,
@@ -169,7 +168,7 @@ ProductOption.defaultProps = {
 	label: '',
 	offerCopy: '',
 	cssOverrides: '',
-	billingPeriod: Monthly,
+	billingPeriod: BillingPeriod.Monthly,
 };
 
 export default ProductOption;

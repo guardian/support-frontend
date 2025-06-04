@@ -12,7 +12,7 @@ import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createTestStoreForSubscriptions } from '../../../__test-utils__/testStore';
-import type { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
+import { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from '../../../helpers/productPrice/fulfilmentOptions';
 import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from '../../../helpers/productPrice/productOptions';
@@ -27,7 +27,7 @@ function setUpStore(
 ): SubscriptionsStore {
 	const store = createTestStoreForSubscriptions(
 		GuardianWeekly,
-		'Monthly',
+		BillingPeriod.Monthly,
 		formatMachineDate(new Date()),
 		NoProductOptions,
 		getWeeklyFulfilmentOption,
@@ -55,7 +55,7 @@ describe('Guardian Weekly checkout form', () => {
 	console.error = jest.fn();
 
 	let initialState: Record<string, unknown>;
-	const billingPeriod: BillingPeriod = 'Monthly';
+	const billingPeriod = BillingPeriod.Monthly;
 	const productOption: ProductOptions = 'NoProductOptions';
 	const fulfilmentOption: FulfilmentOptions = 'Domestic';
 

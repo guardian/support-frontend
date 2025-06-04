@@ -1,4 +1,3 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -9,8 +8,16 @@ import {
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { isProductKey, productCatalog } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	isProductKey,
+	productCatalog,
+} from 'helpers/productCatalog';
+import {
+	BillingPeriod,
+	toRegularBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
@@ -42,7 +49,7 @@ const countryId: IsoCountry = Country.detect();
 const getPromotionFromProductPrices = (
 	appConfig: AppConfig,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 	countryId: IsoCountry,
 	billingPeriod: BillingPeriod,
 ) => {
@@ -115,17 +122,11 @@ export function Checkout({
 		return <div>Product not found</div>;
 	}
 
-	/**
-	 * Get and validate ratePlan
-	 * TODO: This type should be more specific e.g. `ProductRatePlanKey<P>`.
-	 * Annoyingly the TypeScript for this is a little fiddly due to the
-	 * API being completely based on literals, so we've left it as `string`
-	 * although we do validate it is a valid ratePlan for this product
-	 */
+	/** Get and validate active ratePlan */
 	const ratePlanParam = urlSearchParams.get('ratePlan');
 	const ratePlanKey =
 		ratePlanParam && ratePlanParam in product.ratePlans
-			? ratePlanParam
+			? (ratePlanParam as ActiveRatePlanKey)
 			: undefined;
 	const ratePlan = ratePlanKey && product.ratePlans[ratePlanKey];
 	if (!ratePlan) {
@@ -158,17 +159,8 @@ export function Checkout({
 	const contributionAmount = contributionParam
 		? parseInt(contributionParam, 10)
 		: undefined;
-
-	/**
-	 * This is some annoying transformation we need from
-	 * Product API => Contributions work we need to do
-	 */
 	const billingPeriod =
-		ratePlan.billingPeriod === 'Quarter'
-			? 'Quarterly'
-			: ratePlan.billingPeriod === 'Month'
-			? 'Monthly'
-			: 'Annual';
+		toRegularBillingPeriod(ratePlan.billingPeriod) ?? BillingPeriod.Annual;
 
 	let promotion;
 	if (productKey === 'Contribution') {

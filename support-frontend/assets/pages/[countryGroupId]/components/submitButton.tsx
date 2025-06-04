@@ -5,6 +5,10 @@ import type {
 	Currency,
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import {
+	type BillingPeriod,
+	getBillingPeriodNoun,
+} from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -20,9 +24,7 @@ type SubmitButtonProps = {
 	isTestUser: boolean;
 	finalAmount: number;
 	currencyKey: IsoCurrency;
-	ratePlanDescription: {
-		billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
-	};
+	billingPeriod: BillingPeriod;
 	csrf: string;
 	currency: Currency;
 	formRef: React.RefObject<HTMLFormElement>;
@@ -37,7 +39,7 @@ export function SubmitButton({
 	isTestUser,
 	finalAmount,
 	currencyKey,
-	ratePlanDescription,
+	billingPeriod,
 	csrf,
 	currency,
 }: SubmitButtonProps) {
@@ -91,12 +93,7 @@ export function SubmitButton({
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
-							setupPayPalPayment(
-								finalAmount,
-								currencyKey,
-								ratePlanDescription.billingPeriod,
-								csrf,
-							)
+							setupPayPalPayment(finalAmount, currencyKey, billingPeriod, csrf)
 								.then((token) => {
 									resolve(token);
 								})
@@ -131,13 +128,10 @@ export function SubmitButton({
 		default:
 			return (
 				<DefaultPaymentButton
-					buttonText={`Pay ${simpleFormatAmount(currency, finalAmount)} per ${
-						ratePlanDescription.billingPeriod === 'Annual'
-							? 'year'
-							: ratePlanDescription.billingPeriod === 'Monthly'
-							? 'month'
-							: 'quarter'
-					}`}
+					buttonText={`Pay ${simpleFormatAmount(
+						currency,
+						finalAmount,
+					)} per ${getBillingPeriodNoun(billingPeriod)}`}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler

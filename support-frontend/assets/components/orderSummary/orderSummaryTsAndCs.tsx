@@ -8,10 +8,13 @@ import {
 } from '@guardian/source/foundations';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import {
-	type BillingPeriod,
-	billingPeriodNoun,
+	getBillingPeriodNoun,
+	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
@@ -71,19 +74,20 @@ export function OrderSummaryStartDate({
 
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
-	billingPeriod: BillingPeriod;
+	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
-	billingPeriod,
+	ratePlanKey,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
-	const billingPeriodSingular = billingPeriodNoun(billingPeriod).toLowerCase();
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -102,7 +106,7 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
+					<p>Auto renews every {periodNoun} until you cancel.</p>
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
@@ -110,13 +114,13 @@ export function OrderSummaryTsAndCs({
 				</>
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
-				<p>Auto renews every {billingPeriodSingular}. Cancel anytime.</p>
+				<p>Auto renews every {periodNoun}. Cancel anytime.</p>
 			)}
 		</div>
 	);
 	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
-			<p>Auto renews every {billingPeriodSingular} until you cancel.</p>
+			<p>Auto renews every {periodNoun} until you cancel.</p>
 			<p>
 				{['Contribution', 'OneTimeContribution'].includes(productKey)
 					? 'Cancel or change your support anytime.'

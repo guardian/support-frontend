@@ -4,7 +4,6 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import { SimilarProductsConsent } from '../../components/SimilarProductsConsent';
 import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
@@ -18,7 +17,6 @@ type PersonalDetailsFieldsProps = {
 	confirmedEmail: string;
 	setConfirmedEmail: (value: string) => void;
 	isSignedIn: boolean;
-	showSimilarProductsConsent: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -32,7 +30,6 @@ export function PersonalDetailsFields({
 	confirmedEmail,
 	setConfirmedEmail,
 	isSignedIn,
-	showSimilarProductsConsent,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -47,7 +44,6 @@ export function PersonalDetailsFields({
 				setConfirmedEmail={setConfirmedEmail}
 				isSignedIn={isSignedIn}
 			/>
-			{showSimilarProductsConsent && <SimilarProductsConsent />}
 			<div>
 				<TextInput
 					id="firstName"

@@ -3,7 +3,7 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import { International } from 'helpers/internationalisation/countryGroup';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
-import { Annual } from 'helpers/productPrice/billingPeriods';
+import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Domestic, RestOfWorld } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
@@ -60,9 +60,13 @@ function getCountryPrice(
 	const fulfilmentOption =
 		countryGroupName === International ? RestOfWorld : Domestic;
 	const shortTermPrice =
-		prices[fulfilmentOption]?.[NoProductOptions]?.['Monthly']?.[currency];
+		prices[fulfilmentOption]?.[NoProductOptions]?.[BillingPeriod.Monthly]?.[
+			currency
+		];
 	const annualPrice =
-		prices[fulfilmentOption]?.[NoProductOptions]?.[Annual]?.[currency];
+		prices[fulfilmentOption]?.[NoProductOptions]?.[BillingPeriod.Annual]?.[
+			currency
+		];
 	return {
 		currencyGlyph,
 		shortTermPrice,

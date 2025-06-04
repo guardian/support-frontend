@@ -1,5 +1,8 @@
 // describes options relating to a product itself - only relevant for paper currently
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -33,7 +36,12 @@ export type PaperProductOptions =
 	| typeof Sunday
 	| typeof Weekend
 	| typeof Sixday
-	| typeof Everyday;
+	| typeof Everyday
+	| typeof SaturdayPlus
+	| typeof SundayPlus
+	| typeof WeekendPlus
+	| typeof SixdayPlus
+	| typeof EverydayPlus;
 
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Everyday,
@@ -41,6 +49,11 @@ const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Weekend,
 	Saturday,
 	Sunday,
+	EverydayPlus,
+	SixdayPlus,
+	WeekendPlus,
+	SaturdayPlus,
+	SundayPlus,
 ] as const;
 
 export type ActivePaperProductOptions =
@@ -85,13 +98,20 @@ function productOptionIfDigiAddOnChanged(
 	return matchingProducLookup[selectedOption];
 }
 
-const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
+const getPaperProductOptions = (
+	ratePlanKey: ActiveRatePlanKey,
+): ProductOptions => {
 	switch (ratePlanKey) {
 		case 'Saturday':
 		case 'Sunday':
 		case 'Weekend':
 		case 'Sixday':
 		case 'Everyday':
+		case 'WeekendPlus':
+		case 'SaturdayPlus':
+		case 'SundayPlus':
+		case 'SixdayPlus':
+		case 'EverydayPlus':
 			return ratePlanKey;
 	}
 	throw new Error(
@@ -100,7 +120,7 @@ const getPaperProductOptions = (ratePlanKey: string): ProductOptions => {
 };
 export const getProductOptionFromProductAndRatePlan = (
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ): ProductOptions => {
 	switch (productKey) {
 		case 'SupporterPlus':
@@ -108,7 +128,6 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'Contribution':
 		case 'OneTimeContribution':
 		case 'DigitalSubscription':
-		case 'GuardianPatron':
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
 			return 'NoProductOptions';

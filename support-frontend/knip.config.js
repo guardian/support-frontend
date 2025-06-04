@@ -13,6 +13,8 @@ module.exports = {
 	ignoreDependencies: [
 		// used in package.json
 		'@guardian/browserslist-config',
+		// knip has trouble telling that this is used
+		'@guardian/support-service-lambdas',
 		'lint-staged',
 		// used by scripts in package.json
 		'webpack-cli',

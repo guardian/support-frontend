@@ -1,0 +1,42 @@
+{
+  "name": "support-workers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --group=-integration",
+    "it-test": "jest --group=integration",
+    "lint": "eslint src/typescript/**/*.ts",
+    "check-formatting": "prettier --check **.ts",
+    "build": "tsc",
+    "clean-target": "rm -rf target && mkdir -p target",
+    "install-runtime-dependencies": "pnpm install --ignore-scripts --modules-dir target/typescript/node_modules --production",
+    "build-and-zip": "pnpm clean-target && pnpm build && pnpm install-runtime-dependencies && cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
+    "package": "pnpm check-formatting && pnpm lint && pnpm test && pnpm build-and-zip"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guardian/support-frontend.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.679.0",
+    "@aws-sdk/credential-provider-node": "3.699.0",
+    "stripe": "^17.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@guardian/eslint-config-typescript": "12.0.0",
+    "@guardian/prettier": "^2.1.5",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.27",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "jest-runner-groups": "^2.2.0",
+    "prettier": "^2.8.8",
+    "prettier-eslint": "^16.3.0",
+    "pretty-format": "^29.7.0",
+    "ts-jest": "^29.2.4",
+    "typescript": "^5.2.2"
+  }
+}

@@ -115,7 +115,7 @@ export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
 	productKey: 'Contribution',
-	ratePlanKey: '',
+	ratePlanKey: 'OneTime',
 	productDescription: 'One-off contribution',
 	enableCheckList: false,
 	amount: 25,
@@ -158,7 +158,7 @@ RecurringContribution.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'Contribution'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -193,7 +193,7 @@ SupporterPlus.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'SupporterPlus'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={12}
 		/>
@@ -210,7 +210,7 @@ export const TierThree = Template.bind({});
 
 TierThree.args = {
 	productKey: 'TierThree',
-	ratePlanKey: 'Montly',
+	ratePlanKey: 'Monthly',
 	productDescription: 'Digital + print',
 	enableCheckList: true,
 	amount: 27,
@@ -233,7 +233,7 @@ TierThree.args = {
 	tsAndCs: (
 		<OrderSummaryTsAndCs
 			productKey={'TierThree'}
-			billingPeriod={'Monthly'}
+			ratePlanKey={'Monthly'}
 			countryGroupId={GBPCountries}
 			thresholdAmount={27}
 		/>

@@ -90,6 +90,19 @@ export const ukWithPostalAddressOnly = (postCode: string = 'N1 9GU') => ({
 	],
 });
 
+export const intWithPostalAddressOnly = (postCode: string = '8001') => ({
+	email: email(),
+	firstName: firstName(),
+	lastName: lastName(),
+	addresses: [
+		{
+			postCode: postCode,
+			firstLine: '0C Heerengracht Street',
+			city: 'Cape Town',
+		},
+	],
+});
+
 export const usWithPostalAddressOnly: TestFieldsGenerator = () => ({
 	email: email(),
 	firstName: firstName(),

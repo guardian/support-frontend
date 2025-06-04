@@ -1,5 +1,7 @@
-import type { ActiveProductKey } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
-import { activeTypeObject } from '@guardian/support-service-lambdas/modules/product-catalog/src/typeObject';
+import type {
+	ProductKey,
+	ProductRatePlanKey,
+} from '@modules/product-catalog/productCatalog';
 import type { Participations } from './abTests/models';
 import { newspaperCountries } from './internationalisation/country';
 import type {
@@ -7,8 +9,61 @@ import type {
 	SupportInternationalisationId,
 } from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
+import {
+	BillingPeriod,
+	type RecurringBillingPeriod,
+} from './productPrice/billingPeriods';
 
-export type { ActiveProductKey };
+const activeProductKeys = [
+	'GuardianWeeklyDomestic',
+	'GuardianWeeklyRestOfWorld',
+	'GuardianAdLite',
+	'TierThree',
+	'DigitalSubscription',
+	'NationalDelivery',
+	'HomeDelivery',
+	'SupporterPlus',
+	'SubscriptionCard',
+	'Contribution',
+	'OneTimeContribution',
+] as const;
+
+export type ActiveProductKey = Extract<
+	ProductKey,
+	(typeof activeProductKeys)[number]
+>;
+
+/*
+ * Ideally, would prefer to loop the ActiveProductKey's generating an ActiveRatePlanKey
+ */
+type OneTimeContributionRatePlanKey = ProductRatePlanKey<'OneTimeContribution'>;
+type GuardianAdLiteRatePlanKey = ProductRatePlanKey<'GuardianAdLite'>;
+type TierThreeRatePlanKey = ProductRatePlanKey<'TierThree'>;
+type DigitalSubscriptionRatePlanKey = ProductRatePlanKey<'DigitalSubscription'>;
+type NationalDeliveryRatePlanKey = ProductRatePlanKey<'NationalDelivery'>;
+type HomeDeliveryRatePlanKey = ProductRatePlanKey<'HomeDelivery'>;
+type SupporterPlusRatePlanKey = ProductRatePlanKey<'SupporterPlus'>;
+type GuardianWeeklyRestOfWorldRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyRestOfWorld'>;
+type GuardianWeeklyDomesticRatePlanKey =
+	ProductRatePlanKey<'GuardianWeeklyDomestic'>;
+type SubscriptionCardRatePlanKey = ProductRatePlanKey<'SubscriptionCard'>;
+type ContributionRatePlanKey = ProductRatePlanKey<'Contribution'>;
+
+export type ActiveRatePlanKey = keyof {
+	[Key in
+		| OneTimeContributionRatePlanKey
+		| GuardianAdLiteRatePlanKey
+		| TierThreeRatePlanKey
+		| DigitalSubscriptionRatePlanKey
+		| NationalDeliveryRatePlanKey
+		| HomeDeliveryRatePlanKey
+		| SupporterPlusRatePlanKey
+		| GuardianWeeklyRestOfWorldRatePlanKey
+		| GuardianWeeklyDomesticRatePlanKey
+		| SubscriptionCardRatePlanKey
+		| ContributionRatePlanKey]: true;
+};
 
 export const productCatalog = window.guardian.productCatalog;
 
@@ -35,7 +90,7 @@ export type ProductDescription = {
 	ratePlans: Record<
 		string,
 		{
-			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			billingPeriod: RecurringBillingPeriod;
 			label?: string;
 			hideSimilarProductsConsent?: boolean;
 		}
@@ -44,20 +99,8 @@ export type ProductDescription = {
 
 export const showSimilarProductsConsentForRatePlan = (
 	productDescription: ProductDescription,
-	ratePlanKey: string,
+	ratePlanKey: ActiveRatePlanKey,
 ) => !productDescription.ratePlans[ratePlanKey]?.hideSimilarProductsConsent;
-
-export const userShouldSeeConsentCheckbox = (
-	productDescription: ProductDescription,
-	ratePlanKey: string,
-	abParticipations: Participations,
-) => {
-	return (
-		['VariantA', 'VariantB'].includes(
-			abParticipations.similarProductsConsent ?? '',
-		) && showSimilarProductsConsentForRatePlan(productDescription, ratePlanKey)
-	);
-};
 
 export function filterBenefitByRegion(
 	benefit: {
@@ -105,9 +148,8 @@ function displayBenefitByABTestVariant(
 	return display ? variantFound : !variantFound; // abtest variantFound opposite if hiding
 }
 
-const productKeys = Object.keys(activeTypeObject) as ActiveProductKey[];
 export function isProductKey(val: unknown): val is ActiveProductKey {
-	return productKeys.includes(val as ActiveProductKey);
+	return activeProductKeys.includes(val as ActiveProductKey);
 }
 
 const digitalEditionBenefit = {
@@ -204,7 +246,7 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/guardian-ad-lite',
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				hideSimilarProductsConsent: true,
 			},
 		},
@@ -219,28 +261,28 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			DomesticMonthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			DomesticAnnual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			RestOfWorldMonthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			RestOfWorldAnnual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			DomesticMonthlyV2: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			DomesticAnnualV2: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			RestOfWorldMonthlyV2: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			RestOfWorldAnnualV2: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 		},
 	},
@@ -262,16 +304,16 @@ export const productCatalogDescription: Record<
 		],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 		},
 	},
@@ -281,10 +323,10 @@ export const productCatalogDescription: Record<
 		benefits: supporterPlusBenefits,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 		},
 	},
@@ -295,19 +337,19 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			Quarterly: {
-				billingPeriod: 'Quarterly',
+				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 		},
 	},
@@ -318,19 +360,19 @@ export const productCatalogDescription: Record<
 		deliverableTo: gwDeliverableCountries,
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			OneYearGift: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 			Quarterly: {
-				billingPeriod: 'Quarterly',
+				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 		},
 	},
@@ -342,23 +384,23 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Every day package',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Six day package',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Weekend package',
 			},
 			Saturday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Saturday package',
 			},
 			Sunday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'The Observer',
 				hideSimilarProductsConsent: true,
 			},
@@ -372,23 +414,23 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Every day package',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Six day package',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Weekend package',
 			},
 			Saturday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Saturday package',
 			},
 			Sunday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'The Observer',
 				hideSimilarProductsConsent: true,
 			},
@@ -402,15 +444,15 @@ export const productCatalogDescription: Record<
 		deliverableTo: newspaperCountries,
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Every day package - The Guardian and The Observer',
 			},
 			Sixday: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Six day package - The Guardian',
 			},
 			Weekend: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 				label: 'Weekend package - The Guardian and The Observer',
 			},
 		},
@@ -421,10 +463,10 @@ export const productCatalogDescription: Record<
 		benefits: [supportBenefit, newsletterBenefitUS],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Monthly',
+				billingPeriod: BillingPeriod.Monthly,
 			},
 			Annual: {
-				billingPeriod: 'Annual',
+				billingPeriod: BillingPeriod.Annual,
 			},
 		},
 	},
@@ -435,26 +477,6 @@ export const productCatalogDescription: Record<
 		// Omit one time rate plans for now. We don't expect to use this data and the types in support-frontend
 		// can't handle a billingPeriod of OneTime.
 		ratePlans: {},
-	},
-	GuardianPatron: {
-		label: 'Guardian Patron',
-		landingPagePath: '/contribute',
-		benefits: [
-			{
-				copy: 'The Digital Edition app. Enjoy the Guardian and Observer newspaper, available for mobile and tablet',
-			},
-			{
-				copy: 'Full access to the Guardian app. Read our reporting on the go',
-			},
-			{
-				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
-			},
-		],
-		ratePlans: {
-			GuardianPatron: {
-				billingPeriod: 'Monthly',
-			},
-		},
 	},
 };
 
@@ -521,39 +543,62 @@ export function productCatalogGuardianAdLite(): Record<
 export function internationaliseProductAndRatePlan(
 	supportInternationalisationId: SupportInternationalisationId,
 	productKey: ActiveProductKey,
-	ratePlanKey: string,
-): { productKey: ActiveProductKey; ratePlanKey: string } {
-	let productKeyToUse = productKey;
-	let ratePlanToUse = ratePlanKey;
+	ratePlanKey: ActiveRatePlanKey,
+): {
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+} {
+	return {
+		productKey: internationaliseProduct(
+			supportInternationalisationId,
+			productKey,
+		),
+		ratePlanKey: internationaliseRatePlan(
+			supportInternationalisationId,
+			productKey,
+			ratePlanKey,
+		),
+	};
+}
 
-	if (productKey === 'TierThree') {
-		if (supportInternationalisationId === 'int') {
-			if (ratePlanKey === 'DomesticAnnual') {
-				ratePlanToUse = 'RestOfWorldAnnual';
-			}
-			if (ratePlanKey === 'DomesticMonthly') {
-				ratePlanToUse = 'RestOfWorldMonthly';
-			}
-		} else {
-			if (ratePlanKey === 'RestOfWorldAnnual') {
-				ratePlanToUse = 'DomesticAnnual';
-			}
-			if (ratePlanKey === 'RestOfWorldMonthly') {
-				ratePlanToUse = 'DomesticMonthly';
-			}
-		}
-	}
-
+export function internationaliseProduct(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ActiveProductKey,
+): ActiveProductKey {
 	if (
 		productKey === 'GuardianWeeklyDomestic' ||
 		productKey === 'GuardianWeeklyRestOfWorld'
 	) {
 		if (supportInternationalisationId === 'int') {
-			productKeyToUse = 'GuardianWeeklyRestOfWorld';
+			return 'GuardianWeeklyRestOfWorld';
 		} else {
-			productKeyToUse = 'GuardianWeeklyDomestic';
+			return 'GuardianWeeklyDomestic';
 		}
 	}
+	return productKey;
+}
 
-	return { productKey: productKeyToUse, ratePlanKey: ratePlanToUse };
+function internationaliseRatePlan(
+	supportInternationalisationId: SupportInternationalisationId,
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): ActiveRatePlanKey {
+	if (productKey === 'TierThree') {
+		if (supportInternationalisationId === 'int') {
+			if (ratePlanKey === 'DomesticAnnual') {
+				return 'RestOfWorldAnnual';
+			}
+			if (ratePlanKey === 'DomesticMonthly') {
+				return 'RestOfWorldMonthly';
+			}
+		} else {
+			if (ratePlanKey === 'RestOfWorldAnnual') {
+				return 'DomesticAnnual';
+			}
+			if (ratePlanKey === 'RestOfWorldMonthly') {
+				return 'DomesticMonthly';
+			}
+		}
+	}
+	return ratePlanKey;
 }

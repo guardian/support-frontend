@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cd ../../cdk
-yarn synth
+cd ../..
+pnpm --filter cdk synth
 
 # We need to upload the template to S3 because it is too big to inline
 aws --region eu-west-1 --profile membership \

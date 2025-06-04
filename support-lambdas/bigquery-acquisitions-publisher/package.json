@@ -22,6 +22,7 @@
 	"dependencies": {
 		"@aws-sdk/client-ssm": "^3.750.0",
 		"@aws-sdk/credential-provider-node": "^3.750.0",
+		"google-auth-library": "^9.0.0",
 		"@google-cloud/bigquery": "^7.9.2",
 		"aws-lambda": "^1.0.7",
 		"zod": "^3.24.2"

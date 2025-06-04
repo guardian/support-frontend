@@ -120,6 +120,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
     ),
     publicKey = StripePublicKey("pk_test_FOO"),
     recaptchaToken = "recaptchaToken",
+    similarProductsConsent = Some(true),
   )
 
   "StripeController" when {
