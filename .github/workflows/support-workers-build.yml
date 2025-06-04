@@ -30,23 +30,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # (Respects .nvmrc)
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: "yarn"
-          cache-dependency-path: '**/yarn.lock'
+      - name: Setup Node and Install Dependencies
+        uses: ./.github/actions/setup-node-and-install
 
       - name: Build CFN from CDK
         run: ./script/ci
         working-directory: cdk
 
       - name: Build TypeScript lambdas
-        run: |
-          yarn install --frozen-lockfile
-          yarn package
-        working-directory: support-workers
+        run: pnpm --filter support-workers package
 
       - uses: sbt/setup-sbt@v1
 
