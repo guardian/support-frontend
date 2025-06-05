@@ -9,14 +9,11 @@
     "lint": "eslint src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
-    "bundle": "esbuild src/typescript/lambdas/*.ts --bundle --platform=node --target=node22 --outdir=target/typescript/lambdas",
+    "bundle": "esbuild src/typescript/lambdas/*.ts --bundle --platform=node --target=node22 --outdir=target/typescript",
     "clean-target": "rm -rf target && mkdir -p target",
-    "install-runtime-dependencies": "pnpm install --prod --install-strategy=hoisted --ignore-scripts --modules-dir target/typescript/node_modules",
-    "pnpm-deploy": "pnpm --config.shamefully-hoist=true --config.hoist=true --config.node-linker=true --config.symlinks=false --config.shared-workspace-lockfile=false deploy --filter=support-workers --prod target/typescript/node_modules",
-    "copy-node-modules": "cp -r ./node_modules target/typescript/",
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
-    "build-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
-    "package": "pnpm check-formatting && pnpm lint && pnpm test && pnpm build-and-zip"
+    "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
+    "package": "pnpm check-formatting && pnpm lint && pnpm test && pnpm bundle-and-zip"
   },
   "repository": {
     "type": "git",
