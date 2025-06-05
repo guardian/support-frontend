@@ -106,10 +106,12 @@ object StripeCheckoutSessionService {
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
       } else {
-        val existingQuery = uri.getQuery
+        val existingQueryArgs = uri.getQuery.split("&").toList
         val newQuery =
-          if (existingQuery != "") s"$existingQuery&__CHECKOUT_SESSION_ID_PLACEHOLDER__"
-          else "__CHECKOUT_SESSION_ID_PLACEHOLDER__"
+          if (existingQueryArgs.nonEmpty) {
+            val withExistingCheckoutSessionIdRemoved = existingQueryArgs.filterNot(_.startsWith("checkoutSessionId="))
+            s"${withExistingCheckoutSessionIdRemoved.mkString("&")}&__CHECKOUT_SESSION_ID_PLACEHOLDER__"
+          } else "__CHECKOUT_SESSION_ID_PLACEHOLDER__"
 
         val successUrlWithPlaceholder =
           new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, newQuery, uri.getFragment).toString
@@ -132,7 +134,10 @@ object StripeCheckoutSessionService {
       if (uri.getScheme != "https" || !ALLOWED_SUCCESS_DOMAINS.contains(uri.getHost)) {
         None
       } else {
-        Some(refererUrl)
+        val existingQueryArgs = uri.getQuery.split("&").toList
+        val newQuery = existingQueryArgs.filterNot(_.startsWith("checkoutSessionId=")).mkString("&")
+
+        Some(new java.net.URI(uri.getScheme, uri.getHost, uri.getPath, newQuery, uri.getFragment).toString)
       }
     } catch {
       case _: java.net.URISyntaxException => None
