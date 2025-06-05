@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { countrySchema } from './address';
 import { stripePaymentTypeSchema } from './paymentFields';
 // Payment methods are the activated payment details which are passed into Zuora as opposed to
 // payment fields which are the details entered by the user into the checkout
@@ -25,7 +26,7 @@ const stripePaymentMethodSchema = z.object({
 	TokenId: z.string(), // Stripe Card id
 	SecondTokenId: z.string(), // Stripe Customer Id
 	CreditCardNumber: z.string(),
-	CreditCardCountry: z.string().nullable(),
+	CreditCardCountry: countrySchema.nullable(),
 	CreditCardExpirationMonth: z.number(),
 	CreditCardExpirationYear: z.number(),
 	CreditCardType: z.string().optional(),
@@ -41,7 +42,7 @@ const directDebitPaymentMethodSchema = z.object({
 	BankTransferAccountName: z.string(),
 	BankCode: z.string(),
 	BankTransferAccountNumber: z.string(),
-	Country: z.string(), //TODO: build a schema for this
+	Country: countrySchema,
 	City: z.string().nullable(),
 	PostalCode: z.string().nullable(),
 	State: z.string().nullable(),

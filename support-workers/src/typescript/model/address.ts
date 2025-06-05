@@ -1,13 +1,15 @@
 import { z } from 'zod';
 import { isoCountries } from '../../../../support-frontend/assets/helpers/internationalisation/country';
 
+export const countrySchema = z.enum(isoCountries);
+
 export const addressSchema = z.object({
 	lineOne: z.string().nullable(),
 	lineTwo: z.string().nullable(),
 	city: z.string().nullable(),
 	state: z.string().nullable(),
 	postCode: z.string().nullable(),
-	country: z.enum(isoCountries),
+	country: countrySchema,
 });
 
 type AddressLine = {
