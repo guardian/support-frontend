@@ -14,7 +14,7 @@
     "clean-target": "rm -rf target && mkdir -p target",
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
     "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
-    "package": "pnpm check-formatting && pnpm lint && pnpm test && pnpm bundle-and-zip"
+    "package": "pnpm check-formatting && pnpm lint:check && pnpm test && pnpm bundle-and-zip"
   },
   "repository": {
     "type": "git",
