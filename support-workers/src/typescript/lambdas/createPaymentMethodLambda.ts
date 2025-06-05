@@ -71,7 +71,7 @@ export function createPaymentMethod(
 		case 'PayPal':
 			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'DirectDebit':
-			return createDirectDebitPaymentMethod(paymentFields, user);
+			return createDirectDebitPaymentMethod(user, paymentFields);
 		case 'Existing':
 			return Promise.reject(
 				new Error(
@@ -220,8 +220,8 @@ async function createPayPalPaymentMethod(
 }
 
 export function createDirectDebitPaymentMethod(
-	dd: DirectDebitPaymentFields,
 	user: User,
+	dd: DirectDebitPaymentFields,
 ): Promise<DirectDebitPaymentMethod> {
 	const addressLine = combinedAddressLine(
 		user.billingAddress.lineOne,
