@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import * as paperTabStyles from './paperTabsStyles';
-import * as tabStyles from './tabsStyles';
+import * as legacyTabStyles from './tabsStyles';
 
 type TabElement = 'a' | 'button';
 export type TabProps = {
@@ -16,7 +16,7 @@ type PropTypes = {
 	tabElement: TabElement;
 	tabs: TabProps[];
 	onTabChange: (tabName: PaperFulfilmentOptions) => void;
-	theme?: 'tabs' | 'paperTabs';
+	theme?: 'legacyTabs' | 'paperTabs';
 };
 
 function Tabs({
@@ -24,9 +24,9 @@ function Tabs({
 	tabElement,
 	tabs,
 	onTabChange,
-	theme = 'tabs',
+	theme = 'legacyTabs',
 }: PropTypes): JSX.Element {
-	const styles = theme === 'tabs' ? tabStyles : paperTabStyles;
+	const styles = theme === 'legacyTabs' ? legacyTabStyles : paperTabStyles;
 	const TabControllerElement = tabElement;
 	return (
 		<div>
