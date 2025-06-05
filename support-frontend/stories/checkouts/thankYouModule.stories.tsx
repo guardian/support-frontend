@@ -46,7 +46,7 @@ import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 import { SubscriptionStartItems } from 'components/thankYou/subscriptionStart/subscriptionStartItems';
-import { WhatNext } from 'components/thankYou/guardianAdLite/whatNext';
+import { WhatNext } from 'components/thankYou/whatNext/whatNext';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 
 const container = css`
@@ -264,7 +264,7 @@ SignIn.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(),
-	bodyCopy: <SignInBodyCopy isGuardianWeekly={false} isTierThree={false} />,
+	bodyCopy: <SignInBodyCopy isGuardianPrint={false} isTierThree={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Continue" />
 	),
@@ -277,7 +277,7 @@ SignInTier3.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
 	header: signInHeader(true),
-	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianWeekly={false} />,
+	bodyCopy: <SignInBodyCopy isTierThree={true} isGuardianPrint={false} />,
 	ctas: (
 		<SignInCTA email={''} csrf={{ token: undefined }} buttonLabel="Sign in" />
 	),
@@ -294,7 +294,7 @@ SignInObserver.args = {
 		<SignInBodyCopy
 			observerPrint={ObserverPrint.Paper}
 			isTierThree={false}
-			isGuardianWeekly={false}
+			isGuardianPrint={false}
 		/>
 	),
 	ctas: (
@@ -325,16 +325,16 @@ AusMap.args = {
 	ctas: <AusMapCTA />,
 };
 
-export const WhatNextNoStartDate = Template.bind({});
-WhatNextNoStartDate.args = {
+export const WhatNextGuardianAdLiteNoStartDate = Template.bind({});
+WhatNextGuardianAdLiteNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} isGuardianWeekly={false} />,
+	bodyCopy: <WhatNext amount={'12'} productKey="GuardianAdLite" />,
 };
 
-export const WhatNextSignedIn = Template.bind({});
-WhatNextSignedIn.args = {
+export const WhatNextGuardianAdLiteSignedIn = Template.bind({});
+WhatNextGuardianAdLiteSignedIn.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
@@ -343,13 +343,13 @@ WhatNextSignedIn.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
-			isGuardianWeekly={false}
+			productKey="GuardianAdLite"
 		/>
 	),
 };
 
-export const WhatNextSignedOut = Template.bind({});
-WhatNextSignedOut.args = {
+export const WhatNextGuardianAdLiteSignedOut = Template.bind({});
+WhatNextGuardianAdLiteSignedOut.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
@@ -358,7 +358,7 @@ WhatNextSignedOut.args = {
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			isGuardianWeekly={false}
+			productKey="GuardianAdLite"
 		/>
 	),
 };
@@ -374,7 +374,7 @@ WhatNextObserverPaper.args = {
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.Paper}
-			isGuardianWeekly={false}
+			productKey="HomeDelivery"
 		/>
 	),
 };
@@ -386,11 +386,11 @@ WhatNextObserverSubsCard.args = {
 	header: 'What happens next?',
 	ctas: (
 		<WhatNext
+			productKey="SubscriptionCard"
 			amount={'12'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.SubscriptionCard}
-			isGuardianWeekly={false}
 		/>
 	),
 };

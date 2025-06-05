@@ -46,7 +46,10 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
-import { isGuardianWeeklyProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import {
+	isGuardianWeeklyProduct,
+	isPrintProduct,
+} from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
@@ -118,8 +121,7 @@ export function ThankYouComponent({
 	landingPageSettings,
 }: CheckoutComponentProps) {
 	const countryId = Country.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const user = getUser();
-	const isSignedIn = user.isSignedIn;
+	const { isSignedIn } = getUser();
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 	// Session storage order (from Checkout)
@@ -191,13 +193,8 @@ export function ThankYouComponent({
 		'NationalDelivery',
 		'HomeDelivery',
 	];
-	const printProductsKeys: ActiveProductKey[] = [
-		...subscriptionCardProductsKey,
-		...paperProductsKeys,
-		'GuardianWeeklyDomestic',
-		'GuardianWeeklyRestOfWorld',
-	];
-	const isPrint = printProductsKeys.includes(productKey);
+
+	const isPrint = isPrintProduct(productKey);
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 
 	const getObserver = (): ObserverPrint | undefined => {
@@ -215,22 +212,22 @@ export function ThankYouComponent({
 	};
 	const observerPrint = getObserver();
 
-	const isGuardianPrint =
-		printProductsKeys.includes(productKey) && ratePlanKey !== 'Sunday';
+	const isGuardianPrint = isPrint && !observerPrint;
 	const isDigitalEdition = productKey === 'DigitalSubscription';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = productKey === 'SupporterPlus';
 	const isTierThree = productKey === 'TierThree';
+	const isNationalDelivery = productKey === 'NationalDelivery';
 	const validEmail = order.email !== '';
 	const showNewspaperArchiveBenefit = ['v1', 'v2', 'control'].includes(
 		abParticipations.newspaperArchiveBenefit ?? '',
 	);
 
 	// Clarify Guardian Ad-lite thankyou page states
-	const guestUser = identityUserType === 'new';
-	const signedInUser = !guestUser && isSignedIn;
-	const userNotSignedIn = !guestUser && !isSignedIn;
+	const signedInUser = isSignedIn;
+	const userNotSignedIn = !isSignedIn && identityUserType === 'current';
+	const guestUser = !isSignedIn && identityUserType === 'new';
 
 	const getBenefits = (): BenefitsCheckListData[] => {
 		// Three Tier products get their config from the Landing Page tool
@@ -288,26 +285,25 @@ export function ThankYouComponent({
 	): ThankYouModuleType[] => (condition ? [moduleType] : []);
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(
-			(isGuardianWeekly && guestUser) ||
+			(isGuardianPrint && guestUser) ||
 				(!isPending && guestUser && !isGuardianAdLite && !isGuardianPrint),
 			'signUp',
 		), // Complete your Guardian account
-		...maybeThankYouModule(
-			userNotSignedIn &&
-				!isGuardianAdLite &&
-				(!isGuardianPrint || isGuardianWeekly),
-			'signIn',
-		), // Sign in to access your benefits
+		...maybeThankYouModule(userNotSignedIn && !isGuardianAdLite, 'signIn'), // Sign in to access your benefits
 		...maybeThankYouModule(isTierThree, 'benefits'),
 		...maybeThankYouModule(
 			isTierThree && showNewspaperArchiveBenefit,
 			'newspaperArchiveBenefit',
 		),
 		...maybeThankYouModule(
-			isTierThree || (isGuardianPrint && !isGuardianWeekly),
+			isTierThree || isNationalDelivery,
 			'subscriptionStart',
 		),
-		...maybeThankYouModule(isTierThree || isSupporterPlus, 'appsDownload'),
+		...maybeThankYouModule(isGuardianAdLite || isPrint, 'whatNext'),
+		...maybeThankYouModule(
+			isTierThree || isSupporterPlus || (isGuardianPrint && !isGuardianWeekly),
+			'appsDownload',
+		),
 		...maybeThankYouModule(isOneOff && validEmail, 'supportReminder'),
 		...maybeThankYouModule(
 			isOneOff ||
@@ -315,7 +311,7 @@ export function ThankYouComponent({
 					isSignedIn &&
 					!isGuardianAdLite &&
 					!observerPrint &&
-					!isGuardianWeekly),
+					!isGuardianPrint),
 			'feedback',
 		),
 		...maybeThankYouModule(isDigitalEdition, 'appDownloadEditions'),
@@ -324,10 +320,6 @@ export function ThankYouComponent({
 			!isTierThree && !isGuardianAdLite && !isPrint,
 			'socialShare',
 		),
-		...maybeThankYouModule(
-			isGuardianAdLite || isGuardianWeekly || !!observerPrint,
-			'whatNext',
-		), // All
 		...maybeThankYouModule(
 			isGuardianAdLite && userNotSignedIn,
 			'signInToActivate',

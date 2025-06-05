@@ -31,7 +31,7 @@ function ThankYouModules({
 	thankYouModulesData,
 }: ThankYouModulesProps) {
 	return (
-		<div css={mansory}>
+		<div css={mansory} data-testid="thankyou-modules">
 			{thankYouModules.map((moduleType) => (
 				<ThankYouModule
 					moduleType={moduleType}

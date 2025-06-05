@@ -41,7 +41,7 @@ type ThankYouHeaderProps = {
 	ratePlanKey: ActiveRatePlanKey;
 	isDirectDebitPayment: boolean;
 	isOneOffPayPal: boolean;
-	amount: number | undefined;
+	amount: number;
 	currency: IsoCurrency;
 	observerPrint?: ObserverPrint;
 	startDate?: string;
