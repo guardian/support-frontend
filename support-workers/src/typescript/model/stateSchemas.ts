@@ -1,4 +1,5 @@
 import { boolean, z } from 'zod';
+import { supportInternationalisationIds } from '../../../../support-frontend/assets/helpers/internationalisation/countryGroup';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
@@ -90,7 +91,7 @@ const baseStateSchema = z.object({
 	appliedPromotion: z
 		.object({
 			promoCode: z.string(),
-			countryGroupId: z.string(), //TODO: build a schema for this or take it from the frontend
+			countryGroupId: z.enum(supportInternationalisationIds),
 		})
 		.nullable(),
 	csrUsername: z.string().nullable(),

@@ -29,14 +29,18 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
+export const supportInternationalisationIds = [
+	'uk',
+	'us',
+	'au',
+	'eu',
+	'int',
+	'nz',
+	'ca',
+] as const;
+
 export type SupportInternationalisationId =
-	| 'uk'
-	| 'us'
-	| 'au'
-	| 'eu'
-	| 'int'
-	| 'nz'
-	| 'ca';
+	(typeof supportInternationalisationIds)[number];
 
 /*
   Note: supportInternationalisationId should match an existing
