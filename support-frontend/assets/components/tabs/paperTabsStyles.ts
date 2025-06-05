@@ -8,13 +8,13 @@ import {
 	textSansBold17,
 } from '@guardian/source/foundations';
 
-export const tabList = css`
+const tabList = css`
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-start;
 	margin-top: ${space[5]}px;
 `;
-export const tabButton = css`
+const tabButton = css`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -43,8 +43,10 @@ export const tabButton = css`
 		}
 	}
 `;
-export const tabPanel = css`
+const tabPanel = css`
 	background-color: ${palette.brand[400]};
 	color: ${palette.neutral[100]};
 	padding: ${space[2]}px;
 `;
+
+export default { tabList, tabButton, tabPanel };

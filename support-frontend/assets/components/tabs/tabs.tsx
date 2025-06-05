@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import * as paperTabStyles from './paperTabsStyles';
-import * as legacyTabStyles from './tabsStyles';
+import paperTabStyles from './paperTabsStyles';
+import legacyTabStyles from './tabsStyles';
 
 type TabElement = 'a' | 'button';
 export type TabProps = {
