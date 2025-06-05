@@ -1,3 +1,4 @@
+import { getConsentFor, onConsentChange } from '@guardian/libs';
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -8,7 +9,6 @@ import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
 import { DirectDebit, PayPal } from '../forms/paymentMethods';
-import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
@@ -32,20 +32,20 @@ type SubscriptionConversionData = {
 };
 
 // these values match the keys used by @guardian/consent-management-platform
-const googleTagManagerKey = 'google-tag-manager';
-const googleAnalyticsKey = 'google-analytics';
-const googleRemarketingKey = 'remarketing';
-const facebookKey = 'fb';
-const twitterKey = 'twitter';
-const bingKey = 'bing';
-const vendorIds: Record<string, string> = {
-	[googleTagManagerKey]: '5e952f6107d9d20c88e7c975',
-	[googleAnalyticsKey]: '5e542b3a4cd8884eb41b5a72',
-	[googleRemarketingKey]: '5ed0eb688a76503f1016578f',
-	[facebookKey]: '5e7e1298b8e05c54a85c52d2',
-	[twitterKey]: '5e71760b69966540e4554f01',
-	[bingKey]: '5f353ea3f8baf8390b95ffd4',
-};
+// const googleTagManagerKey = 'google-tag-manager';
+// const googleAnalyticsKey = 'google-analytics';
+// const googleRemarketingKey = 'remarketing';
+// const facebookKey = 'fb';
+// const twitterKey = 'twitter';
+// const bingKey = 'bing';
+// const vendorIds: Record<string, string> = {
+// 	[googleTagManagerKey]: '5e952f6107d9d20c88e7c975',
+// 	[googleAnalyticsKey]: '5e542b3a4cd8884eb41b5a72',
+// 	[googleRemarketingKey]: '5ed0eb688a76503f1016578f',
+// 	[facebookKey]: '5e7e1298b8e05c54a85c52d2',
+// 	[twitterKey]: '5e71760b69966540e4554f01',
+// 	[bingKey]: '5f353ea3f8baf8390b95ffd4',
+// };
 
 /**
  * vendorConsentsLookup is a string we
@@ -54,7 +54,7 @@ const vendorIds: Record<string, string> = {
  * adding tags
  *
  */
-let vendorConsentsLookup = '';
+const vendorConsentsLookup = '';
 // Default userConsentsToGTM to false
 let userConsentsToGTM = false;
 // Default scriptAdded to false
@@ -202,52 +202,79 @@ function addTagManagerScript() {
 	}
 }
 
-async function init(): Promise<void> {
+function init(): void {
 	/**
 	 * The callback passed to onConsentChangeEvent is called
 	 * each time consent changes. EG. if a user consents via the CMP.
 	 * The callback will receive the user's consent as the parameter
 	 * "thirdPartyTrackingConsent".
 	 */
-	await onConsentChangeEvent(
-		(thirdPartyTrackingConsent: Record<string, boolean>) => {
-			// Update vendorConsentsLookup value based on thirdPartyTrackingConsent
-			vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent)
-				.filter((vendorKey) => thirdPartyTrackingConsent[vendorKey])
-				.join(',');
 
-			/**
-			 * Update userConsentsToGTM value when
-			 * consent changes via the CMP library.
-			 */
-			userConsentsToGTM =
-				thirdPartyTrackingConsent[googleTagManagerKey] ?? false;
+	onConsentChange((consentState) => {
+		userConsentsToGTM = getConsentFor('google-tag-manager', consentState);
+		if (userConsentsToGTM) {
+			if (!scriptAdded) {
+				/**
+				 * Instruction for Google Analytics
+				 * to leverage the TCFv2 framework
+				 */
+				window.gtag_enable_tcf_support = true;
 
-			if (userConsentsToGTM) {
-				if (!scriptAdded) {
-					/**
-					 * Instruction for Google Analytics
-					 * to leverage the TCFv2 framework
-					 */
-					window.gtag_enable_tcf_support = true;
-
-					/**
-					 * Add Google Tag Manager script to the page
-					 * If it hasn't been added already.
-					 */
-					addTagManagerScript();
-				} else {
-					/**
-					 * If Google Tag Manager script has benn added already process pending events
-					 * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
-					 * clears the queues as it executes each function in them.
-					 */
-					processQueues();
-				}
+				/**
+				 * Add Google Tag Manager script to the page
+				 * If it hasn't been added already.
+				 */
+				addTagManagerScript();
+			} else {
+				/**
+				 * If Google Tag Manager script has been added already process pending events
+				 * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
+				 * clears the queues as it executes each function in them.
+				 */
+				processQueues();
 			}
-		},
-		vendorIds,
-	);
+		}
+	});
+
+	// await onConsentChangeEvent(
+	// 	(thirdPartyTrackingConsent: Record<string, boolean>) => {
+	// 		// Update vendorConsentsLookup value based on thirdPartyTrackingConsent
+	// 		vendorConsentsLookup = Object.keys(thirdPartyTrackingConsent)
+	// 			.filter((vendorKey) => thirdPartyTrackingConsent[vendorKey])
+	// 			.join(',');
+
+	// 		/**
+	// 		 * Update userConsentsToGTM value when
+	// 		 * consent changes via the CMP library.
+	// 		 */
+	// 		userConsentsToGTM =
+	// 			thirdPartyTrackingConsent[googleTagManagerKey] ?? false;
+
+	// 		if (userConsentsToGTM) {
+	// 			if (!scriptAdded) {
+	// 				/**
+	// 				 * Instruction for Google Analytics
+	// 				 * to leverage the TCFv2 framework
+	// 				 */
+	// 				window.gtag_enable_tcf_support = true;
+
+	// 				/**
+	// 				 * Add Google Tag Manager script to the page
+	// 				 * If it hasn't been added already.
+	// 				 */
+	// 				addTagManagerScript();
+	// 			} else {
+	// 				/**
+	// 				 * If Google Tag Manager script has benn added already process pending events
+	// 				 * in googleAnalyticsEventQueue and googleTagManagerDataQueue. This also
+	// 				 * clears the queues as it executes each function in them.
+	// 				 */
+	// 				processQueues();
+	// 			}
+	// 		}
+	// 	},
+	// 	vendorIds,
+	// );
 	sendData('DataLayerReady');
 }
 
