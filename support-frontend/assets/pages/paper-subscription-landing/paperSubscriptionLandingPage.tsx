@@ -89,18 +89,13 @@ function PaperLandingPage({
 				productPrices={productPrices}
 				promotionCopy={sanitisedPromoCopy}
 			/>
-			{showPaperProductTabs && (
+			{showPaperProductTabs ? (
 				<FullWidthContainer>
 					<CentredContainer>
-						<PaperProductTabs
-							productPrices={productPrices}
-							selectedTab={selectedTab}
-							setTabAction={handleSetTabAction}
-						/>
+						<PaperProductTabs productPrices={productPrices} />
 					</CentredContainer>
 				</FullWidthContainer>
-			)}
-			{!showPaperProductTabs && (
+			) : (
 				<>
 					<FullWidthContainer>
 						<CentredContainer>

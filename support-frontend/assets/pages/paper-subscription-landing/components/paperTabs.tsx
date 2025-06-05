@@ -53,7 +53,7 @@ function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
 				tabElement="a"
 				tabs={tabItems}
 				onTabChange={(tabId) => {
-					const newActiveTab = tabId as PaperFulfilmentOptions;
+					const newActiveTab = tabId;
 					setTabAction(newActiveTab);
 				}}
 			/>

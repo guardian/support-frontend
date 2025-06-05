@@ -1,69 +1,61 @@
-// ----- Imports ----- //
-import { Outset } from 'components/content/content';
+import type { ReactElement} from 'react';
+import { useState } from 'react';
 import Tabs from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { PaperDeliveryTab } from './content/paperDeliveryTab';
-import { PaperSubsCardTab } from './content/paperSubsCardTab';
-// ----- Tabs ----- //
+
+
 type TabOptions = {
 	name: string;
 	href: string;
-	content: typeof PaperDeliveryTab | typeof PaperSubsCardTab;
+	content: () => ReactElement;
 };
+
 const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
 		name: 'Home Delivery',
 		href: `#${HomeDelivery}`,
-		content: PaperDeliveryTab,
+		content: () => <>Home Delivery Content</>,
 	},
 	Collection: {
 		name: 'Subscription Card',
 		href: `#${Collection}`,
-		content: PaperSubsCardTab,
+		content: () => <>Subscription Card Content</>,
 	},
 };
-type PaperProductTabsProps = {
-	selectedTab: PaperFulfilmentOptions;
-	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	productPrices?: ProductPrices;
-};
 
-// ----- Component ----- //
-function PaperProductTabs({
-	selectedTab,
-	setTabAction,
-}: PaperProductTabsProps): JSX.Element {
-	const tabOptions = Object.keys(tabs);
-	const tabItems = (tabOptions as PaperFulfilmentOptions[]).map(
-		(fulfilmentMethod) => {
-			const TabContent = tabs[fulfilmentMethod].content;
-			return {
-				id: fulfilmentMethod,
-				text: tabs[fulfilmentMethod].name,
-				href: tabs[fulfilmentMethod].href,
-				selected: fulfilmentMethod === selectedTab,
-				content: <TabContent />,
-			};
-		},
-	);
+function PaperProductTabs() {
+	const fulfilment =
+		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
+
+	const [selectedTab, setSelectedTab] =
+		useState<PaperFulfilmentOptions>(fulfilment);
+
+	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
+		const { content: ContentComponent } = tab;
+		return {
+			id: fulfilment,
+			text: tab.name,
+			href: tab.href,
+			selected: fulfilment === selectedTab,
+			content: <ContentComponent />,
+		};
+	});
+
 	return (
-		<Outset>
-			<Tabs
-				tabsLabel="Paper subscription options"
-				tabElement="a"
-				tabs={tabItems}
-				onTabChange={(tabId) => {
-					const newActiveTab = tabId as PaperFulfilmentOptions;
-					setTabAction(newActiveTab);
-				}}
-			/>
-		</Outset>
+		<Tabs
+			tabsLabel="Paper subscription options"
+			tabElement="a"
+			tabs={tabItems}
+			onTabChange={(tabId) => {
+				setSelectedTab(tabId);
+			}}
+			theme="paperTabs"
+		/>
 	);
-} // ----- Exports ----- //
+}
 
 export default PaperProductTabs;
