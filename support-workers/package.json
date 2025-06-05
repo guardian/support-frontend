@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
-    "lint": "eslint src/typescript/**/*.ts",
+    "lint:check": "eslint src/typescript/**/*.ts",
+    "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
     "build": "tsc",
     "bundle": "esbuild src/typescript/lambdas/*.ts --bundle --platform=node --target=node22 --outdir=target/typescript",
