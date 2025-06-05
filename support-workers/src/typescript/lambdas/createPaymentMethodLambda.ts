@@ -23,18 +23,18 @@ import {
 	createPaymentMethodStateSchema,
 	wrapperSchemaForState,
 } from '../model/stateSchemas';
-import { ServiceHandler } from '../services/config';
+import { ServiceProvider } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
 import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();
-const stripeServiceHandler = new ServiceHandler(stage, async (stage) => {
+const stripeServiceProvider = new ServiceProvider(stage, async (stage) => {
 	const config = await getStripeConfig(stage);
 	return new StripeService(config);
 });
-const paypalServiceHandler = new ServiceHandler(stage, async (stage) => {
+const paypalServiceProvider = new ServiceProvider(stage, async (stage) => {
 	const config = await getPayPalConfig(stage);
 	return new PayPalService(config);
 });
@@ -126,7 +126,7 @@ export async function createStripePaymentMethod(
 	isTestUser: boolean,
 	paymentFields: StripePaymentFields,
 ): Promise<StripePaymentMethod> {
-	const stripeService = await stripeServiceHandler.getServiceForUser(
+	const stripeService = await stripeServiceProvider.getServiceForUser(
 		isTestUser,
 	);
 	const customer = await stripeService.createCustomer(
@@ -161,7 +161,7 @@ async function createStripeHostedPaymentMethod(
 	isTestUser: boolean,
 	{ stripePublicKey, checkoutSessionId }: StripeHostedPaymentFields,
 ): Promise<StripePaymentMethod> {
-	const stripeService = await stripeServiceHandler.getServiceForUser(
+	const stripeService = await stripeServiceProvider.getServiceForUser(
 		isTestUser,
 	);
 	if (!checkoutSessionId) {
@@ -206,7 +206,7 @@ async function createPayPalPaymentMethod(
 	isTestUser: boolean,
 	payPal: PayPalPaymentFields,
 ): Promise<PayPalPaymentMethod> {
-	const payPalService = await paypalServiceHandler.getServiceForUser(
+	const payPalService = await paypalServiceProvider.getServiceForUser(
 		isTestUser,
 	);
 	const email = await payPalService.retrieveEmail(payPal.baid);

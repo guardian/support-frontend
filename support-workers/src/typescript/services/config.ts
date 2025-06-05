@@ -18,7 +18,7 @@ export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 	return schema.parse(JSON.parse(response.Parameter?.Value ?? ''));
 }
 
-export class ServiceHandler<T> {
+export class ServiceProvider<T> {
 	defaultService: T | undefined;
 	testService: T | undefined;
 	constructor(
