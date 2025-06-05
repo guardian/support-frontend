@@ -20,7 +20,7 @@
 		"devrun": "NODE_ENV=DEV npm-run-all clean webpack-dev-server",
 		"test": "NODE_ENV=test echo 'Running TS tests' && jest",
 		"test-watch": "NODE_ENV=test echo 'Running TS tests in watch mode' && jest --watch",
-		"knip": "knip --include files,exports,nsExports,types,nsTypes,dependencies",
+		"knip": "knip --tags=-knipskip --include files,exports,nsExports,types,nsTypes,dependencies",
 		"knip:production": "pnpm knip --production --config knip.production.config.js",
 		"jest-update-snapshot": "echo 'Updating TS tests' && jest -u",
 		"prepare": "cd .. && husky install ./support-frontend/.husky",

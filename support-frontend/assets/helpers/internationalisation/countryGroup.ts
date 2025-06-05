@@ -29,6 +29,7 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
+/** @knipskip -- This is imported in support-workers */
 export const supportInternationalisationIds = [
 	'uk',
 	'us',
