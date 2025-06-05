@@ -99,7 +99,6 @@ jobs:
                 parameters:
                   functionNames:
                     - "-CreatePaymentMethodLambda-"
-                    - "-DummyTypescriptLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:
