@@ -1,12 +1,11 @@
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useState } from 'react';
-import Tabs from 'components/tabs/tabs';
+import Tabs, { type TabProps } from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-
 
 type TabOptions = {
 	name: string;
@@ -42,7 +41,7 @@ function PaperProductTabs() {
 			href: tab.href,
 			selected: fulfilment === selectedTab,
 			content: <ContentComponent />,
-		};
+		} as TabProps;
 	});
 
 	return (

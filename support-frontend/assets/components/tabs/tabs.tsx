@@ -5,7 +5,7 @@ import legacyTabStyles from './tabsStyles';
 
 type TabElement = 'a' | 'button';
 export type TabProps = {
-	id: string;
+	id: PaperFulfilmentOptions;
 	text: string;
 	href?: string;
 	selected: boolean;
@@ -15,7 +15,7 @@ type PropTypes = {
 	tabsLabel: string;
 	tabElement: TabElement;
 	tabs: TabProps[];
-	onTabChange: (tabName: PaperFulfilmentOptions) => void;
+	onTabChange: (tabId: PaperFulfilmentOptions) => void;
 	theme?: 'legacyTabs' | 'paperTabs';
 };
 

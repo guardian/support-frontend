@@ -92,7 +92,7 @@ function PaperLandingPage({
 			{showPaperProductTabs ? (
 				<FullWidthContainer>
 					<CentredContainer>
-						<PaperProductTabs productPrices={productPrices} />
+						<PaperProductTabs />
 					</CentredContainer>
 				</FullWidthContainer>
 			) : (
