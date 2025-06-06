@@ -48,7 +48,7 @@ export const handler = async (
 			createPaymentMethodStateSchema,
 		).parse(state).state;
 		return createSalesforceContactState(
-			createPaymentMethodState,
+			state,
 			await createPaymentMethod(
 				createPaymentMethodState.paymentFields,
 				createPaymentMethodState.user,
@@ -83,23 +83,18 @@ export function createPaymentMethod(
 }
 
 export function createSalesforceContactState(
-	inputState: CreatePaymentMethodState,
+	wrappedState: WrappedState<CreatePaymentMethodState>,
 	paymentMethod: PaymentMethod,
 ): WrappedState<CreateSalesforceContactState> {
 	const outputState: CreateSalesforceContactState = {
-		...inputState,
+		...wrappedState.state,
 		paymentMethod,
 	};
 
 	return {
 		state: outputState,
 		error: null,
-		requestInfo: {
-			testUser: false,
-			failed: false,
-			messages: [],
-			accountExists: false,
-		},
+		requestInfo: wrappedState.requestInfo,
 	};
 }
 
