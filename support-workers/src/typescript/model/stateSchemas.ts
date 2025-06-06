@@ -24,7 +24,7 @@ export const userSchema = z.object({
 	billingAddress: addressSchema,
 	deliveryAddress: addressSchema.nullable(),
 	telephoneNumber: z.string().nullable(),
-	isTestUser: z.boolean().default(false),
+	isTestUser: z.boolean(),
 	deliveryInstructions: z.string().nullable(),
 });
 export type User = z.infer<typeof userSchema>;

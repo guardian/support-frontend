@@ -1,7 +1,7 @@
 import {
 	asFormattedString,
-	clipForZuoraStreetNameLimit,
 	combinedAddressLine,
+	truncateForZuoraStreetNameLimit,
 } from '../model/address';
 
 describe('combinedAddressLine', () => {
@@ -63,7 +63,7 @@ describe('combinedAddressLine', () => {
 
 		const addressLine = { streetNumber: '123', streetName: tooLongStreetName };
 
-		const clipped = clipForZuoraStreetNameLimit(addressLine);
+		const truncated = truncateForZuoraStreetNameLimit(addressLine);
 
 		const expected = {
 			streetNumber: '123',
@@ -71,7 +71,7 @@ describe('combinedAddressLine', () => {
 				'trash alley, bin 5, you know how to find that particular bin because it is the one with the fairy li',
 		};
 
-		expect(clipped).toStrictEqual(expected);
+		expect(truncated).toStrictEqual(expected);
 	});
 
 	test('asFormattedString should combine a street number and a street name', () => {

@@ -15,7 +15,14 @@ export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 	};
 	const command = new GetParameterCommand(params);
 	const response = await ssmClient.send(command);
-	return schema.parse(JSON.parse(response.Parameter?.Value ?? ''));
+	if (
+		response.Parameter?.Value === undefined
+	) {
+		throw new Error(
+			`Parameter ${params.Name} not found or has no value in SSM`,
+		);
+	}
+	return schema.parse(JSON.parse(response.Parameter.Value));
 }
 
 export class ServiceProvider<T> {

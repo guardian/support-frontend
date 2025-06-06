@@ -42,63 +42,51 @@ export function combinedAddressLine(
 		secondStreetName: string,
 	): string => `${firstStreetName}, ${secondStreetName}`;
 
-	const combinedLine = (() => {
-		if (!addressLine1MaybeSplit && !addressLine2MaybeSplit) {
-			return undefined;
-		}
-		if (addressLine1MaybeSplit && !addressLine2MaybeSplit) {
-			return addressLine1MaybeSplit;
-		}
-		if (!addressLine1MaybeSplit && addressLine2MaybeSplit) {
-			return addressLine2MaybeSplit;
-		}
-		if (addressLine1MaybeSplit && addressLine2MaybeSplit) {
-			if (addressLine1MaybeSplit.streetNumber) {
-				return {
-					streetNumber: addressLine1MaybeSplit.streetNumber,
-					streetName: concatStreetNames(
-						addressLine1MaybeSplit.streetName,
-						addressLine2MaybeSplit.streetName,
-					),
-				};
-			} else if (addressLine2MaybeSplit.streetNumber) {
-				return {
-					streetNumber: addressLine2MaybeSplit.streetNumber,
-					streetName: concatStreetNames(
-						addressLine2MaybeSplit.streetName,
-						addressLine1MaybeSplit.streetName,
-					),
-				};
-			} else {
-				return {
-					streetName: concatStreetNames(
-						addressLine1MaybeSplit.streetName,
-						addressLine2MaybeSplit.streetName,
-					),
-				};
-			}
-		}
+	if (!addressLine1MaybeSplit && !addressLine2MaybeSplit) {
 		return undefined;
-	})();
-
-	return combinedLine;
+	}
+	if (addressLine1MaybeSplit && !addressLine2MaybeSplit) {
+		return addressLine1MaybeSplit;
+	}
+	if (!addressLine1MaybeSplit && addressLine2MaybeSplit) {
+		return addressLine2MaybeSplit;
+	}
+	if (addressLine1MaybeSplit && addressLine2MaybeSplit) {
+		if (addressLine1MaybeSplit.streetNumber) {
+			return {
+				streetNumber: addressLine1MaybeSplit.streetNumber,
+				streetName: concatStreetNames(
+					addressLine1MaybeSplit.streetName,
+					addressLine2MaybeSplit.streetName,
+				),
+			};
+		} else if (addressLine2MaybeSplit.streetNumber) {
+			return {
+				streetNumber: addressLine2MaybeSplit.streetNumber,
+				streetName: concatStreetNames(
+					addressLine2MaybeSplit.streetName,
+					addressLine1MaybeSplit.streetName,
+				),
+			};
+		} else {
+			return {
+				streetName: concatStreetNames(
+					addressLine1MaybeSplit.streetName,
+					addressLine2MaybeSplit.streetName,
+				),
+			};
+		}
+	}
+	return undefined;
 }
 
-export function clipForZuoraStreetNameLimit(
+export function truncateForZuoraStreetNameLimit(
 	addressLine: AddressLine,
 ): AddressLine {
 	if (addressLine.streetName.length > 100) {
 		return { ...addressLine, streetName: addressLine.streetName.slice(0, 100) };
 	}
 	return addressLine;
-}
-
-export function getAddressLine(address: {
-	lineOne: string | null;
-	lineTwo: string | null;
-}): string | undefined {
-	const combined = combinedAddressLine(address.lineOne, address.lineTwo);
-	return combined ? asFormattedString(combined) : undefined;
 }
 
 export function asFormattedString(addressLine: AddressLine): string {
