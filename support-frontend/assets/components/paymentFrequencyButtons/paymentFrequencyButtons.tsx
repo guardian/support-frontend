@@ -12,13 +12,9 @@ import {
 	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 
-interface PaymentFrequencyButtonObj {
-	billingPeriod: BillingPeriod;
-	isPreSelected?: boolean;
-}
-
 export interface PaymentFrequencyButtonsProps {
-	paymentFrequencies: PaymentFrequencyButtonObj[];
+	billingPeriods: BillingPeriod[];
+	preselectedBillingPeriod?: BillingPeriod;
 	buttonClickHandler: (buttonIndex: number) => void;
 	additionalStyles?: SerializedStyles;
 }
@@ -58,39 +54,38 @@ const button = (isSelected: boolean) => css`
 `;
 
 export function PaymentFrequencyButtons({
-	paymentFrequencies,
+	billingPeriods,
+	preselectedBillingPeriod,
 	buttonClickHandler,
 	additionalStyles,
 }: PaymentFrequencyButtonsProps): JSX.Element {
-	const [selectedButton, setSelectedButton] = useState(
-		Math.max(
-			paymentFrequencies.findIndex(
-				(paymentFrequency) => paymentFrequency.isPreSelected,
-			),
-			0,
-		),
+	const [selectedBillingPeriod, setSelectedBillingPeriod] = useState(
+		preselectedBillingPeriod ?? billingPeriods[0],
 	);
 	return (
 		<div
-			css={[container(paymentFrequencies.length), additionalStyles]}
+			css={[container(billingPeriods.length), additionalStyles]}
 			role="tablist"
 			aria-label="Payment frequency options"
 		>
-			{paymentFrequencies.map((paymentFrequency, buttonIndex) => (
-				<button
-					css={button(buttonIndex === selectedButton)}
-					role="tab"
-					id={paymentFrequency.billingPeriod}
-					aria-controls={`${paymentFrequency.billingPeriod}-tab`}
-					aria-selected={buttonIndex === selectedButton}
-					onClick={() => {
-						setSelectedButton(buttonIndex);
-						buttonClickHandler(buttonIndex);
-					}}
-				>
-					{getBillingPeriodTitle(paymentFrequency.billingPeriod)}
-				</button>
-			))}
+			{billingPeriods.map((billingPeriod, idx) => {
+				const isSelected = billingPeriod === selectedBillingPeriod;
+				return (
+					<button
+						css={button(isSelected)}
+						role="tab"
+						id={billingPeriod}
+						aria-controls={`${billingPeriod}-tab`}
+						aria-selected={isSelected}
+						onClick={() => {
+							setSelectedBillingPeriod(billingPeriod);
+							buttonClickHandler(idx);
+						}}
+					>
+						{getBillingPeriodTitle(billingPeriod)}
+					</button>
+				);
+			})}
 		</div>
 	);
 }

@@ -64,14 +64,6 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	paymentFrequencies: [
-		{
-			billingPeriod: BillingPeriod.Monthly,
-			isPreSelected: true,
-		},
-		{
-			billingPeriod: BillingPeriod.Annual,
-			isPreSelected: false,
-		},
-	],
+	billingPeriods: [BillingPeriod.Monthly, BillingPeriod.Annual],
+	preselectedBillingPeriod: BillingPeriod.Monthly,
 };

@@ -579,13 +579,14 @@ export function ThreeTierLanding({
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
 					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod:
-									contributionTypeToBillingPeriod(paymentFrequency),
-								isPreSelected: paymentFrequencies[index] === contributionType,
-							}),
+						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
+							contributionTypeToBillingPeriod(paymentFrequency),
 						)}
+						preselectedBillingPeriod={
+							paymentFrequencies
+								.filter((pf) => pf === contributionType)
+								.map((pf) => contributionTypeToBillingPeriod(pf))[0]
+						}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
