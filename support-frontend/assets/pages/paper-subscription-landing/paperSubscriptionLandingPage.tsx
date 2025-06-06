@@ -24,7 +24,9 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { PaperHero } from './components/hero/hero';
 import PaperProductPrices from './components/paperProductPrices';
+import PaperProductTabs from './components/paperProductTabs';
 import PaperTabs from './components/paperTabs';
+import { displayPaperProductTabs } from './helpers/displayPaperProductTabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -75,6 +77,8 @@ function PaperLandingPage({
 		window.history.replaceState({}, '', `#${newTab}`);
 	}
 
+	const showPaperProductTabs = displayPaperProductTabs();
+
 	return (
 		<Page
 			id={pageQaId}
@@ -85,28 +89,33 @@ function PaperLandingPage({
 				productPrices={productPrices}
 				promotionCopy={sanitisedPromoCopy}
 			/>
-			<FullWidthContainer>
-				<CentredContainer>
-					<Block>
-						<div css={tabsTabletSpacing}>
-							<PaperTabs
-								selectedTab={selectedTab}
+			{showPaperProductTabs ? (
+				<PaperProductTabs />
+			) : (
+				<>
+					<FullWidthContainer>
+						<CentredContainer>
+							<Block>
+								<div css={tabsTabletSpacing}>
+									<PaperTabs
+										selectedTab={selectedTab}
+										setTabAction={handleSetTabAction}
+									/>
+								</div>
+							</Block>
+						</CentredContainer>
+					</FullWidthContainer>
+					<FullWidthContainer theme="dark" hasOverlap>
+						<CentredContainer>
+							<PaperProductPrices
+								productPrices={productPrices}
+								tab={selectedTab}
 								setTabAction={handleSetTabAction}
 							/>
-						</div>
-					</Block>
-				</CentredContainer>
-			</FullWidthContainer>
-
-			<FullWidthContainer theme="dark" hasOverlap>
-				<CentredContainer>
-					<PaperProductPrices
-						productPrices={productPrices}
-						tab={selectedTab}
-						setTabAction={handleSetTabAction}
-					/>
-				</CentredContainer>
-			</FullWidthContainer>
+						</CentredContainer>
+					</FullWidthContainer>
+				</>
+			)}
 		</Page>
 	);
 }
