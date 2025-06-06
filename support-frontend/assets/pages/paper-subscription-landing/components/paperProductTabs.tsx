@@ -1,5 +1,7 @@
 import type { ReactElement } from 'react';
 import { useState } from 'react';
+import CentredContainer from 'components/containers/centredContainer';
+import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -8,19 +10,19 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 
 type TabOptions = {
-	name: string;
+	text: string;
 	href: string;
 	content: () => ReactElement;
 };
 
 const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
-		name: 'Home Delivery',
+		text: 'Home Delivery',
 		href: `#${HomeDelivery}`,
 		content: () => <>Home Delivery Content</>,
 	},
 	Collection: {
-		name: 'Subscription Card',
+		text: 'Subscription Card',
 		href: `#${Collection}`,
 		content: () => <>Subscription Card Content</>,
 	},
@@ -34,26 +36,30 @@ function PaperProductTabs() {
 		useState<PaperFulfilmentOptions>(fulfilment);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
-		const { content: ContentComponent } = tab;
+		const { href, text, content: ContentComponent } = tab;
 		return {
 			id: fulfilment,
-			text: tab.name,
-			href: tab.href,
+			text,
+			href,
 			selected: fulfilment === selectedTab,
 			content: <ContentComponent />,
 		} as TabProps;
 	});
 
 	return (
-		<Tabs
-			tabsLabel="Paper subscription options"
-			tabElement="a"
-			tabs={tabItems}
-			onTabChange={(tabId) => {
-				setSelectedTab(tabId);
-			}}
-			theme="paperTabs"
-		/>
+		<FullWidthContainer>
+			<CentredContainer>
+				<Tabs
+					tabsLabel="Paper subscription options"
+					tabElement="a"
+					tabs={tabItems}
+					onTabChange={(tabId) => {
+						setSelectedTab(tabId);
+					}}
+					theme="paperTabs"
+				/>
+			</CentredContainer>
+		</FullWidthContainer>
 	);
 }
 

@@ -90,11 +90,7 @@ function PaperLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 			/>
 			{showPaperProductTabs ? (
-				<FullWidthContainer>
-					<CentredContainer>
-						<PaperProductTabs />
-					</CentredContainer>
-				</FullWidthContainer>
+				<PaperProductTabs />
 			) : (
 				<>
 					<FullWidthContainer>
