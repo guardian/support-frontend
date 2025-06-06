@@ -180,7 +180,7 @@ export class SupportWorkers extends GuStack {
         app: "support-workers-typescript",
         fileName: `support-workers.zip`,
         runtime: Runtime.NODEJS_22_X,
-        handler: `lambdas/${lambdaTSFile}.handler`,
+        handler: `${lambdaTSFile}.handler`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
           s3Policy,
@@ -246,7 +246,7 @@ export class SupportWorkers extends GuStack {
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createScalaLambda(
+    const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
@@ -269,9 +269,6 @@ export class SupportWorkers extends GuStack {
     const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
     ]);
-
-    // Just to check that we can create a typescript lambda
-    createTypescriptLambda("DummyTypescript");
 
     const shouldClonePaymentMethodChoice = new Choice(
       this,
