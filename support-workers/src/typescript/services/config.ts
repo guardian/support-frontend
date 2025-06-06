@@ -15,9 +15,7 @@ export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 	};
 	const command = new GetParameterCommand(params);
 	const response = await ssmClient.send(command);
-	if (
-		response.Parameter?.Value === undefined
-	) {
+	if (response.Parameter?.Value === undefined) {
 		throw new Error(
 			`Parameter ${params.Name} not found or has no value in SSM`,
 		);
@@ -28,6 +26,7 @@ export async function getConfig<I, O, T extends z.ZodType<O, z.ZodTypeDef, I>>(
 export class ServiceProvider<T> {
 	defaultService: T | undefined;
 	testService: T | undefined;
+
 	constructor(
 		private stage: Stage,
 		private serviceCreator: (stage: Stage) => Promise<T>,
