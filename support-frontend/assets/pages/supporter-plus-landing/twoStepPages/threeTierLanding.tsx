@@ -319,19 +319,22 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	/**
-	 * Tier 1: Contributions
-	 * We use the amounts from RRCP to populate the Contribution tier
-	 */
+	// We use the RRCP amounts tool for the one-off amounts only
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
-		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
-		.amounts[0] as number;
+
+	/**
+	 * Tier 1: Contributions
+	 * We use the product catalog for the recurring Contribution tier amount
+	 */
+	const monthlyRecurringAmount = productCatalog.Contribution?.ratePlans.Monthly
+		?.pricing[currencyId] as number;
+	const annualRecurringAmount = productCatalog.Contribution?.ratePlans.Annual
+		?.pricing[currencyId] as number;
+
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
