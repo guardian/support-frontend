@@ -160,14 +160,14 @@ export function ContributionsOnlyLanding({
 		getInitialBillingPeriod(),
 	);
 
-	const paymentFrequencies: BillingPeriod[] = [
+	const billingPeriods: BillingPeriod[] = [
 		BillingPeriod.OneTime,
 		BillingPeriod.Monthly,
 		BillingPeriod.Annual,
 	];
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
-		const billingPeriod = paymentFrequencies[buttonIndex];
+		const billingPeriod = billingPeriods[buttonIndex];
 		if (billingPeriod) {
 			setBillingPeriod(billingPeriod);
 		}
@@ -209,12 +209,8 @@ export function ContributionsOnlyLanding({
 						<strong>Cancel anytime.</strong>
 					</p>
 					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod: paymentFrequency,
-								isPreSelected: paymentFrequencies[index] === billingPeriod,
-							}),
-						)}
+						billingPeriods={billingPeriods}
+						preselectedBillingPeriod={billingPeriod}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtons}
 					/>
