@@ -15,7 +15,7 @@ import createSalesforceContactContribution from './fixtures/createSalesforceCont
 import createSalesforceContactPaper from './fixtures/createSalesforceContact/paperDirectDebit.json';
 
 describe('stateSchemas', () => {
-	test('createPaymentMethodSchema works with real inputs', () => {
+	test('createPaymentMethodStateSchema works for supporter plus', () => {
 		const supporterPlus = createPaymentMethodStateSchema.parse(
 			createPaymentSupporterPlus,
 		);
@@ -23,7 +23,8 @@ describe('stateSchemas', () => {
 		expect(supporterPlus.acquisitionData?.ophanIds.pageviewId).toBe(
 			'9999999999999',
 		);
-
+	});
+	test('createPaymentMethodStateSchema works for Stripe contribution', () => {
 		const contribution: CreatePaymentMethodState =
 			createPaymentMethodStateSchema.parse(createPaymentContribution);
 		expect(contribution.product.currency).toBe('USD');
@@ -37,7 +38,8 @@ describe('stateSchemas', () => {
 		expect(stripePaymentFields.stripePaymentType).toBe(
 			'StripePaymentRequestButton',
 		);
-
+	});
+	test('createPaymentMethodStateSchema works for PayPal contribution', () => {
 		const payPalContribution: CreatePaymentMethodState =
 			createPaymentMethodStateSchema.parse(contributionWithPayPal);
 		expect(payPalContribution.product.currency).toBe('GBP');
@@ -49,16 +51,17 @@ describe('stateSchemas', () => {
 		if (payPalContribution.paymentFields.paymentType === 'PayPal') {
 			expect(payPalContribution.paymentFields.baid).toBe('BA-1234');
 		}
-
-		const paper = createPaymentMethodStateSchema.parse(createPaymentPaper);
+	});
+	test('createPaymentMethodStateSchema works for paper', () => {
+		const paper: CreatePaymentMethodState =
+			createPaymentMethodStateSchema.parse(createPaymentPaper);
 		expect(paper.product.productType).toBe('Paper');
 		expect(paper.firstDeliveryDate).toBe('2024-10-17');
 		expect(paper.user.deliveryAddress?.lineOne).toBe('123 Test Street');
 		const ddPaymentFields = paper.paymentFields as DirectDebitPaymentFields;
 		expect(ddPaymentFields.accountNumber).toBe('00000000');
 	});
-
-	test('createSalesforceContactSchema works with real inputs', () => {
+	test('createSalesforceContactSchema works for contributions', () => {
 		const contribution = createSalesforceContactStateSchema.parse(
 			createSalesforceContactContribution,
 		);
@@ -73,7 +76,8 @@ describe('stateSchemas', () => {
 		if (contribution.paymentMethod.Type === 'CreditCardReferenceTransaction') {
 			expect(contribution.paymentMethod.CreditCardType).toBe('MasterCard');
 		}
-
+	});
+	test('createSalesforceContactSchema works for paper', () => {
 		const paper = createSalesforceContactStateSchema.parse(
 			createSalesforceContactPaper,
 		);
