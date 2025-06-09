@@ -14,12 +14,12 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'preact/hooks';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import {
@@ -578,14 +578,15 @@ export function ThreeTierLanding({
 					{settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
-					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod:
-									contributionTypeToBillingPeriod(paymentFrequency),
-								isPreSelected: paymentFrequencies[index] === contributionType,
-							}),
+					<BillingPeriodButtons
+						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
+							contributionTypeToBillingPeriod(paymentFrequency),
 						)}
+						preselectedBillingPeriod={
+							paymentFrequencies
+								.filter((pf) => pf === contributionType)
+								.map((pf) => contributionTypeToBillingPeriod(pf))[0]
+						}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
