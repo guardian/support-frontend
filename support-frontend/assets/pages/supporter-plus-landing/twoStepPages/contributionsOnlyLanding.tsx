@@ -13,9 +13,9 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'preact/hooks';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
