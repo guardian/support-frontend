@@ -19,7 +19,7 @@ import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import {
@@ -578,7 +578,7 @@ export function ThreeTierLanding({
 					{settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
-					<PaymentFrequencyButtons
+					<BillingPeriodButtons
 						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
 							contributionTypeToBillingPeriod(paymentFrequency),
 						)}

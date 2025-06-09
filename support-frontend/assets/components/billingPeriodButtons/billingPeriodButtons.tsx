@@ -12,7 +12,7 @@ import {
 	getBillingPeriodTitle,
 } from 'helpers/productPrice/billingPeriods';
 
-export interface PaymentFrequencyButtonsProps {
+export interface BillingPeriodButtonsProps {
 	billingPeriods: BillingPeriod[];
 	preselectedBillingPeriod?: BillingPeriod;
 	buttonClickHandler: (buttonIndex: number) => void;
@@ -53,12 +53,12 @@ const button = (isSelected: boolean) => css`
 	}
 `;
 
-export function PaymentFrequencyButtons({
+export function BillingPeriodButtons({
 	billingPeriods,
 	preselectedBillingPeriod,
 	buttonClickHandler,
 	additionalStyles,
-}: PaymentFrequencyButtonsProps): JSX.Element {
+}: BillingPeriodButtonsProps): JSX.Element {
 	const [selectedBillingPeriod, setSelectedBillingPeriod] = useState(
 		preselectedBillingPeriod ?? billingPeriods[0],
 	);

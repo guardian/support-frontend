@@ -15,7 +15,7 @@ import {
 import { useState } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
@@ -208,7 +208,7 @@ export function ContributionsOnlyLanding({
 						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
-					<PaymentFrequencyButtons
+					<BillingPeriodButtons
 						billingPeriods={billingPeriods}
 						preselectedBillingPeriod={billingPeriod}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
