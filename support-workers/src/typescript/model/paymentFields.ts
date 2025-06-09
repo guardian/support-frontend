@@ -4,6 +4,10 @@ import { z } from 'zod';
 
 const stripePaymentProviderSchema = z.literal('Stripe');
 const stripeHostedPaymentProviderSchema = z.literal('StripeHostedCheckout');
+const stripeApplePayPaymentProviderSchema = z.literal('StripeApplePay');
+const stripePaymentRequestButtonProviderSchema = z.literal(
+	'StripePaymentRequestButton',
+);
 const payPalPaymentProviderSchema = z.literal('PayPal');
 const directDebitPaymentProviderSchema = z.literal('DirectDebit');
 const existingPaymentProviderSchema = z.literal('Existing');
@@ -11,8 +15,8 @@ const existingPaymentProviderSchema = z.literal('Existing');
 export const paymentProviderSchema = z.union([
 	stripePaymentProviderSchema,
 	stripeHostedPaymentProviderSchema,
-	z.literal('StripeApplePay'),
-	z.literal('StripePaymentRequestButton'),
+	stripeApplePayPaymentProviderSchema,
+	stripePaymentRequestButtonProviderSchema,
 	payPalPaymentProviderSchema,
 	directDebitPaymentProviderSchema,
 	existingPaymentProviderSchema,
@@ -23,8 +27,8 @@ const payPalPaymentFieldsSchema = z.object({
 });
 export type PayPalPaymentFields = z.infer<typeof payPalPaymentFieldsSchema>;
 export const stripePaymentTypeSchema = z.union([
-	z.literal('StripePaymentRequestButton'),
-	z.literal('StripeApplePay'),
+	stripePaymentRequestButtonProviderSchema,
+	stripeApplePayPaymentProviderSchema,
 	z.literal('StripeCheckout'),
 ]);
 const stripePaymentFieldsSchema = z.object({
