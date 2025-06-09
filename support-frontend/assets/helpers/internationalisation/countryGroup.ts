@@ -29,19 +29,14 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
-/** @knipskip -- This is imported in support-workers */
-export const supportInternationalisationIds = [
-	'uk',
-	'us',
-	'au',
-	'eu',
-	'int',
-	'nz',
-	'ca',
-] as const;
-
 export type SupportInternationalisationId =
-	(typeof supportInternationalisationIds)[number];
+	| 'uk'
+	| 'us'
+	| 'au'
+	| 'eu'
+	| 'int'
+	| 'nz'
+	| 'ca';
 
 /*
   Note: supportInternationalisationId should match an existing
