@@ -95,11 +95,18 @@ export class SupportWorkers extends GuStack {
         Fn.importValue(table)
       ),
     });
+    const parameterStoreResources =
+      this.stage === "CODE"
+        ? [
+            `arn:aws:ssm:${this.region}:${this.account}:parameter/CODE/${this.stack}/support-workers/*`,
+          ]
+        : [
+            `arn:aws:ssm:${this.region}:${this.account}:parameter/CODE/${this.stack}/support-workers/*`,
+            `arn:aws:ssm:${this.region}:${this.account}:parameter/PROD/${this.stack}/support-workers/*`,
+          ];
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
-      resources: [
-        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
-      ],
+      resources: parameterStoreResources,
     });
 
     // Lambdas
