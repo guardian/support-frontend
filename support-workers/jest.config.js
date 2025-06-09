@@ -4,4 +4,7 @@ module.exports = {
 	testEnvironment: 'node',
 	runner: 'groups',
 	testPathIgnorePatterns: ['/node_modules/', 'target'],
+	moduleNameMapper: {
+		'@modules/(.*)$': '<rootDir>/../modules/$1',
+	},
 };

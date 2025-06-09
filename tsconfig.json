@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                                /* Use ECMAScript 2022 features */
+    "module": "ESNext",                                /* Use ESNext modules */
+    "moduleResolution": "NodeNext",                       /* Resolve modules in Node.js style */
+    "baseUrl": "./",                                   /* Base directory for resolving non-relative module imports */
+    "resolveJsonModule": true,                         /* Enable importing .json files */
+    "esModuleInterop": true,                           /* Enable compatibility with CommonJS modules */
+    "forceConsistentCasingInFileNames": true,          /* Enforce consistent casing in imports */
+    "strict": true,                                    /* Enable all strict type-checking options */
+    "noImplicitReturns": true,                         /* Error on functions missing explicit return */
+    "noUnusedLocals": true,                            /* Error on unused local variables */
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,                  /* Add 'undefined' to indexed types */
+    "paths": {
+      "@modules/*": ["modules/*"]
+    },
+  },
+}

@@ -1,5 +1,5 @@
+import { isoCountries } from '@modules/internationalisation/country';
 import { z } from 'zod';
-import { isoCountries } from '../../../../support-frontend/assets/helpers/internationalisation/country';
 
 export const countrySchema = z.enum(isoCountries);
 

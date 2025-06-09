@@ -9,6 +9,7 @@
     "lint:check": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
+    "fix-formatting": "prettier --write **.ts",
     "build": "tsc",
     "bundle": "esbuild src/typescript/lambdas/*.ts --bundle --platform=node --target=node22 --outdir=target/typescript",
     "clean-target": "rm -rf target && mkdir -p target",
