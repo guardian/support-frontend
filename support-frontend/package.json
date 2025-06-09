@@ -126,7 +126,7 @@
 		"@babel/runtime": "7.26.10",
 		"@emotion/eslint-plugin": "^11.11.0",
 		"@guardian/browserslist-config": "^6.1.2",
-		"@guardian/eslint-config": "8.0.1",
+		"@guardian/eslint-config": "11.0.0",
 		"@guardian/eslint-config-typescript": "11.0.0",
 		"@guardian/prettier": "^2.1.5",
 		"@storybook/addon-a11y": "^8.4.2",
