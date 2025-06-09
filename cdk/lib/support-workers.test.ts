@@ -25,6 +25,10 @@ describe("The support-workers stack", () => {
         "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
         "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
       ],
+      parameterStorePaths: [
+        `arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*`,
+        `arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/*`,
+      ],
     });
 
     const template = Template.fromStack(stack);

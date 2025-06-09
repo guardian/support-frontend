@@ -50,6 +50,7 @@ interface SupportWorkersProps extends GuStackProps {
   s3Files: string[];
   supporterProductDataTables: string[];
   eventBusArns: string[];
+  parameterStorePaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
@@ -97,9 +98,7 @@ export class SupportWorkers extends GuStack {
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
-      resources: [
-        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
-      ],
+      resources: props.parameterStorePaths,
     });
 
     // Lambdas
