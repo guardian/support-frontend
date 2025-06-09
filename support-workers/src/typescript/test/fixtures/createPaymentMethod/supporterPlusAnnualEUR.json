@@ -1,0 +1,96 @@
+{
+  "requestId": "fb597527-2563-f84a-0000-0000000016e5",
+  "user": {
+    "id": "9999999999999",
+    "primaryEmailAddress": "test@test.com",
+    "title": null,
+    "firstName": "Test",
+    "lastName": "User",
+    "billingAddress": {
+      "lineOne": null,
+      "lineTwo": null,
+      "city": null,
+      "state": null,
+      "postCode": null,
+      "country": "NL"
+    },
+    "deliveryAddress": null,
+    "telephoneNumber": null,
+    "isTestUser": false,
+    "deliveryInstructions": null
+  },
+  "giftRecipient": null,
+  "product": {
+    "amount": 120,
+    "currency": "EUR",
+    "billingPeriod": "Annual",
+    "productType": "SupporterPlus"
+  },
+  "analyticsInfo": {
+    "isGiftPurchase": false,
+    "paymentProvider": "Stripe"
+  },
+  "paymentFields": {
+    "paymentType": "Stripe",
+    "paymentMethod": "pm_9999999999999",
+    "stripePaymentType": "StripeCheckout",
+    "stripePublicKey": "pk_live_2O6zPMHXNs2AGea4bAmq5R7Z"
+  },
+  "firstDeliveryDate": null,
+  "appliedPromotion": {
+    "promoCode": "OCT_DISCOUNT_50_3_MONTHS",
+    "countryGroupId": "eu"
+  },
+  "csrUsername": null,
+  "salesforceCaseId": null,
+  "acquisitionData": {
+    "ophanIds": {
+      "pageviewId": "9999999999999",
+      "browserId": "9999999999999"
+    },
+    "referrerAcquisitionData": {
+      "campaignCode": null,
+      "referrerPageviewId": "9999999999999",
+      "referrerUrl": "https://www.theguardian.com/world/ng-interactive/2024/oct/05/it-felt-like-death-was-chasing-us-one-gaza-familys-attempt-to-evade-israeli-strikes-visualised",
+      "componentId": "2024-10-02_OCTOBER_DISOCUNT_BANNER___UK_ROW_V1_EXCLUSIVE_AC",
+      "componentType": "ACQUISITIONS_ENGAGEMENT_BANNER",
+      "source": "GUARDIAN_WEB",
+      "abTests": [
+        {
+          "name": "2024-10-02_OCTOBER_DISOCUNT_BANNER___UK_ROW",
+          "variant": "V1_EXCLUSIVE_AC"
+        }
+      ],
+      "queryParameters": [
+        {
+          "name": "promoCode",
+          "value": "OCT_DISCOUNT_50_3_MONTHS"
+        },
+        {
+          "name": "numArticles",
+          "value": "24"
+        }
+      ],
+      "hostname": "support.theguardian.com",
+      "gaClientId": null,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+      "ipAddress": "127.0.0.1",
+      "labels": [
+        "generic-checkout"
+      ]
+    },
+    "supportAbTests": [
+      {
+        "name": "abandonedBasket",
+        "variant": "control"
+      },
+      {
+        "name": "auPartnerBenefit",
+        "variant": "control"
+      }
+    ]
+  },
+  "ipAddress": "127.0.0.1",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+  "similarProductsConsent": true
+}
