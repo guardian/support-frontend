@@ -10,16 +10,6 @@ export const stripePaymentGatewaySchema = z.union([
 ]);
 export type StripePaymentGateway = z.infer<typeof stripePaymentGatewaySchema>;
 
-const directDebitPaymentGatewaySchema = z.literal('GoCardless');
-
-export const paymentGatewaySchema = z
-	.union([
-		z.literal('PayPal Express'),
-		directDebitPaymentGatewaySchema,
-		z.literal('Amazon Pay - Contributions USA'),
-	])
-	.or(stripePaymentGatewaySchema);
-
 const payPalPaymentPaymentMethodSchema = z.object({
 	PaypalBaid: z.string(),
 	PaypalEmail: z.string(),
@@ -59,7 +49,7 @@ const directDebitPaymentMethodSchema = z.object({
 	StreetNumber: z.string().nullable(),
 	BankTransferType: z.literal('DirectDebitUK'),
 	Type: z.literal('BankTransfer'),
-	PaymentGateway: directDebitPaymentGatewaySchema,
+	PaymentGateway: z.literal('GoCardless'),
 });
 export type DirectDebitPaymentMethod = z.infer<
 	typeof directDebitPaymentMethodSchema
