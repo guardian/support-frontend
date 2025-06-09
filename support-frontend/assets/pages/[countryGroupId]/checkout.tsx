@@ -33,8 +33,7 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
-import type { CheckoutSession } from './checkout/helpers/stripeCheckoutSession';
-import { getFormDetails } from './checkout/helpers/stripeCheckoutSession';
+import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 
 type Props = {
@@ -78,28 +77,6 @@ const getPromotionFromProductPrices = (
 		fulfilmentOption,
 		productOptions,
 	);
-};
-
-const attemptToRetrievePersistedFormData = (
-	urlSearchParams: URLSearchParams,
-): CheckoutSession | undefined => {
-	const checkoutSessionIdUrlParam = 'checkoutSessionId';
-	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
-
-	if (maybeCheckoutSessionId) {
-		const persistedFormData = getFormDetails(maybeCheckoutSessionId);
-
-		if (persistedFormData) {
-			return persistedFormData;
-		}
-
-		// If there's no persisted data, remove the checkoutSessionId from the URL
-		const url = new URL(window.location.href);
-		url.searchParams.delete(checkoutSessionIdUrlParam);
-		window.location.href = url.toString();
-	}
-
-	return undefined;
 };
 
 export function Checkout({
@@ -276,7 +253,11 @@ export function Checkout({
 		);
 	}, []);
 
-	const checkoutSession = attemptToRetrievePersistedFormData(urlSearchParams);
+	const checkoutSessionIdUrlParam = 'checkoutSessionId';
+	const maybeCheckoutSessionId = urlSearchParams.get(checkoutSessionIdUrlParam);
+
+	const [checkoutSession, clearCheckoutSession] =
+		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
@@ -298,6 +279,7 @@ export function Checkout({
 				abParticipations={abParticipations}
 				landingPageSettings={landingPageSettings}
 				checkoutSession={checkoutSession}
+				clearCheckoutSession={clearCheckoutSession}
 			/>
 		</Elements>
 	);

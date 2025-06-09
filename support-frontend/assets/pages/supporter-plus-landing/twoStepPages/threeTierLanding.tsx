@@ -14,12 +14,12 @@ import {
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
 import { useState } from 'preact/hooks';
+import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import {
@@ -319,19 +319,22 @@ export function ThreeTierLanding({
 	const selectedContributionRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
-	/**
-	 * Tier 1: Contributions
-	 * We use the amounts from RRCP to populate the Contribution tier
-	 */
+	// We use the RRCP amounts tool for the one-off amounts only
 	const { selectedAmountsVariant: amounts } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		window.guardian.settings,
 	);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY
-		.amounts[0] as number;
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL
-		.amounts[0] as number;
+
+	/**
+	 * Tier 1: Contributions
+	 * We use the product catalog for the recurring Contribution tier amount
+	 */
+	const monthlyRecurringAmount = productCatalog.Contribution?.ratePlans.Monthly
+		?.pricing[currencyId] as number;
+	const annualRecurringAmount = productCatalog.Contribution?.ratePlans.Annual
+		?.pricing[currencyId] as number;
+
 	const recurringAmount =
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
@@ -575,14 +578,15 @@ export function ThreeTierLanding({
 					{settings.tickerSettings && (
 						<TickerContainer tickerSettings={settings.tickerSettings} />
 					)}
-					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								billingPeriod:
-									contributionTypeToBillingPeriod(paymentFrequency),
-								isPreSelected: paymentFrequencies[index] === contributionType,
-							}),
+					<BillingPeriodButtons
+						billingPeriods={paymentFrequencies.map((paymentFrequency) =>
+							contributionTypeToBillingPeriod(paymentFrequency),
 						)}
+						preselectedBillingPeriod={
+							paymentFrequencies
+								.filter((pf) => pf === contributionType)
+								.map((pf) => contributionTypeToBillingPeriod(pf))[0]
+						}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>

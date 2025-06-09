@@ -50,6 +50,7 @@ interface SupportWorkersProps extends GuStackProps {
   s3Files: string[];
   supporterProductDataTables: string[];
   eventBusArns: string[];
+  parameterStorePaths: string[];
 }
 
 export class SupportWorkers extends GuStack {
@@ -97,9 +98,7 @@ export class SupportWorkers extends GuStack {
     });
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
-      resources: [
-        `arn:aws:ssm:${this.region}:${this.account}:parameter/${this.stage}/${this.stack}/support-workers/*`,
-      ],
+      resources: props.parameterStorePaths,
     });
 
     // Lambdas
@@ -180,7 +179,7 @@ export class SupportWorkers extends GuStack {
         app: "support-workers-typescript",
         fileName: `support-workers.zip`,
         runtime: Runtime.NODEJS_22_X,
-        handler: `lambdas/${lambdaTSFile}.handler`,
+        handler: `${lambdaTSFile}.handler`,
         functionName: `${this.stack}-${lambdaName}Lambda-${this.stage}`,
         initialPolicy: [
           s3Policy,
@@ -246,7 +245,7 @@ export class SupportWorkers extends GuStack {
       "PreparePaymentMethodForReuse"
     ).addCatch(failureHandler, catchProps);
 
-    const createPaymentMethodLambda = createScalaLambda(
+    const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
@@ -269,9 +268,6 @@ export class SupportWorkers extends GuStack {
     const sendAcquisitionEvent = createScalaLambda("SendAcquisitionEvent", [
       eventBusPolicy,
     ]);
-
-    // Just to check that we can create a typescript lambda
-    createTypescriptLambda("DummyTypescript");
 
     const shouldClonePaymentMethodChoice = new Choice(
       this,
