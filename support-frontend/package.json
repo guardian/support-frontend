@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
-		"lint:fix": "pnpm lint:check --fix",
+		"lint:fix": "eslint --fix ./assets --ext .ts --ext .tsx",
 		"build-dev": "webpack --config webpack.dev.js",
 		"build-ssr": "tsx ./scripts/build-ssr-content.tsx",
 		"build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
