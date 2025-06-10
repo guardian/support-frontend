@@ -4,7 +4,17 @@
   "scripts": {
     "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
+    "lint:check": "eslint **/*.ts",
+    "lint:fix": "eslint --fix **/*.ts",
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts"
+  },
+  "devDependencies": {
+    "eslint": "catalog:",
+    "@guardian/eslint-config-typescript": "catalog:",
+    "@guardian/prettier": "catalog:",
+    "@types/node": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   }
 }

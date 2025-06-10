@@ -4,6 +4,7 @@ packages:
   - 'support-lambdas/bigquery-acquisitions-publisher'
   - 'support-e2e'
   - 'support-workers'
+  - 'modules'
 catalog:
   typescript: ^5.2.2
   zod: ^3.23.8
