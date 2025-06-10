@@ -1,5 +1,5 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { ReactNode } from 'react';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';

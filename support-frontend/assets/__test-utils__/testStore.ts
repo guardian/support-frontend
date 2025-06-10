@@ -1,6 +1,6 @@
 import '__mocks__/settingsMock';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';

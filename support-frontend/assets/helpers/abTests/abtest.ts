@@ -1,7 +1,7 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import seedrandom from 'seedrandom';
 import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';

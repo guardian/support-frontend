@@ -4,10 +4,10 @@ import {
 	buttonThemeBrandAlt,
 	LinkButton,
 } from '@guardian/source/react-components';
+import type { AuState } from '@modules/internationalisation/country';
+import { auStates } from '@modules/internationalisation/country';
 import * as React from 'react';
 import type { ReactNode, RefObject } from 'react';
-import type { AuState } from 'helpers/internationalisation/country';
-import { auStates } from 'helpers/internationalisation/country';
 import type {
 	Testimonial,
 	TestimonialsCollection,

@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { Option, Select } from '@guardian/source/react-components';
-import type { FormEventHandler } from 'react';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
-} from 'helpers/internationalisation/country';
+} from '@modules/internationalisation/country';
+import type { FormEventHandler } from 'react';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type StateSelectProps = {

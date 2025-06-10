@@ -5,12 +5,12 @@ import {
 	textEgyptian15,
 	textEgyptian17,
 } from '@guardian/source/foundations';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
