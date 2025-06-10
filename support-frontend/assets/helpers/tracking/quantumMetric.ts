@@ -97,7 +97,7 @@ const cartValueEventIds: SendEventId[] = [
 
 // We only want to send a sample percentage of our user traffic to Quantum Metric.
 function userIsInSampledCohort(): boolean {
-	const percentageOfUsersToSample = 50;
+	const percentageOfUsersToSample = 10;
 	const divisor = 100 / percentageOfUsersToSample;
 
 	const mvtId = getMvtId();
