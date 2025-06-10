@@ -2,6 +2,11 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "types": ["node", "jest"],
-    "outDir": "target/typescript"
+    "resolveJsonModule": true,
+    "outDir": "target/typescript",
+    "baseUrl": "./",
+    "paths": {
+      "@modules/*": ["../modules/*"]
+    }
   }
 }
