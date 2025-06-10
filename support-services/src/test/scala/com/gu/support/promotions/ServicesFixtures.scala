@@ -67,7 +67,7 @@ object ServicesFixtures {
     List(
       RatePlanData(RatePlan(validProductRatePlanId), Nil, Nil),
     ),
-    Subscription(now, now, now, "id123"),
+    Subscription(now, now, now, "id123", lastPlanAddedDate = now),
   )
 
   def promotion(
