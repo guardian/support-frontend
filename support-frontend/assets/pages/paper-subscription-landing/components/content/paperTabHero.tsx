@@ -119,7 +119,7 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
-				{heroContent[tab].copy.map((paragraph) => (
+       const { copy, imageUrl, accordianCopy } = heroContent[tab];
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
 				{heroContent[tab].accordianCopy && (
