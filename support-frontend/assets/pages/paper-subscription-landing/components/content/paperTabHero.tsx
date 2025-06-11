@@ -72,8 +72,28 @@ const accordionRowOverride = css`
 	}
 `;
 
-const homeDeliveryImageUrl = `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`;
-const collectionImageUrl = `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`;
+type HeroContent = {
+	copy: Array<string | JSX.Element>;
+	imageUrl: string;
+};
+const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
+	HomeDelivery: {
+		copy: [
+			`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
+			`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
+		],
+		imageUrl: `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`,
+	},
+	Collection: {
+		copy: [
+			`The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks in the UK such as McColl's, Co-op, One Stop and selected SPAR stores.`,
+			`You can collect the newspaper from your local store or have your copies delivered by your newsagent.`,
+			<strong>Collecting from multiple newsagent</strong>,
+			<strong>Delivery from your retailer</strong>,
+		],
+		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
+	},
+};
 
 type PaperTabHeroProps = {
 	tab: PaperFulfilmentOptions;
@@ -81,22 +101,10 @@ type PaperTabHeroProps = {
 export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 	const isHomeDelivery = tab === 'HomeDelivery';
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
-	const copyHomeDelivery = [
-		`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
-		`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
-	];
-	const copyCollection = [
-		`The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks in the UK such as McColl's, Co-op, One Stop and selected SPAR stores.`,
-		`You can collect the newspaper from your local store or have your copies delivered by your newsagent.`,
-		<strong>Collecting from multiple newsagent</strong>,
-		<strong>Delivery from your retailer</strong>,
-	];
-	const copyHero = isHomeDelivery ? copyHomeDelivery : copyCollection;
-	const imgHero = isHomeDelivery ? homeDeliveryImageUrl : collectionImageUrl;
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
-				{copyHero.map((paragraph) => (
+				{heroContent[tab].copy.map((paragraph) => (
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
 				{isHomeDelivery && (
@@ -123,7 +131,7 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 					</Accordion>
 				)}
 			</div>
-			<img src={imgHero} />
+			<img src={heroContent[tab].imageUrl} />
 		</FlexContainer>
 	);
 }
