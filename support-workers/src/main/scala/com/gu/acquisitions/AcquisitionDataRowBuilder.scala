@@ -91,6 +91,7 @@ object AcquisitionDataRowBuilder {
       state = commonState.user.billingAddress.state,
       email = Some(commonState.user.primaryEmailAddress),
       similarProductsConsent = commonState.similarProductsConsent,
+      paypalTransactionId = None,
     )
   }
 
