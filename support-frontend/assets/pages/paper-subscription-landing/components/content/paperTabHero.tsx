@@ -123,7 +123,6 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 				{productInfo.map((paragraph) => (
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
-				<p css={paragraphStyle}>{productInfo}</p>
 				{heroContent[tab].deliveryDetails && (
 					<Accordion cssOverrides={accordionOverride}>
 						{[
