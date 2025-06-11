@@ -73,18 +73,18 @@ const accordionRowOverride = css`
 `;
 
 type HeroContent = {
-	copy: Array<string | JSX.Element>;
+	productInfo: Array<string | JSX.Element>;
 	imageUrl: string;
-	accordianCopy?: JSX.Element;
+	deliveryDetails?: JSX.Element;
 };
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
-		copy: [
+		productInfo: [
 			`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
 			`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
 		],
 		imageUrl: `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`,
-		accordianCopy: (
+		deliveryDetails: (
 			<>
 				<p>Your newspaper will arrive before 9am.</p>
 				<p>
@@ -100,14 +100,14 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 		),
 	},
 	Collection: {
-		copy: [
+		productInfo: [
 			`The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks in the UK such as McColl's, Co-op, One Stop and selected SPAR stores.`,
 			`You can collect the newspaper from your local store or have your copies delivered by your newsagent.`,
 			<strong>Collecting from multiple newsagent</strong>,
 			<strong>Delivery from your retailer</strong>,
 		],
 		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
-		accordianCopy: undefined,
+		deliveryDetails: undefined,
 	},
 };
 
@@ -116,13 +116,15 @@ type PaperTabHeroProps = {
 };
 export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
+	const { productInfo, imageUrl, deliveryDetails } = heroContent[tab];
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
-       const { copy, imageUrl, accordianCopy } = heroContent[tab];
+				{productInfo.map((paragraph) => (
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
-				{heroContent[tab].accordianCopy && (
+				<p css={paragraphStyle}>{productInfo}</p>
+				{heroContent[tab].deliveryDetails && (
 					<Accordion cssOverrides={accordionOverride}>
 						{[
 							<TabAccordionRow
@@ -130,13 +132,13 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 								label={'View Delivery details'}
 								cssOverrides={accordionRowOverride}
 							>
-								{heroContent[tab].accordianCopy}
+								{deliveryDetails}
 							</TabAccordionRow>,
 						]}
 					</Accordion>
 				)}
 			</div>
-			<img src={heroContent[tab].imageUrl} />
+			<img src={imageUrl} />
 		</FlexContainer>
 	);
 }
