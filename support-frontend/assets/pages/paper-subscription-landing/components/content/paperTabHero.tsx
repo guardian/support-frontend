@@ -6,10 +6,10 @@ import {
 	textSans17,
 	until,
 } from '@guardian/source/foundations';
-import { Accordion, AccordionRow } from '@guardian/source/react-components';
-import { useState } from 'react';
+import { Accordion } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { TabAccordionRow } from './tabAccordionRow';
 
 const flexContainerOverride = css`
 	${textSans17};
@@ -79,8 +79,8 @@ type PaperTabHeroProps = {
 	tab: PaperFulfilmentOptions;
 };
 export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
-	const [expanded, setExpanded] = useState<boolean>(false);
 	const isHomeDelivery = tab === 'HomeDelivery';
+	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 	const copyHomeDelivery = [
 		`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
 		`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
@@ -102,11 +102,10 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 				{isHomeDelivery && (
 					<Accordion cssOverrides={accordionOverride}>
 						{[
-							<AccordionRow
+							<TabAccordionRow
+								trackingId={homeDeliveryTrackingId}
 								label={'View Delivery details'}
-								hideToggleLabel={true}
 								cssOverrides={accordionRowOverride}
-								onClick={() => setExpanded(!expanded)}
 							>
 								<p>Your newspaper will arrive before 9am.</p>
 								<p>
@@ -119,7 +118,7 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 									if you’re going away anywhere, you won’t have to pay for the
 									newspapers that you miss.
 								</p>
-							</AccordionRow>,
+							</TabAccordionRow>,
 						]}
 					</Accordion>
 				)}
