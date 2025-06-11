@@ -1,5 +1,13 @@
 import { css } from '@emotion/react';
-import { from, space, textSans17, until } from '@guardian/source/foundations';
+import {
+	from,
+	palette,
+	space,
+	textSans17,
+	until,
+} from '@guardian/source/foundations';
+import { Accordion, AccordionRow } from '@guardian/source/react-components';
+import { useState } from 'react';
 import FlexContainer from 'components/containers/flexContainer';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 
@@ -25,12 +33,42 @@ const flexContainerOverride = css`
 		}
 	}
 `;
+const copyWidthStyle = css`
+	color: ${palette.neutral[100]};
+	${from.tablet} {
+		max-width: 669px;
+	}
+`;
 const paragraphStyle = css`
 	line-height: 115%;
 	padding-bottom: ${space[2]}px;
 	${from.tablet} {
 		padding-bottom: ${space[3]}px;
 		max-width: 669px;
+	}
+`;
+const accordionOverride = css`
+	border: none;
+	p,
+	button {
+		color: ${palette.neutral[100]};
+	}
+`;
+const accordionRowOverride = css`
+	border: none;
+	> button {
+		display: flex;
+		justify-content: flex-start;
+	}
+	> button > div > span {
+		display: none;
+	} // remove label
+	> button > div > svg > path {
+		fill: ${palette.neutral[100]};
+	}
+	> div > div > p {
+		padding-bottom: ${space[3]}px;
+		font-weight: 700;
 	}
 `;
 
@@ -41,6 +79,7 @@ type PaperTabHeroProps = {
 	tab: PaperFulfilmentOptions;
 };
 export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
+	const [expanded, setExpanded] = useState<boolean>(false);
 	const isHomeDelivery = tab === 'HomeDelivery';
 	const copyHomeDelivery = [
 		`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
@@ -56,11 +95,34 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 	const imgHero = isHomeDelivery ? homeDeliveryImageUrl : collectionImageUrl;
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
-			<div>
+			<div css={copyWidthStyle}>
 				{copyHero.map((paragraph) => (
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
-				{isHomeDelivery && <div>DropDown</div>}
+				{isHomeDelivery && (
+					<Accordion cssOverrides={accordionOverride}>
+						{[
+							<AccordionRow
+								label={'View Delivery details'}
+								hideToggleLabel={true}
+								cssOverrides={accordionRowOverride}
+								onClick={() => setExpanded(!expanded)}
+							>
+								<p>Your newspaper will arrive before 9am.</p>
+								<p>
+									We can’t deliver to individual flats, or apartments within
+									blocks because we need access to your post box to deliver your
+									newspaper.
+								</p>
+								<p>
+									You can pause your subscription for up to 5 weeks a year. So
+									if you’re going away anywhere, you won’t have to pay for the
+									newspapers that you miss.
+								</p>
+							</AccordionRow>,
+						]}
+					</Accordion>
+				)}
 			</div>
 			<img src={imgHero} />
 		</FlexContainer>
