@@ -75,6 +75,7 @@ const accordionRowOverride = css`
 type HeroContent = {
 	copy: Array<string | JSX.Element>;
 	imageUrl: string;
+	accordianCopy?: JSX.Element;
 };
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
@@ -83,6 +84,20 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
 		],
 		imageUrl: `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`,
+		accordianCopy: (
+			<>
+				<p>Your newspaper will arrive before 9am.</p>
+				<p>
+					We can’t deliver to individual flats, or apartments within blocks
+					because we need access to your post box to deliver your newspaper.
+				</p>
+				<p>
+					You can pause your subscription for up to 5 weeks a year. So if you’re
+					going away anywhere, you won’t have to pay for the newspapers that you
+					miss.
+				</p>
+			</>
+		),
 	},
 	Collection: {
 		copy: [
@@ -92,6 +107,7 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			<strong>Delivery from your retailer</strong>,
 		],
 		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
+		accordianCopy: undefined,
 	},
 };
 
@@ -99,7 +115,6 @@ type PaperTabHeroProps = {
 	tab: PaperFulfilmentOptions;
 };
 export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
-	const isHomeDelivery = tab === 'HomeDelivery';
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
@@ -107,7 +122,7 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 				{heroContent[tab].copy.map((paragraph) => (
 					<p css={paragraphStyle}>{paragraph}</p>
 				))}
-				{isHomeDelivery && (
+				{heroContent[tab].accordianCopy && (
 					<Accordion cssOverrides={accordionOverride}>
 						{[
 							<TabAccordionRow
@@ -115,17 +130,7 @@ export function PaperTabHero({ tab }: PaperTabHeroProps): JSX.Element {
 								label={'View Delivery details'}
 								cssOverrides={accordionRowOverride}
 							>
-								<p>Your newspaper will arrive before 9am.</p>
-								<p>
-									We can’t deliver to individual flats, or apartments within
-									blocks because we need access to your post box to deliver your
-									newspaper.
-								</p>
-								<p>
-									You can pause your subscription for up to 5 weeks a year. So
-									if you’re going away anywhere, you won’t have to pay for the
-									newspapers that you miss.
-								</p>
+								{heroContent[tab].accordianCopy}
 							</TabAccordionRow>,
 						]}
 					</Accordion>
