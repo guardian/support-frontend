@@ -8,6 +8,7 @@ import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import { PaperTabHero } from './content/paperTabHero';
 
 type TabOptions = {
 	text: string;
@@ -19,12 +20,12 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
 		text: 'Home Delivery',
 		href: `#${HomeDelivery}`,
-		content: () => <>Home Delivery Content</>,
+		content: () => <PaperTabHero tab={HomeDelivery} />,
 	},
 	Collection: {
 		text: 'Subscription Card',
 		href: `#${Collection}`,
-		content: () => <>Subscription Card Content</>,
+		content: () => <PaperTabHero tab={Collection} />,
 	},
 };
 
