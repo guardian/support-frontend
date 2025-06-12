@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { from, titlepiece42 } from '@guardian/source/foundations';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type {
@@ -8,31 +6,15 @@ import type {
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import ContributionHeading from './ContributionHeading';
+import GenericHeading from './GenericHeading';
 import GuardianPrintHeading from './GuardianPrintHeading';
+import {
+	headerTitleText,
+	longHeaderTitleText,
+	tier3lineBreak,
+} from './headingStyles';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
-
-const tier3lineBreak = css`
-	display: none;
-	${from.tablet} {
-		display: inline-block;
-	}
-`;
-
-const headerTitleText = css`
-	${titlepiece42};
-	font-size: 24px;
-	${from.tablet} {
-		font-size: 40px;
-	}
-`;
-const longHeaderTitleText = css`
-	${titlepiece42};
-	font-size: 24px;
-	${from.tablet} {
-		font-size: 28px;
-	}
-`;
 
 type HeadingProps = {
 	name: string | null;
@@ -62,6 +44,10 @@ function Heading({
 	const isGuardianPrint = isPrintProduct(productKey) && !isObserverPrint;
 
 	const contributorName = name && name.length < 10 ? name : '';
+
+	if (!amount) {
+		return <GenericHeading contributorName={contributorName} />;
+	}
 
 	if (isGuardianPrint) {
 		return <GuardianPrintHeading ratePlanKey={ratePlanKey} />;
@@ -118,12 +104,7 @@ function Heading({
 		);
 	}
 
-	return (
-		<h1 css={headerTitleText}>
-			Thank you <span data-qm-masking="blocklist">{contributorName}</span> for
-			your valuable contribution
-		</h1>
-	);
+	return <GenericHeading contributorName={contributorName} />;
 }
 
 export default Heading;
