@@ -20,7 +20,7 @@ type HeadingProps = {
 	name: string | null;
 	productKey: ActiveProductKey;
 	isOneOffPayPal: boolean;
-	amount: number | undefined;
+	amount: number;
 	currency: IsoCurrency;
 	isObserverPrint: boolean;
 	ratePlanKey: ActiveRatePlanKey;
