@@ -10,9 +10,9 @@ import { SvgInfoRound } from '@guardian/source/react-components';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
+import ProductCard from 'components/product/PaperProductCard';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
-import ProductOption from 'components/product/productOption';
 import { observerLinks } from 'helpers/legal';
 import LinkTo from './linkTo';
 
@@ -141,7 +141,7 @@ export function PaperPrices({
 			</div>
 			<FlexContainer cssOverrides={[priceBoxes, pricesBoxesGridLayout]}>
 				{products.map((product) => (
-					<ProductOption
+					<ProductCard
 						cssOverrides={
 							product.label ? productOverrideWithLabel : productOverride
 						}
