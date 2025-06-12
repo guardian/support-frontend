@@ -278,7 +278,7 @@ export class PaymentApi extends GuStack {
     });
 
     const paypalMetricDuration = Duration.minutes(5);
-    const paypalEvaluationPeriods = 12; // The number of 5 minute periods in 1 hour
+    const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
     const paypalAlarmPeriod = Duration.minutes(
       paypalMetricDuration.toMinutes() * paypalEvaluationPeriods
     );
