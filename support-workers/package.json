@@ -9,12 +9,14 @@
     "lint:check": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
     "check-formatting": "prettier --check **.ts",
+    "fix-formatting": "prettier --write **.ts",
     "build": "tsc",
     "bundle": "esbuild src/typescript/lambdas/*.ts --bundle --platform=node --target=node22 --outdir=target/typescript",
     "clean-target": "rm -rf target && mkdir -p target",
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
     "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
-    "package": "pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip"
+    "check-modules": "pnpm --filter modules check-formatting && pnpm --filter modules lint:check",
+    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip"
   },
   "repository": {
     "type": "git",
@@ -22,24 +24,22 @@
   },
   "private": true,
   "dependencies": {
-    "@aws-sdk/client-ssm": "^3.679.0",
-    "@aws-sdk/credential-provider-node": "3.699.0",
-    "esbuild": "^0.25.5",
+    "@aws-sdk/client-ssm": "catalog:",
+    "@aws-sdk/credential-provider-node": "catalog:",
     "stripe": "^17.4.0",
-    "zod": "^3.23.8"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@guardian/eslint-config-typescript": "12.0.0",
-    "@guardian/prettier": "^2.1.5",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.27",
-    "eslint": "^8.57.0",
-    "jest": "^29.7.0",
-    "jest-runner-groups": "^2.2.0",
-    "prettier": "^2.8.8",
-    "prettier-eslint": "^16.3.0",
-    "pretty-format": "^29.7.0",
-    "ts-jest": "^29.2.4",
-    "typescript": "^5.2.2"
+    "@guardian/eslint-config-typescript": "catalog:",
+    "@guardian/prettier": "catalog:",
+    "@types/jest": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "jest": "catalog:",
+    "jest-runner-groups": "catalog:",
+    "prettier": "catalog:",
+    "ts-jest": "catalog:",
+    "typescript": "catalog:",
+    "esbuild": "catalog:"
   }
 }

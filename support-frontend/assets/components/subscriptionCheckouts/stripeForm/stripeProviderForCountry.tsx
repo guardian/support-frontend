@@ -1,9 +1,9 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
 import { getStripeKeyForCountry } from 'helpers/forms/stripe';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';

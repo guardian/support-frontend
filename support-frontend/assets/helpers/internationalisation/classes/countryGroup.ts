@@ -1,6 +1,6 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import type { IsoCountry } from '../country';
 import {
 	AUDCountries,
 	Canada,

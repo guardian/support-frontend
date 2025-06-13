@@ -1,3 +1,7 @@
+import type {
+	IsoCountry,
+	UsState,
+} from '@modules/internationalisation/country';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -14,7 +18,6 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import type { Country } from 'helpers/internationalisation/countries';
-import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';

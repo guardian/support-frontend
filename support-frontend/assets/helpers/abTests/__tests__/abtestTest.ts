@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type {

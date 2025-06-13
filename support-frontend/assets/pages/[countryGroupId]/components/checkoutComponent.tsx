@@ -13,6 +13,7 @@ import {
 	ErrorSummary,
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
@@ -52,7 +53,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {

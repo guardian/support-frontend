@@ -1,4 +1,4 @@
-import type { IsoCountry } from '../internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 
 export const breakpoints = {

@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
 		"lint:nibble": "eslint-nibble ./assets --ext .ts,.tsx",
 		"lint:check": "eslint ./assets --ext .ts --ext .tsx",
-		"lint:fix": "pnpm lint:check --fix",
+		"lint:fix": "eslint --fix ./assets --ext .ts --ext .tsx",
 		"build-dev": "webpack --config webpack.dev.js",
 		"build-ssr": "tsx ./scripts/build-ssr-content.tsx",
 		"build-prod-no-test": "npm-run-all clean 'webpack --config webpack.prod.js'",
@@ -64,8 +64,9 @@
 		"moduleNameMapper": {
 			"ophan(.*)": "<rootDir>/node_modules/ophan-tracker-js/build/ophan.support",
 			"\\.(css|less|sass|scss)$": "<rootDir>/assets/__mocks__/styleMock.ts",
-			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts"
-		},
+			"\\.(svg|png|jpg)$": "<rootDir>/assets/__mocks__/imageMock.ts",
+      "@modules/(.*)$": "<rootDir>/../modules/$1"
+    },
 		"setupFilesAfterEnv": [
 			"./jestSetup"
 		],
@@ -126,9 +127,8 @@
 		"@babel/runtime": "7.26.10",
 		"@emotion/eslint-plugin": "^11.11.0",
 		"@guardian/browserslist-config": "^6.1.2",
-		"@guardian/eslint-config": "8.0.1",
-		"@guardian/eslint-config-typescript": "11.0.0",
 		"@guardian/prettier": "^2.1.5",
+    "@guardian/eslint-config-typescript": "10.0.1",
 		"@storybook/addon-a11y": "^8.4.2",
 		"@storybook/addon-essentials": "^8.4.5",
 		"@storybook/addon-interactions": "^8.4.2",

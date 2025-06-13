@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
 // ----- Types ----- //

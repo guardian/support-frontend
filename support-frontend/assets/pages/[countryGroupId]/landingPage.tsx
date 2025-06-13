@@ -1,7 +1,7 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { ContributionsOnlyLanding } from 'pages/supporter-plus-landing/twoStepPages/contributionsOnlyLanding';

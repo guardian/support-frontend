@@ -1,4 +1,5 @@
 import { storage } from '@guardian/libs';
+import { isoCountries } from '@modules/internationalisation/country';
 import type { InferInput } from 'valibot';
 import {
 	boolean,
@@ -10,7 +11,6 @@ import {
 	safeParse,
 	string,
 } from 'valibot';
-import { isoCountries } from 'helpers/internationalisation/country';
 
 const formDetailsSchema = object({
 	personalData: object({

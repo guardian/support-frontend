@@ -15,7 +15,7 @@
 		"paths": {
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
 			"@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
-			"@modules/internationalisation/*": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/*"],
+      "@modules/*": ["../../modules/*"]
 		},
 		"types": ["@testing-library/jest-dom"]
 	},

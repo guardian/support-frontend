@@ -1,4 +1,4 @@
-import type { IsoCountry } from './country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 
 const gwCountries: Partial<Record<IsoCountry, string>> = {
 	GB: 'United Kingdom',

@@ -1,8 +1,8 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { ContributionTypes } from 'helpers/contributions';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import type { CommonStateSetupData, Internationalisation } from './state';
 import { initialCommonState } from './state';
