@@ -322,6 +322,11 @@ export class PaymentApi extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
+    const stripeExpressMetricDuration = Duration.minutes(5);
+    const stripeExpressEvaluationPeriods = 12; // The number of 5 minute periods in 1 hour
+    const stripeExpressAlarmPeriod = Duration.minutes(
+      stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods
+    );
     const [applePaySuccessMetric, paymentRequestButtonSuccessMetric] = [
       "StripeApplePay",
       "StripePaymentRequestButton",
@@ -334,13 +339,13 @@ export class PaymentApi extends GuStack {
             "payment-provider": paymentProvider,
           },
           statistic: "Sum",
-          period: Duration.seconds(300),
+          period: stripeExpressMetricDuration
         })
     );
     const combinedApplePayAndPaymentRequestButtonSuccessMetric =
       new MathExpression({
         expression: "SUM(METRICS())",
-        period: Duration.seconds(300),
+        period: stripeExpressMetricDuration,
         usingMetrics: {
           m1: applePaySuccessMetric,
           m2: paymentRequestButtonSuccessMetric,
@@ -348,10 +353,10 @@ export class PaymentApi extends GuStack {
       });
     new GuAlarm(this, "NoStripeExpressPaymentsInOneHourAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for an hour`,
+      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
-      evaluationPeriods: 12,
+      evaluationPeriods: stripeExpressEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: combinedApplePayAndPaymentRequestButtonSuccessMetric,
       treatMissingData: TreatMissingData.BREACHING,
