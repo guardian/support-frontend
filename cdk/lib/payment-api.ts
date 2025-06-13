@@ -323,7 +323,7 @@ export class PaymentApi extends GuStack {
     });
 
     const stripeExpressMetricDuration = Duration.minutes(5);
-    const stripeExpressEvaluationPeriods = 12; // The number of 5 minute periods in 1 hour
+    const stripeExpressEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
     const stripeExpressAlarmPeriod = Duration.minutes(
       stripeExpressMetricDuration.toMinutes() * stripeExpressEvaluationPeriods
     );
