@@ -277,12 +277,17 @@ export class PaymentApi extends GuStack {
       snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
-    new GuAlarm(this, "NoPaypalPaymentsInOneHourAlarm", {
+    const paypalMetricDuration = Duration.minutes(5);
+    const paypalEvaluationPeriods = 18; // The number of 5 minute periods in 90 minutes
+    const paypalAlarmPeriod = Duration.minutes(
+      paypalMetricDuration.toMinutes() * paypalEvaluationPeriods
+    );
+    new GuAlarm(this, "NoPaypalPaymentsInPeriodAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful paypal payments via payment-api for an hour`,
+      alarmName: `[CDK] ${app} ${this.stage} No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
-      evaluationPeriods: 12,
+      evaluationPeriods: paypalEvaluationPeriods,
       comparisonOperator: ComparisonOperator.LESS_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "payment-success",
@@ -291,7 +296,7 @@ export class PaymentApi extends GuStack {
           "payment-provider": "Paypal",
         },
         statistic: "Sum",
-        period: Duration.seconds(300),
+        period: paypalMetricDuration,
       }),
       treatMissingData: TreatMissingData.BREACHING,
       snsTopicName: `alarms-handler-topic-${this.stage}`,
