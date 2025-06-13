@@ -91,6 +91,9 @@ object AcquisitionDataRowBuilder {
       state = commonState.user.billingAddress.state,
       email = Some(commonState.user.primaryEmailAddress),
       similarProductsConsent = commonState.similarProductsConsent,
+      // For now always pass None here, even though this may be a PayPal transaction. We do set this for single PayPal
+      // contributions. In future we can figure out whether it's worth finding the equivalent for a recurring PayPal
+      // payment and wire this in, but it's currently not needed.
       paypalTransactionId = None,
     )
   }
