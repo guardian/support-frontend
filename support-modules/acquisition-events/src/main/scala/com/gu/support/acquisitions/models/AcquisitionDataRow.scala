@@ -45,6 +45,7 @@ case class AcquisitionDataRow(
     state: Option[String],
     email: Option[String],
     similarProductsConsent: Option[Boolean],
+    paypalTransactionId: Option[String],
 )
 
 object AcquisitionDataRow {
