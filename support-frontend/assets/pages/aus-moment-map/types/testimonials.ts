@@ -1,4 +1,4 @@
-import type { AuState } from 'helpers/internationalisation/country';
+import type { AuState } from '@modules/internationalisation/country';
 
 export type Testimonial = {
 	name: string;

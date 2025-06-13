@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { JSDOM } from 'jsdom';
 import { Country } from '../classes/country';
-import type { IsoCountry } from '../country';
 import {
 	AUDCountries,
 	EURCountries,

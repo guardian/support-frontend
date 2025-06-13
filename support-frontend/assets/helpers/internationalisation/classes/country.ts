@@ -1,12 +1,10 @@
-import * as cookie from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
 import type {
 	AuState,
 	CaState,
 	IsoCountry,
 	StateProvince,
 	UsState,
-} from '../country';
+} from '@modules/internationalisation/country';
 import {
 	auStates,
 	caStates,
@@ -14,7 +12,9 @@ import {
 	isoCountries,
 	isoCountrySet,
 	usStates,
-} from '../country';
+} from '@modules/internationalisation/country';
+import * as cookie from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
 import {
 	AUDCountries,
 	Canada,

@@ -1,5 +1,5 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroupName,
 	CountryGroup as CountryGroupType,

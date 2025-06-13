@@ -1,3 +1,4 @@
+import { isoCountries } from '@modules/internationalisation/country';
 import type { InferOutput } from 'valibot';
 import {
 	array,
@@ -14,7 +15,6 @@ import {
 	string,
 	union,
 } from 'valibot';
-import { isoCountries } from 'helpers/internationalisation/country';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';

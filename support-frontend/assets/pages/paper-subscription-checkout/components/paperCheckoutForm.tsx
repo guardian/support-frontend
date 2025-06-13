@@ -8,6 +8,7 @@ import {
 	Select,
 	TextArea,
 } from '@guardian/source/react-components';
+import { newspaperCountries } from '@modules/internationalisation/country';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { ConnectedProps } from 'react-redux';
@@ -41,7 +42,6 @@ import { StripeProviderForCountry } from 'components/subscriptionCheckouts/strip
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { newspaperCountries } from 'helpers/internationalisation/country';
 import {
 	Collection,
 	HomeDelivery,

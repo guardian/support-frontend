@@ -1,5 +1,5 @@
 // Fulfilment options describe the various ways that a user can receive a product
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from '../productCatalog';
 

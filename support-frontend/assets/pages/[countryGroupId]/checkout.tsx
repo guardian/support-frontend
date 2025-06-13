@@ -1,3 +1,4 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -7,7 +8,6 @@ import {
 } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,

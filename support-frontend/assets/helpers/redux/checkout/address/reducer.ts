@@ -1,3 +1,4 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import {
 	combineReducers,
@@ -6,7 +7,6 @@ import {
 } from '@reduxjs/toolkit';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { Country } from 'helpers/internationalisation/classes/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';

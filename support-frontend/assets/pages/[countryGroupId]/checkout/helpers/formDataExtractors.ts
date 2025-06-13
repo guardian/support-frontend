@@ -1,4 +1,4 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCountry } from '@modules/internationalisation/country';
 
 export type FormPersonalFields = {
 	firstName: string;

@@ -15,6 +15,7 @@ import {
 	Divider,
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
+import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -58,7 +59,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
