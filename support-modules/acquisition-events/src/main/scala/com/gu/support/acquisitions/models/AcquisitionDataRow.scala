@@ -167,9 +167,15 @@ object PrintProduct {
 
   case object NationalDeliveryEveryday extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY")
 
+  case object NationalDeliveryEverydayPlus extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY_PLUS")
+
   case object NationalDeliverySixday extends PrintProduct("NATIONAL_DELIVERY_SIXDAY")
 
+  case object NationalDeliverySixdayPlus extends PrintProduct("NATIONAL_DELIVERY_SIXDAY_PLUS")
+
   case object NationalDeliveryWeekend extends PrintProduct("NATIONAL_DELIVERY_WEEKEND")
+
+  case object NationalDeliveryWeekendPlus extends PrintProduct("NATIONAL_DELIVERY_WEEKEND_PLUS")
 
   case object VoucherEveryday extends PrintProduct("VOUCHER_EVERYDAY")
 

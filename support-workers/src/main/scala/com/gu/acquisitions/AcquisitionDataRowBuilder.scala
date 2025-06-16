@@ -147,8 +147,11 @@ object AcquisitionDataRowBuilder {
         case (HomeDelivery, Sunday) => HomeDeliverySunday
         case (HomeDelivery, SundayPlus) => HomeDeliverySundayPlus
         case (NationalDelivery, Everyday) => NationalDeliveryEveryday
+        case (NationalDelivery, EverydayPlus) => NationalDeliveryEverydayPlus
         case (NationalDelivery, Sixday) => NationalDeliverySixday
+        case (NationalDelivery, SixdayPlus) => NationalDeliverySixdayPlus
         case (NationalDelivery, Weekend) => NationalDeliveryWeekend
+        case (NationalDelivery, WeekendPlus) => NationalDeliveryWeekendPlus
         case (Collection, Everyday) => VoucherEveryday
         case (Collection, EverydayPlus) => VoucherEverydayPlus
         case (Collection, Sixday) => VoucherSixday
