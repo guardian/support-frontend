@@ -66,6 +66,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       }
     }
 
+    val date = new LocalDate(2020, 6, 15)
     val subscriptionCreator = new ZuoraDigitalSubscriptionHandler(
       new ZuoraSubscriptionCreator(
         zuora,
@@ -76,7 +77,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
       new DigitalSubscriptionBuilder(
         config = ZuoraDigitalPackConfig(14, 2, "", ""),
         promotionService = null, // shouldn't be called for subs with no promo code
-        DateGenerator(new LocalDate(2020, 6, 15)),
+        DateGenerator(date),
         TouchPointEnvironments.CODE,
         new SubscribeItemBuilder(
           requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
@@ -89,6 +90,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
+          date,
         ),
       ),
       user =
