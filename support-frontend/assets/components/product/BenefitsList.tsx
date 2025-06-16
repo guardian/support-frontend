@@ -10,7 +10,7 @@ import type { ReactNode } from 'react';
 
 export const benefitsContainer = css`
 	${textSans15};
-	margin: ${space[6]}px 0 ${space[2]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
 	padding-top: ${space[2]}px;
 	border-top: 1px solid ${neutral[86]};
 `;

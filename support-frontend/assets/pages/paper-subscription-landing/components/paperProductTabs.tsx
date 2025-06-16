@@ -20,7 +20,7 @@ const cardsContainer = css`
 	flex-direction: column;
 	${from.tablet} {
 		flex-direction: row;
-		padding: ${space[3]}px ${space[6]}px ${space[5]}px;
+		padding: ${space[6]}px ${space[6]}px ${space[5]}px;
 		gap: ${space[5]}px;
 	}
 `;

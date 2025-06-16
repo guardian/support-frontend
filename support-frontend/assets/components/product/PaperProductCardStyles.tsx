@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import {
-	between,
 	brandAlt,
 	from,
 	headlineBold24,
@@ -11,20 +10,23 @@ import {
 	textSans14,
 	textSans15,
 	textSans17,
-	textSansBold12,
 	textSansBold14,
 	textSansBold15,
-	until,
 } from '@guardian/source/foundations';
 
 export const productOption = css`
 	${textSans17};
 	position: relative;
+	display: flex;
+	flex-direction: column;
 
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
 	padding: ${space[3]}px;
 	border-radius: ${space[2]}px;
+	${from.tablet} {
+		min-width: 338px;
+	}
 `;
 
 export const productCardWithLabel = css`
@@ -50,20 +52,11 @@ export const productOptionTitleHeading = css`
 export const productOptionLabel = css`
 	display: block;
 	width: max-content;
-	${textSansBold12}
+	${textSansBold14}
 	color: ${palette.neutral[100]};
 	background: ${palette.brand[500]};
 	border-radius: ${space[1]}px;
 	padding: 2.5px ${space[2]}px;
-	${until.mobileMedium} {
-		max-width: 98px;
-	}
-	${between.leftCol.and.wide} {
-		max-width: 112px;
-	}
-	${from.leftCol} {
-		${textSansBold14}
-	}
 `;
 
 export const productOptionLabelObserver = css`
@@ -75,32 +68,39 @@ export const productOptionOfferCopy = css`
 	color: ${neutral[38]};
 	text-align: center;
 	${from.tablet} {
-		padding-bottom: ${space[2]}px;
-	}
-	${between.tablet.and.leftCol} {
-		${textSans15};
-	}
-	${from.leftCol} {
-		margin-top: ${space[1]}px;
+		min-height: 20px;
 	}
 `;
 
 export const productOptionInfo = css`
-	position: absolute;
-	bottom: ${space[5]}px;
 	${textSans15}
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
+	margin-bottom: ${space[4]}px;
+	margin-top: auto;
+	position: relative;
+
+	&:before {
+		position: absolute;
+		content: '';
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		left: 6px;
+		top: 6px;
+		background-color: ${palette.neutral[7]};
+	}
+
 	svg {
 		flex-shrink: 0;
 		margin-right: ${space[1]}px;
 		fill: ${palette.brandAlt[400]};
+		z-index: 0;
 	}
 `;
 
 export const productOptionPrice = css`
 	${headlineBold34};
-
 	small {
 		${textSans15};
 	}
@@ -120,36 +120,17 @@ export const productOptionHighlight = css`
 	border-top-right-radius: ${space[2]}px;
 `;
 
-export const buttonDiv = css`
+export const ButtonCTA = css`
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	grid-area: button;
-	padding: ${space[3]}px 0;
-	margin-top: ${space[5]}px;
-
-	${from.leftCol} {
-		grid-area: auto;
-		padding: 0;
-	}
-`;
-
-export const button = css`
-	display: flex;
-	justify-content: center;
-	${from.mobileLandscape} {
-		grid-area: priceCopy;
-		display: inline-flex;
-	}
-	${from.tablet} {
-		grid-area: auto;
-		display: inline-flex;
-	}
+	padding: ${space[2]}px 0;
+	margin: ${space[4]}px 0 ${space[1]}px;
 `;
 
 export const planDescription = css`
 	${textSans15}
-	margin: ${space[5]}px 0 ${space[4]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
 	${from.tablet} {
 		display: none;
 	}
