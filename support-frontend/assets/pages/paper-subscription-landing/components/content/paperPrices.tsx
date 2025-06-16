@@ -8,9 +8,9 @@ import {
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
-import ProductCard from 'components/product/PaperProductCard';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
+import ProductOption from 'components/product/productOption';
 import { observerLinks } from 'helpers/legal';
 import {
 	Collection,
@@ -144,7 +144,7 @@ export function PaperPrices({
 			</div>
 			<FlexContainer cssOverrides={[priceBoxes, pricesBoxesGridLayout]}>
 				{products.map((product) => (
-					<ProductCard
+					<ProductOption
 						cssOverrides={
 							product.label ? productOverrideWithLabel : productOverride
 						}

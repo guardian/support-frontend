@@ -7,7 +7,6 @@ import {
 	headlineBold34,
 	neutral,
 	palette,
-	size,
 	space,
 	textSans14,
 	textSans15,
@@ -76,7 +75,6 @@ export const productOptionOfferCopy = css`
 	color: ${neutral[38]};
 	text-align: center;
 	${from.tablet} {
-		height: 100%;
 		padding-bottom: ${space[2]}px;
 	}
 	${between.tablet.and.leftCol} {
@@ -88,17 +86,15 @@ export const productOptionOfferCopy = css`
 `;
 
 export const productOptionInfo = css`
+	position: absolute;
+	bottom: ${space[5]}px;
+	${textSans15}
 	display: flex;
-	flex: 0 1 auto;
+	align-items: flex-start;
 	svg {
-		fill: ${palette.brand[500]};
-		min-height: ${size.xsmall}px;
-		min-width: ${size.xsmall}px;
-		height: ${size.xsmall}px;
-		width: ${size.xsmall}px;
-	}
-	p {
-		margin-left: 4px;
+		flex-shrink: 0;
+		margin-right: ${space[1]}px;
+		fill: ${palette.brandAlt[400]};
 	}
 `;
 
@@ -124,12 +120,6 @@ export const productOptionHighlight = css`
 	border-top-right-radius: ${space[2]}px;
 `;
 
-export const specialOfferHighlight = css`
-	width: calc(100% + 10px);
-	top: 0;
-	left: -5px;
-`;
-
 export const buttonDiv = css`
 	display: flex;
 	flex-direction: column;
@@ -137,7 +127,6 @@ export const buttonDiv = css`
 	grid-area: button;
 	padding: ${space[3]}px 0;
 	margin-top: ${space[5]}px;
-	margin-bottom: ${space[2]}px;
 
 	${from.leftCol} {
 		grid-area: auto;
@@ -155,5 +144,13 @@ export const button = css`
 	${from.tablet} {
 		grid-area: auto;
 		display: inline-flex;
+	}
+`;
+
+export const planDescription = css`
+	${textSans15}
+	margin: ${space[5]}px 0 ${space[4]}px;
+	${from.tablet} {
+		display: none;
 	}
 `;
