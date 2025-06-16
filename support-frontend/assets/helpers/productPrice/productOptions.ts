@@ -8,7 +8,6 @@ const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
 const SaturdayPlus = 'SaturdayPlus';
 const Sunday = 'Sunday';
-const SundayPlus = 'SundayPlus';
 const Weekend = 'Weekend';
 const WeekendPlus = 'WeekendPlus';
 const Sixday = 'Sixday';
@@ -22,7 +21,6 @@ export type ProductOptions =
 	| typeof Saturday
 	| typeof SaturdayPlus
 	| typeof Sunday
-	| typeof SundayPlus
 	| typeof Weekend
 	| typeof WeekendPlus
 	| typeof Sixday
@@ -38,22 +36,20 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday
 	| typeof SaturdayPlus
-	| typeof SundayPlus
 	| typeof WeekendPlus
 	| typeof SixdayPlus
 	| typeof EverydayPlus;
 
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
+	EverydayPlus,
+	SixdayPlus,
+	WeekendPlus,
+	SaturdayPlus,
 	Everyday,
 	Sixday,
 	Weekend,
 	Saturday,
 	Sunday,
-	EverydayPlus,
-	SixdayPlus,
-	WeekendPlus,
-	SaturdayPlus,
-	SundayPlus,
 ] as const;
 
 export type ActivePaperProductOptions =
@@ -69,7 +65,6 @@ export const isActivePaperProductOption = (
 
 const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
-	Sunday: SundayPlus,
 	Weekend: WeekendPlus,
 	Sixday: SixdayPlus,
 	Everyday: EverydayPlus,
@@ -77,7 +72,6 @@ const paperProductsWithDigital = {
 
 const paperProductsWithoutDigital = {
 	SaturdayPlus: Saturday,
-	SundayPlus: Sunday,
 	WeekendPlus: Weekend,
 	SixdayPlus: Sixday,
 	EverydayPlus: Everyday,
@@ -109,7 +103,6 @@ const getPaperProductOptions = (
 		case 'Everyday':
 		case 'WeekendPlus':
 		case 'SaturdayPlus':
-		case 'SundayPlus':
 		case 'SixdayPlus':
 		case 'EverydayPlus':
 			return ratePlanKey;
@@ -147,7 +140,6 @@ export {
 	Saturday,
 	SaturdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
 	Sixday,
