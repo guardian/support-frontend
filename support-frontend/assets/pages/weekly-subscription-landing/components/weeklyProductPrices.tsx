@@ -52,15 +52,12 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
-	abParticipations: Participations,
+	_abParticipations: Participations, // This is not used right now but will be when we're testing gifting so I'm leaving it here
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
 	// Gifting will be supported last
-	if (
-		abParticipations.guardianWeeklyGenericCheckout === 'variant' &&
-		!orderIsGift
-	) {
+	if (!orderIsGift) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 		const productGuardianWeekly = internationaliseProduct(
 			countryGroups[countryGroupId].supportInternationalisationId,
@@ -76,8 +73,7 @@ const getCheckoutUrl = (
 
 	const promoCode = getQueryParameter(promoQueryParam);
 	const promoQuery = promoCode ? `&${promoQueryParam}=${promoCode}` : '';
-	const gift = orderIsGift ? '/gift' : '';
-	return `${getOrigin()}/subscribe/weekly/checkout${gift}?period=${billingPeriod.toString()}${promoQuery}`;
+	return `${getOrigin()}/subscribe/weekly/checkout/gift?period=${billingPeriod.toString()}${promoQuery}`;
 };
 
 const getCurrencySymbol = (currencyId: IsoCurrency): string =>
