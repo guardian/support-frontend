@@ -13,9 +13,12 @@ import {
 	Channel,
 	type ProductLabelProps,
 } from 'pages/paper-subscription-landing/helpers/products';
+import type { PlanData } from 'pages/paper-subscription-landing/planData';
+import BenefitsList from './BenefitsList';
 import {
 	button,
 	buttonDiv,
+	planDescription,
 	productCardWithLabel,
 	productOption,
 	productOptionHighlight,
@@ -26,7 +29,6 @@ import {
 	productOptionPrice,
 	productOptionTitle,
 	productOptionTitleHeading,
-	specialOfferHighlight,
 	specialOfferOption,
 } from './PaperProductCardStyles';
 
@@ -35,7 +37,7 @@ export type Product = {
 	price: string;
 	children?: ReactNode;
 	offerCopy?: ReactNode;
-	priceCopy: ReactNode;
+	planData: PlanData;
 	buttonCopy: string;
 	href: string;
 	onClick: () => void;
@@ -48,7 +50,7 @@ export type Product = {
 	unavailableOutsideLondon?: boolean;
 };
 
-function ProductCard(props: Product): JSX.Element {
+function ProductCard(props: Product) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -79,17 +81,8 @@ function ProductCard(props: Product): JSX.Element {
 				props.label ? productCardWithLabel : css``,
 			]}
 		>
-			{props.label && (
-				<div
-					css={[
-						productOptionHighlight,
-						props.isSpecialOffer ? specialOfferHighlight : css``,
-					]}
-				>
-					{props.label}
-				</div>
-			)}
-			<div css={[productOptionTitle]}>
+			{props.label && <div css={[productOptionHighlight]}>{props.label}</div>}
+			<section css={[productOptionTitle]}>
 				<h3 css={productOptionTitleHeading}>{props.title}</h3>
 				{props.productLabel && (
 					<span
@@ -102,13 +95,12 @@ function ProductCard(props: Product): JSX.Element {
 					</span>
 				)}
 				{props.children && props.children}
-			</div>
-			<div>
-				<p css={productOptionPrice}>
-					{props.price}
-					<small>/month</small>
-				</p>
-			</div>
+			</section>
+
+			<p css={productOptionPrice}>
+				{props.price}
+				<small>/month</small>
+			</p>
 
 			<div css={buttonDiv}>
 				<LinkButton
@@ -122,15 +114,26 @@ function ProductCard(props: Product): JSX.Element {
 					{props.buttonCopy}
 				</LinkButton>
 			</div>
-			<p css={[productOptionOfferCopy]}>
-				{props.offerCopy}
-				{props.unavailableOutsideLondon && (
-					<div css={productOptionInfo}>
-						<SvgInfoRound />
-						<p>Only available inside Greater London.</p>
-					</div>
-				)}
-			</p>
+
+			<p css={[productOptionOfferCopy]}>{props.offerCopy}</p>
+			<p css={planDescription}>{props.planData.description}</p>
+
+			<BenefitsList
+				title={props.planData.benefits.label}
+				listItems={props.planData.benefits.items}
+			/>
+
+			<BenefitsList
+				title={props.planData.digitalRewards?.label}
+				listItems={props.planData.digitalRewards?.items}
+			/>
+			{props.unavailableOutsideLondon && (
+				<p css={productOptionInfo}>
+					{' '}
+					<SvgInfoRound size="xsmall" />
+					Only available inside Greater London.
+				</p>
+			)}
 		</div>
 	);
 }
