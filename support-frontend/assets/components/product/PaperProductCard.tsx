@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
+import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
@@ -15,9 +16,9 @@ import {
 } from 'pages/paper-subscription-landing/helpers/products';
 import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import BenefitsList from './BenefitsList';
+import Collapsible from './Collapsible';
 import {
-	button,
-	buttonDiv,
+	ButtonCTA,
 	planDescription,
 	productCardWithLabel,
 	productOption,
@@ -56,6 +57,8 @@ function ProductCard(props: Product) {
 		debounce: true,
 	});
 
+	const isWideScreen = useIsWideScreen();
+
 	/**
 	 * The first time this runs hasBeenSeen
 	 * is false, it's default value. It will run
@@ -70,6 +73,26 @@ function ProductCard(props: Product) {
 	}, [hasBeenSeen]);
 
 	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
+
+	const renderPlanDetails = () => (
+		<>
+			<BenefitsList
+				title={props.planData.benefits.label}
+				listItems={props.planData.benefits.items}
+			/>
+
+			<BenefitsList
+				title={props.planData.digitalRewards?.label}
+				listItems={props.planData.digitalRewards?.items}
+			/>
+			{props.unavailableOutsideLondon && (
+				<p css={productOptionInfo}>
+					<SvgInfoRound size="small" />
+					Only available inside Greater London.
+				</p>
+			)}
+		</>
+	);
 
 	return (
 		<div
@@ -102,10 +125,9 @@ function ProductCard(props: Product) {
 				<small>/month</small>
 			</p>
 
-			<div css={buttonDiv}>
+			<div css={ButtonCTA}>
 				<LinkButton
 					priority="primary"
-					cssOverrides={button}
 					href={props.href}
 					onClick={props.onClick}
 					aria-label={`${props.title}- ${props.buttonCopy}`}
@@ -118,21 +140,10 @@ function ProductCard(props: Product) {
 			<p css={[productOptionOfferCopy]}>{props.offerCopy}</p>
 			<p css={planDescription}>{props.planData.description}</p>
 
-			<BenefitsList
-				title={props.planData.benefits.label}
-				listItems={props.planData.benefits.items}
-			/>
-
-			<BenefitsList
-				title={props.planData.digitalRewards?.label}
-				listItems={props.planData.digitalRewards?.items}
-			/>
-			{props.unavailableOutsideLondon && (
-				<p css={productOptionInfo}>
-					{' '}
-					<SvgInfoRound size="xsmall" />
-					Only available inside Greater London.
-				</p>
+			{isWideScreen ? (
+				renderPlanDetails()
+			) : (
+				<Collapsible>{renderPlanDetails()}</Collapsible>
 			)}
 		</div>
 	);
