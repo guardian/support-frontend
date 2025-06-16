@@ -163,8 +163,6 @@ object PrintProduct {
 
   case object HomeDeliverySunday extends PrintProduct("HOME_DELIVERY_SUNDAY")
 
-  case object HomeDeliverySundayPlus extends PrintProduct("HOME_DELIVERY_SUNDAY_PLUS")
-
   case object NationalDeliveryEveryday extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY")
 
   case object NationalDeliveryEverydayPlus extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY_PLUS")
@@ -195,8 +193,6 @@ object PrintProduct {
 
   case object VoucherSunday extends PrintProduct("VOUCHER_SUNDAY")
 
-  case object VoucherSundayPlus extends PrintProduct("VOUCHER_SUNDAY_PLUS")
-
   case object GuardianWeekly extends PrintProduct("GUARDIAN_WEEKLY")
 
   def fromString(code: String): Option[PrintProduct] = {
@@ -210,7 +206,6 @@ object PrintProduct {
       HomeDeliverySaturday,
       HomeDeliverySaturdayPlus,
       HomeDeliverySunday,
-      HomeDeliverySundayPlus,
       NationalDeliveryEveryday,
       NationalDeliverySixday,
       NationalDeliveryWeekend,
@@ -223,7 +218,6 @@ object PrintProduct {
       VoucherSaturday,
       VoucherSaturdayPlus,
       VoucherSunday,
-      VoucherSundayPlus,
       GuardianWeekly,
     ).find(_.value == code)
   }
