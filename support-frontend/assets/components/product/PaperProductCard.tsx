@@ -1,20 +1,14 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	LinkButton,
 	SvgInfoRound,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Channel,
-	type ProductLabelProps,
-} from 'pages/paper-subscription-landing/helpers/products';
-import type { PlanData } from 'pages/paper-subscription-landing/planData';
+import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 import BenefitsList from './BenefitsList';
 import Collapsible from './Collapsible';
 import {
@@ -32,24 +26,7 @@ import {
 	productOptionTitleHeading,
 	specialOfferOption,
 } from './PaperProductCardStyles';
-
-export type Product = {
-	title: string;
-	price: string;
-	children?: ReactNode;
-	offerCopy?: ReactNode;
-	planData: PlanData;
-	buttonCopy: string;
-	href: string;
-	onClick: () => void;
-	onView: () => void;
-	productLabel?: ProductLabelProps;
-	label?: string;
-	cssOverrides?: SerializedStyles;
-	billingPeriod?: BillingPeriod;
-	isSpecialOffer?: boolean;
-	unavailableOutsideLondon?: boolean;
-};
+import { type Product } from './productOption';
 
 function ProductCard(props: Product) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
@@ -77,13 +54,13 @@ function ProductCard(props: Product) {
 	const renderPlanDetails = () => (
 		<>
 			<BenefitsList
-				title={props.planData.benefits.label}
-				listItems={props.planData.benefits.items}
+				title={props.planData?.benefits.label}
+				listItems={props.planData?.benefits.items}
 			/>
 
 			<BenefitsList
-				title={props.planData.digitalRewards?.label}
-				listItems={props.planData.digitalRewards?.items}
+				title={props.planData?.digitalRewards?.label}
+				listItems={props.planData?.digitalRewards?.items}
 			/>
 			{props.unavailableOutsideLondon && (
 				<p css={productOptionInfo}>
@@ -138,7 +115,7 @@ function ProductCard(props: Product) {
 			</div>
 
 			<p css={[productOptionOfferCopy]}>{props.offerCopy}</p>
-			<p css={planDescription}>{props.planData.description}</p>
+			<p css={planDescription}>{props.planData?.description}</p>
 
 			{isWideScreen ? (
 				renderPlanDetails()
