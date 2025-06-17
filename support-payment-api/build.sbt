@@ -71,6 +71,7 @@ excludeDependencies ++= Seq(
   // don't need it. The vulnerability is fixed in v3 onwards, but the lib was renamed so I don't think we can force a
   // newer version by specifying it in the dependencies.
   ExclusionRule("net.sourceforge.htmlunit", "htmlunit"),
+  ExclusionRule("commons-beanutils", "commons-beanutils"), // Also exclude commons-beanutils due to a vulnerability
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
