@@ -7,7 +7,15 @@ import { useEffect, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import { type Product } from 'components/product/productOption';
+import Carousel from 'components/product/Carousel';
+import ProductCard from 'components/product/PaperProductCard';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
+import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	Collection,
+	HomeDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
@@ -15,15 +23,10 @@ import NewspaperTabHero from './content/NewspaperTabHero';
 
 const cardsContainer = css`
 	background-color: ${palette.brand[400]};
-	padding: ${space[6]}px ${space[5]}px ${space[3]}px;
+	padding: 0 ${space[6]}px ${space[6]}px;
 	gap: ${space[4]}px;
 	display: flex;
 	flex-direction: column;
-	${from.tablet} {
-		flex-direction: row;
-		padding: ${space[6]}px ${space[6]}px ${space[5]}px;
-		gap: ${space[5]}px;
-	}
 `;
 
 type TabOptions = {
@@ -74,6 +77,9 @@ function NewspaperProductTabs({
 		} as TabProps;
 	});
 
+	const renderProducts = () =>
+		products.map((product) => <ProductCard {...product} />);
+
 	return (
 		<FullWidthContainer>
 			<CentredContainer>
@@ -117,6 +123,11 @@ function NewspaperProductTabs({
 								unavailableOutsideLondon={unavailableOutsideLondon}
 							/>
 						),
+					)}
+					{isWideScreen ? (
+						<Carousel items={renderProducts()} />
+					) : (
+						renderProducts()
 					)}
 				</section>
 			</CentredContainer>
