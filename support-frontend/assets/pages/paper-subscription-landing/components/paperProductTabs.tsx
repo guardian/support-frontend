@@ -1,11 +1,13 @@
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
+import Carousel from 'components/product/Carousel';
 import ProductCard from 'components/product/PaperProductCard';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
+import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
@@ -17,15 +19,10 @@ import { PaperTabHero } from './content/paperTabHero';
 
 const cardsContainer = css`
 	background-color: ${palette.brand[400]};
-	padding: ${space[6]}px ${space[5]}px ${space[3]}px;
+	padding: 0 ${space[6]}px ${space[6]}px;
 	gap: ${space[4]}px;
 	display: flex;
 	flex-direction: column;
-	${from.tablet} {
-		flex-direction: row;
-		padding: ${space[6]}px ${space[6]}px ${space[5]}px;
-		gap: ${space[5]}px;
-	}
 `;
 
 type TabOptions = {
@@ -53,6 +50,7 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+	const isWideScreen = useIsWideScreen();
 
 	const products = getPlans(selectedTab, productPrices);
 
@@ -67,6 +65,9 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 		} as TabProps;
 	});
 
+	const renderProducts = () =>
+		products.map((product) => <ProductCard {...product} />);
+
 	return (
 		<FullWidthContainer>
 			<CentredContainer>
@@ -80,22 +81,11 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
-					{products.map((product) => (
-						<ProductCard
-							title={product.title}
-							price={product.price}
-							priceCopy={product.priceCopy}
-							planData={product.planData}
-							offerCopy={product.offerCopy}
-							buttonCopy={product.buttonCopy}
-							href={product.href}
-							onClick={product.onClick}
-							onView={product.onView}
-							label={product.label}
-							productLabel={product.productLabel}
-							unavailableOutsideLondon={product.unavailableOutsideLondon}
-						/>
-					))}
+					{isWideScreen ? (
+						<Carousel items={renderProducts()} />
+					) : (
+						renderProducts()
+					)}
 				</section>
 			</CentredContainer>
 		</FullWidthContainer>
