@@ -52,7 +52,7 @@ export type Product = {
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
-	planData: PlanData;
+	planData?: PlanData;
 };
 
 function ProductOption(props: Product): JSX.Element {
