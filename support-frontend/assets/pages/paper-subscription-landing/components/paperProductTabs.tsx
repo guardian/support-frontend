@@ -81,6 +81,7 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 						<ProductCard
 							title={product.title}
 							price={product.price}
+							priceCopy={product.priceCopy}
 							planData={product.planData}
 							offerCopy={product.offerCopy}
 							buttonCopy={product.buttonCopy}

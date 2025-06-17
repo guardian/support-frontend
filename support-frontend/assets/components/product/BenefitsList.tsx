@@ -8,18 +8,18 @@ import {
 import { SvgTickRound } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
-export const benefitsContainer = css`
+const benefitsContainer = css`
 	${textSans15};
 	margin: ${space[5]}px 0 ${space[2]}px;
 	padding-top: ${space[2]}px;
 	border-top: 1px solid ${neutral[86]};
 `;
 
-export const benefitsList = css`
+const benefitsList = css`
 	padding-top: ${space[4]}px;
 `;
 
-export const benefitsItem = css`
+const benefitsItem = css`
 	display: flex;
 	align-items: flex-start;
 	margin-bottom: ${space[4]}px;
