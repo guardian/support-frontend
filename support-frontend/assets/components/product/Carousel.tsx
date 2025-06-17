@@ -4,8 +4,8 @@ import {
 	SvgChevronLeftSingle,
 	SvgChevronRightSingle,
 } from '@guardian/source/react-components';
-import type { ReactNode} from 'react';
-import { useRef } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const carouselWrapper = css`
 	position: relative;
@@ -35,7 +35,6 @@ const buttonStyle = css`
 	transform: translateY(-50%);
 	background: ${palette.brand[400]};
 	border: none;
-	cursor: pointer;
 	z-index: 1;
 	width: 36px;
 	height: 36px;
@@ -50,18 +49,40 @@ const buttonStyle = css`
 const prevButton = css`
 	${buttonStyle};
 	left: -24px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+`;
+
+const showNavButton = css`
+	opacity: 1;
+	cursor: pointer;
 `;
 
 const nextButton = css`
 	${buttonStyle};
 	right: -24px;
+	opacity: 0;
 `;
 
 export default function Carousel({ items }: { items: ReactNode[] }) {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const [canScrollPrev, setCanScrollPrev] = useState(false);
+	const [canScrollNext, setCanScrollNext] = useState(false);
+
+	const updateScrollButtons = () => {
+		const container = containerRef.current;
+		if (!container) {return;}
+
+		setCanScrollPrev(container.scrollLeft > 24);
+		setCanScrollNext(
+			container.scrollLeft + container.clientWidth < container.scrollWidth - 1,
+		);
+	};
 
 	const scrollByWidth = (direction: 'next' | 'prev') => {
-		if (!containerRef.current) {return;}
+		if (!containerRef.current) {
+			return;
+		}
 		const container = containerRef.current;
 		const scrollAmount = container.clientWidth * 0.3;
 		container.scrollBy({
@@ -70,9 +91,26 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 		});
 	};
 
+	useEffect(() => {
+		updateScrollButtons();
+		const container = containerRef.current;
+		if (!container) {return;}
+
+		container.addEventListener('scroll', updateScrollButtons);
+		window.addEventListener('resize', updateScrollButtons);
+
+		return () => {
+			container.removeEventListener('scroll', updateScrollButtons);
+			window.removeEventListener('resize', updateScrollButtons);
+		};
+	}, []);
+
 	return (
 		<div css={carouselWrapper}>
-			<button css={prevButton} onClick={() => scrollByWidth('prev')}>
+			<button
+				css={[prevButton, canScrollPrev && showNavButton]}
+				onClick={() => scrollByWidth('prev')}
+			>
 				<SvgChevronLeftSingle size="small" />
 			</button>
 			<div css={carouselContainer} ref={containerRef}>
@@ -80,7 +118,10 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 					<div css={carouselItem}>{item}</div>
 				))}
 			</div>
-			<button css={nextButton} onClick={() => scrollByWidth('next')}>
+			<button
+				css={[nextButton, canScrollNext && showNavButton]}
+				onClick={() => scrollByWidth('next')}
+			>
 				<SvgChevronRightSingle size="small" />
 			</button>
 		</div>
