@@ -43,7 +43,7 @@
 			".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
 		},
 		"transformIgnorePatterns": [
-			"/node_modules/\\.pnpm/(?!@guardian|valibot)",
+			"/node_modules/\\.pnpm/(?!@guardian)",
 			"^.+\\.module\\.(css|sass|scss)$"
 		],
 		"moduleFileExtensions": [
@@ -112,7 +112,6 @@
 		"snarkdown": "^2.0.0",
 		"tsx": "^4.19.2",
 		"uuid": "^9.0.0",
-		"valibot": "^0.31.0",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
