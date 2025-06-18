@@ -14,7 +14,7 @@ import {
 	textSansBold15,
 } from '@guardian/source/foundations';
 
-export const productOption = css`
+export const productCard = css`
 	${textSans17};
 	position: relative;
 	display: flex;
@@ -33,23 +33,23 @@ export const productCardWithLabel = css`
 	border-top-left-radius: 0;
 `;
 
-export const specialOfferOption = css`
+export const specialOffer = css`
 	background-color: #fffdeb;
 	border: 5px solid ${brandAlt[400]};
 	/* Reduce top and bottom padding to account for the border */
 	padding: 7px ${space[3]}px;
 `;
 
-export const productOptionTitle = css`
+export const productCardHeader = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-export const productOptionTitleHeading = css`
+export const productCardHeading = css`
 	${headlineBold24};
 	margin-bottom: ${space[1]}px;
 `;
 
-export const productOptionLabel = css`
+export const productLabel = css`
 	display: block;
 	width: max-content;
 	${textSansBold14}
@@ -59,11 +59,11 @@ export const productOptionLabel = css`
 	padding: 2.5px ${space[2]}px;
 `;
 
-export const productOptionLabelObserver = css`
+export const productLabelObserver = css`
 	background: #963c00;
 `;
 
-export const productOptionOfferCopy = css`
+export const productCardOffer = css`
 	${textSans14};
 	color: ${neutral[38]};
 	text-align: center;
@@ -72,7 +72,7 @@ export const productOptionOfferCopy = css`
 	}
 `;
 
-export const productOptionInfo = css`
+export const productCardInfo = css`
 	${textSans15}
 	display: flex;
 	align-items: center;
@@ -99,14 +99,14 @@ export const productOptionInfo = css`
 	}
 `;
 
-export const productOptionPrice = css`
+export const productCardPrice = css`
 	${headlineBold34};
 	small {
 		${textSans15};
 	}
 `;
 
-export const productOptionHighlight = css`
+export const productCardLabel = css`
 	background-color: #c1d8fc;
 	color: ${neutral[7]};
 	position: absolute;
