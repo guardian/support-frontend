@@ -2,6 +2,7 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { countryGroups } from 'support-frontend/assets/helpers/internationalisation/countryGroup';
 import type { ActiveProductKey } from '../../support-frontend/assets/helpers/productCatalog';
+import { z } from 'zod';
 
 const HomeDelivery = 'HomeDelivery';
 const NationalDelivery = 'NationalDelivery';
@@ -14,13 +15,16 @@ type GuardianWeeklyFulfilmentOptions = typeof Domestic | typeof RestOfWorld;
 
 export type PaperFulfilmentOptions = typeof HomeDelivery | typeof Collection;
 
-export type FulfilmentOptions =
-	| typeof HomeDelivery
-	| typeof NationalDelivery
-	| typeof Collection
-	| typeof Domestic
-	| typeof RestOfWorld
-	| typeof NoFulfilmentOptions;
+export const fulfilmentOptionsSchema = z.enum([
+	NoFulfilmentOptions,
+	NationalDelivery,
+	HomeDelivery,
+	Collection,
+	Domestic,
+	RestOfWorld,
+]);
+
+export type FulfilmentOptions = z.infer<typeof fulfilmentOptionsSchema>;
 
 export {
 	HomeDelivery,

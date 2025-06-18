@@ -1,12 +1,5 @@
 import { isoCountries } from '@modules/internationalisation/country';
-import {
-	Collection,
-	Domestic,
-	HomeDelivery,
-	NationalDelivery,
-	NoFulfilmentOptions,
-	RestOfWorld,
-} from '@modules/productCatalog/fulfilmentOptions';
+import { fulfilmentOptionsSchema } from '@modules/productCatalog/fulfilmentOptions';
 import { productOptionsSchema } from '@modules/productCatalog/productOptions';
 import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
@@ -227,14 +220,6 @@ const countryKeySchema = z.enum([
 	'United States',
 	'Canada',
 	'International',
-]);
-const fulfilmentOptionsSchema = z.enum([
-	NoFulfilmentOptions,
-	NationalDelivery,
-	HomeDelivery,
-	Collection,
-	Domestic,
-	RestOfWorld,
 ]);
 const billingPeriodSchema = z.union([
 	z.literal('Monthly'), //TODO: share this with support-workers
