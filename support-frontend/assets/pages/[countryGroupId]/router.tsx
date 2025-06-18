@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HoldingContent } from 'components/serverSideRendered/holdingContent';
+import { WithCoreWebVitals } from 'helpers/coreWebVitals/withCoreWebVitals';
 import { parseAppConfig } from 'helpers/globalsAndSwitches/window';
 import {
 	getAbParticipations,
@@ -114,7 +115,11 @@ const router = createBrowserRouter(
 );
 
 function Router() {
-	return <RouterProvider router={router} />;
+	return (
+		<WithCoreWebVitals>
+			<RouterProvider router={router} />
+		</WithCoreWebVitals>
+	);
 }
 
 export default renderPage(<Router />);

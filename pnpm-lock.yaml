@@ -171,6 +171,9 @@ importers:
       '@floating-ui/react':
         specifier: ^0.27.6
         version: 0.27.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@guardian/core-web-vitals':
+        specifier: ^11.1.0
+        version: 11.1.0(@guardian/libs@22.5.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)
       '@guardian/libs':
         specifier: ^22.0.0
         version: 22.5.0(tslib@2.8.1)(typescript@5.5.4)
@@ -1736,6 +1739,17 @@ packages:
       aws-cdk: 2.1007.0
       aws-cdk-lib: 2.189.0
       constructs: 10.4.2
+
+  '@guardian/core-web-vitals@11.1.0':
+    resolution: {integrity: sha512-akfJvMoLhBZOxG9QetNz9L1ywgJZjkioNiS6u88uGv9yr3eQFBATcFVRr9B/najj4jv2oEaaHbEhyd8w8Tp4oQ==}
+    peerDependencies:
+      '@guardian/libs': ^22.0.0
+      tslib: ^2.6.2
+      typescript: ~5.5.2
+      web-vitals: ^4.2.1
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@guardian/eslint-config-typescript@10.0.1':
     resolution: {integrity: sha512-Y9QBfonXbiILuifudDOb96nYN+lwFhejPHda4ZzbGqRjcQbALQAmT/RMl0gubZTbIuXbRH+RZ7mWHGs/wxOuog==}
@@ -8008,6 +8022,9 @@ packages:
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
 
+  web-vitals@4.2.4:
+    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -10056,6 +10073,14 @@ snapshots:
       lodash.upperfirst: 4.3.1
       read-pkg-up: 7.0.1
       yargs: 17.7.2
+
+  '@guardian/core-web-vitals@11.1.0(@guardian/libs@22.5.0(tslib@2.8.1)(typescript@5.5.4))(tslib@2.8.1)(typescript@5.5.4)(web-vitals@4.2.4)':
+    dependencies:
+      '@guardian/libs': 22.5.0(tslib@2.8.1)(typescript@5.5.4)
+      tslib: 2.8.1
+      web-vitals: 4.2.4
+    optionalDependencies:
+      typescript: 5.5.4
 
   '@guardian/eslint-config-typescript@10.0.1(eslint@8.57.1)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
@@ -17858,6 +17883,8 @@ snapshots:
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
+
+  web-vitals@4.2.4: {}
 
   webidl-conversions@3.0.1: {}
 
