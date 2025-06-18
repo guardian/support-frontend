@@ -6,6 +6,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
+import React from 'react';
 
 const fieldset = css`
 	position: relative;
@@ -60,6 +61,10 @@ type FormSectionProps = {
 	children: ReactNode;
 };
 
-export function FormSection({ children }: FormSectionProps) {
-	return <fieldset css={fieldset}>{children}</fieldset>;
-}
+export const FormSection = React.forwardRef(
+	(props: FormSectionProps, ref?: React.Ref<HTMLDivElement>) => (
+		<div ref={ref}>
+			<fieldset css={fieldset}>{props.children}</fieldset>;
+		</div>
+	),
+);
