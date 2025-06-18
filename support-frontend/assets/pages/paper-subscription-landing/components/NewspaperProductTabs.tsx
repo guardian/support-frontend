@@ -10,7 +10,6 @@ import { type Product } from 'components/product/productOption';
 import Carousel from 'components/product/Carousel';
 import ProductCard from 'components/product/PaperProductCard';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
-import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
@@ -58,6 +57,8 @@ function NewspaperProductTabs({
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
 		getPlans(selectedTab, productPrices),
 	);
@@ -93,38 +94,7 @@ function NewspaperProductTabs({
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
-					{productRatePlans.map(
-						({
-							title,
-							price,
-							priceCopy,
-							planData,
-							offerCopy,
-							buttonCopy,
-							href,
-							onClick,
-							onView,
-							label,
-							productLabel,
-							unavailableOutsideLondon,
-						}) => (
-							<NewspaperRatePlanCard
-								title={title}
-								price={price}
-								priceCopy={priceCopy}
-								planData={planData}
-								offerCopy={offerCopy}
-								buttonCopy={buttonCopy}
-								href={href}
-								onClick={onClick}
-								onView={onView}
-								label={label}
-								productLabel={productLabel}
-								unavailableOutsideLondon={unavailableOutsideLondon}
-							/>
-						),
-					)}
-					{isWideScreen ? (
+					{windowWidthIsGreaterThan('tablet') ? (
 						<Carousel items={renderProducts()} />
 					) : (
 						renderProducts()
