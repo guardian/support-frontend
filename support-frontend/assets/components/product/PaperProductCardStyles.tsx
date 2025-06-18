@@ -22,7 +22,7 @@ export const productCard = css`
 
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
-	padding: ${space[3]}px;
+	padding: ${space[3]}px ${space[4]}px;
 	border-radius: ${space[2]}px;
 	${from.tablet} {
 		min-width: 338px;
@@ -76,9 +76,14 @@ export const productCardInfo = css`
 	${textSans15}
 	display: flex;
 	align-items: center;
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${space[1]}px;
 	margin-top: auto;
 	position: relative;
+	padding-top: ${space[3]}px;
+
+	${from.tablet} {
+		padding-top: ${space[12]}px;
+	}
 
 	&:before {
 		position: absolute;
@@ -87,7 +92,7 @@ export const productCardInfo = css`
 		height: 12px;
 		border-radius: 50%;
 		left: 6px;
-		top: 6px;
+		bottom: 6px;
 		background-color: ${palette.neutral[7]};
 	}
 
@@ -101,6 +106,7 @@ export const productCardInfo = css`
 
 export const productCardPrice = css`
 	${headlineBold34};
+	margin-bottom: ${space[1]}px;
 	small {
 		${textSans15};
 	}
@@ -124,8 +130,7 @@ export const ButtonCTA = css`
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	padding: ${space[2]}px 0;
-	margin: ${space[4]}px 0 ${space[1]}px;
+	margin: ${space[5]}px 0 ${space[2]}px;
 `;
 
 export const planDescription = css`
