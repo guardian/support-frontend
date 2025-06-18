@@ -1,14 +1,13 @@
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import { Collection } from '@modules/productCatalog/fulfilmentOptions';
 import type {
 	ActivePaperProductOptions,
 	ProductOptions,
 } from '@modules/productCatalog/productOptions';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Collection } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';

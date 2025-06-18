@@ -1,10 +1,10 @@
 // ----- Routes ----- //
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
+} from '@modules/productCatalog/fulfilmentOptions';
+import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { countryGroups } from '../internationalisation/countryGroup';

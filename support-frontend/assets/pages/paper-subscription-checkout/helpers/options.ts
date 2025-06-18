@@ -1,6 +1,6 @@
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import { HomeDelivery } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 

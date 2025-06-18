@@ -1,11 +1,11 @@
 // ----- Imports ----- //
-import { Outset } from 'components/content/content';
-import Tabs from 'components/tabs/tabs';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
+} from '@modules/productCatalog/fulfilmentOptions';
+import { Outset } from 'components/content/content';
+import Tabs from 'components/tabs/tabs';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';
 import { SubsCardFaqBlock } from './content/subsCardTab';
 // ----- Tabs ----- //

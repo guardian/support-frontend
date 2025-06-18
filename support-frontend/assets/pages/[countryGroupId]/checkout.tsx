@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
 	type ProductOptions,
@@ -22,7 +23,6 @@ import {
 	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';

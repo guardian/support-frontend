@@ -1,3 +1,4 @@
+import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
 import { getProductOptionFromProductAndRatePlan } from '@modules/productCatalog/productOptions';
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -7,7 +8,6 @@ import type {
 	ProductDescription,
 } from 'helpers/productCatalog';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
 import { logException } from 'helpers/utilities/logger';
 
 type GetProductFieldsParams = {

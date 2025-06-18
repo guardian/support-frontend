@@ -1,5 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { AddressFields } from './state';
 import {
 	applyBillingAddressRules,

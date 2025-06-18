@@ -7,16 +7,16 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
+import {
+	Collection,
+	HomeDelivery,
+} from '@modules/productCatalog/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
 import { observerLinks } from 'helpers/legal';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
 
 type PaperPricesPropTypes = {

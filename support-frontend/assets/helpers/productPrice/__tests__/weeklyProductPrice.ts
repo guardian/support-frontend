@@ -3,7 +3,7 @@ import {
 	Domestic,
 	getWeeklyFulfilmentOption,
 	RestOfWorld,
-} from 'helpers/productPrice/fulfilmentOptions';
+} from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { BillingPeriod } from '../billingPeriods';

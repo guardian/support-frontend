@@ -1,12 +1,12 @@
+import type {
+	FulfilmentOptions,
+	PaperFulfilmentOptions,
+} from '@modules/productCatalog/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/productCatalog/productOptions';
 import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type {
-	FulfilmentOptions,
-	PaperFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
 import type {
 	ProductPrice,
 	ProductPrices,

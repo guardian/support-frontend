@@ -7,8 +7,8 @@ import {
 	textEgyptianBold15,
 } from '@guardian/source/foundations';
 import { Link } from '@guardian/source/react-components';
+import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { ReactNode } from 'react';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';
 
 const linkColor = css`

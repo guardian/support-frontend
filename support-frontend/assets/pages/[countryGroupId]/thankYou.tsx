@@ -1,3 +1,4 @@
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
 import {
@@ -9,7 +10,6 @@ import {
 	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';

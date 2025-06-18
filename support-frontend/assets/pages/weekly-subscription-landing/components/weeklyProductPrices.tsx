@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
 import type { Product } from 'components/product/productOption';
 import type { Participations } from 'helpers/abTests/models';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
@@ -16,8 +17,6 @@ import {
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
 } from 'helpers/productPrice/billingPeriods';
-import 'components/product/productOption';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { getSimplifiedPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import {
 	getFirstValidPrice,

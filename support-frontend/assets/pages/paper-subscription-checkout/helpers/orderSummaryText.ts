@@ -1,8 +1,8 @@
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import { HomeDelivery } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { HomeDelivery } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import 'helpers/productPrice/productPrices';
 

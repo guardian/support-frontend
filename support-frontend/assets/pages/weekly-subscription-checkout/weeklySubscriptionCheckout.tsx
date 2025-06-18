@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source/foundations';
+import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
 import { NoProductOptions } from '@modules/productCatalog/productOptions';
 import { Provider } from 'react-redux';
 import Page from 'components/page/page';
@@ -10,7 +11,6 @@ import {
 	BillingPeriod,
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';

@@ -1,5 +1,13 @@
 import { isoCountries } from '@modules/internationalisation/country';
 import {
+	Collection,
+	Domestic,
+	HomeDelivery,
+	NationalDelivery,
+	NoFulfilmentOptions,
+	RestOfWorld,
+} from '@modules/productCatalog/fulfilmentOptions';
+import {
 	Everyday,
 	EverydayPlus,
 	NewspaperArchive,
@@ -17,14 +25,6 @@ import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import {
-	Collection,
-	Domestic,
-	HomeDelivery,
-	NationalDelivery,
-	NoFulfilmentOptions,
-	RestOfWorld,
-} from '../productPrice/fulfilmentOptions';
 
 /**
  * This file is used to validate data that gets injected from

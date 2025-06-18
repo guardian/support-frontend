@@ -1,7 +1,7 @@
 // Fulfilment options describe the various ways that a user can receive a product
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { ActiveProductKey } from '../productCatalog';
+import { countryGroups } from 'support-frontend/assets/helpers/internationalisation/countryGroup';
+import type { ActiveProductKey } from '../../support-frontend/assets/helpers/productCatalog';
 
 const HomeDelivery = 'HomeDelivery';
 const NationalDelivery = 'NationalDelivery';
@@ -59,6 +59,7 @@ export const getFulfilmentOptionFromProductKey = (
 		case 'HomeDelivery':
 			return productKey;
 	}
+	throw new Error(`Fulfilment option not defined for product ${productKey}`);
 };
 
 export { getWeeklyFulfilmentOption };

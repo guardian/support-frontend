@@ -1,11 +1,11 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import {
 	M25_POSTCODE_PREFIXES,
 	postcodeIsWithinDeliveryArea,
 } from 'helpers/forms/deliveryCheck';
 import { isValidPostcode } from 'helpers/forms/formValidation';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import type { Rule } from 'helpers/subscriptionsForms/validation';
 import {

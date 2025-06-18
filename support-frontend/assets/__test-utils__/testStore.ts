@@ -1,9 +1,9 @@
 import '__mocks__/settingsMock';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
