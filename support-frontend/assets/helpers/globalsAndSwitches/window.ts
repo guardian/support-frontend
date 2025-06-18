@@ -1,8 +1,30 @@
 import { isoCountries } from '@modules/internationalisation/country';
-import { z } from 'zod';
+import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import {
+	Collection,
+	Domestic,
+	HomeDelivery,
+	NationalDelivery,
+	NoFulfilmentOptions,
+	RestOfWorld,
+} from '../productPrice/fulfilmentOptions';
+import {
+	Everyday,
+	EverydayPlus,
+	NewspaperArchive,
+	NoProductOptions,
+	Saturday,
+	SaturdayPlus,
+	Sixday,
+	SixdayPlus,
+	Sunday,
+	SundayPlus,
+	Weekend,
+	WeekendPlus,
+} from '../productPrice/productOptions';
 
 /**
  * This file is used to validate data that gets injected from
@@ -210,20 +232,89 @@ const ProductCatalogSchema = z.object({
 	),
 });
 
-/**
- * TODO: try making this schema stricter no that we are no using valibot
- * We parse productPrices through as a looseObject (no validation)
- * and then type it on the InferOutput using the existing types.
- *
- * This is partly because it is a model that needs refactoring now
- * we're moving into a more product focussed world, but also because
- * when creating the valibot schema we get this error
- * `Type instantiation is excessively deep and possibly infinite.`
- */
+const countryKeySchema = z.enum([
+	'United Kingdom',
+	'Europe',
+	'Australia',
+	'New Zealand',
+	'United States',
+	'Canada',
+	'International',
+]);
+const productOptionsSchema = z.enum([
+	NoProductOptions,
+	Everyday,
+	EverydayPlus,
+	Sixday,
+	SixdayPlus,
+	Weekend,
+	WeekendPlus,
+	Saturday,
+	SaturdayPlus,
+	Sunday,
+	SundayPlus,
+	NewspaperArchive,
+]);
+const fulfilmentOptionsSchema = z.enum([
+	NoFulfilmentOptions,
+	NationalDelivery,
+	HomeDelivery,
+	Collection,
+	Domestic,
+	RestOfWorld,
+]);
+const billingPeriodSchema = z.union([
+	z.literal('Monthly'), //TODO: share this with support-workers
+	z.literal('Annual'),
+	z.literal('Quarterly'),
+]);
+const currencySchema = z.enum(['GBP', 'USD', 'AUD', 'EUR', 'NZD', 'CAD']);
+const dateTimeSchema = z.preprocess(
+	(val) => (typeof val === 'string' ? new Date(val) : val),
+	z.date(),
+);
+const promotionSchema = z.object({
+	name: z.string(),
+	description: z.string(),
+	promoCode: z.string(),
+	discountedPrice: optional(z.number()),
+	numberOfDiscountedPeriods: optional(z.number()),
+	discount: optional(
+		z.object({
+			amount: z.number(),
+			durationMonths: z.number().optional(),
+		}),
+	),
+	starts: dateTimeSchema,
+	expires: dateTimeSchema.optional(),
+});
 export const ProductPricesSchema = z.object({
 	allProductPrices: z.record(
 		z.enum(legacyProductTypes),
-		z.record(z.any()).optional(),
+		optional(
+			z.record(
+				countryKeySchema,
+				z.record(
+					fulfilmentOptionsSchema,
+					z.record(
+						productOptionsSchema,
+						z.record(
+							billingPeriodSchema,
+							z.record(
+								currencySchema,
+								z.object({
+									price: z.number(),
+									savingVsRetail: z.number().optional(),
+									currency: currencySchema,
+									fixedTerm: z.boolean(),
+									promotions: z.array(promotionSchema),
+								}),
+							),
+						),
+					),
+				),
+			),
+		),
 	),
 });
 
