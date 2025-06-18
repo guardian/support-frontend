@@ -6,7 +6,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
-import React from 'react';
+import * as React from 'react';
 
 const fieldset = css`
 	position: relative;
