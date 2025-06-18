@@ -71,7 +71,9 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 
 	const updateScrollButtons = () => {
 		const container = containerRef.current;
-		if (!container) {return;}
+		if (!container) {
+			return;
+		}
 
 		setCanScrollPrev(container.scrollLeft > 24);
 		setCanScrollNext(
@@ -94,7 +96,9 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 	useEffect(() => {
 		updateScrollButtons();
 		const container = containerRef.current;
-		if (!container) {return;}
+		if (!container) {
+			return;
+		}
 
 		container.addEventListener('scroll', updateScrollButtons);
 		window.addEventListener('resize', updateScrollButtons);
