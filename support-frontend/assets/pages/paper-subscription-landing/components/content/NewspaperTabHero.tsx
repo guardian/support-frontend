@@ -108,6 +108,7 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			<strong>Delivery from your retailer</strong>,
 		],
 		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
+		deliveryDetails: undefined,
 	},
 };
 
