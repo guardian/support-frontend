@@ -14,9 +14,9 @@ import {
 	themeLinkBrand,
 } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
-import ProductCard from 'components/product/PaperProductCard';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
+import ProductOption from 'components/product/productOption';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -100,7 +100,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 			</p>
 			<FlexContainer cssOverrides={priceBoxes}>
 				{products.map((product) => (
-					<ProductCard
+					<ProductOption
 						cssOverrides={
 							product.label ? productOverrideWithLabel : productOverride
 						}
