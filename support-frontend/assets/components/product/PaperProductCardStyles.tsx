@@ -111,7 +111,7 @@ export const productCardLabel = css`
 	color: ${neutral[7]};
 	position: absolute;
 	left: 0;
-	top: 1px;
+	top: 0;
 	transform: translateY(-100%);
 	text-align: center;
 	padding: ${space[1]}px ${space[2]}px;
