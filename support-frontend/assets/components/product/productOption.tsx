@@ -14,6 +14,7 @@ import {
 	Channel,
 	type ProductLabelProps,
 } from 'pages/paper-subscription-landing/helpers/products';
+import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
 	button,
 	buttonDiv,
@@ -51,6 +52,7 @@ export type Product = {
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
+	planData?: PlanData;
 };
 
 function ProductOption(props: Product): JSX.Element {

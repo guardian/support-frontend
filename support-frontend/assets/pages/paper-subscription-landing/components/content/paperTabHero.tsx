@@ -21,7 +21,7 @@ const flexContainerOverride = css`
 	padding: ${space[2]}px ${space[3]}px ${space[3]}px;
 	border-radius: ${space[1]}px;
 	${from.tablet} {
-		margin: ${space[5]}px;
+		margin: ${space[6]}px;
 		padding: ${space[3]}px ${space[5]}px;
 		border-radius: ${space[2]}px;
 	}
