@@ -7,13 +7,13 @@ import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Carousel from 'components/product/Carousel';
 import ProductCard from 'components/product/PaperProductCard';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
-import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { getPlans } from '../helpers/getPlans';
 import { PaperTabHero } from './content/paperTabHero';
 
@@ -50,7 +50,7 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
-	const isWideScreen = useIsWideScreen();
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 
 	const products = getPlans(selectedTab, productPrices);
 
@@ -81,7 +81,7 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
-					{isWideScreen ? (
+					{windowWidthIsGreaterThan('tablet') ? (
 						<Carousel items={renderProducts()} />
 					) : (
 						renderProducts()
