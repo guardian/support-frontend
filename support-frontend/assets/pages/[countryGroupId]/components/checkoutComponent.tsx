@@ -277,7 +277,7 @@ export function CheckoutComponent({
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
 	useEffect(() => {
 		if (paymentMethodError) {
-			scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [paymentMethodError]);
 
@@ -493,6 +493,7 @@ export function CheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const scrollToViewRef = useRef<HTMLDivElement>(null);
+	const paymentMethodRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1145,124 +1146,128 @@ export function CheckoutComponent({
 									cssOverrides={css``}
 								/>
 							</Legend>
+							<div ref={paymentMethodRef}>
+								<RadioGroup
+									role="radiogroup"
+									label="Select payment method"
+									hideLabel
+									error={paymentMethodError}
+								>
+									{validPaymentMethods.map((validPaymentMethod) => {
+										const selected = paymentMethod === validPaymentMethod;
+										const { label, icon } =
+											paymentMethodData[validPaymentMethod];
+										return (
+											<PaymentMethodSelector selected={selected}>
+												<PaymentMethodRadio selected={selected}>
+													<Radio
+														label={
+															<>
+																{label}
+																<div>{icon}</div>
+															</>
+														}
+														name="paymentMethod"
+														value={validPaymentMethod}
+														cssOverrides={
+															selected
+																? checkedRadioLabelColour
+																: defaultRadioLabelColour
+														}
+														onChange={() => {
+															setPaymentMethod(validPaymentMethod);
+															setPaymentMethodError(undefined);
+															// Track payment method selection with QM
+															sendEventPaymentMethodSelected(
+																validPaymentMethod,
+															);
+														}}
+													/>
+												</PaymentMethodRadio>
+												{validPaymentMethod === 'Stripe' && selected && (
+													<div css={paymentMethodBody}>
+														<input
+															type="hidden"
+															name="recaptchaToken"
+															value={recaptchaToken}
+														/>
+														<StripeCardForm
+															onCardNumberChange={() => {
+																// no-op
+															}}
+															onExpiryChange={() => {
+																// no-op
+															}}
+															onCvcChange={() => {
+																// no-op
+															}}
+															errors={{}}
+															recaptcha={
+																<Recaptcha
+																	onRecaptchaCompleted={(token) => {
+																		setRecaptchaToken(token);
+																	}}
+																	onRecaptchaExpired={() => {
+																		setRecaptchaToken(undefined);
+																	}}
+																/>
+															}
+														/>
+													</div>
+												)}
 
-							<RadioGroup
-								role="radiogroup"
-								label="Select payment method"
-								hideLabel
-								error={paymentMethodError}
-							>
-								{validPaymentMethods.map((validPaymentMethod) => {
-									const selected = paymentMethod === validPaymentMethod;
-									const { label, icon } = paymentMethodData[validPaymentMethod];
-									return (
-										<PaymentMethodSelector selected={selected}>
-											<PaymentMethodRadio selected={selected}>
-												<Radio
-													label={
-														<>
-															{label}
-															<div>{icon}</div>
-														</>
-													}
-													name="paymentMethod"
-													value={validPaymentMethod}
-													cssOverrides={
-														selected
-															? checkedRadioLabelColour
-															: defaultRadioLabelColour
-													}
-													onChange={() => {
-														setPaymentMethod(validPaymentMethod);
-														setPaymentMethodError(undefined);
-														// Track payment method selection with QM
-														sendEventPaymentMethodSelected(validPaymentMethod);
-													}}
-												/>
-											</PaymentMethodRadio>
-											{validPaymentMethod === 'Stripe' && selected && (
-												<div css={paymentMethodBody}>
-													<input
-														type="hidden"
-														name="recaptchaToken"
-														value={recaptchaToken}
-													/>
-													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
-														}}
-														onExpiryChange={() => {
-															// no-op
-														}}
-														onCvcChange={() => {
-															// no-op
-														}}
-														errors={{}}
-														recaptcha={
-															<Recaptcha
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
-														}
-													/>
-												</div>
-											)}
-
-											{validPaymentMethod === 'DirectDebit' && selected && (
-												<div
-													css={css`
-														padding: ${space[5]}px ${space[3]}px ${space[6]}px;
-													`}
-												>
-													<DirectDebitForm
-														countryGroupId={countryGroupId}
-														accountHolderName={accountHolderName}
-														accountNumber={accountNumber}
-														accountHolderConfirmation={
-															accountHolderConfirmation
-														}
-														sortCode={sortCode}
-														recaptchaCompleted={false}
-														isSundayOnly={isSundayOnly}
-														updateAccountHolderName={(name: string) => {
-															setAccountHolderName(name);
-														}}
-														updateAccountNumber={(number: string) => {
-															setAccountNumber(number);
-														}}
-														updateSortCode={(sortCode: string) => {
-															setSortCode(sortCode);
-														}}
-														updateAccountHolderConfirmation={(
-															confirmation: boolean,
-														) => {
-															setAccountHolderConfirmation(confirmation);
-														}}
-														recaptcha={
-															<Recaptcha
-																// We could change the parents type to Promise and uses await here, but that has
-																// a lot of refactoring with not too much gain
-																onRecaptchaCompleted={(token) => {
-																	setRecaptchaToken(token);
-																}}
-																onRecaptchaExpired={() => {
-																	setRecaptchaToken(undefined);
-																}}
-															/>
-														}
-														formError={''}
-														errors={{}}
-													/>
-												</div>
-											)}
-										</PaymentMethodSelector>
-									);
-								})}
-							</RadioGroup>
+												{validPaymentMethod === 'DirectDebit' && selected && (
+													<div
+														css={css`
+															padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+														`}
+													>
+														<DirectDebitForm
+															countryGroupId={countryGroupId}
+															accountHolderName={accountHolderName}
+															accountNumber={accountNumber}
+															accountHolderConfirmation={
+																accountHolderConfirmation
+															}
+															sortCode={sortCode}
+															recaptchaCompleted={false}
+															isSundayOnly={isSundayOnly}
+															updateAccountHolderName={(name: string) => {
+																setAccountHolderName(name);
+															}}
+															updateAccountNumber={(number: string) => {
+																setAccountNumber(number);
+															}}
+															updateSortCode={(sortCode: string) => {
+																setSortCode(sortCode);
+															}}
+															updateAccountHolderConfirmation={(
+																confirmation: boolean,
+															) => {
+																setAccountHolderConfirmation(confirmation);
+															}}
+															recaptcha={
+																<Recaptcha
+																	// We could change the parents type to Promise and uses await here, but that has
+																	// a lot of refactoring with not too much gain
+																	onRecaptchaCompleted={(token) => {
+																		setRecaptchaToken(token);
+																	}}
+																	onRecaptchaExpired={() => {
+																		setRecaptchaToken(undefined);
+																	}}
+																/>
+															}
+															formError={''}
+															errors={{}}
+														/>
+													</div>
+												)}
+											</PaymentMethodSelector>
+										);
+									})}
+								</RadioGroup>
+							</div>
 						</FormSection>
 						<div
 							css={css`
