@@ -1133,20 +1133,20 @@ export function CheckoutComponent({
 								/>
 							</FormSection>
 						)}
-						<FormSection>
-							<Legend>
-								{productDescription.deliverableTo
-									? deliveryPostcodeIsOutsideM25
-										? '4'
-										: '3'
-									: '2'}
-								. Payment method
-								<SecureTransactionIndicator
-									hideText={true}
-									cssOverrides={css``}
-								/>
-							</Legend>
-							<div ref={paymentMethodRef}>
+						<div ref={paymentMethodRef}>
+							<FormSection>
+								<Legend>
+									{productDescription.deliverableTo
+										? deliveryPostcodeIsOutsideM25
+											? '4'
+											: '3'
+										: '2'}
+									. Payment method
+									<SecureTransactionIndicator
+										hideText={true}
+										cssOverrides={css``}
+									/>
+								</Legend>
 								<RadioGroup
 									role="radiogroup"
 									label="Select payment method"
@@ -1267,8 +1267,8 @@ export function CheckoutComponent({
 										);
 									})}
 								</RadioGroup>
-							</div>
-						</FormSection>
+							</FormSection>
+						</div>
 						<div
 							css={css`
 								margin: ${space[6]}px 0;
