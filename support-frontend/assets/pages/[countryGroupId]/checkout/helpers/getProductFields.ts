@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
 import { getProductOptionFromProductAndRatePlan } from '@modules/productCatalog/productOptions';
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -7,7 +8,6 @@ import type {
 	ActiveRatePlanKey,
 	ProductDescription,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { logException } from 'helpers/utilities/logger';
 
 type GetProductFieldsParams = {

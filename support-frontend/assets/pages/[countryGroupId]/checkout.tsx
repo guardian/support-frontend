@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
 import {
 	getProductOptionFromProductAndRatePlan,
@@ -19,10 +20,7 @@ import {
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	toRegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';

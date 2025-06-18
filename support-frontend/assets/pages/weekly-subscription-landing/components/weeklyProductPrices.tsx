@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { RecurringBillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
 import type { Product } from 'components/product/productOption';
 import type { Participations } from 'helpers/abTests/models';
@@ -11,7 +12,6 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
-import type { RecurringBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	getBillingPeriodTitle,
 	weeklyBillingPeriods,

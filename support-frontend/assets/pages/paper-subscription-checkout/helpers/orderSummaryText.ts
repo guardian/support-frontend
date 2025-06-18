@@ -1,10 +1,9 @@
+import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import { HomeDelivery } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import 'helpers/productPrice/productPrices';
 
 const productOptionDisplayNames = {
 	Saturday: 'Saturday',

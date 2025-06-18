@@ -11,8 +11,8 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { useState } from 'react';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { SelectedAmountsVariant } from '../../../helpers/contributions';

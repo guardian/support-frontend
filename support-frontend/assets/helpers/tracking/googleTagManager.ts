@@ -1,8 +1,8 @@
+import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';

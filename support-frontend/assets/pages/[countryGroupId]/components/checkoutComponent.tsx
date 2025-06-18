@@ -15,6 +15,7 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -62,10 +63,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';

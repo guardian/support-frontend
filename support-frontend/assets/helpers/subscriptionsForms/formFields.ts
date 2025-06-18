@@ -1,8 +1,8 @@
+import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';

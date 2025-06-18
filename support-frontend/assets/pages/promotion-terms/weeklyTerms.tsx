@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import {
 	Domestic,
 	RestOfWorld,
@@ -8,7 +9,6 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
 import { International } from 'helpers/internationalisation/countryGroup';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import type { PromotionTermsPropTypes } from 'pages/promotion-terms/promotionTermsReducer';

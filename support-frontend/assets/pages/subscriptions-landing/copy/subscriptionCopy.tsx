@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import * as React from 'react';
 // constants
 import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
@@ -13,7 +14,6 @@ import {
 	productCatalog,
 	productCatalogDescription,
 } from 'helpers/productCatalog';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,

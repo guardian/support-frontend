@@ -7,7 +7,8 @@ import type { BillingPeriodButtonsProps } from 'components/billingPeriodButtons/
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 
 export default {
 	title: 'LandingPage/Billing Period Buttons',

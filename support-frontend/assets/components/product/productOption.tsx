@@ -6,10 +6,10 @@ import {
 	LinkButton,
 	SvgInfoRound,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
 	type ProductLabelProps,

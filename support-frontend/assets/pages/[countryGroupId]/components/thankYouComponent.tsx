@@ -9,6 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { ActivePaperProductOptions } from '@modules/productCatalog/productOptions';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -21,7 +22,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
-	BillingPeriod,
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';

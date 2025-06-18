@@ -1,10 +1,10 @@
 // ----- Routes ----- //
+import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
 } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
 import { countryGroups } from '../internationalisation/countryGroup';
@@ -14,7 +14,6 @@ import {
 	getOrigin,
 	isProd,
 } from './url';
-import 'helpers/types/option';
 
 const routes = {
 	recurringContribCheckout: '/contribute/recurring',

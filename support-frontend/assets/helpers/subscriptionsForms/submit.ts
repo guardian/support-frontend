@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import {
 	HomeDelivery,
@@ -21,7 +22,6 @@ import {
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	getCurrency,
 	getProductPrice,

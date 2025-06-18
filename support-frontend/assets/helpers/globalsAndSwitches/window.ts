@@ -1,4 +1,5 @@
 import { isoCountries } from '@modules/internationalisation/country';
+import { billingPeriodSchema } from '@modules/productCatalog/billingPeriod';
 import { fulfilmentOptionsSchema } from '@modules/productCatalog/fulfilmentOptions';
 import { productOptionsSchema } from '@modules/productCatalog/productOptions';
 import { optional, z } from 'zod';
@@ -221,11 +222,7 @@ const countryKeySchema = z.enum([
 	'Canada',
 	'International',
 ]);
-const billingPeriodSchema = z.union([
-	z.literal('Monthly'), //TODO: share this with support-workers
-	z.literal('Annual'),
-	z.literal('Quarterly'),
-]);
+
 const currencySchema = z.enum(['GBP', 'USD', 'AUD', 'EUR', 'NZD', 'CAD']);
 const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),

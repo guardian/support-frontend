@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
@@ -6,10 +7,7 @@ import {
 	isProductKey,
 	productCatalog,
 } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	toRegularBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';

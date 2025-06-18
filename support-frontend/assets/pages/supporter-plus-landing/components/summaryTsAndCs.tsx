@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
@@ -12,7 +13,6 @@ import type {
 } from 'helpers/productCatalog';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import {
-	BillingPeriod,
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';

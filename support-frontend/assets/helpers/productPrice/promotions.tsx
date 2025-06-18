@@ -1,9 +1,9 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import { NoProductOptions } from '@modules/productCatalog/productOptions';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
 	ProductPrice,
 	ProductPrices,

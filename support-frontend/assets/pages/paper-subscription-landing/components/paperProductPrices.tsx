@@ -1,3 +1,4 @@
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
@@ -6,7 +7,6 @@ import type { PaperProductOptions } from '@modules/productCatalog/productOptions
 import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type {
 	ProductPrice,
 	ProductPrices,

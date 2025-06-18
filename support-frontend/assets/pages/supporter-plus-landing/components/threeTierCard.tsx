@@ -12,6 +12,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type {
@@ -19,10 +20,7 @@ import type {
 	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import {
-	BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { LandingPageProductDescription } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { ThreeTierCardPill } from './threeTierCardPill';
