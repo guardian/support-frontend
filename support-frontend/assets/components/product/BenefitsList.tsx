@@ -17,12 +17,14 @@ const benefitsContainer = css`
 
 const benefitsList = css`
 	padding-top: ${space[4]}px;
+	display: flex;
+	flex-direction: column;
+	gap: ${space[4]}px;
 `;
 
 const benefitsItem = css`
 	display: flex;
 	align-items: flex-start;
-	margin-bottom: ${space[4]}px;
 
 	svg {
 		flex-shrink: 0;

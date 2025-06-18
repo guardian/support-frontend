@@ -10,7 +10,7 @@ const toggleButton = css`
 	color: ${palette.neutral[38]};
 	width: 100%;
 	border: none;
-	margin-top: ${space[2]}px;
+	margin-top: ${space[3]}px;
 
 	svg {
 		fill: ${palette.neutral[38]};
@@ -25,6 +25,8 @@ const toggleButtonOpen = css`
 `;
 
 const content = (height: number) => css`
+	display: flex;
+	flex-direction: column;
 	max-height: ${height}px;
 	overflow: hidden;
 	transition: max-height 0.5s ease;
