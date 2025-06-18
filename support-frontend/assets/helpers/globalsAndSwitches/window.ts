@@ -1,4 +1,5 @@
 import { isoCountries } from '@modules/internationalisation/country';
+import { isoCurrencySchema } from '@modules/internationalisation/currency';
 import { billingPeriodSchema } from '@modules/productCatalog/billingPeriod';
 import { fulfilmentOptionsSchema } from '@modules/productCatalog/fulfilmentOptions';
 import { productOptionsSchema } from '@modules/productCatalog/productOptions';
@@ -223,7 +224,6 @@ const countryKeySchema = z.enum([
 	'International',
 ]);
 
-const currencySchema = z.enum(['GBP', 'USD', 'AUD', 'EUR', 'NZD', 'CAD']);
 const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
@@ -256,11 +256,11 @@ export const ProductPricesSchema = z.object({
 						z.record(
 							billingPeriodSchema,
 							z.record(
-								currencySchema,
+								isoCurrencySchema,
 								z.object({
 									price: z.number(),
 									savingVsRetail: z.number().optional(),
-									currency: currencySchema,
+									currency: isoCurrencySchema,
 									fixedTerm: z.boolean(),
 									promotions: z.array(promotionSchema),
 								}),

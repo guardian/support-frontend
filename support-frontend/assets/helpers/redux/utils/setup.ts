@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
@@ -7,7 +8,6 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {

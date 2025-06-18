@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const currencySchema = z.union([
+export const isoCurrencySchema = z.union([
 	z.literal('GBP'),
 	z.literal('EUR'),
 	z.literal('USD'),
@@ -8,4 +8,4 @@ export const currencySchema = z.union([
 	z.literal('AUD'),
 	z.literal('NZD'),
 ]);
-export type Currency = z.infer<typeof currencySchema>;
+export type IsoCurrency = z.infer<typeof isoCurrencySchema>;

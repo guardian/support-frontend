@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import { NoFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
@@ -13,7 +14,6 @@ import {
 	countryGroups,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';

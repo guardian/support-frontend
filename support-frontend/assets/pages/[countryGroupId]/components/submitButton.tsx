@@ -1,11 +1,9 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type {
-	Currency,
-	IsoCurrency,
-} from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {

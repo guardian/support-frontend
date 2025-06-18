@@ -1,11 +1,11 @@
 // ----- Imports ----- //
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import {
 	AUDCountries,
 	EURCountries,
 	GBPCountries,
 	UnitedStates,
 } from '../countryGroup';
-import type { IsoCurrency } from '../currency';
 import { detect } from '../currency';
 
 let mockCurrency: IsoCurrency | null | undefined = null;

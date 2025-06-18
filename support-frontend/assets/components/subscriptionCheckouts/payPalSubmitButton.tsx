@@ -2,6 +2,7 @@
 
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import type {
@@ -11,7 +12,6 @@ import type {
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';

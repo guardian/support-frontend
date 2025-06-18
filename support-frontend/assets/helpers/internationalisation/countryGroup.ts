@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 
 // ----- Types ----- //
 const GBPCountries = 'GBPCountries';

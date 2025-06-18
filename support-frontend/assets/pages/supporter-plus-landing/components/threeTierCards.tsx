@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source/foundations';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CardContent } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 

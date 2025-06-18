@@ -1,3 +1,4 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
 import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
@@ -10,7 +11,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { WritableDraft } from 'immer/dist/types/types-external';
 import { type SelectedAmounts } from 'helpers/contributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { DateYMDString } from 'helpers/types/DateString';

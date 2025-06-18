@@ -1,8 +1,8 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
 import { getProductOptionFromProductAndRatePlan } from '@modules/productCatalog/productOptions';
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,

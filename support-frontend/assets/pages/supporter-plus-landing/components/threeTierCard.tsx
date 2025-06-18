@@ -12,13 +12,11 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type {
-	Currency,
-	IsoCurrency,
-} from 'helpers/internationalisation/currency';
+import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';

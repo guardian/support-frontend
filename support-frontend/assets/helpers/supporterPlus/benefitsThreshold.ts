@@ -1,6 +1,6 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, textEgyptian15 } from '@guardian/source/foundations';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { PaymentStatus } from 'helpers/forms/paymentMethods';
-import { type IsoCurrency } from 'helpers/internationalisation/currency';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
