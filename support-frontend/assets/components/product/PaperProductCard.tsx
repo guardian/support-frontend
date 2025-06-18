@@ -14,17 +14,17 @@ import Collapsible from './Collapsible';
 import {
 	ButtonCTA,
 	planDescription,
+	productCard,
+	productCardHeader,
+	productCardHeading,
+	productCardInfo,
+	productCardLabel,
+	productCardOffer,
+	productCardPrice,
 	productCardWithLabel,
-	productOption,
-	productOptionHighlight,
-	productOptionInfo,
-	productOptionLabel,
-	productOptionLabelObserver,
-	productOptionOfferCopy,
-	productOptionPrice,
-	productOptionTitle,
-	productOptionTitleHeading,
-	specialOfferOption,
+	productLabel,
+	productLabelObserver,
+	specialOffer,
 } from './PaperProductCardStyles';
 import { type Product } from './productOption';
 
@@ -63,7 +63,7 @@ function ProductCard(props: Product) {
 				listItems={props.planData?.digitalRewards?.items}
 			/>
 			{props.unavailableOutsideLondon && (
-				<p css={productOptionInfo}>
+				<p css={productCardInfo}>
 					<SvgInfoRound size="small" />
 					Only available inside Greater London.
 				</p>
@@ -75,20 +75,20 @@ function ProductCard(props: Product) {
 		<div
 			ref={setElementToObserve}
 			css={[
-				productOption,
+				productCard,
 				props.cssOverrides,
-				props.isSpecialOffer ? specialOfferOption : css``,
+				props.isSpecialOffer ? specialOffer : css``,
 				props.label ? productCardWithLabel : css``,
 			]}
 		>
-			{props.label && <div css={[productOptionHighlight]}>{props.label}</div>}
-			<section css={[productOptionTitle]}>
-				<h3 css={productOptionTitleHeading}>{props.title}</h3>
+			{props.label && <div css={[productCardLabel]}>{props.label}</div>}
+			<section css={[productCardHeader]}>
+				<h3 css={productCardHeading}>{props.title}</h3>
 				{props.productLabel && (
 					<span
 						css={[
-							productOptionLabel,
-							isObserverChannel ? productOptionLabelObserver : css``,
+							productLabel,
+							isObserverChannel ? productLabelObserver : css``,
 						]}
 					>
 						{props.productLabel.text}
@@ -97,7 +97,7 @@ function ProductCard(props: Product) {
 				{props.children && props.children}
 			</section>
 
-			<p css={productOptionPrice}>
+			<p css={productCardPrice}>
 				{props.price}
 				<small>/month</small>
 			</p>
@@ -114,7 +114,7 @@ function ProductCard(props: Product) {
 				</LinkButton>
 			</div>
 
-			<p css={[productOptionOfferCopy]}>{props.offerCopy}</p>
+			<p css={[productCardOffer]}>{props.offerCopy}</p>
 			<p css={planDescription}>{props.planData?.description}</p>
 
 			{isWideScreen ? (
