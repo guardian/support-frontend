@@ -1,5 +1,4 @@
 import { expect } from '@storybook/test';
-import { safeParse } from 'valibot';
 import { ProductPricesSchema } from './window';
 
 test('ProductPricesSchema', () => {
@@ -1793,9 +1792,9 @@ test('ProductPricesSchema', () => {
 			},
 		},
 	};
-	const result = safeParse(ProductPricesSchema, allProductPrices);
+	const result = ProductPricesSchema.safeParse(allProductPrices);
 	if (result.success) {
-		const allProductPrices = result.output.allProductPrices;
+		const allProductPrices = result.data.allProductPrices;
 		expect(allProductPrices.Contribution).toBeUndefined;
 		expect(allProductPrices.SupporterPlus).toBeDefined;
 	}
