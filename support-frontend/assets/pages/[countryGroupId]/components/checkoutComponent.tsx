@@ -275,6 +275,11 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	useEffect(() => {
+		if (paymentMethodError) {
+			scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [paymentMethodError]);
 
 	const isRedirectingToStripeHostedCheckout =
 		isSundayOnly &&
