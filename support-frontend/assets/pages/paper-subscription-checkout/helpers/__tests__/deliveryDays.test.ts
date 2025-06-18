@@ -4,7 +4,7 @@ import {
 	Everyday,
 	Saturday,
 	Weekend,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/productCatalog/productOptions';
 import {
 	formatMachineDate,
 	formatUserDate,

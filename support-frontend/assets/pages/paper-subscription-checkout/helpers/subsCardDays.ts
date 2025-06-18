@@ -1,4 +1,4 @@
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { ActivePaperProductOptions } from '@modules/productCatalog/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import type { DayOfWeekIndex } from './homeDeliveryDays';
 

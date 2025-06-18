@@ -2,7 +2,7 @@
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
-} from 'helpers/productCatalog';
+} from 'support-frontend/assets/helpers/productCatalog';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -140,6 +140,9 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'HomeDelivery':
 			return getPaperProductOptions(ratePlanKey);
 	}
+	throw new Error(
+		`Product option not defined for product ${productKey} and ratePlan ${ratePlanKey}`,
+	);
 };
 
 export {

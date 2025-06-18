@@ -1,5 +1,5 @@
+import type { ActivePaperProductOptions } from '@modules/productCatalog/productOptions';
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,

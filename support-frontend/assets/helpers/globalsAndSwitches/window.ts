@@ -1,16 +1,4 @@
 import { isoCountries } from '@modules/internationalisation/country';
-import { optional, z } from 'zod';
-import type { LegacyProductType } from 'helpers/legacyTypeConversions';
-import { legacyProductTypes } from 'helpers/legacyTypeConversions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import {
-	Collection,
-	Domestic,
-	HomeDelivery,
-	NationalDelivery,
-	NoFulfilmentOptions,
-	RestOfWorld,
-} from '../productPrice/fulfilmentOptions';
 import {
 	Everyday,
 	EverydayPlus,
@@ -24,7 +12,19 @@ import {
 	SundayPlus,
 	Weekend,
 	WeekendPlus,
-} from '../productPrice/productOptions';
+} from '@modules/productCatalog/productOptions';
+import { optional, z } from 'zod';
+import type { LegacyProductType } from 'helpers/legacyTypeConversions';
+import { legacyProductTypes } from 'helpers/legacyTypeConversions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import {
+	Collection,
+	Domestic,
+	HomeDelivery,
+	NationalDelivery,
+	NoFulfilmentOptions,
+	RestOfWorld,
+} from '../productPrice/fulfilmentOptions';
 
 /**
  * This file is used to validate data that gets injected from

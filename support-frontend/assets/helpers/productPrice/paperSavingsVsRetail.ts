@@ -1,9 +1,9 @@
+import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	CountryGroupPrices,
 	ProductPrices,

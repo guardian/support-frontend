@@ -1,3 +1,8 @@
+import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import {
+	paperProductsWithDigital,
+	paperProductsWithoutDigital,
+} from '@modules/productCatalog/productOptions';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { WritableDraft } from 'immer/dist/types/types-external';
@@ -6,11 +11,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { DateYMDString } from 'helpers/types/DateString';

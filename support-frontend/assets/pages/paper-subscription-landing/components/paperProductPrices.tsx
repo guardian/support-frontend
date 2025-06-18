@@ -1,3 +1,5 @@
+import type { PaperProductOptions } from '@modules/productCatalog/productOptions';
+import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -5,8 +7,6 @@ import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
-import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,

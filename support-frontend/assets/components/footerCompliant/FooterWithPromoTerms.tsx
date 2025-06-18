@@ -1,9 +1,9 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { NoProductOptions } from '@modules/productCatalog/productOptions';
 import type { ReactNode } from 'react';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { Option } from 'helpers/types/option';

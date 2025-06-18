@@ -3,6 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import '__mocks__/settingsMock';
 import '__mocks__/stripeMock';
+import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import { NoProductOptions } from '@modules/productCatalog/productOptions';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
@@ -15,8 +17,6 @@ import { createTestStoreForSubscriptions } from '../../../__test-utils__/testSto
 import { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from '../../../helpers/productPrice/fulfilmentOptions';
 import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from '../../../helpers/productPrice/productOptions';
-import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
 import { setProductPrices } from '../../../helpers/redux/checkout/product/actions';
 import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';

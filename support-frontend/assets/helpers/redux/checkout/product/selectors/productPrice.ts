@@ -1,4 +1,4 @@
-import { productOptionIfDigiAddOnChanged } from 'helpers/productPrice/productOptions';
+import { productOptionIfDigiAddOnChanged } from '@modules/productCatalog/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { finalPrice } from 'helpers/productPrice/promotions';

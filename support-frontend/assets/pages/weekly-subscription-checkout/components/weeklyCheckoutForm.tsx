@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source/react-components';
+import { NoProductOptions } from '@modules/productCatalog/productOptions';
 import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -45,7 +46,6 @@ import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { gwCountries } from 'helpers/internationalisation/gwCountries';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
-import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import {

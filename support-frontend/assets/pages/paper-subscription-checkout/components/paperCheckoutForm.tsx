@@ -9,6 +9,7 @@ import {
 	TextArea,
 } from '@guardian/source/react-components';
 import { newspaperCountries } from '@modules/internationalisation/country';
+import type { ActivePaperProductOptions } from '@modules/productCatalog/productOptions';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { ConnectedProps } from 'react-redux';
@@ -46,7 +47,6 @@ import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';

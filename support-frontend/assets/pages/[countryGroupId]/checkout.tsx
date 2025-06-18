@@ -1,4 +1,8 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import {
+	getProductOptionFromProductAndRatePlan,
+	type ProductOptions,
+} from '@modules/productCatalog/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -19,10 +23,6 @@ import {
 	toRegularBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import { getFulfilmentOptionFromProductKey } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getProductOptionFromProductAndRatePlan,
-	type ProductOptions,
-} from 'helpers/productPrice/productOptions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';

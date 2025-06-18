@@ -2,6 +2,7 @@ import type {
 	IsoCountry,
 	UsState,
 } from '@modules/internationalisation/country';
+import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -20,7 +21,6 @@ import {
 import type { Country } from 'helpers/internationalisation/countries';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
 	DigitalPack,

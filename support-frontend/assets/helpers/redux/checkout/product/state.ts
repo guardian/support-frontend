@@ -1,3 +1,4 @@
+import type { ProductOptions } from '@modules/productCatalog/productOptions';
 import { z } from 'zod';
 import type {
 	ContributionType,
@@ -9,7 +10,6 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getCurrency } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
