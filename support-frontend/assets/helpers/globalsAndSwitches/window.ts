@@ -7,20 +7,7 @@ import {
 	NoFulfilmentOptions,
 	RestOfWorld,
 } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	Everyday,
-	EverydayPlus,
-	NewspaperArchive,
-	NoProductOptions,
-	Saturday,
-	SaturdayPlus,
-	Sixday,
-	SixdayPlus,
-	Sunday,
-	SundayPlus,
-	Weekend,
-	WeekendPlus,
-} from '@modules/productCatalog/productOptions';
+import { productOptionsSchema } from '@modules/productCatalog/productOptions';
 import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
@@ -240,20 +227,6 @@ const countryKeySchema = z.enum([
 	'United States',
 	'Canada',
 	'International',
-]);
-const productOptionsSchema = z.enum([
-	NoProductOptions,
-	Everyday,
-	EverydayPlus,
-	Sixday,
-	SixdayPlus,
-	Weekend,
-	WeekendPlus,
-	Saturday,
-	SaturdayPlus,
-	Sunday,
-	SundayPlus,
-	NewspaperArchive,
 ]);
 const fulfilmentOptionsSchema = z.enum([
 	NoFulfilmentOptions,
