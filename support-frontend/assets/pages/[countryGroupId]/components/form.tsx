@@ -62,9 +62,9 @@ type FormSectionProps = {
 };
 
 export const FormSection = React.forwardRef(
-	(props: FormSectionProps, ref?: React.Ref<HTMLDivElement>) => (
-		<div ref={ref}>
-			<fieldset css={fieldset}>{props.children}</fieldset>;
-		</div>
+	(props: FormSectionProps, ref?: React.Ref<HTMLFieldSetElement>) => (
+		<fieldset css={fieldset} ref={ref}>
+			{props.children}
+		</fieldset>
 	),
 );

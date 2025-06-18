@@ -371,7 +371,7 @@ export function OneTimeCheckoutComponent({
 	}, [paymentMethodError]);
 
 	const formRef = useRef<HTMLFormElement>(null);
-	const paymentMethodRef = useRef<HTMLDivElement>(null);
+	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,

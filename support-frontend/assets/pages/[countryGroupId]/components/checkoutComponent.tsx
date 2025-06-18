@@ -493,7 +493,7 @@ export function CheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const scrollToViewRef = useRef<HTMLDivElement>(null);
-	const paymentMethodRef = useRef<HTMLDivElement>(null);
+	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
 
 	useEffect(() => {
 		scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
