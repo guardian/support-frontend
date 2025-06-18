@@ -6,8 +6,8 @@ import {
 } from '@guardian/source/react-components';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { useIsWideScreen } from 'helpers/customHooks/useIsWideScreen';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 import BenefitsList from './BenefitsList';
 import Collapsible from './Collapsible';
@@ -34,7 +34,7 @@ function ProductCard(props: Product) {
 		debounce: true,
 	});
 
-	const isWideScreen = useIsWideScreen();
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 
 	/**
 	 * The first time this runs hasBeenSeen
@@ -117,7 +117,7 @@ function ProductCard(props: Product) {
 			<p css={[productCardOffer]}>{props.offerCopy}</p>
 			<p css={planDescription}>{props.planData?.description}</p>
 
-			{isWideScreen ? (
+			{windowWidthIsGreaterThan('tablet') ? (
 				renderPlanDetails()
 			) : (
 				<Collapsible>{renderPlanDetails()}</Collapsible>
