@@ -1,14 +1,32 @@
+import { css } from '@emotion/react';
+import { from, palette, space } from '@guardian/source/foundations';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
+import ProductCard from 'components/product/PaperProductCard';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { getPlans } from '../helpers/getPlans';
 import { PaperTabHero } from './content/paperTabHero';
+
+const cardsContainer = css`
+	background-color: ${palette.brand[400]};
+	padding: ${space[6]}px ${space[5]}px ${space[3]}px;
+	gap: ${space[4]}px;
+	display: flex;
+	flex-direction: column;
+	${from.tablet} {
+		flex-direction: row;
+		padding: ${space[6]}px ${space[6]}px ${space[5]}px;
+		gap: ${space[5]}px;
+	}
+`;
 
 type TabOptions = {
 	text: string;
@@ -29,12 +47,14 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	},
 };
 
-function PaperProductTabs() {
+function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 	const fulfilment =
 		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+
+	const products = getPlans(selectedTab, productPrices);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
 		const { href, text, content: ContentComponent } = tab;
@@ -59,6 +79,24 @@ function PaperProductTabs() {
 					}}
 					theme="paperTabs"
 				/>
+				<section css={cardsContainer}>
+					{products.map((product) => (
+						<ProductCard
+							title={product.title}
+							price={product.price}
+							priceCopy={product.priceCopy}
+							planData={product.planData}
+							offerCopy={product.offerCopy}
+							buttonCopy={product.buttonCopy}
+							href={product.href}
+							onClick={product.onClick}
+							onView={product.onView}
+							label={product.label}
+							productLabel={product.productLabel}
+							unavailableOutsideLondon={product.unavailableOutsideLondon}
+						/>
+					))}
+				</section>
 			</CentredContainer>
 		</FullWidthContainer>
 	);
