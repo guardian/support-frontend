@@ -1,6 +1,6 @@
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';

@@ -1,4 +1,4 @@
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import { PriceLabel } from 'components/priceLabel/priceLabel';
 import { DropdownArrowUp } from 'components/svgs/dropDownArrowUp';

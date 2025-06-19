@@ -3,11 +3,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import '__mocks__/settingsMock';
 import '__mocks__/stripeMock';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
-import { NoProductOptions } from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
+import { NoProductOptions } from '@modules/product/productOptions';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
@@ -17,6 +16,7 @@ import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createTestStoreForSubscriptions } from '../../../__test-utils__/testStore';
+import { getWeeklyFulfilmentOption } from '../../../helpers/productCatalogToFulfilmentOption';
 import { setProductPrices } from '../../../helpers/redux/checkout/product/actions';
 import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';

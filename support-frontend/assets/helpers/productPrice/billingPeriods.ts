@@ -1,8 +1,5 @@
-import type {
-	RecurringBillingPeriod} from '@modules/productCatalog/billingPeriod';
-import {
-	BillingPeriod
-} from '@modules/productCatalog/billingPeriod';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 

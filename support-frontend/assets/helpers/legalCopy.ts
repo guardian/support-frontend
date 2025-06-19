@@ -1,5 +1,5 @@
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { simpleFormatAmount } from './forms/checkouts';

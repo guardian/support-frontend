@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { recurringBillingPeriodSchema } from '@modules/productCatalog/billingPeriod';
+import { recurringBillingPeriodSchema } from '@modules/product/billingPeriod';
 import { isoCurrencySchema } from '@modules/internationalisation/currency';
 
 export const fulfilmentOptionsSchema = z.enum([

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, textSans12 } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	contributionsTermsLinks,
 	digitalSubscriptionTermsLink,

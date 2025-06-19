@@ -1,8 +1,5 @@
-import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';

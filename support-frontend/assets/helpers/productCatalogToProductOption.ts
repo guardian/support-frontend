@@ -1,51 +1,20 @@
-// describes options relating to a product itself - only relevant for paper currently
 import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from 'support-frontend/assets/helpers/productCatalog';
-import { z } from 'zod';
-
-const NoProductOptions = 'NoProductOptions';
-const Saturday = 'Saturday';
-const SaturdayPlus = 'SaturdayPlus';
-const Sunday = 'Sunday';
-const SundayPlus = 'SundayPlus';
-const Weekend = 'Weekend';
-const WeekendPlus = 'WeekendPlus';
-const Sixday = 'Sixday';
-const SixdayPlus = 'SixdayPlus';
-const Everyday = 'Everyday';
-const EverydayPlus = 'EverydayPlus';
-const NewspaperArchive = 'NewspaperArchive';
-
-export const productOptionsSchema = z.enum([
-	NoProductOptions,
+	PaperProductOptions,
+	ProductOptions,
+} from '@modules/product/productOptions';
+import {
 	Everyday,
 	EverydayPlus,
-	Sixday,
-	SixdayPlus,
-	Weekend,
-	WeekendPlus,
 	Saturday,
 	SaturdayPlus,
+	Sixday,
+	SixdayPlus,
 	Sunday,
 	SundayPlus,
-	NewspaperArchive,
-]);
-
-export type ProductOptions = z.infer<typeof productOptionsSchema>;
-
-export type PaperProductOptions =
-	| typeof Saturday
-	| typeof Sunday
-	| typeof Weekend
-	| typeof Sixday
-	| typeof Everyday
-	| typeof SaturdayPlus
-	| typeof SundayPlus
-	| typeof WeekendPlus
-	| typeof SixdayPlus
-	| typeof EverydayPlus;
+	Weekend,
+	WeekendPlus,
+} from '@modules/product/productOptions';
+import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	Everyday,
@@ -59,10 +28,8 @@ const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	SaturdayPlus,
 	SundayPlus,
 ] as const;
-
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
-
 export const isActivePaperProductOption = (
 	productOption: ProductOptions,
 ): productOption is ActivePaperProductOptions => {
@@ -70,7 +37,6 @@ export const isActivePaperProductOption = (
 		productOption as ActivePaperProductOptions,
 	);
 };
-
 const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
 	Sunday: SundayPlus,
@@ -78,7 +44,6 @@ const paperProductsWithDigital = {
 	Sixday: SixdayPlus,
 	Everyday: EverydayPlus,
 } as Record<ProductOptions, ProductOptions>;
-
 const paperProductsWithoutDigital = {
 	SaturdayPlus: Saturday,
 	SundayPlus: Sunday,
@@ -86,7 +51,6 @@ const paperProductsWithoutDigital = {
 	SixdayPlus: Sixday,
 	EverydayPlus: Everyday,
 } as Record<ProductOptions, ProductOptions>;
-
 // Returns the product option with the opposite 'add digital' option to the one passed
 // e.g. SaturdayPlus -> Saturday
 function productOptionIfDigiAddOnChanged(
@@ -144,26 +108,8 @@ export const getProductOptionFromProductAndRatePlan = (
 		case 'HomeDelivery':
 			return getPaperProductOptions(ratePlanKey);
 	}
-	throw new Error(
-		`Product option not defined for product ${productKey} and ratePlan ${ratePlanKey}`,
-	);
 };
-
-export {
-	NoProductOptions,
-	Saturday,
-	SaturdayPlus,
-	Sunday,
-	SundayPlus,
-	Weekend,
-	WeekendPlus,
-	Sixday,
-	SixdayPlus,
-	Everyday,
-	EverydayPlus,
-	NewspaperArchive,
-	ActivePaperProductTypes,
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-	productOptionIfDigiAddOnChanged,
-};
+export { productOptionIfDigiAddOnChanged };
+export { paperProductsWithoutDigital };
+export { paperProductsWithDigital };
+export { ActivePaperProductTypes };

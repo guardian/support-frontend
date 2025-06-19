@@ -1,4 +1,4 @@
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getSubscriptionAnnualValue } from '../quantumMetricHelpers';
 

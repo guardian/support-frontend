@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';

@@ -6,7 +6,7 @@ import {
 	space,
 	textSansBold17,
 } from '@guardian/source/foundations';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 

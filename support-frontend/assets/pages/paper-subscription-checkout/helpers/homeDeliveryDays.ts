@@ -1,4 +1,4 @@
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { Day } from 'helpers/subscriptionsForms/deliveryDays';
 import {
 	getDeliveryDays,

@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import type { BenefitsCheckListData } from '../../../../components/checkoutBenefits/benefitsCheckList';
 import type { Participations } from '../../../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../../../helpers/globalsAndSwitches/landingPageSettings';
-import type { CountryGroupId } from '../../../../helpers/internationalisation/countryGroup';
 import {
 	filterBenefitByABTest,
 	filterBenefitByRegion,

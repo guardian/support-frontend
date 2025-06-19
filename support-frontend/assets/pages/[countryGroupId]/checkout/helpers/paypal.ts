@@ -1,6 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 
 export const setupPayPalPayment = async (
 	amount: number,

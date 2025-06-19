@@ -6,7 +6,7 @@ import {
 	LinkButton,
 	SvgInfoRound,
 } from '@guardian/source/react-components';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';

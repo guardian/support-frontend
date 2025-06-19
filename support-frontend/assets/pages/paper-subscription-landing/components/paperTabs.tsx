@@ -1,9 +1,6 @@
 // ----- Imports ----- //
-import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';

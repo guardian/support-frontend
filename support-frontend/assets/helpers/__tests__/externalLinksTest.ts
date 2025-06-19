@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { CountryGroupId } from '../internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -8,7 +8,7 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from '../internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 import {
 	androidAppUrl,
 	getDailyEditionUrl,

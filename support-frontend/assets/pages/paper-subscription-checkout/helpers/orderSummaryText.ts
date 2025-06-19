@@ -1,7 +1,7 @@
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import { HomeDelivery } from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 

@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import * as storage from 'helpers/storage/storage';

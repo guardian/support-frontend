@@ -1,13 +1,10 @@
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import {
-	Domestic,
-	RestOfWorld,
-} from '@modules/productCatalog/fulfilmentOptions';
-import { NoProductOptions } from '@modules/productCatalog/productOptions';
+import type { CountryGroupName } from '@modules/internationalisation/countryGroup';
+import { International } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { Domestic, RestOfWorld } from '@modules/product/fulfilmentOptions';
+import { NoProductOptions } from '@modules/product/productOptions';
 import { SansParagraph } from 'components/text/text';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
-import { International } from 'helpers/internationalisation/countryGroup';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { CountryGroupPrices } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';

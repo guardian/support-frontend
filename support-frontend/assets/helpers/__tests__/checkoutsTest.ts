@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getValidPaymentMethods, simpleFormatAmount } from '../forms/checkouts';
 

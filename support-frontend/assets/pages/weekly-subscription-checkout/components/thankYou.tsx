@@ -1,4 +1,4 @@
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';

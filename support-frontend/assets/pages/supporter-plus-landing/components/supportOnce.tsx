@@ -11,7 +11,7 @@ import { LinkButton } from '@guardian/source/react-components';
 import {
 	type CountryGroupId,
 	countryGroups,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const container = css`

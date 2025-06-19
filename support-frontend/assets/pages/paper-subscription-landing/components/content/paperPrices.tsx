@@ -7,11 +7,8 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { SvgInfoRound } from '@guardian/source/react-components';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
-import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';

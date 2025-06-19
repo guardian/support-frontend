@@ -1,8 +1,8 @@
 import { Radio, RadioGroup } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import { NoFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { NoFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';

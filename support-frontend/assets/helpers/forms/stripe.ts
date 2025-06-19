@@ -5,7 +5,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 
-
 export type StripeAccountType = 'ONE_OFF' | 'REGULAR';
 
 export type StripePaymentIntentResult = {

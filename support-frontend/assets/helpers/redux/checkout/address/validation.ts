@@ -1,6 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import {
 	M25_POSTCODE_PREFIXES,
 	postcodeIsWithinDeliveryArea,

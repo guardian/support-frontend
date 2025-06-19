@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getQueryParameter } from 'helpers/urls/url';
 import { CountryGroup } from './classes/countryGroup';
-import type { CountryGroupId } from './countryGroup';
-import { countryGroups } from './countryGroup';
 
 // ----- Types ----- //
 

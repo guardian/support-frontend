@@ -1,4 +1,4 @@
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	extendedGlyph,
 	glyph as shortGlyph,

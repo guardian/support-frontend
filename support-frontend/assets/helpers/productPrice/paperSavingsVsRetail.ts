@@ -1,13 +1,10 @@
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
-import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type {
 	CountryGroupPrices,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
+import { ActivePaperProductTypes } from '../productCatalogToProductOption';
 
 function getSavingsForFulfilmentOption(
 	prices: CountryGroupPrices,

@@ -14,8 +14,9 @@ import {
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
 import {
 	ExpressCheckoutElement,
 	useElements,
@@ -54,7 +55,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,

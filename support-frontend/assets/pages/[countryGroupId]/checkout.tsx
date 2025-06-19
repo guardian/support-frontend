@@ -1,10 +1,6 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	getProductOptionFromProductAndRatePlan,
-	type ProductOptions,
-} from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect } from 'react';
@@ -31,6 +27,8 @@ import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
+import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
 import { CheckoutComponent } from './components/checkoutComponent';
 

@@ -13,8 +13,6 @@ import {
 	isoCountrySet,
 	usStates,
 } from '@modules/internationalisation/country';
-import * as cookie from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
 import {
 	AUDCountries,
 	Canada,
@@ -24,8 +22,10 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from '../countryGroup';
-import type { CountryGroupId } from '../countryGroup';
+} from '@modules/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import * as cookie from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
 
 type TargetCountryGroups =
 	| typeof International

@@ -1,5 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';

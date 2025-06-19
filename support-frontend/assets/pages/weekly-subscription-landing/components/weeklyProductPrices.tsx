@@ -1,15 +1,14 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { RecurringBillingPeriod } from '@modules/productCatalog/billingPeriod';
-import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
-import type { Product } from 'components/product/productOption';
-import type { Participations } from 'helpers/abTests/models';
-import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	countryGroups,
 	GBPCountries,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import type { Product } from 'components/product/productOption';
+import type { Participations } from 'helpers/abTests/models';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import {
@@ -43,6 +42,7 @@ import {
 	getOrigin,
 	getQueryParameter,
 } from 'helpers/urls/url';
+import { getWeeklyFulfilmentOption } from '../../../helpers/productCatalogToFulfilmentOption';
 import Prices from './content/prices';
 
 const countryPath = (countryGroupId: CountryGroupId) =>

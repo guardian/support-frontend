@@ -1,7 +1,7 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import { z } from 'zod';
 import type {
 	ContributionType,

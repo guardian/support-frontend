@@ -1,8 +1,7 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source/foundations';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import { getWeeklyFulfilmentOption } from '@modules/productCatalog/fulfilmentOptions';
-import { NoProductOptions } from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { NoProductOptions } from '@modules/product/productOptions';
 import { Provider } from 'react-redux';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
@@ -16,6 +15,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
+import { getWeeklyFulfilmentOption } from '../../helpers/productCatalogToFulfilmentOption';
 import ThankYouContent from './components/thankYou';
 import WeeklyCheckoutForm from './components/weeklyCheckoutForm';
 import WeeklyCheckoutFormGifting from './components/weeklyCheckoutFormGifting';

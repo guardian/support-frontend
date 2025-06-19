@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	getPriceDescription,
 	getSimplifiedPriceDescription,

@@ -9,11 +9,7 @@ import {
 	TextArea,
 } from '@guardian/source/react-components';
 import { newspaperCountries } from '@modules/internationalisation/country';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
-import type { ActivePaperProductOptions } from '@modules/productCatalog/productOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { ConnectedProps } from 'react-redux';
@@ -95,6 +91,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import { DeliveryAgentsSelect } from './deliveryAgentsSelect';
 

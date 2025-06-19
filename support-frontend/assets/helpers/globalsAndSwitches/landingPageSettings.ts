@@ -1,4 +1,4 @@
-import type { CountryGroupId } from '../internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 
 enum TickerName {
 	US = 'US',

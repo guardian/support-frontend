@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import '__mocks__/settingsMock';
 import '__mocks__/stripeMock';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';

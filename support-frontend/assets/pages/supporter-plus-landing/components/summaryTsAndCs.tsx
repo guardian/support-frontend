@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { neutral, space, textSans17 } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { formatAmount } from 'helpers/forms/checkouts';
 import {
 	currencies,

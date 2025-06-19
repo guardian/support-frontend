@@ -11,14 +11,14 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
 import { billingPeriodToContributionType } from 'helpers/productPrice/billingPeriods';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { AmountValuesObject } from '../../../helpers/contributions';
-import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
 import { trackComponentClick } from '../../../helpers/tracking/behaviour';
 import { PaymentCards } from './PaymentIcons';
 

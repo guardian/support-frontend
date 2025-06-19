@@ -1,4 +1,4 @@
-import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ReactNode } from 'react';
 import paperTabStyles from './paperTabsStyles';
 import legacyTabStyles from './tabsStyles';

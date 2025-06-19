@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';

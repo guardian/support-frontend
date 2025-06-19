@@ -2,11 +2,9 @@
 
 import { css } from '@emotion/react';
 import { between, space } from '@guardian/source/foundations';
-import type { PaperFulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from '@modules/productCatalog/fulfilmentOptions';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -14,7 +12,6 @@ import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Block from 'components/page/block';
 import Page from 'components/page/page';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import {
 	getAbParticipations,
 	setUpTrackingAndConsents,

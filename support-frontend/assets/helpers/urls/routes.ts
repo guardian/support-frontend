@@ -1,13 +1,13 @@
 // ----- Routes ----- //
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
-} from '@modules/productCatalog/fulfilmentOptions';
-import type { ProductOptions } from '@modules/productCatalog/productOptions';
+} from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { Option } from 'helpers/types/option';
-import type { CountryGroupId } from '../internationalisation/countryGroup';
-import { countryGroups } from '../internationalisation/countryGroup';
 import {
 	addQueryParamsToURL,
 	getAllQueryParams,

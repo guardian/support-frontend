@@ -7,7 +7,9 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source/react-components';
-import { NoProductOptions } from '@modules/productCatalog/productOptions';
+import { gwCountries } from '@modules/internationalisation/gwCountries';
+import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
+import { NoProductOptions } from '@modules/product/productOptions';
 import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -43,8 +45,6 @@ import Text from 'components/text/text';
 import { setupSubscriptionPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
-import { gwCountries } from 'helpers/internationalisation/gwCountries';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';

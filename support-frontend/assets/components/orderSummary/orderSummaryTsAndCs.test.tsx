@@ -1,5 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { render } from '@testing-library/react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,

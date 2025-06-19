@@ -1,4 +1,4 @@
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { combineReducers } from 'redux';
 import {
 	billingAddressReducer,

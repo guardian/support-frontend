@@ -1,8 +1,8 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import type { FulfilmentOptions } from '@modules/productCatalog/fulfilmentOptions';
-import { Domestic } from '@modules/productCatalog/fulfilmentOptions';
-import { NoProductOptions } from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Domestic } from '@modules/product/fulfilmentOptions';
+import { NoProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';

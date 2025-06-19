@@ -1,10 +1,9 @@
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	FulfilmentOptions,
 	PaperFulfilmentOptions,
-} from '@modules/productCatalog/fulfilmentOptions';
-import type { PaperProductOptions } from '@modules/productCatalog/productOptions';
-import { ActivePaperProductTypes } from '@modules/productCatalog/productOptions';
+} from '@modules/product/fulfilmentOptions';
+import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
 import type {
@@ -24,6 +23,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
+import { ActivePaperProductTypes } from '../../../helpers/productCatalogToProductOption';
 import { getProductLabel, getTitle } from '../helpers/products';
 import { PaperPrices } from './content/paperPrices';
 

@@ -16,7 +16,8 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -81,7 +82,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,

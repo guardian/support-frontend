@@ -3,7 +3,7 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import type { BillingPeriod } from '@modules/productCatalog/billingPeriod';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import type {
 	PayPalCheckoutDetails,

@@ -1,7 +1,5 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
-import { BillingPeriod } from '@modules/productCatalog/billingPeriod';
-import { getFulfilmentOptionFromProductKey } from '@modules/productCatalog/fulfilmentOptions';
-import { getProductOptionFromProductAndRatePlan } from '@modules/productCatalog/productOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	ActiveProductKey,
@@ -9,6 +7,8 @@ import type {
 	ProductDescription,
 } from 'helpers/productCatalog';
 import { logException } from 'helpers/utilities/logger';
+import { getFulfilmentOptionFromProductKey } from '../../../../helpers/productCatalogToFulfilmentOption';
+import { getProductOptionFromProductAndRatePlan } from '../../../../helpers/productCatalogToProductOption';
 
 type GetProductFieldsParams = {
 	product: {
