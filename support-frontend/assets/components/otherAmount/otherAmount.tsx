@@ -5,7 +5,6 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { HTMLAttributes } from 'react';
 import { currencies } from 'helpers/internationalisation/currency';
 
-
 const topSpacing = css`
 	margin-top: ${space[2]}px;
 `;

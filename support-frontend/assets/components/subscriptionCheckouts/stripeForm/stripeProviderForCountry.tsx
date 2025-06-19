@@ -9,7 +9,6 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 
-
 // Types
 export type PropTypes = {
 	country: IsoCountry;

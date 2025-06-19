@@ -3,7 +3,6 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 
-
 type SubscriptionsPaymentMethod =
 	| typeof DirectDebit
 	| typeof PayPal
