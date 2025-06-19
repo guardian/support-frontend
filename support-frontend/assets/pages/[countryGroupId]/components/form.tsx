@@ -5,7 +5,7 @@ import {
 	space,
 	until,
 } from '@guardian/source/foundations';
-import type { ReactNode, Ref } from 'react';
+import type { ReactNode } from 'react';
 import { forwardRef } from 'react';
 
 const fieldset = css`
@@ -61,7 +61,7 @@ type FormSectionProps = {
 	children: ReactNode;
 };
 
-export const FormSection = React.forwardRef(
+export const FormSection = forwardRef(
 	(props: FormSectionProps, ref?: React.Ref<HTMLFieldSetElement>) => (
 		<fieldset css={fieldset} ref={ref}>
 			{props.children}
