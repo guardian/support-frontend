@@ -275,6 +275,11 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	useEffect(() => {
+		if (paymentMethodError) {
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [paymentMethodError]);
 
 	const isRedirectingToStripeHostedCheckout =
 		isSundayOnly &&
@@ -488,6 +493,7 @@ export function CheckoutComponent({
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const scrollToViewRef = useRef<HTMLDivElement>(null);
+	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
 
 	useEffect(() => {
 		scrollToViewRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1127,7 +1133,7 @@ export function CheckoutComponent({
 								/>
 							</FormSection>
 						)}
-						<FormSection>
+						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								{productDescription.deliverableTo
 									? deliveryPostcodeIsOutsideM25

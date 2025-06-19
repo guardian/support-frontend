@@ -364,8 +364,14 @@ export function OneTimeCheckoutComponent({
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	useEffect(() => {
+		if (paymentMethodError) {
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+		}
+	}, [paymentMethodError]);
 
 	const formRef = useRef<HTMLFormElement>(null);
+	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
 
 	const validate = (
 		event: React.FormEvent<HTMLInputElement>,
@@ -787,7 +793,7 @@ export function OneTimeCheckoutComponent({
 							)}
 						</FormSection>
 						<CheckoutDivider spacing="loose" />
-						<FormSection>
+						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								2. Payment method
 								<SecureTransactionIndicator hideText={true} />
