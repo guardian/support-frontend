@@ -5,8 +5,8 @@ import {
 	space,
 	until,
 } from '@guardian/source/foundations';
-import type { ReactNode } from 'react';
-import * as React from 'react';
+import type { ReactNode, Ref } from 'react';
+import { forwardRef } from 'react';
 
 const fieldset = css`
 	position: relative;
