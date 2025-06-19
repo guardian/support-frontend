@@ -3,20 +3,29 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 export enum BillingPeriod {
 	Annual = 'Annual',
+	OneYearGift = 'OneYearGift',
 	Monthly = 'Monthly',
 	Quarterly = 'Quarterly',
+	ThreeMonthGift = 'ThreeMonthGift',
 	OneTime = 'OneTime',
 }
 export type RecurringBillingPeriod =
 	| typeof BillingPeriod.Annual
+	| typeof BillingPeriod.OneYearGift
 	| typeof BillingPeriod.Monthly
-	| typeof BillingPeriod.Quarterly;
+	| typeof BillingPeriod.Quarterly
+	| typeof BillingPeriod.ThreeMonthGift;
 
 export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Monthly,
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
 ];
+/*
+  ToDo: awaiting productPrices update to contain Gifting Billing Periods.
+        upon update, can replace with OneYearGift & ThreeMonthGift
+  */
+
 export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
@@ -28,8 +37,10 @@ export function getBillingPeriodNoun(
 ): string {
 	switch (billingPeriod) {
 		case BillingPeriod.Annual:
+		case BillingPeriod.OneYearGift:
 			return fixedTerm ? '12 months' : 'year';
 		case BillingPeriod.Quarterly:
+		case BillingPeriod.ThreeMonthGift:
 			return fixedTerm ? '3 months' : 'quarter';
 		case BillingPeriod.OneTime:
 			return 'one-time';
@@ -44,11 +55,11 @@ export function getBillingPeriodTitle(
 ): string {
 	switch (billingPeriod) {
 		case BillingPeriod.Annual:
+		case BillingPeriod.OneYearGift:
 			return fixedTerm ? '12 months' : billingPeriod;
-
 		case BillingPeriod.Quarterly:
+		case BillingPeriod.ThreeMonthGift:
 			return fixedTerm ? '3 months' : billingPeriod;
-
 		case BillingPeriod.OneTime:
 			return 'One-time';
 
@@ -66,10 +77,12 @@ export function ratePlanToBillingPeriod(
 		case 'DomesticAnnual':
 		case 'RestOfWorldAnnualV2':
 		case 'DomesticAnnualV2':
-		case 'OneYearGift':
 		case 'V1DeprecatedAnnual':
 			return BillingPeriod.Annual;
+		case 'OneYearGift':
+			return BillingPeriod.OneYearGift;
 		case 'ThreeMonthGift':
+			return BillingPeriod.ThreeMonthGift;
 		case 'Quarterly':
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
@@ -103,6 +116,7 @@ export function billingPeriodToContributionType(
 		case BillingPeriod.Monthly:
 			return 'MONTHLY';
 		case BillingPeriod.Annual:
+		case BillingPeriod.OneYearGift:
 			return 'ANNUAL';
 		default:
 			return undefined; // quarterly has no mapping
@@ -119,8 +133,10 @@ export function toRegularBillingPeriod(
 	// for weeklySubscriptionCheckout (to be deprecated)
 	const regularBillingPeriods: BillingPeriod[] = [
 		BillingPeriod.Annual,
+		BillingPeriod.OneYearGift,
 		BillingPeriod.Monthly,
 		BillingPeriod.Quarterly,
+		BillingPeriod.ThreeMonthGift,
 	];
 	if (
 		regularBillingPeriods.includes(
@@ -130,7 +146,7 @@ export function toRegularBillingPeriod(
 		return regularBillingString as RecurringBillingPeriod;
 	}
 
-	// // for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
+	// exception for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
 	if (regularBillingString === 'Quarter') {
 		return BillingPeriod.Quarterly;
 	}

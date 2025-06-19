@@ -8,7 +8,9 @@ import { getAppliedPromo } from 'helpers/productPrice/promotions';
 const periodMultipliers: Record<BillingPeriod, number> = {
 	OneTime: 1,
 	Annual: 1,
+	OneYearGift: 1,
 	Quarterly: 4,
+	ThreeMonthGift: 4,
 	Monthly: 12,
 };
 
