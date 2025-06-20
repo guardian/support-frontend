@@ -1,8 +1,10 @@
 import { isoCountries } from '@modules/internationalisation/country';
-import { isoCurrencySchema } from '@modules/internationalisation/currency';
-import { billingPeriodSchema } from '@modules/product/billingPeriod';
-import { fulfilmentOptionsSchema } from '@modules/product/fulfilmentOptions';
-import { productOptionsSchema } from '@modules/product/productOptions';
+import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import {
+	billingPeriodSchema,
+	fulfilmentOptionsSchema,
+	productOptionsSchema,
+} from '@modules/product/schemas';
 import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';

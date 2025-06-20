@@ -1,30 +1,10 @@
-import { isoCurrencySchema } from '@modules/internationalisation/currency';
-import { recurringBillingPeriodSchema } from '@modules/product/billingPeriod';
+import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import {
+	fulfilmentOptionsSchema,
+	productOptionsSchema,
+	recurringBillingPeriodSchema,
+} from '@modules/product/schemas';
 import { z } from 'zod';
-
-export const fulfilmentOptionsSchema = z.enum([
-	'HomeDelivery',
-	'NationalDelivery',
-	'Collection',
-	'Domestic',
-	'RestOfWorld',
-	'NoFulfilmentOptions',
-]);
-
-const productOptionsSchema = z.enum([
-	'NoProductOptions',
-	'Saturday',
-	'SaturdayPlus',
-	'Sunday',
-	'SundayPlus',
-	'Weekend',
-	'WeekendPlus',
-	'Sixday',
-	'SixdayPlus',
-	'Everyday',
-	'EverydayPlus',
-	'NewspaperArchive',
-]);
 
 export const contributionProductSchema = z.object({
 	amount: z.number(),

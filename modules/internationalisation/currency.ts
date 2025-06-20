@@ -1,11 +1,10 @@
-import { z } from 'zod';
+export const IsoCurrency = {
+	GBP: 'GBP',
+	EUR: 'EUR',
+	USD: 'USD',
+	CAD: 'CAD',
+	AUD: 'AUD',
+	NZD: 'NZD',
+} as const;
 
-export const isoCurrencySchema = z.union([
-	z.literal('GBP'),
-	z.literal('EUR'),
-	z.literal('USD'),
-	z.literal('CAD'),
-	z.literal('AUD'),
-	z.literal('NZD'),
-]);
-export type IsoCurrency = z.infer<typeof isoCurrencySchema>;
+export type IsoCurrency = (typeof IsoCurrency)[keyof typeof IsoCurrency];

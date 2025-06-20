@@ -1,5 +1,4 @@
 // Fulfilment options describe the various ways that a user can receive a product
-import { z } from 'zod';
 
 const HomeDelivery = 'HomeDelivery';
 const NationalDelivery = 'NationalDelivery';
@@ -14,16 +13,13 @@ export type GuardianWeeklyFulfilmentOptions =
 
 export type PaperFulfilmentOptions = typeof HomeDelivery | typeof Collection;
 
-export const fulfilmentOptionsSchema = z.enum([
-	NoFulfilmentOptions,
-	NationalDelivery,
-	HomeDelivery,
-	Collection,
-	Domestic,
-	RestOfWorld,
-]);
-
-export type FulfilmentOptions = z.infer<typeof fulfilmentOptionsSchema>;
+export type FulfilmentOptions =
+	| typeof HomeDelivery
+	| typeof NationalDelivery
+	| typeof Collection
+	| typeof Domestic
+	| typeof RestOfWorld
+	| typeof NoFulfilmentOptions;
 
 export {
 	HomeDelivery,

@@ -1,5 +1,4 @@
 // describes options relating to a product itself - only relevant for paper currently
-import { z } from 'zod';
 
 const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
@@ -14,22 +13,19 @@ const Everyday = 'Everyday';
 const EverydayPlus = 'EverydayPlus';
 const NewspaperArchive = 'NewspaperArchive';
 
-export const productOptionsSchema = z.enum([
-	NoProductOptions,
-	Everyday,
-	EverydayPlus,
-	Sixday,
-	SixdayPlus,
-	Weekend,
-	WeekendPlus,
-	Saturday,
-	SaturdayPlus,
-	Sunday,
-	SundayPlus,
-	NewspaperArchive,
-]);
-
-export type ProductOptions = z.infer<typeof productOptionsSchema>;
+export type ProductOptions =
+	| typeof NoProductOptions
+	| typeof Saturday
+	| typeof SaturdayPlus
+	| typeof Sunday
+	| typeof SundayPlus
+	| typeof Weekend
+	| typeof WeekendPlus
+	| typeof Sixday
+	| typeof SixdayPlus
+	| typeof Everyday
+	| typeof EverydayPlus
+	| typeof NewspaperArchive;
 
 export type PaperProductOptions =
 	| typeof Saturday
