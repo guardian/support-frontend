@@ -57,9 +57,10 @@ const getCheckoutUrl = (
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
-	const isWeeklyGiftGenericCheckout =
-		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant';
-	if (isWeeklyGiftGenericCheckout || !orderIsGift) {
+	if (
+		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant' ||
+		!orderIsGift
+	) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 		const productGuardianWeekly = internationaliseProduct(
 			countryGroups[countryGroupId].supportInternationalisationId,
@@ -69,10 +70,7 @@ const getCheckoutUrl = (
 		return addQueryParamsToURL(url, {
 			promoCode: promotion?.promoCode,
 			product: productGuardianWeekly,
-			ratePlan: BillingPeriodToRatePlan(
-				billingPeriod,
-				isWeeklyGiftGenericCheckout,
-			),
+			ratePlan: BillingPeriodToRatePlan(billingPeriod, orderIsGift),
 		});
 	}
 
