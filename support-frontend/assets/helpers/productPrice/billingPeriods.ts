@@ -22,7 +22,7 @@ export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Annual,
 ];
 
-export function BillingPeriodToRatePlan(
+export function billingPeriodToRatePlan(
 	billingPeriod: BillingPeriod,
 	isWeeklyGifting: boolean,
 ): string {

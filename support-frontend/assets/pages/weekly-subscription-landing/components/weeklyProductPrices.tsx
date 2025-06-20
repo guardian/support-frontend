@@ -12,7 +12,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import type { RecurringBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
-	BillingPeriodToRatePlan,
+	billingPeriodToRatePlan,
 	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
@@ -70,7 +70,7 @@ const getCheckoutUrl = (
 		return addQueryParamsToURL(url, {
 			promoCode: promotion?.promoCode,
 			product: productGuardianWeekly,
-			ratePlan: BillingPeriodToRatePlan(billingPeriod, orderIsGift),
+			ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
 		});
 	}
 
