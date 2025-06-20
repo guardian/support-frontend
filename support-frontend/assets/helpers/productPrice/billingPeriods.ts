@@ -9,19 +9,13 @@ export enum BillingPeriod {
 	ThreeMonthGift = 'ThreeMonthGift',
 	OneTime = 'OneTime',
 }
-export type RecurringBillingPeriod =
-	| typeof BillingPeriod.Annual
-	| typeof BillingPeriod.OneYearGift
-	| typeof BillingPeriod.Monthly
-	| typeof BillingPeriod.Quarterly
-	| typeof BillingPeriod.ThreeMonthGift;
 
-export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
+export const weeklyBillingPeriods: BillingPeriod[] = [
 	BillingPeriod.Monthly,
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
 ];
-export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
+export const weeklyGiftBillingPeriods: BillingPeriod[] = [
 	BillingPeriod.ThreeMonthGift,
 	BillingPeriod.OneYearGift,
 ];
@@ -136,7 +130,7 @@ export function billingPeriodToContributionType(
 
 export function toRegularBillingPeriod(
 	regularBillingString: string | undefined,
-): RecurringBillingPeriod | undefined {
+): BillingPeriod | undefined {
 	if (!regularBillingString) {
 		return undefined;
 	}
@@ -149,12 +143,8 @@ export function toRegularBillingPeriod(
 		BillingPeriod.Quarterly,
 		BillingPeriod.ThreeMonthGift,
 	];
-	if (
-		regularBillingPeriods.includes(
-			regularBillingString as RecurringBillingPeriod,
-		)
-	) {
-		return regularBillingString as RecurringBillingPeriod;
+	if (regularBillingPeriods.includes(regularBillingString as BillingPeriod)) {
+		return regularBillingString as BillingPeriod;
 	}
 
 	// exception for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)

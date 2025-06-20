@@ -9,10 +9,7 @@ import type {
 	SupportInternationalisationId,
 } from './internationalisation/countryGroup';
 import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
-import {
-	BillingPeriod,
-	type RecurringBillingPeriod,
-} from './productPrice/billingPeriods';
+import { BillingPeriod } from './productPrice/billingPeriods';
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',
@@ -90,7 +87,7 @@ export type ProductDescription = {
 	ratePlans: Record<
 		string,
 		{
-			billingPeriod: RecurringBillingPeriod;
+			billingPeriod: BillingPeriod;
 			label?: string;
 			hideSimilarProductsConsent?: boolean;
 		}
