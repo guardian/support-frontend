@@ -10,7 +10,6 @@ const productOptionDisplayNames = {
 	Saturday: 'Saturday',
 	SaturdayPlus: 'Saturday',
 	Sunday: 'Sunday',
-	SundayPlus: 'Sunday',
 	Weekend: 'Weekend',
 	WeekendPlus: 'Weekend',
 	Sixday: 'Six day',

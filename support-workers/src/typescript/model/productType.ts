@@ -16,7 +16,6 @@ const productOptionsSchema = z.enum([
 	'Saturday',
 	'SaturdayPlus',
 	'Sunday',
-	'SundayPlus',
 	'Weekend',
 	'WeekendPlus',
 	'Sixday',

@@ -16,17 +16,6 @@ const productPrices = {
 					},
 				},
 			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 22.06,
-						savingVsRetail: 15,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
 			SaturdayPlus: {
 				Monthly: {
 					GBP: {
@@ -121,16 +110,6 @@ const productPrices = {
 				Monthly: {
 					GBP: {
 						price: 30.36,
-						currency: 'GBP',
-						fixedTerm: false,
-						promotions: [],
-					},
-				},
-			},
-			SundayPlus: {
-				Monthly: {
-					GBP: {
-						price: 26.39,
 						currency: 'GBP',
 						fixedTerm: false,
 						promotions: [],
