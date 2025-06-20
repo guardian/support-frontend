@@ -121,10 +121,9 @@ export function billingPeriodToContributionType(
 		case BillingPeriod.Monthly:
 			return 'MONTHLY';
 		case BillingPeriod.Annual:
-		case BillingPeriod.OneYearGift:
 			return 'ANNUAL';
 		default:
-			return undefined; // quarterly has no mapping
+			return undefined; // gifting & quarterly has no mapping currently
 	}
 }
 
