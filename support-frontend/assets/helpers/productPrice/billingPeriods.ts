@@ -3,37 +3,35 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 
 export enum BillingPeriod {
 	Annual = 'Annual',
-	OneYearGift = 'OneYearGift',
 	Monthly = 'Monthly',
 	Quarterly = 'Quarterly',
-	ThreeMonthGift = 'ThreeMonthGift',
 	OneTime = 'OneTime',
 }
+export type RecurringBillingPeriod =
+	| typeof BillingPeriod.Annual
+	| typeof BillingPeriod.Monthly
+	| typeof BillingPeriod.Quarterly;
 
-export const weeklyBillingPeriods: BillingPeriod[] = [
+export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Monthly,
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
 ];
-export const weeklyGiftBillingPeriods: BillingPeriod[] = [
-	BillingPeriod.ThreeMonthGift,
-	BillingPeriod.OneYearGift,
+export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
+	BillingPeriod.Quarterly,
+	BillingPeriod.Annual,
 ];
 
-/*
-  To Remove: awaiting productPrices update to contain Gifting Billing Periods.
-  */
-export function BillingPeriodNoGift(
+export function BillingPeriodToRatePlan(
 	billingPeriod: BillingPeriod,
-): BillingPeriod {
-	switch (billingPeriod) {
-		case BillingPeriod.OneYearGift:
-			return BillingPeriod.Annual;
-		case BillingPeriod.ThreeMonthGift:
-			return BillingPeriod.Quarterly;
-		default:
-			return billingPeriod;
+	isWeeklyGifting: boolean,
+): string {
+	if (isWeeklyGifting) {
+		return billingPeriod === BillingPeriod.Annual
+			? 'OneYearGift'
+			: 'ThreeMonthGift';
 	}
+	return billingPeriod.toString();
 }
 
 export function getBillingPeriodNoun(
@@ -42,10 +40,8 @@ export function getBillingPeriodNoun(
 ): string {
 	switch (billingPeriod) {
 		case BillingPeriod.Annual:
-		case BillingPeriod.OneYearGift:
 			return fixedTerm ? '12 months' : 'year';
 		case BillingPeriod.Quarterly:
-		case BillingPeriod.ThreeMonthGift:
 			return fixedTerm ? '3 months' : 'quarter';
 		case BillingPeriod.OneTime:
 			return 'one-time';
@@ -61,14 +57,13 @@ export function getBillingPeriodTitle(
 	switch (billingPeriod) {
 		case BillingPeriod.Annual:
 			return fixedTerm ? '12 months' : billingPeriod;
+
 		case BillingPeriod.Quarterly:
 			return fixedTerm ? '3 months' : billingPeriod;
+
 		case BillingPeriod.OneTime:
 			return 'One-time';
-		case BillingPeriod.OneYearGift:
-			return '12 months';
-		case BillingPeriod.ThreeMonthGift:
-			return '3 months';
+
 		default:
 			return billingPeriod;
 	}
@@ -83,12 +78,10 @@ export function ratePlanToBillingPeriod(
 		case 'DomesticAnnual':
 		case 'RestOfWorldAnnualV2':
 		case 'DomesticAnnualV2':
+		case 'OneYearGift':
 		case 'V1DeprecatedAnnual':
 			return BillingPeriod.Annual;
-		case 'OneYearGift':
-			return BillingPeriod.OneYearGift;
 		case 'ThreeMonthGift':
-			return BillingPeriod.ThreeMonthGift;
 		case 'Quarterly':
 			return BillingPeriod.Quarterly;
 		case 'Monthly':
@@ -124,13 +117,13 @@ export function billingPeriodToContributionType(
 		case BillingPeriod.Annual:
 			return 'ANNUAL';
 		default:
-			return undefined; // gifting & quarterly has no mapping currently
+			return undefined; // quarterly has no mapping
 	}
 }
 
 export function toRegularBillingPeriod(
 	regularBillingString: string | undefined,
-): BillingPeriod | undefined {
+): RecurringBillingPeriod | undefined {
 	if (!regularBillingString) {
 		return undefined;
 	}
@@ -138,16 +131,18 @@ export function toRegularBillingPeriod(
 	// for weeklySubscriptionCheckout (to be deprecated)
 	const regularBillingPeriods: BillingPeriod[] = [
 		BillingPeriod.Annual,
-		BillingPeriod.OneYearGift,
 		BillingPeriod.Monthly,
 		BillingPeriod.Quarterly,
-		BillingPeriod.ThreeMonthGift,
 	];
-	if (regularBillingPeriods.includes(regularBillingString as BillingPeriod)) {
-		return regularBillingString as BillingPeriod;
+	if (
+		regularBillingPeriods.includes(
+			regularBillingString as RecurringBillingPeriod,
+		)
+	) {
+		return regularBillingString as RecurringBillingPeriod;
 	}
 
-	// exception for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
+	// // for thankyou/checkout mis-matched ratePlan.BillingPeriod (future cleanup)
 	if (regularBillingString === 'Quarter') {
 		return BillingPeriod.Quarterly;
 	}

@@ -10,8 +10,9 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { RecurringBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
+	BillingPeriodToRatePlan,
 	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
@@ -51,15 +52,14 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 
 const getCheckoutUrl = (
 	countryId: IsoCountry,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
-	if (
-		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant' ||
-		!orderIsGift
-	) {
+	const isWeeklyGiftGenericCheckout =
+		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant';
+	if (isWeeklyGiftGenericCheckout || !orderIsGift) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 		const productGuardianWeekly = internationaliseProduct(
 			countryGroups[countryGroupId].supportInternationalisationId,
@@ -69,7 +69,10 @@ const getCheckoutUrl = (
 		return addQueryParamsToURL(url, {
 			promoCode: promotion?.promoCode,
 			product: productGuardianWeekly,
-			ratePlan: billingPeriod.toString(),
+			ratePlan: BillingPeriodToRatePlan(
+				billingPeriod,
+				isWeeklyGiftGenericCheckout,
+			),
 		});
 	}
 
@@ -116,7 +119,7 @@ const getMainDisplayPrice = (
 
 const weeklyProductProps = (
 	countryId: IsoCountry,
-	billingPeriod: BillingPeriod,
+	billingPeriod: RecurringBillingPeriod,
 	productPrice: ProductPrice,
 	abParticipations: Participations,
 	orderIsAGift = false,
