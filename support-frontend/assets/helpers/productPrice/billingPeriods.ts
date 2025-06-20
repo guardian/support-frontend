@@ -60,14 +60,15 @@ export function getBillingPeriodTitle(
 ): string {
 	switch (billingPeriod) {
 		case BillingPeriod.Annual:
-		case BillingPeriod.OneYearGift:
 			return fixedTerm ? '12 months' : billingPeriod;
 		case BillingPeriod.Quarterly:
-		case BillingPeriod.ThreeMonthGift:
 			return fixedTerm ? '3 months' : billingPeriod;
 		case BillingPeriod.OneTime:
 			return 'One-time';
-
+		case BillingPeriod.OneYearGift:
+			return '12 months';
+		case BillingPeriod.ThreeMonthGift:
+			return '3 months';
 		default:
 			return billingPeriod;
 	}
