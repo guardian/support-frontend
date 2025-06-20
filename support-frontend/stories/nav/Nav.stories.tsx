@@ -1,7 +1,7 @@
 import { expect } from '@storybook/test';
 import { userEvent, waitFor, within } from '@storybook/test';
 import NavComponent from 'components/nav/nav';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -10,7 +10,7 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Checkout Layout/Nav',

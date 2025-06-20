@@ -1,4 +1,4 @@
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import {
 	Everyday,
 	EverydayPlus,
@@ -10,7 +10,7 @@ import {
 	SundayPlus,
 	Weekend,
 	WeekendPlus,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 import type { Day } from 'helpers/subscriptionsForms/deliveryDays';
 import {
 	getDeliveryDays,

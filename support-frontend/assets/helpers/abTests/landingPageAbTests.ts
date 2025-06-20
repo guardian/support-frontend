@@ -1,3 +1,4 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import seedrandom from 'seedrandom';
 import { getSettings } from '../globalsAndSwitches/globals';
 import type {
@@ -5,7 +6,6 @@ import type {
 	LandingPageVariant,
 } from '../globalsAndSwitches/landingPageSettings';
 import { CountryGroup } from '../internationalisation/classes/countryGroup';
-import type { CountryGroupId } from '../internationalisation/countryGroup';
 import type { Participations } from './models';
 import { getMvtId } from './mvt';
 import {

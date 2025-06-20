@@ -1,14 +1,10 @@
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection } from '@modules/product/fulfilmentOptions';
+import type { ProductOptions } from '@modules/product/productOptions';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-import type {
-	ActivePaperProductOptions,
-	ProductOptions,
-} from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
@@ -21,6 +17,7 @@ import {
 	getOrderSummaryTitle,
 	getPriceSummary,
 } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
+import type { ActivePaperProductOptions } from '../../../../helpers/productCatalogToProductOption';
 
 export type OrderSummaryProps = {
 	digiSubPrice: string;

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import '__mocks__/settingsMock';
 import '__mocks__/stripeMock';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
 import { renderWithStore } from '__test-utils__/render';
 import { createTestStoreForSubscriptions } from '__test-utils__/testStore';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
 import type { PropTypes } from './stripeProviderForCountry';
 import { StripeProviderForCountry } from './stripeProviderForCountry';

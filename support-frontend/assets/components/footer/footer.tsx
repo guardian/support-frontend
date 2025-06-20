@@ -1,11 +1,11 @@
 // ----- Imports ----- //
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { Children } from 'react';
 import type { ReactNode } from 'react';
 import type { Appearance } from 'components/content/content';
 import Content from 'components/content/content';
 import ContribLegal from 'components/legal/contribLegal/contribLegal';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { copyrightNotice, privacyLink } from 'helpers/legal';
 import './footer.scss';
 import Rows from '../base/rows';

@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -12,7 +13,6 @@ import {
 	showPrice,
 } from 'helpers/productPrice/productPrices';
 import { finalPrice } from 'helpers/productPrice/promotions';
-import { BillingPeriod } from '../billingPeriods';
 
 // ----- Tests ----- //
 jest.mock('ophan', () => () => ({}));

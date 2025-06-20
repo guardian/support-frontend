@@ -1,4 +1,6 @@
 // ----- Imports ----- //
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -8,8 +10,6 @@ import type {
 	SetupPayPalRequestType,
 } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { getPayPalOptions } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 

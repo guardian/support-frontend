@@ -109,6 +109,10 @@ importers:
         version: 5.3.3
 
   modules:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.30
     devDependencies:
       '@guardian/eslint-config-typescript':
         specifier: 'catalog:'

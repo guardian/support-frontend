@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, palette, textSans12 } from '@guardian/source/foundations';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import {
 	getDateWithOrdinal,

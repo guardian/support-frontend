@@ -6,7 +6,7 @@ import {
 	space,
 	textSans14,
 } from '@guardian/source/foundations';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { productLegal } from 'helpers/legalCopy';
 import type {
 	ActiveProductKey,

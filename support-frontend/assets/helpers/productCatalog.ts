@@ -1,18 +1,16 @@
 import { newspaperCountries } from '@modules/internationalisation/country';
 import type {
+	CountryGroupId,
+	SupportInternationalisationId,
+} from '@modules/internationalisation/countryGroup';
+import { gwDeliverableCountries } from '@modules/internationalisation/gwDeliverableCountries';
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import type {
 	ProductKey,
 	ProductRatePlanKey,
 } from '@modules/product-catalog/productCatalog';
 import type { Participations } from './abTests/models';
-import type {
-	CountryGroupId,
-	SupportInternationalisationId,
-} from './internationalisation/countryGroup';
-import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
-import {
-	BillingPeriod,
-	type RecurringBillingPeriod,
-} from './productPrice/billingPeriods';
 
 const activeProductKeys = [
 	'GuardianWeeklyDomestic',

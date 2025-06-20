@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 // ----- Terms & Conditions ----- //
 const privacyLink = 'https://www.theguardian.com/help/privacy-policy';
 const defaultContributionEmail = 'mailto:contribution.support@theguardian.com';

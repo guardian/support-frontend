@@ -7,7 +7,7 @@ import {
 	OrderSummaryStartDate,
 	OrderSummaryTsAndCs,
 } from 'components/orderSummary/orderSummaryTsAndCs';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';

@@ -1,5 +1,5 @@
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import type { DayOfWeekIndex } from './homeDeliveryDays';
 
 const additionalDays = [

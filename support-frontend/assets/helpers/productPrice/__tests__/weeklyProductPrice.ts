@@ -1,12 +1,9 @@
 // ----- Imports ----- //
-import {
-	Domestic,
-	getWeeklyFulfilmentOption,
-	RestOfWorld,
-} from 'helpers/productPrice/fulfilmentOptions';
+import { BillingPeriod } from '@modules/product/billingPeriod';
+import { Domestic, RestOfWorld } from '@modules/product/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import { BillingPeriod } from '../billingPeriods';
+import { getWeeklyFulfilmentOption } from '../../productCatalogToFulfilmentOption';
 
 jest.mock('ophan', () => () => ({}));
 

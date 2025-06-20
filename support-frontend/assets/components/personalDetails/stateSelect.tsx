@@ -6,9 +6,9 @@ import {
 	caStates,
 	usStates,
 } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { FormEventHandler } from 'react';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type StateSelectProps = {
 	countryId: IsoCountry;

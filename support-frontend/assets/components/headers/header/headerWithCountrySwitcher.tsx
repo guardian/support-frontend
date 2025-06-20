@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import Header from './header';

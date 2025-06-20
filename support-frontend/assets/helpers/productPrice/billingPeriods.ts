@@ -1,16 +1,7 @@
+import type { RecurringBillingPeriod } from '@modules/product/billingPeriod';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ContributionType } from 'helpers/contributions';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-
-export enum BillingPeriod {
-	Annual = 'Annual',
-	Monthly = 'Monthly',
-	Quarterly = 'Quarterly',
-	OneTime = 'OneTime',
-}
-export type RecurringBillingPeriod =
-	| typeof BillingPeriod.Annual
-	| typeof BillingPeriod.Monthly
-	| typeof BillingPeriod.Quarterly;
 
 export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Monthly,

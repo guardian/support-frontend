@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { connect } from 'react-redux';
 import Header from 'components/headers/header/header';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Stage } from 'helpers/subscriptionsForms/formFields';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 

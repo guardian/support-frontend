@@ -1,11 +1,9 @@
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	getBillingPeriodTitle,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export function getLowerProductBenefitThreshold(
 	billingPeriod: BillingPeriod,

@@ -1,10 +1,6 @@
 // ----- Imports ----- //
 
-import {
-	Everyday,
-	Saturday,
-	Weekend,
-} from 'helpers/productPrice/productOptions';
+import { Everyday, Saturday, Weekend } from '@modules/product/productOptions';
 import {
 	formatMachineDate,
 	formatUserDate,

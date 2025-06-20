@@ -1,5 +1,5 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { type ContributionType, getAmount } from 'helpers/contributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 

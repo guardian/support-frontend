@@ -1,9 +1,9 @@
 // ----- Imports ----- //
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { Component } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
 import { Padlock } from 'components/svgs/padlock';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
 import MobileMenuToggler from './mobileMenuToggler';

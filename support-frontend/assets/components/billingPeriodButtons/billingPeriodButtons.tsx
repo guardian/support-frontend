@@ -6,11 +6,9 @@ import {
 	space,
 	textSansBold17,
 } from '@guardian/source/foundations';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'react';
-import {
-	type BillingPeriod,
-	getBillingPeriodTitle,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
 export interface BillingPeriodButtonsProps {
 	billingPeriods: BillingPeriod[];
