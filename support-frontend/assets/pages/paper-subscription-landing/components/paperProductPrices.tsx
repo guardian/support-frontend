@@ -71,7 +71,9 @@ const getUnavailableOutsideLondon = (
 	productOption: PaperProductOptions,
 ) =>
 	fulfilmentOption === 'HomeDelivery' &&
-	(productOption === 'Saturday' || productOption === 'Sunday');
+	(productOption === 'Saturday' ||
+		productOption === 'Sunday' ||
+		productOption === 'SaturdayPlus');
 
 // ---- Plans ----- //
 const copy: Record<
@@ -137,12 +139,6 @@ const copy: Record<
 				for <strong>the Guardian</strong>, delivered
 			</>
 		),
-		SundayPlus: (
-			<>
-				{' '}
-				for <strong>the Observer</strong>, delivered
-			</>
-		),
 	},
 	Collection: {
 		Everyday: (
@@ -199,12 +195,6 @@ const copy: Record<
 				for <strong>the Guardian</strong>
 			</>
 		),
-		SundayPlus: (
-			<>
-				{' '}
-				for <strong>the Observer</strong>
-			</>
-		),
 	},
 };
 
@@ -213,7 +203,8 @@ const getPlans = (
 	productPrices: ProductPrices,
 ): Product[] =>
 	ActivePaperProductTypes.filter(
-		(productOption) => !productOption.endsWith('Plus'),
+		(productOption) =>
+			productOption.endsWith('Plus') || productOption === 'Sunday',
 	) //Don't show Plus options on the landing page for now
 		.map((productOption) => {
 			const priceAfterPromosApplied = finalPrice(
@@ -237,7 +228,10 @@ const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
-			const label = productOption === 'Everyday' ? 'Best deal' : '';
+			const label =
+				productOption === 'Everyday' || productOption === 'EverydayPlus'
+					? 'Best deal'
+					: '';
 			const productLabel = getProductLabel(productOption);
 			return {
 				title: getTitle(productOption),

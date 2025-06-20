@@ -16,8 +16,6 @@ case object SaturdayPlus extends PaperProductOptions(true)
 
 case object Sunday extends PaperProductOptions(false)
 
-case object SundayPlus extends PaperProductOptions(true)
-
 case object Weekend extends PaperProductOptions(false)
 
 case object WeekendPlus extends PaperProductOptions(true)
@@ -53,7 +51,7 @@ object ProductOptions {
 
 object PaperProductOptions {
   val productOptions: List[PaperProductOptions] =
-    List(Saturday, SaturdayPlus, Sunday, SundayPlus, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
+    List(Saturday, SaturdayPlus, Sunday, Weekend, WeekendPlus, Sixday, SixdayPlus, Everyday, EverydayPlus)
 
   implicit val decoder: Decoder[PaperProductOptions] =
     Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))
