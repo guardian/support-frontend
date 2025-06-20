@@ -21,15 +21,26 @@ export const weeklyBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Quarterly,
 	BillingPeriod.Annual,
 ];
-/*
-  ToDo: awaiting productPrices update to contain Gifting Billing Periods.
-        upon update, can replace with OneYearGift & ThreeMonthGift
-  */
-
 export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
-	BillingPeriod.Quarterly,
-	BillingPeriod.Annual,
+	BillingPeriod.ThreeMonthGift,
+	BillingPeriod.OneYearGift,
 ];
+
+/*
+  To Remove: awaiting productPrices update to contain Gifting Billing Periods.
+  */
+export function BillingPeriodNoGift(
+	billingPeriod: BillingPeriod,
+): BillingPeriod {
+	switch (billingPeriod) {
+		case BillingPeriod.OneYearGift:
+			return BillingPeriod.Annual;
+		case BillingPeriod.ThreeMonthGift:
+			return BillingPeriod.Quarterly;
+		default:
+			return billingPeriod;
+	}
+}
 
 export function getBillingPeriodNoun(
 	billingPeriod: BillingPeriod,

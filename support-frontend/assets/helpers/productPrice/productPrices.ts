@@ -10,7 +10,10 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type BillingPeriod,
+	BillingPeriodNoGift,
+} from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -61,9 +64,10 @@ function getProductPrice(
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
 
+	const billingPeriodNoGift = BillingPeriodNoGift(billingPeriod);
 	const productPrice =
 		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
-			billingPeriod
+			billingPeriodNoGift
 		]?.[countryGroup.currency];
 
 	if (productPrice) {
