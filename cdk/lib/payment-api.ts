@@ -284,7 +284,9 @@ export class PaymentApi extends GuStack {
     );
     new GuAlarm(this, "NoPaypalPaymentsInPeriodAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
       evaluationPeriods: paypalEvaluationPeriods,
@@ -339,7 +341,7 @@ export class PaymentApi extends GuStack {
             "payment-provider": paymentProvider,
           },
           statistic: "Sum",
-          period: stripeExpressMetricDuration
+          period: stripeExpressMetricDuration,
         })
     );
     const combinedApplePayAndPaymentRequestButtonSuccessMetric =
@@ -353,7 +355,9 @@ export class PaymentApi extends GuStack {
       });
     new GuAlarm(this, "NoStripeExpressPaymentsInOneHourAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
       evaluationPeriods: stripeExpressEvaluationPeriods,
