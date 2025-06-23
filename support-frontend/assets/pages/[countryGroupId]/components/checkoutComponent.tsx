@@ -95,6 +95,7 @@ import {
 	getWeeklyDays,
 } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -133,7 +134,6 @@ import {
 } from './paymentMethod';
 import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
-import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 

@@ -1,7 +1,10 @@
 import { Radio, RadioGroup } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
 import { setStartDate } from 'helpers/redux/checkout/product/actions';
-import { firstError, FormError } from 'helpers/subscriptionsForms/validation';
+import {
+	firstError,
+	type FormError,
+} from 'helpers/subscriptionsForms/validation';
 import {
 	formatMachineDate,
 	formatUserDate,
