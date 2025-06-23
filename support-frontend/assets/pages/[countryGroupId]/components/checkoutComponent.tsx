@@ -22,7 +22,10 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import type {
+	ExpressPaymentType,
+	StripeCardNumberElementChangeEvent,
+} from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
@@ -101,6 +104,7 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
+import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -281,6 +285,11 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	const [stripeCardNumberIsEmpty, setStripeCardNumberIsEmpty] =
+		useState<boolean>(true);
+	const [stripeCardNumberError, setStripeCardNumberError] = useState<
+		string | undefined
+	>();
 	useEffect(() => {
 		if (paymentMethodError) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -549,6 +558,11 @@ export function CheckoutComponent({
 			setPaymentMethodError('Please select a payment method');
 			return;
 		}
+		if (stripeCardNumberIsEmpty && paymentMethod === Stripe) {
+			setStripeCardNumberError('Please enter your card number');
+			return;
+		}
+
 		const finalProductKey =
 			productKey === 'HomeDelivery' && deliveryPostcodeIsOutsideM25
 				? 'NationalDelivery'
@@ -1218,8 +1232,13 @@ export function CheckoutComponent({
 														value={recaptchaToken}
 													/>
 													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
+														onCardNumberChange={(
+															event: StripeCardNumberElementChangeEvent,
+														) => {
+															setStripeCardNumberIsEmpty(event.empty);
+
+															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															setStripeCardNumberError(undefined);
 														}}
 														onExpiryChange={() => {
 															// no-op
@@ -1227,7 +1246,9 @@ export function CheckoutComponent({
 														onCvcChange={() => {
 															// no-op
 														}}
-														errors={{}}
+														errors={{
+															cardNumber: maybeArrayWrap(stripeCardNumberError),
+														}}
 														recaptcha={
 															<Recaptcha
 																onRecaptchaCompleted={(token) => {
