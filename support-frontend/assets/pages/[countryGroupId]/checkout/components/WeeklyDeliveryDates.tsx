@@ -1,6 +1,5 @@
 import { Radio, RadioGroup } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
-import { setStartDate } from 'helpers/redux/checkout/product/actions';
 import {
 	firstError,
 	type FormError,
@@ -12,13 +11,15 @@ import {
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 type WeeklyDeliveryDatesProps = {
-	startDate: string;
+	weeklyDeliveryDate: string;
 	formErrors: Array<FormError<string>>;
+	setWeeklyDeliveryDate: (date: string) => void;
 };
 
 export function WeeklyDeliveryDates({
-	startDate,
 	formErrors,
+	weeklyDeliveryDate,
+	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
 	const days = getWeeklyDays();
 	return (
@@ -48,8 +49,8 @@ export function WeeklyDeliveryDates({
 									label={userDate}
 									value={userDate}
 									name={machineDate}
-									checked={machineDate === startDate}
-									onChange={() => setStartDate(machineDate)}
+									checked={machineDate === weeklyDeliveryDate}
+									onChange={() => setWeeklyDeliveryDate(machineDate)}
 								/>
 							);
 						})}

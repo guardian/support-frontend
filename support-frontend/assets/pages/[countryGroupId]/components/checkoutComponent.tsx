@@ -220,7 +220,6 @@ export function CheckoutComponent({
 		(productKey === 'GuardianWeeklyDomestic' ||
 			productKey === 'GuardianWeeklyRestOfWorld') &&
 		(ratePlanKey === 'OneYearGift' || ratePlanKey === 'ThreeMonthGift');
-	const weeklyStartDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -371,6 +370,11 @@ export function CheckoutComponent({
 		);
 
 	/** Delivery Instructions */
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.weeklyDeliveryDate,
+			formatMachineDate(getWeeklyDays()[0] as Date),
+		);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
@@ -958,8 +962,11 @@ export function CheckoutComponent({
 								<FormSection>
 									<Legend>2. Gift delivery date</Legend>
 									<WeeklyDeliveryDates
-										startDate={weeklyStartDate}
 										formErrors={[]}
+										weeklyDeliveryDate={weeklyDeliveryDate}
+										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
+											setWeeklyDeliveryDate(weeklyDeliveryDate);
+										}}
 									/>
 									<div>
 										<p className="component-text__sans">

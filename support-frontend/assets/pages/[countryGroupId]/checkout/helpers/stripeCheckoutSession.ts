@@ -30,6 +30,7 @@ const formDetailsSchema = z.object({
 	}),
 	deliveryInstructions: z.string().nullish(),
 	billingAddressMatchesDelivery: z.oboolean(),
+	weeklyDeliveryDate: z.string().nullish(),
 });
 
 export type PersistableFormFields = z.infer<typeof formDetailsSchema>;
