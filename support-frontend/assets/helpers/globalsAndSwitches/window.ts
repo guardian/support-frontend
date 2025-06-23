@@ -21,7 +21,6 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
 } from '../productPrice/productOptions';
@@ -252,7 +251,6 @@ const productOptionsSchema = z.enum([
 	Saturday,
 	SaturdayPlus,
 	Sunday,
-	SundayPlus,
 	NewspaperArchive,
 ]);
 const fulfilmentOptionsSchema = z.enum([

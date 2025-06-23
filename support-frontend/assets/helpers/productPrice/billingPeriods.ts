@@ -98,12 +98,12 @@ export function ratePlanToBillingPeriod(
 		case 'SixdayPlus':
 		case 'WeekendPlus':
 		case 'SaturdayPlus':
-		case 'SundayPlus':
 		case 'V1DeprecatedMonthly':
 			return BillingPeriod.Monthly;
 		case 'OneTime':
 			return BillingPeriod.OneTime;
 	}
+	throw new Error('Unsupported rate plan key: ' + ratePlanKey);
 }
 
 export function billingPeriodToContributionType(
