@@ -28,7 +28,6 @@ export function WeeklyDeliveryDates({
 					id="startDate"
 					name="startDate"
 					error={firstError('startDate', formErrors) as string}
-					label="Gift delivery date"
 				>
 					{days
 						.filter((day) => {

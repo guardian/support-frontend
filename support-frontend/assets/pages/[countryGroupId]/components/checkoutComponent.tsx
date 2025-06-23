@@ -956,7 +956,7 @@ export function CheckoutComponent({
 						{isWeeklyGift && (
 							<>
 								<FormSection>
-									<Legend>2. Delivery address</Legend>
+									<Legend>2. Gift delivery date</Legend>
 									<WeeklyDeliveryDates
 										startDate={weeklyStartDate}
 										formErrors={[]}
