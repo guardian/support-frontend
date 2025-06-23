@@ -22,6 +22,18 @@ export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Annual,
 ];
 
+export function billingPeriodToRatePlan(
+	billingPeriod: BillingPeriod,
+	isWeeklyGifting: boolean,
+): string {
+	if (isWeeklyGifting) {
+		return billingPeriod === BillingPeriod.Annual
+			? 'OneYearGift'
+			: 'ThreeMonthGift';
+	}
+	return billingPeriod.toString();
+}
+
 export function getBillingPeriodNoun(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
