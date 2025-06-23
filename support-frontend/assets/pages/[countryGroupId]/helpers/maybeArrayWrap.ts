@@ -1,6 +1,4 @@
-export const maybeArrayWrap = <T>(
-	value: T | undefined,
-): T[] | undefined => {
+export const maybeArrayWrap = <T>(value: T | undefined): T[] | undefined => {
 	if (value === undefined) {
 		return undefined;
 	}
