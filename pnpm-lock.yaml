@@ -181,11 +181,11 @@ importers:
         specifier: 1.0.0-alpha.7
         version: 1.0.0-alpha.7
       '@guardian/source':
-        specifier: 8.0.0
-        version: 8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        specifier: 10.2.0
+        version: 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/source-development-kitchen':
         specifier: 18.1.1
-        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.5.2(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+        version: 18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.5.2(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/support-service-lambdas':
         specifier: guardian/support-service-lambdas#7c47d02f232c455163f12ab9fab25722d29af7ff
         version: https://codeload.github.com/guardian/support-service-lambdas/tar.gz/7c47d02f232c455163f12ab9fab25722d29af7ff
@@ -1922,11 +1922,11 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/source@8.0.0':
-    resolution: {integrity: sha512-P6OTmCWsSWkT20M5uRAPoKonsz3nikOj308mUEiFDO2vpx1oyG2V6KP0YBlDxoSzw7EW6KbM9Ptat6VNd55cEw==}
+  '@guardian/source@10.2.0':
+    resolution: {integrity: sha512-mPozNtjGe0ykOjyFPuMS76CAPqafV9oJpHaX1ptx+h5wAMnu6csqKLwkALd6plDM9Y5vfWM8S/UERRlFg/rnzw==}
     peerDependencies:
-      '@emotion/react': ^11.11.3
-      '@types/react': ^18.2.11
+      '@emotion/react': ^11.11.4
+      '@types/react': ^18.2.79
       react: ^18.2.0
       tslib: ^2.6.2
       typescript: ~5.5.2
@@ -10772,10 +10772,10 @@ snapshots:
       prettier: 3.5.3
       tslib: 2.8.1
 
-  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.5.2(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source-development-kitchen@18.1.1(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@guardian/libs@22.5.2(tslib@2.8.1)(typescript@5.5.4))(@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       '@guardian/libs': 22.5.2(tslib@2.8.1)(typescript@5.5.4)
-      '@guardian/source': 8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/source': 10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/react': 11.14.0(@types/react@18.2.0)(react@18.2.0)
@@ -10783,7 +10783,7 @@ snapshots:
       react: 18.2.0
       typescript: 5.5.4
 
-  '@guardian/source@8.0.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
+  '@guardian/source@10.2.0(@emotion/react@11.14.0(@types/react@18.2.0)(react@18.2.0))(@types/react@18.2.0)(react@18.2.0)(tslib@2.8.1)(typescript@5.5.4)':
     dependencies:
       mini-svg-data-uri: 1.4.4
       tslib: 2.8.1
