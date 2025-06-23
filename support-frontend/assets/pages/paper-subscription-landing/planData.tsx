@@ -133,17 +133,6 @@ const planData: Record<PaperProductOptions, PlanData> = {
 			items: [],
 		},
 	},
-	SundayPlus: {
-		description: <></>,
-		benefits: {
-			label: <></>,
-			items: [],
-		},
-		digitalRewards: {
-			label: <></>,
-			items: [],
-		},
-	},
 	WeekendPlus: {
 		description: <></>,
 		benefits: {
