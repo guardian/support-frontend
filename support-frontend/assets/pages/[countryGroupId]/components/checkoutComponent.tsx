@@ -85,9 +85,15 @@ import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryChe
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { formatUserDate } from '../../../helpers/utilities/dateConversions';
+import {
+	formatMachineDate,
+	formatUserDate,
+} from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import {
+	getTierThreeDeliveryDate,
+	getWeeklyDays,
+} from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import {
 	getBenefitsChecklistFromLandingPageTool,
@@ -127,6 +133,7 @@ import {
 } from './paymentMethod';
 import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
+import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 
 const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
@@ -209,6 +216,11 @@ export function CheckoutComponent({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
+	const isWeeklyGift =
+		(productKey === 'GuardianWeeklyDomestic' ||
+			productKey === 'GuardianWeeklyRestOfWorld') &&
+		(ratePlanKey === 'OneYearGift' || ratePlanKey === 'ThreeMonthGift');
+	const weeklyStartDate = formatMachineDate(getWeeklyDays()[0] as Date);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -941,6 +953,28 @@ export function CheckoutComponent({
 							)}
 						</FormSection>
 						<CheckoutDivider spacing="loose" />
+						{isWeeklyGift && (
+							<>
+								<FormSection>
+									<Legend>2. Delivery address</Legend>
+									<WeeklyDeliveryDates
+										startDate={weeklyStartDate}
+										formErrors={[]}
+									/>
+									<div>
+										<p className="component-text__sans">
+											We will take payment on the date the recipient receives
+											the first Guardian Weekly.
+										</p>
+										<p className="component-text__sans">
+											Subscription start dates are automatically selected to be
+											the earliest we can fulfil your order.
+										</p>
+									</div>
+								</FormSection>
+								<CheckoutDivider spacing="loose" />
+							</>
+						)}
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
