@@ -405,7 +405,11 @@ export function CheckoutComponent({
 			if (postcodeIsWithinDeliveryArea(postcode)) {
 				// The user's postcode is inside the M25
 				setDeliveryPostcodeIsOutsideM25(false);
-			} else if (ratePlanKey === 'Saturday' || ratePlanKey === 'Sunday') {
+			} else if (
+				ratePlanKey === 'Saturday' ||
+				ratePlanKey === 'SaturdayPlus' ||
+				ratePlanKey === 'Sunday'
+			) {
 				// The user's postcode is outside the M25 but they have selected a
 				// Saturday or Sunday only rate plan which is not supported
 				setDeliveryAddressErrors((prevState) => [

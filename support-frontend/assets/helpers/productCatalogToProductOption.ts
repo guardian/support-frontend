@@ -10,7 +10,6 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
@@ -26,7 +25,6 @@ const ActivePaperProductTypes: readonly PaperProductOptions[] = [
 	SixdayPlus,
 	WeekendPlus,
 	SaturdayPlus,
-	SundayPlus,
 ] as const;
 export type ActivePaperProductOptions =
 	(typeof ActivePaperProductTypes)[number];
@@ -39,14 +37,12 @@ export const isActivePaperProductOption = (
 };
 const paperProductsWithDigital = {
 	Saturday: SaturdayPlus,
-	Sunday: SundayPlus,
 	Weekend: WeekendPlus,
 	Sixday: SixdayPlus,
 	Everyday: EverydayPlus,
 } as Record<ProductOptions, ProductOptions>;
 const paperProductsWithoutDigital = {
 	SaturdayPlus: Saturday,
-	SundayPlus: Sunday,
 	WeekendPlus: Weekend,
 	SixdayPlus: Sixday,
 	EverydayPlus: Everyday,
@@ -77,7 +73,6 @@ const getPaperProductOptions = (
 		case 'Everyday':
 		case 'WeekendPlus':
 		case 'SaturdayPlus':
-		case 'SundayPlus':
 		case 'SixdayPlus':
 		case 'EverydayPlus':
 			return ratePlanKey;
@@ -109,7 +104,9 @@ export const getProductOptionFromProductAndRatePlan = (
 			return getPaperProductOptions(ratePlanKey);
 	}
 };
-export { productOptionIfDigiAddOnChanged };
-export { paperProductsWithoutDigital };
-export { paperProductsWithDigital };
-export { ActivePaperProductTypes };
+export {
+	productOptionIfDigiAddOnChanged,
+	paperProductsWithoutDigital,
+	paperProductsWithDigital,
+	ActivePaperProductTypes,
+};

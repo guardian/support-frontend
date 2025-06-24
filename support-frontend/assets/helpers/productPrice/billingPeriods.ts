@@ -13,6 +13,18 @@ export const weeklyGiftBillingPeriods: RecurringBillingPeriod[] = [
 	BillingPeriod.Annual,
 ];
 
+export function billingPeriodToRatePlan(
+	billingPeriod: BillingPeriod,
+	isWeeklyGifting: boolean,
+): string {
+	if (isWeeklyGifting) {
+		return billingPeriod === BillingPeriod.Annual
+			? 'OneYearGift'
+			: 'ThreeMonthGift';
+	}
+	return billingPeriod.toString();
+}
+
 export function getBillingPeriodNoun(
 	billingPeriod: BillingPeriod,
 	fixedTerm = false,
@@ -77,12 +89,12 @@ export function ratePlanToBillingPeriod(
 		case 'SixdayPlus':
 		case 'WeekendPlus':
 		case 'SaturdayPlus':
-		case 'SundayPlus':
 		case 'V1DeprecatedMonthly':
 			return BillingPeriod.Monthly;
 		case 'OneTime':
 			return BillingPeriod.OneTime;
 	}
+	throw new Error('Unsupported rate plan key: ' + ratePlanKey);
 }
 
 export function billingPeriodToContributionType(

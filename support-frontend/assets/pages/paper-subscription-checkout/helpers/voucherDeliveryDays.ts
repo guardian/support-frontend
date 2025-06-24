@@ -7,7 +7,6 @@ import {
 	Sixday,
 	SixdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
 } from '@modules/product/productOptions';
@@ -29,11 +28,8 @@ const getDeliveryDayForProduct = (product: ProductOptions): Day => {
 		case Weekend:
 		case WeekendPlus:
 			return 6;
-
-		case SundayPlus:
 		case Sunday:
 			return 0;
-
 		case Sixday:
 		case SixdayPlus:
 		case Everyday:

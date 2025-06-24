@@ -4,7 +4,6 @@ const NoProductOptions = 'NoProductOptions';
 const Saturday = 'Saturday';
 const SaturdayPlus = 'SaturdayPlus';
 const Sunday = 'Sunday';
-const SundayPlus = 'SundayPlus';
 const Weekend = 'Weekend';
 const WeekendPlus = 'WeekendPlus';
 const Sixday = 'Sixday';
@@ -18,7 +17,6 @@ export type ProductOptions =
 	| typeof Saturday
 	| typeof SaturdayPlus
 	| typeof Sunday
-	| typeof SundayPlus
 	| typeof Weekend
 	| typeof WeekendPlus
 	| typeof Sixday
@@ -34,7 +32,6 @@ export type PaperProductOptions =
 	| typeof Sixday
 	| typeof Everyday
 	| typeof SaturdayPlus
-	| typeof SundayPlus
 	| typeof WeekendPlus
 	| typeof SixdayPlus
 	| typeof EverydayPlus;
@@ -44,7 +41,6 @@ export {
 	Saturday,
 	SaturdayPlus,
 	Sunday,
-	SundayPlus,
 	Weekend,
 	WeekendPlus,
 	Sixday,

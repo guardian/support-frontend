@@ -28,8 +28,8 @@ export const pageUrlRegexes = {
 			weeklyLandingPage: /\/subscribe\/weekly\/checkout?(\?.*)?$/,
 		},
 		// Includes landing, original & generic checkout/thankyou pages
-		subsWeeklyPages:
-			'(/subscribe/weekly/checkout)(/.*)?$|(?:/(uk|us|ca|eu|nz|int))(?:/(subscribe/weekly|checkout|thankyou|thank-you))(/.*)?$',
+		subsWeeklyGiftPages:
+			'(/subscribe/weekly/gift).*?|/(subscribe/weekly/checkout/gift).*?|((?:/(uk|us|ca|eu|nz|int))(?:/(checkout|thank-you))).*?(OneYearGift|ThreeMonthGift).*?',
 	},
 };
 
@@ -96,6 +96,30 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeContributionsOnlyCountries: true,
+	},
+	guardianWeeklyGiftGenericCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 9,
+		targetPage: pageUrlRegexes.subscriptions.subsWeeklyGiftPages,
+		persistPage:
+			// match generic checkout & thank you page
+			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
 };

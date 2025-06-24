@@ -12,6 +12,7 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 import { currencies } from 'helpers/internationalisation/currency';
 import { internationaliseProduct } from 'helpers/productCatalog';
 import {
+	billingPeriodToRatePlan,
 	getBillingPeriodTitle,
 	weeklyBillingPeriods,
 	weeklyGiftBillingPeriods,
@@ -51,12 +52,14 @@ const countryPath = (countryGroupId: CountryGroupId) =>
 const getCheckoutUrl = (
 	countryId: IsoCountry,
 	billingPeriod: RecurringBillingPeriod,
-	_abParticipations: Participations, // This is not used right now but will be when we're testing gifting so I'm leaving it here
+	abParticipations: Participations,
 	orderIsGift: boolean,
 	promotion?: Promotion,
 ): string => {
-	// Gifting will be supported last
-	if (!orderIsGift) {
+	if (
+		abParticipations.guardianWeeklyGiftGenericCheckout === 'variant' ||
+		!orderIsGift
+	) {
 		const countryGroupId = CountryGroup.fromCountry(countryId) ?? GBPCountries;
 		const productGuardianWeekly = internationaliseProduct(
 			countryGroups[countryGroupId].supportInternationalisationId,
@@ -66,7 +69,7 @@ const getCheckoutUrl = (
 		return addQueryParamsToURL(url, {
 			promoCode: promotion?.promoCode,
 			product: productGuardianWeekly,
-			ratePlan: billingPeriod.toString(),
+			ratePlan: billingPeriodToRatePlan(billingPeriod, orderIsGift),
 		});
 	}
 
