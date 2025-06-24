@@ -1,5 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import type { AmountsTest, AmountsVariant } from '../contributions';

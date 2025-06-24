@@ -1,6 +1,6 @@
 import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { ActiveProductKey } from '../../../../helpers/productCatalog';
-import { isActivePaperProductOption } from '../../../../helpers/productPrice/productOptions';
+import { isActivePaperProductOption } from '../../../../helpers/productCatalogToProductOption';
 import { formatMachineDate } from '../../../../helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from '../../../paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from '../../../paper-subscription-checkout/helpers/subsCardDays';

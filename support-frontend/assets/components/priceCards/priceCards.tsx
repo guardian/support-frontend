@@ -1,13 +1,11 @@
 import { css } from '@emotion/react';
 import { from, space, until } from '@guardian/source/foundations';
 import { ChoiceCardGroup } from '@guardian/source/react-components';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import {
-	BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import { PriceCard } from './priceCard';
 
 const cardStyles = css`

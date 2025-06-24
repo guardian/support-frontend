@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Participations } from 'helpers/abTests/models';
 import {
 	getGlobal,
@@ -7,7 +8,6 @@ import {
 } from 'helpers/globalsAndSwitches/globals';
 import { Country } from 'helpers/internationalisation/classes/country';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 

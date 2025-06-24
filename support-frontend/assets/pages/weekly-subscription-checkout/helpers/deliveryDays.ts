@@ -1,5 +1,4 @@
 import type { ActiveProductKey } from 'helpers/productCatalog';
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getDeliveryDays,
 	getNextDeliveryDay,
@@ -9,6 +8,7 @@ import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
 import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 
 const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;

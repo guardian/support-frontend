@@ -1,14 +1,13 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import { z } from 'zod';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isErrorReason } from 'helpers/forms/errorReasons';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { userTypeSchema } from 'helpers/redux/checkout/personalDetails/state';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
-import 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { addQueryParamsToURL } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';

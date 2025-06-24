@@ -1,9 +1,9 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type {
 	AmountsTest,
 	AmountsVariant,
 	SelectedAmountsVariant,
 } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 type AmountsTestWithVariants = AmountsTest & {
 	variants: [AmountsVariant, ...AmountsVariant[]];

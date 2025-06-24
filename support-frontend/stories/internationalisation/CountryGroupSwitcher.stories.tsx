@@ -2,7 +2,7 @@ import { expect } from '@storybook/test';
 import { userEvent, waitFor, within } from '@storybook/test';
 import React from 'react';
 import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -11,7 +11,7 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Internationalisation/Country Group Switcher',
