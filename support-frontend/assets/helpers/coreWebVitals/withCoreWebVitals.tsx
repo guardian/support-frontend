@@ -12,6 +12,7 @@ export function WithCoreWebVitals({ children }: { children: React.ReactNode }) {
 			isDev: !isProd(),
 			team: 'supporterRevenue',
 			platform: 'support',
+			sampling: 20 / 100,
 		});
 	}, []);
 
