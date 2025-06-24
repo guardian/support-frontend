@@ -3,10 +3,6 @@ import { space } from '@guardian/source/foundations';
 import { Radio, RadioGroup } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
 import {
-	firstError,
-	type FormError,
-} from 'helpers/subscriptionsForms/validation';
-import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
@@ -25,12 +21,10 @@ const weeklyInfo = css`
 
 type WeeklyDeliveryDatesProps = {
 	deliveryDateChecked: Date;
-	formErrors: Array<FormError<string>>;
 	setWeeklyDeliveryDate: (deliveryDate: Date) => void;
 };
 
 export function WeeklyDeliveryDates({
-	formErrors,
 	deliveryDateChecked,
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
@@ -38,11 +32,7 @@ export function WeeklyDeliveryDates({
 	return (
 		<>
 			<Rows>
-				<RadioGroup
-					id="startDate"
-					name="startDate"
-					error={firstError('startDate', formErrors) as string}
-				>
+				<RadioGroup id="weeklyDeliveryDates" name="weeklyDeliveryDates">
 					{weeklyDays
 						.filter((day) => {
 							const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];

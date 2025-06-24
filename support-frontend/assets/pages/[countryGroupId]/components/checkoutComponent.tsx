@@ -959,7 +959,6 @@ export function CheckoutComponent({
 								<FormSection>
 									<Legend>2. Gift delivery date</Legend>
 									<WeeklyDeliveryDates
-										formErrors={[]}
 										deliveryDateChecked={weeklyDeliveryDate}
 										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
 											setWeeklyDeliveryDate(weeklyDeliveryDate);
