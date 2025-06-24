@@ -108,6 +108,7 @@ export class PaymentApi extends GuStack {
         domainName: props.domainName,
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
+      instanceMetricGranularity: "5Minute",
       monitoringConfiguration: { noMonitoring: true },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
       scaling: props.scaling,
