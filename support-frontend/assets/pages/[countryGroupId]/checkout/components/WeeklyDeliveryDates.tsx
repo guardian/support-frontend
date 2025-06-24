@@ -8,6 +8,13 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
+import {
+	checkedRadioLabelColour,
+	defaultRadioLabelColour,
+	paymentMethodNotSelected,
+	paymentMethodRadio,
+	paymentMethodSelected,
+} from 'pages/[countryGroupId]/components/paymentMethod';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 type WeeklyDeliveryDatesProps = {
@@ -43,15 +50,29 @@ export function WeeklyDeliveryDates({
 								formatUserDate(day),
 								formatMachineDate(day),
 							];
-
+							const isChecked = machineDate === weeklyDeliveryDate;
 							return (
-								<Radio
-									label={userDate}
-									value={userDate}
-									name={machineDate}
-									checked={machineDate === weeklyDeliveryDate}
-									onChange={() => setWeeklyDeliveryDate(machineDate)}
-								/>
+								<div
+									css={[
+										paymentMethodRadio,
+										isChecked
+											? paymentMethodSelected
+											: paymentMethodNotSelected,
+									]}
+								>
+									<Radio
+										label={userDate}
+										value={userDate}
+										name={machineDate}
+										checked={isChecked}
+										cssOverrides={
+											isChecked
+												? checkedRadioLabelColour
+												: defaultRadioLabelColour
+										}
+										onChange={() => setWeeklyDeliveryDate(machineDate)}
+									/>
+								</div>
 							);
 						})}
 				</RadioGroup>
