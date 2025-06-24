@@ -30,53 +30,49 @@ export function WeeklyDeliveryDates({
 }: WeeklyDeliveryDatesProps) {
 	const days = getWeeklyDays();
 	return (
-		<div>
-			<Rows>
-				<RadioGroup
-					id="startDate"
-					name="startDate"
-					error={firstError('startDate', formErrors) as string}
-				>
-					{days
-						.filter((day) => {
-							const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-							const date = formatMachineDate(day);
-							return !invalidPublicationDates.some((dateSuffix) =>
-								date.endsWith(dateSuffix),
-							);
-						})
-						.map((day) => {
-							const [userDate, machineDate] = [
-								formatUserDate(day),
-								formatMachineDate(day),
-							];
-							const isChecked = machineDate === weeklyDeliveryDate;
-							return (
-								<div
-									css={[
-										paymentMethodRadio,
+		<Rows>
+			<RadioGroup
+				id="startDate"
+				name="startDate"
+				error={firstError('startDate', formErrors) as string}
+			>
+				{days
+					.filter((day) => {
+						const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+						const date = formatMachineDate(day);
+						return !invalidPublicationDates.some((dateSuffix) =>
+							date.endsWith(dateSuffix),
+						);
+					})
+					.map((day) => {
+						const [userDate, machineDate] = [
+							formatUserDate(day),
+							formatMachineDate(day),
+						];
+						const isChecked = machineDate === weeklyDeliveryDate;
+						return (
+							<div
+								css={[
+									paymentMethodRadio,
+									isChecked ? paymentMethodSelected : paymentMethodNotSelected,
+								]}
+							>
+								<Radio
+									label={userDate}
+									value={userDate}
+									name={machineDate}
+									checked={isChecked}
+									cssOverrides={
 										isChecked
-											? paymentMethodSelected
-											: paymentMethodNotSelected,
-									]}
-								>
-									<Radio
-										label={userDate}
-										value={userDate}
-										name={machineDate}
-										checked={isChecked}
-										cssOverrides={
-											isChecked
-												? checkedRadioLabelColour
-												: defaultRadioLabelColour
-										}
-										onChange={() => setWeeklyDeliveryDate(machineDate)}
-									/>
-								</div>
-							);
-						})}
-				</RadioGroup>
-			</Rows>
-		</div>
+											? checkedRadioLabelColour
+											: defaultRadioLabelColour
+									}
+									onChange={() => setWeeklyDeliveryDate(machineDate)}
+								/>
+							</div>
+						);
+					})}
+			</RadioGroup>
+		</Rows>
 	);
 }
