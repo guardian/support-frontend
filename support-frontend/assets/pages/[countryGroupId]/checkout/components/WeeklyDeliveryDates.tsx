@@ -29,13 +29,13 @@ export function WeeklyDeliveryDates({
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
 	const weeklyDays = getWeeklyDays();
+	const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 	return (
 		<>
 			<Rows>
 				<RadioGroup id="weeklyDeliveryDates" name="weeklyDeliveryDates">
 					{weeklyDays
 						.filter((day) => {
-							const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 							const date = formatMachineDate(day);
 							return !invalidPublicationDates.some((dateSuffix) =>
 								date.endsWith(dateSuffix),
