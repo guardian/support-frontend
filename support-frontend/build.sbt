@@ -22,13 +22,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % "0.14.1",
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "4.12",
+  "com.gu.identity" %% "identity-auth-play" % "4.37.0",
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
   "com.okta.jwt" % "okta-jwt-verifier-impl" % oktaJwtVerifierVersion % Runtime,
   "com.gu" %% "identity-test-users" % "0.10.2",
   "com.google.guava" % "guava" % "32.1.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v30" % "8.0.1",
+  "com.gu.play-googleauth" %% "play-v30" % "8.0.4",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
@@ -52,7 +52,7 @@ excludeDependencies ++= Seq(
 )
 
 ThisBuild / libraryDependencySchemes ++= Seq(
-  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
 )
 
 Compile / doc / sources := Seq.empty
@@ -85,11 +85,13 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-val jvmParameters = Def.setting(Seq(
-  "-XX:MaxMetaspaceSize=256m",
-  s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
-  "-XX:-OmitStackTraceInFastThrow",
-))
+val jvmParameters = Def.setting(
+  Seq(
+    "-XX:MaxMetaspaceSize=256m",
+    s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
+    "-XX:-OmitStackTraceInFastThrow",
+  ),
+)
 val playParameters = Seq(
   "-Dpidfile.path=/dev/null", // https://www.playframework.com/documentation/3.0.x/ProductionConfiguration#Changing-the-path-of-RUNNING_PID
 )
