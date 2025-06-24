@@ -85,10 +85,7 @@ import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryChe
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from '../../../helpers/utilities/dateConversions';
+import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
 import {
 	getTierThreeDeliveryDate,
@@ -371,9 +368,9 @@ export function CheckoutComponent({
 
 	/** Delivery Instructions */
 	const [weeklyDeliveryDate, setWeeklyDeliveryDate] =
-		useStateWithCheckoutSession<string>(
+		useStateWithCheckoutSession<Date>(
 			checkoutSession?.formFields.weeklyDeliveryDate,
-			formatMachineDate(getWeeklyDays()[0] as Date),
+			getWeeklyDays()[0] as Date,
 		);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
@@ -963,7 +960,7 @@ export function CheckoutComponent({
 									<Legend>2. Gift delivery date</Legend>
 									<WeeklyDeliveryDates
 										formErrors={[]}
-										weeklyDeliveryDate={weeklyDeliveryDate}
+										deliveryDateChecked={weeklyDeliveryDate}
 										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
 											setWeeklyDeliveryDate(weeklyDeliveryDate);
 										}}

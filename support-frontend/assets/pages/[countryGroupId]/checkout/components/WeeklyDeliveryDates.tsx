@@ -24,17 +24,17 @@ const weeklyInfo = css`
 `;
 
 type WeeklyDeliveryDatesProps = {
-	weeklyDeliveryDate: string;
+	deliveryDateChecked: Date;
 	formErrors: Array<FormError<string>>;
-	setWeeklyDeliveryDate: (date: string) => void;
+	setWeeklyDeliveryDate: (deliveryDate: Date) => void;
 };
 
 export function WeeklyDeliveryDates({
 	formErrors,
-	weeklyDeliveryDate,
+	deliveryDateChecked,
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
-	const days = getWeeklyDays();
+	const weeklyDays = getWeeklyDays();
 	return (
 		<>
 			<Rows>
@@ -43,7 +43,7 @@ export function WeeklyDeliveryDates({
 					name="startDate"
 					error={firstError('startDate', formErrors) as string}
 				>
-					{days
+					{weeklyDays
 						.filter((day) => {
 							const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 							const date = formatMachineDate(day);
@@ -51,12 +51,13 @@ export function WeeklyDeliveryDates({
 								date.endsWith(dateSuffix),
 							);
 						})
-						.map((day) => {
+						.map((validDay) => {
 							const [userDate, machineDate] = [
-								formatUserDate(day),
-								formatMachineDate(day),
+								formatUserDate(validDay),
+								formatMachineDate(validDay),
 							];
-							const isChecked = machineDate === weeklyDeliveryDate;
+							const isChecked =
+								machineDate === formatMachineDate(deliveryDateChecked);
 							return (
 								<div
 									css={[
@@ -74,7 +75,7 @@ export function WeeklyDeliveryDates({
 												? checkedRadioLabelColour
 												: defaultRadioLabelColour
 										}
-										onChange={() => setWeeklyDeliveryDate(machineDate)}
+										onChange={() => setWeeklyDeliveryDate(validDay)}
 									/>
 								</div>
 							);
