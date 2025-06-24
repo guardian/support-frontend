@@ -295,10 +295,13 @@ export function CheckoutComponent({
 		[key in StripeField]?: string;
 	}>({});
 	useEffect(() => {
-		if (paymentMethodError) {
+		if (
+			paymentMethodError ??
+			Object.values(stripeFieldError).some((error) => !!error)
+		) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 		}
-	}, [paymentMethodError]);
+	}, [paymentMethodError, ...Object.values(stripeFieldError)]);
 
 	const isRedirectingToStripeHostedCheckout =
 		isSundayOnly &&
