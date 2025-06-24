@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source/foundations';
 import { Radio, RadioGroup } from '@guardian/source/react-components';
 import Rows from 'components/base/rows';
 import {
@@ -9,13 +11,17 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import {
+	checkedRadioBox,
 	checkedRadioLabelColour,
+	defaultRadioBox,
 	defaultRadioLabelColour,
-	paymentMethodNotSelected,
-	paymentMethodRadio,
-	paymentMethodSelected,
+	radioPadding,
 } from 'pages/[countryGroupId]/components/paymentMethod';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+
+const weeklyInfo = css`
+	margin-top: ${space[5]}px;
+`;
 
 type WeeklyDeliveryDatesProps = {
 	weeklyDeliveryDate: string;
@@ -30,49 +36,61 @@ export function WeeklyDeliveryDates({
 }: WeeklyDeliveryDatesProps) {
 	const days = getWeeklyDays();
 	return (
-		<Rows>
-			<RadioGroup
-				id="startDate"
-				name="startDate"
-				error={firstError('startDate', formErrors) as string}
-			>
-				{days
-					.filter((day) => {
-						const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-						const date = formatMachineDate(day);
-						return !invalidPublicationDates.some((dateSuffix) =>
-							date.endsWith(dateSuffix),
-						);
-					})
-					.map((day) => {
-						const [userDate, machineDate] = [
-							formatUserDate(day),
-							formatMachineDate(day),
-						];
-						const isChecked = machineDate === weeklyDeliveryDate;
-						return (
-							<div
-								css={[
-									paymentMethodRadio,
-									isChecked ? paymentMethodSelected : paymentMethodNotSelected,
-								]}
-							>
-								<Radio
-									label={userDate}
-									value={userDate}
-									name={machineDate}
-									checked={isChecked}
-									cssOverrides={
-										isChecked
-											? checkedRadioLabelColour
-											: defaultRadioLabelColour
-									}
-									onChange={() => setWeeklyDeliveryDate(machineDate)}
-								/>
-							</div>
-						);
-					})}
-			</RadioGroup>
-		</Rows>
+		<>
+			<Rows>
+				<RadioGroup
+					id="startDate"
+					name="startDate"
+					error={firstError('startDate', formErrors) as string}
+				>
+					{days
+						.filter((day) => {
+							const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+							const date = formatMachineDate(day);
+							return !invalidPublicationDates.some((dateSuffix) =>
+								date.endsWith(dateSuffix),
+							);
+						})
+						.map((day) => {
+							const [userDate, machineDate] = [
+								formatUserDate(day),
+								formatMachineDate(day),
+							];
+							const isChecked = machineDate === weeklyDeliveryDate;
+							return (
+								<div
+									css={[
+										radioPadding,
+										isChecked ? checkedRadioBox : defaultRadioBox,
+									]}
+								>
+									<Radio
+										label={userDate}
+										value={userDate}
+										name={machineDate}
+										checked={isChecked}
+										cssOverrides={
+											isChecked
+												? checkedRadioLabelColour
+												: defaultRadioLabelColour
+										}
+										onChange={() => setWeeklyDeliveryDate(machineDate)}
+									/>
+								</div>
+							);
+						})}
+				</RadioGroup>
+			</Rows>
+			<div css={weeklyInfo}>
+				<p>
+					We will take payment on the date the recipient receives the first
+					Guardian Weekly.
+				</p>
+				<p>
+					Subscription start dates are automatically selected to be the earliest
+					we can fulfil your order.
+				</p>
+			</div>
+		</>
 	);
 }

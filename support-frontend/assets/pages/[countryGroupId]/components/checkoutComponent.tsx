@@ -968,16 +968,6 @@ export function CheckoutComponent({
 											setWeeklyDeliveryDate(weeklyDeliveryDate);
 										}}
 									/>
-									<div>
-										<p className="component-text__sans">
-											We will take payment on the date the recipient receives
-											the first Guardian Weekly.
-										</p>
-										<p className="component-text__sans">
-											Subscription start dates are automatically selected to be
-											the earliest we can fulfil your order.
-										</p>
-									</div>
 								</FormSection>
 								<CheckoutDivider spacing="loose" />
 							</>
