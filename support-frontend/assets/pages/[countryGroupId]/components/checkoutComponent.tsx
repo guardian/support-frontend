@@ -367,10 +367,11 @@ export function CheckoutComponent({
 		);
 
 	/** Delivery Instructions */
+	const weeklyDeliveryDates = getWeeklyDays();
 	const [weeklyDeliveryDate, setWeeklyDeliveryDate] =
 		useStateWithCheckoutSession<Date>(
 			checkoutSession?.formFields.weeklyDeliveryDate,
-			getWeeklyDays()[0] as Date,
+			weeklyDeliveryDates[0] as Date,
 		);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
@@ -959,7 +960,8 @@ export function CheckoutComponent({
 								<FormSection>
 									<Legend>2. Gift delivery date</Legend>
 									<WeeklyDeliveryDates
-										deliveryDateChecked={weeklyDeliveryDate}
+										weeklyDeliveryDates={weeklyDeliveryDates}
+										weeklyDeliveryDateSelected={weeklyDeliveryDate}
 										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
 											setWeeklyDeliveryDate(weeklyDeliveryDate);
 										}}

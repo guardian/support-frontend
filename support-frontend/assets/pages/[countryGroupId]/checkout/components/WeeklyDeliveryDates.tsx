@@ -13,41 +13,41 @@ import {
 	defaultRadioLabelColour,
 	radioPadding,
 } from 'pages/[countryGroupId]/components/paymentMethod';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const weeklyInfo = css`
 	margin-top: ${space[5]}px;
 `;
 
 type WeeklyDeliveryDatesProps = {
-	deliveryDateChecked: Date;
+	weeklyDeliveryDates: Date[];
+	weeklyDeliveryDateSelected: Date;
 	setWeeklyDeliveryDate: (deliveryDate: Date) => void;
 };
 
 export function WeeklyDeliveryDates({
-	deliveryDateChecked,
+	weeklyDeliveryDates,
+	weeklyDeliveryDateSelected,
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
-	const weeklyDays = getWeeklyDays();
 	const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 	return (
 		<>
 			<Rows>
 				<RadioGroup id="weeklyDeliveryDates" name="weeklyDeliveryDates">
-					{weeklyDays
-						.filter((day) => {
-							const date = formatMachineDate(day);
+					{weeklyDeliveryDates
+						.filter((date) => {
+							const machineDate = formatMachineDate(date);
 							return !invalidPublicationDates.some((dateSuffix) =>
-								date.endsWith(dateSuffix),
+								machineDate.endsWith(dateSuffix),
 							);
 						})
-						.map((validDay) => {
+						.map((validDate) => {
 							const [userDate, machineDate] = [
-								formatUserDate(validDay),
-								formatMachineDate(validDay),
+								formatUserDate(validDate),
+								formatMachineDate(validDate),
 							];
 							const isChecked =
-								machineDate === formatMachineDate(deliveryDateChecked);
+								machineDate === formatMachineDate(weeklyDeliveryDateSelected);
 							return (
 								<div
 									css={[
@@ -65,7 +65,7 @@ export function WeeklyDeliveryDates({
 												? checkedRadioLabelColour
 												: defaultRadioLabelColour
 										}
-										onChange={() => setWeeklyDeliveryDate(validDay)}
+										onChange={() => setWeeklyDeliveryDate(validDate)}
 									/>
 								</div>
 							);
