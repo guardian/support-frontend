@@ -16,6 +16,8 @@ import {
 	ErrorSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	CardNumberElement,
 	ExpressCheckoutElement,
@@ -59,7 +61,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -81,7 +82,6 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
-import { countryGroups } from '../../../helpers/internationalisation/countryGroup';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,

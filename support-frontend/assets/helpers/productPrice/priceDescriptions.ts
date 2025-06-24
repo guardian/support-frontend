@@ -1,8 +1,8 @@
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import {
 	extendedGlyph,
 	glyph as shortGlyph,
 } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo, hasDiscount } from 'helpers/productPrice/promotions';

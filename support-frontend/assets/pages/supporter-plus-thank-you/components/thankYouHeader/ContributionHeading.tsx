@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, titlepiece42 } from '@guardian/source/foundations';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';

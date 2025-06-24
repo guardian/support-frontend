@@ -5,7 +5,8 @@ import type { PriceCardsProps } from 'components/priceCards/priceCards';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+
+import { BillingPeriod } from '@modules/product/billingPeriod';
 
 export default {
 	title: 'Checkouts/Price Cards',

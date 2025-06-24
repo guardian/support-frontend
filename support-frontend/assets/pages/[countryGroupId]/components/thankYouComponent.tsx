@@ -9,6 +9,7 @@ import {
 } from '@guardian/source/foundations';
 import { Container, LinkButton } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -20,11 +21,9 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import {
-	BillingPeriod,
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import type { ActivePaperProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { type CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -54,6 +53,7 @@ import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/h
 import type { BenefitsCheckListData } from '../../../components/checkoutBenefits/benefitsCheckList';
 import ThankYouModules from '../../../components/thankYou/thankyouModules';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import {
 	getReturnAddress,
 	getThankYouOrder,

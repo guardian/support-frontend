@@ -1,5 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { CountryGroupId } from '../internationalisation/countryGroup';
 
 export function countdownSwitchOn(): boolean {
 	const isOn = isSwitchOn('featureSwitches.enableCampaignCountdown');

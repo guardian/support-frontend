@@ -1,13 +1,10 @@
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
 import { PaperTabHero } from './content/paperTabHero';
 
 type TabOptions = {

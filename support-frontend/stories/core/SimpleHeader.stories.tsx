@@ -10,7 +10,7 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+} from '@modules/internationalisation/countryGroup';
 
 export default {
 	title: 'Core/Simple Header',

@@ -1,4 +1,4 @@
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
 
 // ----- Types ----- //

@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { ContributionType } from 'helpers/contributions';
-import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	DirectDebit,
@@ -11,7 +11,6 @@ import {
 	StripeHostedCheckout,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type {
 	Currency,
 	SpokenCurrency,

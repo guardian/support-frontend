@@ -13,6 +13,16 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import {
+	AUDCountries,
+	Canada,
+	EURCountries,
+	GBPCountries,
+	International,
+	NZDCountries,
+	UnitedStates,
+} from '@modules/internationalisation/countryGroup';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -28,21 +38,9 @@ import {
 } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { Country } from 'helpers/internationalisation/classes/country';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
-import {
-	type BillingPeriod,
-	contributionTypeToBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';

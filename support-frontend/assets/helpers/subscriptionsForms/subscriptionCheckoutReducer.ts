@@ -1,5 +1,5 @@
+import type { FulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { combineReducers } from 'redux';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	billingAddressReducer,
 	deliveryAddressReducer,

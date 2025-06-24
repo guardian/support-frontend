@@ -7,8 +7,8 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { TabAccordionRow } from './tabAccordionRow';
 
 const flexContainerOverride = css`

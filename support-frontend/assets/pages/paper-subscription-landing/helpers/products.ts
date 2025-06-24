@@ -1,7 +1,7 @@
 import type {
 	PaperProductOptions,
 	ProductOptions,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 import {
 	Everyday,
 	EverydayPlus,
@@ -9,7 +9,7 @@ import {
 	Sixday,
 	SixdayPlus,
 	WeekendPlus,
-} from 'helpers/productPrice/productOptions';
+} from '@modules/product/productOptions';
 
 export const getTitle = (productOption: ProductOptions) => {
 	switch (productOption) {

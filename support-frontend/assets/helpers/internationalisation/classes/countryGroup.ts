@@ -1,6 +1,4 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import * as cookie from 'helpers/storage/cookie';
-import { getQueryParameter } from 'helpers/urls/url';
 import {
 	AUDCountries,
 	Canada,
@@ -10,12 +8,14 @@ import {
 	International,
 	NZDCountries,
 	UnitedStates,
-} from '../countryGroup';
+} from '@modules/internationalisation/countryGroup';
 import type {
 	CountryGroupId,
 	CountryGroupName,
 	CountryGroup as CountryGroupType,
-} from '../countryGroup';
+} from '@modules/internationalisation/countryGroup';
+import * as cookie from 'helpers/storage/cookie';
+import { getQueryParameter } from 'helpers/urls/url';
 import { Country } from './country';
 
 export class CountryGroup {

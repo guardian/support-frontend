@@ -1,4 +1,4 @@
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 

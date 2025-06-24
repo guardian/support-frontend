@@ -1,7 +1,7 @@
 // ----- Imports ----- //
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import PageSection from 'components/pageSection/pageSection';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
 	ContactPageLink,
