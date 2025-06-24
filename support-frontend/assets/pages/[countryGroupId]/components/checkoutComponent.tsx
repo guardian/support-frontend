@@ -287,15 +287,12 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	type StripeField = 'cardNumber' | 'expiry' | 'cvc';
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<{
-		cardNumber: boolean;
-		expiry: boolean;
-		cvc: boolean;
-	}>({ expiry: true, cardNumber: true, cvc: true });
+		[key in StripeField]: boolean;
+	}>({ cardNumber: true, expiry: true, cvc: true });
 	const [stripeFieldError, setStripeFieldError] = useState<{
-		cardNumber?: string;
-		expiry?: string;
-		cvc?: string;
+		[key in StripeField]?: string;
 	}>({});
 	useEffect(() => {
 		if (paymentMethodError) {
