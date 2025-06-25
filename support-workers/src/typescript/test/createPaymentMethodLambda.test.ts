@@ -1,5 +1,9 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { handler } from '../lambdas/createPaymentMethodLambda';
+import {
+	guardianDirectDebitGateway,
+	tortoiseMediaDirectDebitGateway,
+} from '../model/paymentGateway';
 import type { CreatePaymentMethodState } from '../model/stateSchemas';
 import { createPaymentMethodStateSchema } from '../model/stateSchemas';
 import createPaymentDirectDebitPaper from './fixtures/createPaymentMethod/paperDirectDebit.json';
@@ -30,7 +34,9 @@ describe('handler', () => {
 
 			const result = await handler(wrapPayload(payload));
 
-			expect(result.state.paymentMethod.PaymentGateway).toBe('GoCardless');
+			expect(result.state.paymentMethod.PaymentGateway).toBe(
+				guardianDirectDebitGateway,
+			);
 		});
 
 		it('uses the Tortoise payment gateway for a Sunday newspaper subscription', async () => {
@@ -47,7 +53,7 @@ describe('handler', () => {
 			const result = await handler(wrapPayload(payload));
 
 			expect(result.state.paymentMethod.PaymentGateway).toBe(
-				'GoCardless - Observer - Tortoise Media',
+				tortoiseMediaDirectDebitGateway,
 			);
 		});
 	});

@@ -6,6 +6,10 @@ import type {
 	StripeHostedPaymentFields,
 	StripePaymentFields,
 } from '../model/paymentFields';
+import {
+	guardianDirectDebitGateway,
+	tortoiseMediaDirectDebitGateway,
+} from '../model/paymentGateway';
 import type {
 	DirectDebitPaymentMethod,
 	PaymentMethod,
@@ -230,14 +234,12 @@ export function createDirectDebitPaymentMethod(
 	const shouldUseTortoiseMediaGateway =
 		productType.productType === 'Paper' &&
 		productType.productOptions === 'Sunday';
-	const guardianGateway = 'GoCardless';
-	const tortoiseMediaGateway = 'GoCardless - Observer - Tortoise Media';
 
 	return Promise.resolve({
 		Type: 'BankTransfer',
 		PaymentGateway: shouldUseTortoiseMediaGateway
-			? tortoiseMediaGateway
-			: guardianGateway,
+			? tortoiseMediaDirectDebitGateway
+			: guardianDirectDebitGateway,
 		BankTransferType: 'DirectDebitUK',
 		FirstName: user.firstName,
 		LastName: user.lastName,
