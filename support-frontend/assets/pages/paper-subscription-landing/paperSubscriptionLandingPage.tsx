@@ -20,8 +20,8 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { PaperHero } from './components/hero/hero';
+import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
-import PaperProductTabs from './components/paperProductTabs';
 import PaperTabs from './components/paperTabs';
 import { displayPaperProductTabs } from './helpers/displayPaperProductTabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
@@ -87,7 +87,7 @@ function PaperLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 			/>
 			{showPaperProductTabs ? (
-				<PaperProductTabs />
+				<NewspaperProductTabs productPrices={productPrices} />
 			) : (
 				<>
 					<FullWidthContainer>
