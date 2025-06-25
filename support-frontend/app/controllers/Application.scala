@@ -276,7 +276,7 @@ class Application(
   }
 
   def studentGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = getGeoPath(request, campaignCode, "contribute")
+    val url = getGeoPath(request, campaignCode, "student")
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
@@ -322,6 +322,18 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       contributionsHtml(countryCode, campaignCodeOption),
+    ).withSettingsSurrogateKey
+  }
+
+  def studentLanding(
+      countryCode: String,
+      campaignCode: String,
+  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    val campaignCodeOption = if (campaignCode != "") Some(campaignCode) else None
+
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(
+      studentHtml(countryCode, campaignCodeOption),
     ).withSettingsSurrogateKey
   }
 
@@ -375,6 +387,69 @@ class Application(
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
     val canonicalLink = s"https://support.theguardian.com/contribute"
+
+    views.html.contributions(
+      id = s"contributions-landing-page-$countryCode",
+      mainElement = mainElement,
+      js = RefPath("[countryGroupId]/router.js"),
+      description = stringsConfig.contributionsLandingDescription,
+      paymentMethodConfigs = PaymentMethodConfigs(
+        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+        oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+        regularTestStripeConfig = regularStripeConfigProvider.get(true),
+        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+        regularTestPayPalConfig = payPalConfigProvider.get(true),
+      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      membersDataApiUrl = membersDataApiUrl,
+      idUser = idUser,
+      guestAccountCreationToken = guestAccountCreationToken,
+      geoData = geoData,
+      shareImageUrl = shareImageUrl(settings),
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+      serversideTests = serversideTests,
+      allProductPrices = allProductPrices,
+      productCatalog = productCatalog,
+      noIndex = stage != PROD,
+      canonicalLink = canonicalLink,
+    )
+  }
+
+  private def studentHtml(
+      countryCode: String,
+      campaignCode: Option[String],
+  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
+    val geoData = request.geoData
+    val idUser = request.user
+
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+
+    val classes = "gu-content--contribution-form--placeholder" +
+      campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
+
+    val mainElement = assets.getSsrCacheContentsAsHtml(
+      divId = s"student-landing-page-$countryCode",
+      file = "ssr-holding-content.html",
+      classes = Some(classes),
+    )
+
+    val serversideTests = generateParticipations(Nil)
+    val isTestUser = testUserService.isTestUser(request)
+
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+
+    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
+
+    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
+    // We want the canonical link to point to the geo-redirect page so that users arriving from
+    // search will be redirected to the correct version of the page
+    val canonicalLink = s"https://support.theguardian.com/student"
 
     views.html.contributions(
       id = s"contributions-landing-page-$countryCode",
