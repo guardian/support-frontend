@@ -57,3 +57,4 @@ export const productTypeSchema = z.discriminatedUnion('productType', [
 	digitalPackProductSchema,
 	guardianAdLiteProductSchema,
 ]);
+export type ProductType = z.infer<typeof productTypeSchema>;
