@@ -85,8 +85,12 @@ import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import {
+	getTierThreeDeliveryDate,
+	getWeeklyDays,
+} from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -207,6 +211,10 @@ export function CheckoutComponent({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
+	const isWeeklyGift =
+		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
+			productKey,
+		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -357,6 +365,10 @@ export function CheckoutComponent({
 		);
 
 	/** Delivery Instructions */
+	const weeklyDeliveryDates = getWeeklyDays();
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		weeklyDeliveryDates[0] as Date,
+	);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
@@ -939,6 +951,21 @@ export function CheckoutComponent({
 							)}
 						</FormSection>
 						<CheckoutDivider spacing="loose" />
+						{isWeeklyGift && (
+							<>
+								<FormSection>
+									<Legend>2. Gift delivery date</Legend>
+									<WeeklyDeliveryDates
+										weeklyDeliveryDates={weeklyDeliveryDates}
+										weeklyDeliveryDateSelected={weeklyDeliveryDate}
+										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
+											setWeeklyDeliveryDate(weeklyDeliveryDate);
+										}}
+									/>
+								</FormSection>
+								<CheckoutDivider spacing="loose" />
+							</>
+						)}
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
