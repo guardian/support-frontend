@@ -212,7 +212,9 @@ export function CheckoutComponent({
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
 	const isWeeklyGift =
-		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(productKey) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
+			productKey,
+		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -364,11 +366,9 @@ export function CheckoutComponent({
 
 	/** Delivery Instructions */
 	const weeklyDeliveryDates = getWeeklyDays();
-	const [weeklyDeliveryDate, setWeeklyDeliveryDate] =
-		useStateWithCheckoutSession<Date>(
-			checkoutSession?.formFields.weeklyDeliveryDate,
-			weeklyDeliveryDates[0] as Date,
-		);
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		weeklyDeliveryDates[0] as Date,
+	);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
