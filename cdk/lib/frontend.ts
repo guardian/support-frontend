@@ -141,6 +141,7 @@ export class Frontend extends GuStack {
         domainName,
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
+      instanceMetricGranularity: "5Minute",
       monitoringConfiguration: {
         snsTopicName: `alarms-handler-topic-${this.stage}`,
         http5xxAlarm: http5xxAlarm,
