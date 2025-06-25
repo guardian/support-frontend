@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import {
-	brandAlt,
 	from,
 	headlineBold24,
 	headlineBold34,
@@ -33,13 +32,6 @@ export const cardWithLabel = css`
 	border-top-left-radius: 0;
 `;
 
-export const specialOffer = css`
-	background-color: #fffdeb;
-	border: 5px solid ${brandAlt[400]};
-	/* Reduce top and bottom padding to account for the border */
-	padding: 7px ${space[3]}px;
-`;
-
 export const cardHeader = css`
 	padding-bottom: ${space[2]}px;
 `;
@@ -49,7 +41,7 @@ export const cardHeading = css`
 	margin-bottom: ${space[1]}px;
 `;
 
-export const productLabel = css`
+export const badge = css`
 	display: block;
 	width: max-content;
 	${textSansBold14}
@@ -59,7 +51,7 @@ export const productLabel = css`
 	padding: 2.5px ${space[2]}px;
 `;
 
-export const productLabelObserver = css`
+export const badgeObserver = css`
 	background: #963c00;
 `;
 

@@ -4,7 +4,6 @@ import {
 	SvgInfoRound,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -13,6 +12,8 @@ import BenefitsList from '../../../components/product/BenefitsList';
 import Collapsible from '../../../components/product/Collapsible';
 import { type Product } from '../../../components/product/productOption';
 import {
+	badge,
+	badgeObserver,
 	ButtonCTA,
 	card,
 	cardHeader,
@@ -23,12 +24,21 @@ import {
 	cardPrice,
 	cardWithLabel,
 	planDescription,
-	productLabel,
-	productLabelObserver,
-	specialOffer,
 } from './NewspaperRatePlanCardStyles';
 
-function NewspaperRatePlanCard(props: Product) {
+function NewspaperRatePlanCard({
+	title,
+	price,
+	planData,
+	offerCopy,
+	buttonCopy,
+	href,
+	onClick,
+	onView,
+	label,
+	productLabel,
+	unavailableOutsideLondon,
+}: Product) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -45,24 +55,24 @@ function NewspaperRatePlanCard(props: Product) {
 	 * */
 	useEffect(() => {
 		if (hasBeenSeen) {
-			props.onView();
+			onView();
 		}
 	}, [hasBeenSeen]);
 
-	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
+	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
 	const renderPlanDetails = () => (
 		<>
 			<BenefitsList
-				title={props.planData?.benefits.label}
-				listItems={props.planData?.benefits.items}
+				title={planData?.benefits.label}
+				listItems={planData?.benefits.items}
 			/>
 
 			<BenefitsList
-				title={props.planData?.digitalRewards?.label}
-				listItems={props.planData?.digitalRewards?.items}
+				title={planData?.digitalRewards?.label}
+				listItems={planData?.digitalRewards?.items}
 			/>
-			{props.unavailableOutsideLondon && (
+			{unavailableOutsideLondon && (
 				<p css={cardInfo}>
 					<SvgInfoRound size="xsmall" />
 					Only available inside Greater London.
@@ -72,49 +82,36 @@ function NewspaperRatePlanCard(props: Product) {
 	);
 
 	return (
-		<div
-			ref={setElementToObserve}
-			css={[
-				card,
-				props.cssOverrides,
-				props.isSpecialOffer && specialOffer,
-				props.label && cardWithLabel,
-			]}
-		>
-			{props.label && <div css={cardLabel}>{props.label}</div>}
+		<div ref={setElementToObserve} css={[card, label && cardWithLabel]}>
+			{label && <div css={cardLabel}>{label}</div>}
 			<section css={cardHeader}>
-				<h3 css={cardHeading}>{props.title}</h3>
-				{props.productLabel && (
-					<span
-						css={[
-							productLabel,
-							isObserverChannel ? productLabelObserver : css``,
-						]}
-					>
-						{props.productLabel.text}
+				<h3 css={cardHeading}>{title}</h3>
+				{productLabel && (
+					<span css={[badge, isObserverChannel ? badgeObserver : css``]}>
+						{productLabel.text}
 					</span>
 				)}
 			</section>
 
 			<p css={cardPrice}>
-				{props.price}
+				{price}
 				<small>/month</small>
 			</p>
 
 			<div css={ButtonCTA}>
 				<LinkButton
 					priority="primary"
-					href={props.href}
-					onClick={props.onClick}
-					aria-label={`${props.title}- ${props.buttonCopy}`}
+					href={href}
+					onClick={onClick}
+					aria-label={`${title}- ${buttonCopy}`}
 					theme={themeButtonReaderRevenueBrand}
 				>
-					{props.buttonCopy}
+					{buttonCopy}
 				</LinkButton>
 			</div>
 
-			<p css={cardOffer}>{props.offerCopy}</p>
-			<p css={planDescription}>{props.planData?.description}</p>
+			<p css={cardOffer}>{offerCopy}</p>
+			<p css={planDescription}>{planData?.description}</p>
 
 			{windowWidthIsGreaterThan('tablet') ? (
 				renderPlanDetails()
@@ -124,13 +121,5 @@ function NewspaperRatePlanCard(props: Product) {
 		</div>
 	);
 }
-
-NewspaperRatePlanCard.defaultProps = {
-	children: null,
-	label: '',
-	offerCopy: '',
-	cssOverrides: '',
-	billingPeriod: BillingPeriod.Monthly,
-};
 
 export default NewspaperRatePlanCard;
