@@ -24,22 +24,26 @@ type WeeklyDeliveryDatesProps = {
 	setWeeklyDeliveryDate: (deliveryDate: Date) => void;
 };
 
+function deliveryDateIsInvalid(date: Date): boolean {
+	const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+	const machineDate = formatMachineDate(date);
+	return invalidPublicationDates.some((dateSuffix) =>
+		machineDate.endsWith(dateSuffix),
+	);
+}
+
 export function WeeklyDeliveryDates({
 	weeklyDeliveryDates,
 	weeklyDeliveryDateSelected,
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
-	const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
 	return (
 		<>
 			<Rows>
 				<RadioGroup id="weeklyDeliveryDates" name="weeklyDeliveryDates">
 					{weeklyDeliveryDates
 						.filter((date) => {
-							const machineDate = formatMachineDate(date);
-							return !invalidPublicationDates.some((dateSuffix) =>
-								machineDate.endsWith(dateSuffix),
-							);
+							return !deliveryDateIsInvalid(date);
 						})
 						.map((validDate) => {
 							const [userDate, machineDate] = [
