@@ -212,9 +212,7 @@ export function CheckoutComponent({
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
 	const isWeeklyGift =
-		(productKey === 'GuardianWeeklyDomestic' ||
-			productKey === 'GuardianWeeklyRestOfWorld') &&
-		(ratePlanKey === 'OneYearGift' || ratePlanKey === 'ThreeMonthGift');
+		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(productKey) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
