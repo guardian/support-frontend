@@ -21,6 +21,7 @@ import {
   InstanceClass,
   InstanceSize,
   InstanceType,
+  SecurityGroup,
   UserData,
 } from "aws-cdk-lib/aws-ec2";
 import {
@@ -108,6 +109,7 @@ export class PaymentApi extends GuStack {
         domainName: props.domainName,
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
+      instanceMetricGranularity: "5Minute",
       monitoringConfiguration: { noMonitoring: true },
       instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
       scaling: props.scaling,
@@ -209,6 +211,18 @@ export class PaymentApi extends GuStack {
       },
     });
 
+    // A temporary security group with a fixed logical ID, replicating the one removed from GuCDK v61.5.0.
+    const tempSecurityGroup = new SecurityGroup(this, "WazuhSecurityGroup", {
+      vpc: playApp.vpc,
+      // Must keep the same description, else CloudFormation will try to replace the security group
+      // See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-securitygroup.html#cfn-ec2-securitygroup-groupdescription.
+      description: "Allow outbound traffic from wazuh agent to manager",
+    });
+    this.overrideLogicalId(tempSecurityGroup, {
+      logicalId: "WazuhSecurityGroup",
+      reason: "Part one of updating to GuCDK 61.5.0+ whilst using Riff-Raff's ASG deployment type",
+    });
+
     // Rule to only allow known http methods
     new ApplicationListenerRule(this, "AllowKnownMethods", {
       listener: playApp.listener,
@@ -284,7 +298,9 @@ export class PaymentApi extends GuStack {
     );
     new GuAlarm(this, "NoPaypalPaymentsInPeriodAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful paypal payments via payment-api for ${paypalAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
       evaluationPeriods: paypalEvaluationPeriods,
@@ -339,7 +355,7 @@ export class PaymentApi extends GuStack {
             "payment-provider": paymentProvider,
           },
           statistic: "Sum",
-          period: stripeExpressMetricDuration
+          period: stripeExpressMetricDuration,
         })
     );
     const combinedApplePayAndPaymentRequestButtonSuccessMetric =
@@ -353,7 +369,9 @@ export class PaymentApi extends GuStack {
       });
     new GuAlarm(this, "NoStripeExpressPaymentsInOneHourAlarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
+      alarmName: `[CDK] ${app} ${
+        this.stage
+      } No successful stripe express payments via payment-api for ${stripeExpressAlarmPeriod.toHumanString()}`,
       actionsEnabled: props.stage === "PROD",
       threshold: 0,
       evaluationPeriods: stripeExpressEvaluationPeriods,
