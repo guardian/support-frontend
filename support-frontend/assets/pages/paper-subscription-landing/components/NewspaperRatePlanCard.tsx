@@ -94,7 +94,6 @@ function NewspaperRatePlanCard(props: Product) {
 						{props.productLabel.text}
 					</span>
 				)}
-				{props.children && props.children}
 			</section>
 
 			<p css={cardPrice}>
