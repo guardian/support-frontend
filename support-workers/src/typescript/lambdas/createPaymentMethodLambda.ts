@@ -12,7 +12,7 @@ import type {
 	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
-import { ProductType } from '../model/productType';
+import type { ProductType } from '../model/productType';
 import { stageFromEnvironment } from '../model/stage';
 import type {
 	CreatePaymentMethodState,
