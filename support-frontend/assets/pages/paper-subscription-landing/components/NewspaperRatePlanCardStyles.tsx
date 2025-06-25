@@ -14,7 +14,7 @@ import {
 	textSansBold15,
 } from '@guardian/source/foundations';
 
-export const productCard = css`
+export const card = css`
 	${textSans17};
 	position: relative;
 	display: flex;
@@ -29,7 +29,7 @@ export const productCard = css`
 	}
 `;
 
-export const productCardWithLabel = css`
+export const cardWithLabel = css`
 	border-top-left-radius: 0;
 `;
 
@@ -40,11 +40,11 @@ export const specialOffer = css`
 	padding: 7px ${space[3]}px;
 `;
 
-export const productCardHeader = css`
+export const cardHeader = css`
 	padding-bottom: ${space[2]}px;
 `;
 
-export const productCardHeading = css`
+export const cardHeading = css`
 	${headlineBold24};
 	margin-bottom: ${space[1]}px;
 `;
@@ -63,7 +63,7 @@ export const productLabelObserver = css`
 	background: #963c00;
 `;
 
-export const productCardOffer = css`
+export const cardOffer = css`
 	${textSans14};
 	color: ${neutral[38]};
 	text-align: center;
@@ -72,7 +72,7 @@ export const productCardOffer = css`
 	}
 `;
 
-export const productCardInfo = css`
+export const cardInfo = css`
 	${textSans15}
 	display: flex;
 	align-items: center;
@@ -88,8 +88,8 @@ export const productCardInfo = css`
 	&:before {
 		position: absolute;
 		content: '';
-		width: 12px;
-		height: 12px;
+		width: 8px;
+		height: 8px;
 		border-radius: 50%;
 		left: 6px;
 		bottom: 6px;
@@ -104,15 +104,14 @@ export const productCardInfo = css`
 	}
 `;
 
-export const productCardPrice = css`
+export const cardPrice = css`
 	${headlineBold34};
-	margin-bottom: ${space[1]}px;
 	small {
 		${textSans15};
 	}
 `;
 
-export const productCardLabel = css`
+export const cardLabel = css`
 	background-color: #c1d8fc;
 	color: ${neutral[7]};
 	position: absolute;
@@ -122,8 +121,8 @@ export const productCardLabel = css`
 	text-align: center;
 	padding: ${space[1]}px ${space[2]}px;
 	${textSansBold15};
-	border-top-left-radius: ${space[2]}px;
-	border-top-right-radius: ${space[2]}px;
+	border-top-left-radius: ${space[1]}px;
+	border-top-right-radius: ${space[1]}px;
 `;
 
 export const ButtonCTA = css`

@@ -3,14 +3,15 @@ import { from, palette, space } from '@guardian/source/foundations';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
-import ProductCard from 'components/product/PaperProductCard';
+import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
-import { PaperTabHero } from './content/paperTabHero';
+import NewspaperTabHero from './content/NewspaperTabHero';
 
 const cardsContainer = css`
 	background-color: ${palette.brand[400]};
@@ -35,23 +36,32 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
 		text: 'Home Delivery',
 		href: `#${HomeDelivery}`,
-		content: () => <PaperTabHero tab={HomeDelivery} />,
+		content: () => <NewspaperTabHero tab={HomeDelivery} />,
 	},
 	Collection: {
 		text: 'Subscription Card',
 		href: `#${Collection}`,
-		content: () => <PaperTabHero tab={Collection} />,
+		content: () => <NewspaperTabHero tab={Collection} />,
 	},
 };
 
-function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
+function NewspaperProductTabs({
+	productPrices,
+}: {
+	productPrices: ProductPrices;
+}) {
 	const fulfilment =
 		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
+		getPlans(selectedTab, productPrices),
+	);
 
-	const products = getPlans(selectedTab, productPrices);
+	useEffect(() => {
+		setProductRatePlans(getPlans(selectedTab, productPrices));
+	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
 		const { href, text, content: ContentComponent } = tab;
@@ -77,26 +87,41 @@ function PaperProductTabs({ productPrices }: { productPrices: ProductPrices }) {
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
-					{products.map((product) => (
-						<ProductCard
-							title={product.title}
-							price={product.price}
-							priceCopy={product.priceCopy}
-							planData={product.planData}
-							offerCopy={product.offerCopy}
-							buttonCopy={product.buttonCopy}
-							href={product.href}
-							onClick={product.onClick}
-							onView={product.onView}
-							label={product.label}
-							productLabel={product.productLabel}
-							unavailableOutsideLondon={product.unavailableOutsideLondon}
-						/>
-					))}
+					{productRatePlans.map(
+						({
+							title,
+							price,
+							priceCopy,
+							planData,
+							offerCopy,
+							buttonCopy,
+							href,
+							onClick,
+							onView,
+							label,
+							productLabel,
+							unavailableOutsideLondon,
+						}) => (
+							<NewspaperRatePlanCard
+								title={title}
+								price={price}
+								priceCopy={priceCopy}
+								planData={planData}
+								offerCopy={offerCopy}
+								buttonCopy={buttonCopy}
+								href={href}
+								onClick={onClick}
+								onView={onView}
+								label={label}
+								productLabel={productLabel}
+								unavailableOutsideLondon={unavailableOutsideLondon}
+							/>
+						),
+					)}
 				</section>
 			</CentredContainer>
 		</FullWidthContainer>
 	);
 }
 
-export default PaperProductTabs;
+export default NewspaperProductTabs;

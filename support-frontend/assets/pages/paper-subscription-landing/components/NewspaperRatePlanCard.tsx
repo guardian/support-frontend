@@ -9,26 +9,26 @@ import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';
-import BenefitsList from './BenefitsList';
-import Collapsible from './Collapsible';
+import BenefitsList from '../../../components/product/BenefitsList';
+import Collapsible from '../../../components/product/Collapsible';
+import { type Product } from '../../../components/product/productOption';
 import {
 	ButtonCTA,
+	card,
+	cardHeader,
+	cardHeading,
+	cardInfo,
+	cardLabel,
+	cardOffer,
+	cardPrice,
+	cardWithLabel,
 	planDescription,
-	productCard,
-	productCardHeader,
-	productCardHeading,
-	productCardInfo,
-	productCardLabel,
-	productCardOffer,
-	productCardPrice,
-	productCardWithLabel,
 	productLabel,
 	productLabelObserver,
 	specialOffer,
-} from './PaperProductCardStyles';
-import { type Product } from './productOption';
+} from './NewspaperRatePlanCardStyles';
 
-function ProductCard(props: Product) {
+function NewspaperRatePlanCard(props: Product) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
 		debounce: true,
@@ -63,8 +63,8 @@ function ProductCard(props: Product) {
 				listItems={props.planData?.digitalRewards?.items}
 			/>
 			{props.unavailableOutsideLondon && (
-				<p css={productCardInfo}>
-					<SvgInfoRound size="small" />
+				<p css={cardInfo}>
+					<SvgInfoRound size="xsmall" />
 					Only available inside Greater London.
 				</p>
 			)}
@@ -75,15 +75,15 @@ function ProductCard(props: Product) {
 		<div
 			ref={setElementToObserve}
 			css={[
-				productCard,
+				card,
 				props.cssOverrides,
-				props.isSpecialOffer ? specialOffer : css``,
-				props.label ? productCardWithLabel : css``,
+				props.isSpecialOffer && specialOffer,
+				props.label && cardWithLabel,
 			]}
 		>
-			{props.label && <div css={[productCardLabel]}>{props.label}</div>}
-			<section css={[productCardHeader]}>
-				<h3 css={productCardHeading}>{props.title}</h3>
+			{props.label && <div css={cardLabel}>{props.label}</div>}
+			<section css={cardHeader}>
+				<h3 css={cardHeading}>{props.title}</h3>
 				{props.productLabel && (
 					<span
 						css={[
@@ -97,7 +97,7 @@ function ProductCard(props: Product) {
 				{props.children && props.children}
 			</section>
 
-			<p css={productCardPrice}>
+			<p css={cardPrice}>
 				{props.price}
 				<small>/month</small>
 			</p>
@@ -114,7 +114,7 @@ function ProductCard(props: Product) {
 				</LinkButton>
 			</div>
 
-			<p css={[productCardOffer]}>{props.offerCopy}</p>
+			<p css={cardOffer}>{props.offerCopy}</p>
 			<p css={planDescription}>{props.planData?.description}</p>
 
 			{windowWidthIsGreaterThan('tablet') ? (
@@ -126,7 +126,7 @@ function ProductCard(props: Product) {
 	);
 }
 
-ProductCard.defaultProps = {
+NewspaperRatePlanCard.defaultProps = {
 	children: null,
 	label: '',
 	offerCopy: '',
@@ -134,4 +134,4 @@ ProductCard.defaultProps = {
 	billingPeriod: BillingPeriod.Monthly,
 };
 
-export default ProductCard;
+export default NewspaperRatePlanCard;
