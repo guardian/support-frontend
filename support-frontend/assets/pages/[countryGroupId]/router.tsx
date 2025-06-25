@@ -50,9 +50,24 @@ const LandingPage = lazy(() => {
 		},
 	);
 });
+const StudentLandingPage = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPage" */ './studentLandingPage'
+	).then((mod) => {
+		return { default: mod.StudentLandingPage };
+	});
+});
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
+		{
+			path: `/${geoId}/student`,
+			element: (
+				<Suspense fallback={<HoldingContent />}>
+					<StudentLandingPage geoId={geoId} />
+				</Suspense>
+			),
+		},
 		{
 			path: `/${geoId}/contribute/:campaignCode?`,
 			element: (
