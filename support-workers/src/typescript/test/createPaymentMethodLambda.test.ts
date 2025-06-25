@@ -1,11 +1,8 @@
-import { handler } from '../lambdas/createPaymentMethodLambda';
-import createPaymentDirectDebitPaper from './fixtures/createPaymentMethod/paperDirectDebit.json';
-import {
-	CreatePaymentMethodState,
-	createPaymentMethodStateSchema,
-} from '../model/stateSchemas';
-import { fulfilmentOptionsSchema } from '@modules/product/schemas';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import { handler } from '../lambdas/createPaymentMethodLambda';
+import type { CreatePaymentMethodState } from '../model/stateSchemas';
+import { createPaymentMethodStateSchema } from '../model/stateSchemas';
+import createPaymentDirectDebitPaper from './fixtures/createPaymentMethod/paperDirectDebit.json';
 
 const wrapPayload = (payload: CreatePaymentMethodState) => ({
 	state: payload,
