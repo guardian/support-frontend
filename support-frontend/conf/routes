@@ -79,6 +79,10 @@ GET  /contribute/:campaignCode                                     controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
+GET  /student                                                   controllers.Application.studentGeoRedirect(campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/student                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/student/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
+
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
 GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()

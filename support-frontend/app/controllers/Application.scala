@@ -275,6 +275,11 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
+  def studentGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = getGeoPath(request, campaignCode, "contribute")
+    RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
+  }
+
   def geoRedirectToPath(path: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val url = getGeoPath(request, "", path)
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
