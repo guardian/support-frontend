@@ -4,9 +4,9 @@ import {
 	SvgInfoRound,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import { Channel } from 'pages/paper-subscription-landing/helpers/products';
 import BenefitsList from '../../../components/product/BenefitsList';

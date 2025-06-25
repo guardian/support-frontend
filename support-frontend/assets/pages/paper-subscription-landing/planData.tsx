@@ -1,4 +1,4 @@
-import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
+import type { PaperProductOptions } from '@modules/product/productOptions';
 
 export type PlanData = {
 	description: JSX.Element;
