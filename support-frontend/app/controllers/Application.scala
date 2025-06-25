@@ -427,7 +427,7 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
-    val classes = "gu-content--contribution-form--placeholder" +
+    val classes = "gu-content--student-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
@@ -452,10 +452,10 @@ class Application(
     val canonicalLink = s"https://support.theguardian.com/student"
 
     views.html.contributions(
-      id = s"contributions-landing-page-$countryCode",
+      id = s"student-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
-      description = stringsConfig.contributionsLandingDescription,
+      description = stringsConfig.studentLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
