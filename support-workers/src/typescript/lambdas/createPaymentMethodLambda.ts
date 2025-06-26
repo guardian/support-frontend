@@ -12,6 +12,7 @@ import type {
 	PayPalPaymentMethod,
 	StripePaymentMethod,
 } from '../model/paymentMethod';
+import type { ProductType } from '../model/productType';
 import { stageFromEnvironment } from '../model/stage';
 import type {
 	CreatePaymentMethodState,
@@ -52,6 +53,7 @@ export const handler = async (
 			await createPaymentMethod(
 				createPaymentMethodState.paymentFields,
 				createPaymentMethodState.user,
+				createPaymentMethodState.product,
 			),
 		);
 	} catch (error) {
@@ -62,6 +64,7 @@ export const handler = async (
 export function createPaymentMethod(
 	paymentFields: PaymentFields,
 	user: User,
+	productType: ProductType,
 ): Promise<PaymentMethod> {
 	switch (paymentFields.paymentType) {
 		case 'Stripe':
@@ -71,7 +74,7 @@ export function createPaymentMethod(
 		case 'PayPal':
 			return createPayPalPaymentMethod(user.isTestUser, paymentFields);
 		case 'DirectDebit':
-			return createDirectDebitPaymentMethod(user, paymentFields);
+			return createDirectDebitPaymentMethod(user, paymentFields, productType);
 		case 'Existing':
 			return Promise.reject(
 				new Error(
@@ -217,15 +220,24 @@ async function createPayPalPaymentMethod(
 export function createDirectDebitPaymentMethod(
 	user: User,
 	dd: DirectDebitPaymentFields,
+	productType: ProductType,
 ): Promise<DirectDebitPaymentMethod> {
 	const addressLine = combinedAddressLine(
 		user.billingAddress.lineOne,
 		user.billingAddress.lineTwo,
 	);
 
+	const shouldUseTortoiseMediaGateway =
+		productType.productType === 'Paper' &&
+		productType.productOptions === 'Sunday';
+	const guardianGateway = 'GoCardless';
+	const tortoiseMediaGateway = 'GoCardless - Observer - Tortoise Media';
+
 	return Promise.resolve({
 		Type: 'BankTransfer',
-		PaymentGateway: 'GoCardless',
+		PaymentGateway: shouldUseTortoiseMediaGateway
+			? tortoiseMediaGateway
+			: guardianGateway,
 		BankTransferType: 'DirectDebitUK',
 		FirstName: user.firstName,
 		LastName: user.lastName,
