@@ -36,6 +36,10 @@ const stripePaymentMethodSchema = z.object({
 });
 export type StripePaymentMethod = z.infer<typeof stripePaymentMethodSchema>;
 
+export const directDebitPaymentGatewaySchema = z.union([
+	z.literal('GoCardless'),
+	z.literal('GoCardless - Observer - Tortoise Media'),
+]);
 const directDebitPaymentMethodSchema = z.object({
 	FirstName: z.string(),
 	LastName: z.string(),
@@ -50,7 +54,7 @@ const directDebitPaymentMethodSchema = z.object({
 	StreetNumber: z.string().nullable(),
 	BankTransferType: z.literal('DirectDebitUK'),
 	Type: z.literal('BankTransfer'),
-	PaymentGateway: z.literal('GoCardless'),
+	PaymentGateway: directDebitPaymentGatewaySchema,
 });
 export type DirectDebitPaymentMethod = z.infer<
 	typeof directDebitPaymentMethodSchema
