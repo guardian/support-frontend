@@ -14,7 +14,7 @@ export function StudentLandingPage({ geoId }: Props) {
 		countryGroupIds: [AUDCountries],
 		selectedCountryGroup: countryGroupId,
 		subPath: '/studentLanding',
-	}; // hidden initially, will display with more regions
+	}; // AU initially, further updates will display with more regions
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<StudentHeaderCard geoId={geoId} />
