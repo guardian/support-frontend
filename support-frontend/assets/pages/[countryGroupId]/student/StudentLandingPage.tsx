@@ -8,17 +8,10 @@ import {
 	setReturnAddress,
 } from '../checkout/helpers/sessionStorage';
 import { AccordianComponent } from '../components/accordianComponent';
-import { HeaderCards } from './components/headerCards';
+import Header from './components/Header';
 import { LandingPageLayout } from './components/landingPageLayout';
-import { PosterComponent } from './components/posterComponent';
 
-type GuardianAdLiteLandingProps = {
-	geoId: GeoId;
-};
-
-export function GuardianAdLiteLanding({
-	geoId,
-}: GuardianAdLiteLandingProps): JSX.Element {
+export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 	const user = getUser();
 	const { countryGroupId } = getGeoIdConfig(geoId);
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -39,12 +32,11 @@ export function GuardianAdLiteLanding({
 	}
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<HeaderCards
+			<Header
 				geoId={geoId}
 				returnLink={getReturnAddress()} // defaults to urlSearchParamsReturn if available
 				isSignedIn={user.isSignedIn}
 			/>
-			<PosterComponent />
 			<AccordianComponent />
 		</LandingPageLayout>
 	);

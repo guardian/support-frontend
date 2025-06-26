@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { AccordianComponent } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordianComponent';
+import { AccordianComponent } from 'pages/[countryGroupId]/components/accordianComponent';
 
 export default {
 	title: 'LandingPage/GuardianAdLite Accordian',
