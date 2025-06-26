@@ -321,7 +321,12 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, campaignCodeOption),
+      contributionsPlusStudentHtml(
+        countryCode,
+        campaignCodeOption,
+        "contributions",
+        "https://support.theguardian.com/contribute",
+      ),
     ).withSettingsSurrogateKey
   }
 
@@ -333,7 +338,12 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      studentHtml(countryCode, campaignCodeOption),
+      contributionsPlusStudentHtml(
+        countryCode,
+        campaignCodeOption,
+        "student",
+        "https://support.theguardian.com/student",
+      ),
     ).withSettingsSurrogateKey
   }
 
@@ -354,9 +364,11 @@ class Application(
     "https://i.guim.co.uk/img/media/5366cacfd2081e5a4af259318238b3f82610d32e/0_0_1000_525/1000.png?quality=85&s=966978166c0983aef68828559ede40d8"
   }
 
-  private def contributionsHtml(
+  private def contributionsPlusStudentHtml(
       countryCode: String,
       campaignCode: Option[String],
+      pageName: String,
+      canonicalUrl: String,
   )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
     val geoData = request.geoData
     val idUser = request.user
@@ -364,11 +376,13 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
-    val classes = "gu-content--contribution-form--placeholder" +
+    val classes = s"gu-content--$pageName-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
+    val ssrCachePageName = if (pageName == "contributions") "supporter-plus" else pageName
+
     val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"supporter-plus-landing-page-$countryCode",
+      divId = s"$ssrCachePageName-landing-page-$countryCode",
       file = "ssr-holding-content.html",
       classes = Some(classes),
     )
@@ -386,76 +400,15 @@ class Application(
     val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
     // We want the canonical link to point to the geo-redirect page so that users arriving from
     // search will be redirected to the correct version of the page
-    val canonicalLink = s"https://support.theguardian.com/contribute"
+    val canonicalLink = s"$canonicalUrl"
 
     views.html.contributions(
-      id = s"contributions-landing-page-$countryCode",
+      id = s"$pageName-landing-page-$countryCode",
       mainElement = mainElement,
       js = RefPath("[countryGroupId]/router.js"),
-      description = stringsConfig.contributionsLandingDescription,
-      paymentMethodConfigs = PaymentMethodConfigs(
-        oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-        oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
-        regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-        regularTestStripeConfig = regularStripeConfigProvider.get(true),
-        regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularTestPayPalConfig = payPalConfigProvider.get(true),
-      ),
-      paymentApiUrl = paymentAPIService.paymentAPIUrl,
-      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-      membersDataApiUrl = membersDataApiUrl,
-      idUser = idUser,
-      guestAccountCreationToken = guestAccountCreationToken,
-      geoData = geoData,
-      shareImageUrl = shareImageUrl(settings),
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-      serversideTests = serversideTests,
-      allProductPrices = allProductPrices,
-      productCatalog = productCatalog,
-      noIndex = stage != PROD,
-      canonicalLink = canonicalLink,
-    )
-  }
-
-  private def studentHtml(
-      countryCode: String,
-      campaignCode: Option[String],
-  )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
-    val geoData = request.geoData
-    val idUser = request.user
-
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
-
-    val classes = "gu-content--student-form--placeholder" +
-      campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
-
-    val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"student-landing-page-$countryCode",
-      file = "ssr-holding-content.html",
-      classes = Some(classes),
-    )
-
-    val serversideTests = generateParticipations(Nil)
-    val isTestUser = testUserService.isTestUser(request)
-
-    val queryPromos =
-      request.queryString
-        .getOrElse("promoCode", Nil)
-        .toList
-
-    val allProductPrices = getAllProductPrices(isTestUser, queryPromos)
-
-    val productCatalog = cachedProductCatalogServiceProvider.fromStage(stage, isTestUser).get()
-    // We want the canonical link to point to the geo-redirect page so that users arriving from
-    // search will be redirected to the correct version of the page
-    val canonicalLink = s"https://support.theguardian.com/student"
-
-    views.html.contributions(
-      id = s"student-landing-page-$countryCode",
-      mainElement = mainElement,
-      js = RefPath("[countryGroupId]/router.js"),
-      description = stringsConfig.studentLandingDescription,
+      description =
+        if (pageName.startsWith("student")) stringsConfig.studentLandingDescription
+        else stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
