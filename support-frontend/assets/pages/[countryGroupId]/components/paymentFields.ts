@@ -68,7 +68,6 @@ const getStripePaymentFields = async (
 				'There was an issue with your card details.',
 				appropriateErrorMessage(stripeIntentResult.error.decline_code ?? ''),
 			);
-			console.error(stripeIntentResult.error);
 		} else if (stripeIntentResult.setupIntent.payment_method) {
 			return {
 				paymentType: 'Stripe',
