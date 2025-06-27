@@ -7,7 +7,7 @@ import {
 	getReturnAddress,
 	setReturnAddress,
 } from '../checkout/helpers/sessionStorage';
-import { AccordianComponent } from './components/accordianComponent';
+import { AccordionFAQ } from './components/accordionFAQ';
 import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
@@ -45,7 +45,10 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordianComponent />
+			<AccordionFAQ
+				product={'GuardianAdLite'}
+				countryGroupId={countryGroupId}
+			/>
 		</LandingPageLayout>
 	);
 }
