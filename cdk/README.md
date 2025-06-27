@@ -22,3 +22,5 @@ There are also some other commands defined in `package.json`, including:
 - `pnpm test -u` to update the snapshots
 
 However, it's advised you configure your IDE to format on save to avoid horrible "correct linting" commits.
+
+Test change.
