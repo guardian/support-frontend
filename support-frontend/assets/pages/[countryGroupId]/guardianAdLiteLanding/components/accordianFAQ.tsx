@@ -179,8 +179,8 @@ const productFAQ: Record<ActiveProductKey, ProductFAQ | undefined> = {
 			title: 'Will my All-access subscription work across all devices?',
 			body: (
 				<div css={rowSpacing}>
-					You can access your All- access digital subscription across all
-					devices by logging into your Guardian account.
+					You can access your All-access digital subscription across all devices
+					by logging into your Guardian account.
 				</div>
 			),
 		},
