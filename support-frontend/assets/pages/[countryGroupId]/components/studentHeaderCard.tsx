@@ -8,6 +8,7 @@ const container = css`
 	position: relative;
 	> div {
 		max-width: 620px;
+		height: 320px;
 		background-color: ${palette.neutral[97]};
 		padding: ${space[3]}px;
 		display: flex;
