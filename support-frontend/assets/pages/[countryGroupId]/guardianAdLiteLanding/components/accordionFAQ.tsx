@@ -11,9 +11,14 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import React, { useState } from 'react';
 import { Container } from 'components/layout/container';
-import { guardianAdLiteTermsLink, supporterPlusTermsLink } from 'helpers/legal';
+import {
+	guardianAdLiteTermsLink,
+	privacyLink,
+	supporterPlusTermsLink,
+} from 'helpers/legal';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 
@@ -98,12 +103,13 @@ const rowSpacing = css`
 	}
 `;
 
-type ProductFAQ = Array<{
+type CountryGroupFAQ = Array<{
 	title: string;
 	body: JSX.Element;
 }>;
-const productFAQ: Partial<Record<ActiveProductKey, ProductFAQ>> = {
-	GuardianAdLite: [
+
+const guardianAdLiteFAQ: Partial<Record<CountryGroupId, CountryGroupFAQ>> = {
+	GBPCountries: [
 		{
 			title: 'What is included in my Guardian Ad-Lite subscription?',
 			body: (
@@ -154,64 +160,128 @@ const productFAQ: Partial<Record<ActiveProductKey, ProductFAQ>> = {
 			),
 		},
 	],
-	SupporterPlus: [
-		{
-			title: 'Who is eligible for this discount?',
-			body: (
-				<div css={rowSpacing}>
-					Current students at [university/college] who register and verify
-					through Student Beans, are eligible for this discount.
-				</div>
-			),
-		},
-		{
-			title: 'What is included in my All-access subscription?',
-			body: (
-				<div css={rowSpacing}>
-					Your All-access digital subscription entitles you to all the benefits
-					listed above, including: unlimited access to the Guardian news app and
-					Guardian Feast app, ad-free reading on all your devices, exclusive
-					newsletter for supporters and far fewer asks for support.
-				</div>
-			),
-		},
-		{
-			title: 'Will my All-access subscription work across all devices?',
-			body: (
-				<div css={rowSpacing}>
-					You can access your All-access digital subscription across all devices
-					by logging into your Guardian account.
-				</div>
-			),
-		},
-		{
-			title: 'How can I manage my All-access subscription?',
-			body: (
-				<div css={rowSpacing}>
-					{' '}
-					To manage your subscription, go to Manage my account, and for further
-					information on your All-access digital subscription, see our Terms &
-					Conditions <a href={supporterPlusTermsLink}>here</a>
-				</div>
-			),
-		},
-		{
-			title: 'How do I contact customer services?',
-			body: (
-				<div css={rowSpacing}>
-					For any queries, including subscription-related queries, visit our{' '}
-					<a href={helpCentreUrl}>Help centre</a>
-				</div>
-			),
-		},
-	],
+};
+const supporterPlusBodyAccess: JSX.Element = (
+	<div css={rowSpacing}>
+		You can access your All- access digital subscription across all devices by
+		logging into your Guardian account.
+	</div>
+);
+const supporterPlusBodyManage: JSX.Element = (
+	<div css={rowSpacing}>
+		To manage your subscription, go to Manage my account, and for further
+		information on your All-access digital subscription, see our Terms &
+		Conditions <a href={supporterPlusTermsLink}>here</a>
+	</div>
+);
+const supporterPlusBodyContact: JSX.Element = (
+	<div css={rowSpacing}>
+		For any queries, including subscription-related queries, visit our{' '}
+		<a href={helpCentreUrl}>Help centre</a>
+	</div>
+);
+const otherSupporterPlusFAQ: CountryGroupFAQ = [
+	{
+		title: 'Who is eligible for this discount?',
+		body: (
+			<div css={rowSpacing}>
+				Current students at [university/college] who register and verify through
+				Student Beans, are eligible for this discount.
+			</div>
+		),
+	},
+	{
+		title: 'What is included in my All-access subscription?',
+		body: (
+			<div css={rowSpacing}>
+				Your All-access digital subscription entitles you to all the benefits
+				listed above, including: unlimited access to the Guardian news app and
+				Guardian Feast app, ad-free reading on all your devices, exclusive
+				newsletter for supporters and far fewer asks for support.
+			</div>
+		),
+	},
+	{
+		title: 'Will my All-access subscription work across all devices?',
+		body: supporterPlusBodyAccess,
+	},
+	{
+		title: 'How can I manage my All-access subscription?',
+		body: supporterPlusBodyManage,
+	},
+	{
+		title: 'How do I contact customer services?',
+		body: supporterPlusBodyContact,
+	},
+];
+const auSupporterPlusFAQ: CountryGroupFAQ = [
+	{
+		title: 'Who is eligible for this discount?',
+		body: (
+			<div css={rowSpacing}>
+				Access to the All-access digital subscription offered under this
+				agreement is strictly limited to currently enrolled students of the
+				University of Technology Sydney (UTS). Redemption of the offer is
+				conditional upon registration using a valid and active UTS email
+				address. Your email address may be subjected to an internal verification
+				process to confirm your eligibility as a UTS student – you may refer to
+				the Guardian’s <a href={privacyLink}>privacy policy</a> which explains
+				how personal information is handled by the Guardian. The Guardian
+				reserves the right to cancel, suspend, or revoke any subscription
+				claimed through this offer if it is reasonably suspected or determined
+				that the subscriber does not meet the eligibility criteria.
+			</div>
+		),
+	},
+	{
+		title: 'What is included in my All-access subscription?',
+		body: (
+			<div css={rowSpacing}>
+				Your All-access digital subscription entitles you to all the benefits
+				listed above, including: unlimited access to the Guardian news app and
+				Guardian Feast app, ad-free reading on all your devices, exclusive
+				newsletter for supporters and far fewer asks for support. Currently,
+				this offer provides you with a free All-access digital subscription for
+				a period of 24 months after redemption. We will be in touch during this
+				period if there are opportunities to extend beyond this timeframe.
+			</div>
+		),
+	},
+	{
+		title: 'Will my All-access subscription work across all devices?',
+		body: supporterPlusBodyAccess,
+	},
+	{
+		title: 'How can I manage my All-access subscription?',
+		body: supporterPlusBodyManage,
+	},
+	{
+		title: 'How do I contact customer services?',
+		body: supporterPlusBodyContact,
+	},
+];
+const supporterPlusFAQ: Partial<Record<CountryGroupId, CountryGroupFAQ>> = {
+	AUDCountries: auSupporterPlusFAQ,
+	GBPCountries: otherSupporterPlusFAQ,
+	UnitedStates: otherSupporterPlusFAQ,
+};
+
+const productFAQ: Partial<
+	Record<ActiveProductKey, Partial<Record<CountryGroupId, CountryGroupFAQ>>>
+> = {
+	GuardianAdLite: guardianAdLiteFAQ,
+	SupporterPlus: supporterPlusFAQ,
 };
 
 export type AccordionFAQProps = {
 	product: ActiveProductKey;
+	countryGroupId: CountryGroupId;
 };
-export function AccordionFAQ({ product }: AccordionFAQProps): JSX.Element {
-	const rows = productFAQ[product];
+export function AccordionFAQ({
+	product,
+	countryGroupId,
+}: AccordionFAQProps): JSX.Element {
+	const rows = productFAQ[product]?.[countryGroupId];
 	return (
 		<Container sideBorders cssOverrides={container}>
 			<div css={bodyContainer}>
@@ -219,7 +289,11 @@ export function AccordionFAQ({ product }: AccordionFAQProps): JSX.Element {
 				{rows && (
 					<Accordion cssOverrides={accordian}>
 						{rows.map((row) => (
-							<AccordianFAQRow title={row.title} body={row.body} />
+							<AccordianFAQRow
+								key={row.title}
+								title={row.title}
+								body={row.body}
+							/>
 						))}
 					</Accordion>
 				)}

@@ -20,7 +20,7 @@ export function StudentLandingPage({ geoId }: Props) {
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<StudentHeaderCard geoId={geoId} />
-			<AccordionFAQ product={product} />
+			<AccordionFAQ product={product} countryGroupId={countryGroupId} />
 		</LandingPageLayout>
 	);
 }
