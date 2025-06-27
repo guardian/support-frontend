@@ -147,5 +147,3 @@ main () {
 }
 
 main
-
-echo "foo"
