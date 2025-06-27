@@ -147,3 +147,5 @@ main () {
 }
 
 main
+
+echo "foo"
