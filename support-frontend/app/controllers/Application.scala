@@ -326,6 +326,7 @@ class Application(
         campaignCodeOption,
         "contributions",
         "https://support.theguardian.com/contribute",
+        stage != PROD,
       ),
     ).withSettingsSurrogateKey
   }
@@ -343,6 +344,7 @@ class Application(
         campaignCodeOption,
         "student",
         "https://support.theguardian.com/student",
+        true,
       ),
     ).withSettingsSurrogateKey
   }
@@ -369,6 +371,7 @@ class Application(
       campaignCode: Option[String],
       pageName: String,
       canonicalUrl: String,
+      noIndexing: Boolean,
   )(implicit request: OptionalAuthRequest[AnyContent], settings: AllSettings) = {
     val geoData = request.geoData
     val idUser = request.user
@@ -428,7 +431,7 @@ class Application(
       serversideTests = serversideTests,
       allProductPrices = allProductPrices,
       productCatalog = productCatalog,
-      noIndex = stage != PROD,
+      noIndex = noIndexing,
       canonicalLink = canonicalLink,
     )
   }
