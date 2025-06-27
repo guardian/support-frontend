@@ -45,7 +45,7 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordionFAQ />
+			<AccordionFAQ product={'GuardianAdLite'} />
 		</LandingPageLayout>
 	);
 }

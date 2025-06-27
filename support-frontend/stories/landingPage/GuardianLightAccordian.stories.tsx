@@ -3,7 +3,7 @@ import { AccordionFAQ } from 'pages/[countryGroupId]/guardianAdLiteLanding/compo
 
 export default {
 	title: 'LandingPage/GuardianAdLite Accordian',
-	component: AccordionFAQ,
+	component: <AccordionFAQ product={'GuardianAdLite'} />,
 	argTypes: {},
 };
 
@@ -15,7 +15,7 @@ function Template() {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<AccordionFAQ />
+			<AccordionFAQ product={'GuardianAdLite'} />
 		</div>
 	);
 }

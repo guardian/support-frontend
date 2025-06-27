@@ -11,9 +11,10 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Container } from 'components/layout/container';
-import { guardianAdLiteTermsLink } from 'helpers/legal';
+import { guardianAdLiteTermsLink, supporterPlusTermsLink } from 'helpers/legal';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 
 const container = css`
@@ -97,67 +98,140 @@ const rowSpacing = css`
 	}
 `;
 
-const rows = [
-	{
-		title: 'What is included in my Guardian Ad-Lite subscription?',
-		body: (
-			<div>
-				<p css={rowSpacing}>
-					A Guardian Ad-Lite subscription enables you to read the Guardian
-					website without personalised advertising. You will still see
-					advertising but it will be delivered without the use of personalised
-					advertising cookies or similar technologies.
-				</p>
-				<p css={rowSpacing}>
-					A Guardian Ad-Lite subscription does not entitle you to the additional
-					benefits on offer via our All-access digital and Digital + print
-					subscriptions, which are stated <a href="/contribute">here</a>.
-				</p>
-			</div>
-		),
-	},
-	{
-		title: 'Will my Guardian Ad-Lite subscription work across all devices?',
-		body: (
-			<div css={rowSpacing}>
-				You can read the Guardian website without personalised advertising
-				across all devices by logging into your Guardian account. Guardian
-				Ad-Lite applies to our website only, and not the Guardian Live App.
-			</div>
-		),
-	},
-	{
-		title: 'How do I cancel my Guardian Ad-Lite subscription?',
-		body: (
-			<div css={rowSpacing}>
-				To cancel, go to Manage my account, and for further information on your
-				Guardian Ad-Lite subscription, see{' '}
-				<a href={guardianAdLiteTermsLink}>here</a>.
-			</div>
-		),
-	},
-	{
-		title: 'How do I contact customer services?',
-		body: (
-			<div css={rowSpacing}>
-				For any queries, including subscription-related queries, please visit
-				our <a href={helpCentreUrl}>Help centre</a>, where you will also find
-				contact details for your region.
-			</div>
-		),
-	},
-];
+type ProductFAQ = Array<{
+	title: string;
+	body: JSX.Element;
+}>;
+const productFAQ: Record<ActiveProductKey, ProductFAQ | undefined> = {
+	GuardianAdLite: [
+		{
+			title: 'What is included in my Guardian Ad-Lite subscription?',
+			body: (
+				<div>
+					<p css={rowSpacing}>
+						A Guardian Ad-Lite subscription enables you to read the Guardian
+						website without personalised advertising. You will still see
+						advertising but it will be delivered without the use of personalised
+						advertising cookies or similar technologies.
+					</p>
+					<p css={rowSpacing}>
+						A Guardian Ad-Lite subscription does not entitle you to the
+						additional benefits on offer via our All-access digital and Digital
+						+ print subscriptions, which are stated{' '}
+						<a href="/contribute">here</a>.
+					</p>
+				</div>
+			),
+		},
+		{
+			title: 'Will my Guardian Ad-Lite subscription work across all devices?',
+			body: (
+				<div css={rowSpacing}>
+					You can read the Guardian website without personalised advertising
+					across all devices by logging into your Guardian account. Guardian
+					Ad-Lite applies to our website only, and not the Guardian Live App.
+				</div>
+			),
+		},
+		{
+			title: 'How do I cancel my Guardian Ad-Lite subscription?',
+			body: (
+				<div css={rowSpacing}>
+					To cancel, go to Manage my account, and for further information on
+					your Guardian Ad-Lite subscription, see{' '}
+					<a href={guardianAdLiteTermsLink}>here</a>.
+				</div>
+			),
+		},
+		{
+			title: 'How do I contact customer services?',
+			body: (
+				<div css={rowSpacing}>
+					For any queries, including subscription-related queries, please visit
+					our <a href={helpCentreUrl}>Help centre</a>, where you will also find
+					contact details for your region.
+				</div>
+			),
+		},
+	],
+	SupporterPlus: [
+		{
+			title: 'Who is eligible for this discount?',
+			body: (
+				<div css={rowSpacing}>
+					Current students at [university/college] who register and verify
+					through Student Beans, are eligible for this discount.
+				</div>
+			),
+		},
+		{
+			title: 'What is included in my All-access subscription?',
+			body: (
+				<div css={rowSpacing}>
+					Your All-access digital subscription entitles you to all the benefits
+					listed above, including: unlimited access to the Guardian news app and
+					Guardian Feast app, ad-free reading on all your devices, exclusive
+					newsletter for supporters and far fewer asks for support.
+				</div>
+			),
+		},
+		{
+			title: 'Will my All-access subscription work across all devices?',
+			body: (
+				<div css={rowSpacing}>
+					You can access your All- access digital subscription across all
+					devices by logging into your Guardian account.
+				</div>
+			),
+		},
+		{
+			title: 'How can I manage my All-access subscription?',
+			body: (
+				<div css={rowSpacing}>
+					{' '}
+					To manage your subscription, go to Manage my account, and for further
+					information on your All-access digital subscription, see our Terms &
+					Conditions <a href={supporterPlusTermsLink}>here</a>
+				</div>
+			),
+		},
+		{
+			title: 'How do I contact customer services?',
+			body: (
+				<div css={rowSpacing}>
+					For any queries, including subscription-related queries, visit our{' '}
+					<a href={helpCentreUrl}>Help centre</a>
+				</div>
+			),
+		},
+	],
+	GuardianWeeklyDomestic: undefined,
+	GuardianWeeklyRestOfWorld: undefined,
+	TierThree: undefined,
+	DigitalSubscription: undefined,
+	NationalDelivery: undefined,
+	HomeDelivery: undefined,
+	SubscriptionCard: undefined,
+	Contribution: undefined,
+	OneTimeContribution: undefined,
+};
 
-export function AccordionFAQ(): JSX.Element {
+type AccordianFAQProps = {
+	product: ActiveProductKey;
+};
+export function AccordionFAQ({ product }: AccordianFAQProps): JSX.Element {
+	const rows = productFAQ[product];
 	return (
 		<Container sideBorders cssOverrides={container}>
 			<div css={bodyContainer}>
 				<h2 css={heading}>Any questions?</h2>
-				<Accordion cssOverrides={accordian}>
-					{rows.map((row) => (
-						<AccordianFAQRow title={row.title} body={row.body} />
-					))}
-				</Accordion>
+				{rows && (
+					<Accordion cssOverrides={accordian}>
+						{rows.map((row) => (
+							<AccordianFAQRow title={row.title} body={row.body} />
+						))}
+					</Accordion>
+				)}
 			</div>
 		</Container>
 	);
@@ -167,7 +241,6 @@ type AccordianFAQRowProps = {
 	title: string;
 	body: React.ReactNode;
 };
-
 function AccordianFAQRow({ title, body }: AccordianFAQRowProps): JSX.Element {
 	const [expanded, setExpanded] = useState<boolean>(false);
 	return (
