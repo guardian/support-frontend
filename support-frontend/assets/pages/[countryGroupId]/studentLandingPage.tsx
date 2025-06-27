@@ -2,7 +2,7 @@ import { AUDCountries } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { StudentHeaderCard } from './components/studentHeaderCard';
-import { AccordionFAQ } from './guardianAdLiteLanding/components/accordianFAQ';
+import { AccordionFAQ } from './guardianAdLiteLanding/components/accordionFAQ';
 import { LandingPageLayout } from './guardianAdLiteLanding/components/landingPageLayout';
 
 type Props = {

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import {
-	AccordianFAQProps,
+	AccordionFAQProps,
 	AccordionFAQ,
-} from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordianFAQ';
+} from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordionFAQ';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',
@@ -12,7 +12,7 @@ export default {
 	},
 };
 
-function Template(args: AccordianFAQProps) {
+function Template(args: AccordionFAQProps) {
 	const innerContentContainer = css`
 		max-width: 980px;
 		margin: 0 auto;

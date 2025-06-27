@@ -207,10 +207,10 @@ const productFAQ: Partial<Record<ActiveProductKey, ProductFAQ>> = {
 	],
 };
 
-export type AccordianFAQProps = {
+export type AccordionFAQProps = {
 	product: ActiveProductKey;
 };
-export function AccordionFAQ({ product }: AccordianFAQProps): JSX.Element {
+export function AccordionFAQ({ product }: AccordionFAQProps): JSX.Element {
 	const rows = productFAQ[product];
 	return (
 		<Container sideBorders cssOverrides={container}>
@@ -228,11 +228,11 @@ export function AccordionFAQ({ product }: AccordianFAQProps): JSX.Element {
 	);
 }
 
-type AccordianFAQRowProps = {
+type AccordionFAQRowProps = {
 	title: string;
 	body: React.ReactNode;
 };
-function AccordianFAQRow({ title, body }: AccordianFAQRowProps): JSX.Element {
+function AccordianFAQRow({ title, body }: AccordionFAQRowProps): JSX.Element {
 	const [expanded, setExpanded] = useState<boolean>(false);
 	return (
 		<AccordionRow
