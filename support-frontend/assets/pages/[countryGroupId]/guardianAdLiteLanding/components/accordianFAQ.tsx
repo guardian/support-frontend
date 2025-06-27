@@ -102,7 +102,7 @@ type ProductFAQ = Array<{
 	title: string;
 	body: JSX.Element;
 }>;
-const productFAQ: Record<ActiveProductKey, ProductFAQ | undefined> = {
+const productFAQ: Partial<Record<ActiveProductKey, ProductFAQ>> = {
 	GuardianAdLite: [
 		{
 			title: 'What is included in my Guardian Ad-Lite subscription?',
@@ -205,15 +205,6 @@ const productFAQ: Record<ActiveProductKey, ProductFAQ | undefined> = {
 			),
 		},
 	],
-	GuardianWeeklyDomestic: undefined,
-	GuardianWeeklyRestOfWorld: undefined,
-	TierThree: undefined,
-	DigitalSubscription: undefined,
-	NationalDelivery: undefined,
-	HomeDelivery: undefined,
-	SubscriptionCard: undefined,
-	Contribution: undefined,
-	OneTimeContribution: undefined,
 };
 
 type AccordianFAQProps = {
