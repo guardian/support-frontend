@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { countrySchema } from './address';
 import { stripePaymentTypeSchema } from './paymentFields';
+import {
+	guardianDirectDebitGateway,
+	tortoiseMediaDirectDebitGateway,
+} from './paymentGateway';
 // Payment methods are the activated payment details which are passed into Zuora as opposed to
 // payment fields which are the details entered by the user into the checkout
 
@@ -37,8 +41,8 @@ const stripePaymentMethodSchema = z.object({
 export type StripePaymentMethod = z.infer<typeof stripePaymentMethodSchema>;
 
 export const directDebitPaymentGatewaySchema = z.union([
-	z.literal('GoCardless'),
-	z.literal('GoCardless - Observer - Tortoise Media'),
+	z.literal(guardianDirectDebitGateway),
+	z.literal(tortoiseMediaDirectDebitGateway),
 ]);
 const directDebitPaymentMethodSchema = z.object({
 	FirstName: z.string(),
