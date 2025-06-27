@@ -207,7 +207,7 @@ const productFAQ: Partial<Record<ActiveProductKey, ProductFAQ>> = {
 	],
 };
 
-type AccordianFAQProps = {
+export type AccordianFAQProps = {
 	product: ActiveProductKey;
 };
 export function AccordionFAQ({ product }: AccordianFAQProps): JSX.Element {
