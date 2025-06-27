@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { AccordianComponent } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordianComponent';
+import { AccordionFAQ } from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordianFAQ';
 
 export default {
 	title: 'LandingPage/GuardianAdLite Accordian',
-	component: AccordianComponent,
+	component: AccordionFAQ,
 	argTypes: {},
 };
 
@@ -15,7 +15,7 @@ function Template() {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<AccordianComponent />
+			<AccordionFAQ />
 		</div>
 	);
 }

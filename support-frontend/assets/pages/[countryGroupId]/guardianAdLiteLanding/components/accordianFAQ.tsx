@@ -148,14 +148,14 @@ const rows = [
 	},
 ];
 
-export function AccordianComponent(): JSX.Element {
+export function AccordionFAQ(): JSX.Element {
 	return (
 		<Container sideBorders cssOverrides={container}>
 			<div css={bodyContainer}>
 				<h2 css={heading}>Any questions?</h2>
 				<Accordion cssOverrides={accordian}>
 					{rows.map((row) => (
-						<AccordianComponentRow title={row.title} body={row.body} />
+						<AccordianFAQRow title={row.title} body={row.body} />
 					))}
 				</Accordion>
 			</div>
@@ -163,15 +163,12 @@ export function AccordianComponent(): JSX.Element {
 	);
 }
 
-type AccordianRowProps = {
+type AccordianFAQRowProps = {
 	title: string;
 	body: React.ReactNode;
 };
 
-function AccordianComponentRow({
-	title,
-	body,
-}: AccordianRowProps): JSX.Element {
+function AccordianFAQRow({ title, body }: AccordianFAQRowProps): JSX.Element {
 	const [expanded, setExpanded] = useState<boolean>(false);
 	return (
 		<AccordionRow
