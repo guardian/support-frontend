@@ -1,23 +1,23 @@
-import { GBPCountries } from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import {
+	FooterLinks,
+	FooterWithContents,
+} from '@guardian/source-development-kitchen/react-components';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { PageScaffold } from 'components/page/pageScaffold';
 import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { AccordianComponent } from '../components/accordianComponent';
-import Header from './components/Header';
-import { LandingPageLayout } from './components/landingPageLayout';
+import StudentHeader from './components/StudentHeader';
 
 export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
-	const { countryGroupId } = getGeoIdConfig(geoId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [GBPCountries],
-		selectedCountryGroup: countryGroupId,
-		subPath: '/student',
-	};
-
 	return (
-		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<Header geoId={geoId} />
-			<AccordianComponent />
-		</LandingPageLayout>
+		<PageScaffold
+			header={<Header />}
+			footer={
+				<FooterWithContents>
+					<FooterLinks />
+				</FooterWithContents>
+			}
+		>
+			<StudentHeader geoId={geoId} />
+		</PageScaffold>
 	);
 }

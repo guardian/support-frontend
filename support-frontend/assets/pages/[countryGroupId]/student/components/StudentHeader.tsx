@@ -13,7 +13,7 @@ import { Container } from 'components/layout/container';
 import type { GeoId } from 'pages/geoIdConfig';
 import getProductContents from '../helpers/getProduct';
 import LogoUTS from '../logos/uts';
-import ProductCard from './ProductCard';
+import StudentProductCard from './StudentProductCard';
 
 const containerCardsAndSignIn = css`
 	background-color: ${palette.brand[400]};
@@ -73,7 +73,7 @@ const cardcontainer = css`
 	padding: ${space[9]}px 0;
 `;
 
-export default function Header({ geoId }: { geoId: GeoId }) {
+export default function StudentHeader({ geoId }: { geoId: GeoId }) {
 	const cardContent = getProductContents(geoId);
 	return (
 		<Container
@@ -96,7 +96,7 @@ export default function Header({ geoId }: { geoId: GeoId }) {
 				</p>
 			</div>
 			<div css={cardcontainer}>
-				<ProductCard
+				<StudentProductCard
 					cardTier={1}
 					promoCount={0}
 					isSubdued={false}

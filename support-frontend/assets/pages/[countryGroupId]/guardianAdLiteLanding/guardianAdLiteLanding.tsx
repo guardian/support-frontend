@@ -7,7 +7,7 @@ import {
 	getReturnAddress,
 	setReturnAddress,
 } from '../checkout/helpers/sessionStorage';
-import { AccordianComponent } from '../components/accordianComponent';
+import { AccordianComponent } from './components/accordianComponent';
 import { HeaderCards } from './components/headerCards';
 import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
