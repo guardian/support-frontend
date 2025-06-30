@@ -16,11 +16,10 @@ export function StudentLandingPage({ geoId }: Props) {
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	}; // AU initially, further updates will display with more regions
-	const product = 'SupporterPlus';
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<StudentHeaderCard geoId={geoId} />
-			<StudentTsAndCs product={product} countryGroupId={countryGroupId} />
+			<StudentTsAndCs countryGroupId={countryGroupId} />
 		</LandingPageLayout>
 	);
 }
