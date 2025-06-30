@@ -16,8 +16,15 @@ const container = css`
 		justify-content: center;
 		border-bottom: 1px solid ${palette.brand[600]};
 		${from.tablet} {
+			width: 742px;
 			border-left: 1px solid ${palette.brand[600]};
 			border-right: 1px solid ${palette.brand[600]};
+		}
+		${from.desktop} {
+			width: 982px;
+		}
+		${from.leftCol} {
+			width: 1142px;
 		}
 	}
 	> div > div {
