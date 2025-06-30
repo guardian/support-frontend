@@ -8,15 +8,15 @@ import {
 	textSans17,
 	textSansBold17,
 } from '@guardian/source/foundations';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { Container } from 'components/layout/container';
-import { isCode } from 'helpers/urls/url';
+import type { GeoId } from 'pages/geoIdConfig';
+import getProductContents from '../helpers/getProduct';
 import LogoUTS from '../logos/uts';
+import ProductCard from './ProductCard';
 
 const containerCardsAndSignIn = css`
 	background-color: ${palette.brand[400]};
-	${from.tablet} {
-		background-color: ${palette.neutral[97]};
-	}
 	> div {
 		position: relative;
 		display: flex;
@@ -68,11 +68,13 @@ const universityBadge = css`
 	}
 `;
 
-const codeOrProd = isCode() ? 'code.dev-theguardian' : 'theguardian';
-const SignInUrl = `https://manage.${codeOrProd}.com`;
-const SignInLink = <a href={SignInUrl}>sign in</a>;
+const cardcontainer = css`
+	display: flex;
+	padding: ${space[9]}px 0;
+`;
 
-export default function Header({ isSignedIn }: { isSignedIn: boolean }) {
+export default function Header({ geoId }: { geoId: GeoId }) {
+	const cardContent = getProductContents(geoId);
 	return (
 		<Container
 			sideBorders
@@ -92,6 +94,16 @@ export default function Header({ isSignedIn }: { isSignedIn: boolean }) {
 					the premium experience of Guardian journalism, including unmetered app
 					access, free for 2 years.
 				</p>
+			</div>
+			<div css={cardcontainer}>
+				<ProductCard
+					cardTier={1}
+					promoCount={0}
+					isSubdued={false}
+					currencyId={'AUD'}
+					billingPeriod={BillingPeriod.Annual}
+					cardContent={cardContent}
+				/>
 			</div>
 		</Container>
 	);

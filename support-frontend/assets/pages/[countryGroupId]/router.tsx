@@ -43,13 +43,7 @@ const GuardianAdLiteLanding = lazy(() => {
 		return { default: mod.GuardianAdLiteLanding };
 	});
 });
-const StudentLanding = lazy(() => {
-	return import(
-		/* webpackChunkName: "StudentLanding" */ './student/StudentLandingPage'
-	).then((mod) => {
-		return { default: mod.StudentLandingPage };
-	});
-});
+
 const LandingPage = lazy(() => {
 	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
 		(mod) => {
@@ -129,7 +123,7 @@ const router = createBrowserRouter(
 			path: `/${geoId}/guardian-ad-lite`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
-					<StudentLanding geoId={geoId} />
+					<GuardianAdLiteLanding geoId={geoId} />
 				</Suspense>
 			),
 		},

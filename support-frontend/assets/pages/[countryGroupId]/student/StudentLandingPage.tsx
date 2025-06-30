@@ -30,6 +30,7 @@ export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 	if (urlSearchParamsReturn) {
 		setReturnAddress({ link: urlSearchParamsReturn });
 	}
+
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
 			<Header
