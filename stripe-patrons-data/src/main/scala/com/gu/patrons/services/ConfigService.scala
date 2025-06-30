@@ -1,8 +1,7 @@
 package com.gu.patrons.services
 
-import com.amazonaws.services.simplesystemsmanagement.model.Parameter
-import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
+import software.amazon.awssdk.services.ssm.model.Parameter
 
 trait ConfigService extends StrictLogging {
 
@@ -15,7 +14,7 @@ trait ConfigService extends StrictLogging {
 
   protected def findParameterValue(name: String, params: List[Parameter]) =
     params
-      .find(_.getName.split('/').last == name)
-      .map(_.getValue)
+      .find(_.name.split('/').last == name)
+      .map(_.value)
 
 }
