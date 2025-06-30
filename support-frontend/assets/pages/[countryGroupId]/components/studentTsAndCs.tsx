@@ -1,5 +1,35 @@
+import { css } from '@emotion/react';
+import { from, palette, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { Container } from 'components/layout/container';
 import { privacyLink } from 'helpers/legal';
+
+const container = css`
+	${textSans12}
+	color: ${palette.neutral[97]};
+	background-color: ${palette.brand[400]};
+	position: relative;
+	align-content: end;
+	> div {
+		padding: ${space[3]}px ${space[4]}px ${space[4]}px;
+		display: flex;
+		justify-content: center;
+		border-bottom: 1px solid ${palette.brand[600]};
+		${from.tablet} {
+			border-left: 1px solid ${palette.brand[600]};
+			border-right: 1px solid ${palette.brand[600]};
+		}
+	}
+	> div > div {
+		max-width: 940px;
+		& a {
+			color: ${palette.neutral[97]};
+			:visited {
+				color: ${palette.neutral[97]};
+			}
+		}
+	}
+`;
 
 const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	AUDCountries: (
@@ -9,8 +39,8 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 			Technology Sydney (UTS). Redemption of the offer is conditional upon
 			registration using a valid and active UTS email address. Your email
 			address may be subjected to an internal verification process to confirm
-			your eligibility as a UTS student – you may refer to the Guardian’s
-			<a href={privacyLink}>Privacy Policy</a> which explains how personal
+			your eligibility as a UTS student – you may refer to the Guardian’s{` `}
+			<a href={privacyLink}>privacy policy</a> which explains how personal
 			information is handled by the Guardian. The Guardian reserves the right to
 			cancel, suspend, or revoke any subscription claimed through this offer if
 			it is reasonably suspected or determined that the subscriber does not meet
@@ -24,5 +54,9 @@ interface StudentTsAndCsProps {
 export function StudentTsAndCs({
 	countryGroupId,
 }: StudentTsAndCsProps): JSX.Element {
-	return <div>{studentTsAndCs[countryGroupId]}</div>;
+	return (
+		<Container sideBorders={true} cssOverrides={container}>
+			{studentTsAndCs[countryGroupId]}
+		</Container>
+	);
 }

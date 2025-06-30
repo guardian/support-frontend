@@ -7,7 +7,7 @@ const container = css`
 	background-color: ${palette.brand[400]};
 	position: relative;
 	> div {
-		max-width: 620px;
+		max-width: 940px;
 		background-color: ${palette.neutral[97]};
 		padding: ${space[3]}px;
 		display: flex;
