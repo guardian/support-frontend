@@ -1,21 +1,16 @@
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
-import { type Product } from 'components/product/productOption';
 import Carousel from 'components/product/Carousel';
-import ProductCard from 'components/product/PaperProductCard';
+import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	Collection,
-	HomeDelivery,
-} from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
 import NewspaperTabHero from './content/NewspaperTabHero';
@@ -79,7 +74,7 @@ function NewspaperProductTabs({
 	});
 
 	const renderProducts = () =>
-		products.map((product) => <ProductCard {...product} />);
+		productRatePlans.map((product) => <NewspaperRatePlanCard {...product} />);
 
 	return (
 		<FullWidthContainer>

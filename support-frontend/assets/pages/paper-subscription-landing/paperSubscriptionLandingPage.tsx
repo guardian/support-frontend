@@ -87,7 +87,7 @@ function PaperLandingPage({
 				promotionCopy={sanitisedPromoCopy}
 			/>
 			{showPaperProductTabs ? (
-				<PaperProductTabs productPrices={productPrices} />
+				<NewspaperProductTabs productPrices={productPrices} />
 			) : (
 				<>
 					<FullWidthContainer>
