@@ -7,11 +7,8 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import type {
-	ThreeTierCardProps} from 'pages/supporter-plus-landing/components/threeTierCard';
-import {
-	discountSummaryCopy
-} from 'pages/supporter-plus-landing/components/threeTierCard';
+import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
+import { discountSummaryCopy } from 'pages/supporter-plus-landing/components/threeTierCard';
 import {
 	benefitsListCSS,
 	btnStyleOverrides,

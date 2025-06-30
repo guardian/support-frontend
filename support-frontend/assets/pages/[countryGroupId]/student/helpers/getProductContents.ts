@@ -2,7 +2,7 @@ import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { productCatalog } from 'helpers/productCatalog';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import type { GeoId} from 'pages/geoIdConfig';
+import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { CardContent } from 'pages/supporter-plus-landing/components/threeTierCard';
 

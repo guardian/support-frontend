@@ -6,12 +6,12 @@ import LogoUTS from '../logos/uts';
 import {
 	cardcontainer,
 	containerCardsAndSignIn,
+	heading,
 	headingWrapper,
 	subheading,
 	universityBadge,
 } from './StudentHeaderStyles';
 import StudentProductCard from './StudentProductCard';
-import { heading } from './StudentProductCardStyles';
 
 export default function StudentHeader({ geoId }: { geoId: GeoId }) {
 	const productContent = getProductContents(geoId);
