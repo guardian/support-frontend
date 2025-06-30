@@ -287,10 +287,11 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
-	type StripeField = 'cardNumber' | 'expiry' | 'cvc';
+	type StripeOnlyField = 'cardNumber' | 'expiry' | 'cvc';
 	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<{
-		[key in StripeField]: boolean;
+		[key in StripeOnlyField]: boolean;
 	}>({ cardNumber: true, expiry: true, cvc: true });
+	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<{
 		[key in StripeField]?: string;
 	}>({});
@@ -480,6 +481,9 @@ export function CheckoutComponent({
 			cvc: true,
 		});
 		setStripeFieldError({});
+		// Should we unset recaptcha token here?
+		// Should we reset the recaptcha error when the recaptcha token changes?
+		// Maybe questions for Helene.
 	}, [paymentMethod]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
@@ -575,6 +579,7 @@ export function CheckoutComponent({
 			setPaymentMethodError('Please select a payment method');
 			return;
 		}
+
 		if (paymentMethod === 'Stripe') {
 			stripeFieldsAreEmpty.cardNumber &&
 				setStripeFieldError((previousState) => ({
@@ -591,9 +596,16 @@ export function CheckoutComponent({
 					...previousState,
 					cvc: 'Please enter your card CVC number',
 				}));
+			// Recaptcha works slightly differently because we own the state
+			if (!recaptchaToken) {
+				setStripeFieldError((previousState) => ({
+					...previousState,
+					recaptcha: 'Please complete the security check',
+				}));
+			}
 
-			// Don't go any further if any of these fields are empty
-			if (Object.values(stripeFieldsAreEmpty).some((value) => value)) {
+			// Don't go any further if there are errors for any Stripe fields
+			if (Object.values(stripeFieldError).some((value) => value)) {
 				return;
 			}
 		}
@@ -1315,6 +1327,9 @@ export function CheckoutComponent({
 															),
 															expiry: maybeArrayWrap(stripeFieldError.expiry),
 															cvc: maybeArrayWrap(stripeFieldError.cvc),
+															recaptcha: maybeArrayWrap(
+																stripeFieldError.recaptcha,
+															),
 														}}
 														recaptcha={
 															<Recaptcha
