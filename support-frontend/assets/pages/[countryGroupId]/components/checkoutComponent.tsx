@@ -481,10 +481,15 @@ export function CheckoutComponent({
 			cvc: true,
 		});
 		setStripeFieldError({});
-		// Should we unset recaptcha token here?
-		// Should we reset the recaptcha error when the recaptcha token changes?
-		// Maybe questions for Helene.
 	}, [paymentMethod]);
+
+	// Reset recaptcha error when recaptcha token changes
+	useEffect(() => {
+		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+	}, [recaptchaToken]);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
