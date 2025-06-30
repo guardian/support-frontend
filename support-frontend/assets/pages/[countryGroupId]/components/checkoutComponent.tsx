@@ -584,23 +584,23 @@ export function CheckoutComponent({
 			stripeFieldsAreEmpty.cardNumber &&
 				setStripeFieldError((previousState) => ({
 					...previousState,
-					cardNumber: 'Please enter your card number',
+					cardNumber: 'Please enter card number',
 				}));
 			stripeFieldsAreEmpty.expiry &&
 				setStripeFieldError((previousState) => ({
 					...previousState,
-					expiry: 'Please enter your card expiration date',
+					expiry: 'Please enter expiry',
 				}));
 			stripeFieldsAreEmpty.cvc &&
 				setStripeFieldError((previousState) => ({
 					...previousState,
-					cvc: 'Please enter your card CVC number',
+					cvc: 'Please enter CVC',
 				}));
 			// Recaptcha works slightly differently because we own the state
 			if (!recaptchaToken) {
 				setStripeFieldError((previousState) => ({
 					...previousState,
-					recaptcha: 'Please complete the security check',
+					recaptcha: 'Please complete security check',
 				}));
 			}
 
