@@ -9,7 +9,7 @@ const container = css`
 	color: ${palette.neutral[97]};
 	background-color: ${palette.brand[400]};
 	position: relative;
-	align-content: end;
+	align-items: flex-end;
 	> div {
 		padding: ${space[3]}px ${space[4]}px ${space[4]}px;
 		display: flex;
@@ -30,6 +30,7 @@ const container = css`
 	> div > div {
 		max-width: 940px;
 		& a {
+			font-weight: bold;
 			color: ${palette.neutral[97]};
 			:visited {
 				color: ${palette.neutral[97]};
@@ -47,11 +48,13 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 			registration using a valid and active UTS email address. Your email
 			address may be subjected to an internal verification process to confirm
 			your eligibility as a UTS student – you may refer to the Guardian’s{` `}
-			<a href={privacyLink}>privacy policy</a> which explains how personal
-			information is handled by the Guardian. The Guardian reserves the right to
-			cancel, suspend, or revoke any subscription claimed through this offer if
-			it is reasonably suspected or determined that the subscriber does not meet
-			the eligibility criteria.
+			<a href={privacyLink} target="_blank" rel="noopener noreferrer">
+				privacy policy
+			</a>{' '}
+			which explains how personal information is handled by the Guardian. The
+			Guardian reserves the right to cancel, suspend, or revoke any subscription
+			claimed through this offer if it is reasonably suspected or determined
+			that the subscriber does not meet the eligibility criteria.
 		</div>
 	),
 };
@@ -62,7 +65,7 @@ export function StudentTsAndCs({
 	countryGroupId,
 }: StudentTsAndCsProps): JSX.Element {
 	return (
-		<Container sideBorders={true} cssOverrides={container}>
+		<Container sideBorders cssOverrides={container}>
 			{studentTsAndCs[countryGroupId]}
 		</Container>
 	);
