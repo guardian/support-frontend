@@ -9,7 +9,7 @@ const container = css`
 	color: ${palette.neutral[97]};
 	background-color: ${palette.brand[400]};
 	position: relative;
-	align-items: flex-end;
+	align-content: end;
 	> div {
 		padding: ${space[3]}px ${space[4]}px ${space[4]}px;
 		display: flex;
@@ -25,6 +25,9 @@ const container = css`
 		}
 		${from.leftCol} {
 			width: 1142px;
+		}
+		${from.wide} {
+			width: 1302px;
 		}
 	}
 	> div > div {
