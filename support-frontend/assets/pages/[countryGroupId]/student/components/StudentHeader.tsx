@@ -4,11 +4,11 @@ import type { GeoId } from 'pages/geoIdConfig';
 import getProductContents from '../helpers/getProductContents';
 import LogoUTS from '../logos/uts';
 import {
-	cardcontainer,
+	cardContainer,
 	containerCardsAndSignIn,
 	heading,
 	headingWrapper,
-	subheading,
+	subHeading,
 	universityBadge,
 } from './StudentHeaderStyles';
 import StudentProductCard from './StudentProductCard';
@@ -29,13 +29,13 @@ export default function StudentHeader({ geoId }: { geoId: GeoId }) {
 				<h1 css={heading}>
 					Subscribe to fearless, independent and inspiring journalism
 				</h1>
-				<p css={subheading}>
+				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app
 					access, free for 2 years.
 				</p>
 			</div>
-			<div css={cardcontainer}>
+			<div css={cardContainer}>
 				<StudentProductCard
 					cardTier={1}
 					promoCount={0}

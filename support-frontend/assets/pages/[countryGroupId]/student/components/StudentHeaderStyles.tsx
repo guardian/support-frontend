@@ -43,7 +43,7 @@ export const heading = css`
 	}
 `;
 
-export const subheading = css`
+export const subHeading = css`
 	${textSans17}
 `;
 
@@ -62,7 +62,7 @@ export const universityBadge = css`
 	}
 `;
 
-export const cardcontainer = css`
+export const cardContainer = css`
 	display: flex;
 	padding: ${space[9]}px 0;
 `;
