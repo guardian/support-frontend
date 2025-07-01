@@ -22,7 +22,7 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 		</div>
 	),
 };
-interface StudentTsAndCsProps {
+export interface StudentTsAndCsProps {
 	countryGroupId: CountryGroupId;
 }
 export function StudentTsAndCs({
