@@ -295,14 +295,12 @@ export function CheckoutComponent({
 	const [stripeFieldError, setStripeFieldError] = useState<{
 		[key in StripeField]?: string;
 	}>({});
+
 	useEffect(() => {
-		if (
-			paymentMethodError ??
-			Object.values(stripeFieldError).some((error) => !!error)
-		) {
+		if (paymentMethodError) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 		}
-	}, [paymentMethodError, ...Object.values(stripeFieldError)]);
+	}, [paymentMethodError]);
 
 	const isRedirectingToStripeHostedCheckout =
 		isSundayOnly &&
@@ -586,31 +584,24 @@ export function CheckoutComponent({
 		}
 
 		if (paymentMethod === 'Stripe') {
-			stripeFieldsAreEmpty.cardNumber &&
-				setStripeFieldError((previousState) => ({
-					...previousState,
+			const newStripeFieldError = {
+				...(stripeFieldsAreEmpty.cardNumber && {
 					cardNumber: 'Please enter card number',
-				}));
-			stripeFieldsAreEmpty.expiry &&
-				setStripeFieldError((previousState) => ({
-					...previousState,
+				}),
+				...(stripeFieldsAreEmpty.expiry && {
 					expiry: 'Please enter expiry',
-				}));
-			stripeFieldsAreEmpty.cvc &&
-				setStripeFieldError((previousState) => ({
-					...previousState,
+				}),
+				...(stripeFieldsAreEmpty.cvc && {
 					cvc: 'Please enter CVC',
-				}));
-			// Recaptcha works slightly differently because we own the state
-			if (!recaptchaToken) {
-				setStripeFieldError((previousState) => ({
-					...previousState,
-					recaptcha: 'Please complete security check',
-				}));
-			}
+				}),
+				// Recaptcha works slightly differently because we own the state
+				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
+			};
 
 			// Don't go any further if there are errors for any Stripe fields
-			if (Object.values(stripeFieldError).some((value) => value)) {
+			if (Object.values(newStripeFieldError).some((value) => value)) {
+				setStripeFieldError(newStripeFieldError);
+				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 				return;
 			}
 		}
