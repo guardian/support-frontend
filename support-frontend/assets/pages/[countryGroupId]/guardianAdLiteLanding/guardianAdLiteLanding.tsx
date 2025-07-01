@@ -46,7 +46,7 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordionFAQ faq={productFAQ['GuardianAdLite']?.[countryGroupId]} />
+			<AccordionFAQ faqItems={productFAQ['GuardianAdLite']?.[countryGroupId]} />
 		</LandingPageLayout>
 	);
 }

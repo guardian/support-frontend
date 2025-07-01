@@ -11,16 +11,16 @@ import {
 } from './accordianFAQStyles';
 
 export type AccordionFAQProps = {
-	faq?: FAQ;
+	faqItems?: FAQ;
 };
-export function AccordionFAQ({ faq }: AccordionFAQProps): JSX.Element {
+export function AccordionFAQ({ faqItems }: AccordionFAQProps): JSX.Element {
 	return (
 		<Container sideBorders cssOverrides={container}>
 			<div css={bodyContainer}>
 				<h2 css={heading}>Any questions?</h2>
-				{faq && (
+				{faqItems && (
 					<Accordion cssOverrides={accordian}>
-						{faq.map((faqRow) => (
+						{faqItems.map((faqRow) => (
 							<AccordianFAQRow
 								key={faqRow.title}
 								title={faqRow.title}

@@ -19,7 +19,7 @@ export function StudentLandingPage({ geoId }: Props) {
 	const product = 'SupporterPlus';
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<AccordionFAQ faq={productFAQ[product]?.[countryGroupId]} />
+			<AccordionFAQ faqItems={productFAQ[product]?.[countryGroupId]} />
 		</LandingPageLayout>
 	);
 }

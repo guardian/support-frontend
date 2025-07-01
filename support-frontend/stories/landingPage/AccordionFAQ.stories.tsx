@@ -18,7 +18,7 @@ function Template(args: AccordionFAQProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<AccordionFAQ faq={args.faq} />
+			<AccordionFAQ faqItems={args.faqItems} />
 		</div>
 	);
 }
