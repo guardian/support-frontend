@@ -28,7 +28,7 @@ Template.args = {} as Record<string, unknown>;
 
 export const Default = Template.bind({});
 Default.args = {
-	faqItems: undefined,
+	faqItems: studentFAQs['NZDCountries'],
 };
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
