@@ -24,7 +24,7 @@ export const carouselItem = css`
 	display: flex;
 `;
 
-export const buttonStyle = css`
+const buttonStyle = css`
 	position: absolute;
 	top: 0;
 	background: ${palette.brand[400]};
