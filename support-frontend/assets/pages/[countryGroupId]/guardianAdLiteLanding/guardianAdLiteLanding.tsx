@@ -9,6 +9,7 @@ import {
 } from '../checkout/helpers/sessionStorage';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import { LandingPageLayout } from '../components/landingPageLayout';
+import { productFAQ } from '../helpers/productFAQ';
 import { HeaderCards } from './components/headerCards';
 import { PosterComponent } from './components/posterComponent';
 
@@ -45,10 +46,7 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordionFAQ
-				product={'GuardianAdLite'}
-				countryGroupId={countryGroupId}
-			/>
+			<AccordionFAQ faq={productFAQ['GuardianAdLite']?.[countryGroupId]} />
 		</LandingPageLayout>
 	);
 }

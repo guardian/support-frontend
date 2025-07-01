@@ -3,6 +3,7 @@ import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import { LandingPageLayout } from '../components/landingPageLayout';
+import { productFAQ } from '../helpers/productFAQ';
 
 type Props = {
 	geoId: GeoId;
@@ -18,7 +19,7 @@ export function StudentLandingPage({ geoId }: Props) {
 	const product = 'SupporterPlus';
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<AccordionFAQ product={product} countryGroupId={countryGroupId} />
+			<AccordionFAQ faq={productFAQ[product]?.[countryGroupId]} />
 		</LandingPageLayout>
 	);
 }

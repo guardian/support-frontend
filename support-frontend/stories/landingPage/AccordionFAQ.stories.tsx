@@ -3,12 +3,13 @@ import {
 	AccordionFAQProps,
 	AccordionFAQ,
 } from 'pages/[countryGroupId]/components/accordionFAQ';
+import { productFAQ } from 'pages/[countryGroupId]/helpers/productFAQ';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',
 	component: AccordionFAQ,
 	argTypes: {
-		product: 'TierThree',
+		faq: productFAQ['TierThree']?.['UnitedStates'],
 	},
 };
 
@@ -20,10 +21,7 @@ function Template(args: AccordionFAQProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<AccordionFAQ
-				product={args.product}
-				countryGroupId={args.countryGroupId}
-			/>
+			<AccordionFAQ faq={args.faq} />
 		</div>
 	);
 }
@@ -32,21 +30,17 @@ Template.args = {} as Record<string, unknown>;
 
 export const Default = Template.bind({});
 Default.args = {
-	product: 'TierThree',
-	countryGroupId: 'UnitedStates',
+	faq: productFAQ['TierThree']?.['UnitedStates'],
 };
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
-	product: 'GuardianAdLite',
-	countryGroupId: 'GBPCountries',
+	faq: productFAQ['GuardianAdLite']?.['GBPCountries'],
 };
 export const SupporterPlusAud = Template.bind({});
 SupporterPlusAud.args = {
-	product: 'SupporterPlus',
-	countryGroupId: 'AUDCountries',
+	faq: productFAQ['SupporterPlus']?.['AUDCountries'],
 };
 export const SupporterPlusGbp = Template.bind({});
 SupporterPlusGbp.args = {
-	product: 'SupporterPlus',
-	countryGroupId: 'GBPCountries',
+	faq: productFAQ['SupporterPlus']?.['GBPCountries'],
 };
