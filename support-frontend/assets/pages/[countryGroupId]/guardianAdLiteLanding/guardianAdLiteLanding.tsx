@@ -9,9 +9,9 @@ import {
 } from '../checkout/helpers/sessionStorage';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import { LandingPageLayout } from '../components/landingPageLayout';
-import { productFAQ } from '../helpers/productFAQ';
 import { HeaderCards } from './components/headerCards';
 import { PosterComponent } from './components/posterComponent';
+import { adLiteFAQs } from './helpers/adLiteFAQs';
 
 type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
@@ -46,7 +46,7 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordionFAQ faqItems={productFAQ['GuardianAdLite']?.[countryGroupId]} />
+			<AccordionFAQ faqItems={adLiteFAQs} />
 		</LandingPageLayout>
 	);
 }

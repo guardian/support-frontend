@@ -3,7 +3,8 @@ import {
 	AccordionFAQProps,
 	AccordionFAQ,
 } from 'pages/[countryGroupId]/components/accordionFAQ';
-import { productFAQ } from 'pages/[countryGroupId]/helpers/productFAQ';
+import { adLiteFAQs } from 'pages/[countryGroupId]/guardianAdLiteLanding/helpers/adLiteFAQs';
+import { studentFAQs } from 'pages/[countryGroupId]/student/helpers/studentFAQs';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',
@@ -27,17 +28,17 @@ Template.args = {} as Record<string, unknown>;
 
 export const Default = Template.bind({});
 Default.args = {
-	faq: productFAQ['TierThree']?.['UnitedStates'],
+	faqItems: undefined,
 };
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
-	faq: productFAQ['GuardianAdLite']?.['GBPCountries'],
+	faqItems: adLiteFAQs,
 };
-export const SupporterPlusAud = Template.bind({});
-SupporterPlusAud.args = {
-	faq: productFAQ['SupporterPlus']?.['AUDCountries'],
+export const StudentAud = Template.bind({});
+StudentAud.args = {
+	faqItems: studentFAQs['AUDCountries'],
 };
-export const SupporterPlusGbp = Template.bind({});
-SupporterPlusGbp.args = {
-	faq: productFAQ['SupporterPlus']?.['GBPCountries'],
+export const StudentGbp = Template.bind({});
+StudentGbp.args = {
+	faqItems: studentFAQs['GBPCountries'],
 };

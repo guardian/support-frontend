@@ -1,7 +1,6 @@
 import { Accordion, AccordionRow } from '@guardian/source/react-components';
 import React, { useState } from 'react';
 import { Container } from 'components/layout/container';
-import type { FAQ } from '../helpers/productFAQ';
 import {
 	accordian,
 	accordianRow,
@@ -9,6 +8,11 @@ import {
 	container,
 	heading,
 } from './accordianFAQStyles';
+
+export type FAQ = Array<{
+	title: string;
+	body: JSX.Element;
+}>;
 
 export type AccordionFAQProps = {
 	faqItems?: FAQ;
