@@ -1,5 +1,5 @@
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import OrderedList from 'components/list/orderedList';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Option } from 'helpers/types/option';
 import { digitalSubscriptionLanding } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';

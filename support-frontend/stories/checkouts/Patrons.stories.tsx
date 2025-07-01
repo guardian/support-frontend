@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source/react-components';
 import React from 'react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';

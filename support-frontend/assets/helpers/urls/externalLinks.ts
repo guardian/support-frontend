@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
 import { getBaseDomain } from 'helpers/urls/url';
 
 // ----- Types ----- //

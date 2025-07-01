@@ -12,6 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import { useState } from 'preact/hooks';
 import { BillingPeriodButtons } from 'components/billingPeriodButtons/billingPeriodButtons';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -20,7 +21,6 @@ import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { Country } from 'helpers/internationalisation/classes/country';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import {
-	BillingPeriod,
 	billingPeriodToContributionType,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';

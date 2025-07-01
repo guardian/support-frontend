@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { palette, space } from '@guardian/source/foundations';
 import { Column, Columns, Hide } from '@guardian/source/react-components';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Container } from 'components/layout/container';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const switcherContainer = css`
 	height: 28px;

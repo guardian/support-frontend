@@ -14,6 +14,8 @@ import {
 	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
@@ -53,7 +55,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
@@ -62,10 +63,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
-import {
-	BillingPeriod,
-	getBillingPeriodNoun,
-} from 'helpers/productPrice/billingPeriods';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -87,8 +85,12 @@ import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import {
+	getTierThreeDeliveryDate,
+	getWeeklyDays,
+} from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
+import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
@@ -209,6 +211,10 @@ export function CheckoutComponent({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
+	const isWeeklyGift =
+		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
+			productKey,
+		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -359,6 +365,10 @@ export function CheckoutComponent({
 		);
 
 	/** Delivery Instructions */
+	const weeklyDeliveryDates = getWeeklyDays();
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		weeklyDeliveryDates[0] as Date,
+	);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
@@ -941,6 +951,21 @@ export function CheckoutComponent({
 							)}
 						</FormSection>
 						<CheckoutDivider spacing="loose" />
+						{isWeeklyGift && (
+							<>
+								<FormSection>
+									<Legend>2. Gift delivery date</Legend>
+									<WeeklyDeliveryDates
+										weeklyDeliveryDates={weeklyDeliveryDates}
+										weeklyDeliveryDateSelected={weeklyDeliveryDate}
+										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
+											setWeeklyDeliveryDate(weeklyDeliveryDate);
+										}}
+									/>
+								</FormSection>
+								<CheckoutDivider spacing="loose" />
+							</>
+						)}
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.

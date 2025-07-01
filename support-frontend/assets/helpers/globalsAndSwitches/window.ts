@@ -1,29 +1,14 @@
 import { isoCountries } from '@modules/internationalisation/country';
+import { isoCurrencySchema } from '@modules/internationalisation/schemas';
+import {
+	billingPeriodSchema,
+	fulfilmentOptionsSchema,
+	productOptionsSchema,
+} from '@modules/product/schemas';
 import { optional, z } from 'zod';
 import type { LegacyProductType } from 'helpers/legacyTypeConversions';
 import { legacyProductTypes } from 'helpers/legacyTypeConversions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import {
-	Collection,
-	Domestic,
-	HomeDelivery,
-	NationalDelivery,
-	NoFulfilmentOptions,
-	RestOfWorld,
-} from '../productPrice/fulfilmentOptions';
-import {
-	Everyday,
-	EverydayPlus,
-	NewspaperArchive,
-	NoProductOptions,
-	Saturday,
-	SaturdayPlus,
-	Sixday,
-	SixdayPlus,
-	Sunday,
-	Weekend,
-	WeekendPlus,
-} from '../productPrice/productOptions';
 
 /**
  * This file is used to validate data that gets injected from
@@ -240,33 +225,7 @@ const countryKeySchema = z.enum([
 	'Canada',
 	'International',
 ]);
-const productOptionsSchema = z.enum([
-	NoProductOptions,
-	Everyday,
-	EverydayPlus,
-	Sixday,
-	SixdayPlus,
-	Weekend,
-	WeekendPlus,
-	Saturday,
-	SaturdayPlus,
-	Sunday,
-	NewspaperArchive,
-]);
-const fulfilmentOptionsSchema = z.enum([
-	NoFulfilmentOptions,
-	NationalDelivery,
-	HomeDelivery,
-	Collection,
-	Domestic,
-	RestOfWorld,
-]);
-const billingPeriodSchema = z.union([
-	z.literal('Monthly'), //TODO: share this with support-workers
-	z.literal('Annual'),
-	z.literal('Quarterly'),
-]);
-const currencySchema = z.enum(['GBP', 'USD', 'AUD', 'EUR', 'NZD', 'CAD']);
+
 const dateTimeSchema = z.preprocess(
 	(val) => (typeof val === 'string' ? new Date(val) : val),
 	z.date(),
@@ -299,11 +258,11 @@ export const ProductPricesSchema = z.object({
 						z.record(
 							billingPeriodSchema,
 							z.record(
-								currencySchema,
+								isoCurrencySchema,
 								z.object({
 									price: z.number(),
 									savingVsRetail: z.number().optional(),
-									currency: currencySchema,
+									currency: isoCurrencySchema,
 									fixedTerm: z.boolean(),
 									promotions: z.array(promotionSchema),
 								}),

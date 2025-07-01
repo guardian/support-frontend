@@ -27,12 +27,10 @@ jobs:
       - name: Setup Node and Install Dependencies
         uses: ./.github/actions/setup-node-and-install
 
-      - name: Test - support-frontend
-        run: pnpm --filter support-frontend test
+      - name: Test all workspaces
+        run: pnpm test
 
       - name: Install & test - CDK
         run: ./script/ci
         working-directory: cdk
 
-      - name: Test - bigquery-acquisitions-publisher
-        run: pnpm --filter bigquery-acquisitions-publisher test

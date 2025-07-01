@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';

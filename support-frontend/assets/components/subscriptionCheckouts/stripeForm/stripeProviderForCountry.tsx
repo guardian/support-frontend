@@ -1,4 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import { getStripeKeyForCountry } from 'helpers/forms/stripe';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
 
 // Types
 export type PropTypes = {

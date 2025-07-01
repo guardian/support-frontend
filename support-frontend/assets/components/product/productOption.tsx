@@ -6,14 +6,15 @@ import {
 	LinkButton,
 	SvgInfoRound,
 } from '@guardian/source/react-components';
+import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Channel,
 	type ProductLabelProps,
 } from 'pages/paper-subscription-landing/helpers/products';
+import type { PlanData } from 'pages/paper-subscription-landing/planData';
 import {
 	button,
 	buttonDiv,
@@ -51,6 +52,7 @@ export type Product = {
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
 	unavailableOutsideLondon?: boolean;
+	planData?: PlanData;
 };
 
 function ProductOption(props: Product): JSX.Element {

@@ -1,5 +1,5 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import { gwCountries } from './gwCountries';
+import { gwCountries } from '@modules/internationalisation/gwCountries';
 
 const gwNonDeliverableCountries: Set<IsoCountry> = new Set([
 	'AF', // Afghanistan

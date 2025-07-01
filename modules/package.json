@@ -2,12 +2,13 @@
   "name": "modules",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest --group=-integration",
-    "it-test": "jest --group=integration",
     "lint:check": "eslint **/*.ts",
     "lint:fix": "eslint --fix **/*.ts",
     "check-formatting": "prettier --check **.ts",
     "fix-formatting": "prettier --write **.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
   },
   "devDependencies": {
     "eslint": "catalog:",
