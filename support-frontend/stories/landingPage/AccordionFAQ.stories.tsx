@@ -8,9 +8,6 @@ import { productFAQ } from 'pages/[countryGroupId]/helpers/productFAQ';
 export default {
 	title: 'LandingPage/Accordian FAQ',
 	component: AccordionFAQ,
-	argTypes: {
-		faq: productFAQ['TierThree']?.['UnitedStates'],
-	},
 };
 
 function Template(args: AccordionFAQProps) {
