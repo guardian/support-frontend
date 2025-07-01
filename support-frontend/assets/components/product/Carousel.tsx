@@ -1,68 +1,17 @@
-import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source/foundations';
 import {
 	SvgChevronLeftSingle,
 	SvgChevronRightSingle,
 } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
-
-const carouselWrapper = css`
-	position: relative;
-`;
-
-const carouselContainer = css`
-	display: flex;
-	overflow-x: auto;
-	scroll-snap-type: x mandatory;
-	padding: ${space[6]}px ${space[6]}px ${space[5]}px;
-	gap: ${space[5]}px;
-	-webkit-overflow-scrolling: touch;
-
-	&::-webkit-scrollbar {
-		display: none;
-	}
-`;
-
-const carouselItem = css`
-	scroll-snap-align: start;
-	display: flex;
-`;
-
-const buttonStyle = css`
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	background: ${palette.brand[400]};
-	border: none;
-	z-index: 1;
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	padding: ${space[1]}px;
-
-	svg {
-		fill: ${palette.neutral[100]};
-	}
-`;
-
-const prevButton = css`
-	${buttonStyle};
-	left: -24px;
-	opacity: 0;
-	transition: opacity 0.3s ease;
-`;
-
-const showNavButton = css`
-	opacity: 1;
-	cursor: pointer;
-`;
-
-const nextButton = css`
-	${buttonStyle};
-	right: -24px;
-	opacity: 0;
-`;
+import {
+	carouselContainer,
+	carouselItem,
+	carouselWrapper,
+	nextButton,
+	prevButton,
+	showNavButton,
+} from './CarouselStyles';
 
 export default function Carousel({ items }: { items: ReactNode[] }) {
 	const containerRef = useRef<HTMLDivElement>(null);
