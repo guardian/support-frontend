@@ -7,9 +7,9 @@ import {
 	getReturnAddress,
 	setReturnAddress,
 } from '../checkout/helpers/sessionStorage';
-import { AccordionFAQ } from './components/accordionFAQ';
+import { AccordionFAQ } from '../components/accordionFAQ';
+import { LandingPageLayout } from '../components/landingPageLayout';
 import { HeaderCards } from './components/headerCards';
-import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
 
 type GuardianAdLiteLandingProps = {

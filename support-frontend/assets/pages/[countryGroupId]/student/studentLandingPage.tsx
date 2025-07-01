@@ -1,9 +1,8 @@
 import { AUDCountries } from '@modules/internationalisation/countryGroup';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { StudentHeaderCard } from './components/studentHeaderCard';
-import { AccordionFAQ } from './guardianAdLiteLanding/components/accordionFAQ';
-import { LandingPageLayout } from './guardianAdLiteLanding/components/landingPageLayout';
+import { AccordionFAQ } from '../components/accordionFAQ';
+import { LandingPageLayout } from '../components/landingPageLayout';
 
 type Props = {
 	geoId: GeoId;
@@ -19,7 +18,6 @@ export function StudentLandingPage({ geoId }: Props) {
 	const product = 'SupporterPlus';
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<StudentHeaderCard geoId={geoId} />
 			<AccordionFAQ product={product} countryGroupId={countryGroupId} />
 		</LandingPageLayout>
 	);

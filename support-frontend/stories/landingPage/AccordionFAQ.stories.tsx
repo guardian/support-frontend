@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import {
 	AccordionFAQProps,
 	AccordionFAQ,
-} from 'pages/[countryGroupId]/guardianAdLiteLanding/components/accordionFAQ';
+} from 'pages/[countryGroupId]/components/accordionFAQ';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',

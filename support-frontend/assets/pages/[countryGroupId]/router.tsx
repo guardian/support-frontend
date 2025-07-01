@@ -52,7 +52,7 @@ const LandingPage = lazy(() => {
 });
 const StudentLandingPage = lazy(() => {
 	return import(
-		/* webpackChunkName: "StudentLandingPage" */ './studentLandingPage'
+		/* webpackChunkName: "StudentLandingPage" */ './student/studentLandingPage'
 	).then((mod) => {
 		return { default: mod.StudentLandingPage };
 	});
