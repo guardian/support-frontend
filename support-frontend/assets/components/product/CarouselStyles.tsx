@@ -9,8 +9,8 @@ export const carouselContainer = css`
 	display: flex;
 	overflow-x: auto;
 	scroll-snap-type: x mandatory;
-	scroll-padding-left: 50px;
-	padding: ${space[6]}px ${space[6]}px ${space[5]}px;
+	scroll-padding-left: 56px;
+	padding: ${space[8]}px ${space[2]}px ${space[5]}px;
 	gap: ${space[5]}px;
 	-webkit-overflow-scrolling: touch;
 
@@ -30,9 +30,11 @@ const buttonStyle = css`
 	background: ${palette.brand[400]};
 	border: none;
 	z-index: 1;
-	width: 58px;
+	width: 76px;
 	height: 100%;
 	padding: ${space[1]}px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 
 	svg {
 		background-color: ${palette.neutral[100]};
@@ -45,9 +47,7 @@ const buttonStyle = css`
 
 export const prevButton = css`
 	${buttonStyle};
-	left: -24px;
-	opacity: 0;
-	transition: opacity 0.3s ease;
+	left: -${space[5]}px;
 `;
 
 export const showNavButton = css`
@@ -57,6 +57,5 @@ export const showNavButton = css`
 
 export const nextButton = css`
 	${buttonStyle};
-	right: -24px;
-	opacity: 0;
+	right: -${space[5]}px;
 `;
