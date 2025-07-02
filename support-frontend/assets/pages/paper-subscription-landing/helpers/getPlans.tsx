@@ -203,7 +203,8 @@ export const getPlans = (
 	productPrices: ProductPrices,
 ): Product[] =>
 	ActivePaperProductTypes.filter(
-		(productOption) => !productOption.endsWith('Plus'),
+		(productOption) =>
+			productOption.endsWith('Plus') || productOption === 'Sunday',
 	) //Don't show Plus options on the landing page for now
 		.map((productOption) => {
 			const priceAfterPromosApplied = finalPrice(
