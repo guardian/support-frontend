@@ -26,10 +26,6 @@ function Template(args: AccordionFAQProps) {
 
 Template.args = {} as Record<string, unknown>;
 
-export const Default = Template.bind({});
-Default.args = {
-	faqItems: getStudentFAQs('NZDCountries'),
-};
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
 	faqItems: adLiteFAQs,
