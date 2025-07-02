@@ -2,7 +2,7 @@ import type { CountryGroupId } from '@modules/internationalisation/countryGroup'
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
-import type { GeoId} from 'pages/geoIdConfig';
+import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
 const supporterPlusBodyAccess: JSX.Element = (
