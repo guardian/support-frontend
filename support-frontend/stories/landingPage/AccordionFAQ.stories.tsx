@@ -4,7 +4,7 @@ import {
 	AccordionFAQ,
 } from 'pages/[countryGroupId]/components/accordionFAQ';
 import { adLiteFAQs } from 'pages/[countryGroupId]/guardianAdLiteLanding/helpers/adLiteFAQs';
-import { studentFAQs } from 'pages/[countryGroupId]/student/helpers/studentFAQs';
+import { getStudentFAQs } from 'pages/[countryGroupId]/student/helpers/studentFAQs';
 
 export default {
 	title: 'LandingPage/Accordian FAQ',
@@ -28,7 +28,7 @@ Template.args = {} as Record<string, unknown>;
 
 export const Default = Template.bind({});
 Default.args = {
-	faqItems: studentFAQs['NZDCountries'],
+	faqItems: getStudentFAQs('NZDCountries'),
 };
 export const GuardianAdLite = Template.bind({});
 GuardianAdLite.args = {
@@ -36,9 +36,9 @@ GuardianAdLite.args = {
 };
 export const StudentAud = Template.bind({});
 StudentAud.args = {
-	faqItems: studentFAQs['AUDCountries'],
+	faqItems: getStudentFAQs('AUDCountries'),
 };
 export const StudentGbp = Template.bind({});
 StudentGbp.args = {
-	faqItems: studentFAQs['GBPCountries'],
+	faqItems: getStudentFAQs('GBPCountries'),
 };

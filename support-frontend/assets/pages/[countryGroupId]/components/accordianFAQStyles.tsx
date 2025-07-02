@@ -85,10 +85,10 @@ export const accordianRow = (expanded: boolean) => css`
 	> button > div > span {
 		display: none;
 	} // remove label
-`;
-export const rowSpacing = css`
-	padding-top: ${space[2]}px;
-	${from.desktop} {
-		max-width: 648px;
+	p {
+		padding-top: ${space[2]}px;
+		${from.desktop} {
+			max-width: 648px;
+		}
 	}
 `;

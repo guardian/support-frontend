@@ -1,47 +1,46 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { privacyLink, supporterPlusTermsLink } from 'helpers/legal';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
-import { rowSpacing } from 'pages/[countryGroupId]/components/accordianFAQStyles';
-import type { FAQ } from 'pages/[countryGroupId]/components/accordionFAQ';
+import type { FAQItem } from 'pages/[countryGroupId]/components/accordionFAQ';
 
 const supporterPlusBodyAccess: JSX.Element = (
-	<div css={rowSpacing}>
+	<p>
 		You can access your All- access digital subscription across all devices by
 		logging into your Guardian account.
-	</div>
+	</p>
 );
 const supporterPlusBodyManage: JSX.Element = (
-	<div css={rowSpacing}>
+	<p>
 		To manage your subscription, go to Manage my account, and for further
 		information on your All-access digital subscription, see our Terms &
 		Conditions <a href={supporterPlusTermsLink}>here</a>
-	</div>
+	</p>
 );
 const supporterPlusBodyContact: JSX.Element = (
-	<div css={rowSpacing}>
+	<p>
 		For any queries, including subscription-related queries, visit our{' '}
 		<a href={helpCentreUrl}>Help centre</a>
-	</div>
+	</p>
 );
-const otherSupporterPlusFAQ: FAQ = [
+const otherSupporterPlusFAQ: FAQItem[] = [
 	{
 		title: 'Who is eligible for this discount?',
 		body: (
-			<div css={rowSpacing}>
+			<p>
 				Current students at [university/college] who register and verify through
 				Student Beans, are eligible for this discount.
-			</div>
+			</p>
 		),
 	},
 	{
 		title: 'What is included in my All-access subscription?',
 		body: (
-			<div css={rowSpacing}>
+			<p>
 				Your All-access digital subscription entitles you to all the benefits
 				listed above, including: unlimited access to the Guardian news app and
 				Guardian Feast app, ad-free reading on all your devices, exclusive
 				newsletter for supporters and far fewer asks for support.
-			</div>
+			</p>
 		),
 	},
 	{
@@ -57,11 +56,11 @@ const otherSupporterPlusFAQ: FAQ = [
 		body: supporterPlusBodyContact,
 	},
 ];
-const auSupporterPlusFAQ: FAQ = [
+const auSupporterPlusFAQ: FAQItem[] = [
 	{
 		title: 'Who is eligible for this discount?',
 		body: (
-			<div css={rowSpacing}>
+			<p>
 				Access to the All-access digital subscription offered under this
 				agreement is strictly limited to currently enrolled students of the
 				University of Technology Sydney (UTS). Redemption of the offer is
@@ -73,13 +72,13 @@ const auSupporterPlusFAQ: FAQ = [
 				reserves the right to cancel, suspend, or revoke any subscription
 				claimed through this offer if it is reasonably suspected or determined
 				that the subscriber does not meet the eligibility criteria.
-			</div>
+			</p>
 		),
 	},
 	{
 		title: 'What is included in my All-access subscription?',
 		body: (
-			<div css={rowSpacing}>
+			<p>
 				Your All-access digital subscription entitles you to all the benefits
 				listed above, including: unlimited access to the Guardian news app and
 				Guardian Feast app, ad-free reading on all your devices, exclusive
@@ -87,7 +86,7 @@ const auSupporterPlusFAQ: FAQ = [
 				this offer provides you with a free All-access digital subscription for
 				a period of 24 months after redemption. We will be in touch during this
 				period if there are opportunities to extend beyond this timeframe.
-			</div>
+			</p>
 		),
 	},
 	{
@@ -103,8 +102,14 @@ const auSupporterPlusFAQ: FAQ = [
 		body: supporterPlusBodyContact,
 	},
 ];
-export const studentFAQs: Partial<Record<CountryGroupId, FAQ>> = {
+const studentFAQs: Partial<Record<CountryGroupId, FAQItem[]>> = {
 	GBPCountries: otherSupporterPlusFAQ,
 	UnitedStates: otherSupporterPlusFAQ,
 	AUDCountries: auSupporterPlusFAQ,
 };
+
+export function getStudentFAQs(
+	countryGroupId: CountryGroupId,
+): FAQItem[] | undefined {
+	return studentFAQs[countryGroupId];
+}

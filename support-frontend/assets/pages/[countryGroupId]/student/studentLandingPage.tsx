@@ -3,7 +3,7 @@ import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import { LandingPageLayout } from '../components/landingPageLayout';
-import { studentFAQs } from './helpers/studentFAQs';
+import { getStudentFAQs } from './helpers/studentFAQs';
 
 type Props = {
 	geoId: GeoId;
@@ -16,9 +16,10 @@ export function StudentLandingPage({ geoId }: Props) {
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	}; // AU initially, further updates will display with more regions
+	const faqItems = getStudentFAQs(countryGroupId);
 	return (
 		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<AccordionFAQ faqItems={studentFAQs[countryGroupId]} />
+			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 		</LandingPageLayout>
 	);
 }
