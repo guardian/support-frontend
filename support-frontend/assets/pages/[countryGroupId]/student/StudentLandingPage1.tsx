@@ -1,25 +1,28 @@
-import { AUDCountries } from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import {
+	FooterLinks,
+	FooterWithContents,
+} from '@guardian/source-development-kitchen/react-components';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { PageScaffold } from 'components/page/pageScaffold';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
-import { LandingPageLayout } from '../components/landingPageLayout';
+import StudentHeader from './components/StudentHeader';
 import { getStudentFAQs } from './helpers/studentFAQs';
 
-type Props = {
-	geoId: GeoId;
-};
-
-export function StudentLandingPage({ geoId }: Props) {
+export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 	const { countryGroupId } = getGeoIdConfig(geoId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [AUDCountries],
-		selectedCountryGroup: countryGroupId,
-		subPath: '/student',
-	}; // AU initially, further updates will display with more regions
 	const faqItems = getStudentFAQs(countryGroupId);
 	return (
-		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
+		<PageScaffold
+			header={<Header />}
+			footer={
+				<FooterWithContents>
+					<FooterLinks />
+				</FooterWithContents>
+			}
+		>
+			<StudentHeader geoId={geoId} />
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
-		</LandingPageLayout>
+		</PageScaffold>
 	);
 }
