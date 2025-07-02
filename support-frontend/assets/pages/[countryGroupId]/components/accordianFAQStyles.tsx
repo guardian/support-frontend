@@ -22,7 +22,6 @@ export const container = css`
 		}
 		${from.tablet} {
 			padding-top: ${space[9]}px;
-			padding-bottom: ${space[24]}px;
 			display: flex;
 			justify-content: center;
 		}
