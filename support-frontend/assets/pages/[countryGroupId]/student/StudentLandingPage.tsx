@@ -5,6 +5,7 @@ import {
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { GeoId } from 'pages/geoIdConfig';
+import { StudentHeader } from './components/StudentHeader';
 import { StudentTsAndCs } from './components/studentTsAndCs';
 import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
 
@@ -19,6 +20,7 @@ export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 				</FooterWithContents>
 			}
 		>
+      <StudentHeader geoId={geoId} />
 			{tsAndCsItems && <StudentTsAndCs tsAndCsItem={tsAndCsItems} />}
 		</PageScaffold>
 	);
