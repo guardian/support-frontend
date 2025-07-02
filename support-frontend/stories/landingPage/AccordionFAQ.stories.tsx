@@ -32,9 +32,9 @@ GuardianAdLite.args = {
 };
 export const StudentAud = Template.bind({});
 StudentAud.args = {
-	faqItems: getStudentFAQs('AUDCountries'),
+	faqItems: getStudentFAQs('au'),
 };
 export const StudentGbp = Template.bind({});
 StudentGbp.args = {
-	faqItems: getStudentFAQs('GBPCountries'),
+	faqItems: getStudentFAQs('uk'),
 };

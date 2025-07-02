@@ -4,14 +4,13 @@ import {
 } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { type GeoId } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
 import { getStudentFAQs } from './helpers/studentFAQs';
 
 export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
-	const { countryGroupId } = getGeoIdConfig(geoId);
-	const faqItems = getStudentFAQs(countryGroupId);
+	const faqItems = getStudentFAQs(geoId);
 	return (
 		<PageScaffold
 			header={<Header />}
