@@ -72,6 +72,10 @@ const mobileCreditDebitIcons = css`
 	}
 `;
 
+const stripeFieldsContainer = css`
+	flex: 1;
+`;
+
 type ElementRenderProps = {
 	id: string;
 	options: StripeCardElementOptions;
@@ -103,31 +107,33 @@ export function ElementDecorator({
 	const [isFocused, setIsFocused] = useState<boolean>(false);
 
 	return (
-		<Label
-			{...labelProps}
-			htmlFor={id}
-			cssOverrides={stripeElementStyles(isFocused, error)}
-		>
-			{error && (
-				<div css={inlineMessageMargin}>
-					<InlineError id={descriptionId(id)}>{error}</InlineError>
-				</div>
-			)}
-			{renderElement({
-				id,
-				options: {
-					style: {
-						base: { ...baseStyles },
+		<div css={stripeFieldsContainer}>
+			<Label
+				{...labelProps}
+				htmlFor={id}
+				cssOverrides={stripeElementStyles(isFocused, error)}
+			>
+				{error && (
+					<div css={inlineMessageMargin}>
+						<InlineError id={descriptionId(id)}>{error}</InlineError>
+					</div>
+				)}
+				{renderElement({
+					id,
+					options: {
+						style: {
+							base: { ...baseStyles },
+						},
 					},
-				},
-				onFocus: () => setIsFocused(true),
-				onBlur: () => setIsFocused(false),
-			})}
-			{id === 'card-number' && (
-				<p css={mobileCreditDebitIcons}>
-					<BrandedIcons />
-				</p>
-			)}
-		</Label>
+					onFocus: () => setIsFocused(true),
+					onBlur: () => setIsFocused(false),
+				})}
+				{id === 'card-number' && (
+					<p css={mobileCreditDebitIcons}>
+						<BrandedIcons />
+					</p>
+				)}
+			</Label>
+		</div>
 	);
 }
