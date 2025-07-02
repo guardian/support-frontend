@@ -7,10 +7,11 @@ import {
 	getReturnAddress,
 	setReturnAddress,
 } from '../checkout/helpers/sessionStorage';
-import { AccordianComponent } from './components/accordianComponent';
+import { AccordionFAQ } from '../components/accordionFAQ';
+import { LandingPageLayout } from '../components/landingPageLayout';
 import { HeaderCards } from './components/headerCards';
-import { LandingPageLayout } from './components/landingPageLayout';
 import { PosterComponent } from './components/posterComponent';
+import { adLiteFAQs } from './helpers/adLiteFAQs';
 
 type GuardianAdLiteLandingProps = {
 	geoId: GeoId;
@@ -45,7 +46,7 @@ export function GuardianAdLiteLanding({
 				isSignedIn={user.isSignedIn}
 			/>
 			<PosterComponent />
-			<AccordianComponent />
+			<AccordionFAQ faqItems={adLiteFAQs} />
 		</LandingPageLayout>
 	);
 }
