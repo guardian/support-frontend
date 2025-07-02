@@ -1,6 +1,8 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { Container } from 'components/layout/container';
 import { privacyLink } from 'helpers/legal';
+import type { GeoId} from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { container } from './studentTsAndCsStyles';
 
 const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
@@ -23,11 +25,10 @@ const studentTsAndCs: Partial<Record<CountryGroupId, JSX.Element>> = {
 	),
 };
 export interface StudentTsAndCsProps {
-	countryGroupId: CountryGroupId;
+	geoId: GeoId;
 }
-export function StudentTsAndCs({
-	countryGroupId,
-}: StudentTsAndCsProps): JSX.Element {
+export function StudentTsAndCs({ geoId }: StudentTsAndCsProps): JSX.Element {
+	const { countryGroupId } = getGeoIdConfig(geoId);
 	return (
 		<Container sideBorders cssOverrides={container}>
 			{studentTsAndCs[countryGroupId]}

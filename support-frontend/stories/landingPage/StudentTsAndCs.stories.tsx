@@ -19,7 +19,7 @@ function Template(args: StudentTsAndCsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<StudentTsAndCs countryGroupId={args.countryGroupId} />
+			<StudentTsAndCs geoId={args.geoId} />
 		</div>
 	);
 }
@@ -28,5 +28,5 @@ Template.args = {} as Record<string, unknown>;
 
 export const DefaultAUD = Template.bind({});
 DefaultAUD.args = {
-	countryGroupId: 'AUDCountries',
+	geoId: 'au',
 };

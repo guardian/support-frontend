@@ -1,23 +1,23 @@
-import { AUDCountries } from '@modules/internationalisation/countryGroup';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { LandingPageLayout } from '../guardianAdLiteLanding/components/landingPageLayout';
+import {
+	FooterLinks,
+	FooterWithContents,
+} from '@guardian/source-development-kitchen/react-components';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { PageScaffold } from 'components/page/pageScaffold';
+import type { GeoId } from 'pages/geoIdConfig';
 import { StudentTsAndCs } from './components/studentTsAndCs';
 
-type Props = {
-	geoId: GeoId;
-};
-
-export function StudentLandingPage({ geoId }: Props) {
-	const { countryGroupId } = getGeoIdConfig(geoId);
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [AUDCountries],
-		selectedCountryGroup: countryGroupId,
-		subPath: '/student',
-	}; // AU initially, further updates will display with more regions
+export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 	return (
-		<LandingPageLayout countrySwitcherProps={countrySwitcherProps}>
-			<StudentTsAndCs countryGroupId={countryGroupId} />
-		</LandingPageLayout>
+		<PageScaffold
+			header={<Header />}
+			footer={
+				<FooterWithContents>
+					<FooterLinks />
+				</FooterWithContents>
+			}
+		>
+			<StudentTsAndCs geoId={geoId} />
+		</PageScaffold>
 	);
 }
