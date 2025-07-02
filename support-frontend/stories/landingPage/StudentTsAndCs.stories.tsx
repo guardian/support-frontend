@@ -3,6 +3,7 @@ import {
 	StudentTsAndCs,
 	StudentTsAndCsProps,
 } from 'pages/[countryGroupId]/student/components/studentTsAndCs';
+import { getStudentTsAndCs } from 'pages/[countryGroupId]/student/helpers/studentTsAndCsCopy';
 
 export default {
 	title: 'LandingPage/StudentTsAndCs',
@@ -19,7 +20,7 @@ function Template(args: StudentTsAndCsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<StudentTsAndCs geoId={args.geoId} />
+			<StudentTsAndCs tsAndCsItem={args.tsAndCsItem} />
 		</div>
 	);
 }
@@ -28,5 +29,5 @@ Template.args = {} as Record<string, unknown>;
 
 export const DefaultAUD = Template.bind({});
 DefaultAUD.args = {
-	geoId: 'au',
+	tsAndCsItem: getStudentTsAndCs('au'),
 };
