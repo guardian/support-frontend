@@ -13,7 +13,7 @@ import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
 
 export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 	const faqItems = getStudentFAQs(geoId);
-	const tsAndCsItems = getStudentTsAndCs(geoId);
+	const tsAndCsItem = getStudentTsAndCs(geoId);
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -25,7 +25,7 @@ export function StudentLandingPage({ geoId }: { geoId: GeoId }) {
 		>
 			<StudentHeader geoId={geoId} />
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
-			{tsAndCsItems && <StudentTsAndCs tsAndCsItem={tsAndCsItems} />}
+			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
 		</PageScaffold>
 	);
 }
