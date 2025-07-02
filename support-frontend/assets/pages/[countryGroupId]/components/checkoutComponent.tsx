@@ -617,8 +617,13 @@ export function CheckoutComponent({
 					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
 				);
 			}
+			// This state update is in the catch block because it has the effect of
+			// removing the processing overlay. Previously it was outside of the catch
+			// and this had the effect of removing the overlay even in the case where
+			// the submitForm was successful which meant there was a flash of the
+			// checkout with no overlap before the redirect to the thank you page.
+			setIsProcessingPayment(false);
 		}
-		setIsProcessingPayment(false);
 	};
 
 	useAbandonedBasketCookie(
