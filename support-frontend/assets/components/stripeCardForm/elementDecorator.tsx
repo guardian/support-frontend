@@ -41,12 +41,10 @@ These styles applied to the .StripeElement container that wraps each iframe make
 like our own inputs from Source.
 */
 const stripeElementStyles = (isFocused: boolean, error?: string) => css`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	display: block;
+	flex-grow: 1;
 	// credit card icons positioned absolutely on mobile breakpoints
 	position: relative;
-	height: 100%;
 
 	& > div:first-child {
 		margin-bottom: ${space[1]}px;
@@ -72,10 +70,6 @@ const mobileCreditDebitIcons = css`
 	@media (min-width: 355px) {
 		display: none;
 	}
-`;
-
-const stripeFieldsContainer = css`
-	flex: 1;
 `;
 
 type ElementRenderProps = {
@@ -109,33 +103,31 @@ export function ElementDecorator({
 	const [isFocused, setIsFocused] = useState<boolean>(false);
 
 	return (
-		<div css={stripeFieldsContainer}>
-			<Label
-				{...labelProps}
-				htmlFor={id}
-				cssOverrides={stripeElementStyles(isFocused, error)}
-			>
-				{error && (
-					<div css={inlineMessageMargin}>
-						<InlineError id={descriptionId(id)}>{error}</InlineError>
-					</div>
-				)}
-				{renderElement({
-					id,
-					options: {
-						style: {
-							base: { ...baseStyles },
-						},
+		<Label
+			{...labelProps}
+			htmlFor={id}
+			cssOverrides={stripeElementStyles(isFocused, error)}
+		>
+			{error && (
+				<div css={inlineMessageMargin}>
+					<InlineError id={descriptionId(id)}>{error}</InlineError>
+				</div>
+			)}
+			{renderElement({
+				id,
+				options: {
+					style: {
+						base: { ...baseStyles },
 					},
-					onFocus: () => setIsFocused(true),
-					onBlur: () => setIsFocused(false),
-				})}
-				{id === 'card-number' && (
-					<p css={mobileCreditDebitIcons}>
-						<BrandedIcons />
-					</p>
-				)}
-			</Label>
-		</div>
+				},
+				onFocus: () => setIsFocused(true),
+				onBlur: () => setIsFocused(false),
+			})}
+			{id === 'card-number' && (
+				<p css={mobileCreditDebitIcons}>
+					<BrandedIcons />
+				</p>
+			)}
+		</Label>
 	);
 }
