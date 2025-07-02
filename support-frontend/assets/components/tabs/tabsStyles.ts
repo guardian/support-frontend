@@ -59,6 +59,7 @@ const tabButton = css`
 `;
 const tabPanel = css`
 	position: relative;
+	padding: ${space[2]}px;
 	border: 1px solid ${palette.neutral[86]};
 `;
 

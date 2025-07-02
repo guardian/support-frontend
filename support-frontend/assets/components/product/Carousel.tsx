@@ -24,17 +24,17 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 			return;
 		}
 
-		setCanScrollPrev(container.scrollLeft > 24);
+		setCanScrollPrev(container.scrollLeft > 0);
 		setCanScrollNext(
 			container.scrollLeft + container.clientWidth < container.scrollWidth - 1,
 		);
 	};
 
 	const scrollByWidth = (direction: 'next' | 'prev') => {
-		if (!containerRef.current) {
+		const container = containerRef.current;
+		if (!container) {
 			return;
 		}
-		const container = containerRef.current;
 		const scrollAmount = container.clientWidth * 0.3;
 		container.scrollBy({
 			left: direction === 'next' ? scrollAmount : -scrollAmount,
