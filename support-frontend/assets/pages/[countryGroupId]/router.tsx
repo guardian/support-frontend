@@ -43,6 +43,7 @@ const GuardianAdLiteLanding = lazy(() => {
 		return { default: mod.GuardianAdLiteLanding };
 	});
 });
+
 const LandingPage = lazy(() => {
 	return import(/* webpackChunkName: "LandingPage" */ './landingPage').then(
 		(mod) => {
@@ -52,7 +53,7 @@ const LandingPage = lazy(() => {
 });
 const StudentLandingPage = lazy(() => {
 	return import(
-		/* webpackChunkName: "StudentLandingPage" */ './studentLandingPage'
+		/* webpackChunkName: "StudentLandingPage" */ './student/StudentLandingPage'
 	).then((mod) => {
 		return { default: mod.StudentLandingPage };
 	});
