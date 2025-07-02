@@ -8,7 +8,7 @@ export const container = css`
 	position: relative;
 	align-content: end;
 	> div {
-		padding: ${space[3]}px ${space[4]}px ${space[4]}px;
+		padding: ${space[4]}px 10px ${space[4]}px;
 		display: flex;
 		justify-content: center;
 		border-bottom: 1px solid ${palette.brand[600]};
