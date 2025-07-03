@@ -1,29 +1,26 @@
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
+import { palette, space } from '@guardian/source/foundations';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { Collection, HomeDelivery } from '@modules/product/fulfilmentOptions';
 import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
+import Carousel from 'components/product/Carousel';
 import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
 import { getPlans } from '../helpers/getPlans';
 import NewspaperTabHero from './content/NewspaperTabHero';
 
 const cardsContainer = css`
 	background-color: ${palette.brand[400]};
-	padding: ${space[6]}px ${space[5]}px ${space[3]}px;
+	padding: 0 ${space[6]}px ${space[6]}px;
 	gap: ${space[4]}px;
 	display: flex;
 	flex-direction: column;
-	${from.tablet} {
-		flex-direction: row;
-		padding: ${space[6]}px ${space[6]}px ${space[5]}px;
-		gap: ${space[5]}px;
-	}
 `;
 
 type TabOptions = {
@@ -55,6 +52,8 @@ function NewspaperProductTabs({
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
+
+	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
 		getPlans(selectedTab, productPrices),
 	);
@@ -74,6 +73,9 @@ function NewspaperProductTabs({
 		} as TabProps;
 	});
 
+	const renderProducts = () =>
+		productRatePlans.map((product) => <NewspaperRatePlanCard {...product} />);
+
 	return (
 		<FullWidthContainer>
 			<CentredContainer>
@@ -87,36 +89,10 @@ function NewspaperProductTabs({
 					theme="paperTabs"
 				/>
 				<section css={cardsContainer}>
-					{productRatePlans.map(
-						({
-							title,
-							price,
-							priceCopy,
-							planData,
-							offerCopy,
-							buttonCopy,
-							href,
-							onClick,
-							onView,
-							label,
-							productLabel,
-							unavailableOutsideLondon,
-						}) => (
-							<NewspaperRatePlanCard
-								title={title}
-								price={price}
-								priceCopy={priceCopy}
-								planData={planData}
-								offerCopy={offerCopy}
-								buttonCopy={buttonCopy}
-								href={href}
-								onClick={onClick}
-								onView={onView}
-								label={label}
-								productLabel={productLabel}
-								unavailableOutsideLondon={unavailableOutsideLondon}
-							/>
-						),
+					{windowWidthIsGreaterThan('tablet') ? (
+						<Carousel items={renderProducts()} />
+					) : (
+						renderProducts()
 					)}
 				</section>
 			</CentredContainer>

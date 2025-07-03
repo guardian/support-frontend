@@ -38,6 +38,7 @@ const tabButton = css`
 		background-color: ${neutral[100]};
 		color: ${palette.brand[100]};
 		box-shadow: none;
+		border: 1px solid ${neutral[73]};
 		&:hover {
 			box-shadow: inset 0 ${space[2]}px 0 0 ${brandAlt[400]};
 		}
