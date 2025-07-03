@@ -26,20 +26,20 @@ test.describe('Checkout', () => {
 		},
 		{
 			product: 'HomeDelivery',
-			ratePlan: 'Everyday',
+			ratePlan: 'EverydayPlus',
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'UK',
 		},
 		{
 			product: 'NationalDelivery',
-			ratePlan: 'Weekend',
+			ratePlan: 'WeekendPlus',
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'UK',
 			postCode: 'BN44 3QG', // This postcode only has one delivery agent
 		},
 		{
 			product: 'NationalDelivery',
-			ratePlan: 'Weekend',
+			ratePlan: 'WeekendPlus',
 			paymentType: 'Credit/Debit card',
 			internationalisationId: 'UK',
 			postCode: 'BS6 6QY', // This postcode has multiple delivery agents
