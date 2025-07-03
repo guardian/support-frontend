@@ -295,6 +295,9 @@ export function CheckoutComponent({
 	const [stripeFieldError, setStripeFieldError] = useState<{
 		[key in StripeField]?: string;
 	}>({});
+	const [directDebitFieldError, setDirectDebitFieldError] = useState<{
+		recaptcha?: string;
+	}>({});
 
 	useEffect(() => {
 		if (paymentMethodError) {
@@ -479,11 +482,16 @@ export function CheckoutComponent({
 			cvc: true,
 		});
 		setStripeFieldError({});
+		setDirectDebitFieldError({});
 	}, [paymentMethod]);
 
 	// Reset recaptcha error when recaptcha token changes
 	useEffect(() => {
 		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+		setDirectDebitFieldError((previousState) => ({
 			...previousState,
 			recaptcha: undefined,
 		}));
@@ -601,6 +609,19 @@ export function CheckoutComponent({
 			// Don't go any further if there are errors for any Stripe fields
 			if (Object.values(newStripeFieldError).some((value) => value)) {
 				setStripeFieldError(newStripeFieldError);
+				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+				return;
+			}
+		}
+
+		if (paymentMethod === 'DirectDebit') {
+			const newDirectDebitFieldError = {
+				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
+			};
+
+			// Don't go any further if there are errors for any Stripe fields
+			if (Object.values(newDirectDebitFieldError).some((value) => value)) {
+				setDirectDebitFieldError(newDirectDebitFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 				return;
 			}
@@ -1384,7 +1405,11 @@ export function CheckoutComponent({
 															/>
 														}
 														formError={''}
-														errors={{}}
+														errors={{
+															recaptcha: maybeArrayWrap(
+																directDebitFieldError.recaptcha,
+															),
+														}}
 													/>
 												</div>
 											)}
