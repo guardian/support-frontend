@@ -22,7 +22,12 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import type { ExpressPaymentType } from '@stripe/stripe-js';
+import type {
+	ExpressPaymentType,
+	StripeCardCvcElementChangeEvent,
+	StripeCardExpiryElementChangeEvent,
+	StripeCardNumberElementChangeEvent,
+} from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
@@ -101,6 +106,7 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
+import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -281,6 +287,15 @@ export function CheckoutComponent({
 		PaymentMethod | undefined
 	>(checkoutSession ? StripeHostedCheckout : undefined, undefined);
 	const [paymentMethodError, setPaymentMethodError] = useState<string>();
+	type StripeOnlyField = 'cardNumber' | 'expiry' | 'cvc';
+	const [stripeFieldsAreEmpty, setStripeFieldsAreEmpty] = useState<{
+		[key in StripeOnlyField]: boolean;
+	}>({ cardNumber: true, expiry: true, cvc: true });
+	type StripeField = StripeOnlyField | 'recaptcha';
+	const [stripeFieldError, setStripeFieldError] = useState<{
+		[key in StripeField]?: string;
+	}>({});
+
 	useEffect(() => {
 		if (paymentMethodError) {
 			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -456,6 +471,24 @@ export function CheckoutComponent({
 		}
 	}, [deliveryPostcode]);
 
+	useEffect(() => {
+		// Return to the default state when payment method changes
+		setStripeFieldsAreEmpty({
+			cardNumber: true,
+			expiry: true,
+			cvc: true,
+		});
+		setStripeFieldError({});
+	}, [paymentMethod]);
+
+	// Reset recaptcha error when recaptcha token changes
+	useEffect(() => {
+		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+	}, [recaptchaToken]);
+
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
@@ -549,6 +582,30 @@ export function CheckoutComponent({
 			setPaymentMethodError('Please select a payment method');
 			return;
 		}
+
+		if (paymentMethod === 'Stripe') {
+			const newStripeFieldError = {
+				...(stripeFieldsAreEmpty.cardNumber && {
+					cardNumber: 'Please enter card number',
+				}),
+				...(stripeFieldsAreEmpty.expiry && {
+					expiry: 'Please enter expiry',
+				}),
+				...(stripeFieldsAreEmpty.cvc && {
+					cvc: 'Please enter CVC',
+				}),
+				// Recaptcha works slightly differently because we own the state
+				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
+			};
+
+			// Don't go any further if there are errors for any Stripe fields
+			if (Object.values(newStripeFieldError).some((value) => value)) {
+				setStripeFieldError(newStripeFieldError);
+				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+				return;
+			}
+		}
+
 		const finalProductKey =
 			productKey === 'HomeDelivery' && deliveryPostcodeIsOutsideM25
 				? 'NationalDelivery'
@@ -1218,16 +1275,58 @@ export function CheckoutComponent({
 														value={recaptchaToken}
 													/>
 													<StripeCardForm
-														onCardNumberChange={() => {
-															// no-op
+														onCardNumberChange={(
+															event: StripeCardNumberElementChangeEvent,
+														) => {
+															setStripeFieldsAreEmpty({
+																...stripeFieldsAreEmpty,
+																cardNumber: event.empty,
+															});
+
+															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															setStripeFieldError({
+																...stripeFieldError,
+																cardNumber: undefined,
+															});
 														}}
-														onExpiryChange={() => {
-															// no-op
+														onExpiryChange={(
+															event: StripeCardExpiryElementChangeEvent,
+														) => {
+															setStripeFieldsAreEmpty({
+																...stripeFieldsAreEmpty,
+																expiry: event.empty,
+															});
+
+															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															setStripeFieldError({
+																...stripeFieldError,
+																expiry: undefined,
+															});
 														}}
-														onCvcChange={() => {
-															// no-op
+														onCvcChange={(
+															event: StripeCardCvcElementChangeEvent,
+														) => {
+															setStripeFieldsAreEmpty({
+																...stripeFieldsAreEmpty,
+																cvc: event.empty,
+															});
+
+															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
+															setStripeFieldError({
+																...stripeFieldError,
+																cvc: undefined,
+															});
 														}}
-														errors={{}}
+														errors={{
+															cardNumber: maybeArrayWrap(
+																stripeFieldError.cardNumber,
+															),
+															expiry: maybeArrayWrap(stripeFieldError.expiry),
+															cvc: maybeArrayWrap(stripeFieldError.cvc),
+															recaptcha: maybeArrayWrap(
+																stripeFieldError.recaptcha,
+															),
+														}}
 														recaptcha={
 															<Recaptcha
 																onRecaptchaCompleted={(token) => {
