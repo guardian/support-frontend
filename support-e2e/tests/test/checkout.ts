@@ -178,7 +178,6 @@ export const completeCheckout = async (page, testDetails: TestDetails) => {
 			fillInPayPalDetails(popupPage);
 			break;
 		case 'Credit/Debit card':
-		default:
 			await fillInCardDetails(page);
 			await checkRecaptcha(page);
 			await page
