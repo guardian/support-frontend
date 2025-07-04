@@ -180,16 +180,13 @@ export const completeCheckout = async (page, testDetails: TestDetails) => {
 		case 'Credit/Debit card':
 		default:
 			await fillInCardDetails(page);
+			await checkRecaptcha(page);
+			await page
+				.getByRole('button', {
+					name: `Pay`,
+				})
+				.click();
 			break;
-	}
-
-	if (paymentType === 'Credit/Debit card') {
-		await checkRecaptcha(page);
-		await page
-			.getByRole('button', {
-				name: `Pay`,
-			})
-			.click();
 	}
 
 	await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
