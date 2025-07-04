@@ -614,17 +614,12 @@ export function CheckoutComponent({
 			}
 		}
 
-		if (paymentMethod === 'DirectDebit') {
-			const newDirectDebitFieldError = {
-				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
-			};
-
-			// Don't go any further if there are errors for any Direct Debit fields
-			if (Object.values(newDirectDebitFieldError).some((value) => value)) {
-				setDirectDebitFieldError(newDirectDebitFieldError);
-				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
-				return;
-			}
+		if (paymentMethod === 'DirectDebit' && !recaptchaToken) {
+			setDirectDebitFieldError({
+				recaptcha: 'Please complete security check',
+			});
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+			return;
 		}
 
 		const finalProductKey =
