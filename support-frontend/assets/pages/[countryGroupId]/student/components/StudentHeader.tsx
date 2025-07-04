@@ -1,4 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type { GeoId } from 'pages/geoIdConfig';
 import getProductContents from '../helpers/getProductContents';
@@ -43,6 +44,34 @@ export default function StudentHeader({ geoId }: { geoId: GeoId }) {
 					currencyId={'AUD'}
 					billingPeriod={BillingPeriod.Annual}
 					cardContent={productContent}
+				/>
+				<GridPicture
+					sources={[
+						{
+							gridId: 'AuStudentLandingHeroMobile',
+							srcSizes: [2000, 1000, 500],
+							sizes: '350px',
+							imgType: 'jpg',
+							media: '(max-width: 739px)',
+						},
+						{
+							gridId: 'AuStudentLandingHeroTablet',
+							srcSizes: [1396, 855, 428],
+							sizes: '350px',
+							imgType: 'jpg',
+							media: '(max-width: 979px)',
+						},
+						{
+							gridId: 'AuStudentLandingHeroDesktop',
+							srcSizes: [2000, 1000, 500],
+							sizes: '574px',
+							imgType: 'jpg',
+							media: '(min-width: 980px)',
+						},
+					]}
+					fallback="AuStudentLandingHeroDesktop"
+					fallbackSize={574}
+					altText=""
 				/>
 			</div>
 		</Container>

@@ -16,9 +16,13 @@ import {
 
 export const container = css`
 	background-color: ${palette.neutral[100]};
-	border-radius: ${space[3]}px;
+	border-radius: 0 0 ${space[2]}px ${space[2]}px;
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
+	${from.tablet} {
+		border-radius: ${space[2]}px 0 0 ${space[2]}px;
+		${textSansBold24}
+	}
 `;
 
 export const heading = css`

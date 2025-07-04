@@ -64,5 +64,23 @@ export const universityBadge = css`
 
 export const cardContainer = css`
 	display: flex;
+	flex-direction: column-reverse;
 	padding: ${space[9]}px 0;
+	align-self: center;
+
+	picture {
+		display: contents;
+	}
+
+	${from.tablet} {
+		flex-direction: row;
+		min-width: 360px;
+	}
+
+	img {
+		border-radius: ${space[2]}px ${space[2]}px 0 0;
+		${from.tablet} {
+			border-radius: 0 ${space[2]}px ${space[2]}px 0;
+		}
+	}
 `;
