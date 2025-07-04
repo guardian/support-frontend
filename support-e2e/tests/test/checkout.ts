@@ -139,54 +139,56 @@ export const testCheckout = (testDetails: TestDetails) => {
 		const page = await context.newPage();
 		await setupPage(page, context, baseURL, url);
 
-		await setUserDetailsForProduct(
-			page,
-			product,
-			internationalisationId,
-			postCode,
-		);
+		await completeCheckout(page, testDetails);
+	});
+};
 
-		// State mandatory for AU and US
-		if (internationalisationId === 'AU') {
-			await page.getByLabel('State').selectOption({ label: 'New South Wales' });
-		}
-		if (internationalisationId === 'US') {
-			await page.getByLabel('State').selectOption({ label: 'Illinois' });
-		}
+export const completeCheckout = async (page, testDetails: TestDetails) => {
+	const { product, internationalisationId, postCode, paymentType } =
+		testDetails;
+	await setUserDetailsForProduct(
+		page,
+		product,
+		internationalisationId,
+		postCode,
+	);
 
-		await page.getByRole('radio', { name: paymentType }).check();
-		switch (paymentType) {
-			case 'PayPal':
-				const popupPagePromise = page.waitForEvent('popup');
-				await page
-					.locator("iframe[name^='xcomponent__ppbutton']")
-					.scrollIntoViewIfNeeded();
-				await page
-					.frameLocator("iframe[name^='xcomponent__ppbutton']")
-					// this class gets added to the iframe body after the JavaScript has finished executing
-					.locator('body.dom-ready')
-					.locator('[role="button"]:has-text("Pay with")')
-					.click({ delay: 2000 });
-				const popupPage = await popupPagePromise;
-				fillInPayPalDetails(popupPage);
-				break;
-			case 'Credit/Debit card':
-			default:
-				await fillInCardDetails(page);
-				break;
-		}
+	// State mandatory for AU and US
+	if (internationalisationId === 'AU') {
+		await page.getByLabel('State').selectOption({ label: 'New South Wales' });
+	}
+	if (internationalisationId === 'US') {
+		await page.getByLabel('State').selectOption({ label: 'Illinois' });
+	}
 
-		if (paymentType === 'Credit/Debit card') {
+	await page.getByRole('radio', { name: paymentType }).check();
+	switch (paymentType) {
+		case 'PayPal':
+			const popupPagePromise = page.waitForEvent('popup');
+			await page
+				.locator("iframe[name^='xcomponent__ppbutton']")
+				.scrollIntoViewIfNeeded();
+			await page
+				.frameLocator("iframe[name^='xcomponent__ppbutton']")
+				// this class gets added to the iframe body after the JavaScript has finished executing
+				.locator('body.dom-ready')
+				.locator('[role="button"]:has-text("Pay with")')
+				.click({ delay: 2000 });
+			const popupPage = await popupPagePromise;
+			fillInPayPalDetails(popupPage);
+			break;
+		case 'Credit/Debit card':
+			await fillInCardDetails(page);
 			await checkRecaptcha(page);
 			await page
 				.getByRole('button', {
 					name: `Pay`,
 				})
 				.click();
-		}
+			break;
+	}
 
-		await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
-			timeout: 600000,
-		});
+	await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
+		timeout: 600000,
 	});
 };
