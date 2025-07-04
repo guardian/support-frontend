@@ -619,7 +619,7 @@ export function CheckoutComponent({
 				...(!recaptchaToken && { recaptcha: 'Please complete security check' }),
 			};
 
-			// Don't go any further if there are errors for any Stripe fields
+			// Don't go any further if there are errors for any Direct Debit fields
 			if (Object.values(newDirectDebitFieldError).some((value) => value)) {
 				setDirectDebitFieldError(newDirectDebitFieldError);
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
