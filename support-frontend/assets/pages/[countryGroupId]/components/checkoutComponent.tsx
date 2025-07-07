@@ -295,6 +295,9 @@ export function CheckoutComponent({
 	const [stripeFieldError, setStripeFieldError] = useState<{
 		[key in StripeField]?: string;
 	}>({});
+	const [directDebitFieldError, setDirectDebitFieldError] = useState<{
+		recaptcha?: string;
+	}>({});
 
 	useEffect(() => {
 		if (paymentMethodError) {
@@ -479,11 +482,16 @@ export function CheckoutComponent({
 			cvc: true,
 		});
 		setStripeFieldError({});
+		setDirectDebitFieldError({});
 	}, [paymentMethod]);
 
 	// Reset recaptcha error when recaptcha token changes
 	useEffect(() => {
 		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+		setDirectDebitFieldError((previousState) => ({
 			...previousState,
 			recaptcha: undefined,
 		}));
@@ -604,6 +612,14 @@ export function CheckoutComponent({
 				paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
 				return;
 			}
+		}
+
+		if (paymentMethod === 'DirectDebit' && !recaptchaToken) {
+			setDirectDebitFieldError({
+				recaptcha: 'Please complete security check',
+			});
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+			return;
 		}
 
 		const finalProductKey =
@@ -1390,7 +1406,11 @@ export function CheckoutComponent({
 															/>
 														}
 														formError={''}
-														errors={{}}
+														errors={{
+															recaptcha: maybeArrayWrap(
+																directDebitFieldError.recaptcha,
+															),
+														}}
 													/>
 												</div>
 											)}
