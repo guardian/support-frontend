@@ -65,7 +65,10 @@ const router = createBrowserRouter(
 			path: `/${geoId}/student`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
-					<StudentLandingPage geoId={geoId} />
+					<StudentLandingPage
+						geoId={geoId}
+						landingPageVariant={landingPageParticipations.variant}
+					/>
 				</Suspense>
 			),
 		},
