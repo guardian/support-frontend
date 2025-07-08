@@ -59,19 +59,8 @@ const StudentLandingPage = lazy(() => {
 	});
 });
 
-const router = createBrowserRouter(
-	geoIds.flatMap((geoId) => [
-		{
-			path: `/${geoId}/student`,
-			element: (
-				<Suspense fallback={<HoldingContent />}>
-					<StudentLandingPage
-						geoId={geoId}
-						landingPageVariant={landingPageParticipations.variant}
-					/>
-				</Suspense>
-			),
-		},
+const router = createBrowserRouter([
+	...geoIds.flatMap((geoId) => [
 		{
 			path: `/${geoId}/contribute/:campaignCode?`,
 			element: (
@@ -131,7 +120,18 @@ const router = createBrowserRouter(
 			),
 		},
 	]),
-);
+	{
+		path: '/au/student/UTS',
+		element: (
+			<Suspense fallback={<HoldingContent />}>
+				<StudentLandingPage
+					geoId={'au'}
+					landingPageVariant={landingPageParticipations.variant}
+				/>
+			</Suspense>
+		),
+	},
+]);
 
 function Router() {
 	return (
