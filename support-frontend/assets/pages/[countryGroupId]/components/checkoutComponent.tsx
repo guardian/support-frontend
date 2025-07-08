@@ -202,6 +202,9 @@ export function CheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
+	const urlParams = new URLSearchParams(window.location.search);
+	const showBackButton = urlParams.get('backButton') !== 'false';
+
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -780,10 +783,12 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton
-								path={`/${geoId}${productDescription.landingPagePath}`}
-								buttonText={'Change'}
-							/>
+							showBackButton && (
+								<BackButton
+									path={`/${geoId}${productDescription.landingPagePath}`}
+									buttonText={'Change'}
+								/>
+							)
 						}
 					/>
 				</BoxContents>
