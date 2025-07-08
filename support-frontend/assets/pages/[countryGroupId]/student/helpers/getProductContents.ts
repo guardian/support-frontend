@@ -15,6 +15,7 @@ export default function getProductContents(geoId: GeoId): CardContent {
 	const urlSearchParams = new URLSearchParams({
 		product: 'SupporterPlus',
 		ratePlan: 'Annual',
+		backButton: 'false',
 	});
 
 	const promotion = getPromotion(
