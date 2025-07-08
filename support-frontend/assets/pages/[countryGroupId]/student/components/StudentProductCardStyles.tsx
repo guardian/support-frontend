@@ -20,6 +20,7 @@ export const container = css`
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
 	${from.tablet} {
+		min-width: 386px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;
 		${textSansBold24}
 	}

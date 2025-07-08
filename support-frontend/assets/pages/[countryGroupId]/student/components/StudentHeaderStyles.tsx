@@ -7,6 +7,7 @@ import {
 	space,
 	textSans17,
 	textSansBold17,
+	until,
 } from '@guardian/source/foundations';
 
 export const containerCardsAndSignIn = css`
@@ -69,18 +70,22 @@ export const cardContainer = css`
 	align-self: center;
 
 	picture {
-		display: contents;
+		display: flex;
+		overflow: clip;
+		${from.tablet} {
+			border-radius: 0 ${space[2]}px ${space[2]}px 0;
+		}
+
+		img {
+			border-radius: 0 ${space[2]}px 0 0;
+			${until.tablet} {
+				width: 100%;
+			}
+		}
 	}
 
 	${from.tablet} {
 		flex-direction: row;
 		min-width: 360px;
-	}
-
-	img {
-		border-radius: ${space[2]}px ${space[2]}px 0 0;
-		${from.tablet} {
-			border-radius: 0 ${space[2]}px ${space[2]}px 0;
-		}
 	}
 `;
