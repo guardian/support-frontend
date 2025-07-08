@@ -1,6 +1,6 @@
 import test, { expect } from '@playwright/test';
 import { setupPage } from '../utils/page';
-import { completeCheckout } from './checkout';
+import { completeGenericCheckout } from '../utils/completeGenericCheckout';
 
 export type TestDetails = {
 	paymentType: string;
@@ -24,9 +24,8 @@ export const testAdLiteCheckout = (testDetails: TestDetails) =>
 			timeout: 100000,
 		});
 
-		await completeCheckout(page, {
+		await completeGenericCheckout(page, {
 			product: 'GuardianAdLite',
-			ratePlan: testDetails.ratePlan,
 			paymentType: testDetails.paymentType,
 			internationalisationId: 'UK',
 		});
