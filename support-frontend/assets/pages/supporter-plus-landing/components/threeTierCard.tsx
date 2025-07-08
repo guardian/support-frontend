@@ -153,7 +153,7 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-export const discountSummaryCopy = (
+const discountSummaryCopy = (
 	currency: Currency,
 	promoCount: number,
 	price: number,

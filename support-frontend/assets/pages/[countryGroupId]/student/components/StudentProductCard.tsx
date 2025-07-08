@@ -7,8 +7,8 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
+import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
-import { discountSummaryCopy } from 'pages/supporter-plus-landing/components/threeTierCard';
 import {
 	benefitsListCSS,
 	btnStyleOverrides,
@@ -30,10 +30,20 @@ export default function StudentProductCard({
 	const { title, benefits, promotion, price, link, cta } = cardContent;
 	const currency = currencies[currencyId];
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const originalPrice = simpleFormatAmount(currency, price);
-	const promotionPrice =
-		promotion?.discountedPrice &&
-		simpleFormatAmount(currency, promotion.discountedPrice);
+	const priceWithCurrency = simpleFormatAmount(currency, price);
+	const discountPriceWithCurrency = simpleFormatAmount(
+		currency,
+		promotion?.discountedPrice ?? 0,
+	);
+	const durationInMonths = promotion?.discount?.durationMonths ?? 0;
+
+	const discountSummary = getDiscountSummary({
+		priceWithCurrency,
+		discountPriceWithCurrency,
+		durationInMonths,
+		billingPeriod,
+		promoCount,
+	});
 
 	return (
 		<section css={container}>
@@ -42,13 +52,13 @@ export default function StudentProductCard({
 				<h2 css={heading}>{title}</h2>
 				<p>
 					<span css={promotionCss}>
-						{promotion ? promotionPrice : originalPrice}
+						{promotion ? discountPriceWithCurrency : priceWithCurrency}
 						<small>/{periodNoun}</small>
 					</span>
 					{promotion && (
 						<span
 							css={originalPriceStrikeThrough}
-						>{`${originalPrice}/${periodNoun}`}</span>
+						>{`${priceWithCurrency}/${periodNoun}`}</span>
 					)}
 				</p>
 			</div>
@@ -60,16 +70,7 @@ export default function StudentProductCard({
 			>
 				{cta.copy}
 			</LinkButton>
-			<p css={discountSummaryCss}>
-				{promotion &&
-					discountSummaryCopy(
-						currency,
-						promoCount,
-						price,
-						promotion,
-						billingPeriod,
-					)}
-			</p>
+			<p css={discountSummaryCss}>{promotion && discountSummary}</p>
 			<BenefitsCheckList
 				benefitsCheckListData={benefits.map((benefit) => {
 					return {
