@@ -31,8 +31,8 @@ const baseDigitalRewards = [
 	'Far fewer asks for support',
 ];
 
-const planData: Record<PaperProductOptions, PlanData> = {
-	Everyday: {
+const planData: Partial<Record<PaperProductOptions, PlanData>> = {
+	EverydayPlus: {
 		description: (
 			<>
 				<strong>Home delivery</strong> of <strong>the Guardian</strong> from
@@ -52,7 +52,7 @@ const planData: Record<PaperProductOptions, PlanData> = {
 			items: baseDigitalRewards,
 		},
 	},
-	Sixday: {
+	SixdayPlus: {
 		description: (
 			<>
 				<strong>Home delivery</strong> of <strong>the Guardian</strong> plus
@@ -68,7 +68,7 @@ const planData: Record<PaperProductOptions, PlanData> = {
 			items: baseDigitalRewards,
 		},
 	},
-	Weekend: {
+	WeekendPlus: {
 		description: (
 			<>
 				<strong>Home delivery</strong> of the Saturday editions of{' '}
@@ -88,7 +88,7 @@ const planData: Record<PaperProductOptions, PlanData> = {
 			items: baseDigitalRewards,
 		},
 	},
-	Saturday: {
+	SaturdayPlus: {
 		description: (
 			<>
 				<strong>Home delivery</strong> of <strong>the Guardian</strong> on
@@ -120,50 +120,6 @@ const planData: Record<PaperProductOptions, PlanData> = {
 				</>
 			),
 			items: ['The Observer and all its supplements, delivered on Sundays  '],
-		},
-	},
-	SaturdayPlus: {
-		description: <></>,
-		benefits: {
-			label: <></>,
-			items: [],
-		},
-		digitalRewards: {
-			label: <></>,
-			items: [],
-		},
-	},
-	WeekendPlus: {
-		description: <></>,
-		benefits: {
-			label: <></>,
-			items: [],
-		},
-		digitalRewards: {
-			label: <></>,
-			items: [],
-		},
-	},
-	SixdayPlus: {
-		description: <></>,
-		benefits: {
-			label: <></>,
-			items: [],
-		},
-		digitalRewards: {
-			label: <></>,
-			items: [],
-		},
-	},
-	EverydayPlus: {
-		description: <></>,
-		benefits: {
-			label: <></>,
-			items: [],
-		},
-		digitalRewards: {
-			label: <></>,
-			items: [],
 		},
 	},
 };

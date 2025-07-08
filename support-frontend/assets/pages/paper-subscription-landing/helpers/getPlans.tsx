@@ -205,52 +205,51 @@ export const getPlans = (
 	ActivePaperProductTypes.filter(
 		(productOption) =>
 			productOption.endsWith('Plus') || productOption === 'Sunday',
-	) //Don't show Plus options on the landing page for now
-		.map((productOption) => {
-			const priceAfterPromosApplied = finalPrice(
-				productPrices,
-				'GB',
-				BillingPeriod.Monthly,
+	).map((productOption) => {
+		const priceAfterPromosApplied = finalPrice(
+			productPrices,
+			'GB',
+			BillingPeriod.Monthly,
+			fulfilmentOption,
+			productOption,
+		);
+		const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+		const promoCode = promotion ? promotion.promoCode : null;
+		const trackingProperties: TrackingProperties = {
+			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		};
+		const nonDiscountedPrice = getProductPrice(
+			productPrices,
+			'GB',
+			BillingPeriod.Monthly,
+			fulfilmentOption,
+			productOption,
+		);
+		const label =
+			productOption === 'Everyday' || productOption === 'EverydayPlus'
+				? 'Best deal'
+				: '';
+		const productLabel = getProductLabel(productOption);
+		return {
+			title: getTitle(productOption),
+			price: showPrice(priceAfterPromosApplied),
+			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+			onClick: sendTrackingEventsOnClick(trackingProperties),
+			onView: sendTrackingEventsOnView(trackingProperties),
+			buttonCopy: 'Subscribe',
+			priceCopy: getPriceCopyString(
+				nonDiscountedPrice,
+				copy[fulfilmentOption][productOption],
+			),
+			planData: getPlanData(productOption),
+			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+			label,
+			productLabel,
+			unavailableOutsideLondon: getUnavailableOutsideLondon(
 				fulfilmentOption,
 				productOption,
-			);
-			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
-			const promoCode = promotion ? promotion.promoCode : null;
-			const trackingProperties: TrackingProperties = {
-				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-				product: 'Paper',
-				componentType: 'ACQUISITIONS_BUTTON',
-			};
-			const nonDiscountedPrice = getProductPrice(
-				productPrices,
-				'GB',
-				BillingPeriod.Monthly,
-				fulfilmentOption,
-				productOption,
-			);
-			const label =
-				productOption === 'Everyday' || productOption === 'EverydayPlus'
-					? 'Best deal'
-					: '';
-			const productLabel = getProductLabel(productOption);
-			return {
-				title: getTitle(productOption),
-				price: showPrice(priceAfterPromosApplied),
-				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-				onClick: sendTrackingEventsOnClick(trackingProperties),
-				onView: sendTrackingEventsOnView(trackingProperties),
-				buttonCopy: 'Subscribe',
-				priceCopy: getPriceCopyString(
-					nonDiscountedPrice,
-					copy[fulfilmentOption][productOption],
-				),
-				planData: getPlanData(productOption),
-				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-				label,
-				productLabel,
-				unavailableOutsideLondon: getUnavailableOutsideLondon(
-					fulfilmentOption,
-					productOption,
-				),
-			};
-		});
+			),
+		};
+	});

@@ -202,6 +202,9 @@ export function CheckoutComponent({
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
 
+	const urlParams = new URLSearchParams(window.location.search);
+	const showBackButton = urlParams.get('backButton') !== 'false';
+
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -294,6 +297,9 @@ export function CheckoutComponent({
 	type StripeField = StripeOnlyField | 'recaptcha';
 	const [stripeFieldError, setStripeFieldError] = useState<{
 		[key in StripeField]?: string;
+	}>({});
+	const [directDebitFieldError, setDirectDebitFieldError] = useState<{
+		recaptcha?: string;
 	}>({});
 
 	useEffect(() => {
@@ -479,11 +485,16 @@ export function CheckoutComponent({
 			cvc: true,
 		});
 		setStripeFieldError({});
+		setDirectDebitFieldError({});
 	}, [paymentMethod]);
 
 	// Reset recaptcha error when recaptcha token changes
 	useEffect(() => {
 		setStripeFieldError((previousState) => ({
+			...previousState,
+			recaptcha: undefined,
+		}));
+		setDirectDebitFieldError((previousState) => ({
 			...previousState,
 			recaptcha: undefined,
 		}));
@@ -606,6 +617,14 @@ export function CheckoutComponent({
 			}
 		}
 
+		if (paymentMethod === 'DirectDebit' && !recaptchaToken) {
+			setDirectDebitFieldError({
+				recaptcha: 'Please complete security check',
+			});
+			paymentMethodRef.current?.scrollIntoView({ behavior: 'smooth' });
+			return;
+		}
+
 		const finalProductKey =
 			productKey === 'HomeDelivery' && deliveryPostcodeIsOutsideM25
 				? 'NationalDelivery'
@@ -674,8 +693,14 @@ export function CheckoutComponent({
 					`An error occurred in checkoutComponent.tsx while trying to submit the form: ${errorMessage}`,
 				);
 			}
+			// This state update is in the catch block because it has the effect
+			// of removing the processing overlay. If it was outside of the
+			// try/catch then in the case where the submitForm is successful the
+			// overlay would be removed before the redirect has completed
+			// resulting in a flash of the checkout with no overlay before the
+			// redirect to the thank you page.
+			setIsProcessingPayment(false);
 		}
-		setIsProcessingPayment(false);
 	};
 
 	useAbandonedBasketCookie(
@@ -758,10 +783,12 @@ export function CheckoutComponent({
 							/>
 						}
 						headerButton={
-							<BackButton
-								path={`/${geoId}${productDescription.landingPagePath}`}
-								buttonText={'Change'}
-							/>
+							showBackButton && (
+								<BackButton
+									path={`/${geoId}${productDescription.landingPagePath}`}
+									buttonText={'Change'}
+								/>
+							)
 						}
 					/>
 				</BoxContents>
@@ -1384,7 +1411,11 @@ export function CheckoutComponent({
 															/>
 														}
 														formError={''}
-														errors={{}}
+														errors={{
+															recaptcha: maybeArrayWrap(
+																directDebitFieldError.recaptcha,
+															),
+														}}
 													/>
 												</div>
 											)}
