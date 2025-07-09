@@ -13,7 +13,7 @@ export default function getProductContents(
 ): CardContent {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const tier2Pricing = productCatalog.SupporterPlus?.ratePlans[
-		BillingPeriod.Annual
+		BillingPeriod.Monthly
 	]?.pricing[currencyKey] as number;
 
 	const urlSearchParams = new URLSearchParams({
@@ -25,7 +25,7 @@ export default function getProductContents(
 	const promotion = getPromotion(
 		window.guardian.allProductPrices.SupporterPlus,
 		geoId.toLocaleUpperCase() as IsoCountry,
-		BillingPeriod.Annual,
+		BillingPeriod.Monthly,
 	);
 
 	if (promotion) {

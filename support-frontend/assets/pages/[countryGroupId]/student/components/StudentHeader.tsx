@@ -27,7 +27,7 @@ export default function StudentHeader({
 		productContent.promotion?.discount?.durationMonths ?? 0;
 	const discountDuration = getDiscountDuration({
 		durationInMonths,
-		billingPeriod: BillingPeriod.Annual,
+		asYear: true,
 	});
 
 	return (
@@ -56,7 +56,7 @@ export default function StudentHeader({
 					promoCount={0}
 					isSubdued={false}
 					currencyId={'AUD'}
-					billingPeriod={BillingPeriod.Annual}
+					billingPeriod={BillingPeriod.Monthly}
 					cardContent={productContent}
 				/>
 			</div>

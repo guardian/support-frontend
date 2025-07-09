@@ -3,19 +3,23 @@ import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 
 export function getDiscountDuration({
 	durationInMonths,
-	billingPeriod,
 }: {
 	durationInMonths: number;
-	billingPeriod: BillingPeriod;
 }) {
-	const duration =
-		billingPeriod === BillingPeriod.Annual
-			? durationInMonths / 12
-			: durationInMonths;
+	const isYearly = durationInMonths % 12 === 0;
+	const duration = isYearly ? durationInMonths / 12 : durationInMonths;
+	const billingPeriod = isYearly ? BillingPeriod.Annual : BillingPeriod.Monthly;
+
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	return duration === 1
-		? `the first ${periodNoun}`
-		: `${duration} ${periodNoun}s`;
+
+	switch (duration) {
+		case 1:
+			return `the first ${periodNoun}`;
+		case 2:
+			return `two ${periodNoun}s`;
+		default:
+			return `${duration} ${periodNoun}s`;
+	}
 }
 
 export function getDiscountSummary({
@@ -34,7 +38,6 @@ export function getDiscountSummary({
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	const discountDuration = getDiscountDuration({
 		durationInMonths,
-		billingPeriod,
 	});
 
 	return `${discountPriceWithCurrency}/${periodNoun} for ${discountDuration}, then ${priceWithCurrency}/${periodNoun}${'*'.repeat(

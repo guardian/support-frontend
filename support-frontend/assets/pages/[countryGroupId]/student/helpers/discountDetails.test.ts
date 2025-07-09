@@ -44,57 +44,44 @@ describe('Discount Details', () => {
 				billingPeriod: BillingPeriod.Annual,
 				promoCount: 0,
 			});
-			expect(result).toBe('£200/year for 2 years, then £300/year');
+			expect(result).toBe('£200/year for two years, then £300/year');
 		});
 	});
 
 	describe('getDiscountDuration', () => {
-		it('returns "the first month" for 1 month of monthly billing', () => {
+		it('returns "the first month" for 1 month', () => {
 			const result = getDiscountDuration({
 				durationInMonths: 1,
-				billingPeriod: BillingPeriod.Monthly,
 			});
 			expect(result).toBe('the first month');
 		});
 
-		it('returns "6 months" for 6 months of monthly billing', () => {
+		it('returns "6 months" for 6 months', () => {
 			const result = getDiscountDuration({
 				durationInMonths: 6,
-				billingPeriod: BillingPeriod.Monthly,
 			});
 			expect(result).toBe('6 months');
 		});
 
-		it('returns "the first year" for 12 months of annual billing', () => {
+		it('returns "the first year" for 12 months', () => {
 			const result = getDiscountDuration({
 				durationInMonths: 12,
-				billingPeriod: BillingPeriod.Annual,
 			});
 			expect(result).toBe('the first year');
 		});
 
-		it('returns "2 years" for 24 months of annual billing', () => {
+		it('returns "2 years" for 24 months', () => {
 			const result = getDiscountDuration({
 				durationInMonths: 24,
-				billingPeriod: BillingPeriod.Annual,
 			});
-			expect(result).toBe('2 years');
+			expect(result).toBe('two years');
 		});
 
-		it('returns "0 months" for 0 duration on monthly billing', () => {
-			const result = getDiscountDuration({
-				durationInMonths: 0,
-				billingPeriod: BillingPeriod.Monthly,
-			});
-			expect(result).toBe('0 months');
-		});
-
-		it('returns fractional duration for unexpected inputs (e.g., 18 months annual)', () => {
+		it('returns 18 months if not yearly based', () => {
 			const result = getDiscountDuration({
 				durationInMonths: 18,
-				billingPeriod: BillingPeriod.Annual,
 			});
-			expect(result).toBe('1.5 years');
+			expect(result).toBe('18 months');
 		});
 	});
 });

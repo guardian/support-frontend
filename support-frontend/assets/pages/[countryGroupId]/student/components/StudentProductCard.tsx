@@ -7,7 +7,10 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import { getDiscountSummary } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import {
+	getDiscountDuration,
+	getDiscountSummary,
+} from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import {
 	benefitsListCSS,
@@ -23,7 +26,6 @@ import {
 
 export default function StudentProductCard({
 	cardContent,
-	promoCount,
 	currencyId,
 	billingPeriod,
 }: ThreeTierCardProps) {
@@ -37,23 +39,23 @@ export default function StudentProductCard({
 	);
 	const durationInMonths = promotion?.discount?.durationMonths ?? 0;
 
+	const discountDuration = getDiscountDuration({ durationInMonths });
 	const discountSummary = getDiscountSummary({
 		priceWithCurrency,
 		discountPriceWithCurrency,
 		durationInMonths,
 		billingPeriod,
-		promoCount,
 	});
 
 	return (
 		<section css={container}>
-			<div css={pill}>student offer</div>
+			<div css={pill}>Student offer</div>
 			<div css={headWrapper}>
 				<h2 css={heading}>{title}</h2>
 				<p>
 					<span css={promotionCss}>
 						{promotion ? discountPriceWithCurrency : priceWithCurrency}
-						<small>/{periodNoun}</small>
+						<small>{`/${periodNoun} for ${discountDuration}`}</small>
 					</span>
 					{promotion && (
 						<span
