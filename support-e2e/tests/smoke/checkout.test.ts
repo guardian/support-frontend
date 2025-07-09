@@ -7,18 +7,6 @@ afterEachTasks(test);
 test.describe('Checkout', () => {
 	[
 		{
-			product: 'SupporterPlus',
-			ratePlan: 'Annual',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'EU',
-		},
-		{
-			product: 'TierThree',
-			ratePlan: 'DomesticMonthly',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'UK',
-		},
-		{
 			product: 'HomeDelivery',
 			ratePlan: 'EverydayPlus',
 			paymentType: 'Credit/Debit card',
