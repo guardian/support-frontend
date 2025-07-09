@@ -46,7 +46,7 @@ export default function StudentHeader({
 				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app
-					access, free for {discountDuration}.
+					access, <strong>free for {discountDuration}</strong>.
 				</p>
 			</div>
 			<div css={cardContainer}>

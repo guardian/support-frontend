@@ -45,6 +45,9 @@ export const heading = css`
 
 export const subHeading = css`
 	${textSans17}
+	strong {
+		${textSansBold17}
+	}
 `;
 
 export const universityBadge = css`
