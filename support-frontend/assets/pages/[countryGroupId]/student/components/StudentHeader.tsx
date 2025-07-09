@@ -2,6 +2,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import { getDiscountDuration } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import type { GeoId } from 'pages/geoIdConfig';
 import getProductContents from '../helpers/getProductContents';
 import LogoUTS from '../logos/uts';
@@ -23,6 +24,12 @@ export default function StudentHeader({
 	landingPageVariant: LandingPageVariant;
 }) {
 	const productContent = getProductContents(geoId, landingPageVariant);
+	const durationInMonths =
+		productContent.promotion?.discount?.durationMonths ?? 0;
+	const discountDuration = getDiscountDuration({
+		durationInMonths,
+	});
+
 	return (
 		<Container
 			sideBorders
@@ -40,7 +47,7 @@ export default function StudentHeader({
 				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app
-					access, free for 2 years.
+					access, <strong>free for {discountDuration}</strong>.
 				</p>
 			</div>
 			<div css={cardContainer}>
@@ -49,7 +56,7 @@ export default function StudentHeader({
 					promoCount={0}
 					isSubdued={false}
 					currencyId={'AUD'}
-					billingPeriod={BillingPeriod.Annual}
+					billingPeriod={BillingPeriod.Monthly}
 					cardContent={productContent}
 				/>
 				<GridPicture
