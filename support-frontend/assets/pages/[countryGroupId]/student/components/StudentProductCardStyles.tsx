@@ -19,15 +19,11 @@ export const container = css`
 	border-radius: 0 0 ${space[2]}px ${space[2]}px;
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
+	width: 350px;
 	${from.tablet} {
-		min-width: 386px;
+		width: 370px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;
 		${textSansBold24}
-	}
-
-	${from.desktop} {
-		min-width: 370px;
-		max-width: 410px;
 	}
 `;
 
