@@ -54,14 +54,18 @@ export default function StudentProductCard({
 				<h2 css={heading}>{title}</h2>
 				<p>
 					<span css={promotionCss}>
-						{promotion ? discountPriceWithCurrency : priceWithCurrency}
-						<small>{`/${periodNoun} for ${discountDuration}`}</small>
+						{promotion ? (
+							<>
+								{discountPriceWithCurrency}
+								<small>{`/${periodNoun} for ${discountDuration}`}</small>
+								<span
+									css={originalPriceStrikeThrough}
+								>{`${priceWithCurrency}/${periodNoun}`}</span>
+							</>
+						) : (
+							priceWithCurrency
+						)}
 					</span>
-					{promotion && (
-						<span
-							css={originalPriceStrikeThrough}
-						>{`${priceWithCurrency}/${periodNoun}`}</span>
-					)}
 				</p>
 			</div>
 			<LinkButton
