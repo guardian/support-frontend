@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
+import { size, space } from '@guardian/source/foundations';
 import {
 	Checkbox,
 	Label,
@@ -1249,7 +1249,13 @@ export function CheckoutComponent({
 													label={
 														<>
 															{label}
-															<div>{icon}</div>
+															<div
+																css={css`
+																	max-height: ${size.xsmall}px;
+																`}
+															>
+																{icon}
+															</div>
 														</>
 													}
 													name="paymentMethod"
