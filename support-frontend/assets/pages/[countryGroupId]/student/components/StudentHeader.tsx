@@ -27,7 +27,6 @@ export default function StudentHeader({
 		productContent.promotion?.discount?.durationMonths ?? 0;
 	const discountDuration = getDiscountDuration({
 		durationInMonths,
-		asYear: true,
 	});
 
 	return (
