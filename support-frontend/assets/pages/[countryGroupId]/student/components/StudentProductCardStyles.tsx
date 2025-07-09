@@ -16,9 +16,19 @@ import {
 
 export const container = css`
 	background-color: ${palette.neutral[100]};
-	border-radius: ${space[3]}px;
+	border-radius: 0 0 ${space[2]}px ${space[2]}px;
 	padding: ${space[6]}px ${space[4]}px ${space[5]}px;
 	position: relative;
+	${from.tablet} {
+		min-width: 386px;
+		border-radius: ${space[2]}px 0 0 ${space[2]}px;
+		${textSansBold24}
+	}
+
+	${from.desktop} {
+		min-width: 370px;
+		max-width: 410px;
+	}
 `;
 
 export const heading = css`
@@ -61,9 +71,6 @@ export const benefitsListCSS = css`
 	border-top: 1px solid ${neutral[73]};
 	margin-top: ${space[6]}px;
 	padding-top: ${space[2]}px;
-	${from.desktop} {
-		width: 90%;
-	}
 `;
 
 export const pill = css`
