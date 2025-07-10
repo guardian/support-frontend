@@ -592,6 +592,9 @@ const countries: Record<IsoCountry, string> = {
 	JE: 'Jersey',
 	SH: 'Saint Helena',
 };
+export function getCountryNameByIsoCode(code: IsoCountry) {
+	return countries[code] || null;
+}
 // ----- Types ----- //
 export type UsState = keyof typeof usStates;
 export type CaState = keyof typeof caStates;

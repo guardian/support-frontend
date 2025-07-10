@@ -302,11 +302,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-workers-scala/support-workers.jar",
+          "S3Key": "support/PROD/support-workers-typescript/support-workers.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-workers-scala",
+            "APP": "support-workers-typescript",
             "EMAIL_QUEUE_NAME": {
               "Fn::ImportValue": "comms-PROD-EmailQueueName",
             },
@@ -318,7 +318,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
           },
         },
         "FunctionName": "support-CreateSalesforceContactLambda-PROD",
-        "Handler": "com.gu.support.workers.lambdas.CreateSalesforceContact::handleRequest",
+        "Handler": "createSalesforceContactLambda.handler",
         "LoggingConfig": {
           "LogFormat": "JSON",
         },
@@ -329,11 +329,11 @@ exports[`The support-workers stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java21",
+        "Runtime": "nodejs22.x",
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers-scala",
+            "Value": "support-workers-typescript",
           },
           {
             "Key": "gu:cdk:version",
@@ -387,7 +387,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-workers-scala",
+            "Value": "support-workers-typescript",
           },
           {
             "Key": "gu:cdk:version",
@@ -433,6 +433,14 @@ exports[`The support-workers stack matches the snapshot 1`] = `
               "Resource": "*",
             },
             {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:ssm:eu-west-1:865473395570:parameter/CODE/support/support-workers/*",
+                "arn:aws:ssm:eu-west-1:865473395570:parameter/PROD/support/support-workers/*",
+              ],
+            },
+            {
               "Action": [
                 "s3:GetObject*",
                 "s3:GetBucket*",
@@ -467,7 +475,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-workers-scala/support-workers.jar",
+                      "/support/PROD/support-workers-typescript/support-workers.zip",
                     ],
                   ],
                 },
@@ -488,7 +496,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers-scala",
+                    ":parameter/PROD/support/support-workers-typescript",
                   ],
                 ],
               },
@@ -511,7 +519,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-workers-scala/*",
+                    ":parameter/PROD/support/support-workers-typescript/*",
                   ],
                 ],
               },
@@ -3580,7 +3588,7 @@ exports[`The support-workers stack matches the snapshot 1`] = `
                   "Arn",
                 ],
               },
-              "","Payload.$":"$"}},"CreateSalesforceContact":{"Next":"CreateZuoraSubscription","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2},{"ErrorEquals":["com.gu.support.workers.exceptions.RetryNone"],"MaxAttempts":0},{"ErrorEquals":["com.gu.support.workers.exceptions.RetryLimited"],"IntervalSeconds":1,"MaxAttempts":5,"BackoffRate":10},{"ErrorEquals":["com.gu.support.workers.exceptions.RetryUnlimited"],"IntervalSeconds":1,"MaxAttempts":999999,"BackoffRate":2},{"ErrorEquals":["States.ALL"],"IntervalSeconds":3,"MaxAttempts":999999,"BackoffRate":2}],"Catch":[{"ErrorEquals":["States.TaskFailed"],"ResultPath":"$.error","Next":"FailureHandler"}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:",
+              "","Payload.$":"$"}},"CreateSalesforceContact":{"Next":"CreateZuoraSubscription","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2},{"ErrorEquals":["RetryNone"],"MaxAttempts":0},{"ErrorEquals":["RetryLimited"],"IntervalSeconds":1,"MaxAttempts":5,"BackoffRate":10},{"ErrorEquals":["RetryUnlimited"],"IntervalSeconds":1,"MaxAttempts":999999,"BackoffRate":2},{"ErrorEquals":["States.ALL"],"IntervalSeconds":3,"MaxAttempts":999999,"BackoffRate":2}],"Catch":[{"ErrorEquals":["States.TaskFailed"],"ResultPath":"$.error","Next":"FailureHandler"}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:",
               {
                 "Ref": "AWS::Partition",
               },
