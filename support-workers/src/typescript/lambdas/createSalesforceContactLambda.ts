@@ -37,7 +37,10 @@ export const handler = async (
 			createSalesforceContactState.user,
 			createSalesforceContactState.giftRecipient,
 		);
-		return createNextState(createSalesforceContactState, contactRecords);
+		return {
+			...state,
+			state: createNextState(createSalesforceContactState, contactRecords),
+		};
 	} catch (error) {
 		throw asRetryError(error);
 	}
@@ -51,6 +54,7 @@ const createNextState = (
 		case 'Contribution':
 			return {
 				productSpecificState: {
+					productType: 'Contribution',
 					product: state.product,
 					paymentMethod: state.paymentMethod,
 					salesForceContact: contactRecords.buyer,
@@ -61,6 +65,7 @@ const createNextState = (
 		case 'SupporterPlus':
 			return {
 				productSpecificState: {
+					productType: 'SupporterPlus',
 					billingCountry: user.billingAddress.country,
 					product: state.product,
 					paymentMethod: state.paymentMethod,
@@ -73,6 +78,7 @@ const createNextState = (
 		case 'TierThree':
 			return {
 				productSpecificState: {
+					productType: 'TierThree',
 					user: state.user,
 					product: state.product,
 					paymentMethod: state.paymentMethod,
@@ -89,6 +95,7 @@ const createNextState = (
 		case 'GuardianAdLite':
 			return {
 				productSpecificState: {
+					productType: 'GuardianAdLite',
 					product: state.product,
 					paymentMethod: state.paymentMethod,
 					salesForceContact: contactRecords.buyer,
@@ -98,6 +105,7 @@ const createNextState = (
 		case 'GuardianWeekly':
 			return {
 				productSpecificState: {
+					productType: 'GuardianWeekly',
 					user: state.user,
 					giftRecipient: state.giftRecipient,
 					product: state.product,
@@ -115,6 +123,7 @@ const createNextState = (
 		case 'Paper':
 			return {
 				productSpecificState: {
+					productType: 'Paper',
 					user: state.user,
 					product: state.product,
 					paymentMethod: state.paymentMethod,
@@ -131,6 +140,7 @@ const createNextState = (
 		case 'DigitalPack':
 			return {
 				productSpecificState: {
+					productType: 'DigitalSubscription',
 					billingCountry: user.billingAddress.country,
 					product: state.product,
 					paymentMethod: state.paymentMethod,
