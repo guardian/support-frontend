@@ -7,7 +7,6 @@ import {
 	space,
 	textSans17,
 	textSansBold17,
-	until,
 } from '@guardian/source/foundations';
 
 export const containerCardsAndSignIn = css`
@@ -69,26 +68,29 @@ export const universityBadge = css`
 export const cardContainer = css`
 	display: flex;
 	flex-direction: column-reverse;
-	padding: ${space[9]}px 0;
 	align-self: center;
+	padding: ${space[6]}px 0 ${space[3]}px;
 
 	picture {
 		display: flex;
-		overflow: clip;
-		${from.tablet} {
-			border-radius: 0 ${space[2]}px ${space[2]}px 0;
-		}
 
 		img {
-			border-radius: 0 ${space[2]}px 0 0;
-			${until.tablet} {
-				width: 100%;
+			max-width: 100%;
+			object-fit: cover;
+			border-radius: ${space[2]}px ${space[2]}px 0 0;
+			${from.tablet} {
+				border-radius: 0 ${space[2]}px ${space[2]}px 0;
 			}
 		}
 	}
 
 	${from.tablet} {
 		flex-direction: row;
-		min-width: 360px;
+		padding: ${space[9]}px 0 ${space[8]}px;
+	}
+
+	${from.desktop} {
+		flex-direction: row;
+		padding: ${space[12]}px 0 ${space[9]}px;
 	}
 `;

@@ -14,16 +14,18 @@ import {
 export const container = css`
 	background-color: ${palette.neutral[97]};
 	position: relative;
+
 	> div {
-		padding: ${space[3]}px 10px ${space[14]}px;
-		${from.mobileLandscape} {
-			padding-left: ${space[5]}px;
-			padding-right: ${space[5]}px;
-		}
+		padding: ${space[5]}px 10px;
+
 		${from.tablet} {
-			padding-top: ${space[9]}px;
+			padding: ${space[5]}px ${space[3]}px;
 			display: flex;
 			justify-content: center;
+		}
+
+		${from.desktop} {
+			padding-top: ${space[9]}px;
 		}
 	}
 `;
