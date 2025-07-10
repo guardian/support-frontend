@@ -21,7 +21,7 @@ export const container = css`
 	position: relative;
 	width: 350px;
 	${from.tablet} {
-		width: 370px;
+		width: 366px;
 		border-radius: ${space[2]}px 0 0 ${space[2]}px;
 		${textSansBold24}
 	}

@@ -68,8 +68,8 @@ export const universityBadge = css`
 export const cardContainer = css`
 	display: flex;
 	flex-direction: column-reverse;
-	padding: ${space[9]}px 0;
 	align-self: center;
+	padding: ${space[6]}px 0 ${space[3]}px;
 
 	picture {
 		display: flex;
@@ -86,5 +86,11 @@ export const cardContainer = css`
 
 	${from.tablet} {
 		flex-direction: row;
+		padding: ${space[9]}px 0 ${space[8]}px;
+	}
+
+	${from.desktop} {
+		flex-direction: row;
+		padding: ${space[12]}px 0 ${space[9]}px;
 	}
 `;
