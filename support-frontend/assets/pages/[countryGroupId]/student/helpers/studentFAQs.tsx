@@ -14,8 +14,8 @@ const supporterPlusBodyAccess: JSX.Element = (
 const supporterPlusBodyManage: JSX.Element = (
 	<p>
 		To manage your subscription, go to Manage my account, and for further
-		information on your All-access digital subscription, see our Terms &
-		Conditions <a href={supporterPlusTermsLink}>here</a>
+		information on your All-access digital subscription, see our{' '}
+		<a href={supporterPlusTermsLink}>Terms & Conditions</a>
 	</p>
 );
 const supporterPlusBodyContact: JSX.Element = (

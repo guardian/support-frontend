@@ -18,7 +18,7 @@ export default function getProductContents(
 
 	const urlSearchParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: 'Annual',
+		ratePlan: 'Monthly',
 		backButton: 'false',
 	});
 
@@ -31,7 +31,7 @@ export default function getProductContents(
 	if (promotion) {
 		urlSearchParams.set('promoCode', promotion.promoCode);
 	}
-	const chekoutUrl = `checkout?${urlSearchParams.toString()}`;
+	const chekoutUrl = `/${geoId}/checkout?${urlSearchParams.toString()}`;
 
 	return {
 		product: 'SupporterPlus',
