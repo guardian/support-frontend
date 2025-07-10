@@ -1,6 +1,7 @@
 import test, { expect } from '@playwright/test';
 import { setupPage } from '../utils/page';
 import { completeGenericCheckout } from '../utils/completeGenericCheckout';
+import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 export type TestDetails = {
 	product: string;
@@ -25,30 +26,27 @@ export const testNewspaperCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const landingPageUrl = `/${internationalisationId.toLowerCase()}/subscribe/paper`;
-		const page = await context.newPage();
-		await setupPage(page, context, baseURL, landingPageUrl);
+		await visitLandingPageAndCompleteCheckout(
+			`/${internationalisationId.toLowerCase()}/subscribe/paper`,
+			{
+				context,
+				baseURL,
+				product,
+				paymentType,
+				internationalisationId,
+				postCode,
+			},
+			async (page) => {
+				// Transition from landing page to checkout:
 
-		// Select the product (Home Delivery or Subscription Card)
-		await page.getByRole('tab', { name: productLabel }).click();
+				// 1. Select the product (Home Delivery or Subscription Card)
+				await page.getByRole('tab', { name: productLabel }).click();
 
-		// // Click through to the checkout (we use the aria-label to target the link)
-		await page
-			.getByLabel(`${ratePlanLabel}- Subscribe`, { exact: true })
-			.click();
-
-		// Wait for the checkout page to load
-		await expect(
-			page.getByRole('heading', { name: 'Your subscription' }),
-		).toBeVisible({
-			timeout: 100000,
-		});
-
-		await completeGenericCheckout(page, {
-			product,
-			paymentType,
-			internationalisationId,
-			postCode,
-		});
+				// 2. Click through to the checkout (we use the aria-label to target the link)
+				await page
+					.getByLabel(`${ratePlanLabel}- Subscribe`, { exact: true })
+					.click();
+			},
+		);
 	});
 };

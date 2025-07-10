@@ -1,6 +1,5 @@
-import test, { expect } from '@playwright/test';
-import { setupPage } from '../utils/page';
-import { completeGenericCheckout } from '../utils/completeGenericCheckout';
+import test from '@playwright/test';
+import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 export type TestDetails = {
 	productLabel: string;
@@ -22,27 +21,18 @@ export const testThreeTierCheckout = (testDetails: TestDetails) => {
 		context,
 		baseURL,
 	}) => {
-		const landingPageUrl = `/${internationalisationId.toLowerCase()}/contribute`;
-		const page = await context.newPage();
-		await setupPage(page, context, baseURL, landingPageUrl);
+		await visitLandingPageAndCompleteCheckout(
+			`/${internationalisationId.toLowerCase()}/contribute`,
+			{ context, baseURL, product, paymentType, internationalisationId },
+			async (page) => {
+				// Transition from landing page to checkout:
 
-		// Select the billing frequency
-		await page.getByRole('tab', { name: billingFrequency }).click();
+				// 1. Select the billing frequency
+				await page.getByRole('tab', { name: billingFrequency }).click();
 
-		// Click through to the checkout (we use the aria-label to target the link)
-		await page.getByLabel(productLabel, { exact: true }).click();
-
-		// Wait for the checkout page to load
-		await expect(
-			page.getByRole('heading', { name: 'Your subscription' }),
-		).toBeVisible({
-			timeout: 100000,
-		});
-
-		await completeGenericCheckout(page, {
-			product,
-			paymentType,
-			internationalisationId,
-		});
+				// 2. Click through to the checkout (we use the aria-label to target the link)
+				await page.getByLabel(productLabel, { exact: true }).click();
+			},
+		);
 	});
 };
