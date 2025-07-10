@@ -1,13 +1,38 @@
 import test from '@playwright/test';
-import { testAdLiteCheckout } from '../test/adLiteCheckout';
-import type { TestDetails } from '../test/adLiteCheckout';
+import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
+
+type TestDetails = {
+	paymentType: string;
+};
 
 const tests: TestDetails[] = [
 	{
 		paymentType: 'Credit/Debit card',
-		ratePlan: 'Monthly',
 	},
 ];
 
 test.describe('Ad Lite Checkout', () =>
-	tests.map((testDetails) => testAdLiteCheckout(testDetails)));
+	tests.map((testDetails: TestDetails) => {
+		const { paymentType } = testDetails;
+
+		test(`Ad-Lite - ${testDetails.paymentType}`, async ({
+			context,
+			baseURL,
+		}) => {
+			await visitLandingPageAndCompleteCheckout(
+				`/uk/guardian-ad-lite`,
+				{
+					context,
+					baseURL,
+					product: 'GuardianAdLite',
+					paymentType,
+					internationalisationId: 'UK',
+				},
+				async (page) => {
+					// Transition from landing page to checkout:
+					const purchaseButton = await page.getByText('Get Guardian Ad-Lite');
+					await purchaseButton.click();
+				},
+			);
+		});
+	}));
