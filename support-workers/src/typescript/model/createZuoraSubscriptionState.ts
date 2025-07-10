@@ -24,6 +24,7 @@ import {
 } from './stateSchemas';
 
 export const contributionStateSchema = z.object({
+	productType: z.literal('Contribution'),
 	product: contributionProductSchema,
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
@@ -32,6 +33,7 @@ export const contributionStateSchema = z.object({
 export type ContributionState = z.infer<typeof contributionStateSchema>;
 
 export const supporterPlusStateSchema = z.object({
+	productType: z.literal('SupporterPlus'),
 	billingCountry: countrySchema,
 	product: supporterPlusProductSchema,
 	paymentMethod: paymentMethodSchema,
@@ -42,6 +44,7 @@ export const supporterPlusStateSchema = z.object({
 export type SupporterPlusState = z.infer<typeof supporterPlusStateSchema>;
 
 export const tierThreeStateSchema = z.object({
+	productType: z.literal('TierThree'),
 	user: userSchema,
 	product: tierThreeProductSchema,
 	paymentMethod: paymentMethodSchema,
@@ -53,6 +56,7 @@ export const tierThreeStateSchema = z.object({
 export type TierThreeState = z.infer<typeof tierThreeStateSchema>;
 
 export const guardianAdLiteStateSchema = z.object({
+	productType: z.literal('GuardianAdLite'),
 	product: guardianAdLiteProductSchema,
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
@@ -60,6 +64,7 @@ export const guardianAdLiteStateSchema = z.object({
 export type GuardianAdLiteState = z.infer<typeof guardianAdLiteStateSchema>;
 
 export const digitalSubscriptionStateSchema = z.object({
+	productType: z.literal('DigitalSubscription'),
 	billingCountry: countrySchema,
 	product: digitalPackProductSchema,
 	paymentMethod: paymentMethodSchema,
@@ -72,6 +77,7 @@ export type DigitalSubscriptionState = z.infer<
 >;
 
 export const paperStateSchema = z.object({
+	productType: z.literal('Paper'),
 	user: userSchema,
 	product: paperProductSchema,
 	paymentMethod: paymentMethodSchema,
@@ -83,6 +89,7 @@ export const paperStateSchema = z.object({
 export type PaperState = z.infer<typeof paperStateSchema>;
 
 export const guardianWeeklyStateSchema = z.object({
+	productType: z.literal('GuardianWeekly'),
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: guardianWeeklyProductSchema,
@@ -95,7 +102,7 @@ export const guardianWeeklyStateSchema = z.object({
 export type GuardianWeeklyState = z.infer<typeof guardianWeeklyStateSchema>;
 
 export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
-	'product',
+	'productType',
 	[
 		contributionStateSchema,
 		supporterPlusStateSchema,
