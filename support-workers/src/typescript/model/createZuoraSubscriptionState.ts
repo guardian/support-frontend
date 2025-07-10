@@ -1,0 +1,125 @@
+import { z } from 'zod';
+import {
+	salesforceContactRecordSchema,
+	salesforceContactRecordsSchema,
+} from '../services/salesforce';
+import { countrySchema } from './address';
+import { paymentMethodSchema } from './paymentMethod';
+import {
+	contributionProductSchema,
+	digitalPackProductSchema,
+	guardianAdLiteProductSchema,
+	guardianWeeklyProductSchema,
+	paperProductSchema,
+	productTypeSchema,
+	supporterPlusProductSchema,
+	tierThreeProductSchema,
+} from './productType';
+import {
+	acquisitionDataSchema,
+	analyticsInfoSchema,
+	appliedPromotionSchema,
+	giftRecipientSchema,
+	userSchema,
+} from './stateSchemas';
+
+export const contributionStateSchema = z.object({
+	product: contributionProductSchema,
+	paymentMethod: paymentMethodSchema,
+	salesForceContact: salesforceContactRecordSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type ContributionState = z.infer<typeof contributionStateSchema>;
+
+export const supporterPlusStateSchema = z.object({
+	billingCountry: countrySchema,
+	product: supporterPlusProductSchema,
+	paymentMethod: paymentMethodSchema,
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	salesForceContact: salesforceContactRecordSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type SupporterPlusState = z.infer<typeof supporterPlusStateSchema>;
+
+export const tierThreeStateSchema = z.object({
+	user: userSchema,
+	product: tierThreeProductSchema,
+	paymentMethod: paymentMethodSchema,
+	firstDeliveryDate: z.string(),
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	salesForceContact: salesforceContactRecordSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type TierThreeState = z.infer<typeof tierThreeStateSchema>;
+
+export const guardianAdLiteStateSchema = z.object({
+	product: guardianAdLiteProductSchema,
+	paymentMethod: paymentMethodSchema,
+	salesForceContact: salesforceContactRecordSchema,
+});
+export type GuardianAdLiteState = z.infer<typeof guardianAdLiteStateSchema>;
+
+export const digitalSubscriptionStateSchema = z.object({
+	billingCountry: countrySchema,
+	product: digitalPackProductSchema,
+	paymentMethod: paymentMethodSchema,
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	salesForceContact: salesforceContactRecordSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type DigitalSubscriptionState = z.infer<
+	typeof digitalSubscriptionStateSchema
+>;
+
+export const paperStateSchema = z.object({
+	user: userSchema,
+	product: paperProductSchema,
+	paymentMethod: paymentMethodSchema,
+	firstDeliveryDate: z.string(),
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	salesForceContact: salesforceContactRecordSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type PaperState = z.infer<typeof paperStateSchema>;
+
+export const guardianWeeklyStateSchema = z.object({
+	user: userSchema,
+	giftRecipient: giftRecipientSchema.nullable(),
+	product: guardianWeeklyProductSchema,
+	paymentMethod: paymentMethodSchema,
+	firstDeliveryDate: z.string(),
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	salesforceContacts: salesforceContactRecordsSchema,
+	similarProductsConsent: z.boolean().nullable(),
+});
+export type GuardianWeeklyState = z.infer<typeof guardianWeeklyStateSchema>;
+
+export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
+	'product',
+	[
+		contributionStateSchema,
+		supporterPlusStateSchema,
+		tierThreeStateSchema,
+		guardianAdLiteStateSchema,
+		digitalSubscriptionStateSchema,
+		paperStateSchema,
+		guardianWeeklyStateSchema,
+	],
+);
+
+export const createZuoraSubscriptionStateSchema = z.object({
+	productSpecificState: createZuoraSubscriptionProductStateSchema,
+	requestId: z.string(),
+	user: userSchema,
+	product: productTypeSchema,
+	analyticsInfo: analyticsInfoSchema,
+	firstDeliveryDate: z.string().nullable(),
+	appliedPromotion: appliedPromotionSchema.nullable(),
+	csrUsername: z.string().nullable(),
+	salesforceCaseId: z.string().nullable(),
+	acquisitionData: acquisitionDataSchema.nullable(),
+});
+
+export type CreateZuoraSubscriptionState = z.infer<
+	typeof createZuoraSubscriptionStateSchema
+>;

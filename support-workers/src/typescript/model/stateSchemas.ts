@@ -15,6 +15,8 @@ export const titleSchema = z.union([
 	z.literal('Rev'),
 ]);
 
+export type Title = z.infer<typeof titleSchema>;
+
 export const userSchema = z.object({
 	id: z.string(),
 	primaryEmailAddress: z.string(),
@@ -23,9 +25,9 @@ export const userSchema = z.object({
 	lastName: z.string(),
 	billingAddress: addressSchema,
 	deliveryAddress: addressSchema.nullable(),
-	telephoneNumber: z.string().nullable(),
+	telephoneNumber: z.string().nullish(),
 	isTestUser: z.boolean(),
-	deliveryInstructions: z.string().nullable(),
+	deliveryInstructions: z.string().nullish(),
 });
 export type User = z.infer<typeof userSchema>;
 
@@ -65,7 +67,7 @@ const referrerAcquisitionDataSchema = z.object({
 	labels: z.array(z.string()).nullable(),
 });
 
-const acquisitionDataSchema = z.object({
+export const acquisitionDataSchema = z.object({
 	ophanIds: ophanIdsSchema,
 	referrerAcquisitionData: referrerAcquisitionDataSchema,
 	supportAbTests: z.array(abTestSchema),
@@ -78,6 +80,13 @@ export const giftRecipientSchema = z.object({
 	email: z.string().nullable(),
 });
 
+export type GiftRecipient = z.infer<typeof giftRecipientSchema>;
+
+export const appliedPromotionSchema = z.object({
+	promoCode: z.string(),
+	countryGroupId: z.string(), //TODO: build a schema for this or take it from the frontend
+});
+
 const baseStateSchema = z.object({
 	requestId: z.string(),
 	user: userSchema,
@@ -87,12 +96,7 @@ const baseStateSchema = z.object({
 	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
 	// so leave it as a string until all the lambdas are Typescript
 	firstDeliveryDate: z.string().nullable(),
-	appliedPromotion: z
-		.object({
-			promoCode: z.string(),
-			countryGroupId: z.string(), //TODO: build a schema for this or take it from the frontend
-		})
-		.nullable(),
+	appliedPromotion: appliedPromotionSchema.nullable(),
 	csrUsername: z.string().nullable(),
 	salesforceCaseId: z.string().nullable(),
 	acquisitionData: acquisitionDataSchema.nullable(),

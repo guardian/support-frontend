@@ -27,7 +27,8 @@
     "@aws-sdk/client-ssm": "catalog:",
     "@aws-sdk/credential-provider-node": "catalog:",
     "stripe": "^17.4.0",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "dayjs": "^1.11.13"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "catalog:",

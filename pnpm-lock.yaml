@@ -549,6 +549,9 @@ importers:
       '@aws-sdk/credential-provider-node':
         specifier: 'catalog:'
         version: 3.699.0(@aws-sdk/client-sso-oidc@3.817.0)(@aws-sdk/client-sts@3.817.0)
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       stripe:
         specifier: ^17.4.0
         version: 17.7.0

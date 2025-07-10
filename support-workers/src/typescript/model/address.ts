@@ -5,12 +5,14 @@ export const countrySchema = z.enum(isoCountries);
 
 export const addressSchema = z.object({
 	lineOne: z.string().nullable(),
-	lineTwo: z.string().nullable(),
+	lineTwo: z.string().nullish(),
 	city: z.string().nullable(),
 	state: z.string().nullable(),
 	postCode: z.string().nullable(),
 	country: countrySchema,
 });
+
+type Address = z.infer<typeof addressSchema>;
 
 type AddressLine = {
 	streetNumber?: string;
@@ -19,7 +21,7 @@ type AddressLine = {
 
 export function combinedAddressLine(
 	addressLine1: string | null,
-	addressLine2: string | null,
+	addressLine2?: string | null,
 ): AddressLine | undefined {
 	const singleAddressLine = (addressLine: string): AddressLine => {
 		const pattern = /([0-9]+) (.+)/;
@@ -80,6 +82,17 @@ export function combinedAddressLine(
 		}
 	}
 	return undefined;
+}
+
+export function getAddressLine(address: Address): string | null {
+	const combinedAddressLineResult = combinedAddressLine(
+		address.lineOne,
+		address.lineTwo,
+	);
+	if (combinedAddressLineResult) {
+		return asFormattedString(combinedAddressLineResult);
+	}
+	return null;
 }
 
 export function truncateForZuoraStreetNameLimit(
