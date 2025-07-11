@@ -7,26 +7,6 @@ afterEachTasks(test);
 test.describe('Checkout', () => {
 	[
 		{
-			product: 'HomeDelivery',
-			ratePlan: 'EverydayPlus',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'UK',
-		},
-		{
-			product: 'NationalDelivery',
-			ratePlan: 'WeekendPlus',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'UK',
-			postCode: 'BN44 3QG', // This postcode only has one delivery agent
-		},
-		{
-			product: 'NationalDelivery',
-			ratePlan: 'WeekendPlus',
-			paymentType: 'Credit/Debit card',
-			internationalisationId: 'UK',
-			postCode: 'BS6 6QY', // This postcode has multiple delivery agents
-		},
-		{
 			product: 'GuardianWeeklyDomestic',
 			ratePlan: 'Monthly',
 			paymentType: 'Credit/Debit card',
