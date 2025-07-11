@@ -1,6 +1,6 @@
 package com.gu.emailservices
 
-import com.gu.i18n.Currency.{EUR, GBP, USD}
+import com.gu.i18n.Currency.{AUD, EUR, GBP, USD}
 import com.gu.support.workers._
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
@@ -69,5 +69,23 @@ class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
       payments(firstDiscountedPayment, List(3)) ++ payments(firstFullPricePayment, List(3, 6))
     val expected = "£30.00 every quarter for 2 quarters, then £37.50 every quarter"
     assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Quarterly, GBP) == expected)
+  }
+
+  "describe" should "correctly format zero amounts with multiple zero amounts in the payment schedule" in {
+    val zeroPayment = Payment(referenceDate, 0.00)
+    val schedule: List[Payment] = payments(zeroPayment, List(10))
+
+    val got = SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Monthly, AUD)
+
+    assert(got == "$0.00 every month")
+  }
+
+  "describe" should "correctly format zero amounts with a single zero amount in the payment schedule" in {
+    val zeroPayment = Payment(referenceDate, 0.00)
+    val schedule: List[Payment] = List(zeroPayment)
+
+    val got = SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Monthly, AUD)
+
+    assert(got == "$0.00 for the first month")
   }
 }
