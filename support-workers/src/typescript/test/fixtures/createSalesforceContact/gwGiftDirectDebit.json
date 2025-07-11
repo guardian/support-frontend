@@ -1,0 +1,106 @@
+{
+  "state": {
+    "requestId": "531f493c-c880-fb83-0000-00000000111b",
+    "user": {
+      "id": "21841796",
+      "primaryEmailAddress": "Test.User@gmail.com",
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "billingAddress": {
+        "lineOne": "York Place",
+        "lineTwo": null,
+        "city": "London",
+        "state": "",
+        "postCode": "N19GU",
+        "country": "GB"
+      },
+      "deliveryAddress": {
+        "lineOne": "York Place",
+        "lineTwo": null,
+        "city": "London",
+        "state": "",
+        "postCode": "N19GU",
+        "country": "GB"
+      },
+      "telephoneNumber": "+4411111111111",
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": {
+      "title": null,
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "Test.User@gmail.com"
+    },
+    "product": {
+      "currency": "GBP",
+      "billingPeriod": "Quarterly",
+      "fulfilmentOptions": "Domestic",
+      "productType": "GuardianWeekly"
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": true,
+      "paymentProvider": "DirectDebit"
+    },
+    "paymentFields": {
+      "accountHolderName": "RB",
+      "sortCode": "200000",
+      "accountNumber": "55779911",
+      "recaptchaToken": "03AFcWeA7yDAPAWz2F28cZRoK5B0Guxe98-DPZ-umjdJahSjb2biO0eb_asDvNDDHkOwysL1ALlmCc3tHzVi2EFqCTw-koYnQw6Zs8xYJT4wWoY6Z2_Pafp1096XkIFWRSqYHanugwLaBLoKeloVX78a3hV6LDGUL9msZPEr5a3kiy-Q-sf68_-0qSvCzE3AYU-tbq9PQgU23ZhI-oTZJJCt8IQKUp5FeJJ37PoZ3iimu1TkXnMHDv1YIpLhieGrAogUT5NhkIuVVntSVHg0SQzWRPud5eTOmIT4cYSm4_9dnoBySAXUAoohNRIt0vg02Fz0-BFzm12vQhLHSqEcho3BP-cTKp5ed7XW03s2dcNHplBhMTuolmnpAraQ8RnQan15kbgoXncQD46OmrxeMTNlMGb0EQyuiuRm4BDgXQF-EX94nyU6vz5swcNdB8-dEZPBkiFgF0fqn1iW3q4WRzlCveEDNJlr3iPFCmUVtOdAqsPzNqTUdHQxE2LxlEKTSxItJXw0x2wLKMp0_J0MupzpbO6ItuFwfdp-ew1fJIeXg6hPwgDONPBKlA70bF-WoZUiKquK8jrrajJNNKZa2thybK8ho_HXj0mhB6ViwVxL1U3KiFbuFqyTWp1u2mjm9HIoi51S81jqH3ljn7V8Zb0bHALR3ixinMSpplkMFvonZDcY2WVMR6pfC9zLF_QwKN_d9tc1MUDrFIA2PH1FBOasjYtoSoGCS9gz4yuk-H8UeuU5tQ3OBZKFiT9F31Nw590TtYoXHCC_PgC4YFQ4UdVJycJB-87u_GAeYYLcB3y5yQbkZoBUzQ5OxYL8SVd3ywk9vepVk7cnr86w1yHbA3i8TdhcX78mcwTli8yGL5pxJLQVOkMr6L_s3Ce7VsormEgB8DL_9EtSwhGpzoGvyqn-k1h5fAmC2qN5ES5gPGwjwJm-v8P35brdIRE5vletLj--cKpukEAezyTMx9VXn8roOVk-D4v4T1AjMj-X3VTN9dJO1d1lMTsu8Qa6HlAIlHw_AG70AM5OTMKtU0yVt8H1ZoLyeVBaak2Trg8KHF6j80d94kO3Gy5VAZoVYk_H1ZUeNAplNXbyi9BH6us1SD0zdafbC8lW57xujdKnnzVDZ_EQpdpMdqT49wTBeU--7tdTS3ivv6rpebRMHG1P5cG7c1XU3MOLQS15YK81hBc13JaGpTaKgquntFs6mGby_7R2BDD29N-rf4GK7twHevpET1aXa_1AvO5pH85_Il6BlEOUxcW8kcWF8qBpiNuxeY3ESELqbgoFmX5TYX30bTVGP8NH0YLNu5S-1mtHJ4WcaeLA4xyfMK80_YLhmV3fanmWJQ0o_8reCUmPRu6G11R2HyfxqcqB3S1sIGw_Tb6uqojcz5YxABTw7TLkrYoNSJKjS9Jy_SftD9OlFPHKaUjrdaW-Vpk6DlTYVJmstOBsywKL73wY_ngTwKAfPlv-MND_nKtwgwBZgkpzXYHmqJ5d2TZTI0fzNlZt8wQ_OU80UDLkb6eFDvyD6M2Zs2nyjf3LKt_3ZBF1B5w33sM5TfjOQhDU82LJIqHGoqK8likZsNSo2dM2JTPlo",
+      "paymentType": "DirectDebit"
+    },
+    "firstDeliveryDate": "2025-07-25",
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mcywaoxrovvvh02sdtuf",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0",
+        "ipAddress": "10.248.135.28",
+        "labels": null
+      },
+      "supportAbTests": []
+    },
+    "ipAddress": "86.154.28.44",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0",
+    "similarProductsConsent": null,
+    "paymentMethod": {
+      "Type": "BankTransfer",
+      "PaymentGateway": "GoCardless",
+      "BankTransferType": "DirectDebitUK",
+      "FirstName": "Test",
+      "LastName": "User",
+      "BankTransferAccountName": "RB",
+      "BankCode": "200000",
+      "BankTransferAccountNumber": "55779911",
+      "Country": "GB",
+      "City": "London",
+      "PostalCode": "N19GU",
+      "State": "",
+      "StreetName": "Trelawney Road",
+      "StreetNumber": "8"
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": [],
+    "accountExists": false
+  }
+}
