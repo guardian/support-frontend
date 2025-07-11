@@ -84,7 +84,7 @@ export type GiftRecipient = z.infer<typeof giftRecipientSchema>;
 
 export const appliedPromotionSchema = z.object({
 	promoCode: z.string(),
-	countryGroupId: z.string(), //TODO: build a schema for this or take it from the frontend
+	countryGroupId: z.string(),
 });
 
 const baseStateSchema = z.object({

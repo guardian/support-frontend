@@ -3,35 +3,35 @@
     "requestId": "531f493c-c880-fb83-0000-00000000111b",
     "user": {
       "id": "21841796",
-      "primaryEmailAddress": "rupert.bates@gmail.com",
+      "primaryEmailAddress": "Test.User@gmail.com",
       "title": null,
-      "firstName": "Rupert",
-      "lastName": "Bates",
+      "firstName": "Test",
+      "lastName": "User",
       "billingAddress": {
-        "lineOne": "8 Trelawney Road",
+        "lineOne": "York Place",
         "lineTwo": null,
-        "city": "Bristol",
+        "city": "London",
         "state": "",
-        "postCode": "BS6 6EA",
+        "postCode": "N19GU",
         "country": "GB"
       },
       "deliveryAddress": {
-        "lineOne": "8 Trelawney Road",
+        "lineOne": "York Place",
         "lineTwo": null,
-        "city": "Bristol",
+        "city": "London",
         "state": "",
-        "postCode": "BS6 6EA",
+        "postCode": "N19GU",
         "country": "GB"
       },
-      "telephoneNumber": "+447972212521",
+      "telephoneNumber": "+4411111111111",
       "isTestUser": false,
       "deliveryInstructions": null
     },
     "giftRecipient": {
       "title": null,
-      "firstName": "Rupert",
-      "lastName": "Bates",
-      "email": "rupert.bates@gmail.com"
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "Test.User@gmail.com"
     },
     "product": {
       "currency": "GBP",
@@ -83,14 +83,14 @@
       "Type": "BankTransfer",
       "PaymentGateway": "GoCardless",
       "BankTransferType": "DirectDebitUK",
-      "FirstName": "Rupert",
-      "LastName": "Bates",
+      "FirstName": "Test",
+      "LastName": "User",
       "BankTransferAccountName": "RB",
       "BankCode": "200000",
       "BankTransferAccountNumber": "55779911",
       "Country": "GB",
-      "City": "Bristol",
-      "PostalCode": "BS6 6EA",
+      "City": "London",
+      "PostalCode": "N19GU",
       "State": "",
       "StreetName": "Trelawney Road",
       "StreetNumber": "8"
