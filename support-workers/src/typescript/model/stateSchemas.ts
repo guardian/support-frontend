@@ -125,6 +125,15 @@ export type CreateSalesforceContactState = z.infer<
 	typeof createSalesforceContactStateSchema
 >;
 
+const requestInfoSchema = z.object({
+	testUser: z.boolean(),
+	failed: z.boolean(),
+	messages: z.array(z.string()),
+	accountExists: z.boolean(),
+});
+
+export type RequestInfo = z.infer<typeof requestInfoSchema>;
+
 export type LambdaState =
 	| CreatePaymentMethodState
 	| CreateSalesforceContactState;
@@ -154,11 +163,18 @@ export function wrapperSchemaForState<SchemaType extends z.ZodTypeAny>(
 				Cause: z.string(),
 			})
 			.nullable(),
-		requestInfo: z.object({
-			testUser: z.boolean(),
-			failed: z.boolean(),
-			messages: z.array(z.string()),
-			accountExists: z.boolean(),
-		}),
+		requestInfo: requestInfoSchema,
 	});
+}
+
+export function wrapState<S extends LambdaState>(
+	state: S,
+	error: { Error: string; Cause: string } | null = null,
+	requestInfo: RequestInfo,
+): WrappedState<S> {
+	return {
+		state,
+		error,
+		requestInfo,
+	};
 }
