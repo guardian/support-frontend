@@ -13,6 +13,8 @@ import { setTestUserDetails } from '../utils/testUserDetails';
 		expectedPromoText: '$0/month for two years, then $20/month',
 		expectedCheckoutTotalText: 'Was $20, now $0/month',
 		accessibleCtaText: 'Sign up for free',
+		expectedThankYouText:
+			"You'll pay $0/month for the first 24 months, then $20/month afterwards unless you cancel",
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode} Promo`, async ({
@@ -55,6 +57,7 @@ import { setTestUserDetails } from '../utils/testUserDetails';
 			testLastName,
 			true,
 		);
+		await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 		await fillInCardDetails(page);
 		await checkRecaptcha(page);
@@ -63,5 +66,14 @@ import { setTestUserDetails } from '../utils/testUserDetails';
 				name: `Pay`,
 			})
 			.click();
+
+		// Thank you
+		await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible({
+			timeout: 600000,
+		});
+
+		await expect(
+			page.getByText(testDetails.expectedThankYouText).first(),
+		).toBeVisible({ timeout: 600000 });
 	});
 });
