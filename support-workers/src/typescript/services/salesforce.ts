@@ -42,7 +42,7 @@ export const salesforceContactRecordSchema = z.object({
 });
 type SalesforceContactRecord = z.infer<typeof salesforceContactRecordSchema>;
 
-class SalesforceError extends Error {
+export class SalesforceError extends Error {
 	constructor({ errorCode, message }: { errorCode: string; message: string }) {
 		super(message);
 		this.name = errorCode;
@@ -65,7 +65,7 @@ const upsertResponseSchema = z.discriminatedUnion('Success', [
 	failedUpsertResponseSchema,
 ]);
 
-type UpsertResponse = z.infer<typeof upsertResponseSchema>;
+export type UpsertResponse = z.infer<typeof upsertResponseSchema>;
 
 export const salesforceContactRecordsSchema = z.object({
 	buyer: salesforceContactRecordSchema,
@@ -75,7 +75,7 @@ export type SalesforceContactRecords = z.infer<
 	typeof salesforceContactRecordsSchema
 >;
 
-const salesforceErrorCodes = {
+export const salesforceErrorCodes = {
 	expiredAuthenticationCode: 'INVALID_SESSION_ID',
 	rateLimitExceeded: 'REQUEST_LIMIT_EXCEEDED',
 	readOnlyMaintenance: 'INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE',
@@ -118,6 +118,10 @@ export class SalesforceService {
 			upsertResponseSchema,
 		);
 
+		return SalesforceService.parseResponseToResult(response);
+	};
+
+	static parseResponseToResult(response: UpsertResponse) {
 		if (response.Success) {
 			return response;
 		} else {
@@ -133,7 +137,7 @@ export class SalesforceService {
 					'Salesforce `Success` returned as `false` with no error message',
 			});
 		}
-	};
+	}
 
 	private maybeAddGiftRecipient(
 		contactRecord: SalesforceContactRecord,
