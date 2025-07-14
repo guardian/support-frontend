@@ -1311,44 +1311,44 @@ export function CheckoutComponent({
 														onCardNumberChange={(
 															event: StripeCardNumberElementChangeEvent,
 														) => {
-															setStripeFieldsAreEmpty({
-																...stripeFieldsAreEmpty,
+															setStripeFieldsAreEmpty((prevState) => ({
+																...prevState,
 																cardNumber: event.empty,
-															});
+															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError({
-																...stripeFieldError,
+															setStripeFieldError((prevState) => ({
+																...prevState,
 																cardNumber: undefined,
-															});
+															}));
 														}}
 														onExpiryChange={(
 															event: StripeCardExpiryElementChangeEvent,
 														) => {
-															setStripeFieldsAreEmpty({
-																...stripeFieldsAreEmpty,
+															setStripeFieldsAreEmpty((prevState) => ({
+																...prevState,
 																expiry: event.empty,
-															});
+															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError({
-																...stripeFieldError,
+															setStripeFieldError((prevState) => ({
+																...prevState,
 																expiry: undefined,
-															});
+															}));
 														}}
 														onCvcChange={(
 															event: StripeCardCvcElementChangeEvent,
 														) => {
-															setStripeFieldsAreEmpty({
-																...stripeFieldsAreEmpty,
+															setStripeFieldsAreEmpty((prevState) => ({
+																...prevState,
 																cvc: event.empty,
-															});
+															}));
 
 															// Clear errors when the field changes, we'll (re) show errors, if any, on submit
-															setStripeFieldError({
-																...stripeFieldError,
+															setStripeFieldError((prevState) => ({
+																...prevState,
 																cvc: undefined,
-															});
+															}));
 														}}
 														errors={{
 															cardNumber: maybeArrayWrap(
