@@ -32,7 +32,7 @@ export const testNewspaperCheckout = (testDetails: TestDetails) => {
 		// Select the product (Home Delivery or Subscription Card)
 		await page.getByRole('tab', { name: productLabel }).click();
 
-		// // Click through to the checkout (we use the aria-label to target the link)
+		// Click through to the checkout (we use the aria-label to target the link)
 		await page
 			.getByLabel(`${ratePlanLabel}- Subscribe`, { exact: true })
 			.click();
