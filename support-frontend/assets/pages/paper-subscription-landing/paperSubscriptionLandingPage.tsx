@@ -19,7 +19,11 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import { PaperHero } from './components/hero/hero';
+import {
+	defaultPrintCopy,
+	defaultPrintPlusCopy,
+	PaperHero,
+} from './components/hero/hero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
@@ -84,6 +88,9 @@ function PaperLandingPage({
 		>
 			<PaperHero
 				productPrices={productPrices}
+				defaultCopy={
+					showPaperProductTabs ? defaultPrintPlusCopy : defaultPrintCopy
+				}
 				promotionCopy={sanitisedPromoCopy}
 			/>
 			{showPaperProductTabs ? (

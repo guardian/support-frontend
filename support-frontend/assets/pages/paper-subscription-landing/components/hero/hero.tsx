@@ -29,6 +29,7 @@ import { getDiscountCopy } from './discountCopy';
 
 type PaperHeroPropTypes = {
 	productPrices: ProductPrices;
+	defaultCopy: string;
 	promotionCopy: PromotionCopy;
 };
 
@@ -78,16 +79,17 @@ const defaultTitle = (
 		Observer newspapers
 	</>
 );
-const defaultCopy = (
-	<>
-		Whether you’re looking to keep up to date with the headlines or pore over
+export const defaultPrintCopy = `Whether you’re looking to keep up to date with the headlines or pore over
 		our irresistible recipes, you can enjoy our award-winning journalism for
-		less.
-	</>
-);
+		less.`;
+export const defaultPrintPlusCopy = `From political insight to the perfect pasta, there’s something for everyone
+		with a Guardian print subscription. Plus, enjoy free digital access when you
+		subscribe, so you can stay informed on your mobile or tablet, wherever you
+		are, whenever you like.`;
 
 export function PaperHero({
 	productPrices,
+	defaultCopy,
 	promotionCopy,
 }: PaperHeroPropTypes): JSX.Element | null {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
