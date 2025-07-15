@@ -2,7 +2,7 @@ import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
 import { asRetryError } from '../util/errorHandler';
 
 describe('errorHandler', () => {
-	test('should throw a the correct retry error for Salesforce errors', () => {
+	test('should throw a retry unlimited error during readonly mode', () => {
 		const errorMessage =
 			'Failed Upsert of new Contact: Upsert failed. First exception on row 0; first error: INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE, Updates can’t be made during maintenance. Try again when maintenance is complete: []';
 		const salesforceError: SalesforceError = new SalesforceError({
