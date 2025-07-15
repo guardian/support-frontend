@@ -29,8 +29,8 @@ import { getDiscountCopy } from './discountCopy';
 
 type PaperHeroPropTypes = {
 	productPrices: ProductPrices;
-	defaultCopy: string;
 	promotionCopy: PromotionCopy;
+	isPaperPlus: boolean;
 };
 
 const heroCopy = css`
@@ -73,35 +73,45 @@ const desktopToWideLineBreak = css`
 		display: none;
 	}
 `;
-const defaultTitle = (
+const defaultPrintTitle = (
 	<>
 		Guardian and <br css={desktopToWideLineBreak} />
 		Observer newspapers
 	</>
 );
-export const defaultPrintCopy = `Whether you’re looking to keep up to date with the headlines or pore over
+const defaultPrintCopy = `Whether you’re looking to keep up to date with the headlines or pore over
 		our irresistible recipes, you can enjoy our award-winning journalism for
 		less.`;
-export const defaultPrintPlusCopy = `From political insight to the perfect pasta, there’s something for everyone
+const defaultPrintPlusCopy = `From political insight to the perfect pasta, there’s something for everyone
 		with a Guardian print subscription. Plus, enjoy free digital access when you
 		subscribe, so you can stay informed on your mobile or tablet, wherever you
 		are, whenever you like.`;
 
 export function PaperHero({
 	productPrices,
-	defaultCopy,
 	promotionCopy,
+	isPaperPlus,
 }: PaperHeroPropTypes): JSX.Element | null {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
-	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
-
+	const defaultTitle = isPaperPlus
+		? `Save up to ${maxSavingVsRetail}% on your Guardian print subscription`
+		: defaultPrintTitle;
 	const title = promotionCopy.title ?? defaultTitle;
+
+	const defaultCopy = isPaperPlus ? defaultPrintPlusCopy : defaultPrintCopy;
 	const copy =
 		promotionHTML(promotionCopy.description, {
 			tag: 'p',
 		}) ?? defaultCopy;
+
+	const { roundel } = getDiscountCopy(maxSavingVsRetail);
+	const defaultRoundelText = isPaperPlus
+		? `Includes unlimited digital access`
+		: roundel.length
+		? roundel.join(' ')
+		: undefined;
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+
 	return (
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
