@@ -135,6 +135,7 @@ describe('CreateSalesforceContatctLambda', () => {
 		);
 
 		expect(result.state.product.productType).toBe('Contribution');
+		// Need to check type here because Typescript can't infer it from the preceding check
 		if (result.state.productSpecificState.productType === 'Contribution') {
 			expect(result.state.productSpecificState.salesForceContact.Id).toBe(
 				'003UD00000bt0YfYAI',
