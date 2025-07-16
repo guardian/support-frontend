@@ -19,7 +19,8 @@ const benefitsAndDigitalRewardsLabel = (
 );
 
 const baseDigitalRewards = [
-	'Unlimited access to the refreshed Guardian app',
+	'Unlimited access to the refreshed Guardian app and Guardian Feast app',
+	'Unlimited access to the Guardian Editions app so you can enjoy newspapers on your mobile and tablet',
 	'Ad-free reading on all your devices',
 	'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 	'Far fewer asks for support',
