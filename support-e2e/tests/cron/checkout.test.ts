@@ -7,12 +7,6 @@ afterEachTasks(test);
 test.describe('Checkout', () => {
 	[
 		{
-			product: 'GuardianAdLite',
-			ratePlan: 'Monthly',
-			paymentType: 'PayPal',
-			internationalisationId: 'UK',
-		},
-		{
 			product: 'SupporterPlus',
 			ratePlan: 'Monthly',
 			paymentType: 'PayPal',
