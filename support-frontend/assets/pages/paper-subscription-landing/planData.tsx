@@ -12,15 +12,9 @@ export type PlanData = {
 	};
 };
 
-const benefitsLabel = (
+const benefitsAndDigitalRewardsLabel = (
 	<>
-		Enjoy <strong>home delivery</strong> of your newspaper
-	</>
-);
-
-const digitalRewardsLabel = (
-	<>
-		Unlock exclusive <strong>digital rewards</strong>
+		Unlock <strong>full digital experience</strong>
 	</>
 );
 
@@ -41,14 +35,14 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: [
 				'The Guardian and all its supplements Monday to Saturday',
 				'The Observer and all its supplements, delivered on Sundays',
 			],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -60,11 +54,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: ['The Guardian and all its supplements Monday to Saturday'],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -77,14 +71,14 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: [
 				'Saturday edition of The Guardian and all its Saturday supplements',
 				'The Observer and all its supplements, delivered on Sundays',
 			],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -96,13 +90,13 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: [
 				'Saturday edition of The Guardian and all its Saturday supplements',
 			],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: benefitsAndDigitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
