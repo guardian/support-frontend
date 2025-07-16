@@ -19,19 +19,12 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import {
-	bodyPaper,
-	bodyPaperPlus,
-	PaperHero,
-	roundelPaper,
-	roundelPaperPlus,
-	titlePaper,
-	titlePaperPlus,
-} from './components/hero/hero';
+import { PaperHero } from './components/content/PaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
 import { displayPaperProductTabs } from './helpers/displayPaperProductTabs';
+import { getPaperItems, getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -90,20 +83,20 @@ function PaperLandingPage({
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
-			<PaperHero
-				promotionCopy={sanitisedPromoCopy}
-				titleCopy={
-					showPaperProductTabs ? titlePaperPlus(productPrices) : titlePaper
-				}
-				bodyCopy={showPaperProductTabs ? bodyPaperPlus : bodyPaper}
-				roundelCopy={
-					showPaperProductTabs ? roundelPaperPlus : roundelPaper(productPrices)
-				}
-			/>
 			{showPaperProductTabs ? (
-				<NewspaperProductTabs productPrices={productPrices} />
+				<>
+					<PaperHero
+						promotionCopy={sanitisedPromoCopy}
+						paperHeroItems={getPaperPlusItems(productPrices)}
+					/>
+					<NewspaperProductTabs productPrices={productPrices} />
+				</>
 			) : (
 				<>
+					<PaperHero
+						promotionCopy={sanitisedPromoCopy}
+						paperHeroItems={getPaperItems(productPrices)}
+					/>
 					<FullWidthContainer>
 						<CentredContainer>
 							<Block>
