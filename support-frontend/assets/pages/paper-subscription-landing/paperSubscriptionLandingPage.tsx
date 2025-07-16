@@ -19,7 +19,15 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import { PaperHero } from './components/hero/hero';
+import {
+	bodyPaper,
+	bodyPaperPlus,
+	PaperHero,
+	roundelPaper,
+	roundelPaperPlus,
+	titlePaper,
+	titlePaperPlus,
+} from './components/hero/hero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
@@ -83,9 +91,14 @@ function PaperLandingPage({
 			footer={paperSubsFooter}
 		>
 			<PaperHero
-				productPrices={productPrices}
-				isPaperPlus={showPaperProductTabs}
 				promotionCopy={sanitisedPromoCopy}
+				titleCopy={
+					showPaperProductTabs ? titlePaperPlus(productPrices) : titlePaper
+				}
+				bodyCopy={showPaperProductTabs ? bodyPaperPlus : bodyPaper}
+				roundelCopy={
+					showPaperProductTabs ? roundelPaperPlus : roundelPaper(productPrices)
+				}
 			/>
 			{showPaperProductTabs ? (
 				<NewspaperProductTabs productPrices={productPrices} />

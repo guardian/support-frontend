@@ -28,9 +28,10 @@ import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { getDiscountCopy } from './discountCopy';
 
 type PaperHeroPropTypes = {
-	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
-	isPaperPlus: boolean;
+	titleCopy: string | JSX.Element;
+	bodyCopy: string;
+	roundelCopy?: string | undefined;
 };
 
 const heroCopy = css`
@@ -73,44 +74,44 @@ const desktopToWideLineBreak = css`
 		display: none;
 	}
 `;
-const defaultPrintTitle = (
+export const titlePaper = (
 	<>
 		Guardian and <br css={desktopToWideLineBreak} />
 		Observer newspapers
 	</>
 );
-const defaultPrintCopy = `Whether you’re looking to keep up to date with the headlines or pore over
+export function titlePaperPlus(productPrices: ProductPrices): string {
+	return `Save up to ${
+		getMaxSavingVsRetail(productPrices) ?? 0
+	}% on your Guardian print subscription`;
+}
+export function roundelPaper(productPrices: ProductPrices): string | undefined {
+	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
+	const { roundel } = getDiscountCopy(maxSavingVsRetail);
+	const roundelText = roundel.length ? roundel.join(' ') : undefined;
+	return roundelText;
+}
+export const roundelPaperPlus = 'Includes unlimited digital access';
+export const bodyPaper = `Whether you’re looking to keep up to date with the headlines or pore over
 		our irresistible recipes, you can enjoy our award-winning journalism for
 		less.`;
-const defaultPrintPlusCopy = `From political insight to the perfect pasta, there’s something for everyone
+export const bodyPaperPlus = `From political insight to the perfect pasta, there’s something for everyone
 		with a Guardian print subscription. Plus, enjoy free digital access when you
 		subscribe, so you can stay informed on your mobile or tablet, wherever you
 		are, whenever you like.`;
 
 export function PaperHero({
-	productPrices,
 	promotionCopy,
-	isPaperPlus,
+	titleCopy,
+	bodyCopy,
+	roundelCopy,
 }: PaperHeroPropTypes): JSX.Element | null {
-	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
-	const defaultTitle = isPaperPlus
-		? `Save up to ${maxSavingVsRetail}% on your Guardian print subscription`
-		: defaultPrintTitle;
-	const title = promotionCopy.title ?? defaultTitle;
-
-	const defaultCopy = isPaperPlus ? defaultPrintPlusCopy : defaultPrintCopy;
-	const copy =
+	const title = promotionCopy.title ?? titleCopy;
+	const body =
 		promotionHTML(promotionCopy.description, {
 			tag: 'p',
-		}) ?? defaultCopy;
-
-	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = isPaperPlus
-		? 'Includes unlimited digital access'
-		: roundel.length
-		? roundel.join(' ')
-		: undefined;
-	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+		}) ?? bodyCopy;
+	const roundel = promotionCopy.roundel ?? roundelCopy;
 
 	return (
 		<PageTitle title="Newspaper subscription" theme="paper">
@@ -118,7 +119,7 @@ export function PaperHero({
 				<OfferStrapline
 					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
-					copy={roundelText}
+					copy={roundel}
 				/>
 				<Hero
 					image={
@@ -137,7 +138,7 @@ export function PaperHero({
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
-						<p css={heroParagraph}>{copy}</p>
+						<p css={heroParagraph}>{body}</p>
 						<ThemeProvider theme={buttonThemeBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
