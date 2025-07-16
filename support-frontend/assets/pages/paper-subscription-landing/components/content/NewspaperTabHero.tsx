@@ -49,7 +49,8 @@ const paragraphStyle = css`
 	}
 `;
 const accordionOverride = css`
-	border: none;
+	border-top: 1px solid ${neutral[73]};
+	border-bottom: none;
 	p,
 	button {
 		color: ${palette.neutral[100]};
@@ -59,7 +60,6 @@ const accordionRowOverride = css`
 	border: none;
 	> button {
 		display: flex;
-		justify-content: flex-start;
 	}
 	> button > div > span {
 		display: none;
