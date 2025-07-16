@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
+import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
 
-class RetryError extends Error {
+export class RetryError extends Error {
 	constructor(errorType: string, message: string) {
 		super(message);
 		this.name = errorType; // This is what the step function retry policy uses
@@ -18,6 +19,9 @@ const retryUnlimited = (message: string) =>
 export const asRetryError = (error: unknown) => {
 	if (error instanceof Stripe.errors.StripeError) {
 		return mapStripeError(error);
+	}
+	if (error instanceof SalesforceError) {
+		return mapSalesforceError(error);
 	}
 	if (error instanceof Error) {
 		return retryLimited(error.message);
@@ -42,4 +46,11 @@ function mapStripeError(error: Stripe.errors.StripeError) {
 		default:
 			return retryLimited(error.message);
 	}
+}
+
+function mapSalesforceError(error: SalesforceError) {
+	if (Object.values(salesforceErrorCodes).includes(error.name)) {
+		return retryUnlimited(error.message);
+	}
+	return retryNone(error.message);
 }
