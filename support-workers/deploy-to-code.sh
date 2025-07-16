@@ -2,6 +2,7 @@ S3_BUCKET="membership-dist"
 S3_KEY="support/CODE/support-workers-typescript/support-workers.zip"
 LAMBDA_FUNCTIONS=(
   "CreatePaymentMethodLambda"
+  "CreateSalesforceContactLambda"
 )
 echo "Uploading target/typescript/support-workers.zip to S3 (to update the zipfile before upload use the yarn deploy-to-code command)"
 aws s3 cp target/typescript/support-workers.zip s3://$S3_BUCKET/$S3_KEY --profile membership

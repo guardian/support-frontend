@@ -249,7 +249,7 @@ export class SupportWorkers extends GuStack {
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
 
-    const createSalesforceContactLambda = createScalaLambda(
+    const createSalesforceContactLambda = createTypescriptLambda(
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
