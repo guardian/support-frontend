@@ -90,7 +90,7 @@ export const appliedPromotionSchema = z.object({
 const baseStateSchema = z.object({
 	requestId: z.string(),
 	user: userSchema,
-	giftRecipient: giftRecipientSchema.nullable(),
+	giftRecipient: giftRecipientSchema.nullish(),
 	product: productTypeSchema,
 	analyticsInfo: analyticsInfoSchema,
 	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
