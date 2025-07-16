@@ -3,6 +3,7 @@ import {
 	from,
 	headlineBold34,
 	headlineBold42,
+	palette,
 	space,
 	textEgyptian17,
 	until,
@@ -46,5 +47,19 @@ export const desktopToWideLineBreak = css`
 	}
 	${from.wide} {
 		display: none;
+	}
+`;
+/* override styling is a trade-off to keep PaperHero generic */
+export const heroPaperPlusStyles = css`
+	div:last-of-type > div:last-of-type {
+		background-color: ${palette.neutral[97]};
+		color: ${palette.neutral[7]};
+	}
+	a {
+		border: 1px solid ${palette.neutral[7]};
+		color: ${palette.neutral[7]};
+		&:hover {
+			background-color: ${'#AEBDC8'};
+		}
 	}
 `;

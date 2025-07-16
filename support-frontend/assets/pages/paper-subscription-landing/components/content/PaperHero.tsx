@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import { ThemeProvider } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
 import { palette } from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
@@ -26,11 +27,13 @@ export type PaperHeroItems = {
 type PaperHeroPropTypes = {
 	promotionCopy: PromotionCopy;
 	paperHeroItems: PaperHeroItems;
+	cssOverrides?: SerializedStyles;
 };
 
 export function PaperHero({
 	promotionCopy,
 	paperHeroItems,
+	cssOverrides,
 }: PaperHeroPropTypes): JSX.Element | null {
 	const title = promotionCopy.title ?? paperHeroItems.titleCopy;
 	const body =
@@ -40,7 +43,11 @@ export function PaperHero({
 	const roundel = promotionCopy.roundel ?? paperHeroItems.roundelCopy;
 
 	return (
-		<PageTitle title="Newspaper subscription" theme="paper">
+		<PageTitle
+			title="Newspaper subscription"
+			theme="paper"
+			cssOverrides={cssOverrides}
+		>
 			<CentredContainer>
 				<OfferStrapline
 					fgCol={palette.neutral[7]}
