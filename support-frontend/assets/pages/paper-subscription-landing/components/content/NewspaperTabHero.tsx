@@ -91,9 +91,10 @@ type HeroContent = {
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo: [
-			`If you want your newspaper delivered to your door, select a subscription below and checkout.`,
+			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
 		],
-		imageUrl: `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`,
+		imageUrl:
+			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
 		deliveryDetails: (
 			<>
 				<p>Your newspaper will arrive before 9am.</p>
@@ -123,13 +124,16 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			<div css={linkStyle}>
 				<a
 					target="_blank"
-					href={`https://digitalvouchers-production-storefinder.azurewebsites.net/map/go`}
+					href={
+						'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
+					}
 				>
 					Find your nearest participating store or delivery retailer
 				</a>
 			</div>,
 		],
-		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
+		imageUrl:
+			'https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747',
 	},
 };
 

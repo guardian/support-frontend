@@ -106,7 +106,7 @@ export function PaperHero({
 
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
 	const defaultRoundelText = isPaperPlus
-		? `Includes unlimited digital access`
+		? 'Includes unlimited digital access'
 		: roundel.length
 		? roundel.join(' ')
 		: undefined;
