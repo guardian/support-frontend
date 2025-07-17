@@ -227,7 +227,7 @@ export function CheckoutComponent({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
-	const isPaper = ['HomeDelivery', 'NationalDelivery'].includes(productKey);
+	const isPaper = ['HomeDelivery', 'SubscriptionCard'].includes(productKey);
 	const showPaperProductTabs = isPaper && displayPaperProductTabs();
 
 	/** Delivery agent for National Delivery product */
