@@ -88,13 +88,14 @@ export function OrderSummaryTsAndCs({
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
+
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
 		'/',
 		thresholdAmount,
 		promotion,
-	);
+	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (

@@ -15,17 +15,16 @@ export function getLowerProductBenefitThreshold(
 	product: ActiveProductKey,
 	ratePlan: ActiveRatePlanKey,
 ): number {
-	const ratePlanTier3 =
-		countryGroupId === 'International'
-			? billingPeriod === BillingPeriod.Annual
-				? 'RestOfWorldAnnual'
-				: 'RestOfWorldMonthly'
-			: billingPeriod === BillingPeriod.Annual
-			? 'DomesticAnnual'
-			: 'DomesticMonthly';
-	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);
-
 	if (product === 'TierThree') {
+		const ratePlanTier3 =
+			countryGroupId === 'International'
+				? billingPeriod === BillingPeriod.Annual
+					? 'RestOfWorldAnnual'
+					: 'RestOfWorldMonthly'
+				: billingPeriod === BillingPeriod.Annual
+				? 'DomesticAnnual'
+				: 'DomesticMonthly';
+
 		return (
 			productCatalog[product]?.ratePlans[ratePlanTier3]?.pricing[currencyId] ??
 			0
@@ -38,6 +37,7 @@ export function getLowerProductBenefitThreshold(
 		);
 	}
 
+	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);
 	return (
 		productCatalog[product]?.ratePlans[ratePlanRegularContribution]?.pricing[
 			currencyId
