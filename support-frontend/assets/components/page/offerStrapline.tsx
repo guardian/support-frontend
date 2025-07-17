@@ -65,33 +65,30 @@ type PropTypes = {
 	size?: Size;
 };
 
+export const preventWidow = (text: string): string => {
+	const trimmed = text.trim();
+	const words = trimmed.split(' ');
+
+	if (words.length <= 1) {
+		return text;
+	}
+
+	const lastWord = words.pop();
+	return `${words.join(' ')}\u00A0${lastWord}`; // \u00A0 is non-breaking space
+};
+
 export default function OfferStrapline({
 	fgCol,
 	bgCol,
 	copy,
 	size = 'regular',
 }: PropTypes) {
-	// Requirement: last line must include a minimum of 2 words
-	const noWidowWord = (c: string) => {
-		const trimmedCopy = c.trim();
-		const copyLength = trimmedCopy.length;
-		const wordArray: string[] = trimmedCopy.split(' ');
-		if (wordArray.length > 1) {
-			const lastWord: string | undefined = wordArray.pop();
-			return (
-				<div css={offerStraplineStyles(copyLength > 32, bgCol, fgCol, size)}>
-					<span>
-						{wordArray.join(' ')}&nbsp;{lastWord}
-					</span>
-				</div>
-			);
-		}
-		return <div css={offerStraplineStyles(false, bgCol, fgCol, size)}>{c}</div>;
-	};
+	const text = preventWidow(copy);
+	const isLong = text.length > 32;
 
-	if (copy) {
-		return noWidowWord(copy);
-	}
-
-	return null;
+	return (
+		<div css={offerStraplineStyles(isLong, bgCol, fgCol, size)}>
+			<span>{text}</span>
+		</div>
+	);
 }

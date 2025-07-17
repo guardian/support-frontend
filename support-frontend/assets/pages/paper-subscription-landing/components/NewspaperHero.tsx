@@ -85,7 +85,7 @@ export default function NewspaperHero({
 					<OfferStrapline
 						fgCol={palette.neutral[7]}
 						bgCol={offerStraplineBlue}
-						copy={roundel}
+						copy="Whether you’re looking to keep up to date with the headlines"
 						size="small"
 					/>
 				)}
