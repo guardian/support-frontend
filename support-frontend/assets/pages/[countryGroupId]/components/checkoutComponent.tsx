@@ -16,6 +16,7 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
@@ -79,7 +80,8 @@ import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { baseDigitalRewards } from 'pages/paper-subscription-landing/planData';
+import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
+import getPlanData from 'pages/paper-subscription-landing/planData';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -205,7 +207,6 @@ export function CheckoutComponent({
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
-	const showPaperProductTabs = urlParams.get('paperProductTabs') === 'true';
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -226,6 +227,8 @@ export function CheckoutComponent({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+	const isPaper = ['HomeDelivery', 'NationalDelivery'].includes(productKey);
+	const showPaperProductTabs = isPaper && displayPaperProductTabs();
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -792,8 +795,10 @@ export function CheckoutComponent({
 								/>
 							)
 						}
-						digitalRewardsCheckListData={
-							showPaperProductTabs ? baseDigitalRewards : undefined
+						planData={
+							showPaperProductTabs
+								? getPlanData(ratePlanKey as PaperProductOptions)
+								: undefined
 						}
 					/>
 				</BoxContents>
