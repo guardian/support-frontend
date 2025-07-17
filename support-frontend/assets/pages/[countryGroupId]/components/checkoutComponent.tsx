@@ -726,6 +726,7 @@ export function CheckoutComponent({
 		fromCountryGroupId(countryGroupId),
 		countryGroupId,
 		productKey,
+		ratePlanKey,
 	);
 
 	return (
