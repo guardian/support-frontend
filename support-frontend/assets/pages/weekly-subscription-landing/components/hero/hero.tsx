@@ -149,12 +149,13 @@ export function WeeklyHero({
 			theme="weekly"
 		>
 			<CentredContainer>
-				<OfferStrapline
-					fgCol={palette.neutral[7]}
-					bgCol={brandAlt[400]}
-					copy={roundelText}
-					orderIsAGift={orderIsAGift}
-				/>
+				{!orderIsAGift && (
+					<OfferStrapline
+						fgCol={palette.neutral[7]}
+						bgCol={brandAlt[400]}
+						copy={roundelText}
+					/>
+				)}
 				<Hero
 					image={
 						<GridImage

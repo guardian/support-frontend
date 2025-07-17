@@ -5,15 +5,30 @@ import {
 	textSansBold20,
 	textSansBold24,
 } from '@guardian/source/foundations';
-import type { ReactElement } from 'react';
+
+const fontSizes = {
+	regular: css`
+		${textSansBold17};
+		${from.tablet} {
+			${textSansBold20};
+		}
+		${from.desktop} {
+			${textSansBold24};
+		}
+	`,
+
+	small: css`
+		${textSansBold17};
+	`,
+};
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
 const offerStraplineStyles = (
 	isLong: boolean,
 	bgCol: string,
 	fgCol: string,
+	size: Size,
 ) => css`
-	${textSansBold17};
 	padding: 4px 10px 8px;
 	margin-bottom: 0;
 	background-color: ${bgCol};
@@ -35,28 +50,27 @@ const offerStraplineStyles = (
 			: ''}
 	}
 	${from.tablet} {
-		${textSansBold20};
 		padding: 4px 20px 12px;
 		max-width: 50%;
 	}
-	${from.desktop} {
-		${textSansBold24};
-	}
+	${fontSizes[size]}
 `;
+
+type Size = 'small' | 'regular';
 
 type PropTypes = {
 	fgCol: string;
 	bgCol: string;
-	copy?: string;
-	orderIsAGift?: boolean;
+	copy: string;
+	size?: Size;
 };
 
-function OfferStrapline({
+export default function OfferStrapline({
 	fgCol,
 	bgCol,
 	copy,
-	orderIsAGift,
-}: PropTypes): ReactElement {
+	size = 'regular',
+}: PropTypes) {
 	// Requirement: last line must include a minimum of 2 words
 	const noWidowWord = (c: string) => {
 		const trimmedCopy = c.trim();
@@ -65,26 +79,19 @@ function OfferStrapline({
 		if (wordArray.length > 1) {
 			const lastWord: string | undefined = wordArray.pop();
 			return (
-				<div css={offerStraplineStyles(copyLength > 32, bgCol, fgCol)}>
+				<div css={offerStraplineStyles(copyLength > 32, bgCol, fgCol, size)}>
 					<span>
 						{wordArray.join(' ')}&nbsp;{lastWord}
 					</span>
 				</div>
 			);
 		}
-		return <div css={offerStraplineStyles(false, bgCol, fgCol)}>{c}</div>;
+		return <div css={offerStraplineStyles(false, bgCol, fgCol, size)}>{c}</div>;
 	};
-
-	// Requirement: never show the offer on the Gift page
-	if (orderIsAGift) {
-		return <></>;
-	}
 
 	if (copy) {
 		return noWidowWord(copy);
-	} else {
-		return <></>;
 	}
-}
 
-export default OfferStrapline;
+	return null;
+}
