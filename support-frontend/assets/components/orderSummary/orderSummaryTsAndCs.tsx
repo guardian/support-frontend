@@ -88,20 +88,20 @@ export function OrderSummaryTsAndCs({
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
+	const promoMessage = productLegal(
+		countryGroupId,
+		billingPeriod,
+		'/',
+		thresholdAmount,
+		promotion,
+	);
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
 				<p>
-					You’ll pay{' '}
-					{productLegal(
-						countryGroupId,
-						billingPeriod,
-						'/',
-						thresholdAmount,
-						promotion,
-					)}{' '}
-					afterwards unless you cancel. Offer only available to new subscribers
-					who do not have an existing subscription with the Guardian.
+					You’ll pay {promoMessage} afterwards unless you cancel. Offer only
+					available to new subscribers who do not have an existing subscription
+					with the Guardian.
 				</p>
 			)}
 			{productKey === 'SupporterPlus' && (
@@ -120,6 +120,7 @@ export function OrderSummaryTsAndCs({
 	);
 	const defaultOrderSummaryTsAndCs = (
 		<div css={containerSummaryTsCs}>
+			{promotion && <p>You’ll pay {promoMessage}.</p>}
 			<p>Auto renews every {periodNoun} until you cancel.</p>
 			<p>
 				{['Contribution', 'OneTimeContribution'].includes(productKey)

@@ -1,7 +1,10 @@
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import { getBillingPeriodTitle } from 'helpers/productPrice/billingPeriods';
 
@@ -10,6 +13,7 @@ export function getLowerProductBenefitThreshold(
 	currencyId: IsoCurrency,
 	countryGroupId: CountryGroupId,
 	product: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
 ): number {
 	const ratePlanTier3 =
 		countryGroupId === 'International'
@@ -20,7 +24,23 @@ export function getLowerProductBenefitThreshold(
 			? 'DomesticAnnual'
 			: 'DomesticMonthly';
 	const ratePlanRegularContribution = getBillingPeriodTitle(billingPeriod);
-	const ratePlan =
-		product === 'TierThree' ? ratePlanTier3 : ratePlanRegularContribution;
-	return productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0;
+
+	if (product === 'TierThree') {
+		return (
+			productCatalog[product]?.ratePlans[ratePlanTier3]?.pricing[currencyId] ??
+			0
+		);
+	}
+
+	if (product === 'HomeDelivery' || product === 'SubscriptionCard') {
+		return (
+			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0
+		);
+	}
+
+	return (
+		productCatalog[product]?.ratePlans[ratePlanRegularContribution]?.pricing[
+			currencyId
+		] ?? 0
+	);
 }
