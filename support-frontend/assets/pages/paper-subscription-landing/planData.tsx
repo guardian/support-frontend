@@ -12,7 +12,13 @@ export type PlanData = {
 	};
 };
 
-const benefitsAndDigitalRewardsLabel = (
+const benefitsLabel = (
+	<>
+		Enjoy <strong>home delivery</strong> of your newspaper
+	</>
+);
+
+const digitalRewardsLabel = (
 	<>
 		Unlock <strong>full digital experience</strong>
 	</>
@@ -36,14 +42,14 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: benefitsLabel,
 			items: [
 				'The Guardian and all its supplements Monday to Saturday',
 				'The Observer and all its supplements, delivered on Sundays',
 			],
 		},
 		digitalRewards: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -55,11 +61,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: benefitsLabel,
 			items: ['The Guardian and all its supplements Monday to Saturday'],
 		},
 		digitalRewards: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -72,14 +78,14 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: benefitsLabel,
 			items: [
 				'Saturday edition of The Guardian and all its Saturday supplements',
 				'The Observer and all its supplements, delivered on Sundays',
 			],
 		},
 		digitalRewards: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -91,13 +97,13 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: benefitsLabel,
 			items: [
 				'Saturday edition of The Guardian and all its Saturday supplements',
 			],
 		},
 		digitalRewards: {
-			label: benefitsAndDigitalRewardsLabel,
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
