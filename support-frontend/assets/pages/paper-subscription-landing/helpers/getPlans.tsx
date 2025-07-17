@@ -201,6 +201,7 @@ const copy: Record<
 export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
+	isPaperPlusDigital?: boolean,
 ): Product[] =>
 	ActivePaperProductTypes.filter(
 		(productOption) =>
@@ -235,7 +236,12 @@ export const getPlans = (
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+			href: paperCheckoutUrl(
+				fulfilmentOption,
+				productOption,
+				promoCode,
+				isPaperPlusDigital ? 'true' : null,
+			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe',
