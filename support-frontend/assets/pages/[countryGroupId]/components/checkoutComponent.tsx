@@ -79,6 +79,7 @@ import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { baseDigitalRewards } from 'pages/paper-subscription-landing/planData';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -204,6 +205,7 @@ export function CheckoutComponent({
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
+	const showPaperProductTabs = urlParams.get('paperProductTabs') === 'true';
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -789,6 +791,9 @@ export function CheckoutComponent({
 									buttonText={'Change'}
 								/>
 							)
+						}
+						digitalRewardsCheckListData={
+							showPaperProductTabs ? baseDigitalRewards : undefined
 						}
 					/>
 				</BoxContents>

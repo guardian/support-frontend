@@ -153,11 +153,21 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	digitalRewardsCheckListData?: string[];
 };
 
 const visuallyHiddenCss = css`
 	${visuallyHidden};
 `;
+
+function convertDigitalRewardsToBenefits(
+	digitalRewardsCheckList: string[],
+): BenefitsCheckListData[] {
+	return digitalRewardsCheckList.map((item) => ({
+		text: item,
+		isChecked: true,
+	}));
+}
 
 export function ContributionsOrderSummary({
 	productKey,
@@ -174,6 +184,7 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	digitalRewardsCheckListData,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -181,10 +192,13 @@ export function ContributionsOrderSummary({
 		ratePlanKey,
 	);
 
-	const hasCheckList = enableCheckList && checkListData.length > 0;
+	const benefitsCheckListData = digitalRewardsCheckListData
+		? convertDigitalRewardsToBenefits(digitalRewardsCheckListData)
+		: checkListData;
+	const hasCheckList = enableCheckList && benefitsCheckListData.length > 0;
 	const checkList = hasCheckList && (
 		<BenefitsCheckList
-			benefitsCheckListData={checkListData}
+			benefitsCheckListData={benefitsCheckListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>

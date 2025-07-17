@@ -24,7 +24,7 @@ const digitalRewardsLabel = (
 	</>
 );
 
-const baseDigitalRewards = [
+export const baseDigitalRewards = [
 	'Unlimited access to the refreshed Guardian app',
 	'Ad-free reading on all your devices',
 	'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
