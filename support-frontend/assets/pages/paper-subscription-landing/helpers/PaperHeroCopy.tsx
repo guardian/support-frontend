@@ -53,8 +53,6 @@ const bodyPaperPlus = `From political insight to the perfect pasta, there’s so
 		are, whenever you like.`;
 
 const getDiscountCopy = (discountPercentage: number): DiscountCopy =>
-	discountCopy(discountPercentage);
-const discountCopy = (discountPercentage: number): DiscountCopy =>
 	discountPercentage > 0
 		? {
 				roundel: ['Save up to', `${discountPercentage}%`, 'a year'],
