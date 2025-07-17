@@ -38,7 +38,7 @@ object ProductTypeCreatedTestData {
 
   val digitalSubscriptionCreated = SendThankYouEmailDigitalSubscriptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    DigitalPack(GBP, Monthly, ReaderType.Direct),
+    DigitalPack(GBP, Monthly),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,

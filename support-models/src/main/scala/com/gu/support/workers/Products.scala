@@ -57,9 +57,8 @@ case class SupporterPlus(
 case class DigitalPack(
     currency: Currency,
     billingPeriod: BillingPeriod,
-    readerType: ReaderType = Direct,
 ) extends ProductType {
-  override def describe: String = s"$billingPeriod-DigitalPack-$currency-$readerType"
+  override def describe: String = s"$billingPeriod-DigitalPack-$currency"
 }
 
 case class Paper(
