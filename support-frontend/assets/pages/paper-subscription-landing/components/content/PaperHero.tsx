@@ -1,14 +1,7 @@
 // ----- Imports ----- //
-import { css, ThemeProvider } from '@emotion/react';
-import {
-	from,
-	headlineBold34,
-	headlineBold42,
-	palette,
-	space,
-	textEgyptian17,
-	until,
-} from '@guardian/source/foundations';
+import { ThemeProvider } from '@emotion/react';
+import type { SerializedStyles } from '@emotion/react';
+import { palette } from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
 	LinkButton,
@@ -19,94 +12,47 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
-import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
-import { getDiscountCopy } from './discountCopy';
+import { heroCopy, heroParagraph, heroTitle } from './PaperHeroStyles';
 
-type PaperHeroPropTypes = {
-	productPrices: ProductPrices;
-	promotionCopy: PromotionCopy;
+export type PaperHeroItems = {
+	titleCopy: string | JSX.Element;
+	bodyCopy: string;
+	roundelCopy: string | undefined;
 };
 
-const heroCopy = css`
-	padding: 0 ${space[3]}px ${space[3]}px;
-	${from.tablet} {
-		padding-bottom: ${space[9]}px;
-	}
-	${from.desktop} {
-		padding-bottom: ${space[24]}px;
-	}
-`;
-const heroTitle = css`
-	${headlineBold34};
-	margin-bottom: ${space[3]}px;
-
-	${from.tablet} {
-		${headlineBold42};
-	}
-`;
-const heroParagraph = css`
-	${textEgyptian17};
-	line-height: 1.4;
-	margin-bottom: ${space[6]}px;
-
-	/* apply the same margin to paragraphs parsed from markdown from promo codes */
-	& p:not(:last-of-type) {
-		margin-bottom: ${space[9]}px;
-	}
-
-	${from.desktop} {
-		max-width: 75%;
-		margin-bottom: ${space[9]}px;
-	}
-`;
-const desktopToWideLineBreak = css`
-	${until.desktop} {
-		display: none;
-	}
-	${from.wide} {
-		display: none;
-	}
-`;
-const defaultTitle = (
-	<>
-		Guardian and <br css={desktopToWideLineBreak} />
-		Observer newspapers
-	</>
-);
-const defaultCopy = (
-	<>
-		Whether you’re looking to keep up to date with the headlines or pore over
-		our irresistible recipes, you can enjoy our award-winning journalism for
-		less.
-	</>
-);
+type PaperHeroPropTypes = {
+	promotionCopy: PromotionCopy;
+	paperHeroItems: PaperHeroItems;
+	cssOverrides?: SerializedStyles;
+};
 
 export function PaperHero({
-	productPrices,
 	promotionCopy,
+	paperHeroItems,
+	cssOverrides,
 }: PaperHeroPropTypes): JSX.Element | null {
-	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
-	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
-
-	const title = promotionCopy.title ?? defaultTitle;
-	const copy =
+	const title = promotionCopy.title ?? paperHeroItems.titleCopy;
+	const body =
 		promotionHTML(promotionCopy.description, {
 			tag: 'p',
-		}) ?? defaultCopy;
-	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+		}) ?? paperHeroItems.bodyCopy;
+	const roundel = promotionCopy.roundel ?? paperHeroItems.roundelCopy;
+
 	return (
-		<PageTitle title="Newspaper subscription" theme="paper">
+		<PageTitle
+			title="Newspaper subscription"
+			theme="paper"
+			cssOverrides={cssOverrides}
+		>
 			<CentredContainer>
 				<OfferStrapline
 					fgCol={palette.neutral[7]}
 					bgCol={offerStraplineBlue}
-					copy={roundelText}
+					copy={roundel}
 				/>
 				<Hero
 					image={
@@ -125,7 +71,7 @@ export function PaperHero({
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
-						<p css={heroParagraph}>{copy}</p>
+						<p css={heroParagraph}>{body}</p>
 						<ThemeProvider theme={buttonThemeBrand}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({

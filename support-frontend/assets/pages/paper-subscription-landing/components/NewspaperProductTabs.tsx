@@ -32,7 +32,7 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 		content: () => <NewspaperTabHero tab={HomeDelivery} />,
 	},
 	Collection: {
-		text: 'Subscription Card',
+		text: 'Subscription card',
 		href: `#${Collection}`,
 		content: () => <NewspaperTabHero tab={Collection} />,
 	},

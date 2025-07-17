@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import {
 	from,
+	neutral,
 	palette,
 	space,
 	textSans17,
@@ -48,7 +49,8 @@ const paragraphStyle = css`
 	}
 `;
 const accordionOverride = css`
-	border: none;
+	border-top: 1px solid ${neutral[73]};
+	border-bottom: none;
 	p,
 	button {
 		color: ${palette.neutral[100]};
@@ -58,7 +60,6 @@ const accordionRowOverride = css`
 	border: none;
 	> button {
 		display: flex;
-		justify-content: flex-start;
 	}
 	> button > div > span {
 		display: none;
@@ -71,6 +72,15 @@ const accordionRowOverride = css`
 		font-weight: 700;
 	}
 `;
+const linkStyle = css`
+	font-weight: bolder;
+	& a {
+		color: ${neutral[100]};
+		:visited {
+			color: ${neutral[100]};
+		}
+	}
+`;
 
 type HeroContent = {
 	productInfo: Array<string | JSX.Element>;
@@ -81,10 +91,10 @@ type HeroContent = {
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo: [
-			`Use the Guardian’s home delivery service to get our newspaper direct to your door`,
-			`Select your subscription below and checkout. You'll receive your first newspaper as quickly as five days from subscribing.`,
+			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
 		],
-		imageUrl: `https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992`,
+		imageUrl:
+			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
 		deliveryDetails: (
 			<>
 				<p>Your newspaper will arrive before 9am.</p>
@@ -102,12 +112,28 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	},
 	Collection: {
 		productInfo: [
-			`The Guardian subscription card can be used at any of the 40,000 shops and supermarkets with news kiosks in the UK such as McColl's, Co-op, One Stop and selected SPAR stores.`,
-			`You can collect the newspaper from your local store or have your copies delivered by your newsagent.`,
-			<strong>Collecting from multiple newsagent</strong>,
-			<strong>Delivery from your retailer</strong>,
+			`Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
+			<strong>
+				To collect from multiple newsagents, present your card each time –
+				they’ll scan it and be reimbursed automatically.
+			</strong>,
+			<strong>
+				To arrange your own delivery with your local retailer, share the barcode
+				from your Home Delivery Letter with your chosen store.
+			</strong>,
+			<div css={linkStyle}>
+				<a
+					target="_blank"
+					href={
+						'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
+					}
+				>
+					Find your nearest participating store or delivery retailer
+				</a>
+			</div>,
 		],
-		imageUrl: `https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747`,
+		imageUrl:
+			'https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747',
 	},
 };
 
@@ -129,7 +155,7 @@ export default function NewspaperTabHero({
 						{[
 							<TabAccordionRow
 								trackingId={homeDeliveryTrackingId}
-								label={'View Delivery details'}
+								label={'Delivery details'}
 								cssOverrides={accordionRowOverride}
 							>
 								{deliveryDetails}
