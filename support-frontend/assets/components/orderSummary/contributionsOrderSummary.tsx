@@ -24,10 +24,6 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import {
-	convertPlanDataToBenefits,
-	type PlanData,
-} from 'pages/paper-subscription-landing/planData';
 
 const componentStyles = css`
 	${textSans17}
@@ -157,7 +153,6 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	planData?: PlanData;
 };
 
 const visuallyHiddenCss = css`
@@ -179,7 +174,6 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
-	planData,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -187,13 +181,10 @@ export function ContributionsOrderSummary({
 		ratePlanKey,
 	);
 
-	const benefitsCheckListData = planData
-		? convertPlanDataToBenefits(planData)
-		: checkListData;
-	const hasCheckList = enableCheckList && benefitsCheckListData.length > 0;
+	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
 		<BenefitsCheckList
-			benefitsCheckListData={benefitsCheckListData}
+			benefitsCheckListData={checkListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>

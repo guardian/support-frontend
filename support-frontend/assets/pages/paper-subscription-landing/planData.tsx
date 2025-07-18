@@ -131,18 +131,21 @@ export default function getPlanData(ratePlanKey: PaperProductOptions) {
 }
 
 export function convertPlanDataToBenefits(
-	planData: PlanData,
-): BenefitsCheckListData[] {
-	const benefits = planData.benefits.items.map((item) => ({
-		text: item,
-		isChecked: true,
-	}));
-	if (planData.digitalRewards) {
-		const digitalBenefits = planData.digitalRewards.items.map((item) => ({
+	planData?: PlanData,
+): BenefitsCheckListData[] | undefined {
+	if (planData) {
+		const benefits = planData.benefits.items.map((item) => ({
 			text: item,
 			isChecked: true,
 		}));
-		return benefits.concat(digitalBenefits);
+		if (planData.digitalRewards) {
+			const digitalBenefits = planData.digitalRewards.items.map((item) => ({
+				text: item,
+				isChecked: true,
+			}));
+			return benefits.concat(digitalBenefits);
+		}
+		return benefits;
 	}
-	return benefits;
+	return undefined;
 }

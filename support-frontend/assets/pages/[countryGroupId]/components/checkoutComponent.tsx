@@ -81,7 +81,9 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import getPlanData from 'pages/paper-subscription-landing/planData';
+import getPlanData, {
+	convertPlanDataToBenefits,
+} from 'pages/paper-subscription-landing/planData';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -729,6 +731,18 @@ export function CheckoutComponent({
 		ratePlanKey,
 	);
 
+	const paperPlusDigitalBenefits = showPaperProductTabs
+		? convertPlanDataToBenefits(getPlanData(ratePlanKey as PaperProductOptions))
+		: undefined;
+	const benefitsCheckListData =
+		paperPlusDigitalBenefits ??
+		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromProductDescription(
+			productDescription,
+			countryGroupId,
+			abParticipations,
+		);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -756,17 +770,7 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={
-							getBenefitsChecklistFromLandingPageTool(
-								productKey,
-								landingPageSettings,
-							) ??
-							getBenefitsChecklistFromProductDescription(
-								productDescription,
-								countryGroupId,
-								abParticipations,
-							)
-						}
+						checkListData={benefitsCheckListData}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
@@ -797,11 +801,6 @@ export function CheckoutComponent({
 									buttonText={'Change'}
 								/>
 							)
-						}
-						planData={
-							showPaperProductTabs
-								? getPlanData(ratePlanKey as PaperProductOptions)
-								: undefined
 						}
 					/>
 				</BoxContents>
