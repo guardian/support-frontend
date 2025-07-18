@@ -108,7 +108,6 @@ function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
 	promoCode?: Option<string>,
-	paperProductTabs?: Option<string>,
 ) {
 	const url = `${getOrigin()}/uk/checkout`;
 	return addQueryParamsToURL(url, {
@@ -116,7 +115,6 @@ function paperCheckoutUrl(
 		product:
 			fulfilmentOption === 'Collection' ? 'SubscriptionCard' : fulfilmentOption,
 		ratePlan: productOptions,
-		paperProductTabs,
 	});
 }
 

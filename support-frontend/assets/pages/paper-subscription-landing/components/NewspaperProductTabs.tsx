@@ -51,11 +51,11 @@ function NewspaperProductTabs({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
-		getPlans(selectedTab, productPrices, true),
+		getPlans(selectedTab, productPrices),
 	);
 
 	useEffect(() => {
-		setProductRatePlans(getPlans(selectedTab, productPrices, true));
+		setProductRatePlans(getPlans(selectedTab, productPrices));
 	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {
