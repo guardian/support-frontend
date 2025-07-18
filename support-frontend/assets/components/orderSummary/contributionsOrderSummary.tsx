@@ -24,7 +24,10 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import type { PlanData } from 'pages/paper-subscription-landing/planData';
+import {
+	convertPlanDataToBenefits,
+	type PlanData,
+} from 'pages/paper-subscription-landing/planData';
 
 const componentStyles = css`
 	${textSans17}
@@ -160,23 +163,6 @@ export type ContributionsOrderSummaryProps = {
 const visuallyHiddenCss = css`
 	${visuallyHidden};
 `;
-
-function convertPlanDataToBenefits(
-	planData: PlanData,
-): BenefitsCheckListData[] {
-	const benefits = planData.benefits.items.map((item) => ({
-		text: item,
-		isChecked: true,
-	}));
-	if (planData.digitalRewards) {
-		const digitalBenefits = planData.digitalRewards.items.map((item) => ({
-			text: item,
-			isChecked: true,
-		}));
-		return benefits.concat(digitalBenefits);
-	}
-	return benefits;
-}
 
 export function ContributionsOrderSummary({
 	productKey,
