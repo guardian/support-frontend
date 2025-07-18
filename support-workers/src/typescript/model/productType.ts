@@ -41,7 +41,6 @@ export const guardianWeeklyProductSchema = z.object({
 export const digitalPackProductSchema = z.object({
 	currency: isoCurrencySchema,
 	billingPeriod: recurringBillingPeriodSchema,
-	readerType: z.string(), //TODO this can be removed now that digital subscription gifts are no longer supported but we'll need to remove it from the scala code as well
 	productType: z.literal('DigitalPack'),
 });
 export const guardianAdLiteProductSchema = z.object({
