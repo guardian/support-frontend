@@ -105,25 +105,6 @@ export function createSalesforceContactState(
 	};
 }
 
-const zuoraCardTypeFromStripe = (stripeCardType: string): string => {
-	switch (stripeCardType) {
-		case 'visa':
-			return 'Visa';
-		case 'mastercard':
-			return 'MasterCard';
-		case 'amex':
-			return 'AmericanExpress';
-		case 'discover':
-			return 'Discover';
-		case 'jcb':
-			return 'JCB';
-		case 'diners':
-			return 'Diners';
-		default:
-			throw new Error(`Unknown card type ${stripeCardType}`);
-	}
-};
-
 export async function createStripePaymentMethod(
 	isTestUser: boolean,
 	paymentFields: StripePaymentFields,
@@ -150,7 +131,6 @@ export async function createStripePaymentMethod(
 		CreditCardCountry: card.country,
 		CreditCardExpirationMonth: card.exp_month,
 		CreditCardExpirationYear: card.exp_year,
-		CreditCardType: zuoraCardTypeFromStripe(card.brand),
 		PaymentGateway: stripeService.getPaymentGateway(
 			paymentFields.stripePublicKey,
 		),
@@ -198,7 +178,6 @@ async function createStripeHostedPaymentMethod(
 		CreditCardCountry: card.country,
 		CreditCardExpirationMonth: card.exp_month,
 		CreditCardExpirationYear: card.exp_year,
-		CreditCardType: zuoraCardTypeFromStripe(card.brand),
 		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
 		Type: 'CreditCardReferenceTransaction',
 	};
