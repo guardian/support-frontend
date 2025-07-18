@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { ThemeProvider } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { palette } from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
 	LinkButton,
@@ -16,7 +15,6 @@ import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { PaperHeroItems } from 'pages/paper-subscription-landing/helpers/PaperHeroCopy';
-import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { heroCopy, heroParagraph, heroTitle } from './PaperHeroStyles';
 
 type PaperHeroPropTypes = {
@@ -44,13 +42,7 @@ export function PaperHero({
 			cssOverrides={cssOverrides}
 		>
 			<CentredContainer>
-				{roundel && (
-					<OfferStrapline
-						fgCol={palette.neutral[7]}
-						bgCol={offerStraplineBlue}
-						copy={roundel}
-					/>
-				)}
+				{roundel && <OfferStrapline copy={roundel} />}
 				<Hero
 					image={
 						<GridImage

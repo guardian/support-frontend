@@ -26,16 +26,11 @@ import type { PaperHeroItems } from '../helpers/PaperHeroCopy';
 const heroCssOverrides = css`
 	background-color: ${palette.neutral[100]};
 	color: ${palette.neutral[7]};
+	flex-direction: column-reverse;
 `;
 
 const heroCopy = css`
 	padding: ${space[1]}px ${space[5]}px ${space[10]}px;
-	${from.tablet} {
-		padding-bottom: ${space[9]}px;
-	}
-	${from.desktop} {
-		padding-bottom: ${space[24]}px;
-	}
 `;
 
 const heroTitle = css`
@@ -80,14 +75,7 @@ export default function NewspaperHero({
 	return (
 		<PageTitle title="Newspaper subscription" theme="weekly">
 			<CentredContainer>
-				{roundel && (
-					<OfferStrapline
-						fgCol={palette.neutral[7]}
-						bgCol={palette.brand[800]}
-						copy={roundel}
-						size="small"
-					/>
-				)}
+				{roundel && <OfferStrapline copy={roundel} size="small" />}
 				<Hero
 					image={
 						<GridImage
