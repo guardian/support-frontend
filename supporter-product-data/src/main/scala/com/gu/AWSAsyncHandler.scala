@@ -16,12 +16,12 @@ class AwsAsyncHandler[Request <: AwsRequest, Response](
 
   result
     .thenAccept((response: Response) => {
-      logger.debug(s"Successful result from AWS AsyncHandler")
+      logger.debug(s"Successful result from AwsAsyncHandler")
 
       promise.success(response)
     })
     .exceptionally((exception: Throwable) => {
-      logger.warn("Failure from AWSAsyncHandler", exception)
+      logger.warn("Failure from AwsAsyncHandler", exception)
 
       exception match {
         case e: AwsServiceException =>
