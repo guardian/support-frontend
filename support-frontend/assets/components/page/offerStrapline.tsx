@@ -1,15 +1,19 @@
-import { css } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
 import {
 	from,
+	palette,
+	space,
 	textSansBold17,
 	textSansBold20,
 	textSansBold24,
 } from '@guardian/source/foundations';
 
 const fontSizes = {
-	regular: css`
+	medium: css`
 		${textSansBold17};
+		padding: ${space[1]}px ${space[3]}px;
 		${from.tablet} {
+			padding: ${space[2]}px ${space[5]}px;
 			${textSansBold20};
 		}
 		${from.desktop} {
@@ -18,21 +22,16 @@ const fontSizes = {
 	`,
 
 	small: css`
+		padding: ${space[1]}px ${space[5]}px;
 		${textSansBold17};
 	`,
 };
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
-const offerStraplineStyles = (
-	isLong: boolean,
-	bgCol: string,
-	fgCol: string,
-	size: Size,
-) => css`
-	padding: 4px 10px 8px;
+const offerStraplineStyles = (isLong: boolean, size: Size) => css`
 	margin-bottom: 0;
-	background-color: ${bgCol};
-	color: ${fgCol};
+	background-color: ${palette.brand[800]};
+	color: ${palette.neutral[7]};
 	${isLong
 		? 'width: 100%;'
 		: `
@@ -41,7 +40,6 @@ const offerStraplineStyles = (
     `}
 
 	${from.phablet} {
-		padding: 4px 20px 8px;
 		${isLong
 			? `
             width: fit-content;
@@ -50,19 +48,17 @@ const offerStraplineStyles = (
 			: ''}
 	}
 	${from.tablet} {
-		padding: 4px 20px 12px;
 		max-width: 50%;
 	}
 	${fontSizes[size]}
 `;
 
-type Size = 'small' | 'regular';
+type Size = 'small' | 'medium';
 
 type PropTypes = {
-	fgCol: string;
-	bgCol: string;
 	copy: string;
 	size?: Size;
+	cssOverrides?: SerializedStyles;
 };
 
 export const preventWidow = (text: string): string => {
@@ -78,16 +74,15 @@ export const preventWidow = (text: string): string => {
 };
 
 export default function OfferStrapline({
-	fgCol,
-	bgCol,
 	copy,
-	size = 'regular',
+	size = 'medium',
+	cssOverrides,
 }: PropTypes) {
 	const text = preventWidow(copy);
 	const isLong = text.length > 32;
 
 	return (
-		<div css={offerStraplineStyles(isLong, bgCol, fgCol, size)}>
+		<div css={[offerStraplineStyles(isLong, size), cssOverrides]}>
 			<span>{text}</span>
 		</div>
 	);

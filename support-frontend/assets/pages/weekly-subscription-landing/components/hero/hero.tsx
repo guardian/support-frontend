@@ -73,6 +73,10 @@ const styles = {
 	priceCardsHeroContainer: css`
 		background-color: ${palette.brand[400]};
 	`,
+
+	yellowBackground: css`
+		background-color: ${brandAlt[400]};
+	`,
 };
 
 const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
@@ -151,9 +155,8 @@ export function WeeklyHero({
 			<CentredContainer>
 				{!orderIsAGift && (
 					<OfferStrapline
-						fgCol={palette.neutral[7]}
-						bgCol={brandAlt[400]}
 						copy={roundelText}
+						cssOverrides={styles.yellowBackground}
 					/>
 				)}
 				<Hero
