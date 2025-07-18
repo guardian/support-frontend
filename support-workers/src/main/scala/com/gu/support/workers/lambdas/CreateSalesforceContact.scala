@@ -60,7 +60,7 @@ class NextState(state: CreateSalesforceContactState) {
         toNextTierThree(salesforceContactRecords, product, purchase)
       case (product: GuardianAdLite, purchase) =>
         toNextGuardianAdLite(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, purchase) if product.readerType == ReaderType.Direct =>
+      case (product: DigitalPack, purchase) =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
       case (product: Paper, purchase) =>
         toNextPaper(salesforceContactRecords.buyer, product, purchase)

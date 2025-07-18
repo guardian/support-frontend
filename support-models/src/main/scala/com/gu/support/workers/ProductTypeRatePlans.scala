@@ -27,9 +27,7 @@ object ProductTypeRatePlans {
   ): Option[ProductRatePlan[catalog.DigitalPack.type]] =
     catalog.DigitalPack.ratePlans
       .getOrElse(environment, Nil)
-      .find(productRatePlan =>
-        productRatePlan.billingPeriod == product.billingPeriod && productRatePlan.readerType == product.readerType,
-      )
+      .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
 
   def supporterPlusRatePlan(
       product: SupporterPlus,

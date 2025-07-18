@@ -91,46 +91,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     )
   }
 
-  "SubscriptionData for a Monthly subscription with a Patron PromoCode" should "be correct" in {
-    val aPromotion = mock[Promotion]
-    val pwc = PromotionWithCode("FOOPATRON", aPromotion)
-
-    when(promotionService.findPromotion(ArgumentMatchers.eq("FOOPATRON"))).thenReturn(Right(pwc))
-
-    when(
-      promotionService.applyPromotion(
-        ArgumentMatchers.eq(pwc),
-        ArgumentMatchers.eq(UK),
-        ArgumentMatchers.eq("2c92c0f84bbfec8b014bc655f4852d9d"),
-        any(),
-        ArgumentMatchers.eq(false),
-      ),
-    ).thenAnswer { i =>
-      {
-        val sd = i.getArgument[SubscriptionData](3)
-        val patchedSubscription = sd.subscription.copy(promoCode = Some(pwc.promoCode))
-        Right(sd.copy(subscription = patchedSubscription))
-      }
-    }
-
-    monthlyPatron.subscriptionData shouldBe SubscriptionData(
-      List(RatePlanData(RatePlan("2c92c0f84bbfec8b014bc655f4852d9d"), List(), List())),
-      Subscription(
-        contractAcceptanceDate = saleDate.plusDays(16),
-        contractEffectiveDate = saleDate,
-        termStartDate = saleDate,
-        createdRequestId = "f7651338-5d94-4f57-85fd-262030de9ad5",
-        autoRenew = true,
-        initialTermPeriodType = Month,
-        initialTerm = 12,
-        renewalTerm = 12,
-        termType = "TERMED",
-        readerType = ReaderType.Patron,
-        promoCode = Some("FOOPATRON"),
-      ),
-    )
-  }
-
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
 
