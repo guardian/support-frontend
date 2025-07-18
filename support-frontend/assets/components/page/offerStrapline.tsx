@@ -82,8 +82,6 @@ export default function OfferStrapline({
 	const isLong = text.length > 32;
 
 	return (
-		<div css={[offerStraplineStyles(isLong, size), cssOverrides]}>
-			<span>{text}</span>
-		</div>
+		<div css={[offerStraplineStyles(isLong, size), cssOverrides]}>{text}</div>
 	);
 }
