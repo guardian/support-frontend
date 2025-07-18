@@ -793,9 +793,7 @@ export function CheckoutComponent({
 						headerButton={
 							showBackButton && (
 								<BackButton
-									path={`/${geoId}${productDescription.landingPagePath}${
-										showPaperProductTabs ? `?paperProductTabs=true` : ''
-									}`}
+									path={`/${geoId}${productDescription.landingPagePath}`}
 									buttonText={'Change'}
 								/>
 							)
