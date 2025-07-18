@@ -132,11 +132,6 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         CreditCardReferenceTransaction(
           TokenId = cardResponse.tokenId,
           SecondTokenId = cardResponse.secondTokenId,
-          CreditCardNumber = cardResponse.creditCardMaskNumber,
-          CreditCardCountry = maybeCountry,
-          CreditCardExpirationMonth = cardResponse.creditCardExpirationMonth,
-          CreditCardExpirationYear = cardResponse.creditCardExpirationYear,
-          CreditCardType = cardResponse.creditCardType,
           PaymentGateway = paymentGateway,
           StripePaymentType = None,
         ),

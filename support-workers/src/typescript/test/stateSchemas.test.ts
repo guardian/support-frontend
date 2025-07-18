@@ -74,7 +74,7 @@ describe('stateSchemas', () => {
 			'CreditCardReferenceTransaction',
 		);
 		if (contribution.paymentMethod.Type === 'CreditCardReferenceTransaction') {
-			expect(contribution.paymentMethod.CreditCardType).toBe('MasterCard');
+			expect(contribution.paymentMethod.TokenId).toBe('pm_9999999999999');
 		}
 	});
 	test('createSalesforceContactSchema works for paper', () => {

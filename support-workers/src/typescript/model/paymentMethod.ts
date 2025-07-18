@@ -29,11 +29,6 @@ export type PayPalPaymentMethod = z.infer<
 const stripePaymentMethodSchema = z.object({
 	TokenId: z.string(), // Stripe Card id
 	SecondTokenId: z.string(), // Stripe Customer Id
-	CreditCardNumber: z.string(),
-	CreditCardCountry: z.string().nullable(), // String because that's what Stripe returns
-	CreditCardExpirationMonth: z.number(),
-	CreditCardExpirationYear: z.number(),
-	CreditCardType: z.string().optional(),
 	PaymentGateway: stripePaymentGatewaySchema,
 	Type: z.literal('CreditCardReferenceTransaction'),
 	StripePaymentType: stripePaymentTypeSchema.optional(),

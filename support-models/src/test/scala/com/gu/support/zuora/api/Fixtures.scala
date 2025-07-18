@@ -146,11 +146,6 @@ object Fixtures {
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
-    cardNumber,
-    Some(Country.UK),
-    12,
-    41,
-    Some("AmericanExpress"),
     StripeGatewayDefault,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )

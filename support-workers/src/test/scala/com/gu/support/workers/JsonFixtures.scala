@@ -189,11 +189,6 @@ object JsonFixtures {
     CreditCardReferenceTransaction(
       "card_E0zitFfsO2wTEn",
       "cus_E0zic0cedDT5MZ",
-      "4242",
-      Some(Country.US),
-      2,
-      2029,
-      Some("Visa"),
       StripeGatewayDefault,
       StripePaymentType = None,
     )
