@@ -130,9 +130,10 @@ export default function getPlanData(ratePlanKey: PaperProductOptions) {
 	return planData[ratePlanKey];
 }
 
-export function convertPlanDataToBenefits(
-	planData?: PlanData,
+export function getPaperRatePlanBenefits(
+	ratePlanKey: PaperProductOptions,
 ): BenefitsCheckListData[] | undefined {
+	const planData = getPlanData(ratePlanKey);
 	if (planData) {
 		const benefits = planData.benefits.items.map((item) => ({
 			text: item,

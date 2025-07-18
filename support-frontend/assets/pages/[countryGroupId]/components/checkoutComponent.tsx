@@ -81,9 +81,7 @@ import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import getPlanData, {
-	convertPlanDataToBenefits,
-} from 'pages/paper-subscription-landing/planData';
+import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -732,7 +730,7 @@ export function CheckoutComponent({
 	);
 
 	const paperPlusDigitalBenefits = showPaperProductTabs
-		? convertPlanDataToBenefits(getPlanData(ratePlanKey as PaperProductOptions))
+		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
 		: undefined;
 	const benefitsCheckListData =
 		paperPlusDigitalBenefits ??
