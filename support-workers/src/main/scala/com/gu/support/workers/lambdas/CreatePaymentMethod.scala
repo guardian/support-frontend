@@ -141,10 +141,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         paymentMethodId.value,
         stripeCustomer.id,
         card.last4,
-        CountryGroup.countryByCode(card.country),
         card.exp_month,
         card.exp_year,
-        card.brand.zuoraCreditCardType,
         PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
         StripePaymentType = None,
       )
@@ -166,10 +164,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         stripe.paymentMethod.value,
         stripeCustomer.id,
         card.last4,
-        CountryGroup.countryByCode(card.country),
         card.exp_month,
         card.exp_year,
-        card.brand.zuoraCreditCardType,
         PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
         StripePaymentType = stripe.stripePaymentType,
       )

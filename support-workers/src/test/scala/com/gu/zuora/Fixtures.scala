@@ -70,10 +70,8 @@ object Fixtures {
     tokenId,
     secondTokenId,
     cardNumber,
-    Some(Country.UK),
     12,
     41,
-    Some("AmericanExpress"),
     _: PaymentGateway,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )

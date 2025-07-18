@@ -128,7 +128,6 @@ export async function createStripePaymentMethod(
 		TokenId: paymentFields.paymentMethod,
 		SecondTokenId: customer.id,
 		CreditCardNumber: card.last4,
-		CreditCardCountry: card.country,
 		CreditCardExpirationMonth: card.exp_month,
 		CreditCardExpirationYear: card.exp_year,
 		PaymentGateway: stripeService.getPaymentGateway(
@@ -175,7 +174,6 @@ async function createStripeHostedPaymentMethod(
 		TokenId: paymentMethodId,
 		SecondTokenId: customer.id,
 		CreditCardNumber: card.last4,
-		CreditCardCountry: card.country,
 		CreditCardExpirationMonth: card.exp_month,
 		CreditCardExpirationYear: card.exp_year,
 		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
