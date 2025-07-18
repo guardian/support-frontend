@@ -54,13 +54,13 @@ class ParameterStoreService(client: SsmClient, asyncClient: SsmAsyncClient, stag
 }
 
 object ParameterStoreService {
-  val client = SsmClient
+  lazy val client: SsmClient = SsmClient
     .builder()
     .credentialsProvider(CredentialsProvider)
     .region(Region.EU_WEST_1)
     .build()
 
-  val asyncClient = SsmAsyncClient
+  lazy val asyncClient: SsmAsyncClient = SsmAsyncClient
     .builder()
     .credentialsProvider(CredentialsProvider)
     .region(Region.EU_WEST_1)
