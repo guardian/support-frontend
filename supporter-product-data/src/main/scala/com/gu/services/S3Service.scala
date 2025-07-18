@@ -1,23 +1,28 @@
 package com.gu.services
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder
-import com.gu.services.ParameterStoreService.CredentialsProviderDEPRECATEDV1
+import com.gu.aws.CredentialsProvider
 import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
+import software.amazon.awssdk.core.async.AsyncResponseTransformer
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.s3.S3AsyncClient
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
+import software.amazon.awssdk.transfer.s3.S3TransferManager
+import scala.compat.java8.FutureConverters._
 
 import java.io.InputStream
 
 object S3Service extends StrictLogging {
-  val s3Client = AmazonS3ClientBuilder.standard
-    .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProviderDEPRECATEDV1)
-    .build
-  val transferManager = TransferManagerBuilder.standard
-    .withS3Client(s3Client)
-    .build
+  val s3Client: S3AsyncClient = S3AsyncClient
+    .builder()
+    .region(Region.EU_WEST_1)
+    .credentialsProvider(CredentialsProvider)
+    .build()
+
+  val transferManager = S3TransferManager
+    .builder()
+    .s3Client(s3Client)
+    .build()
 
   def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value.toLowerCase}"
 
@@ -35,7 +40,7 @@ object S3Service extends StrictLogging {
 
   def streamFromS3(stage: Stage, filename: String) = {
     logger.info(s"Trying to stream from S3 - bucketName: ${bucketName(stage)}, filename: $filename")
-    s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
+    val request = new GetObjectRequest(bucketName(stage), filename)
+    s3Client.getObject(request, AsyncResponseTransformer.toBytes()).toScala
   }
-
 }
