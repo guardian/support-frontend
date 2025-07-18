@@ -21,7 +21,6 @@ import { PageTitle } from 'components/page/pageTitle';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import type { PaperHeroItems } from '../helpers/PaperHeroCopy';
 
 const heroCssOverrides = css`
@@ -84,8 +83,8 @@ export default function NewspaperHero({
 				{roundel && (
 					<OfferStrapline
 						fgCol={palette.neutral[7]}
-						bgCol={offerStraplineBlue}
-						copy="Whether you’re looking to keep up to date with the headlines"
+						bgCol={palette.brand[800]}
+						copy={roundel}
 						size="small"
 					/>
 				)}
