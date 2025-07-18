@@ -1,4 +1,5 @@
 import type { PaperProductOptions } from '@modules/product/productOptions';
+import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
 
 export type PlanData = {
 	description: JSX.Element;
@@ -127,4 +128,27 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 
 export default function getPlanData(ratePlanKey: PaperProductOptions) {
 	return planData[ratePlanKey];
+}
+
+export function getPaperRatePlanBenefits(
+	ratePlanKey: PaperProductOptions,
+): BenefitsCheckListData[] | undefined {
+	const ratePlanData = getPlanData(ratePlanKey);
+
+	if (!ratePlanData) {
+		return undefined;
+	}
+
+	const benefits = ratePlanData.benefits.items.map((item) => ({
+		text: item,
+		isChecked: true,
+	}));
+	if (ratePlanData.digitalRewards) {
+		const digitalBenefits = ratePlanData.digitalRewards.items.map((item) => ({
+			text: item,
+			isChecked: true,
+		}));
+		return benefits.concat(digitalBenefits);
+	}
+	return benefits;
 }
