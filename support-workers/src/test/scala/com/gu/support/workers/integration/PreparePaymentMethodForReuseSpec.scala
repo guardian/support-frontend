@@ -39,9 +39,6 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
         state.paymentMethod shouldBe CreditCardReferenceTransaction(
           TokenId = "card_EdajV2eXkZPrVV",
           SecondTokenId = "cus_EdajoRmjUSlef9",
-          CreditCardNumber = "************4242",
-          CreditCardExpirationMonth = 2,
-          CreditCardExpirationYear = 2022,
           PaymentGateway = StripeGatewayPaymentIntentsDefault,
           StripePaymentType = None,
         )

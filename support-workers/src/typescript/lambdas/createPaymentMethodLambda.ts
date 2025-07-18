@@ -116,20 +116,9 @@ export async function createStripePaymentMethod(
 		paymentFields.stripePublicKey,
 		paymentFields.paymentMethod,
 	);
-	const paymentMethod = await stripeService.getPaymentMethod(
-		paymentFields.stripePublicKey,
-		paymentFields.paymentMethod,
-	);
-	const card = getIfDefined(
-		paymentMethod.card,
-		`Couldn't retrieve card details from Stripe for customer ${customer.id}`,
-	);
 	return {
 		TokenId: paymentFields.paymentMethod,
 		SecondTokenId: customer.id,
-		CreditCardNumber: card.last4,
-		CreditCardExpirationMonth: card.exp_month,
-		CreditCardExpirationYear: card.exp_year,
 		PaymentGateway: stripeService.getPaymentGateway(
 			paymentFields.stripePublicKey,
 		),
@@ -161,21 +150,10 @@ async function createStripeHostedPaymentMethod(
 		stripePublicKey,
 		paymentMethodId,
 	);
-	const paymentMethod = await stripeService.getPaymentMethod(
-		stripePublicKey,
-		paymentMethodId,
-	);
-	const card = getIfDefined(
-		paymentMethod.card,
-		'Card was missing from payment method',
-	);
 
 	return {
 		TokenId: paymentMethodId,
 		SecondTokenId: customer.id,
-		CreditCardNumber: card.last4,
-		CreditCardExpirationMonth: card.exp_month,
-		CreditCardExpirationYear: card.exp_year,
 		PaymentGateway: stripeService.getPaymentGateway(stripePublicKey),
 		Type: 'CreditCardReferenceTransaction',
 	};

@@ -22,7 +22,6 @@ object Fixtures {
   val identityId = "30000311"
   val tokenId = "card_Aaynm1dIeDH1zp"
   val secondTokenId = "cus_AaynKIp19IIGDz"
-  val cardNumber = "4242"
   val payPalBaid = "B-23637766K5365543J"
   val deliveryAgentId = 2532
 
@@ -69,9 +68,6 @@ object Fixtures {
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
     secondTokenId,
-    cardNumber,
-    12,
-    41,
     _: PaymentGateway,
     StripePaymentType = Some(StripePaymentType.StripeCheckout),
   )
