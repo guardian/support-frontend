@@ -247,7 +247,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
@@ -276,7 +275,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,
@@ -520,7 +518,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = DirectDebitPaymentFields("", "", "", ""),
       switches = TestData.buildSwitches(
@@ -549,7 +546,6 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       product = DigitalPack(
         GBP,
         Monthly,
-        Direct,
       ),
       paymentFields = StripePaymentFields(
         paymentMethod = PaymentMethodId("testId").get,

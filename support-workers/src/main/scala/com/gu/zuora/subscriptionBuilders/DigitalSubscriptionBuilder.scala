@@ -32,7 +32,7 @@ class DigitalSubscriptionBuilder(
       productRatePlanId = productRatePlanId,
       contractEffectiveDate = todaysDate,
       contractAcceptanceDate = contractAcceptanceDate,
-      readerType = ReaderType.impliedBySomeAppliedPromotion(state.appliedPromotion) getOrElse state.product.readerType,
+      readerType = ReaderType.Direct,
       initialTermPeriodType = Month,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
