@@ -8,7 +8,11 @@ import {
 	textSansBold24,
 } from '@guardian/source/foundations';
 
-const fontSizes = {
+type Size = 'small' | 'medium';
+
+const fontSizes: {
+	[K in Size]: SerializedStyles;
+} = {
 	medium: css`
 		${textSansBold17};
 		padding: ${space[1]}px ${space[3]}px;
@@ -53,14 +57,6 @@ const offerStraplineStyles = (isLong: boolean, size: Size) => css`
 	${fontSizes[size]}
 `;
 
-type Size = 'small' | 'medium';
-
-type PropTypes = {
-	copy: string;
-	size?: Size;
-	cssOverrides?: SerializedStyles;
-};
-
 export const preventWidow = (text: string): string => {
 	const trimmed = text.trim();
 	const words = trimmed.split(' ');
@@ -77,7 +73,11 @@ export default function OfferStrapline({
 	copy,
 	size = 'medium',
 	cssOverrides,
-}: PropTypes) {
+}: {
+	copy: string;
+	size?: Size;
+	cssOverrides?: SerializedStyles;
+}) {
 	const text = preventWidow(copy);
 	const isLong = text.length > 32;
 
