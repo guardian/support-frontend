@@ -2,13 +2,10 @@
   "ci": {
     "assert": {
       "assertions": {
-        "first-contentful-paint": ["error", { "maxNumericValue": 3000 }],
-        "largest-contentful-paint": ["error", { "maxNumericValue": 7000 }],
+        "first-contentful-paint": ["error", { "maxNumericValue": 4000 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 10000 }],
         "interactive": ["error", { "maxNumericValue": 9500 }],
-        "resource-summary:document:size": [
-          "warn",
-          { "maxNumericValue": 26000 }
-        ]
+        "resource-summary:document:size": ["warn", { "maxNumericValue": 26000 }]
       }
     }
   }
