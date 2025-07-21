@@ -8,7 +8,6 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "software.amazon.awssdk" % "ssm" % awsClientVersion2,
   "software.amazon.awssdk" % "s3" % awsClientVersion2,
-  "software.amazon.awssdk" % "s3-transfer-manager" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
