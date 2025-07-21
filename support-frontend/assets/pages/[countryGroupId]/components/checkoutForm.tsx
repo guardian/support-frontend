@@ -11,7 +11,6 @@ import {
 import {
 	Divider,
 	ErrorSummary,
-	InfoSummary,
 } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
@@ -33,11 +32,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { checkAccount } from 'components/directDebit/helpers/ajax';
-import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
-import {
-	OrderSummaryStartDate,
-	OrderSummaryTsAndCs,
-} from 'components/orderSummary/orderSummaryTsAndCs';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -69,13 +63,11 @@ import {
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -91,18 +83,10 @@ import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryChe
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import {
-	getTierThreeDeliveryDate,
-	getWeeklyDays,
-} from '../../weekly-subscription-checkout/helpers/deliveryDays';
+import { getWeeklyDays } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
-import {
-	getBenefitsChecklistFromLandingPageTool,
-	getBenefitsChecklistFromProductDescription,
-} from '../checkout/helpers/benefitsChecklist';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
@@ -114,8 +98,6 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from '../validation';
-import { BackButton } from './backButton';
-import { CheckoutLayout } from './checkoutLayout';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -147,7 +129,7 @@ function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	);
 }
 
-type CheckoutComponentProps = {
+type CheckoutFormProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
 	stripePublicKey: string;
@@ -182,7 +164,7 @@ const getPaymentMethods = (
 	return [maybeDirectDebit, Stripe, PayPal];
 };
 
-export function CheckoutComponent({
+export default function CheckoutForm({
 	geoId,
 	appConfig,
 	stripePublicKey,
@@ -195,18 +177,13 @@ export function CheckoutComponent({
 	promotion,
 	useStripeExpressCheckout,
 	countryId,
-	forcedCountry,
 	abParticipations,
-	landingPageSettings,
 	checkoutSession,
 	clearCheckoutSession,
-}: CheckoutComponentProps) {
+}: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
 	const isSignedIn = !!user?.email;
-
-	const urlParams = new URLSearchParams(window.location.search);
-	const showBackButton = urlParams.get('backButton') !== 'false';
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
@@ -742,6 +719,7 @@ export function CheckoutComponent({
 		);
 
 	return (
+<<<<<<< HEAD:support-frontend/assets/pages/[countryGroupId]/components/checkoutComponent.tsx
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
@@ -801,6 +779,9 @@ export function CheckoutComponent({
 					/>
 				</BoxContents>
 			</Box>
+=======
+		<>
+>>>>>>> e52b4d8aa (split checkout form from summary):support-frontend/assets/pages/[countryGroupId]/components/checkoutForm.tsx
 			<form
 				ref={formRef}
 				onSubmit={(event) => {
@@ -1508,6 +1489,6 @@ export function CheckoutComponent({
 					hideProcessingMessage={isRedirectingToStripeHostedCheckout}
 				/>
 			)}
-		</CheckoutLayout>
+		</>
 	);
 }
