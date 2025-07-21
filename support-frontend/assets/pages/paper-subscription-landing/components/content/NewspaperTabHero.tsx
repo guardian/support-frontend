@@ -1,85 +1,15 @@
-import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	palette,
-	space,
-	textSans17,
-	until,
-} from '@guardian/source/foundations';
 import { Accordion } from '@guardian/source/react-components';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
+import {
+	accordionOverride,
+	accordionRowOverride,
+	copyWidthStyle,
+	flexContainerOverride,
+	linkStyle,
+	paragraphStyle,
+} from './NewspaperTabHeroStyles';
 import { TabAccordionRow } from './tabAccordionRow';
-
-const flexContainerOverride = css`
-	${textSans17};
-	background-color: #335182;
-	align-items: flex-start;
-	justify-content: space-between;
-
-	margin: ${space[3]}px ${space[2]}px ${space[5]}px;
-	padding: ${space[2]}px ${space[3]}px ${space[3]}px;
-	border-radius: ${space[1]}px;
-	${from.tablet} {
-		margin: ${space[6]}px;
-		padding: ${space[3]}px ${space[5]}px;
-		border-radius: ${space[2]}px;
-	}
-
-	img {
-		object-fit: cover;
-		${until.tablet} {
-			display: none;
-		}
-	}
-`;
-const copyWidthStyle = css`
-	color: ${palette.neutral[100]};
-	${from.tablet} {
-		max-width: 669px;
-	}
-`;
-const paragraphStyle = css`
-	text-align: justify;
-	line-height: 115%;
-	padding-bottom: ${space[2]}px;
-	${from.tablet} {
-		padding-bottom: ${space[4]}px;
-		max-width: 669px;
-	}
-`;
-const accordionOverride = css`
-	border-top: 1px solid ${neutral[73]};
-	border-bottom: none;
-	p,
-	button {
-		color: ${palette.neutral[100]};
-	}
-`;
-const accordionRowOverride = css`
-	border: none;
-	> button {
-		display: flex;
-	}
-	> button > div > span {
-		display: none;
-	} // remove label
-	> button > div > svg > path {
-		fill: ${palette.neutral[100]};
-	}
-	> div > div > p {
-		padding-bottom: ${space[2]}px;
-	}
-`;
-const linkStyle = css`
-	& a {
-		color: ${neutral[100]};
-		:visited {
-			color: ${neutral[100]};
-		}
-	}
-`;
 
 type HeroDelivery = {
 	title: string;
