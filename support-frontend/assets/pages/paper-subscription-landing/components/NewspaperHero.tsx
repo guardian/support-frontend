@@ -1,9 +1,7 @@
-// ----- Imports ----- //
-import { ThemeProvider } from '@emotion/react';
 import {
-	buttonThemeBrand,
 	LinkButton,
 	SvgArrowDownStraight,
+	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -13,18 +11,21 @@ import { PageTitle } from 'components/page/pageTitle';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import type { PaperHeroItems } from 'pages/paper-subscription-landing/helpers/PaperHeroCopy';
-import { heroCopy, heroParagraph, heroTitle } from './PaperHeroStyles';
+import type { PaperHeroItems } from '../helpers/PaperHeroCopy';
+import {
+	heroCopy,
+	heroCssOverrides,
+	heroParagraph,
+	heroTitle,
+} from './NewspaperHeroStyles';
 
-type PaperHeroPropTypes = {
+export default function NewspaperHero({
+	paperHeroItems,
+	promotionCopy,
+}: {
 	promotionCopy: PromotionCopy;
 	paperHeroItems: PaperHeroItems;
-};
-
-export function PaperHero({
-	promotionCopy,
-	paperHeroItems,
-}: PaperHeroPropTypes): JSX.Element | null {
+}) {
 	const title = promotionCopy.title ?? paperHeroItems.titleCopy;
 	const body =
 		promotionHTML(promotionCopy.description, {
@@ -33,42 +34,39 @@ export function PaperHero({
 	const roundel = promotionCopy.roundel ?? paperHeroItems.roundelCopy;
 
 	return (
-		<PageTitle title="Newspaper subscription" theme="paper">
+		<PageTitle title="Newspaper subscription" theme="weekly">
 			<CentredContainer>
-				{roundel && <OfferStrapline copy={roundel} />}
+				{roundel && <OfferStrapline copy={roundel} size="small" />}
 				<Hero
 					image={
 						<GridImage
-							gridId="printCampaignWithObserverHeroHD"
-							srcSizes={[1000, 500, 140]}
-							sizes="(max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            500px"
+							gridId="weeklyCampaignHeroImg"
+							srcSizes={[500, 140]}
+							sizes="(max-width: 740px) 100%, 500px"
 							imgType="png"
-							altText="Newspapers"
+							altText="A collection of Guardian Weekly magazines"
 						/>
 					}
 					hideRoundelBelow="mobileMedium"
-					roundelElement={undefined}
+					cssOverrides={heroCssOverrides}
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
 						<p css={heroParagraph}>{body}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
-									id: 'options_cta_click',
-									product: 'Paper',
-									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								href="#HomeDelivery"
-							>
-								See pricing options
-							</LinkButton>
-						</ThemeProvider>
+						<LinkButton
+							onClick={sendTrackingEventsOnClick({
+								id: 'options_cta_click',
+								product: 'Paper',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})}
+							priority="tertiary"
+							iconSide="right"
+							icon={<SvgArrowDownStraight />}
+							href="#HomeDelivery"
+							theme={themeButtonBrandAlt}
+						>
+							See pricing options
+						</LinkButton>
 					</section>
 				</Hero>
 			</CentredContainer>

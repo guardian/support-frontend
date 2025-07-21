@@ -1,32 +1,35 @@
+// ----- Imports ----- //
 import { css } from '@emotion/react';
 import {
+	article17,
 	from,
+	headlineBold28,
 	headlineBold34,
-	headlineBold42,
+	palette,
 	space,
-	textEgyptian17,
-	until,
 } from '@guardian/source/foundations';
 
-export const heroCopy = css`
-	padding: 0 ${space[3]}px ${space[3]}px;
-	${from.tablet} {
-		padding-bottom: ${space[9]}px;
-	}
-	${from.desktop} {
-		padding-bottom: ${space[24]}px;
-	}
+export const heroCssOverrides = css`
+	background-color: ${palette.neutral[100]};
+	color: ${palette.neutral[7]};
+	flex-direction: column-reverse;
 `;
+
+export const heroCopy = css`
+	padding: ${space[1]}px ${space[5]}px ${space[10]}px;
+`;
+
 export const heroTitle = css`
-	${headlineBold34};
+	${headlineBold28};
 	margin-bottom: ${space[3]}px;
 
-	${from.tablet} {
-		${headlineBold42};
+	${from.desktop} {
+		${headlineBold34};
 	}
 `;
+
 export const heroParagraph = css`
-	${textEgyptian17};
+	${article17};
 	line-height: 1.4;
 	margin-bottom: ${space[6]}px;
 
@@ -38,13 +41,5 @@ export const heroParagraph = css`
 	${from.desktop} {
 		max-width: 75%;
 		margin-bottom: ${space[9]}px;
-	}
-`;
-export const desktopToWideLineBreak = css`
-	${until.desktop} {
-		display: none;
-	}
-	${from.wide} {
-		display: none;
 	}
 `;
