@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import { ThemeProvider } from '@emotion/react';
-import type { SerializedStyles } from '@emotion/react';
 import {
 	buttonThemeBrand,
 	LinkButton,
@@ -20,13 +19,11 @@ import { heroCopy, heroParagraph, heroTitle } from './PaperHeroStyles';
 type PaperHeroPropTypes = {
 	promotionCopy: PromotionCopy;
 	paperHeroItems: PaperHeroItems;
-	cssOverrides?: SerializedStyles;
 };
 
 export function PaperHero({
 	promotionCopy,
 	paperHeroItems,
-	cssOverrides,
 }: PaperHeroPropTypes): JSX.Element | null {
 	const title = promotionCopy.title ?? paperHeroItems.titleCopy;
 	const body =
@@ -36,11 +33,7 @@ export function PaperHero({
 	const roundel = promotionCopy.roundel ?? paperHeroItems.roundelCopy;
 
 	return (
-		<PageTitle
-			title="Newspaper subscription"
-			theme="paper"
-			cssOverrides={cssOverrides}
-		>
+		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
 				{roundel && <OfferStrapline copy={roundel} />}
 				<Hero
