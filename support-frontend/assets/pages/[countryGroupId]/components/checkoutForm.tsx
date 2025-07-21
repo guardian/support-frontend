@@ -161,7 +161,7 @@ const getPaymentMethods = (
 	return [maybeDirectDebit, Stripe, PayPal];
 };
 
-export default function CheckoutForm({
+export function CheckoutComponent({
 	geoId,
 	appConfig,
 	stripePublicKey,
