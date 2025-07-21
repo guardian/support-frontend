@@ -38,7 +38,7 @@ export const copyWidthStyle = css`
 `;
 export const paragraphStyle = css`
 	line-height: 115%;
-	padding-bottom: ${space[2]}px;
+	padding-bottom: ${space[5]}px;
 	${from.tablet} {
 		padding-bottom: ${space[4]}px;
 		max-width: 669px;
