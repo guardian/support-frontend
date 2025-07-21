@@ -14,7 +14,7 @@ export const flexContainerOverride = css`
 	align-items: flex-start;
 	justify-content: space-between;
 
-	margin: ${space[3]}px ${space[2]}px ${space[5]}px;
+	margin: ${space[6]}px ${space[4]}px ${space[10]}px;
 	padding: ${space[2]}px ${space[3]}px ${space[3]}px;
 	border-radius: ${space[1]}px;
 	${from.tablet} {
@@ -37,12 +37,14 @@ export const copyWidthStyle = css`
 	}
 `;
 export const paragraphStyle = css`
-	text-align: justify;
 	line-height: 115%;
 	padding-bottom: ${space[2]}px;
 	${from.tablet} {
 		padding-bottom: ${space[4]}px;
 		max-width: 669px;
+	}
+	${from.desktop} {
+		text-align: justify;
 	}
 `;
 export const accordionOverride = css`
