@@ -41,50 +41,48 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
   ): Future[AddSupporterRatePlanItemToQueueState] = {
     logger.info(s"Starting to add subscriptions to queue for ${state.recordCount} records from ${state.filename}")
 
-    S3Service
+    val s3Object = S3Service
       .streamFromS3(stage, state.filename)
-      .flatMap(responseBytes => {
-        val byteArray = responseBytes.asByteArray()
-        val csvString = new String(byteArray, "UTF-8")
-        val reader = new StringReader(csvString)
-        val csvReader = reader.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
-        val sqsService = SqsService(stage)
-        val alarmService = AlarmService(stage)
+    val byteArray = s3Object.readAllBytes()
+    val csvString = new String(byteArray, "UTF-8")
+    val reader = new StringReader(csvString)
+    val csvReader = reader.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
+    val sqsService = SqsService(stage)
+    val alarmService = AlarmService(stage)
 
-        if (csvReader.isEmpty) {
-          alarmAndExit(alarmService, s"The specified CSV file ${state.filename} was empty")
-        }
+    if (csvReader.isEmpty) {
+      alarmAndExit(alarmService, s"The specified CSV file ${state.filename} was empty")
+    }
 
-        val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
+    val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
 
-        val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
-        val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
+    val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
+    val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
-        if (invalidUnprocessedIndexes.nonEmpty) {
-          alarmAndExit(
-            alarmService,
-            s"there were ${invalidUnprocessedIndexes.length} read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes
-                .mkString(",")}",
-          )
-        }
+    if (invalidUnprocessedIndexes.nonEmpty) {
+      alarmAndExit(
+        alarmService,
+        s"there were ${invalidUnprocessedIndexes.length} read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes
+            .mkString(",")}",
+      )
+    }
 
-        val batches = validUnprocessed.grouped(10).toList
+    val batches = validUnprocessed.grouped(10).toList
 
-        val processedCount = writeBatchesUntilTimeout(
-          state.processedCount,
-          batches,
-          timeOutCheck,
-          sqsService,
-          alarmService,
-        )
+    val processedCount = writeBatchesUntilTimeout(
+      state.processedCount,
+      batches,
+      timeOutCheck,
+      sqsService,
+      alarmService,
+    )
 
-        val maybeSaveSuccessTime =
-          if (processedCount == state.recordCount)
-            ConfigService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
-          else Future.successful(())
+    val maybeSaveSuccessTime =
+      if (processedCount == state.recordCount)
+        ConfigService(stage).putLastSuccessfulQueryTime(state.attemptedQueryTime)
+      else Future.successful(())
 
-        maybeSaveSuccessTime.map(_ => state.copy(processedCount = processedCount))
-      })
+    maybeSaveSuccessTime.map(_ => state.copy(processedCount = processedCount))
   }
 
   def alarmAndExit(alarmService: AlarmService, message: String) = {
