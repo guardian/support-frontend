@@ -1,13 +1,3 @@
-// ----- Imports ----- //
-import { css } from '@emotion/react';
-import {
-	article17,
-	from,
-	headlineBold28,
-	headlineBold34,
-	palette,
-	space,
-} from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowDownStraight,
@@ -22,41 +12,12 @@ import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { PaperHeroItems } from '../helpers/PaperHeroCopy';
-
-const heroCssOverrides = css`
-	background-color: ${palette.neutral[100]};
-	color: ${palette.neutral[7]};
-	flex-direction: column-reverse;
-`;
-
-const heroCopy = css`
-	padding: ${space[1]}px ${space[5]}px ${space[10]}px;
-`;
-
-const heroTitle = css`
-	${headlineBold28};
-	margin-bottom: ${space[3]}px;
-
-	${from.desktop} {
-		${headlineBold34};
-	}
-`;
-
-const heroParagraph = css`
-	${article17};
-	line-height: 1.4;
-	margin-bottom: ${space[6]}px;
-
-	/* apply the same margin to paragraphs parsed from markdown from promo codes */
-	& p:not(:last-of-type) {
-		margin-bottom: ${space[9]}px;
-	}
-
-	${from.desktop} {
-		max-width: 75%;
-		margin-bottom: ${space[9]}px;
-	}
-`;
+import {
+	heroCopy,
+	heroCssOverrides,
+	heroParagraph,
+	heroTitle,
+} from './NewspaperHeroStyles';
 
 export default function NewspaperHero({
 	paperHeroItems,
