@@ -12,8 +12,8 @@ import {
 import { TabAccordionRow } from './tabAccordionRow';
 
 type HeroDelivery = {
-	title: string;
-	content: JSX.Element;
+	deliveryTitle: string;
+	deliveryInfo: JSX.Element;
 };
 type HeroContent = {
 	productInfo: string[];
@@ -30,8 +30,8 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
 		delivery: [
 			{
-				title: 'Delivery details',
-				content: (
+				deliveryTitle: 'Delivery details',
+				deliveryInfo: (
 					<>
 						<p>Your newspaper will arrive before 9am.</p>
 						<p>
@@ -56,8 +56,8 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			'https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747',
 		delivery: [
 			{
-				title: 'Collecting from multiple newsagents',
-				content: (
+				deliveryTitle: 'Collecting from multiple newsagents',
+				deliveryInfo: (
 					<p>
 						To collect from multiple newsagents, present your card each time –
 						they’ll scan it and be reimbursed automatically.
@@ -65,8 +65,8 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 				),
 			},
 			{
-				title: 'Delivery from your retailer',
-				content: (
+				deliveryTitle: 'Delivery from your retailer',
+				deliveryInfo: (
 					<>
 						<p>
 							To arrange your own delivery with your local retailer, share the
@@ -108,10 +108,10 @@ export default function NewspaperTabHero({
 						{[
 							<TabAccordionRow
 								trackingId={homeDeliveryTrackingId}
-								label={deliveryItem.title}
+								label={deliveryItem.deliveryTitle}
 								cssOverrides={accordionRowOverride}
 							>
-								{deliveryItem.content}
+								{deliveryItem.deliveryInfo}
 							</TabAccordionRow>,
 						]}
 					</Accordion>
