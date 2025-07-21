@@ -6,6 +6,7 @@ import {
 	accordionRowOverride,
 	copyWidthStyle,
 	flexContainerOverride,
+	imageHeightStyle,
 	linkStyle,
 	paragraphStyle,
 } from './NewspaperTabHeroStyles';
@@ -117,7 +118,9 @@ export default function NewspaperTabHero({
 					</Accordion>
 				))}
 			</div>
-			<img src={imageUrl} />
+			<div css={imageHeightStyle}>
+				<img src={imageUrl} />
+			</div>
 		</FlexContainer>
 	);
 }

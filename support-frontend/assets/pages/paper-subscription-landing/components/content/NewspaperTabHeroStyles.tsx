@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	between,
 	from,
 	neutral,
 	palette,
@@ -11,40 +12,49 @@ import {
 export const flexContainerOverride = css`
 	${textSans17};
 	background-color: #335182;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
+	flex-direction: column-reverse;
 
 	margin: ${space[6]}px ${space[4]}px ${space[10]}px;
-	padding: ${space[2]}px ${space[3]}px ${space[3]}px;
 	border-radius: ${space[1]}px;
 	${from.tablet} {
+		align-items: flex-start;
 		margin: ${space[6]}px;
-		padding: ${space[3]}px ${space[5]}px;
 		border-radius: ${space[2]}px;
 	}
 
 	img {
 		object-fit: cover;
-		${until.tablet} {
+		${until.mobile} {
 			display: none;
 		}
 	}
 `;
 export const copyWidthStyle = css`
+	padding: 0px ${space[3]}px ${space[3]}px;
 	color: ${palette.neutral[100]};
 	${from.tablet} {
+		padding: ${space[3]}px ${space[5]}px;
 		max-width: 669px;
+	}
+`;
+export const imageHeightStyle = css`
+	${from.tablet} {
+		max-width: 669px;
+	}
+	${between.tablet.and.desktop} {
+		padding-top: ${space[3]}px;
 	}
 `;
 export const paragraphStyle = css`
 	line-height: 115%;
+	padding-top: ${space[4]}px;
 	padding-bottom: ${space[5]}px;
 	${from.tablet} {
+		padding-top: 0px;
 		padding-bottom: ${space[4]}px;
 		max-width: 669px;
-	}
-	${from.desktop} {
-		text-align: justify;
 	}
 `;
 export const accordionOverride = css`
