@@ -57,6 +57,8 @@ const offerStraplineStyles = (isLong: boolean, size: Size) => css`
 	${fontSizes[size]}
 `;
 
+// This function adds a non breaking space between the last two words in a sentence
+// so that when a line break occours, you won't end up with a single word in the 2nd line
 export const preventWidow = (text: string): string => {
 	const trimmed = text.trim();
 	const words = trimmed.split(' ');
