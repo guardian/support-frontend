@@ -35,10 +35,8 @@
     "TokenId": "pm_9999999999999",
     "SecondTokenId": "cus_9999999999999",
     "CreditCardNumber": "4242",
-    "CreditCardCountry": "US",
     "CreditCardExpirationMonth": 7,
     "CreditCardExpirationYear": 2027,
-    "CreditCardType": "MasterCard",
     "PaymentGateway": "Stripe PaymentIntents GNM Membership",
     "Type": "CreditCardReferenceTransaction",
     "StripePaymentType": "StripePaymentRequestButton"
