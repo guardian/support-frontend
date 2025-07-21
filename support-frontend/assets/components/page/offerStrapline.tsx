@@ -1,23 +1,41 @@
-import { css } from '@emotion/react';
+import { css, type SerializedStyles } from '@emotion/react';
 import {
 	from,
+	palette,
+	space,
 	textSansBold17,
 	textSansBold20,
 	textSansBold24,
 } from '@guardian/source/foundations';
-import type { ReactElement } from 'react';
+
+type Size = 'small' | 'medium';
+
+const fontSizes: {
+	[K in Size]: SerializedStyles;
+} = {
+	medium: css`
+		${textSansBold17};
+		padding: ${space[1]}px ${space[3]}px;
+		${from.tablet} {
+			padding: ${space[2]}px ${space[5]}px;
+			${textSansBold20};
+		}
+		${from.desktop} {
+			${textSansBold24};
+		}
+	`,
+
+	small: css`
+		padding: ${space[1]}px ${space[5]}px;
+		${textSansBold17};
+	`,
+};
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
-const offerStraplineStyles = (
-	isLong: boolean,
-	bgCol: string,
-	fgCol: string,
-) => css`
-	${textSansBold17};
-	padding: 4px 10px 8px;
+const offerStraplineStyles = (isLong: boolean, size: Size) => css`
 	margin-bottom: 0;
-	background-color: ${bgCol};
-	color: ${fgCol};
+	background-color: ${palette.brand[800]};
+	color: ${palette.neutral[7]};
 	${isLong
 		? 'width: 100%;'
 		: `
@@ -26,7 +44,6 @@ const offerStraplineStyles = (
     `}
 
 	${from.phablet} {
-		padding: 4px 20px 8px;
 		${isLong
 			? `
             width: fit-content;
@@ -35,56 +52,38 @@ const offerStraplineStyles = (
 			: ''}
 	}
 	${from.tablet} {
-		${textSansBold20};
-		padding: 4px 20px 12px;
 		max-width: 50%;
 	}
-	${from.desktop} {
-		${textSansBold24};
-	}
+	${fontSizes[size]}
 `;
 
-type PropTypes = {
-	fgCol: string;
-	bgCol: string;
-	copy?: string;
-	orderIsAGift?: boolean;
+// This function adds a non breaking space between the last two words in a sentence
+// so that when a line break occours, you won't end up with a single word in the 2nd line
+export const preventWidow = (text: string): string => {
+	const trimmed = text.trim();
+	const words = trimmed.split(' ');
+
+	if (words.length <= 1) {
+		return text;
+	}
+
+	const lastWord = words.pop();
+	return `${words.join(' ')}\u00A0${lastWord}`; // \u00A0 is non-breaking space
 };
 
-function OfferStrapline({
-	fgCol,
-	bgCol,
+export default function OfferStrapline({
 	copy,
-	orderIsAGift,
-}: PropTypes): ReactElement {
-	// Requirement: last line must include a minimum of 2 words
-	const noWidowWord = (c: string) => {
-		const trimmedCopy = c.trim();
-		const copyLength = trimmedCopy.length;
-		const wordArray: string[] = trimmedCopy.split(' ');
-		if (wordArray.length > 1) {
-			const lastWord: string | undefined = wordArray.pop();
-			return (
-				<div css={offerStraplineStyles(copyLength > 32, bgCol, fgCol)}>
-					<span>
-						{wordArray.join(' ')}&nbsp;{lastWord}
-					</span>
-				</div>
-			);
-		}
-		return <div css={offerStraplineStyles(false, bgCol, fgCol)}>{c}</div>;
-	};
+	size = 'medium',
+	cssOverrides,
+}: {
+	copy: string;
+	size?: Size;
+	cssOverrides?: SerializedStyles;
+}) {
+	const text = preventWidow(copy);
+	const isLong = text.length > 32;
 
-	// Requirement: never show the offer on the Gift page
-	if (orderIsAGift) {
-		return <></>;
-	}
-
-	if (copy) {
-		return noWidowWord(copy);
-	} else {
-		return <></>;
-	}
+	return (
+		<div css={[offerStraplineStyles(isLong, size), cssOverrides]}>{text}</div>
+	);
 }
-
-export default OfferStrapline;
