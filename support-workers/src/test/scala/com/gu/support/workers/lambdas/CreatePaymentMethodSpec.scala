@@ -63,7 +63,6 @@ class CreatePaymentMethodSpec extends AsyncLambdaSpec with MockContext {
           case stripe: CreditCardReferenceTransaction =>
             withClue("stripe: " + stripe) {
               stripe.SecondTokenId should be("12345")
-              stripe.CreditCardNumber should be("1234")
             }
           case _ => fail()
         }

@@ -134,17 +134,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         "Invalid PaymentMethodId",
       )
       stripeCustomer <- stripeServiceForAccount.createCustomerFromPaymentMethod(paymentMethodId)
-      stripePaymentMethod <- stripeServiceForAccount.getPaymentMethod(paymentMethodId)
     } yield {
-      val card = stripePaymentMethod.card
       CreditCardReferenceTransaction(
         paymentMethodId.value,
         stripeCustomer.id,
-        card.last4,
-        CountryGroup.countryByCode(card.country),
-        card.exp_month,
-        card.exp_year,
-        card.brand.zuoraCreditCardType,
         PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
         StripePaymentType = None,
       )
@@ -159,17 +152,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
 
     for {
       stripeCustomer <- stripeServiceForAccount.createCustomerFromPaymentMethod(stripe.paymentMethod)
-      stripePaymentMethod <- stripeServiceForAccount.getPaymentMethod(stripe.paymentMethod)
     } yield {
-      val card = stripePaymentMethod.card
       CreditCardReferenceTransaction(
         stripe.paymentMethod.value,
         stripeCustomer.id,
-        card.last4,
-        CountryGroup.countryByCode(card.country),
-        card.exp_month,
-        card.exp_year,
-        card.brand.zuoraCreditCardType,
         PaymentGateway = stripeServiceForAccount.paymentIntentGateway,
         StripePaymentType = stripe.stripePaymentType,
       )
