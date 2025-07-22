@@ -6,13 +6,13 @@ import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.GoCardlessConfig
-import com.gu.support.gocardless.GoCardlessService
+import com.gu.support.touchpoint.TouchpointService
 import models.CheckBankAccountDetails
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessService(config) with SafeLogging {
+class GoCardlessFrontendService(config: GoCardlessConfig) extends TouchpointService with SafeLogging {
 
   lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 

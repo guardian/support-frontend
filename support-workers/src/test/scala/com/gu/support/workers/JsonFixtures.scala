@@ -3,17 +3,8 @@ package com.gu.support.workers
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.{emailAddress, idId, state}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.catalog.{
-  Domestic,
-  Everyday,
-  FulfilmentOptions,
-  HomeDelivery,
-  NationalDelivery,
-  RestOfWorld,
-  Sunday,
-}
+import com.gu.support.catalog.{Domestic, Everyday, FulfilmentOptions, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
@@ -37,7 +28,8 @@ import java.util.UUID
 
 //noinspection TypeAnnotation
 object JsonFixtures {
-
+  val idId = "9999999"
+  val emailAddress = "integration-test@thegulocal.com"
   def wrapFixture(string: String): ByteArrayInputStream =
     JsonWrapper(
       parser.parse(string).toOption.get,

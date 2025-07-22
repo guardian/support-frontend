@@ -2,7 +2,6 @@ package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogging
-import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
 import com.typesafe.config.{Config, ConfigFactory}
 
@@ -42,11 +41,9 @@ case class Configuration(config: Config) {
 
   val stripeConfigProvider = new StripeConfigProvider(config, stage)
   val payPalConfigProvider = new PayPalConfigProvider(config, stage)
-  val salesforceConfigProvider = new SalesforceConfigProvider(config, stage)
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
   val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
-  val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
 }
