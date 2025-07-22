@@ -17,19 +17,18 @@ type HeroDelivery = {
 	deliveryInfo: JSX.Element;
 };
 type HeroContent = {
-	productInfo: string[];
+	productInfo: string;
 	imageUrl: string;
-	delivery: HeroDelivery[];
+	deliveries: HeroDelivery[];
 };
 
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
-		productInfo: [
-			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
-		],
+		productInfo:
+			'If you want yur newspaper delivered to your door, select a subscription below and checkout.',
 		imageUrl:
 			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
-		delivery: [
+		deliveries: [
 			{
 				deliveryTitle: 'Delivery details',
 				deliveryInfo: (
@@ -50,12 +49,10 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 		],
 	},
 	Collection: {
-		productInfo: [
-			`Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
-		],
+		productInfo: `Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
 		imageUrl:
 			'https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747',
-		delivery: [
+		deliveries: [
 			{
 				deliveryTitle: 'Collecting from multiple newsagents',
 				deliveryInfo: (
@@ -97,22 +94,20 @@ export default function NewspaperTabHero({
 	tab: PaperFulfilmentOptions;
 }): JSX.Element {
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
-	const { productInfo, imageUrl, delivery: delivery } = heroContent[tab];
+	const { productInfo, imageUrl, deliveries } = heroContent[tab];
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
-				{productInfo.map((paragraph) => (
-					<p css={paragraphStyle}>{paragraph}</p>
-				))}
-				{delivery.map((deliveryItem) => (
+				<p css={paragraphStyle}>{productInfo}</p>
+				{deliveries.map((delivery) => (
 					<Accordion cssOverrides={accordionOverride}>
 						{[
 							<TabAccordionRow
 								trackingId={homeDeliveryTrackingId}
-								label={deliveryItem.deliveryTitle}
+								label={delivery.deliveryTitle}
 								cssOverrides={accordionRowOverride}
 							>
-								{deliveryItem.deliveryInfo}
+								{delivery.deliveryInfo}
 							</TabAccordionRow>,
 						]}
 					</Accordion>
