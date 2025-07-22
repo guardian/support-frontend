@@ -16,26 +16,25 @@ export const flexContainerOverride = css`
 	justify-content: space-between;
 	flex-direction: column-reverse;
 
-	margin: ${space[6]}px ${space[4]}px ${space[10]}px;
-	border-radius: ${space[1]}px;
+	margin: ${space[4]}px ${space[1]}px ${space[10]}px;
+	border-radius: ${space[2]}px;
 	${from.tablet} {
-		align-items: flex-start;
-		margin: ${space[6]}px;
-		border-radius: ${space[2]}px;
+		align-items: stretch;
+		margin: ${space[4]}px ${space[3]}px ${space[4]}px;
 	}
 
 	& img {
-		object-fit: contain;
+		object-fit: fill;
 		${until.mobile} {
 			display: none;
 		}
 	}
 `;
 export const copyWidthStyle = css`
-	padding: 0px ${space[3]}px ${space[3]}px;
+	padding: 0px ${space[4]}px ${space[3]}px;
 	color: ${palette.neutral[100]};
 	${from.tablet} {
-		padding: ${space[3]}px ${space[5]}px;
+		padding-top: ${space[4]}px;
 		max-width: 669px;
 	}
 `;
@@ -44,7 +43,7 @@ export const imageHeightStyle = css`
 		max-width: 669px;
 	}
 	${between.tablet.and.desktop} {
-		padding-top: ${space[3]}px;
+		padding-top: ${space[4]}px;
 	}
 `;
 export const paragraphStyle = css`

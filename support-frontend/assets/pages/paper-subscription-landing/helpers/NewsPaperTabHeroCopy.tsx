@@ -13,7 +13,7 @@ type HeroContent = {
 export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
-			'If you want yur newspaper delivered to your door, select a subscription below and checkout.',
+			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
 		imageUrl:
 			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
 		deliveries: [
