@@ -1,8 +1,13 @@
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Option } from 'helpers/types/option';
-import type { PaperHeroItems } from '../components/content/PaperHero';
 import { desktopToWideLineBreak } from '../components/content/PaperHeroStyles';
+
+export type PaperHeroItems = {
+	titleCopy: string | JSX.Element;
+	bodyCopy: string;
+	roundelCopy: string | undefined;
+};
 
 type DiscountCopy = {
 	roundel: string[];
