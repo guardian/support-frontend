@@ -24,7 +24,7 @@ export const flexContainerOverride = css`
 		border-radius: ${space[2]}px;
 	}
 
-	img {
+	& img {
 		object-fit: contain;
 		${until.mobile} {
 			display: none;
@@ -67,6 +67,7 @@ export const accordionOverride = css`
 `;
 export const accordionRowOverride = css`
 	border: none;
+
 	> button {
 		display: flex;
 	}
@@ -79,8 +80,7 @@ export const accordionRowOverride = css`
 	> div > div > p {
 		padding-bottom: ${space[2]}px;
 	}
-`;
-export const linkStyle = css`
+
 	& a {
 		color: ${neutral[100]};
 		:visited {
