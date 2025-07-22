@@ -16,6 +16,7 @@ import {
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { countryGroups } from '@modules/internationalisation/countryGroup';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ProductKey } from '@modules/product-catalog/productCatalog';
 import {
 	ExpressCheckoutElement,
@@ -79,6 +80,8 @@ import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
+import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -224,6 +227,8 @@ export function CheckoutComponent({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+	const isPaper = ['HomeDelivery', 'SubscriptionCard'].includes(productKey);
+	const showPaperProductTabs = isPaper && displayPaperProductTabs();
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -724,6 +729,18 @@ export function CheckoutComponent({
 		ratePlanKey,
 	);
 
+	const paperPlusDigitalBenefits = showPaperProductTabs
+		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
+		: undefined;
+	const benefitsCheckListData =
+		paperPlusDigitalBenefits ??
+		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
+		getBenefitsChecklistFromProductDescription(
+			productDescription,
+			countryGroupId,
+			abParticipations,
+		);
+
 	return (
 		<CheckoutLayout>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -751,17 +768,7 @@ export function CheckoutComponent({
 						amount={originalAmount}
 						promotion={promotion}
 						currency={currency}
-						checkListData={
-							getBenefitsChecklistFromLandingPageTool(
-								productKey,
-								landingPageSettings,
-							) ??
-							getBenefitsChecklistFromProductDescription(
-								productDescription,
-								countryGroupId,
-								abParticipations,
-							)
-						}
+						checkListData={benefitsCheckListData}
 						onCheckListToggle={(isOpen) => {
 							trackComponentClick(
 								`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
