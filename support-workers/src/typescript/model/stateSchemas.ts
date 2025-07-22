@@ -3,6 +3,7 @@ import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
 import { productTypeSchema } from './productType';
+import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 
 export const titleSchema = z.union([
 	z.literal('Mr'),
@@ -92,6 +93,7 @@ const baseStateSchema = z.object({
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: productTypeSchema,
+	productInformation: productPurchaseSchema,
 	analyticsInfo: analyticsInfoSchema,
 	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
 	// so leave it as a string until all the lambdas are Typescript
