@@ -59,8 +59,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         createDirectDebitPaymentMethod(dd, state)
       case sepa: SepaPaymentFields =>
         createSepaPaymentMethod(sepa, state.user, state.ipAddress, state.userAgent)
-      case _: ExistingPaymentFields =>
-        Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
     }
 
   private def getCreateSalesforceContactState(

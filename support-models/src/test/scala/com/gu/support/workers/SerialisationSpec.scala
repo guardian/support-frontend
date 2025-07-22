@@ -46,7 +46,6 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
   "FailureHandlerState" should "deserialise correctly from any lambda" in {
     import com.gu.support.workers.StatesTestData._
 
-    testEncodeToDifferentState(preparePaymentMethodForReuseState, failureHandlerState)
     testEncodeToDifferentState(createZuoraSubscriptionState, failureHandlerState)
     testEncodeToDifferentState(createSalesforceContactState, failureHandlerState)
     testEncodeToDifferentState(createPaymentMethodState, failureHandlerState)
@@ -124,16 +123,5 @@ object StatesTestData {
     ProductTypeCreatedTestData.digitalSubscriptionCreated,
     analyticsInfo = AnalyticsInfo(false, PayPal),
     acquisitionData = None,
-  )
-
-  val preparePaymentMethodForReuseState = PreparePaymentMethodForReuseState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
-    product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentFields = ExistingPaymentFields("existingBillingAcId"),
-    acquisitionData = None,
-    appliedPromotion = None,
   )
 }

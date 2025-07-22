@@ -116,8 +116,6 @@ case class SepaPaymentFields(
     streetName: Option[String],
 ) extends PaymentFields
 
-case class ExistingPaymentFields(billingAccountId: String) extends PaymentFields
-
 object PaymentFields {
   val discriminatedType = new DiscriminatedType[PaymentFields]("paymentType")
 
@@ -132,15 +130,12 @@ object PaymentFields {
     discriminatedType.variant[DirectDebitPaymentFields]("DirectDebit")
   implicit val sepapaymentFieldsCodec: discriminatedType.VariantCodec[SepaPaymentFields] =
     discriminatedType.variant[SepaPaymentFields]("Sepa")
-  implicit val existingPaymentFieldsCodec: discriminatedType.VariantCodec[ExistingPaymentFields] =
-    discriminatedType.variant[ExistingPaymentFields]("Existing")
   implicit val paymentFieldsCodec: Codec[PaymentFields] = discriminatedType.codec(
     List(
       payPalPaymentFieldsCodec,
       stripePaymentMethodPaymentFieldsCodec,
       directDebitPaymentFieldsCodec,
       sepapaymentFieldsCodec,
-      existingPaymentFieldsCodec,
       stripeHostedPaymentFieldsCodec,
     ),
   )

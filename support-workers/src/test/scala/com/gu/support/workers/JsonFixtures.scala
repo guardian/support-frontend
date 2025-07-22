@@ -42,7 +42,7 @@ object JsonFixtures {
     JsonWrapper(
       parser.parse(string).toOption.get,
       None,
-      RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
+      RequestInfo(testUser = false, failed = false, Nil),
     ).asJson.noSpaces.asInputStream
 
   def user(id: String = idId, country: Country = UK): User =

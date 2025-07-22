@@ -78,10 +78,6 @@ object CheckoutValidationRules {
           if (switches.stripe.contains(On)) Valid else Invalid("Invalid Payment Method")
         case None => Invalid("Invalid Payment Method")
       }
-    case _: ExistingPaymentFields =>
-      // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
-      // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
-      Valid
   }
   def checkPaymentMethodEnabled(
       product: ProductType,
@@ -224,8 +220,6 @@ object PaidProductValidation {
         directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
     case _: StripePaymentFields => Valid // already validated in PaymentMethodId.apply
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
-    case existingDetails: ExistingPaymentFields =>
-      existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
     case SepaPaymentFields(accountHolderName, iban, country, streetName) =>
       accountHolderName.nonEmpty.otherwise("sepa account holder name missing") and
         iban.nonEmpty.otherwise("sepa iban empty")

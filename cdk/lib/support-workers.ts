@@ -241,10 +241,6 @@ export class SupportWorkers extends GuStack {
       errors: ["States.TaskFailed"],
     };
 
-    const preparePaymentMethodForReuse = createScalaLambda(
-      "PreparePaymentMethodForReuse"
-    ).addCatch(failureHandler, catchProps);
-
     const createPaymentMethodLambda = createTypescriptLambda(
       "CreatePaymentMethod"
     ).addCatch(failureHandler, catchProps);
@@ -269,14 +265,6 @@ export class SupportWorkers extends GuStack {
       eventBusPolicy,
     ]);
 
-    const shouldClonePaymentMethodChoice = new Choice(
-      this,
-      "ShouldClonePaymentMethodChoice"
-    );
-    const accountExists = Condition.booleanEquals(
-      "$.requestInfo.accountExists",
-      true
-    );
     const checkoutSuccess = new Succeed(this, "CheckoutSuccess");
 
     const parallelSteps = new Parallel(this, "Parallel")
@@ -285,23 +273,15 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
-    const commonSteps = createZuoraSubscription.next(parallelSteps);
-
-    const stepsWithExistingAccount =
-      preparePaymentMethodForReuse.next(commonSteps);
-
-    const stepsForNewAccount = createPaymentMethodLambda
+    const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(commonSteps);
-
-    const initialState = shouldClonePaymentMethodChoice
-      .when(accountExists, stepsWithExistingAccount)
-      .otherwise(stepsForNewAccount);
+      .next(createZuoraSubscription)
+      .next(parallelSteps);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
       timeout: Duration.hours(24),
-      definitionBody: DefinitionBody.fromChainable(initialState),
+      definitionBody: DefinitionBody.fromChainable(allSteps),
     });
 
     this.overrideLogicalId(stateMachine, {

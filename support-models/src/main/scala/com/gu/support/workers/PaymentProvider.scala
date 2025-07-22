@@ -57,7 +57,6 @@ object PaymentProvider {
     case _: PayPalPaymentFields => PayPal
     case _: DirectDebitPaymentFields => DirectDebit
     case _: SepaPaymentFields => Sepa
-    case _: ExistingPaymentFields => Existing
     case _: StripeHostedPaymentFields => StripeHostedCheckout
   }
 
