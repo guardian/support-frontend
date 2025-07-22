@@ -25,7 +25,7 @@ export const flexContainerOverride = css`
 	}
 
 	img {
-		object-fit: cover;
+		object-fit: contain;
 		${until.mobile} {
 			display: none;
 		}
