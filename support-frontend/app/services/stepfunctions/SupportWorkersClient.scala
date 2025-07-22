@@ -162,7 +162,6 @@ class SupportWorkersClient(
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
         similarProductsConsent = request.body.similarProductsConsent,
       )
-      isExistingAccount = false
       name =
         (if (user.isTestUser) "TestUser-" else "") +
           createPaymentMethodState.product.describe + "-" +
