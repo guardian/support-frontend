@@ -138,11 +138,9 @@ export const getThankYouModuleData = (
 
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
-	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
+	const getFeedbackSurveyLink = () => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
-		if (countryId === 'AU') {
-			return `${surveyBasePath}guardian_australia_message`;
-		}
+
 		if (isOneOff) {
 			return `${surveyBasePath}guardian_supporter_single`;
 		}
@@ -203,7 +201,7 @@ export const getThankYouModuleData = (
 			),
 			ctas: feedbackSurveyCompleted ? null : (
 				<FeedbackCTA
-					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
+					feedbackSurveyLink={getFeedbackSurveyLink()}
 					onClick={() => {
 						setFeedbackSurveyCompleted(true);
 						if (feedbackSurveyHasBeenCompleted) {
