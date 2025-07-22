@@ -5,8 +5,11 @@ export const cardsContainer = css`
 	display: flex;
 	flex-direction: column;
 	background-color: ${palette.brand[400]};
-	padding: 0 ${space[6]}px ${space[6]}px;
+	padding: 0 ${space[3]}px ${space[6]}px;
 	gap: ${space[4]}px;
+	${from.desktop} {
+		padding-right: ${space[6]}px;
+	}
 `;
 
 export const productInfoWrapper = css`
@@ -14,7 +17,7 @@ export const productInfoWrapper = css`
 	display: flex;
 	align-items: flex-start;
 	gap: ${space[1]}px;
-	padding: 0 ${space[5]}px ${space[5]}px;
+	padding: 0 ${space[3]}px ${space[5]}px;
 	color: ${palette.neutral[100]};
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
@@ -33,7 +36,7 @@ export const productInfoWrapper = css`
 	}
 
 	${from.tablet} {
-		padding: ${space[8]}px ${space[6]}px ${space[6]}px;
+		padding: ${space[8]}px ${space[5]}px ${space[6]}px;
 		background-color: unset;
 		border-bottom: none;
 		svg {
