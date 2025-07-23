@@ -19,6 +19,7 @@ case class CreateZuoraSubscriptionState(
     requestId: UUID,
     user: User,
     product: ProductType,
+    productInformation: Option[ProductInformation],
     analyticsInfo: AnalyticsInfo,
     firstDeliveryDate: Option[LocalDate],
     appliedPromotion: Option[AppliedPromotion],

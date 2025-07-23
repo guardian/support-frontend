@@ -11,14 +11,12 @@ import {
 	guardianAdLiteProductSchema,
 	guardianWeeklyProductSchema,
 	paperProductSchema,
-	productTypeSchema,
 	supporterPlusProductSchema,
 	tierThreeProductSchema,
 } from './productType';
 import {
-	acquisitionDataSchema,
-	analyticsInfoSchema,
 	appliedPromotionSchema,
+	baseStateSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -114,18 +112,11 @@ export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
 	],
 );
 
-export const createZuoraSubscriptionStateSchema = z.object({
-	productSpecificState: createZuoraSubscriptionProductStateSchema,
-	requestId: z.string(),
-	user: userSchema,
-	product: productTypeSchema,
-	analyticsInfo: analyticsInfoSchema,
-	firstDeliveryDate: z.string().nullable(),
-	appliedPromotion: appliedPromotionSchema.nullable(),
-	csrUsername: z.string().nullable(),
-	salesforceCaseId: z.string().nullable(),
-	acquisitionData: acquisitionDataSchema.nullable(),
-});
+export const createZuoraSubscriptionStateSchema = baseStateSchema.merge(
+	z.object({
+		productSpecificState: createZuoraSubscriptionProductStateSchema,
+	}),
+);
 
 export type CreateZuoraSubscriptionState = z.infer<
 	typeof createZuoraSubscriptionStateSchema
