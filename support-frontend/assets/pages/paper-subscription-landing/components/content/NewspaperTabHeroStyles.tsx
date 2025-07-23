@@ -44,7 +44,7 @@ export const imageHeightStyle = css`
 	}
 `;
 export const paragraphStyle = css`
-	line-height: 115%;
+	line-height: 130%;
 	padding-top: ${space[4]}px;
 	padding-bottom: ${space[5]}px;
 	${from.tablet} {
