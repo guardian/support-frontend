@@ -51,10 +51,14 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     val alarmService = AlarmService(stage)
 
     if (csvReader.isEmpty) {
+      s3Object.close()
       alarmAndExit(alarmService, s"The specified CSV file ${state.filename} was empty")
     }
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
+
+    // Close this after retrieving all the items
+    s3Object.close()
 
     val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
