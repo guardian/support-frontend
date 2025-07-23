@@ -74,7 +74,7 @@ export const accordionRowOverride = css`
 		fill: ${palette.neutral[100]};
 	}
 	> div > div > p {
-		padding-bottom: ${space[2]}px;
+		padding-bottom: ${space[1]}px;
 	}
 
 	& a {
