@@ -38,10 +38,18 @@ class SqsService(queueName: String, alarmService: AlarmService)(implicit val exe
     logger.info(s"Sending message batch with ${supporterRatePlanItems.length} items to SQS queue $queueUrl")
 
     val batchRequestEntries = supporterRatePlanItems.map { case (item, index) =>
-      new SendMessageBatchRequestEntry(index.toString, item.asJson.noSpaces)
+      SendMessageBatchRequestEntry
+        .builder()
+        .id(index.toString)
+        .messageBody(item.asJson.noSpaces)
+        .build()
     }
 
-    val batchRequest = new SendMessageBatchRequest(queueUrl, batchRequestEntries.asJava)
+    val batchRequest = SendMessageBatchRequest
+      .builder()
+      .queueUrl(queueUrl)
+      .entries(batchRequestEntries.asJava)
+      .build()
     sqsClient.sendMessageBatch(batchRequest)
 
     Try(sqsClient.sendMessageBatch(batchRequest)) match {
