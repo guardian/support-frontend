@@ -3,16 +3,13 @@ package com.gu.services
 import com.gu.aws.CredentialsProvider
 import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
-import software.amazon.awssdk.core.async.{AsyncRequestBody, AsyncResponseTransformer}
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.{S3AsyncClient, S3Client}
 import software.amazon.awssdk.services.s3.model.{GetObjectRequest, PutObjectRequest}
 
-import scala.compat.java8.FutureConverters._
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
-import java.util.concurrent.{ExecutorService, Executors}
 import scala.io.Source
 
 object S3Service extends StrictLogging {
