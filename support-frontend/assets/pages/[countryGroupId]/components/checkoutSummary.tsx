@@ -3,6 +3,7 @@ import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperProductOptions } from '@modules/product/productOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -25,9 +26,9 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
 import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
@@ -39,7 +40,6 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
-import type { PaperProductOptions } from '@modules/product/productOptions';
 
 type CheckoutSummaryProps = {
 	geoId: GeoId;
