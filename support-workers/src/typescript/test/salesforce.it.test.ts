@@ -130,7 +130,6 @@ describe('CreateSalesforceContatctLambda', () => {
 				testUser: false,
 				failed: false,
 				messages: [],
-				accountExists: false,
 			}),
 		);
 

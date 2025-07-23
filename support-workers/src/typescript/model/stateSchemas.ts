@@ -129,7 +129,6 @@ const requestInfoSchema = z.object({
 	testUser: z.boolean(),
 	failed: z.boolean(),
 	messages: z.array(z.string()),
-	accountExists: z.boolean(),
 });
 
 export type RequestInfo = z.infer<typeof requestInfoSchema>;
@@ -144,12 +143,7 @@ export type WrappedState<InputState> = {
 		Error: string;
 		Cause: string;
 	} | null;
-	requestInfo: {
-		testUser: boolean;
-		failed: boolean;
-		messages: string[];
-		accountExists: boolean;
-	};
+	requestInfo: RequestInfo;
 };
 
 export function wrapperSchemaForState<SchemaType extends z.ZodTypeAny>(
