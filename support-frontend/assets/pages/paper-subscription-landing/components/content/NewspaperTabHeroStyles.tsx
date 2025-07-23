@@ -6,6 +6,7 @@ import {
 	palette,
 	space,
 	textSans17,
+	textSansBold17,
 	until,
 } from '@guardian/source/foundations';
 
@@ -59,6 +60,9 @@ export const accordionOverride = css`
 	p,
 	button {
 		color: ${palette.neutral[100]};
+	}
+	button > strong {
+		${textSansBold17};
 	}
 `;
 export const accordionRowOverride = css`
