@@ -90,7 +90,6 @@ jobs:
                     - "-UpdateSupporterProductDataLambda-"
                     - "-FailureHandlerLambda-"
                     - "-SendAcquisitionEventLambda-"
-                    - "-PreparePaymentMethodForReuseLambda-"
                   fileName: support-workers.jar
                 dependencies: [cfn]
               support-workers-typescript:

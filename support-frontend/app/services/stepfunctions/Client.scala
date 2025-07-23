@@ -66,12 +66,12 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLo
       }
   }
 
-  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean, name: String)(implicit
+  def triggerExecution[T](input: T, isTestUser: Boolean, name: String)(implicit
       ec: ExecutionContext,
       encoder: Encoder[T],
       stateWrapper: StateWrapper,
   ): Response[StateMachineExecution] = {
-    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount), name)
+    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser), name)
       .map(StateMachineExecution.fromStartExecution)
   }
 
