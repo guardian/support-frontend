@@ -46,6 +46,7 @@ case class CreateSupportWorkersRequest(
     deliveryAddress: Option[Address],
     giftRecipient: Option[GiftRecipientRequest],
     product: ProductType,
+    productInformation: Option[ProductInformation],
     firstDeliveryDate: Option[LocalDate],
     paymentFields: PaymentFields,
     appliedPromotion: Option[AppliedPromotion],
@@ -141,6 +142,7 @@ class SupportWorkersClient(
         user = user,
         giftRecipient = giftRecipient,
         product = request.body.product,
+        productInformation = request.body.productInformation,
         analyticsInfo = AnalyticsInfo(
           giftRecipient.isDefined,
           PaymentProvider.fromPaymentFields(request.body.paymentFields),
