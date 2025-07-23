@@ -33,10 +33,6 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     )
   }
 
-  "CreateSalesforceContactState" should "deserialise correctly" in {
-    testDecoding[CreateSalesforceContactState](createSalesforceContactJson)
-  }
-
   "CreateZuoraSubscription" should "deserialise correctly" in {
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson())
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson(Annual))
@@ -47,7 +43,6 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     import com.gu.support.workers.StatesTestData._
 
     testEncodeToDifferentState(createZuoraSubscriptionState, failureHandlerState)
-    testEncodeToDifferentState(createSalesforceContactState, failureHandlerState)
     testEncodeToDifferentState(createPaymentMethodState, failureHandlerState)
     // sendAcquisitionEventState does not go to failure state if it fails
   }
@@ -77,21 +72,6 @@ object StatesTestData {
     acquisitionData = None,
     ipAddress = "127.0.0.1",
     userAgent = "TestAgent",
-    similarProductsConsent = None,
-  )
-
-  val createSalesforceContactState = CreateSalesforceContactState(
-    requestId = UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    giftRecipient = None,
-    product = DigitalPack(Currency.GBP, Monthly),
-    analyticsInfo = AnalyticsInfo(false, StripeApplePay),
-    paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
-    firstDeliveryDate = None,
-    appliedPromotion = None,
-    csrUsername = None,
-    salesforceCaseId = None,
-    acquisitionData = None,
     similarProductsConsent = None,
   )
 

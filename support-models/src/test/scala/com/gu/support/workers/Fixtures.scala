@@ -228,22 +228,6 @@ object Fixtures {
           "similarProductsConsent": false
         }"""
 
-  val createSalesforceContactJson =
-    s"""
-          {
-            $requestIdJson,
-            $userJson,
-            "product": ${contribution()},
-            "analyticsInfo": {
-              "paymentProvider": "PayPal",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $payPalPaymentMethod,
-            "acquisitionData": $acquisitionData,
-            "similarProductsConsent": false
-          }
-        """
-
   val salesforceContactJson =
     """
         {

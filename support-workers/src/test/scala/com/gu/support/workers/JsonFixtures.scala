@@ -400,44 +400,6 @@ object JsonFixtures {
           "similarProductsConsent": false
         }"""
 
-  val createSalesForceContactJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson("200001969")},
-            "product": ${contribution()},
-            "analyticsInfo": {
-              "paymentProvider": "PayPal",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $payPalPaymentMethod,
-            "similarProductsConsent": false
-          }
-        """
-
-  val createSalesForceGiftContactJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson()},
-            "product": $weeklyJson,
-            "analyticsInfo": {
-              "paymentProvider": "PayPal",
-              "isGiftPurchase": true
-            },
-            "paymentMethod": $payPalPaymentMethod,
-            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
-            "giftRecipient": {
-              "title": "Mr",
-              "firstName": "Gifty",
-              "lastName": "McRecipent",
-              "email": "gift.recipient@thegulocal.com",
-              "giftRecipientType": "Weekly"
-            },
-            "similarProductsConsent": false
-          }
-        """
-
   val salesforceContact =
     SalesforceContactRecord(
       "0033E00001Cq8D2QAJ",
