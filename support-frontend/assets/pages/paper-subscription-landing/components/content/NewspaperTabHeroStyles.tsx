@@ -35,13 +35,10 @@ export const copyWidthStyle = css`
 	color: ${palette.neutral[100]};
 	${from.tablet} {
 		padding-top: ${space[4]}px;
-		max-width: 669px;
+		max-width: 734px;
 	}
 `;
 export const imageHeightStyle = css`
-	${from.tablet} {
-		max-width: 669px;
-	}
 	${between.tablet.and.desktop} {
 		padding-top: ${space[4]}px;
 	}
@@ -53,7 +50,7 @@ export const paragraphStyle = css`
 	${from.tablet} {
 		padding-top: 0px;
 		padding-bottom: ${space[4]}px;
-		max-width: 669px;
+		max-width: 734px;
 	}
 `;
 export const accordionOverride = css`
