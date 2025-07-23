@@ -58,16 +58,14 @@ export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 							To arrange your own delivery with your local retailer, share the
 							barcode from your Home Delivery Letter with your chosen store.{' '}
 						</p>
-						<div>
-							<a
-								target="_blank"
-								href={
-									'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
-								}
-							>
-								Find your nearest participating store or delivery retailer
-							</a>
-						</div>
+						<a
+							target="_blank"
+							href={
+								'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
+							}
+						>
+							Find your nearest participating store or delivery retailer
+						</a>
 						,
 					</>
 				),
