@@ -2,7 +2,7 @@ import { Accordion } from '@guardian/source/react-components';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
 import GridPicture from 'components/gridPicture/gridPicture';
-import { getHeroContent } from 'pages/paper-subscription-landing/helpers/NewsPaperTabHeroCopy';
+import { getHeroContent } from 'pages/paper-subscription-landing/helpers/newsPaperTabHeroData';
 import {
 	accordionOverride,
 	accordionRowOverride,
