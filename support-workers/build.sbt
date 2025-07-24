@@ -61,8 +61,6 @@ deployToCode := {
   log.info(s"generated jar $assemblyJar, about to upload to S3...")
   log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
   List(
-    "-CreatePaymentMethodLambda-",
-    "-CreateSalesforceContactLambda-",
     "-CreateZuoraSubscriptionLambda-",
     "-SendThankYouEmailLambda-",
     "-UpdateSupporterProductDataLambda-",
