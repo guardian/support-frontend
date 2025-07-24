@@ -1,6 +1,7 @@
 import { Accordion } from '@guardian/source/react-components';
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import FlexContainer from 'components/containers/flexContainer';
+import GridPicture from 'components/gridPicture/gridPicture';
 import { getHeroContent } from 'pages/paper-subscription-landing/helpers/NewsPaperTabHeroCopy';
 import {
 	accordionOverride,
@@ -18,7 +19,7 @@ export default function NewspaperTabHero({
 	tab: PaperFulfilmentOptions;
 }): JSX.Element {
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
-	const { productInfo, imageUrl, deliveries } = getHeroContent[tab];
+	const { productInfo, gridPictureImages, deliveries } = getHeroContent[tab];
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
@@ -38,7 +39,12 @@ export default function NewspaperTabHero({
 				))}
 			</div>
 			<div css={imageHeightStyle}>
-				<img src={imageUrl} />
+				<GridPicture
+					sources={gridPictureImages.sources}
+					fallback={gridPictureImages.fallback}
+					fallbackSize={gridPictureImages.fallbackSize}
+					altText={gridPictureImages.altText}
+				/>
 			</div>
 		</FlexContainer>
 	);

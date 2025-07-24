@@ -1,4 +1,5 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 
 type HeroDelivery = {
 	deliveryTitle: string;
@@ -6,16 +7,52 @@ type HeroDelivery = {
 };
 type HeroContent = {
 	productInfo: string;
-	imageUrl: string;
+	gridPictureImages: GridPictureProp;
 	deliveries: HeroDelivery[];
+};
+
+const imageSourcesPaperTabHero: GridPictureProp = {
+	sources: [
+		{
+			gridId: 'guardianWeeklyTabHeroMobile',
+			srcSizes: [271, 542],
+			sizes: '271px',
+			imgType: 'jpg',
+			media: '(max-width: 659px)',
+		},
+		{
+			gridId: 'guardianWeeklyTabHeroPhablet',
+			srcSizes: [331, 662],
+			sizes: '331px',
+			imgType: 'jpg',
+			media: '(max-width: 739px)',
+		},
+		{
+			gridId: 'guardianWeeklyTabHeroMobile',
+			srcSizes: [271, 542],
+			sizes: '271px',
+			imgType: 'jpg',
+			media: '(max-width: 979px)',
+		},
+		{
+			gridId: 'guardianWeeklyTabHeroDesktop',
+			srcSizes: [342, 684],
+			sizes: '342px',
+			imgType: 'jpg',
+			media: '(min-width: 980px)',
+		},
+	],
+	fallback: 'guardianWeeklyTabHeroDesktop',
+	fallbackSize: 342,
+	altText: '',
+	fallbackImgType: 'jpg',
 };
 
 export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
 			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
-		imageUrl:
-			'https://i.guim.co.uk/img/media/6c9e57a633a20d9c863071dc38dfa24680676cbb/0_0_1011_607/1011.png?width=252&quality=75&s=da12a5fe67381ed9c4243223569d7992',
+		gridPictureImages: imageSourcesPaperTabHero,
 		deliveries: [
 			{
 				deliveryTitle: 'Delivery details',
@@ -38,8 +75,7 @@ export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	},
 	Collection: {
 		productInfo: `Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
-		imageUrl:
-			'https://i.guim.co.uk/img/media/e68254bdbeab6806c83d1fb29ec61aef2c376cc1/0_0_892_714/892.jpg?width=222&quality=75&s=00bd5126359c43bfd98829507f846747',
+		gridPictureImages: imageSourcesPaperTabHero,
 		deliveries: [
 			{
 				deliveryTitle: 'Collecting from multiple newsagents',
