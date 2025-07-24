@@ -96,6 +96,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
       SendThankYouEmailDigitalSubscriptionState(
         User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
         DigitalPack(GBP, Annual),
+        Some(ProductInformation("DigitalSubscription", "Annual", None)),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 1, 14), 119.90))),
         None,
@@ -154,6 +155,7 @@ class SupporterPlusEmailFieldsSpec extends AsyncFlatSpec with Matchers with Insi
         deliveryAddress = Some(officeAddress),
       ),
       SupporterPlus(12, GBP, Monthly),
+      Some(ProductInformation("SupporterPlus", "Monthly", Some(12))),
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(today, 10), Payment(today.plusMonths(1), 12))),
       None,
@@ -225,6 +227,7 @@ class TierThreeEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside {
         deliveryAddress = Some(officeAddress),
       ),
       TierThree(GBP, Annual, Domestic),
+      Some(ProductInformation("TierThree", "Annual", None)),
       directDebitPaymentMethod,
       PaymentSchedule(List(Payment(today, 119.90))),
       None,

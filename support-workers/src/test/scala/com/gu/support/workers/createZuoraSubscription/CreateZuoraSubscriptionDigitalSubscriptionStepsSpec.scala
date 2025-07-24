@@ -27,6 +27,7 @@ class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec 
     val state = DigitalSubscriptionState(
       billingCountry = Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
+      productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None)),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),

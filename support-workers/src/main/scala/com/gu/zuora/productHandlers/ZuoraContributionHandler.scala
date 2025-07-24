@@ -22,6 +22,7 @@ class ZuoraContributionHandler(
     } yield SendThankYouEmailContributionState(
       user,
       state.product,
+      state.productInformation,
       state.paymentMethod,
       account.value,
       sub.value,
