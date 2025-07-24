@@ -87,6 +87,9 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
     }
   }
 
+  private def booleanToFuture(boolean: Boolean, errorMessage: String) =
+    if (boolean) Future.successful(()) else Future.failed(new RuntimeException(errorMessage))
+
   private def doesCheckoutSessionFormFieldsHashMatch(
       user: User,
       checkoutSession: RetrieveCheckoutSessionResponseSuccess,
@@ -126,7 +129,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       )
       checkoutSession <- stripeServiceForAccount
         .retrieveCheckoutSession(checkoutSessionId)
-      _ = doesCheckoutSessionFormFieldsHashMatch(user, checkoutSession)
+      _ <- booleanToFuture(
+        doesCheckoutSessionFormFieldsHashMatch(user, checkoutSession),
+        "Checkout session formFields hash does not match",
+      )
       paymentMethodId <- optionToFuture(
         PaymentMethodId(checkoutSession.setup_intent.payment_method.id),
         "Invalid PaymentMethodId",
