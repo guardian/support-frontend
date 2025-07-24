@@ -13,6 +13,7 @@ import org.joda.time.LocalDate
 sealed trait SendThankYouEmailState extends StepFunctionUserState {
   def product: ProductType
   def similarProductsConsent: Option[Boolean]
+  def productInformation: Option[ProductInformation]
 }
 
 object SendThankYouEmailState {
@@ -20,6 +21,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailContributionState(
       user: User,
       product: Contribution,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       accountNumber: String,
       subscriptionNumber: String,
@@ -29,6 +31,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailSupporterPlusState(
       user: User,
       product: SupporterPlus,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       promoCode: Option[PromoCode],
@@ -40,6 +43,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailTierThreeState(
       user: User,
       product: TierThree,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       promoCode: Option[PromoCode],
@@ -52,6 +56,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailGuardianAdLiteState(
       user: User,
       product: GuardianAdLite,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       accountNumber: String,
@@ -62,6 +67,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailDigitalSubscriptionState(
       user: User,
       product: DigitalPack,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       promoCode: Option[PromoCode],
@@ -73,6 +79,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailPaperState(
       user: User,
       product: Paper,
+      productInformation: Option[ProductInformation],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,
       promoCode: Option[PromoCode],
@@ -85,6 +92,7 @@ object SendThankYouEmailState {
   case class SendThankYouEmailGuardianWeeklyState(
       user: User,
       product: GuardianWeekly,
+      productInformation: Option[ProductInformation],
       giftRecipient: Option[GiftRecipient],
       paymentMethod: PaymentMethod,
       paymentSchedule: PaymentSchedule,

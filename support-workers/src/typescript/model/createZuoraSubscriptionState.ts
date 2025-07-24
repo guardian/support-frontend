@@ -1,3 +1,4 @@
+import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import { z } from 'zod';
 import {
 	salesforceContactRecordSchema,
@@ -24,6 +25,7 @@ import {
 export const contributionStateSchema = z.object({
 	productType: z.literal('Contribution'),
 	product: contributionProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
 	similarProductsConsent: z.boolean().nullable(),
@@ -34,6 +36,7 @@ export const supporterPlusStateSchema = z.object({
 	productType: z.literal('SupporterPlus'),
 	billingCountry: countrySchema,
 	product: supporterPlusProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	salesForceContact: salesforceContactRecordSchema,
@@ -45,6 +48,7 @@ export const tierThreeStateSchema = z.object({
 	productType: z.literal('TierThree'),
 	user: userSchema,
 	product: tierThreeProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
@@ -56,6 +60,7 @@ export type TierThreeState = z.infer<typeof tierThreeStateSchema>;
 export const guardianAdLiteStateSchema = z.object({
 	productType: z.literal('GuardianAdLite'),
 	product: guardianAdLiteProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
 });
@@ -65,6 +70,7 @@ export const digitalSubscriptionStateSchema = z.object({
 	productType: z.literal('DigitalSubscription'),
 	billingCountry: countrySchema,
 	product: digitalPackProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	salesForceContact: salesforceContactRecordSchema,
@@ -78,6 +84,7 @@ export const paperStateSchema = z.object({
 	productType: z.literal('Paper'),
 	user: userSchema,
 	product: paperProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
@@ -91,6 +98,7 @@ export const guardianWeeklyStateSchema = z.object({
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: guardianWeeklyProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
