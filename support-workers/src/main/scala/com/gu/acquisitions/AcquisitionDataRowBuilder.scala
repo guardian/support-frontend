@@ -77,9 +77,9 @@ object AcquisitionDataRowBuilder {
       identityId = Some(commonState.user.id),
       pageViewId = state.acquisitionData.flatMap(_.ophanIds.pageviewId),
       referrerPageViewId = state.acquisitionData.flatMap(_.referrerAcquisitionData.referrerPageviewId),
-      labels = buildLabels(state, requestInfo.accountExists),
+      labels = buildLabels(state),
       promoCode = acquisitionTypeDetails.promoCode,
-      reusedExistingPaymentMethod = requestInfo.accountExists,
+      reusedExistingPaymentMethod = false,
       readerType = acquisitionTypeDetails.readerType,
       acquisitionType = acquisitionTypeDetails.acquisitionType,
       zuoraSubscriptionNumber = acquisitionTypeDetails.zuoraSubscriptionNumber,
@@ -255,11 +255,10 @@ object AcquisitionDataRowBuilder {
         )
     }
 
-  private def buildLabels(state: SendAcquisitionEventState, accountExists: Boolean) = {
+  private def buildLabels(state: SendAcquisitionEventState) = {
     val referrerLabels = state.acquisitionData.flatMap(_.referrerAcquisitionData.labels).getOrElse(Set())
 
     Set(
-      if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (state.analyticsInfo.isGiftPurchase) Some("GIFT_SUBSCRIPTION") else None,
     ).flatten.union(referrerLabels).toList
   }

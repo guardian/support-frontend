@@ -30,7 +30,9 @@ import { getLegacyProductType } from '../../helpers/legacyTypeConversions';
 import { getFulfilmentOptionFromProductKey } from '../../helpers/productCatalogToFulfilmentOption';
 import { getProductOptionFromProductAndRatePlan } from '../../helpers/productCatalogToProductOption';
 import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHostedCheckoutSession';
-import { CheckoutComponent } from './components/checkoutComponent';
+import CheckoutForm from './components/checkoutForm';
+import { CheckoutLayout } from './components/checkoutLayout';
+import CheckoutSummary from './components/checkoutSummary';
 
 type Props = {
 	geoId: GeoId;
@@ -257,26 +259,49 @@ export function Checkout({
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
-			<CheckoutComponent
-				geoId={geoId}
-				appConfig={appConfig}
-				stripePublicKey={stripePublicKey}
-				isTestUser={isTestUser}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				promotion={promotion}
-				originalAmount={payment.originalAmount}
-				discountedAmount={payment.discountedAmount}
-				contributionAmount={payment.contributionAmount}
-				finalAmount={payment.finalAmount}
-				useStripeExpressCheckout={useStripeExpressCheckout}
-				countryId={countryId}
-				forcedCountry={forcedCountry}
-				abParticipations={abParticipations}
-				landingPageSettings={landingPageSettings}
-				checkoutSession={checkoutSession}
-				clearCheckoutSession={clearCheckoutSession}
-			/>
+			<CheckoutLayout>
+				<CheckoutSummary
+					geoId={geoId}
+					appConfig={appConfig}
+					stripePublicKey={stripePublicKey}
+					isTestUser={isTestUser}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					promotion={promotion}
+					originalAmount={payment.originalAmount}
+					discountedAmount={payment.discountedAmount}
+					contributionAmount={payment.contributionAmount}
+					finalAmount={payment.finalAmount}
+					useStripeExpressCheckout={useStripeExpressCheckout}
+					countryId={countryId}
+					forcedCountry={forcedCountry}
+					abParticipations={abParticipations}
+					landingPageSettings={landingPageSettings}
+					checkoutSession={checkoutSession}
+					clearCheckoutSession={clearCheckoutSession}
+				/>
+
+				<CheckoutForm
+					geoId={geoId}
+					appConfig={appConfig}
+					stripePublicKey={stripePublicKey}
+					isTestUser={isTestUser}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					promotion={promotion}
+					originalAmount={payment.originalAmount}
+					discountedAmount={payment.discountedAmount}
+					contributionAmount={payment.contributionAmount}
+					finalAmount={payment.finalAmount}
+					useStripeExpressCheckout={useStripeExpressCheckout}
+					countryId={countryId}
+					forcedCountry={forcedCountry}
+					abParticipations={abParticipations}
+					landingPageSettings={landingPageSettings}
+					checkoutSession={checkoutSession}
+					clearCheckoutSession={clearCheckoutSession}
+				/>
+			</CheckoutLayout>
 		</Elements>
 	);
 }

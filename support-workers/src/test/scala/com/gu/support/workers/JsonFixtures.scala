@@ -3,17 +3,8 @@ package com.gu.support.workers
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Fixtures.{emailAddress, idId, state}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.catalog.{
-  Domestic,
-  Everyday,
-  FulfilmentOptions,
-  HomeDelivery,
-  NationalDelivery,
-  RestOfWorld,
-  Sunday,
-}
+import com.gu.support.catalog.{Domestic, Everyday, FulfilmentOptions, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
@@ -37,12 +28,13 @@ import java.util.UUID
 
 //noinspection TypeAnnotation
 object JsonFixtures {
-
+  val idId = "9999999"
+  val emailAddress = "integration-test@thegulocal.com"
   def wrapFixture(string: String): ByteArrayInputStream =
     JsonWrapper(
       parser.parse(string).toOption.get,
       None,
-      RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
+      RequestInfo(testUser = false, failed = false, Nil),
     ).asJson.noSpaces.asInputStream
 
   def user(id: String = idId, country: Country = UK): User =
@@ -407,44 +399,6 @@ object JsonFixtures {
           "userAgent": "Test",
           "similarProductsConsent": false
         }"""
-
-  val createSalesForceContactJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson("200001969")},
-            "product": ${contribution()},
-            "analyticsInfo": {
-              "paymentProvider": "PayPal",
-              "isGiftPurchase": false
-            },
-            "paymentMethod": $payPalPaymentMethod,
-            "similarProductsConsent": false
-          }
-        """
-
-  val createSalesForceGiftContactJson =
-    s"""
-          {
-            $requestIdJson,
-            ${userJson()},
-            "product": $weeklyJson,
-            "analyticsInfo": {
-              "paymentProvider": "PayPal",
-              "isGiftPurchase": true
-            },
-            "paymentMethod": $payPalPaymentMethod,
-            "firstDeliveryDate": "${LocalDate.now(DateTimeZone.UTC)}",
-            "giftRecipient": {
-              "title": "Mr",
-              "firstName": "Gifty",
-              "lastName": "McRecipent",
-              "email": "gift.recipient@thegulocal.com",
-              "giftRecipientType": "Weekly"
-            },
-            "similarProductsConsent": false
-          }
-        """
 
   val salesforceContact =
     SalesforceContactRecord(
