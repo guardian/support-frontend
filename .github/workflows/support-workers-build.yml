@@ -98,6 +98,7 @@ jobs:
                   functionNames:
                     - "-CreateSalesforceContactLambda-"
                     - "-CreatePaymentMethodLambda-"
+                    - "-CreateZuoraSubscriptionTSLambda-"
                   fileName: support-workers.zip
                 dependencies: [cfn]
               it-tests:

@@ -249,8 +249,13 @@ export class SupportWorkers extends GuStack {
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscription = createScalaLambda(
+    const createZuoraSubscriptionScala = createScalaLambda(
       "CreateZuoraSubscription",
+      [promotionsDynamoTablePolicy]
+    ).addCatch(failureHandler, catchProps);
+
+    const createZuoraSubscriptionTS = createTypescriptLambda(
+      "CreateZuoraSubscriptionTS",
       [promotionsDynamoTablePolicy]
     ).addCatch(failureHandler, catchProps);
 
@@ -273,10 +278,19 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
+    const createZuoraSubscriptionChoice = new Choice(
+      this,
+      "CreateZuoraSubscriptionChoice"
+    )
+      .when(
+        Condition.isNull("$.state.productSpecificState.productInformation"),
+        createZuoraSubscriptionScala.next(parallelSteps)
+      )
+      .otherwise(createZuoraSubscriptionTS.next(parallelSteps));
+
     const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(createZuoraSubscription)
-      .next(parallelSteps);
+      .next(createZuoraSubscriptionChoice);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
