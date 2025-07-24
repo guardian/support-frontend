@@ -11,7 +11,7 @@ type HeroContent = {
 	deliveries: HeroDelivery[];
 };
 
-const imageSourcesPaperTabHero: GridPictureProp = {
+const gridPictureNewspaperHeroTabImages: GridPictureProp = {
 	sources: [
 		{
 			gridId: 'guardianWeeklyTabHeroMobile',
@@ -44,7 +44,7 @@ const imageSourcesPaperTabHero: GridPictureProp = {
 	],
 	fallback: 'guardianWeeklyTabHeroDesktop',
 	fallbackSize: 342,
-	altText: '',
+	altText: 'Guardian Weekly Tab Hero',
 	fallbackImgType: 'jpg',
 };
 
@@ -52,7 +52,7 @@ export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
 			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
-		gridPictureImages: imageSourcesPaperTabHero,
+		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
 				deliveryTitle: 'Delivery details',
@@ -75,7 +75,7 @@ export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	},
 	Collection: {
 		productInfo: `Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
-		gridPictureImages: imageSourcesPaperTabHero,
+		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
 				deliveryTitle: 'Collecting from multiple newsagents',

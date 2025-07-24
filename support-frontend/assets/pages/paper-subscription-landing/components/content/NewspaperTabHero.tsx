@@ -39,12 +39,7 @@ export default function NewspaperTabHero({
 				))}
 			</div>
 			<div css={imageHeightStyle}>
-				<GridPicture
-					sources={gridPictureImages.sources}
-					fallback={gridPictureImages.fallback}
-					fallbackSize={gridPictureImages.fallbackSize}
-					altText={gridPictureImages.altText}
-				/>
+				<GridPicture {...gridPictureImages} />
 			</div>
 		</FlexContainer>
 	);
