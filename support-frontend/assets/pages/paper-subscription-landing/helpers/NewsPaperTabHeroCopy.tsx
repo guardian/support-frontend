@@ -48,7 +48,7 @@ const gridPictureNewspaperHeroTabImages: GridPictureProp = {
 	fallbackImgType: 'jpg',
 };
 
-export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
+const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
 			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
@@ -109,3 +109,9 @@ export const getHeroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 		],
 	},
 };
+
+export function getHeroContent(
+	fulfilmentOption: PaperFulfilmentOptions,
+): HeroContent {
+	return heroContent[fulfilmentOption];
+}

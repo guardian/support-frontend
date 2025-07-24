@@ -19,7 +19,7 @@ export default function NewspaperTabHero({
 	tab: PaperFulfilmentOptions;
 }): JSX.Element {
 	const homeDeliveryTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
-	const { productInfo, gridPictureImages, deliveries } = getHeroContent[tab];
+	const { productInfo, deliveries, gridPictureImages } = getHeroContent(tab);
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={copyWidthStyle}>
