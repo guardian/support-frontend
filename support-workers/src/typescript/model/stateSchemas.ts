@@ -1,9 +1,9 @@
+import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
 import { paymentMethodSchema } from './paymentMethod';
 import { productTypeSchema } from './productType';
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 
 export const titleSchema = z.union([
 	z.literal('Mr'),
