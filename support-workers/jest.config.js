@@ -6,6 +6,10 @@ module.exports = {
 	testPathIgnorePatterns: ['/node_modules/', 'target'],
 	transformIgnorePatterns: ['/node_modules/\\.pnpm/(?!@guardian)'],
 	moduleNameMapper: {
-		'@modules/(.*)$': '<rootDir>/../modules/$1',
+		'@modules/internationalisation/(.*)$':
+			'<rootDir>/../modules/internationalisation/$1',
+		'@modules/(.*)/(.*)$':
+			'@guardian/support-service-lambdas/modules/$1/src/$2',
+		'@modules/(.*)$': '@guardian/support-service-lambdas/modules/$1',
 	},
 };
