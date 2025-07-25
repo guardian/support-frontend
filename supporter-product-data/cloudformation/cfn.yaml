@@ -399,7 +399,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Sub Supporter Product Data step function Failure in ${Stage}
       AlarmDescription: !Sub The supporter-product-data-${Stage} step function has failed. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-${Stage}?statusFilter=FAILED for details.
       Metrics:
@@ -445,7 +445,7 @@ Resources:
       Period: '60'
       EvaluationPeriods: '60'
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
     DependsOn:
       - SupporterProductDataDeadLetterQueue
 
@@ -454,7 +454,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: There was a csv read failure when loading supporter product data into DynamoDB
       AlarmDescription: >
         Search for 'CSV read failure' in the AddSupporterRatePlanItemToQueueLambda Cloudwatch logs:
@@ -475,7 +475,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: There was a DynamoDB write failure when writing supporter product data into DynamoDB
       AlarmDescription: >
         Impact - On or more subscriber will not get their digital benefits
@@ -497,7 +497,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: There was a failure when trying to write supporter data to the supporter-product-data-PROD sqs queue
       AlarmDescription: >
         Search for the term 'Error writing to the queue' in the AddSupporterRatePlanItemToQueueLambda cloudwatch logs
