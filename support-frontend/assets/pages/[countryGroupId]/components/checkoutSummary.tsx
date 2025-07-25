@@ -28,6 +28,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
+import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
 import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
@@ -95,7 +96,6 @@ export default function CheckoutComponent({
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
-
 	const isRecurringContribution = productKey === 'Contribution';
 
 	const productFields = getProductFields({
@@ -186,7 +186,10 @@ export default function CheckoutComponent({
 					productKey={productKey}
 					productDescription={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={ratePlanDescription.label}
+					ratePlanDescription={
+						ratePlanDescription.label ??
+						getTitle(ratePlanKey as PaperProductOptions)
+					}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
 					)}
