@@ -133,6 +133,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   }
 
   lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
+  lazy val weeklyProductInformation = Some(ProductInformation("GuardianWeeklyDomestic", "Quarterly", None))
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
@@ -169,6 +170,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       Some(GiftRecipient(None, "bob", "smith", None)),
       weekly,
+      weeklyProductInformation,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
@@ -193,6 +195,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     ),
     None,
     weekly,
+    None,
     PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
     firstDeliveryDate,
     None,
@@ -231,6 +234,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       None,
       weekly,
+      weeklyProductInformation,
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,

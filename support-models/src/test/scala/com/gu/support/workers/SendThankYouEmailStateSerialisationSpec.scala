@@ -30,6 +30,7 @@ object ProductTypeCreatedTestData {
   val contributionCreated = SendThankYouEmailContributionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     Contribution(1, GBP, Monthly),
+    Some(ProductInformation("Contribution", "Monthly", Some(1))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     "acno",
     "subno",
@@ -39,6 +40,7 @@ object ProductTypeCreatedTestData {
   val digitalSubscriptionCreated = SendThankYouEmailDigitalSubscriptionState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     DigitalPack(GBP, Monthly),
+    Some(ProductInformation("DigitalSubscription", "Monthly", None)),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
@@ -54,6 +56,7 @@ object ProductTypeCreatedTestData {
       productOptions = Saturday,
       deliveryAgent = Some(AgentId(-1)),
     ),
+    Some(ProductInformation("SubscriptionCard", "Saturday", None)),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
@@ -66,6 +69,7 @@ object ProductTypeCreatedTestData {
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     GuardianWeekly(GBP, Monthly, Domestic),
+    Some(ProductInformation("GuardianWeeklyDomestic", "Monthly", None)),
     Some(GiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),

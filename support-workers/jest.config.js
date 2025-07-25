@@ -4,6 +4,7 @@ module.exports = {
 	testEnvironment: 'node',
 	runner: 'groups',
 	testPathIgnorePatterns: ['/node_modules/', 'target'],
+	transformIgnorePatterns: ['/node_modules/\\.pnpm/(?!@guardian)'],
 	moduleNameMapper: {
 		'@modules/(.*)$': '<rootDir>/../modules/$1',
 	},
