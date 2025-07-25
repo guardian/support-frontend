@@ -30,7 +30,7 @@ class S3CatalogLoader(stage: Stage) extends CatalogLoader with LazyLogging {
     logger.info(s"Attempting to load catalog from $bucket/$key")
 
     Try(
-      S3Service.s3Client.getObjectAsString(bucket, key),
+      S3Service.getAsString(bucket, key),
     )
   }
 }
