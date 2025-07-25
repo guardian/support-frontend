@@ -15,7 +15,7 @@ type GridSlot = {
 	media: string;
 };
 type Source = GridImage & GridSlot;
-export type PropTypes = {
+export type GridPictureProp = {
 	sources: Source[];
 	fallback: string;
 	fallbackSize: number;
@@ -23,7 +23,7 @@ export type PropTypes = {
 	fallbackImgType: ImageType;
 }; // ----- Component ----- //
 
-export default function GridPicture(props: PropTypes) {
+export default function GridPicture(props: GridPictureProp) {
 	const sources = props.sources.map((source) => {
 		const srcSet = gridSrcset(source.gridId, source.srcSizes, source.imgType);
 		return <source sizes={source.sizes} media={source.media} srcSet={srcSet} />;

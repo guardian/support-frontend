@@ -1,6 +1,6 @@
 import { Container } from '@guardian/source/react-components';
 import React from 'react';
-import type { PropTypes } from 'components/gridPicture/gridPicture';
+import type { GridPictureProp } from 'components/gridPicture/gridPicture';
 import GridPicture from 'components/gridPicture/gridPicture';
 
 export default {
@@ -30,10 +30,10 @@ export default {
 	},
 };
 
-function Template(args: PropTypes) {
+function Template(args: GridPictureProp) {
 	return <GridPicture {...args} />;
 }
-Template.args = {} as PropTypes;
+Template.args = {} as GridPictureProp;
 
 export const EditionsPackshotShort = Template.bind({});
 EditionsPackshotShort.args = {
