@@ -11,6 +11,20 @@ type HeroContent = {
 	deliveries: HeroDelivery[];
 };
 
+function collectionMapUrl(name: string): JSX.Element {
+	return (
+		<a
+			href={
+				'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
+			}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			{name}
+		</a>
+	);
+}
+
 const gridPictureNewspaperHeroTabImages: GridPictureProp = {
 	sources: [
 		{
@@ -80,10 +94,13 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 			{
 				deliveryTitle: 'Collecting from multiple newsagents',
 				deliveryInfo: (
-					<p>
-						To collect from multiple newsagents, present your card each time –
-						they’ll scan it and be reimbursed automatically.
-					</p>
+					<>
+						<p>
+							To collect from multiple newsagents, present your card each time –
+							they’ll scan it and be reimbursed automatically.
+						</p>
+						{collectionMapUrl('Find your nearest participating retailer')}
+					</>
 				),
 			},
 			{
@@ -94,15 +111,7 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 							To arrange your own delivery with your local retailer, share the
 							barcode from your Home Delivery Letter with your chosen store.{' '}
 						</p>
-						<a
-							target="_blank"
-							href={
-								'https://digitalvouchers-production-storefinder.azurewebsites.net/map/go'
-							}
-						>
-							Find your nearest participating store or delivery retailer
-						</a>
-						,
+						{collectionMapUrl('Find your nearest delivery retailer')},
 					</>
 				),
 			},
