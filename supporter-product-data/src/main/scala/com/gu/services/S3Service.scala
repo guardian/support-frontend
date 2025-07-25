@@ -21,7 +21,7 @@ object S3Service extends StrictLogging {
 
   def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value.toLowerCase}"
 
-  def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Option[Long]) = {
+  def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Long) = {
     logger.info(s"Trying to stream to S3 - bucketName: ${bucketName(stage)}, filename: $filename, length: $length")
 
     val putObjectRequest = PutObjectRequest
@@ -30,7 +30,7 @@ object S3Service extends StrictLogging {
       .key(filename)
       .build()
 
-    val body = RequestBody.fromInputStream(inputStream, length.getOrElse(0))
+    val body = RequestBody.fromInputStream(inputStream, length)
     s3Client.putObject(putObjectRequest, body)
   }
 
