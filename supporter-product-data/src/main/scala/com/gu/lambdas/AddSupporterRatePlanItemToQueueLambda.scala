@@ -11,7 +11,7 @@ import com.typesafe.scalalogging.StrictLogging
 import kantan.csv._
 import kantan.csv.ops._
 
-import java.io.{InputStreamReader, StringReader}
+import java.io.StringReader
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
