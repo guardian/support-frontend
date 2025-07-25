@@ -168,6 +168,10 @@ export default function CheckoutComponent({
 			abParticipations,
 		);
 
+	const planDescription = isPaper
+		? getTitle(ratePlanKey as PaperProductOptions)
+		: ratePlanDescription.label;
+
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -186,10 +190,7 @@ export default function CheckoutComponent({
 					productKey={productKey}
 					productDescription={productDescription.label}
 					ratePlanKey={ratePlanKey}
-					ratePlanDescription={
-						ratePlanDescription.label ??
-						getTitle(ratePlanKey as PaperProductOptions)
-					}
+					ratePlanDescription={planDescription}
 					paymentFrequency={getBillingPeriodNoun(
 						ratePlanDescription.billingPeriod,
 					)}
