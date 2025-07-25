@@ -9,7 +9,7 @@ import {
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
@@ -99,6 +99,13 @@ export class SupportWorkers extends GuStack {
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
       resources: props.parameterStorePaths,
+    });
+    const secretsManagerPolicy = new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ["secretsmanager:GetSecretValue"],
+      resources: [
+        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${this.stage}/Zuora-OAuth/SupportServiceLambdas-*`,
+      ],
     });
 
     // Lambdas
@@ -256,7 +263,7 @@ export class SupportWorkers extends GuStack {
 
     const createZuoraSubscriptionTS = createTypescriptLambda(
       "CreateZuoraSubscriptionTS",
-      [promotionsDynamoTablePolicy]
+      [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
     const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
