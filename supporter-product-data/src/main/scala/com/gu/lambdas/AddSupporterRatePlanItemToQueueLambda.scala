@@ -11,7 +11,6 @@ import com.typesafe.scalalogging.StrictLogging
 import kantan.csv._
 import kantan.csv.ops._
 
-import java.io.StringReader
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -41,12 +40,8 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
   ): Future[AddSupporterRatePlanItemToQueueState] = {
     logger.info(s"Starting to add subscriptions to queue for ${state.recordCount} records from ${state.filename}")
 
-    val s3Object = S3Service
-      .streamFromS3(stage, state.filename)
-    val byteArray = s3Object.readAllBytes()
-    val csvString = new String(byteArray, "UTF-8")
-    val reader = new StringReader(csvString)
-    val csvReader = reader.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
+    val s3Object = S3Service.streamFromS3(stage, state.filename)
+    val csvReader = s3Object.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val sqsService = SqsService(stage)
     val alarmService = AlarmService(stage)
 
