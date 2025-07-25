@@ -24,24 +24,25 @@
   },
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "catalog:",
     "@aws-sdk/client-ssm": "catalog:",
     "@aws-sdk/credential-provider-node": "catalog:",
-    "stripe": "^17.4.0",
-    "zod": "catalog:",
+    "@guardian/support-service-lambdas": "catalog:",
     "dayjs": "^1.11.13",
-    "@guardian/support-service-lambdas": "catalog:"
+    "stripe": "^17.4.0",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "catalog:",
     "@guardian/prettier": "catalog:",
     "@types/jest": "catalog:",
     "@types/node": "catalog:",
+    "esbuild": "catalog:",
     "eslint": "catalog:",
     "jest": "catalog:",
     "jest-runner-groups": "catalog:",
     "prettier": "catalog:",
     "ts-jest": "catalog:",
-    "typescript": "catalog:",
-    "esbuild": "catalog:"
+    "typescript": "catalog:"
   }
 }
