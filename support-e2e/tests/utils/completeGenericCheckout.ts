@@ -62,6 +62,7 @@ const setUserDetailsForProduct = async (
 	switch (product) {
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
+		case 'DigitalSubscription':
 			await setTestUserDetails(page, email(), firstName(), lastName(), true);
 
 			break;
