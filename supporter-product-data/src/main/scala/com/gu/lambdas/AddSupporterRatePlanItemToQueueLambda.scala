@@ -41,7 +41,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     logger.info(s"Starting to add subscriptions to queue for ${state.recordCount} records from ${state.filename}")
 
     val s3Object = S3Service.streamFromS3(stage, state.filename)
-    val csvReader = s3Object.getObjectContent.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
+    val csvReader = s3Object.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val sqsService = SqsService(stage)
     val alarmService = AlarmService(stage)
 
