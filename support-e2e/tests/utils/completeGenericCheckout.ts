@@ -174,7 +174,7 @@ export const completeGenericCheckout = async (
 			await recaptchaAndSubmit(page);
 			break;
 		case 'Direct debit':
-			await fillInDirectDebitDetails(page, 'contribution');
+			await fillInDirectDebitDetails(page);
 			await recaptchaAndSubmit(page);
 			break;
 	}

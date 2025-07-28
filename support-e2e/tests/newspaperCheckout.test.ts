@@ -99,7 +99,7 @@ test.describe('Sign up newspaper subscription', () => {
 					await page.getByRole('button', { name: 'Pay now' }).click();
 					break;
 				case 'Direct debit':
-					await fillInDirectDebitDetails(page, 'subscription');
+					await fillInDirectDebitDetails(page);
 					await page.locator('button:has-text("Confirm")').click();
 					await checkRecaptcha(page);
 					await page.locator('button:has-text("Subscribe")').click();
