@@ -11,14 +11,14 @@ export type TestDetails = {
 
 const tests: TestDetails[] = [
 	{
-		productLabel: 'Digital Subscription',
+		productLabel: 'Annual DigitalEdition',
 		product: 'DigitalSubscription',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'UK',
 	},
 	{
-		productLabel: 'Digital Subscription',
+		productLabel: 'Monthly DigitalEdition',
 		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
 		paymentType: 'Credit/Debit card',
@@ -41,15 +41,12 @@ test.describe('Digital Subscription Checkout', () =>
 			baseURL,
 		}) => {
 			await visitLandingPageAndCompleteCheckout(
-				`/${internationalisationId.toLowerCase()}/checkout`,
+				`/${internationalisationId.toLowerCase()}/subscribe`,
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
 
-					// 1. Select the billing frequency
-					await page.getByRole('tab', { name: billingFrequency }).click();
-
-					// 2. Click through to the checkout (we use the aria-label to target the link)
+					// 1. Click through to the checkout (we use the aria-label to target the link)
 					await page.getByLabel(productLabel, { exact: true }).click();
 				},
 			);

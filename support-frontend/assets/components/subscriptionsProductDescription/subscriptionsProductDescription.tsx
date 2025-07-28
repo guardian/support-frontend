@@ -128,6 +128,7 @@ function SubscriptionsProductDescription({
 							button.modifierClasses ?? '',
 							'subscriptions__product-button',
 						]}
+						aria-label={button.ariaLabel ?? null}
 					>
 						{button.ctaButtonText}
 					</AnchorButton>
