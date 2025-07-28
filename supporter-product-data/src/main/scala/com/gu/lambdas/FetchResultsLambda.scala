@@ -41,14 +41,8 @@ object FetchResultsLambda extends StrictLogging {
         fileResponse.isSuccessful,
         s"File download for job with id $jobId failed with http code ${fileResponse.code}",
       )
-      contentLength = fileResponse.body.contentLength
-      _ = assert(
-        contentLength > 0,
-        s"Content length of the file for job with id $jobId is not > 0",
-      )
-      byteStream = fileResponse.body.byteStream
-      _ = S3Service.streamToS3(stage, filename, byteStream, contentLength)
-      _ = byteStream.close()
+      val contentLength = if (fileResponse.body.contentLength >= 0) Some(fileResponse.body.contentLength) else None
+      _ = S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, contentLength)
     } yield {
       logger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
       if (batch.recordCount == 0)

@@ -1,6 +1,6 @@
 package com.gu.services
 
-import software.amazon.awssdk.services.ssm.model.Parameter
+import com.amazonaws.services.simplesystemsmanagement.model.Parameter
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.monitoring.SafeLogger
 import com.gu.supporterdata.model.Stage.{CODE, PROD}
@@ -80,8 +80,8 @@ class ConfigService(stage: Stage) extends StrictLogging {
 
   private def findParameterValue(name: String, params: List[Parameter]) =
     params
-      .find(_.name.split('/').last == name)
-      .map(_.value)
+      .find(_.getName.split('/').last == name)
+      .map(_.getValue)
 
   def putLastSuccessfulQueryTime(time: ZonedDateTime) = {
     val timeAsString = time.format(DateTimeFormatter.ISO_DATE_TIME)
