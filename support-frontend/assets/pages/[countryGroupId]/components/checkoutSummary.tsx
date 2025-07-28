@@ -28,7 +28,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
+import { getPaperDescription } from 'pages/paper-subscription-landing/helpers/products';
 import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
@@ -80,7 +80,11 @@ export default function CheckoutComponent({
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 
-	const isPaper = ['HomeDelivery', 'SubscriptionCard'].includes(productKey);
+	const isPaper = [
+		'HomeDelivery',
+		'NationalDelivery',
+		'SubscriptionCard',
+	].includes(productKey);
 	const showPaperProductTabs = isPaper && displayPaperProductTabs();
 
 	const productCatalog = appConfig.productCatalog;
@@ -168,9 +172,8 @@ export default function CheckoutComponent({
 			abParticipations,
 		);
 
-	const planDescription = isPaper
-		? getTitle(ratePlanKey as PaperProductOptions)
-		: ratePlanDescription.label;
+	const planDescription =
+		getPaperDescription(productKey, ratePlanKey) ?? ratePlanDescription.label;
 
 	return (
 		<Box cssOverrides={shorterBoxMargin}>

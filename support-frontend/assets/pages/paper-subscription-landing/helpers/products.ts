@@ -10,6 +10,24 @@ import {
 	SixdayPlus,
 	WeekendPlus,
 } from '@modules/product/productOptions';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+
+export const getPaperDescription = (
+	productKey: ActiveProductKey,
+	ratePlan: ActiveRatePlanKey,
+): string | undefined => {
+	switch (productKey) {
+		case 'HomeDelivery':
+		case 'NationalDelivery':
+		case 'SubscriptionCard':
+			return getTitle(ratePlan as ProductOptions);
+		default:
+			return undefined;
+	}
+};
 
 export const getTitle = (productOption: ProductOptions) => {
 	switch (productOption) {
