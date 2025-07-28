@@ -6,6 +6,7 @@ export type TestDetails = {
 	paymentType: string;
 	product: string;
 	internationalisationId: string;
+	postCode?: string;
 };
 
 const tests: TestDetails[] = [

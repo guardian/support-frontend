@@ -1,13 +1,6 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
-
-export type TestDetails = {
-	productLabel: string;
-	paymentType: string;
-	product: string;
-	billingFrequency: string;
-	internationalisationId: string;
-};
+import { TestDetails } from '../smoke/digital-subscription.test';
 
 const tests: TestDetails[] = [
 	{

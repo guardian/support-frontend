@@ -1,7 +1,7 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
-type TestDetails = {
+export type TestDetails = {
 	paymentType: string;
 };
 
