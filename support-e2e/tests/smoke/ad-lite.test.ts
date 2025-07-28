@@ -1,4 +1,4 @@
-import test, { TestDetails } from '@playwright/test';
+import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 const tests = [
