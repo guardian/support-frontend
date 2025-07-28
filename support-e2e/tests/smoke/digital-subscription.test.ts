@@ -11,16 +11,16 @@ export type TestDetails = {
 
 const tests: TestDetails[] = [
 	{
-		productLabel: 'Annual DigitalEdition',
-		product: 'DigitalSubscription',
-		billingFrequency: 'Annual',
-		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
-	},
-	{
 		productLabel: 'Monthly DigitalEdition',
 		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
+		paymentType: 'Direct debit',
+		internationalisationId: 'UK',
+	},
+	{
+		productLabel: 'Annual DigitalEdition',
+		product: 'DigitalSubscription',
+		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'US',
 	},

@@ -14,6 +14,7 @@ import {
 	intWithPostalAddressOnly,
 } from './userFields';
 import { email, firstName, lastName } from './users';
+import { fillInDirectDebitDetails } from './directDebitDetails';
 
 const selectDeliveryAgent = async (page: Page) => {
 	// Depending on whether there are one or multiple delivery agents we need to do different things here.
@@ -122,6 +123,15 @@ type TestDetails = {
 	postCode?: string;
 };
 
+const recaptchaAndSubmit = async (page: Page) => {
+	await checkRecaptcha(page);
+	await page
+		.getByRole('button', {
+			name: `Pay`,
+		})
+		.click();
+};
+
 export const completeGenericCheckout = async (
 	page,
 	testDetails: TestDetails,
@@ -161,12 +171,11 @@ export const completeGenericCheckout = async (
 			break;
 		case 'Credit/Debit card':
 			await fillInCardDetails(page);
-			await checkRecaptcha(page);
-			await page
-				.getByRole('button', {
-					name: `Pay`,
-				})
-				.click();
+			await recaptchaAndSubmit(page);
+			break;
+		case 'Direct debit':
+			await fillInDirectDebitDetails(page, 'contribution');
+			await recaptchaAndSubmit(page);
 			break;
 	}
 
