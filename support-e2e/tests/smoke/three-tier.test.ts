@@ -1,15 +1,7 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
-export type TestDetails = {
-	productLabel: string;
-	paymentType: string;
-	product: string;
-	billingFrequency: string;
-	internationalisationId: string;
-};
-
-const tests: TestDetails[] = [
+const tests = [
 	{
 		productLabel: 'All-access digital',
 		product: 'SupporterPlus',
@@ -27,7 +19,7 @@ const tests: TestDetails[] = [
 ];
 
 test.describe('Three Tier Checkout', () =>
-	tests.map((testDetails: TestDetails) => {
+	tests.map((testDetails) => {
 		const {
 			billingFrequency,
 			product,

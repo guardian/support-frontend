@@ -1,8 +1,7 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
-import { TestDetails } from '../smoke/digital-subscription.test';
 
-const tests: TestDetails[] = [
+const tests = [
 	{
 		productLabel: 'Monthly DigitalEdition',
 		product: 'DigitalSubscription',
@@ -13,7 +12,7 @@ const tests: TestDetails[] = [
 ];
 
 test.describe('Digital Subscription Checkout', () =>
-	tests.map((testDetails: TestDetails) => {
+	tests.map((testDetails) => {
 		const {
 			billingFrequency,
 			product,

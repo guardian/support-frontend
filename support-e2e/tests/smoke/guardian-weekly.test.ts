@@ -1,15 +1,7 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
-export type TestDetails = {
-	ratePlan: string;
-	paymentType: string;
-	product: string;
-	internationalisationId: string;
-	postCode?: string;
-};
-
-const tests: TestDetails[] = [
+const tests = [
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Monthly',
@@ -49,7 +41,7 @@ const tests: TestDetails[] = [
 ];
 
 test.describe('Guardian Weekly Checkout', () =>
-	tests.map((testDetails: TestDetails) => {
+	tests.map((testDetails) => {
 		const { ratePlan, product, paymentType, internationalisationId } =
 			testDetails;
 
