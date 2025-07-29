@@ -14,7 +14,7 @@ const tests = [
 		product: 'DigitalSubscription',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'US',
+		internationalisationId: 'UK',
 	},
 ];
 
