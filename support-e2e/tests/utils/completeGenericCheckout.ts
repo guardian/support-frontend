@@ -61,6 +61,7 @@ const setUserDetailsForProduct = async (
 	postCode,
 ) => {
 	switch (product) {
+		case 'Contribution':
 		case 'SupporterPlus':
 		case 'GuardianAdLite':
 		case 'DigitalSubscription':
