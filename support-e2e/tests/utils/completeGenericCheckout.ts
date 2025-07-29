@@ -6,13 +6,7 @@ import {
 	setTestUserAddressDetails,
 	setTestUserDetails,
 } from './testUserDetails';
-import {
-	TestFields,
-	ukWithPostalAddressOnly,
-	usWithPostalAddressOnly,
-	ausWithFullAddress,
-	intWithPostalAddressOnly,
-} from './userFields';
+import { getUserFields } from './userFields';
 import { email, firstName, lastName } from './users';
 import { fillInDirectDebitDetails } from './directDebitDetails';
 
@@ -31,26 +25,6 @@ const selectDeliveryAgent = async (page: Page) => {
 	if ((await deliveryAgentRadioButton.count()) > 0) {
 		// If there are multiple delivery agents, select the first one
 		await deliveryAgentRadioButton.first().check();
-	}
-};
-
-const userDetails = (
-	product: string,
-	internationalisationId: string,
-): TestFields => {
-	switch (internationalisationId) {
-		case 'UK':
-			return ukWithPostalAddressOnly();
-		case 'US':
-			return usWithPostalAddressOnly();
-		case 'AU':
-			return ausWithFullAddress();
-		case 'INT':
-			return intWithPostalAddressOnly();
-		default:
-			throw new Error(
-				`Couldn't find user details for ${product} in ${internationalisationId}`,
-			);
 	}
 };
 
@@ -73,7 +47,7 @@ const setUserDetailsForProduct = async (
 		case 'TierThree':
 			await setTestUserAddressDetails(
 				page,
-				userDetails(product, internationalisationId),
+				getUserFields(internationalisationId),
 				internationalisationId,
 				3,
 			);
@@ -88,7 +62,7 @@ const setUserDetailsForProduct = async (
 
 			await setTestUserAddressDetails(
 				page,
-				ukWithPostalAddressOnly(),
+				getUserFields(internationalisationId),
 				internationalisationId,
 				3,
 			);
@@ -103,7 +77,7 @@ const setUserDetailsForProduct = async (
 
 			await setTestUserAddressDetails(
 				page,
-				ukWithPostalAddressOnly(postCode),
+				getUserFields(internationalisationId, postCode),
 				internationalisationId,
 				3,
 			);
@@ -146,12 +120,11 @@ export const completeGenericCheckout = async (
 		postCode,
 	);
 
-	// State mandatory for AU and US
-	if (internationalisationId === 'AU') {
-		await page.getByLabel('State').selectOption({ label: 'New South Wales' });
-	}
-	if (internationalisationId === 'US') {
-		await page.getByLabel('State').selectOption({ label: 'Illinois' });
+	const state = getUserFields(internationalisationId).addresses[0].state;
+	if (state) {
+		await page
+			.getByLabel(internationalisationId === 'CA' ? 'Province' : 'State')
+			.selectOption({ label: state });
 	}
 
 	await page.getByRole('radio', { name: paymentType }).check();

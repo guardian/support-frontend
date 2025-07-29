@@ -18,7 +18,7 @@ const tests = [
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Quarterly',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
+		internationalisationId: 'NZ',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',

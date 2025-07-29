@@ -14,7 +14,7 @@ const tests = [
 		product: 'Contribution',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'EU',
+		internationalisationId: 'CA',
 	},
 	{
 		productLabel: 'All-access digital',
@@ -28,7 +28,7 @@ const tests = [
 		product: 'TierThree',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
+		internationalisationId: 'EU',
 	},
 ];
 

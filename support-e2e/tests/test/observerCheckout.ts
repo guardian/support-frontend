@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { setupPage } from '../utils/page';
 import { setTestUserAddressDetails } from '../utils/testUserDetails';
-import { ukWithPostalAddressOnly } from '../utils/userFields';
+import { getUserFields } from '../utils/userFields';
 import {
 	expectToLandOnStripeCheckoutPage,
 	fillStripeCheckoutForm,
@@ -31,7 +31,7 @@ export const testObserverCheckout = (testDetails: TestDetails) => {
 		// Fill checkout form and submit
 		await setTestUserAddressDetails(
 			page,
-			ukWithPostalAddressOnly(),
+			getUserFields(internationalisationId, postCode),
 			internationalisationId,
 			3,
 		);
