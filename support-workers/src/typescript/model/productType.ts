@@ -31,6 +31,7 @@ export const paperProductSchema = z.object({
 	fulfilmentOptions: fulfilmentOptionsSchema,
 	productOptions: productOptionsSchema,
 	productType: z.literal('Paper'),
+	deliveryAgent: z.number().nullish(),
 });
 export const guardianWeeklyProductSchema = z.object({
 	currency: isoCurrencySchema,
