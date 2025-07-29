@@ -1,14 +1,7 @@
 import { Page } from '@playwright/test';
 
-export const fillInDirectDebitDetails = async (
-	page: Page,
-	pageType: 'subscription' | 'contribution',
-) => {
-	await page
-		.getByLabel(
-			pageType === 'subscription' ? 'Bank account holder name' : 'Account name',
-		)
-		.fill('CP Scott');
+export const fillInDirectDebitDetails = async (page: Page) => {
+	await page.getByLabel('Account name').fill('CP Scott');
 	await page.getByLabel('Sort code').fill('200000');
 	await page.getByLabel('Account number').fill('55779911');
 

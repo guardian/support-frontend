@@ -1,18 +1,14 @@
 import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
-type TestDetails = {
-	paymentType: string;
-};
-
-const tests: TestDetails[] = [
+const tests = [
 	{
 		paymentType: 'Credit/Debit card',
 	},
 ];
 
 test.describe('Ad Lite Checkout', () =>
-	tests.map((testDetails: TestDetails) => {
+	tests.map((testDetails) => {
 		const { paymentType } = testDetails;
 
 		test(`Ad-Lite - ${testDetails.paymentType}`, async ({

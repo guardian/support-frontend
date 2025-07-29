@@ -72,7 +72,7 @@ function Form(props: PropTypes): JSX.Element {
 						)
 					}
 					maxLength={40}
-					label="Bank account holder name"
+					label="Account name"
 					error={props.accountHolderNameError}
 				/>
 			</div>
