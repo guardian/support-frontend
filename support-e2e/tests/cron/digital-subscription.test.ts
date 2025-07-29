@@ -21,7 +21,7 @@ test.describe('Digital Subscription Checkout', () =>
 			productLabel,
 		} = testDetails;
 
-		test(`Digital Subscription - ${product} - ${billingFrequency} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`Digital Subscription - ${billingFrequency} - ${paymentType} - ${internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {

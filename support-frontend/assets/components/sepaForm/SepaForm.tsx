@@ -55,7 +55,7 @@ export function SepaForm({
 						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
-						label="Account name"
+						label="Bank account holder name"
 						maxLength={40}
 						value={accountHolderName ?? undefined}
 						error={errors.accountHolderName?.[0]}
