@@ -7,7 +7,7 @@ const tests = [
 		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
 		paymentType: 'PayPal',
-		internationalisationId: 'EU',
+		internationalisationId: 'UK',
 	},
 ];
 
