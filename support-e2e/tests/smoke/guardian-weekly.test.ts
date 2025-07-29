@@ -11,7 +11,7 @@ const tests = [
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Annual',
-		paymentType: 'Credit/Debit card',
+		paymentType: 'Direct debit',
 		internationalisationId: 'UK',
 	},
 	{
