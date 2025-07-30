@@ -45,7 +45,7 @@ test.describe('Guardian Weekly Checkout', () =>
 		const { ratePlan, product, paymentType, internationalisationId } =
 			testDetails;
 
-		test(`Guardian Weekly - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {

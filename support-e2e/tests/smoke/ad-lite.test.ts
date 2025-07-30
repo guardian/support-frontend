@@ -18,7 +18,7 @@ test.describe('Ad Lite Checkout', () =>
 	tests.map((testDetails) => {
 		const { product, paymentType, internationalisationId } = testDetails;
 
-		test(`Ad-Lite - Monthly - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - Monthly - ${paymentType} - ${internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {
