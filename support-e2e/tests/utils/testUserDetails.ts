@@ -74,6 +74,11 @@ export const setTestUserDetails = async (
 		testFields.lastName,
 		true, // confirmEmail required
 	);
+	if (['US', 'AU', 'CA'].includes(internationalisationId)) {
+		await page
+			.getByLabel(internationalisationId === 'CA' ? 'Province' : 'State')
+			.selectOption({ label: testFields.addresses[0].state });
+	}
 
 	if (requireAddress(product, internationalisationId) && testFields.addresses) {
 		if (testFields.addresses.length > 1) {

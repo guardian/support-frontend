@@ -36,13 +36,6 @@ export const completeGenericCheckout = async (
 		getUserFields(internationalisationId, postCode),
 	);
 
-	const state = getUserFields(internationalisationId).addresses[0].state;
-	if (state) {
-		await page
-			.getByLabel(internationalisationId === 'CA' ? 'Province' : 'State')
-			.selectOption({ label: state });
-	}
-
 	await page.getByRole('radio', { name: paymentType }).check();
 	switch (paymentType) {
 		case 'PayPal':
