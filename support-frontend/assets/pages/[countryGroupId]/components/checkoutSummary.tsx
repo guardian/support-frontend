@@ -79,7 +79,11 @@ export default function CheckoutComponent({
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
 
-	const isPaper = ['HomeDelivery', 'SubscriptionCard'].includes(productKey);
+	const isPaper = [
+		'HomeDelivery',
+		'NationalDelivery',
+		'SubscriptionCard',
+	].includes(productKey);
 	const showPaperProductTabs = isPaper && displayPaperProductTabs();
 
 	const productCatalog = appConfig.productCatalog;
@@ -95,7 +99,6 @@ export default function CheckoutComponent({
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
-
 	const isRecurringContribution = productKey === 'Contribution';
 
 	const productFields = getProductFields({
