@@ -19,6 +19,29 @@ const selectDeliveryAgent = async (page: Page) => {
 	}
 };
 
+const requireAddress = (
+	product: string,
+	internationalisationId: string,
+): boolean => {
+	switch (product) {
+		case 'GuardianWeeklyDomestic':
+		case 'GuardianWeeklyRestOfWorld':
+		case 'TierThree':
+			return true; // global
+		case 'HomeDelivery':
+		case 'NationalDelivery':
+		case 'SubscriptionCard':
+			if (internationalisationId !== 'UK') {
+				throw new Error(
+					`${product} is only available in the UK, but got ${internationalisationId}`,
+				);
+			}
+			return true; // UK specific
+		default:
+			return false;
+	}
+};
+
 export const setTestUserCoreDetails = async (
 	page: Page,
 	email: string,
@@ -73,10 +96,11 @@ export const setTestUserDetails = async (
 			if (address.postCode) {
 				await page
 					.getByLabel(internationalisationId === 'US' ? 'ZIP code' : 'Postcode')
-					.nth(index)
+					// UK postCodes have extra lookup, doubling its location on screen
+					.nth(internationalisationId === 'UK' ? index * 2 : index)
 					.fill(address.postCode);
 			}
-			if (address.postCode) {
+			if (address.firstLine) {
 				await page
 					.getByLabel(`Address Line 1`)
 					.nth(index)
@@ -93,28 +117,5 @@ export const setTestUserDetails = async (
 		if (product === 'NationalDelivery') {
 			await selectDeliveryAgent(page);
 		}
-	}
-};
-
-const requireAddress = (
-	product: string,
-	internationalisationId: string,
-): boolean => {
-	switch (product) {
-		case 'GuardianWeeklyDomestic':
-		case 'GuardianWeeklyRestOfWorld':
-		case 'TierThree':
-			return true; // global
-		case 'HomeDelivery':
-		case 'NationalDelivery':
-		case 'SubscriptionCard':
-			if (internationalisationId !== 'UK') {
-				throw new Error(
-					`${product} is only available in the UK, but got ${internationalisationId}`,
-				);
-			}
-			return true; // UK specific
-		default:
-			return false;
 	}
 };
