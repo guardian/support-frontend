@@ -67,6 +67,7 @@ export const setTestUserDetails = async (
 	internationalisationId: string,
 	testFields: TestFields,
 ) => {
+	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
 	await setTestUserCoreDetails(
 		page,
 		testFields.email,
@@ -76,7 +77,7 @@ export const setTestUserDetails = async (
 	);
 	if (['US', 'AU', 'CA'].includes(internationalisationId)) {
 		await page
-			.getByLabel(internationalisationId === 'CA' ? 'Province' : 'State')
+			.getByLabel(stateLabel)
 			.selectOption({ label: testFields.addresses[0].state });
 	}
 
@@ -91,16 +92,18 @@ export const setTestUserDetails = async (
 
 		// To run in sequence using async/await, for required over forEach
 		let index = 0;
+		const postcodeLabel =
+			internationalisationId === 'US' ? 'ZIP code' : 'Postcode';
 		for (const address of testFields.addresses) {
 			if (address.state) {
 				await page
-					.getByLabel(internationalisationId === 'CA' ? 'Province' : 'State')
+					.getByLabel(stateLabel)
 					.nth(index)
 					.selectOption({ label: address.state });
 			}
 			if (address.postCode) {
 				await page
-					.getByLabel(internationalisationId === 'US' ? 'ZIP code' : 'Postcode')
+					.getByLabel(postcodeLabel)
 					// UK postCodes have extra lookup, doubling its location on screen
 					.nth(internationalisationId === 'UK' ? index * 2 : index)
 					.fill(address.postCode);
