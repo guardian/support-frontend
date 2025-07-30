@@ -79,14 +79,14 @@ export type ProductBenefit = {
 	hideBullet?: boolean;
 };
 
-export type ProductDescription = {
+export type ProductDescription<T extends ActiveProductKey> = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	landingPagePath: string;
 	deliverableTo?: Record<string, string>;
 	ratePlans: Record<
-		string,
+		ProductRatePlanKey<T>,
 		{
 			billingPeriod: RecurringBillingPeriod;
 			label?: string;
@@ -234,10 +234,9 @@ const guardianAdLiteBenefits = [
 
 const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
 
-export const productCatalogDescription: Record<
-	ActiveProductKey,
-	ProductDescription
-> = {
+export const productCatalogDescription: {
+	[Key in ActiveProductKey]: ProductDescription<Key>;
+} = {
 	GuardianAdLite: {
 		label: 'Guardian Ad-Lite',
 		thankyouMessage: `Your subscription powers our journalism.`,
