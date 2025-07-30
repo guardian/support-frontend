@@ -3,22 +3,15 @@ import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAn
 
 const tests = [
 	{
-		productLabel: 'All-access digital',
-		product: 'SupporterPlus',
-		billingFrequency: 'Annual',
-		paymentType: 'Credit/Debit card',
-		internationalisationId: 'EU',
-	},
-	{
-		productLabel: 'Digital + print',
-		product: 'TierThree',
+		productLabel: 'Monthly DigitalEdition',
+		product: 'DigitalSubscription',
 		billingFrequency: 'Monthly',
-		paymentType: 'Credit/Debit card',
+		paymentType: 'PayPal',
 		internationalisationId: 'UK',
 	},
 ];
 
-test.describe('Three Tier Checkout', () =>
+test.describe('Digital Subscription Checkout', () =>
 	tests.map((testDetails) => {
 		const {
 			billingFrequency,
@@ -28,20 +21,17 @@ test.describe('Three Tier Checkout', () =>
 			productLabel,
 		} = testDetails;
 
-		test(`Three Tier - ${product} - ${billingFrequency} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`Digital Subscription - ${billingFrequency} - ${paymentType} - ${internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {
 			await visitLandingPageAndCompleteCheckout(
-				`/${internationalisationId.toLowerCase()}/contribute`,
+				`/${internationalisationId.toLowerCase()}/subscribe`,
 				{ context, baseURL, product, paymentType, internationalisationId },
 				async (page) => {
 					// Transition from landing page to checkout:
 
-					// 1. Select the billing frequency
-					await page.getByRole('tab', { name: billingFrequency }).click();
-
-					// 2. Click through to the checkout (we use the aria-label to target the link)
+					// 1. Click through to the checkout (we use the aria-label to target the link)
 					await page.getByLabel(productLabel, { exact: true }).click();
 				},
 			);

@@ -37,6 +37,7 @@ export type ProductButton = {
 	hierarchy?: string;
 	modifierClasses?: string;
 	primary?: boolean;
+	ariaLabel?: string;
 };
 
 type ProductCopy = {
@@ -118,6 +119,7 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Monthly} DigitalEdition`,
 			},
 			{
 				ctaButtonText: getDigitalEditionPrice(
@@ -131,6 +133,7 @@ function digitalCheckout(
 					componentType: 'ACQUISITIONS_BUTTON',
 				}),
 				modifierClasses: 'digital',
+				ariaLabel: `${BillingPeriod.Annual} DigitalEdition`,
 			},
 		],
 		benefits: productCatalogDescription['DigitalSubscription'].benefits,

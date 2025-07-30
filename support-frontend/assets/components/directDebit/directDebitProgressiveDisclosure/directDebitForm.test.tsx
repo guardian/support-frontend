@@ -30,7 +30,7 @@ async function fillOutForm(
 	{ name, sortCode, accountNumber }: Record<string, string> = {},
 	confirm = true,
 ) {
-	const nameField = await screen.findByLabelText('Bank account holder name');
+	const nameField = await screen.findByLabelText('Account name');
 	const sortCodeField = await screen.findByLabelText('Sort code');
 	const accountNumberField = await screen.findByLabelText('Account number');
 	const confirmationField = await screen.findByLabelText(
