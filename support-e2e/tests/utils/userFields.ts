@@ -14,7 +14,7 @@ export interface TestFields {
 	addresses?: TestAddress[]; // 0st Delivery, 2nd Billing
 }
 
-const userBasicFields: TestFields = {
+const userCoreFields: TestFields = {
 	email: email(),
 	firstName: firstName(),
 	lastName: lastName(),
@@ -22,7 +22,7 @@ const userBasicFields: TestFields = {
 };
 const userDetails: Record<string, TestFields> = {
 	UK: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: 'N1 9GU',
@@ -32,7 +32,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	EU: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: '10117',
@@ -42,7 +42,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	US: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: '10006',
@@ -53,7 +53,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	CA: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: 'ON M5V 3L9',
@@ -64,7 +64,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	AU: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: '2010',
@@ -75,7 +75,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	NZ: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: '1010',
@@ -85,7 +85,7 @@ const userDetails: Record<string, TestFields> = {
 		],
 	},
 	INT: {
-		...userBasicFields,
+		...userCoreFields,
 		addresses: [
 			{
 				postCode: '8001',
