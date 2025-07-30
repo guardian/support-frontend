@@ -79,20 +79,22 @@ export type ProductBenefit = {
 	hideBullet?: boolean;
 };
 
+type RatePlanDetails = Record<
+	string,
+	{
+		billingPeriod: RecurringBillingPeriod;
+		label?: string;
+		hideSimilarProductsConsent?: boolean;
+	}
+>;
+
 export type ProductDescription = {
 	label: string;
 	thankyouMessage?: string;
 	benefits: ProductBenefit[];
 	landingPagePath: string;
 	deliverableTo?: Record<string, string>;
-	ratePlans: Record<
-		string,
-		{
-			billingPeriod: RecurringBillingPeriod;
-			label?: string;
-			hideSimilarProductsConsent?: boolean;
-		}
-	>;
+	ratePlans: RatePlanDetails;
 };
 
 export const showSimilarProductsConsentForRatePlan = (
@@ -233,6 +235,55 @@ const guardianAdLiteBenefits = [
 ];
 
 const paperThankyouMessage = `Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future. As well as future communications on how to make the most of your subscription and weekly newsletters written by the editors. `;
+
+const nationalPaperPlusRatePlans: RatePlanDetails = {
+	Everyday: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Every day package',
+	},
+	EverydayPlus: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Every day package',
+	},
+	Sixday: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Six day package',
+	},
+	SixdayPlus: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Six day package',
+	},
+	Weekend: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Weekend package',
+	},
+	WeekendPlus: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Weekend package',
+	},
+};
+
+const paperPlusRatePlans: RatePlanDetails = {
+	...nationalPaperPlusRatePlans,
+	Saturday: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Saturday package',
+	},
+	SaturdayPlus: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'Saturday package',
+	},
+	Sunday: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'The Observer',
+		hideSimilarProductsConsent: true,
+	},
+	SundayPlus: {
+		billingPeriod: BillingPeriod.Monthly,
+		label: 'The Observer',
+		hideSimilarProductsConsent: true,
+	},
+};
 
 export const productCatalogDescription: Record<
 	ActiveProductKey,
@@ -380,29 +431,7 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/subscribe/paper#Collection',
 		benefits: [],
 		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Every day package',
-			},
-			Sixday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Six day package',
-			},
-			Weekend: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Weekend package',
-			},
-			Saturday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Saturday package',
-			},
-			Sunday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'The Observer',
-				hideSimilarProductsConsent: true,
-			},
-		},
+		ratePlans: paperPlusRatePlans,
 	},
 	HomeDelivery: {
 		label: 'Home delivery',
@@ -410,29 +439,7 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/subscribe/paper',
 		benefits: [],
 		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Every day package',
-			},
-			Sixday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Six day package',
-			},
-			Weekend: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Weekend package',
-			},
-			Saturday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Saturday package',
-			},
-			Sunday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'The Observer',
-				hideSimilarProductsConsent: true,
-			},
-		},
+		ratePlans: paperPlusRatePlans,
 	},
 	NationalDelivery: {
 		label: 'National delivery',
@@ -440,20 +447,7 @@ export const productCatalogDescription: Record<
 		landingPagePath: '/subscribe/paper',
 		benefits: [],
 		deliverableTo: newspaperCountries,
-		ratePlans: {
-			Everyday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Every day package - The Guardian and The Observer',
-			},
-			Sixday: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Six day package - The Guardian',
-			},
-			Weekend: {
-				billingPeriod: BillingPeriod.Monthly,
-				label: 'Weekend package - The Guardian and The Observer',
-			},
-		},
+		ratePlans: nationalPaperPlusRatePlans,
 	},
 	Contribution: {
 		label: 'Support',
