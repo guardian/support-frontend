@@ -25,14 +25,14 @@ const userDetails: Record<string, TestFields> = {
 		...userCoreFields,
 		addresses: [
 			{
-				postCode: 'M1 1PW',
-				firstLine: '3 Cross Street',
-				city: 'Manchester',
-			},
-			{
 				postCode: 'N1 9GU',
 				firstLine: '90 York Way',
 				city: 'London',
+			},
+			{
+				postCode: 'M1 1PW',
+				firstLine: '3 Cross Street',
+				city: 'Manchester',
 			},
 		],
 	},
