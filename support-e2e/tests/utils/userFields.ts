@@ -110,7 +110,7 @@ export const getUserFields = (
 		throw new Error(`No user details found for country: ${country}`);
 	}
 	if (postCode) {
-		validUserDetails.addresses[0].postCode = postCode;
+		validUserDetails.addresses[0].postCode = postCode; // delivery address override only required
 	}
 	return validUserDetails;
 };
