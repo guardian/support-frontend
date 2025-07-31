@@ -116,7 +116,7 @@ export const setTestUserDetails = async (
 			}
 			if (address.city) {
 				await page
-					.getByLabel(`Town/City`)
+					.getByLabel('Town/City')
 					.nth(index)
 					.fill(address.city ?? '');
 			}
