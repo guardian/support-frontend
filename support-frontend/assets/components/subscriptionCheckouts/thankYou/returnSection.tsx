@@ -1,10 +1,10 @@
 // ----- Imports ----- //
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { from, space } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -26,24 +26,23 @@ function ReturnSection(props: PropTypes) {
 			<Divider />
 			<NarrowContent>
 				<div className="thank-you-stage__ctas">
-					<ThemeProvider theme={buttonThemeReaderRevenue}>
-						<LinkButton
-							cssOverrides={buttonStyles}
-							priority="tertiary"
-							aria-label="Return to the Guardian home page"
-							href="https://theguardian.com"
-							icon={<SvgArrowRightStraight />}
-							iconSide="right"
-							nudgeIcon
-							onClick={sendTrackingEventsOnClick({
-								id: 'checkout_return_home',
-								product: props.subscriptionProduct,
-								componentType: 'ACQUISITIONS_BUTTON',
-							})}
-						>
-							Return to the Guardian
-						</LinkButton>
-					</ThemeProvider>
+					<LinkButton
+						cssOverrides={buttonStyles}
+						priority="tertiary"
+						aria-label="Return to the Guardian home page"
+						href="https://theguardian.com"
+						icon={<SvgArrowRightStraight />}
+						iconSide="right"
+						nudgeIcon
+						onClick={sendTrackingEventsOnClick({
+							id: 'checkout_return_home',
+							product: props.subscriptionProduct,
+							componentType: 'ACQUISITIONS_BUTTON',
+						})}
+						theme={themeButtonReaderRevenue}
+					>
+						Return to the Guardian
+					</LinkButton>
 				</div>
 			</NarrowContent>
 		</Content>

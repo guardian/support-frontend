@@ -1,4 +1,4 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold24,
@@ -8,8 +8,8 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenueBrand,
 	LinkButton,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
@@ -126,21 +126,20 @@ export function AmountsCard({
 				/>
 			</div>
 			<div css={buttonContainer}>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-					<LinkButton
-						href={checkoutLink}
-						cssOverrides={btnStyleOverrides}
-						onClick={() => {
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriodToContributionType(
-									billingPeriod,
-								)}`,
-							);
-						}}
-					>
-						Continue to checkout
-					</LinkButton>
-				</ThemeProvider>
+				<LinkButton
+					href={checkoutLink}
+					cssOverrides={btnStyleOverrides}
+					onClick={() => {
+						trackComponentClick(
+							`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriodToContributionType(
+								billingPeriod,
+							)}`,
+						);
+					}}
+					theme={themeButtonReaderRevenueBrand}
+				>
+					Continue to checkout
+				</LinkButton>
 				<PaymentCards />
 			</div>
 		</section>

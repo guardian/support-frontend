@@ -1,9 +1,9 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import {
 	Button,
-	buttonThemeReaderRevenue,
 	SvgArrowRightStraight,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { CardNumberElement } from '@stripe/react-stripe-js';
@@ -441,18 +441,17 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 						/>
 					) : null}
 					<div className="component-stripe-submit-button">
-						<ThemeProvider theme={buttonThemeReaderRevenue}>
-							<Button
-								id="qa-stripe-submit-button"
-								onClick={requestSCAPaymentMethod}
-								priority="primary"
-								icon={<SvgArrowRightStraight />}
-								iconSide="right"
-								disabled={disableButton}
-							>
-								{props.buttonText}
-							</Button>
-						</ThemeProvider>
+						<Button
+							id="qa-stripe-submit-button"
+							onClick={requestSCAPaymentMethod}
+							priority="primary"
+							icon={<SvgArrowRightStraight />}
+							iconSide="right"
+							disabled={disableButton}
+							theme={themeButtonReaderRevenue}
+						>
+							{props.buttonText}
+						</Button>
 					</div>
 					{errors.length > 0 && <ErrorSummary errors={errors} />}
 				</fieldset>

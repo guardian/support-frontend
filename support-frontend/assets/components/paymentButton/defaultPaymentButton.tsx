@@ -1,9 +1,9 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { neutral } from '@guardian/source/foundations';
 import type { ButtonProps } from '@guardian/source/react-components';
 import {
 	Button,
-	buttonThemeReaderRevenueBrand,
+	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 
 const buttonOverrides = css`
@@ -26,15 +26,14 @@ export function DefaultPaymentButton({
 	...buttonProps
 }: DefaultPaymentButtonProps): JSX.Element {
 	return (
-		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-			<Button
-				id={id}
-				cssOverrides={buttonOverrides}
-				isLoading={false}
-				{...buttonProps}
-			>
-				{buttonText}
-			</Button>
-		</ThemeProvider>
+		<Button
+			id={id}
+			cssOverrides={buttonOverrides}
+			isLoading={false}
+			{...buttonProps}
+			theme={themeButtonReaderRevenueBrand}
+		>
+			{buttonText}
+		</Button>
 	);
 }

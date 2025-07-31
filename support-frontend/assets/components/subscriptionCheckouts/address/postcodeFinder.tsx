@@ -1,11 +1,11 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import {
 	Button,
-	buttonThemeReaderRevenueBrandAlt,
 	Option,
 	Select,
 	TextInput,
+	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import React from 'react';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
@@ -70,11 +70,14 @@ export function PostcodeFinder({
 
 				{!isLoading && (
 					<div css={styles.buttonContainer}>
-						<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
-							<Button priority="tertiary" type="button" onClick={handleSubmit}>
-								Find address
-							</Button>
-						</ThemeProvider>
+						<Button
+							priority="tertiary"
+							type="button"
+							onClick={handleSubmit}
+							theme={themeButtonReaderRevenueBrandAlt}
+						>
+							Find address
+						</Button>
 					</div>
 				)}
 			</div>

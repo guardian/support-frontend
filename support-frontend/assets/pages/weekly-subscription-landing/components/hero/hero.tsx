@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	brandAlt,
 	from,
@@ -11,9 +11,9 @@ import {
 	textEgyptian17,
 } from '@guardian/source/foundations';
 import {
-	buttonThemeDefault,
 	LinkButton,
 	SvgArrowDownStraight,
+	themeButton,
 } from '@guardian/source/react-components';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { GBPCountries } from '@modules/internationalisation/countryGroup';
@@ -175,22 +175,21 @@ export function WeeklyHero({
 					<section css={styles.weeklyHeroCopy}>
 						<h2 css={styles.weeklyHeroTitle}>{title}</h2>
 						<p css={styles.weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeDefault}>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
-									id: 'options_cta_click',
-									product: 'GuardianWeekly',
-									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								cssOverrides={linkButtonColour}
-								href="#subscribe"
-							>
-								See pricing options
-							</LinkButton>
-						</ThemeProvider>
+						<LinkButton
+							onClick={sendTrackingEventsOnClick({
+								id: 'options_cta_click',
+								product: 'GuardianWeekly',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})}
+							priority="tertiary"
+							iconSide="right"
+							icon={<SvgArrowDownStraight />}
+							cssOverrides={linkButtonColour}
+							href="#subscribe"
+							theme={themeButton}
+						>
+							See pricing options
+						</LinkButton>
 					</section>
 				</Hero>
 			</CentredContainer>

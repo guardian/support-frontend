@@ -1,9 +1,8 @@
 // ----- Imports ----- //
-import { ThemeProvider } from '@emotion/react';
 import {
-	buttonThemeBrand,
 	LinkButton,
 	SvgArrowDownStraight,
+	themeButtonBrand,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
@@ -54,21 +53,20 @@ export function PaperHero({
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>
 						<p css={heroParagraph}>{body}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
-									id: 'options_cta_click',
-									product: 'Paper',
-									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								href="#HomeDelivery"
-							>
-								See pricing options
-							</LinkButton>
-						</ThemeProvider>
+						<LinkButton
+							onClick={sendTrackingEventsOnClick({
+								id: 'options_cta_click',
+								product: 'Paper',
+								componentType: 'ACQUISITIONS_BUTTON',
+							})}
+							priority="tertiary"
+							iconSide="right"
+							icon={<SvgArrowDownStraight />}
+							href="#HomeDelivery"
+							theme={themeButtonBrand}
+						>
+							See pricing options
+						</LinkButton>
 					</section>
 				</Hero>
 			</CentredContainer>

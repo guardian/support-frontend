@@ -1,7 +1,6 @@
-import { ThemeProvider } from '@emotion/react';
 import {
-	buttonThemeBrand,
 	LinkButton,
+	themeButtonBrand,
 } from '@guardian/source/react-components';
 import { contributeUrl } from '../utils';
 
@@ -61,18 +60,17 @@ export function Header(): JSX.Element {
 		<div id="header-wrapper">
 			<div>
 				<div id="header">Join the fight for progress</div>
-				<ThemeProvider theme={buttonThemeBrand}>
-					<LinkButton
-						priority="tertiary"
-						size="small"
-						href={contributeUrl('AUSELECTION2022_SUPPORTERMAP_header')}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<span className="header-cta-text-full">Support the Guardian</span>
-						<span className="header-cta-text-short">Support us</span>
-					</LinkButton>
-				</ThemeProvider>
+				<LinkButton
+					priority="tertiary"
+					size="small"
+					href={contributeUrl('AUSELECTION2022_SUPPORTERMAP_header')}
+					target="_blank"
+					rel="noopener noreferrer"
+					theme={themeButtonBrand}
+				>
+					<span className="header-cta-text-full">Support the Guardian</span>
+					<span className="header-cta-text-short">Support us</span>
+				</LinkButton>
 			</div>
 			<a className="logo" href="https://www.theguardian.com/au">
 				<GuardianLogoSvg />
