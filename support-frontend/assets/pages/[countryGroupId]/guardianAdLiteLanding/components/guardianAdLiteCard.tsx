@@ -1,4 +1,4 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	from,
 	headlineBold20,
@@ -102,15 +102,14 @@ export function GuardianAdLiteCard({
 				<div css={svgCss}>{icon}</div>
 				<h2 css={titleCss(cardIndex)}>{label}</h2>
 			</div>
-			<ThemeProvider theme={themeLinkBrand}>
-				<LinkButton
-					href={link}
-					cssOverrides={btnStyleOverrides}
-					data-qm-trackable={quantumMetricButtonRef}
-				>
-					{ctaCopy}
-				</LinkButton>
-			</ThemeProvider>
+			<LinkButton
+				href={link}
+				cssOverrides={btnStyleOverrides}
+				data-qm-trackable={quantumMetricButtonRef}
+				theme={themeLinkBrand}
+			>
+				{ctaCopy}
+			</LinkButton>
 			<Divider cssOverrides={dividerCss} />
 			<BenefitsCheckList
 				benefitsCheckListData={benefits.map((benefit) => {
