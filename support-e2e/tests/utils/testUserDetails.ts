@@ -110,7 +110,7 @@ export const setTestUserDetails = async (
 			}
 			if (address.firstLine) {
 				await page
-					.getByLabel(`Address Line 1`)
+					.getByLabel('Address Line 1')
 					.nth(index)
 					.fill(address.firstLine ?? '');
 			}
