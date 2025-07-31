@@ -38,7 +38,7 @@ class Promotions(
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
         case DigitalPack => routes.Application.geoRedirectToPath("subscribe/digitaledition").url
-        case Paper => routes.Application.geoRedirectToPath("uk/subscribe/paper").url
+        case Paper => routes.PaperSubscriptionController.paper().url
         case _ => routes.Application.contributeGeoRedirect("").url
       }
       val queryString = {
