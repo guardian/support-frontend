@@ -81,9 +81,8 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import { getWeeklyDays } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
-import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
+import { WeeklyGiftFields } from '../checkout/components/WeeklyGiftFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
@@ -362,43 +361,7 @@ export default function CheckoutForm({
 			'',
 		);
 
-	/** Gift recipient details */
-	// Session storage unavailable yet, so use state
-	const [recipientFirstName, setRecipientFirstName] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientLastName, setRecipientLastName] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientEmail, setRecipientEmail] =
-		useStateWithCheckoutSession<string>(undefined, '');
-
-	/** Gift recipient address */
-	const [recipientPostcode, setRecipientPostcode] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientLineOne, setRecipientLineOne] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientLineTwo, setRecipientLineTwo] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientCity, setRecipientCity] = useStateWithCheckoutSession<string>(
-		undefined,
-		'',
-	);
-	const [recipientState, setRecipientState] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientPostcodeStateResults, setRecipientPostcodeStateResults] =
-		useState<PostcodeFinderResult[]>([]);
-	const [recipientPostcodeStateLoading, setRecipientPostcodeStateLoading] =
-		useState(false);
-	const [recipientCountry, setRecipientCountry] =
-		useStateWithCheckoutSession<IsoCountry>(undefined, countryId);
-	const [recipientAddressErrors, setRecipientAddressErrors] = useState<
-		AddressFormFieldError[]
-	>([]);
-
 	/** Delivery Instructions */
-	const weeklyDeliveryDates = getWeeklyDays();
-	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		weeklyDeliveryDates[0] as Date,
-	);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
@@ -895,103 +858,11 @@ export default function CheckoutForm({
 						)}
 
 						{isWeeklyGift && (
-							<>
-								<FormSection>
-									<Legend>1. Gift recipient's details</Legend>
-
-									<PersonalDetailsFields
-										isEmailAddressReadOnly={false}
-										firstName={recipientFirstName}
-										setFirstName={(recipientFirstName) =>
-											setRecipientFirstName(recipientFirstName)
-										}
-										lastName={recipientLastName}
-										setLastName={(recipientLastName) =>
-											setRecipientLastName(recipientLastName)
-										}
-										email={recipientEmail}
-										setEmail={(recipientEmail) =>
-											setRecipientEmail(recipientEmail)
-										}
-										isSignedIn={false}
-									/>
-								</FormSection>
-								<CheckoutDivider spacing="loose" />
-								<FormSection>
-									<Legend>2. Gift delivery date</Legend>
-									<WeeklyDeliveryDates
-										weeklyDeliveryDates={weeklyDeliveryDates}
-										weeklyDeliveryDateSelected={weeklyDeliveryDate}
-										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
-											setWeeklyDeliveryDate(weeklyDeliveryDate);
-										}}
-									/>
-								</FormSection>
-								<CheckoutDivider spacing="loose" />
-								<FormSection>
-									{productDescription.deliverableTo && (
-										<>
-											<fieldset>
-												<Legend>3. Gift recipient's address</Legend>
-												<AddressFields
-													scope={'recipient'}
-													lineOne={recipientLineOne}
-													lineTwo={recipientLineTwo}
-													city={recipientCity}
-													country={recipientCountry}
-													state={recipientState}
-													postCode={recipientPostcode}
-													countryGroupId={countryGroupId}
-													countries={productDescription.deliverableTo}
-													errors={recipientAddressErrors}
-													postcodeState={{
-														results: recipientPostcodeStateResults,
-														isLoading: recipientPostcodeStateLoading,
-														postcode: recipientPostcode,
-														error: '',
-													}}
-													setLineOne={(lineOne) => {
-														setRecipientLineOne(lineOne);
-													}}
-													setLineTwo={(lineTwo) => {
-														setRecipientLineTwo(lineTwo);
-													}}
-													setTownCity={(city) => {
-														setRecipientCity(city);
-													}}
-													setState={(state) => {
-														setRecipientState(state);
-													}}
-													setPostcode={(postcode) => {
-														setRecipientPostcode(postcode);
-													}}
-													setCountry={(country) => {
-														setRecipientCountry(country);
-													}}
-													setPostcodeForFinder={() => {
-														// no-op
-													}}
-													setPostcodeErrorForFinder={() => {
-														// no-op
-													}}
-													setErrors={(errors) => {
-														setRecipientAddressErrors(errors);
-													}}
-													onFindAddress={(postcode) => {
-														setRecipientPostcodeStateLoading(true);
-														void findAddressesForPostcode(postcode).then(
-															(results) => {
-																setRecipientPostcodeStateLoading(false);
-																setRecipientPostcodeStateResults(results);
-															},
-														);
-													}}
-												/>
-											</fieldset>
-										</>
-									)}
-								</FormSection>
-							</>
+							<WeeklyGiftFields
+								countryId={countryId}
+								productDescription={productDescription}
+								countryGroupId={countryGroupId}
+							/>
 						)}
 
 						<FormSection>
