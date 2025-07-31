@@ -3,7 +3,7 @@ import { email, firstName, lastName } from '../utils/users';
 import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
-import { setTestUserDetails } from '../utils/testUserDetails';
+import { setTestUserCoreDetails } from '../utils/testUserDetails';
 
 [
 	{
@@ -50,7 +50,7 @@ import { setTestUserDetails } from '../utils/testUserDetails';
 		await expect(
 			page.getByText(testDetails.expectedCheckoutTotalText).first(),
 		).toBeVisible();
-		await setTestUserDetails(
+		await setTestUserCoreDetails(
 			page,
 			testEmail,
 			testFirstName,

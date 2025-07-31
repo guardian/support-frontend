@@ -3,18 +3,32 @@ import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAn
 
 const tests = [
 	{
-		productLabel: 'All-access digital',
-		product: 'SupporterPlus',
+		productLabel: 'Support',
+		product: 'Contribution',
+		billingFrequency: 'Monthly',
+		paymentType: 'Direct debit',
+		internationalisationId: 'UK',
+	},
+	{
+		productLabel: 'Support',
+		product: 'Contribution',
 		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'EU',
+		internationalisationId: 'CA',
+	},
+	{
+		productLabel: 'All-access digital',
+		product: 'SupporterPlus',
+		billingFrequency: 'Monthly',
+		paymentType: 'Credit/Debit card',
+		internationalisationId: 'US',
 	},
 	{
 		productLabel: 'Digital + print',
 		product: 'TierThree',
-		billingFrequency: 'Monthly',
+		billingFrequency: 'Annual',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
+		internationalisationId: 'EU',
 	},
 ];
 
