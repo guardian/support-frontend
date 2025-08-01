@@ -2,18 +2,15 @@ import type { IsoCountry } from '@modules/internationalisation/country';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
-import type {
-	PostcodeFinderResult} from 'components/subscriptionCheckouts/address/postcodeLookup';
-import {
-	findAddressesForPostcode
-} from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
-import { PersonalDetailsFields } from './PersonalDetailsFields';
+import { PersonalFields } from './PersonalFields';
 import { WeeklyDeliveryDates } from './WeeklyDeliveryDates';
 
 type WeeklyGiftFieldsProps = {
@@ -69,9 +66,7 @@ export function WeeklyGiftFields({
 		<>
 			<FormSection>
 				<Legend>1. Gift recipient's details</Legend>
-
-				<PersonalDetailsFields
-					isEmailAddressReadOnly={false}
+				<PersonalFields
 					firstName={recipientFirstName}
 					setFirstName={(recipientFirstName) =>
 						setRecipientFirstName(recipientFirstName)
@@ -82,7 +77,6 @@ export function WeeklyGiftFields({
 					}
 					email={recipientEmail}
 					setEmail={(recipientEmail) => setRecipientEmail(recipientEmail)}
-					isSignedIn={false}
 				/>
 			</FormSection>
 			<CheckoutDivider spacing="loose" />

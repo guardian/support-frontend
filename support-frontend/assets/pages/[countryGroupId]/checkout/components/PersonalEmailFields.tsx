@@ -7,8 +7,9 @@ import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation
 type PersonalEmailFieldsProps = {
 	email: string;
 	setEmail: (value: string) => void;
-	isEmailAddressReadOnly: boolean;
-	isSignedIn: boolean;
+	optional?: boolean;
+	isEmailAddressReadOnly?: boolean;
+	isSignedIn?: boolean;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
 };
@@ -16,14 +17,15 @@ type PersonalEmailFieldsProps = {
 export function PersonalEmailFields({
 	email,
 	setEmail,
-	isEmailAddressReadOnly,
-	isSignedIn,
+	optional = false,
+	isEmailAddressReadOnly = false,
+	isSignedIn = false,
 	confirmedEmail,
 	setConfirmedEmail,
 }: PersonalEmailFieldsProps) {
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
-
+	const endUser = optional ? 'recipient' : 'your';
 	return (
 		<>
 			<div>
@@ -33,6 +35,7 @@ export function PersonalEmailFields({
 					label="Email address"
 					value={email}
 					type="email"
+					optional={optional}
 					autoComplete="email"
 					onChange={(event) => {
 						setEmail(event.currentTarget.value);
@@ -42,7 +45,7 @@ export function PersonalEmailFields({
 					}}
 					readOnly={isEmailAddressReadOnly}
 					name="email"
-					required
+					required={!optional}
 					maxLength={80}
 					error={emailError}
 					onInvalid={(event) => {
@@ -52,9 +55,9 @@ export function PersonalEmailFields({
 							setEmailError(undefined);
 						} else {
 							if (validityState.valueMissing) {
-								setEmailError('Please enter your email address.');
+								setEmailError(`Please enter ${endUser} email address.`);
 							} else {
-								setEmailError('Please enter a valid email address.');
+								setEmailError(`Please enter a valid ${endUser} email address.`);
 							}
 						}
 					}}
@@ -90,7 +93,7 @@ export function PersonalEmailFields({
 								} else {
 									if (validityState.valueMissing) {
 										setConfirmedEmailError(
-											'Please confirm your email address.',
+											`Please confirm ${endUser} email address.`,
 										);
 									} else if (validityState.patternMismatch) {
 										setConfirmedEmailError('The email addresses do not match.');
