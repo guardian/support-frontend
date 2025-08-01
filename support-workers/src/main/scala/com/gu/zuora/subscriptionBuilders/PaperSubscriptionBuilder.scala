@@ -1,11 +1,12 @@
 package com.gu.zuora.subscriptionBuilders
 
-import com.gu.support.catalog.NationalDelivery
+import com.gu.support.catalog.{NationalDelivery, Sunday}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.{PromoError, PromotionService}
-import com.gu.support.workers.Paper
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, Paper, PaymentMethod}
 import com.gu.support.workers.ProductTypeRatePlans._
+import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
@@ -29,8 +30,8 @@ class PaperSubscriptionBuilder(
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
-
-    val deliveryAgent = validateDeliveryAgent(product);
+    val deliveryAgent = validateDeliveryAgent(product)
+    validatePaymentGateway(paymentMethod, product)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
@@ -66,11 +67,25 @@ class PaperSubscriptionBuilder(
 
   def validateDeliveryAgent(paper: Paper): Option[AgentId] = {
     if (paper.fulfilmentOptions == NationalDelivery && paper.deliveryAgent.isEmpty) {
-      throw new IllegalArgumentException(
+      throw new BadRequestException(
         s"National Delivery subscriptions must have a delivery agent. ${paper.describe} does not have an agentId.",
       )
     }
     paper.deliveryAgent
+  }
+
+  def validatePaymentGateway(paymentMethod: PaymentMethod, paper: Paper): Unit = {
+    (paper.productOptions, paymentMethod) match {
+      case (Sunday, _: CreditCardReferenceTransaction) if paymentMethod.PaymentGateway != StripeTortoiseMedia =>
+        throw new BadRequestException(
+          s"Sunday subscriptions must use StripeTortoiseMedia payment gateway. ${paper.describe} uses ${paymentMethod.PaymentGateway}.",
+        )
+      case (Sunday, _: DirectDebitPaymentMethod) if paymentMethod.PaymentGateway != DirectDebitTortoiseMediaGateway =>
+        throw new BadRequestException(
+          s"Sunday subscriptions must use DirectDebitTortoiseMediaGateway payment gateway. ${paper.describe} uses ${paymentMethod.PaymentGateway}.",
+        )
+      case _ => ()
+    }
   }
 
 }
