@@ -1,7 +1,10 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.support.catalog.NationalDelivery
 import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.workers.Paper
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.zuora.api.ReaderType.Direct
@@ -27,6 +30,8 @@ class PaperSubscriptionBuilder(
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
 
+    val deliveryAgent = validateDeliveryAgent(product);
+
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
       contractAcceptanceDate = state.firstDeliveryDate,
@@ -34,7 +39,7 @@ class PaperSubscriptionBuilder(
       readerType = Direct,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
-      deliveryAgent = product.deliveryAgent,
+      deliveryAgent = deliveryAgent,
     )
 
     applyPromoCodeIfPresent(
@@ -57,6 +62,15 @@ class PaperSubscriptionBuilder(
         Some(soldToContact),
       )
     }
+  }
+
+  def validateDeliveryAgent(paper: Paper): Option[AgentId] = {
+    if (paper.fulfilmentOptions == NationalDelivery && paper.deliveryAgent.isEmpty) {
+      throw new IllegalArgumentException(
+        s"National Delivery subscriptions must have a delivery agent. ${paper.describe} does not have an agentId.",
+      )
+    }
+    paper.deliveryAgent
   }
 
 }
