@@ -1,4 +1,4 @@
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';

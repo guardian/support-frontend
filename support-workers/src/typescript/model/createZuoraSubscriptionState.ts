@@ -1,4 +1,4 @@
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { z } from 'zod';
 import {
 	salesforceContactRecordSchema,
