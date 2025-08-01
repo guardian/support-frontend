@@ -12,7 +12,7 @@ import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup'
 
 type StateSelectProps = {
 	countryId: IsoCountry;
-	state?: string;
+	state: string;
 	onStateChange: FormEventHandler<HTMLSelectElement>;
 	onBlur?: FormEventHandler<HTMLSelectElement>;
 	onInvalid?: FormEventHandler<HTMLSelectElement>;
