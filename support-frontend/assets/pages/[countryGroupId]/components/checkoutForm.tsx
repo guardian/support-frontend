@@ -852,35 +852,51 @@ export default function CheckoutForm({
 						)}
 
 						{isWeeklyGift && (
-							<WeeklyGiftFields
+							<>
+								<WeeklyGiftFields
+									countryId={countryId}
+									productDescription={productDescription}
+									countryGroupId={countryGroupId}
+								/>
+								<PersonalDetailsFields
+									countryId={countryId}
+									legend={`${legendStartNumber}. Your details`}
+									firstName={firstName}
+									setFirstName={(firstName) => setFirstName(firstName)}
+									lastName={lastName}
+									setLastName={(lastName) => setLastName(lastName)}
+									email={email}
+									setEmail={(email) => setEmail(email)}
+								/>
+							</>
+						)}
+						{!isWeeklyGift && (
+							<PersonalDetailsFields
 								countryId={countryId}
-								productDescription={productDescription}
-								countryGroupId={countryGroupId}
+								legend={`${legendStartNumber}. Your details`}
+								firstName={firstName}
+								setFirstName={(firstName) => setFirstName(firstName)}
+								lastName={lastName}
+								setLastName={(lastName) => setLastName(lastName)}
+								email={email}
+								setEmail={(email) => setEmail(email)}
+								confirmedEmail={confirmedEmail}
+								setConfirmedEmail={(confirmedEmail) =>
+									setConfirmedEmail(confirmedEmail)
+								}
+								billingState={billingState}
+								setBillingState={(billingState) =>
+									setBillingState(billingState)
+								}
+								billingPostcode={billingPostcode}
+								setBillingPostcode={(billingPostcode) =>
+									setBillingPostcode(billingPostcode)
+								}
+								hasDeliveryAddress={hasDeliveryAddress}
+								isEmailAddressReadOnly={isSignedIn}
+								isSignedIn={isSignedIn}
 							/>
 						)}
-						<PersonalDetailsFields
-							countryId={countryId}
-							legend={`${legendStartNumber}. Your details`}
-							isEmailAddressReadOnly={isSignedIn}
-							hasDeliveryAddress={hasDeliveryAddress}
-							firstName={firstName}
-							setFirstName={(firstName) => setFirstName(firstName)}
-							lastName={lastName}
-							setLastName={(lastName) => setLastName(lastName)}
-							email={email}
-							setEmail={(email) => setEmail(email)}
-							confirmedEmail={confirmedEmail}
-							setConfirmedEmail={(confirmedEmail) =>
-								setConfirmedEmail(confirmedEmail)
-							}
-							billingState={billingState}
-							setBillingState={(billingState) => setBillingState(billingState)}
-							billingPostcode={billingPostcode}
-							setBillingPostcode={(billingPostcode) =>
-								setBillingPostcode(billingPostcode)
-							}
-							isSignedIn={isSignedIn}
-						/>
 						<CheckoutDivider spacing="loose" />
 
 						{/**

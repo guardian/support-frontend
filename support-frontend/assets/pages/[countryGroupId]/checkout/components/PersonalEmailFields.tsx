@@ -7,21 +7,21 @@ import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation
 type PersonalEmailFieldsProps = {
 	email: string;
 	setEmail: (value: string) => void;
-	endUser: string;
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
+	endUser?: string;
 };
 
 export function PersonalEmailFields({
 	email,
 	setEmail,
-	endUser,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
 	confirmedEmail,
 	setConfirmedEmail,
+	endUser = 'your',
 }: PersonalEmailFieldsProps) {
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();

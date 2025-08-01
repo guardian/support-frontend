@@ -760,7 +760,6 @@ export function OneTimeCheckoutComponent({
 							<PersonalEmailFields
 								email={email}
 								setEmail={(email) => setEmail(email)}
-								endUser={'your'}
 								isEmailAddressReadOnly={isSignedIn}
 								isSignedIn={isSignedIn}
 							/>

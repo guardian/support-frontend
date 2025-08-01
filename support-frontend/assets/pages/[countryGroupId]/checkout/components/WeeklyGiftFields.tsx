@@ -10,8 +10,8 @@ import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
-import { PersonalDetailsFields } from './PersonalDetailsFields';
 import { WeeklyDeliveryDates } from './WeeklyDeliveryDates';
+import { WeeklyGiftPersonalFields } from './WeeklyGiftPersonalFields';
 
 type WeeklyGiftFieldsProps = {
 	countryId: IsoCountry;
@@ -64,10 +64,8 @@ export function WeeklyGiftFields({
 
 	return (
 		<>
-			<PersonalDetailsFields
-				countryId={countryId}
+			<WeeklyGiftPersonalFields
 				legend={`1. Gift recipient's details`}
-				hasDeliveryAddress={true}
 				firstName={recipientFirstName}
 				setFirstName={(recipientFirstName) =>
 					setRecipientFirstName(recipientFirstName)
@@ -78,7 +76,6 @@ export function WeeklyGiftFields({
 				}
 				email={recipientEmail}
 				setEmail={(recipientEmail) => setRecipientEmail(recipientEmail)}
-				isWeeklyGift={true}
 			/>
 
 			<CheckoutDivider spacing="loose" />

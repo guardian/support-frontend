@@ -13,7 +13,6 @@ import { PersonalFields } from './PersonalFields';
 type PersonalDetailsFieldsProps = {
 	countryId: IsoCountry;
 	legend: string;
-	hasDeliveryAddress: boolean;
 	firstName: string;
 	setFirstName: (value: string) => void;
 	lastName: string;
@@ -26,15 +25,14 @@ type PersonalDetailsFieldsProps = {
 	setBillingState?: (value: string) => void;
 	billingPostcode?: string;
 	setBillingPostcode?: (value: string) => void;
+	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
-	isWeeklyGift?: boolean;
 };
 
 export function PersonalDetailsFields({
 	countryId,
 	legend,
-	hasDeliveryAddress,
 	firstName,
 	setFirstName,
 	lastName,
@@ -47,27 +45,23 @@ export function PersonalDetailsFields({
 	setBillingState,
 	billingPostcode,
 	setBillingPostcode,
+	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
-	isWeeklyGift = false,
 }: PersonalDetailsFieldsProps) {
 	const [billingStateError, setBillingStateError] = useState<string>();
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
-	const endUser = isWeeklyGift ? 'recipient' : 'your';
 	return (
 		<FormSection>
 			<Legend>{legend}</Legend>
-			{!isWeeklyGift && (
-				<PersonalEmailFields
-					email={email}
-					setEmail={setEmail}
-					endUser={endUser}
-					isEmailAddressReadOnly={isEmailAddressReadOnly}
-					confirmedEmail={confirmedEmail}
-					setConfirmedEmail={setConfirmedEmail}
-					isSignedIn={isSignedIn}
-				/>
-			)}
+			<PersonalEmailFields
+				email={email}
+				setEmail={setEmail}
+				confirmedEmail={confirmedEmail}
+				setConfirmedEmail={setConfirmedEmail}
+				isEmailAddressReadOnly={isEmailAddressReadOnly}
+				isSignedIn={isSignedIn}
+			/>
 			<PersonalFields
 				firstName={firstName}
 				setFirstName={setFirstName}
@@ -75,21 +69,13 @@ export function PersonalDetailsFields({
 				setLastName={setLastName}
 				email={email}
 				setEmail={setEmail}
-				endUser={endUser}
 			/>
-			{isWeeklyGift && (
-				<PersonalEmailFields
-					email={email}
-					setEmail={setEmail}
-					endUser={endUser}
-				/>
-			)}
 			{/**
 			 * We require state for non-deliverable products as we use different taxes
 			 * within those regions upstream For deliverable products we take the
 			 * state // and zip code with the delivery address
 			 */}
-			{!isWeeklyGift && !hasDeliveryAddress && (
+			{!hasDeliveryAddress && (
 				<>
 					{billingState &&
 						setBillingState &&

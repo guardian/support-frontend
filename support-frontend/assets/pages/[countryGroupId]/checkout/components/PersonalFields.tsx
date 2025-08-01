@@ -12,7 +12,7 @@ type PersonalDetailsFieldsProps = {
 	setLastName: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
-	endUser: string;
+	endUser?: string;
 };
 
 export function PersonalFields({
@@ -20,7 +20,7 @@ export function PersonalFields({
 	setFirstName,
 	lastName,
 	setLastName,
-	endUser,
+	endUser = 'your',
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
