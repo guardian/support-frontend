@@ -10,7 +10,7 @@ import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
-import { PersonalFields } from './PersonalFields';
+import { PersonalDetailsFields } from './PersonalDetailsFields';
 import { WeeklyDeliveryDates } from './WeeklyDeliveryDates';
 
 type WeeklyGiftFieldsProps = {
@@ -64,21 +64,23 @@ export function WeeklyGiftFields({
 
 	return (
 		<>
-			<FormSection>
-				<Legend>1. Gift recipient's details</Legend>
-				<PersonalFields
-					firstName={recipientFirstName}
-					setFirstName={(recipientFirstName) =>
-						setRecipientFirstName(recipientFirstName)
-					}
-					lastName={recipientLastName}
-					setLastName={(recipientLastName) =>
-						setRecipientLastName(recipientLastName)
-					}
-					email={recipientEmail}
-					setEmail={(recipientEmail) => setRecipientEmail(recipientEmail)}
-				/>
-			</FormSection>
+			<PersonalDetailsFields
+				countryId={countryId}
+				legend={`1. Gift recipient's details`}
+				hasDeliveryAddress={true}
+				firstName={recipientFirstName}
+				setFirstName={(recipientFirstName) =>
+					setRecipientFirstName(recipientFirstName)
+				}
+				lastName={recipientLastName}
+				setLastName={(recipientLastName) =>
+					setRecipientLastName(recipientLastName)
+				}
+				email={recipientEmail}
+				setEmail={(recipientEmail) => setRecipientEmail(recipientEmail)}
+				isWeeklyGift={true}
+			/>
+
 			<CheckoutDivider spacing="loose" />
 			<FormSection>
 				<Legend>2. Gift delivery date</Legend>

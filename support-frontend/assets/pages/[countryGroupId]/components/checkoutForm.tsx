@@ -6,7 +6,6 @@ import {
 	Radio,
 	RadioGroup,
 	TextArea,
-	TextInput,
 } from '@guardian/source/react-components';
 import {
 	Divider,
@@ -32,7 +31,6 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { checkAccount } from 'components/directDebit/helpers/ajax';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
-import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
@@ -90,10 +88,6 @@ import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession'
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import {
-	doesNotContainExtendedEmojiOrLeadingSpace,
-	preventDefaultValidityMessage,
-} from '../validation';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -116,8 +110,6 @@ import {
 } from './paymentMethod';
 import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
-
-const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
@@ -191,6 +183,7 @@ export default function CheckoutForm({
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
+	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -484,7 +477,7 @@ export default function CheckoutForm({
 			checkoutSession?.formFields.addressFields.billingAddress.postCode,
 			'',
 		);
-	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
+
 	const [billingLineOne, setBillingLineOne] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
@@ -499,7 +492,7 @@ export default function CheckoutForm({
 		checkoutSession?.formFields.addressFields.billingAddress.city,
 		'',
 	);
-	const [billingStateError, setBillingStateError] = useState<string>();
+
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
@@ -647,7 +640,7 @@ export default function CheckoutForm({
 				paymentMethod,
 				paymentFields,
 				productFields,
-				hasDeliveryAddress: !!productDescription.deliverableTo,
+				hasDeliveryAddress,
 				abParticipations,
 				promotion,
 				contributionAmount,
@@ -780,7 +773,7 @@ export default function CheckoutForm({
 
 										if (
 											!event.billingDetails?.address.state &&
-											countriesRequiringBillingState.includes(countryId)
+											['US', 'CA', 'AU'].includes(countryId)
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
@@ -865,97 +858,36 @@ export default function CheckoutForm({
 								countryGroupId={countryGroupId}
 							/>
 						)}
-
-						<FormSection>
-							<Legend>{`${legendStartNumber}. Your details`}</Legend>
-
-							<PersonalDetailsFields
-								isEmailAddressReadOnly={isSignedIn}
-								firstName={firstName}
-								setFirstName={(firstName) => setFirstName(firstName)}
-								lastName={lastName}
-								setLastName={(lastName) => setLastName(lastName)}
-								email={email}
-								setEmail={(email) => setEmail(email)}
-								confirmedEmail={confirmedEmail}
-								setConfirmedEmail={(confirmedEmail) =>
-									setConfirmedEmail(confirmedEmail)
-								}
-								isSignedIn={isSignedIn}
-							/>
-
-							{/**
-							 * We require state for non-deliverable products as we use different taxes within those regions upstream
-							 * For deliverable products we take the state and zip code with the delivery address
-							 */}
-							{countriesRequiringBillingState.includes(countryId) &&
-								!productDescription.deliverableTo && (
-									<StateSelect
-										countryId={countryId}
-										state={billingState}
-										onStateChange={(event) => {
-											setBillingState(event.currentTarget.value);
-										}}
-										onBlur={(event) => {
-											event.currentTarget.checkValidity();
-										}}
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingStateError(undefined);
-											} else {
-												setBillingStateError(
-													'Please enter a state, province or territory.',
-												);
-											}
-										}}
-										error={billingStateError}
-									/>
-								)}
-							{countryId === 'US' && !productDescription.deliverableTo && (
-								<div>
-									<TextInput
-										id="zipCode"
-										label="ZIP code"
-										name="billing-postcode"
-										onChange={(event) => {
-											setBillingPostcode(event.target.value);
-										}}
-										onBlur={(event) => {
-											event.target.checkValidity();
-										}}
-										maxLength={20}
-										value={billingPostcode}
-										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-										error={billingPostcodeError}
-										optional
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingPostcodeError(undefined);
-											} else {
-												if (validityState.patternMismatch) {
-													setBillingPostcodeError(
-														'Please enter a valid zip code.',
-													);
-												}
-											}
-										}}
-										// We have seen this field be filled in with an email address
-										autoComplete={'off'}
-									/>
-								</div>
-							)}
-						</FormSection>
+						<PersonalDetailsFields
+							countryId={countryId}
+							legend={`${legendStartNumber}. Your details`}
+							isEmailAddressReadOnly={isSignedIn}
+							hasDeliveryAddress={hasDeliveryAddress}
+							firstName={firstName}
+							setFirstName={(firstName) => setFirstName(firstName)}
+							lastName={lastName}
+							setLastName={(lastName) => setLastName(lastName)}
+							email={email}
+							setEmail={(email) => setEmail(email)}
+							confirmedEmail={confirmedEmail}
+							setConfirmedEmail={(confirmedEmail) =>
+								setConfirmedEmail(confirmedEmail)
+							}
+							billingState={billingState}
+							setBillingState={(billingState) => setBillingState(billingState)}
+							billingPostcode={billingPostcode}
+							setBillingPostcode={(billingPostcode) =>
+								setBillingPostcode(billingPostcode)
+							}
+							isSignedIn={isSignedIn}
+						/>
 						<CheckoutDivider spacing="loose" />
 
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
 						 */}
-						{!productDescription.deliverableTo && (
+						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
 						{productDescription.deliverableTo && (
@@ -1151,7 +1083,7 @@ export default function CheckoutForm({
 						)}
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
-								{productDescription.deliverableTo
+								{hasDeliveryAddress
 									? deliveryPostcodeIsOutsideM25
 										? legendStartNumber + 3
 										: legendStartNumber + 2

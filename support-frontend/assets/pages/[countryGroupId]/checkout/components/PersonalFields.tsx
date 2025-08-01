@@ -4,7 +4,6 @@ import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
-import { PersonalEmailFields } from './PersonalEmailFields';
 
 type PersonalDetailsFieldsProps = {
 	firstName: string;
@@ -13,6 +12,7 @@ type PersonalDetailsFieldsProps = {
 	setLastName: (value: string) => void;
 	email: string;
 	setEmail: (value: string) => void;
+	endUser: string;
 };
 
 export function PersonalFields({
@@ -20,8 +20,7 @@ export function PersonalFields({
 	setFirstName,
 	lastName,
 	setLastName,
-	email,
-	setEmail,
+	endUser,
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
@@ -54,7 +53,7 @@ export function PersonalFields({
 							setFirstNameError(undefined);
 						} else {
 							if (validityState.valueMissing) {
-								setFirstNameError('Please enter recipient first name.');
+								setFirstNameError(`Please enter ${endUser} first name.`);
 							} else {
 								setFirstNameError('Please enter a valid first name.');
 							}
@@ -88,7 +87,7 @@ export function PersonalFields({
 							setLastNameError(undefined);
 						} else {
 							if (validityState.valueMissing) {
-								setLastNameError('Please enter recipient last name.');
+								setLastNameError(`Please enter ${endUser} last name.`);
 							} else {
 								setLastNameError('Please enter a valid last name.');
 							}
@@ -96,7 +95,6 @@ export function PersonalFields({
 					}}
 				/>
 			</div>
-			<PersonalEmailFields email={email} setEmail={setEmail} optional={true} />
 		</>
 	);
 }

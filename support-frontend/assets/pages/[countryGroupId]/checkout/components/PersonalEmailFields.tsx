@@ -7,7 +7,7 @@ import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation
 type PersonalEmailFieldsProps = {
 	email: string;
 	setEmail: (value: string) => void;
-	optional?: boolean;
+	endUser: string;
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
 	confirmedEmail?: string;
@@ -17,7 +17,7 @@ type PersonalEmailFieldsProps = {
 export function PersonalEmailFields({
 	email,
 	setEmail,
-	optional = false,
+	endUser,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
 	confirmedEmail,
@@ -25,7 +25,7 @@ export function PersonalEmailFields({
 }: PersonalEmailFieldsProps) {
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
-	const endUser = optional ? 'recipient' : 'your';
+	const optional = endUser === 'recipient';
 	return (
 		<>
 			<div>
