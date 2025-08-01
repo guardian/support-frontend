@@ -6,11 +6,16 @@ import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { asRetryError } from '../util/errorHandler';
+import { getProductCatalogFromApi } from '@guardian/support-service-lambdas/modules/product-catalog/src/api';
 
 const stage = stageFromEnvironment();
 
 const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
 	return ZuoraClient.create(stage);
+});
+
+const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
+	return getProductCatalogFromApi(stage);
 });
 
 export const handler = async (
@@ -32,4 +37,26 @@ export const handler = async (
 	} catch (error) {
 		throw asRetryError(error);
 	}
+};
+
+const createSubscription = async (
+	state: CreateZuoraSubscriptionState,
+): Promise<WrappedState<CreateZuoraSubscriptionState>> => {
+	const zuoraClient = await zuoraServiceProvider.getServiceForUser(
+		state.user.isTestUser,
+	);
+	const path = `v1/subscriptions`;
+	const subscription: ZuoraSubscription = await zuoraClient.post(
+		path,
+		state,
+		zuoraSubscriptionResponseSchema,
+	);
+	console.info(`Subscription created: ${JSON.stringify(subscription)}`);
+	return {
+		type: 'success',
+		state: {
+			...state,
+			subscriptionId: subscription.id,
+		},
+	};
 };
