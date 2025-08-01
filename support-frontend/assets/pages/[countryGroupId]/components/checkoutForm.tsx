@@ -6,7 +6,6 @@ import {
 	Radio,
 	RadioGroup,
 	TextArea,
-	TextInput,
 } from '@guardian/source/react-components';
 import {
 	Divider,
@@ -32,7 +31,6 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { checkAccount } from 'components/directDebit/helpers/ajax';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
-import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
@@ -81,9 +79,8 @@ import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
-import { getWeeklyDays } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
-import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
+import { WeeklyGiftFields } from '../checkout/components/WeeklyGiftFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
@@ -91,10 +88,6 @@ import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession'
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
-import {
-	doesNotContainExtendedEmojiOrLeadingSpace,
-	preventDefaultValidityMessage,
-} from '../validation';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -117,8 +110,6 @@ import {
 } from './paymentMethod';
 import SimilarProductsConsent from './SimilarProductsConsent';
 import { SubmitButton } from './submitButton';
-
-const countriesRequiringBillingState = ['US', 'CA', 'AU'];
 
 function paymentMethodIsActive(paymentMethod: LegacyPaymentMethod) {
 	return isSwitchOn(
@@ -192,6 +183,7 @@ export default function CheckoutForm({
 	const productDescription = showNewspaperArchiveBenefit
 		? productCatalogDescriptionNewBenefits(countryGroupId)[productKey]
 		: productCatalogDescription[productKey];
+	const hasDeliveryAddress = !!productDescription.deliverableTo;
 	const ratePlanDescription = productDescription.ratePlans[ratePlanKey] ?? {
 		billingPeriod: BillingPeriod.Monthly,
 	};
@@ -201,6 +193,7 @@ export default function CheckoutForm({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+	const legendStartNumber = isWeeklyGift ? 4 : 1;
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -363,10 +356,6 @@ export default function CheckoutForm({
 		);
 
 	/** Delivery Instructions */
-	const weeklyDeliveryDates = getWeeklyDays();
-	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		weeklyDeliveryDates[0] as Date,
-	);
 	const [deliveryInstructions, setDeliveryInstructions] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.deliveryInstructions,
@@ -488,7 +477,7 @@ export default function CheckoutForm({
 			checkoutSession?.formFields.addressFields.billingAddress.postCode,
 			'',
 		);
-	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
+
 	const [billingLineOne, setBillingLineOne] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
@@ -503,7 +492,7 @@ export default function CheckoutForm({
 		checkoutSession?.formFields.addressFields.billingAddress.city,
 		'',
 	);
-	const [billingStateError, setBillingStateError] = useState<string>();
+
 	/**
 	 * BillingState selector initialised to undefined to hide
 	 * billingStateError message. formOnSubmit checks and converts to
@@ -651,7 +640,7 @@ export default function CheckoutForm({
 				paymentMethod,
 				paymentFields,
 				productFields,
-				hasDeliveryAddress: !!productDescription.deliverableTo,
+				hasDeliveryAddress,
 				abParticipations,
 				promotion,
 				contributionAmount,
@@ -784,7 +773,7 @@ export default function CheckoutForm({
 
 										if (
 											!event.billingDetails?.address.state &&
-											countriesRequiringBillingState.includes(countryId)
+											['US', 'CA', 'AU'].includes(countryId)
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
@@ -861,11 +850,30 @@ export default function CheckoutForm({
 								/>
 							</div>
 						)}
-						<FormSection>
-							<Legend>1. Your details</Legend>
 
+						{isWeeklyGift && (
+							<>
+								<WeeklyGiftFields
+									countryId={countryId}
+									productDescription={productDescription}
+									countryGroupId={countryGroupId}
+								/>
+								<PersonalDetailsFields
+									countryId={countryId}
+									legend={`${legendStartNumber}. Your details`}
+									firstName={firstName}
+									setFirstName={(firstName) => setFirstName(firstName)}
+									lastName={lastName}
+									setLastName={(lastName) => setLastName(lastName)}
+									email={email}
+									setEmail={(email) => setEmail(email)}
+								/>
+							</>
+						)}
+						{!isWeeklyGift && (
 							<PersonalDetailsFields
-								isEmailAddressReadOnly={isSignedIn}
+								countryId={countryId}
+								legend={`${legendStartNumber}. Your details`}
 								firstName={firstName}
 								setFirstName={(firstName) => setFirstName(firstName)}
 								lastName={lastName}
@@ -876,101 +884,34 @@ export default function CheckoutForm({
 								setConfirmedEmail={(confirmedEmail) =>
 									setConfirmedEmail(confirmedEmail)
 								}
+								billingState={billingState}
+								setBillingState={(billingState) =>
+									setBillingState(billingState)
+								}
+								billingPostcode={billingPostcode}
+								setBillingPostcode={(billingPostcode) =>
+									setBillingPostcode(billingPostcode)
+								}
+								hasDeliveryAddress={hasDeliveryAddress}
+								isEmailAddressReadOnly={isSignedIn}
 								isSignedIn={isSignedIn}
 							/>
-
-							{/**
-							 * We require state for non-deliverable products as we use different taxes within those regions upstream
-							 * For deliverable products we take the state and zip code with the delivery address
-							 */}
-							{countriesRequiringBillingState.includes(countryId) &&
-								!productDescription.deliverableTo && (
-									<StateSelect
-										countryId={countryId}
-										state={billingState}
-										onStateChange={(event) => {
-											setBillingState(event.currentTarget.value);
-										}}
-										onBlur={(event) => {
-											event.currentTarget.checkValidity();
-										}}
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingStateError(undefined);
-											} else {
-												setBillingStateError(
-													'Please enter a state, province or territory.',
-												);
-											}
-										}}
-										error={billingStateError}
-									/>
-								)}
-							{countryId === 'US' && !productDescription.deliverableTo && (
-								<div>
-									<TextInput
-										id="zipCode"
-										label="ZIP code"
-										name="billing-postcode"
-										onChange={(event) => {
-											setBillingPostcode(event.target.value);
-										}}
-										onBlur={(event) => {
-											event.target.checkValidity();
-										}}
-										maxLength={20}
-										value={billingPostcode}
-										pattern={doesNotContainExtendedEmojiOrLeadingSpace}
-										error={billingPostcodeError}
-										optional
-										onInvalid={(event) => {
-											preventDefaultValidityMessage(event.currentTarget);
-											const validityState = event.currentTarget.validity;
-											if (validityState.valid) {
-												setBillingPostcodeError(undefined);
-											} else {
-												if (validityState.patternMismatch) {
-													setBillingPostcodeError(
-														'Please enter a valid zip code.',
-													);
-												}
-											}
-										}}
-										// We have seen this field be filled in with an email address
-										autoComplete={'off'}
-									/>
-								</div>
-							)}
-						</FormSection>
-						<CheckoutDivider spacing="loose" />
-						{isWeeklyGift && (
-							<>
-								<FormSection>
-									<Legend>2. Gift delivery date</Legend>
-									<WeeklyDeliveryDates
-										weeklyDeliveryDates={weeklyDeliveryDates}
-										weeklyDeliveryDateSelected={weeklyDeliveryDate}
-										setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
-											setWeeklyDeliveryDate(weeklyDeliveryDate);
-										}}
-									/>
-								</FormSection>
-								<CheckoutDivider spacing="loose" />
-							</>
 						)}
+						<CheckoutDivider spacing="loose" />
+
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
 						 * which we get from the GU_country cookie which comes from the Fastly geo client.
 						 */}
-						{!productDescription.deliverableTo && (
+						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
 						{productDescription.deliverableTo && (
 							<>
 								<fieldset>
-									<Legend>2. Delivery address</Legend>
+									<Legend>{`${
+										legendStartNumber + 1
+									}. Delivery address`}</Legend>
 									<AddressFields
 										scope={'delivery'}
 										lineOne={deliveryLineOne}
@@ -1134,7 +1075,7 @@ export default function CheckoutForm({
 						)}
 						{deliveryPostcodeIsOutsideM25 && (
 							<FormSection>
-								<Legend>3. Delivery Agent</Legend>
+								<Legend>{`${legendStartNumber + 2}.  Delivery Agent`}</Legend>
 								<DeliveryAgentsSelect
 									chosenDeliveryAgent={chosenDeliveryAgent}
 									deliveryAgentsResponse={deliveryAgents}
@@ -1158,11 +1099,11 @@ export default function CheckoutForm({
 						)}
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
-								{productDescription.deliverableTo
+								{hasDeliveryAddress
 									? deliveryPostcodeIsOutsideM25
-										? '4'
-										: '3'
-									: '2'}
+										? legendStartNumber + 3
+										: legendStartNumber + 2
+									: legendStartNumber + 1}
 								. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
