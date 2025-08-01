@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "STAGE=CODE jest --group=-integration",
+    "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
     "lint:check": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
