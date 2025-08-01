@@ -200,6 +200,7 @@ export default function CheckoutForm({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+	const legendStartNumber = isWeeklyGift ? 4 : 1;
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -866,7 +867,7 @@ export default function CheckoutForm({
 						)}
 
 						<FormSection>
-							<Legend>1. Your details</Legend>
+							<Legend>{`${legendStartNumber}. Your details`}</Legend>
 
 							<PersonalDetailsFields
 								isEmailAddressReadOnly={isSignedIn}
@@ -960,7 +961,9 @@ export default function CheckoutForm({
 						{productDescription.deliverableTo && (
 							<>
 								<fieldset>
-									<Legend>2. Delivery address</Legend>
+									<Legend>{`${
+										legendStartNumber + 1
+									}. Delivery address`}</Legend>
 									<AddressFields
 										scope={'delivery'}
 										lineOne={deliveryLineOne}
@@ -1124,7 +1127,7 @@ export default function CheckoutForm({
 						)}
 						{deliveryPostcodeIsOutsideM25 && (
 							<FormSection>
-								<Legend>3. Delivery Agent</Legend>
+								<Legend>{`${legendStartNumber + 2}.  Delivery Agent`}</Legend>
 								<DeliveryAgentsSelect
 									chosenDeliveryAgent={chosenDeliveryAgent}
 									deliveryAgentsResponse={deliveryAgents}
@@ -1150,9 +1153,9 @@ export default function CheckoutForm({
 							<Legend>
 								{productDescription.deliverableTo
 									? deliveryPostcodeIsOutsideM25
-										? '4'
-										: '3'
-									: '2'}
+										? legendStartNumber + 3
+										: legendStartNumber + 2
+									: legendStartNumber + 1}
 								. Payment method
 								<SecureTransactionIndicator
 									hideText={true}
