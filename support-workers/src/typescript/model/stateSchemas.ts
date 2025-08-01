@@ -1,3 +1,4 @@
+import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { boolean, z } from 'zod';
 import { addressSchema } from './address';
 import { paymentFieldsSchema, paymentProviderSchema } from './paymentFields';
@@ -87,11 +88,12 @@ export const appliedPromotionSchema = z.object({
 	countryGroupId: z.string(),
 });
 
-const baseStateSchema = z.object({
+export const baseStateSchema = z.object({
 	requestId: z.string(),
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: productTypeSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	analyticsInfo: analyticsInfoSchema,
 	//TODO: This should probably be a date but the scala lambdas struggle to deserialise the default date representation
 	// so leave it as a string until all the lambdas are Typescript

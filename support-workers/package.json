@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "STAGE=CODE jest --group=-integration",
+    "test": "jest --group=-integration",
     "it-test": "jest --group=integration",
     "lint:check": "eslint src/typescript/**/*.ts",
     "lint:fix": "eslint --fix src/typescript/**/*.ts",
@@ -28,7 +28,8 @@
     "@aws-sdk/credential-provider-node": "catalog:",
     "stripe": "^17.4.0",
     "zod": "catalog:",
-    "dayjs": "^1.11.13"
+    "dayjs": "^1.11.13",
+    "@guardian/support-service-lambdas": "catalog:"
   },
   "devDependencies": {
     "@guardian/eslint-config-typescript": "catalog:",
