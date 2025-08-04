@@ -77,33 +77,31 @@ export function PersonalDetailsFields({
 			 */}
 			{!hasDeliveryAddress && (
 				<>
-					{billingState &&
-						setBillingState &&
-						['US', 'CA', 'AU'].includes(countryId) && (
-							<StateSelect
-								countryId={countryId}
-								state={billingState}
-								onStateChange={(event) => {
-									setBillingState(event.currentTarget.value);
-								}}
-								onBlur={(event) => {
-									event.currentTarget.checkValidity();
-								}}
-								onInvalid={(event) => {
-									preventDefaultValidityMessage(event.currentTarget);
-									const validityState = event.currentTarget.validity;
-									if (validityState.valid) {
-										setBillingStateError(undefined);
-									} else {
-										setBillingStateError(
-											'Please enter a state, province or territory.',
-										);
-									}
-								}}
-								error={billingStateError}
-							/>
-						)}
-					{billingPostcode && setBillingPostcode && countryId === 'US' && (
+					{setBillingState && ['US', 'CA', 'AU'].includes(countryId) && (
+						<StateSelect
+							countryId={countryId}
+							state={billingState ?? ''}
+							onStateChange={(event) => {
+								setBillingState(event.currentTarget.value);
+							}}
+							onBlur={(event) => {
+								event.currentTarget.checkValidity();
+							}}
+							onInvalid={(event) => {
+								preventDefaultValidityMessage(event.currentTarget);
+								const validityState = event.currentTarget.validity;
+								if (validityState.valid) {
+									setBillingStateError(undefined);
+								} else {
+									setBillingStateError(
+										'Please enter a state, province or territory.',
+									);
+								}
+							}}
+							error={billingStateError}
+						/>
+					)}
+					{setBillingPostcode && countryId === 'US' && (
 						<div>
 							<TextInput
 								id="zipCode"
