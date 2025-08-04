@@ -58,7 +58,6 @@ class SendThankYouEmailSpec extends AsyncLambdaSpec {
       SendThankYouEmailContributionState(
         user,
         Contribution(20, GBP, Monthly),
-        Some(ProductInformation("Contribution", "Monthly", Some(20))),
         directDebitPaymentMethod,
         "acno",
         "subno",
@@ -128,7 +127,6 @@ object SendContributionEmail extends App {
     SendThankYouEmailContributionState(
       billingOnlyUser,
       Contribution(20, GBP, Monthly),
-      Some(ProductInformation("Contribution", "Monthly", Some(20))),
       directDebitPaymentMethod,
       acno,
       subno,
@@ -161,7 +159,6 @@ object SendSupporterPlusEmail extends App {
     SendThankYouEmailSupporterPlusState(
       billingOnlyUser,
       SupporterPlus(20, GBP, Monthly),
-      Some(ProductInformation("SupporterPlus", "Monthly", Some(20))),
       directDebitPaymentMethod,
       supporterPlusPaymentSchedule,
       Some("SUPPORTER_PLUS_PROMO"),
@@ -194,7 +191,6 @@ object SendTierThreeEmail extends App {
     SendThankYouEmailTierThreeState(
       user = officeUser,
       product = TierThree(GBP, Quarterly, Domestic),
-      productInformation = Some(ProductInformation("TierThree", "DomesticAnnual", None)),
       paymentMethod = directDebitPaymentMethod,
       paymentSchedule = PaymentSchedule(
         List(
@@ -220,7 +216,6 @@ object SendDigitalPackEmail extends App {
       SendThankYouEmailDigitalSubscriptionState(
         billingOnlyUser,
         DigitalPack(GBP, Annual),
-        Some(ProductInformation("DigitalSubscription", "Monthly", None)),
         directDebitPaymentMethod,
         paymentSchedule,
         None,
@@ -240,7 +235,6 @@ object SendPaperSubscriptionEmail extends App {
       SendThankYouEmailPaperState(
         officeUser,
         Paper(GBP, Monthly, Collection, Saturday, None),
-        Some(ProductInformation("SubscriptionCard", "Monthly", None)),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
         None,
@@ -276,7 +270,6 @@ object SendWeeklySubscriptionEmail extends App {
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
-        Some(ProductInformation("GuardianWeeklyDomestic", "Quarterly", None)),
         None,
         directDebitPaymentMethod,
         PaymentSchedule(
@@ -302,7 +295,6 @@ object SendWeeklySubscriptionGiftEmail extends App {
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
-        Some(ProductInformation("GuardianWeeklyDomestic", "Quarterly", None)),
         Some(GiftRecipient(None, "Earl", "Palmer", None)),
         directDebitPaymentMethod,
         PaymentSchedule(
