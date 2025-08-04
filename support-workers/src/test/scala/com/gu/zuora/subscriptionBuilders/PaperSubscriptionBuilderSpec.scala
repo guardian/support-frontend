@@ -4,13 +4,8 @@ import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{EverydayPlus, HomeDelivery, NationalDelivery, Sunday}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.PromotionService
-import com.gu.support.workers.JsonFixtures.{
-  salesforceContact,
-  stripePaymentMethodObj,
-  userJsonWithDeliveryAddress,
-  userJsonWithDeliveryAddressOutsideLondon,
-}
-import com.gu.support.workers.Paper
+import com.gu.support.workers.JsonFixtures.{salesforceContact, stripePaymentMethodObj, userJsonWithDeliveryAddress, userJsonWithDeliveryAddressOutsideLondon}
+import com.gu.support.workers.{Paper, ProductInformation}
 import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.zuora.api.{DirectDebitTortoiseMediaGateway, StripeTortoiseMedia}
@@ -32,6 +27,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
     val userObject = userJsonWithDeliveryAddressOutsideLondon
     val state = PaperState(
       product = product,
+      productInformation = None,
       firstDeliveryDate = LocalDate.now(),
       appliedPromotion = None,
       user = userObject,
@@ -68,6 +64,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
     )
     val stripeState = PaperState(
       product = product,
+      productInformation = None,
       firstDeliveryDate = LocalDate.now(),
       appliedPromotion = None,
       user = userObject,
@@ -103,6 +100,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
     )
     val stripeState = PaperState(
       product = product,
+      productInformation = None,
       firstDeliveryDate = LocalDate.now(),
       appliedPromotion = None,
       user = userObject,
@@ -138,6 +136,7 @@ class PaperSubscriptionBuilderSpec extends AnyFlatSpec with Matchers {
     )
     val stripeState = PaperState(
       product = product,
+      productInformation = None,
       firstDeliveryDate = LocalDate.now(),
       appliedPromotion = None,
       user = userObject,
