@@ -218,10 +218,6 @@ export default function CheckoutForm({
 
 	const legendStartNumber = isWeeklyGift ? 3 : 1;
 	const legendPersonalDetails = `${legendStartNumber}. Your details`;
-	const legendDelivery = `${legendStartNumber + 1}. ${
-		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
-	}`;
-	const legendOutsideM25 = `${legendStartNumber + 2}.  Delivery Agent`;
 	const legendPayment = `${
 		hasDeliveryAddress
 			? deliveryPostcodeIsOutsideM25
@@ -839,8 +835,6 @@ export default function CheckoutForm({
 
 						<PersonalAddressFields
 							countryId={countryId}
-							legend={legendDelivery}
-							legendOutsideM25={legendOutsideM25}
 							checkoutSession={checkoutSession}
 							productDescription={productDescription}
 							productKey={productKey}
@@ -858,6 +852,7 @@ export default function CheckoutForm({
 							setBillingPostcode={setBillingPostcode}
 							billingState={billingState}
 							setBillingState={setBillingState}
+							isWeeklyGift={isWeeklyGift}
 						/>
 
 						<FormSection ref={paymentMethodRef}>

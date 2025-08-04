@@ -18,8 +18,6 @@ import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
-	legend: string;
-	legendOutsideM25: string;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
 	productKey: ActiveProductKey;
@@ -39,12 +37,11 @@ type PersonalAddressFieldsProps = {
 	setBillingPostcode: (value: string) => void;
 	billingState: string;
 	setBillingState: (value: string) => void;
+	isWeeklyGift: boolean;
 };
 
 export function PersonalAddressFields({
 	countryId,
-	legend,
-	legendOutsideM25,
 	checkoutSession,
 	productDescription,
 	productKey,
@@ -62,19 +59,25 @@ export function PersonalAddressFields({
 	setBillingPostcode,
 	billingState,
 	setBillingState,
+	isWeeklyGift,
 }: PersonalAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
 			true,
 		);
+	const legendDelivery = `${isWeeklyGift ? 4 : 2}. ${
+		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
+	}`;
+	const legendOutsideM25 = `${isWeeklyGift ? 5 : 3}.  Delivery Agent`;
+
 	return (
 		<>
 			{productDescription.deliverableTo && (
 				<>
 					<DeliveryRecipientAddress
 						countryId={countryId}
-						legend={legend}
+						legend={legendDelivery}
 						checkoutSession={checkoutSession}
 						productDescription={productDescription}
 						productKey={productKey}
