@@ -3,6 +3,7 @@ import {
 	from,
 	headlineBold24,
 	neutral,
+	palette,
 	space,
 	textEgyptian17,
 	textSans12,
@@ -84,6 +85,7 @@ const pricesInfo = css`
 
 const termsLink = css`
 	${textSans12};
+	color: ${palette.brand[500]};
 	margin-left: ${space[9]}px;
 	margin-top: -12px;
 `;
