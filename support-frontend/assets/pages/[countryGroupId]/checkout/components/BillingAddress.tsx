@@ -1,9 +1,9 @@
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
@@ -12,7 +12,6 @@ import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSessio
 type BillingAddressProps = {
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
-	countryGroupId: CountryGroupId;
 	countryId: IsoCountry;
 	billingPostcode: string;
 	setBillingPostcode: (value: string) => void;
@@ -23,7 +22,6 @@ type BillingAddressProps = {
 export function BillingAddress({
 	checkoutSession,
 	productDescription,
-	countryGroupId,
 	countryId,
 	billingPostcode,
 	setBillingPostcode,
@@ -58,6 +56,7 @@ export function BillingAddress({
 		AddressFormFieldError[]
 	>([]);
 
+	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
 	return (
 		<fieldset>
 			<AddressFields

@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { TextArea } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { useState } from 'react';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
 import type {
 	ActiveProductKey,
 	ProductDescription,
@@ -20,7 +20,6 @@ type DeliveryRecipientAddressProps = {
 	isWeeklyGift: boolean;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
-	countryGroupId: CountryGroupId;
 	countryId: IsoCountry;
 	productKey: ActiveProductKey;
 	legendStartNumber: number;
@@ -36,7 +35,7 @@ export function DeliveryRecipientAddress({
 	isWeeklyGift,
 	checkoutSession,
 	productDescription,
-	countryGroupId,
+
 	countryId,
 	productKey,
 	legendStartNumber,
@@ -79,6 +78,7 @@ export function DeliveryRecipientAddress({
 			'',
 		);
 
+	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
 	const deliveryLegend = `${legendStartNumber + 1}. ${
 		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
 	}`;

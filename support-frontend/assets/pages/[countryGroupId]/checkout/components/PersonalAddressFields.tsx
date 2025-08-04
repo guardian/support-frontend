@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { Checkbox, Label } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import type {
 	ActiveProductKey,
 	ProductDescription,
@@ -18,18 +17,14 @@ import { BillingAddress } from './BillingAddress';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
-	isWeeklyGift: boolean;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
-	countryGroupId: CountryGroupId;
 	countryId: IsoCountry;
 	productKey: ActiveProductKey;
 	legendStartNumber: number;
-	billingPostcode: string;
-	setBillingPostcode: (value: string) => void;
-	billingState: string;
-	setBillingState: (value: string) => void;
 	deliveryPostcodeIsOutsideM25: boolean;
+	deliveryPostcode: string;
+	setDeliveryPostcode: (value: string) => void;
 	chosenDeliveryAgent: number | undefined;
 	setChosenDeliveryAgent: (value: number | undefined) => void;
 	deliveryAgents: DeliveryAgentsResponse | undefined;
@@ -39,23 +34,22 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	deliveryPostcode: string;
-	setDeliveryPostcode: (value: string) => void;
+	billingPostcode: string;
+	setBillingPostcode: (value: string) => void;
+	billingState: string;
+	setBillingState: (value: string) => void;
+	isWeeklyGift: boolean;
 };
 
 export function PersonalAddressFields({
-	isWeeklyGift,
 	checkoutSession,
 	productDescription,
-	countryGroupId,
 	countryId,
 	productKey,
 	legendStartNumber,
-	billingPostcode,
-	setBillingPostcode,
-	billingState,
-	setBillingState,
 	deliveryPostcodeIsOutsideM25,
+	deliveryPostcode,
+	setDeliveryPostcode,
 	chosenDeliveryAgent,
 	setChosenDeliveryAgent,
 	deliveryAgents,
@@ -63,8 +57,11 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	deliveryPostcode,
-	setDeliveryPostcode,
+	billingPostcode,
+	setBillingPostcode,
+	billingState,
+	setBillingState,
+	isWeeklyGift,
 }: PersonalAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
@@ -79,7 +76,6 @@ export function PersonalAddressFields({
 						isWeeklyGift={isWeeklyGift}
 						checkoutSession={checkoutSession}
 						productDescription={productDescription}
-						countryGroupId={countryGroupId}
 						countryId={countryId}
 						productKey={productKey}
 						legendStartNumber={legendStartNumber}
@@ -114,7 +110,6 @@ export function PersonalAddressFields({
 						<BillingAddress
 							checkoutSession={checkoutSession}
 							productDescription={productDescription}
-							countryGroupId={countryGroupId}
 							countryId={countryId}
 							billingPostcode={billingPostcode}
 							setBillingPostcode={setBillingPostcode}

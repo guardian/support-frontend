@@ -825,18 +825,14 @@ export default function CheckoutForm({
 						)}
 
 						<PersonalAddressFields
-							isWeeklyGift={isWeeklyGift}
 							checkoutSession={checkoutSession}
 							productDescription={productDescription}
-							countryGroupId={countryGroupId}
 							countryId={countryId}
 							productKey={productKey}
 							legendStartNumber={legendStartNumber}
-							billingPostcode={billingPostcode}
-							setBillingPostcode={setBillingPostcode}
-							billingState={billingState}
-							setBillingState={setBillingState}
 							deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
+							deliveryPostcode={deliveryPostcode}
+							setDeliveryPostcode={setDeliveryPostcode}
 							chosenDeliveryAgent={chosenDeliveryAgent}
 							setChosenDeliveryAgent={setChosenDeliveryAgent}
 							deliveryAgents={deliveryAgents}
@@ -844,8 +840,11 @@ export default function CheckoutForm({
 							setDeliveryAgentError={setDeliveryAgentError}
 							deliveryAddressErrors={deliveryAddressErrors}
 							setDeliveryAddressErrors={setDeliveryAddressErrors}
-							deliveryPostcode={deliveryPostcode}
-							setDeliveryPostcode={setDeliveryPostcode}
+							billingPostcode={billingPostcode}
+							setBillingPostcode={setBillingPostcode}
+							billingState={billingState}
+							setBillingState={setBillingState}
+							isWeeklyGift={isWeeklyGift}
 						/>
 
 						<FormSection ref={paymentMethodRef}>
