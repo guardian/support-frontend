@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 const isProd = (baseURL: string): boolean => {
-	return baseURL.includes('support.theguardian.com');
+	try {
+		return new URL(baseURL).hostname === 'support.theguardian.com';
+	} catch {
+		return false;
+	}
 };
 
 const eventIdFromBaseURL = (baseURL: string): string => {
