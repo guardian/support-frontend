@@ -8,7 +8,7 @@ import { WeeklyGiftPersonalFields } from './WeeklyGiftPersonalFields';
 
 export function WeeklyGiftFields(): JSX.Element {
 	/** Gift recipient details */
-	// Session storage unavailable yet, so use state
+	// Session storage unavailable yet, using state
 	const [recipientFirstName, setRecipientFirstName] =
 		useStateWithCheckoutSession<string>(undefined, '');
 	const [recipientLastName, setRecipientLastName] =

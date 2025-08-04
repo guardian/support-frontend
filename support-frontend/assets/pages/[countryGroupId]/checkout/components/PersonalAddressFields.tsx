@@ -68,13 +68,6 @@ export function PersonalAddressFields({
 	deliveryPostcode,
 	setDeliveryPostcode,
 }: PersonalAddressFieldsProps) {
-	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.deliveryInstructions,
-			'',
-		);
-
 	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
 		useStateWithCheckoutSession<string>(
@@ -102,6 +95,11 @@ export function PersonalAddressFields({
 		useStateWithCheckoutSession<IsoCountry>(
 			checkoutSession?.formFields.addressFields.deliveryAddress?.country,
 			countryId,
+		);
+	const [deliveryInstructions, setDeliveryInstructions] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.deliveryInstructions,
+			'',
 		);
 
 	/** Billing address */
@@ -137,70 +135,50 @@ export function PersonalAddressFields({
 		AddressFormFieldError[]
 	>([]);
 
-	/** Gift recipient address */
-	const [recipientPostcode, setRecipientPostcode] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientLineOne, setRecipientLineOne] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientLineTwo, setRecipientLineTwo] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientCity, setRecipientCity] = useStateWithCheckoutSession<string>(
-		undefined,
-		'',
-	);
-	const [recipientState, setRecipientState] =
-		useStateWithCheckoutSession<string>(undefined, '');
-	const [recipientPostcodeStateResults, setRecipientPostcodeStateResults] =
-		useState<PostcodeFinderResult[]>([]);
-	const [recipientPostcodeStateLoading, setRecipientPostcodeStateLoading] =
-		useState(false);
-	const [recipientCountry, setRecipientCountry] =
-		useStateWithCheckoutSession<IsoCountry>(undefined, countryId);
-	const [recipientAddressErrors, setRecipientAddressErrors] = useState<
-		AddressFormFieldError[]
-	>([]);
+	const deliveryLegend = `${legendStartNumber + 1}. ${
+		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
+	}`;
+
 	return (
 		<>
-			{isWeeklyGift && productDescription.deliverableTo && (
+			{productDescription.deliverableTo && (
 				<>
 					<fieldset>
-						<Legend>{`${
-							legendStartNumber + 1
-						}. Gift recipient's address`}</Legend>
+						<Legend>{deliveryLegend}</Legend>
 						<AddressFields
-							scope={'recipient'}
-							lineOne={recipientLineOne}
-							lineTwo={recipientLineTwo}
-							city={recipientCity}
-							country={recipientCountry}
-							state={recipientState}
-							postCode={recipientPostcode}
+							scope={'delivery'}
+							lineOne={deliveryLineOne}
+							lineTwo={deliveryLineTwo}
+							city={deliveryCity}
+							country={deliveryCountry}
+							state={deliveryState}
+							postCode={deliveryPostcode}
 							countryGroupId={countryGroupId}
 							countries={productDescription.deliverableTo}
-							errors={recipientAddressErrors}
+							errors={deliveryAddressErrors}
 							postcodeState={{
-								results: recipientPostcodeStateResults,
-								isLoading: recipientPostcodeStateLoading,
-								postcode: recipientPostcode,
+								results: deliveryPostcodeStateResults,
+								isLoading: deliveryPostcodeStateLoading,
+								postcode: deliveryPostcode,
 								error: '',
 							}}
 							setLineOne={(lineOne) => {
-								setRecipientLineOne(lineOne);
+								setDeliveryLineOne(lineOne);
 							}}
 							setLineTwo={(lineTwo) => {
-								setRecipientLineTwo(lineTwo);
+								setDeliveryLineTwo(lineTwo);
 							}}
 							setTownCity={(city) => {
-								setRecipientCity(city);
+								setDeliveryCity(city);
 							}}
 							setState={(state) => {
-								setRecipientState(state);
+								setDeliveryState(state);
 							}}
 							setPostcode={(postcode) => {
-								setRecipientPostcode(postcode);
+								setDeliveryPostcode(postcode);
 							}}
 							setCountry={(country) => {
-								setRecipientCountry(country);
+								setDeliveryCountry(country);
 							}}
 							setPostcodeForFinder={() => {
 								// no-op
@@ -209,100 +187,37 @@ export function PersonalAddressFields({
 								// no-op
 							}}
 							setErrors={(errors) => {
-								setRecipientAddressErrors(errors);
+								setDeliveryAddressErrors(errors);
 							}}
 							onFindAddress={(postcode) => {
-								setRecipientPostcodeStateLoading(true);
+								setDeliveryPostcodeStateLoading(true);
 								void findAddressesForPostcode(postcode).then((results) => {
-									setRecipientPostcodeStateLoading(false);
-									setRecipientPostcodeStateResults(results);
+									setDeliveryPostcodeStateLoading(false);
+									setDeliveryPostcodeStateResults(results);
 								});
 							}}
 						/>
 					</fieldset>
-				</>
-			)}
-			{productDescription.deliverableTo && (
-				<>
-					{!isWeeklyGift && (
-						<>
-							<fieldset>
-								<Legend>{`${legendStartNumber + 1}. Delivery address`}</Legend>
-								<AddressFields
-									scope={'delivery'}
-									lineOne={deliveryLineOne}
-									lineTwo={deliveryLineTwo}
-									city={deliveryCity}
-									country={deliveryCountry}
-									state={deliveryState}
-									postCode={deliveryPostcode}
-									countryGroupId={countryGroupId}
-									countries={productDescription.deliverableTo}
-									errors={deliveryAddressErrors}
-									postcodeState={{
-										results: deliveryPostcodeStateResults,
-										isLoading: deliveryPostcodeStateLoading,
-										postcode: deliveryPostcode,
-										error: '',
-									}}
-									setLineOne={(lineOne) => {
-										setDeliveryLineOne(lineOne);
-									}}
-									setLineTwo={(lineTwo) => {
-										setDeliveryLineTwo(lineTwo);
-									}}
-									setTownCity={(city) => {
-										setDeliveryCity(city);
-									}}
-									setState={(state) => {
-										setDeliveryState(state);
-									}}
-									setPostcode={(postcode) => {
-										setDeliveryPostcode(postcode);
-									}}
-									setCountry={(country) => {
-										setDeliveryCountry(country);
-									}}
-									setPostcodeForFinder={() => {
-										// no-op
-									}}
-									setPostcodeErrorForFinder={() => {
-										// no-op
-									}}
-									setErrors={(errors) => {
-										setDeliveryAddressErrors(errors);
-									}}
-									onFindAddress={(postcode) => {
-										setDeliveryPostcodeStateLoading(true);
-										void findAddressesForPostcode(postcode).then((results) => {
-											setDeliveryPostcodeStateLoading(false);
-											setDeliveryPostcodeStateResults(results);
-										});
-									}}
-								/>
-							</fieldset>
-							{productKey === 'HomeDelivery' && (
-								<fieldset
-									css={css`
-										margin-bottom: ${space[6]}px;
-									`}
-								>
-									<TextArea
-										id="deliveryInstructions"
-										data-qm-masking="blocklist"
-										name="deliveryInstructions"
-										label="Delivery instructions"
-										autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
-										supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
-										onChange={(event) => {
-											setDeliveryInstructions(event.target.value);
-										}}
-										value={deliveryInstructions}
-										optional
-									/>
-								</fieldset>
-							)}
-						</>
+					{productKey === 'HomeDelivery' && (
+						<fieldset
+							css={css`
+								margin-bottom: ${space[6]}px;
+							`}
+						>
+							<TextArea
+								id="deliveryInstructions"
+								data-qm-masking="blocklist"
+								name="deliveryInstructions"
+								label="Delivery instructions"
+								autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+								supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+								onChange={(event) => {
+									setDeliveryInstructions(event.target.value);
+								}}
+								value={deliveryInstructions}
+								optional
+							/>
+						</fieldset>
 					)}
 					<fieldset
 						css={css`
@@ -326,7 +241,6 @@ export function PersonalAddressFields({
 							label="Billing address same as delivery address"
 						/>
 					</fieldset>
-
 					{!billingAddressMatchesDelivery && (
 						<fieldset>
 							<AddressFields
@@ -383,8 +297,6 @@ export function PersonalAddressFields({
 							/>
 						</fieldset>
 					)}
-
-					<CheckoutDivider spacing="loose" />
 				</>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (
@@ -411,6 +323,7 @@ export function PersonalAddressFields({
 					/>
 				</FormSection>
 			)}
+			<CheckoutDivider spacing="loose" />
 		</>
 	);
 }
