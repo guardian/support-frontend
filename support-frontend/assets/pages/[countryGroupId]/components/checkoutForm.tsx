@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import { size, space } from '@guardian/source/foundations';
-import {
-	Checkbox,
-	Label,
-	Radio,
-	RadioGroup,
-	TextArea,
-} from '@guardian/source/react-components';
+import { Radio, RadioGroup } from '@guardian/source/react-components';
 import {
 	Divider,
 	ErrorSummary,
@@ -34,9 +28,6 @@ import { paymentMethodData } from 'components/paymentMethodSelector/paymentMetho
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
-import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
@@ -78,7 +69,7 @@ import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryChe
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
-import { DeliveryAgentsSelect } from '../../paper-subscription-checkout/components/deliveryAgentsSelect';
+import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
 import { WeeklyGiftFields } from '../checkout/components/WeeklyGiftFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
@@ -194,6 +185,15 @@ export default function CheckoutForm({
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
 	const legendStartNumber = isWeeklyGift ? 4 : 1;
+
+	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
+	const [deliveryPostcode, setDeliveryPostcode] =
+		useStateWithCheckoutSession<string>(
+			checkoutSession?.formFields.addressFields.deliveryAddress?.postCode,
+			'',
+		);
 
 	/** Delivery agent for National Delivery product */
 	const [deliveryPostcodeIsOutsideM25, setDeliveryPostcodeIsOutsideM25] =
@@ -355,50 +355,6 @@ export default function CheckoutForm({
 			'',
 		);
 
-	/** Delivery Instructions */
-	const [deliveryInstructions, setDeliveryInstructions] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.deliveryInstructions,
-			'',
-		);
-
-	/** Delivery and billing addresses */
-	const [deliveryPostcode, setDeliveryPostcode] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.addressFields.deliveryAddress?.postCode,
-			'',
-		);
-	const [deliveryLineOne, setDeliveryLineOne] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne,
-			'',
-		);
-	const [deliveryLineTwo, setDeliveryLineTwo] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.addressFields.deliveryAddress?.lineTwo,
-			'',
-		);
-	const [deliveryCity, setDeliveryCity] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.city,
-		'',
-	);
-	const [deliveryState, setDeliveryState] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.deliveryAddress?.state,
-		'',
-	);
-	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
-		useState<PostcodeFinderResult[]>([]);
-	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
-		useState(false);
-	const [deliveryCountry, setDeliveryCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
-			checkoutSession?.formFields.addressFields.deliveryAddress?.country,
-			countryId,
-		);
-	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
-		AddressFormFieldError[]
-	>([]);
-
 	const fetchDeliveryAgentsIfRequired = async (postcode: string) => {
 		if (isValidPostcode(postcode)) {
 			if (postcodeIsWithinDeliveryArea(postcode)) {
@@ -466,32 +422,11 @@ export default function CheckoutForm({
 		}));
 	}, [recaptchaToken]);
 
-	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useStateWithCheckoutSession<boolean>(
-			checkoutSession?.formFields.billingAddressMatchesDelivery,
-			true,
-		);
-
 	const [billingPostcode, setBillingPostcode] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.billingAddress.postCode,
 			'',
 		);
-
-	const [billingLineOne, setBillingLineOne] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.addressFields.billingAddress.lineOne,
-			'',
-		);
-	const [billingLineTwo, setBillingLineTwo] =
-		useStateWithCheckoutSession<string>(
-			checkoutSession?.formFields.addressFields.billingAddress.lineTwo,
-			'',
-		);
-	const [billingCity, setBillingCity] = useStateWithCheckoutSession<string>(
-		checkoutSession?.formFields.addressFields.billingAddress.city,
-		'',
-	);
 
 	/**
 	 * BillingState selector initialised to undefined to hide
@@ -502,18 +437,6 @@ export default function CheckoutForm({
 		checkoutSession?.formFields.addressFields.billingAddress.state,
 		'',
 	);
-	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
-		useState<PostcodeFinderResult[]>([]);
-	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
-		useState(false);
-	const [billingCountry, setBillingCountry] =
-		useStateWithCheckoutSession<IsoCountry>(
-			checkoutSession?.formFields.addressFields.billingAddress.country,
-			countryId,
-		);
-	const [billingAddressErrors, setBillingAddressErrors] = useState<
-		AddressFormFieldError[]
-	>([]);
 
 	const formRef = useRef<HTMLFormElement>(null);
 	const scrollToViewRef = useRef<HTMLDivElement>(null);
@@ -906,197 +829,29 @@ export default function CheckoutForm({
 						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
-						{productDescription.deliverableTo && (
-							<>
-								<fieldset>
-									<Legend>{`${
-										legendStartNumber + 1
-									}. Delivery address`}</Legend>
-									<AddressFields
-										scope={'delivery'}
-										lineOne={deliveryLineOne}
-										lineTwo={deliveryLineTwo}
-										city={deliveryCity}
-										country={deliveryCountry}
-										state={deliveryState}
-										postCode={deliveryPostcode}
-										countryGroupId={countryGroupId}
-										countries={productDescription.deliverableTo}
-										errors={deliveryAddressErrors}
-										postcodeState={{
-											results: deliveryPostcodeStateResults,
-											isLoading: deliveryPostcodeStateLoading,
-											postcode: deliveryPostcode,
-											error: '',
-										}}
-										setLineOne={(lineOne) => {
-											setDeliveryLineOne(lineOne);
-										}}
-										setLineTwo={(lineTwo) => {
-											setDeliveryLineTwo(lineTwo);
-										}}
-										setTownCity={(city) => {
-											setDeliveryCity(city);
-										}}
-										setState={(state) => {
-											setDeliveryState(state);
-										}}
-										setPostcode={(postcode) => {
-											setDeliveryPostcode(postcode);
-										}}
-										setCountry={(country) => {
-											setDeliveryCountry(country);
-										}}
-										setPostcodeForFinder={() => {
-											// no-op
-										}}
-										setPostcodeErrorForFinder={() => {
-											// no-op
-										}}
-										setErrors={(errors) => {
-											setDeliveryAddressErrors(errors);
-										}}
-										onFindAddress={(postcode) => {
-											setDeliveryPostcodeStateLoading(true);
-											void findAddressesForPostcode(postcode).then(
-												(results) => {
-													setDeliveryPostcodeStateLoading(false);
-													setDeliveryPostcodeStateResults(results);
-												},
-											);
-										}}
-									/>
-								</fieldset>
-								{productKey === 'HomeDelivery' && (
-									<fieldset
-										css={css`
-											margin-bottom: ${space[6]}px;
-										`}
-									>
-										<TextArea
-											id="deliveryInstructions"
-											data-qm-masking="blocklist"
-											name="deliveryInstructions"
-											label="Delivery instructions"
-											autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
-											supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
-											onChange={(event) => {
-												setDeliveryInstructions(event.target.value);
-											}}
-											value={deliveryInstructions}
-											optional
-										/>
-									</fieldset>
-								)}
-								<fieldset
-									css={css`
-										margin-bottom: ${space[6]}px;
-									`}
-								>
-									<Label
-										text="Billing address"
-										htmlFor="billingAddressMatchesDelivery"
-									/>
-									<Checkbox
-										checked={billingAddressMatchesDelivery}
-										value="yes"
-										onChange={() => {
-											setBillingAddressMatchesDelivery(
-												!billingAddressMatchesDelivery,
-											);
-										}}
-										id="billingAddressMatchesDelivery"
-										name="billingAddressMatchesDelivery"
-										label="Billing address same as delivery address"
-									/>
-								</fieldset>
+						<PersonalAddressFields
+							checkoutSession={checkoutSession}
+							productDescription={productDescription}
+							countryGroupId={countryGroupId}
+							countryId={countryId}
+							productKey={productKey}
+							legendStartNumber={legendStartNumber}
+							billingPostcode={billingPostcode}
+							setBillingPostcode={setBillingPostcode}
+							billingState={billingState}
+							setBillingState={setBillingState}
+							deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
+							chosenDeliveryAgent={chosenDeliveryAgent}
+							setChosenDeliveryAgent={setChosenDeliveryAgent}
+							deliveryAgents={deliveryAgents}
+							deliveryAgentError={deliveryAgentError}
+							setDeliveryAgentError={setDeliveryAgentError}
+							deliveryAddressErrors={deliveryAddressErrors}
+							setDeliveryAddressErrors={setDeliveryAddressErrors}
+							deliveryPostcode={deliveryPostcode}
+							setDeliveryPostcode={setDeliveryPostcode}
+						/>
 
-								{!billingAddressMatchesDelivery && (
-									<fieldset>
-										<AddressFields
-											scope={'billing'}
-											lineOne={billingLineOne}
-											lineTwo={billingLineTwo}
-											city={billingCity}
-											country={billingCountry}
-											state={billingState}
-											postCode={billingPostcode}
-											countryGroupId={countryGroupId}
-											countries={productDescription.deliverableTo}
-											errors={billingAddressErrors}
-											postcodeState={{
-												results: billingPostcodeStateResults,
-												isLoading: billingPostcodeStateLoading,
-												postcode: billingPostcode,
-												error: '',
-											}}
-											setLineOne={(lineOne) => {
-												setBillingLineOne(lineOne);
-											}}
-											setLineTwo={(lineTwo) => {
-												setBillingLineTwo(lineTwo);
-											}}
-											setTownCity={(city) => {
-												setBillingCity(city);
-											}}
-											setState={(state) => {
-												setBillingState(state);
-											}}
-											setPostcode={(postcode) => {
-												setBillingPostcode(postcode);
-											}}
-											setCountry={(country) => {
-												setBillingCountry(country);
-											}}
-											setPostcodeForFinder={() => {
-												// no-op
-											}}
-											setPostcodeErrorForFinder={() => {
-												// no-op
-											}}
-											setErrors={(errors) => {
-												setBillingAddressErrors(errors);
-											}}
-											onFindAddress={(postcode) => {
-												setBillingPostcodeStateLoading(true);
-												void findAddressesForPostcode(postcode).then(
-													(results) => {
-														setBillingPostcodeStateLoading(false);
-														setBillingPostcodeStateResults(results);
-													},
-												);
-											}}
-										/>
-									</fieldset>
-								)}
-
-								<CheckoutDivider spacing="loose" />
-							</>
-						)}
-						{deliveryPostcodeIsOutsideM25 && (
-							<FormSection>
-								<Legend>{`${legendStartNumber + 2}.  Delivery Agent`}</Legend>
-								<DeliveryAgentsSelect
-									chosenDeliveryAgent={chosenDeliveryAgent}
-									deliveryAgentsResponse={deliveryAgents}
-									setDeliveryAgent={(agent: number | undefined) => {
-										setChosenDeliveryAgent(agent);
-										setDeliveryAgentError(undefined);
-									}}
-									formErrors={
-										deliveryAgentError !== undefined
-											? [
-													{
-														field: 'deliveryProvider',
-														message: deliveryAgentError,
-													},
-											  ]
-											: []
-									}
-									deliveryAddressErrors={[]}
-								/>
-							</FormSection>
-						)}
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
 								{hasDeliveryAddress
