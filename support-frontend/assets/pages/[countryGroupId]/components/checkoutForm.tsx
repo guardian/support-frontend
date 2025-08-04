@@ -60,7 +60,6 @@ import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
@@ -816,7 +815,6 @@ export default function CheckoutForm({
 								isSignedIn={isSignedIn}
 							/>
 						)}
-						<CheckoutDivider spacing="loose" />
 
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
@@ -825,6 +823,7 @@ export default function CheckoutForm({
 						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
+
 						<PersonalAddressFields
 							isWeeklyGift={isWeeklyGift}
 							checkoutSession={checkoutSession}
