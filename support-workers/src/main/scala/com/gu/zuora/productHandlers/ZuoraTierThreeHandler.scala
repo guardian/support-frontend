@@ -35,6 +35,7 @@ class ZuoraTierThreeHandler(
     } yield SendThankYouEmailTierThreeState(
       state.user,
       state.product,
+      state.productInformation,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),
