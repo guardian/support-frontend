@@ -17,12 +17,11 @@ import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 
 type DeliveryRecipientAddressProps = {
-	isWeeklyGift: boolean;
+	countryId: IsoCountry;
+	legend: string;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
-	countryId: IsoCountry;
 	productKey: ActiveProductKey;
-	legendStartNumber: number;
 	deliveryAddressErrors: AddressFormFieldError[];
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
@@ -32,13 +31,11 @@ type DeliveryRecipientAddressProps = {
 };
 
 export function DeliveryRecipientAddress({
-	isWeeklyGift,
+	countryId,
+	legend,
 	checkoutSession,
 	productDescription,
-
-	countryId,
 	productKey,
-	legendStartNumber,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
 	deliveryPostcode,
@@ -79,14 +76,11 @@ export function DeliveryRecipientAddress({
 		);
 
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
-	const deliveryLegend = `${legendStartNumber + 1}. ${
-		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
-	}`;
 
 	return (
 		<>
 			<fieldset>
-				<Legend>{deliveryLegend}</Legend>
+				<Legend>{legend}</Legend>
 				<AddressFields
 					scope={'delivery'}
 					lineOne={deliveryLineOne}

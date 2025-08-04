@@ -183,7 +183,6 @@ export default function CheckoutForm({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
-	const legendStartNumber = isWeeklyGift ? 3 : 1;
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -216,6 +215,20 @@ export default function CheckoutForm({
 			contributionAmount,
 		},
 	});
+
+	const legendStartNumber = isWeeklyGift ? 3 : 1;
+	const legendPersonalDetails = `${legendStartNumber}. Your details`;
+	const legendDelivery = `${legendStartNumber + 1}. ${
+		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
+	}`;
+	const legendOutsideM25 = `${legendStartNumber + 2}.  Delivery Agent`;
+	const legendPayment = `${
+		hasDeliveryAddress
+			? deliveryPostcodeIsOutsideM25
+				? legendStartNumber + 3
+				: legendStartNumber + 2
+			: legendStartNumber + 1
+	}. Payment method`;
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -778,7 +791,7 @@ export default function CheckoutForm({
 								<WeeklyGiftFields />
 								<PersonalDetailsFields
 									countryId={countryId}
-									legend={`${legendStartNumber}. Your details`}
+									legend={legendPersonalDetails}
 									firstName={firstName}
 									setFirstName={(firstName) => setFirstName(firstName)}
 									lastName={lastName}
@@ -791,7 +804,7 @@ export default function CheckoutForm({
 						{!isWeeklyGift && (
 							<PersonalDetailsFields
 								countryId={countryId}
-								legend={`${legendStartNumber}. Your details`}
+								legend={legendPersonalDetails}
 								firstName={firstName}
 								setFirstName={(firstName) => setFirstName(firstName)}
 								lastName={lastName}
@@ -825,11 +838,12 @@ export default function CheckoutForm({
 						)}
 
 						<PersonalAddressFields
+							countryId={countryId}
+							legend={legendDelivery}
+							legendOutsideM25={legendOutsideM25}
 							checkoutSession={checkoutSession}
 							productDescription={productDescription}
-							countryId={countryId}
 							productKey={productKey}
-							legendStartNumber={legendStartNumber}
 							deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
 							deliveryPostcode={deliveryPostcode}
 							setDeliveryPostcode={setDeliveryPostcode}
@@ -844,17 +858,11 @@ export default function CheckoutForm({
 							setBillingPostcode={setBillingPostcode}
 							billingState={billingState}
 							setBillingState={setBillingState}
-							isWeeklyGift={isWeeklyGift}
 						/>
 
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
-								{hasDeliveryAddress
-									? deliveryPostcodeIsOutsideM25
-										? legendStartNumber + 3
-										: legendStartNumber + 2
-									: legendStartNumber + 1}
-								. Payment method
+								{legendPayment}
 								<SecureTransactionIndicator
 									hideText={true}
 									cssOverrides={css``}

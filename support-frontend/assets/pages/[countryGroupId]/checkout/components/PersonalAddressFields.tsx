@@ -17,11 +17,12 @@ import { BillingAddress } from './BillingAddress';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
+	countryId: IsoCountry;
+	legend: string;
+	legendOutsideM25: string;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
-	countryId: IsoCountry;
 	productKey: ActiveProductKey;
-	legendStartNumber: number;
 	deliveryPostcodeIsOutsideM25: boolean;
 	deliveryPostcode: string;
 	setDeliveryPostcode: (value: string) => void;
@@ -38,15 +39,15 @@ type PersonalAddressFieldsProps = {
 	setBillingPostcode: (value: string) => void;
 	billingState: string;
 	setBillingState: (value: string) => void;
-	isWeeklyGift: boolean;
 };
 
 export function PersonalAddressFields({
+	countryId,
+	legend,
+	legendOutsideM25,
 	checkoutSession,
 	productDescription,
-	countryId,
 	productKey,
-	legendStartNumber,
 	deliveryPostcodeIsOutsideM25,
 	deliveryPostcode,
 	setDeliveryPostcode,
@@ -61,7 +62,6 @@ export function PersonalAddressFields({
 	setBillingPostcode,
 	billingState,
 	setBillingState,
-	isWeeklyGift,
 }: PersonalAddressFieldsProps) {
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
@@ -73,12 +73,11 @@ export function PersonalAddressFields({
 			{productDescription.deliverableTo && (
 				<>
 					<DeliveryRecipientAddress
-						isWeeklyGift={isWeeklyGift}
+						countryId={countryId}
+						legend={legend}
 						checkoutSession={checkoutSession}
 						productDescription={productDescription}
-						countryId={countryId}
 						productKey={productKey}
-						legendStartNumber={legendStartNumber}
 						deliveryAddressErrors={deliveryAddressErrors}
 						setDeliveryAddressErrors={setDeliveryAddressErrors}
 						deliveryPostcode={deliveryPostcode}
@@ -119,7 +118,7 @@ export function PersonalAddressFields({
 					)}
 					{deliveryPostcodeIsOutsideM25 && (
 						<FormSection>
-							<Legend>{`${legendStartNumber + 2}.  Delivery Agent`}</Legend>
+							<Legend>{legendOutsideM25}</Legend>
 							<DeliveryAgentsSelect
 								chosenDeliveryAgent={chosenDeliveryAgent}
 								deliveryAgentsResponse={deliveryAgents}
