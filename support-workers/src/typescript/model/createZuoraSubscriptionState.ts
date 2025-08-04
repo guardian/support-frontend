@@ -1,3 +1,4 @@
+import { productPurchaseSchema } from '@modules/product-catalog/productPurchaseSchema';
 import { z } from 'zod';
 import {
 	salesforceContactRecordSchema,
@@ -11,14 +12,12 @@ import {
 	guardianAdLiteProductSchema,
 	guardianWeeklyProductSchema,
 	paperProductSchema,
-	productTypeSchema,
 	supporterPlusProductSchema,
 	tierThreeProductSchema,
 } from './productType';
 import {
-	acquisitionDataSchema,
-	analyticsInfoSchema,
 	appliedPromotionSchema,
+	baseStateSchema,
 	giftRecipientSchema,
 	userSchema,
 } from './stateSchemas';
@@ -26,6 +25,7 @@ import {
 export const contributionStateSchema = z.object({
 	productType: z.literal('Contribution'),
 	product: contributionProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
 	similarProductsConsent: z.boolean().nullable(),
@@ -36,6 +36,7 @@ export const supporterPlusStateSchema = z.object({
 	productType: z.literal('SupporterPlus'),
 	billingCountry: countrySchema,
 	product: supporterPlusProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	salesForceContact: salesforceContactRecordSchema,
@@ -47,6 +48,7 @@ export const tierThreeStateSchema = z.object({
 	productType: z.literal('TierThree'),
 	user: userSchema,
 	product: tierThreeProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
@@ -58,6 +60,7 @@ export type TierThreeState = z.infer<typeof tierThreeStateSchema>;
 export const guardianAdLiteStateSchema = z.object({
 	productType: z.literal('GuardianAdLite'),
 	product: guardianAdLiteProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	salesForceContact: salesforceContactRecordSchema,
 });
@@ -67,6 +70,7 @@ export const digitalSubscriptionStateSchema = z.object({
 	productType: z.literal('DigitalSubscription'),
 	billingCountry: countrySchema,
 	product: digitalPackProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	appliedPromotion: appliedPromotionSchema.nullable(),
 	salesForceContact: salesforceContactRecordSchema,
@@ -80,6 +84,7 @@ export const paperStateSchema = z.object({
 	productType: z.literal('Paper'),
 	user: userSchema,
 	product: paperProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
@@ -93,6 +98,7 @@ export const guardianWeeklyStateSchema = z.object({
 	user: userSchema,
 	giftRecipient: giftRecipientSchema.nullable(),
 	product: guardianWeeklyProductSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	paymentMethod: paymentMethodSchema,
 	firstDeliveryDate: z.string(),
 	appliedPromotion: appliedPromotionSchema.nullable(),
@@ -114,18 +120,11 @@ export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
 	],
 );
 
-export const createZuoraSubscriptionStateSchema = z.object({
-	productSpecificState: createZuoraSubscriptionProductStateSchema,
-	requestId: z.string(),
-	user: userSchema,
-	product: productTypeSchema,
-	analyticsInfo: analyticsInfoSchema,
-	firstDeliveryDate: z.string().nullable(),
-	appliedPromotion: appliedPromotionSchema.nullable(),
-	csrUsername: z.string().nullable(),
-	salesforceCaseId: z.string().nullable(),
-	acquisitionData: acquisitionDataSchema.nullable(),
-});
+export const createZuoraSubscriptionStateSchema = baseStateSchema.merge(
+	z.object({
+		productSpecificState: createZuoraSubscriptionProductStateSchema,
+	}),
+);
 
 export type CreateZuoraSubscriptionState = z.infer<
 	typeof createZuoraSubscriptionStateSchema
