@@ -74,17 +74,47 @@ class PaperSubscriptionBuilder(
     paper.deliveryAgent
   }
 
-  def validatePaymentGateway(paymentMethod: PaymentMethod, paper: Paper): Unit = {
-    (paper.productOptions, paymentMethod) match {
-      case (Sunday, _: CreditCardReferenceTransaction) if paymentMethod.PaymentGateway != StripeTortoiseMedia =>
-        throw new BadRequestException(
-          s"Sunday subscriptions must use StripeTortoiseMedia payment gateway. ${paper.describe} uses ${paymentMethod.PaymentGateway}.",
-        )
-      case (Sunday, _: DirectDebitPaymentMethod) if paymentMethod.PaymentGateway != DirectDebitTortoiseMediaGateway =>
-        throw new BadRequestException(
-          s"Sunday subscriptions must use DirectDebitTortoiseMediaGateway payment gateway. ${paper.describe} uses ${paymentMethod.PaymentGateway}.",
-        )
+  private def validateSunday(paymentMethod: PaymentMethod): Unit = {
+    paymentMethod match {
+      case _: CreditCardReferenceTransaction =>
+        if (paymentMethod.PaymentGateway != StripeTortoiseMedia) {
+          throw new BadRequestException(
+            s"Sunday subscriptions must use StripeTortoiseMedia payment gateway. ${paymentMethod.PaymentGateway} is not allowed.",
+          )
+        }
+      case _: DirectDebitPaymentMethod =>
+        if (paymentMethod.PaymentGateway != DirectDebitTortoiseMediaGateway) {
+          throw new BadRequestException(
+            s"Sunday subscriptions must use DirectDebitTortoiseMediaGateway payment gateway. ${paymentMethod.PaymentGateway} is not allowed.",
+          )
+        }
       case _ => ()
+    }
+  }
+
+  private def validateNonSunday(paymentMethod: PaymentMethod): Unit = {
+    paymentMethod match {
+      case _: CreditCardReferenceTransaction =>
+        if (paymentMethod.PaymentGateway == StripeTortoiseMedia) {
+          throw new BadRequestException(
+            s"Only Sunday subscriptions should use the Tortoise media Stripe payment gateway.",
+          )
+        }
+      case _: DirectDebitPaymentMethod =>
+        if (paymentMethod.PaymentGateway == DirectDebitTortoiseMediaGateway) {
+          throw new BadRequestException(
+            s"Only Sunday subscriptions should use the Tortoise media Direct Debit payment gateway.",
+          )
+        }
+      case _ => ()
+    }
+  }
+
+  private def validatePaymentGateway(paymentMethod: PaymentMethod, paper: Paper): Unit = {
+    if (paper.productOptions == Sunday) {
+      validateSunday(paymentMethod)
+    } else {
+      validateNonSunday(paymentMethod)
     }
   }
 
