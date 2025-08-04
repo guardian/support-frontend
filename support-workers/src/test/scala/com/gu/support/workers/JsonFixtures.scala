@@ -445,7 +445,6 @@ object JsonFixtures {
     CreateZuoraSubscriptionState(
       ContributionState(
         Contribution(amount, GBP, billingPeriod),
-        Some(ProductInformation("Contribution", "Monthly", Some(amount))),
         stripePaymentMethodObj,
         salesforceContact,
         similarProductsConsent = None,
@@ -471,7 +470,6 @@ object JsonFixtures {
       SupporterPlusState(
         Country.UK,
         SupporterPlus(amount, currency, billingPeriod),
-        Some(ProductInformation("SupporterPlus", "Monthly", Some(amount))),
         stripePaymentMethodObj,
         None,
         salesforceContact,
@@ -498,7 +496,6 @@ object JsonFixtures {
       productSpecificState = TierThreeState(
         userJsonWithDeliveryAddress,
         TierThree(currency, billingPeriod, fulfilmentOptions),
-        Some(ProductInformation("TierThree", "Monthly", None)),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
@@ -521,7 +518,6 @@ object JsonFixtures {
       DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
-        Some(ProductInformation("DigitalSubscription", "Annual", None)),
         stripePaymentMethodObj,
         None,
         salesforceContact,
@@ -543,7 +539,6 @@ object JsonFixtures {
       DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
-        Some(ProductInformation("DigitalSubscription", "Annual", None)),
         stripePaymentMethodObj,
         Some(AppliedPromotion("DJP8L27FY", CountryGroup.UK.id)),
         salesforceContact,
@@ -565,7 +560,6 @@ object JsonFixtures {
       PaperState(
         userJsonWithDeliveryAddress,
         Paper(GBP, Monthly, HomeDelivery, Everyday, None),
-        Some(ProductInformation("HomeDelivery", "Everyday", None)),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
@@ -589,7 +583,6 @@ object JsonFixtures {
       PaperState(
         userJsonWithDeliveryAddressOutsideLondon,
         paper,
-        Some(ProductInformation("NationalDelivery", "Everyday", None)),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
@@ -616,7 +609,6 @@ object JsonFixtures {
         userJsonWithDeliveryAddress,
         None,
         GuardianWeekly(GBP, billingPeriod, RestOfWorld),
-        Some(ProductInformation("GuardianWeeklyRestOfWorld", "Monthly", None)),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
@@ -647,7 +639,6 @@ object JsonFixtures {
           ),
         ),
         GuardianWeekly(GBP, Quarterly, RestOfWorld),
-        Some(ProductInformation("GuardianWeeklyRestOfWorld", "Quarterly", None)),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
@@ -669,7 +660,6 @@ object JsonFixtures {
     CreateZuoraSubscriptionState(
       GuardianAdLiteState(
         GuardianAdLite(GBP),
-        Some(ProductInformation("GuardianAdLite", "Monthly", None)),
         stripePaymentMethodObj,
         salesforceContact,
       ),
@@ -967,7 +957,6 @@ object JsonFixtures {
       DigitalSubscriptionState(
         Country.UK,
         DigitalPack(GBP, Annual),
-        Some(ProductInformation("DigitalSubscription", "Annual", None)),
         stripePaymentMethodObj,
         Some(AppliedPromotion("DJRHYMDS8", CountryGroup.UK.id)),
         salesforceContact,

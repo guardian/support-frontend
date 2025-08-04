@@ -30,7 +30,6 @@ class ZuoraGuardianAdLiteHandler(
     } yield SendThankYouEmailGuardianAdLiteState(
       user,
       state.product,
-      state.productInformation,
       state.paymentMethod,
       paymentSchedule,
       account.value,

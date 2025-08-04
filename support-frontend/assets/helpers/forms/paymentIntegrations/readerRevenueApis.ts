@@ -1,4 +1,3 @@
-import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import type {
 	IsoCountry,
 	UsState,
@@ -173,7 +172,6 @@ export type RegularPaymentRequest = {
 	email: string;
 	giftRecipient?: GiftRecipientType;
 	product: ProductFields;
-	productInformation?: ProductPurchase;
 	firstDeliveryDate: Option<string>;
 	paymentFields: RegularPaymentFields;
 	ophanIds: OphanIds;

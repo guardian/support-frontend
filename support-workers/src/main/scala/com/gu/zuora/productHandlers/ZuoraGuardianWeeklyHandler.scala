@@ -35,7 +35,6 @@ class ZuoraGuardianWeeklyHandler(
     } yield SendThankYouEmailGuardianWeeklyState(
       state.user,
       state.product,
-      state.productInformation,
       state.giftRecipient,
       state.paymentMethod,
       paymentSchedule,
