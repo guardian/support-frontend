@@ -184,7 +184,7 @@ export default function CheckoutForm({
 		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
 			productKey,
 		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
-	const legendStartNumber = isWeeklyGift ? 4 : 1;
+	const legendStartNumber = isWeeklyGift ? 3 : 1;
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -776,11 +776,7 @@ export default function CheckoutForm({
 
 						{isWeeklyGift && (
 							<>
-								<WeeklyGiftFields
-									countryId={countryId}
-									productDescription={productDescription}
-									countryGroupId={countryGroupId}
-								/>
+								<WeeklyGiftFields />
 								<PersonalDetailsFields
 									countryId={countryId}
 									legend={`${legendStartNumber}. Your details`}
@@ -830,6 +826,7 @@ export default function CheckoutForm({
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
 						<PersonalAddressFields
+							isWeeklyGift={isWeeklyGift}
 							checkoutSession={checkoutSession}
 							productDescription={productDescription}
 							countryGroupId={countryGroupId}

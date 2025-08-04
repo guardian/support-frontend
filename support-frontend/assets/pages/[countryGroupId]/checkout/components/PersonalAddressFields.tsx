@@ -20,6 +20,7 @@ import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 
 type PersonalAddressFieldsProps = {
+	isWeeklyGift: boolean;
 	checkoutSession?: CheckoutSession;
 	productDescription: ProductDescription;
 	countryGroupId: CountryGroupId;
@@ -45,6 +46,7 @@ type PersonalAddressFieldsProps = {
 };
 
 export function PersonalAddressFields({
+	isWeeklyGift,
 	checkoutSession,
 	productDescription,
 	countryGroupId,
@@ -73,7 +75,7 @@ export function PersonalAddressFields({
 			'',
 		);
 
-	/** Delivery and billing addresses */
+	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
 		useStateWithCheckoutSession<string>(
 			checkoutSession?.formFields.addressFields.deliveryAddress?.lineOne,
@@ -102,6 +104,7 @@ export function PersonalAddressFields({
 			countryId,
 		);
 
+	/** Billing address */
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useStateWithCheckoutSession<boolean>(
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
@@ -134,46 +137,70 @@ export function PersonalAddressFields({
 		AddressFormFieldError[]
 	>([]);
 
+	/** Gift recipient address */
+	const [recipientPostcode, setRecipientPostcode] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientLineOne, setRecipientLineOne] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientLineTwo, setRecipientLineTwo] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientCity, setRecipientCity] = useStateWithCheckoutSession<string>(
+		undefined,
+		'',
+	);
+	const [recipientState, setRecipientState] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientPostcodeStateResults, setRecipientPostcodeStateResults] =
+		useState<PostcodeFinderResult[]>([]);
+	const [recipientPostcodeStateLoading, setRecipientPostcodeStateLoading] =
+		useState(false);
+	const [recipientCountry, setRecipientCountry] =
+		useStateWithCheckoutSession<IsoCountry>(undefined, countryId);
+	const [recipientAddressErrors, setRecipientAddressErrors] = useState<
+		AddressFormFieldError[]
+	>([]);
 	return (
 		<>
-			{productDescription.deliverableTo && (
+			{isWeeklyGift && productDescription.deliverableTo && (
 				<>
 					<fieldset>
-						<Legend>{`${legendStartNumber + 1}. Delivery address`}</Legend>
+						<Legend>{`${
+							legendStartNumber + 1
+						}. Gift recipient's address`}</Legend>
 						<AddressFields
-							scope={'delivery'}
-							lineOne={deliveryLineOne}
-							lineTwo={deliveryLineTwo}
-							city={deliveryCity}
-							country={deliveryCountry}
-							state={deliveryState}
-							postCode={deliveryPostcode}
+							scope={'recipient'}
+							lineOne={recipientLineOne}
+							lineTwo={recipientLineTwo}
+							city={recipientCity}
+							country={recipientCountry}
+							state={recipientState}
+							postCode={recipientPostcode}
 							countryGroupId={countryGroupId}
 							countries={productDescription.deliverableTo}
-							errors={deliveryAddressErrors}
+							errors={recipientAddressErrors}
 							postcodeState={{
-								results: deliveryPostcodeStateResults,
-								isLoading: deliveryPostcodeStateLoading,
-								postcode: deliveryPostcode,
+								results: recipientPostcodeStateResults,
+								isLoading: recipientPostcodeStateLoading,
+								postcode: recipientPostcode,
 								error: '',
 							}}
 							setLineOne={(lineOne) => {
-								setDeliveryLineOne(lineOne);
+								setRecipientLineOne(lineOne);
 							}}
 							setLineTwo={(lineTwo) => {
-								setDeliveryLineTwo(lineTwo);
+								setRecipientLineTwo(lineTwo);
 							}}
 							setTownCity={(city) => {
-								setDeliveryCity(city);
+								setRecipientCity(city);
 							}}
 							setState={(state) => {
-								setDeliveryState(state);
+								setRecipientState(state);
 							}}
 							setPostcode={(postcode) => {
-								setDeliveryPostcode(postcode);
+								setRecipientPostcode(postcode);
 							}}
 							setCountry={(country) => {
-								setDeliveryCountry(country);
+								setRecipientCountry(country);
 							}}
 							setPostcodeForFinder={() => {
 								// no-op
@@ -182,37 +209,100 @@ export function PersonalAddressFields({
 								// no-op
 							}}
 							setErrors={(errors) => {
-								setDeliveryAddressErrors(errors);
+								setRecipientAddressErrors(errors);
 							}}
 							onFindAddress={(postcode) => {
-								setDeliveryPostcodeStateLoading(true);
+								setRecipientPostcodeStateLoading(true);
 								void findAddressesForPostcode(postcode).then((results) => {
-									setDeliveryPostcodeStateLoading(false);
-									setDeliveryPostcodeStateResults(results);
+									setRecipientPostcodeStateLoading(false);
+									setRecipientPostcodeStateResults(results);
 								});
 							}}
 						/>
 					</fieldset>
-					{productKey === 'HomeDelivery' && (
-						<fieldset
-							css={css`
-								margin-bottom: ${space[6]}px;
-							`}
-						>
-							<TextArea
-								id="deliveryInstructions"
-								data-qm-masking="blocklist"
-								name="deliveryInstructions"
-								label="Delivery instructions"
-								autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
-								supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
-								onChange={(event) => {
-									setDeliveryInstructions(event.target.value);
-								}}
-								value={deliveryInstructions}
-								optional
-							/>
-						</fieldset>
+				</>
+			)}
+			{productDescription.deliverableTo && (
+				<>
+					{!isWeeklyGift && (
+						<>
+							<fieldset>
+								<Legend>{`${legendStartNumber + 1}. Delivery address`}</Legend>
+								<AddressFields
+									scope={'delivery'}
+									lineOne={deliveryLineOne}
+									lineTwo={deliveryLineTwo}
+									city={deliveryCity}
+									country={deliveryCountry}
+									state={deliveryState}
+									postCode={deliveryPostcode}
+									countryGroupId={countryGroupId}
+									countries={productDescription.deliverableTo}
+									errors={deliveryAddressErrors}
+									postcodeState={{
+										results: deliveryPostcodeStateResults,
+										isLoading: deliveryPostcodeStateLoading,
+										postcode: deliveryPostcode,
+										error: '',
+									}}
+									setLineOne={(lineOne) => {
+										setDeliveryLineOne(lineOne);
+									}}
+									setLineTwo={(lineTwo) => {
+										setDeliveryLineTwo(lineTwo);
+									}}
+									setTownCity={(city) => {
+										setDeliveryCity(city);
+									}}
+									setState={(state) => {
+										setDeliveryState(state);
+									}}
+									setPostcode={(postcode) => {
+										setDeliveryPostcode(postcode);
+									}}
+									setCountry={(country) => {
+										setDeliveryCountry(country);
+									}}
+									setPostcodeForFinder={() => {
+										// no-op
+									}}
+									setPostcodeErrorForFinder={() => {
+										// no-op
+									}}
+									setErrors={(errors) => {
+										setDeliveryAddressErrors(errors);
+									}}
+									onFindAddress={(postcode) => {
+										setDeliveryPostcodeStateLoading(true);
+										void findAddressesForPostcode(postcode).then((results) => {
+											setDeliveryPostcodeStateLoading(false);
+											setDeliveryPostcodeStateResults(results);
+										});
+									}}
+								/>
+							</fieldset>
+							{productKey === 'HomeDelivery' && (
+								<fieldset
+									css={css`
+										margin-bottom: ${space[6]}px;
+									`}
+								>
+									<TextArea
+										id="deliveryInstructions"
+										data-qm-masking="blocklist"
+										name="deliveryInstructions"
+										label="Delivery instructions"
+										autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
+										supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
+										onChange={(event) => {
+											setDeliveryInstructions(event.target.value);
+										}}
+										value={deliveryInstructions}
+										optional
+									/>
+								</fieldset>
+							)}
+						</>
 					)}
 					<fieldset
 						css={css`
