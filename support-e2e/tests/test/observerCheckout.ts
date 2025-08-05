@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { setupPage } from '../utils/page';
-import { setTestUserAddressDetails } from '../utils/testUserDetails';
-import { ukWithPostalAddressOnly } from '../utils/userFields';
+import { setTestUserDetails } from '../utils/testUserDetails';
+import { getUserFields } from '../utils/userFields';
 import {
 	expectToLandOnStripeCheckoutPage,
 	fillStripeCheckoutForm,
@@ -29,11 +29,11 @@ export const testObserverCheckout = (testDetails: TestDetails) => {
 		await setupPage(page, context, baseURL, url);
 
 		// Fill checkout form and submit
-		await setTestUserAddressDetails(
+		await setTestUserDetails(
 			page,
-			ukWithPostalAddressOnly(),
+			product,
 			internationalisationId,
-			3,
+			getUserFields(internationalisationId, postCode),
 		);
 		await page.getByRole('radio', { name: paymentType }).check();
 		await page.getByRole('button', { name: `Pay` }).click();
