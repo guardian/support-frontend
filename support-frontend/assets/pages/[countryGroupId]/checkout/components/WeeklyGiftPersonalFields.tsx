@@ -1,4 +1,5 @@
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
+import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';
 
@@ -22,22 +23,25 @@ export function WeeklyGiftPersonalFields({
 	setEmail,
 }: PersonalGiftDetailsFieldsProps) {
 	return (
-		<FormSection>
-			<Legend>{legend}</Legend>
-			<PersonalFields
-				firstName={firstName}
-				setFirstName={setFirstName}
-				lastName={lastName}
-				setLastName={setLastName}
-				email={email}
-				setEmail={setEmail}
-				endUser={'recipient'}
-			/>
-			<PersonalEmailFields
-				email={email}
-				setEmail={setEmail}
-				endUser={'recipient'}
-			/>
-		</FormSection>
+		<>
+			<FormSection>
+				<Legend>{legend}</Legend>
+				<PersonalFields
+					firstName={firstName}
+					setFirstName={setFirstName}
+					lastName={lastName}
+					setLastName={setLastName}
+					email={email}
+					setEmail={setEmail}
+					endUser={'recipient'}
+				/>
+				<PersonalEmailFields
+					email={email}
+					setEmail={setEmail}
+					endUser={'recipient'}
+				/>
+			</FormSection>
+			<CheckoutDivider spacing="loose" />
+		</>
 	);
 }

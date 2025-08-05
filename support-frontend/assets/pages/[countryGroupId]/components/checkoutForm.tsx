@@ -70,7 +70,8 @@ import { isValidPostcode } from '../../../helpers/forms/formValidation';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { PersonalAddressFields } from '../checkout/components/PersonalAddressFields';
 import { PersonalDetailsFields } from '../checkout/components/PersonalDetailsFields';
-import { WeeklyGiftFields } from '../checkout/components/WeeklyGiftFields';
+import { WeeklyDeliveryDates } from '../checkout/components/WeeklyDeliveryDates';
+import { WeeklyGiftPersonalFields } from '../checkout/components/WeeklyGiftPersonalFields';
 import type { DeliveryAgentsResponse } from '../checkout/helpers/getDeliveryAgents';
 import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
@@ -450,6 +451,15 @@ export default function CheckoutForm({
 		'',
 	);
 
+	/** Gift recipient details */
+	// Session storage unavailable yet, using state
+	const [recipientFirstName, setRecipientFirstName] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientLastName, setRecipientLastName] =
+		useStateWithCheckoutSession<string>(undefined, '');
+	const [recipientEmail, setRecipientEmail] =
+		useStateWithCheckoutSession<string>(undefined, '');
+
 	const formRef = useRef<HTMLFormElement>(null);
 	const scrollToViewRef = useRef<HTMLDivElement>(null);
 	const paymentMethodRef = useRef<HTMLFieldSetElement>(null);
@@ -788,10 +798,28 @@ export default function CheckoutForm({
 
 						{isWeeklyGift && (
 							<>
-								<WeeklyGiftFields
-									weeklyDeliveryDate={weeklyDeliveryDate}
-									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+								<WeeklyGiftPersonalFields
+									legend={`1. Gift recipient's details`}
+									firstName={recipientFirstName}
+									setFirstName={(recipientFirstName) =>
+										setRecipientFirstName(recipientFirstName)
+									}
+									lastName={recipientLastName}
+									setLastName={(recipientLastName) =>
+										setRecipientLastName(recipientLastName)
+									}
+									email={recipientEmail}
+									setEmail={(recipientEmail) =>
+										setRecipientEmail(recipientEmail)
+									}
+								/>
+								<WeeklyDeliveryDates
+									legend={`2. Gift delivery date`}
 									weeklyDeliveryDates={weeklyDeliveryDates}
+									weeklyDeliveryDateSelected={weeklyDeliveryDate}
+									setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
+										setWeeklyDeliveryDate(weeklyDeliveryDate);
+									}}
 								/>
 								<PersonalDetailsFields
 									countryId={countryId}
