@@ -821,45 +821,32 @@ export default function CheckoutForm({
 										setWeeklyDeliveryDate(weeklyDeliveryDate);
 									}}
 								/>
-								<PersonalDetailsFields
-									countryId={countryId}
-									legend={legendPersonalDetails}
-									firstName={firstName}
-									setFirstName={(firstName) => setFirstName(firstName)}
-									lastName={lastName}
-									setLastName={(lastName) => setLastName(lastName)}
-									email={email}
-									setEmail={(email) => setEmail(email)}
-								/>
 							</>
 						)}
-						{!isWeeklyGift && (
-							<PersonalDetailsFields
-								countryId={countryId}
-								legend={legendPersonalDetails}
-								firstName={firstName}
-								setFirstName={(firstName) => setFirstName(firstName)}
-								lastName={lastName}
-								setLastName={(lastName) => setLastName(lastName)}
-								email={email}
-								setEmail={(email) => setEmail(email)}
-								confirmedEmail={confirmedEmail}
-								setConfirmedEmail={(confirmedEmail) =>
-									setConfirmedEmail(confirmedEmail)
-								}
-								billingState={billingState}
-								setBillingState={(billingState) =>
-									setBillingState(billingState)
-								}
-								billingPostcode={billingPostcode}
-								setBillingPostcode={(billingPostcode) =>
-									setBillingPostcode(billingPostcode)
-								}
-								hasDeliveryAddress={hasDeliveryAddress}
-								isEmailAddressReadOnly={isSignedIn}
-								isSignedIn={isSignedIn}
-							/>
-						)}
+
+						<PersonalDetailsFields
+							countryId={countryId}
+							legend={legendPersonalDetails}
+							firstName={firstName}
+							setFirstName={(firstName) => setFirstName(firstName)}
+							lastName={lastName}
+							setLastName={(lastName) => setLastName(lastName)}
+							email={email}
+							setEmail={(email) => setEmail(email)}
+							confirmedEmail={confirmedEmail}
+							setConfirmedEmail={(confirmedEmail) =>
+								setConfirmedEmail(confirmedEmail)
+							}
+							billingState={billingState}
+							setBillingState={(billingState) => setBillingState(billingState)}
+							billingPostcode={billingPostcode}
+							setBillingPostcode={(billingPostcode) =>
+								setBillingPostcode(billingPostcode)
+							}
+							hasDeliveryAddress={hasDeliveryAddress}
+							isEmailAddressReadOnly={isSignedIn}
+							isSignedIn={isSignedIn}
+						/>
 
 						{/**
 						 * We need the billing-country for all transactions, even non-deliverable ones
