@@ -3,22 +3,18 @@ import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAn
 
 const tests = [
 	{
-		product: 'GuardianAdLite',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
 	},
 	{
-		product: 'GuardianAdLite',
 		paymentType: 'Direct debit',
-		internationalisationId: 'UK',
 	},
 ];
 
 test.describe('Ad Lite Checkout', () =>
 	tests.map((testDetails) => {
-		const { product, paymentType, internationalisationId } = testDetails;
+		const { paymentType } = testDetails;
 
-		test(`${product} - Monthly - ${paymentType} - ${internationalisationId}`, async ({
+		test(`GuardianAdLite - Monthly - ${paymentType} - UK`, async ({
 			context,
 			baseURL,
 		}) => {
@@ -27,9 +23,9 @@ test.describe('Ad Lite Checkout', () =>
 				{
 					context,
 					baseURL,
-					product,
+					product: 'GuardianAdLite',
 					paymentType,
-					internationalisationId,
+					internationalisationId: 'UK',
 				},
 				async (page) => {
 					// Transition from landing page to checkout:
