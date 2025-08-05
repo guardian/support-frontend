@@ -77,6 +77,7 @@ import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
+import { isWeeklyGiftSub } from '../helpers/isWeeklyGiftSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
@@ -179,10 +180,7 @@ export default function CheckoutForm({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-	const isWeeklyGift =
-		['GuardianWeeklyDomestic', 'GuardianWeeklyRestOfWorld'].includes(
-			productKey,
-		) && ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey);
+	const isWeeklyGift = isWeeklyGiftSub(productKey, ratePlanKey);
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
