@@ -106,11 +106,12 @@ export const getUserFields = (
 	postCode?: string,
 ): TestFields => {
 	const validUserDetails = userDetails[country];
-	if (!validUserDetails) {
+	const userDetailsCopy = JSON.parse(JSON.stringify(validUserDetails)); // Create a deep copy
+	if (!userDetailsCopy) {
 		throw new Error(`No user details found for country: ${country}`);
 	}
 	if (postCode) {
-		validUserDetails.addresses[0].postCode = postCode; // delivery address override only required
+		userDetailsCopy.addresses[0].postCode = postCode; // delivery address override only required
 	}
-	return validUserDetails;
+	return userDetailsCopy;
 };
