@@ -1,12 +1,20 @@
-import { useState } from 'react';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 import { WeeklyDeliveryDates } from './WeeklyDeliveryDates';
 import { WeeklyGiftPersonalFields } from './WeeklyGiftPersonalFields';
 
-export function WeeklyGiftFields(): JSX.Element {
+type WeeklyGiftFieldsProps = {
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	weeklyDeliveryDates: Date[];
+};
+
+export function WeeklyGiftFields({
+	weeklyDeliveryDate,
+	setWeeklyDeliveryDate,
+	weeklyDeliveryDates,
+}: WeeklyGiftFieldsProps): JSX.Element {
 	/** Gift recipient details */
 	// Session storage unavailable yet, using state
 	const [recipientFirstName, setRecipientFirstName] =
@@ -15,12 +23,6 @@ export function WeeklyGiftFields(): JSX.Element {
 		useStateWithCheckoutSession<string>(undefined, '');
 	const [recipientEmail, setRecipientEmail] =
 		useStateWithCheckoutSession<string>(undefined, '');
-
-	/** Delivery Instructions */
-	const weeklyDeliveryDates = getWeeklyDays();
-	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		weeklyDeliveryDates[0] as Date,
-	);
 
 	return (
 		<>

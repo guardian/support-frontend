@@ -64,6 +64,7 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -467,6 +468,11 @@ export default function CheckoutForm({
 	const [postStripeCheckoutErrorMessage, setPostStripeCheckoutErrorMessage] =
 		useState<string>();
 
+	const weeklyDeliveryDates = getWeeklyDays();
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		weeklyDeliveryDates[0] as Date,
+	);
+
 	// If we get an error, and we've already got a checkout session, clear the checkout session
 	// so that the user restarts the checkout process
 	useEffect(() => {
@@ -782,7 +788,11 @@ export default function CheckoutForm({
 
 						{isWeeklyGift && (
 							<>
-								<WeeklyGiftFields />
+								<WeeklyGiftFields
+									weeklyDeliveryDate={weeklyDeliveryDate}
+									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+									weeklyDeliveryDates={weeklyDeliveryDates}
+								/>
 								<PersonalDetailsFields
 									countryId={countryId}
 									legend={legendPersonalDetails}
