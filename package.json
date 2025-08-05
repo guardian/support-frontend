@@ -1,7 +1,8 @@
 {
   "license": "Apache-2.0",
   "scripts": {
-    "prepare": "husky",
+    "pre-commit": "pnpm run --filter \"support-*\" pre-commit",
+    "prepare": "husky install",
     "test": "pnpm --stream -r run test"
   },
   "devDependencies": {

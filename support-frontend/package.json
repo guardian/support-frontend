@@ -28,7 +28,8 @@
 		"prettier:fix": "prettier --write ./assets",
 		"storybook": "storybook dev -p 9001 --no-open",
 		"build-storybook": "storybook build -o storybook-static",
-		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+		"check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+		"pre-commit": "lint-staged"
 	},
 	"browserslist": [
 		"extends @guardian/browserslist-config"
