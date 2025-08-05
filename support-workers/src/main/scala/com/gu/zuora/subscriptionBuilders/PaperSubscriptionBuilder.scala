@@ -1,8 +1,12 @@
 package com.gu.zuora.subscriptionBuilders
 
+import com.gu.support.catalog.{NationalDelivery, Sunday}
 import com.gu.support.config.TouchPointEnvironment
+import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.{PromoError, PromotionService}
+import com.gu.support.workers.{CreditCardReferenceTransaction, DirectDebitPaymentMethod, Paper, PaymentMethod}
 import com.gu.support.workers.ProductTypeRatePlans._
+import com.gu.support.workers.exceptions.BadRequestException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
@@ -26,6 +30,8 @@ class PaperSubscriptionBuilder(
     val contractEffectiveDate = LocalDate.now(DateTimeZone.UTC)
 
     val productRatePlanId = validateRatePlan(paperRatePlan(product, environment), product.describe)
+    val deliveryAgent = validateDeliveryAgent(product)
+    validatePaymentGateway(paymentMethod, product)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId,
@@ -34,7 +40,7 @@ class PaperSubscriptionBuilder(
       readerType = Direct,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
-      deliveryAgent = product.deliveryAgent,
+      deliveryAgent = deliveryAgent,
     )
 
     applyPromoCodeIfPresent(
@@ -56,6 +62,59 @@ class PaperSubscriptionBuilder(
         Some(state.paymentMethod),
         Some(soldToContact),
       )
+    }
+  }
+
+  def validateDeliveryAgent(paper: Paper): Option[AgentId] = {
+    if (paper.fulfilmentOptions == NationalDelivery && paper.deliveryAgent.isEmpty) {
+      throw new BadRequestException(
+        s"National Delivery subscriptions must have a delivery agent. ${paper.describe} does not have an agentId.",
+      )
+    }
+    paper.deliveryAgent
+  }
+
+  private def validateSunday(paymentMethod: PaymentMethod): Unit = {
+    paymentMethod match {
+      case _: CreditCardReferenceTransaction =>
+        if (paymentMethod.PaymentGateway != StripeTortoiseMedia) {
+          throw new BadRequestException(
+            s"Sunday subscriptions must use StripeTortoiseMedia payment gateway. ${paymentMethod.PaymentGateway} is not allowed.",
+          )
+        }
+      case _: DirectDebitPaymentMethod =>
+        if (paymentMethod.PaymentGateway != DirectDebitTortoiseMediaGateway) {
+          throw new BadRequestException(
+            s"Sunday subscriptions must use DirectDebitTortoiseMediaGateway payment gateway. ${paymentMethod.PaymentGateway} is not allowed.",
+          )
+        }
+      case _ => ()
+    }
+  }
+
+  private def validateNonSunday(paymentMethod: PaymentMethod): Unit = {
+    paymentMethod match {
+      case _: CreditCardReferenceTransaction =>
+        if (paymentMethod.PaymentGateway == StripeTortoiseMedia) {
+          throw new BadRequestException(
+            s"Only Sunday subscriptions should use the Tortoise media Stripe payment gateway.",
+          )
+        }
+      case _: DirectDebitPaymentMethod =>
+        if (paymentMethod.PaymentGateway == DirectDebitTortoiseMediaGateway) {
+          throw new BadRequestException(
+            s"Only Sunday subscriptions should use the Tortoise media Direct Debit payment gateway.",
+          )
+        }
+      case _ => ()
+    }
+  }
+
+  private def validatePaymentGateway(paymentMethod: PaymentMethod, paper: Paper): Unit = {
+    if (paper.productOptions == Sunday) {
+      validateSunday(paymentMethod)
+    } else {
+      validateNonSunday(paymentMethod)
     }
   }
 

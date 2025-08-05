@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	space,
 	textSans15,
@@ -8,9 +8,9 @@ import {
 } from '@guardian/source/foundations';
 import {
 	Button,
-	buttonThemeReaderRevenueBrand,
-	buttonThemeReaderRevenueBrandAlt,
 	SvgArrowRightStraight,
+	themeButtonReaderRevenueBrand,
+	themeButtonReaderRevenueBrandAlt,
 } from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
@@ -116,19 +116,21 @@ function Playback(props: {
 			</div>
 
 			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrandAlt}>
-					<Button onClick={props.editDirectDebitClicked}>Edit</Button>
-				</ThemeProvider>
-				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-					<Button
-						id="qa-submit-button-2"
-						onClick={props.onSubmit}
-						icon={<SvgArrowRightStraight />}
-						iconSide="right"
-					>
-						{props.buttonText}
-					</Button>
-				</ThemeProvider>
+				<Button
+					onClick={props.editDirectDebitClicked}
+					theme={themeButtonReaderRevenueBrandAlt}
+				>
+					Edit
+				</Button>
+				<Button
+					id="qa-submit-button-2"
+					onClick={props.onSubmit}
+					icon={<SvgArrowRightStraight />}
+					iconSide="right"
+					theme={themeButtonReaderRevenueBrand}
+				>
+					{props.buttonText}
+				</Button>
 			</div>
 
 			{props.allErrors.length > 0 && (
