@@ -1,5 +1,33 @@
 import { test, expect } from '@playwright/test';
 
+const isProd = (baseURL: string): boolean => {
+	try {
+		return new URL(baseURL).hostname === 'support.theguardian.com';
+	} catch {
+		return false;
+	}
+};
+
+const eventIdFromBaseURL = (baseURL: string): string => {
+	const prodE2EEventId = '1428771';
+	const codeE2EEventId = '1354460';
+	if (isProd(baseURL)) {
+		return prodE2EEventId;
+	} else {
+		return codeE2EEventId;
+	}
+};
+
+const iframeSrcFromBaseUrl = (baseURL: string): string => {
+	const prodIframeSrc = 'https://tickets.theguardian.live';
+	const codeIframeSrc = 'https://www.tickettailor.com';
+	if (isProd(baseURL)) {
+		return prodIframeSrc;
+	} else {
+		return codeIframeSrc;
+	}
+};
+
 test('Ticket Tailor iframe loads correctly', async ({
 	page,
 	context,
@@ -23,11 +51,11 @@ test('Ticket Tailor iframe loads correctly', async ({
 	});
 
 	// Navigate to the page containing the iframe
-	await page.goto('https://support.theguardian.com/uk/events/1428771');
+	await page.goto(`${baseURL}/uk/events/${eventIdFromBaseURL(baseURL)}`);
 
 	// Wait for the iframe to be present in the DOM
 	const iframe = await page.waitForSelector(
-		'iframe[src*="https://tickets.theguardian.live"]',
+		`iframe[src*="${iframeSrcFromBaseUrl(baseURL)}"]`,
 	);
 
 	// Check if the iframe is visible
