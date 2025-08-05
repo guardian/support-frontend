@@ -74,10 +74,18 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
+	// The product information can be calculated higher up the call stack
+	// once we get rid of the old product fields mechanism.
+	const productInformationAmount =
+		productFields.productType === 'Contribution' ||
+		productFields.productType === 'SupporterPlus'
+			? productFields.amount
+			: undefined;
+
 	const productInformation: ProductPurchase = productPurchaseSchema.parse({
 		product: productKey,
 		ratePlan: ratePlanKey,
-		amount: contributionAmount,
+		amount: productInformationAmount,
 	});
 
 	const firstDeliveryDate = getFirstDeliveryDateForProduct(
