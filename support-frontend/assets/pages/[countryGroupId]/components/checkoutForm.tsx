@@ -64,7 +64,6 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
-import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -128,6 +127,9 @@ type CheckoutFormProps = {
 	landingPageSettings: LandingPageVariant;
 	checkoutSession?: CheckoutSession;
 	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
+	setWeeklyDeliveryDate: (value: Date) => void;
+	weeklyDeliveryDates: Date[];
 };
 
 const getPaymentMethods = (
@@ -160,6 +162,9 @@ export default function CheckoutForm({
 	abParticipations,
 	checkoutSession,
 	clearCheckoutSession,
+	weeklyDeliveryDate,
+	setWeeklyDeliveryDate,
+	weeklyDeliveryDates,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -467,11 +472,6 @@ export default function CheckoutForm({
 	const [errorContext, setErrorContext] = useState<string>();
 	const [postStripeCheckoutErrorMessage, setPostStripeCheckoutErrorMessage] =
 		useState<string>();
-
-	const weeklyDeliveryDates = getWeeklyDays();
-	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
-		weeklyDeliveryDates[0] as Date,
-	);
 
 	// If we get an error, and we've already got a checkout session, clear the checkout session
 	// so that the user restarts the checkout process
