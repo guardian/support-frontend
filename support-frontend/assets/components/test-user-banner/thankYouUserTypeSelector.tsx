@@ -1,8 +1,8 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	Radio,
 	RadioGroup,
-	radioThemeBrand,
+	themeRadioBrand,
 } from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
 import type { UserType } from 'helpers/redux/checkout/personalDetails/state';
@@ -23,27 +23,26 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 	}, [selectedUserType]);
 
 	return (
-		<ThemeProvider theme={radioThemeBrand}>
-			<RadioGroup
-				error=""
-				label="Select a user account type:"
-				name="thankYouUserTypeSelector"
-				orientation="horizontal"
-				cssOverrides={selectorStyles}
-			>
-				<Radio
-					// the default user type response from identity as a test user is "new"
-					defaultChecked
-					label="New"
-					value="new"
-					onChange={() => setSelectedUserType('new')}
-				/>
-				<Radio
-					label="Existing"
-					value="current"
-					onChange={() => setSelectedUserType('current')}
-				/>
-			</RadioGroup>
-		</ThemeProvider>
+		<RadioGroup
+			error=""
+			label="Select a user account type:"
+			name="thankYouUserTypeSelector"
+			orientation="horizontal"
+			cssOverrides={selectorStyles}
+			theme={themeRadioBrand}
+		>
+			<Radio
+				// the default user type response from identity as a test user is "new"
+				defaultChecked
+				label="New"
+				value="new"
+				onChange={() => setSelectedUserType('new')}
+			/>
+			<Radio
+				label="Existing"
+				value="current"
+				onChange={() => setSelectedUserType('current')}
+			/>
+		</RadioGroup>
 	);
 }

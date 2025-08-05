@@ -11,14 +11,14 @@ const tests = [
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Annual',
-		paymentType: 'Credit/Debit card',
+		paymentType: 'Direct debit',
 		internationalisationId: 'UK',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: 'Quarterly',
 		paymentType: 'Credit/Debit card',
-		internationalisationId: 'UK',
+		internationalisationId: 'NZ',
 	},
 	{
 		product: 'GuardianWeeklyDomestic',
@@ -45,7 +45,7 @@ test.describe('Guardian Weekly Checkout', () =>
 		const { ratePlan, product, paymentType, internationalisationId } =
 			testDetails;
 
-		test(`Guardian Weekly - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
+		test(`${product} - ${ratePlan} - ${paymentType} - ${internationalisationId}`, async ({
 			context,
 			baseURL,
 		}) => {

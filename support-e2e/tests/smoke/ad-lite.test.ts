@@ -5,13 +5,16 @@ const tests = [
 	{
 		paymentType: 'Credit/Debit card',
 	},
+	{
+		paymentType: 'Direct debit',
+	},
 ];
 
 test.describe('Ad Lite Checkout', () =>
 	tests.map((testDetails) => {
 		const { paymentType } = testDetails;
 
-		test(`Ad-Lite - ${testDetails.paymentType}`, async ({
+		test(`GuardianAdLite - Monthly - ${paymentType} - UK`, async ({
 			context,
 			baseURL,
 		}) => {

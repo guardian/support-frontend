@@ -11,8 +11,22 @@ const tests = [
 	},
 	{
 		productLabel: 'Home Delivery',
+		product: 'HomeDelivery',
+		ratePlanLabel: 'Saturday',
+		paymentType: 'Direct debit',
+		internationalisationId: 'UK',
+	},
+	{
+		productLabel: 'Home Delivery',
+		product: 'HomeDelivery',
+		ratePlanLabel: 'Six day',
+		paymentType: 'Direct debit',
+		internationalisationId: 'UK',
+	},
+	{
+		productLabel: 'Home Delivery',
 		product: 'NationalDelivery',
-		ratePlanLabel: 'Weekend',
+		ratePlanLabel: 'Every day',
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'UK',
 		postCode: 'BN44 3QG', // This postcode only has one delivery agent
@@ -38,7 +52,7 @@ test.describe('Newspaper Checkout', () =>
 			ratePlanLabel,
 		} = testDetails;
 
-		test(`Newspaper - ${product} - ${paymentType} - ${internationalisationId} ${postCode ? `- ${postCode}` : ''}`, async ({
+		test(`Newspaper - ${product} - ${ratePlanLabel} - ${paymentType} - ${internationalisationId} ${postCode ? `- ${postCode}` : ''}`, async ({
 			context,
 			baseURL,
 		}) => {

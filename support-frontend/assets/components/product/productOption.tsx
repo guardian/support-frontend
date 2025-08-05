@@ -1,10 +1,10 @@
 import type { SerializedStyles } from '@emotion/react';
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import { until } from '@guardian/source/foundations';
 import {
-	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgInfoRound,
+	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import type { ReactNode } from 'react';
@@ -150,16 +150,15 @@ function ProductOption(props: Product): JSX.Element {
 				</p>
 			</div>
 			<div css={buttonDiv}>
-				<ThemeProvider theme={buttonThemeReaderRevenue}>
-					<LinkButton
-						cssOverrides={button}
-						href={props.href}
-						onClick={props.onClick}
-						aria-label={`${props.title}- ${props.buttonCopy}`}
-					>
-						{props.buttonCopy}
-					</LinkButton>
-				</ThemeProvider>
+				<LinkButton
+					cssOverrides={button}
+					href={props.href}
+					onClick={props.onClick}
+					aria-label={`${props.title}- ${props.buttonCopy}`}
+					theme={themeButtonReaderRevenue}
+				>
+					{props.buttonCopy}
+				</LinkButton>
 			</div>
 		</div>
 	);
