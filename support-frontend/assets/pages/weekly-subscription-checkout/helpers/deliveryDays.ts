@@ -20,7 +20,7 @@ function getWeeklyDeliveryDate(productKey: ActiveProductKey): Date {
 			? getTierThreeDeliveryDate()
 			: getWeeklyDays()[0];
 	if (!weeklyDate) {
-		throw new Error('We couldn\t find a valid weekly delivery date');
+		throw new Error('We could not find a valid weekly delivery date');
 	}
 	return weeklyDate;
 }
