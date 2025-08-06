@@ -11,7 +11,7 @@ type PersonalEmailFieldsProps = {
 	isSignedIn?: boolean;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
-	endUser?: string;
+	endUser?: 'your' | 'recipient';
 };
 
 export function PersonalEmailFields({
