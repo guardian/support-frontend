@@ -32,6 +32,7 @@ class ZuoraSupporterPlusHandler(
     } yield SendThankYouEmailSupporterPlusState(
       user,
       state.product,
+      state.productInformation,
       state.paymentMethod,
       paymentSchedule,
       state.appliedPromotion.map(_.promoCode),

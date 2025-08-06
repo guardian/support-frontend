@@ -6,7 +6,12 @@
     "outDir": "target/typescript",
     "baseUrl": "./",
     "paths": {
-      "@modules/*": ["../modules/*"]
+      "@modules/product/*": ["../modules/product/*"],
+      "@modules/internationalisation/*": ["../modules/internationalisation/*"],
+      "@modules/aws/*": ["./node_modules/@guardian/support-service-lambdas/modules/aws/src/*"],
+      "@modules/zuora/*": ["./node_modules/@guardian/support-service-lambdas/modules/zuora/src/*"],
+      "@modules/product-catalog/*": ["./node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
+      "@modules/*": ["./node_modules/@guardian/support-service-lambdas/modules/*"]
     }
   }
 }
