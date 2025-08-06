@@ -75,7 +75,15 @@ export function PersonalEmailFields({
 								setConfirmedEmail(event.currentTarget.value);
 							}}
 							onBlur={(event) => {
-								event.target.checkValidity();
+								// Delay to allow the state to update before checking validity.
+								// When using auto-fill we sometimes see the validity check for
+								// equality with the email field fail. I think this is happening
+								// because the state hasn't yet updated. Delaying this slightly
+								// seems to fix the issue. It doesn't seem super elegant but I'm
+								// not sure of a better way to handle this.
+								setTimeout(() => {
+									event.target.checkValidity();
+								}, 100);
 							}}
 							name="confirm-email"
 							required
