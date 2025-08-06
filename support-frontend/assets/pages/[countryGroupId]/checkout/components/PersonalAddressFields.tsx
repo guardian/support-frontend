@@ -74,12 +74,12 @@ export function PersonalAddressFields({
 				countryId={countryId}
 				countries={countries}
 				checkoutSession={checkoutSession}
+				postcode={deliveryPostcode}
+				setPostcode={setDeliveryPostcode}
 				legend={legendDelivery}
 				productKey={productKey}
 				deliveryAddressErrors={deliveryAddressErrors}
 				setDeliveryAddressErrors={setDeliveryAddressErrors}
-				postcode={deliveryPostcode}
-				setPostcode={setDeliveryPostcode}
 			/>
 			<fieldset
 				css={css`
