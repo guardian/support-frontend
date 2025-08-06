@@ -64,6 +64,7 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
 import { isValidPostcode } from '../../../helpers/forms/formValidation';
@@ -130,7 +131,6 @@ type CheckoutFormProps = {
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
-	weeklyDeliveryDates: Date[];
 };
 
 const getPaymentMethods = (
@@ -165,7 +165,6 @@ export default function CheckoutForm({
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
-	weeklyDeliveryDates,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -815,7 +814,7 @@ export default function CheckoutForm({
 								/>
 								<WeeklyDeliveryDates
 									legend={`2. Gift delivery date`}
-									weeklyDeliveryDates={weeklyDeliveryDates}
+									weeklyDeliveryDates={getWeeklyDays()}
 									weeklyDeliveryDateSelected={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
 										setWeeklyDeliveryDate(weeklyDeliveryDate);

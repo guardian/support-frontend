@@ -23,10 +23,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import {
-	getWeeklyDays,
-	getWeeklyDeliveryDate,
-} from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
@@ -305,7 +302,6 @@ export function Checkout({
 					clearCheckoutSession={clearCheckoutSession}
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
-					weeklyDeliveryDates={getWeeklyDays()}
 				/>
 			</CheckoutLayout>
 		</Elements>
