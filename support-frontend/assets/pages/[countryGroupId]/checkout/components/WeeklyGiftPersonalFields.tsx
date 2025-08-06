@@ -5,39 +5,37 @@ import { PersonalFields } from './PersonalFields';
 
 type PersonalGiftDetailsFieldsProps = {
 	legend: string;
-	firstName: string;
-	setFirstName: (value: string) => void;
-	lastName: string;
-	setLastName: (value: string) => void;
-	email: string;
-	setEmail: (value: string) => void;
+	recipientFirstName: string;
+	setRecipientFirstName: (value: string) => void;
+	recipientLastName: string;
+	setRecipientLastName: (value: string) => void;
+	recipientEmail: string;
+	setRecipientEmail: (value: string) => void;
 };
 
 export function WeeklyGiftPersonalFields({
 	legend,
-	firstName,
-	setFirstName,
-	lastName,
-	setLastName,
-	email,
-	setEmail,
+	recipientFirstName,
+	setRecipientFirstName,
+	recipientLastName,
+	setRecipientLastName,
+	recipientEmail,
+	setRecipientEmail,
 }: PersonalGiftDetailsFieldsProps) {
 	return (
 		<>
 			<FormSection>
 				<Legend>{legend}</Legend>
 				<PersonalFields
-					firstName={firstName}
-					setFirstName={setFirstName}
-					lastName={lastName}
-					setLastName={setLastName}
-					email={email}
-					setEmail={setEmail}
+					firstName={recipientFirstName}
+					setFirstName={setRecipientFirstName}
+					lastName={recipientLastName}
+					setLastName={setRecipientLastName}
 					endUser={'recipient'}
 				/>
 				<PersonalEmailFields
-					email={email}
-					setEmail={setEmail}
+					email={recipientEmail}
+					setEmail={setRecipientEmail}
 					endUser={'recipient'}
 				/>
 			</FormSection>

@@ -69,8 +69,6 @@ export function PersonalDetailsFields({
 					setFirstName={setFirstName}
 					lastName={lastName}
 					setLastName={setLastName}
-					email={email}
-					setEmail={setEmail}
 				/>
 				{/**
 				 * We require state for non-deliverable products as we use different taxes

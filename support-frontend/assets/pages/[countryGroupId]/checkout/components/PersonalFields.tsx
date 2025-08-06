@@ -10,8 +10,6 @@ type PersonalDetailsFieldsProps = {
 	setFirstName: (value: string) => void;
 	lastName: string;
 	setLastName: (value: string) => void;
-	email: string;
-	setEmail: (value: string) => void;
 	endUser?: string;
 };
 

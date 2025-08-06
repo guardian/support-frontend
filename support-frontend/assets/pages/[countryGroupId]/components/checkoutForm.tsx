@@ -799,23 +799,23 @@ export default function CheckoutForm({
 							<>
 								<WeeklyGiftPersonalFields
 									legend={`1. Gift recipient's details`}
-									firstName={recipientFirstName}
-									setFirstName={(recipientFirstName) =>
+									recipientFirstName={recipientFirstName}
+									setRecipientFirstName={(recipientFirstName) =>
 										setRecipientFirstName(recipientFirstName)
 									}
-									lastName={recipientLastName}
-									setLastName={(recipientLastName) =>
+									recipientLastName={recipientLastName}
+									setRecipientLastName={(recipientLastName) =>
 										setRecipientLastName(recipientLastName)
 									}
-									email={recipientEmail}
-									setEmail={(recipientEmail) =>
+									recipientEmail={recipientEmail}
+									setRecipientEmail={(recipientEmail) =>
 										setRecipientEmail(recipientEmail)
 									}
 								/>
 								<WeeklyDeliveryDates
 									legend={`2. Gift delivery date`}
 									weeklyDeliveryDates={getWeeklyDays()}
-									weeklyDeliveryDateSelected={weeklyDeliveryDate}
+									weeklyDeliveryDate={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
 										setWeeklyDeliveryDate(weeklyDeliveryDate);
 									}}

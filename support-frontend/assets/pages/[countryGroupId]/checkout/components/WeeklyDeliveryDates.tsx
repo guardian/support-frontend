@@ -23,7 +23,7 @@ const weeklyInfo = css`
 type WeeklyDeliveryDatesProps = {
 	legend: string;
 	weeklyDeliveryDates: Date[];
-	weeklyDeliveryDateSelected: Date;
+	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (deliveryDate: Date) => void;
 };
 
@@ -38,7 +38,7 @@ function deliveryDateIsInvalid(date: Date): boolean {
 export function WeeklyDeliveryDates({
 	legend,
 	weeklyDeliveryDates,
-	weeklyDeliveryDateSelected,
+	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 }: WeeklyDeliveryDatesProps) {
 	return (
@@ -57,7 +57,7 @@ export function WeeklyDeliveryDates({
 									formatMachineDate(validDate),
 								];
 								const isChecked =
-									machineDate === formatMachineDate(weeklyDeliveryDateSelected);
+									machineDate === formatMachineDate(weeklyDeliveryDate);
 								return (
 									<div
 										css={[
