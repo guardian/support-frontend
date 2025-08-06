@@ -3,6 +3,7 @@ import type { IsoCountry } from '@modules/internationalisation/country';
 import { useState } from 'react';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
+import { countriesRequiringBillingState } from 'pages/[countryGroupId]/helpers/countriesRequiringBillingState';
 import {
 	doesNotContainExtendedEmojiOrLeadingSpace,
 	preventDefaultValidityMessage,
@@ -77,30 +78,31 @@ export function PersonalDetailsFields({
 				 */}
 				{!hasDeliveryAddress && (
 					<>
-						{setBillingState && ['US', 'CA', 'AU'].includes(countryId) && (
-							<StateSelect
-								countryId={countryId}
-								state={billingState ?? ''}
-								onStateChange={(event) => {
-									setBillingState(event.currentTarget.value);
-								}}
-								onBlur={(event) => {
-									event.currentTarget.checkValidity();
-								}}
-								onInvalid={(event) => {
-									preventDefaultValidityMessage(event.currentTarget);
-									const validityState = event.currentTarget.validity;
-									if (validityState.valid) {
-										setBillingStateError(undefined);
-									} else {
-										setBillingStateError(
-											'Please enter a state, province or territory.',
-										);
-									}
-								}}
-								error={billingStateError}
-							/>
-						)}
+						{setBillingState &&
+							countriesRequiringBillingState.includes(countryId) && (
+								<StateSelect
+									countryId={countryId}
+									state={billingState ?? ''}
+									onStateChange={(event) => {
+										setBillingState(event.currentTarget.value);
+									}}
+									onBlur={(event) => {
+										event.currentTarget.checkValidity();
+									}}
+									onInvalid={(event) => {
+										preventDefaultValidityMessage(event.currentTarget);
+										const validityState = event.currentTarget.validity;
+										if (validityState.valid) {
+											setBillingStateError(undefined);
+										} else {
+											setBillingStateError(
+												'Please enter a state, province or territory.',
+											);
+										}
+									}}
+									error={billingStateError}
+								/>
+							)}
 						{setBillingPostcode && countryId === 'US' && (
 							<div>
 								<TextInput

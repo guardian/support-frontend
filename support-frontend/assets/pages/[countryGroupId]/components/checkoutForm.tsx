@@ -78,6 +78,7 @@ import { getDeliveryAgents } from '../checkout/helpers/getDeliveryAgents';
 import { getProductFields } from '../checkout/helpers/getProductFields';
 import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
+import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { isWeeklyGiftSub } from '../helpers/isWeeklyGiftSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
@@ -717,7 +718,7 @@ export default function CheckoutForm({
 
 										if (
 											!event.billingDetails?.address.state &&
-											['US', 'CA', 'AU'].includes(countryId)
+											countriesRequiringBillingState.includes(countryId)
 										) {
 											logException(
 												"Could not find state from Stripe's billingDetails",
