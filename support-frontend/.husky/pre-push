@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm --filter support-frontend test
+pnpm --filter support-frontend tsc && pnpm --filter support-frontend knip && pnpm --filter support-frontend test
