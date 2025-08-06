@@ -220,14 +220,14 @@ export default function CheckoutForm({
 		},
 	});
 
-	const legendStartNumber = isWeeklyGift ? 3 : 1;
-	const legendPersonalDetails = `${legendStartNumber}. Your details`;
+	const legendPrefix = isWeeklyGift ? 3 : 1;
+	const legendPersonalDetails = `${legendPrefix}. Your details`;
 	const legendPayment = `${
 		hasDeliveryAddress
 			? deliveryPostcodeIsOutsideM25
-				? legendStartNumber + 3
-				: legendStartNumber + 2
-			: legendStartNumber + 1
+				? legendPrefix + 3
+				: legendPrefix + 2
+			: legendPrefix + 1
 	}. Payment method`;
 
 	/**
