@@ -73,77 +73,68 @@ export function PersonalAddressFields({
 
 	return (
 		<>
-			{productDescription.deliverableTo && (
-				<>
-					<DeliveryRecipientAddress
-						countryId={countryId}
-						legend={legendDelivery}
-						checkoutSession={checkoutSession}
-						productDescription={productDescription}
-						productKey={productKey}
-						deliveryAddressErrors={deliveryAddressErrors}
-						setDeliveryAddressErrors={setDeliveryAddressErrors}
-						deliveryPostcode={deliveryPostcode}
-						setDeliveryPostcode={setDeliveryPostcode}
+			<DeliveryRecipientAddress
+				countryId={countryId}
+				legend={legendDelivery}
+				checkoutSession={checkoutSession}
+				productDescription={productDescription}
+				productKey={productKey}
+				deliveryAddressErrors={deliveryAddressErrors}
+				setDeliveryAddressErrors={setDeliveryAddressErrors}
+				deliveryPostcode={deliveryPostcode}
+				setDeliveryPostcode={setDeliveryPostcode}
+			/>
+			<fieldset
+				css={css`
+					margin-bottom: ${space[6]}px;
+				`}
+			>
+				<Label text="Billing address" htmlFor="billingAddressMatchesDelivery" />
+				<Checkbox
+					checked={billingAddressMatchesDelivery}
+					value="yes"
+					onChange={() => {
+						setBillingAddressMatchesDelivery(!billingAddressMatchesDelivery);
+					}}
+					id="billingAddressMatchesDelivery"
+					name="billingAddressMatchesDelivery"
+					label="Billing address same as delivery address"
+				/>
+			</fieldset>
+			{!billingAddressMatchesDelivery && (
+				<BillingAddress
+					checkoutSession={checkoutSession}
+					productDescription={productDescription}
+					countryId={countryId}
+					billingPostcode={billingPostcode}
+					setBillingPostcode={setBillingPostcode}
+					billingState={billingState}
+					setBillingState={setBillingState}
+				/>
+			)}
+			{deliveryPostcodeIsOutsideM25 && (
+				<FormSection>
+					<Legend>{legendOutsideM25}</Legend>
+					<DeliveryAgentsSelect
+						chosenDeliveryAgent={chosenDeliveryAgent}
+						deliveryAgentsResponse={deliveryAgents}
+						setDeliveryAgent={(agent: number | undefined) => {
+							setChosenDeliveryAgent(agent);
+							setDeliveryAgentError(undefined);
+						}}
+						formErrors={
+							deliveryAgentError !== undefined
+								? [
+										{
+											field: 'deliveryProvider',
+											message: deliveryAgentError,
+										},
+								  ]
+								: []
+						}
+						deliveryAddressErrors={[]}
 					/>
-					<fieldset
-						css={css`
-							margin-bottom: ${space[6]}px;
-						`}
-					>
-						<Label
-							text="Billing address"
-							htmlFor="billingAddressMatchesDelivery"
-						/>
-						<Checkbox
-							checked={billingAddressMatchesDelivery}
-							value="yes"
-							onChange={() => {
-								setBillingAddressMatchesDelivery(
-									!billingAddressMatchesDelivery,
-								);
-							}}
-							id="billingAddressMatchesDelivery"
-							name="billingAddressMatchesDelivery"
-							label="Billing address same as delivery address"
-						/>
-					</fieldset>
-					{!billingAddressMatchesDelivery && (
-						<BillingAddress
-							checkoutSession={checkoutSession}
-							productDescription={productDescription}
-							countryId={countryId}
-							billingPostcode={billingPostcode}
-							setBillingPostcode={setBillingPostcode}
-							billingState={billingState}
-							setBillingState={setBillingState}
-						/>
-					)}
-					{deliveryPostcodeIsOutsideM25 && (
-						<FormSection>
-							<Legend>{legendOutsideM25}</Legend>
-							<DeliveryAgentsSelect
-								chosenDeliveryAgent={chosenDeliveryAgent}
-								deliveryAgentsResponse={deliveryAgents}
-								setDeliveryAgent={(agent: number | undefined) => {
-									setChosenDeliveryAgent(agent);
-									setDeliveryAgentError(undefined);
-								}}
-								formErrors={
-									deliveryAgentError !== undefined
-										? [
-												{
-													field: 'deliveryProvider',
-													message: deliveryAgentError,
-												},
-										  ]
-										: []
-								}
-								deliveryAddressErrors={[]}
-							/>
-						</FormSection>
-					)}
-				</>
+				</FormSection>
 			)}
 			<CheckoutDivider spacing="loose" />
 		</>

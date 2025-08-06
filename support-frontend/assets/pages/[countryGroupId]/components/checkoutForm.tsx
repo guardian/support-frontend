@@ -854,28 +854,29 @@ export default function CheckoutForm({
 						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
-
-						<PersonalAddressFields
-							countryId={countryId}
-							checkoutSession={checkoutSession}
-							productDescription={productDescription}
-							productKey={productKey}
-							deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
-							deliveryPostcode={deliveryPostcode}
-							setDeliveryPostcode={setDeliveryPostcode}
-							chosenDeliveryAgent={chosenDeliveryAgent}
-							setChosenDeliveryAgent={setChosenDeliveryAgent}
-							deliveryAgents={deliveryAgents}
-							deliveryAgentError={deliveryAgentError}
-							setDeliveryAgentError={setDeliveryAgentError}
-							deliveryAddressErrors={deliveryAddressErrors}
-							setDeliveryAddressErrors={setDeliveryAddressErrors}
-							billingPostcode={billingPostcode}
-							setBillingPostcode={setBillingPostcode}
-							billingState={billingState}
-							setBillingState={setBillingState}
-							isWeeklyGift={isWeeklyGift}
-						/>
+						{hasDeliveryAddress && (
+							<PersonalAddressFields
+								countryId={countryId}
+								checkoutSession={checkoutSession}
+								productDescription={productDescription}
+								productKey={productKey}
+								deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
+								deliveryPostcode={deliveryPostcode}
+								setDeliveryPostcode={setDeliveryPostcode}
+								chosenDeliveryAgent={chosenDeliveryAgent}
+								setChosenDeliveryAgent={setChosenDeliveryAgent}
+								deliveryAgents={deliveryAgents}
+								deliveryAgentError={deliveryAgentError}
+								setDeliveryAgentError={setDeliveryAgentError}
+								deliveryAddressErrors={deliveryAddressErrors}
+								setDeliveryAddressErrors={setDeliveryAddressErrors}
+								billingPostcode={billingPostcode}
+								setBillingPostcode={setBillingPostcode}
+								billingState={billingState}
+								setBillingState={setBillingState}
+								isWeeklyGift={isWeeklyGift}
+							/>
+						)}
 
 						<FormSection ref={paymentMethodRef}>
 							<Legend>
