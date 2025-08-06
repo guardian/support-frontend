@@ -1,4 +1,10 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm --filter support-frontend tsc && pnpm --filter support-frontend knip && pnpm --filter support-frontend test
+echo "🔍 Running pre-push checks..."
+
+pnpm --filter support-frontend typecheck
+pnpm --filter support-frontend knip
+pnpm --filter support-frontend test
+
+echo "✅ Pre-push checks passed!"
