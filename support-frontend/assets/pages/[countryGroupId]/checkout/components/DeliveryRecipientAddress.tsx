@@ -7,10 +7,7 @@ import { AddressFields } from 'components/subscriptionCheckouts/address/addressF
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type {
-	ActiveProductKey,
-	ProductDescription,
-} from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { Legend } from 'pages/[countryGroupId]/components/form';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
@@ -18,28 +15,28 @@ import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSessio
 
 type DeliveryRecipientAddressProps = {
 	countryId: IsoCountry;
-	legend: string;
+	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
-	productDescription: ProductDescription;
+	postcode: string;
+	setPostcode: (value: string) => void;
+	legend: string;
 	productKey: ActiveProductKey;
 	deliveryAddressErrors: AddressFormFieldError[];
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	deliveryPostcode: string;
-	setDeliveryPostcode: (value: string) => void;
 };
 
 export function DeliveryRecipientAddress({
 	countryId,
-	legend,
+	countries,
 	checkoutSession,
-	productDescription,
+	postcode,
+	setPostcode,
+	legend,
 	productKey,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	deliveryPostcode,
-	setDeliveryPostcode,
 }: DeliveryRecipientAddressProps) {
 	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
@@ -88,14 +85,14 @@ export function DeliveryRecipientAddress({
 					city={deliveryCity}
 					country={deliveryCountry}
 					state={deliveryState}
-					postCode={deliveryPostcode}
+					postCode={postcode}
 					countryGroupId={countryGroupId}
-					countries={productDescription.deliverableTo ?? {}}
+					countries={countries ?? {}}
 					errors={deliveryAddressErrors}
 					postcodeState={{
 						results: deliveryPostcodeStateResults,
 						isLoading: deliveryPostcodeStateLoading,
-						postcode: deliveryPostcode,
+						postcode,
 						error: '',
 					}}
 					setLineOne={(lineOne) => {
@@ -111,7 +108,7 @@ export function DeliveryRecipientAddress({
 						setDeliveryState(state);
 					}}
 					setPostcode={(postcode) => {
-						setDeliveryPostcode(postcode);
+						setPostcode(postcode);
 					}}
 					setCountry={(country) => {
 						setDeliveryCountry(country);

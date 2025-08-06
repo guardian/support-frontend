@@ -857,8 +857,8 @@ export default function CheckoutForm({
 						{hasDeliveryAddress && (
 							<PersonalAddressFields
 								countryId={countryId}
+								countries={productDescription.deliverableTo}
 								checkoutSession={checkoutSession}
-								productDescription={productDescription}
 								productKey={productKey}
 								deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
 								deliveryPostcode={deliveryPostcode}

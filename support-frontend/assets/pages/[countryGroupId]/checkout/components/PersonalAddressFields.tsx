@@ -2,10 +2,7 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source/foundations';
 import { Checkbox, Label } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type {
-	ActiveProductKey,
-	ProductDescription,
-} from 'helpers/productCatalog';
+import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { FormSection, Legend } from 'pages/[countryGroupId]/components/form';
 import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/components/deliveryAgentsSelect';
@@ -18,8 +15,8 @@ import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
+	countries?: Record<string, string>;
 	checkoutSession?: CheckoutSession;
-	productDescription: ProductDescription;
 	productKey: ActiveProductKey;
 	deliveryPostcodeIsOutsideM25: boolean;
 	deliveryPostcode: string;
@@ -42,8 +39,8 @@ type PersonalAddressFieldsProps = {
 
 export function PersonalAddressFields({
 	countryId,
+	countries,
 	checkoutSession,
-	productDescription,
 	productKey,
 	deliveryPostcodeIsOutsideM25,
 	deliveryPostcode,
@@ -75,14 +72,14 @@ export function PersonalAddressFields({
 		<>
 			<DeliveryRecipientAddress
 				countryId={countryId}
-				legend={legendDelivery}
+				countries={countries}
 				checkoutSession={checkoutSession}
-				productDescription={productDescription}
+				legend={legendDelivery}
 				productKey={productKey}
 				deliveryAddressErrors={deliveryAddressErrors}
 				setDeliveryAddressErrors={setDeliveryAddressErrors}
-				deliveryPostcode={deliveryPostcode}
-				setDeliveryPostcode={setDeliveryPostcode}
+				postcode={deliveryPostcode}
+				setPostcode={setDeliveryPostcode}
 			/>
 			<fieldset
 				css={css`
@@ -103,13 +100,13 @@ export function PersonalAddressFields({
 			</fieldset>
 			{!billingAddressMatchesDelivery && (
 				<BillingAddress
-					checkoutSession={checkoutSession}
-					productDescription={productDescription}
 					countryId={countryId}
-					billingPostcode={billingPostcode}
-					setBillingPostcode={setBillingPostcode}
-					billingState={billingState}
-					setBillingState={setBillingState}
+					countries={countries}
+					checkoutSession={checkoutSession}
+					postcode={billingPostcode}
+					setPostcode={setBillingPostcode}
+					state={billingState}
+					setState={setBillingState}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (

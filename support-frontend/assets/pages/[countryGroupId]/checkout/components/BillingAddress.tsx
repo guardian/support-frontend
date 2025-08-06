@@ -4,29 +4,28 @@ import { AddressFields } from 'components/subscriptionCheckouts/address/addressF
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { ProductDescription } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
 import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
 
 type BillingAddressProps = {
-	checkoutSession?: CheckoutSession;
-	productDescription: ProductDescription;
 	countryId: IsoCountry;
-	billingPostcode: string;
-	setBillingPostcode: (value: string) => void;
-	billingState: string;
-	setBillingState: (value: string) => void;
+	countries?: Record<string, string>;
+	checkoutSession?: CheckoutSession;
+	postcode: string;
+	setPostcode: (value: string) => void;
+	state: string;
+	setState: (value: string) => void;
 };
 
 export function BillingAddress({
-	checkoutSession,
-	productDescription,
+	countries,
 	countryId,
-	billingPostcode,
-	setBillingPostcode,
-	billingState,
-	setBillingState,
+	checkoutSession,
+	postcode,
+	setPostcode,
+	state,
+	setState,
 }: BillingAddressProps) {
 	/** Billing address */
 	const [billingLineOne, setBillingLineOne] =
@@ -65,15 +64,15 @@ export function BillingAddress({
 				lineTwo={billingLineTwo}
 				city={billingCity}
 				country={billingCountry}
-				state={billingState}
-				postCode={billingPostcode}
+				state={state}
+				postCode={postcode}
 				countryGroupId={countryGroupId}
-				countries={productDescription.deliverableTo ?? {}}
+				countries={countries ?? {}}
 				errors={billingAddressErrors}
 				postcodeState={{
 					results: billingPostcodeStateResults,
 					isLoading: billingPostcodeStateLoading,
-					postcode: billingPostcode,
+					postcode: postcode,
 					error: '',
 				}}
 				setLineOne={(lineOne) => {
@@ -86,10 +85,10 @@ export function BillingAddress({
 					setBillingCity(city);
 				}}
 				setState={(state) => {
-					setBillingState(state);
+					setState(state);
 				}}
 				setPostcode={(postcode) => {
-					setBillingPostcode(postcode);
+					setPostcode(postcode);
 				}}
 				setCountry={(country) => {
 					setBillingCountry(country);
