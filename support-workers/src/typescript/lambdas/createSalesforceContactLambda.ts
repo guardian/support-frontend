@@ -56,6 +56,7 @@ const createNextState = (
 				productSpecificState: {
 					productType: 'Contribution',
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					salesForceContact: contactRecords.buyer,
 					similarProductsConsent: state.similarProductsConsent,
@@ -68,6 +69,7 @@ const createNextState = (
 					productType: 'SupporterPlus',
 					billingCountry: user.billingAddress.country,
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					appliedPromotion: state.appliedPromotion,
 					salesForceContact: contactRecords.buyer,
@@ -81,6 +83,7 @@ const createNextState = (
 					productType: 'TierThree',
 					user: state.user,
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					firstDeliveryDate: getIfDefined(
 						state.firstDeliveryDate,
@@ -97,6 +100,7 @@ const createNextState = (
 				productSpecificState: {
 					productType: 'GuardianAdLite',
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					salesForceContact: contactRecords.buyer,
 				},
@@ -109,6 +113,7 @@ const createNextState = (
 					user: state.user,
 					giftRecipient: state.giftRecipient,
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					firstDeliveryDate: getIfDefined(
 						state.firstDeliveryDate,
@@ -126,6 +131,7 @@ const createNextState = (
 					productType: 'Paper',
 					user: state.user,
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					firstDeliveryDate: getIfDefined(
 						state.firstDeliveryDate,
@@ -143,6 +149,7 @@ const createNextState = (
 					productType: 'DigitalSubscription',
 					billingCountry: user.billingAddress.country,
 					product: state.product,
+					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					appliedPromotion: state.appliedPromotion,
 					salesForceContact: contactRecords.buyer,

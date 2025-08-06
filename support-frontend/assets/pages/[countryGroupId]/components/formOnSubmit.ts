@@ -1,3 +1,5 @@
+import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import type { Participations } from '../../../helpers/abTests/models';
@@ -72,6 +74,20 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
+	// The product information can be calculated higher up the call stack
+	// once we get rid of the old product fields mechanism.
+	const productInformationAmount =
+		productFields.productType === 'Contribution' ||
+		productFields.productType === 'SupporterPlus'
+			? productFields.amount
+			: undefined;
+
+	const productInformation: ProductPurchase = productPurchaseSchema.parse({
+		product: productKey,
+		ratePlan: ratePlanKey,
+		amount: productInformationAmount,
+	});
+
 	const firstDeliveryDate = getFirstDeliveryDateForProduct(
 		productKey,
 		productFields,
@@ -99,6 +115,7 @@ export const submitForm = async ({
 		ophanIds,
 		referrerAcquisitionData,
 		product: productFields,
+		productInformation,
 		supportAbTests,
 		deliveryInstructions,
 		debugInfo: '',

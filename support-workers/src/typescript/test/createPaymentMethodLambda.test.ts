@@ -19,6 +19,10 @@ const wrapPayload = (payload: CreatePaymentMethodState) => ({
 	},
 });
 
+jest.mock('../model/stage', () => ({
+	stageFromEnvironment: jest.fn().mockReturnValue('CODE'),
+}));
+
 describe('handler', () => {
 	describe('Direct Debit', () => {
 		it('uses the GoCardless payment gateway for a non-Sunday newspaper subscription', async () => {
