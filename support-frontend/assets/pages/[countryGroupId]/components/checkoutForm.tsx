@@ -800,25 +800,17 @@ export default function CheckoutForm({
 								<WeeklyGiftPersonalFields
 									legend={`1. Gift recipient's details`}
 									recipientFirstName={recipientFirstName}
-									setRecipientFirstName={(recipientFirstName) =>
-										setRecipientFirstName(recipientFirstName)
-									}
+									setRecipientFirstName={setRecipientFirstName}
 									recipientLastName={recipientLastName}
-									setRecipientLastName={(recipientLastName) =>
-										setRecipientLastName(recipientLastName)
-									}
+									setRecipientLastName={setRecipientLastName}
 									recipientEmail={recipientEmail}
-									setRecipientEmail={(recipientEmail) =>
-										setRecipientEmail(recipientEmail)
-									}
+									setRecipientEmail={setRecipientEmail}
 								/>
 								<WeeklyDeliveryDates
 									legend={`2. Gift delivery date`}
 									weeklyDeliveryDates={getWeeklyDays()}
 									weeklyDeliveryDate={weeklyDeliveryDate}
-									setWeeklyDeliveryDate={(weeklyDeliveryDate) => {
-										setWeeklyDeliveryDate(weeklyDeliveryDate);
-									}}
+									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 								/>
 							</>
 						)}
@@ -827,21 +819,17 @@ export default function CheckoutForm({
 							countryId={countryId}
 							legend={legendPersonalDetails}
 							firstName={firstName}
-							setFirstName={(firstName) => setFirstName(firstName)}
+							setFirstName={setFirstName}
 							lastName={lastName}
-							setLastName={(lastName) => setLastName(lastName)}
+							setLastName={setLastName}
 							email={email}
-							setEmail={(email) => setEmail(email)}
+							setEmail={setEmail}
 							confirmedEmail={confirmedEmail}
-							setConfirmedEmail={(confirmedEmail) =>
-								setConfirmedEmail(confirmedEmail)
-							}
+							setConfirmedEmail={setConfirmedEmail}
 							billingState={billingState}
-							setBillingState={(billingState) => setBillingState(billingState)}
+							setBillingState={setBillingState}
 							billingPostcode={billingPostcode}
-							setBillingPostcode={(billingPostcode) =>
-								setBillingPostcode(billingPostcode)
-							}
+							setBillingPostcode={setBillingPostcode}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}

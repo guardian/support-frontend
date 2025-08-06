@@ -75,33 +75,19 @@ export function BillingAddress({
 					postcode: postcode,
 					error: '',
 				}}
-				setLineOne={(lineOne) => {
-					setBillingLineOne(lineOne);
-				}}
-				setLineTwo={(lineTwo) => {
-					setBillingLineTwo(lineTwo);
-				}}
-				setTownCity={(city) => {
-					setBillingCity(city);
-				}}
-				setState={(state) => {
-					setState(state);
-				}}
-				setPostcode={(postcode) => {
-					setPostcode(postcode);
-				}}
-				setCountry={(country) => {
-					setBillingCountry(country);
-				}}
+				setLineOne={setBillingLineOne}
+				setLineTwo={setBillingLineTwo}
+				setTownCity={setBillingCity}
+				setState={setState}
+				setPostcode={setPostcode}
+				setCountry={setBillingCountry}
 				setPostcodeForFinder={() => {
 					// no-op
 				}}
 				setPostcodeErrorForFinder={() => {
 					// no-op
 				}}
-				setErrors={(errors) => {
-					setBillingAddressErrors(errors);
-				}}
+				setErrors={setBillingAddressErrors}
 				onFindAddress={(postcode) => {
 					setBillingPostcodeStateLoading(true);
 					void findAddressesForPostcode(postcode).then((results) => {

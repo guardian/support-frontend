@@ -94,33 +94,19 @@ export function DeliveryRecipientAddress({
 						postcode,
 						error: '',
 					}}
-					setLineOne={(lineOne) => {
-						setDeliveryLineOne(lineOne);
-					}}
-					setLineTwo={(lineTwo) => {
-						setDeliveryLineTwo(lineTwo);
-					}}
-					setTownCity={(city) => {
-						setDeliveryCity(city);
-					}}
-					setState={(state) => {
-						setDeliveryState(state);
-					}}
-					setPostcode={(postcode) => {
-						setPostcode(postcode);
-					}}
-					setCountry={(country) => {
-						setDeliveryCountry(country);
-					}}
+					setLineOne={setDeliveryLineOne}
+					setLineTwo={setDeliveryLineTwo}
+					setTownCity={setDeliveryCity}
+					setState={setDeliveryState}
+					setPostcode={setPostcode}
+					setCountry={setDeliveryCountry}
 					setPostcodeForFinder={() => {
 						// no-op
 					}}
 					setPostcodeErrorForFinder={() => {
 						// no-op
 					}}
-					setErrors={(errors) => {
-						setAddressErrors(errors);
-					}}
+					setErrors={setAddressErrors}
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
 						void findAddressesForPostcode(postcode).then((results) => {
