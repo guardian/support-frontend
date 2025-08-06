@@ -1,8 +1,6 @@
 {
   "license": "Apache-2.0",
   "scripts": {
-    "pre-commit": "pnpm run --filter \"support-*\" pre-commit",
-    "pre-push": "pnpm run --filter \"support-*\" pre-push",
     "prepare": "husky install",
     "test": "pnpm --stream -r run test"
   },

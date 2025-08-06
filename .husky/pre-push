@@ -1,2 +1,3 @@
+echo 'husky pre push'
 pnpm --filter cdk check-formatting && pnpm --filter cdk test
 pnpm --filter support-frontend pre-push
