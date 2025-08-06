@@ -83,7 +83,7 @@ export function PersonalEmailFields({
 								// not sure of a better way to handle this.
 								setTimeout(() => {
 									event.target.checkValidity();
-								}, 100);
+								}, 50);
 							}}
 							name="confirm-email"
 							required
