@@ -7,7 +7,6 @@ import { AddressFields } from 'components/subscriptionCheckouts/address/addressF
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { CountryGroup } from 'helpers/internationalisation/classes/countryGroup';
-import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import { Legend } from 'pages/[countryGroupId]/components/form';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
@@ -20,9 +19,9 @@ type DeliveryRecipientAddressProps = {
 	postcode: string;
 	setPostcode: (value: string) => void;
 	legend: string;
-	productKey: ActiveProductKey;
-	deliveryAddressErrors: AddressFormFieldError[];
-	setDeliveryAddressErrors: React.Dispatch<
+	showInstructions: boolean;
+	addressErrors: AddressFormFieldError[];
+	setAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
 };
@@ -34,9 +33,9 @@ export function DeliveryRecipientAddress({
 	postcode,
 	setPostcode,
 	legend,
-	productKey,
-	deliveryAddressErrors,
-	setDeliveryAddressErrors,
+	showInstructions,
+	addressErrors,
+	setAddressErrors,
 }: DeliveryRecipientAddressProps) {
 	/** Delivery address */
 	const [deliveryLineOne, setDeliveryLineOne] =
@@ -88,7 +87,7 @@ export function DeliveryRecipientAddress({
 					postCode={postcode}
 					countryGroupId={countryGroupId}
 					countries={countries ?? {}}
-					errors={deliveryAddressErrors}
+					errors={addressErrors}
 					postcodeState={{
 						results: deliveryPostcodeStateResults,
 						isLoading: deliveryPostcodeStateLoading,
@@ -120,7 +119,7 @@ export function DeliveryRecipientAddress({
 						// no-op
 					}}
 					setErrors={(errors) => {
-						setDeliveryAddressErrors(errors);
+						setAddressErrors(errors);
 					}}
 					onFindAddress={(postcode) => {
 						setDeliveryPostcodeStateLoading(true);
@@ -131,7 +130,7 @@ export function DeliveryRecipientAddress({
 					}}
 				/>
 			</fieldset>
-			{productKey === 'HomeDelivery' && (
+			{showInstructions && (
 				<fieldset
 					css={css`
 						margin-bottom: ${space[6]}px;

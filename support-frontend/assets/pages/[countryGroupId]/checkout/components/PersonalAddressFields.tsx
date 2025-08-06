@@ -77,9 +77,9 @@ export function PersonalAddressFields({
 				postcode={deliveryPostcode}
 				setPostcode={setDeliveryPostcode}
 				legend={legendDelivery}
-				productKey={productKey}
-				deliveryAddressErrors={deliveryAddressErrors}
-				setDeliveryAddressErrors={setDeliveryAddressErrors}
+				showInstructions={productKey === 'HomeDelivery'}
+				addressErrors={deliveryAddressErrors}
+				setAddressErrors={setDeliveryAddressErrors}
 			/>
 			<fieldset
 				css={css`
