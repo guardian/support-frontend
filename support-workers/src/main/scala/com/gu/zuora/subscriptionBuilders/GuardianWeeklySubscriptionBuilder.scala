@@ -76,7 +76,7 @@ class GuardianWeeklySubscriptionBuilder(
       }
       subscribeItemBuilder.build(
         subscriptionData,
-        state.salesforceContacts.recipient,
+        state.salesForceContact,
         Some(state.paymentMethod),
         Some(soldToContact),
       )

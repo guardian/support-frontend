@@ -141,28 +141,6 @@ object Salesforce {
       ContactRecord: SalesforceContactRecord,
   )
 
-  object SalesforceContactSuccess {
-    implicit val codec: Codec[SalesforceContactSuccess] = deriveCodec
-  }
-
-  case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]) {
-    def recipient: SalesforceContactRecord = giftRecipient.getOrElse(buyer)
-  }
-  object SalesforceContactRecords {
-    implicit val codec: Codec[SalesforceContactRecords] = deriveCodec
-  }
-
-  case class SalesforceContactRecordsResponse(
-      buyer: SalesforceContactSuccess,
-      giftRecipient: Option[SalesforceContactSuccess],
-  ) {
-    def successful: Boolean = buyer.Success && giftRecipient.forall(_.Success)
-
-    def errorMessage: Option[String] = List(buyer.ErrorString, giftRecipient.flatMap(_.ErrorString)).flatten.headOption
-
-    def contactRecords = SalesforceContactRecords(buyer.ContactRecord, giftRecipient.map(_.ContactRecord))
-  }
-
   object SalesforceErrorResponse {
     implicit val codec: Codec[SalesforceErrorResponse] = deriveCodec
     val expiredAuthenticationCode = "INVALID_SESSION_ID"
@@ -185,10 +163,6 @@ object Salesforce {
       new RetryUnlimited(message, cause = this)
     else
       new RetryNone(message, cause = this)
-  }
-
-  object SalesforceAuthenticationErrorResponse {
-    implicit val codec: Codec[SalesforceAuthenticationErrorResponse] = deriveCodec
   }
 
   case class SalesforceAuthenticationErrorResponse(error: String, error_description: String) extends Throwable {
