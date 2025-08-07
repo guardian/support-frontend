@@ -65,7 +65,7 @@ describe('Personal Details', () => {
 
 		elementTestIds.forEach((elementTestId) => {
 			const element = screen.getByTestId(elementTestId);
-			expect(element).not.toBeInTheDocument();
+			expect(element).toBeInTheDocument();
 			expect(element.dataset.qmMasking).toBe('blocklist');
 		});
 	});
