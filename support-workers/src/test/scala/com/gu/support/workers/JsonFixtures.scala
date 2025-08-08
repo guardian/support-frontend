@@ -412,20 +412,6 @@ object JsonFixtures {
         }
       """
 
-  val salesforceContactsJson =
-    """
-       "salesforceContacts": {
-          "buyer": {
-            "Id": "0033E00001Cq8D2QAJ",
-            "AccountId": "0013E00001AU6xcQAD"
-          },
-          "giftRecipient": {
-            "Id": "0033E00001Cq8D2QAJ",
-            "AccountId": "0013E00001AU6xcQAD"
-          }
-        }
-      """
-
   def createContributionZuoraSubscriptionJson(amount: BigDecimal = 5, billingPeriod: BillingPeriod = Monthly): String =
     CreateZuoraSubscriptionState(
       ContributionState(
