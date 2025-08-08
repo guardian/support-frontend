@@ -1,4 +1,4 @@
-import type { Currency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
 import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
 import { ProductCatalogHelper } from '@modules/product-catalog/productCatalog';
@@ -37,7 +37,7 @@ export const handler = async (
 	const user = createZuoraSubscriptionState.user;
 	try {
 		console.info(`Input is ${JSON.stringify(state)}`);
-		const currency: Currency = createZuoraSubscriptionState.product.currency;
+		const currency: IsoCurrency = createZuoraSubscriptionState.product.currency;
 		const paymentGateway: PaymentGateway<DirectDebit> = 'GoCardless';
 		const paymentMethod: DirectDebit = {
 			accountHolderInfo: {
