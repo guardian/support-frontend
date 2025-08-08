@@ -1,0 +1,117 @@
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { getProductCatalogFromApi } from '@modules/product-catalog/api';
+import type { ProductCatalog } from '@modules/product-catalog/productCatalog';
+import { ProductCatalogHelper } from '@modules/product-catalog/productCatalog';
+import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
+import { createSubscription } from '@modules/zuora/createSubscription';
+import type {
+	Contact,
+	DirectDebit,
+	PaymentGateway,
+} from '@modules/zuora/orders/newAccount';
+import { ZuoraClient } from '@modules/zuora/zuoraClient';
+import dayjs from 'dayjs';
+import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
+import { stageFromEnvironment } from '../model/stage';
+import type { WrappedState } from '../model/stateSchemas';
+import { ServiceProvider } from '../services/config';
+import { asRetryError } from '../util/errorHandler';
+import { getIfDefined } from '../util/nullAndUndefined';
+
+const stage = stageFromEnvironment();
+
+const zuoraServiceProvider = new ServiceProvider(stage, async (stage) => {
+	return ZuoraClient.create(stage);
+});
+
+const productCatalogProvider = new ServiceProvider(stage, async (stage) => {
+	return getProductCatalogFromApi(stage);
+});
+
+export const handler = async (
+	state: WrappedState<CreateZuoraSubscriptionState>,
+) => {
+	const createZuoraSubscriptionState = state.state;
+	const productSpecificState =
+		createZuoraSubscriptionState.productSpecificState;
+	const user = createZuoraSubscriptionState.user;
+	try {
+		console.info(`Input is ${JSON.stringify(state)}`);
+		const currency: IsoCurrency = createZuoraSubscriptionState.product.currency;
+		const paymentGateway: PaymentGateway<DirectDebit> = 'GoCardless';
+		const paymentMethod: DirectDebit = {
+			accountHolderInfo: {
+				accountHolderName: 'RB',
+			},
+			accountNumber: '55779911',
+			bankCode: '200000',
+			type: 'Bacs',
+		};
+		const billToContact: Contact = {
+			firstName: user.firstName,
+			lastName: user.lastName,
+			workEmail: user.primaryEmailAddress,
+			country: user.billingAddress.country,
+			state: user.billingAddress.state ?? undefined,
+			city: user.billingAddress.city ?? undefined,
+			address1: user.billingAddress.lineOne ?? undefined,
+			address2: user.billingAddress.lineTwo ?? undefined,
+			postalCode: user.billingAddress.postCode ?? undefined,
+		};
+		//const soldToContact = null; //TODO: Add soldToContact if needed
+
+		const salesforceContact = productSpecificState.salesForceContact;
+
+		const productRatePlanId = await getProductRatePlanId(
+			await productCatalogProvider.getServiceForUser(user.isTestUser),
+			getIfDefined(
+				productSpecificState.productInformation,
+				'productInformation is required',
+			),
+		);
+
+		const inputFields = {
+			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
+			createdRequestId: createZuoraSubscriptionState.requestId,
+			salesforceAccountId: salesforceContact.AccountId,
+			salesforceContactId: salesforceContact.Id,
+			identityId: createZuoraSubscriptionState.user.id,
+			currency: currency,
+			paymentGateway: paymentGateway,
+			paymentMethod: paymentMethod,
+			billToContact: billToContact,
+			productRatePlanId: productRatePlanId,
+			contractEffectiveDate: dayjs(),
+			customerAcceptanceDate: dayjs(),
+			// chargeOverride: { // TODO: Add charge override for contribution and supporter plus
+			// 	productRatePlanChargeId: '2c92c0f85a6b1352015a7fcf35ab397c',
+			// 	overrideAmount: 8.99,
+			// },
+			runBilling: true,
+			collectPayment: true,
+		};
+		const zuoraClient = await zuoraServiceProvider.getServiceForUser(false);
+		const result = await createSubscription(zuoraClient, inputFields);
+
+		return Promise.resolve({
+			state: result,
+		});
+	} catch (error) {
+		throw asRetryError(error);
+	}
+};
+
+const getProductRatePlanId = (
+	productCatalog: ProductCatalog,
+	productInformation: ProductPurchase,
+): Promise<string> => {
+	const productCatalogHelper = new ProductCatalogHelper(productCatalog);
+	// TODO: Fix up  the types here
+	const productRatePlan = productCatalogHelper.getProductRatePlan(
+		productInformation.product,
+		// @ts-expect-error this is safe, I just can't figure out how to convince TypeScript
+		productInformation.ratePlan,
+	);
+	// @ts-expect-error this is safe, I just can't figure out how to convince TypeScript
+	return productRatePlan.id as string;
+};
