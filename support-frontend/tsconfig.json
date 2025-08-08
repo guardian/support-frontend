@@ -14,7 +14,8 @@
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
 		"paths": {
 			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
-			"@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
+      "@modules/internationalisation/currency": ["../node_modules/@guardian/support-service-lambdas/modules/internationalisation/src/currency"],
+      "@modules/product-catalog/*": ["../node_modules/@guardian/support-service-lambdas/modules/product-catalog/src/*"],
       "@modules/*": ["../../modules/*"]
 		},
 		"types": ["@testing-library/jest-dom"]
