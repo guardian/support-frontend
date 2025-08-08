@@ -63,9 +63,9 @@ export function PersonalAddressFields({
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
 			true,
 		);
-	const legendDelivery = `${isWeeklyGift ? 4 : 2}. ${
-		isWeeklyGift ? `Gift recipient's address` : `Delivery address`
-	}`;
+	const legendDelivery = isWeeklyGift
+		? `4. Gift recipient's address`
+		: `2. Delivery address`;
 	const legendOutsideM25 = `${isWeeklyGift ? 5 : 3}.  Delivery Agent`;
 
 	return (
