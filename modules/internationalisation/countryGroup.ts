@@ -1,6 +1,5 @@
-// ----- Imports ----- //
+import type { IsoCurrency } from '@guardian/support-service-lambdas/modules/internationalisation/src/currency';
 import type { IsoCountry } from '@modules/internationalisation/country';
-import type { IsoCurrency } from '@modules/internationalisation/currency';
 
 // ----- Types ----- //
 const GBPCountries = 'GBPCountries';
