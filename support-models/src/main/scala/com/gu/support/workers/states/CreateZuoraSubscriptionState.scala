@@ -1,7 +1,6 @@
 package com.gu.support.workers.states
 
 import com.gu.i18n.Country
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.{Codec, DiscriminatedType}
@@ -100,7 +99,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       firstDeliveryDate: LocalDate,
       appliedPromotion: Option[AppliedPromotion],
-      salesforceContacts: SalesforceContactRecords,
+      salesForceContact: SalesforceContactRecord,
       similarProductsConsent: Option[Boolean],
   ) extends CreateZuoraSubscriptionProductState
 

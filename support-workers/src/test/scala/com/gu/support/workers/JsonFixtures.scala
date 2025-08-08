@@ -3,7 +3,6 @@ package com.gu.support.workers
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
 import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{Domestic, Everyday, FulfilmentOptions, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
@@ -405,39 +404,11 @@ object JsonFixtures {
       "0033E00001Cq8D2QAJ",
       "0013E00001AU6xcQAD",
     )
-  val salesforceContacts = {
-    SalesforceContactRecords(
-      SalesforceContactRecord(
-        "0033E00001Cq8D2QAJ",
-        "0013E00001AU6xcQAD",
-      ),
-      Some(
-        SalesforceContactRecord(
-          "0033E00001Cq8D2QAJ",
-          "0013E00001AU6xcQAD",
-        ),
-      ),
-    )
-  }
   val salesforceContactJson =
     """
         {
           "Id": "0033E00001Cq8D2QAJ",
           "AccountId": "0013E00001AU6xcQAD"
-        }
-      """
-
-  val salesforceContactsJson =
-    """
-       "salesforceContacts": {
-          "buyer": {
-            "Id": "0033E00001Cq8D2QAJ",
-            "AccountId": "0013E00001AU6xcQAD"
-          },
-          "giftRecipient": {
-            "Id": "0033E00001Cq8D2QAJ",
-            "AccountId": "0013E00001AU6xcQAD"
-          }
         }
       """
 
@@ -620,7 +591,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        salesforceContacts,
+        salesforceContact,
         similarProductsConsent = None,
       ),
       UUID.randomUUID(),
@@ -651,7 +622,7 @@ object JsonFixtures {
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC).plusDays(10),
         None,
-        salesforceContacts,
+        salesforceContact,
         similarProductsConsent = None,
       ),
       UUID.randomUUID(),

@@ -155,12 +155,9 @@ describe('CreateSalesforceContatctLambda', () => {
 		expect(result.state.product.productType).toBe('GuardianWeekly');
 		if (result.state.productSpecificState.productType === 'GuardianWeekly') {
 			expect(result.state.productSpecificState.giftRecipient).toBeDefined();
-			expect(
-				result.state.productSpecificState.salesforceContacts.buyer.Id,
-			).toBe('0039E00001Lin87QAB');
-			expect(
-				result.state.productSpecificState.salesforceContacts.giftRecipient?.Id,
-			).toEqual(expect.any(String));
+			expect(result.state.productSpecificState.salesForceContact.Id).toEqual(
+				expect.any(String),
+			);
 		}
 	});
 });
