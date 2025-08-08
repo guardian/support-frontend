@@ -17,6 +17,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { isWeeklyGiftSub } from 'pages/[countryGroupId]/helpers/isWeeklyGiftSub';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
@@ -115,7 +116,12 @@ export function OrderSummaryTsAndCs({
 				</>
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
-				<p>Auto renews every {periodNoun}. Cancel anytime.</p>
+				<p>
+					{!isWeeklyGiftSub(productKey, ratePlanKey)
+						? `Auto renews every ${periodNoun}. `
+						: ``}
+					Cancel anytime.
+				</p>
 			)}
 		</div>
 	);

@@ -3,7 +3,7 @@ import { BillingPeriod } from '@modules/product/billingPeriod';
 import { type ProductOptions } from '@modules/product/productOptions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	getStripeKeyForCountry,
 	getStripeKeyForProduct,
@@ -23,6 +23,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
 import type { LegacyProductType } from '../../helpers/legacyTypeConversions';
@@ -257,28 +258,27 @@ export function Checkout({
 	const [checkoutSession, clearCheckoutSession] =
 		useStripeHostedCheckoutSession(maybeCheckoutSessionId);
 
+	const [weeklyDeliveryDate, setWeeklyDeliveryDate] = useState<Date>(
+		getWeeklyDeliveryDate(productKey),
+	);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
 				<CheckoutSummary
 					geoId={geoId}
 					appConfig={appConfig}
-					stripePublicKey={stripePublicKey}
-					isTestUser={isTestUser}
 					productKey={productKey}
 					ratePlanKey={ratePlanKey}
 					promotion={promotion}
 					originalAmount={payment.originalAmount}
-					discountedAmount={payment.discountedAmount}
 					contributionAmount={payment.contributionAmount}
 					finalAmount={payment.finalAmount}
-					useStripeExpressCheckout={useStripeExpressCheckout}
 					countryId={countryId}
 					forcedCountry={forcedCountry}
 					abParticipations={abParticipations}
 					landingPageSettings={landingPageSettings}
-					checkoutSession={checkoutSession}
-					clearCheckoutSession={clearCheckoutSession}
+					weeklyDeliveryDate={weeklyDeliveryDate}
 				/>
 
 				<CheckoutForm
@@ -300,6 +300,8 @@ export function Checkout({
 					landingPageSettings={landingPageSettings}
 					checkoutSession={checkoutSession}
 					clearCheckoutSession={clearCheckoutSession}
+					weeklyDeliveryDate={weeklyDeliveryDate}
+					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 				/>
 			</CheckoutLayout>
 		</Elements>
