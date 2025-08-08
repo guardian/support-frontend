@@ -55,7 +55,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 };
 
-export default function CheckoutComponent({
+export default function CheckoutSummary({
 	geoId,
 	appConfig,
 	productKey,
