@@ -36,14 +36,14 @@ export function StudentLandingPage({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/student',
 	};
-	const enableCountrySwitcher =
+	const showCountrySwitcher =
 		geoId !== 'au' && countrySwitcherProps.countryGroupIds.length > 1;
 
 	return (
 		<PageScaffold
 			header={
 				<Header>
-					{enableCountrySwitcher && (
+					{showCountrySwitcher && (
 						<CountrySwitcherContainer>
 							<CountryGroupSwitcher {...countrySwitcherProps} />
 						</CountrySwitcherContainer>
