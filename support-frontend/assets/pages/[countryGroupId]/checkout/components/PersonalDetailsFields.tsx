@@ -23,6 +23,8 @@ type PersonalDetailsFieldsProps = {
 	setEmail: (value: string) => void;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
+	telephone?: string;
+	setTelephone?: (value: string) => void;
 	billingState?: string;
 	setBillingState?: (value: string) => void;
 	billingPostcode?: string;
@@ -43,6 +45,8 @@ export function PersonalDetailsFields({
 	setEmail,
 	confirmedEmail,
 	setConfirmedEmail,
+	telephone,
+	setTelephone,
 	billingState,
 	setBillingState,
 	billingPostcode,
@@ -70,6 +74,8 @@ export function PersonalDetailsFields({
 					setFirstName={setFirstName}
 					lastName={lastName}
 					setLastName={setLastName}
+					telephone={telephone}
+					setTelephone={setTelephone}
 				/>
 				{/**
 				 * We require state for non-deliverable products as we use different taxes

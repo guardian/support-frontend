@@ -10,6 +10,8 @@ type PersonalDetailsFieldsProps = {
 	setFirstName: (value: string) => void;
 	lastName: string;
 	setLastName: (value: string) => void;
+	telephone?: string;
+	setTelephone?: (value: string) => void;
 	endUser?: string;
 };
 
@@ -18,11 +20,13 @@ export function PersonalFields({
 	setFirstName,
 	lastName,
 	setLastName,
+	telephone,
+	setTelephone,
 	endUser = 'your',
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
-
+	const [telephoneError, setTelephoneError] = useState<string>();
 	return (
 		<>
 			<div>
@@ -30,6 +34,7 @@ export function PersonalFields({
 					id="firstName"
 					data-qm-masking="blocklist"
 					label="First name"
+					name="firstName"
 					value={firstName}
 					autoComplete="given-name"
 					autoCapitalize="words"
@@ -39,7 +44,6 @@ export function PersonalFields({
 					onBlur={(event) => {
 						event.target.checkValidity();
 					}}
-					name="firstName"
 					required
 					maxLength={40}
 					error={firstNameError}
@@ -64,6 +68,7 @@ export function PersonalFields({
 					id="lastName"
 					data-qm-masking="blocklist"
 					label="Last name"
+					name="lastName"
 					value={lastName}
 					autoComplete="family-name"
 					autoCapitalize="words"
@@ -73,7 +78,6 @@ export function PersonalFields({
 					onBlur={(event) => {
 						event.target.checkValidity();
 					}}
-					name="lastName"
 					required
 					maxLength={40}
 					error={lastNameError}
@@ -93,6 +97,36 @@ export function PersonalFields({
 					}}
 				/>
 			</div>
+			{setTelephone && (
+				<div>
+					<TextInput
+						id="telephone"
+						data-qm-masking="blocklist"
+						label="Telephone"
+						name="telephone"
+						value={telephone}
+						onChange={(event) => {
+							setTelephone(event.target.value);
+						}}
+						onBlur={(event) => {
+							event.target.checkValidity();
+						}}
+						optional
+						error={telephoneError}
+						pattern={doesNotContainExtendedEmojiOrLeadingSpace} // Original Checkout this appears to be a minimally validated string field, possibly to provide more details than a number?
+						supporting="We may use this to get in touch with you about your subscription."
+						onInvalid={(event) => {
+							preventDefaultValidityMessage(event.currentTarget);
+							const validityState = event.currentTarget.validity;
+							if (validityState.valid) {
+								setTelephoneError(undefined);
+							} else {
+								setTelephoneError('Please enter valid telephone details.');
+							}
+						}}
+					/>
+				</div>
+			)}
 		</>
 	);
 }

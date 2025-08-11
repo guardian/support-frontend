@@ -367,6 +367,11 @@ export default function CheckoutForm({
 			checkoutSession?.formFields.personalData.email,
 			'',
 		);
+	// Session storage unavailable yet, using state
+	const [telephone, setTelephone] = useStateWithCheckoutSession<string>(
+		undefined,
+		'',
+	);
 
 	const fetchDeliveryAgentsIfRequired = async (postcode: string) => {
 		if (isValidPostcode(postcode)) {
@@ -827,6 +832,8 @@ export default function CheckoutForm({
 							setEmail={setEmail}
 							confirmedEmail={confirmedEmail}
 							setConfirmedEmail={setConfirmedEmail}
+							telephone={isWeeklyGift ? telephone : undefined}
+							setTelephone={isWeeklyGift ? setTelephone : undefined}
 							billingState={billingState}
 							setBillingState={setBillingState}
 							billingPostcode={billingPostcode}
