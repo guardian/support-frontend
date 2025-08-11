@@ -113,7 +113,7 @@ export function PersonalFields({
 						}}
 						optional
 						error={telephoneError}
-						pattern={doesNotContainExtendedEmojiOrLeadingSpace} // Original Checkout this appears to be a minimally validated string field, possibly to provide more details than a number?
+						pattern={doesNotContainExtendedEmojiOrLeadingSpace} // Original checkout appears to be a minimally validated string field, possibly to provide more details than a number?
 						supporting="We may use this to get in touch with you about your subscription."
 						onInvalid={(event) => {
 							preventDefaultValidityMessage(event.currentTarget);
