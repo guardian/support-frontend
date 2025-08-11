@@ -119,6 +119,18 @@ const router = createBrowserRouter([
 				</Suspense>
 			),
 		},
+		{
+			path: `/${geoId}/student`,
+			element: (
+				<Suspense fallback={<HoldingContent />}>
+					<StudentLandingPage
+						geoId={geoId}
+						landingPageVariant={landingPageParticipations.variant}
+						global
+					/>
+				</Suspense>
+			),
+		},
 	]),
 	{
 		path: '/au/student/UTS',
