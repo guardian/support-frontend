@@ -6,12 +6,12 @@ import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSc
 import { createSubscription } from '@modules/zuora/createSubscription';
 import type {
 	Contact,
-	DirectDebit,
-	PaymentGateway,
+	PaymentMethod as ZuoraPaymentMethod,
 } from '@modules/zuora/orders/newAccount';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
+import type { PaymentMethod } from '../model/paymentMethod';
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
@@ -38,15 +38,10 @@ export const handler = async (
 	try {
 		console.info(`Input is ${JSON.stringify(state)}`);
 		const currency: IsoCurrency = createZuoraSubscriptionState.product.currency;
-		const paymentGateway: PaymentGateway<DirectDebit> = 'GoCardless';
-		const paymentMethod: DirectDebit = {
-			accountHolderInfo: {
-				accountHolderName: 'RB',
-			},
-			accountNumber: '55779911',
-			bankCode: '200000',
-			type: 'Bacs',
-		};
+		const zuoraPaymentMethod = getZuoraPaymentMethod(
+			productSpecificState.paymentMethod,
+		);
+
 		const billToContact: Contact = {
 			firstName: user.firstName,
 			lastName: user.lastName,
@@ -58,7 +53,9 @@ export const handler = async (
 			address2: user.billingAddress.lineTwo ?? undefined,
 			postalCode: user.billingAddress.postCode ?? undefined,
 		};
-		//const soldToContact = null; //TODO: Add soldToContact if needed
+
+		// const soldToContact: Contact | undefined =
+		// 	getSoldToContact(productSpecificState);
 
 		const salesforceContact = productSpecificState.salesForceContact;
 
@@ -77,8 +74,8 @@ export const handler = async (
 			salesforceContactId: salesforceContact.Id,
 			identityId: createZuoraSubscriptionState.user.id,
 			currency: currency,
-			paymentGateway: paymentGateway,
-			paymentMethod: paymentMethod,
+			paymentGateway: productSpecificState.paymentMethod.PaymentGateway,
+			paymentMethod: zuoraPaymentMethod,
 			billToContact: billToContact,
 			productRatePlanId: productRatePlanId,
 			contractEffectiveDate: dayjs(),
@@ -114,4 +111,32 @@ const getProductRatePlanId = (
 	);
 	// @ts-expect-error this is safe, I just can't figure out how to convince TypeScript
 	return productRatePlan.id as string;
+};
+
+const getZuoraPaymentMethod = (
+	paymentMethod: PaymentMethod,
+): ZuoraPaymentMethod => {
+	switch (paymentMethod.Type) {
+		case 'CreditCardReferenceTransaction':
+			return {
+				type: 'CreditCardReferenceTransaction',
+				tokenId: paymentMethod.TokenId,
+				secondTokenId: paymentMethod.SecondTokenId,
+			};
+		case 'PayPal':
+			return {
+				type: 'PayPalNativeEC',
+				BAID: paymentMethod.PaypalBaid,
+				email: paymentMethod.PaypalEmail,
+			};
+		case 'BankTransfer':
+			return {
+				type: 'Bacs',
+				accountHolderInfo: {
+					accountHolderName: paymentMethod.BankTransferAccountName,
+				},
+				accountNumber: paymentMethod.BankTransferAccountNumber,
+				bankCode: paymentMethod.BankCode,
+			};
+	}
 };
