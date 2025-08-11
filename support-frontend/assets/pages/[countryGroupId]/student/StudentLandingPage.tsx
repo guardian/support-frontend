@@ -7,9 +7,7 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '@modules/internationalisation/countryGroup';
-import type {
-	CountryGroupSwitcherProps,
-} from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
