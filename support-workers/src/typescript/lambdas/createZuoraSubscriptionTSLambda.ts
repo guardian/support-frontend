@@ -57,12 +57,20 @@ export const handler = async (
 
 		const salesforceContact = productSpecificState.salesForceContact;
 
+		const productCatalog = await productCatalogProvider.getServiceForUser(
+			createZuoraSubscriptionState.user.isTestUser,
+		);
+		const productInformation = getIfDefined(
+			productSpecificState.productInformation,
+			'productInformation is required',
+		);
 		const productRatePlanId = await getProductRatePlanId(
-			await productCatalogProvider.getServiceForUser(user.isTestUser),
-			getIfDefined(
-				productSpecificState.productInformation,
-				'productInformation is required',
-			),
+			productCatalog,
+			productInformation,
+		);
+		const chargeOverride = getChargeOverride(
+			productCatalog,
+			productInformation,
 		);
 
 		const inputFields = {
@@ -79,10 +87,7 @@ export const handler = async (
 			productRatePlanId: productRatePlanId,
 			contractEffectiveDate: dayjs(),
 			customerAcceptanceDate: dayjs(),
-			// chargeOverride: { // TODO: Add charge override for contribution and supporter plus
-			// 	productRatePlanChargeId: '2c92c0f85a6b1352015a7fcf35ab397c',
-			// 	overrideAmount: 8.99,
-			// },
+			chargeOverride: chargeOverride,
 			deliveryInstructions: user.deliveryInstructions,
 			runBilling: true,
 			collectPayment: true,
@@ -111,6 +116,36 @@ const getProductRatePlanId = (
 	);
 	// @ts-expect-error this is safe, I just can't figure out how to convince TypeScript
 	return productRatePlan.id as string;
+};
+
+export const getChargeOverride = (
+	productCatalog: ProductCatalog,
+	productInformation: ProductPurchase,
+): { productRatePlanChargeId: string; overrideAmount: number } | undefined => {
+	if (productInformation.product === 'Contribution') {
+		const chargeId =
+			productCatalog.Contribution.ratePlans[productInformation.ratePlan].charges
+				.Contribution.id;
+		return {
+			productRatePlanChargeId: chargeId,
+			overrideAmount: productInformation.amount,
+		};
+	} else if (productInformation.product === 'SupporterPlus') {
+		if (
+			//These are the only rate plans that have a contribution charge
+			productInformation.ratePlan === 'Annual' ||
+			productInformation.ratePlan === 'Monthly'
+		) {
+			const chargeId =
+				productCatalog.SupporterPlus.ratePlans[productInformation.ratePlan]
+					.charges.Contribution.id;
+			return {
+				productRatePlanChargeId: chargeId,
+				overrideAmount: productInformation.amount,
+			};
+		}
+	}
+	return;
 };
 
 const getZuoraPaymentMethod = (
