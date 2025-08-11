@@ -12,7 +12,6 @@ describe('StudentLandingPage', () => {
 			<StudentLandingPage
 				geoId="uk"
 				landingPageVariant={landingPageParticipations.variant}
-				global
 			/>,
 		);
 

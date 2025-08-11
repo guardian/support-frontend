@@ -126,7 +126,6 @@ const router = createBrowserRouter([
 					<StudentLandingPage
 						geoId={geoId}
 						landingPageVariant={landingPageParticipations.variant}
-						global
 					/>
 				</Suspense>
 			),

@@ -23,11 +23,9 @@ import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
 export function StudentLandingPage({
 	geoId,
 	landingPageVariant,
-	global = false,
 }: {
 	geoId: GeoId;
 	landingPageVariant: LandingPageVariant;
-	global?: boolean;
 }) {
 	const faqItems = getStudentFAQs(geoId);
 	const tsAndCsItem = getStudentTsAndCs(geoId);
@@ -39,7 +37,7 @@ export function StudentLandingPage({
 		subPath: '/student',
 	};
 	const enableCountrySwitcher =
-		global && countrySwitcherProps.countryGroupIds.length > 1;
+		geoId !== 'au' && countrySwitcherProps.countryGroupIds.length > 1;
 
 	return (
 		<PageScaffold
