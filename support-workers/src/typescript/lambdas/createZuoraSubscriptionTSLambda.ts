@@ -21,6 +21,7 @@ import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
+import { getSubscriptionDates } from '../util/subscriptionDates';
 
 const stage = stageFromEnvironment();
 
@@ -72,6 +73,8 @@ export const handler = async (
 			productCatalog,
 			productInformation,
 		);
+		const { contractEffectiveDate, customerAcceptanceDate } =
+			getSubscriptionDates(dayjs(), productSpecificState);
 
 		const inputFields = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
@@ -85,8 +88,8 @@ export const handler = async (
 			billToContact: billToContact,
 			soldToContact: soldToContact,
 			productRatePlanId: productRatePlanId,
-			contractEffectiveDate: dayjs(),
-			customerAcceptanceDate: dayjs(),
+			contractEffectiveDate: contractEffectiveDate,
+			customerAcceptanceDate: customerAcceptanceDate,
 			chargeOverride: chargeOverride,
 			deliveryInstructions: user.deliveryInstructions,
 			runBilling: true,
