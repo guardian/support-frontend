@@ -1,7 +1,7 @@
 import prod from '@guardian/support-service-lambdas/modules/zuora-catalog/test/fixtures/catalog-prod.json';
 import { generateProductCatalog } from '@modules/product-catalog/generateProductCatalog';
+import type { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 import { getChargeOverride } from '../lambdas/createZuoraSubscriptionTSLambda';
-import { ProductPurchase } from '@modules/product-catalog/productPurchaseSchema';
 
 jest.mock('../model/stage', () => ({
 	stageFromEnvironment: jest.fn().mockReturnValue('CODE'),
