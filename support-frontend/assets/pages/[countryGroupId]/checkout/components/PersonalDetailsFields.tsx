@@ -12,6 +12,7 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { BillingAddressFields } from './BillingAddressFields';
 import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';
+import { PersonalPhoneField } from './PersonalPhoneField';
 
 export type BillingStatePostcode = {
 	billingState: string;
@@ -31,8 +32,8 @@ type PersonalDetailsFieldsProps = {
 	setEmail: (value: string) => void;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
-	telephone?: string;
-	setTelephone?: (value: string) => void;
+	phoneNumber?: string;
+	setPhoneNumber?: (value: string) => void;
 	billingStatePostcode?: BillingStatePostcode;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
@@ -51,8 +52,8 @@ export function PersonalDetailsFields({
 	setEmail,
 	confirmedEmail,
 	setConfirmedEmail,
-	telephone,
-	setTelephone,
+	phoneNumber,
+	setPhoneNumber,
 	billingStatePostcode,
 	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
@@ -61,25 +62,31 @@ export function PersonalDetailsFields({
 }: PersonalDetailsFieldsProps) {
 	const [billingStateError, setBillingStateError] = useState<string>();
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
+	const personalEmailFields = (
+		<PersonalEmailFields
+			email={email}
+			setEmail={setEmail}
+			confirmedEmail={confirmedEmail}
+			setConfirmedEmail={setConfirmedEmail}
+			isEmailAddressReadOnly={isEmailAddressReadOnly}
+			isSignedIn={isSignedIn}
+		/>
+	);
 	return (
 		<>
 			<FormSection>
 				<Legend>{legend}</Legend>
-				<PersonalEmailFields
-					email={email}
-					setEmail={setEmail}
-					confirmedEmail={confirmedEmail}
-					setConfirmedEmail={setConfirmedEmail}
-					isEmailAddressReadOnly={isEmailAddressReadOnly}
-					isSignedIn={isSignedIn}
-				/>
+				{!isWeeklyGift && personalEmailFields}
 				<PersonalFields
 					firstName={firstName}
 					setFirstName={setFirstName}
 					lastName={lastName}
 					setLastName={setLastName}
-					telephone={telephone}
-					setTelephone={setTelephone}
+				/>
+				{isWeeklyGift && personalEmailFields}
+				<PersonalPhoneField
+					phoneNumber={phoneNumber}
+					setPhoneNumber={setPhoneNumber}
 				/>
 				{/**
 				 * We require state for non-deliverable products as we use different taxes

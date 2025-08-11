@@ -368,7 +368,7 @@ export default function CheckoutForm({
 			'',
 		);
 	// Session storage unavailable yet, using state
-	const [telephone, setTelephone] = useStateWithCheckoutSession<string>(
+	const [phoneNumber, setPhoneNumber] = useStateWithCheckoutSession<string>(
 		undefined,
 		'',
 	);
@@ -855,8 +855,8 @@ export default function CheckoutForm({
 							setEmail={setEmail}
 							confirmedEmail={confirmedEmail}
 							setConfirmedEmail={setConfirmedEmail}
-							telephone={isWeeklyGift ? telephone : undefined}
-							setTelephone={isWeeklyGift ? setTelephone : undefined}
+							phoneNumber={isWeeklyGift ? phoneNumber : undefined}
+							setPhoneNumber={isWeeklyGift ? setPhoneNumber : undefined}
 							billingStatePostcode={billingStatePostcode}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
