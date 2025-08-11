@@ -10,7 +10,11 @@ import type {
 } from '@modules/zuora/orders/newAccount';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
-import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
+import type { Address } from '../model/address';
+import type {
+	CreateZuoraSubscriptionState,
+	ProductSpecificState,
+} from '../model/createZuoraSubscriptionState';
 import type { PaymentMethod } from '../model/paymentMethod';
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
@@ -42,20 +46,14 @@ export const handler = async (
 			productSpecificState.paymentMethod,
 		);
 
-		const billToContact: Contact = {
-			firstName: user.firstName,
-			lastName: user.lastName,
-			workEmail: user.primaryEmailAddress,
-			country: user.billingAddress.country,
-			state: user.billingAddress.state ?? undefined,
-			city: user.billingAddress.city ?? undefined,
-			address1: user.billingAddress.lineOne ?? undefined,
-			address2: user.billingAddress.lineTwo ?? undefined,
-			postalCode: user.billingAddress.postCode ?? undefined,
-		};
-
-		// const soldToContact: Contact | undefined =
-		// 	getSoldToContact(productSpecificState);
+		const billToContact: Contact = buildContact(
+			user.firstName,
+			user.lastName,
+			user.primaryEmailAddress,
+			user.billingAddress,
+		);
+		const soldToContact: Contact | undefined =
+			getSoldToContact(productSpecificState);
 
 		const salesforceContact = productSpecificState.salesForceContact;
 
@@ -77,6 +75,7 @@ export const handler = async (
 			paymentGateway: productSpecificState.paymentMethod.PaymentGateway,
 			paymentMethod: zuoraPaymentMethod,
 			billToContact: billToContact,
+			soldToContact: soldToContact,
 			productRatePlanId: productRatePlanId,
 			contractEffectiveDate: dayjs(),
 			customerAcceptanceDate: dayjs(),
@@ -84,6 +83,7 @@ export const handler = async (
 			// 	productRatePlanChargeId: '2c92c0f85a6b1352015a7fcf35ab397c',
 			// 	overrideAmount: 8.99,
 			// },
+			deliveryInstructions: user.deliveryInstructions,
 			runBilling: true,
 			collectPayment: true,
 		};
@@ -139,4 +139,65 @@ const getZuoraPaymentMethod = (
 				bankCode: paymentMethod.BankCode,
 			};
 	}
+};
+
+export const getSoldToContact = <T extends ProductSpecificState>(
+	productSpecificState: T,
+) => {
+	switch (productSpecificState.productType) {
+		case 'GuardianWeekly': {
+			const user = productSpecificState.giftRecipient
+				? productSpecificState.giftRecipient
+				: {
+						firstName: productSpecificState.user.firstName,
+						lastName: productSpecificState.user.lastName,
+						email: productSpecificState.user.primaryEmailAddress,
+				  };
+
+			return buildContact(
+				user.firstName,
+				user.lastName,
+				user.email ?? '',
+				getIfDefined(
+					productSpecificState.user.deliveryAddress,
+					'Delivery address is required for Guardian Weekly',
+				),
+			);
+		}
+		case 'TierThree':
+		case 'Paper':
+			return buildContact(
+				productSpecificState.user.firstName,
+				productSpecificState.user.lastName,
+				productSpecificState.user.primaryEmailAddress,
+				getIfDefined(
+					productSpecificState.user.deliveryAddress,
+					`Delivery address is required for ${productSpecificState.productType}`,
+				),
+			);
+		case 'DigitalSubscription':
+		case 'SupporterPlus':
+		case 'GuardianAdLite':
+		case 'Contribution':
+			return;
+	}
+};
+
+const buildContact = (
+	firstName: string,
+	lastName: string,
+	email: string,
+	address: Address,
+) => {
+	return {
+		firstName: firstName,
+		lastName: lastName,
+		workEmail: email,
+		country: address.country,
+		state: address.state ?? undefined,
+		city: address.city ?? undefined,
+		address1: address.lineOne ?? undefined,
+		address2: address.lineTwo ?? undefined,
+		postalCode: address.postCode ?? undefined,
+	};
 };
