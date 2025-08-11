@@ -40,7 +40,9 @@ export const salesforceContactRecordSchema = z.object({
 	Id: z.string(),
 	AccountId: z.string(),
 });
-type SalesforceContactRecord = z.infer<typeof salesforceContactRecordSchema>;
+export type SalesforceContactRecord = z.infer<
+	typeof salesforceContactRecordSchema
+>;
 
 export class SalesforceError extends Error {
 	constructor({ errorCode, message }: { errorCode: string; message: string }) {
@@ -67,14 +69,6 @@ const upsertResponseSchema = z.discriminatedUnion('Success', [
 
 export type UpsertResponse = z.infer<typeof upsertResponseSchema>;
 
-export const salesforceContactRecordsSchema = z.object({
-	buyer: salesforceContactRecordSchema,
-	giftRecipient: salesforceContactRecordSchema.nullable(),
-});
-export type SalesforceContactRecords = z.infer<
-	typeof salesforceContactRecordsSchema
->;
-
 export const salesforceErrorCodes = {
 	expiredAuthenticationCode: 'INVALID_SESSION_ID',
 	rateLimitExceeded: 'REQUEST_LIMIT_EXCEEDED',
@@ -92,19 +86,16 @@ export class SalesforceService {
 	createContactRecords = async (
 		user: User,
 		giftRecipient: GiftRecipient | null,
-	): Promise<SalesforceContactRecords> => {
-		const upsertResponse = await this.upsert(
+	): Promise<SalesforceContactRecord> => {
+		const buyerResponse = await this.upsert(
 			createContactRecordRequest(user, giftRecipient),
 		);
-		const recipientUpsertResponse = await this.maybeAddGiftRecipient(
-			upsertResponse.ContactRecord,
+		const giftRecipientResponse = await this.maybeAddGiftRecipient(
+			buyerResponse.ContactRecord,
 			giftRecipient,
 			user,
 		);
-		return {
-			buyer: upsertResponse.ContactRecord,
-			giftRecipient: recipientUpsertResponse?.ContactRecord ?? null,
-		};
+		return giftRecipientResponse?.ContactRecord ?? buyerResponse.ContactRecord;
 	};
 
 	upsert = async (

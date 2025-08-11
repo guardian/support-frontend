@@ -9,7 +9,7 @@ import {
 	wrapperSchemaForState,
 } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
-import type { SalesforceContactRecords } from '../services/salesforce';
+import type { SalesforceContactRecord } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
 import { user } from '../test/fixtures/salesforceFixtures';
@@ -48,7 +48,7 @@ export const handler = async (
 
 const createNextState = (
 	state: CreateSalesforceContactState,
-	contactRecords: SalesforceContactRecords,
+	contactRecord: SalesforceContactRecord,
 ): CreateZuoraSubscriptionState => {
 	switch (state.product.productType) {
 		case 'Contribution':
@@ -58,7 +58,7 @@ const createNextState = (
 					product: state.product,
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
@@ -72,7 +72,7 @@ const createNextState = (
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					appliedPromotion: state.appliedPromotion,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
@@ -90,7 +90,7 @@ const createNextState = (
 						'First delivery date is required for Tier Three products',
 					),
 					appliedPromotion: state.appliedPromotion,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
@@ -102,7 +102,7 @@ const createNextState = (
 					product: state.product,
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 				},
 				...state,
 			};
@@ -120,7 +120,7 @@ const createNextState = (
 						'First delivery date is required for Guardian Weekly products',
 					),
 					appliedPromotion: state.appliedPromotion,
-					salesforceContacts: contactRecords,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
@@ -138,7 +138,7 @@ const createNextState = (
 						'First delivery date is required for Paper products',
 					),
 					appliedPromotion: state.appliedPromotion,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,
@@ -152,7 +152,7 @@ const createNextState = (
 					productInformation: state.productInformation,
 					paymentMethod: state.paymentMethod,
 					appliedPromotion: state.appliedPromotion,
-					salesForceContact: contactRecords.buyer,
+					salesForceContact: contactRecord,
 					similarProductsConsent: state.similarProductsConsent,
 				},
 				...state,

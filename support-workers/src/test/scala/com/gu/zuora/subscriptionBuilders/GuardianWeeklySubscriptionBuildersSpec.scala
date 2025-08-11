@@ -4,7 +4,6 @@ import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
 import com.gu.i18n.CountryGroup.UK
 import com.gu.i18n.Currency.GBP
-import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
@@ -174,7 +173,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+      SalesforceContactRecord("", ""),
       similarProductsConsent = None,
     ),
     None,
@@ -199,7 +198,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
     firstDeliveryDate,
     None,
-    SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+    SalesforceContactRecord("", ""),
     similarProductsConsent = None,
   );
 
@@ -238,7 +237,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
       firstDeliveryDate,
       None,
-      SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
+      SalesforceContactRecord("", ""),
       similarProductsConsent = None,
     ),
     Some("Dan Csr"),

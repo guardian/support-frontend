@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "eslint": "catalog:",
+    "@guardian/support-service-lambdas": "catalog:",
     "@guardian/eslint-config-typescript": "catalog:",
     "@guardian/prettier": "catalog:",
     "@types/node": "catalog:",

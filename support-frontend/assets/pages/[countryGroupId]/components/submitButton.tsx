@@ -57,8 +57,6 @@ export function SubmitButton({
 						}}
 						commit={true}
 						validate={({ disable, enable }) => {
-							/** We run this so the form validation happens and focus on errors */
-							formRef.current?.requestSubmit();
 							/** We run this initially to set the button to the correct state */
 							const valid = formRef.current?.checkValidity();
 							if (valid) {
@@ -88,6 +86,16 @@ export function SubmitButton({
 						}}
 						onClick={() => {
 							// TODO - add tracking
+
+							// The button won't actually submit if the form
+							// isn't valid but we can check here and if invalid
+							// the browser will scroll the user to the first
+							// error if necessary
+							const valid = formRef.current?.checkValidity();
+							if (!valid) {
+								/** We run this so the form validation happens and focus on errors */
+								formRef.current?.requestSubmit();
+							}
 						}}
 						/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
 						payment={(resolve, reject) => {
