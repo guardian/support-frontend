@@ -9,8 +9,16 @@ import {
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
+import { BillingAddressFields } from './BillingAddressFields';
 import { PersonalEmailFields } from './PersonalEmailFields';
 import { PersonalFields } from './PersonalFields';
+
+export type BillingStatePostcode = {
+	billingState: string;
+	setBillingState: (value: string) => void;
+	billingPostcode: string;
+	setBillingPostcode: (value: string) => void;
+};
 
 type PersonalDetailsFieldsProps = {
 	countryId: IsoCountry;
@@ -25,13 +33,11 @@ type PersonalDetailsFieldsProps = {
 	setConfirmedEmail?: (value: string) => void;
 	telephone?: string;
 	setTelephone?: (value: string) => void;
-	billingState?: string;
-	setBillingState?: (value: string) => void;
-	billingPostcode?: string;
-	setBillingPostcode?: (value: string) => void;
+	billingStatePostcode?: BillingStatePostcode;
 	hasDeliveryAddress?: boolean;
 	isEmailAddressReadOnly?: boolean;
 	isSignedIn?: boolean;
+	isWeeklyGift?: boolean;
 };
 
 export function PersonalDetailsFields({
@@ -47,13 +53,11 @@ export function PersonalDetailsFields({
 	setConfirmedEmail,
 	telephone,
 	setTelephone,
-	billingState,
-	setBillingState,
-	billingPostcode,
-	setBillingPostcode,
+	billingStatePostcode,
 	hasDeliveryAddress = false,
 	isEmailAddressReadOnly = false,
 	isSignedIn = false,
+	isWeeklyGift = false,
 }: PersonalDetailsFieldsProps) {
 	const [billingStateError, setBillingStateError] = useState<string>();
 	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
@@ -84,13 +88,15 @@ export function PersonalDetailsFields({
 				 */}
 				{!hasDeliveryAddress && (
 					<>
-						{setBillingState &&
+						{billingStatePostcode?.setBillingState &&
 							countriesRequiringBillingState.includes(countryId) && (
 								<StateSelect
 									countryId={countryId}
-									state={billingState ?? ''}
+									state={billingStatePostcode.billingState}
 									onStateChange={(event) => {
-										setBillingState(event.currentTarget.value);
+										billingStatePostcode.setBillingState(
+											event.currentTarget.value,
+										);
 									}}
 									onBlur={(event) => {
 										event.currentTarget.checkValidity();
@@ -109,20 +115,20 @@ export function PersonalDetailsFields({
 									error={billingStateError}
 								/>
 							)}
-						{setBillingPostcode && countryId === 'US' && (
+						{billingStatePostcode?.setBillingPostcode && countryId === 'US' && (
 							<div>
 								<TextInput
 									id="zipCode"
 									label="ZIP code"
 									name="billing-postcode"
 									onChange={(event) => {
-										setBillingPostcode(event.target.value);
+										billingStatePostcode.setBillingPostcode(event.target.value);
 									}}
 									onBlur={(event) => {
 										event.target.checkValidity();
 									}}
 									maxLength={20}
-									value={billingPostcode}
+									value={billingStatePostcode.billingPostcode}
 									pattern={doesNotContainExtendedEmojiOrLeadingSpace}
 									error={billingPostcodeError}
 									optional
@@ -145,6 +151,12 @@ export function PersonalDetailsFields({
 							</div>
 						)}
 					</>
+				)}
+				{isWeeklyGift && billingStatePostcode && (
+					<BillingAddressFields
+						countryId={countryId}
+						billingStatePostcode={billingStatePostcode}
+					/>
 				)}
 			</FormSection>
 			<CheckoutDivider spacing="loose" />

@@ -221,14 +221,14 @@ export default function CheckoutForm({
 		},
 	});
 
-	const legendPrefix = isWeeklyGift ? 3 : 1;
+	const legendPrefix = isWeeklyGift ? 4 : 1;
 	const legendPersonalDetails = `${legendPrefix}. Your details`;
 	const legendPayment = `${
-		hasDeliveryAddress
-			? deliveryPostcodeIsOutsideM25
-				? legendPrefix + 3
-				: legendPrefix + 2
-			: legendPrefix + 1
+		isWeeklyGift || !hasDeliveryAddress
+			? legendPrefix + 1
+			: !deliveryPostcodeIsOutsideM25
+			? legendPrefix + 2
+			: legendPrefix + 3
 	}. Payment method`;
 
 	/**
@@ -640,6 +640,13 @@ export default function CheckoutForm({
 		ratePlanKey,
 	);
 
+	const billingStatePostcode = {
+		billingState: billingState,
+		setBillingState: setBillingState,
+		billingPostcode: billingPostcode,
+		setBillingPostcode: setBillingPostcode,
+	};
+
 	return (
 		<>
 			<form
@@ -818,6 +825,22 @@ export default function CheckoutForm({
 									weeklyDeliveryDate={weeklyDeliveryDate}
 									setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 								/>
+								<PersonalAddressFields
+									countryId={countryId}
+									countries={productDescription.deliverableTo}
+									checkoutSession={checkoutSession}
+									productKey={productKey}
+									deliveryPostcodeIsOutsideM25={deliveryPostcodeIsOutsideM25}
+									deliveryPostcode={deliveryPostcode}
+									setDeliveryPostcode={setDeliveryPostcode}
+									chosenDeliveryAgent={chosenDeliveryAgent}
+									setChosenDeliveryAgent={setChosenDeliveryAgent}
+									deliveryAgents={deliveryAgents}
+									deliveryAgentError={deliveryAgentError}
+									setDeliveryAgentError={setDeliveryAgentError}
+									deliveryAddressErrors={deliveryAddressErrors}
+									setDeliveryAddressErrors={setDeliveryAddressErrors}
+								/>
 							</>
 						)}
 
@@ -834,13 +857,11 @@ export default function CheckoutForm({
 							setConfirmedEmail={setConfirmedEmail}
 							telephone={isWeeklyGift ? telephone : undefined}
 							setTelephone={isWeeklyGift ? setTelephone : undefined}
-							billingState={billingState}
-							setBillingState={setBillingState}
-							billingPostcode={billingPostcode}
-							setBillingPostcode={setBillingPostcode}
+							billingStatePostcode={billingStatePostcode}
 							hasDeliveryAddress={hasDeliveryAddress}
 							isEmailAddressReadOnly={isSignedIn}
 							isSignedIn={isSignedIn}
+							isWeeklyGift={isWeeklyGift}
 						/>
 
 						{/**
@@ -850,7 +871,7 @@ export default function CheckoutForm({
 						{!hasDeliveryAddress && (
 							<input type="hidden" name="billing-country" value={countryId} />
 						)}
-						{hasDeliveryAddress && (
+						{!isWeeklyGift && hasDeliveryAddress && (
 							<PersonalAddressFields
 								countryId={countryId}
 								countries={productDescription.deliverableTo}
@@ -866,11 +887,7 @@ export default function CheckoutForm({
 								setDeliveryAgentError={setDeliveryAgentError}
 								deliveryAddressErrors={deliveryAddressErrors}
 								setDeliveryAddressErrors={setDeliveryAddressErrors}
-								billingPostcode={billingPostcode}
-								setBillingPostcode={setBillingPostcode}
-								billingState={billingState}
-								setBillingState={setBillingState}
-								isWeeklyGift={isWeeklyGift}
+								billingStatePostcode={billingStatePostcode}
 							/>
 						)}
 

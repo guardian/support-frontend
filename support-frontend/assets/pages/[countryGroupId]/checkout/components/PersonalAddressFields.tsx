@@ -1,6 +1,3 @@
-import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
-import { Checkbox, Label } from '@guardian/source/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { ActiveProductKey } from 'helpers/productCatalog';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
@@ -9,9 +6,9 @@ import { DeliveryAgentsSelect } from 'pages/paper-subscription-checkout/componen
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import type { DeliveryAgentsResponse } from '../helpers/getDeliveryAgents';
 import type { CheckoutSession } from '../helpers/stripeCheckoutSession';
-import { useStateWithCheckoutSession } from '../hooks/useStateWithCheckoutSession';
-import { BillingAddress } from './BillingAddress';
+import { BillingAddressFields } from './BillingAddressFields';
 import { DeliveryRecipientAddress } from './DeliveryRecipientAddress';
+import type { BillingStatePostcode } from './PersonalDetailsFields';
 
 type PersonalAddressFieldsProps = {
 	countryId: IsoCountry;
@@ -30,11 +27,7 @@ type PersonalAddressFieldsProps = {
 	setDeliveryAddressErrors: React.Dispatch<
 		React.SetStateAction<AddressFormFieldError[]>
 	>;
-	billingPostcode: string;
-	setBillingPostcode: (value: string) => void;
-	billingState: string;
-	setBillingState: (value: string) => void;
-	isWeeklyGift: boolean;
+	billingStatePostcode?: BillingStatePostcode;
 };
 
 export function PersonalAddressFields({
@@ -52,21 +45,12 @@ export function PersonalAddressFields({
 	setDeliveryAgentError,
 	deliveryAddressErrors,
 	setDeliveryAddressErrors,
-	billingPostcode,
-	setBillingPostcode,
-	billingState,
-	setBillingState,
-	isWeeklyGift,
+	billingStatePostcode,
 }: PersonalAddressFieldsProps) {
-	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
-		useStateWithCheckoutSession<boolean>(
-			checkoutSession?.formFields.billingAddressMatchesDelivery,
-			true,
-		);
-	const legendDelivery = isWeeklyGift
-		? `4. Gift recipient's address`
-		: `2. Delivery address`;
-	const legendOutsideM25 = `${isWeeklyGift ? 5 : 3}.  Delivery Agent`;
+	const legendDelivery = billingStatePostcode
+		? `2. Delivery address`
+		: `3. Gift recipient's address`;
+	const legendOutsideM25 = `${billingStatePostcode ? 3 : 4}.  Delivery Agent`;
 
 	return (
 		<>
@@ -81,32 +65,12 @@ export function PersonalAddressFields({
 				addressErrors={deliveryAddressErrors}
 				setAddressErrors={setDeliveryAddressErrors}
 			/>
-			<fieldset
-				css={css`
-					margin-bottom: ${space[6]}px;
-				`}
-			>
-				<Label text="Billing address" htmlFor="billingAddressMatchesDelivery" />
-				<Checkbox
-					checked={billingAddressMatchesDelivery}
-					value="yes"
-					onChange={() => {
-						setBillingAddressMatchesDelivery(!billingAddressMatchesDelivery);
-					}}
-					id="billingAddressMatchesDelivery"
-					name="billingAddressMatchesDelivery"
-					label="Billing address same as delivery address"
-				/>
-			</fieldset>
-			{!billingAddressMatchesDelivery && (
-				<BillingAddress
+			{billingStatePostcode && (
+				<BillingAddressFields
 					countryId={countryId}
 					countries={countries}
 					checkoutSession={checkoutSession}
-					postcode={billingPostcode}
-					setPostcode={setBillingPostcode}
-					state={billingState}
-					setState={setBillingState}
+					billingStatePostcode={billingStatePostcode}
 				/>
 			)}
 			{deliveryPostcodeIsOutsideM25 && (
