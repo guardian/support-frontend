@@ -11,6 +11,8 @@ describe('StudentLandingPage', () => {
 		render(
 			<StudentLandingPage
 				geoId="uk"
+				productKey="SupporterPlus"
+				ratePlanKey="OneYearStudent"
 				landingPageVariant={landingPageParticipations.variant}
 			/>,
 		);
@@ -24,6 +26,8 @@ describe('StudentLandingPage', () => {
 		render(
 			<StudentLandingPage
 				geoId="au"
+				productKey="SupporterPlus"
+				ratePlanKey="Monthly"
 				landingPageVariant={landingPageParticipations.variant}
 			/>,
 		);
