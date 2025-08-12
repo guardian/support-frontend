@@ -4,81 +4,44 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { currencies } from 'helpers/internationalisation/currency';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
-import {
-	getDiscountDuration,
-	getDiscountSummary,
-} from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
+import type { ProductBenefit } from 'helpers/globalsAndSwitches/landingPageSettings';
 import {
 	benefitsListCSS,
 	btnStyleOverrides,
 	container,
-	discountSummaryCss,
 	heading,
 	headWrapper,
-	originalPriceStrikeThrough,
 	pill,
-	promotionCss,
+	priceCss,
 } from './StudentProductCardStyles';
 
 export default function StudentProductCard({
-	cardContent,
-	currencyId,
-	billingPeriod,
-}: ThreeTierCardProps) {
-	const { title, benefits, promotion, price, link, cta } = cardContent;
-	const currency = currencies[currencyId];
-	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const priceWithCurrency = simpleFormatAmount(currency, price);
-	const discountPriceWithCurrency = simpleFormatAmount(
-		currency,
-		promotion?.discountedPrice ?? 0,
-	);
-	const durationInMonths = promotion?.discount?.durationMonths ?? 0;
-
-	const discountDuration = getDiscountDuration({ durationInMonths });
-	const discountSummary = getDiscountSummary({
-		priceWithCurrency,
-		discountPriceWithCurrency,
-		durationInMonths,
-		billingPeriod,
-	});
-
+	priceSlot,
+	benefitsList,
+	url,
+}: {
+	priceSlot: JSX.Element;
+	benefitsList: ProductBenefit[];
+	url: string;
+}) {
 	return (
 		<section css={container}>
 			<div css={pill}>Student offer</div>
 			<div css={headWrapper}>
-				<h2 css={heading}>{title}</h2>
-				<p>
-					<span css={promotionCss}>
-						{promotion ? (
-							<>
-								{discountPriceWithCurrency}
-								<small>{`/${periodNoun} for ${discountDuration}`}</small>
-								<span
-									css={originalPriceStrikeThrough}
-								>{`${priceWithCurrency}/${periodNoun}`}</span>
-							</>
-						) : (
-							priceWithCurrency
-						)}
-					</span>
-				</p>
+				<h2 css={heading}>All-access digital</h2>
+				<p css={priceCss}>{priceSlot}</p>
 			</div>
 			<LinkButton
-				href={link}
+				href={url}
 				cssOverrides={btnStyleOverrides}
-				aria-label={title}
+				aria-label="All-access digital"
 				theme={themeButtonReaderRevenueBrand}
 			>
-				{cta.copy}
+				Sign up for free
 			</LinkButton>
-			<p css={discountSummaryCss}>{promotion && discountSummary}</p>
+
 			<BenefitsCheckList
-				benefitsCheckListData={benefits.map((benefit) => {
+				benefitsCheckListData={benefitsList.map((benefit) => {
 					return {
 						text: benefit.copy,
 						isChecked: true,
