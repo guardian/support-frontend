@@ -10,6 +10,7 @@ import {
 } from 'helpers/forms/stripe';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
 import { Country } from 'helpers/internationalisation/classes/country';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -19,6 +20,7 @@ import {
 import { toRegularBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import * as cookie from 'helpers/storage/cookie';
+import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -262,6 +264,19 @@ export function Checkout({
 		getWeeklyDeliveryDate(productKey),
 	);
 
+	/**
+	 * Passed down because minimum product prices are unavailable in the paymentTsAndCs story
+	 * and shared across summary and form checkout sub-components
+	 */
+	const { countryGroupId } = getGeoIdConfig(geoId);
+	const thresholdAmount = getLowerProductBenefitThreshold(
+		billingPeriod,
+		fromCountryGroupId(countryGroupId),
+		countryGroupId,
+		productKey,
+		ratePlanKey,
+	);
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
@@ -272,13 +287,12 @@ export function Checkout({
 					ratePlanKey={ratePlanKey}
 					promotion={promotion}
 					originalAmount={payment.originalAmount}
-					contributionAmount={payment.contributionAmount}
-					finalAmount={payment.finalAmount}
 					countryId={countryId}
 					forcedCountry={forcedCountry}
 					abParticipations={abParticipations}
 					landingPageSettings={landingPageSettings}
 					weeklyDeliveryDate={weeklyDeliveryDate}
+					thresholdAmount={thresholdAmount}
 				/>
 
 				<CheckoutForm
@@ -302,6 +316,7 @@ export function Checkout({
 					clearCheckoutSession={clearCheckoutSession}
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
+					thresholdAmount={thresholdAmount}
 				/>
 			</CheckoutLayout>
 		</Elements>
