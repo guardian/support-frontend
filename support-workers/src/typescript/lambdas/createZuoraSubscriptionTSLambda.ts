@@ -151,7 +151,7 @@ export const getChargeOverride = (
 	return;
 };
 
-const getZuoraPaymentMethod = (
+export const getZuoraPaymentMethod = (
 	paymentMethod: PaymentMethod,
 ): ZuoraPaymentMethod => {
 	switch (paymentMethod.Type) {
