@@ -50,7 +50,7 @@ export function PersonalAddressFields({
 	const legendDelivery = billingStatePostcode
 		? `2. Delivery address`
 		: `3. Gift recipient's address`;
-	const legendOutsideM25 = `${billingStatePostcode ? 3 : 4}.  Delivery Agent`;
+	const legendOutsideM25 = `${billingStatePostcode ? 3 : 4}. Delivery Agent`;
 
 	return (
 		<>
