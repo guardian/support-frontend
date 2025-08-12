@@ -148,6 +148,23 @@ const getPaymentMethods = (
 	return [maybeDirectDebit, Stripe, PayPal];
 };
 
+const LEGEND_PREFIX_WEEKLY_GIFT = 4;
+const LEGEND_PREFIX_DEFAULT = 1;
+const getPaymentLegendPrefix = (
+	legendPrefix: number,
+	isWeeklyGift: boolean,
+	hasDeliveryAddress: boolean,
+	deliveryPostcodeIsOutsideM25: boolean,
+): number => {
+	if (isWeeklyGift || !hasDeliveryAddress) {
+		return legendPrefix + 1;
+	}
+	if (!deliveryPostcodeIsOutsideM25) {
+		return legendPrefix + 2;
+	}
+	return legendPrefix + 3;
+};
+
 export default function CheckoutForm({
 	geoId,
 	appConfig,
@@ -221,15 +238,16 @@ export default function CheckoutForm({
 		},
 	});
 
-	const legendPrefix = isWeeklyGift ? 4 : 1;
+	const legendPrefix = isWeeklyGift
+		? LEGEND_PREFIX_WEEKLY_GIFT
+		: LEGEND_PREFIX_DEFAULT;
 	const legendPersonalDetails = `${legendPrefix}. Your details`;
-	const legendPayment = `${
-		isWeeklyGift || !hasDeliveryAddress
-			? legendPrefix + 1
-			: !deliveryPostcodeIsOutsideM25
-			? legendPrefix + 2
-			: legendPrefix + 3
-	}. Payment method`;
+	const legendPayment = `${getPaymentLegendPrefix(
+		legendPrefix,
+		isWeeklyGift,
+		hasDeliveryAddress,
+		deliveryPostcodeIsOutsideM25,
+	)}. Payment method`;
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
