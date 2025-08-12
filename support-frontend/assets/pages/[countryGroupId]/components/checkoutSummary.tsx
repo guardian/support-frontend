@@ -31,38 +31,31 @@ import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helper
 import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
-import { getTierThreeDeliveryDate } from '../../weekly-subscription-checkout/helpers/deliveryDays';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
 import { getProductFields } from '../checkout/helpers/getProductFields';
-import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
 type CheckoutSummaryProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
-	stripePublicKey: string;
-	isTestUser: boolean;
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	discountedAmount?: number;
 	contributionAmount?: number;
 	finalAmount: number;
 	promotion?: Promotion;
-	useStripeExpressCheckout: boolean;
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
-	checkoutSession?: CheckoutSession;
-	clearCheckoutSession: () => void;
+	weeklyDeliveryDate: Date;
 };
 
-export default function CheckoutComponent({
+export default function CheckoutSummary({
 	geoId,
 	appConfig,
 	productKey,
@@ -75,6 +68,7 @@ export default function CheckoutComponent({
 	forcedCountry,
 	abParticipations,
 	landingPageSettings,
+	weeklyDeliveryDate,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -206,7 +200,7 @@ export default function CheckoutComponent({
 					startDate={
 						<OrderSummaryStartDate
 							productKey={productKey}
-							startDate={formatUserDate(getTierThreeDeliveryDate())}
+							startDate={formatUserDate(weeklyDeliveryDate)}
 						/>
 					}
 					tsAndCs={

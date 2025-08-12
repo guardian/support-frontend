@@ -4,7 +4,7 @@ import { Divider } from '@guardian/source-development-kitchen/react-components';
 import type { FinePrintTheme } from './finePrint';
 
 const looseSpacing = css`
-	margin: 40px 0 ${space[6]}px;
+	margin: ${space[8]}px 0 ${space[6]}px;
 `;
 
 const tightSpacing = css`

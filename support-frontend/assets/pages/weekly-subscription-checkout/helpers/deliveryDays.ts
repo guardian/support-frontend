@@ -14,6 +14,17 @@ const extraDelayCutoffWeekday = 3;
 const normalDelayWeeks = 1;
 const extraDelayWeeks = 2;
 
+function getWeeklyDeliveryDate(productKey: ActiveProductKey): Date {
+	const weeklyDate =
+		productKey === 'TierThree'
+			? getTierThreeDeliveryDate()
+			: getWeeklyDays()[0];
+	if (!weeklyDate) {
+		throw new Error('We could not find a valid weekly delivery date');
+	}
+	return weeklyDate;
+}
+
 const getWeeklyDays = (today?: number): Date[] => {
 	const now = new Date(today ?? new Date().getTime());
 	const currentWeekday = now.getDay();
@@ -111,4 +122,5 @@ export {
 	addDays,
 	getTierThreeDeliveryDate,
 	productDeliveryOrStartDate,
+	getWeeklyDeliveryDate,
 };
