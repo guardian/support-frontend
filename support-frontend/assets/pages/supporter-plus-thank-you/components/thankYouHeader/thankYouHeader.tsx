@@ -85,7 +85,11 @@ function ThankYouHeader({
 
 			<div css={headerSupportingText}>
 				{showStartDateMessage && (
-					<StartDateMessage productKey={productKey} startDate={startDate} />
+					<StartDateMessage
+						productKey={productKey}
+						ratePlanKey={ratePlanKey}
+						startDate={startDate}
+					/>
 				)}
 
 				{isDirectDebitPayment && (
