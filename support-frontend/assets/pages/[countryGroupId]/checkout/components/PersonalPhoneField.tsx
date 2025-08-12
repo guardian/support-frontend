@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { from, space } from '@guardian/source/foundations';
 import { TextInput } from '@guardian/source/react-components';
 import { useState } from 'react';
 import {
@@ -10,6 +12,13 @@ type PersonalPhoneFieldProps = {
 	setPhoneNumber?: (value: string) => void;
 };
 
+const phoneStyle = css`
+	margin-top: ${space[4]}px;
+	${from.tablet} {
+		margin-top: ${space[5]}px;
+	}
+`;
+
 export function PersonalPhoneField({
 	phoneNumber,
 	setPhoneNumber,
@@ -18,7 +27,7 @@ export function PersonalPhoneField({
 	return (
 		<>
 			{setPhoneNumber && (
-				<div>
+				<fieldset css={phoneStyle}>
 					<TextInput
 						id="telephone"
 						data-qm-masking="blocklist"
@@ -44,7 +53,7 @@ export function PersonalPhoneField({
 							}
 						}}
 					/>
-				</div>
+				</fieldset>
 			)}
 		</>
 	);
