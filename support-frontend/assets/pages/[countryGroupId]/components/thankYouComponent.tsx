@@ -67,10 +67,13 @@ const thankYouContainer = css`
 `;
 const headerContainer = css`
 	${from.desktop} {
-		width: 83%;
+		width: 90%;
 	}
 	${from.leftCol} {
-		width: calc(75% - ${space[3]}px);
+		width: 78%;
+	}
+	${from.wide} {
+		width: 70%;
 	}
 `;
 const buttonContainer = css`

@@ -1,8 +1,8 @@
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import { headerTitleText } from './headingStyles';
+import { headerTitleText, longHeaderTitleText } from './headingStyles';
 import YellowHighlightText from './YellowHighlightText';
 
-export default function GuardianPrintheaderTitleText({
+export default function GuardianPrintHeading({
 	ratePlanKey,
 }: {
 	ratePlanKey: ActiveRatePlanKey;
@@ -27,10 +27,13 @@ export default function GuardianPrintheaderTitleText({
 	);
 	if (guardianWeeklyGifting) {
 		return (
-			<h1 css={headerTitleText}>
+			<h1 css={longHeaderTitleText}>
 				{thankYouText}
 				<br />
-				Your purchase of a Guardian Weekly gift subscription is now complete
+				You have now purchased a{' '}
+				<YellowHighlightText>
+					Guardian Weekly gift subscription
+				</YellowHighlightText>
 			</h1>
 		);
 	}
