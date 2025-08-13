@@ -20,11 +20,13 @@ export default function StudentProductCard({
 	priceSlot,
 	benefitsList,
 	url,
+	ctaLabel,
 	discountSummary,
 }: {
 	priceSlot: JSX.Element;
 	benefitsList: ProductBenefit[];
 	url: string;
+	ctaLabel: string;
 	discountSummary?: string;
 }) {
 	return (
@@ -40,7 +42,7 @@ export default function StudentProductCard({
 				aria-label="All-access digital"
 				theme={themeButtonReaderRevenueBrand}
 			>
-				Sign up for free
+				{ctaLabel}
 			</LinkButton>
 			{discountSummary && <p css={discountSummaryCss}>{discountSummary}</p>}
 

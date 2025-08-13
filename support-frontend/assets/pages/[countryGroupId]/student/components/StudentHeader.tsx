@@ -7,9 +7,8 @@ import type {
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
-import getPromotionData from '../helpers/getPromotionData';
+import { getDiscountData } from '../helpers/discountDetails';
 import LogoUTS from '../logos/uts';
-import PromotionPrice from './PromotionPrice';
 import {
 	cardContainer,
 	containerCardsAndSignIn,
@@ -18,6 +17,7 @@ import {
 	subHeading,
 	universityBadge,
 } from './StudentHeaderStyles';
+import StudentPrice from './StudentPrice';
 import StudentProductCard from './StudentProductCard';
 
 export default function StudentHeader({
@@ -31,7 +31,10 @@ export default function StudentHeader({
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 }) {
-	const { promoDuration, promoCode, discountSummary } = getPromotionData(geoId);
+	const { amount, promoDuration, promoCode, discountSummary } = getDiscountData(
+		geoId,
+		ratePlanKey,
+	);
 	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
 		geoId,
@@ -39,6 +42,8 @@ export default function StudentHeader({
 		ratePlanKey,
 		promoCode,
 	);
+
+	const ctaLabel = amount === 0 ? 'Sign up for free' : 'Subscribe';
 
 	return (
 		<Container
@@ -57,15 +62,22 @@ export default function StudentHeader({
 				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app
-					access, <strong>free for {promoDuration}</strong>.
+					access
+					{promoDuration && (
+						<>
+							, <strong>free for {promoDuration}</strong>
+						</>
+					)}
+					.
 				</p>
 			</div>
 			<div css={cardContainer}>
 				<StudentProductCard
-					priceSlot={<PromotionPrice geoId={geoId} />}
+					priceSlot={<StudentPrice geoId={geoId} ratePlanKey={ratePlanKey} />}
 					benefitsList={benefits}
-					discountSummary={discountSummary}
 					url={checkoutUrl}
+					ctaLabel={ctaLabel}
+					discountSummary={discountSummary}
 				/>
 				<GridPicture
 					sources={[

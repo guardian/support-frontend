@@ -1,5 +1,16 @@
+import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import { productCatalog } from 'helpers/productCatalog';
+import {
+	getBillingPeriodNoun,
+	ratePlanToBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import type { GeoId } from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 
 export function getDiscountDuration({
 	durationInMonths,
@@ -43,4 +54,88 @@ export function getDiscountSummary({
 	return `${discountPriceWithCurrency}/${periodNoun} for ${discountDuration}, then ${priceWithCurrency}/${periodNoun}${'*'.repeat(
 		promoCount,
 	)}`;
+}
+
+type PromotionData = {
+	priceWithCurrency: string;
+	periodNoun: string;
+	amount: number;
+	promoCode?: string;
+	promoDuration?: string;
+	discountSummary?: string;
+	discountPriceWithCurrency?: string;
+};
+
+export function getDiscountData(
+	geoId: GeoId,
+	ratePlanKey: ActiveRatePlanKey,
+): PromotionData {
+	const { currencyKey } = getGeoIdConfig(geoId);
+	const currency = currencies[currencyKey];
+	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
+	const periodNoun = getBillingPeriodNoun(billingPeriod);
+
+	const promotion = getPromotion(
+		window.guardian.allProductPrices.SupporterPlus,
+		geoId.toLocaleUpperCase() as IsoCountry,
+		billingPeriod,
+	);
+
+	const ratePlanPrice = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
+		?.pricing[currencyKey] as number;
+
+	if (!promotion) {
+		const regularBillingPeriodPrice = productCatalog.SupporterPlus?.ratePlans[
+			billingPeriod
+		]?.pricing[currencyKey] as number;
+
+		const discountPriceWithCurrency = simpleFormatAmount(
+			currency,
+			ratePlanPrice,
+		);
+
+		const priceWithCurrency = simpleFormatAmount(
+			currency,
+			regularBillingPeriodPrice,
+		);
+
+		return {
+			amount: ratePlanPrice || regularBillingPeriodPrice,
+			discountPriceWithCurrency,
+			priceWithCurrency,
+			periodNoun,
+		};
+	}
+
+	const priceWithCurrency = simpleFormatAmount(currency, ratePlanPrice);
+	const discountPriceWithCurrency =
+		promotion.discountedPrice !== undefined
+			? simpleFormatAmount(currency, promotion.discountedPrice)
+			: undefined;
+
+	const durationInMonths = promotion.discount?.durationMonths;
+
+	const promoDuration = durationInMonths
+		? getDiscountDuration({ durationInMonths })
+		: undefined;
+
+	const discountSummary =
+		durationInMonths && discountPriceWithCurrency
+			? getDiscountSummary({
+					priceWithCurrency,
+					discountPriceWithCurrency,
+					durationInMonths,
+					billingPeriod,
+			  })
+			: undefined;
+
+	return {
+		amount: promotion.discountedPrice ?? ratePlanPrice,
+		discountPriceWithCurrency,
+		priceWithCurrency,
+		promoDuration,
+		periodNoun,
+		promoCode: promotion.promoCode,
+		discountSummary,
+	};
 }
