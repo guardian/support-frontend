@@ -19,13 +19,13 @@ import {
 export default function StudentProductCard({
 	priceSlot,
 	benefitsList,
-	discountSummary,
 	url,
+	discountSummary,
 }: {
 	priceSlot: JSX.Element;
 	benefitsList: ProductBenefit[];
-	discountSummary: string | null;
 	url: string;
+	discountSummary?: string;
 }) {
 	return (
 		<section css={container}>
