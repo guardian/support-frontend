@@ -67,13 +67,7 @@ const thankYouContainer = css`
 `;
 const headerContainer = css`
 	${from.desktop} {
-		width: 90%;
-	}
-	${from.leftCol} {
-		width: 78%;
-	}
-	${from.wide} {
-		width: 70%;
+		width: 860px;
 	}
 `;
 const buttonContainer = css`
