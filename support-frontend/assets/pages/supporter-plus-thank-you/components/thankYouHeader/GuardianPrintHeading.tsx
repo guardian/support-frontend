@@ -1,5 +1,9 @@
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import { headerTitleText, longHeaderTitleText } from './headingStyles';
+import {
+	headerTitleText,
+	longHeaderTitleText,
+	weeklyGiftLineBreak,
+} from './headingStyles';
 import YellowHighlightText from './YellowHighlightText';
 
 export default function GuardianPrintHeading({
@@ -30,10 +34,12 @@ export default function GuardianPrintHeading({
 			<h1 css={longHeaderTitleText}>
 				{thankYouText}
 				<br />
-				You have now purchased a{' '}
-				<YellowHighlightText>
-					Guardian Weekly gift subscription
-				</YellowHighlightText>
+				<div css={weeklyGiftLineBreak}>
+					<span>You have now purchased a </span>
+					<YellowHighlightText>
+						Guardian Weekly gift subscription
+					</YellowHighlightText>
+				</div>
 			</h1>
 		);
 	}
