@@ -8,6 +8,9 @@ import { isGuardianWeeklyProduct } from './utils/productMatchers';
 
 const startDateStyle = css`
 	margin-bottom: ${space[2]}px;
+	strong {
+		font-weight: bold;
+	}
 `;
 
 export default function StartDateMessage({
@@ -32,7 +35,7 @@ export default function StartDateMessage({
 
 	return (
 		<p css={startDateStyle}>
-			{deliveryMessage} {startDate}.
+			{deliveryMessage} <strong>{startDate}</strong>.
 		</p>
 	);
 }

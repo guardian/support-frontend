@@ -43,7 +43,7 @@ export function WhatNext({
 		const manageSubscription = (
 			<>
 				You can manage your subscription by visiting {myAccountCta}. For any
-				other queries please visit the {helpCenterCta('Help centre.')}
+				other queries please visit the {helpCenterCta('Help centre')}.
 			</>
 		);
 		const guardianWeeklyItems = [
@@ -56,7 +56,7 @@ export function WhatNext({
 			'We’re unable to contact the gift recipient directly - make sure to let them know the gift is on its way',
 			<>
 				Each copy will be delivered to the gift recipient’s door. Here’s a
-				reminder of {helpCenterCta('how home delivery works.')}
+				reminder of {helpCenterCta('how home delivery works')}.
 			</>,
 			manageSubscription,
 		];
