@@ -127,7 +127,6 @@ Template.args = {} as Record<string, unknown>;
 Template.decorators = [] as unknown[];
 
 export const DownloadTheAppSignedIn = Template.bind({});
-
 DownloadTheAppSignedIn.args = {
 	moduleType: 'appDownload',
 	isSignedIn: true,
@@ -138,7 +137,6 @@ DownloadTheAppSignedIn.args = {
 };
 
 export const DownloadTheAppSignedOut = Template.bind({});
-
 DownloadTheAppSignedOut.args = {
 	moduleType: 'appDownload',
 	isSignedIn: false,
@@ -149,7 +147,6 @@ DownloadTheAppSignedOut.args = {
 };
 
 export const NewsFeastApps = Template.bind({});
-
 NewsFeastApps.args = {
 	moduleType: 'appsDownload',
 	isSignedIn: true,
@@ -174,7 +171,6 @@ NewsFeastApps.args = {
 };
 
 export const NewspaperArchiveBenefit = Template.bind({});
-
 NewspaperArchiveBenefit.args = {
 	moduleType: 'newspaperArchiveBenefit',
 	isSignedIn: true,
@@ -185,7 +181,6 @@ NewspaperArchiveBenefit.args = {
 };
 
 export const ShareYourSupport = Template.bind({});
-
 ShareYourSupport.args = {
 	moduleType: 'socialShare',
 	isSignedIn: true,
@@ -196,7 +191,6 @@ ShareYourSupport.args = {
 };
 
 export const Feedback = Template.bind({});
-
 Feedback.args = {
 	moduleType: 'feedback',
 	isSignedIn: true,
@@ -211,7 +205,6 @@ Feedback.args = {
 		/>
 	),
 };
-
 Feedback.decorators = [
 	(Story: React.FC): JSX.Element => {
 		const store = createTestStoreForContributions();
@@ -225,7 +218,6 @@ Feedback.decorators = [
 ];
 
 export const SignUp = Template.bind({});
-
 SignUp.args = {
 	moduleType: 'signUp',
 	isSignedIn: false,
@@ -236,7 +228,6 @@ SignUp.args = {
 };
 
 export const SignUpTier3 = Template.bind({});
-
 SignUpTier3.args = {
 	moduleType: 'signUp',
 	isSignedIn: false,
@@ -247,7 +238,6 @@ SignUpTier3.args = {
 };
 
 export const SignUpObserver = Template.bind({});
-
 SignUpObserver.args = {
 	moduleType: 'signUp',
 	isSignedIn: false,
@@ -258,7 +248,6 @@ SignUpObserver.args = {
 };
 
 export const SignIn = Template.bind({});
-
 SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
@@ -271,7 +260,6 @@ SignIn.args = {
 };
 
 export const SignInTier3 = Template.bind({});
-
 SignInTier3.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
@@ -284,7 +272,6 @@ SignInTier3.args = {
 };
 
 export const SignInObserver = Template.bind({});
-
 SignInObserver.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
@@ -315,7 +302,6 @@ SignIn.decorators = [
 ];
 
 export const AusMap = Template.bind({});
-
 AusMap.args = {
 	moduleType: 'ausMap',
 	isSignedIn: true,
@@ -395,8 +381,38 @@ WhatNextObserverSubsCard.args = {
 	),
 };
 
-export const SupportReminder = Template.bind({});
+export const WhatNextGuardianWeekly = Template.bind({});
+WhatNextGuardianWeekly.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			productKey="GuardianWeeklyDomestic"
+			amount={'16.50'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+		/>
+	),
+};
 
+export const WhatNextGuardianWeeklyGift = Template.bind({});
+WhatNextGuardianWeeklyGift.args = {
+	moduleType: 'whatNext',
+	icon: getThankYouModuleIcon('whatNext'),
+	header: 'What happens next?',
+	ctas: (
+		<WhatNext
+			productKey="GuardianWeeklyDomestic"
+			ratePlanKey="OneYearGift"
+			amount={'198'}
+			startDate={'Friday, March 28, 2025'}
+			isSignedIn={false}
+		/>
+	),
+};
+
+export const SupportReminder = Template.bind({});
 SupportReminder.args = {
 	moduleType: 'supportReminder',
 	isSignedIn: true,
@@ -424,7 +440,6 @@ SupportReminder.args = {
 };
 
 export const SubscriptionStartPaperDelivery = Template.bind({});
-
 SubscriptionStartPaperDelivery.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
@@ -438,7 +453,6 @@ SubscriptionStartPaperDelivery.args = {
 };
 
 export const SubscriptionStartPaperSubsCard = Template.bind({});
-
 SubscriptionStartPaperSubsCard.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
@@ -452,7 +466,6 @@ SubscriptionStartPaperSubsCard.args = {
 };
 
 export const SubscriptionStartGuardianWeekly = Template.bind({});
-
 SubscriptionStartGuardianWeekly.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
@@ -466,7 +479,6 @@ SubscriptionStartGuardianWeekly.args = {
 };
 
 export const SubscriptionStartTierThree = Template.bind({});
-
 SubscriptionStartTierThree.args = {
 	icon: getThankYouModuleIcon('subscriptionStart'),
 	header: 'When will your subscription start?',
