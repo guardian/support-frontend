@@ -1,17 +1,12 @@
-import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { isGuardianWeeklyProduct } from './utils/productMatchers';
-
-const startDateStyle = css`
-	margin-bottom: ${space[2]}px;
-	strong {
-		font-weight: bold;
-	}
-`;
+import { messageBold, messageMargin } from './MessageStyles';
+import {
+	isGuardianWeeklyGiftProduct,
+	isGuardianWeeklyProduct,
+} from './utils/productMatchers';
 
 export default function StartDateMessage({
 	productKey,
@@ -26,7 +21,7 @@ export default function StartDateMessage({
 		return null;
 	}
 
-	const weeklyMessage = ['OneYearGift', 'ThreeMonthGift'].includes(ratePlanKey)
+	const weeklyMessage = isGuardianWeeklyGiftProduct(ratePlanKey)
 		? `The gift recipient's first issue will be published on`
 		: 'Your first issue will be published on';
 	const deliveryMessage = isGuardianWeeklyProduct(productKey)
@@ -34,8 +29,8 @@ export default function StartDateMessage({
 		: 'You will receive your newspapers from';
 
 	return (
-		<p css={startDateStyle}>
-			{deliveryMessage} <strong>{startDate}</strong>.
+		<p css={messageMargin}>
+			{deliveryMessage} <strong css={messageBold}>{startDate}</strong>.
 		</p>
 	);
 }
