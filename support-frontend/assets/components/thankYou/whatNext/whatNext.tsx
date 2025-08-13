@@ -30,37 +30,34 @@ export function WhatNext({
 }) {
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
-	const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(
-		productKey,
-		ratePlanKey,
-	);
+	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
 
 	if (isGuardianWeekly) {
-		const lookoutForEmail =
+		const lookoutForEmailCopy =
 			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.';
-		const manageSubscription = (
+		const manageSubscriptionComponent = (
 			<>
 				You can manage your subscription by visiting {myAccountCta}. For any
 				other queries please visit the {helpCenterCta('Help centre')}.
 			</>
 		);
 		const guardianWeeklyItems = [
-			lookoutForEmail,
+			lookoutForEmailCopy,
 			'Your magazine will be delivered to your door. Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.',
-			manageSubscription,
+			manageSubscriptionComponent,
 		];
 		const guardianWeeklyGiftItems = [
-			lookoutForEmail,
+			lookoutForEmailCopy,
 			'We’re unable to contact the gift recipient directly - make sure to let them know the gift is on its way',
 			<>
 				Each copy will be delivered to the gift recipient’s door. Here’s a
 				reminder of {helpCenterCta('how home delivery works')}.
 			</>,
-			manageSubscription,
+			manageSubscriptionComponent,
 		];
 
+		const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(ratePlanKey);
 		return (
 			<OrderedList
 				items={

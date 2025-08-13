@@ -4,6 +4,7 @@ import {
 	longHeaderTitleText,
 	weeklyGiftLineBreak,
 } from './headingStyles';
+import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
 export default function GuardianPrintHeading({
@@ -26,9 +27,7 @@ export default function GuardianPrintHeading({
 		);
 	}
 
-	const guardianWeeklyGifting = ['ThreeMonthGift', 'OneYearGift'].includes(
-		ratePlanKey,
-	);
+	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(ratePlanKey);
 	if (guardianWeeklyGifting) {
 		return (
 			<h1 css={longHeaderTitleText}>

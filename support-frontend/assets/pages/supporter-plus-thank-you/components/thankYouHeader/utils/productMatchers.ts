@@ -38,11 +38,9 @@ export function isContributionProduct(productKey: ActiveProductKey): boolean {
 }
 
 export function isGuardianWeeklyGiftProduct(
-	productKey: ActiveProductKey,
 	ratePlanKey?: ActiveRatePlanKey,
 ): boolean {
 	return !ratePlanKey
 		? false
-		: guardianWeeklyKeys.includes(productKey) &&
-				['ThreeMonthGift', 'OneYearGift'].includes(ratePlanKey);
+		: ['ThreeMonthGift', 'OneYearGift'].includes(ratePlanKey); // ratePlans unique to Guardian Weekly gifting
 }
