@@ -12,7 +12,10 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setThankYouFeedbackSurveyHasBeenCompleted,
@@ -110,6 +113,7 @@ const defaultFeedbackSurveyHasBeenCompleted = false;
 
 export const getThankYouModuleData = (
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 	countryGroupId: CountryGroupId,
 	countryId: IsoCountry,
 	csrf: CsrfState,
@@ -347,6 +351,7 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<WhatNext
 					productKey={productKey}
+					ratePlanKey={ratePlanKey}
 					amount={(finalAmount ?? '').toString()}
 					startDate={startDate}
 					isSignedIn={isSignedIn}

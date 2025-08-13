@@ -262,6 +262,7 @@ export function ThankYouComponent({
 
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
+		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,

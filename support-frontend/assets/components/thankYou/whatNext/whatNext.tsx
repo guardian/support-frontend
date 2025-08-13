@@ -1,8 +1,12 @@
 import { palette } from '@guardian/source/foundations';
 import OrderedList from 'components/list/orderedList';
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { ObserverPrint } from 'pages/paper-subscription-landing/helpers/products';
 import {
+	isGuardianWeeklyGiftProduct,
 	isGuardianWeeklyProduct,
 	isPrintProduct,
 } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
@@ -11,12 +15,14 @@ import { helpCenterCta, myAccountCta } from './whatNextCta';
 
 export function WhatNext({
 	productKey,
+	ratePlanKey,
 	amount,
 	observerPrint,
 	startDate,
 	isSignedIn = false,
 }: {
 	productKey: ActiveProductKey;
+	ratePlanKey?: ActiveRatePlanKey;
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
@@ -24,20 +30,44 @@ export function WhatNext({
 }) {
 	const isSubscriptionCard = productKey === 'SubscriptionCard';
 	const isGuardianAdLite = productKey === 'GuardianAdLite';
-	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
 	const isGuardianPrint = isPrintProduct(productKey) && !observerPrint;
+	const isGuardianWeekly = isGuardianWeeklyProduct(productKey);
+	const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(
+		productKey,
+		ratePlanKey,
+	);
 
 	if (isGuardianWeekly) {
-		const guardianWeeklyItems = [
-			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.',
-			'Your magazine will be delivered to your door. Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.',
+		const lookoutForEmail =
+			'Look out for an email from us confirming your subscription. It has everything you need to know about how to manage it in the future.';
+		const manageSubscription = (
 			<>
 				You can manage your subscription by visiting {myAccountCta}. For any
-				other queries please visit the {helpCenterCta}.
+				other queries please visit the {helpCenterCta('Help centre.')}
+			</>
+		);
+		const guardianWeeklyItems = [
+			lookoutForEmail,
+			'Your magazine will be delivered to your door. Please allow 1 to 7 days after publication date for your magazine to arrive, depending on national post services.',
+			manageSubscription,
+		];
+		const guardianWeeklyGiftItems = [
+			lookoutForEmail,
+			'We’re unable to contact the gift recipient directly - make sure to let them know the gift is on its way',
+			<>
+				Each copy will be delivered to the gift recipient’s door. Here’s a
+				reminder of {helpCenterCta('how home delivery works.')}
 			</>,
+			manageSubscription,
 		];
 
-		return <OrderedList items={guardianWeeklyItems} />;
+		return (
+			<OrderedList
+				items={
+					isGuardianWeeklyGift ? guardianWeeklyGiftItems : guardianWeeklyItems
+				}
+			/>
+		);
 	}
 
 	if (observerPrint ?? isGuardianPrint) {
