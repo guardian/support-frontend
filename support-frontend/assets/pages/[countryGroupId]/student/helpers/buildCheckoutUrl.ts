@@ -1,4 +1,7 @@
-import type { ActiveProductKey, ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 
 export default function buildCheckoutUrl(

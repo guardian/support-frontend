@@ -13,7 +13,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { ActiveProductKey, ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
