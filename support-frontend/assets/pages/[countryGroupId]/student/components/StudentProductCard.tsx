@@ -9,6 +9,7 @@ import {
 	benefitsListCSS,
 	btnStyleOverrides,
 	container,
+	discountSummaryCss,
 	heading,
 	headWrapper,
 	pill,
@@ -18,10 +19,12 @@ import {
 export default function StudentProductCard({
 	priceSlot,
 	benefitsList,
+	discountSummary,
 	url,
 }: {
 	priceSlot: JSX.Element;
 	benefitsList: ProductBenefit[];
+	discountSummary: string | null;
 	url: string;
 }) {
 	return (
@@ -39,6 +42,7 @@ export default function StudentProductCard({
 			>
 				Sign up for free
 			</LinkButton>
+			{discountSummary && <p css={discountSummaryCss}>{discountSummary}</p>}
 
 			<BenefitsCheckList
 				benefitsCheckListData={benefitsList.map((benefit) => {

@@ -4,7 +4,7 @@ import { originalPriceStrikeThrough } from './StudentProductCardStyles';
 
 export default function PromotionPrice({ geoId }: { geoId: GeoId }) {
 	const {
-		promoPriceWithCurrency,
+		discountPriceWithCurrency,
 		priceWithCurrency,
 		periodNoun,
 		promoDuration,
@@ -12,16 +12,16 @@ export default function PromotionPrice({ geoId }: { geoId: GeoId }) {
 
 	return (
 		<>
-			{promoPriceWithCurrency ? (
+			{discountPriceWithCurrency ? (
 				<>
-					{promoPriceWithCurrency}
+					{discountPriceWithCurrency}
 					<small>{`/${periodNoun} for ${promoDuration}`}</small>
 					<span
 						css={originalPriceStrikeThrough}
 					>{`${priceWithCurrency}/${periodNoun}`}</span>
 				</>
 			) : (
-				priceWithCurrency
+				<>{`${priceWithCurrency}/${periodNoun}`}</>
 			)}
 		</>
 	);

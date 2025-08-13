@@ -1,7 +1,10 @@
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type { ActiveProductKey, ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
 import getPromotionData from '../helpers/getPromotionData';
@@ -28,7 +31,7 @@ export default function StudentHeader({
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 }) {
-	const { promoDuration, promoCode } = getPromotionData(geoId);
+	const { promoDuration, promoCode, discountSummary } = getPromotionData(geoId);
 	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
 		geoId,
@@ -61,6 +64,7 @@ export default function StudentHeader({
 				<StudentProductCard
 					priceSlot={<PromotionPrice geoId={geoId} />}
 					benefitsList={benefits}
+					discountSummary={discountSummary}
 					url={checkoutUrl}
 				/>
 				<GridPicture
