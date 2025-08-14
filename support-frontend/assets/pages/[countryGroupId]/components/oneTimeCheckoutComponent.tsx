@@ -95,6 +95,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutNudge } from './checkoutNudge';
 import { FormSection, Legend, shorterBoxMargin } from './form';
 import {
 	checkedRadioLabelColour,
@@ -155,6 +156,7 @@ const similarProductsConsentCheckboxContainer = css`
 		background-color: ${neutral[100]};
 	}
 `;
+
 
 type OneTimeCheckoutComponentProps = {
 	geoId: GeoId;
@@ -637,6 +639,10 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
+					<CheckoutNudge
+						type={'regular'}
+						currency={currency}
+					/>
 				</BoxContents>
 			</Box>
 			<form
