@@ -25,7 +25,7 @@ export default function StudentPrice({
 		return (
 			<>
 				{discountPriceWithCurrency}
-				<small>/{periodNoun}</small>
+				<small>{`/${periodNoun}`}</small>
 				{promoDuration && <small>{`for ${promoDuration}`}</small>}
 				<span
 					css={originalPriceStrikeThrough}
