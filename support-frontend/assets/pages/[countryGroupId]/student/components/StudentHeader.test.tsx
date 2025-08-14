@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import StudentHeader from './StudentHeader';
+import { type LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import type { GeoId } from 'pages/geoIdConfig';
 import { getStudentDiscount } from '../helpers/discountDetails';
-import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
-import { GeoId } from 'pages/geoIdConfig';
-import { ActiveProductKey, ActiveRatePlanKey } from 'helpers/productCatalog';
+import StudentHeader from './StudentHeader';
 
 jest.mock('../helpers/discountDetails');
 jest.mock('../helpers/buildCheckoutUrl');
@@ -23,11 +26,10 @@ describe('<StudentHeader />', () => {
 				benefits: ['Benefit 1', 'Benefit 2'],
 			},
 		},
-	};
+	} as unknown as LandingPageVariant;
 
 	beforeEach(() => {
 		jest.resetAllMocks();
-		(buildCheckoutUrl as jest.Mock).mockReturnValue('/checkout-url');
 	});
 
 	it('shows promo duration in the subheading when provided', () => {
@@ -43,7 +45,7 @@ describe('<StudentHeader />', () => {
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant as any}
+				landingPageVariant={landingPageVariant}
 			/>,
 		);
 
@@ -63,7 +65,7 @@ describe('<StudentHeader />', () => {
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant as any}
+				landingPageVariant={landingPageVariant}
 			/>,
 		);
 
@@ -85,7 +87,7 @@ describe('<StudentHeader />', () => {
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant as any}
+				landingPageVariant={landingPageVariant}
 			/>,
 		);
 
@@ -103,7 +105,7 @@ describe('<StudentHeader />', () => {
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant as any}
+				landingPageVariant={landingPageVariant}
 			/>,
 		);
 
