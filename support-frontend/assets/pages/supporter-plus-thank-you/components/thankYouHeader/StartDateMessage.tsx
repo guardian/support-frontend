@@ -21,7 +21,7 @@ export default function StartDateMessage({
 		return null;
 	}
 
-	const weeklyMessage = isGuardianWeeklyGiftProduct(ratePlanKey)
+	const weeklyMessage = isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
 		? `The gift recipient's first issue will be published on`
 		: 'Your first issue will be published on';
 	const deliveryMessage = isGuardianWeeklyProduct(productKey)

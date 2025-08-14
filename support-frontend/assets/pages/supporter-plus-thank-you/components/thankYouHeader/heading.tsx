@@ -50,7 +50,9 @@ function Heading({
 	}
 
 	if (isGuardianPrint) {
-		return <GuardianPrintHeading ratePlanKey={ratePlanKey} />;
+		return (
+			<GuardianPrintHeading productKey={productKey} ratePlanKey={ratePlanKey} />
+		);
 	}
 
 	if (contributionProduct) {

@@ -22,7 +22,7 @@ export function WhatNext({
 	isSignedIn = false,
 }: {
 	productKey: ActiveProductKey;
-	ratePlanKey?: ActiveRatePlanKey;
+	ratePlanKey: ActiveRatePlanKey;
 	amount: string;
 	startDate?: string;
 	isSignedIn?: boolean;
@@ -57,7 +57,10 @@ export function WhatNext({
 			manageSubscriptionComponent,
 		];
 
-		const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(ratePlanKey);
+		const isGuardianWeeklyGift = isGuardianWeeklyGiftProduct(
+			productKey,
+			ratePlanKey,
+		);
 		return (
 			<OrderedList
 				items={

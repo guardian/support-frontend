@@ -316,7 +316,9 @@ WhatNextGuardianAdLiteNoStartDate.args = {
 	moduleType: 'whatNext',
 	icon: getThankYouModuleIcon('whatNext'),
 	header: 'What happens next?',
-	bodyCopy: <WhatNext amount={'12'} productKey="GuardianAdLite" />,
+	bodyCopy: (
+		<WhatNext productKey="GuardianAdLite" ratePlanKey="Monthly" amount={'5'} />
+	),
 };
 
 export const WhatNextGuardianAdLiteSignedIn = Template.bind({});
@@ -326,10 +328,11 @@ WhatNextGuardianAdLiteSignedIn.args = {
 	header: 'What happens next?',
 	bodyCopy: (
 		<WhatNext
-			amount={'12'}
+			productKey="GuardianAdLite"
+			ratePlanKey="Monthly"
+			amount={'5'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={true}
-			productKey="GuardianAdLite"
 		/>
 	),
 };
@@ -341,10 +344,11 @@ WhatNextGuardianAdLiteSignedOut.args = {
 	header: 'What happens next?',
 	bodyCopy: (
 		<WhatNext
-			amount={'12'}
+			productKey="GuardianAdLite"
+			ratePlanKey="Monthly"
+			amount={'5'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
-			productKey="GuardianAdLite"
 		/>
 	),
 };
@@ -356,11 +360,12 @@ WhatNextObserverPaper.args = {
 	header: 'What happens next?',
 	ctas: (
 		<WhatNext
-			amount={'12'}
+			productKey="HomeDelivery"
+			ratePlanKey="Monthly"
+			amount={'20.99'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.Paper}
-			productKey="HomeDelivery"
 		/>
 	),
 };
@@ -373,7 +378,8 @@ WhatNextObserverSubsCard.args = {
 	ctas: (
 		<WhatNext
 			productKey="SubscriptionCard"
-			amount={'12'}
+			ratePlanKey="Monthly"
+			amount={'20.99'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}
 			observerPrint={ObserverPrint.SubscriptionCard}
@@ -389,6 +395,7 @@ WhatNextGuardianWeekly.args = {
 	ctas: (
 		<WhatNext
 			productKey="GuardianWeeklyDomestic"
+			ratePlanKey="Monthly"
 			amount={'16.50'}
 			startDate={'Friday, March 28, 2025'}
 			isSignedIn={false}

@@ -1,4 +1,7 @@
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import {
 	headerTitleText,
 	longHeaderTitleText,
@@ -8,8 +11,10 @@ import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
 export default function GuardianPrintHeading({
+	productKey,
 	ratePlanKey,
 }: {
+	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 }) {
 	const thankYouText = 'Thank you for supporting our journalism!';
@@ -27,7 +32,10 @@ export default function GuardianPrintHeading({
 		);
 	}
 
-	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(ratePlanKey);
+	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(
+		productKey,
+		ratePlanKey,
+	);
 	if (guardianWeeklyGifting) {
 		return (
 			<h1 css={longHeaderTitleText}>
