@@ -12,6 +12,7 @@ import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, SupporterPlus
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config._
 import com.gu.support.encoding.InternationalisationCodecs
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import controllers.AppConfig.CsrfToken
@@ -196,6 +197,7 @@ case class AllProductPrices(
     TierThree: ProductPrices,
     Paper: ProductPrices,
     GuardianWeekly: ProductPrices,
+    GuardianWeeklyGift: ProductPrices,
     DigitalPack: ProductPrices,
 )
 
@@ -237,6 +239,7 @@ class Application(
       TierThree = priceSummaryServiceProvider.forUser(isTestUser).getPrices(TierThree, queryPromos),
       Paper = priceSummaryServiceProvider.forUser(isTestUser).getPrices(Paper, queryPromos),
       GuardianWeekly = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos),
+      GuardianWeeklyGift = priceSummaryServiceProvider.forUser(isTestUser).getPrices(GuardianWeekly, queryPromos, Gift),
       DigitalPack = priceSummaryServiceProvider.forUser(isTestUser).getPrices(DigitalPack, queryPromos),
     )
   }

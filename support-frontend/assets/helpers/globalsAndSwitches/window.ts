@@ -245,9 +245,10 @@ const promotionSchema = z.object({
 	starts: dateTimeSchema,
 	expires: dateTimeSchema.optional(),
 });
+
 export const ProductPricesSchema = z.object({
 	allProductPrices: z.record(
-		z.enum(legacyProductTypes),
+		z.enum([...legacyProductTypes, 'GuardianWeeklyGift']),
 		optional(
 			z.record(
 				countryKeySchema,
@@ -279,7 +280,9 @@ const AppConfigSchema =
 	PaymentConfigSchema.merge(ProductCatalogSchema).merge(ProductPricesSchema);
 
 export type AppConfig = z.infer<typeof AppConfigSchema> & {
-	allProductPrices: Partial<Record<LegacyProductType, ProductPrices>>;
+	allProductPrices: Partial<
+		Record<LegacyProductType | 'GuardianWeeklyGift', ProductPrices>
+	>;
 };
 
 export const parseAppConfig = (obj: unknown): AppConfig => {
