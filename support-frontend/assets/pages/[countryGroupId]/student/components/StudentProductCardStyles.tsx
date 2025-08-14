@@ -36,7 +36,7 @@ export const heading = css`
 	}
 `;
 
-export const promotionCss = css`
+export const priceCss = css`
 	${textSansBold28};
 	small {
 		${textSansBold17};

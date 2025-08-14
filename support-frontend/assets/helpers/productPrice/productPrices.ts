@@ -104,6 +104,8 @@ const getDiscountVsRetail = (
 	return Math.floor(totalSavingVsRetail);
 };
 
+const allProductPrices = window.guardian.allProductPrices;
+
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -112,4 +114,5 @@ export {
 	showPrice,
 	isNumeric,
 	getDiscountVsRetail,
+	allProductPrices,
 };

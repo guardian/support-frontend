@@ -51,7 +51,7 @@ export const parseCountdownSettings = (
 	};
 };
 
-interface ProductBenefit {
+export interface ProductBenefit {
 	copy: string;
 	tooltip?: string;
 	label?: {

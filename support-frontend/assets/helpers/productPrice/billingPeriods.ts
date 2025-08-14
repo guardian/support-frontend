@@ -70,6 +70,7 @@ export function ratePlanToBillingPeriod(
 		case 'RestOfWorldAnnualV2':
 		case 'DomesticAnnualV2':
 		case 'OneYearGift':
+		case 'OneYearStudent':
 		case 'V1DeprecatedAnnual':
 			return BillingPeriod.Annual;
 		case 'ThreeMonthGift':
