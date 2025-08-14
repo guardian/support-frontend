@@ -2,8 +2,14 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ProductSpecificState } from '../model/createZuoraSubscriptionState';
 
-const freeTrialPeriodInDays = 14;
-const paymentGracePeriodInDays = 2;
+const DigitalSubscription = {
+	freeTrialPeriodInDays: 14,
+	paymentGracePeriodInDays: 2,
+};
+
+const GuardianAdLite = {
+	freeTrialPeriodInDays: 15,
+};
 
 export const getSubscriptionDates = <T extends ProductSpecificState>(
 	now: Dayjs,
@@ -25,14 +31,21 @@ const getCustomerAcceptanceDate = <T extends ProductSpecificState>(
 	now: Dayjs,
 	productSpecificState: T,
 ): Dayjs => {
-	if (
-		productSpecificState.productType === 'GuardianWeekly' ||
-		productSpecificState.productType === 'TierThree' ||
-		productSpecificState.productType === 'Paper'
-	) {
-		return dayjs(productSpecificState.firstDeliveryDate);
-	} else if (productSpecificState.productType === 'DigitalSubscription') {
-		return now.add(freeTrialPeriodInDays + paymentGracePeriodInDays, 'day');
+	switch (productSpecificState.productType) {
+		case 'GuardianWeekly':
+		case 'TierThree':
+		case 'Paper':
+			return dayjs(productSpecificState.firstDeliveryDate);
+		case 'DigitalSubscription':
+			return now.add(
+				DigitalSubscription.freeTrialPeriodInDays +
+					DigitalSubscription.paymentGracePeriodInDays,
+				'day',
+			);
+		case 'GuardianAdLite':
+			return now.add(GuardianAdLite.freeTrialPeriodInDays, 'day');
+
+		default:
+			return now;
 	}
-	return now;
 };

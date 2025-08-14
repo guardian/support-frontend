@@ -76,6 +76,16 @@ export const handler = async (
 		const { contractEffectiveDate, customerAcceptanceDate } =
 			getSubscriptionDates(dayjs(), productSpecificState);
 
+		// TODO:
+		//  Apply promotion if present
+		//  ReaderType - GIFT, PATRON
+		//  DeliveryAgent
+		//  Validate paper payment gateway
+		//  Set term & autoRenew correctly for GW gifts (and S+ students?)
+		//  Set contribution amount correctly for S+ (amount - cost)
+		//  Output state
+		//  CSR mode is NOT needed
+
 		const inputFields = {
 			accountName: salesforceContact.AccountId, // We store the Salesforce Account id in the name field
 			createdRequestId: createZuoraSubscriptionState.requestId,
