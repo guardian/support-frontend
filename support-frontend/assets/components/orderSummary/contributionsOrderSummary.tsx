@@ -235,8 +235,8 @@ export function ContributionsOrderSummary({
 				{isSundayOnlyNewspaperSubscription && showCheckList && (
 					<div css={orderSummarySundayDetails}>
 						{productKey === 'HomeDelivery'
-							? 'Print edition, delivered every Sunday and access to exclusive slow news digital newsletters, thought-provoking podcasts and Think-Ins, discussions with journalists.'
-							: 'Print edition every Sunday and access to exclusive slow news digital newsletters, thought-provoking podcasts and Think-Ins, discussions with journalists.'}
+							? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
+							: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
 					</div>
 				)}
 			</div>
