@@ -11,7 +11,7 @@ import GuardianPrintHeading from './GuardianPrintHeading';
 import {
 	headerTitleText,
 	longHeaderTitleText,
-	tier3lineBreak,
+	tier3LineBreak,
 } from './headingStyles';
 import { isContributionProduct, isPrintProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
@@ -50,7 +50,9 @@ function Heading({
 	}
 
 	if (isGuardianPrint) {
-		return <GuardianPrintHeading ratePlanKey={ratePlanKey} />;
+		return (
+			<GuardianPrintHeading productKey={productKey} ratePlanKey={ratePlanKey} />
+		);
 	}
 
 	if (contributionProduct) {
@@ -85,7 +87,7 @@ function Heading({
 				</YellowHighlightText>
 				{isTier3 && (
 					<>
-						<br css={tier3lineBreak} />
+						<br css={tier3LineBreak} />
 						Your valued support powers our journalism.
 					</>
 				)}

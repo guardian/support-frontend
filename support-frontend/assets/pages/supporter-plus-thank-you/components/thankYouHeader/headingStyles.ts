@@ -1,10 +1,19 @@
 import { css } from '@emotion/react';
 import { from, titlepiece42 } from '@guardian/source/foundations';
 
-export const tier3lineBreak = css`
+export const tier3LineBreak = css`
 	display: none;
 	${from.tablet} {
 		display: inline-block;
+	}
+`;
+
+export const weeklyGiftLineBreak = css`
+	span {
+		display: inline-block;
+		${from.desktop} {
+			display: inline;
+		}
 	}
 `;
 
