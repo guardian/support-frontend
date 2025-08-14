@@ -57,7 +57,10 @@ const getPromotionFromProductPrices = (
 	 * Get any promotions.
 	 * These come from the productPrices object for the particular product on window.guardian.
 	 */
-	const productPriceKey: LegacyProductType = getLegacyProductType(productKey);
+	const productPriceKey: LegacyProductType = getLegacyProductType(
+		productKey,
+		ratePlanKey,
+	);
 
 	const productPrices = appConfig.allProductPrices[productPriceKey];
 
