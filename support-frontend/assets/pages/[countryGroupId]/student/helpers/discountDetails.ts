@@ -86,61 +86,61 @@ export function getStudentDiscount(
 		ratePlanKey
 	]?.pricing[currencyKey] as number;
 
-	if (!promotion) {
-		const regularBillingPeriodPrice = productCatalog.SupporterPlus?.ratePlans[
-			billingPeriod
-		]?.pricing[currencyKey] as number;
-
-		const discountPriceWithCurrency = simpleFormatAmount(
+	if (promotion) {
+		const fullPriceWithCurrency = simpleFormatAmount(
 			currency,
 			productCatalogPrice,
 		);
+		const discountPriceWithCurrency =
+			promotion.discountedPrice !== undefined
+				? simpleFormatAmount(currency, promotion.discountedPrice)
+				: undefined;
 
-		const fullPriceWithCurrency = simpleFormatAmount(
-			currency,
-			regularBillingPeriodPrice,
-		);
+		const durationInMonths = promotion.discount?.durationMonths;
+
+		const promoDuration = durationInMonths
+			? getDiscountDuration({ durationInMonths })
+			: undefined;
+
+		const discountSummary =
+			durationInMonths && discountPriceWithCurrency
+				? getDiscountSummary({
+						fullPriceWithCurrency,
+						discountPriceWithCurrency,
+						durationInMonths,
+						billingPeriod,
+				  })
+				: undefined;
 
 		return {
-			amount: productCatalogPrice || regularBillingPeriodPrice,
+			amount: promotion.discountedPrice ?? productCatalogPrice,
 			discountPriceWithCurrency,
 			fullPriceWithCurrency,
+			promoDuration,
 			periodNoun,
+			promoCode: promotion.promoCode,
+			discountSummary,
 		};
 	}
 
-	const fullPriceWithCurrency = simpleFormatAmount(
+	const regularBillingPeriodPrice = productCatalog.SupporterPlus?.ratePlans[
+		billingPeriod
+	]?.pricing[currencyKey] as number;
+
+	const discountPriceWithCurrency = simpleFormatAmount(
 		currency,
 		productCatalogPrice,
 	);
-	const discountPriceWithCurrency =
-		promotion.discountedPrice !== undefined
-			? simpleFormatAmount(currency, promotion.discountedPrice)
-			: undefined;
 
-	const durationInMonths = promotion.discount?.durationMonths;
-
-	const promoDuration = durationInMonths
-		? getDiscountDuration({ durationInMonths })
-		: undefined;
-
-	const discountSummary =
-		durationInMonths && discountPriceWithCurrency
-			? getDiscountSummary({
-					fullPriceWithCurrency,
-					discountPriceWithCurrency,
-					durationInMonths,
-					billingPeriod,
-			  })
-			: undefined;
+	const fullPriceWithCurrency = simpleFormatAmount(
+		currency,
+		regularBillingPeriodPrice,
+	);
 
 	return {
-		amount: promotion.discountedPrice ?? productCatalogPrice,
+		amount: productCatalogPrice || regularBillingPeriodPrice,
 		discountPriceWithCurrency,
 		fullPriceWithCurrency,
-		promoDuration,
 		periodNoun,
-		promoCode: promotion.promoCode,
-		discountSummary,
 	};
 }
