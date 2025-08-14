@@ -67,10 +67,7 @@ const thankYouContainer = css`
 `;
 const headerContainer = css`
 	${from.desktop} {
-		width: 83%;
-	}
-	${from.leftCol} {
-		width: calc(75% - ${space[3]}px);
+		width: 860px;
 	}
 `;
 const buttonContainer = css`
@@ -262,6 +259,7 @@ export function ThankYouComponent({
 
 	const thankYouModuleData = getThankYouModuleData(
 		productKey,
+		ratePlanKey,
 		countryGroupId,
 		countryId,
 		csrf,

@@ -1,10 +1,20 @@
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import { headerTitleText } from './headingStyles';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
+import {
+	headerTitleText,
+	longHeaderTitleText,
+	weeklyGiftLineBreak,
+} from './headingStyles';
+import { isGuardianWeeklyGiftProduct } from './utils/productMatchers';
 import YellowHighlightText from './YellowHighlightText';
 
-export default function GuardianPrintheaderTitleText({
+export default function GuardianPrintHeading({
+	productKey,
 	ratePlanKey,
 }: {
+	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 }) {
 	const thankYouText = 'Thank you for supporting our journalism!';
@@ -22,15 +32,21 @@ export default function GuardianPrintheaderTitleText({
 		);
 	}
 
-	const guardianWeeklyGifting = ['ThreeMonthGift', 'OneYearGift'].includes(
+	const guardianWeeklyGifting = isGuardianWeeklyGiftProduct(
+		productKey,
 		ratePlanKey,
 	);
 	if (guardianWeeklyGifting) {
 		return (
-			<h1 css={headerTitleText}>
+			<h1 css={longHeaderTitleText}>
 				{thankYouText}
 				<br />
-				Your purchase of a Guardian Weekly gift subscription is now complete
+				<div css={weeklyGiftLineBreak}>
+					<span>You have now purchased a </span>
+					<YellowHighlightText>
+						Guardian Weekly gift subscription
+					</YellowHighlightText>
+				</div>
 			</h1>
 		);
 	}

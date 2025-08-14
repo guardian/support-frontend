@@ -17,11 +17,12 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 				: 'HomeDelivery';
 			const { container } = render(
 				<WhatNext
+					productKey={productKey}
+					ratePlanKey={'Monthly'}
 					amount={'12'}
 					startDate={'Friday, March 28, 2025'}
 					isSignedIn={signIn as boolean}
 					observerPrint={observerPaperType as ObserverPrint}
-					productKey={productKey}
 				/>,
 			);
 			expect(container).toMatchSnapshot();
