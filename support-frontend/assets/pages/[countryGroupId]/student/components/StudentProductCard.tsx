@@ -17,15 +17,15 @@ import {
 } from './StudentProductCardStyles';
 
 export default function StudentProductCard({
-	priceSlot,
+	price,
 	benefitsList,
-	url,
+	ctaUrl,
 	ctaLabel,
 	discountSummary,
 }: {
-	priceSlot: JSX.Element;
+	price: JSX.Element;
 	benefitsList: ProductBenefit[];
-	url: string;
+	ctaUrl: string;
 	ctaLabel: string;
 	discountSummary?: string;
 }) {
@@ -34,10 +34,10 @@ export default function StudentProductCard({
 			<div css={pill}>Student offer</div>
 			<div css={headWrapper}>
 				<h2 css={heading}>All-access digital</h2>
-				<p css={priceCss}>{priceSlot}</p>
+				<p css={priceCss}>{price}</p>
 			</div>
 			<LinkButton
-				href={url}
+				href={ctaUrl}
 				cssOverrides={btnStyleOverrides}
 				aria-label="All-access digital"
 				theme={themeButtonReaderRevenueBrand}

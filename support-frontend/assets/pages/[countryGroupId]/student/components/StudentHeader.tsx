@@ -73,9 +73,9 @@ export default function StudentHeader({
 			</div>
 			<div css={cardContainer}>
 				<StudentProductCard
-					priceSlot={<StudentPrice geoId={geoId} ratePlanKey={ratePlanKey} />}
+					price={<StudentPrice geoId={geoId} ratePlanKey={ratePlanKey} />}
 					benefitsList={benefits}
-					url={checkoutUrl}
+					ctaUrl={checkoutUrl}
 					ctaLabel={ctaLabel}
 					discountSummary={discountSummary}
 				/>
