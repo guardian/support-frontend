@@ -8,6 +8,7 @@ import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
+import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -34,13 +35,13 @@ export function getDiscountDuration({
 }
 
 export function getDiscountSummary({
-	priceWithCurrency,
+	fullPriceWithCurrency,
 	discountPriceWithCurrency,
 	durationInMonths,
 	billingPeriod,
 	promoCount = 0,
 }: {
-	priceWithCurrency: string;
+	fullPriceWithCurrency: string;
 	discountPriceWithCurrency: string;
 	durationInMonths: number;
 	billingPeriod: BillingPeriod;
@@ -51,38 +52,39 @@ export function getDiscountSummary({
 		durationInMonths,
 	});
 
-	return `${discountPriceWithCurrency}/${periodNoun} for ${discountDuration}, then ${priceWithCurrency}/${periodNoun}${'*'.repeat(
+	return `${discountPriceWithCurrency}/${periodNoun} for ${discountDuration}, then ${fullPriceWithCurrency}/${periodNoun}${'*'.repeat(
 		promoCount,
 	)}`;
 }
 
-type PromotionData = {
-	priceWithCurrency: string;
-	periodNoun: string;
+type StudentDiscount = {
+	fullPriceWithCurrency: string;
 	amount: number;
+	periodNoun: string;
 	promoCode?: string;
 	promoDuration?: string;
 	discountSummary?: string;
 	discountPriceWithCurrency?: string;
 };
 
-export function getDiscountData(
+export function getStudentDiscount(
 	geoId: GeoId,
 	ratePlanKey: ActiveRatePlanKey,
-): PromotionData {
+): StudentDiscount {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 
 	const promotion = getPromotion(
-		window.guardian.allProductPrices.SupporterPlus,
+		allProductPrices.SupporterPlus,
 		geoId.toLocaleUpperCase() as IsoCountry,
 		billingPeriod,
 	);
 
-	const ratePlanPrice = productCatalog.SupporterPlus?.ratePlans[ratePlanKey]
-		?.pricing[currencyKey] as number;
+	const productCatalogPrice = productCatalog.SupporterPlus?.ratePlans[
+		ratePlanKey
+	]?.pricing[currencyKey] as number;
 
 	if (!promotion) {
 		const regularBillingPeriodPrice = productCatalog.SupporterPlus?.ratePlans[
@@ -91,23 +93,26 @@ export function getDiscountData(
 
 		const discountPriceWithCurrency = simpleFormatAmount(
 			currency,
-			ratePlanPrice,
+			productCatalogPrice,
 		);
 
-		const priceWithCurrency = simpleFormatAmount(
+		const fullPriceWithCurrency = simpleFormatAmount(
 			currency,
 			regularBillingPeriodPrice,
 		);
 
 		return {
-			amount: ratePlanPrice || regularBillingPeriodPrice,
+			amount: productCatalogPrice || regularBillingPeriodPrice,
 			discountPriceWithCurrency,
-			priceWithCurrency,
+			fullPriceWithCurrency,
 			periodNoun,
 		};
 	}
 
-	const priceWithCurrency = simpleFormatAmount(currency, ratePlanPrice);
+	const fullPriceWithCurrency = simpleFormatAmount(
+		currency,
+		productCatalogPrice,
+	);
 	const discountPriceWithCurrency =
 		promotion.discountedPrice !== undefined
 			? simpleFormatAmount(currency, promotion.discountedPrice)
@@ -122,7 +127,7 @@ export function getDiscountData(
 	const discountSummary =
 		durationInMonths && discountPriceWithCurrency
 			? getDiscountSummary({
-					priceWithCurrency,
+					fullPriceWithCurrency,
 					discountPriceWithCurrency,
 					durationInMonths,
 					billingPeriod,
@@ -130,9 +135,9 @@ export function getDiscountData(
 			: undefined;
 
 	return {
-		amount: promotion.discountedPrice ?? ratePlanPrice,
+		amount: promotion.discountedPrice ?? productCatalogPrice,
 		discountPriceWithCurrency,
-		priceWithCurrency,
+		fullPriceWithCurrency,
 		promoDuration,
 		periodNoun,
 		promoCode: promotion.promoCode,

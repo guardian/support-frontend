@@ -1,6 +1,6 @@
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import { getDiscountData } from '../helpers/discountDetails';
+import { getStudentDiscount } from '../helpers/discountDetails';
 import { originalPriceStrikeThrough } from './StudentProductCardStyles';
 
 export default function StudentPrice({
@@ -12,14 +12,14 @@ export default function StudentPrice({
 }) {
 	const {
 		discountPriceWithCurrency,
-		priceWithCurrency,
+		fullPriceWithCurrency,
 		periodNoun,
 		promoDuration,
-	} = getDiscountData(geoId, ratePlanKey);
+	} = getStudentDiscount(geoId, ratePlanKey);
 
 	const showDiscountPrice =
 		discountPriceWithCurrency &&
-		discountPriceWithCurrency !== priceWithCurrency;
+		discountPriceWithCurrency !== fullPriceWithCurrency;
 
 	if (showDiscountPrice) {
 		return (
@@ -29,14 +29,14 @@ export default function StudentPrice({
 				{promoDuration && <small>{`for ${promoDuration}`}</small>}
 				<span
 					css={originalPriceStrikeThrough}
-				>{`${priceWithCurrency}/${periodNoun}`}</span>
+				>{`${fullPriceWithCurrency}/${periodNoun}`}</span>
 			</>
 		);
 	}
 
 	return (
 		<>
-			{priceWithCurrency}
+			{fullPriceWithCurrency}
 			<small>/{periodNoun}</small>
 		</>
 	);

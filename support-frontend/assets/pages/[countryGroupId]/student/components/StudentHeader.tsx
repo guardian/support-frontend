@@ -7,7 +7,7 @@ import type {
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
-import { getDiscountData } from '../helpers/discountDetails';
+import { getStudentDiscount } from '../helpers/discountDetails';
 import LogoUTS from '../logos/uts';
 import {
 	cardContainer,
@@ -31,10 +31,8 @@ export default function StudentHeader({
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 }) {
-	const { amount, promoDuration, promoCode, discountSummary } = getDiscountData(
-		geoId,
-		ratePlanKey,
-	);
+	const { amount, promoDuration, promoCode, discountSummary } =
+		getStudentDiscount(geoId, ratePlanKey);
 	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
 		geoId,
