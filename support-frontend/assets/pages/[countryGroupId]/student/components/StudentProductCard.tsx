@@ -37,6 +37,7 @@ export default function StudentProductCard({
 				<p css={priceCss}>{price}</p>
 			</div>
 			<LinkButton
+				data-testid="cta-button"
 				href={ctaUrl}
 				cssOverrides={btnStyleOverrides}
 				aria-label="All-access digital"

@@ -41,6 +41,7 @@ describe('StudentPrice Component', () => {
 
 		expect(container).toHaveTextContent('£5/month');
 		expect(container).toHaveTextContent('£10/month');
+		expect(screen.getByText('for 3 months')).toBeInTheDocument();
 		expect(screen.queryAllByText('/month', { exact: false })).toHaveLength(2);
 	});
 
@@ -57,5 +58,20 @@ describe('StudentPrice Component', () => {
 		expect(screen.getByText('€8')).toBeInTheDocument();
 		expect(screen.getByText('€12/month')).toBeInTheDocument();
 		expect(screen.queryByText('for', { exact: false })).not.toBeInTheDocument();
+	});
+
+	it('applies strike-through style to the original price', () => {
+		(getStudentDiscount as jest.Mock).mockReturnValue({
+			discountPriceWithCurrency: '£5',
+			fullPriceWithCurrency: '£10',
+			periodNoun: 'month',
+			promoDuration: '3 months',
+		});
+
+		render(<StudentPrice geoId={geoId} ratePlanKey={ratePlanKey} />);
+
+		const originalPrice = screen.getByTestId('original-price');
+		expect(originalPrice).toHaveTextContent('£10/month');
+		expect(originalPrice).toHaveStyle('text-decoration: line-through');
 	});
 });
