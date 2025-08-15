@@ -32,6 +32,7 @@ export const testObserverCheckout = (testDetails: TestDetails) => {
 		await setTestUserDetails(
 			page,
 			product,
+			ratePlan,
 			internationalisationId,
 			getUserFields(internationalisationId, postCode),
 		);

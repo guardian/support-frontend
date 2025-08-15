@@ -852,6 +852,7 @@ export default function CheckoutForm({
 
 						<PersonalDetailsFields
 							countryId={countryId}
+							countries={productDescription.deliverableTo}
 							legend={legendPersonalDetails}
 							firstName={firstName}
 							setFirstName={setFirstName}

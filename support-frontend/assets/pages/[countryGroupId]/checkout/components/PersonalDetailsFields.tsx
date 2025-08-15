@@ -23,6 +23,7 @@ export type BillingStatePostcode = {
 
 type PersonalDetailsFieldsProps = {
 	countryId: IsoCountry;
+	countries?: Record<string, string>;
 	legend: string;
 	firstName: string;
 	setFirstName: (value: string) => void;
@@ -43,6 +44,7 @@ type PersonalDetailsFieldsProps = {
 
 export function PersonalDetailsFields({
 	countryId,
+	countries,
 	legend,
 	firstName,
 	setFirstName,
@@ -162,6 +164,7 @@ export function PersonalDetailsFields({
 				{isWeeklyGift && billingStatePostcode && (
 					<BillingAddressFields
 						countryId={countryId}
+						countries={countries}
 						billingStatePostcode={billingStatePostcode}
 					/>
 				)}
