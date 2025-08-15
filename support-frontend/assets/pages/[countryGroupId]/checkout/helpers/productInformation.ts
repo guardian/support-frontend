@@ -1,10 +1,10 @@
 import { getIfDefined } from '@guardian/support-service-lambdas/modules/nullAndUndefined';
-import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import {
 	isDeliveryProduct,
 	isNewspaperProduct,
-} from '@modules/product-catalog/productCatalog';
+} from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
+import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
+import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	ActiveProductKey,
