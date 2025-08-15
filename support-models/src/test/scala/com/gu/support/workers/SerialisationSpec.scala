@@ -63,7 +63,7 @@ object StatesTestData {
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     giftRecipient = None,
     product = DigitalPack(Currency.GBP, Monthly),
-    productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None)),
+    productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None, None, None, None, None)),
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = PayPalPaymentFields("baid"),
     firstDeliveryDate = None,
@@ -80,7 +80,7 @@ object StatesTestData {
     DigitalSubscriptionState(
       Country.UK,
       product = DigitalPack(Currency.GBP, Monthly),
-      productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None)),
+      productInformation = Some(ProductInformation("DigitalSubscription", "Monthly", None, None, None, None, None)),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       appliedPromotion = None,
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
