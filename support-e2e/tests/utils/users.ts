@@ -12,6 +12,10 @@ function generateString(length: number) {
 	return result;
 }
 
+export function userName(label: string) {
+	return `support.e2e.${label}+${generateString(5)}`;
+}
+
 export const firstName = () => `support.e2e.firstName+${generateString(5)}`;
 export const lastName = () => `support.e2e.lastName+${generateString(5)}`;
 /**

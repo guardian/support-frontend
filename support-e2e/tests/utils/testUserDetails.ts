@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { TestFields } from './userFields';
+import { TestRecipient, TestFields } from './userFields';
 
 const selectDeliveryAgent = async (page: Page) => {
 	// Depending on whether there are one or multiple delivery agents we need to do different things here.
@@ -61,20 +61,52 @@ export const setTestUserCoreDetails = async (
 	}
 };
 
+export const setGiftingCoreDetails = async (
+	page: Page,
+	email: string,
+	firstName: string,
+	lastName: string,
+	recipient: TestRecipient,
+	confirmEmail?: boolean,
+) => {
+	await page.getByLabel('First name').nth(0).fill(recipient.firstName);
+	await page.getByLabel('Last name').nth(0).fill(recipient.lastName);
+	await page.getByLabel('Email address').nth(0).fill(recipient.email);
+	await page.getByLabel('First name').nth(1).fill(firstName);
+	await page.getByLabel('Last name').nth(1).fill(lastName);
+	await page.getByLabel('Email address').nth(1).fill(email);
+	if (confirmEmail) {
+		await page.getByLabel('Confirm email address').fill(email);
+	}
+};
+
 export const setTestUserDetails = async (
 	page: Page,
 	product: string,
+	ratePlan: string,
 	internationalisationId: string,
 	testFields: TestFields,
 ) => {
 	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
-	await setTestUserCoreDetails(
-		page,
-		testFields.email,
-		testFields.firstName,
-		testFields.lastName,
-		true, // confirmEmail required
-	);
+	if (['3MonthGift', 'OneYearGift'].includes(ratePlan)) {
+		await setGiftingCoreDetails(
+			page,
+			testFields.email,
+			testFields.firstName,
+			testFields.lastName,
+			testFields.recipient,
+			true, // confirmEmail required
+		);
+	} else {
+		await setTestUserCoreDetails(
+			page,
+			testFields.email,
+			testFields.firstName,
+			testFields.lastName,
+			true, // confirmEmail required
+		);
+	}
+
 	if (['US', 'AU', 'CA'].includes(internationalisationId)) {
 		await page
 			.getByLabel(stateLabel)

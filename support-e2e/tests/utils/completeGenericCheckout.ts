@@ -11,6 +11,7 @@ type TestDetails = {
 	product: string;
 	paymentType: string;
 	internationalisationId: string;
+	ratePlan?: string;
 	postCode?: string;
 };
 
@@ -27,11 +28,12 @@ export const completeGenericCheckout = async (
 	page,
 	testDetails: TestDetails,
 ) => {
-	const { product, internationalisationId, postCode, paymentType } =
+	const { product, internationalisationId, postCode, paymentType, ratePlan } =
 		testDetails;
 	await setTestUserDetails(
 		page,
 		product,
+		ratePlan,
 		internationalisationId,
 		getUserFields(internationalisationId, postCode),
 	);

@@ -398,7 +398,7 @@ export const productCatalogDescription: Record<
 				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: BillingPeriod.Monthly,
+				billingPeriod: BillingPeriod.Quarterly,
 			},
 		},
 	},
@@ -421,7 +421,7 @@ export const productCatalogDescription: Record<
 				billingPeriod: BillingPeriod.Quarterly,
 			},
 			ThreeMonthGift: {
-				billingPeriod: BillingPeriod.Monthly,
+				billingPeriod: BillingPeriod.Quarterly,
 			},
 		},
 	},
