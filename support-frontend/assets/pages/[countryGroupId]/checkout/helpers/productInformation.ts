@@ -1,7 +1,7 @@
 import { getIfDefined } from '@guardian/support-service-lambdas/modules/nullAndUndefined';
 import {
 	isDeliveryProduct,
-	isNewspaperProduct,
+	requiresDeliveryInstructions,
 } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
@@ -63,7 +63,7 @@ export const buildProductInformation = (
 			},
 		};
 	}
-	if (isNewspaperProduct(productKey)) {
+	if (requiresDeliveryInstructions(productKey)) {
 		basicProductInformation = {
 			...basicProductInformation,
 			deliveryInstructions,
@@ -72,7 +72,6 @@ export const buildProductInformation = (
 	if (productKey === 'NationalDelivery') {
 		basicProductInformation = {
 			...basicProductInformation,
-			deliveryInstructions,
 			deliveryAgent: deliveryAgent,
 		};
 	}
