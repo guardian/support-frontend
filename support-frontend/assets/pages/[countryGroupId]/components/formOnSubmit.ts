@@ -1,5 +1,3 @@
-import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import type { Participations } from '../../../helpers/abTests/models';
@@ -27,6 +25,7 @@ import {
 	extractNonDeliverableAddressDataFromForm,
 	extractPersonalDataFromForm,
 } from '../checkout/helpers/formDataExtractors';
+import { buildProductInformation } from '../checkout/helpers/productInformation';
 import { setThankYouOrder } from '../checkout/helpers/sessionStorage';
 import { stripeCreateCheckoutSession } from '../checkout/helpers/stripe';
 import {
@@ -76,20 +75,6 @@ export const submitForm = async ({
 		labels: ['generic-checkout'], // Shall we get rid of this now?
 	};
 
-	// The product information can be calculated higher up the call stack
-	// once we get rid of the old product fields mechanism.
-	const productInformationAmount =
-		productFields.productType === 'Contribution' ||
-		productFields.productType === 'SupporterPlus'
-			? productFields.amount
-			: undefined;
-
-	const productInformation: ProductPurchase = productPurchaseSchema.parse({
-		product: productKey,
-		ratePlan: ratePlanKey,
-		amount: productInformationAmount,
-	});
-
 	const firstDeliveryDate = getFirstDeliveryDateForProduct(
 		productKey,
 		productFields,
@@ -106,6 +91,21 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
+	const deliveryAgent =
+		productFields.productType === 'Paper'
+			? productFields.deliveryAgent
+			: undefined;
+
+	const productInformation = buildProductInformation(
+		productFields,
+		productKey,
+		ratePlanKey,
+		personalData,
+		deliveryAddress,
+		firstDeliveryDate,
+		deliveryInstructions,
+		deliveryAgent,
+	);
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,
