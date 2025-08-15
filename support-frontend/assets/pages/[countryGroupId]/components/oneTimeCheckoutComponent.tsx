@@ -157,7 +157,6 @@ const similarProductsConsentCheckboxContainer = css`
 	}
 `;
 
-
 type OneTimeCheckoutComponentProps = {
 	geoId: GeoId;
 	appConfig: AppConfig;
@@ -639,10 +638,7 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					<CheckoutNudge
-						type={'regular'}
-						currency={currency}
-					/>
+					<CheckoutNudge type={'regular'} currency={currency} />
 				</BoxContents>
 			</Box>
 			<form

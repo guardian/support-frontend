@@ -15,9 +15,9 @@ import type { Currency } from 'helpers/internationalisation/currency';
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
 interface CheckoutNudgeProps {
 	type: 'regular' | 'supporter+';
-    currency: Currency;
-    // countryGroupId: CountryGroupId;
-    // currencyKey: keyof typeof currencies; 
+	currency: Currency;
+	// countryGroupId: CountryGroupId;
+	// currencyKey: keyof typeof currencies;
 }
 
 const nudgeBoxOverrides = css`
@@ -60,10 +60,8 @@ const getButtonCopy = (
 		? `Support us for ${currency.glyph}4/month`
 		: `Support us for ${currency.glyph}4/month`;
 
-//  type, currency, currencyKey, countryGroupId 
+//  type, currency, currencyKey, countryGroupId
 export function CheckoutNudge({ type, currency }: CheckoutNudgeProps) {
-
-
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents>
