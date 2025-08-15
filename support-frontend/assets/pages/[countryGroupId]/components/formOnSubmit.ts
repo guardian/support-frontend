@@ -23,6 +23,7 @@ import { getFirstDeliveryDateForProduct } from '../checkout/helpers/deliveryDate
 import type { FormPersonalFields } from '../checkout/helpers/formDataExtractors';
 import {
 	extractDeliverableAddressDataFromForm,
+	extractGiftRecipientDataFromForm,
 	extractNonDeliverableAddressDataFromForm,
 	extractPersonalDataFromForm,
 } from '../checkout/helpers/formDataExtractors';
@@ -64,6 +65,7 @@ export const submitForm = async ({
 	contributionAmount: number | undefined;
 }): Promise<string> => {
 	const personalData = extractPersonalDataFromForm(formData);
+	const giftRecipient = extractGiftRecipientDataFromForm(formData);
 	const { billingAddress, deliveryAddress } = hasDeliveryAddress
 		? extractDeliverableAddressDataFromForm(formData)
 		: extractNonDeliverableAddressDataFromForm(formData);
@@ -120,6 +122,7 @@ export const submitForm = async ({
 		deliveryInstructions,
 		debugInfo: '',
 		similarProductsConsent,
+		giftRecipient,
 	};
 
 	if (
