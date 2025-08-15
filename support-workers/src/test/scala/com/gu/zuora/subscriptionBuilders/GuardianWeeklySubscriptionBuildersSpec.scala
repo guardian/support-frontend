@@ -132,7 +132,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   }
 
   lazy val weekly = GuardianWeekly(GBP, Quarterly, Domestic)
-  lazy val weeklyProductInformation = Some(ProductInformation("GuardianWeeklyDomestic", "Quarterly", None))
+  lazy val weeklyProductInformation = None
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
