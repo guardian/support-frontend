@@ -95,6 +95,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutNudge } from './checkoutNudge';
 import { FormSection, Legend, shorterBoxMargin } from './form';
 import {
 	checkedRadioLabelColour,
@@ -637,6 +638,7 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
+					<CheckoutNudge type={'regular'} currency={currency} />
 				</BoxContents>
 			</Box>
 			<form
