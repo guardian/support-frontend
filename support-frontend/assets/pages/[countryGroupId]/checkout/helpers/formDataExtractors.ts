@@ -24,7 +24,7 @@ export const extractGiftRecipientDataFromForm = (
 		return {
 			firstName: recipientFirstName as string,
 			lastName: recipientLastName as string,
-			email: formData.get('recipientEmail') as string,
+			email: formData.get('recipientEmail') as string | undefined,
 		};
 	}
 	return undefined;
