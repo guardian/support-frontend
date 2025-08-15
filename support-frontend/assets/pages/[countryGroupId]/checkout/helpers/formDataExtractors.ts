@@ -14,23 +14,18 @@ export const extractPersonalDataFromForm = (
 	email: formData.get('email') as string,
 });
 
+export type FormAddress = {
+	lineOne?: string | null;
+	lineTwo?: string | null;
+	city?: string | null;
+	state?: string | null;
+	postCode?: string | null;
+	country: IsoCountry;
+};
+
 type FormAddressFields = {
-	billingAddress: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
-	deliveryAddress?: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
+	billingAddress: FormAddress;
+	deliveryAddress?: FormAddress;
 };
 
 export const extractDeliverableAddressDataFromForm = (
