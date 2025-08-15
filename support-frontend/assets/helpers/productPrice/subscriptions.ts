@@ -11,6 +11,7 @@ const DigitalPack = 'DigitalPack';
 const PremiumTier = 'PremiumTier';
 const DailyEdition = 'DailyEdition';
 const GuardianWeekly = 'GuardianWeekly';
+const GuardianWeeklyGift = 'GuardianWeeklyGift';
 const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
@@ -19,6 +20,7 @@ export const subscriptionProductTypes = [
 	PremiumTier,
 	DailyEdition,
 	GuardianWeekly,
+	GuardianWeeklyGift,
 	Paper,
 	PaperAndDigital,
 ] as const;

@@ -12,14 +12,19 @@ function canDeterminePaperPrice(productState: ProductState): boolean {
 	const hasProductOption = productState.productOption !== 'NoProductOptions';
 	return hasFulfilment && hasProductOption;
 }
+function canDetermineGuardianWeeklyFulfilment(
+	productState: ProductState,
+): boolean {
+	return productState.fulfilmentOption !== 'NoFulfilmentOptions';
+}
 
 const requiredFieldsForProduct: Record<
 	GuardianProduct,
 	(productState: ProductState) => boolean
 > = {
 	DigitalPack: () => true,
-	GuardianWeekly: (productState: ProductState) =>
-		productState.fulfilmentOption !== 'NoFulfilmentOptions',
+	GuardianWeekly: canDetermineGuardianWeeklyFulfilment,
+	GuardianWeeklyGift: canDetermineGuardianWeeklyFulfilment,
 	Paper: canDeterminePaperPrice,
 	PaperAndDigital: canDeterminePaperPrice,
 	NoProduct: () => false,

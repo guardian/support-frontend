@@ -3,6 +3,7 @@ import escapeStringRegexp from 'escape-string-regexp';
 import { useState } from 'react';
 import Signout from 'components/signout/signout';
 import { preventDefaultValidityMessage } from 'pages/[countryGroupId]/validation';
+import type { EndUserType } from './PersonalFields';
 
 type PersonalEmailFieldsProps = {
 	email: string;
@@ -11,7 +12,7 @@ type PersonalEmailFieldsProps = {
 	isSignedIn?: boolean;
 	confirmedEmail?: string;
 	setConfirmedEmail?: (value: string) => void;
-	endUser?: 'your' | 'recipient';
+	endUser?: EndUserType;
 };
 
 export function PersonalEmailFields({
@@ -26,11 +27,13 @@ export function PersonalEmailFields({
 	const [emailError, setEmailError] = useState<string>();
 	const [confirmedEmailError, setConfirmedEmailError] = useState<string>();
 	const optional = endUser === 'recipient';
+	const emailNameId = endUser === 'recipient' ? 'recipientEmail' : 'email';
 	return (
 		<>
 			<div>
 				<TextInput
-					id="email"
+					id={emailNameId}
+					name={emailNameId}
 					data-qm-masking="blocklist"
 					label="Email address"
 					value={email}
@@ -44,7 +47,6 @@ export function PersonalEmailFields({
 						event.target.checkValidity();
 					}}
 					readOnly={isEmailAddressReadOnly}
-					name="email"
 					required={!optional}
 					maxLength={80}
 					error={emailError}

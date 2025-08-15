@@ -1,4 +1,5 @@
-import type { ActiveProductKey } from './productCatalog';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 import { subscriptionProductTypes } from './productPrice/subscriptions';
 
 /**
@@ -18,6 +19,7 @@ export type LegacyProductType = (typeof legacyProductTypes)[number];
 
 export const getLegacyProductType = (
 	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
 ): LegacyProductType => {
 	switch (productKey) {
 		case 'HomeDelivery':
@@ -26,7 +28,9 @@ export const getLegacyProductType = (
 			return 'Paper';
 		case 'GuardianWeeklyRestOfWorld':
 		case 'GuardianWeeklyDomestic':
-			return 'GuardianWeekly';
+			return isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
+				? 'GuardianWeeklyGift'
+				: 'GuardianWeekly';
 		case 'DigitalSubscription':
 			return 'DigitalPack';
 		case 'OneTimeContribution':
