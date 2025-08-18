@@ -63,6 +63,34 @@ const btnStyleOverrides = css`
 	}
 `;
 
+const dividerContainer = css`
+	text-align: center;
+	margin-bottom: ${space[8]}px;
+`;
+
+const dividerCopy = css`
+	${textSans17};
+	color: ${palette.neutral[38]};
+	display: flex;
+	align-items: center;
+
+	:before,
+	:after {
+		content: '';
+		height: 1px;
+		background-color: ${palette.neutral[86]};
+		flex-grow: 2;
+	}
+
+	:before {
+		margin-right: ${space[2]}px;
+	}
+
+	:after {
+		margin-left: ${space[2]}px;
+	}
+`;
+
 interface StudentOfferProps {
 	currencyKey: IsoCurrency;
 	countryGroupId: CountryGroupId;
@@ -85,23 +113,28 @@ export function StudentOffer({
 	}
 
 	return (
-		<div css={container}>
-			<h2 css={heading}>Student subscription</h2>
-			<p css={standFirst}>
-				Keep up to date on the latest news with an{' '}
-				<span css={boldCopy}>All&#x2011;access&nbsp;digital</span> subscription
-				for just {currencyGlyph}
-				{price}&nbsp;a&nbsp;year.
-			</p>
-			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/student`}
-				priority="tertiary"
-				size="default"
-				cssOverrides={btnStyleOverrides}
-				aria-label="Find out more"
-			>
-				Find out more
-			</LinkButton>
-		</div>
+		<>
+			<div css={dividerContainer}>
+				<p css={dividerCopy}>More subscription options</p>
+			</div>
+			<div css={container}>
+				<h2 css={heading}>Student subscription</h2>
+				<p css={standFirst}>
+					Keep up to date on the latest news with an{' '}
+					<span css={boldCopy}>All&#x2011;access&nbsp;digital</span>{' '}
+					subscription for just {currencyGlyph}
+					{price}&nbsp;a&nbsp;year.
+				</p>
+				<LinkButton
+					href={`/${countryGroups[countryGroupId].supportInternationalisationId}/student`}
+					priority="tertiary"
+					size="default"
+					cssOverrides={btnStyleOverrides}
+					aria-label="Find out more"
+				>
+					Find out more
+				</LinkButton>
+			</div>
+		</>
 	);
 }
