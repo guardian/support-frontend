@@ -71,7 +71,9 @@ export const setGiftingCoreDetails = async (
 ) => {
 	await page.getByLabel('First name').nth(0).fill(recipient.firstName);
 	await page.getByLabel('Last name').nth(0).fill(recipient.lastName);
-	await page.getByLabel('Email address').nth(0).fill(recipient.email);
+	if (recipient.email) {
+		await page.getByLabel('Email address').nth(0).fill(recipient.email);
+	}
 	await page.getByLabel('First name').nth(1).fill(firstName);
 	await page.getByLabel('Last name').nth(1).fill(lastName);
 	await page.getByLabel('Email address').nth(1).fill(email);
