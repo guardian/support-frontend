@@ -197,8 +197,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 			props.setErrors(updatedErrors);
 		}
 	};
-	console.log('*** props.country', props.country);
-	console.log('*** scope', scope);
+
 	return (
 		<div data-component={`${scope}AddressFields`}>
 			<Select
@@ -209,7 +208,6 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				value={props.country}
 				onChange={(event) => {
 					const selectedCountry = Country.fromString(event.target.value);
-					console.log('*** selectedCountry', selectedCountry);
 					if (selectedCountry && countryGroupId) {
 						const selectedCountryGroup = Object.entries(countryGroups).find(
 							([, countryGroup]) =>

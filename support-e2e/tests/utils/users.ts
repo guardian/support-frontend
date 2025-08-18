@@ -15,9 +15,8 @@ function generateString(length: number) {
 export function userName(label: string) {
 	return `support.e2e.${label}+${generateString(5)}`;
 }
-
-export const firstName = () => `support.e2e.firstName+${generateString(5)}`;
-export const lastName = () => `support.e2e.lastName+${generateString(5)}`;
+export const firstName = () => userName('firstName');
+export const lastName = () => userName('lastName');
 /**
  * This email needs to end with @thegulocal.com.
  *

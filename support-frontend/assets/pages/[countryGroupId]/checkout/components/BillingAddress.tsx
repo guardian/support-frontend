@@ -56,11 +56,6 @@ export function BillingAddress({
 	>([]);
 
 	const countryGroupId = CountryGroup.fromCountry(countryId) ?? 'International';
-	console.log(
-		'**** countryGroupId, billingCountry',
-		countryGroupId,
-		billingCountry,
-	);
 	return (
 		<fieldset>
 			<AddressFields

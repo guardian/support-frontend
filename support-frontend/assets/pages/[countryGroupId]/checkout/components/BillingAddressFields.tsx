@@ -25,7 +25,6 @@ export function BillingAddressFields({
 			checkoutSession?.formFields.billingAddressMatchesDelivery,
 			true,
 		);
-	console.log('** countryId', countryId);
 	return (
 		<>
 			<fieldset
