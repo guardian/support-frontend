@@ -292,6 +292,10 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
+	const enableStudentOffer =
+		['uk', 'us', 'ca'].includes(geoId) &&
+		urlSearchParams.has('enableStudentOffer');
+
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
@@ -620,16 +624,18 @@ export function ThreeTierLanding({
 					/>
 				</Container>
 			)}
-			<Container
-				sideBorders
-				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={lightContainer}
-			>
-				<StudentOffer
-					currency={currencies[currencyId].glyph}
-					countryGroupId={countryGroupId}
-				/>
-			</Container>
+			{enableStudentOffer && (
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={lightContainer}
+				>
+					<StudentOffer
+						currency={currencies[currencyId].glyph}
+						countryGroupId={countryGroupId}
+					/>
+				</Container>
+			)}
 		</PageScaffold>
 	);
 }
