@@ -43,7 +43,7 @@ const standFirst = css`
 		max-width: 340px;
 	}
 	${from.desktop} {
-		max-width: 500px;
+		max-width: 422px;
 	}
 `;
 
