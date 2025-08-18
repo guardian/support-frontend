@@ -631,7 +631,7 @@ export function ThreeTierLanding({
 					cssOverrides={lightContainer}
 				>
 					<StudentOffer
-						currency={currencies[currencyId].glyph}
+						currencyKey={currencyId}
 						countryGroupId={countryGroupId}
 					/>
 				</Container>

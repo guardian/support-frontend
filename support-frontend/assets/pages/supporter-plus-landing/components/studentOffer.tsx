@@ -8,10 +8,11 @@ import {
 	textSans17,
 } from '@guardian/source/foundations';
 import { LinkButton } from '@guardian/source/react-components';
-import {
-	type CountryGroupId,
-	countryGroups,
-} from '@modules/internationalisation/countryGroup';
+import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
+import { countryGroups } from '@modules/internationalisation/countryGroup';
+import type { IsoCurrency } from '@modules/internationalisation/currency';
+import { currencies } from 'helpers/internationalisation/currency';
+import { productCatalog } from 'helpers/productCatalog';
 
 const container = css`
 	text-align: center;
@@ -62,22 +63,34 @@ const btnStyleOverrides = css`
 `;
 
 interface StudentOfferProps {
-	currency: string;
+	currencyKey: IsoCurrency;
 	countryGroupId: CountryGroupId;
 }
 
 export function StudentOffer({
-	currency,
+	currencyKey,
 	countryGroupId,
 }: StudentOfferProps): JSX.Element {
+	const price =
+		productCatalog.SupporterPlus?.ratePlans['OneYearStudent']?.pricing[
+			currencyKey
+		];
+	const currencyGlyph = currencies[currencyKey].glyph;
+
+	// We don't expect this to happen, but don't render the copy with a missing
+	// price if it ever does.
+	if (!price) {
+		return <></>;
+	}
+
 	return (
 		<div css={container}>
 			<h2 css={heading}>Student subscription</h2>
 			<p css={standFirst}>
 				Keep up to date on the latest news with an{' '}
 				<span css={boldCopy}>All&#x2011;access&nbsp;digital</span> subscription
-				for just {currency}
-				TBD&nbsp;a&nbsp;year.
+				for just {currencyGlyph}
+				{price}&nbsp;a&nbsp;year.
 			</p>
 			<LinkButton
 				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/student`}
