@@ -19,10 +19,12 @@ import {
 	BenefitsCheckList,
 	type BenefitsCheckListData,
 } from 'components/checkoutBenefits/benefitsCheckList';
+import type { Participations } from 'helpers/abTests/models';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { CheckoutNudgeThankYou } from 'pages/[countryGroupId]/components/checkoutNudge';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 const componentStyles = css`
@@ -153,6 +155,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	abParticipations: Participations;
 };
 
 const visuallyHiddenCss = css`
@@ -174,6 +177,7 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	abParticipations,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -195,6 +199,9 @@ export function ContributionsOrderSummary({
 	const formattedPromotionAmount =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
+
+	const isInNudgeABParticipations =
+		abParticipations.checkoutOneTimeNudge === 'variant';
 
 	return (
 		<div css={componentStyles}>
@@ -267,6 +274,7 @@ export function ContributionsOrderSummary({
 				</p>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+			{isInNudgeABParticipations && <CheckoutNudgeThankYou />}
 		</div>
 	);
 }

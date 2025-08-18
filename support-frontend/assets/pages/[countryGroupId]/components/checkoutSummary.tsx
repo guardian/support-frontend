@@ -220,6 +220,7 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					abParticipations={abParticipations}
 				/>
 			</BoxContents>
 		</Box>
