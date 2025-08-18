@@ -582,6 +582,8 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const isInNudgeABParticipations =  abParticipations.checkoutOneTimeNudge === 'variant';
+
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -638,7 +640,7 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					<CheckoutNudge type={'regular'} currency={currency} />
+					{isInNudgeABParticipations && (<CheckoutNudge type={'toRegular'} currency={currency} />)}
 				</BoxContents>
 			</Box>
 			<form

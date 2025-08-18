@@ -14,7 +14,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
 interface CheckoutNudgeProps {
-	type: 'regular' | 'supporter+';
+	type: 'toRegular' | 'toSupporter+';
 	currency: Currency;
 	// countryGroupId: CountryGroupId;
 	// currencyKey: keyof typeof currencies;
@@ -45,9 +45,9 @@ const nudgeButtonOverrides = css`
 
 // TODO: change copy for supporter+ option
 const getNudgeHeadline = (type: CheckoutNudgeProps['type']) =>
-	type === 'regular' ? 'Make a bigger impact' : 'Make a bigger impact';
+	type === 'toRegular' ? 'Make a bigger impact' : 'Make a bigger impact';
 const getNudgeCopy = (type: CheckoutNudgeProps['type']) =>
-	type === 'regular'
+	type === 'toRegular'
 		? 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.'
 		: 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.';
 
@@ -56,7 +56,7 @@ const getButtonCopy = (
 	type: CheckoutNudgeProps['type'],
 	currency: CheckoutNudgeProps['currency'],
 ) =>
-	type === 'regular'
+	type === 'toRegular'
 		? `Support us for ${currency.glyph}4/month`
 		: `Support us for ${currency.glyph}4/month`;
 
