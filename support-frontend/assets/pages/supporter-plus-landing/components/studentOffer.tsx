@@ -80,7 +80,7 @@ export function StudentOffer({
 				TBD&nbsp;a&nbsp;year.
 			</p>
 			<LinkButton
-				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/one-time-checkout`}
+				href={`/${countryGroups[countryGroupId].supportInternationalisationId}/student`}
 				priority="tertiary"
 				size="default"
 				cssOverrides={btnStyleOverrides}
