@@ -122,4 +122,25 @@ export const tests: Tests = {
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
+	checkoutOneTimeNudge: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ?
+		seed: 1, // ?
+		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
+		excludeContributionsOnlyCountries: true, // not sure
+	},
 };
