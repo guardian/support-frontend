@@ -1,6 +1,6 @@
-import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
@@ -71,14 +71,15 @@ export function getStudentDiscount(
 	geoId: GeoId,
 	ratePlanKey: ActiveRatePlanKey,
 ): StudentDiscount {
-	const { currencyKey } = getGeoIdConfig(geoId);
+	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const countryId = Country.detect(countryGroupId);
 	const currency = currencies[currencyKey];
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 
 	const promotion = getPromotion(
 		allProductPrices.SupporterPlus,
-		geoId.toLocaleUpperCase() as IsoCountry,
+		countryId,
 		billingPeriod,
 	);
 
