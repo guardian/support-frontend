@@ -32,10 +32,12 @@ export function getLowerProductBenefitThreshold(
 	}
 
 	if (
-		product === 'HomeDelivery' ||
-		product === 'SubscriptionCard' ||
-		product === 'GuardianWeeklyDomestic' ||
-		product === 'GuardianWeeklyRestOfWorld'
+		[
+			'HomeDelivery',
+			'SubscriptionCard',
+			'GuardianWeeklyDomestic',
+			'GuardianWeeklyRestOfWorld',
+		].includes(product)
 	) {
 		return (
 			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0
