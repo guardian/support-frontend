@@ -96,16 +96,17 @@ export const submitForm = async ({
 			? productFields.deliveryAgent
 			: undefined;
 
-	const productInformation = buildProductInformation(
-		productFields,
-		productKey,
-		ratePlanKey,
-		personalData,
-		deliveryAddress,
-		firstDeliveryDate,
-		deliveryInstructions,
-		deliveryAgent,
-	);
+	const productInformation = buildProductInformation({
+		productFields: productFields,
+		productKey: productKey,
+		ratePlanKey: ratePlanKey,
+		personalData: personalData,
+		deliveryAddress: deliveryAddress,
+		firstDeliveryDate: firstDeliveryDate,
+		deliveryInstructions: deliveryInstructions,
+		deliveryAgent: deliveryAgent,
+		giftRecipient: giftRecipient,
+	});
 
 	const paymentRequest: RegularPaymentRequest = {
 		...personalData,

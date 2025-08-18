@@ -5,23 +5,33 @@ import {
 } from '@guardian/support-service-lambdas/modules/product-catalog/src/productCatalog';
 import type { ProductPurchase } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
 import { productPurchaseSchema } from '@guardian/support-service-lambdas/modules/product-catalog/src/productPurchaseSchema';
-import type { ProductFields } from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from '../../../../helpers/productCatalog';
+	GiftRecipientType,
+	ProductFields,
+} from '../../../../helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { FormAddress, FormPersonalFields } from './formDataExtractors';
 
-export const buildProductInformation = (
-	productFields: ProductFields,
-	productKey: ActiveProductKey,
-	ratePlanKey: ActiveRatePlanKey,
-	personalData: FormPersonalFields,
-	deliveryAddress: FormAddress | undefined,
-	firstDeliveryDate: string | null,
-	deliveryInstructions: string,
-	deliveryAgent: number | undefined,
-): ProductPurchase => {
+export const buildProductInformation = ({
+	productFields,
+	productKey,
+	ratePlanKey,
+	personalData,
+	deliveryAddress,
+	firstDeliveryDate,
+	deliveryInstructions,
+	deliveryAgent,
+	giftRecipient,
+}: {
+	productFields: ProductFields;
+	productKey: string;
+	ratePlanKey: string;
+	personalData: FormPersonalFields;
+	deliveryAddress: FormAddress | undefined;
+	firstDeliveryDate: string | null;
+	deliveryInstructions: string;
+	deliveryAgent: number | undefined;
+	giftRecipient: GiftRecipientType | undefined;
+}): ProductPurchase => {
 	let basicProductInformation: Record<string, unknown> = {
 		product: productKey,
 		ratePlan: ratePlanKey,
@@ -47,13 +57,15 @@ export const buildProductInformation = (
 			deliveryAddress,
 			'Delivery products require a delivery address',
 		);
+		const recipient = giftRecipient ? giftRecipient : personalData;
+
 		basicProductInformation = {
 			...basicProductInformation,
 			firstDeliveryDate: deliveryDate,
 			deliveryContact: {
-				firstName: personalData.firstName,
-				lastName: personalData.lastName,
-				workEmail: personalData.email,
+				firstName: recipient.firstName,
+				lastName: recipient.lastName,
+				workEmail: recipient.email,
 				country: address.country,
 				state: address.state,
 				city: address.city,

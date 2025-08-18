@@ -28,23 +28,24 @@ describe('buildProductInformation', () => {
 		postalCode: 'SW1A 1AA',
 	};
 
-	describe('Contribution products', () => {
+	describe('Digital products', () => {
 		test('should build product information for Contribution', () => {
 			const productFields = {
 				productType: 'Contribution',
 				amount: 50,
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'Contribution',
-				'Monthly',
-				mockPersonalData,
-				undefined,
-				null,
-				'',
-				undefined,
-			);
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'Contribution',
+				ratePlanKey: 'Monthly',
+				personalData: mockPersonalData,
+				deliveryAddress: undefined,
+				firstDeliveryDate: null,
+				deliveryInstructions: '',
+				deliveryAgent: undefined,
+				giftRecipient: undefined,
+			});
 
 			expect(result).toEqual({
 				product: 'Contribution',
@@ -59,21 +60,45 @@ describe('buildProductInformation', () => {
 				amount: 100,
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'SupporterPlus',
-				'Annual',
-				mockPersonalData,
-				undefined,
-				null,
-				'',
-				undefined,
-			);
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'SupporterPlus',
+				ratePlanKey: 'Annual',
+				personalData: mockPersonalData,
+				deliveryAddress: undefined,
+				firstDeliveryDate: null,
+				deliveryInstructions: '',
+				deliveryAgent: undefined,
+				giftRecipient: undefined,
+			});
 
 			expect(result).toEqual({
 				product: 'SupporterPlus',
 				ratePlan: 'Annual',
 				amount: 100,
+			});
+		});
+
+		test('should build product information for DigitalSubscription', () => {
+			const productFields = {
+				productType: 'DigitalPack',
+			} as ProductFields;
+
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'DigitalSubscription',
+				ratePlanKey: 'Monthly',
+				personalData: mockPersonalData,
+				deliveryAddress: undefined,
+				firstDeliveryDate: null,
+				deliveryInstructions: '',
+				deliveryAgent: undefined,
+				giftRecipient: undefined,
+			});
+
+			expect(result).toEqual({
+				product: 'DigitalSubscription',
+				ratePlan: 'Monthly',
 			});
 		});
 	});
@@ -84,16 +109,17 @@ describe('buildProductInformation', () => {
 				productType: 'GuardianWeekly',
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'GuardianWeeklyRestOfWorld',
-				'Quarterly',
-				mockPersonalData,
-				mockDeliveryAddress,
-				'2024-06-15',
-				'',
-				undefined,
-			);
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'GuardianWeeklyRestOfWorld',
+				ratePlanKey: 'Quarterly',
+				personalData: mockPersonalData,
+				deliveryAddress: mockDeliveryAddress,
+				firstDeliveryDate: '2024-06-15',
+				deliveryInstructions: '',
+				deliveryAgent: undefined,
+				giftRecipient: undefined,
+			});
 
 			expect(result).toEqual({
 				product: 'GuardianWeeklyRestOfWorld',
@@ -103,41 +129,43 @@ describe('buildProductInformation', () => {
 			});
 		});
 
-		test('should throw error when delivery product missing delivery date', () => {
+		test('should throw an error if delivery product missing delivery date', () => {
 			const productFields = {
 				productType: 'GuardianWeekly',
 			} as ProductFields;
 
 			expect(() =>
-				buildProductInformation(
-					productFields,
-					'GuardianWeeklyDomestic',
-					'Monthly',
-					mockPersonalData,
-					mockDeliveryAddress,
-					null,
-					'',
-					undefined,
-				),
+				buildProductInformation({
+					productFields: productFields,
+					productKey: 'GuardianWeeklyDomestic',
+					ratePlanKey: 'Monthly',
+					personalData: mockPersonalData,
+					deliveryAddress: mockDeliveryAddress,
+					firstDeliveryDate: null,
+					deliveryInstructions: '',
+					deliveryAgent: undefined,
+					giftRecipient: undefined,
+				}),
 			).toThrow('Delivery products require a first delivery date');
 		});
 
-		test('should throw error when delivery product missing delivery address', () => {
+		test('should throw an error if delivery product is missing delivery address', () => {
 			const productFields = {
 				productType: 'GuardianWeekly',
 			} as ProductFields;
 
 			expect(() =>
-				buildProductInformation(
-					productFields,
-					'GuardianWeeklyDomestic',
-					'Monthly',
-					mockPersonalData,
-					undefined,
-					'2024-06-15',
-					'',
-					undefined,
-				),
+				buildProductInformation({
+					productFields: productFields,
+					productKey: 'GuardianWeeklyDomestic',
+					ratePlanKey: 'Monthly',
+					personalData: mockPersonalData,
+					deliveryAddress: undefined,
+					firstDeliveryDate: '2024-06-15',
+					deliveryInstructions: '',
+					deliveryAgent: undefined,
+					giftRecipient: undefined,
+				}),
 			).toThrow('Delivery products require a delivery address');
 		});
 	});
@@ -148,16 +176,17 @@ describe('buildProductInformation', () => {
 				productType: 'Paper',
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'HomeDelivery',
-				'Everyday',
-				mockPersonalData,
-				mockDeliveryAddress,
-				'2024-06-20',
-				'Leave by front door',
-				undefined,
-			);
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'HomeDelivery',
+				ratePlanKey: 'Everyday',
+				personalData: mockPersonalData,
+				deliveryAddress: mockDeliveryAddress,
+				firstDeliveryDate: '2024-06-20',
+				deliveryInstructions: 'Leave by front door',
+				deliveryAgent: undefined,
+				giftRecipient: undefined,
+			});
 
 			expect(result).toEqual({
 				product: 'HomeDelivery',
@@ -167,24 +196,42 @@ describe('buildProductInformation', () => {
 				deliveryInstructions: 'Leave by front door',
 			});
 		});
-	});
+		test('should throw an error if newspaper product is missing delivery instructions', () => {
+			const productFields = {
+				productType: 'Paper',
+			} as ProductFields;
 
-	describe('NationalDelivery products', () => {
+			expect(() =>
+				buildProductInformation({
+					productFields: productFields,
+					productKey: 'HomeDelivery',
+					ratePlanKey: 'Everyday',
+					personalData: mockPersonalData,
+					deliveryAddress: mockDeliveryAddress,
+					firstDeliveryDate: '2024-06-20',
+					deliveryInstructions: '',
+					deliveryAgent: undefined,
+					giftRecipient: undefined,
+				}),
+			).toThrow('Newspaper products require delivery instructions');
+		});
+
 		test('should build product information for NationalDelivery with delivery agent', () => {
 			const productFields = {
 				productType: 'Paper',
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'NationalDelivery',
-				'Weekend',
-				mockPersonalData,
-				mockDeliveryAddress,
-				'2024-06-22',
-				'Ring doorbell twice',
-				123,
-			);
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'NationalDelivery',
+				ratePlanKey: 'Weekend',
+				personalData: mockPersonalData,
+				deliveryAddress: mockDeliveryAddress,
+				firstDeliveryDate: '2024-06-22',
+				deliveryInstructions: 'Ring doorbell twice',
+				deliveryAgent: 123,
+				giftRecipient: undefined,
+			});
 
 			expect(result).toEqual({
 				product: 'NationalDelivery',
@@ -197,26 +244,44 @@ describe('buildProductInformation', () => {
 		});
 	});
 
-	describe('Digital products', () => {
-		test('should build product information for DigitalSubscription', () => {
+	describe('Gift subscriptions', () => {
+		test('should use gift recipient details for delivery contact when giftRecipient is provided', () => {
 			const productFields = {
-				productType: 'DigitalPack',
+				productType: 'GuardianWeekly',
 			} as ProductFields;
 
-			const result = buildProductInformation(
-				productFields,
-				'DigitalSubscription',
-				'Monthly',
-				mockPersonalData,
-				undefined,
-				null,
-				'',
-				undefined,
-			);
+			const giftRecipient = {
+				firstName: 'Jane',
+				lastName: 'Smith',
+				email: 'jane.smith@example.com',
+			};
+
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'GuardianWeeklyDomestic',
+				ratePlanKey: 'OneYearGift',
+				personalData: mockPersonalData,
+				deliveryAddress: mockDeliveryAddress,
+				firstDeliveryDate: '2024-12-25',
+				deliveryInstructions: '',
+				deliveryAgent: undefined,
+				giftRecipient: giftRecipient,
+			});
 
 			expect(result).toEqual({
-				product: 'DigitalSubscription',
-				ratePlan: 'Monthly',
+				product: 'GuardianWeeklyDomestic',
+				ratePlan: 'OneYearGift',
+				firstDeliveryDate: new Date('2024-12-25'),
+				deliveryContact: {
+					firstName: 'Jane',
+					lastName: 'Smith',
+					workEmail: 'jane.smith@example.com',
+					country: 'GB',
+					city: 'London',
+					address1: '123 Main St',
+					address2: 'Apt 4B',
+					postalCode: 'SW1A 1AA',
+				},
 			});
 		});
 	});
