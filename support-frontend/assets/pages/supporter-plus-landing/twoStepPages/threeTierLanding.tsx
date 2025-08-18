@@ -50,6 +50,7 @@ import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
+import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -80,7 +81,7 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = css`
+const lightContainer = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	> div {
@@ -611,7 +612,7 @@ export function ThreeTierLanding({
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={oneTimeContainer}
+					cssOverrides={lightContainer}
 				>
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
@@ -619,6 +620,16 @@ export function ThreeTierLanding({
 					/>
 				</Container>
 			)}
+			<Container
+				sideBorders
+				borderColor="rgba(170, 170, 180, 0.5)"
+				cssOverrides={lightContainer}
+			>
+				<StudentOffer
+					currency={currencies[currencyId].glyph}
+					countryGroupId={countryGroupId}
+				/>
+			</Container>
 		</PageScaffold>
 	);
 }
