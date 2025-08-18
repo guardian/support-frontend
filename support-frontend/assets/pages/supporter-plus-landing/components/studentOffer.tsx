@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-	headlineBold24,
+	headlineMedium34,
 	palette,
 	space,
 	textSans17,
@@ -20,7 +20,7 @@ const container = css`
 
 const heading = css`
 	color: ${palette.neutral[7]};
-	${headlineBold24}
+	${headlineMedium34}
 	${between.tablet.and.desktop} {
 		margin: 0 auto;
 		max-width: 340px;
@@ -31,7 +31,7 @@ const heading = css`
 `;
 
 const standFirst = css`
-	color: ${palette.neutral[10]};
+	color: ${palette.neutral[7]};
 	${textSans17};
 	line-height: 1.35;
 	padding-top: ${space[1]}px;
