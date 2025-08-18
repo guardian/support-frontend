@@ -31,7 +31,14 @@ export function getLowerProductBenefitThreshold(
 		);
 	}
 
-	if (product === 'HomeDelivery' || product === 'SubscriptionCard') {
+	if (
+		[
+			'HomeDelivery',
+			'SubscriptionCard',
+			'GuardianWeeklyDomestic',
+			'GuardianWeeklyRestOfWorld',
+		].includes(product)
+	) {
 		return (
 			productCatalog[product]?.ratePlans[ratePlan]?.pricing[currencyId] ?? 0
 		);

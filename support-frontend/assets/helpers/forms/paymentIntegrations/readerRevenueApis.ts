@@ -151,7 +151,7 @@ export type RegularPaymentRequestAddress = {
 	postCode?: Option<string>;
 	city?: Option<string>;
 };
-type GiftRecipientType = {
+export type GiftRecipientType = {
 	title?: Title;
 	firstName: string;
 	lastName: string;

@@ -5,12 +5,13 @@ import {
 	preventDefaultValidityMessage,
 } from 'pages/[countryGroupId]/validation';
 
+export type EndUserType = 'your' | 'recipient';
 type PersonalDetailsFieldsProps = {
 	firstName: string;
 	setFirstName: (value: string) => void;
 	lastName: string;
 	setLastName: (value: string) => void;
-	endUser?: string;
+	endUser?: EndUserType;
 };
 
 export function PersonalFields({
@@ -22,14 +23,17 @@ export function PersonalFields({
 }: PersonalDetailsFieldsProps) {
 	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastNameError, setLastNameError] = useState<string>();
+	const firstNameId =
+		endUser === 'recipient' ? 'recipientFirstName' : 'firstName';
+	const lastNameId = endUser === 'recipient' ? 'recipientLastName' : 'lastName';
 	return (
 		<>
 			<div>
 				<TextInput
-					id="firstName"
+					id={firstNameId}
+					name={firstNameId}
 					data-qm-masking="blocklist"
 					label="First name"
-					name="firstName"
 					value={firstName}
 					autoComplete="given-name"
 					autoCapitalize="words"
@@ -60,10 +64,10 @@ export function PersonalFields({
 			</div>
 			<div>
 				<TextInput
-					id="lastName"
+					id={lastNameId}
+					name={lastNameId}
 					data-qm-masking="blocklist"
 					label="Last name"
-					name="lastName"
 					value={lastName}
 					autoComplete="family-name"
 					autoCapitalize="words"
