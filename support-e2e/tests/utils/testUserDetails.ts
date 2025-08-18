@@ -67,7 +67,6 @@ export const setGiftingCoreDetails = async (
 	firstName: string,
 	lastName: string,
 	recipient: TestRecipient,
-	confirmEmail?: boolean,
 ) => {
 	await page.getByLabel('First name').nth(0).fill(recipient.firstName);
 	await page.getByLabel('Last name').nth(0).fill(recipient.lastName);
@@ -77,9 +76,7 @@ export const setGiftingCoreDetails = async (
 	await page.getByLabel('First name').nth(1).fill(firstName);
 	await page.getByLabel('Last name').nth(1).fill(lastName);
 	await page.getByLabel('Email address').nth(1).fill(email);
-	if (confirmEmail) {
-		await page.getByLabel('Confirm email address').fill(email);
-	}
+	await page.getByLabel('Confirm email address').fill(email);
 };
 
 export const setTestUserDetails = async (
@@ -97,7 +94,6 @@ export const setTestUserDetails = async (
 			testFields.firstName,
 			testFields.lastName,
 			testFields.recipient,
-			true, // confirmEmail required
 		);
 	} else {
 		await setTestUserCoreDetails(

@@ -208,6 +208,7 @@ export function AddressFields({ scope, countryGroupId, ...props }: PropTypes) {
 				value={props.country}
 				onChange={(event) => {
 					const selectedCountry = Country.fromString(event.target.value);
+
 					if (selectedCountry && countryGroupId) {
 						const selectedCountryGroup = Object.entries(countryGroups).find(
 							([, countryGroup]) =>
