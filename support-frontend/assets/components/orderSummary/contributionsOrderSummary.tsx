@@ -155,7 +155,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	abParticipations: Participations;
+	abParticipations?: Participations;
 };
 
 const visuallyHiddenCss = css`
@@ -201,7 +201,7 @@ export function ContributionsOrderSummary({
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 
 	const isInNudgeABParticipations =
-		abParticipations.checkoutOneTimeNudge === 'variant';
+		abParticipations?.checkoutOneTimeNudge === 'variant';
 
 	return (
 		<div css={componentStyles}>
