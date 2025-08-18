@@ -13,11 +13,17 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { Currency } from 'helpers/internationalisation/currency';
 
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
+
+// TODO: how to get the information needed to set the amount, currency, rateplan, ctaUrl?
+// interface CheckoutNudgeDetails {
+// 	currency: Currency;
+// 	amount: string;
+// 	rateplan: string;
+// 	CtaUrl: string;
+// }
 interface CheckoutNudgeProps {
 	type: 'toRegular' | 'toSupporter+';
 	currency: Currency;
-	// countryGroupId: CountryGroupId;
-	// currencyKey: keyof typeof currencies;
 }
 
 const nudgeBoxOverrides = css`
@@ -38,10 +44,10 @@ const nudgeButtonOverrides = css`
 	width: 100%;
 `;
 
-// const nudgeThankYouBox = css`
-// 	display: flex;
-// 	flex-direction: row;
-// `;
+const nudgeThankYouBox = css`
+	display: flex;
+	flex-direction: row;
+`;
 
 // TODO: change copy for supporter+ option
 const getNudgeHeadline = (type: CheckoutNudgeProps['type']) =>
@@ -82,19 +88,19 @@ export function CheckoutNudge({ type, currency }: CheckoutNudgeProps) {
 }
 
 // probably need to pass the type to ensure we're showing the correct values.
-// export function CheckoutNudgeThankYou({ type, currency }: CheckoutNudgeProps) {
-// 	return (
-// 		<Box cssOverrides={nudgeBoxOverrides}>
-// 			<BoxContents>
-// 				<div css={nudgeThankYouBox}>
-// 					<div>
-// 						<h3>Thank you for choosing to Support us monthly</h3>
-// 						<p>You are helping ensure the future of Guardian journalism.</p>
-// 					</div>
-// 					{/* TODO: define width, src of image */}
-// 					<img />
-// 				</div>
-// 			</BoxContents>
-// 		</Box>
-// 	);
-// }
+export function CheckoutNudgeThankYou() {
+	return (
+		<Box cssOverrides={nudgeBoxOverrides}>
+			<BoxContents>
+				<div css={nudgeThankYouBox}>
+					<div>
+						<h3>Thank you for choosing to Support us monthly</h3>
+						<p>You are helping ensure the future of Guardian journalism.</p>
+					</div>
+					{/* TODO: define width, src of image */}
+					<img />
+				</div>
+			</BoxContents>
+		</Box>
+	);
+}
