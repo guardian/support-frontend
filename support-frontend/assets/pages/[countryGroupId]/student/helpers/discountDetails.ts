@@ -36,7 +36,6 @@ export function getDiscountSummary({
 	promoCount?: number;
 }) {
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	console.log('***', periodNoun);
 	const discountDuration = getDiscountDuration({
 		durationInMonths,
 	});
