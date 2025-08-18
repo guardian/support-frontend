@@ -15,6 +15,7 @@ import {
 
 const container = css`
 	text-align: center;
+	margin-bottom: ${space[4]}px;
 `;
 
 const heading = css`
