@@ -41,7 +41,7 @@ describe('buildProductInformation', () => {
 				ratePlanKey: 'Monthly',
 				personalData: mockPersonalData,
 				deliveryAddress: undefined,
-				firstDeliveryDate: null,
+				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
 				deliveryAgent: undefined,
 				giftRecipient: undefined,
@@ -66,7 +66,7 @@ describe('buildProductInformation', () => {
 				ratePlanKey: 'Annual',
 				personalData: mockPersonalData,
 				deliveryAddress: undefined,
-				firstDeliveryDate: null,
+				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
 				deliveryAgent: undefined,
 				giftRecipient: undefined,
@@ -90,7 +90,7 @@ describe('buildProductInformation', () => {
 				ratePlanKey: 'Monthly',
 				personalData: mockPersonalData,
 				deliveryAddress: undefined,
-				firstDeliveryDate: null,
+				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
 				deliveryAgent: undefined,
 				giftRecipient: undefined,
@@ -141,7 +141,7 @@ describe('buildProductInformation', () => {
 					ratePlanKey: 'Monthly',
 					personalData: mockPersonalData,
 					deliveryAddress: mockDeliveryAddress,
-					firstDeliveryDate: null,
+					firstDeliveryDate: undefined,
 					deliveryInstructions: '',
 					deliveryAgent: undefined,
 					giftRecipient: undefined,
@@ -209,11 +209,13 @@ describe('buildProductInformation', () => {
 					personalData: mockPersonalData,
 					deliveryAddress: mockDeliveryAddress,
 					firstDeliveryDate: '2024-06-20',
-					deliveryInstructions: '',
+					deliveryInstructions: undefined,
 					deliveryAgent: undefined,
 					giftRecipient: undefined,
 				}),
-			).toThrow('Newspaper products require delivery instructions');
+			).toThrow(
+				'Delivery instructions are required for Newspaper products, pass a blank string if necessary',
+			);
 		});
 
 		test('should build product information for NationalDelivery with delivery agent', () => {

@@ -27,8 +27,8 @@ export const buildProductInformation = ({
 	ratePlanKey: string;
 	personalData: FormPersonalFields;
 	deliveryAddress: FormAddress | undefined;
-	firstDeliveryDate: string | null;
-	deliveryInstructions: string;
+	firstDeliveryDate: string | undefined;
+	deliveryInstructions: string | undefined;
 	deliveryAgent: number | undefined;
 	giftRecipient: GiftRecipientType | undefined;
 }): ProductPurchase => {
@@ -78,7 +78,10 @@ export const buildProductInformation = ({
 	if (requiresDeliveryInstructions(productKey)) {
 		basicProductInformation = {
 			...basicProductInformation,
-			deliveryInstructions,
+			deliveryInstructions: getIfDefined(
+				deliveryInstructions,
+				'Delivery instructions are required for Newspaper products, pass a blank string if necessary',
+			),
 		};
 	}
 	if (productKey === 'NationalDelivery') {

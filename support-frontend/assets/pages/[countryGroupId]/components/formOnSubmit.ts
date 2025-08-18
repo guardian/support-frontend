@@ -102,7 +102,7 @@ export const submitForm = async ({
 		ratePlanKey: ratePlanKey,
 		personalData: personalData,
 		deliveryAddress: deliveryAddress,
-		firstDeliveryDate: firstDeliveryDate,
+		firstDeliveryDate: firstDeliveryDate ?? undefined,
 		deliveryInstructions: deliveryInstructions,
 		deliveryAgent: deliveryAgent,
 		giftRecipient: giftRecipient,
