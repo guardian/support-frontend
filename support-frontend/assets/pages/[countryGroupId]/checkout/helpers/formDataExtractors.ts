@@ -30,23 +30,18 @@ export const extractGiftRecipientDataFromForm = (
 	return undefined;
 };
 
+export type FormAddress = {
+	lineOne?: string | null;
+	lineTwo?: string | null;
+	city?: string | null;
+	state?: string | null;
+	postCode?: string | null;
+	country: IsoCountry;
+};
+
 type FormAddressFields = {
-	billingAddress: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
-	deliveryAddress?: {
-		lineOne?: string | null;
-		lineTwo?: string | null;
-		city?: string | null;
-		state?: string | null;
-		postCode?: string | null;
-		country: IsoCountry;
-	};
+	billingAddress: FormAddress;
+	deliveryAddress?: FormAddress;
 };
 
 export const extractDeliverableAddressDataFromForm = (
