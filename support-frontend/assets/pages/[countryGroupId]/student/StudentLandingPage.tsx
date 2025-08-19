@@ -13,6 +13,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
@@ -22,9 +26,13 @@ import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
 
 export function StudentLandingPage({
 	geoId,
+	productKey,
+	ratePlanKey,
 	landingPageVariant,
 }: {
 	geoId: GeoId;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 }) {
 	const faqItems = getStudentFAQs(geoId);
@@ -56,7 +64,12 @@ export function StudentLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<StudentHeader geoId={geoId} landingPageVariant={landingPageVariant} />
+			<StudentHeader
+				geoId={geoId}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				landingPageVariant={landingPageVariant}
+			/>
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
 		</PageScaffold>

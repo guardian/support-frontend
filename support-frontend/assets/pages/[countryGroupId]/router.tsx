@@ -125,6 +125,8 @@ const router = createBrowserRouter([
 				<Suspense fallback={<HoldingContent />}>
 					<StudentLandingPage
 						geoId={geoId}
+						productKey="SupporterPlus"
+						ratePlanKey="OneYearStudent"
 						landingPageVariant={landingPageParticipations.variant}
 					/>
 				</Suspense>
@@ -137,6 +139,8 @@ const router = createBrowserRouter([
 			<Suspense fallback={<HoldingContent />}>
 				<StudentLandingPage
 					geoId={'au'}
+					productKey="SupporterPlus"
+					ratePlanKey="Monthly"
 					landingPageVariant={landingPageParticipations.variant}
 				/>
 			</Suspense>

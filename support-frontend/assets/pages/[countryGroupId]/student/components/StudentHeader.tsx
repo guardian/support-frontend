@@ -1,10 +1,13 @@
-import { BillingPeriod } from '@modules/product/billingPeriod';
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { getDiscountDuration } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import getProductContents from '../helpers/getProductContents';
+import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
+import { getStudentDiscount } from '../helpers/discountDetails';
 import LogoUTS from '../logos/uts';
 import {
 	cardContainer,
@@ -14,21 +17,31 @@ import {
 	subHeading,
 	universityBadge,
 } from './StudentHeaderStyles';
+import StudentPrice from './StudentPrice';
 import StudentProductCard from './StudentProductCard';
 
 export default function StudentHeader({
 	geoId,
+	productKey,
+	ratePlanKey,
 	landingPageVariant,
 }: {
 	geoId: GeoId;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 }) {
-	const productContent = getProductContents(geoId, landingPageVariant);
-	const durationInMonths =
-		productContent.promotion?.discount?.durationMonths ?? 0;
-	const discountDuration = getDiscountDuration({
-		durationInMonths,
-	});
+	const { amount, promoDuration, promoCode, discountSummary } =
+		getStudentDiscount(geoId, ratePlanKey);
+	const { benefits } = landingPageVariant.products.SupporterPlus;
+	const checkoutUrl = buildCheckoutUrl(
+		geoId,
+		productKey,
+		ratePlanKey,
+		promoCode,
+	);
+
+	const ctaLabel = amount === 0 ? 'Sign up for free' : 'Subscribe';
 
 	return (
 		<Container
@@ -47,17 +60,22 @@ export default function StudentHeader({
 				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app
-					access, <strong>free for {discountDuration}</strong>.
+					access
+					{promoDuration && (
+						<>
+							, <strong>free for {promoDuration}</strong>
+						</>
+					)}
+					.
 				</p>
 			</div>
 			<div css={cardContainer}>
 				<StudentProductCard
-					cardTier={1}
-					promoCount={0}
-					isSubdued={false}
-					currencyId={'AUD'}
-					billingPeriod={BillingPeriod.Monthly}
-					cardContent={productContent}
+					price={<StudentPrice geoId={geoId} ratePlanKey={ratePlanKey} />}
+					benefitsList={benefits}
+					ctaUrl={checkoutUrl}
+					ctaLabel={ctaLabel}
+					discountSummary={discountSummary}
 				/>
 				<GridPicture
 					sources={[
