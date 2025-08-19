@@ -33,6 +33,7 @@ import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
+import { getStudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
@@ -131,7 +132,7 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
-
+	const studentDiscount = getStudentDiscount(geoId, 'OneYearStudent');
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -147,7 +148,6 @@ export default function CheckoutSummary({
 					</div>
 				)}
 				<ContributionsOrderSummary
-					geoId={geoId}
 					productKey={productKey}
 					productDescription={productDescription.label}
 					ratePlanKey={ratePlanKey}
@@ -188,6 +188,7 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					studentDiscount={studentDiscount}
 				/>
 			</BoxContents>
 		</Box>

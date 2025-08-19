@@ -24,8 +24,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { getStudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import type { GeoId } from 'pages/geoIdConfig';
+import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const componentStyles = css`
 	${textSans17}
@@ -140,7 +139,6 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	geoId: GeoId;
 	productKey: ProductKey;
 	productDescription: string;
 	ratePlanKey: ActiveRatePlanKey;
@@ -156,6 +154,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	studentDiscount?: StudentDiscount;
 };
 
 const visuallyHiddenCss = css`
@@ -163,7 +162,6 @@ const visuallyHiddenCss = css`
 `;
 
 export function ContributionsOrderSummary({
-	geoId,
 	productKey,
 	productDescription,
 	ratePlanKey,
@@ -178,6 +176,7 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	studentDiscount,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -194,24 +193,23 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
-	const { fullPriceWithCurrency, discountPriceWithCurrency } =
-		getStudentDiscount(geoId, 'OneYearStudent');
-
 	const fullPrice =
-		ratePlanKey === 'OneYearStudent'
-			? fullPriceWithCurrency
+		ratePlanKey === 'OneYearStudent' && studentDiscount
+			? studentDiscount.fullPriceWithCurrency
 			: simpleFormatAmount(currency, amount);
 
 	const promoDiscountPrice =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 	const discountPrice =
-		ratePlanKey === 'OneYearStudent'
-			? discountPriceWithCurrency
+		ratePlanKey === 'OneYearStudent' && studentDiscount
+			? studentDiscount.discountPriceWithCurrency
 			: promoDiscountPrice;
 
-	function displayPaymentFrequency(price: string): string {
-		return `${price}${paymentFrequency ? `/${paymentFrequency}` : ''}`;
+	const period = studentDiscount?.periodNoun ?? paymentFrequency;
+
+	function displayPeriod(price: string): string {
+		return `${price}${period ? `/${period}` : ''}`;
 	}
 
 	return (
@@ -270,10 +268,10 @@ export function ContributionsOrderSummary({
 								{fullPrice}
 								<span css={visuallyHiddenCss}>, now</span>
 							</span>{' '}
-							{displayPaymentFrequency(discountPrice)}
+							{displayPeriod(discountPrice)}
 						</>
 					)}
-					{!discountPrice && <>{displayPaymentFrequency(fullPrice)}</>}
+					{!discountPrice && <>{displayPeriod(fullPrice)}</>}
 				</p>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}

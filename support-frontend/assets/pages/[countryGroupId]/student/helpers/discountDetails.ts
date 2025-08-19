@@ -57,7 +57,7 @@ export function getDiscountSummary({
 	)}`;
 }
 
-type StudentDiscount = {
+export type StudentDiscount = {
 	fullPriceWithCurrency: string;
 	amount: number;
 	periodNoun: string;

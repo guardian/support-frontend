@@ -81,7 +81,6 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	geoId: 'uk',
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Monthly support',
@@ -115,7 +114,6 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	geoId: 'us',
 	productKey: 'Contribution',
 	ratePlanKey: 'OneTime',
 	productDescription: 'One-off contribution',
@@ -140,7 +138,6 @@ SingleContribution.args = {
 export const RecurringContribution = Template.bind({});
 
 RecurringContribution.args = {
-	geoId: 'uk',
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Support',
@@ -176,7 +173,6 @@ RecurringContribution.args = {
 export const SupporterPlus = Template.bind({});
 
 SupporterPlus.args = {
-	geoId: 'uk',
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	productDescription: 'All-access Digital',
@@ -213,7 +209,6 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 
 TierThree.args = {
-	geoId: 'uk',
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Digital + print',
@@ -254,4 +249,47 @@ TierThree.args = {
 			Change
 		</Button>
 	),
+};
+
+export const StudentOneYear = Template.bind({});
+
+StudentOneYear.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'OneYearStudent',
+	productDescription: 'All-access Digital',
+	paymentFrequency: 'month',
+	enableCheckList: true,
+	amount: 120,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'OneYearStudent'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={12}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	studentDiscount: {
+		amount: 9,
+		periodNoun: 'year',
+		fullPriceWithCurrency: '£120',
+		discountPriceWithCurrency: '£9',
+	},
 };
