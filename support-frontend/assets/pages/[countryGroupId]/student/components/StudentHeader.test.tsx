@@ -74,7 +74,7 @@ describe('<StudentHeader />', () => {
 		);
 	});
 
-	it("uses 'Subscribe' as CTA label when amount is 0", () => {
+	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
 		(getStudentDiscount as jest.Mock).mockReturnValue({
 			amount: 10,
 			promoDuration: undefined,
