@@ -147,6 +147,7 @@ export default function CheckoutSummary({
 					</div>
 				)}
 				<ContributionsOrderSummary
+					geoId={geoId}
 					productKey={productKey}
 					productDescription={productDescription.label}
 					ratePlanKey={ratePlanKey}

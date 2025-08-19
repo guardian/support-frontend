@@ -81,6 +81,7 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
+	geoId: 'uk',
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Monthly support',
@@ -114,6 +115,7 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
+	geoId: 'us',
 	productKey: 'Contribution',
 	ratePlanKey: 'OneTime',
 	productDescription: 'One-off contribution',
@@ -138,6 +140,7 @@ SingleContribution.args = {
 export const RecurringContribution = Template.bind({});
 
 RecurringContribution.args = {
+	geoId: 'uk',
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Support',
@@ -173,6 +176,7 @@ RecurringContribution.args = {
 export const SupporterPlus = Template.bind({});
 
 SupporterPlus.args = {
+	geoId: 'uk',
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	productDescription: 'All-access Digital',
@@ -209,6 +213,7 @@ SupporterPlus.args = {
 export const TierThree = Template.bind({});
 
 TierThree.args = {
+	geoId: 'uk',
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
 	productDescription: 'Digital + print',
