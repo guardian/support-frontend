@@ -19,8 +19,8 @@ jest.mock('helpers/productCatalog', () => ({
 		SupporterPlus: {
 			ratePlans: {
 				Monthly: { pricing: { USD: 10, AUD: '10' } },
-				Annual: { pricing: { USD: 120, AUD: '120' } },
-				OneYearStudent: { pricing: { USD: 9 } },
+				Annual: { pricing: { USD: 150, AUD: '120' } },
+				OneYearStudent: { pricing: { USD: 10 } },
 			},
 		},
 	},
@@ -121,9 +121,9 @@ describe('Discount Details', () => {
 			const result = getStudentDiscount('us', 'OneYearStudent');
 
 			expect(result).toEqual({
-				amount: 9,
-				discountPriceWithCurrency: '$9',
-				fullPriceWithCurrency: '$120',
+				amount: 10,
+				discountPriceWithCurrency: '$10',
+				fullPriceWithCurrency: '$150',
 				periodNoun: 'year',
 			});
 		});
