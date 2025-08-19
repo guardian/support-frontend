@@ -17,10 +17,7 @@ export default function StudentPrice({
 		promoDuration,
 	} = getStudentDiscount(geoId, ratePlanKey);
 
-	const showDiscountPrice =
-		discountPriceWithCurrency &&
-		discountPriceWithCurrency !== fullPriceWithCurrency;
-
+	const showDiscountPrice = discountPriceWithCurrency !== fullPriceWithCurrency;
 	if (showDiscountPrice) {
 		return (
 			<>
