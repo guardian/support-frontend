@@ -41,6 +41,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -368,7 +369,7 @@ export function ThreeTierLanding({
 	});
 
 	const tier2Promotion = getPromotion(
-		window.guardian.allProductPrices.SupporterPlus,
+		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
@@ -428,7 +429,7 @@ export function ThreeTierLanding({
 		ratePlan: tier3RatePlan,
 	});
 	const tier3Promotion = getPromotion(
-		window.guardian.allProductPrices.TierThree,
+		allProductPrices.TierThree,
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
