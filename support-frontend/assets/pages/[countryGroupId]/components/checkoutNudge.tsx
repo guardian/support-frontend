@@ -10,7 +10,7 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import type { GeoId} from 'pages/geoIdConfig';
+import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
