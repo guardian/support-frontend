@@ -85,7 +85,11 @@ const lightContainer = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[5]}px 72px;
+		padding: ${space[5]}px;
+
+		${from.tablet} {
+			padding: ${space[5]}px 72px;
+		}
 	}
 `;
 
