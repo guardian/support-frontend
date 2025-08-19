@@ -64,8 +64,11 @@ const btnStyleOverrides = css`
 `;
 
 const dividerContainer = css`
-	text-align: center;
-	margin-bottom: ${space[8]}px;
+	margin: 0 auto ${space[8]}px auto;
+
+	${from.desktop} {
+		max-width: 940px;
+	}
 `;
 
 const dividerCopy = css`
