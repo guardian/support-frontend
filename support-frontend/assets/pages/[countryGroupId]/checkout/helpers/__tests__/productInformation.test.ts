@@ -210,6 +210,27 @@ describe('buildProductInformation', () => {
 			);
 		});
 
+		test('should throw an error if a National Delivery product is missing delivery agent', () => {
+			const productFields = {
+				productType: 'Paper',
+			} as ProductFields;
+
+			expect(() =>
+				buildProductInformation({
+					productFields: productFields,
+					productKey: 'NationalDelivery',
+					ratePlanKey: 'Everyday',
+					personalData: mockPersonalData,
+					deliveryAddress: mockDeliveryAddress,
+					firstDeliveryDate: '2024-06-20',
+					deliveryInstructions: '',
+					giftRecipient: undefined,
+				}),
+			).toThrow(
+				'NationalDelivery requires a delivery agent, but it was not provided or the product type is not Paper',
+			);
+		});
+
 		test('should build product information for NationalDelivery with delivery agent', () => {
 			const productFields = {
 				productType: 'Paper',
