@@ -642,7 +642,7 @@ export function OneTimeCheckoutComponent({
 						/>
 					</div>
 					{isInNudgeABParticipations && (
-						<CheckoutNudge type={'toRegular'} currency={currency} />
+						<CheckoutNudge type={'toRegular'} geoId={geoId} />
 					)}
 				</BoxContents>
 			</Box>

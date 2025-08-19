@@ -6,24 +6,18 @@ import {
 	space,
 } from '@guardian/source/foundations';
 import {
-	Button,
+	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import type { Currency } from 'helpers/internationalisation/currency';
+import type { GeoId} from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
 
-// TODO: how to get the information needed to set the amount, currency, rateplan, ctaUrl?
-// interface CheckoutNudgeDetails {
-// 	currency: Currency;
-// 	amount: string;
-// 	rateplan: string;
-// 	CtaUrl: string;
-// }
 interface CheckoutNudgeProps {
 	type: 'toRegular' | 'toSupporter+';
-	currency: Currency;
+	geoId: GeoId;
 }
 
 const nudgeBoxOverrides = css`
@@ -50,38 +44,50 @@ const nudgeThankYouBox = css`
 `;
 
 // TODO: change copy for supporter+ option
-const getNudgeHeadline = (type: CheckoutNudgeProps['type']) =>
-	type === 'toRegular' ? 'Make a bigger impact' : 'Make a bigger impact';
-const getNudgeCopy = (type: CheckoutNudgeProps['type']) =>
-	type === 'toRegular'
-		? 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.'
-		: 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.';
 
-// TODO: fix amount based on countryGroupId
-const getButtonCopy = (
-	type: CheckoutNudgeProps['type'],
-	currency: CheckoutNudgeProps['currency'],
-) =>
-	type === 'toRegular'
-		? `Support us for ${currency.glyph}4/month`
-		: `Support us for ${currency.glyph}4/month`;
+export const productCatalog = window.guardian.productCatalog;
 
-//  type, currency, currencyKey, countryGroupId
-export function CheckoutNudge({ type, currency }: CheckoutNudgeProps) {
+export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
+	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
+
+	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans
+		.Monthly?.pricing[currencyId] as number;
+
+	const getButtonCopy =
+		type === 'toRegular'
+			? `Support us for ${currency.glyph}${lowMonthlyRecurringAmount}/month`
+			: `Support us for ${currency.glyph}4/month`;
+
+	const tier1UrlParams = new URLSearchParams({
+		product: 'Contribution',
+		ratePlan: 'Monthly',
+		contribution: lowMonthlyRecurringAmount.toString(),
+		// todo: add ab: checkoutOneTimeNudge and pick up in generic checkout.
+	});
+	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}`;
+
+	const getNudgeHeadline =
+		type === 'toRegular' ? 'Make a bigger impact' : 'Make a bigger impact';
+
+	const getNudgeCopy =
+		type === 'toRegular'
+			? 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.'
+			: 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.';
+
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents>
-				<h3>{getNudgeHeadline(type)}</h3>
-				<p>{getNudgeCopy(type)}</p>
-				{/* TODO: button location add parameters */}
-				<Button
+				<h3>{getNudgeHeadline}</h3>
+				<p>{getNudgeCopy}</p>
+				<LinkButton
 					id="id_checkoutNudge"
 					cssOverrides={nudgeButtonOverrides}
 					isLoading={false}
 					theme={themeButtonReaderRevenueBrand}
+					href={buildCtaUrl}
 				>
-					{getButtonCopy(type, currency)}
-				</Button>
+					{getButtonCopy}
+				</LinkButton>
 			</BoxContents>
 		</Box>
 	);
