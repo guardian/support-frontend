@@ -91,10 +91,6 @@ export const submitForm = async ({
 	const supportAbTests = getSupportAbTests(abParticipations);
 	const deliveryInstructions = formData.get('deliveryInstructions') as string;
 	const similarProductsConsent = getConsentValue(formData, CONSENT_ID);
-	const deliveryAgent =
-		productFields.productType === 'Paper'
-			? productFields.deliveryAgent
-			: undefined;
 
 	const productInformation = buildProductInformation({
 		productFields: productFields,
@@ -104,7 +100,6 @@ export const submitForm = async ({
 		deliveryAddress: deliveryAddress,
 		firstDeliveryDate: firstDeliveryDate ?? undefined,
 		deliveryInstructions: deliveryInstructions,
-		deliveryAgent: deliveryAgent,
 		giftRecipient: giftRecipient,
 	});
 

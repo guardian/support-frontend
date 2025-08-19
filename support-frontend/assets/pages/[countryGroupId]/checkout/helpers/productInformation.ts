@@ -19,7 +19,6 @@ export const buildProductInformation = ({
 	deliveryAddress,
 	firstDeliveryDate,
 	deliveryInstructions,
-	deliveryAgent,
 	giftRecipient,
 }: {
 	productFields: ProductFields;
@@ -29,7 +28,6 @@ export const buildProductInformation = ({
 	deliveryAddress: FormAddress | undefined;
 	firstDeliveryDate: string | undefined;
 	deliveryInstructions: string | undefined;
-	deliveryAgent: number | undefined;
 	giftRecipient: GiftRecipientType | undefined;
 }): ProductPurchase => {
 	let basicProductInformation: Record<string, unknown> = {
@@ -85,9 +83,17 @@ export const buildProductInformation = ({
 		};
 	}
 	if (productKey === 'NationalDelivery') {
+		if (
+			productFields.productType !== 'Paper' ||
+			productFields.deliveryAgent === undefined
+		) {
+			throw new Error(
+				'NationalDelivery requires a delivery agent, but it was not provided or the product type is not Paper',
+			);
+		}
 		basicProductInformation = {
 			...basicProductInformation,
-			deliveryAgent: deliveryAgent,
+			deliveryAgent: productFields.deliveryAgent,
 		};
 	}
 

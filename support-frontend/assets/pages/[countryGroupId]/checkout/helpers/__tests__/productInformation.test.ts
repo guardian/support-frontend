@@ -43,7 +43,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: undefined,
 				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
-				deliveryAgent: undefined,
 				giftRecipient: undefined,
 			});
 
@@ -68,7 +67,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: undefined,
 				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
-				deliveryAgent: undefined,
 				giftRecipient: undefined,
 			});
 
@@ -92,7 +90,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: undefined,
 				firstDeliveryDate: undefined,
 				deliveryInstructions: '',
-				deliveryAgent: undefined,
 				giftRecipient: undefined,
 			});
 
@@ -117,7 +114,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: mockDeliveryAddress,
 				firstDeliveryDate: '2024-06-15',
 				deliveryInstructions: '',
-				deliveryAgent: undefined,
 				giftRecipient: undefined,
 			});
 
@@ -143,7 +139,6 @@ describe('buildProductInformation', () => {
 					deliveryAddress: mockDeliveryAddress,
 					firstDeliveryDate: undefined,
 					deliveryInstructions: '',
-					deliveryAgent: undefined,
 					giftRecipient: undefined,
 				}),
 			).toThrow('Delivery products require a first delivery date');
@@ -163,7 +158,6 @@ describe('buildProductInformation', () => {
 					deliveryAddress: undefined,
 					firstDeliveryDate: '2024-06-15',
 					deliveryInstructions: '',
-					deliveryAgent: undefined,
 					giftRecipient: undefined,
 				}),
 			).toThrow('Delivery products require a delivery address');
@@ -184,7 +178,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: mockDeliveryAddress,
 				firstDeliveryDate: '2024-06-20',
 				deliveryInstructions: 'Leave by front door',
-				deliveryAgent: undefined,
 				giftRecipient: undefined,
 			});
 
@@ -210,7 +203,6 @@ describe('buildProductInformation', () => {
 					deliveryAddress: mockDeliveryAddress,
 					firstDeliveryDate: '2024-06-20',
 					deliveryInstructions: undefined,
-					deliveryAgent: undefined,
 					giftRecipient: undefined,
 				}),
 			).toThrow(
@@ -221,6 +213,7 @@ describe('buildProductInformation', () => {
 		test('should build product information for NationalDelivery with delivery agent', () => {
 			const productFields = {
 				productType: 'Paper',
+				deliveryAgent: 123,
 			} as ProductFields;
 
 			const result = buildProductInformation({
@@ -231,7 +224,6 @@ describe('buildProductInformation', () => {
 				deliveryAddress: mockDeliveryAddress,
 				firstDeliveryDate: '2024-06-22',
 				deliveryInstructions: 'Ring doorbell twice',
-				deliveryAgent: 123,
 				giftRecipient: undefined,
 			});
 
@@ -266,7 +258,7 @@ describe('buildProductInformation', () => {
 				deliveryAddress: mockDeliveryAddress,
 				firstDeliveryDate: '2024-12-25',
 				deliveryInstructions: '',
-				deliveryAgent: undefined,
+
 				giftRecipient: giftRecipient,
 			});
 
