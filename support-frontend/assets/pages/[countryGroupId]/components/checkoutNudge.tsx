@@ -45,7 +45,7 @@ const nudgeThankYouBox = css`
 
 // TODO: change copy for supporter+ option
 
-export const productCatalog = window.guardian.productCatalog;
+const productCatalog = window.guardian.productCatalog;
 
 export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
