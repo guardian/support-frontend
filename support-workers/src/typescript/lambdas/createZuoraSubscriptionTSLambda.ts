@@ -35,6 +35,7 @@ export const handler = async (
 		const createZuoraSubscriptionState = state.state;
 		const productSpecificState =
 			createZuoraSubscriptionState.productSpecificState;
+
 		const user = createZuoraSubscriptionState.user;
 		const currency: IsoCurrency = createZuoraSubscriptionState.product.currency;
 		const zuoraPaymentMethod = getZuoraPaymentMethod(
@@ -57,11 +58,7 @@ export const handler = async (
 
 		// TODO:
 		//  Apply promotion if present
-		//  ReaderType - GIFT, PATRON
-		//  DeliveryAgent
-		//  Validate paper payment gateway
-		//  Set term & autoRenew correctly for GW gifts (and S+ students?)
-		//  Set contribution amount correctly for S+ (amount - cost)
+		//  Validate paper payment gateway? Might be done already by schema
 		//  Output state
 		//  CSR mode is NOT needed
 
@@ -90,6 +87,7 @@ export const handler = async (
 			inputFields,
 		);
 
+		// TODO: return the correct state
 		return Promise.resolve({
 			state: result,
 		});
