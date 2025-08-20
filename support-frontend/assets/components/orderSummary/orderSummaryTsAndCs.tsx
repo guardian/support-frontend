@@ -89,7 +89,7 @@ export function OrderSummaryTsAndCs({
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-
+	const isStudentRatePlan = ratePlanKey === 'OneYearStudent';
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -97,6 +97,7 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
+
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -108,7 +109,9 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {periodNoun} until you cancel.</p>
+					{!isStudentRatePlan && (
+						<p>Auto renews every {periodNoun} until you cancel.</p>
+					)}
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
