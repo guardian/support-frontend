@@ -24,8 +24,12 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { CheckoutNudgeThankYou } from 'pages/[countryGroupId]/components/checkoutNudge';
+import {
+	CheckoutNudge,
+	CheckoutNudgeThankYou,
+} from 'pages/[countryGroupId]/components/checkoutNudge';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import type { GeoId } from 'pages/geoIdConfig';
 
 const componentStyles = css`
 	${textSans17}
@@ -156,6 +160,7 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
+	geoId: GeoId;
 };
 
 const visuallyHiddenCss = css`
@@ -178,13 +183,13 @@ export function ContributionsOrderSummary({
 	startDate,
 	enableCheckList,
 	abParticipations,
+	geoId,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
-
 	const hasCheckList = enableCheckList && checkListData.length > 0;
 	const checkList = hasCheckList && (
 		<BenefitsCheckList
@@ -200,8 +205,52 @@ export function ContributionsOrderSummary({
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 
-	const isInNudgeABParticipations =
-		abParticipations?.checkoutOneTimeNudge === 'variant';
+	/* nudge AB test */
+	// get nudge url param
+	const urlSearchParams = new URLSearchParams(window.location.search);
+	// check value is one of the set of expected values
+
+	const verifyNudgeTypeInput = (input: string | null) => {
+		if (input === null) {
+			return '';
+		} else if (input === 'toRegular') {
+			return input;
+		} else if (input === 'toSupporterPlus') {
+			return input;
+		} else {
+			return '';
+		}
+	};
+
+	console.log('productKey:' + productKey);
+	const nudgeType = verifyNudgeTypeInput(urlSearchParams.get('nudge'));
+
+	const isContribution = productKey === 'Contribution';
+	const isSupporterPlus = productKey === 'SupporterPlus';
+	console.log('isContributions is: ' + isContribution);
+	const isInNudgeToLowRegular =
+		isContribution && abParticipations?.abNudgeToLowRegular === 'variant';
+	const isInABNudgeToSupporterPlus =
+		isContribution && abParticipations?.abNudgeToSupporterPlus === 'variant';
+	const isInABNudgeToSupporterPlusThanks =
+		isSupporterPlus && abParticipations?.abNudgeToSupporterPlus === 'variant';
+	const showSupporterPlusNudge =
+		isInABNudgeToSupporterPlus && nudgeType.trim() === ''; // TODO: might be empty
+	const showSupporterPlusNudgeThanks =
+		isInABNudgeToSupporterPlusThanks && nudgeType.trim() === 'toSupporterPlus';
+	const showLowRegularNudgeThanks =
+		isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
+
+	const nudge = showSupporterPlusNudge && (
+		<CheckoutNudge type="toSupporterPlus" geoId={geoId} />
+	);
+	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks && (
+		<CheckoutNudgeThankYou type="toSupporterPlus" />
+	);
+
+	const nudgeLowRegularThanks = showLowRegularNudgeThanks && (
+		<CheckoutNudgeThankYou type="toRegular" />
+	);
 
 	return (
 		<div css={componentStyles}>
@@ -274,7 +323,9 @@ export function ContributionsOrderSummary({
 				</p>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{isInNudgeABParticipations && <CheckoutNudgeThankYou />}
+			{nudge}
+			{nudgeSupporterPlusThanks}
+			{nudgeLowRegularThanks}
 		</div>
 	);
 }
