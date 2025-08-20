@@ -9,7 +9,7 @@ import {
   Metric,
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Architecture, Runtime } from "aws-cdk-lib/aws-lambda";
 import {
   Choice,
@@ -99,6 +99,13 @@ export class SupportWorkers extends GuStack {
     const parameterStorePolicy = new PolicyStatement({
       actions: ["ssm:GetParameter"],
       resources: props.parameterStorePaths,
+    });
+    const secretsManagerPolicy = new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: ["secretsmanager:GetSecretValue"],
+      resources: [
+        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${this.stage}/Zuora-OAuth/SupportServiceLambdas-*`,
+      ],
     });
 
     // Lambdas
@@ -249,9 +256,14 @@ export class SupportWorkers extends GuStack {
       "CreateSalesforceContact"
     ).addCatch(failureHandler, catchProps);
 
-    const createZuoraSubscription = createScalaLambda(
+    const createZuoraSubscriptionScala = createScalaLambda(
       "CreateZuoraSubscription",
       [promotionsDynamoTablePolicy]
+    ).addCatch(failureHandler, catchProps);
+
+    const createZuoraSubscriptionTS = createTypescriptLambda(
+      "CreateZuoraSubscriptionTS",
+      [promotionsDynamoTablePolicy, secretsManagerPolicy]
     ).addCatch(failureHandler, catchProps);
 
     const sendThankYouEmail = createScalaLambda("SendThankYouEmail", [
@@ -273,10 +285,19 @@ export class SupportWorkers extends GuStack {
       .branch(sendAcquisitionEvent)
       .branch(checkoutSuccess);
 
+    const createZuoraSubscriptionChoice = new Choice(
+      this,
+      "CreateZuoraSubscriptionChoice"
+    )
+      .when(
+        Condition.isNull("$.state"), // We don't want to use the TS lambda yet
+        createZuoraSubscriptionTS.next(parallelSteps)
+      )
+      .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
+
     const allSteps = createPaymentMethodLambda
       .next(createSalesforceContactLambda)
-      .next(createZuoraSubscription)
-      .next(parallelSteps);
+      .next(createZuoraSubscriptionChoice);
 
     const stateMachine = new StateMachine(this, "SupportWorkers", {
       stateMachineName: `${app}-${this.stage}`, // Used by support-frontend to find the state machine
