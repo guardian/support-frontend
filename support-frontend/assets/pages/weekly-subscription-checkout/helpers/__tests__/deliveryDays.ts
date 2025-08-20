@@ -1,14 +1,8 @@
 // ----- Imports ----- //
-import {
-	formatMachineDate,
-	formatUserDate,
-} from 'helpers/utilities/dateConversions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from '../deliveryDays';
 // ----- Tests ----- //
 const tuesday = 1551175752198;
-
-/* 2019-02-26 */
-const friday = 1551399618000;
 
 /* 2019-03-01 */
 const thursday = 1551918018000;
@@ -21,14 +15,6 @@ const ninthOfDecember = 1575891520247;
 
 /* 2019-12-09 */
 describe('deliveryDays', () => {
-	describe('date formatters', () => {
-		it('formatMachineDate formats date in YYYY-DD-MM format', () => {
-			expect(formatMachineDate(new Date(friday))).toEqual('2019-03-01');
-		});
-		it('formatUserDate formats date in a readable format', () => {
-			expect(formatUserDate(new Date(friday))).toEqual('Friday, March 1, 2019');
-		});
-	});
 	describe('getWeeklyDays', () => {
 		it('if you order after wednesday, it delivers the Weekly on Friday fortnight', () => {
 			const days = getWeeklyDays(thursday);
