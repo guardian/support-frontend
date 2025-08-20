@@ -46,6 +46,12 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
 		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
+			const studentDiscount = {
+				fullPriceWithCurrency: '£120',
+				amount: 9,
+				periodNoun: 'year',
+				discountPriceWithCurrency: '£9',
+			};
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
 				ratePlanKey === 'RestOfWorldMonthly' &&
@@ -62,12 +68,12 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					ratePlanKey={ratePlanKey}
 					countryGroupId={countryGroupId}
 					thresholdAmount={amount}
-					studentDiscount={{
-						fullPriceWithCurrency: '£120',
-						amount: 9,
-						periodNoun: 'year',
-						discountPriceWithCurrency: '£9',
-					}}
+					studentDiscount={
+						paymentProductKey === 'SupporterPlus' &&
+						ratePlanKey !== 'OneYearStudent'
+							? undefined
+							: studentDiscount
+					}
 					promotion={promo}
 				/>,
 			);
