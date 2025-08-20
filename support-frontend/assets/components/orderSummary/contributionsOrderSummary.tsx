@@ -160,7 +160,7 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
-	geoId: GeoId;
+	geoId?: GeoId;
 };
 
 const visuallyHiddenCss = css`
@@ -240,9 +240,9 @@ export function ContributionsOrderSummary({
 		isInABNudgeToSupporterPlusThanks && nudgeType.trim() === 'toSupporterPlus';
 	const showLowRegularNudgeThanks =
 		isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
-
+	// TODO: handle the geoId better - ? add to storybook settings?
 	const nudge = showSupporterPlusNudge && (
-		<CheckoutNudge type="toSupporterPlus" geoId={geoId} />
+		<CheckoutNudge type="toSupporterPlus" geoId={geoId!} />
 	);
 	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks && (
 		<CheckoutNudgeThankYou type="toSupporterPlus" />
