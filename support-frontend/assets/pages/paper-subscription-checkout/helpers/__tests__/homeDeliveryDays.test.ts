@@ -1,5 +1,3 @@
-// ----- Imports ----- //
-
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import {
 	canDeliverOnNextDeliveryDay,

@@ -7,7 +7,6 @@ import {
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
 import { getPaymentStartDate } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { getVoucherDays } from 'pages/paper-subscription-checkout/helpers/voucherDeliveryDays';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 
 const extraDelayCutoffWeekday = 3;
@@ -87,18 +86,15 @@ const productDeliveryOrStartDate = (
 			return getTierThreeDeliveryDate();
 		case 'NationalDelivery':
 		case 'HomeDelivery':
-		case 'SubscriptionCard': {
-			// paper productOption undefined check
 			if (paperProductOptions === undefined) {
 				return undefined;
 			}
-			const paperDeliveryDate =
-				productKey === 'SubscriptionCard'
-					? getPaymentStartDate(Date.now(), paperProductOptions)
-					: productKey === 'HomeDelivery'
-					? getHomeDeliveryDays(Date.now(), paperProductOptions)[0]
-					: getVoucherDays(Date.now(), paperProductOptions)[0];
-			return paperDeliveryDate;
+			return getHomeDeliveryDays(Date.now(), paperProductOptions)[0];
+		case 'SubscriptionCard': {
+			if (paperProductOptions === undefined) {
+				return undefined;
+			}
+			return getPaymentStartDate(Date.now(), paperProductOptions);
 		}
 		case 'GuardianWeeklyDomestic':
 		case 'GuardianWeeklyRestOfWorld': {

@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import { getWeeklyDays } from '../deliveryDays';
+import { getWeeklyDays, productDeliveryOrStartDate } from '../deliveryDays';
 
 // 2019-02-26T10:09:12.198Z
 const tuesday = 1551175752198;
@@ -36,5 +36,26 @@ describe('getWeeklyDays', () => {
 			undefined,
 		);
 		expect(days.length).toEqual(5);
+	});
+});
+
+describe('productDeliveryOrStartDate', () => {
+	it('returns the correct first date for NationalDelivery EverydayPlus', () => {
+		// Mock the current date/time
+		const orderDate = new Date('2025-08-19T15:55:00');
+		jest.useFakeTimers().setSystemTime(orderDate);
+
+		const firstDeliveryDate = productDeliveryOrStartDate(
+			'NationalDelivery',
+			'EverydayPlus',
+		);
+
+		expect(firstDeliveryDate).not.toBeUndefined();
+		if (firstDeliveryDate) {
+			expect(formatMachineDate(firstDeliveryDate)).toEqual('2025-08-22');
+		}
+
+		// Restore the original date/time
+		jest.useRealTimers();
 	});
 });
