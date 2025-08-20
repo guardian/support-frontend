@@ -1,15 +1,12 @@
 // ----- Imports ----- //
 
 import { Everyday, Saturday, Weekend } from '@modules/product/productOptions';
-import {
-	formatMachineDate,
-	formatUserDate,
-} from 'helpers/utilities/dateConversions';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import {
 	canDeliverOnNextDeliveryDay,
 	daysTillNextDelivery,
 	getHomeDeliveryDays,
-} from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
+} from '../homeDeliveryDays';
 import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
 import { getVoucherDays } from '../voucherDeliveryDays';
 
@@ -51,16 +48,6 @@ const sunday = 1551577952198;
 
 /* 2019-03-03 */
 describe('deliveryDays', () => {
-	describe('date formatters', () => {
-		it('formatMachineDate formats date in YYYY-DD-MM format', () => {
-			expect(formatMachineDate(new Date(wednesday))).toEqual('2019-02-27');
-		});
-		it('formatUserDate formats date in a readable format', () => {
-			expect(formatUserDate(new Date(wednesday))).toEqual(
-				'Wednesday, February 27, 2019',
-			);
-		});
-	});
 	describe('getHomeDeliveryDays', () => {
 		it('can work out the number of days till the next delivery', () => {
 			expect(
