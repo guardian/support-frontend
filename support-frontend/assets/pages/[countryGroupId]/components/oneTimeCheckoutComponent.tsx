@@ -582,8 +582,8 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const isInNudgeABParticipations =
-		abParticipations.checkoutOneTimeNudge === 'variant';
+	const isAbNudgeToLowRegular =
+		abParticipations.abNudgeToLowRegular === 'variant';
 
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
@@ -641,7 +641,7 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					{isInNudgeABParticipations && (
+					{isAbNudgeToLowRegular && (
 						<CheckoutNudge type={'toRegular'} geoId={geoId} />
 					)}
 				</BoxContents>
