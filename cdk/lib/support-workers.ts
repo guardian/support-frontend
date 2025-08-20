@@ -290,7 +290,7 @@ export class SupportWorkers extends GuStack {
       "CreateZuoraSubscriptionChoice"
     )
       .when(
-        Condition.isNull("$fieldThatDoesNotExist"), // We don't want to use the TS lambda yet
+        Condition.isNull("$.state.fieldThatDoesNotExist"), // We don't want to use the TS lambda yet
         createZuoraSubscriptionScala.next(parallelSteps)
       )
       .otherwise(createZuoraSubscriptionTS.next(parallelSteps));
