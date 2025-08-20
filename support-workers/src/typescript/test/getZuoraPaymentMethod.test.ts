@@ -1,5 +1,5 @@
 import { getZuoraPaymentMethod } from '../lambdas/createZuoraSubscriptionTSLambda';
-import { PaymentMethod } from '../model/paymentMethod';
+import type { PaymentMethod } from '../model/paymentMethod';
 
 jest.mock('../model/stage', () => ({
 	stageFromEnvironment: jest.fn().mockReturnValue('CODE'),
