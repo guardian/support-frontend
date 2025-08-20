@@ -48,9 +48,10 @@ const checkListData = [
 ];
 
 const studentDiscount: StudentDiscount = {
-	fullPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
 	amount: 9,
 	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
 };
 
 export default {
