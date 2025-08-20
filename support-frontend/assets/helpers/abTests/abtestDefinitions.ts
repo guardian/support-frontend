@@ -126,7 +126,7 @@ export const tests: Tests = {
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
 	},
-	checkoutOneTimeNudge: {
+	abNudgeToLowRegular: {
 		variants: [
 			{
 				id: 'control',
@@ -142,9 +142,30 @@ export const tests: Tests = {
 			},
 		},
 		isActive: false, // until we need to switch it on
-		referrerControlled: false, // ?
-		seed: 7, // needs to be different to others
+		referrerControlled: false, // requires a URL param to trigger
+		seed: 7, // needs to be different to other tests
 		targetPage: pageUrlRegexes.contributions.allGenericCheckouts,
+		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
+	},
+	abNudgeToSupporterPlus: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false, // until we need to switch it on
+		referrerControlled: false, // requires a URL param to trigger
+		seed: 8, // needs to be different to other tests
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
 		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
 	},
 };
