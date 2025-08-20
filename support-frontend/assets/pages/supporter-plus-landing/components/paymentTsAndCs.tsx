@@ -27,6 +27,7 @@ import {
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -112,6 +113,7 @@ export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
+	studentDiscount: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
@@ -119,6 +121,7 @@ export function PaymentTsAndCs({
 	productKey,
 	ratePlanKey,
 	countryGroupId,
+	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
 }: PaymentTsAndCsProps): JSX.Element {
@@ -126,7 +129,7 @@ export function PaymentTsAndCs({
 	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
 	const billingPeriodPlural =
 		getBillingPeriodTitle(billingPeriod).toLowerCase();
-
+	const isStudentRatePlan = ratePlanKey === 'OneYearStudent';
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
@@ -144,6 +147,16 @@ export function PaymentTsAndCs({
 			</div>
 		);
 	}
+	const legalPrice =
+		ratePlanKey === 'OneYearStudent'
+			? studentDiscount.discountPriceWithCurrency
+			: productLegal(
+					countryGroupId,
+					billingPeriod,
+					' per ',
+					thresholdAmount,
+					promotion,
+			  );
 
 	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
 	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
@@ -157,6 +170,36 @@ export function PaymentTsAndCs({
 		</div>
 	);
 	const productLabel = productCatalogDescription[productKey].label;
+	const subscriptionBasis = !isStudentRatePlan
+		? ' on a subscription basis'
+		: '';
+	const supporterPlusStartTsAndCs = `If you pay at least ${legalPrice}, you will receive the ${productLabel} benefits${subscriptionBasis}. If you increase your payments per ${billingPeriodSingular}, these additional amounts will be separate ${billingPeriodPlural} voluntary financial contributions to the Guardian. `;
+	const supporterPlusEndCopy = `You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a ${productLabel} subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current ${billingPeriodPlural} payment period. To cancel, go to `;
+	const supporterPlusEndTsAndCs = (
+		<>
+			{supporterPlusEndCopy}
+			{ManageMyAccountLink}
+			{` or see our `}
+			{termsLink('Terms', supporterPlusTermsLink)}
+			{'. '}
+		</>
+	);
+	const supporterPlusTsAndCs: JSX.Element = (
+		<>
+			{supporterPlusStartTsAndCs}
+			The {productLabel} subscription and any contributions will auto-renew each{' '}
+			{billingPeriodSingular}. You will be charged the subscription and
+			contribution amounts using your chosen payment method at each renewal
+			unless you cancel. {supporterPlusEndTsAndCs}
+		</>
+	);
+	const studentSupporterPlusTsAndCs: JSX.Element = (
+		<>
+			{supporterPlusStartTsAndCs}
+			{supporterPlusEndTsAndCs}
+		</>
+	);
+
 	const paymentTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		DigitalSubscription: (
 			<div>
@@ -188,30 +231,7 @@ export function PaymentTsAndCs({
 		),
 		SupporterPlus: (
 			<div>
-				If you pay at least{' '}
-				{productLegal(
-					countryGroupId,
-					billingPeriod,
-					' per ',
-					thresholdAmount,
-					promotion,
-				)}
-				, you will receive the {productLabel} benefits on a subscription basis.
-				If you increase your payments per {billingPeriodSingular}, these
-				additional amounts will be separate {billingPeriodPlural} voluntary
-				financial contributions to the Guardian. The {productLabel} subscription
-				and any contributions will auto-renew each {billingPeriodSingular}. You
-				will be charged the subscription and contribution amounts using your
-				chosen payment method at each renewal unless you cancel. You can cancel
-				your subscription or change your contributions at any time before your
-				next renewal date. If you cancel within 14 days of taking out a{' '}
-				{productLabel} subscription, you’ll receive a full refund (including of
-				any contributions) and your subscription and any contribution will stop
-				immediately. Cancellation of your subscription (which will also cancel
-				any contribution) or cancellation of your contribution made after 14
-				days will take effect at the end of your current {billingPeriodPlural}{' '}
-				payment period. To cancel, go to {ManageMyAccountLink} or see our{' '}
-				{termsLink('Terms', supporterPlusTermsLink)}.
+				{isStudentRatePlan ? studentSupporterPlusTsAndCs : supporterPlusTsAndCs}
 			</div>
 		),
 		TierThree: (

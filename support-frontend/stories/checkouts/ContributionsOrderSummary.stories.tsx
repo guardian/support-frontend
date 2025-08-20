@@ -11,6 +11,7 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const boldText = css`
 	font-weight: bold;
@@ -45,6 +46,12 @@ const checkListData = [
 		),
 	},
 ];
+
+const studentDiscount: StudentDiscount = {
+	fullPriceWithCurrency: '£9',
+	amount: 9,
+	periodNoun: 'year',
+};
 
 export default {
 	title: 'Checkouts/Contributions Order Summary',
@@ -109,6 +116,7 @@ Default.args = {
 			Change
 		</Button>
 	),
+	studentDiscount: studentDiscount,
 };
 
 export const SingleContribution = Template.bind({});
@@ -133,6 +141,7 @@ SingleContribution.args = {
 			Change
 		</Button>
 	),
+	studentDiscount: studentDiscount,
 };
 
 export const RecurringContribution = Template.bind({});
@@ -168,6 +177,7 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
+	studentDiscount: studentDiscount,
 };
 
 export const SupporterPlus = Template.bind({});
@@ -204,6 +214,7 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
+	studentDiscount: studentDiscount,
 };
 
 export const TierThree = Template.bind({});
@@ -249,6 +260,7 @@ TierThree.args = {
 			Change
 		</Button>
 	),
+	studentDiscount: studentDiscount,
 };
 
 export const StudentOneYear = Template.bind({});
@@ -286,10 +298,5 @@ StudentOneYear.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: {
-		amount: 9,
-		periodNoun: 'year',
-		fullPriceWithCurrency: '£120',
-		discountPriceWithCurrency: '£9',
-	},
+	studentDiscount: studentDiscount,
 };

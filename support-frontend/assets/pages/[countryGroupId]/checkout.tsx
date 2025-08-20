@@ -36,6 +36,7 @@ import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHosted
 import CheckoutForm from './components/checkoutForm';
 import { CheckoutLayout } from './components/checkoutLayout';
 import CheckoutSummary from './components/checkoutSummary';
+import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
 	geoId: GeoId;
@@ -279,6 +280,7 @@ export function Checkout({
 		productKey,
 		ratePlanKey,
 	);
+	const studentDiscount = getStudentDiscount(geoId, 'OneYearStudent');
 
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
@@ -296,6 +298,7 @@ export function Checkout({
 					landingPageSettings={landingPageSettings}
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
 				/>
 
 				<CheckoutForm
@@ -320,6 +323,7 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
 				/>
 			</CheckoutLayout>
 		</Elements>

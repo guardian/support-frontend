@@ -35,6 +35,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 		['DigitalSubscription', 'Monthly', 'GBPCountries', 0],
 		['Contribution', 'Annual', 'AUDCountries', 0],
 		['SupporterPlus', 'Monthly', 'GBPCountries', 12],
+		['SupporterPlus', 'OneYearStudent', 'GBPCountries', 9],
 		['TierThree', 'RestOfWorldMonthly', 'UnitedStates', 45],
 		['HomeDelivery', 'Monthly', 'GBPCountries', 0],
 		['NationalDelivery', 'Monthly', 'GBPCountries', 0],
@@ -61,6 +62,12 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					ratePlanKey={ratePlanKey}
 					countryGroupId={countryGroupId}
 					thresholdAmount={amount}
+					studentDiscount={{
+						fullPriceWithCurrency: '£120',
+						amount: 9,
+						periodNoun: 'year',
+						discountPriceWithCurrency: '£9',
+					}}
 					promotion={promo}
 				/>,
 			);
