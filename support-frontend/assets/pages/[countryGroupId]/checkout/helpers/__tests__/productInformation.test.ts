@@ -125,6 +125,30 @@ describe('buildProductInformation', () => {
 			});
 		});
 
+		test('should build product information for TierThree', () => {
+			const productFields = {
+				productType: 'TierThree',
+			} as ProductFields;
+
+			const result = buildProductInformation({
+				productFields: productFields,
+				productKey: 'TierThree',
+				ratePlanKey: 'DomesticAnnual',
+				personalData: mockPersonalData,
+				deliveryAddress: mockDeliveryAddress,
+				firstDeliveryDate: '2024-06-15',
+				deliveryInstructions: '',
+				giftRecipient: undefined,
+			});
+
+			expect(result).toEqual({
+				product: 'TierThree',
+				ratePlan: 'DomesticAnnual',
+				firstDeliveryDate: new Date('2024-06-15'),
+				deliveryContact: expectedDeliveryContact,
+			});
+		});
+
 		test('should throw an error if delivery product missing delivery date', () => {
 			const productFields = {
 				productType: 'GuardianWeekly',
