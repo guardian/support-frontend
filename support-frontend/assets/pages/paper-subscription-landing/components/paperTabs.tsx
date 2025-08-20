@@ -18,7 +18,7 @@ const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 		content: ContentDeliveryFaqBlock,
 	},
 	Collection: {
-		name: 'Subscription Card',
+		name: 'Collect in store',
 		href: `#${Collection}`,
 		content: SubsCardFaqBlock,
 	},
