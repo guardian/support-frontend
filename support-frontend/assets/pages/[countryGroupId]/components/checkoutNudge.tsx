@@ -15,9 +15,15 @@ import { getGeoIdConfig } from 'pages/geoIdConfig';
 
 // TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
 
+type NudgeType = 'toRegular' | 'toSupporterPlus';
+
 interface CheckoutNudgeProps {
-	type: 'toRegular' | 'toSupporter+';
+	type: NudgeType;
 	geoId: GeoId;
+}
+
+interface CheckoutNudgeThanksProps {
+	type: NudgeType;
 }
 
 const nudgeBoxOverrides = css`
@@ -44,6 +50,8 @@ const nudgeThankYouBox = css`
 `;
 
 // TODO: change copy for supporter+ option
+// TODO: add tracking e.g., line 195 in checkoutSummary
+// TODO: how to handle the variety of different types in checkout - not relevant to newspaper for example
 
 const productCatalog = window.guardian.productCatalog;
 
@@ -56,15 +64,25 @@ export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 	const getButtonCopy =
 		type === 'toRegular'
 			? `Support us for ${currency.glyph}${lowMonthlyRecurringAmount}/month`
-			: `Support us for ${currency.glyph}4/month`;
+			: `Support us for ${currency.glyph}12/month`;
 
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: 'Monthly',
 		contribution: lowMonthlyRecurringAmount.toString(),
-		// todo: add ab: checkoutOneTimeNudge and pick up in generic checkout.
+		nudge: 'toRegular',
 	});
-	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}`;
+
+	const tier2UrlParams = new URLSearchParams({
+		product: 'SupporterPlus',
+		ratePlan: 'Monthly',
+		nudge: 'toSupporterPlus',
+	});
+	// TODO: remove the force variant before go live!
+	const buildCtaUrl =
+		type === 'toRegular'
+			? `checkout?${tier1UrlParams.toString()}#ab-abNudgeToLowRegular=variant`
+			: `checkout?${tier2UrlParams.toString()}#ab-abNudgeToSupporterPlus=variant`;
 
 	const getNudgeHeadline =
 		type === 'toRegular' ? 'Make a bigger impact' : 'Make a bigger impact';
@@ -94,14 +112,24 @@ export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 }
 
 // probably need to pass the type to ensure we're showing the correct values.
-export function CheckoutNudgeThankYou() {
+export function CheckoutNudgeThankYou({ type }: CheckoutNudgeThanksProps) {
+	const getNudgeHeadline =
+		type === 'toRegular'
+			? 'Thank you for choosing to Support us monthly'
+			: 'Thank you for choosing to upgrade';
+
+	const getNudgeCopy =
+		type === 'toRegular'
+			? 'You are helping ensure the future of Guardian journalism.'
+			: 'Alongside your extra benefits you are also helping ensure the future of The Guardian.';
+
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
 			<BoxContents>
 				<div css={nudgeThankYouBox}>
 					<div>
-						<h3>Thank you for choosing to Support us monthly</h3>
-						<p>You are helping ensure the future of Guardian journalism.</p>
+						<h3>{getNudgeHeadline}</h3>
+						<p>{getNudgeCopy}</p>
 					</div>
 					{/* TODO: define width, src of image */}
 					<img />
