@@ -154,7 +154,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	studentDiscount: StudentDiscount;
+	studentDiscount?: StudentDiscount;
 };
 
 const visuallyHiddenCss = css`
@@ -194,22 +194,14 @@ export function ContributionsOrderSummary({
 	);
 
 	const fullPrice =
-		ratePlanKey === 'OneYearStudent'
-			? studentDiscount.fullPriceWithCurrency
-			: simpleFormatAmount(currency, amount);
-
+		studentDiscount?.fullPriceWithCurrency ??
+		simpleFormatAmount(currency, amount);
 	const promoDiscountPrice =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 	const discountPrice =
-		ratePlanKey === 'OneYearStudent'
-			? studentDiscount.discountPriceWithCurrency
-			: promoDiscountPrice;
-
-	const period =
-		ratePlanKey === 'OneYearStudent'
-			? studentDiscount.periodNoun
-			: paymentFrequency;
+		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
+	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
 	function displayPeriod(price: string): string {
 		return `${price}${period ? `/${period}` : ''}`;

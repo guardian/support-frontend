@@ -50,7 +50,7 @@ type CheckoutSummaryProps = {
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
-	studentDiscount: StudentDiscount;
+	studentDiscount?: StudentDiscount;
 };
 
 export default function CheckoutSummary({

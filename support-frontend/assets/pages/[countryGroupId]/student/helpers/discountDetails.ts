@@ -1,15 +1,16 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 import { productCatalog } from 'helpers/productCatalog';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
@@ -58,29 +59,43 @@ export function getDiscountSummary({
 }
 
 export type StudentDiscount = {
-	fullPriceWithCurrency: string;
 	amount: number;
 	periodNoun: string;
+	discountPriceWithCurrency: string;
+	fullPriceWithCurrency: string;
 	promoCode?: string;
 	promoDuration?: string;
 	discountSummary?: string;
-	discountPriceWithCurrency?: string;
 };
+
+function isStudent(
+	geoId: GeoId,
+	ratePlanKey: ActiveRatePlanKey,
+	productKey: ActiveProductKey,
+	promotion?: Promotion,
+): boolean {
+	const isOneYearStudent = ratePlanKey === 'OneYearStudent' && geoId !== 'au';
+	const isAUSStudent =
+		geoId === 'au' &&
+		productKey === 'SupporterPlus' &&
+		ratePlanKey === 'Monthly' &&
+		promotion?.promoCode === 'UTS_STUDENT';
+	return isOneYearStudent || isAUSStudent;
+}
 
 export function getStudentDiscount(
 	geoId: GeoId,
 	ratePlanKey: ActiveRatePlanKey,
-): StudentDiscount {
-	const { currencyKey, countryGroupId } = getGeoIdConfig(geoId);
-	const countryId = Country.detect(countryGroupId);
+	productKey: ActiveProductKey,
+	promotion?: Promotion,
+): StudentDiscount | undefined {
+	if (!isStudent(geoId, ratePlanKey, productKey, promotion)) {
+		return undefined;
+	}
+	const { currencyKey } = getGeoIdConfig(geoId);
 	const currency = currencies[currencyKey];
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const promotion = getPromotion(
-		allProductPrices.SupporterPlus,
-		countryId,
-		billingPeriod,
-	);
 
 	// full price
 	const productCatalogFullPrice = productCatalog.SupporterPlus?.ratePlans[
@@ -90,7 +105,6 @@ export function getStudentDiscount(
 		currency,
 		productCatalogFullPrice,
 	);
-
 	// student or promotional price
 	const productCatalogDiscountPrice = productCatalog.SupporterPlus?.ratePlans[
 		ratePlanKey

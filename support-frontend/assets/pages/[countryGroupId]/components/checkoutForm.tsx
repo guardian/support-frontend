@@ -132,7 +132,7 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
-	studentDiscount: StudentDiscount;
+	studentDiscount?: StudentDiscount;
 };
 
 const getPaymentMethods = (

@@ -113,7 +113,7 @@ export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	countryGroupId: CountryGroupId;
-	studentDiscount: StudentDiscount;
+	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
 }
@@ -148,15 +148,14 @@ export function PaymentTsAndCs({
 		);
 	}
 	const legalPrice =
-		ratePlanKey === 'OneYearStudent'
-			? studentDiscount.discountPriceWithCurrency
-			: productLegal(
-					countryGroupId,
-					billingPeriod,
-					' per ',
-					thresholdAmount,
-					promotion,
-			  );
+		studentDiscount?.discountPriceWithCurrency ??
+		productLegal(
+			countryGroupId,
+			billingPeriod,
+			' per ',
+			thresholdAmount,
+			promotion,
+		);
 
 	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
 	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;

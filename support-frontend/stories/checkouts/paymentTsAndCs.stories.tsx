@@ -16,9 +16,10 @@ function Template(args: PaymentTsAndCsProps) {
 }
 
 const studentDiscount: StudentDiscount = {
-	fullPriceWithCurrency: '£9',
 	amount: 9,
 	periodNoun: 'year',
+	fullPriceWithCurrency: '£9',
+	discountPriceWithCurrency: '£120',
 };
 
 Template.args = {} as Omit<PaymentTsAndCsProps, ''>;
