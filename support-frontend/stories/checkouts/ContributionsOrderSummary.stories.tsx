@@ -117,7 +117,6 @@ Default.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
 };
 
 export const SingleContribution = Template.bind({});
@@ -142,7 +141,6 @@ SingleContribution.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
 };
 
 export const RecurringContribution = Template.bind({});
@@ -178,7 +176,6 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
 };
 
 export const SupporterPlus = Template.bind({});
@@ -215,7 +212,6 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
 };
 
 export const TierThree = Template.bind({});
@@ -261,7 +257,6 @@ TierThree.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
 };
 
 export const StudentOneYear = Template.bind({});
