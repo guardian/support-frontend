@@ -80,7 +80,6 @@ function Template(props: ContributionsOrderSummaryProps) {
 Template.args = {} as ContributionsOrderSummaryProps;
 
 export const Default = Template.bind({});
-
 Default.args = {
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
@@ -113,7 +112,6 @@ Default.args = {
 };
 
 export const SingleContribution = Template.bind({});
-
 SingleContribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'OneTime',
@@ -137,7 +135,6 @@ SingleContribution.args = {
 };
 
 export const RecurringContribution = Template.bind({});
-
 RecurringContribution.args = {
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
@@ -172,9 +169,8 @@ RecurringContribution.args = {
 };
 
 export const SupporterPlus = Template.bind({});
-
 SupporterPlus.args = {
-	productKey: 'TierThree',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productDescription: 'All-access Digital',
 	enableCheckList: true,
@@ -208,7 +204,6 @@ SupporterPlus.args = {
 };
 
 export const TierThree = Template.bind({});
-
 TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
@@ -253,12 +248,11 @@ TierThree.args = {
 };
 
 export const StudentOneYear = Template.bind({});
-
 StudentOneYear.args = {
 	productKey: 'SupporterPlus',
 	ratePlanKey: 'OneYearStudent',
 	productDescription: 'All-access Digital',
-	paymentFrequency: 'month',
+	paymentFrequency: 'year',
 	enableCheckList: true,
 	amount: 120,
 	currency: {
@@ -278,7 +272,7 @@ StudentOneYear.args = {
 			productKey={'SupporterPlus'}
 			ratePlanKey={'OneYearStudent'}
 			countryGroupId={GBPCountries}
-			thresholdAmount={12}
+			thresholdAmount={9}
 		/>
 	),
 	startDate: null,
