@@ -642,7 +642,7 @@ export function OneTimeCheckoutComponent({
 						/>
 					</div>
 					{isAbNudgeToLowRegular && (
-						<CheckoutNudge type={'toRegular'} geoId={geoId} />
+						<CheckoutNudge type={'toRegular'} geoId={geoId} ratePlanKey='Monthly'/>
 					)}
 				</BoxContents>
 			</Box>

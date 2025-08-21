@@ -10,6 +10,7 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { type ActiveRatePlanKey, productCatalog } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
@@ -20,6 +21,7 @@ type NudgeType = 'toRegular' | 'toSupporterPlus';
 interface CheckoutNudgeProps {
 	type: NudgeType;
 	geoId: GeoId;
+	ratePlanKey: ActiveRatePlanKey;
 }
 
 interface CheckoutNudgeThanksProps {
@@ -51,35 +53,49 @@ const nudgeThankYouBox = css`
 
 // TODO: change copy for supporter+ option
 // TODO: add tracking e.g., line 195 in checkoutSummary
-// TODO: how to handle the variety of different types in checkout - not relevant to newspaper for example
 
-const productCatalog = window.guardian.productCatalog;
-
-export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
+export function CheckoutNudge({
+	type,
+	geoId,
+	ratePlanKey,
+}: CheckoutNudgeProps) {
 	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
 
-	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans
-		.Monthly?.pricing[currencyId] as number;
+	if(!['Monthly','Annual'].includes(ratePlanKey)) {
+		ratePlanKey = 'Monthly';
+	}
 
-	// TODO: get the correct SupporterPlus value based on location
+	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans
+		[ratePlanKey]?.pricing[currencyId] as number;
+
+	const supporterPlusAmount = productCatalog.SupporterPlus?.ratePlans
+		[ratePlanKey]?.pricing[currencyId] as number;
+
+	const ratePlanDescription = ratePlanKey === 'Monthly' ? 'month' : 'year';
+
 	const getButtonCopy =
 		type === 'toRegular'
-			? `Support us for ${currency.glyph}${lowMonthlyRecurringAmount}/month`
-			: `Support us for ${currency.glyph}12/month`;
+			? `Support us for ${
+					currency.glyph
+			  }${lowMonthlyRecurringAmount.toString()}/${ratePlanDescription}`
+			: `Support us for ${
+					currency.glyph
+			  }${supporterPlusAmount.toString()}/${ratePlanDescription}`;
 
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
-		ratePlan: 'Monthly',
+		ratePlan: ratePlanKey,
 		contribution: lowMonthlyRecurringAmount.toString(),
 		nudge: 'toRegular',
 	});
 
 	const tier2UrlParams = new URLSearchParams({
 		product: 'SupporterPlus',
-		ratePlan: 'Monthly',
+		ratePlan: ratePlanKey,
 		nudge: 'toSupporterPlus',
 	});
-	// TODO: remove the force variant before go live!
+
+	// TODO: remove the force variant before go live!!!
 	const buildCtaUrl =
 		type === 'toRegular'
 			? `checkout?${tier1UrlParams.toString()}#ab-abNudgeToLowRegular=variant`
@@ -91,7 +107,7 @@ export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 	const getNudgeCopy =
 		type === 'toRegular'
 			? 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.'
-			: 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.';
+			: 'Your all access benefits';
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
@@ -112,7 +128,6 @@ export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 	);
 }
 
-// probably need to pass the type to ensure we're showing the correct values.
 export function CheckoutNudgeThankYou({ type }: CheckoutNudgeThanksProps) {
 	const getNudgeHeadline =
 		type === 'toRegular'
