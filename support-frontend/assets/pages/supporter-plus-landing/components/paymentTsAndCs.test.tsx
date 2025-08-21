@@ -65,9 +65,9 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 					thresholdAmount={amount}
 					studentDiscount={
 						paymentProductKey === 'SupporterPlus' &&
-						ratePlanKey !== 'OneYearStudent'
-							? undefined
-							: oneYearStudentDiscount
+						ratePlanKey === 'OneYearStudent'
+							? oneYearStudentDiscount
+							: undefined
 					}
 					promotion={promo}
 				/>,
