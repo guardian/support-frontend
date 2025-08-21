@@ -11,7 +11,7 @@ import { GBPCountries } from '@modules/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
-import { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { oneYearStudentDiscount } from './paymentTsAndCs.stories';
 
 const boldText = css`
 	font-weight: bold;
@@ -46,13 +46,6 @@ const checkListData = [
 		),
 	},
 ];
-
-const studentDiscount: StudentDiscount = {
-	fullPriceWithCurrency: '£120',
-	amount: 9,
-	periodNoun: 'year',
-	discountPriceWithCurrency: '£9',
-};
 
 export default {
 	title: 'Checkouts/Contributions Order Summary',
@@ -294,5 +287,5 @@ StudentOneYear.args = {
 			Change
 		</Button>
 	),
-	studentDiscount: studentDiscount,
+	studentDiscount: oneYearStudentDiscount,
 };

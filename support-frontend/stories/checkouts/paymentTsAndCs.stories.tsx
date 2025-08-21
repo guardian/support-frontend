@@ -10,7 +10,7 @@ export default {
 	decorators: [],
 };
 
-const oneYearStudentDiscount = {
+export const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',
 	discountPriceWithCurrency: '£9',
