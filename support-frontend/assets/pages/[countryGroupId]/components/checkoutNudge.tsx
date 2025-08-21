@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import {
-	brand,
 	headlineBold24,
 	neutral,
+	palette,
 	space,
 } from '@guardian/source/foundations';
 import {
@@ -30,7 +30,7 @@ const nudgeBoxOverrides = css`
 	margin-top: ${space[2]}px;
 	background-color: ${neutral[97]};
 	& h3 {
-		color: ${brand[500]};
+		color: ${palette.brand[500]};
 		${headlineBold24};
 	}
 	& p {
@@ -61,6 +61,7 @@ export function CheckoutNudge({ type, geoId }: CheckoutNudgeProps) {
 	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans
 		.Monthly?.pricing[currencyId] as number;
 
+	// TODO: get the correct SupporterPlus value based on location
 	const getButtonCopy =
 		type === 'toRegular'
 			? `Support us for ${currency.glyph}${lowMonthlyRecurringAmount}/month`
