@@ -159,8 +159,8 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	geoId: GeoId;
 	abParticipations?: Participations;
-	geoId?: GeoId;
 };
 
 const visuallyHiddenCss = css`
@@ -182,8 +182,8 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
-	abParticipations,
 	geoId,
+	abParticipations,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -211,23 +211,16 @@ export function ContributionsOrderSummary({
 	// check value is one of the set of expected values
 
 	const verifyNudgeTypeInput = (input: string | null) => {
-		if (input === null) {
-			return '';
-		} else if (input === 'toRegular') {
-			return input;
-		} else if (input === 'toSupporterPlus') {
-			return input;
-		} else {
+		if (input === null || !['toRegular', 'toSupporterPlus'].includes(input)) {
 			return '';
 		}
+		return input;
 	};
 
-	console.log('productKey:' + productKey);
 	const nudgeType = verifyNudgeTypeInput(urlSearchParams.get('nudge'));
 
 	const isContribution = productKey === 'Contribution';
 	const isSupporterPlus = productKey === 'SupporterPlus';
-	console.log('isContributions is: ' + isContribution);
 	const isInNudgeToLowRegular =
 		isContribution && abParticipations?.abNudgeToLowRegular === 'variant';
 	const isInABNudgeToSupporterPlus =
@@ -235,14 +228,19 @@ export function ContributionsOrderSummary({
 	const isInABNudgeToSupporterPlusThanks =
 		isSupporterPlus && abParticipations?.abNudgeToSupporterPlus === 'variant';
 	const showSupporterPlusNudge =
-		isInABNudgeToSupporterPlus && nudgeType.trim() === ''; // TODO: might be empty
+		isInABNudgeToSupporterPlus && nudgeType.trim() === '';
 	const showSupporterPlusNudgeThanks =
 		isInABNudgeToSupporterPlusThanks && nudgeType.trim() === 'toSupporterPlus';
 	const showLowRegularNudgeThanks =
 		isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
+
 	// TODO: handle the geoId better - ? add to storybook settings?
 	const nudge = showSupporterPlusNudge && (
-		<CheckoutNudge type="toSupporterPlus" geoId={geoId!} />
+		<CheckoutNudge
+			type="toSupporterPlus"
+			geoId={geoId}
+			ratePlanKey={ratePlanKey}
+		/>
 	);
 	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks && (
 		<CheckoutNudgeThankYou type="toSupporterPlus" />
@@ -322,10 +320,10 @@ export function ContributionsOrderSummary({
 					)}
 				</p>
 			</div>
-			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{nudge}
 			{nudgeSupporterPlusThanks}
 			{nudgeLowRegularThanks}
+			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
+			{nudge}
 		</div>
 	);
 }
