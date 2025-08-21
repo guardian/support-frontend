@@ -63,12 +63,14 @@ export function StudentLandingPage({
 		countryId,
 		ratePlanToBillingPeriod(ratePlanKey),
 	);
+	console.log('*** promotionSupporterPlus:', promotionSupporterPlus);
 	const studentDiscount = getStudentDiscount(
 		geoId,
 		ratePlanKey,
 		productKey,
 		promotionSupporterPlus,
 	);
+	console.log('*** studentDiscount:', studentDiscount);
 
 	return (
 		<PageScaffold
