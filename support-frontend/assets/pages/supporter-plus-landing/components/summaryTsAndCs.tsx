@@ -53,7 +53,8 @@ export function SummaryTsAndCs({
 	const renewalFrequency = `${renewalDateStart}${
 		billingPeriod === BillingPeriod.Annual ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
-	const isStudentRatePlan = ratePlanKey === 'OneYearStudent';
+	// Display for AUS Students who are on a subscription basis
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
@@ -94,7 +95,7 @@ export function SummaryTsAndCs({
 		),
 		SupporterPlus: (
 			<>
-				{!isStudentRatePlan && (
+				{!isStudentOneYearRatePlan && (
 					<div css={containerSummaryTsCs}>
 						The {productCatalogDescription[productKey].label} subscription and
 						any contribution will auto-renew each {periodNoun}. You will be
