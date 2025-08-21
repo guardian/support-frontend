@@ -8,17 +8,25 @@ import type {
 import type { GeoId } from 'pages/geoIdConfig';
 import buildCheckoutUrl from '../helpers/buildCheckoutUrl';
 import type { StudentDiscount } from '../helpers/discountDetails';
-import LogoUTS from '../logos/uts';
 import {
 	cardContainer,
 	containerCardsAndSignIn,
 	heading,
 	headingWrapper,
 	subHeading,
-	universityBadge,
 } from './StudentHeaderStyles';
 import StudentPrice from './StudentPrice';
 import StudentProductCard from './StudentProductCard';
+
+interface StudentHeaderProps {
+	geoId: GeoId;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	landingPageVariant: LandingPageVariant;
+	studentDiscount: StudentDiscount;
+	headingCopy: string;
+	universityBadge?: React.ReactNode;
+}
 
 export default function StudentHeader({
 	geoId,
@@ -26,13 +34,9 @@ export default function StudentHeader({
 	ratePlanKey,
 	landingPageVariant,
 	studentDiscount,
-}: {
-	geoId: GeoId;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	landingPageVariant: LandingPageVariant;
-	studentDiscount: StudentDiscount;
-}) {
+	headingCopy,
+	universityBadge,
+}: StudentHeaderProps) {
 	const { amount, promoDuration, promoCode, discountSummary } = studentDiscount;
 	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
@@ -51,13 +55,9 @@ export default function StudentHeader({
 			borderColor="rgba(170, 170, 180, 0.5)"
 			cssOverrides={containerCardsAndSignIn}
 		>
-			<p css={universityBadge}>
-				<LogoUTS /> <span>Special offer for UTS students</span>
-			</p>
+			{universityBadge}
 			<div css={headingWrapper}>
-				<h1 css={heading}>
-					Subscribe to fearless, independent and inspiring journalism
-				</h1>
+				<h1 css={heading}>{headingCopy}</h1>
 				<p css={subHeading}>
 					For a limited time, students with a valid UTS email address can unlock
 					the premium experience of Guardian journalism, including unmetered app

@@ -55,6 +55,7 @@ describe('<StudentHeader />', () => {
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
+				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(
@@ -70,6 +71,7 @@ describe('<StudentHeader />', () => {
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
+				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -85,6 +87,7 @@ describe('<StudentHeader />', () => {
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={oneYearStudentDiscount}
+				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
@@ -98,6 +101,7 @@ describe('<StudentHeader />', () => {
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
+				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(
