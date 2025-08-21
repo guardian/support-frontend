@@ -20,10 +20,12 @@ import type {
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
+import { universityBadge } from './components/StudentHeaderStyles';
 import { StudentTsAndCs } from './components/studentTsAndCs';
 import type { StudentDiscount } from './helpers/discountDetails';
 import { getStudentFAQs } from './helpers/studentFAQs';
 import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
+import LogoUTS from './logos/uts';
 
 type StudentLandingPageProps = {
 	geoId: GeoId;
@@ -75,6 +77,12 @@ export function StudentLandingPage({
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={studentDiscount}
+				headingCopy="Subscribe to fearless, independent and inspiring journalism"
+				universityBadge={
+					<p css={universityBadge}>
+						<LogoUTS /> <span>Special offer for UTS students</span>
+					</p>
+				}
 			/>
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
