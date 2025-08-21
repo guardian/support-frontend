@@ -5,6 +5,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { oneYearStudentDiscount } from 'pages/[countryGroupId]/student/components/StudentHeader.test';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
@@ -46,12 +47,6 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 	it.each(paymentProductKeys)(
 		`paymentTs&Cs render product %s for region %s correctly`,
 		(paymentProductKey, ratePlanKey, countryGroupId, amount) => {
-			const studentDiscount = {
-				fullPriceWithCurrency: '£120',
-				amount: 9,
-				periodNoun: 'year',
-				discountPriceWithCurrency: '£9',
-			};
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
 				ratePlanKey === 'RestOfWorldMonthly' &&
@@ -72,7 +67,7 @@ describe('Payment Ts&Cs Snapshot comparison', () => {
 						paymentProductKey === 'SupporterPlus' &&
 						ratePlanKey !== 'OneYearStudent'
 							? undefined
-							: studentDiscount
+							: oneYearStudentDiscount
 					}
 					promotion={promo}
 				/>,
