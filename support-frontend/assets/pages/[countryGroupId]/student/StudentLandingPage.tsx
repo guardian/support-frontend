@@ -2,7 +2,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import type { IsoCountry } from '@modules/internationalisation/country';
 import {
 	Canada,
 	GBPCountries,
@@ -14,33 +13,33 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import { Country } from 'helpers/internationalisation/classes/country';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
-import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { allProductPrices } from 'helpers/productPrice/productPrices';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
 import { StudentTsAndCs } from './components/studentTsAndCs';
-import { getStudentDiscount } from './helpers/discountDetails';
+import type { StudentDiscount } from './helpers/discountDetails';
 import { getStudentFAQs } from './helpers/studentFAQs';
 import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
+
+type StudentLandingPageProps = {
+	geoId: GeoId;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	landingPageVariant: LandingPageVariant;
+	studentDiscount?: StudentDiscount;
+};
 
 export function StudentLandingPage({
 	geoId,
 	productKey,
 	ratePlanKey,
 	landingPageVariant,
-}: {
-	geoId: GeoId;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	landingPageVariant: LandingPageVariant;
-}) {
+	studentDiscount,
+}: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(geoId);
 	const tsAndCsItem = getStudentTsAndCs(geoId);
 
@@ -52,25 +51,6 @@ export function StudentLandingPage({
 	};
 	const showCountrySwitcher =
 		geoId !== 'au' && countrySwitcherProps.countryGroupIds.length > 1;
-
-	/**
-	 * Non-AU Students have ratePlanKey as OneYearStudent
-	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus and promoCode UTS_STUDENT
-	 */
-	const countryId: IsoCountry = Country.detect();
-	const promotionSupporterPlus = getPromotion(
-		allProductPrices.SupporterPlus,
-		countryId,
-		ratePlanToBillingPeriod(ratePlanKey),
-	);
-	console.log('*** promotionSupporterPlus:', promotionSupporterPlus);
-	const studentDiscount = getStudentDiscount(
-		geoId,
-		ratePlanKey,
-		productKey,
-		promotionSupporterPlus,
-	);
-	console.log('*** studentDiscount:', studentDiscount);
 
 	return (
 		<PageScaffold
