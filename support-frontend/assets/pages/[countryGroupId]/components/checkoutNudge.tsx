@@ -9,7 +9,9 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import type { ProductBenefit } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { type ActiveRatePlanKey, productCatalog } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -41,9 +43,29 @@ const nudgeBoxOverrides = css`
 	}
 `;
 
-const nudgeButtonOverrides = css`
+const boxContentsOverrides = css`
+	display: grid;
+	/*grid-template-cols: 1fr;
+	grid-template-rows:  auto auto auto; */
+`;
+
+const headlineOverrides = css`
+	order: 1;
+`;
+
+const bodyCopyOverrides = css`
+	order: 4;
+`;
+
+const checkmarkBenefitList = css`
+	text-align: left;
+	margin-top: 12px;
+`;
+
+const nudgeButtonOverrides = (isSupporterPlus: boolean) => css`
 	margin-top: ${space[2]}px;
 	width: 100%;
+	${isSupporterPlus ? 'order:3' : 'order:6'};
 `;
 
 const nudgeThankYouBox = css`
@@ -51,7 +73,6 @@ const nudgeThankYouBox = css`
 	flex-direction: row;
 `;
 
-// TODO: change copy for supporter+ option
 // TODO: add tracking e.g., line 195 in checkoutSummary
 
 export function CheckoutNudge({
@@ -61,15 +82,19 @@ export function CheckoutNudge({
 }: CheckoutNudgeProps) {
 	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
 
-	if(!['Monthly','Annual'].includes(ratePlanKey)) {
+	if (!['Monthly', 'Annual'].includes(ratePlanKey)) {
 		ratePlanKey = 'Monthly';
 	}
 
-	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans
-		[ratePlanKey]?.pricing[currencyId] as number;
+	const isSupporterPlus = type === 'toSupporterPlus';
 
-	const supporterPlusAmount = productCatalog.SupporterPlus?.ratePlans
-		[ratePlanKey]?.pricing[currencyId] as number;
+	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans[
+		ratePlanKey
+	]?.pricing[currencyId] as number;
+
+	const supporterPlusAmount = productCatalog.SupporterPlus?.ratePlans[
+		ratePlanKey
+	]?.pricing[currencyId] as number;
 
 	const ratePlanDescription = ratePlanKey === 'Monthly' ? 'month' : 'year';
 
@@ -109,14 +134,50 @@ export function CheckoutNudge({
 			? 'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.'
 			: 'Your all access benefits';
 
+	const benefits: ProductBenefit[] = [
+		{
+			copy: 'Unlimited access to the premium Guardian app',
+			label: {
+				copy: 'Refreshed',
+			},
+		},
+		{
+			copy: 'Exclusive newsletter sent every week from the Guardian newsroom',
+		},
+		{
+			copy: 'Unlimited access to the Guardian Feast app',
+		},
+		{
+			copy: 'Ad-free reading on all your devies',
+		},
+	];
+
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
-			<BoxContents>
-				<h3>{getNudgeHeadline}</h3>
-				<p>{getNudgeCopy}</p>
+			<BoxContents cssOverrides={boxContentsOverrides}>
+				<h3 css={headlineOverrides}>{getNudgeHeadline}</h3>
+				<div css={bodyCopyOverrides}>
+					<p>{getNudgeCopy}</p>
+					{isSupporterPlus && (
+						<BenefitsCheckList
+							benefitsCheckListData={benefits.map((benefit) => {
+								return {
+									text: benefit.copy,
+									isChecked: true,
+									toolTip: benefit.tooltip,
+									pill: benefit.label?.copy,
+									hideBullet: benefits.length <= 1,
+								};
+							})}
+							style={'compact'}
+							iconColor={palette.brand[500]}
+							cssOverrides={checkmarkBenefitList}
+						/>
+					)}
+				</div>
 				<LinkButton
 					id="id_checkoutNudge"
-					cssOverrides={nudgeButtonOverrides}
+					cssOverrides={nudgeButtonOverrides(isSupporterPlus)}
 					isLoading={false}
 					theme={themeButtonReaderRevenueBrand}
 					href={buildCtaUrl}
