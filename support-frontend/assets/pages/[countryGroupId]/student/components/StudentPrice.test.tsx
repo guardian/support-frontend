@@ -13,10 +13,10 @@ describe('StudentPrice Component', () => {
 	});
 
 	it('renders only the full price when no discount is applied', () => {
-		render(<StudentPrice studentDiscount={auStudentDiscount} />);
-		expect(screen.getByText('$0')).toBeInTheDocument();
-		expect(screen.getByText('/month')).toBeInTheDocument();
-		expect(screen.getAllByText('/month')).toHaveLength(1);
+		render(<StudentPrice studentDiscount={oneYearStudentDiscount} />);
+		expect(screen.getByText('£9')).toBeInTheDocument();
+		expect(screen.getByText('/year')).toBeInTheDocument();
+		expect(screen.getAllByText('/year')).toHaveLength(1);
 	});
 
 	it('renders discount price and original price when discount applies', () => {
