@@ -109,6 +109,7 @@ Default.args = {
 			Change
 		</Button>
 	),
+	geoId: 'uk',
 };
 
 export const SingleContribution = Template.bind({});
@@ -133,6 +134,7 @@ SingleContribution.args = {
 			Change
 		</Button>
 	),
+	geoId: 'us',
 };
 
 export const RecurringContribution = Template.bind({});
@@ -168,6 +170,7 @@ RecurringContribution.args = {
 			Change
 		</Button>
 	),
+	geoId: 'uk',
 };
 
 export const SupporterPlus = Template.bind({});
@@ -204,6 +207,7 @@ SupporterPlus.args = {
 			Change
 		</Button>
 	),
+	geoId: 'uk',
 };
 
 export const TierThree = Template.bind({});
@@ -249,4 +253,5 @@ TierThree.args = {
 			Change
 		</Button>
 	),
+	geoId: 'uk',
 };

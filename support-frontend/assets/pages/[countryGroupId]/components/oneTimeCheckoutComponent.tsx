@@ -95,6 +95,7 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
+import { CheckoutNudge } from './checkoutNudge';
 import { FormSection, Legend, shorterBoxMargin } from './form';
 import {
 	checkedRadioLabelColour,
@@ -581,6 +582,9 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const isAbNudgeToLowRegular =
+		abParticipations.abNudgeToLowRegular === 'variant';
+
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -637,6 +641,13 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
+					{isAbNudgeToLowRegular && (
+						<CheckoutNudge
+							type={'toRegular'}
+							geoId={geoId}
+							ratePlanKey="Monthly"
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<form

@@ -1,4 +1,9 @@
 import type { Tests } from './models';
+
+const genericCheckoutRegex =
+	'(uk|us|au|ca|eu|nz|int)/checkout|thank-you\\?product(.*)?$';
+const oneTimeCheckoutOnlyRegex =
+	'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you\\?contribution(.*)?$';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
 // you should always target both the landing page *and* the thank you page.
@@ -14,10 +19,9 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages:
 			'^(?!(?:/subscribe/(paper|weekly)/checkout$))(?:/(uk|us|ca|eu|nz|int))?/(checkout|one-time-checkout|contribute|thankyou|thank-you)(/.*)?$',
 		usLandingPageOnly: '/us/contribute$',
-		genericCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/checkout|thank-you\\?product(.*)?$',
-		oneTimeCheckoutOnly:
-			'(uk|us|au|ca|eu|nz|int)/one-time-checkout|thank-you\\?contribution(.*)?$',
+		genericCheckoutOnly: genericCheckoutRegex,
+		oneTimeCheckoutOnly: oneTimeCheckoutOnlyRegex,
+		allGenericCheckouts: `${oneTimeCheckoutOnlyRegex} | ${genericCheckoutRegex}]`,
 	},
 	subscriptions: {
 		paper: {
@@ -121,5 +125,47 @@ export const tests: Tests = {
 			// match generic checkout & thank you page
 			'^/uk/(checkout|thank-you)',
 		excludeContributionsOnlyCountries: true,
+	},
+	abNudgeToLowRegular: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false, // until we need to switch it on
+		referrerControlled: false, // requires a URL param to trigger
+		seed: 7, // needs to be different to other tests
+		targetPage: pageUrlRegexes.contributions.allGenericCheckouts,
+		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
+	},
+	abNudgeToSupporterPlus: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false, // until we need to switch it on
+		referrerControlled: false, // requires a URL param to trigger
+		seed: 8, // needs to be different to other tests
+		targetPage: pageUrlRegexes.contributions.genericCheckoutOnly,
+		excludeContributionsOnlyCountries: true, // for countries we can't sell recurring products to
 	},
 };
