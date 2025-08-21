@@ -89,7 +89,8 @@ export function OrderSummaryTsAndCs({
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-	const isStudentRatePlan = ratePlanKey === 'OneYearStudent';
+	// Display for AUS Students who are on a subscription basis
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -109,7 +110,7 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					{!isStudentRatePlan && (
+					{!isStudentOneYearRatePlan && (
 						<p>Auto renews every {periodNoun} until you cancel.</p>
 					)}
 					<p>
