@@ -4,9 +4,8 @@ import {
 	type ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { type GeoId } from 'pages/geoIdConfig';
-import StudentHeader from './components/StudentHeader';
 import { getStudentDiscount } from './helpers/discountDetails';
-import { StudentLandingPage } from './StudentLandingPage';
+import { StudentLandingPageGlobal } from './StudentLandingPageGlobal';
 
 export function StudentLandingPageGlobalContainer({
 	geoId,
@@ -28,19 +27,12 @@ export function StudentLandingPageGlobalContainer({
 	return (
 		<>
 			{studentDiscount && (
-				<StudentLandingPage
+				<StudentLandingPageGlobal
 					geoId={geoId}
-					header={
-						<StudentHeader
-							geoId={geoId}
-							productKey={productKey}
-							ratePlanKey={ratePlanKey}
-							landingPageVariant={landingPageVariant}
-							studentDiscount={studentDiscount}
-							headingCopy={`No owner. No agenda. No more than ${studentDiscount.discountPriceWithCurrency} a year for students`}
-							subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
-						/>
-					}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					landingPageVariant={landingPageVariant}
+					studentDiscount={studentDiscount}
 				/>
 			)}
 		</>
