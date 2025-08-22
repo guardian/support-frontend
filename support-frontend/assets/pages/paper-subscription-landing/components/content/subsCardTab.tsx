@@ -85,30 +85,27 @@ export function SubsCardFaqBlock() {
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={faqsContainer}>
 				<p css={paragraphSpacing}>
-					The Guardian subscription card can be used at any of the 40,000 shops
-					and supermarkets with news kiosks in the UK such as McColl&apos;s,
-					Co-op, One Stop and selected SPAR stores.
-				</p>
-				<p css={paragraphSpacing}>
-					You can collect the newspaper from your local store or have your
-					copies delivered by your newsagent.
+					Use your Guardian subscription card to pick up your paper in over
+					40,000 UK shops with news kiosks, including Co-op, McColl&apos;s, One
+					Stop, and select SPAR stores. Or use your card to arrange your own
+					delivery through a local newsagent.
 				</p>
 				<div css={accordionContainer}>
 					<Accordion>
 						<TabAccordionRow
 							trackingId={collectonAccordionTrackingId}
-							label="Collecting from multiple newsagents"
+							label="How to collect in store"
 						>
 							<>
 								<p>
-									Present your card to a newsagent each time you collect the
-									newspaper. The newsagent will scan your card and will be
-									reimbursed for each transaction automatically.
+									To pick up your paper from multiple newsagents, present your
+									Guardian subscription card each time &mdash; they&apos;ll scan
+									it and be reimbursed automatically.
 								</p>
 								<p>
 									<LinkToInfo
 										trackingId={collectonAccordionTrackingId}
-										url="https://imovo.org/guardianstorefinder"
+										url="https://digitalvouchers-production-storefinder.azurewebsites.net/map/go"
 										copy="Find your nearest participating retailer"
 									/>
 								</p>
@@ -116,19 +113,14 @@ export function SubsCardFaqBlock() {
 						</TabAccordionRow>
 						<TabAccordionRow
 							trackingId={deliveryAccordionTrackingId}
-							label="Delivery from your retailer"
+							label="How to arrange your own delivery"
 						>
 							<>
 								<p>
-									Simply give your preferred store / retailer the barcode
-									printed on your Home Delivery Letter.
-								</p>
-								<p>
-									<LinkToInfo
-										trackingId={deliveryAccordionTrackingId}
-										url="https://www.delivermynewspaper.co.uk"
-										copy="Find your nearest delivery retailer"
-									/>
+									If you prefer to arrange your own delivery with your local
+									retailer, simply share the barcode from your Home Delivery
+									Letter with your chosen newsagent. You will receive your Home
+									Delivery Letter along with your Guardian subscription card.
 								</p>
 							</>
 						</TabAccordionRow>

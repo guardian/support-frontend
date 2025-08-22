@@ -1,3 +1,5 @@
+<!-- Note: Please label your PR with one of "Feature", "Change failure fix" or "Maintenance"! -->
+
 <!-- all sections optional, delete any you don't need -->
 ## What are you doing in this PR?
 

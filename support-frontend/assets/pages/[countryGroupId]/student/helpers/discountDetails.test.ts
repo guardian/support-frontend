@@ -1,11 +1,36 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { getDiscountDuration, getDiscountSummary } from './discountDetails';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import {
+	getDiscountDuration,
+	getDiscountSummary,
+	getStudentDiscount,
+} from './discountDetails';
+
+jest.mock('helpers/productPrice/promotions');
+
+jest.mock('helpers/productPrice/productPrices', () => ({
+	allProductPrices: {
+		SupporterPlus: {},
+	},
+}));
+
+jest.mock('helpers/productCatalog', () => ({
+	productCatalog: {
+		SupporterPlus: {
+			ratePlans: {
+				Monthly: { pricing: { USD: 10, AUD: '10' } },
+				Annual: { pricing: { USD: 150, AUD: '120' } },
+				OneYearStudent: { pricing: { USD: 10 } },
+			},
+		},
+	},
+}));
 
 describe('Discount Details', () => {
 	describe('getDiscountSummary', () => {
 		it('handles 1-month discount for monthly billing', () => {
 			const result = getDiscountSummary({
-				priceWithCurrency: '£10',
+				fullPriceWithCurrency: '£10',
 				discountPriceWithCurrency: '£6',
 				durationInMonths: 1,
 				billingPeriod: BillingPeriod.Monthly,
@@ -16,7 +41,7 @@ describe('Discount Details', () => {
 
 		it('handles 6-month discount for monthly billing', () => {
 			const result = getDiscountSummary({
-				priceWithCurrency: '£10',
+				fullPriceWithCurrency: '£10',
 				discountPriceWithCurrency: '£6.50',
 				durationInMonths: 6,
 				billingPeriod: BillingPeriod.Monthly,
@@ -27,7 +52,7 @@ describe('Discount Details', () => {
 
 		it('handles 1-year discount for annual billing', () => {
 			const result = getDiscountSummary({
-				priceWithCurrency: '£275',
+				fullPriceWithCurrency: '£275',
 				discountPriceWithCurrency: '£173',
 				durationInMonths: 12,
 				billingPeriod: BillingPeriod.Annual,
@@ -38,7 +63,7 @@ describe('Discount Details', () => {
 
 		it('handles multiple years of discount for annual billing', () => {
 			const result = getDiscountSummary({
-				priceWithCurrency: '£300',
+				fullPriceWithCurrency: '£300',
 				discountPriceWithCurrency: '£200',
 				durationInMonths: 24,
 				billingPeriod: BillingPeriod.Annual,
@@ -82,6 +107,45 @@ describe('Discount Details', () => {
 				durationInMonths: 18,
 			});
 			expect(result).toBe('18 months');
+		});
+	});
+
+	describe('getStudentDiscount', () => {
+		beforeEach(() => {
+			jest.resetAllMocks();
+		});
+
+		it('returns discount data from ratePlan comparison no promotion exists', () => {
+			(getPromotion as jest.Mock).mockReturnValue(undefined);
+
+			const result = getStudentDiscount('us', 'OneYearStudent');
+
+			expect(result).toEqual({
+				amount: 10,
+				discountPriceWithCurrency: '$10',
+				fullPriceWithCurrency: '$150',
+				periodNoun: 'year',
+			});
+		});
+
+		it('returns discount data when promotion exists with discounted price', () => {
+			(getPromotion as jest.Mock).mockReturnValue({
+				discountedPrice: 5,
+				promoCode: 'PROMO50',
+				discount: { durationMonths: 3 },
+			});
+
+			const result = getStudentDiscount('au', 'Monthly');
+
+			expect(result).toEqual({
+				amount: 5,
+				discountPriceWithCurrency: '$5',
+				fullPriceWithCurrency: '$10',
+				promoDuration: '3 months',
+				periodNoun: 'month',
+				promoCode: 'PROMO50',
+				discountSummary: '$5/month for 3 months, then $10/month',
+			});
 		});
 	});
 });

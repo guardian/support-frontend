@@ -41,6 +41,7 @@ import { Country } from 'helpers/internationalisation/classes/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import { contributionTypeToBillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { allProductPrices } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -50,6 +51,7 @@ import { getSanitisedHtml } from '../../../helpers/utilities/utilities';
 import Countdown from '../components/countdown';
 import { LandingPageBanners } from '../components/landingPageBanners';
 import { OneOffCard } from '../components/oneOffCard';
+import { StudentOffer } from '../components/studentOffer';
 import { SupportOnce } from '../components/supportOnce';
 import type { CardContent } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
@@ -80,11 +82,15 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = css`
+const lightContainer = css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[5]}px 72px;
+		padding: ${space[5]}px;
+
+		${from.tablet} {
+			padding: ${space[5]}px 72px;
+		}
 	}
 `;
 
@@ -291,6 +297,10 @@ export function ThreeTierLanding({
 		campaignSettings?.enableSingleContributions ??
 		urlSearchParams.has('enableOneTime');
 
+	const enableStudentOffer =
+		['uk', 'us', 'ca'].includes(geoId) &&
+		urlSearchParams.has('enableStudentOffer');
+
 	const getInitialContributionType = () => {
 		if (enableSingleContributionsTab && urlSearchParamsOneTime) {
 			return 'ONE_OFF';
@@ -368,7 +378,7 @@ export function ThreeTierLanding({
 	});
 
 	const tier2Promotion = getPromotion(
-		window.guardian.allProductPrices.SupporterPlus,
+		allProductPrices.SupporterPlus,
 		countryId,
 		billingPeriod,
 	);
@@ -428,7 +438,7 @@ export function ThreeTierLanding({
 		ratePlan: tier3RatePlan,
 	});
 	const tier3Promotion = getPromotion(
-		window.guardian.allProductPrices.TierThree,
+		allProductPrices.TierThree,
 		countryId,
 		billingPeriod,
 		countryGroupId === 'International' ? 'RestOfWorld' : 'Domestic',
@@ -611,10 +621,22 @@ export function ThreeTierLanding({
 				<Container
 					sideBorders
 					borderColor="rgba(170, 170, 180, 0.5)"
-					cssOverrides={oneTimeContainer}
+					cssOverrides={lightContainer}
 				>
 					<SupportOnce
 						currency={currencies[currencyId].glyph}
+						countryGroupId={countryGroupId}
+					/>
+				</Container>
+			)}
+			{enableStudentOffer && (
+				<Container
+					sideBorders
+					borderColor="rgba(170, 170, 180, 0.5)"
+					cssOverrides={lightContainer}
+				>
+					<StudentOffer
+						currencyKey={currencyId}
 						countryGroupId={countryGroupId}
 					/>
 				</Container>
