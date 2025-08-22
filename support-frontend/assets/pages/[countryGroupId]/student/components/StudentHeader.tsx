@@ -25,6 +25,7 @@ interface StudentHeaderProps {
 	landingPageVariant: LandingPageVariant;
 	studentDiscount: StudentDiscount;
 	headingCopy: string;
+	subheading: React.ReactNode;
 	universityBadge?: React.ReactNode;
 }
 
@@ -37,7 +38,7 @@ export default function StudentHeader({
 	headingCopy,
 	universityBadge,
 }: StudentHeaderProps) {
-	const { amount, promoDuration, promoCode, discountSummary } = studentDiscount;
+	const { amount, promoCode, discountSummary } = studentDiscount;
 	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
 		geoId,
@@ -58,17 +59,7 @@ export default function StudentHeader({
 			{universityBadge}
 			<div css={headingWrapper}>
 				<h1 css={heading}>{headingCopy}</h1>
-				<p css={subHeading}>
-					For a limited time, students with a valid UTS email address can unlock
-					the premium experience of Guardian journalism, including unmetered app
-					access
-					{promoDuration && (
-						<>
-							, <strong>free for {promoDuration}</strong>
-						</>
-					)}
-					.
-				</p>
+				<p css={subHeading}></p>
 			</div>
 			<div css={cardContainer}>
 				<StudentProductCard
