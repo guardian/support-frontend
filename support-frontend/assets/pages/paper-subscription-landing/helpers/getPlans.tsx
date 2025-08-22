@@ -227,10 +227,7 @@ export const getPlans = (
 			fulfilmentOption,
 			productOption,
 		);
-		const label =
-			productOption === 'Everyday' || productOption === 'EverydayPlus'
-				? 'Best deal'
-				: '';
+		const label = productOption === 'SixdayPlus' ? 'Most popular' : '';
 		const productLabel = getProductLabel(productOption);
 		return {
 			title: getTitle(productOption),
