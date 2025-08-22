@@ -1,5 +1,4 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import {
 	getDiscountDuration,
 	getDiscountSummary,
@@ -116,10 +115,11 @@ describe('Discount Details', () => {
 		});
 
 		it('returns discount data from ratePlan comparison no promotion exists', () => {
-			(getPromotion as jest.Mock).mockReturnValue(undefined);
-
-			const result = getStudentDiscount('us', 'OneYearStudent');
-
+			const result = getStudentDiscount(
+				'us',
+				'OneYearStudent',
+				'SupporterPlus',
+			);
 			expect(result).toEqual({
 				amount: 10,
 				discountPriceWithCurrency: '$10',
@@ -129,22 +129,29 @@ describe('Discount Details', () => {
 		});
 
 		it('returns discount data when promotion exists with discounted price', () => {
-			(getPromotion as jest.Mock).mockReturnValue({
-				discountedPrice: 5,
-				promoCode: 'PROMO50',
-				discount: { durationMonths: 3 },
-			});
+			const promotion = {
+				name: 'AU_STUDENT_100',
+				description: '100% discount for Australian students',
+				promoCode: 'UTS_STUDENT',
+				discount: { amount: 100, durationMonths: 24 },
+				discountedPrice: 0,
+				numberOfDiscountedPeriods: 24,
+			};
 
-			const result = getStudentDiscount('au', 'Monthly');
-
+			const result = getStudentDiscount(
+				'au',
+				'Monthly',
+				'SupporterPlus',
+				promotion,
+			);
 			expect(result).toEqual({
-				amount: 5,
-				discountPriceWithCurrency: '$5',
-				fullPriceWithCurrency: '$10',
-				promoDuration: '3 months',
+				amount: 0,
 				periodNoun: 'month',
-				promoCode: 'PROMO50',
-				discountSummary: '$5/month for 3 months, then $10/month',
+				discountPriceWithCurrency: '$0',
+				fullPriceWithCurrency: '$10',
+				promoDuration: 'two years',
+				promoCode: 'UTS_STUDENT',
+				discountSummary: '$0/month for two years, then $10/month',
 			});
 		});
 	});

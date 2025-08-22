@@ -46,6 +46,13 @@ const checkListData = [
 	},
 ];
 
+const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
+
 export default {
 	title: 'Checkouts/Contributions Order Summary',
 	component: ContributionsOrderSummary,
@@ -79,7 +86,6 @@ function Template(props: ContributionsOrderSummaryProps) {
 Template.args = {} as ContributionsOrderSummaryProps;
 
 export const Default = Template.bind({});
-
 Default.args = {
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
@@ -112,7 +118,6 @@ Default.args = {
 };
 
 export const SingleContribution = Template.bind({});
-
 SingleContribution.args = {
 	productKey: 'Contribution',
 	ratePlanKey: 'OneTime',
@@ -136,7 +141,6 @@ SingleContribution.args = {
 };
 
 export const RecurringContribution = Template.bind({});
-
 RecurringContribution.args = {
 	productKey: 'SupporterMembership',
 	ratePlanKey: 'Monthly',
@@ -171,9 +175,8 @@ RecurringContribution.args = {
 };
 
 export const SupporterPlus = Template.bind({});
-
 SupporterPlus.args = {
-	productKey: 'TierThree',
+	productKey: 'SupporterPlus',
 	ratePlanKey: 'Monthly',
 	productDescription: 'All-access Digital',
 	enableCheckList: true,
@@ -207,7 +210,6 @@ SupporterPlus.args = {
 };
 
 export const TierThree = Template.bind({});
-
 TierThree.args = {
 	productKey: 'TierThree',
 	ratePlanKey: 'Monthly',
@@ -249,4 +251,41 @@ TierThree.args = {
 			Change
 		</Button>
 	),
+};
+
+export const StudentOneYear = Template.bind({});
+StudentOneYear.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'OneYearStudent',
+	productDescription: 'All-access Digital',
+	paymentFrequency: 'year',
+	enableCheckList: true,
+	amount: 120,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
+	checkListData: [
+		...productCatalogDescription.SupporterPlus.benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+		})),
+	],
+	tsAndCs: (
+		<OrderSummaryTsAndCs
+			productKey={'SupporterPlus'}
+			ratePlanKey={'OneYearStudent'}
+			countryGroupId={GBPCountries}
+			thresholdAmount={9}
+		/>
+	),
+	startDate: null,
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	studentDiscount: oneYearStudentDiscount,
 };

@@ -24,6 +24,7 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 
 const componentStyles = css`
 	${textSans17}
@@ -153,6 +154,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	studentDiscount?: StudentDiscount;
 };
 
 const visuallyHiddenCss = css`
@@ -174,6 +176,7 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	studentDiscount,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -190,11 +193,19 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
-	const formattedAmount = simpleFormatAmount(currency, amount);
-
-	const formattedPromotionAmount =
+	const fullPrice =
+		studentDiscount?.fullPriceWithCurrency ??
+		simpleFormatAmount(currency, amount);
+	const promoDiscountPrice =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
+	const discountPrice =
+		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
+	const period = studentDiscount?.periodNoun ?? paymentFrequency;
+
+	function displayPeriod(price: string): string {
+		return `${price}${period ? `/${period}` : ''}`;
+	}
 
 	return (
 		<div css={componentStyles}>
@@ -245,25 +256,17 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{formattedPromotionAmount && (
+					{discountPrice && (
 						<>
 							<span css={originalPriceStrikeThrough}>
 								<span css={visuallyHiddenCss}>Was </span>
-								{formattedAmount}
+								{fullPrice}
 								<span css={visuallyHiddenCss}>, now</span>
 							</span>{' '}
-							{paymentFrequency
-								? `${formattedPromotionAmount}/${paymentFrequency}`
-								: formattedPromotionAmount}
+							{displayPeriod(discountPrice)}
 						</>
 					)}
-					{!formattedPromotionAmount && (
-						<>
-							{paymentFrequency
-								? `${formattedAmount}/${paymentFrequency}`
-								: formattedAmount}
-						</>
-					)}
+					{!discountPrice && <>{displayPeriod(fullPrice)}</>}
 				</p>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}

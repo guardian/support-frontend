@@ -53,7 +53,8 @@ export function SummaryTsAndCs({
 	const renewalFrequency = `${renewalDateStart}${
 		billingPeriod === BillingPeriod.Annual ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
-
+	// Display for AUS Students who are on a subscription basis
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
@@ -93,12 +94,17 @@ export function SummaryTsAndCs({
 			</div>
 		),
 		SupporterPlus: (
-			<div css={containerSummaryTsCs}>
-				The {productCatalogDescription[productKey].label} subscription and any
-				contribution will auto-renew each {periodNoun}. You will be charged the
-				subscription and contribution amounts using your chosen payment method
-				at each renewal, at the rate then in effect, unless you cancel.
-			</div>
+			<>
+				{!isStudentOneYearRatePlan && (
+					<div css={containerSummaryTsCs}>
+						The {productCatalogDescription[productKey].label} subscription and
+						any contribution will auto-renew each {periodNoun}. You will be
+						charged the subscription and contribution amounts using your chosen
+						payment method at each renewal, at the rate then in effect, unless
+						you cancel.
+					</div>
+				)}
+			</>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,
