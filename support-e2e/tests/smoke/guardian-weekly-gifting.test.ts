@@ -2,12 +2,12 @@ import test from '@playwright/test';
 import { visitLandingPageAndCompleteCheckout } from '../utils/visitLandingPageAndCompleteCheckout';
 
 const giftTests = [
-	// {
-	// 	product: 'GuardianWeeklyDomestic',
-	// 	ratePlan: '3MonthGift',
-	// 	paymentType: 'Credit/Debit card',
-	// 	internationalisationId: 'UK',
-	// },
+	{
+		product: 'GuardianWeeklyDomestic',
+		ratePlan: '3MonthGift',
+		paymentType: 'Credit/Debit card',
+		internationalisationId: 'UK',
+	},
 	{
 		product: 'GuardianWeeklyDomestic',
 		ratePlan: '3MonthGift',
@@ -20,12 +20,12 @@ const giftTests = [
 		paymentType: 'Credit/Debit card',
 		internationalisationId: 'INT',
 	},
-	// {
-	// 	product: 'GuardianWeeklyDomestic',
-	// 	ratePlan: 'OneYearGift',
-	// 	paymentType: 'Direct debit',
-	// 	internationalisationId: 'UK',
-	// },
+	{
+		product: 'GuardianWeeklyDomestic',
+		ratePlan: 'OneYearGift',
+		paymentType: 'Direct debit',
+		internationalisationId: 'UK',
+	},
 ];
 
 test.describe('Guardian Weekly Gift Checkout', () =>
