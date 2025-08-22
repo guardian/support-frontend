@@ -82,9 +82,9 @@ export const setGiftingCoreDetails = async (
 export const setTestUserDetails = async (
 	page: Page,
 	product: string,
-	ratePlan: string,
 	internationalisationId: string,
 	testFields: TestFields,
+	ratePlan: string,
 ) => {
 	const stateLabel = internationalisationId === 'CA' ? 'Province' : 'State';
 	if (['3MonthGift', 'OneYearGift'].includes(ratePlan)) {

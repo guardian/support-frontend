@@ -164,8 +164,8 @@ export function PersonalDetailsFields({
 				{isWeeklyGift && billingStatePostcode && (
 					<BillingAddressFields
 						countryId={countryId}
-						countries={countries}
 						billingStatePostcode={billingStatePostcode}
+						countries={countries}
 					/>
 				)}
 			</FormSection>

@@ -11,8 +11,8 @@ type TestDetails = {
 	product: string;
 	paymentType: string;
 	internationalisationId: string;
-	ratePlan?: string;
 	postCode?: string;
+	ratePlan?: string;
 };
 
 const recaptchaAndSubmit = async (page: Page) => {
@@ -33,9 +33,9 @@ export const completeGenericCheckout = async (
 	await setTestUserDetails(
 		page,
 		product,
-		ratePlan,
 		internationalisationId,
 		getUserFields(internationalisationId, postCode),
+		ratePlan,
 	);
 
 	await page.getByRole('radio', { name: paymentType }).check();
