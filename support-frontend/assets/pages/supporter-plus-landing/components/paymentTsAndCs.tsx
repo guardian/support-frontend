@@ -184,7 +184,8 @@ export function PaymentTsAndCs({
 	const subscriptionBasis = !isStudentOneYearRatePlan
 		? ' on a subscription basis'
 		: '';
-	const supporterPlusStartTsAndCs = `If you pay at least ${legalPrice}, you will receive the ${productLabel} benefits${subscriptionBasis}. If you increase your payments per ${billingPeriodSingular}, these additional amounts will be separate ${billingPeriodPlural} voluntary financial contributions to the Guardian. `;
+	const supporterPlusStudentStartTsAndCs = `If you pay at least ${legalPrice}, you will receive the ${productLabel} benefits${subscriptionBasis}. `;
+	const supporterPlusStartTsAndCs = `${supporterPlusStudentStartTsAndCs}If you increase your payments per ${billingPeriodSingular}, these additional amounts will be separate ${billingPeriodPlural} voluntary financial contributions to the Guardian. `;
 	const supporterPlusEndCopy = `You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a ${productLabel} subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current ${billingPeriodPlural} payment period. To cancel, go to `;
 	const supporterPlusEndTsAndCs = (
 		<>
@@ -206,7 +207,7 @@ export function PaymentTsAndCs({
 	);
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			{supporterPlusStartTsAndCs}
+			{supporterPlusStudentStartTsAndCs}
 			{supporterPlusEndTsAndCs}
 		</>
 	);
