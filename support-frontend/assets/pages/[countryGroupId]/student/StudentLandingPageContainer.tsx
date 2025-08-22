@@ -41,12 +41,16 @@ export function StudentLandingPageContainer({
 	);
 
 	return (
-		<StudentLandingPage
-			geoId={geoId}
-			productKey={productKey}
-			ratePlanKey={ratePlanKey}
-			landingPageVariant={landingPageVariant}
-			studentDiscount={studentDiscount}
-		/>
+		<>
+			{studentDiscount && (
+				<StudentLandingPage
+					geoId={geoId}
+					productKey={productKey}
+					ratePlanKey={ratePlanKey}
+					landingPageVariant={landingPageVariant}
+					studentDiscount={studentDiscount}
+				/>
+			)}
+		</>
 	);
 }

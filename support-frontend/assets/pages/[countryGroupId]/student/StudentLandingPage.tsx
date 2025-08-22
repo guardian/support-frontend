@@ -30,7 +30,7 @@ type StudentLandingPageProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
-	studentDiscount?: StudentDiscount;
+	studentDiscount: StudentDiscount;
 };
 
 export function StudentLandingPage({
@@ -69,15 +69,13 @@ export function StudentLandingPage({
 				</FooterWithContents>
 			}
 		>
-			{studentDiscount && (
-				<StudentHeader
-					geoId={geoId}
-					productKey={productKey}
-					ratePlanKey={ratePlanKey}
-					landingPageVariant={landingPageVariant}
-					studentDiscount={studentDiscount}
-				/>
-			)}
+			<StudentHeader
+				geoId={geoId}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				landingPageVariant={landingPageVariant}
+				studentDiscount={studentDiscount}
+			/>
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
 		</PageScaffold>
