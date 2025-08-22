@@ -109,6 +109,16 @@ export function FooterTsAndCs({
 	);
 }
 
+function getStudentPrice(
+	isStudentOneYearRatePlan: boolean,
+	studentDiscount: StudentDiscount,
+): string {
+	const studentPricePeriod = `${studentDiscount.discountPriceWithCurrency} per ${studentDiscount.periodNoun}`;
+	return isStudentOneYearRatePlan
+		? studentDiscount.discountPriceWithCurrency
+		: studentPricePeriod;
+}
+
 export interface PaymentTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
@@ -149,12 +159,8 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	const studentPricePeriod = `${studentDiscount?.discountPriceWithCurrency} per ${studentDiscount?.periodNoun}`;
-	const studentPrice = isStudentOneYearRatePlan
-		? studentDiscount?.discountPriceWithCurrency
-		: studentPricePeriod;
 	const legalPrice = studentDiscount
-		? studentPrice
+		? getStudentPrice(isStudentOneYearRatePlan, studentDiscount)
 		: productLegal(
 				countryGroupId,
 				billingPeriod,
