@@ -25,7 +25,7 @@ interface StudentHeaderProps {
 	landingPageVariant: LandingPageVariant;
 	studentDiscount: StudentDiscount;
 	headingCopy: string;
-	subheading: React.ReactNode;
+	subheadingCopy: React.ReactNode;
 	universityBadge?: React.ReactNode;
 }
 
@@ -36,6 +36,7 @@ export default function StudentHeader({
 	landingPageVariant,
 	studentDiscount,
 	headingCopy,
+	subheadingCopy,
 	universityBadge,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
@@ -59,7 +60,7 @@ export default function StudentHeader({
 			{universityBadge}
 			<div css={headingWrapper}>
 				<h1 css={heading}>{headingCopy}</h1>
-				<p css={subHeading}></p>
+				<p css={subHeading}>{subheadingCopy}</p>
 			</div>
 			<div css={cardContainer}>
 				<StudentProductCard
