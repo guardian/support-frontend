@@ -12,36 +12,18 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
-} from 'helpers/productCatalog';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
-import StudentHeader from './components/StudentHeader';
-import { universityBadge } from './components/StudentHeaderStyles';
 import { StudentTsAndCs } from './components/studentTsAndCs';
-import type { StudentDiscount } from './helpers/discountDetails';
 import { getStudentFAQs } from './helpers/studentFAQs';
 import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
-import LogoUTS from './logos/uts';
 
 type StudentLandingPageProps = {
 	geoId: GeoId;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	landingPageVariant: LandingPageVariant;
-	studentDiscount: StudentDiscount;
+	header: React.ReactNode;
 };
 
-export function StudentLandingPage({
-	geoId,
-	productKey,
-	ratePlanKey,
-	landingPageVariant,
-	studentDiscount,
-}: StudentLandingPageProps) {
+export function StudentLandingPage({ geoId, header }: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(geoId);
 	const tsAndCsItem = getStudentTsAndCs(geoId);
 
@@ -71,32 +53,7 @@ export function StudentLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<StudentHeader
-				geoId={geoId}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={studentDiscount}
-				headingCopy="Subscribe to fearless, independent and inspiring journalism"
-				subheading={
-					<>
-						For a limited time, students with a valid UTS email address can
-						unlock the premium experience of Guardian journalism, including
-						unmetered app access
-						{studentDiscount.promoDuration && (
-							<>
-								, <strong>free for {studentDiscount.promoDuration}</strong>
-							</>
-						)}
-						.
-					</>
-				}
-				universityBadge={
-					<p css={universityBadge}>
-						<LogoUTS /> <span>Special offer for UTS students</span>
-					</p>
-				}
-			/>
+			{header}
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
 		</PageScaffold>
