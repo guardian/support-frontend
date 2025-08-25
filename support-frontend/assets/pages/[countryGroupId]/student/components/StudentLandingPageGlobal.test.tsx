@@ -5,7 +5,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import { StudentLandingPageGlobal } from '../StudentLandingPageGlobal';
+import { StudentLandingPageGlobal } from './StudentLandingPageGlobal';
 
 const oneYearStudentDiscount = {
 	amount: 9,

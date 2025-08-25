@@ -9,8 +9,8 @@ import { ratePlanToBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { allProductPrices } from 'helpers/productPrice/productPrices';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { type GeoId } from 'pages/geoIdConfig';
+import { StudentLandingPageUTS } from './components/StudentLandingPageUTS';
 import { getStudentDiscount } from './helpers/discountDetails';
-import { StudentLandingPageUTS } from './StudentLandingPageUTS';
 
 export function StudentLandingPageUTSContainer({
 	landingPageVariant,
