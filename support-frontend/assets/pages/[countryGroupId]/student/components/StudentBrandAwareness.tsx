@@ -21,7 +21,11 @@ const container = css`
 	}
 `;
 
-const copySection = css``;
+const copySection = css`
+	${from.desktop} {
+		max-width: 530px;
+	}
+`;
 
 const bodyContainer = css`
 	${article17};
@@ -54,6 +58,10 @@ const imageSection = css`
 		display: flex;
 		align-items: flex-end;
 		justify-content: flex-end;
+	}
+
+	${from.desktop} {
+		flex-grow: 1;
 	}
 `;
 
