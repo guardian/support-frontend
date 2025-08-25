@@ -5,8 +5,14 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { oneYearStudentDiscount } from 'pages/[countryGroupId]/student/components/StudentHeader.test';
 import { PaymentTsAndCs } from './paymentTsAndCs';
+
+const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
 
 describe('Payment Ts&Cs Snapshot comparison', () => {
 	const promotionTierThreeUnitedStatesMonthly: Promotion = {
