@@ -1,17 +1,24 @@
 import { render, screen } from '@testing-library/react';
-import {
-	auStudentDiscount,
-	oneYearStudentDiscount,
-} from './StudentHeader.test';
 import StudentPrice from './StudentPrice';
 
-jest.mock('../helpers/discountDetails');
+const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
+
+const auStudentDiscount = {
+	amount: 0,
+	periodNoun: 'month',
+	discountPriceWithCurrency: '$0',
+	fullPriceWithCurrency: '$20',
+	promoCode: 'UTS_STUDENT',
+	promoDuration: 'two years',
+	discountSummary: '$0/month for two years, then $20/month',
+};
 
 describe('StudentPrice Component', () => {
-	beforeEach(() => {
-		jest.resetAllMocks();
-	});
-
 	it('renders only the full price when no discount is applied', () => {
 		render(<StudentPrice studentDiscount={oneYearStudentDiscount} />);
 		expect(screen.getByText('£9')).toBeInTheDocument();
