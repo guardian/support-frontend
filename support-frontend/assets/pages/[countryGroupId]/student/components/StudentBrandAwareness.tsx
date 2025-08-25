@@ -3,7 +3,7 @@ import { article17, from, palette, space } from '@guardian/source/foundations';
 
 const container = css`
 	background-color: ${palette.brand[800]};
-	border-radius: 12px;
+	border-radius: ${space[3]}px;
 	display: flex;
 	flex-direction: column;
 	padding: ${space[5]}px ${space[4]}px;
@@ -21,7 +21,7 @@ const container = css`
 	}
 `;
 
-const copyContainer = css``;
+const copySection = css``;
 
 const bodyContainer = css`
 	${article17};
@@ -30,6 +30,30 @@ const bodyContainer = css`
 
 	p + p {
 		margin-top: ${space[4]}px;
+	}
+`;
+
+const headerImageContainer = css`
+	max-width: 310px;
+
+	${from.tablet} {
+		width: 310px;
+	}
+
+	${from.tablet} {
+		width: 375px;
+	}
+`;
+
+const headerImage = css`
+	object-fit: contain;
+`;
+
+const imageSection = css`
+	${from.tablet} {
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
 	}
 `;
 
@@ -49,8 +73,12 @@ const image = css`
 export const StudentBrandAwareness = () => {
 	return (
 		<div css={container}>
-			<div css={copyContainer}>
-				<h1>Understand the world with the Guardian</h1>
+			<div css={copySection}>
+				<div css={headerImageContainer}>
+					<h1>
+						<img css={headerImage} src="https://placehold.co/310x100" />
+					</h1>
+				</div>
 				<div css={bodyContainer}>
 					<p>
 						Whatever you&apos;re studying, quality news is a critical tool for
@@ -66,8 +94,10 @@ export const StudentBrandAwareness = () => {
 					</p>
 				</div>
 			</div>
-			<div css={imageContainer}>
-				<img css={image} src="https://placehold.co/375" />
+			<div css={imageSection}>
+				<div css={imageContainer}>
+					<img css={image} src="https://placehold.co/375" />
+				</div>
 			</div>
 		</div>
 	);
