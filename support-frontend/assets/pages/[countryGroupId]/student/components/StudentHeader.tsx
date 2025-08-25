@@ -13,6 +13,7 @@ import {
 	containerCardsAndSignIn,
 	heading,
 	headingWrapper,
+	notAStudentContainer,
 	subHeading,
 } from './StudentHeaderStyles';
 import StudentPrice from './StudentPrice';
@@ -98,6 +99,15 @@ export default function StudentHeader({
 					fallbackSize={574}
 					altText=""
 				/>
+			</div>
+			<div css={notAStudentContainer}>
+				<p>
+					<span>Not a student?</span>{' '}
+					<span>
+						Explore our other{' '}
+						<a href={`/${geoId}/contribute`}>support options</a>
+					</span>
+				</p>
 			</div>
 		</Container>
 	);
