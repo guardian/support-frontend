@@ -5,23 +5,9 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import StudentHeader from './StudentHeader';
+import { StudentLandingPageUTS } from '../StudentLandingPageUTS';
 
-jest.mock('../helpers/discountDetails');
-jest.mock('../helpers/buildCheckoutUrl');
-
-jest.mock('components/gridPicture/gridPicture', () => ({
-	__esModule: true,
-	default: jest.fn(() => <div data-testid="grid-picture">Grid Images</div>),
-}));
-
-export const oneYearStudentDiscount = {
-	amount: 9,
-	periodNoun: 'year',
-	discountPriceWithCurrency: '£9',
-	fullPriceWithCurrency: '£120',
-};
-export const auStudentDiscount = {
+const auStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -31,7 +17,7 @@ export const auStudentDiscount = {
 	discountSummary: '$0/month for two years, then $20/month',
 };
 
-describe('<StudentHeader />', () => {
+describe('<StudentLandingPageUTS />', () => {
 	const geoId: GeoId = 'us';
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
@@ -43,19 +29,14 @@ describe('<StudentHeader />', () => {
 		},
 	} as unknown as LandingPageVariant;
 
-	beforeEach(() => {
-		jest.resetAllMocks();
-	});
-
 	it('shows promo duration in the subheading when provided', () => {
 		render(
-			<StudentHeader
+			<StudentLandingPageUTS
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
-				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(
@@ -65,13 +46,12 @@ describe('<StudentHeader />', () => {
 
 	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
 		render(
-			<StudentHeader
+			<StudentLandingPageUTS
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
-				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -79,29 +59,14 @@ describe('<StudentHeader />', () => {
 		);
 	});
 
-	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
-		render(
-			<StudentHeader
-				geoId={geoId}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={oneYearStudentDiscount}
-				headingCopy="Subscribe to fearless, independent and inspiring journalism"
-			/>,
-		);
-		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
-	});
-
 	it('passes discountSummary through to StudentProductCard', () => {
 		render(
-			<StudentHeader
+			<StudentLandingPageUTS
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={auStudentDiscount}
-				headingCopy="Subscribe to fearless, independent and inspiring journalism"
 			/>,
 		);
 		expect(
