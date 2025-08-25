@@ -4,8 +4,8 @@ import {
 	type ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { type GeoId } from 'pages/geoIdConfig';
-import StudentHeader from './components/StudentHeader';
-import type { StudentDiscount } from './helpers/discountDetails';
+import type { StudentDiscount } from '../helpers/discountDetails';
+import StudentHeader from './StudentHeader';
 import { StudentLandingPage } from './StudentLandingPage';
 
 export function StudentLandingPageGlobal({

@@ -13,10 +13,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { AccordionFAQ } from '../components/accordionFAQ';
-import { StudentTsAndCs } from './components/studentTsAndCs';
-import { getStudentFAQs } from './helpers/studentFAQs';
-import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
+import { AccordionFAQ } from '../../components/accordionFAQ';
+import { getStudentFAQs } from '../helpers/studentFAQs';
+import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
+import { StudentTsAndCs } from './studentTsAndCs';
 
 type StudentLandingPageProps = {
 	geoId: GeoId;

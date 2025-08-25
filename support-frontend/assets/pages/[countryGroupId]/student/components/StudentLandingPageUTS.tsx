@@ -4,10 +4,10 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import { type GeoId } from 'pages/geoIdConfig';
-import StudentHeader from './components/StudentHeader';
-import { universityBadge } from './components/StudentHeaderStyles';
-import type { StudentDiscount } from './helpers/discountDetails';
-import LogoUTS from './logos/uts';
+import type { StudentDiscount } from '../helpers/discountDetails';
+import LogoUTS from '../logos/uts';
+import StudentHeader from './StudentHeader';
+import { universityBadge } from './StudentHeaderStyles';
 import { StudentLandingPage } from './StudentLandingPage';
 
 export function StudentLandingPageUTS({

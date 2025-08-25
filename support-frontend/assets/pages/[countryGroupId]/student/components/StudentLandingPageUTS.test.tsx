@@ -5,7 +5,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import { StudentLandingPageUTS } from '../StudentLandingPageUTS';
+import { StudentLandingPageUTS } from './StudentLandingPageUTS';
 
 const auStudentDiscount = {
 	amount: 0,
