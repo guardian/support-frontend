@@ -6,7 +6,7 @@ const container = css`
 	border-radius: ${space[3]}px;
 	display: flex;
 	flex-direction: column;
-	padding: ${space[5]}px ${space[4]}px;
+	padding: ${space[5]}px ${space[4]}px 10px ${space[4]}px;
 	gap: ${space[6]}px;
 
 	${from.tablet} {
@@ -54,8 +54,11 @@ const headerImage = css`
 `;
 
 const imageSection = css`
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+
 	${from.tablet} {
-		display: flex;
 		align-items: flex-end;
 		justify-content: flex-end;
 	}
@@ -66,6 +69,9 @@ const imageSection = css`
 `;
 
 const imageContainer = css`
+	min-width: 240px;
+	max-width: 240px;
+
 	${from.tablet} {
 		min-width: 260px;
 		max-width: 260px;
