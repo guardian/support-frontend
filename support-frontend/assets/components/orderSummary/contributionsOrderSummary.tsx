@@ -7,7 +7,6 @@ import {
 	space,
 	textSans14,
 	textSans17,
-	visuallyHidden,
 } from '@guardian/source/foundations';
 import {
 	Button,
@@ -25,6 +24,7 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
 	${textSans17}
@@ -93,11 +93,6 @@ const buttonOverrides = css`
 	}
 `;
 
-const originalPriceStrikeThrough = css`
-	font-weight: 400;
-	text-decoration: line-through;
-`;
-
 const iconCss = (flip: boolean) => css`
 	svg {
 		max-width: ${space[4]}px;
@@ -157,10 +152,6 @@ export type ContributionsOrderSummaryProps = {
 	studentDiscount?: StudentDiscount;
 };
 
-const visuallyHiddenCss = css`
-	${visuallyHidden};
-`;
-
 export function ContributionsOrderSummary({
 	productKey,
 	productDescription,
@@ -202,10 +193,6 @@ export function ContributionsOrderSummary({
 	const discountPrice =
 		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
 	const period = studentDiscount?.periodNoun ?? paymentFrequency;
-
-	function displayPeriod(price: string): string {
-		return `${price}${period ? `/${period}` : ''}`;
-	}
 
 	return (
 		<div css={componentStyles}>
@@ -255,20 +242,11 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
-				<p>
-					{discountPrice ? (
-						<>
-							<span css={originalPriceStrikeThrough}>
-								<span css={visuallyHiddenCss}>Was </span>
-								{fullPrice}
-								<span css={visuallyHiddenCss}>, now</span>
-							</span>{' '}
-							{displayPeriod(discountPrice)}
-						</>
-					) : (
-						displayPeriod(fullPrice)
-					)}
-				</p>
+				<PriceSummary
+					fullPrice={fullPrice}
+					period={period}
+					discountPrice={discountPrice}
+				/>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>
