@@ -9,6 +9,7 @@ type TestDetails = {
 	paymentType: string;
 	internationalisationId: string;
 	postCode?: string;
+	ratePlan?: string;
 };
 
 export const visitLandingPageAndCompleteCheckout = async (
@@ -23,6 +24,7 @@ export const visitLandingPageAndCompleteCheckout = async (
 		paymentType,
 		internationalisationId,
 		postCode,
+		ratePlan,
 	} = testDetails;
 	const page = await context.newPage();
 	await setupPage(page, context, baseURL, landingPagePath);
@@ -42,5 +44,6 @@ export const visitLandingPageAndCompleteCheckout = async (
 		paymentType,
 		internationalisationId,
 		postCode,
+		ratePlan,
 	});
 };

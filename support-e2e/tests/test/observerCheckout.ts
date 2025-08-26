@@ -34,6 +34,7 @@ export const testObserverCheckout = (testDetails: TestDetails) => {
 			product,
 			internationalisationId,
 			getUserFields(internationalisationId, postCode),
+			ratePlan,
 		);
 		await page.getByRole('radio', { name: paymentType }).check();
 		await page.getByRole('button', { name: `Pay` }).click();
