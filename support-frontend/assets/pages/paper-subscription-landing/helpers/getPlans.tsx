@@ -235,6 +235,7 @@ export const getPlans = (
 			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
+			fulfilmentOptions: fulfilmentOption,
 			buttonCopy: 'Subscribe',
 			priceCopy: getPriceCopyString(
 				nonDiscountedPrice,

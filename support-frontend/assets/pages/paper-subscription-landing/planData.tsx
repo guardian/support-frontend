@@ -9,18 +9,23 @@ const benefitStyle = css`
 export type PlanData = {
 	description: JSX.Element;
 	benefits: {
-		label: JSX.Element;
+		label: { HomeDelivery: JSX.Element; Collection: JSX.Element };
 		items: JSX.Element[];
 	};
 	digitalRewards?: {
-		label: JSX.Element;
+		label: { HomeDelivery: JSX.Element; Collection: JSX.Element };
 		items: JSX.Element[];
 	};
 };
 
-const benefitsLabel = (
+const benefitsHomeDeliveryLabel = (
 	<>
 		Enjoy <strong>home delivery</strong> of your newspaper
+	</>
+);
+const benefitsSubscriptionLabel = (
+	<>
+		Collect in store with a <strong>subscription card</strong>
 	</>
 );
 
@@ -70,11 +75,17 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: {
+				HomeDelivery: benefitsHomeDeliveryLabel,
+				Collection: benefitsSubscriptionLabel,
+			},
 			items: [benefitGuardianSixDay, benefitObserverSunday],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: {
+				HomeDelivery: digitalRewardsLabel,
+				Collection: digitalRewardsLabel,
+			},
 			items: baseDigitalRewards,
 		},
 	},
@@ -86,11 +97,17 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: {
+				HomeDelivery: benefitsHomeDeliveryLabel,
+				Collection: benefitsSubscriptionLabel,
+			},
 			items: [benefitGuardianSixDay],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: {
+				HomeDelivery: digitalRewardsLabel,
+				Collection: digitalRewardsLabel,
+			},
 			items: baseDigitalRewards,
 		},
 	},
@@ -103,11 +120,17 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: {
+				HomeDelivery: benefitsHomeDeliveryLabel,
+				Collection: benefitsSubscriptionLabel,
+			},
 			items: [benefitGuardianSaturday, benefitObserverSunday],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: {
+				HomeDelivery: digitalRewardsLabel,
+				Collection: digitalRewardsLabel,
+			},
 			items: baseDigitalRewards,
 		},
 	},
@@ -119,11 +142,17 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: {
+				HomeDelivery: benefitsHomeDeliveryLabel,
+				Collection: benefitsSubscriptionLabel,
+			},
 			items: [benefitGuardianSaturday],
 		},
 		digitalRewards: {
-			label: digitalRewardsLabel,
+			label: {
+				HomeDelivery: digitalRewardsLabel,
+				Collection: digitalRewardsLabel,
+			},
 			items: baseDigitalRewards,
 		},
 	},
@@ -135,7 +164,10 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: benefitsLabel,
+			label: {
+				HomeDelivery: benefitsHomeDeliveryLabel,
+				Collection: benefitsSubscriptionLabel,
+			},
 			items: [benefitObserverSunday],
 		},
 	},

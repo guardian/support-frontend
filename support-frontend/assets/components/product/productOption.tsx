@@ -7,6 +7,7 @@ import {
 	themeButtonReaderRevenue,
 } from '@guardian/source/react-components';
 import { BillingPeriod } from '@modules/product/billingPeriod';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
@@ -46,6 +47,7 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
+	fulfilmentOptions?: PaperFulfilmentOptions;
 	productLabel?: ProductLabelProps;
 	label?: string;
 	cssOverrides?: SerializedStyles;
