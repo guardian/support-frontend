@@ -28,6 +28,7 @@ interface StudentHeaderProps {
 	headingCopy: string;
 	subheadingCopy: React.ReactNode;
 	universityBadge?: JSX.Element;
+	includeThreeTierLink?: boolean;
 }
 
 export default function StudentHeader({
@@ -39,6 +40,7 @@ export default function StudentHeader({
 	headingCopy,
 	subheadingCopy,
 	universityBadge,
+	includeThreeTierLink = false,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
 	const { benefits } = landingPageVariant.products.SupporterPlus;
@@ -100,15 +102,17 @@ export default function StudentHeader({
 					altText=""
 				/>
 			</div>
-			<div css={notAStudentContainer}>
-				<p>
-					<span>Not a student?</span>{' '}
-					<span>
-						Explore our other{' '}
-						<a href={`/${geoId}/contribute`}>support options</a>
-					</span>
-				</p>
-			</div>
+			{includeThreeTierLink && (
+				<div css={notAStudentContainer}>
+					<p>
+						<span>Not a student?</span>{' '}
+						<span>
+							Explore our other{' '}
+							<a href={`/${geoId}/contribute`}>support options</a>
+						</span>
+					</p>
+				</div>
+			)}
 		</Container>
 	);
 }
