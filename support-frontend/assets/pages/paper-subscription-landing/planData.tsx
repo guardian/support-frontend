@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
 
@@ -9,11 +10,11 @@ const benefitStyle = css`
 export type PlanData = {
 	description: JSX.Element;
 	benefits: {
-		label: { HomeDelivery: JSX.Element; Collection: JSX.Element };
+		label: JSX.Element;
 		items: JSX.Element[];
 	};
 	digitalRewards?: {
-		label: { HomeDelivery: JSX.Element; Collection: JSX.Element };
+		label: JSX.Element;
 		items: JSX.Element[];
 	};
 };
@@ -28,6 +29,10 @@ const benefitsSubscriptionLabel = (
 		Collect in store with a <strong>subscription card</strong>
 	</>
 );
+const benefitsLabel = {
+	HomeDelivery: benefitsHomeDeliveryLabel,
+	Collection: benefitsSubscriptionLabel,
+};
 
 const digitalRewardsLabel = (
 	<>
@@ -75,17 +80,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: {
-				HomeDelivery: benefitsHomeDeliveryLabel,
-				Collection: benefitsSubscriptionLabel,
-			},
+			label: <></>,
 			items: [benefitGuardianSixDay, benefitObserverSunday],
 		},
 		digitalRewards: {
-			label: {
-				HomeDelivery: digitalRewardsLabel,
-				Collection: digitalRewardsLabel,
-			},
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -97,17 +96,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: {
-				HomeDelivery: benefitsHomeDeliveryLabel,
-				Collection: benefitsSubscriptionLabel,
-			},
+			label: <></>,
 			items: [benefitGuardianSixDay],
 		},
 		digitalRewards: {
-			label: {
-				HomeDelivery: digitalRewardsLabel,
-				Collection: digitalRewardsLabel,
-			},
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -120,17 +113,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: {
-				HomeDelivery: benefitsHomeDeliveryLabel,
-				Collection: benefitsSubscriptionLabel,
-			},
+			label: <></>,
 			items: [benefitGuardianSaturday, benefitObserverSunday],
 		},
 		digitalRewards: {
-			label: {
-				HomeDelivery: digitalRewardsLabel,
-				Collection: digitalRewardsLabel,
-			},
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -142,17 +129,11 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: {
-				HomeDelivery: benefitsHomeDeliveryLabel,
-				Collection: benefitsSubscriptionLabel,
-			},
+			label: <></>,
 			items: [benefitGuardianSaturday],
 		},
 		digitalRewards: {
-			label: {
-				HomeDelivery: digitalRewardsLabel,
-				Collection: digitalRewardsLabel,
-			},
+			label: digitalRewardsLabel,
 			items: baseDigitalRewards,
 		},
 	},
@@ -164,24 +145,35 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: {
-				HomeDelivery: benefitsHomeDeliveryLabel,
-				Collection: benefitsSubscriptionLabel,
-			},
+			label: <></>,
 			items: [benefitObserverSunday],
 		},
 	},
 };
 
-export default function getPlanData(ratePlanKey: PaperProductOptions) {
-	return planData[ratePlanKey];
+export default function getPaperPlanData(
+	ratePlanKey: PaperProductOptions,
+	fulfillmentOption?: PaperFulfilmentOptions,
+): PlanData | undefined {
+	const validPaperPlan = planData[ratePlanKey];
+	if (!validPaperPlan) {
+		return undefined;
+	}
+
+	const paperPlan = {
+		...validPaperPlan,
+		benefits: {
+			label: fulfillmentOption ? benefitsLabel[fulfillmentOption] : <></>,
+			items: validPaperPlan.benefits.items,
+		},
+	};
+	return paperPlan;
 }
 
-export function getPaperRatePlanBenefits(
+export function getPaperPlanBenefitData(
 	ratePlanKey: PaperProductOptions,
 ): BenefitsCheckListData[] | undefined {
-	const ratePlanData = getPlanData(ratePlanKey);
-
+	const ratePlanData = getPaperPlanData(ratePlanKey);
 	if (!ratePlanData) {
 		return undefined;
 	}

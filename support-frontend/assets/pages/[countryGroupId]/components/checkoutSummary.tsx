@@ -26,7 +26,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
+import { getPaperPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import {
@@ -121,7 +121,7 @@ export default function CheckoutSummary({
 	}
 
 	const paperPlusDigitalBenefits = showPaperProductTabs
-		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
+		? getPaperPlanBenefitData(ratePlanKey as PaperProductOptions)
 		: undefined;
 	const benefitsCheckListData =
 		paperPlusDigitalBenefits ??

@@ -4,7 +4,6 @@ import {
 	SvgInfoRound,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
-import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
@@ -39,7 +38,6 @@ function NewspaperRatePlanCard({
 	label,
 	productLabel,
 	unavailableOutsideLondon,
-	fulfilmentOptions,
 }: Product) {
 	const [hasBeenSeen, setElementToObserve] = useHasBeenSeen({
 		threshold: 0.5,
@@ -63,33 +61,25 @@ function NewspaperRatePlanCard({
 
 	const isObserverChannel = productLabel?.channel === Channel.Observer;
 
-	function renderPlanDetails(
-		fulfilmentOptions: PaperFulfilmentOptions | undefined,
-	) {
-		return (
-			<>
-				{fulfilmentOptions && (
-					<>
-						<BenefitsList
-							title={planData?.benefits.label[fulfilmentOptions]}
-							listItems={planData?.benefits.items}
-						/>
+	const renderPlanDetails = () => (
+		<>
+			<BenefitsList
+				title={planData?.benefits.label}
+				listItems={planData?.benefits.items}
+			/>
 
-						<BenefitsList
-							title={planData?.digitalRewards?.label[fulfilmentOptions]}
-							listItems={planData?.digitalRewards?.items}
-						/>
-						{unavailableOutsideLondon && (
-							<p css={cardInfo}>
-								<SvgInfoRound size="xsmall" />
-								Only available inside Greater London.
-							</p>
-						)}
-					</>
-				)}
-			</>
-		);
-	}
+			<BenefitsList
+				title={planData?.digitalRewards?.label}
+				listItems={planData?.digitalRewards?.items}
+			/>
+			{unavailableOutsideLondon && (
+				<p css={cardInfo}>
+					<SvgInfoRound size="xsmall" />
+					Only available inside Greater London.
+				</p>
+			)}
+		</>
+	);
 
 	return (
 		<div ref={setElementToObserve} css={[card, label && cardWithLabel]}>
@@ -124,9 +114,9 @@ function NewspaperRatePlanCard({
 			<p css={planDescription}>{planData?.description}</p>
 
 			{windowWidthIsGreaterThan('tablet') ? (
-				renderPlanDetails(fulfilmentOptions)
+				renderPlanDetails()
 			) : (
-				<Collapsible>{renderPlanDetails(fulfilmentOptions)}</Collapsible>
+				<Collapsible>{renderPlanDetails()}</Collapsible>
 			)}
 		</div>
 	);
