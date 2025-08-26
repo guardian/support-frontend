@@ -1,4 +1,4 @@
-import { email, firstName, lastName } from './users';
+import { email, firstName, lastName, userName } from './users';
 
 export interface TestAddress {
 	postCode?: string;
@@ -6,11 +6,17 @@ export interface TestAddress {
 	firstLine?: string;
 	city?: string;
 }
+export interface TestRecipient {
+	firstName: string;
+	lastName: string;
+	email?: string;
+}
 
 export interface TestFields {
 	email: string;
 	firstName: string;
 	lastName: string;
+	recipient?: TestRecipient;
 	addresses?: TestAddress[]; // 0st Delivery, 2nd Billing
 }
 
@@ -18,6 +24,11 @@ const userCoreFields: TestFields = {
 	email: email(),
 	firstName: firstName(),
 	lastName: lastName(),
+	recipient: {
+		firstName: userName('recipientFirstName'),
+		lastName: userName('recipientLastName'),
+		email: email(),
+	},
 	addresses: [],
 };
 const userDetails: Record<string, TestFields> = {
