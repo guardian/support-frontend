@@ -24,7 +24,7 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { ActivePaperProductTypes } from '../../../helpers/productCatalogToProductOption';
-import getPaperPlanData from '../planData';
+import getPlanData from '../planData';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -235,13 +235,12 @@ export const getPlans = (
 			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
-			fulfilmentOptions: fulfilmentOption,
 			buttonCopy: 'Subscribe',
 			priceCopy: getPriceCopyString(
 				nonDiscountedPrice,
 				copy[fulfilmentOption][productOption],
 			),
-			planData: getPaperPlanData(productOption, fulfilmentOption),
+			planData: getPlanData(productOption, fulfilmentOption),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
 			label,
 			productLabel,

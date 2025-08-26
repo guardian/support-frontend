@@ -151,7 +151,7 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 	},
 };
 
-export default function getPaperPlanData(
+export default function getPlanData(
 	ratePlanKey: PaperProductOptions,
 	fulfillmentOption?: PaperFulfilmentOptions,
 ): PlanData | undefined {
@@ -170,10 +170,10 @@ export default function getPaperPlanData(
 	return paperPlan;
 }
 
-export function getPaperPlanBenefitData(
+export function getPlanBenefitData(
 	ratePlanKey: PaperProductOptions,
 ): BenefitsCheckListData[] | undefined {
-	const ratePlanData = getPaperPlanData(ratePlanKey);
+	const ratePlanData = getPlanData(ratePlanKey);
 	if (!ratePlanData) {
 		return undefined;
 	}
