@@ -25,9 +25,9 @@ export function PriceSummary({
 	period,
 	discountPrice,
 }: PriceSummaryProps): JSX.Element {
-	return (
-		<p>
-			{discountPrice ? (
+	const displayPricePeriod = () => {
+		if (discountPrice) {
+			return (
 				<>
 					<span css={originalPriceStrikeThrough}>
 						<span css={visuallyHiddenCss}>Was </span>
@@ -36,9 +36,10 @@ export function PriceSummary({
 					</span>{' '}
 					{displayPeriod(discountPrice, period)}
 				</>
-			) : (
-				displayPeriod(fullPrice, period)
-			)}
-		</p>
-	);
+			);
+		}
+		return displayPeriod(fullPrice, period);
+	};
+
+	return <p>{displayPricePeriod()}</p>;
 }
