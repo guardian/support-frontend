@@ -283,13 +283,15 @@ export function Checkout({
 
 	/**
 	 * Non-AU Students have ratePlanKey as OneYearStudent
-	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus and promoCode UTS_STUDENT
+	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
+	 * and required promoCode UTS_STUDENT
 	 */
 	const studentDiscount = getStudentDiscount(
 		geoId,
 		ratePlanKey,
 		productKey,
 		promotion,
+		true,
 	);
 
 	return (

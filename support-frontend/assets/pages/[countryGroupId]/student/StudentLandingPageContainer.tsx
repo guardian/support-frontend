@@ -25,7 +25,8 @@ export function StudentLandingPageContainer({
 }) {
 	/**
 	 * Non-AU Students have ratePlanKey as OneYearStudent
-	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus and promoCode UTS_STUDENT
+	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
+	 * and optional promoCode
 	 */
 	const countryId: IsoCountry = Country.detect();
 	const promotionSupporterPlus = getPromotion(

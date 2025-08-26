@@ -73,14 +73,19 @@ function isStudent(
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
+	requirePromotion?: boolean,
 ): boolean {
 	const isOneYearStudent = ratePlanKey === 'OneYearStudent' && geoId !== 'au';
-	const isAUSStudent =
+	const isUTSStudent =
 		geoId === 'au' &&
 		productKey === 'SupporterPlus' &&
-		ratePlanKey === 'Monthly' &&
-		promotion?.promoCode === 'UTS_STUDENT';
-	return isOneYearStudent || isAUSStudent;
+		ratePlanKey === 'Monthly';
+	const isUTSStudentWithPromoCode =
+		isUTSStudent && promotion?.promoCode === 'UTS_STUDENT';
+	return (
+		isOneYearStudent ||
+		(requirePromotion ? isUTSStudentWithPromoCode : isUTSStudent)
+	);
 }
 
 export function getStudentDiscount(
@@ -88,8 +93,9 @@ export function getStudentDiscount(
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 	promotion?: Promotion,
+	requirePromotion?: boolean,
 ): StudentDiscount | undefined {
-	if (!isStudent(geoId, ratePlanKey, productKey, promotion)) {
+	if (!isStudent(geoId, ratePlanKey, productKey, promotion, requirePromotion)) {
 		return undefined;
 	}
 	const { currencyKey } = getGeoIdConfig(geoId);
@@ -109,10 +115,14 @@ export function getStudentDiscount(
 	const productCatalogDiscountPrice = productCatalog.SupporterPlus?.ratePlans[
 		ratePlanKey
 	]?.pricing[currencyKey] as number;
-	const discountPriceWithCurrency = simpleFormatAmount(
+	const discountPriceCurrency = simpleFormatAmount(
 		currency,
 		promotion?.discountedPrice ?? productCatalogDiscountPrice,
 	);
+	const discountPriceWithCurrency =
+		discountPriceCurrency !== fullPriceWithCurrency
+			? discountPriceCurrency
+			: ''; // no discount available
 
 	// promotion offer
 	const durationInMonths = promotion?.discount?.durationMonths;
