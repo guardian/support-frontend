@@ -1,15 +1,20 @@
+import { css } from '@emotion/react';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { BenefitsCheckListData } from 'components/checkoutBenefits/benefitsCheckList';
+
+const benefitStyle = css`
+	display: inline-block;
+`;
 
 export type PlanData = {
 	description: JSX.Element;
 	benefits: {
 		label: JSX.Element;
-		items: string[];
+		items: JSX.Element[];
 	};
 	digitalRewards?: {
 		label: JSX.Element;
-		items: string[];
+		items: JSX.Element[];
 	};
 };
 
@@ -26,12 +31,34 @@ const digitalRewardsLabel = (
 );
 
 const baseDigitalRewards = [
-	'Unlimited access to the refreshed Guardian app and Guardian Feast app',
-	'Unlimited access to the Guardian Editions app so you can enjoy newspapers on your mobile and tablet',
-	'Ad-free reading on all your devices',
-	'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-	'Far fewer asks for support',
+	<>Unlimited access to the refreshed Guardian app and Guardian Feast app</>,
+	<>
+		Unlimited access to the Guardian Editions app so you can enjoy newspapers on
+		your mobile and tablet
+	</>,
+	<>Ad-free reading on all your devices</>,
+	<>
+		Exclusive newsletter for supporters, sent every week from the Guardian
+		newsroom
+	</>,
+	<>Far fewer asks for support</>,
 ];
+
+const benefitGuardianSixDay = (
+	<span css={benefitStyle}>
+		The Guardian and all its supplements <strong>Monday to Saturday</strong>
+	</span>
+);
+const benefitGuardianSaturday = (
+	<span css={benefitStyle}>
+		<strong>Saturday</strong> edition of The Guardian and all its supplements
+	</span>
+);
+const benefitObserverSunday = (
+	<span css={benefitStyle}>
+		The Observer on <strong>Sunday</strong>
+	</span>
+);
 
 const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 	EverydayPlus: {
@@ -44,10 +71,7 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 		),
 		benefits: {
 			label: benefitsLabel,
-			items: [
-				'The Guardian and all its supplements Monday to Saturday',
-				'The Observer and all its supplements, delivered on Sundays',
-			],
+			items: [benefitGuardianSixDay, benefitObserverSunday],
 		},
 		digitalRewards: {
 			label: digitalRewardsLabel,
@@ -63,7 +87,7 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 		),
 		benefits: {
 			label: benefitsLabel,
-			items: ['The Guardian and all its supplements Monday to Saturday'],
+			items: [benefitGuardianSixDay],
 		},
 		digitalRewards: {
 			label: digitalRewardsLabel,
@@ -80,10 +104,7 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 		),
 		benefits: {
 			label: benefitsLabel,
-			items: [
-				'Saturday edition of The Guardian and all its Saturday supplements',
-				'The Observer and all its supplements, delivered on Sundays',
-			],
+			items: [benefitGuardianSaturday, benefitObserverSunday],
 		},
 		digitalRewards: {
 			label: digitalRewardsLabel,
@@ -99,9 +120,7 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 		),
 		benefits: {
 			label: benefitsLabel,
-			items: [
-				'Saturday edition of The Guardian and all its Saturday supplements',
-			],
+			items: [benefitGuardianSaturday],
 		},
 		digitalRewards: {
 			label: digitalRewardsLabel,
@@ -116,12 +135,8 @@ const planData: Partial<Record<PaperProductOptions, PlanData>> = {
 			</>
 		),
 		benefits: {
-			label: (
-				<>
-					<strong>home delivery</strong>
-				</>
-			),
-			items: ['The Observer and all its supplements, delivered on Sundays  '],
+			label: benefitsLabel,
+			items: [benefitObserverSunday],
 		},
 	},
 };
