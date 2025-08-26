@@ -16,10 +16,10 @@ import {
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
 const ActivePaperProductTypes: readonly PaperProductOptions[] = [
-	EverydayPlus,
 	SixdayPlus,
-	WeekendPlus,
 	SaturdayPlus,
+	EverydayPlus,
+	WeekendPlus,
 	Everyday,
 	Sixday,
 	Weekend,
