@@ -256,7 +256,7 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{discountPrice && (
+					{discountPrice ? (
 						<>
 							<span css={originalPriceStrikeThrough}>
 								<span css={visuallyHiddenCss}>Was </span>
@@ -265,8 +265,9 @@ export function ContributionsOrderSummary({
 							</span>{' '}
 							{displayPeriod(discountPrice)}
 						</>
+					) : (
+						displayPeriod(fullPrice)
 					)}
-					{!discountPrice && <>{displayPeriod(fullPrice)}</>}
 				</p>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
