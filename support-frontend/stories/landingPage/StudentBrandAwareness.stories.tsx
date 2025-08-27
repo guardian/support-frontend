@@ -14,7 +14,9 @@ export default {
 };
 
 export const Template = () => {
-	const contentContainer = css``;
+	const contentContainer = css`
+		max-width: 1300px;
+	`;
 
 	return (
 		<div css={contentContainer}>
