@@ -18,7 +18,7 @@ const auStudentDiscount = {
 };
 
 describe('<StudentLandingPageUTS />', () => {
-	const geoId: GeoId = 'us';
+	const geoId: GeoId = 'au';
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 	const landingPageVariant = {
@@ -41,36 +41,6 @@ describe('<StudentLandingPageUTS />', () => {
 		);
 		expect(
 			screen.getByText(`for ${auStudentDiscount.promoDuration}`),
-		).toBeInTheDocument();
-	});
-
-	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
-		render(
-			<StudentLandingPageUTS
-				geoId={geoId}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
-			/>,
-		);
-		expect(screen.getByTestId('cta-button')).toHaveTextContent(
-			'Sign up for free',
-		);
-	});
-
-	it('passes discountSummary through to StudentProductCard', () => {
-		render(
-			<StudentLandingPageUTS
-				geoId={geoId}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
-			/>,
-		);
-		expect(
-			screen.getByText(auStudentDiscount.discountSummary),
 		).toBeInTheDocument();
 	});
 });

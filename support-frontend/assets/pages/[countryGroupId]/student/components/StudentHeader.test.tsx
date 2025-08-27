@@ -14,6 +14,16 @@ const oneYearStudentDiscount = {
 	fullPriceWithCurrency: '£120',
 };
 
+const auStudentDiscount = {
+	amount: 0,
+	periodNoun: 'month',
+	discountPriceWithCurrency: '$0',
+	fullPriceWithCurrency: '$20',
+	promoCode: 'UTS_STUDENT',
+	promoDuration: 'two years',
+	discountSummary: '$0/month for two years, then $20/month',
+};
+
 describe('<StudentHeader />', () => {
 	const geoId: GeoId = 'us';
 	const productKey: ActiveProductKey = 'SupporterPlus';
@@ -39,5 +49,39 @@ describe('<StudentHeader />', () => {
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
+	});
+
+	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
+		render(
+			<StudentHeader
+				geoId={geoId}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				landingPageVariant={landingPageVariant}
+				studentDiscount={auStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
+			/>,
+		);
+		expect(screen.getByTestId('cta-button')).toHaveTextContent(
+			'Sign up for free',
+		);
+	});
+
+	it('renders discountSummary when provided', () => {
+		render(
+			<StudentHeader
+				geoId={geoId}
+				productKey={productKey}
+				ratePlanKey={ratePlanKey}
+				landingPageVariant={landingPageVariant}
+				studentDiscount={auStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
+			/>,
+		);
+		expect(
+			screen.getByText(auStudentDiscount.discountSummary),
+		).toBeInTheDocument();
 	});
 });
