@@ -131,6 +131,10 @@ const termsAndConditions = css`
 	p {
 		margin-top: ${space[1]}px;
 	}
+	& div:last-child {
+		margin-top: ${space[3]}px;
+		${textSans14};
+	}
 `;
 
 export type ContributionsOrderSummaryProps = {
