@@ -22,7 +22,7 @@ export function StudentLandingPageUTSContainer({
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
 
 	const countryId: IsoCountry = Country.detect();
-	const promotionSupporterPlus = getPromotion(
+	const maybePromo = getPromotion(
 		allProductPrices.SupporterPlus,
 		countryId,
 		ratePlanToBillingPeriod(ratePlanKey),
@@ -31,7 +31,7 @@ export function StudentLandingPageUTSContainer({
 		geoId,
 		ratePlanKey,
 		productKey,
-		promotionSupporterPlus,
+		maybePromo,
 	);
 
 	return (
