@@ -57,14 +57,15 @@ export const StudentBrandAwareness = () => {
 	return (
 		<div css={container}>
 			<div css={copySection}>
-				<h1>
+				<div>
 					<GridImage
 						gridId="globalStudentLandingBrandTitle"
 						srcSizes={[310, 620, 375, 750]}
 						sizes="(max-width: 939px) 310px, 375px"
 						imgType="png"
+						altText="Understand the world with the Guardian"
 					/>
-				</h1>
+				</div>
 				<div css={bodyContainer}>
 					<p>
 						Whatever you&apos;re studying, quality news is a critical tool for
