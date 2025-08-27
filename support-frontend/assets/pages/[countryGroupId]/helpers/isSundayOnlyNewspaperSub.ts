@@ -7,3 +7,12 @@ export const isSundayOnlyNewspaperSub = (
 ): boolean =>
 	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
 	ratePlanKey === 'Sunday';
+
+export const isPaperPlusSub = (
+	productKey: ProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): boolean =>
+	['HomeDelivery', 'SubscriptionCard'].includes(productKey) &&
+	['EverydayPlus', 'SaturdayPlus', 'SixdayPlus', 'WeekendPlus'].includes(
+		ratePlanKey,
+	);

@@ -20,7 +20,10 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
-import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import {
+	isPaperPlusSub,
+	isSundayOnlyNewspaperSub,
+} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -59,13 +62,15 @@ export function SummaryTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
+	const isPaperPlusSubscription = isPaperPlusSub(productKey, ratePlanKey);
 
-	if (isSundayOnlynewsletterSubscription) {
+	if (isSundayOnlynewsletterSubscription || isPaperPlusSubscription) {
 		return (
 			<div css={containerSummaryTsCs}>
-				The Observer subscription will auto renew each month. You will be
-				charged the subscription amounts using your chosen payment method at
-				each renewal, at the rate then in effect, unless you cancel.
+				The {isSundayOnlynewsletterSubscription ? 'Observer' : ratePlanKey}{' '}
+				subscription will auto renew each month. You will be charged the
+				subscription amounts using your chosen payment method at each renewal,
+				at the rate then in effect, unless you cancel.
 			</div>
 		);
 	}
