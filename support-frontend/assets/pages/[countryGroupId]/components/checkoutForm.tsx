@@ -80,6 +80,7 @@ import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheck
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -131,6 +132,7 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
 };
 
 const getPaymentMethods = (
@@ -183,6 +185,7 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	studentDiscount,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1127,6 +1130,7 @@ export default function CheckoutForm({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							countryGroupId={countryGroupId}
+							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
 						/>

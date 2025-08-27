@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { getLandingPageParticipations } from 'helpers/abTests/landingPageAbTests';
+import {
+	auStudentDiscount,
+	oneYearStudentDiscount,
+} from './components/StudentHeader.test';
 import { StudentLandingPage } from './StudentLandingPage';
-
-jest.mock('./components/StudentHeader');
 
 describe('StudentLandingPage', () => {
 	const landingPageParticipations = getLandingPageParticipations();
@@ -14,11 +16,10 @@ describe('StudentLandingPage', () => {
 				productKey="SupporterPlus"
 				ratePlanKey="OneYearStudent"
 				landingPageVariant={landingPageParticipations.variant}
+				studentDiscount={oneYearStudentDiscount}
 			/>,
 		);
-
 		const countrySwitcherhButton = screen.getByLabelText('Select a country');
-
 		expect(countrySwitcherhButton).toBeInTheDocument();
 	});
 
@@ -29,11 +30,10 @@ describe('StudentLandingPage', () => {
 				productKey="SupporterPlus"
 				ratePlanKey="Monthly"
 				landingPageVariant={landingPageParticipations.variant}
+				studentDiscount={auStudentDiscount}
 			/>,
 		);
-
 		const countrySwitcherhButton = screen.queryByLabelText('Select a country');
-
 		expect(countrySwitcherhButton).not.toBeInTheDocument();
 	});
 });

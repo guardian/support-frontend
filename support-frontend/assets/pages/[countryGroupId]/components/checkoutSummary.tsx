@@ -33,6 +33,7 @@ import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
@@ -49,6 +50,7 @@ type CheckoutSummaryProps = {
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
 };
 
 export default function CheckoutSummary({
@@ -64,6 +66,7 @@ export default function CheckoutSummary({
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
+	studentDiscount,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -131,7 +134,6 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
-
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -187,6 +189,7 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					studentDiscount={studentDiscount}
 				/>
 			</BoxContents>
 		</Box>

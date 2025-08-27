@@ -21,20 +21,25 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../components/accordionFAQ';
 import StudentHeader from './components/StudentHeader';
 import { StudentTsAndCs } from './components/studentTsAndCs';
+import type { StudentDiscount } from './helpers/discountDetails';
 import { getStudentFAQs } from './helpers/studentFAQs';
 import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
+
+type StudentLandingPageProps = {
+	geoId: GeoId;
+	productKey: ActiveProductKey;
+	ratePlanKey: ActiveRatePlanKey;
+	landingPageVariant: LandingPageVariant;
+	studentDiscount: StudentDiscount;
+};
 
 export function StudentLandingPage({
 	geoId,
 	productKey,
 	ratePlanKey,
 	landingPageVariant,
-}: {
-	geoId: GeoId;
-	productKey: ActiveProductKey;
-	ratePlanKey: ActiveRatePlanKey;
-	landingPageVariant: LandingPageVariant;
-}) {
+	studentDiscount,
+}: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(geoId);
 	const tsAndCsItem = getStudentTsAndCs(geoId);
 
@@ -69,6 +74,7 @@ export function StudentLandingPage({
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
+				studentDiscount={studentDiscount}
 			/>
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}

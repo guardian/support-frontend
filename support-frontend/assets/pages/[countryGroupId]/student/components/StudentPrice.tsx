@@ -1,21 +1,17 @@
-import type { ActiveRatePlanKey } from 'helpers/productCatalog';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getStudentDiscount } from '../helpers/discountDetails';
+import type { StudentDiscount } from '../helpers/discountDetails';
 import { originalPriceStrikeThrough } from './StudentProductCardStyles';
 
 export default function StudentPrice({
-	geoId,
-	ratePlanKey,
+	studentDiscount,
 }: {
-	geoId: GeoId;
-	ratePlanKey: ActiveRatePlanKey;
+	studentDiscount: StudentDiscount;
 }) {
 	const {
 		discountPriceWithCurrency,
 		fullPriceWithCurrency,
 		periodNoun,
 		promoDuration,
-	} = getStudentDiscount(geoId, ratePlanKey);
+	} = studentDiscount;
 
 	const showDiscountPrice =
 		discountPriceWithCurrency &&
