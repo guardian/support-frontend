@@ -65,22 +65,22 @@ const gridPictureNewspaperHeroTabImages: GridPictureProp = {
 const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 	HomeDelivery: {
 		productInfo:
-			'If you want your newspaper delivered to your door, select a subscription below and checkout.',
+			'Use the Guardian’s home delivery service to get your newspaper direct to your door.',
 		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
-				deliveryTitle: 'Delivery details',
+				deliveryTitle: 'How our delivery service works',
 				deliveryInfo: (
 					<>
 						<p>Your newspaper will arrive before 9am.</p>
 						<p>
-							We can’t deliver to individual flats, or apartments within blocks
-							because we need access to your post box to deliver your newspaper.
-						</p>
-						<p>
 							You can pause your subscription for up to 5 weeks a year. So if
 							you’re going away anywhere, you won’t have to pay for the
 							newspapers that you miss.
+						</p>
+						<p>
+							We can’t deliver to individual flats, or apartments within blocks
+							because we need access to your post box to deliver your newspaper.
 						</p>
 					</>
 				),
@@ -88,30 +88,33 @@ const heroContent: Record<PaperFulfilmentOptions, HeroContent> = {
 		],
 	},
 	Collection: {
-		productInfo: `Use your Guardian subscription card at 40,000 UK shops with news kiosks, including McColl's, Co-op, One Stop, and select SPAR stores. Collect your paper in-store or arrange delivery through your newsagent.`,
+		productInfo: `Use your Guardian subscription card to pick up your paper in over 40,000 UK shops with news kiosks, including Co-op, McColl's, One Stop, and select SPAR stores. Or use your card to arrange your own delivery through a local newsagent.`,
 		gridPictureImages: gridPictureNewspaperHeroTabImages,
 		deliveries: [
 			{
-				deliveryTitle: 'Collecting from multiple newsagents',
+				deliveryTitle: 'How to collect in store',
 				deliveryInfo: (
 					<>
 						<p>
-							To collect from multiple newsagents, present your card each time –
-							they’ll scan it and be reimbursed automatically.
+							To pick up your paper from multiple newsagents, present your
+							Guardian subscription card each time – they’ll scan it and be
+							reimbursed automatically.
 						</p>
 						{collectionMapUrl('Find your nearest participating retailer')}
 					</>
 				),
 			},
 			{
-				deliveryTitle: 'Delivery from your retailer',
+				deliveryTitle: 'How to arrange your own delivery',
 				deliveryInfo: (
 					<>
 						<p>
-							To arrange your own delivery with your local retailer, share the
-							barcode from your Home Delivery Letter with your chosen store.{' '}
+							If you prefer to arrange your own delivery with your local
+							retailer, simply share the barcode from your Home Delivery Letter
+							with your chosen newsagent. Your retailer will charge you
+							separately for delivery. You will receive your Home Delivery
+							Letter along with your Guardian subscription card.
 						</p>
-						{collectionMapUrl('Find your nearest delivery retailer')},
 					</>
 				),
 			},
