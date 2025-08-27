@@ -7,7 +7,7 @@ import type {
 import type { GeoId } from 'pages/geoIdConfig';
 import { StudentLandingPageUTS } from './StudentLandingPageUTS';
 
-const auStudentDiscount = {
+const utsStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -36,11 +36,11 @@ describe('<StudentLandingPageUTS />', () => {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={utsStudentDiscount}
 			/>,
 		);
 		expect(
-			screen.getByText(`for ${auStudentDiscount.promoDuration}`),
+			screen.getByText(`for ${utsStudentDiscount.promoDuration}`),
 		).toBeInTheDocument();
 	});
 });

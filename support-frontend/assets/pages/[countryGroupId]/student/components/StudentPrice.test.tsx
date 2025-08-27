@@ -8,7 +8,7 @@ const oneYearStudentDiscount = {
 	fullPriceWithCurrency: '£120',
 };
 
-const auStudentDiscount = {
+const utsStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -27,11 +27,11 @@ describe('StudentPrice Component', () => {
 	});
 
 	it('renders discount price and original price when discount applies', () => {
-		render(<StudentPrice studentDiscount={auStudentDiscount} />);
+		render(<StudentPrice studentDiscount={utsStudentDiscount} />);
 		expect(screen.getByText('$0')).toBeInTheDocument();
 		expect(screen.getByText('$20/month')).toBeInTheDocument();
 		expect(
-			screen.getByText(`for ${auStudentDiscount.promoDuration}`),
+			screen.getByText(`for ${utsStudentDiscount.promoDuration}`),
 		).toBeInTheDocument();
 		expect(screen.queryAllByText('/month', { exact: false })).toHaveLength(2);
 	});

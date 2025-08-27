@@ -14,7 +14,7 @@ const oneYearStudentDiscount = {
 	fullPriceWithCurrency: '£120',
 };
 
-const auStudentDiscount = {
+const utsStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -58,7 +58,7 @@ describe('<StudentHeader />', () => {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={utsStudentDiscount}
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 			/>,
@@ -75,13 +75,13 @@ describe('<StudentHeader />', () => {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={utsStudentDiscount}
 				headingCopy="Example heading"
 				subheadingCopy="Example subheading"
 			/>,
 		);
 		expect(
-			screen.getByText(auStudentDiscount.discountSummary),
+			screen.getByText(utsStudentDiscount.discountSummary),
 		).toBeInTheDocument();
 	});
 });
