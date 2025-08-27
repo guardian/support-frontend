@@ -26,7 +26,7 @@ interface StudentHeaderProps {
 	studentDiscount: StudentDiscount;
 	headingCopy: string;
 	subheadingCopy: React.ReactNode;
-	universityBadge?: React.ReactNode;
+	universityBadge?: JSX.Element;
 }
 
 export default function StudentHeader({
