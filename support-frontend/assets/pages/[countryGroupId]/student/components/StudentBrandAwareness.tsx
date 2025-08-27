@@ -73,7 +73,7 @@ export const StudentBrandAwareness = () => {
 					<h1>
 						<GridImage
 							gridId="globalStudentLandingBrandTitle"
-							srcSizes={[620, 750]}
+							srcSizes={[310, 620, 375, 750]}
 							sizes="(max-width: 939px) 310px, 375px"
 							imgType="png"
 						/>
@@ -97,7 +97,7 @@ export const StudentBrandAwareness = () => {
 			<div css={imageSection}>
 				<GridImage
 					gridId="globalStudentLandingBrand"
-					srcSizes={[480, 520]}
+					srcSizes={[260, 520]}
 					sizes="(max-width: 739px) 240px, 260px"
 					imgType="png"
 				/>
