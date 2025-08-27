@@ -1,8 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type {
-	FulfilmentOptions,
-	PaperFulfilmentOptions,
-} from '@modules/product/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
@@ -67,13 +64,12 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 };
 
 const getUnavailableOutsideLondon = (
-	fulfilmentOption: FulfilmentOptions,
+	fulfilmentOption: PaperFulfilmentOptions,
 	productOption: PaperProductOptions,
 ) =>
-	fulfilmentOption === 'HomeDelivery' &&
-	(productOption === 'Saturday' ||
-		productOption === 'Sunday' ||
-		productOption === 'SaturdayPlus');
+	(fulfilmentOption === 'HomeDelivery' && productOption === 'Saturday') ||
+	productOption === 'Sunday' ||
+	productOption === 'SaturdayPlus';
 
 // ---- Plans ----- //
 const copy: Record<
