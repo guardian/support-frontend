@@ -14,11 +14,11 @@ const container = css`
 		flex-direction: row;
 		gap: ${space[5]}px;
 
-		padding: ${space[5]}px ${space[10]}px ${space[5]}px ${space[4]}px;
+		padding: ${space[5]}px ${space[2]}px ${space[5]}px ${space[4]}px;
 	}
 
 	${from.desktop} {
-		padding: ${space[5]}px ${space[2]}px ${space[5]}px ${space[4]}px;
+		padding: ${space[5]}px ${space[10]}px ${space[5]}px ${space[4]}px;
 	}
 `;
 
