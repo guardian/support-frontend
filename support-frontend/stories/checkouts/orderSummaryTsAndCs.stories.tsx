@@ -52,3 +52,19 @@ TierThree.args = {
 		discountedPrice: 37,
 	},
 };
+
+export const SubscriptionCardWeekend = Template.bind({});
+SubscriptionCardWeekend.args = {
+	productKey: 'SubscriptionCard',
+	ratePlanKey: 'WeekendPlus',
+	ratePlanDescription: 'Weekend package',
+	countryGroupId: 'GBPCountries',
+};
+
+export const HomeDeliverySixday = Template.bind({});
+HomeDeliverySixday.args = {
+	productKey: 'HomeDelivery',
+	ratePlanKey: 'SixdayPlus',
+	ratePlanDescription: 'Six day package',
+	countryGroupId: 'GBPCountries',
+};

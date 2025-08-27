@@ -47,3 +47,21 @@ TierThree.args = {
 	currency: 'GBP',
 	amount: 27,
 };
+
+export const SubscriptionCardWeekend = Template.bind({});
+SubscriptionCardWeekend.args = {
+	productKey: 'SubscriptionCard',
+	ratePlanKey: 'WeekendPlus',
+	ratePlanDescription: 'Weekend package',
+	currency: 'GBP',
+	amount: 27.99,
+};
+
+export const HomeDeliverySixday = Template.bind({});
+HomeDeliverySixday.args = {
+	productKey: 'HomeDelivery',
+	ratePlanKey: 'SixdayPlus',
+	ratePlanDescription: 'Six day package',
+	currency: 'GBP',
+	amount: 73.99,
+};

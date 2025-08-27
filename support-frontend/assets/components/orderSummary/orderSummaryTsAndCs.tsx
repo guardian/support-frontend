@@ -83,6 +83,7 @@ export function OrderSummaryStartDate({
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	ratePlanDescription?: string;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
@@ -90,6 +91,7 @@ export interface OrderSummaryTsAndCsProps {
 export function OrderSummaryTsAndCs({
 	productKey,
 	ratePlanKey,
+	ratePlanDescription,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
@@ -115,6 +117,7 @@ export function OrderSummaryTsAndCs({
 	const homeDeliveryStartDate = homeDeliveryDate
 		? formatUserDate(homeDeliveryDate)
 		: '';
+	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
@@ -161,14 +164,14 @@ export function OrderSummaryTsAndCs({
 		HomeDelivery: (
 			<p>
 				You will receive your first newspaper delivery on{' '}
-				{homeDeliveryStartDate} as part of your {ratePlanKey} subscription.
+				{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
 			</p>
 		),
 		SubscriptionCard: (
 			<p>
 				Your virtual subscription card barcode will be emailed to you shortly,
 				and activated from tomorrow to pick up the first newspaper edition you
-				are entitled to in your {ratePlanKey} subscription. Your physical
+				are entitled to in your {rateDescriptor} subscription. Your physical
 				subscription card will be delivered to your door in 1-2 weeks.
 			</p>
 		),

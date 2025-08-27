@@ -20,19 +20,36 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 		ActiveProductKey,
 		CountryGroupId,
 		ActiveRatePlanKey,
+		string | undefined,
 		number,
 	];
 
 	const orderSummaryProductKeys: OrderSummaryTestParams[] = [
-		['GuardianAdLite', 'GBPCountries', 'Monthly', 0],
-		['Contribution', 'AUDCountries', 'Annual', 0],
-		['SupporterPlus', 'GBPCountries', 'Monthly', 12],
-		['SupporterPlus', 'GBPCountries', 'OneYearStudent', 9],
-		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', 45],
+		['GuardianAdLite', 'GBPCountries', 'Monthly', undefined, 0],
+		['Contribution', 'AUDCountries', 'Annual', undefined, 0],
+		['SupporterPlus', 'GBPCountries', 'Monthly', undefined, 12],
+		['SupporterPlus', 'GBPCountries', 'OneYearStudent', undefined, 9],
+		['TierThree', 'UnitedStates', 'RestOfWorldMonthly', undefined, 45],
+		[
+			'SubscriptionCard',
+			'GBPCountries',
+			'WeekendPlus',
+			'Weekend package',
+			69.99,
+		],
+		['HomeDelivery', 'GBPCountries', 'SixdayPlus', 'Six day package', 83.99],
+		['SubscriptionCard', 'GBPCountries', 'Sunday', 'The Observer', 15.99],
+		['HomeDelivery', 'GBPCountries', 'Sunday', 'The Observer', 20.99],
 	];
 	it.each(orderSummaryProductKeys)(
 		`orderSummaryTs&Cs render product %s for region %s for ratePlan %s correctly`,
-		(paymentProductKey, countryGroupId, activeRatePlanKey, amount) => {
+		(
+			paymentProductKey,
+			countryGroupId,
+			activeRatePlanKey,
+			ratePlanDescription,
+			amount,
+		) => {
 			const promo: Promotion | undefined =
 				paymentProductKey === 'TierThree' &&
 				activeRatePlanKey === 'RestOfWorldMonthly' &&
@@ -43,6 +60,7 @@ describe('orderSummaryTs&Cs Snapshot comparison', () => {
 				<OrderSummaryTsAndCs
 					productKey={paymentProductKey}
 					ratePlanKey={activeRatePlanKey}
+					ratePlanDescription={ratePlanDescription}
 					countryGroupId={countryGroupId}
 					thresholdAmount={amount}
 					promotion={promo}

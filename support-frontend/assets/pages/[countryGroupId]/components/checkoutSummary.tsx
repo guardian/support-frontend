@@ -176,6 +176,7 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}

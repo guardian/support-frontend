@@ -39,12 +39,14 @@ const containerSummaryTsCs = css`
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	ratePlanDescription?: string;
 	currency: IsoCurrency;
 	amount: number;
 }
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
+	ratePlanDescription,
 	currency,
 	amount,
 }: SummaryTsAndCsProps): JSX.Element | null {
@@ -63,11 +65,12 @@ export function SummaryTsAndCs({
 		ratePlanKey,
 	);
 	const isPaperPlusSubscription = isPaperPlusSub(productKey, ratePlanKey);
+	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	if (isSundayOnlynewsletterSubscription || isPaperPlusSubscription) {
 		return (
 			<div css={containerSummaryTsCs}>
-				The {isSundayOnlynewsletterSubscription ? 'Observer' : ratePlanKey}{' '}
+				The {isSundayOnlynewsletterSubscription ? 'Observer' : rateDescriptor}{' '}
 				subscription will auto renew each month. You will be charged the
 				subscription amounts using your chosen payment method at each renewal,
 				at the rate then in effect, unless you cancel.
