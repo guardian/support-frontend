@@ -12,7 +12,7 @@ export const addressSchema = z.object({
 	country: countrySchema,
 });
 
-type Address = z.infer<typeof addressSchema>;
+export type Address = z.infer<typeof addressSchema>;
 
 type AddressLine = {
 	streetNumber?: string;
