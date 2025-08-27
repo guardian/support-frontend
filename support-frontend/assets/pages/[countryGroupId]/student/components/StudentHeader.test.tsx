@@ -5,7 +5,7 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import { StudentLandingPageGlobal } from './StudentLandingPageGlobal';
+import StudentHeader from './StudentHeader';
 
 const oneYearStudentDiscount = {
 	amount: 9,
@@ -14,7 +14,7 @@ const oneYearStudentDiscount = {
 	fullPriceWithCurrency: '£120',
 };
 
-describe('<StudentLandingPageGlobal />', () => {
+describe('<StudentHeader />', () => {
 	const geoId: GeoId = 'us';
 	const productKey: ActiveProductKey = 'SupporterPlus';
 	const ratePlanKey: ActiveRatePlanKey = 'Monthly';
@@ -28,12 +28,14 @@ describe('<StudentLandingPageGlobal />', () => {
 
 	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
 		render(
-			<StudentLandingPageGlobal
+			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
 				studentDiscount={oneYearStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
