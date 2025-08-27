@@ -26,15 +26,15 @@ type TabOptions = {
 };
 
 const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
-	HomeDelivery: {
-		text: 'Home Delivery',
-		href: `#${HomeDelivery}`,
-		content: () => <NewspaperTabHero tab={HomeDelivery} />,
-	},
 	Collection: {
-		text: 'Subscription card',
+		text: 'Collect in store',
 		href: `#${Collection}`,
 		content: () => <NewspaperTabHero tab={Collection} />,
+	},
+	HomeDelivery: {
+		text: 'Home delivery',
+		href: `#${HomeDelivery}`,
+		content: () => <NewspaperTabHero tab={HomeDelivery} />,
 	},
 };
 
@@ -44,7 +44,7 @@ function NewspaperProductTabs({
 	productPrices: ProductPrices;
 }) {
 	const fulfilment =
-		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
+		window.location.hash === `#${Collection}` ? HomeDelivery : Collection;
 
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
