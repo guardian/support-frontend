@@ -38,18 +38,6 @@ const bodyContainer = css`
 	}
 `;
 
-const headerImageContainer = css`
-	max-width: 310px;
-
-	${from.tablet} {
-		width: 310px;
-	}
-
-	${from.tablet} {
-		width: 375px;
-	}
-`;
-
 const imageSection = css`
 	display: flex;
 	justify-content: center;
@@ -69,16 +57,14 @@ export const StudentBrandAwareness = () => {
 	return (
 		<div css={container}>
 			<div css={copySection}>
-				<div css={headerImageContainer}>
-					<h1>
-						<GridImage
-							gridId="globalStudentLandingBrandTitle"
-							srcSizes={[310, 620, 375, 750]}
-							sizes="(max-width: 939px) 310px, 375px"
-							imgType="png"
-						/>
-					</h1>
-				</div>
+				<h1>
+					<GridImage
+						gridId="globalStudentLandingBrandTitle"
+						srcSizes={[310, 620, 375, 750]}
+						sizes="(max-width: 939px) 310px, 375px"
+						imgType="png"
+					/>
+				</h1>
 				<div css={bodyContainer}>
 					<p>
 						Whatever you&apos;re studying, quality news is a critical tool for
