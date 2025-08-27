@@ -10,7 +10,7 @@ jobs:
     env:
       GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:

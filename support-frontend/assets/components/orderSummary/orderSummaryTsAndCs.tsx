@@ -17,7 +17,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { isWeeklyGiftSub } from 'pages/[countryGroupId]/helpers/isWeeklyGiftSub';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
@@ -89,7 +89,8 @@ export function OrderSummaryTsAndCs({
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
-
+	// Display for AUS Students who are on a subscription basis
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -97,6 +98,7 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
+
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
 			{promotion && (
@@ -108,7 +110,9 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					<p>Auto renews every {periodNoun} until you cancel.</p>
+					{!isStudentOneYearRatePlan && (
+						<p>Auto renews every {periodNoun} until you cancel.</p>
+					)}
 					<p>
 						Cancel or change your support anytime. If you cancel within the
 						first 14 days, you will receive a full refund.
@@ -117,7 +121,7 @@ export function OrderSummaryTsAndCs({
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
 				<p>
-					{!isWeeklyGiftSub(productKey, ratePlanKey)
+					{!isGuardianWeeklyGiftProduct(productKey, ratePlanKey)
 						? `Auto renews every ${periodNoun}. `
 						: ``}
 					Cancel anytime.

@@ -5,7 +5,6 @@ import type {
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
 import type { GeoId } from 'pages/geoIdConfig';
-import { getStudentDiscount } from '../helpers/discountDetails';
 import StudentHeader from './StudentHeader';
 
 jest.mock('../helpers/discountDetails');
@@ -15,6 +14,22 @@ jest.mock('components/gridPicture/gridPicture', () => ({
 	__esModule: true,
 	default: jest.fn(() => <div data-testid="grid-picture">Grid Images</div>),
 }));
+
+export const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
+export const auStudentDiscount = {
+	amount: 0,
+	periodNoun: 'month',
+	discountPriceWithCurrency: '$0',
+	fullPriceWithCurrency: '$20',
+	promoCode: 'UTS_STUDENT',
+	promoDuration: 'two years',
+	discountSummary: '$0/month for two years, then $20/month',
+};
 
 describe('<StudentHeader />', () => {
 	const geoId: GeoId = 'us';
@@ -33,82 +48,60 @@ describe('<StudentHeader />', () => {
 	});
 
 	it('shows promo duration in the subheading when provided', () => {
-		(getStudentDiscount as jest.Mock).mockReturnValue({
-			amount: 10,
-			promoDuration: '3 months',
-			promoCode: undefined,
-			discountSummary: undefined,
-		});
-
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
+				studentDiscount={auStudentDiscount}
 			/>,
 		);
-
-		expect(screen.getByText('free for 3 months')).toBeInTheDocument();
+		expect(
+			screen.getByText(`for ${auStudentDiscount.promoDuration}`),
+		).toBeInTheDocument();
 	});
 
 	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
-		(getStudentDiscount as jest.Mock).mockReturnValue({
-			amount: 0,
-			promoDuration: undefined,
-			promoCode: undefined,
-			discountSummary: undefined,
-		});
-
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
+				studentDiscount={auStudentDiscount}
 			/>,
 		);
-
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
 			'Sign up for free',
 		);
 	});
 
 	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
-		(getStudentDiscount as jest.Mock).mockReturnValue({
-			amount: 10,
-			promoDuration: undefined,
-			promoCode: undefined,
-			discountSummary: undefined,
-		});
-
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
+				studentDiscount={oneYearStudentDiscount}
 			/>,
 		);
-
 		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
 	});
 
 	it('passes discountSummary through to StudentProductCard', () => {
-		(getStudentDiscount as jest.Mock).mockReturnValue({
-			amount: 5,
-			discountSummary: '50% off for 3 months',
-		});
-
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
+				studentDiscount={auStudentDiscount}
 			/>,
 		);
-
-		expect(screen.getByText('50% off for 3 months')).toBeInTheDocument();
+		expect(
+			screen.getByText(auStudentDiscount.discountSummary),
+		).toBeInTheDocument();
 	});
 });
