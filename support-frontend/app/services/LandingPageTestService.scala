@@ -129,7 +129,6 @@ class LandingPageTestServiceImpl(stage: Stage)(implicit val ec: ExecutionContext
   system.scheduler.scheduleAtFixedRate(0.minute, 1.minute)(() => {
     fetchLandingPageTests()
       .map { tests =>
-        logger.info(s"Got landing page tests: ${tests}")
         cachedTests.set(tests)
       }
       .recover { case NonFatal(error) =>
