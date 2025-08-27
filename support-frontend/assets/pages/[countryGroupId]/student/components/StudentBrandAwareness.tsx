@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { article17, from, palette, space } from '@guardian/source/foundations';
+import GridImage from 'components/gridImage/gridImage';
 
 const container = css`
 	background-color: ${palette.brand[800]};
@@ -49,10 +50,6 @@ const headerImageContainer = css`
 	}
 `;
 
-const headerImage = css`
-	object-fit: contain;
-`;
-
 const imageSection = css`
 	display: flex;
 	justify-content: center;
@@ -68,29 +65,18 @@ const imageSection = css`
 	}
 `;
 
-const imageContainer = css`
-	min-width: 240px;
-	max-width: 240px;
-
-	${from.tablet} {
-		min-width: 260px;
-		max-width: 260px;
-	}
-`;
-
-const image = css`
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-`;
-
 export const StudentBrandAwareness = () => {
 	return (
 		<div css={container}>
 			<div css={copySection}>
 				<div css={headerImageContainer}>
 					<h1>
-						<img css={headerImage} src="https://placehold.co/310x100" />
+						<GridImage
+							gridId="globalStudentLandingBrandTitle"
+							srcSizes={[620, 750]}
+							sizes="(max-width: 939px) 310px, 375px"
+							imgType="png"
+						/>
 					</h1>
 				</div>
 				<div css={bodyContainer}>
@@ -109,9 +95,12 @@ export const StudentBrandAwareness = () => {
 				</div>
 			</div>
 			<div css={imageSection}>
-				<div css={imageContainer}>
-					<img css={image} src="https://placehold.co/375" />
-				</div>
+				<GridImage
+					gridId="globalStudentLandingBrand"
+					srcSizes={[480, 520]}
+					sizes="(max-width: 739px) 240px, 260px"
+					imgType="png"
+				/>
 			</div>
 		</div>
 	);
