@@ -33,6 +33,7 @@ export function StudentLandingPageGlobal({
 					studentDiscount={studentDiscount}
 					headingCopy={`No owner. No agenda. No more than ${studentDiscount.discountPriceWithCurrency} a year for students`}
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
+					includeThreeTierLink={true}
 				/>
 			}
 		/>

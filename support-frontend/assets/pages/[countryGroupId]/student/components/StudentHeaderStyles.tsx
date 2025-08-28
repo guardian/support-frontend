@@ -69,7 +69,7 @@ export const cardContainer = css`
 	display: flex;
 	flex-direction: column-reverse;
 	align-self: center;
-	padding: ${space[6]}px 0 ${space[3]}px;
+	padding: ${space[6]}px 0 ${space[6]}px;
 
 	picture {
 		display: flex;
@@ -86,11 +86,29 @@ export const cardContainer = css`
 
 	${from.tablet} {
 		flex-direction: row;
-		padding: ${space[9]}px 0 ${space[8]}px;
+		padding: ${space[9]}px 0 ${space[6]}px;
 	}
 
 	${from.desktop} {
 		flex-direction: row;
-		padding: ${space[12]}px 0 ${space[9]}px;
+		padding: ${space[12]}px 0 ${space[6]}px;
+	}
+`;
+
+export const notAStudentContainer = css`
+	${textSans17}
+	margin: 0 auto ${space[6]}px;
+	color: ${palette.neutral[100]};
+	text-align: center;
+
+	// This causes the text to break in the right place on small screens, but
+	// doesn't affect things on larger screens.
+	span {
+		display: inline-block;
+	}
+
+	a {
+		${textSansBold17}
+		color: ${palette.neutral[100]};
 	}
 `;
