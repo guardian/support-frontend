@@ -28,8 +28,8 @@ import {
 	CheckoutNudgeThankYou,
 } from 'pages/[countryGroupId]/components/checkoutNudge';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import type { GeoId } from 'pages/geoIdConfig';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import type { GeoId } from 'pages/geoIdConfig';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
