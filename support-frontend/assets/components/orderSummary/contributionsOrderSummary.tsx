@@ -209,43 +209,57 @@ export function ContributionsOrderSummary({
 	// check value is one of the set of expected values
 
 	const verifyNudgeTypeInput = (input: string | null) => {
-		if (input === null || !['toRegular', 'toSupporterPlus'].includes(input)) {
+		if (
+			input === null ||
+			!['toRegular', 'toSupporterPlus'].includes(input.trim())
+		) {
 			return '';
 		}
-		return input;
+		
+		return input.trim();
 	};
 
+	// parameter only passed from nudge CTA so used to determine if should show thanks box
 	const nudgeType = verifyNudgeTypeInput(urlSearchParams.get('nudge'));
 
-	const isContribution = productKey === 'Contribution';
-	const isSupporterPlus = productKey === 'SupporterPlus';
-	const isInNudgeToLowRegular =
-		isContribution && abParticipations?.abNudgeToLowRegular === 'variant';
-	const isInABNudgeToSupporterPlus =
-		isContribution && abParticipations?.abNudgeToSupporterPlus === 'variant';
-	const isInABNudgeToSupporterPlusThanks =
-		isSupporterPlus && abParticipations?.abNudgeToSupporterPlus === 'variant';
-	const showSupporterPlusNudge =
-		isInABNudgeToSupporterPlus && nudgeType.trim() === '';
-	const showSupporterPlusNudgeThanks =
-		isInABNudgeToSupporterPlusThanks && nudgeType.trim() === 'toSupporterPlus';
-	const showLowRegularNudgeThanks =
-		isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
+	// from one time checkout to low regular - show thanks box
+	const showLowRegularNudgeThanks = () => {
+		const isInNudgeToLowRegular =
+			productKey === 'Contribution' &&
+			abParticipations?.abNudgeToLowRegular === 'variant';
+		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
+	};
 
-	// TODO: handle the geoId better - ? add to storybook settings?
-	const nudge = showSupporterPlusNudge && (
+	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
+		<CheckoutNudgeThankYou type="toRegular" />
+	);
+
+	// from low regular to Supporter Plus
+	const showSupporterPlusNudge = () => {
+		const isInABNudgeToSupporterPlus =
+			productKey === 'Contribution' &&
+			abParticipations?.abNudgeToSupporterPlus === 'variant';
+		return isInABNudgeToSupporterPlus && nudgeType === '';
+	};
+
+	// TODO: handle the geoId better - ?
+	const nudge = showSupporterPlusNudge() && (
 		<CheckoutNudge
 			type="toSupporterPlus"
 			geoId={geoId}
 			ratePlanKey={ratePlanKey}
 		/>
 	);
-	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks && (
-		<CheckoutNudgeThankYou type="toSupporterPlus" />
-	);
 
-	const nudgeLowRegularThanks = showLowRegularNudgeThanks && (
-		<CheckoutNudgeThankYou type="toRegular" />
+	const showSupporterPlusNudgeThanks = () => {
+		const isInABNudgeToSupporterPlusThanks =
+			productKey === 'SupporterPlus' &&
+			abParticipations?.abNudgeToSupporterPlus === 'variant';
+		return isInABNudgeToSupporterPlusThanks && nudgeType === 'toSupporterPlus';
+	};
+
+	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks() && (
+		<CheckoutNudgeThankYou type="toSupporterPlus" />
 	);
 
 	return (
