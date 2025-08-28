@@ -24,7 +24,7 @@ import NewspaperHero from './components/NewspaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
-import { displayPaperProductTabs } from './helpers/displayPaperProductTabs';
+import { getPaperProductTestName } from './helpers/getPaperProductTestName';
 import { getPaperItems, getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
@@ -76,15 +76,13 @@ function PaperLandingPage({
 		window.history.replaceState({}, '', `#${newTab}`);
 	}
 
-	const showPaperProductTabs = displayPaperProductTabs();
-
 	return (
 		<Page
 			id={pageQaId}
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
-			{showPaperProductTabs ? (
+			{getPaperProductTestName() ? (
 				<>
 					<NewspaperHero
 						promotionCopy={sanitisedPromoCopy}

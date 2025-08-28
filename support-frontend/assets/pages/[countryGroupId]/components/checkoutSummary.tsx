@@ -25,7 +25,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
+import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
 import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
@@ -76,7 +76,7 @@ export default function CheckoutSummary({
 		'NationalDelivery',
 		'SubscriptionCard',
 	].includes(productKey);
-	const showPaperProductTabs = isPaper && displayPaperProductTabs();
+	const showPaperProductTabs = isPaper && !!getPaperProductTestName();
 
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
