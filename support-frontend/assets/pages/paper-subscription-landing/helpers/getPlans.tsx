@@ -22,7 +22,6 @@ import {
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
-import { getPaperProductTestName } from './getPaperProductTestName';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -199,6 +198,7 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
+	isPaperProductTest: boolean,
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -234,9 +234,7 @@ export const getPlans = (
 					: '';
 			const labelPaperProductTest =
 				productOption === 'SixdayPlus' ? 'Most popular' : '';
-			const label = getPaperProductTestName()
-				? labelPaperProductTest
-				: labelNoTest;
+			const label = isPaperProductTest ? labelPaperProductTest : labelNoTest;
 			const productLabel = getProductLabel(productOption);
 			return {
 				title: getTitle(productOption),
