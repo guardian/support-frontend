@@ -17,7 +17,8 @@ catalog:
   "@types/jest": ^29.5.12
   "@types/node": ^20.11.27
   "@aws-sdk/client-ssm": ^3.679.0
+  "@aws-sdk/client-secrets-manager": ^3.848.0
   "@aws-sdk/credential-provider-node": 3.699.0
   "@guardian/eslint-config-typescript": 12.0.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#8c10b069b3a2e243d19f600cfbf482b480f8367b"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#26dc841334ed11918467d3201c2de3d08ed9558c"

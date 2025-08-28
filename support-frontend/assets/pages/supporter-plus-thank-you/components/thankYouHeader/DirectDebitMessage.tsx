@@ -1,13 +1,4 @@
-import { css } from '@emotion/react';
-import { space } from '@guardian/source/foundations';
-
-const bold = css`
-	font-weight: bold;
-`;
-
-const directDebitMessage = css`
-	margin-bottom: ${space[2]}px;
-`;
+import { messageBold, messageMargin } from './MessageStyles';
 
 function DirectDebitMessage({
 	mediaGroup,
@@ -15,8 +6,8 @@ function DirectDebitMessage({
 	mediaGroup: string;
 }): JSX.Element {
 	return (
-		<div css={directDebitMessage}>
-			<strong css={bold}>Your Direct Debit has been set up. </strong>
+		<div css={messageMargin}>
+			<strong css={messageBold}>Your Direct Debit has been set up. </strong>
 			You will receive an email within three business days confirming your
 			recurring payment. This will appear as '{mediaGroup}' on your bank
 			statements.

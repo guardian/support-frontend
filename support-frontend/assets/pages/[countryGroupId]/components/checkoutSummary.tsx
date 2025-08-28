@@ -14,7 +14,6 @@ import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -23,7 +22,6 @@ import {
 } from 'helpers/productCatalog';
 import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -35,7 +33,7 @@ import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
-import { getProductFields } from '../checkout/helpers/getProductFields';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
@@ -45,14 +43,14 @@ type CheckoutSummaryProps = {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
 	originalAmount: number;
-	contributionAmount?: number;
-	finalAmount: number;
 	promotion?: Promotion;
 	countryId: IsoCountry;
 	forcedCountry?: string;
 	abParticipations: Participations;
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
+	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
 };
 
 export default function CheckoutSummary({
@@ -61,14 +59,14 @@ export default function CheckoutSummary({
 	productKey,
 	ratePlanKey,
 	originalAmount,
-	contributionAmount,
-	finalAmount,
 	promotion,
 	countryId,
 	forcedCountry,
 	abParticipations,
 	landingPageSettings,
 	weeklyDeliveryDate,
+	thresholdAmount,
+	studentDiscount,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
@@ -94,21 +92,6 @@ export default function CheckoutSummary({
 		billingPeriod: BillingPeriod.Monthly,
 	};
 	const isRecurringContribution = productKey === 'Contribution';
-
-	const productFields = getProductFields({
-		product: {
-			productKey,
-			productDescription,
-			ratePlanKey,
-			deliveryAgent: undefined,
-		},
-		financial: {
-			currencyKey,
-			finalAmount,
-			originalAmount,
-			contributionAmount,
-		},
-	});
 
 	/**
 	 * Is It a Contribution? URL queryPrice supplied?
@@ -140,19 +123,6 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const billingPeriod = productFields.billingPeriod;
-	/*
-  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
-          We should revisit this and see if we can remove this prop, pushing it lower down the tree
-  */
-	const thresholdAmount = getLowerProductBenefitThreshold(
-		billingPeriod,
-		fromCountryGroupId(countryGroupId),
-		countryGroupId,
-		productKey,
-		ratePlanKey,
-	);
-
 	const paperPlusDigitalBenefits = showPaperProductTabs
 		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
 		: undefined;
@@ -164,7 +134,6 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
-
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -222,6 +191,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					geoId={geoId}
+					studentDiscount={studentDiscount}
 				/>
 			</BoxContents>
 		</Box>

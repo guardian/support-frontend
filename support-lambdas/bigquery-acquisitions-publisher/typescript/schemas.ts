@@ -273,6 +273,7 @@ export const IsoCountrySchema = z.enum([
 	'IM',
 	'JE',
 	'SH',
+	'IC',
 ]);
 export type IsoCountry = z.infer<typeof IsoCountrySchema>;
 

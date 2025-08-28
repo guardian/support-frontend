@@ -51,11 +51,18 @@ const LandingPage = lazy(() => {
 		},
 	);
 });
-const StudentLandingPage = lazy(() => {
+const StudentLandingPageUTSContainer = lazy(() => {
 	return import(
-		/* webpackChunkName: "StudentLandingPage" */ './student/StudentLandingPage'
+		/* webpackChunkName: "StudentLandingPageUTSContainer" */ './student/StudentLandingPageUTSContainer'
 	).then((mod) => {
-		return { default: mod.StudentLandingPage };
+		return { default: mod.StudentLandingPageUTSContainer };
+	});
+});
+const StudentLandingPageGlobalContainer = lazy(() => {
+	return import(
+		/* webpackChunkName: "StudentLandingPageGlobalContainer" */ './student/StudentLandingPageGlobalContainer'
+	).then((mod) => {
+		return { default: mod.StudentLandingPageGlobalContainer };
 	});
 });
 
@@ -123,7 +130,7 @@ const router = createBrowserRouter([
 			path: `/${geoId}/student`,
 			element: (
 				<Suspense fallback={<HoldingContent />}>
-					<StudentLandingPage
+					<StudentLandingPageGlobalContainer
 						geoId={geoId}
 						landingPageVariant={landingPageParticipations.variant}
 					/>
@@ -135,8 +142,7 @@ const router = createBrowserRouter([
 		path: '/au/student/UTS',
 		element: (
 			<Suspense fallback={<HoldingContent />}>
-				<StudentLandingPage
-					geoId={'au'}
+				<StudentLandingPageUTSContainer
 					landingPageVariant={landingPageParticipations.variant}
 				/>
 			</Suspense>

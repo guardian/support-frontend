@@ -6,7 +6,7 @@ packageSummary := "Support Play APP"
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.7.0",
+  "com.gu" %% "simple-configuration-ssm" % "7.0.0",
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "6.29.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,

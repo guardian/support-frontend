@@ -69,7 +69,7 @@ export const myAccountCta = (
 	</a>
 );
 
-export const helpCenterCta = (
+export const helpCenterCta = (linkCopy: string) => (
 	<a
 		css={neutralFontColor}
 		href={helpCentreUrl}
@@ -79,6 +79,6 @@ export const helpCenterCta = (
 			componentType: 'ACQUISITIONS_BUTTON',
 		})}
 	>
-		Help centre
+		{linkCopy}
 	</a>
 );

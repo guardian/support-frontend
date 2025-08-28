@@ -1,4 +1,7 @@
-import type { ActiveProductKey } from 'helpers/productCatalog';
+import type {
+	ActiveProductKey,
+	ActiveRatePlanKey,
+} from 'helpers/productCatalog';
 
 const paperProductsKeys: ActiveProductKey[] = [
 	'NationalDelivery',
@@ -32,4 +35,14 @@ export function isGuardianWeeklyProduct(productKey: ActiveProductKey): boolean {
 
 export function isContributionProduct(productKey: ActiveProductKey): boolean {
 	return contributionProductKeys.includes(productKey);
+}
+
+export function isGuardianWeeklyGiftProduct(
+	productKey: ActiveProductKey,
+	ratePlanKey: ActiveRatePlanKey,
+): boolean {
+	return (
+		isGuardianWeeklyProduct(productKey) &&
+		['ThreeMonthGift', 'OneYearGift'].includes(ratePlanKey)
+	);
 }

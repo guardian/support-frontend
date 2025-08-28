@@ -10,6 +10,22 @@ export default {
 	decorators: [],
 };
 
+const oneYearStudentDiscount = {
+	amount: 9,
+	periodNoun: 'year',
+	discountPriceWithCurrency: '£9',
+	fullPriceWithCurrency: '£120',
+};
+const auStudentDiscount = {
+	amount: 0,
+	periodNoun: 'month',
+	discountPriceWithCurrency: '$0',
+	fullPriceWithCurrency: '$20',
+	promoCode: 'UTS_STUDENT',
+	promoDuration: 'two years',
+	discountSummary: '$0/month for two years, then $20/month',
+};
+
 function Template(args: PaymentTsAndCsProps) {
 	return <PaymentTsAndCs {...args} />;
 }
@@ -43,6 +59,24 @@ SupporterPlus.args = {
 	ratePlanKey: 'Monthly',
 	countryGroupId: 'GBPCountries',
 	thresholdAmount: 12,
+};
+
+export const SupporterPlusOneYearStudent = Template.bind({});
+SupporterPlusOneYearStudent.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'OneYearStudent',
+	countryGroupId: 'GBPCountries',
+	thresholdAmount: 120,
+	studentDiscount: oneYearStudentDiscount,
+};
+
+export const SupporterPlusAUStudent = Template.bind({});
+SupporterPlusAUStudent.args = {
+	productKey: 'SupporterPlus',
+	ratePlanKey: 'Monthly',
+	countryGroupId: 'AUDCountries',
+	thresholdAmount: 120,
+	studentDiscount: auStudentDiscount,
 };
 
 export const TierThree = Template.bind({});

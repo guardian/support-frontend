@@ -7,7 +7,6 @@ import {
 	space,
 	textSans14,
 	textSans17,
-	visuallyHidden,
 } from '@guardian/source/foundations';
 import {
 	Button,
@@ -30,6 +29,8 @@ import {
 } from 'pages/[countryGroupId]/components/checkoutNudge';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { GeoId } from 'pages/geoIdConfig';
+import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
 	${textSans17}
@@ -98,11 +99,6 @@ const buttonOverrides = css`
 	}
 `;
 
-const originalPriceStrikeThrough = css`
-	font-weight: 400;
-	text-decoration: line-through;
-`;
-
 const iconCss = (flip: boolean) => css`
 	svg {
 		max-width: ${space[4]}px;
@@ -161,11 +157,8 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	geoId: GeoId;
 	abParticipations?: Participations;
+	studentDiscount?: StudentDiscount;
 };
-
-const visuallyHiddenCss = css`
-	${visuallyHidden};
-`;
 
 export function ContributionsOrderSummary({
 	productKey,
@@ -184,6 +177,7 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	geoId,
 	abParticipations,
+	studentDiscount,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -199,11 +193,15 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
-	const formattedAmount = simpleFormatAmount(currency, amount);
-
-	const formattedPromotionAmount =
+	const fullPrice =
+		studentDiscount?.fullPriceWithCurrency ??
+		simpleFormatAmount(currency, amount);
+	const promoDiscountPrice =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
+	const discountPrice =
+		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
+	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
 	/* nudge AB test */
 	// get nudge url param
@@ -298,27 +296,11 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
-				<p>
-					{formattedPromotionAmount && (
-						<>
-							<span css={originalPriceStrikeThrough}>
-								<span css={visuallyHiddenCss}>Was </span>
-								{formattedAmount}
-								<span css={visuallyHiddenCss}>, now</span>
-							</span>{' '}
-							{paymentFrequency
-								? `${formattedPromotionAmount}/${paymentFrequency}`
-								: formattedPromotionAmount}
-						</>
-					)}
-					{!formattedPromotionAmount && (
-						<>
-							{paymentFrequency
-								? `${formattedAmount}/${paymentFrequency}`
-								: formattedAmount}
-						</>
-					)}
-				</p>
+				<PriceSummary
+					fullPrice={fullPrice}
+					period={period}
+					discountPrice={discountPrice}
+				/>
 			</div>
 			{nudgeSupporterPlusThanks}
 			{nudgeLowRegularThanks}

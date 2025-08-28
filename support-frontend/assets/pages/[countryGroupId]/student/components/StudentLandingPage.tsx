@@ -12,21 +12,18 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
-import { AccordionFAQ } from '../components/accordionFAQ';
-import StudentHeader from './components/StudentHeader';
-import { StudentTsAndCs } from './components/studentTsAndCs';
-import { getStudentFAQs } from './helpers/studentFAQs';
-import { getStudentTsAndCs } from './helpers/studentTsAndCsCopy';
+import { AccordionFAQ } from '../../components/accordionFAQ';
+import { getStudentFAQs } from '../helpers/studentFAQs';
+import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
+import { StudentTsAndCs } from './studentTsAndCs';
 
-export function StudentLandingPage({
-	geoId,
-	landingPageVariant,
-}: {
+type StudentLandingPageProps = {
 	geoId: GeoId;
-	landingPageVariant: LandingPageVariant;
-}) {
+	header: JSX.Element;
+};
+
+export function StudentLandingPage({ geoId, header }: StudentLandingPageProps) {
 	const faqItems = getStudentFAQs(geoId);
 	const tsAndCsItem = getStudentTsAndCs(geoId);
 
@@ -56,7 +53,7 @@ export function StudentLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<StudentHeader geoId={geoId} landingPageVariant={landingPageVariant} />
+			{header}
 			{faqItems && <AccordionFAQ faqItems={faqItems} />}
 			{tsAndCsItem && <StudentTsAndCs tsAndCsItem={tsAndCsItem} />}
 		</PageScaffold>

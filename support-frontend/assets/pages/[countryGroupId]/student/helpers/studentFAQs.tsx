@@ -107,6 +107,7 @@ const auSupporterPlusFAQ: FAQItem[] = [
 const studentFAQs: Partial<Record<CountryGroupId, FAQItem[]>> = {
 	GBPCountries: otherSupporterPlusFAQ,
 	UnitedStates: otherSupporterPlusFAQ,
+	Canada: otherSupporterPlusFAQ,
 	AUDCountries: auSupporterPlusFAQ,
 };
 

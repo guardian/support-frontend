@@ -43,7 +43,6 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
-import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import {
 	type ActiveProductKey,
 	type ActiveRatePlanKey,
@@ -55,7 +54,6 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { getLowerProductBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { sendEventPaymentMethodSelected } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
@@ -64,6 +62,7 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -80,8 +79,8 @@ import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession'
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
-import { isWeeklyGiftSub } from '../helpers/isWeeklyGiftSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -132,6 +131,8 @@ type CheckoutFormProps = {
 	clearCheckoutSession: () => void;
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
+	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
 };
 
 const getPaymentMethods = (
@@ -183,6 +184,8 @@ export default function CheckoutForm({
 	clearCheckoutSession,
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
+	thresholdAmount,
+	studentDiscount,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -204,7 +207,7 @@ export default function CheckoutForm({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-	const isWeeklyGift = isWeeklyGiftSub(productKey, ratePlanKey);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -646,18 +649,6 @@ export default function CheckoutForm({
 	);
 
 	const billingPeriod = productFields.billingPeriod;
-	/*
-  TODO :  Passed down because minimum product prices are unavailable in the paymentTsAndCs story
-          We should revisit this and see if we can remove this prop, pushing it lower down the tree
-  */
-	const thresholdAmount = getLowerProductBenefitThreshold(
-		billingPeriod,
-		fromCountryGroupId(countryGroupId),
-		countryGroupId,
-		productKey,
-		ratePlanKey,
-	);
-
 	const billingStatePostcode = {
 		billingState: billingState,
 		setBillingState: setBillingState,
@@ -864,6 +855,7 @@ export default function CheckoutForm({
 
 						<PersonalDetailsFields
 							countryId={countryId}
+							countries={productDescription.deliverableTo}
 							legend={legendPersonalDetails}
 							firstName={firstName}
 							setFirstName={setFirstName}
@@ -1138,6 +1130,7 @@ export default function CheckoutForm({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							countryGroupId={countryGroupId}
+							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
 						/>
