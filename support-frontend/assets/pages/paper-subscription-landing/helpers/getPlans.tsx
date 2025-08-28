@@ -25,7 +25,6 @@ import {
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
-import { getPaperProductTestName } from './getPaperProductTestName';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -203,6 +202,7 @@ export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
 	activePaperProductTypes: ActivePaperProductOptions[],
+	isPaperProductTest: boolean,
 ): Product[] =>
 	activePaperProductTypes
 		.filter(
@@ -244,7 +244,7 @@ export const getPlans = (
 					fulfilmentOption,
 					productOption,
 					promoCode,
-					getPaperProductTestName(),
+					isPaperProductTest ? 'paperProductTabs' : undefined,
 				),
 				onClick: sendTrackingEventsOnClick(trackingProperties),
 				onView: sendTrackingEventsOnView(trackingProperties),

@@ -29,7 +29,6 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
 import { FinePrint } from './finePrint';
 import { ManageMyAccountLink } from './manageMyAccountLink';
 
@@ -128,6 +127,7 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isPaperProductTest?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -136,6 +136,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	isPaperProductTest = false,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -147,7 +148,6 @@ export function PaymentTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
-	const isPaperProductTest = !!getPaperProductTestName();
 
 	if (isSundayOnlynewsletterSubscription) {
 		return (

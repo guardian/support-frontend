@@ -24,7 +24,6 @@ import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -155,6 +154,7 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
 	studentDiscount?: StudentDiscount;
+	isPaperProductTest?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -173,9 +173,9 @@ export function ContributionsOrderSummary({
 	startDate,
 	enableCheckList,
 	studentDiscount,
+	isPaperProductTest = false,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
-	const isPaperProductTest = !!getPaperProductTestName();
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,

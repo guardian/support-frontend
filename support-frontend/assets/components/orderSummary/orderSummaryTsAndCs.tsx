@@ -23,7 +23,6 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
-import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
@@ -88,6 +87,7 @@ export interface OrderSummaryTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isPaperProductTest?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
@@ -96,6 +96,7 @@ export function OrderSummaryTsAndCs({
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
+	isPaperProductTest = false,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -103,7 +104,6 @@ export function OrderSummaryTsAndCs({
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
 	const isPaperSunday = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
-	const isPaperProductTest = !!getPaperProductTestName();
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
