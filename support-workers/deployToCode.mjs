@@ -27,9 +27,7 @@ const lambdaClient = new LambdaClient({
 });
 
 async function uploadToS3() {
-	console.log(
-		'Uploading target/typescript/support-workers.zip to S3 (to update the zipfile before upload use the `pnpm --filter support-workers package` command)',
-	);
+	console.log('Uploading target/typescript/support-workers.zip to S3');
 
 	const zipFilePath = join(__dirname, 'target/typescript/support-workers.zip');
 	const fileStream = createReadStream(zipFilePath);
