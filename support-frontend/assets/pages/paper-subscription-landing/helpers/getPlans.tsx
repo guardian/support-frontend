@@ -253,7 +253,7 @@ export const getPlans = (
 					nonDiscountedPrice,
 					copy[fulfilmentOption][productOption],
 				),
-				planData: getPlanData(productOption),
+				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
 				label,
 				productLabel,

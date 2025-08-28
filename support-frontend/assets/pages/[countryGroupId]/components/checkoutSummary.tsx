@@ -26,7 +26,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
-import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
+import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import {
@@ -77,7 +77,6 @@ export default function CheckoutSummary({
 		'SubscriptionCard',
 	].includes(productKey);
 	const showPaperProductTabs = isPaper && !!getPaperProductTestName();
-
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -124,7 +123,7 @@ export default function CheckoutSummary({
 	}
 
 	const paperPlusDigitalBenefits = showPaperProductTabs
-		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
+		? getPlanBenefitData(ratePlanKey as PaperProductOptions)
 		: undefined;
 	const benefitsCheckListData =
 		paperPlusDigitalBenefits ??
@@ -134,8 +133,6 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
-	console.log('*** paperPlusDigitalBenefits', paperPlusDigitalBenefits);
-	console.log('*** benefitsCheckListData', benefitsCheckListData);
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
