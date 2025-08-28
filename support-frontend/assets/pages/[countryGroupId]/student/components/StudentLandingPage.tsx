@@ -20,7 +20,7 @@ import { StudentTsAndCs } from './studentTsAndCs';
 
 type StudentLandingPageProps = {
 	geoId: GeoId;
-	header: React.ReactNode;
+	header: JSX.Element;
 };
 
 export function StudentLandingPage({ geoId, header }: StudentLandingPageProps) {
