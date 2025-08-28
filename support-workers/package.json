@@ -17,7 +17,9 @@
     "zip": "cd target/typescript && zip -r support-workers.zip ./* -x \".*\" -x \"__MACOSX\"",
     "bundle-and-zip": "pnpm clean-target && pnpm bundle && pnpm zip",
     "check-modules": "pnpm --filter modules check-formatting && pnpm --filter modules lint:check",
-    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip"
+    "package": "pnpm check-modules && pnpm check-formatting && pnpm lint:check && pnpm build && pnpm test && pnpm bundle-and-zip",
+    "deploy-to-code": "node deployToCode.mjs",
+    "package-and-deploy": "pnpm package && pnpm deploy-to-code"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.876.0",
+    "@aws-sdk/client-s3": "^3.876.0",
     "@guardian/eslint-config-typescript": "catalog:",
     "@guardian/prettier": "catalog:",
     "@types/jest": "catalog:",

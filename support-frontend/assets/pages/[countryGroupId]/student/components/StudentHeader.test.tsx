@@ -7,21 +7,14 @@ import type {
 import type { GeoId } from 'pages/geoIdConfig';
 import StudentHeader from './StudentHeader';
 
-jest.mock('../helpers/discountDetails');
-jest.mock('../helpers/buildCheckoutUrl');
-
-jest.mock('components/gridPicture/gridPicture', () => ({
-	__esModule: true,
-	default: jest.fn(() => <div data-testid="grid-picture">Grid Images</div>),
-}));
-
-export const oneYearStudentDiscount = {
+const oneYearStudentDiscount = {
 	amount: 9,
 	periodNoun: 'year',
 	discountPriceWithCurrency: '£9',
 	fullPriceWithCurrency: '£120',
 };
-export const auStudentDiscount = {
+
+const utsStudentDiscount = {
 	amount: 0,
 	periodNoun: 'month',
 	discountPriceWithCurrency: '$0',
@@ -43,23 +36,19 @@ describe('<StudentHeader />', () => {
 		},
 	} as unknown as LandingPageVariant;
 
-	beforeEach(() => {
-		jest.resetAllMocks();
-	});
-
-	it('shows promo duration in the subheading when provided', () => {
+	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={oneYearStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
 			/>,
 		);
-		expect(
-			screen.getByText(`for ${auStudentDiscount.promoDuration}`),
-		).toBeInTheDocument();
+		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
 	});
 
 	it("uses 'Sign up for free' as CTA label when amount is 0", () => {
@@ -69,7 +58,9 @@ describe('<StudentHeader />', () => {
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={utsStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
 			/>,
 		);
 		expect(screen.getByTestId('cta-button')).toHaveTextContent(
@@ -77,31 +68,20 @@ describe('<StudentHeader />', () => {
 		);
 	});
 
-	it("uses 'Subscribe' as CTA label when amount is greater than 0", () => {
+	it('renders discountSummary when provided', () => {
 		render(
 			<StudentHeader
 				geoId={geoId}
 				productKey={productKey}
 				ratePlanKey={ratePlanKey}
 				landingPageVariant={landingPageVariant}
-				studentDiscount={oneYearStudentDiscount}
-			/>,
-		);
-		expect(screen.getByTestId('cta-button')).toHaveTextContent('Subscribe');
-	});
-
-	it('passes discountSummary through to StudentProductCard', () => {
-		render(
-			<StudentHeader
-				geoId={geoId}
-				productKey={productKey}
-				ratePlanKey={ratePlanKey}
-				landingPageVariant={landingPageVariant}
-				studentDiscount={auStudentDiscount}
+				studentDiscount={utsStudentDiscount}
+				headingCopy="Example heading"
+				subheadingCopy="Example subheading"
 			/>,
 		);
 		expect(
-			screen.getByText(auStudentDiscount.discountSummary),
+			screen.getByText(utsStudentDiscount.discountSummary),
 		).toBeInTheDocument();
 	});
 });
