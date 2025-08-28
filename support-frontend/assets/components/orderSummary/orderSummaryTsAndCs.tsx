@@ -23,6 +23,7 @@ import {
 	isPaperPlusSub,
 	isSundayOnlyNewspaperSub,
 } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { getPaperProductTestName } from 'pages/paper-subscription-landing/helpers/getPaperProductTestName';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
@@ -102,7 +103,7 @@ export function OrderSummaryTsAndCs({
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
 	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
 	const isPaperSunday = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
-	const isPaperSundayOrPlus = isPaperPlus || isPaperSunday;
+	const isPaperProductTest = !!getPaperProductTestName();
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -199,10 +200,10 @@ export function OrderSummaryTsAndCs({
 		TierThree: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
-		SubscriptionCard: isPaperSundayOrPlus
+		SubscriptionCard: isPaperProductTest
 			? paperPlusTsAndCs
 			: defaultOrderSummaryTsAndCs,
-		HomeDelivery: isPaperSundayOrPlus
+		HomeDelivery: isPaperProductTest
 			? paperPlusTsAndCs
 			: defaultOrderSummaryTsAndCs,
 	};
