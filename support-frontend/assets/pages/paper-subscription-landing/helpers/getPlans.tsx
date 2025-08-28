@@ -25,6 +25,7 @@ import {
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { ActivePaperProductTypes } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
+import { getPaperProductTestName } from './getPaperProductTestName';
 import { getProductLabel, getTitle } from './products';
 
 const getPriceCopyString = (
@@ -232,10 +233,16 @@ export const getPlans = (
 				? 'Best deal'
 				: '';
 		const productLabel = getProductLabel(productOption);
+
 		return {
 			title: getTitle(productOption),
 			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+			href: paperCheckoutUrl(
+				fulfilmentOption,
+				productOption,
+				promoCode,
+				getPaperProductTestName(),
+			),
 			onClick: sendTrackingEventsOnClick(trackingProperties),
 			onView: sendTrackingEventsOnView(trackingProperties),
 			buttonCopy: 'Subscribe',
