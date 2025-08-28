@@ -131,7 +131,7 @@ const termsAndConditions = css`
 	p {
 		margin-top: ${space[1]}px;
 	}
-	& div:last-child {
+	& div:nth-child(2) {
 		margin-top: ${space[3]}px;
 		${textSans14};
 	}
