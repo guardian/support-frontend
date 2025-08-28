@@ -292,5 +292,6 @@ StudentOneYear.args = {
 			Change
 		</Button>
 	),
+	geoId: 'uk',
 	studentDiscount: oneYearStudentDiscount,
 };
