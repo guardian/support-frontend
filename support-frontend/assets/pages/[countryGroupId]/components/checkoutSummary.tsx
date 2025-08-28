@@ -70,13 +70,7 @@ export default function CheckoutSummary({
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
-
-	const isPaper = [
-		'HomeDelivery',
-		'NationalDelivery',
-		'SubscriptionCard',
-	].includes(productKey);
-	const showPaperProductTabs = isPaper && !!getPaperProductTestName();
+	const isPaperProductTest = !!getPaperProductTestName();
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -122,7 +116,7 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const paperPlusDigitalBenefits = showPaperProductTabs
+	const paperPlusDigitalBenefits = isPaperProductTest
 		? getPlanBenefitData(ratePlanKey as PaperProductOptions)
 		: undefined;
 	const benefitsCheckListData =
