@@ -60,17 +60,17 @@ export function SummaryTsAndCs({
 	}${renewalDateEnd}`;
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
-	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+	const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
 	const isPaperPlusSubscription = isPaperPlusSub(productKey, ratePlanKey);
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
-	if (isSundayOnlynewsletterSubscription || isPaperPlusSubscription) {
+	if (isSundayOnlyNewsletterSubscription || isPaperPlusSubscription) {
 		return (
 			<div css={containerSummaryTsCs}>
-				The {isSundayOnlynewsletterSubscription ? 'Observer' : rateDescriptor}{' '}
+				The {isSundayOnlyNewsletterSubscription ? 'Observer' : rateDescriptor}{' '}
 				subscription will auto renew each month. You will be charged the
 				subscription amounts using your chosen payment method at each renewal,
 				at the rate then in effect, unless you cancel.

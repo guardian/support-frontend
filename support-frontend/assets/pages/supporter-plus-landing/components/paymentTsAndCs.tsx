@@ -144,12 +144,12 @@ export function PaymentTsAndCs({
 	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
 	const billingPeriodPlural =
 		getBillingPeriodTitle(billingPeriod).toLowerCase();
-	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+	const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
 
-	if (isSundayOnlynewsletterSubscription) {
+	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
 				{isPaperProductTest ? 'The Observer is owned by Tortoise Media. ' : ''}
