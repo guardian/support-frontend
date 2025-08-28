@@ -215,7 +215,7 @@ export function ContributionsOrderSummary({
 		) {
 			return '';
 		}
-		
+
 		return input.trim();
 	};
 

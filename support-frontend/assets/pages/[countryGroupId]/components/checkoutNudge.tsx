@@ -208,7 +208,10 @@ export function CheckoutNudgeThankYou({ type }: CheckoutNudgeThanksProps) {
 						<h3>{getNudgeHeadline}</h3>
 						<p>{getNudgeCopy}</p>
 					</div>
-					<img width='116px' src='https://uploads.guim.co.uk/2025/08/28/313aafcd2a1b8fed178628ce346b517248d8692b.png' />
+					<img
+						width="116px"
+						src="https://uploads.guim.co.uk/2025/08/28/313aafcd2a1b8fed178628ce346b517248d8692b.png"
+					/>
 				</div>
 			</BoxContents>
 		</Box>
