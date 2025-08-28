@@ -9,6 +9,7 @@ import Carousel from 'components/product/Carousel';
 import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { observerLinks } from 'helpers/legal';
+import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
@@ -51,11 +52,13 @@ function NewspaperProductTabs({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
-		getPlans(selectedTab, productPrices),
+		getPlans(selectedTab, productPrices, ActivePaperProductTypes),
 	);
 
 	useEffect(() => {
-		setProductRatePlans(getPlans(selectedTab, productPrices));
+		setProductRatePlans(
+			getPlans(selectedTab, productPrices, ActivePaperProductTypes),
+		);
 	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {

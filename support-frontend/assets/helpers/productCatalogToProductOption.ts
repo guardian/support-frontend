@@ -15,7 +15,18 @@ import {
 } from '@modules/product/productOptions';
 import type { ActiveProductKey, ActiveRatePlanKey } from './productCatalog';
 
-const ActivePaperProductTypes: readonly PaperProductOptions[] = [
+const ActivePaperProductNoTestTypes: PaperProductOptions[] = [
+	EverydayPlus,
+	SixdayPlus,
+	WeekendPlus,
+	SaturdayPlus,
+	Everyday,
+	Sixday,
+	Weekend,
+	Saturday,
+	Sunday,
+] as const;
+const ActivePaperProductTypes: PaperProductOptions[] = [
 	SixdayPlus,
 	SaturdayPlus,
 	EverydayPlus,
@@ -109,4 +120,5 @@ export {
 	paperProductsWithoutDigital,
 	paperProductsWithDigital,
 	ActivePaperProductTypes,
+	ActivePaperProductNoTestTypes,
 };

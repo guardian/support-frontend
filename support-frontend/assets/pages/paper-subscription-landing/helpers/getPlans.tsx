@@ -20,7 +20,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { ActivePaperProductTypes } from '../../../helpers/productCatalogToProductOption';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
 import { getPaperProductTestName } from './getPaperProductTestName';
 import { getProductLabel, getTitle } from './products';
@@ -198,61 +198,64 @@ const copy: Record<
 export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
+	activePaperProductTypes: ActivePaperProductOptions[],
 ): Product[] =>
-	ActivePaperProductTypes.filter(
-		(productOption) =>
-			productOption.endsWith('Plus') || productOption === 'Sunday',
-	).map((productOption) => {
-		const priceAfterPromosApplied = finalPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-		const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
-		const promoCode = promotion ? promotion.promoCode : null;
-		const trackingProperties: TrackingProperties = {
-			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-			product: 'Paper',
-			componentType: 'ACQUISITIONS_BUTTON',
-		};
-		const nonDiscountedPrice = getProductPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-
-		const labelNoTest =
-			productOption === 'Everyday' || productOption === 'EverydayPlus'
-				? 'Best deal'
-				: '';
-		const labelPaperProductTest =
-			productOption === 'SixdayPlus' ? 'Most popular' : '';
-		const label = getPaperProductTestName()
-			? labelPaperProductTest
-			: labelNoTest;
-		const productLabel = getProductLabel(productOption);
-		return {
-			title: getTitle(productOption),
-			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-			onClick: sendTrackingEventsOnClick(trackingProperties),
-			onView: sendTrackingEventsOnView(trackingProperties),
-			buttonCopy: 'Subscribe',
-			priceCopy: getPriceCopyString(
-				nonDiscountedPrice,
-				copy[fulfilmentOption][productOption],
-			),
-			planData: getPlanData(productOption, fulfilmentOption),
-			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label,
-			productLabel,
-			unavailableOutsideLondon: getUnavailableOutsideLondon(
+	activePaperProductTypes
+		.filter(
+			(productOption) =>
+				productOption.endsWith('Plus') || productOption === 'Sunday',
+		)
+		.map((productOption) => {
+			const priceAfterPromosApplied = finalPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
 				fulfilmentOption,
 				productOption,
-			),
-		};
-	});
+			);
+			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+			const promoCode = promotion ? promotion.promoCode : null;
+			const trackingProperties: TrackingProperties = {
+				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+				product: 'Paper',
+				componentType: 'ACQUISITIONS_BUTTON',
+			};
+			const nonDiscountedPrice = getProductPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
+				fulfilmentOption,
+				productOption,
+			);
+
+			const labelNoTest =
+				productOption === 'Everyday' || productOption === 'EverydayPlus'
+					? 'Best deal'
+					: '';
+			const labelPaperProductTest =
+				productOption === 'SixdayPlus' ? 'Most popular' : '';
+			const label = getPaperProductTestName()
+				? labelPaperProductTest
+				: labelNoTest;
+			const productLabel = getProductLabel(productOption);
+			return {
+				title: getTitle(productOption),
+				price: showPrice(priceAfterPromosApplied),
+				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+				onClick: sendTrackingEventsOnClick(trackingProperties),
+				onView: sendTrackingEventsOnView(trackingProperties),
+				buttonCopy: 'Subscribe',
+				priceCopy: getPriceCopyString(
+					nonDiscountedPrice,
+					copy[fulfilmentOption][productOption],
+				),
+				planData: getPlanData(productOption, fulfilmentOption),
+				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+				label,
+				productLabel,
+				unavailableOutsideLondon: getUnavailableOutsideLondon(
+					fulfilmentOption,
+					productOption,
+				),
+			};
+		});
