@@ -16,14 +16,6 @@ jest.mock('@guardian/ophan-tracker-js/support', () => ({
   default: mockOphanSupport,
 }));
 
-// General-purpose mock; any and all functions called off the 'ophan' object
-// will be proxied to a mock Jest function
-jest.mock('@guardian/ophan-tracker-js', () => new Proxy({}, {
-  get() {
-    return jest.fn();
-  },
-}));
-
 // window.guardian mock
 global.window.guardian = {
   stripeKeyDefaultCurrencies: {
