@@ -1,0 +1,136 @@
+{
+  "state": {
+    "productSpecificState": {
+      "productType": "SupporterPlus",
+      "billingCountry": "GB",
+      "product": {
+        "amount": 12,
+        "currency": "GBP",
+        "billingPeriod": "Monthly",
+        "productType": "SupporterPlus"
+      },
+      "productInformation": {
+        "product": "SupporterPlus",
+        "ratePlan": "Monthly",
+        "amount": 12
+      },
+      "paymentMethod": {
+        "TokenId": "pm_0S1SrNItVxyc3Q6ntB3yRwJ9",
+        "SecondTokenId": "cus_SxNccaDzSlgCsG",
+        "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+        "Type": "CreditCardReferenceTransaction",
+        "StripePaymentType": "StripeCheckout"
+      },
+      "appliedPromotion": null,
+      "salesForceContact": {
+        "Id": "0039E00001Lin87QAB",
+        "AccountId": "0019E00001ct6lUQAQ"
+      },
+      "similarProductsConsent": true
+    },
+    "requestId": "32630b4c-d9ff-617d-0000-000000001789",
+    "user": {
+      "id": "21841796",
+      "primaryEmailAddress": "test@test.com",
+      "title": null,
+      "firstName": "test",
+      "lastName": "test",
+      "billingAddress": {
+        "lineOne": null,
+        "lineTwo": null,
+        "city": null,
+        "state": null,
+        "postCode": null,
+        "country": "GB"
+      },
+      "deliveryAddress": null,
+      "telephoneNumber": null,
+      "isTestUser": false,
+      "deliveryInstructions": null
+    },
+    "giftRecipient": null,
+    "product": {
+      "amount": 12,
+      "currency": "GBP",
+      "billingPeriod": "Monthly",
+      "productType": "SupporterPlus"
+    },
+    "productInformation": {
+      "product": "SupporterPlus",
+      "ratePlan": "Monthly",
+      "amount": 12
+    },
+    "analyticsInfo": {
+      "isGiftPurchase": false,
+      "paymentProvider": "Stripe"
+    },
+    "firstDeliveryDate": null,
+    "appliedPromotion": null,
+    "csrUsername": null,
+    "salesforceCaseId": null,
+    "acquisitionData": {
+      "ophanIds": {
+        "pageviewId": "mewwgcj5tcojm96n8108",
+        "browserId": null
+      },
+      "referrerAcquisitionData": {
+        "campaignCode": null,
+        "referrerPageviewId": "",
+        "referrerUrl": null,
+        "componentId": null,
+        "componentType": null,
+        "source": null,
+        "abTests": null,
+        "queryParameters": [
+          {
+            "name": "product",
+            "value": "Contribution"
+          },
+          {
+            "name": "ratePlan",
+            "value": "Monthly"
+          },
+          {
+            "name": "userType",
+            "value": "current"
+          },
+          {
+            "name": "contribution",
+            "value": "5"
+          }
+        ],
+        "hostname": "support.code.dev-theguardian.com",
+        "gaClientId": null,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:142.0) Gecko/20100101 Firefox/142.0",
+        "ipAddress": "10.248.135.161",
+        "labels": [
+          "generic-checkout"
+        ]
+      },
+      "supportAbTests": [
+        {
+          "name": "abandonedBasket",
+          "variant": "control"
+        },
+        {
+          "name": "LP_COUNTDOWN",
+          "variant": "CONTROL"
+        }
+      ]
+    },
+    "similarProductsConsent": true,
+    "paymentMethod": {
+      "TokenId": "pm_0S1SrNItVxyc3Q6ntB3yRwJ9",
+      "SecondTokenId": "cus_SxNccaDzSlgCsG",
+      "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+      "Type": "CreditCardReferenceTransaction",
+      "StripePaymentType": "StripeCheckout"
+    }
+  },
+  "error": null,
+  "requestInfo": {
+    "testUser": false,
+    "failed": false,
+    "messages": []
+  }
+}
