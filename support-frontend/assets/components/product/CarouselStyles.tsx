@@ -47,7 +47,7 @@ const buttonStyle = css`
 
 export const prevButton = css`
 	${buttonStyle};
-	left: -${space[5]}px;
+	left: -${space[3]}px;
 `;
 
 export const showNavButton = css`
