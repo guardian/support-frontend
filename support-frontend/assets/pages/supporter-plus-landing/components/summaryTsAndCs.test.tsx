@@ -48,6 +48,11 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 					}
 					currency={'GBP'}
 					amount={0}
+					isPaperProductTest={
+						!!['WeekendPlus', 'SixdayPlus'].includes(
+							activeRatePlanKey as ActiveRatePlanKey,
+						)
+					}
 				/>,
 			);
 			expect(container.textContent).toMatchSnapshot();

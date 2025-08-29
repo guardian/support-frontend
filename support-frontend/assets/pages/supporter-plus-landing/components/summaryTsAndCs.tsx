@@ -20,10 +20,7 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
-import {
-	isPaperPlusSub,
-	isSundayOnlyNewspaperSub,
-} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 
 const containerSummaryTsCs = css`
 	margin-top: ${space[6]}px;
@@ -42,6 +39,7 @@ export interface SummaryTsAndCsProps {
 	ratePlanDescription?: string;
 	currency: IsoCurrency;
 	amount: number;
+	isPaperProductTest?: boolean;
 }
 export function SummaryTsAndCs({
 	productKey,
@@ -49,6 +47,7 @@ export function SummaryTsAndCs({
 	ratePlanDescription,
 	currency,
 	amount,
+	isPaperProductTest = false,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -64,10 +63,9 @@ export function SummaryTsAndCs({
 		productKey,
 		ratePlanKey,
 	);
-	const isPaperPlusSubscription = isPaperPlusSub(productKey, ratePlanKey);
 	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
-	if (isSundayOnlyNewsletterSubscription || isPaperPlusSubscription) {
+	if (isSundayOnlyNewsletterSubscription || isPaperProductTest) {
 		return (
 			<div css={containerSummaryTsCs}>
 				The {isSundayOnlyNewsletterSubscription ? 'Observer' : rateDescriptor}{' '}

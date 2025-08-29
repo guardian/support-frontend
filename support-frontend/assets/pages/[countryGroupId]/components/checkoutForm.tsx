@@ -1098,6 +1098,7 @@ export default function CheckoutForm({
 							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 						<div
 							css={css`
