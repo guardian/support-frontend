@@ -1,3 +1,4 @@
+import { asRetryError } from '../errors/errorHandler';
 import { combinedAddressLine } from '../model/address';
 import type {
 	DirectDebitPaymentFields,
@@ -31,7 +32,6 @@ import {
 import { ServiceProvider } from '../services/config';
 import { getPayPalConfig, PayPalService } from '../services/payPal';
 import { getStripeConfig, StripeService } from '../services/stripe';
-import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();

@@ -115,10 +115,6 @@ describe('SalesforceService', () => {
 	});
 });
 
-jest.mock('../model/stage', () => ({
-	stageFromEnvironment: jest.fn().mockReturnValue('CODE'),
-}));
-
 describe('CreateSalesforceContatctLambda', () => {
 	test('CreateSalesforceContact lambda should upsert a SalesforceContactRecord', async () => {
 		const inputState: CreateSalesforceContactState =

@@ -15,6 +15,7 @@ import type { PaymentMethod as ZuoraPaymentMethod } from '@modules/zuora/orders/
 import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
 import dayjs from 'dayjs';
+import { asRetryError } from '../errors/errorHandler';
 import type { Address } from '../model/address';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
 import type { PaymentMethod } from '../model/paymentMethod';
@@ -28,7 +29,6 @@ import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
-import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 // Ensure that any Date objects are serialised in the format expected by Zuora
@@ -126,7 +126,6 @@ export const handler = async (
 			previewInvoices,
 		);
 	} catch (error) {
-		// TODO: correct error handling
 		throw asRetryError(error);
 	}
 };
