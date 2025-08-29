@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
 
-// General-purpose mock; any and all functions called off the 'ophan' object
-// will be proxied to a mock Jest function
-jest.mock('@guardian/ophan-tracker-js/support', () => new Proxy({}, {
-  get() {
-    return jest.fn();
-  },
+// Mock for ophan support module
+jest.mock('@guardian/ophan-tracker-js/support', () => ({
+  record: jest.fn(),
+  viewId: 'mock-view-id',
+  init: jest.fn(),
+  sendInitialEvent: jest.fn(),
 }));
 
 // General-purpose mock; any and all functions called off the 'ophan' object
