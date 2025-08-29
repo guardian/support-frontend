@@ -182,6 +182,8 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					abParticipations={abParticipations}
+					geoId={geoId}
 					studentDiscount={studentDiscount}
 				/>
 			</BoxContents>
