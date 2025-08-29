@@ -1,10 +1,6 @@
 import { getZuoraPaymentMethod } from '../lambdas/createZuoraSubscriptionTSLambda';
 import type { PaymentMethod } from '../model/paymentMethod';
 
-jest.mock('../model/stage', () => ({
-	stageFromEnvironment: jest.fn().mockReturnValue('CODE'),
-}));
-
 describe('getZuoraPaymentMethod', () => {
 	test('should map CreditCardReferenceTransaction correctly', () => {
 		const paymentMethod = {
