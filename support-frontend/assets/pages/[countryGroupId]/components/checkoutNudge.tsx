@@ -210,7 +210,8 @@ export function CheckoutNudgeThankYou({ type }: CheckoutNudgeThanksProps) {
 					</div>
 					<img
 						width="116px"
-						src="https://uploads.guim.co.uk/2025/08/28/313aafcd2a1b8fed178628ce346b517248d8692b.png"
+						height="91px"
+						src="https://media.guim.co.uk/313aafcd2a1b8fed178628ce346b517248d8692b/0_0_702_582/140.png"
 					/>
 				</div>
 			</BoxContents>
