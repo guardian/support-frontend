@@ -2,7 +2,7 @@
 
 import type { ConsentState } from '@guardian/libs';
 import { cmp, getCookie, onConsent } from '@guardian/libs';
-import { init, record, viewId } from '@guardian/ophan-tracker-js/support';
+import { init, record, viewId } from '@guardian/ophan-tracker-js';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import type { Participations } from 'helpers/abTests/models';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -24,7 +24,7 @@ function analyticsInitialisation(
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init();
-	init();
+	init('support');
 	initQuantumMetric(participations, acquisitionData);
 	trackAbTests(participations);
 	// Sentry logging.

@@ -15,7 +15,7 @@ import {
 	getIosAppUrl,
 } from '../urls/externalLinks';
 // ----- Tests ----- //
-jest.mock('@guardian/ophan-tracker-js/support', () => ({
+jest.mock('@guardian/ophan-tracker-js', () => ({
 	viewId: '123456',
 }));
 describe('externalLinks', () => {

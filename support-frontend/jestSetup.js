@@ -7,7 +7,7 @@ const mockOphanSupport = {
   init: jest.fn(),
   sendInitialEvent: jest.fn(),
 };
-jest.mock('@guardian/ophan-tracker-js/support', () => ({
+jest.mock('@guardian/ophan-tracker-js', () => ({
   ...mockOphanSupport,
   record: mockOphanSupport.record,
   viewId: mockOphanSupport.viewId,

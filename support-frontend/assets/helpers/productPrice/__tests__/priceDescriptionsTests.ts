@@ -6,7 +6,7 @@ import {
 } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 
-jest.mock('@guardian/ophan-tracker-js/support', () => () => ({}));
+jest.mock('@guardian/ophan-tracker-js', () => () => ({}));
 
 const monthlyBillingPeriod = BillingPeriod.Monthly;
 
