@@ -1,6 +1,6 @@
 // ----- Imports ----- //
+import ophan from '@guardian/ophan-tracker-js/support';
 import { motion } from 'framer-motion';
-import * as ophan from 'ophan';
 import * as React from 'react';
 import { renderPage } from 'helpers/rendering/render';
 import './ausMomentMap.scss';

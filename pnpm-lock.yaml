@@ -187,6 +187,9 @@ importers:
       '@guardian/libs':
         specifier: ^22.0.0
         version: 22.5.0(tslib@2.8.1)(typescript@5.5.4)
+      '@guardian/ophan-tracker-js':
+        specifier: file:/Users/jonathan_flynn/Documents/guardian_repos/ophan/tracker-js
+        version: file:../ophan/tracker-js
       '@guardian/pasteup':
         specifier: 1.0.0-alpha.7
         version: 1.0.0-alpha.7
@@ -238,9 +241,6 @@ importers:
       mockdate:
         specifier: ^3.0.5
         version: 3.0.5
-      ophan-tracker-js:
-        specifier: ^1.4.3
-        version: 1.4.3
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1802,6 +1802,10 @@ packages:
       typescript:
         optional: true
 
+  '@guardian/ophan-tracker-js@file:../ophan/tracker-js':
+    resolution: {directory: ../ophan/tracker-js, type: directory}
+    engines: {node: '>=16'}
+
   '@guardian/pasteup@1.0.0-alpha.7':
     resolution: {integrity: sha512-WSa3gnRYxciFas3QYhtTk8unvj5N9K5IB61LL1CP3bVCJ2euXR13xRRHafI/Vy1dnrDwPa80SaE+apTcwipvpA==}
 
@@ -1866,6 +1870,9 @@ packages:
 
   '@guardian/tsconfig@0.2.0':
     resolution: {integrity: sha512-RauppalK+cQZDRK6IssVmDSnU/VyqMNuVOxPxhmI03kVRxEdwcmBuRqexHwDbnClVUxW/N9hYLbFNuAb9V/p+A==}
+
+  '@guardian/tsconfig@1.0.0':
+    resolution: {integrity: sha512-xgajw/jq4lEtQoN72vnmiXeRnejUcd3DgNFmH6TfAbWV6NRK4KC4hAjzKf0H69zBSJMxEfFVfGKP9wBzGII7qg==}
 
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
@@ -6392,10 +6399,6 @@ packages:
     resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
     hasBin: true
 
-  ophan-tracker-js@1.4.3:
-    resolution: {integrity: sha512-rlF9rNazjUx6kr67j1cCYAejo71TXy6VLe88UdhipdOm6UVQamiWvc91/FZ9xxWIqPk/sQ4FVAJYgDF2x5j0og==}
-    deprecated: This package has been replaced by @guardian/ophan-tracker-js
-
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -10224,6 +10227,10 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
+  '@guardian/ophan-tracker-js@file:../ophan/tracker-js':
+    dependencies:
+      '@guardian/tsconfig': 1.0.0
+
   '@guardian/pasteup@1.0.0-alpha.7': {}
 
   '@guardian/prettier@2.1.5(prettier@2.8.8)':
@@ -10264,6 +10271,8 @@ snapshots:
   '@guardian/support-service-lambdas@https://codeload.github.com/guardian/support-service-lambdas/tar.gz/44557b71cba66dd135724baafed4f5abf5546bea': {}
 
   '@guardian/tsconfig@0.2.0': {}
+
+  '@guardian/tsconfig@1.0.0': {}
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
@@ -16212,8 +16221,6 @@ snapshots:
       is-wsl: 2.2.0
 
   opener@1.5.2: {}
-
-  ophan-tracker-js@1.4.3: {}
 
   optionator@0.9.4:
     dependencies:

@@ -1,7 +1,7 @@
 import { loadScript } from '@guardian/libs';
+import ophan from '@guardian/ophan-tracker-js/support';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { ActiveProductKey } from 'helpers/productCatalog';
@@ -463,7 +463,7 @@ function sendEventPageViewId(): void {
 	const sendEventPageViewId: SendEventPageViewId = 181;
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
-			sendEvent(sendEventPageViewId, false, viewId);
+			sendEvent(sendEventPageViewId, false, ophan.viewId);
 		};
 		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
