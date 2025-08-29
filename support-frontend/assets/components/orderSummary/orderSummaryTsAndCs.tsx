@@ -203,9 +203,7 @@ export function OrderSummaryTsAndCs({
 		SubscriptionCard: isPaperProductTest
 			? paperPlusTsAndCs
 			: defaultOrderSummaryTsAndCs,
-		HomeDelivery: isPaperProductTest
-			? paperPlusTsAndCs
-			: defaultOrderSummaryTsAndCs,
+		HomeDelivery: paperPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;
 }
