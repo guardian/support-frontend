@@ -189,7 +189,9 @@ export function OrderSummaryTsAndCs({
 				{isPaperPlus && (
 					<>
 						{paperPlusCopy[productKey]}
-						<p>Your digital benefits will start today.</p>
+						{isPaperProductTest && (
+							<p>Your digital benefits will start today.</p>
+						)}
 					</>
 				)}
 			</div>
