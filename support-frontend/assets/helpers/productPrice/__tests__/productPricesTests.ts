@@ -15,7 +15,7 @@ import {
 import { finalPrice } from 'helpers/productPrice/promotions';
 
 // ----- Tests ----- //
-jest.mock('ophan', () => () => ({}));
+jest.mock('@guardian/ophan-tracker-js/support', () => () => ({}));
 
 describe('isNumeric', () => {
 	it('should return true if a number is provided', () => {

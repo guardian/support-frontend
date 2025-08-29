@@ -5,7 +5,7 @@ import { _ } from '../googleTagManager';
 const { mapFields } = _;
 
 // ----- Tests ----- //
-jest.mock('ophan', () => ({
+jest.mock('@guardian/ophan-tracker-js/support', () => ({
 	viewId: '123456',
 }));
 
