@@ -38,7 +38,7 @@ export default function BenefitsList({
 	listItems = [],
 }: {
 	title?: ReactNode;
-	listItems?: string[];
+	listItems?: JSX.Element[];
 }) {
 	if (listItems.length === 0) {
 		return null;
