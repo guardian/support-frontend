@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import ophan from '@guardian/ophan-tracker-js/support';
+import { viewId } from '@guardian/ophan-tracker-js/support';
 import { testIsActive } from 'helpers/abTests/abtest';
 import { type Participations } from 'helpers/abTests/models';
 import { get as getCookie } from 'helpers/storage/cookie';
@@ -191,7 +191,7 @@ function buildReferrerAcquisitionData(
 }
 
 const getOphanIds = (): OphanIds => ({
-	pageviewId: ophan.viewId,
+	pageviewId: viewId,
 	browserId: getCookie('bwid'),
 });
 

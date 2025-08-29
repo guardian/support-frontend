@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { AbTest, ComponentEvent, TAction, TComponentType } from '@guardian/ophan-tracker-js';
-import ophan from '@guardian/ophan-tracker-js/support';
+import { record, viewId } from '@guardian/ophan-tracker-js/support';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';
@@ -14,7 +14,7 @@ export type OphanABPayload = AbTest[]; // For backward compatibility with tests
 
 // ----- Functions ----- //
 const trackComponentEvents = (componentEvent: ComponentEvent): void =>
-	ophan.record({
+	record({
 		componentEvent,
 	});
 
@@ -33,7 +33,7 @@ export const buildOphanPayload = (
 };
 
 const trackAbTests = (participations: Participations): void =>
-	ophan.record({
+	record({
 		ab: {
 			tests: buildOphanPayload(participations),
 		},
@@ -59,7 +59,7 @@ const setReferrerDataInLocalStorage = (
 	}
 };
 
-const getPageViewId = (): string => ophan.viewId;
+const getPageViewId = (): string => viewId;
 
 export {
 	trackComponentEvents,

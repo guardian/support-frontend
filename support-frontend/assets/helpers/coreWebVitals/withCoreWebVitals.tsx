@@ -1,13 +1,13 @@
 import { initCoreWebVitals } from '@guardian/core-web-vitals';
 import { getCookie } from '@guardian/libs';
-import ophan from '@guardian/ophan-tracker-js/support';
+import { viewId } from '@guardian/ophan-tracker-js/support';
 import { useEffect } from 'react';
 import { isProd } from 'helpers/urls/url';
 
 export function WithCoreWebVitals({ children }: { children: React.ReactNode }) {
 	useEffect(function initialiseCoreWebVitals() {
 		void initCoreWebVitals({
-			pageViewId: ophan.viewId,
+			pageViewId: viewId,
 			browserId: getCookie({ name: 'bwid', shouldMemoize: true }) ?? undefined,
 			isDev: !isProd(),
 			team: 'supporterRevenue',
