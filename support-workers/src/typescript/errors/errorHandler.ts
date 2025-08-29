@@ -1,20 +1,8 @@
+import { ZuoraError } from '@modules/zuora/errors/zuoraError';
 import Stripe from 'stripe';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
-
-export class RetryError extends Error {
-	constructor(errorType: string, message: string) {
-		super(message);
-		this.name = errorType; // This is what the step function retry policy uses
-	}
-}
-
-const retryNone = (message: string) => new RetryError('RetryNone', message);
-
-const retryLimited = (message: string) =>
-	new RetryError('RetryLimited', message);
-
-const retryUnlimited = (message: string) =>
-	new RetryError('RetryUnlimited', message);
+import { retryLimited, retryNone, retryUnlimited } from './retryError';
+import { mapZuoraError } from './zuoraErrors';
 
 export const asRetryError = (error: unknown) => {
 	if (error instanceof Stripe.errors.StripeError) {
@@ -22,6 +10,9 @@ export const asRetryError = (error: unknown) => {
 	}
 	if (error instanceof SalesforceError) {
 		return mapSalesforceError(error);
+	}
+	if (error instanceof ZuoraError) {
+		return mapZuoraError(error);
 	}
 	if (error instanceof Error) {
 		return retryLimited(error.message);
