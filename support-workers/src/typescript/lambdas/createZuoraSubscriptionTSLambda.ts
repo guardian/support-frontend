@@ -77,7 +77,6 @@ export const handler = async (
 		);
 
 		// TODO:
-		//  Output state
 		//  Prevent duplicates (Idempotency key?)
 		//  Apply promotion if present
 		//  Validate paper payment gateway? Might be done already by schema
