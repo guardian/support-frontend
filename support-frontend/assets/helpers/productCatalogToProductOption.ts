@@ -27,10 +27,10 @@ const ActivePaperProductNoTestTypes: PaperProductOptions[] = [
 	Sunday,
 ] as const;
 const ActivePaperProductTypes: PaperProductOptions[] = [
-	EverydayPlus,
 	SixdayPlus,
-	WeekendPlus,
 	SaturdayPlus,
+	EverydayPlus,
+	WeekendPlus,
 	Everyday,
 	Sixday,
 	Weekend,

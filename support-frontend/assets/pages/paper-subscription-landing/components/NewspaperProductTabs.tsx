@@ -27,15 +27,15 @@ type TabOptions = {
 };
 
 const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
-	HomeDelivery: {
-		text: 'Home Delivery',
-		href: `#${HomeDelivery}`,
-		content: () => <NewspaperTabHero tab={HomeDelivery} />,
-	},
 	Collection: {
-		text: 'Subscription card',
+		text: 'Collect in store',
 		href: `#${Collection}`,
 		content: () => <NewspaperTabHero tab={Collection} />,
+	},
+	HomeDelivery: {
+		text: 'Home delivery',
+		href: `#${HomeDelivery}`,
+		content: () => <NewspaperTabHero tab={HomeDelivery} />,
 	},
 };
 

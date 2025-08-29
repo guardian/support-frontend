@@ -11,7 +11,7 @@ export type GuardianWeeklyFulfilmentOptions =
 	| typeof Domestic
 	| typeof RestOfWorld;
 
-export type PaperFulfilmentOptions = typeof HomeDelivery | typeof Collection;
+export type PaperFulfilmentOptions = typeof Collection | typeof HomeDelivery;
 
 export type FulfilmentOptions =
 	| typeof HomeDelivery
