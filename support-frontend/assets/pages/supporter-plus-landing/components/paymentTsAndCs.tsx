@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans12 } from '@guardian/source/foundations';
+import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
@@ -26,6 +26,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { FinePrint } from './finePrint';
@@ -126,6 +127,7 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isPaperProductTest?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -134,6 +136,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	isPaperProductTest = false,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -141,19 +144,21 @@ export function PaymentTsAndCs({
 	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
 	const billingPeriodPlural =
 		getBillingPeriodTitle(billingPeriod).toLowerCase();
-	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+	const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
-	if (isSundayOnlynewsletterSubscription) {
+
+	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
-				The Observer is owned by Tortoise Media. By proceeding, you agree to
-				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
-				We will share your contact and subscription details with our fulfilment
-				partners to provide you with your subscription card. To find out more
-				about what personal data Tortoise Media will collect and how it will be
-				used, please visit Tortoise Media’s{' '}
+				{isPaperProductTest ? 'The Observer is owned by Tortoise Media. ' : ''}
+				By proceeding, you agree to Tortoise Media’s{' '}
+				{termsLink('Terms & Conditions', observerLinks.TERMS)}. We will share
+				your contact and subscription details with our fulfilment partners to
+				provide you with your subscription card. To find out more about what
+				personal data Tortoise Media will collect and how it will be used,
+				please visit Tortoise Media’s{' '}
 				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
@@ -169,8 +174,39 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
-	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
+	const paperProductProductTsAndCs = (
+		<div
+			css={css`
+				margin-bottom: ${space[1]}px;
+			`}
+		>
+			You can cancel your subscription at any time before your next renewal
+			date. Cancellation will take effect at the end of your current payment
+			period. To cancel, use the contact details listed on our{' '}
+			{termsLink('Help Centre', helpCentreUrl)}.
+		</div>
+	);
+	const paperHomeDeliveryTsAndCs = (
+		<>
+			{isPaperProductTest && paperProductProductTsAndCs}
+			<div>
+				We will share your contact and subscription details with our fulfilment
+				partners.
+			</div>
+		</>
+	);
+	const paperNationalDeliveryTsAndCs = (
+		<div>
+			We will share your contact and subscription details with our fulfilment
+			partners to provide you with your subscription card.
+		</div>
+	);
+	const paperSubscriptionCardTsAndCs = (
+		<>
+			{isPaperProductTest && paperProductProductTsAndCs}
+			{paperNationalDeliveryTsAndCs}
+		</>
+	);
 	const guardianWeeklyPromo = (
 		<div>
 			Offer subject to availability. Guardian News and Media Ltd ("GNM")
@@ -270,9 +306,9 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: <div>{paperHomeDeliveryTsAndCs}</div>,
-		NationalDelivery: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
-		SubscriptionCard: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		HomeDelivery: paperHomeDeliveryTsAndCs,
+		SubscriptionCard: paperSubscriptionCardTsAndCs,
+		NationalDelivery: paperNationalDeliveryTsAndCs,
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};

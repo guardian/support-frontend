@@ -227,19 +227,21 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
-
-			const labelNoTest =
+			const label =
 				productOption === 'Everyday' || productOption === 'EverydayPlus'
 					? 'Best deal'
 					: '';
-			const labelPaperProductTest =
-				productOption === 'SixdayPlus' ? 'Most popular' : '';
-			const label = isPaperProductTest ? labelPaperProductTest : labelNoTest;
 			const productLabel = getProductLabel(productOption);
+
 			return {
 				title: getTitle(productOption),
 				price: showPrice(priceAfterPromosApplied),
-				href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
+				href: paperCheckoutUrl(
+					fulfilmentOption,
+					productOption,
+					promoCode,
+					isPaperProductTest ? 'paperProductTabs' : undefined,
+				),
 				onClick: sendTrackingEventsOnClick(trackingProperties),
 				onView: sendTrackingEventsOnView(trackingProperties),
 				buttonCopy: 'Subscribe',

@@ -340,6 +340,7 @@ export function Checkout({
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
 					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 			</CheckoutLayout>
 		</Elements>

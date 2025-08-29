@@ -169,9 +169,11 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -183,6 +185,7 @@ export default function CheckoutSummary({
 						)
 					}
 					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

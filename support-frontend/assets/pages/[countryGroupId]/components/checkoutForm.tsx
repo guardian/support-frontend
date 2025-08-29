@@ -133,6 +133,7 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	isPaperProductTest: boolean;
 };
 
 const getPaymentMethods = (
@@ -186,6 +187,7 @@ export default function CheckoutForm({
 	setWeeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	isPaperProductTest,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -1093,8 +1095,10 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 						<div
 							css={css`
@@ -1133,6 +1137,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					</BoxContents>
 				</Box>
