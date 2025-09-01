@@ -56,6 +56,9 @@ const checkListTextItemCss = css`
 	}
 `;
 const listCss = (style: CheckListStyle) => css`
+	strong {
+		font-weight: bold;
+	}
 	${style === 'standard'
 		? css`
 				${textSans17};

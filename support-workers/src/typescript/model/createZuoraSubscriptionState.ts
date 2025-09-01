@@ -20,6 +20,8 @@ import {
 } from './stateSchemas';
 
 const baseProductStateSchema = z.object({
+	paymentMethod: paymentMethodSchema,
+	productInformation: productPurchaseSchema.nullish(),
 	salesForceContact: salesforceContactRecordSchema,
 });
 
@@ -27,8 +29,6 @@ export const contributionStateSchema = z
 	.object({
 		productType: z.literal('Contribution'),
 		product: contributionProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		similarProductsConsent: z.boolean().nullable(),
 	})
 	.merge(baseProductStateSchema);
@@ -40,8 +40,6 @@ export const supporterPlusStateSchema = z
 		productType: z.literal('SupporterPlus'),
 		billingCountry: countrySchema,
 		product: supporterPlusProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
 	})
@@ -53,8 +51,6 @@ export const tierThreeStateSchema = z
 		productType: z.literal('TierThree'),
 		user: userSchema,
 		product: tierThreeProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		firstDeliveryDate: z.string(),
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
@@ -66,8 +62,6 @@ export const guardianAdLiteStateSchema = z
 	.object({
 		productType: z.literal('GuardianAdLite'),
 		product: guardianAdLiteProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 	})
 	.merge(baseProductStateSchema);
 export type GuardianAdLiteState = z.infer<typeof guardianAdLiteStateSchema>;
@@ -77,8 +71,6 @@ export const digitalSubscriptionStateSchema = z
 		productType: z.literal('DigitalSubscription'),
 		billingCountry: countrySchema,
 		product: digitalPackProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
 	})
@@ -92,8 +84,6 @@ export const paperStateSchema = z
 		productType: z.literal('Paper'),
 		user: userSchema,
 		product: paperProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		firstDeliveryDate: z.string(),
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
@@ -107,8 +97,6 @@ export const guardianWeeklyStateSchema = z
 		user: userSchema,
 		giftRecipient: giftRecipientSchema.nullable(),
 		product: guardianWeeklyProductSchema,
-		productInformation: productPurchaseSchema.nullish(),
-		paymentMethod: paymentMethodSchema,
 		firstDeliveryDate: z.string(),
 		appliedPromotion: appliedPromotionSchema.nullable(),
 		similarProductsConsent: z.boolean().nullable(),
@@ -128,6 +116,10 @@ export const createZuoraSubscriptionProductStateSchema = z.discriminatedUnion(
 		guardianWeeklyStateSchema,
 	],
 );
+
+export type ProductSpecificState = z.infer<
+	typeof createZuoraSubscriptionProductStateSchema
+>;
 
 export const createZuoraSubscriptionStateSchema = baseStateSchema.merge(
 	z.object({

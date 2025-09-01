@@ -7,7 +7,6 @@ import {
 	space,
 	textSans14,
 	textSans17,
-	visuallyHidden,
 } from '@guardian/source/foundations';
 import {
 	Button,
@@ -24,6 +23,8 @@ import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
+import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
+import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
 	${textSans17}
@@ -92,11 +93,6 @@ const buttonOverrides = css`
 	}
 `;
 
-const originalPriceStrikeThrough = css`
-	font-weight: 400;
-	text-decoration: line-through;
-`;
-
 const iconCss = (flip: boolean) => css`
 	svg {
 		max-width: ${space[4]}px;
@@ -135,6 +131,10 @@ const termsAndConditions = css`
 	p {
 		margin-top: ${space[1]}px;
 	}
+	& div:nth-child(2) {
+		margin-top: ${space[3]}px;
+		${textSans14};
+	}
 `;
 
 export type ContributionsOrderSummaryProps = {
@@ -153,11 +153,9 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
+	studentDiscount?: StudentDiscount;
+	isPaperProductTest?: boolean;
 };
-
-const visuallyHiddenCss = css`
-	${visuallyHidden};
-`;
 
 export function ContributionsOrderSummary({
 	productKey,
@@ -174,6 +172,8 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
+	studentDiscount,
+	isPaperProductTest = false,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -190,11 +190,15 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
-	const formattedAmount = simpleFormatAmount(currency, amount);
-
-	const formattedPromotionAmount =
+	const fullPrice =
+		studentDiscount?.fullPriceWithCurrency ??
+		simpleFormatAmount(currency, amount);
+	const promoDiscountPrice =
 		promotion &&
 		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
+	const discountPrice =
+		studentDiscount?.discountPriceWithCurrency ?? promoDiscountPrice;
+	const period = studentDiscount?.periodNoun ?? paymentFrequency;
 
 	return (
 		<div css={componentStyles}>
@@ -232,39 +236,25 @@ export function ContributionsOrderSummary({
 						{startDate}
 					</>
 				)}
-				{isSundayOnlyNewspaperSubscription && showCheckList && (
-					<div css={orderSummarySundayDetails}>
-						{productKey === 'HomeDelivery'
-							? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
-							: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
-					</div>
-				)}
+				{isSundayOnlyNewspaperSubscription &&
+					showCheckList &&
+					!isPaperProductTest && (
+						<div css={orderSummarySundayDetails}>
+							{productKey === 'HomeDelivery'
+								? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
+								: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
+						</div>
+					)}
 			</div>
 
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
-				<p>
-					{formattedPromotionAmount && (
-						<>
-							<span css={originalPriceStrikeThrough}>
-								<span css={visuallyHiddenCss}>Was </span>
-								{formattedAmount}
-								<span css={visuallyHiddenCss}>, now</span>
-							</span>{' '}
-							{paymentFrequency
-								? `${formattedPromotionAmount}/${paymentFrequency}`
-								: formattedPromotionAmount}
-						</>
-					)}
-					{!formattedPromotionAmount && (
-						<>
-							{paymentFrequency
-								? `${formattedAmount}/${paymentFrequency}`
-								: formattedAmount}
-						</>
-					)}
-				</p>
+				<PriceSummary
+					fullPrice={fullPrice}
+					period={period}
+					discountPrice={discountPrice}
+				/>
 			</div>
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
 		</div>

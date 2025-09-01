@@ -25,14 +25,14 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
+import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
 } from '../checkout/helpers/benefitsChecklist';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
 import { shorterBoxMargin } from './form';
 
@@ -49,6 +49,8 @@ type CheckoutSummaryProps = {
 	landingPageSettings: LandingPageVariant;
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
+	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
@@ -64,17 +66,11 @@ export default function CheckoutSummary({
 	landingPageSettings,
 	weeklyDeliveryDate,
 	thresholdAmount,
+	studentDiscount,
+	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
-
-	const isPaper = [
-		'HomeDelivery',
-		'NationalDelivery',
-		'SubscriptionCard',
-	].includes(productKey);
-	const showPaperProductTabs = isPaper && displayPaperProductTabs();
-
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -120,8 +116,8 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const paperPlusDigitalBenefits = showPaperProductTabs
-		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
+	const paperPlusDigitalBenefits = isPaperProductTest
+		? getPlanBenefitData(ratePlanKey as PaperProductOptions)
 		: undefined;
 	const benefitsCheckListData =
 		paperPlusDigitalBenefits ??
@@ -131,7 +127,6 @@ export default function CheckoutSummary({
 			countryGroupId,
 			abParticipations,
 		);
-
 	return (
 		<Box cssOverrides={shorterBoxMargin}>
 			<BoxContents>
@@ -174,9 +169,11 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -187,6 +184,8 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

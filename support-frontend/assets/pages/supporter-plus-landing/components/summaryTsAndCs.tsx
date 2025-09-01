@@ -36,14 +36,18 @@ const containerSummaryTsCs = css`
 export interface SummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	ratePlanDescription?: string;
 	currency: IsoCurrency;
 	amount: number;
+	isPaperProductTest?: boolean;
 }
 export function SummaryTsAndCs({
 	productKey,
 	ratePlanKey,
+	ratePlanDescription,
 	currency,
 	amount,
+	isPaperProductTest = false,
 }: SummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
@@ -53,18 +57,21 @@ export function SummaryTsAndCs({
 	const renewalFrequency = `${renewalDateStart}${
 		billingPeriod === BillingPeriod.Annual ? getLongMonth(today) + ' ' : ''
 	}${renewalDateEnd}`;
-
-	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+	// Display for AUS Students who are on a subscription basis
+	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
+	const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
+	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
-	if (isSundayOnlynewsletterSubscription) {
+	if (isSundayOnlyNewsletterSubscription || isPaperProductTest) {
 		return (
 			<div css={containerSummaryTsCs}>
-				The Observer subscription will auto renew each month. You will be
-				charged the subscription amounts using your chosen payment method at
-				each renewal, at the rate then in effect, unless you cancel.
+				The {isSundayOnlyNewsletterSubscription ? 'Observer' : rateDescriptor}{' '}
+				subscription will auto renew each month. You will be charged the
+				subscription amounts using your chosen payment method at each renewal,
+				at the rate then in effect, unless you cancel.
 			</div>
 		);
 	}
@@ -93,12 +100,17 @@ export function SummaryTsAndCs({
 			</div>
 		),
 		SupporterPlus: (
-			<div css={containerSummaryTsCs}>
-				The {productCatalogDescription[productKey].label} subscription and any
-				contribution will auto-renew each {periodNoun}. You will be charged the
-				subscription and contribution amounts using your chosen payment method
-				at each renewal, at the rate then in effect, unless you cancel.
-			</div>
+			<>
+				{!isStudentOneYearRatePlan && (
+					<div css={containerSummaryTsCs}>
+						The {productCatalogDescription[productKey].label} subscription and
+						any contribution will auto-renew each {periodNoun}. You will be
+						charged the subscription and contribution amounts using your chosen
+						payment method at each renewal, at the rate then in effect, unless
+						you cancel.
+					</div>
+				)}
+			</>
 		),
 		TierThree: summaryTsAndCsTierThreeGuardianAdLite,
 		GuardianAdLite: summaryTsAndCsTierThreeGuardianAdLite,

@@ -9,6 +9,7 @@ import Carousel from 'components/product/Carousel';
 import { type Product } from 'components/product/productOption';
 import Tabs, { type TabProps } from 'components/tabs/tabs';
 import { observerLinks } from 'helpers/legal';
+import { ActivePaperProductTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { useWindowWidth } from 'pages/aus-moment-map/hooks/useWindowWidth';
 import NewspaperRatePlanCard from 'pages/paper-subscription-landing/components/NewspaperRatePlanCard';
@@ -26,22 +27,24 @@ type TabOptions = {
 };
 
 const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
-	HomeDelivery: {
-		text: 'Home Delivery',
-		href: `#${HomeDelivery}`,
-		content: () => <NewspaperTabHero tab={HomeDelivery} />,
-	},
 	Collection: {
-		text: 'Subscription card',
+		text: 'Collect in store',
 		href: `#${Collection}`,
 		content: () => <NewspaperTabHero tab={Collection} />,
+	},
+	HomeDelivery: {
+		text: 'Home delivery',
+		href: `#${HomeDelivery}`,
+		content: () => <NewspaperTabHero tab={HomeDelivery} />,
 	},
 };
 
 function NewspaperProductTabs({
 	productPrices,
+	isPaperProductTest,
 }: {
 	productPrices: ProductPrices;
+	isPaperProductTest: boolean;
 }) {
 	const fulfilment =
 		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
@@ -51,11 +54,23 @@ function NewspaperProductTabs({
 
 	const { windowWidthIsGreaterThan } = useWindowWidth();
 	const [productRatePlans, setProductRatePlans] = useState<Product[]>(
-		getPlans(selectedTab, productPrices),
+		getPlans(
+			selectedTab,
+			productPrices,
+			ActivePaperProductTypes,
+			isPaperProductTest,
+		),
 	);
 
 	useEffect(() => {
-		setProductRatePlans(getPlans(selectedTab, productPrices));
+		setProductRatePlans(
+			getPlans(
+				selectedTab,
+				productPrices,
+				ActivePaperProductTypes,
+				isPaperProductTest,
+			),
+		);
 	}, [selectedTab]);
 
 	const tabItems = Object.entries(tabs).map(([fulfilment, tab]) => {

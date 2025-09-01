@@ -426,7 +426,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SubscriptionCard: {
-		label: 'Subscription card',
+		label: 'Collect in store with a subscription card',
 		thankyouMessage: paperThankyouMessage,
 		landingPagePath: '/subscribe/paper#Collection',
 		benefits: [],

@@ -62,6 +62,7 @@ import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/comp
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { SummaryTsAndCs } from 'pages/supporter-plus-landing/components/summaryTsAndCs';
+import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { postcodeIsWithinDeliveryArea } from '../../../helpers/forms/deliveryCheck';
 import { appropriateErrorMessage } from '../../../helpers/forms/errorReasons';
@@ -78,8 +79,8 @@ import type { CheckoutSession } from '../checkout/helpers/stripeCheckoutSession'
 import { useStateWithCheckoutSession } from '../checkout/hooks/useStateWithCheckoutSession';
 import { countriesRequiringBillingState } from '../helpers/countriesRequiringBillingState';
 import { isSundayOnlyNewspaperSub } from '../helpers/isSundayOnlyNewspaperSub';
-import { isWeeklyGiftSub } from '../helpers/isWeeklyGiftSub';
 import { maybeArrayWrap } from '../helpers/maybeArrayWrap';
+import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { CheckoutLoadingOverlay } from './checkoutLoadingOverlay';
 import {
 	FormSection,
@@ -131,6 +132,8 @@ type CheckoutFormProps = {
 	weeklyDeliveryDate: Date;
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
+	studentDiscount?: StudentDiscount;
+	isPaperProductTest: boolean;
 };
 
 const getPaymentMethods = (
@@ -183,6 +186,8 @@ export default function CheckoutForm({
 	weeklyDeliveryDate,
 	setWeeklyDeliveryDate,
 	thresholdAmount,
+	studentDiscount,
+	isPaperProductTest,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -204,7 +209,7 @@ export default function CheckoutForm({
 	};
 	const isSundayOnly = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const isRecurringContribution = productKey === 'Contribution';
-	const isWeeklyGift = isWeeklyGiftSub(productKey, ratePlanKey);
+	const isWeeklyGift = isGuardianWeeklyGiftProduct(productKey, ratePlanKey);
 
 	const [deliveryAddressErrors, setDeliveryAddressErrors] = useState<
 		AddressFormFieldError[]
@@ -852,6 +857,7 @@ export default function CheckoutForm({
 
 						<PersonalDetailsFields
 							countryId={countryId}
+							countries={productDescription.deliverableTo}
 							legend={legendPersonalDetails}
 							firstName={firstName}
 							setFirstName={setFirstName}
@@ -1089,8 +1095,10 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 						<div
 							css={css`
@@ -1126,8 +1134,10 @@ export default function CheckoutForm({
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
 							countryGroupId={countryGroupId}
+							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					</BoxContents>
 				</Box>

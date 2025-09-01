@@ -11,6 +11,14 @@ jest.mock('helpers/utilities/dateFormatting', () => ({
 	getLongMonth: () => 'March',
 }));
 
+const ratePlanDescription: Partial<
+	Record<ActiveRatePlanKey, string | undefined>
+> = {
+	WeekendPlus: 'Weekend Plus',
+	SixdayPlus: 'Six Day Plus',
+	Sunday: 'The Observer',
+};
+
 describe('Summary Ts&Cs Snapshot comparison', () => {
 	it.each`
 		productKey               | activeRatePlanKey
@@ -24,6 +32,10 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 		${'GuardianAdLite'}      | ${'Monthly'}
 		${'GuardianAdLite'}      | ${'Annual'}
 		${'DigitalSubscription'} | ${'Monthly'}
+		${'SubscriptionCard'}    | ${'WeekendPlus'}
+		${'HomeDelivery'}        | ${'SixdayPlus'}
+		${'SubscriptionCard'}    | ${'Sunday'}
+		${'HomeDelivery'}        | ${'Sunday'}
 	`(
 		`summaryTs&Cs for $productKey With ratePlanKey $activeRatePlanKey renders correctly`,
 		({ productKey, activeRatePlanKey }) => {
@@ -31,8 +43,16 @@ describe('Summary Ts&Cs Snapshot comparison', () => {
 				<SummaryTsAndCs
 					productKey={productKey as ActiveProductKey}
 					ratePlanKey={activeRatePlanKey as ActiveRatePlanKey}
+					ratePlanDescription={
+						ratePlanDescription[activeRatePlanKey as ActiveRatePlanKey]
+					}
 					currency={'GBP'}
 					amount={0}
+					isPaperProductTest={
+						!!['WeekendPlus', 'SixdayPlus'].includes(
+							activeRatePlanKey as ActiveRatePlanKey,
+						)
+					}
 				/>,
 			);
 			expect(container.textContent).toMatchSnapshot();

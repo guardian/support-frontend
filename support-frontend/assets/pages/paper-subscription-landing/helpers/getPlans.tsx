@@ -1,8 +1,5 @@
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type {
-	FulfilmentOptions,
-	PaperFulfilmentOptions,
-} from '@modules/product/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
 import type { PaperProductOptions } from '@modules/product/productOptions';
 import type { ReactNode } from 'react';
 import type { Product } from 'components/product/productOption';
@@ -23,7 +20,7 @@ import {
 	sendTrackingEventsOnView,
 } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
-import { ActivePaperProductTypes } from '../../../helpers/productCatalogToProductOption';
+import type { ActivePaperProductOptions } from '../../../helpers/productCatalogToProductOption';
 import getPlanData from '../planData';
 import { getProductLabel, getTitle } from './products';
 
@@ -67,13 +64,12 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 };
 
 const getUnavailableOutsideLondon = (
-	fulfilmentOption: FulfilmentOptions,
+	fulfilmentOption: PaperFulfilmentOptions,
 	productOption: PaperProductOptions,
 ) =>
-	fulfilmentOption === 'HomeDelivery' &&
-	(productOption === 'Saturday' ||
-		productOption === 'Sunday' ||
-		productOption === 'SaturdayPlus');
+	(fulfilmentOption === 'HomeDelivery' && productOption === 'Saturday') ||
+	productOption === 'Sunday' ||
+	productOption === 'SaturdayPlus';
 
 // ---- Plans ----- //
 const copy: Record<
@@ -201,55 +197,65 @@ const copy: Record<
 export const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
+	activePaperProductTypes: ActivePaperProductOptions[],
+	isPaperProductTest: boolean,
 ): Product[] =>
-	ActivePaperProductTypes.filter(
-		(productOption) =>
-			productOption.endsWith('Plus') || productOption === 'Sunday',
-	).map((productOption) => {
-		const priceAfterPromosApplied = finalPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-		const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
-		const promoCode = promotion ? promotion.promoCode : null;
-		const trackingProperties: TrackingProperties = {
-			id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
-			product: 'Paper',
-			componentType: 'ACQUISITIONS_BUTTON',
-		};
-		const nonDiscountedPrice = getProductPrice(
-			productPrices,
-			'GB',
-			BillingPeriod.Monthly,
-			fulfilmentOption,
-			productOption,
-		);
-		const label =
-			productOption === 'Everyday' || productOption === 'EverydayPlus'
-				? 'Best deal'
-				: '';
-		const productLabel = getProductLabel(productOption);
-		return {
-			title: getTitle(productOption),
-			price: showPrice(priceAfterPromosApplied),
-			href: paperCheckoutUrl(fulfilmentOption, productOption, promoCode),
-			onClick: sendTrackingEventsOnClick(trackingProperties),
-			onView: sendTrackingEventsOnView(trackingProperties),
-			buttonCopy: 'Subscribe',
-			priceCopy: getPriceCopyString(
-				nonDiscountedPrice,
-				copy[fulfilmentOption][productOption],
-			),
-			planData: getPlanData(productOption),
-			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-			label,
-			productLabel,
-			unavailableOutsideLondon: getUnavailableOutsideLondon(
+	activePaperProductTypes
+		.filter(
+			(productOption) =>
+				productOption.endsWith('Plus') || productOption === 'Sunday',
+		)
+		.map((productOption) => {
+			const priceAfterPromosApplied = finalPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
 				fulfilmentOption,
 				productOption,
-			),
-		};
-	});
+			);
+			const promotion = getAppliedPromo(priceAfterPromosApplied.promotions);
+			const promoCode = promotion ? promotion.promoCode : null;
+			const trackingProperties: TrackingProperties = {
+				id: `subscribe_now_cta-${[productOption, fulfilmentOption].join()}`,
+				product: 'Paper',
+				componentType: 'ACQUISITIONS_BUTTON',
+			};
+			const nonDiscountedPrice = getProductPrice(
+				productPrices,
+				'GB',
+				BillingPeriod.Monthly,
+				fulfilmentOption,
+				productOption,
+			);
+			const label =
+				productOption === 'Everyday' || productOption === 'EverydayPlus'
+					? 'Best deal'
+					: '';
+			const productLabel = getProductLabel(productOption);
+
+			return {
+				title: getTitle(productOption),
+				price: showPrice(priceAfterPromosApplied),
+				href: paperCheckoutUrl(
+					fulfilmentOption,
+					productOption,
+					promoCode,
+					isPaperProductTest ? 'paperProductTabs' : undefined,
+				),
+				onClick: sendTrackingEventsOnClick(trackingProperties),
+				onView: sendTrackingEventsOnView(trackingProperties),
+				buttonCopy: 'Subscribe',
+				priceCopy: getPriceCopyString(
+					nonDiscountedPrice,
+					copy[fulfilmentOption][productOption],
+				),
+				planData: getPlanData(productOption, fulfilmentOption),
+				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
+				label,
+				productLabel,
+				unavailableOutsideLondon: getUnavailableOutsideLondon(
+					fulfilmentOption,
+					productOption,
+				),
+			};
+		});

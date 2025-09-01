@@ -25,6 +25,7 @@ import { sendEventCheckoutValue } from 'helpers/tracking/quantumMetric';
 import { logException } from 'helpers/utilities/logger';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { inPaperProductTest } from 'pages/paper-subscription-landing/helpers/inPaperProductTest';
 import { getWeeklyDeliveryDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import type { Participations } from '../../helpers/abTests/models';
 import type { LandingPageVariant } from '../../helpers/globalsAndSwitches/landingPageSettings';
@@ -36,6 +37,7 @@ import { useStripeHostedCheckoutSession } from './checkout/hooks/useStripeHosted
 import CheckoutForm from './components/checkoutForm';
 import { CheckoutLayout } from './components/checkoutLayout';
 import CheckoutSummary from './components/checkoutSummary';
+import { getStudentDiscount } from './student/helpers/discountDetails';
 
 type Props = {
 	geoId: GeoId;
@@ -280,6 +282,21 @@ export function Checkout({
 		ratePlanKey,
 	);
 
+	/**
+	 * Non-AU Students have ratePlanKey as OneYearStudent
+	 * AU Students have ratePlanKey as Monthly, productKey as SupporterPlus
+	 * and required promoCode UTS_STUDENT
+	 */
+	const studentDiscount = getStudentDiscount(
+		geoId,
+		ratePlanKey,
+		productKey,
+		promotion,
+		true,
+	);
+
+	const isPaperProductTest = inPaperProductTest();
+
 	return (
 		<Elements stripe={stripePromise} options={elementsOptions}>
 			<CheckoutLayout>
@@ -296,6 +313,8 @@ export function Checkout({
 					landingPageSettings={landingPageSettings}
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 
 				<CheckoutForm
@@ -320,6 +339,8 @@ export function Checkout({
 					weeklyDeliveryDate={weeklyDeliveryDate}
 					setWeeklyDeliveryDate={setWeeklyDeliveryDate}
 					thresholdAmount={thresholdAmount}
+					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 			</CheckoutLayout>
 		</Elements>
