@@ -649,7 +649,6 @@ export function OneTimeCheckoutComponent({
 					</div>
 					{isAbNudgeToLowRegularVariant && (
 						<CheckoutNudge
-							type={'toRegular'}
 							geoId={geoId}
 							ratePlanKey="Monthly"
 							abTestName="abNudgeToLowRegular"

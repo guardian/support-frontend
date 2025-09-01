@@ -23,13 +23,9 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 import type { ActiveRatePlanKey } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import {
-	CheckoutNudge,
-	CheckoutNudgeThankYou,
-} from 'pages/[countryGroupId]/components/checkoutNudge';
+import { CheckoutNudgeThankYou } from 'pages/[countryGroupId]/components/checkoutNudge';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
-import type { GeoId } from 'pages/geoIdConfig';
 import { PriceSummary } from './priceSummary';
 
 const componentStyles = css`
@@ -155,7 +151,6 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	tsAndCsTier3?: React.ReactNode;
-	geoId: GeoId;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
 };
@@ -175,7 +170,6 @@ export function ContributionsOrderSummary({
 	tsAndCs,
 	startDate,
 	enableCheckList,
-	geoId,
 	abParticipations,
 	studentDiscount,
 }: ContributionsOrderSummaryProps): JSX.Element {
@@ -209,10 +203,7 @@ export function ContributionsOrderSummary({
 	// check value is one of the set of expected values
 
 	const verifyNudgeTypeInput = (input: string | null) => {
-		if (
-			input === null ||
-			!['toRegular', 'toSupporterPlus'].includes(input.trim())
-		) {
+		if (input === null || !['toRegular'].includes(input.trim())) {
 			return '';
 		}
 
@@ -231,37 +222,7 @@ export function ContributionsOrderSummary({
 	};
 
 	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
-		<CheckoutNudgeThankYou type="toRegular" />
-	);
-
-	// from low regular to Supporter Plus
-	const showSupporterPlusNudge = () => {
-		const isInABNudgeToSupporterPlus =
-			productKey === 'Contribution' &&
-			abParticipations?.abNudgeToSupporterPlus === 'variant';
-		return isInABNudgeToSupporterPlus && nudgeType === '';
-	};
-
-	// TODO: handle the geoId better - ?
-	const nudge = showSupporterPlusNudge() && (
-		<CheckoutNudge
-			type="toSupporterPlus"
-			geoId={geoId}
-			ratePlanKey={ratePlanKey}
-			abTestName="abNudgeToSupporterPlus"
-			abTestVariant="variant"
-		/>
-	);
-
-	const showSupporterPlusNudgeThanks = () => {
-		const isInABNudgeToSupporterPlusThanks =
-			productKey === 'SupporterPlus' &&
-			abParticipations?.abNudgeToSupporterPlus === 'variant';
-		return isInABNudgeToSupporterPlusThanks && nudgeType === 'toSupporterPlus';
-	};
-
-	const nudgeSupporterPlusThanks = showSupporterPlusNudgeThanks() && (
-		<CheckoutNudgeThankYou type="toSupporterPlus" />
+		<CheckoutNudgeThankYou />
 	);
 
 	return (
@@ -318,10 +279,8 @@ export function ContributionsOrderSummary({
 					discountPrice={discountPrice}
 				/>
 			</div>
-			{nudgeSupporterPlusThanks}
 			{nudgeLowRegularThanks}
 			{!!tsAndCs && <div css={termsAndConditions}>{tsAndCs}</div>}
-			{nudge}
 		</div>
 	);
 }
