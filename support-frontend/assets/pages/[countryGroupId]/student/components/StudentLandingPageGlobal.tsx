@@ -5,6 +5,7 @@ import {
 } from 'helpers/productCatalog';
 import { type GeoId } from 'pages/geoIdConfig';
 import type { StudentDiscount } from '../helpers/discountDetails';
+import { StudentBrandAwareness } from './StudentBrandAwareness';
 import StudentHeader from './StudentHeader';
 import { StudentLandingPage } from './StudentLandingPage';
 
@@ -36,6 +37,7 @@ export function StudentLandingPageGlobal({
 					includeThreeTierLink={true}
 				/>
 			}
+			brandAwareness={<StudentBrandAwareness />}
 		/>
 	);
 }
