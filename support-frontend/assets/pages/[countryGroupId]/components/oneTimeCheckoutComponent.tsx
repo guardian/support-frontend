@@ -82,6 +82,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -95,7 +96,6 @@ import {
 } from '../validation';
 import { BackButton } from './backButton';
 import { CheckoutLayout } from './checkoutLayout';
-import { CheckoutNudge } from './checkoutNudge';
 import { FormSection, Legend, shorterBoxMargin } from './form';
 import {
 	checkedRadioLabelColour,
