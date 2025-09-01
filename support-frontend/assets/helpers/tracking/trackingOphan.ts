@@ -1,6 +1,6 @@
 // ----- Imports ----- //
-import type { AbTest, ComponentEvent, TAction, TComponentType } from '@guardian/ophan-tracker-js';
-import { record, viewId } from '@guardian/ophan-tracker-js';
+import type { AbTest, ComponentEvent, TAction, TComponentType } from '@guardian/ophan-tracker-js/support';
+import { record, viewId } from '@guardian/ophan-tracker-js/support';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { getLocal, setLocal } from 'helpers/storage/storage';

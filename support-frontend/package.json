@@ -103,7 +103,7 @@
 		"framer-motion": "^1.11.1",
 		"lodash.debounce": "^4.0.6",
 		"mockdate": "^3.0.5",
-		"@guardian/ophan-tracker-js": "file:/Users/jonathan_flynn/Documents/guardian_repos/ophan/tracker-js",
+		"@guardian/ophan-tracker-js": "0.0.0-canary-20250901081445",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-redux": "^8.1.0",

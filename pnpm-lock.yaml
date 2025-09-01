@@ -188,8 +188,8 @@ importers:
         specifier: ^22.0.0
         version: 22.5.0(tslib@2.8.1)(typescript@5.5.4)
       '@guardian/ophan-tracker-js':
-        specifier: file:/Users/jonathan_flynn/Documents/guardian_repos/ophan/tracker-js
-        version: file:../ophan/tracker-js
+        specifier: 0.0.0-canary-20250901081445
+        version: 0.0.0-canary-20250901081445
       '@guardian/pasteup':
         specifier: 1.0.0-alpha.7
         version: 1.0.0-alpha.7
@@ -1802,8 +1802,8 @@ packages:
       typescript:
         optional: true
 
-  '@guardian/ophan-tracker-js@file:../ophan/tracker-js':
-    resolution: {directory: ../ophan/tracker-js, type: directory}
+  '@guardian/ophan-tracker-js@0.0.0-canary-20250901081445':
+    resolution: {integrity: sha512-Ui6oe3ri7rF1T6+3R5AcaA0NZZLcDtmagz27DTqkYcDH8fpAfbOhxrOkQsmoBsnCq+7TqRjvdqSAUZ1xFdOUzQ==}
     engines: {node: '>=16'}
 
   '@guardian/pasteup@1.0.0-alpha.7':
@@ -10227,7 +10227,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@guardian/ophan-tracker-js@file:../ophan/tracker-js':
+  '@guardian/ophan-tracker-js@0.0.0-canary-20250901081445':
     dependencies:
       '@guardian/tsconfig': 1.0.0
 
