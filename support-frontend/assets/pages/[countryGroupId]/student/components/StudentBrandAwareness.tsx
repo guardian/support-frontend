@@ -53,7 +53,7 @@ const imageSection = css`
 	}
 `;
 
-export const StudentBrandAwareness = () => {
+export function StudentBrandAwareness() {
 	return (
 		<div css={container}>
 			<div css={copySection}>
@@ -91,4 +91,4 @@ export const StudentBrandAwareness = () => {
 			</div>
 		</div>
 	);
-};
+}
