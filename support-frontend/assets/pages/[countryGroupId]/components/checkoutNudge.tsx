@@ -93,7 +93,7 @@ export function CheckoutNudge({
 	const getNudgeHeadline = 'Make a bigger impact';
 
 	const getNudgeCopy =
-		'Regular, reliable support powers Guardian journalism in perpetuity. It takes less than a minute.';
+		'Regular, reliable support powers Guardian journalism in perpetuity. Please make a difference and support us monthly today. Cancel anytime.';
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
@@ -125,7 +125,7 @@ export function CheckoutNudgeThankYou() {
 	const getNudgeHeadline = 'Thank you for choosing to Support us monthly';
 
 	const getNudgeCopy =
-		'You are helping ensure the future of Guardian journalism.';
+		'You are helping to support the future of independent journalism.';
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
