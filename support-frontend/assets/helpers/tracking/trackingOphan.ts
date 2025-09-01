@@ -1,5 +1,10 @@
 // ----- Imports ----- //
-import type { AbTest, ComponentEvent, TAction, TComponentType } from '@guardian/ophan-tracker-js/support';
+import type {
+	AbTest,
+	ComponentEvent,
+	TAction,
+	TComponentType,
+} from '@guardian/ophan-tracker-js/support';
 import { record, viewId } from '@guardian/ophan-tracker-js/support';
 import { testIsActive } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
@@ -18,9 +23,7 @@ const trackComponentEvents = (componentEvent: ComponentEvent): void =>
 		componentEvent,
 	});
 
-export const buildOphanPayload = (
-	participations: Participations,
-): AbTest[] => {
+export const buildOphanPayload = (participations: Participations): AbTest[] => {
 	const activeTests: Array<[string, string]> =
 		Object.entries(participations).filter(testIsActive);
 
