@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source/foundations';
 import {
 	FooterLinks,
 	FooterWithContents,
@@ -19,6 +17,10 @@ import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { AccordionFAQ } from '../../components/accordionFAQ';
 import { getStudentFAQs } from '../helpers/studentFAQs';
 import { getStudentTsAndCs } from '../helpers/studentTsAndCsCopy';
+import {
+	brandAwarenessContainer,
+	brandAwarenessSection,
+} from './StudentLandingPageStyles';
 import { StudentTsAndCs } from './studentTsAndCs';
 
 type StudentLandingPageProps = {
@@ -26,20 +28,6 @@ type StudentLandingPageProps = {
 	header: JSX.Element;
 	brandAwareness?: JSX.Element;
 };
-
-const brandAwarenessSection = css`
-	background-color: ${palette.neutral[97]};
-`;
-
-const brandAwarenessContainer = css`
-	max-width: 940px;
-	padding-top: ${space[6]}px;
-	margin: 0 auto;
-
-	${from.desktop} {
-		padding-top: ${space[9]}px;
-	}
-`;
 
 export function StudentLandingPage({
 	geoId,
