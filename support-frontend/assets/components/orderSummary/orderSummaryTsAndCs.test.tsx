@@ -7,6 +7,15 @@ import type {
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { OrderSummaryTsAndCs } from './orderSummaryTsAndCs';
 
+// Mock the date - some of the Ts&Cs include calculated dates
+beforeAll(() => {
+	jest.useFakeTimers().setSystemTime(new Date('2025-08-29'));
+});
+
+afterAll(() => {
+	jest.useRealTimers();
+});
+
 describe('orderSummaryTs&Cs Snapshot comparison', () => {
 	const promotionTierThreeUnitedStatesMonthly: Promotion = {
 		name: '$8 off for 12 months',
