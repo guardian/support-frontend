@@ -5,7 +5,7 @@ export const cardsContainer = css`
 	display: flex;
 	flex-direction: column;
 	background-color: ${palette.brand[400]};
-	padding: 0 ${space[3]}px ${space[6]}px;
+	padding: 0 ${space[5]}px ${space[6]}px;
 	gap: ${space[4]}px;
 	${from.desktop} {
 		padding-right: ${space[6]}px;
