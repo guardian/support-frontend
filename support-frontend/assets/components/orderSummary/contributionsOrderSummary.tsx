@@ -248,6 +248,8 @@ export function ContributionsOrderSummary({
 			type="toSupporterPlus"
 			geoId={geoId}
 			ratePlanKey={ratePlanKey}
+			abTestName="abNudgeToSupporterPlus"
+			abTestVariant="variant"
 		/>
 	);
 

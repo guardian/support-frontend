@@ -325,6 +325,12 @@ export function OneTimeCheckoutComponent({
 		}
 	}, [finalAmount]);
 
+	useEffect(() => {
+		trackComponentLoad(
+			`oneTimeCheckout-abNudgeToLowRegular--${abParticipations.abNudgeToLowRegular}`,
+		);
+	}, []);
+
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const cardElement = elements?.getElement(CardNumberElement);
@@ -582,7 +588,7 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const isAbNudgeToLowRegular =
+	const isAbNudgeToLowRegularVariant =
 		abParticipations.abNudgeToLowRegular === 'variant';
 
 	const paymentButtonText = finalAmount
@@ -641,11 +647,13 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					{isAbNudgeToLowRegular && (
+					{isAbNudgeToLowRegularVariant && (
 						<CheckoutNudge
 							type={'toRegular'}
 							geoId={geoId}
 							ratePlanKey="Monthly"
+							abTestName="abNudgeToLowRegular"
+							abTestVariant="variant"
 						/>
 					)}
 				</BoxContents>

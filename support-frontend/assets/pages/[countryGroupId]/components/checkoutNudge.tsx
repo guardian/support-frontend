@@ -13,10 +13,9 @@ import { BenefitsCheckList } from 'components/checkoutBenefits/benefitsCheckList
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ProductBenefit } from 'helpers/globalsAndSwitches/landingPageSettings';
 import { type ActiveRatePlanKey, productCatalog } from 'helpers/productCatalog';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-
-// TODO: determine what changes between the two different nudges (oneTime to regular and low regular to supporter+)
 
 type NudgeType = 'toRegular' | 'toSupporterPlus';
 
@@ -24,6 +23,8 @@ interface CheckoutNudgeProps {
 	type: NudgeType;
 	geoId: GeoId;
 	ratePlanKey: ActiveRatePlanKey;
+	abTestName: string;
+	abTestVariant: string;
 }
 
 interface CheckoutNudgeThanksProps {
@@ -73,12 +74,12 @@ const nudgeThankYouBox = css`
 	flex-direction: row;
 `;
 
-// TODO: add tracking e.g., line 195 in checkoutSummary
-
 export function CheckoutNudge({
 	type,
 	geoId,
 	ratePlanKey,
+	abTestName,
+	abTestVariant,
 }: CheckoutNudgeProps) {
 	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
 
@@ -181,6 +182,11 @@ export function CheckoutNudge({
 					isLoading={false}
 					theme={themeButtonReaderRevenueBrand}
 					href={buildCtaUrl}
+					onClick={() => {
+						trackComponentClick(
+							`checkoutNudge-${abTestName}--${abTestVariant}`,
+						);
+					}}
 				>
 					{getButtonCopy}
 				</LinkButton>
