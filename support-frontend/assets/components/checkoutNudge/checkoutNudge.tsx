@@ -124,7 +124,7 @@ export function CheckoutNudge({
 	);
 }
 
-interface CheckoutNudgeThankYouProps {
+export interface CheckoutNudgeThankYouProps {
 	abTestVariant: string | undefined;
 }
 
