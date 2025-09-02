@@ -229,8 +229,8 @@ export const getPlans = (
 			);
 			const label =
 				productOption === 'Sixday' || productOption === 'SixdayPlus'
-					? 'Most Popular'
-					: '';
+					? 'Most popular'
+					: undefined;
 			const productLabel = getProductLabel(productOption);
 
 			return {
