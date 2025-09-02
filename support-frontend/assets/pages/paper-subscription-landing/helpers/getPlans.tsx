@@ -228,8 +228,8 @@ export const getPlans = (
 				productOption,
 			);
 			const label =
-				productOption === 'Everyday' || productOption === 'EverydayPlus'
-					? 'Best deal'
+				productOption === 'Sixday' || productOption === 'SixdayPlus'
+					? 'Most Popular'
 					: '';
 			const productLabel = getProductLabel(productOption);
 
