@@ -1,3 +1,7 @@
+/**
+ * @group integration
+ */
+
 import { RetryError, RetryErrorType } from '../errors/retryError';
 import { handler } from '../lambdas/createZuoraSubscriptionTSLambda';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
