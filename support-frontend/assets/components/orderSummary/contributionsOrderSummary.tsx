@@ -217,12 +217,15 @@ export function ContributionsOrderSummary({
 	const showLowRegularNudgeThanks = () => {
 		const isInNudgeToLowRegular =
 			productKey === 'Contribution' &&
-			abParticipations?.abNudgeToLowRegular === 'variant';
+			['v1', 'v2'].some(a => a === abParticipations?.abNudgeToLowRegular);
+
 		return isInNudgeToLowRegular && nudgeType.trim() === 'toRegular';
 	};
 
 	const nudgeLowRegularThanks = showLowRegularNudgeThanks() && (
-		<CheckoutNudgeThankYou />
+		<CheckoutNudgeThankYou
+			abTestVariant={abParticipations?.abNudgeToLowRegular}
+		/>
 	);
 
 	return (

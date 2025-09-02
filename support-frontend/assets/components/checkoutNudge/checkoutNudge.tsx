@@ -10,16 +10,17 @@ import {
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import { type ActiveRatePlanKey, productCatalog } from 'helpers/productCatalog';
+import { type ActiveRatePlanKey } from 'helpers/productCatalog';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
-interface CheckoutNudgeProps {
+export interface CheckoutNudgeProps {
 	geoId: GeoId;
 	ratePlanKey: ActiveRatePlanKey;
+	recurringAmount: number;
 	abTestName: string;
-	abTestVariant: string;
+	abTestVariant: string | undefined;
 }
 
 const nudgeBoxOverrides = css`
@@ -61,39 +62,41 @@ const nudgeThankYouBox = css`
 export function CheckoutNudge({
 	geoId,
 	ratePlanKey,
+	recurringAmount,
 	abTestName,
 	abTestVariant,
 }: CheckoutNudgeProps) {
-	const { currency, currencyKey: currencyId } = getGeoIdConfig(geoId);
+	const { currency } = getGeoIdConfig(geoId);
 
 	if (!['Monthly', 'Annual'].includes(ratePlanKey)) {
 		ratePlanKey = 'Monthly';
 	}
 
-	const lowMonthlyRecurringAmount = productCatalog.Contribution?.ratePlans[
-		ratePlanKey
-	]?.pricing[currencyId] as number;
-
 	const ratePlanDescription = ratePlanKey === 'Monthly' ? 'month' : 'year';
 
 	const getButtonCopy = `Support us for ${
 		currency.glyph
-	}${lowMonthlyRecurringAmount.toString()}/${ratePlanDescription}`;
+	}${recurringAmount.toString()}/${ratePlanDescription}`;
 
 	const tier1UrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: ratePlanKey,
-		contribution: lowMonthlyRecurringAmount.toString(),
+		contribution: recurringAmount.toString(),
 		nudge: 'toRegular',
 	});
 
 	// TODO: remove the force variant before go live!!!
-	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}#ab-abNudgeToLowRegular=variant`;
+	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}#ab-abNudgeToLowRegular=${abTestVariant}`;
 
-	const getNudgeHeadline = 'Make a bigger impact';
+	const getNudgeHeadline =
+		abTestVariant === 'v1'
+			? 'Make a bigger impact'
+			: 'Can I make a bigger impact?';
 
 	const getNudgeCopy =
-		'Regular, reliable support powers Guardian journalism in perpetuity. Please make a difference and support us monthly today. Cancel anytime.';
+		abTestVariant === 'v1'
+			? 'Regular, reliable support powers Guardian journalism in perpetuity. Please make a difference and support us monthly today. Cancel anytime.'
+			: "Yes! We're grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.";
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
@@ -121,11 +124,22 @@ export function CheckoutNudge({
 	);
 }
 
-export function CheckoutNudgeThankYou() {
-	const getNudgeHeadline = 'Thank you for choosing to Support us monthly';
+interface CheckoutNudgeThankYouProps {
+	abTestVariant: string | undefined;
+}
+
+export function CheckoutNudgeThankYou({
+	abTestVariant,
+}: CheckoutNudgeThankYouProps) {
+	const getNudgeHeadline =
+		abTestVariant === 'v1'
+			? 'Thank you for choosing to Support us monthly'
+			: 'Thank you for choosing to support us monthly';
 
 	const getNudgeCopy =
-		'You are helping to support the future of independent journalism.';
+		abTestVariant === 'v1'
+			? 'You are helping to support the future of independent journalism.'
+			: 'Your support makes a huge difference in keeping our journalism free from outside influence';
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>

@@ -61,6 +61,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import { productCatalog } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -588,8 +589,11 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
-	const isAbNudgeToLowRegularVariant =
-		abParticipations.abNudgeToLowRegular === 'variant';
+	const isAnAbNudgeToLowRegularVariant = ['v1', 'v2'].some(
+		(a) => a === abParticipations.abNudgeToLowRegular,
+	);
+	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
+		?.pricing[currencyKey] as number;
 
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
@@ -647,12 +651,13 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
-					{isAbNudgeToLowRegularVariant && (
+					{isAnAbNudgeToLowRegularVariant && (
 						<CheckoutNudge
 							geoId={geoId}
 							ratePlanKey="Monthly"
+							recurringAmount={nudgeRecurringAmount}
 							abTestName="abNudgeToLowRegular"
-							abTestVariant="variant"
+							abTestVariant={abParticipations.abNudgeToLowRegular}
 						/>
 					)}
 				</BoxContents>
