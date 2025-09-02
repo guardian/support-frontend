@@ -1,20 +1,18 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { getProductCatalogFromApi } from '@modules/product-catalog/api';
-import { createSubscription } from '@modules/zuora/createSubscription/createSubscription';
 import type {
 	CreateSubscriptionInputFields,
 	CreateSubscriptionResponse,
 } from '@modules/zuora/createSubscription/createSubscription';
-import { previewCreateSubscription } from '@modules/zuora/createSubscription/previewCreateSubscription';
+import { createSubscription } from '@modules/zuora/createSubscription/createSubscription';
 import type {
 	PreviewCreateSubscriptionInputFields,
 	PreviewCreateSubscriptionResponse,
 } from '@modules/zuora/createSubscription/previewCreateSubscription';
+import { previewCreateSubscription } from '@modules/zuora/createSubscription/previewCreateSubscription';
 import type { Contact } from '@modules/zuora/orders/newAccount';
 import type { PaymentMethod as ZuoraPaymentMethod } from '@modules/zuora/orders/paymentMethods';
-import { zuoraDateFormat } from '@modules/zuora/utils/common';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
-import dayjs from 'dayjs';
 import type { Address } from '../model/address';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
 import type { PaymentMethod } from '../model/paymentMethod';
@@ -30,11 +28,7 @@ import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
 import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
-
-// Ensure that any Date objects are serialised in the format expected by Zuora
-Date.prototype.toJSON = function () {
-	return zuoraDateFormat(dayjs(this));
-};
+import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
 
 const stage = stageFromEnvironment();
 
@@ -119,11 +113,14 @@ export const handler = async (
 			previewInputFields,
 		);
 
-		return buildOutputState(
-			state,
-			createZuoraSubscriptionState,
-			createSubscriptionResult,
-			previewInvoices,
+		return JSON.stringify(
+			buildOutputState(
+				state,
+				createZuoraSubscriptionState,
+				createSubscriptionResult,
+				previewInvoices,
+			),
+			zuoraDateReplacer,
 		);
 	} catch (error) {
 		// TODO: correct error handling
