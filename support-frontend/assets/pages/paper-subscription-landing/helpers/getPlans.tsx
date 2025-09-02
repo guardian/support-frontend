@@ -227,9 +227,10 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
+			const labelWording = isPaperProductTest ? 'Most popular' : 'Best deal';
 			const label =
 				productOption === 'Sixday' || productOption === 'SixdayPlus'
-					? 'Most popular'
+					? labelWording
 					: undefined;
 			const productLabel = getProductLabel(productOption);
 
