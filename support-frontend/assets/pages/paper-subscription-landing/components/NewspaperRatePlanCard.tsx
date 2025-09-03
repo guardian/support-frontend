@@ -35,7 +35,7 @@ function NewspaperRatePlanCard({
 	href,
 	onClick,
 	onView,
-	label,
+	showLabel,
 	productLabel,
 	unavailableOutsideLondon,
 }: Product) {
@@ -82,8 +82,8 @@ function NewspaperRatePlanCard({
 	);
 
 	return (
-		<div ref={setElementToObserve} css={[card, label && cardWithLabel]}>
-			{label && <div css={cardLabel}>{label}</div>}
+		<div ref={setElementToObserve} css={[card, showLabel && cardWithLabel]}>
+			{showLabel && <div css={cardLabel}>Most popular</div>}
 			<section css={cardHeader}>
 				<h3 css={cardHeading}>{title}</h3>
 				{productLabel && (
