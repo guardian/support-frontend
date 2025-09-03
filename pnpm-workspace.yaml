@@ -21,4 +21,4 @@ catalog:
   "@aws-sdk/credential-provider-node": 3.699.0
   "@guardian/eslint-config-typescript": 12.0.0
   "@guardian/prettier": ^2.1.5
-  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#26dc841334ed11918467d3201c2de3d08ed9558c"
+  "@guardian/support-service-lambdas": "guardian/support-service-lambdas#49cf4074e202fd884c80fe66ab9d2fb15ead9711"

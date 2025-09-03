@@ -32,7 +32,15 @@ export function StudentLandingPageGlobal({
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}
 					studentDiscount={studentDiscount}
-					headingCopy={`No owner. No agenda. No more than ${studentDiscount.discountPriceWithCurrency} a year for students`}
+					headingCopy={
+						<>
+							<p>No owner. No agenda.</p>
+							<p>
+								No more than {studentDiscount.discountPriceWithCurrency} a year
+								for students
+							</p>
+						</>
+					}
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
 					includeThreeTierLink={true}
 				/>

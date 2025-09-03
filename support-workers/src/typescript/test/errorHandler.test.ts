@@ -1,5 +1,5 @@
+import { asRetryError } from '../errors/errorHandler';
 import { SalesforceError, salesforceErrorCodes } from '../services/salesforce';
-import { asRetryError } from '../util/errorHandler';
 
 describe('errorHandler', () => {
 	test('should throw a retry unlimited error during readonly mode', () => {
