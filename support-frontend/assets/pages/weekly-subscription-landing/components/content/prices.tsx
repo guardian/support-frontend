@@ -104,7 +104,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.showRecomendedLabel
+							product.showBestDealLabel
 								? productOverrideWithLabel
 								: productOverride
 						}
@@ -116,7 +116,7 @@ function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						showRecomendedLabel={product.showRecomendedLabel}
+						showBestDealLabel={product.showBestDealLabel}
 						isSpecialOffer={product.isSpecialOffer}
 					/>
 				))}

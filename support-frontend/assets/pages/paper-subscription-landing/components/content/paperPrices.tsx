@@ -143,7 +143,7 @@ export function PaperPrices({
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
-							product.showRecomendedLabel
+							product.showBestDealLabel
 								? productOverrideWithLabel
 								: productOverride
 						}
@@ -155,7 +155,7 @@ export function PaperPrices({
 						href={product.href}
 						onClick={product.onClick}
 						onView={product.onView}
-						showRecomendedLabel={product.showRecomendedLabel}
+						showBestDealLabel={product.showBestDealLabel}
 						productLabel={product.productLabel}
 						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>

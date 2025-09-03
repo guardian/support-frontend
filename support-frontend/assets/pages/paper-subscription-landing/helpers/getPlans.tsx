@@ -228,7 +228,7 @@ export const getPlans = (
 				productOption,
 			);
 
-			const showRecomendedLabel =
+			const showBestDealLabel =
 				productOption === 'Sixday' || productOption === 'SixdayPlus';
 
 			const productLabel = getProductLabel(productOption);
@@ -251,7 +251,7 @@ export const getPlans = (
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-				showRecomendedLabel,
+				showBestDealLabel,
 				productLabel,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
 					fulfilmentOption,

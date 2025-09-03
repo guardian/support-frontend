@@ -46,7 +46,7 @@ export type Product = {
 	href: string;
 	onClick: () => void;
 	onView: () => void;
-	showRecomendedLabel?: boolean;
+	showBestDealLabel?: boolean;
 	productLabel?: ProductLabelProps;
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
@@ -76,7 +76,7 @@ function ProductOption(props: Product): JSX.Element {
 
 	const isObserverChannel = props.productLabel?.channel === Channel.Observer;
 	const productOptionMargin =
-		props.showRecomendedLabel &&
+		props.showBestDealLabel &&
 		css`
 			${until.tablet} {
 				/* calculation belows are based on productOptionHighlight text size, line height and padding */
@@ -101,7 +101,7 @@ function ProductOption(props: Product): JSX.Element {
 				props.productLabel ? productOptionWithLabel : css``,
 			]}
 		>
-			{props.showRecomendedLabel && (
+			{props.showBestDealLabel && (
 				<span
 					css={[
 						productOptionHighlight,
