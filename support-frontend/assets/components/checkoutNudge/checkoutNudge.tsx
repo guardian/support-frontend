@@ -1,9 +1,13 @@
 import { css } from '@emotion/react';
 import {
+	from,
+	headlineBold20,
 	headlineBold24,
 	neutral,
 	palette,
 	space,
+	textSans15,
+	textSans17,
 } from '@guardian/source/foundations';
 import {
 	LinkButton,
@@ -26,12 +30,14 @@ export interface CheckoutNudgeProps {
 const nudgeBoxOverrides = css`
 	margin-top: ${space[2]}px;
 	background-color: ${neutral[97]};
+	border: none;
 	& h3 {
 		color: ${palette.brand[500]};
 		${headlineBold24};
 	}
 	& p {
 		margin-top: ${space[2]}px;
+		${textSans15}
 		font-weight: 700;
 	}
 `;
@@ -50,13 +56,10 @@ const bodyCopyOverrides = css`
 
 const nudgeButtonOverrides = css`
 	margin-top: ${space[2]}px;
+	${textSans17}
+	font-weight: 700;
 	width: 100%;
 	order: 6;
-`;
-
-const nudgeThankYouBox = css`
-	display: flex;
-	flex-direction: row;
 `;
 
 export function CheckoutNudge({
@@ -128,6 +131,68 @@ export interface CheckoutNudgeThankYouProps {
 	abTestVariant: string | undefined;
 }
 
+const thankYouBoxOverrides = css`
+	background-color: ${neutral[97]};
+	border: none;
+`;
+const innerThankYouBoxOverrides = css`
+	& h3 {
+		color: ${palette.brand[500]};
+		${headlineBold20};
+	}
+	& p {
+		margin-top: ${space[2]}px;
+		${textSans15}
+
+		font-weight: 700;
+	}
+
+	margin-bottom: -${space[3]}px;
+
+	${from.tablet} {
+		margin-bottom: -${space[5]}px;
+	}
+
+	${from.desktop} {
+		margin-bottom: -${space[6]}px;
+	}
+`;
+
+const nudgeThankYouBox = css`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	${from.tablet} {
+	}
+
+	${from.desktop} {
+	}
+`;
+
+const nudgeThankYouCopyBox = css`
+	padding-bottom: ${space[6]}px;
+
+	${from.tablet} {
+		padding-bottom: -${space[5]}px;
+	}
+
+	${from.desktop} {
+		padding-bottom: -${space[6]}px;
+	}
+`;
+
+const imageOverride = css`
+	align-self: flex-end;
+	margin-left: 4px;
+
+	${from.tablet} {
+	}
+
+	${from.desktop} {
+	}
+`;
+
 export function CheckoutNudgeThankYou({
 	abTestVariant,
 }: CheckoutNudgeThankYouProps) {
@@ -142,14 +207,15 @@ export function CheckoutNudgeThankYou({
 			: 'Your support makes a huge difference in keeping our journalism free from outside influence';
 
 	return (
-		<Box cssOverrides={nudgeBoxOverrides}>
-			<BoxContents>
+		<Box cssOverrides={thankYouBoxOverrides}>
+			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
 				<div css={nudgeThankYouBox}>
-					<div>
+					<div css={nudgeThankYouCopyBox}>
 						<h3>{getNudgeHeadline}</h3>
 						<p>{getNudgeCopy}</p>
 					</div>
 					<img
+						css={imageOverride}
 						width="116px"
 						height="91px"
 						src="https://media.guim.co.uk/313aafcd2a1b8fed178628ce346b517248d8692b/0_0_702_582/140.png"
