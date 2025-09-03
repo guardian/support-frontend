@@ -5,13 +5,14 @@ import admin.settings.{FeatureSwitches, On}
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogging
 import com.gu.support.config.Stage
+import com.gu.support.config.Stages.CODE
 import models.identity.responses.IdentityErrorResponse._
 import org.apache.pekko.stream.scaladsl.Flow
 import org.apache.pekko.util.ByteString
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
-import services.AsyncAuthenticationService
+import services.{AsyncAuthenticationService, TestUserService}
 import services.RecaptchaResponse.recaptchaFailedCode
 import utils.FastlyGEOIP
 
@@ -27,6 +28,7 @@ class CustomActionBuilders(
     csrfConfig: CSRFConfig,
     stage: Stage,
     featureSwitches: => FeatureSwitches,
+    testUsersService: TestUserService,
 )(implicit private val ec: ExecutionContext) {
 
   val PrivateAction =
@@ -65,17 +67,19 @@ class CustomActionBuilders(
     private def pushMetric(cloudwatchEvent: AwsCloudWatchMetricPut.MetricRequest) = {
       AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
     }
-    private def pushAlarmMetric = {
-      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(stage)
+    private def pushAlarmMetric(isTestUser: Boolean) = {
+      val userStage = if (isTestUser) CODE else stage
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideCreateFailure(userStage)
       pushMetric(cloudwatchEvent)
     }
 
-    private def pushHighThresholdAlarmMetric = {
-      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideHighThresholdCreateFailure(stage)
+    private def pushHighThresholdAlarmMetric(isTestUser: Boolean) = {
+      val userStage = if (isTestUser) CODE else stage
+      val cloudwatchEvent = AwsCloudWatchMetricSetup.serverSideHighThresholdCreateFailure(userStage)
       pushMetric(cloudwatchEvent)
     }
 
-    private def maybePushAlarmMetric(result: Result) = {
+    private def maybePushAlarmMetric(result: Result, isTestUser: Boolean) = {
       // We'll never alarm on these
       val ignoreList = Set(
         emailProviderRejectedCode,
@@ -95,17 +99,18 @@ class CustomActionBuilders(
           logger.info(
             s"pushing higher threshold alarm metric for ${result.header.status} ${result.header.reasonPhrase}",
           )
-          pushHighThresholdAlarmMetric
+          pushHighThresholdAlarmMetric(isTestUser)
         } else {
           logger.error(
             scrub"pushing alarm metric - non 2xx response. Http code: ${result.header.status}, reason: ${result.header.reasonPhrase}",
           )
-          pushAlarmMetric
+          pushAlarmMetric(isTestUser)
         }
       }
     }
 
     def apply(requestHeader: RequestHeader): Accumulator[ByteString, Result] = {
+      val isTestUser = testUsersService.isTestUser(requestHeader)
       val accumulator = chainedAction.apply(requestHeader)
       val loggedAccumulator = accumulator.through(Flow.fromFunction { (byteString: ByteString) =>
         logger.info("incoming POST: " + byteString.utf8String)
@@ -113,12 +118,12 @@ class CustomActionBuilders(
       })
       loggedAccumulator
         .map { result =>
-          maybePushAlarmMetric(result)
+          maybePushAlarmMetric(result, isTestUser)
           result
         }
         .recoverWith({ case throwable: Throwable =>
           logger.error(scrub"pushing alarm metric - 5xx response caused by ${throwable}")
-          pushAlarmMetric
+          pushAlarmMetric(isTestUser)
           Future.failed(throwable)
         })
     }

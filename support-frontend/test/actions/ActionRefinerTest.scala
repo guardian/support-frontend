@@ -31,6 +31,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       enableCampaignCountdown = Some(On),
     )
 
+  val testUsersService = TestUserService("secret")
+
   trait Mocks {
     val asyncAuthenticationService = mock[AsyncAuthenticationService]
     val userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder]
@@ -50,7 +52,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
           csrfCheck,
           csrfConfig,
           stage,
-          featureSwitches,
+          featureSwitches = featureSwitches,
+          testUsersService = testUsersService,
         )
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -75,7 +78,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         csrfCheck,
         csrfConfig,
         stage,
-        featureSwitches,
+        featureSwitches = featureSwitches,
+        testUsersService = testUsersService,
       )
 
       val result = actionRefiner
@@ -101,7 +105,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
-        featureSwitches,
+        featureSwitches = featureSwitches,
+        testUsersService = testUsersService,
       )
 
       val result = actionRefiner
@@ -127,7 +132,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
-        featureSwitches,
+        featureSwitches = featureSwitches,
+        testUsersService = testUsersService,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -144,7 +150,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
-        featureSwitches,
+        featureSwitches = featureSwitches,
+        testUsersService = testUsersService,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")

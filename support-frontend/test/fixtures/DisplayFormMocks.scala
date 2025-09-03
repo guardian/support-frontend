@@ -48,6 +48,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
     csrfConfig = csrfConfig,
     stage = stage,
     featureSwitches = FeatureSwitches(Some(On), Some(On), Some(Off), Some(On)),
+    testUsersService = testUsers,
   )
 
 }
