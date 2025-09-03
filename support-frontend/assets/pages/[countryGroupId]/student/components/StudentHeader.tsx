@@ -1,6 +1,9 @@
 import GridPicture from 'components/gridPicture/gridPicture';
 import { Container } from 'components/layout/container';
-import type { LandingPageVariant } from 'helpers/globalsAndSwitches/landingPageSettings';
+import type {
+	LandingPageVariant,
+	ProductBenefit,
+} from 'helpers/globalsAndSwitches/landingPageSettings';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -25,11 +28,18 @@ interface StudentHeaderProps {
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 	studentDiscount: StudentDiscount;
-	headingCopy: string;
+	headingCopy: React.ReactNode;
 	subheadingCopy: React.ReactNode;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
 }
+
+const ukSpecificAdditionalBenefit: ProductBenefit = {
+	copy: 'Student-focused newsletter, curated by our journalists',
+	label: {
+		copy: 'Limited series',
+	},
+};
 
 export default function StudentHeader({
 	geoId,
@@ -43,13 +53,21 @@ export default function StudentHeader({
 	includeThreeTierLink = false,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
-	const { benefits } = landingPageVariant.products.SupporterPlus;
 	const checkoutUrl = buildCheckoutUrl(
 		geoId,
 		productKey,
 		ratePlanKey,
 		promoCode,
 	);
+
+	// In the UK on this page only, add an additional benefit to the list
+	const { benefits: configuredBenefits } =
+		landingPageVariant.products.SupporterPlus;
+
+	const benefits =
+		geoId === 'uk'
+			? [ukSpecificAdditionalBenefit, ...configuredBenefits]
+			: configuredBenefits;
 
 	const ctaLabel = amount === 0 ? 'Sign up for free' : 'Subscribe';
 
