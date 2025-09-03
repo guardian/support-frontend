@@ -178,13 +178,8 @@ const copyOverride = css`
 const imageOverride = css`
 	grid-area: image;
 	align-self: flex-end;
-	margin-left: 4px;
-
-	${from.tablet} {
-	}
-
-	${from.desktop} {
-	}
+	margin-left: ${space[2]}px;
+	margin-top: ${space[2]}px;
 `;
 
 export function CheckoutNudgeThankYou({
@@ -211,6 +206,7 @@ export function CheckoutNudgeThankYou({
 						width="116px"
 						height="91px"
 						src="https://media.guim.co.uk/313aafcd2a1b8fed178628ce346b517248d8692b/0_0_702_582/140.png"
+						alt="An illustration of a man watering a plant which represents The Guardian - helping it to grow"
 					/>
 				</div>
 			</BoxContents>
