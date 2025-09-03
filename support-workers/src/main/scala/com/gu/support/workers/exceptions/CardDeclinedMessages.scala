@@ -20,6 +20,7 @@ object CardDeclinedMessages {
     "Transaction declined.validation_failed - account_number did not pass modulus check",
     "Transaction declined.validation_failed - account_number is the wrong length (should be 8 characters)",
     "Transaction declined.validation_failed - account_number does not match sort code",
+    // This list should be kept in sync with the list in src/typescript/errors/zuoraErrors.ts
   )
   def alarmShouldBeSuppressedForErrorMessage(message: String): Boolean = {
     errorMessages.exists(messageToIgnore => message.contains(messageToIgnore))

@@ -13,6 +13,7 @@ import { previewCreateSubscription } from '@modules/zuora/createSubscription/pre
 import type { Contact } from '@modules/zuora/orders/newAccount';
 import type { PaymentMethod as ZuoraPaymentMethod } from '@modules/zuora/orders/paymentMethods';
 import { ZuoraClient } from '@modules/zuora/zuoraClient';
+import { asRetryError } from '../errors/errorHandler';
 import type { Address } from '../model/address';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
 import type { PaymentMethod } from '../model/paymentMethod';
@@ -26,7 +27,6 @@ import { sendThankYouEmailStateSchema } from '../model/sendAcquisitionEventState
 import { stageFromEnvironment } from '../model/stage';
 import type { WrappedState } from '../model/stateSchemas';
 import { ServiceProvider } from '../services/config';
-import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 import { zuoraDateReplacer } from '../util/zuoraDateReplacer';
 
@@ -123,7 +123,6 @@ export const handler = async (
 			zuoraDateReplacer,
 		);
 	} catch (error) {
-		// TODO: correct error handling
 		throw asRetryError(error);
 	}
 };
