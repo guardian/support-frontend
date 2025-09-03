@@ -28,7 +28,7 @@ interface StudentHeaderProps {
 	ratePlanKey: ActiveRatePlanKey;
 	landingPageVariant: LandingPageVariant;
 	studentDiscount: StudentDiscount;
-	headingCopy: string;
+	headingCopy: React.ReactNode;
 	subheadingCopy: React.ReactNode;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
