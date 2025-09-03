@@ -136,20 +136,10 @@ const thankYouBoxOverrides = css`
 	border: none;
 `;
 const innerThankYouBoxOverrides = css`
-	& h3 {
-		color: ${palette.brand[500]};
-		${headlineBold20};
-	}
-	& p {
-		margin-top: ${space[2]}px;
-		${textSans15}
-
-		font-weight: 700;
-	}
-
 	margin-bottom: -${space[3]}px;
 
 	${from.tablet} {
+		margin-top: -${space[3]}px;
 		margin-bottom: -${space[5]}px;
 	}
 
@@ -159,30 +149,34 @@ const innerThankYouBoxOverrides = css`
 `;
 
 const nudgeThankYouBox = css`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-
-	${from.tablet} {
-	}
+	display: grid;
+	grid-template:
+		'heading	heading'
+		'copy		image';
 
 	${from.desktop} {
+		grid-template:
+			'heading	image'
+			'copy		image';
 	}
 `;
 
-const nudgeThankYouCopyBox = css`
-	padding-bottom: ${space[6]}px;
+const headingOverride = css`
+	grid-area: heading;
+	color: ${palette.brand[500]};
+	${headlineBold20};
+`;
 
-	${from.tablet} {
-		padding-bottom: -${space[5]}px;
-	}
-
-	${from.desktop} {
-		padding-bottom: -${space[6]}px;
-	}
+const copyOverride = css`
+	grid-area: copy;
+	margin-top: ${space[2]}px;
+	margin-bottom: ${space[2]}px;
+	${textSans15}
+	font-weight: 700;
 `;
 
 const imageOverride = css`
+	grid-area: image;
 	align-self: flex-end;
 	margin-left: 4px;
 
@@ -210,10 +204,8 @@ export function CheckoutNudgeThankYou({
 		<Box cssOverrides={thankYouBoxOverrides}>
 			<BoxContents cssOverrides={innerThankYouBoxOverrides}>
 				<div css={nudgeThankYouBox}>
-					<div css={nudgeThankYouCopyBox}>
-						<h3>{getNudgeHeadline}</h3>
-						<p>{getNudgeCopy}</p>
-					</div>
+					<h3 css={headingOverride}>{getNudgeHeadline}</h3>
+					<p css={copyOverride}>{getNudgeCopy}</p>
 					<img
 						css={imageOverride}
 						width="116px"
