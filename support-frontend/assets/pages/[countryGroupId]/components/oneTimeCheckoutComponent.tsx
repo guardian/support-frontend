@@ -266,12 +266,16 @@ export function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	let customAmountsData;
 	const customAmountsParam = urlSearchParams.get('amounts');
-	const customAmountsData = customAmountsParam ? {
-		amounts: parseCustomAmounts(customAmountsParam),
-		defaultAmount: 0,
-		hideChooseYourAmount: false,
-	} : null;
+	if (customAmountsParam) {
+		const amounts = parseCustomAmounts(customAmountsParam);
+		customAmountsData = {
+			amounts,
+			defaultAmount: amounts[1] ?? 0,
+			hideChooseYourAmount: false,
+		};
+	}
 
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
