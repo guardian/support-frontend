@@ -32,6 +32,7 @@ interface StudentHeaderProps {
 	subheadingCopy: React.ReactNode;
 	universityBadge?: JSX.Element;
 	includeThreeTierLink?: boolean;
+	heroImagePrefix: string;
 }
 
 const ukSpecificAdditionalBenefit: ProductBenefit = {
@@ -51,6 +52,7 @@ export default function StudentHeader({
 	subheadingCopy,
 	universityBadge,
 	includeThreeTierLink = false,
+	heroImagePrefix,
 }: StudentHeaderProps) {
 	const { amount, promoCode, discountSummary } = studentDiscount;
 	const checkoutUrl = buildCheckoutUrl(
@@ -94,28 +96,28 @@ export default function StudentHeader({
 				<GridPicture
 					sources={[
 						{
-							gridId: 'AuStudentLandingHeroMobile',
+							gridId: `${heroImagePrefix}Mobile`,
 							srcSizes: [2000, 1000, 500],
 							sizes: '350px',
 							imgType: 'jpg',
 							media: '(max-width: 739px)',
 						},
 						{
-							gridId: 'AuStudentLandingHeroTablet',
+							gridId: `${heroImagePrefix}Tablet`,
 							srcSizes: [1396, 855, 428],
 							sizes: '350px',
 							imgType: 'jpg',
 							media: '(max-width: 979px)',
 						},
 						{
-							gridId: 'AuStudentLandingHeroDesktop',
+							gridId: `${heroImagePrefix}Desktop`,
 							srcSizes: [2000, 1000, 500],
 							sizes: '574px',
 							imgType: 'jpg',
 							media: '(min-width: 980px)',
 						},
 					]}
-					fallback="AuStudentLandingHeroDesktop"
+					fallback={`${heroImagePrefix}Desktop`}
 					fallbackSize={574}
 					altText=""
 				/>

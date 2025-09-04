@@ -43,6 +43,7 @@ export function StudentLandingPageGlobal({
 					}
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
 					includeThreeTierLink={true}
+					heroImagePrefix="globalStudentLandingHero"
 				/>
 			}
 			brandAwareness={<StudentBrandAwareness />}
