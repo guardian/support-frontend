@@ -267,17 +267,15 @@ export function OneTimeCheckoutComponent({
 	);
 
 	const customAmountsParam = urlSearchParams.get('amounts');
-	if (customAmountsParam) {
-		// Let's hijack the ab test variant if we have a custom amounts query param.
-		// This was designed for the marketing team being able to calculate and provide their own
-		// suggested amounts for top-up campaigns, etc.
-		selectedAmountsVariant.amountsCardData['ONE_OFF'].amounts =
-			parseCustomAmounts(customAmountsParam);
-	}
+	const customAmountsData = customAmountsParam ? {
+		amounts: parseCustomAmounts(customAmountsParam),
+		defaultAmount: 0,
+		hideChooseYourAmount: false,
+	} : null;
 
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsCardData['ONE_OFF'];
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
