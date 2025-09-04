@@ -74,7 +74,7 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
+import { parseCustomAmounts, roundToDecimalPlaces } from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
@@ -268,7 +268,7 @@ export function OneTimeCheckoutComponent({
 		// Let's hijack the ab test variant if we have a custom amounts query param.
 		// This was designed for the marketing team being able to calculate and provide their own
 		// suggested amounts for top-up campaigns etc.
-		selectedAmountsVariant.amountsCardData['ONE_OFF'].amounts = customAmountsParam.split(',').map(amount => parseFloat(amount)).filter(amount => !isNaN(amount));
+		selectedAmountsVariant.amountsCardData['ONE_OFF'].amounts = parseCustomAmounts(customAmountsParam);
 	}
 
 	const { amountsCardData } = selectedAmountsVariant;
