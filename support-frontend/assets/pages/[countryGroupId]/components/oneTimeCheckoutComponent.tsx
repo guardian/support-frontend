@@ -267,7 +267,7 @@ export function OneTimeCheckoutComponent({
 	if (customAmountsParam) {
 		// Let's hijack the ab test variant if we have a custom amounts query param.
 		// This was designed for the marketing team being able to calculate and provide their own
-		// suggested amounts for top-up campaigns etc.
+		// suggested amounts for top-up campaigns, etc.
 		selectedAmountsVariant.amountsCardData['ONE_OFF'].amounts = parseCustomAmounts(customAmountsParam);
 	}
 
