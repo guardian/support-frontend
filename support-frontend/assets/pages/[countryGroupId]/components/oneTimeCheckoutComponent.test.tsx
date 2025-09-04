@@ -273,11 +273,18 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 
 		// Should not create custom amounts data when parameter is empty
 		expect(customAmountsData).toBeUndefined();
-		
+
 		// Should use original amountsCardData values
-		expect(amounts).toEqual(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].amounts);
-		expect(defaultAmount).toBe(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount);
-		expect(hideChooseYourAmount).toBe(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].hideChooseYourAmount);
+		expect(amounts).toEqual(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].amounts,
+		);
+		expect(defaultAmount).toBe(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount,
+		);
+		expect(hideChooseYourAmount).toBe(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF']
+				.hideChooseYourAmount,
+		);
 	});
 
 	test('should not create custom amounts data when no custom amounts parameter is provided', () => {
@@ -307,11 +314,18 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		// Should not create custom amounts data when no parameter
 		expect(customAmountsData).toBeUndefined();
 		expect(customAmountsParam).toBeNull();
-		
+
 		// Should use original amountsCardData values
-		expect(amounts).toEqual(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].amounts);
-		expect(defaultAmount).toBe(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount);
-		expect(hideChooseYourAmount).toBe(mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].hideChooseYourAmount);
+		expect(amounts).toEqual(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].amounts,
+		);
+		expect(defaultAmount).toBe(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount,
+		);
+		expect(hideChooseYourAmount).toBe(
+			mockSelectedAmountsVariant.amountsCardData['ONE_OFF']
+				.hideChooseYourAmount,
+		);
 	});
 
 	test('should set amounts to empty array when all custom amounts are invalid', () => {
