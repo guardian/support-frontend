@@ -29,14 +29,25 @@ export interface CheckoutNudgeProps {
 }
 
 const nudgeBoxOverrides = css`
-	margin-top: ${space[2]}px;
 	background-color: ${neutral[97]};
 	border: none;
 `;
 
 const innerBoxOverrides = css`
 	display: grid;
-	margin: -${space[1]}px;
+	padding: ${space[4]}px;
+
+	${until.tablet} {
+		padding: ${space[4]}px;
+	}
+
+	${from.tablet} {
+		padding: ${space[4]}px;
+	}
+
+	${from.desktop} {
+		padding: ${space[4]}px;
+	}
 `;
 
 const headlineOverrides = css`
