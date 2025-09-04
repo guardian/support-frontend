@@ -8,6 +8,7 @@ import {
 	space,
 	textSans15,
 	textSans17,
+	until,
 } from '@guardian/source/foundations';
 import {
 	LinkButton,
@@ -31,27 +32,22 @@ const nudgeBoxOverrides = css`
 	margin-top: ${space[2]}px;
 	background-color: ${neutral[97]};
 	border: none;
-	& h3 {
-		color: ${palette.brand[500]};
-		${headlineBold24};
-	}
-	& p {
-		margin-top: ${space[2]}px;
-		${textSans15}
-		font-weight: 700;
-	}
 `;
 
-const boxContentsOverrides = css`
+const innerBoxOverrides = css`
 	display: grid;
+	margin: -${space[1]}px;
 `;
 
 const headlineOverrides = css`
-	order: 1;
+	color: ${palette.brand[500]};
+	${headlineBold24};
 `;
 
 const bodyCopyOverrides = css`
-	order: 4;
+	margin-top: ${space[2]}px;
+	${textSans15}
+	font-weight: 700;
 `;
 
 const nudgeButtonOverrides = css`
@@ -59,7 +55,6 @@ const nudgeButtonOverrides = css`
 	${textSans17}
 	font-weight: 700;
 	width: 100%;
-	order: 6;
 `;
 
 export function CheckoutNudge({
@@ -103,7 +98,7 @@ export function CheckoutNudge({
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
-			<BoxContents cssOverrides={boxContentsOverrides}>
+			<BoxContents cssOverrides={innerBoxOverrides}>
 				<h3 css={headlineOverrides}>{getNudgeHeadline}</h3>
 				<div css={bodyCopyOverrides}>
 					<p>{getNudgeCopy}</p>
@@ -136,15 +131,25 @@ const thankYouBoxOverrides = css`
 	border: none;
 `;
 const innerThankYouBoxOverrides = css`
-	margin-bottom: -${space[3]}px;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+
+	${until.tablet} {
+		padding: ${space[3]}px;
+		padding-bottom: 0px;
+		margin-bottom: 0px;
+	}
 
 	${from.tablet} {
-		margin-top: -${space[3]}px;
-		margin-bottom: -${space[5]}px;
+		padding: ${space[3]}px;
+		padding-bottom: 0px;
+		margin-bottom: 0px;
 	}
 
 	${from.desktop} {
-		margin-bottom: -${space[6]}px;
+		padding: ${space[3]}px;
+		padding-bottom: 0px;
+		margin-bottom: 0px;
 	}
 `;
 
@@ -170,14 +175,15 @@ const headingOverride = css`
 const copyOverride = css`
 	grid-area: copy;
 	margin-top: ${space[2]}px;
-	margin-bottom: ${space[2]}px;
 	${textSans15}
 	font-weight: 700;
+	padding-bottom: ${space[3]}px;
 `;
 
 const imageOverride = css`
 	grid-area: image;
-	align-self: flex-end;
+	justify-self: end;
+	align-self: end;
 	margin-left: ${space[2]}px;
 	margin-top: ${space[2]}px;
 `;
