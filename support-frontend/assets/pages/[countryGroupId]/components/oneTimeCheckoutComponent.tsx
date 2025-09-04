@@ -263,6 +263,14 @@ export function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	const customAmountsParam = urlSearchParams.get('amounts');
+	if (customAmountsParam) {
+		// Let's hijack the ab test variant if we have a custom amounts query param.
+		// This was designed for the marketing team being able to calculate and provide their own
+		// suggested amounts for top-up campaigns etc.
+		selectedAmountsVariant.amountsCardData['ONE_OFF'].amounts = customAmountsParam.split(',').map(amount => parseFloat(amount)).filter(amount => !isNaN(amount));
+	}
+
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
 		amountsCardData['ONE_OFF'];
@@ -620,12 +628,14 @@ export function OneTimeCheckoutComponent({
 									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
-									onBlur={(event) => {
+									onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
-									onOtherAmountChange={setOtherAmount}
+									onOtherAmountChange={
+										setOtherAmount as (value: string) => void
+									}
 									errors={[otherAmountError ?? '']}
-									onInvalid={(event) => {
+									onInvalid={(event: React.FormEvent<HTMLInputElement>) => {
 										validate(
 											event,
 											setOtherAmountError,
