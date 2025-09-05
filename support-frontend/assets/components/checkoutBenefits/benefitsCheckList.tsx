@@ -128,10 +128,11 @@ export function BenefitsCheckList({
 	return (
 		<ul css={[listCss(style), cssOverrides]}>
 			{benefitsHeading && <p css={benefitHeadingCss}>{benefitsHeading}</p>}
-			{benefitsCheckListData.map((item) => {
+			{benefitsCheckListData.map((item, index) => {
 				const pillCopy = item.isNew ? 'New' : item.pill;
 				return (
 					<li
+						key={index}
 						css={css`
 							display: flex;
 						`}
