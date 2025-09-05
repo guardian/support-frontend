@@ -58,6 +58,19 @@ export default function Carousel({ items }: { items: ReactNode[] }) {
 		};
 	}, []);
 
+	useEffect(
+		function resetScroll() {
+			const container = containerRef.current;
+			if (!container) {
+				return;
+			}
+
+			container.scrollTo({ left: 0, behavior: 'instant' });
+			updateScrollButtons();
+		},
+		[items],
+	);
+
 	return (
 		<div css={carouselWrapper}>
 			<button
