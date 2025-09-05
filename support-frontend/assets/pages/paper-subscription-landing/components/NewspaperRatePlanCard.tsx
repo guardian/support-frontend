@@ -110,8 +110,8 @@ function NewspaperRatePlanCard({
 				</LinkButton>
 			</div>
 
-			<p css={cardOffer}>{offerCopy}</p>
-			<p css={planDescription}>{planData?.description}</p>
+			<p css={cardOffer}>cardOffer: {offerCopy}</p>
+			<p css={planDescription}>planDescription: {planData?.description}</p>
 
 			{windowWidthIsGreaterThan('tablet') ? (
 				renderPlanDetails()
