@@ -131,15 +131,20 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					{!isStudentOneYearRatePlan && (
-						<p>Auto renews every {periodNoun} until you cancel.</p>
+					{isStudentOneYearRatePlan ? (
+						<p>
+							If you cancel within the first 14 days, you will receive a full
+							refund.
+						</p>
+					) : (
+						<>
+							<p>Auto renews every {periodNoun} until you cancel.</p>
+							<p>
+								Cancel or change your support anytime. If you cancel within the
+								first 14 days, you will receive a full refund.
+							</p>
+						</>
 					)}
-					<p>
-						{!isStudentOneYearRatePlan &&
-							'Cancel or change your support anytime. '}
-						If you cancel within the first 14 days, you will receive a full
-						refund.
-					</p>
 				</>
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
