@@ -201,12 +201,11 @@ export default function getPlanData(
 		return undefined;
 	}
 
-	const paperPlan = {
+	return {
 		description,
 		benefits,
-		digitalBenefits: digitalBenefitsMap[ratePlanKey],
+		digitalRewards: digitalBenefitsMap[ratePlanKey],
 	};
-	return paperPlan;
 }
 
 export function getPlanBenefitData(
