@@ -55,6 +55,16 @@ function getSanitisedHtml(markdownString: string): string {
 	});
 }
 
+// Parses a comma-separated string of amounts and returns an array of valid, unique numbers.
+// Filters out invalid values (NaN, negative, zero, infinite) and removes duplicates.
+function parseCustomAmounts(customAmountsParam: string): number[] {
+	return customAmountsParam
+		.split(',')
+		.map((amount) => parseFloat(amount.trim()))
+		.filter((amount) => !isNaN(amount) && isFinite(amount) && amount > 0)
+		.filter((amount, index, array) => array.indexOf(amount) === index);
+}
+
 // ----- Exports ----- //
 export {
 	ascending,
@@ -63,4 +73,5 @@ export {
 	classNameWithModifiers,
 	hiddenIf,
 	deserialiseJsonObject,
+	parseCustomAmounts,
 };
