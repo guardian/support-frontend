@@ -135,8 +135,10 @@ export function OrderSummaryTsAndCs({
 						<p>Auto renews every {periodNoun} until you cancel.</p>
 					)}
 					<p>
-						Cancel or change your support anytime. If you cancel within the
-						first 14 days, you will receive a full refund.
+						{!isStudentOneYearRatePlan &&
+							'Cancel or change your support anytime. '}
+						If you cancel within the first 14 days, you will receive a full
+						refund.
 					</p>
 				</>
 			)}
