@@ -23,7 +23,9 @@ export const getPaperPlusDigitalBenefits = (
 	ratePlanKey: ActiveRatePlanKey,
 	productKey: ActiveProductKey,
 ): BenefitsCheckListData[] | undefined => {
-	if (!isPaperProductTest) {return undefined;}
+	if (!isPaperProductTest) {
+		return undefined;
+	}
 
 	switch (productKey) {
 		case 'HomeDelivery':
