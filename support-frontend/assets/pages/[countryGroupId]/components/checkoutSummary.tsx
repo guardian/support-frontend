@@ -184,6 +184,7 @@ export default function CheckoutSummary({
 							/>
 						)
 					}
+					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
 					isPaperProductTest={isPaperProductTest}
 				/>

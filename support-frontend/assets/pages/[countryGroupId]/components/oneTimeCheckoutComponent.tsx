@@ -61,6 +61,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { AppConfig } from 'helpers/globalsAndSwitches/window';
+import { productCatalog } from 'helpers/productCatalog';
 import * as cookie from 'helpers/storage/cookie';
 import type { PaymentAPIAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
@@ -82,6 +83,7 @@ import { CoverTransactionCost } from 'pages/supporter-plus-landing/components/co
 import { FinePrint } from 'pages/supporter-plus-landing/components/finePrint';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { FooterTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { CheckoutNudge } from '../../../components/checkoutNudge/checkoutNudge';
 import {
 	updateAbandonedBasketCookie,
 	useAbandonedBasketCookie,
@@ -323,6 +325,14 @@ export function OneTimeCheckoutComponent({
 			sendEventOneTimeCheckoutValue(finalAmount, currencyKey);
 		}
 	}, [finalAmount]);
+
+	// TODO: should this be here (should capture control too)
+	// Perhaps we need to only capture it if in the relevant ab test?
+	useEffect(() => {
+		trackComponentLoad(
+			`checkoutNudge-abNudgeToLowRegular--${abParticipations.abNudgeToLowRegular}`,
+		);
+	}, []);
 
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
@@ -581,6 +591,12 @@ export function OneTimeCheckoutComponent({
 		abParticipations.abandonedBasket === 'variant',
 	);
 
+	const isAnAbNudgeToLowRegularVariant = ['v1', 'v2'].some(
+		(a) => a === abParticipations.abNudgeToLowRegular,
+	);
+	const nudgeRecurringAmount = productCatalog.Contribution?.ratePlans['Monthly']
+		?.pricing[currencyKey] as number;
+
 	const paymentButtonText = finalAmount
 		? paymentMethod === 'PayPal'
 			? `Pay ${simpleFormatAmount(currency, finalAmount)} with PayPal`
@@ -637,6 +653,15 @@ export function OneTimeCheckoutComponent({
 							}
 						/>
 					</div>
+					{isAnAbNudgeToLowRegularVariant && (
+						<CheckoutNudge
+							geoId={geoId}
+							ratePlanKey="Monthly"
+							recurringAmount={nudgeRecurringAmount}
+							abTestName="abNudgeToLowRegular"
+							abTestVariant={abParticipations.abNudgeToLowRegular}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<form
