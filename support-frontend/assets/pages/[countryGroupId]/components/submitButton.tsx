@@ -2,9 +2,6 @@ import type { IsoCurrency } from '@modules/internationalisation/currency';
 import type { BillingPeriod } from '@modules/product/billingPeriod';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
-import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import { isProd } from 'helpers/urls/url';
 import {
 	paypalOneClickCheckout,
@@ -13,6 +10,7 @@ import {
 import type { PaymentMethod } from './paymentFields';
 
 type SubmitButtonProps = {
+	buttonText: string;
 	paymentMethod: PaymentMethod | undefined;
 	payPalLoaded: boolean;
 	payPalBAID: string;
@@ -22,11 +20,11 @@ type SubmitButtonProps = {
 	currencyKey: IsoCurrency;
 	billingPeriod: BillingPeriod;
 	csrf: string;
-	currency: Currency;
 	formRef: React.RefObject<HTMLFormElement>;
 };
 
 export function SubmitButton({
+	buttonText,
 	paymentMethod,
 	payPalLoaded,
 	payPalBAID,
@@ -37,7 +35,6 @@ export function SubmitButton({
 	currencyKey,
 	billingPeriod,
 	csrf,
-	currency,
 }: SubmitButtonProps) {
 	switch (paymentMethod) {
 		case 'PayPal':
@@ -134,10 +131,7 @@ export function SubmitButton({
 		default:
 			return (
 				<DefaultPaymentButton
-					buttonText={`Pay ${simpleFormatAmount(
-						currency,
-						finalAmount,
-					)} per ${getBillingPeriodNoun(billingPeriod)}`}
+					buttonText={buttonText}
 					onClick={() => {
 						// no-op
 						// This isn't needed because we are now using the formOnSubmit handler

@@ -31,6 +31,7 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	DirectDebit,
@@ -50,6 +51,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -658,6 +660,13 @@ export default function CheckoutForm({
 		setBillingPostcode: setBillingPostcode,
 	};
 
+	const billingPreposition = productFields.fixedTerm ? 'for a' : 'per';
+
+	const buttonText = `Pay ${simpleFormatAmount(
+		currency,
+		finalAmount,
+	)} ${billingPreposition} ${getBillingPeriodNoun(billingPeriod)}`;
+
 	return (
 		<>
 			<form
@@ -1106,6 +1115,7 @@ export default function CheckoutForm({
 							`}
 						>
 							<SubmitButton
+								buttonText={buttonText}
 								paymentMethod={paymentMethod}
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
@@ -1116,7 +1126,6 @@ export default function CheckoutForm({
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
-								currency={currency}
 							/>
 						</div>
 						{errorMessage && (

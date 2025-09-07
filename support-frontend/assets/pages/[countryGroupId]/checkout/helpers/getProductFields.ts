@@ -36,6 +36,8 @@ export const getProductFields = ({
 	const billingPeriod =
 		productDescription.ratePlans[ratePlanKey]?.billingPeriod ??
 		BillingPeriod.Monthly;
+	const fixedTerm =
+		productDescription.ratePlans[ratePlanKey]?.fixedTerm ?? false;
 	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
 	const productOption = getProductOptionFromProductAndRatePlan(
 		productKey,
@@ -80,7 +82,8 @@ export const getProductFields = ({
 			return {
 				productType: 'SupporterPlus',
 				currency: currencyKey,
-				billingPeriod: billingPeriod,
+				billingPeriod,
+				fixedTerm,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *
