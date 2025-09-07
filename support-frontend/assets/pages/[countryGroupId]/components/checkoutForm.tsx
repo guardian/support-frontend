@@ -660,7 +660,10 @@ export default function CheckoutForm({
 		setBillingPostcode: setBillingPostcode,
 	};
 
-	const billingPreposition = productFields.fixedTerm ? 'for a' : 'per';
+	const billingPreposition = productDescription.ratePlans[ratePlanKey]
+		?.fixedTerm
+		? 'for a'
+		: 'per';
 
 	const buttonText = `Pay ${simpleFormatAmount(
 		currency,

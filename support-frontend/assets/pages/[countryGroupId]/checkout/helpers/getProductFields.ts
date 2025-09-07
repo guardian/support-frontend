@@ -1,6 +1,6 @@
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { RegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { ProductFields } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
@@ -28,7 +28,7 @@ type GetProductFieldsParams = {
 export const getProductFields = ({
 	product,
 	financial,
-}: GetProductFieldsParams): RegularPaymentRequest['product'] => {
+}: GetProductFieldsParams): ProductFields => {
 	const { productKey, ratePlanKey, productDescription, deliveryAgent } =
 		product;
 	const { currencyKey, finalAmount, originalAmount, contributionAmount } =
@@ -36,8 +36,6 @@ export const getProductFields = ({
 	const billingPeriod =
 		productDescription.ratePlans[ratePlanKey]?.billingPeriod ??
 		BillingPeriod.Monthly;
-	const fixedTerm =
-		productDescription.ratePlans[ratePlanKey]?.fixedTerm ?? false;
 	const fulfilmentOption = getFulfilmentOptionFromProductKey(productKey);
 	const productOption = getProductOptionFromProductAndRatePlan(
 		productKey,
@@ -83,7 +81,6 @@ export const getProductFields = ({
 				productType: 'SupporterPlus',
 				currency: currencyKey,
 				billingPeriod,
-				fixedTerm,
 				/**
 				 * We shouldn't have to calculate these amounts here.
 				 *

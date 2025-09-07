@@ -65,7 +65,6 @@ type SupporterPlus = {
 	amount: number;
 	currency: string;
 	billingPeriod: BillingPeriod;
-	fixedTerm: boolean;
 };
 type TierThree = {
 	productType: 'TierThree';
