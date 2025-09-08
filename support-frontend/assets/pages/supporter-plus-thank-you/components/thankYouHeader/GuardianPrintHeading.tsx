@@ -55,6 +55,7 @@ export default function GuardianPrintHeading({
 	const maybeRatePlanDetails =
 		productCatalogDescription[productKey].ratePlans[ratePlanKey];
 	const maybeRatePlanDisplayName = maybeRatePlanDetails?.label;
+	// This will be something like "Six day package"
 	const ratePlanDisplayName =
 		maybeRatePlanDisplayName ?? `${ratePlanKey} package`;
 
