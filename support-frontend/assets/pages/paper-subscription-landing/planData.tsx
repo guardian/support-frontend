@@ -7,16 +7,15 @@ const benefitStyle = css`
 	display: inline-block;
 `;
 
+interface Benefits {
+	label: JSX.Element;
+	items: JSX.Element[];
+}
+
 export type PlanData = {
 	description: JSX.Element;
-	benefits: {
-		label: JSX.Element;
-		items: JSX.Element[];
-	};
-	digitalRewards?: {
-		label: JSX.Element;
-		items: JSX.Element[];
-	};
+	benefits: Benefits;
+	digitalRewards?: Benefits;
 };
 
 const benefitsHomeDeliveryLabel = (
@@ -70,110 +69,150 @@ const benefitObserverSunday = (
 	</span>
 );
 
-const planData: Partial<Record<PaperProductOptions, PlanData>> = {
+const getBenefitsMap = (
+	fulfilmentOption: PaperFulfilmentOptions,
+): Partial<Record<PaperProductOptions, Benefits>> => ({
 	EverydayPlus: {
-		description: (
-			<>
-				<strong>Home delivery</strong> of <strong>the Guardian</strong> from
-				Monday to Saturday and <strong>the Observer</strong> on Sundays plus
-				exclusive <strong>digital rewards</strong>
-			</>
-		),
-		benefits: {
-			label: <></>,
-			items: [benefitGuardianSixDay, benefitObserverSunday],
-		},
-		digitalRewards: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitGuardianSixDay, benefitObserverSunday],
 	},
 	SixdayPlus: {
-		description: (
-			<>
-				<strong>Home delivery</strong> of <strong>the Guardian</strong> plus
-				exclusive <strong>digital rewards</strong>
-			</>
-		),
-		benefits: {
-			label: <></>,
-			items: [benefitGuardianSixDay],
-		},
-		digitalRewards: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitGuardianSixDay],
 	},
 	WeekendPlus: {
-		description: (
-			<>
-				<strong>Home delivery</strong> of the Saturday editions of{' '}
-				<strong>the Guardian</strong> and <strong>the Observer</strong> on
-				Sundays plus exclusive <strong>digital rewards</strong>
-			</>
-		),
-		benefits: {
-			label: <></>,
-			items: [benefitGuardianSaturday, benefitObserverSunday],
-		},
-		digitalRewards: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitGuardianSaturday, benefitObserverSunday],
 	},
 	SaturdayPlus: {
-		description: (
-			<>
-				<strong>Home delivery</strong> of <strong>the Guardian</strong> on
-				Saturdays plus exclusive <strong>digital rewards</strong>
-			</>
-		),
-		benefits: {
-			label: <></>,
-			items: [benefitGuardianSaturday],
-		},
-		digitalRewards: {
-			label: digitalRewardsLabel,
-			items: baseDigitalRewards,
-		},
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitGuardianSaturday],
 	},
 	Sunday: {
-		description: (
+		label: benefitsLabel[fulfilmentOption],
+		items: [benefitObserverSunday],
+	},
+});
+
+const digitalBenefitsMap: Partial<
+	Record<PaperProductOptions, Benefits | undefined>
+> = {
+	EverydayPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
+	},
+	SixdayPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
+	},
+	WeekendPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
+	},
+	SaturdayPlus: {
+		label: digitalRewardsLabel,
+		items: baseDigitalRewards,
+	},
+	Sunday: undefined, // Has no digital benefits
+};
+
+const planDescriptions: Record<
+	PaperFulfilmentOptions,
+	Partial<Record<PaperProductOptions, JSX.Element>>
+> = {
+	Collection: {
+		EverydayPlus: (
 			<>
-				<strong>Home delivery</strong> of <strong>the Observer</strong> on every
-				Sunday
+				Collect the Guardian and all its supplements{' '}
+				<strong>Monday to Saturday</strong> and the Observer on{' '}
+				<strong>Sunday</strong> in store with a subscription card
 			</>
 		),
-		benefits: {
-			label: <></>,
-			items: [benefitObserverSunday],
-		},
+		SixdayPlus: (
+			<>
+				Collect the Guardian and all its supplements{' '}
+				<strong>Monday to Saturday</strong> in store with a subscription card
+			</>
+		),
+		WeekendPlus: (
+			<>
+				Collect the Guardian and all its supplements on{' '}
+				<strong>Saturday</strong> and the Observer on <strong>Sunday</strong> in
+				store with a subscription card
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				Collect the Guardian and all its supplements on{' '}
+				<strong>Saturday</strong> in store with a subscription card
+			</>
+		),
+		Sunday: (
+			<>
+				Collect the Observer on <strong>Sunday</strong> in store with a
+				subscription card
+			</>
+		),
+	},
+	HomeDelivery: {
+		EverydayPlus: (
+			<>
+				The Guardian and all its supplements <strong>Monday to Saturday</strong>{' '}
+				and the Observer on Sunday delivered to your door
+			</>
+		),
+		SixdayPlus: (
+			<>
+				The Guardian and all its supplements <strong>Monday to Saturday</strong>{' '}
+				delivered to your door
+			</>
+		),
+		WeekendPlus: (
+			<>
+				The Guardian and all its supplements on <strong>Saturday</strong> and
+				the Observer on <strong>Sunday</strong> delivered to your door
+			</>
+		),
+		SaturdayPlus: (
+			<>
+				The Guardian and all its supplements on <strong>Saturday</strong>{' '}
+				delivered to your door
+			</>
+		),
+		Sunday: (
+			<>
+				The Observer on <strong>Sunday</strong> delivered to your door
+			</>
+		),
 	},
 };
 
 export default function getPlanData(
 	ratePlanKey: PaperProductOptions,
-	fulfillmentOption?: PaperFulfilmentOptions,
+	fulfillmentOption: PaperFulfilmentOptions,
 ): PlanData | undefined {
-	const validPaperPlan = planData[ratePlanKey];
-	if (!validPaperPlan) {
+	const description = planDescriptions[fulfillmentOption][ratePlanKey];
+	if (!description) {
 		return undefined;
 	}
 
-	const paperPlan = {
-		...validPaperPlan,
-		benefits: {
-			label: fulfillmentOption ? benefitsLabel[fulfillmentOption] : <></>,
-			items: validPaperPlan.benefits.items,
-		},
+	const benefits = getBenefitsMap(fulfillmentOption)[ratePlanKey];
+	if (!benefits) {
+		return undefined;
+	}
+
+	return {
+		description,
+		benefits,
+		digitalRewards: digitalBenefitsMap[ratePlanKey],
 	};
-	return paperPlan;
 }
 
 export function getPlanBenefitData(
 	ratePlanKey: PaperProductOptions,
+	fulfillmentOption: PaperFulfilmentOptions,
 ): BenefitsCheckListData[] | undefined {
-	const ratePlanData = getPlanData(ratePlanKey);
+	const ratePlanData = getPlanData(ratePlanKey, fulfillmentOption);
 	if (!ratePlanData) {
 		return undefined;
 	}

@@ -3,7 +3,6 @@ import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { PaperProductOptions } from '@modules/product/productOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -25,12 +24,12 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { getPlanBenefitData } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
+	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
@@ -116,11 +115,8 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const paperPlusDigitalBenefits = isPaperProductTest
-		? getPlanBenefitData(ratePlanKey as PaperProductOptions)
-		: undefined;
 	const benefitsCheckListData =
-		paperPlusDigitalBenefits ??
+		getPaperPlusDigitalBenefits(isPaperProductTest, ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
