@@ -4,17 +4,40 @@ import { checkRecaptcha } from '../utils/recaptcha';
 import { fillInCardDetails } from '../utils/cardDetails';
 import { setupPage } from '../utils/page';
 import { setTestUserCoreDetails } from '../utils/testUserDetails';
+import { fillInDirectDebitDetails } from '../utils/directDebitDetails';
 
 [
 	{
 		country: 'uk',
+		state: undefined,
+		paymentMethod: 'DirectDebit',
+		amountDescription: '£9',
 		expectedCardHeading: 'All-access digital',
-		expectedPromoText: '£9/year',
 		expectedCheckoutText:
 			'If you cancel within the first 14 days, you will receive a full refund.',
 		accessibleCtaText: 'Subscribe',
-		currencyGlyph: '£',
-		state: undefined,
+	},
+	{
+		country: 'us',
+		state: 'California',
+		stateLabel: 'State',
+		paymentMethod: 'Card',
+		amountDescription: '$10',
+		expectedCardHeading: 'All-access digital',
+		expectedCheckoutText:
+			'If you cancel within the first 14 days, you will receive a full refund.',
+		accessibleCtaText: 'Subscribe',
+	},
+	{
+		country: 'ca',
+		state: 'Ontario',
+		stateLabel: 'Province',
+		paymentMethod: 'Card',
+		amountDescription: '$10',
+		expectedCardHeading: 'All-access digital',
+		expectedCheckoutText:
+			'If you cancel within the first 14 days, you will receive a full refund.',
+		accessibleCtaText: 'Subscribe',
 	},
 ].forEach((testDetails) => {
 	test(`${testDetails.expectedCardHeading} ${testDetails.country}`, async ({
@@ -31,7 +54,7 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 		});
 		const card = page.locator('section').filter({ has: cardHeading });
 		await expect(
-			card.getByText(testDetails.expectedPromoText).first(),
+			card.getByText(`${testDetails.amountDescription}/year`).first(),
 		).toBeVisible();
 
 		// Click through to the checkout
@@ -53,10 +76,19 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 			true,
 		);
 		if (testDetails.state !== undefined) {
-			await page.getByLabel('State').selectOption({ label: testDetails.state });
+			await page
+				.getByLabel(testDetails.stateLabel)
+				.selectOption({ label: testDetails.state });
 		}
-		await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
-		await fillInCardDetails(page);
+
+		if (testDetails.paymentMethod === 'DirectDebit') {
+			await page.getByRole('radio', { name: 'Direct Debit' }).check();
+			await fillInDirectDebitDetails(page);
+		} else {
+			await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
+			await fillInCardDetails(page);
+		}
+
 		await checkRecaptcha(page);
 		await page
 			.getByRole('button', {
@@ -69,7 +101,7 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 			timeout: 600000,
 		});
 
-		const thankYouText = `Thank you for supporting us with ${testDetails.currencyGlyph}9`;
+		const thankYouText = `Thank you for supporting us with ${testDetails.amountDescription}`;
 
 		await expect(page.getByText(thankYouText).first()).toBeVisible({
 			timeout: 600000,
