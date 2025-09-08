@@ -15,6 +15,7 @@ export const parameters = {
 		viewports,
 	},
 	layout: 'fullscreen',
+	chromatic: { diffThreshold: 0.2 },
 };
 
 export const decorators = [withFocusStyleManager];

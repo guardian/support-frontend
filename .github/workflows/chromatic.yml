@@ -24,5 +24,4 @@ jobs:
           buildScriptName: "build-storybook"
           exitOnceUploaded: true
           onlyChanged: "!(main)" # only turbosnap on non-main branches
-          configFile: ./.support-frontend/chromatic.config.json
 
