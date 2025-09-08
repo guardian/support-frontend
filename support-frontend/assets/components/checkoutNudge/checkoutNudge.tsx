@@ -14,9 +14,13 @@ import {
 	LinkButton,
 	themeButtonReaderRevenueBrand,
 } from '@guardian/source/react-components';
+import { useEffect } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { type ActiveRatePlanKey } from 'helpers/productCatalog';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+	trackComponentClick,
+	trackComponentLoad,
+} from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 
@@ -75,6 +79,10 @@ export function CheckoutNudge({
 	abTestName,
 	abTestVariant,
 }: CheckoutNudgeProps) {
+	useEffect(() => {
+		trackComponentLoad(`checkoutNudge-${abTestName}--${abTestVariant}`);
+	}, []);
+
 	const { currency } = getGeoIdConfig(geoId);
 
 	if (!['Monthly', 'Annual'].includes(ratePlanKey)) {

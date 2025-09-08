@@ -326,14 +326,6 @@ export function OneTimeCheckoutComponent({
 		}
 	}, [finalAmount]);
 
-	// TODO: should this be here (should capture control too)
-	// Perhaps we need to only capture it if in the relevant ab test?
-	useEffect(() => {
-		trackComponentLoad(
-			`checkoutNudge-abNudgeToLowRegular--${abParticipations.abNudgeToLowRegular}`,
-		);
-	}, []);
-
 	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const cardElement = elements?.getElement(CardNumberElement);
