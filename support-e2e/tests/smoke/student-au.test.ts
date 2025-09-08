@@ -7,24 +7,29 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 
 [
 	{
-		country: 'uk',
+		frequency: 'Monthly',
+		promoCode: 'UTS_STUDENT',
 		expectedCardHeading: 'All-access digital',
-		expectedPromoText: '£9/year',
-		expectedCheckoutText:
-			'If you cancel within the first 14 days, you will receive a full refund.',
-		accessibleCtaText: 'Subscribe',
-		currencyGlyph: '£',
-		state: undefined,
+		expectedPromoText: '$0/month for two years, then $20/month',
+		expectedCheckoutTotalText: 'Was $20, now $0/month',
+		accessibleCtaText: 'Sign up for free',
+		expectedThankYouText:
+			"You'll pay $0/month for the first 24 months, then $20/month afterwards unless you cancel",
 	},
 ].forEach((testDetails) => {
-	test(`${testDetails.expectedCardHeading} ${testDetails.country}`, async ({
+	test(`${testDetails.expectedCardHeading} ${testDetails.frequency} ${testDetails.promoCode} Promo`, async ({
 		context,
 		baseURL,
 	}) => {
 		// Landing
 		const page = await context.newPage();
 
-		await setupPage(page, context, baseURL, `/${testDetails.country}/student`);
+		await setupPage(
+			page,
+			context,
+			baseURL,
+			`/au/student/UTS?promoCode=${testDetails.promoCode}`,
+		);
 
 		const cardHeading = page.getByRole('heading', {
 			name: testDetails.expectedCardHeading,
@@ -43,7 +48,7 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 		const testLastName = lastName();
 		const testEmail = email();
 		await expect(
-			page.getByText(testDetails.expectedCheckoutText).first(),
+			page.getByText(testDetails.expectedCheckoutTotalText).first(),
 		).toBeVisible();
 		await setTestUserCoreDetails(
 			page,
@@ -52,9 +57,7 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 			testLastName,
 			true,
 		);
-		if (testDetails.state !== undefined) {
-			await page.getByLabel('State').selectOption({ label: testDetails.state });
-		}
+		await page.getByLabel('State').selectOption({ label: 'New South Wales' });
 		await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 		await fillInCardDetails(page);
 		await checkRecaptcha(page);
@@ -69,10 +72,8 @@ import { setTestUserCoreDetails } from '../utils/testUserDetails';
 			timeout: 600000,
 		});
 
-		const thankYouText = `Thank you for supporting us with ${testDetails.currencyGlyph}9`;
-
-		await expect(page.getByText(thankYouText).first()).toBeVisible({
-			timeout: 600000,
-		});
+		await expect(
+			page.getByText(testDetails.expectedThankYouText).first(),
+		).toBeVisible({ timeout: 600000 });
 	});
 });
