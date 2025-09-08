@@ -124,7 +124,7 @@ const planDescriptions: Record<
 		EverydayPlus: (
 			<>
 				Collect the Guardian and all its supplements{' '}
-				<strong>Monday to Saturday</strong>and the Observer on{' '}
+				<strong>Monday to Saturday</strong> and the Observer on{' '}
 				<strong>Sunday</strong> in store with a subscription card
 			</>
 		),
