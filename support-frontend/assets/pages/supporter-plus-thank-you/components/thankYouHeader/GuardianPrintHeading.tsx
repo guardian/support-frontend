@@ -1,6 +1,7 @@
-import type {
-	ActiveProductKey,
-	ActiveRatePlanKey,
+import {
+	type ActiveProductKey,
+	type ActiveRatePlanKey,
+	productCatalogDescription,
 } from 'helpers/productCatalog';
 import {
 	headerTitleText,
@@ -51,14 +52,18 @@ export default function GuardianPrintHeading({
 		);
 	}
 
-	const paperRatePlanName =
-		ratePlanKey === 'Everyday' ? 'Every day' : ratePlanKey;
+	const maybeRatePlanDetails =
+		productCatalogDescription[productKey].ratePlans[ratePlanKey];
+	const maybeRatePlanDisplayName = maybeRatePlanDetails?.label;
+	const ratePlanDisplayName =
+		maybeRatePlanDisplayName ?? `${ratePlanKey} package`;
+
 	return (
 		<h1 css={headerTitleText}>
 			{thankYouText}
 			<br />
 			You have now subscribed to the{' '}
-			<YellowHighlightText>{paperRatePlanName} package</YellowHighlightText>
+			<YellowHighlightText>{ratePlanDisplayName}</YellowHighlightText>
 		</h1>
 	);
 }
