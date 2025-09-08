@@ -94,8 +94,7 @@ export function CheckoutNudge({
 		nudge: 'toRegular',
 	});
 
-	// TODO: remove the force variant before go live!!!
-	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}#ab-abNudgeToLowRegular=${abTestVariant}`;
+	const buildCtaUrl = `checkout?${tier1UrlParams.toString()}`;
 
 	const getNudgeHeadline =
 		abTestVariant === 'v1'
