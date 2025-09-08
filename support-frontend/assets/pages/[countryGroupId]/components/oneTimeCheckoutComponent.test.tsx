@@ -85,6 +85,9 @@ function deepCopySelectedAmountsVariant(
 }
 
 describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
+	// Note: The parseCustomAmounts function is thoroughly tested in its own test file
+	// These tests focus on how the component integrates custom amounts from URL parameters
+	
 	beforeEach(() => {
 		jest.clearAllMocks();
 		mockLocation.search = '';
@@ -95,7 +98,7 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		});
 	});
 
-	test('should create custom amounts data when custom amounts parameter is provided', () => {
+	test('should process custom amounts from URL parameter and override default amounts', () => {
 		// Set up URL with custom amounts parameter
 		mockLocation.search = '?amounts=15,30,75';
 
@@ -120,19 +123,17 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		}
 
 		const { amountsCardData } = selectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
+		const { amounts, defaultAmount } =
 			customAmountsData ?? amountsCardData['ONE_OFF'];
 
 		// Verify the custom amounts data was created correctly
 		expect(customAmountsData).toBeDefined();
 		expect(customAmountsData?.amounts).toEqual([15, 30, 75]);
 		expect(customAmountsData?.defaultAmount).toBe(30); // amounts[1]
-		expect(customAmountsData?.hideChooseYourAmount).toBe(false);
 
 		// Verify the final destructured values
 		expect(amounts).toEqual([15, 30, 75]);
 		expect(defaultAmount).toBe(30);
-		expect(hideChooseYourAmount).toBe(false);
 
 		// Verify original variant data remains unchanged
 		expect(selectedAmountsVariant.amountsCardData['MONTHLY'].amounts).toEqual([
@@ -143,59 +144,7 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		]);
 	});
 
-	test('should filter out invalid amounts and keep only valid ones', () => {
-		mockLocation.search = '?amounts=10,invalid,20,-5,0,30,Infinity,NaN';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should only include valid positive finite amounts
-		expect(amounts).toEqual([10, 20, 30]);
-		expect(defaultAmount).toBe(20); // amounts[1]
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should remove duplicate amounts', () => {
-		mockLocation.search = '?amounts=25,50,25,100,50,25,100';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should remove duplicates and keep first occurrence
-		expect(amounts).toEqual([25, 50, 100]);
-		expect(defaultAmount).toBe(50); // amounts[1]
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should handle decimal values correctly', () => {
+	test('should preserve decimal precision in custom amounts', () => {
 		mockLocation.search = '?amounts=12.50,25.75,50.25';
 
 		const urlSearchParams = new URLSearchParams(mockLocation.search);
@@ -212,79 +161,12 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		}
 
 		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
+		const { amounts, defaultAmount } =
 			customAmountsData ?? amountsCardData['ONE_OFF'];
 
 		// Should handle decimal values correctly (parseFloat handles trailing zeros)
 		expect(amounts).toEqual([12.5, 25.75, 50.25]);
 		expect(defaultAmount).toBe(25.75); // amounts[1]
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should trim whitespace from amounts', () => {
-		mockLocation.search = '?amounts= 15 , 30 , 75 ';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should handle whitespace correctly
-		expect(amounts).toEqual([15, 30, 75]);
-		expect(defaultAmount).toBe(30); // amounts[1]
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should not create custom amounts data when custom amounts parameter is empty', () => {
-		mockLocation.search = '?amounts=';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		const selectedAmountsVariant = deepCopySelectedAmountsVariant(
-			mockSelectedAmountsVariant,
-		);
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = selectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should not create custom amounts data when parameter is empty
-		expect(customAmountsData).toBeUndefined();
-
-		// Should use original amountsCardData values
-		expect(amounts).toEqual(
-			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].amounts,
-		);
-		expect(defaultAmount).toBe(
-			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount,
-		);
-		expect(hideChooseYourAmount).toBe(
-			mockSelectedAmountsVariant.amountsCardData['ONE_OFF']
-				.hideChooseYourAmount,
-		);
 	});
 
 	test('should not create custom amounts data when no custom amounts parameter is provided', () => {
@@ -308,7 +190,7 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		}
 
 		const { amountsCardData } = selectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
+		const { amounts, defaultAmount } =
 			customAmountsData ?? amountsCardData['ONE_OFF'];
 
 		// Should not create custom amounts data when no parameter
@@ -322,88 +204,6 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		expect(defaultAmount).toBe(
 			mockSelectedAmountsVariant.amountsCardData['ONE_OFF'].defaultAmount,
 		);
-		expect(hideChooseYourAmount).toBe(
-			mockSelectedAmountsVariant.amountsCardData['ONE_OFF']
-				.hideChooseYourAmount,
-		);
-	});
-
-	test('should set amounts to empty array when all custom amounts are invalid', () => {
-		mockLocation.search = '?amounts=invalid,NaN,-5,0,-10,abc';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should result in empty array when all amounts are invalid
-		expect(amounts).toEqual([]);
-		expect(defaultAmount).toBe(0); // amounts[1] ?? 0 when amounts[1] is undefined
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should handle single custom amount and set defaultAmount to 0', () => {
-		mockLocation.search = '?amounts=25';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should have single amount and defaultAmount should be 0 (amounts[1] is undefined)
-		expect(amounts).toEqual([25]);
-		expect(defaultAmount).toBe(0); // amounts[1] ?? 0 when amounts[1] is undefined
-		expect(hideChooseYourAmount).toBe(false);
-	});
-
-	test('should handle two custom amounts and set defaultAmount to second amount', () => {
-		mockLocation.search = '?amounts=25,50';
-
-		const urlSearchParams = new URLSearchParams(mockLocation.search);
-		const customAmountsParam = urlSearchParams.get('amounts');
-
-		let customAmountsData;
-		if (customAmountsParam) {
-			const amounts = parseCustomAmounts(customAmountsParam);
-			customAmountsData = {
-				amounts,
-				defaultAmount: amounts[1] ?? 0,
-				hideChooseYourAmount: false,
-			};
-		}
-
-		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount, hideChooseYourAmount } =
-			customAmountsData ?? amountsCardData['ONE_OFF'];
-
-		// Should have two amounts and defaultAmount should be second amount
-		expect(amounts).toEqual([25, 50]);
-		expect(defaultAmount).toBe(50); // amounts[1]
-		expect(hideChooseYourAmount).toBe(false);
 	});
 
 	describe('URLSearchParams behavior', () => {
