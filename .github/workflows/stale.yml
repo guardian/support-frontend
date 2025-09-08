@@ -9,7 +9,7 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           days-before-stale: 30
           stale-issue-message: 'This issue has been open and inactive for 30 days and marked as stale. It will close in 7 days if there is no further activity.'
