@@ -44,7 +44,7 @@ export default function NewspaperTabHero({
 					srcSizes={[1000, 500]}
 					sizes="(max-width: 1139px) 244px, (min-width: 1140px) 300px"
 					imgType="png"
-					altText="Guardian Weekly Tab Hero"
+					altText="Illustration of The Guardian subscription card"
 				/>
 			</div>
 		</FlexContainer>
