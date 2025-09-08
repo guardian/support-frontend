@@ -6,7 +6,7 @@ import {
 } from '../acquisitions';
 
 // ----- Tests ----- //
-jest.mock('ophan', () => ({
+jest.mock('@guardian/ophan-tracker-js/support', () => ({
 	viewId: '123456',
 }));
 

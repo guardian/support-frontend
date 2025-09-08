@@ -1,7 +1,7 @@
 import { loadScript } from '@guardian/libs';
+import { viewId } from '@guardian/ophan-tracker-js/support';
 import type { IsoCurrency } from '@modules/internationalisation/currency';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import { viewId } from 'ophan';
 import type { Participations } from 'helpers/abTests/models';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { ActiveProductKey } from 'helpers/productCatalog';
