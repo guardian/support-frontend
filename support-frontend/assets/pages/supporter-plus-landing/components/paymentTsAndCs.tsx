@@ -218,33 +218,41 @@ export function PaymentTsAndCs({
 	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
-		? ' on a subscription basis'
+		? 'on a subscription basis'
 		: '';
-	const supporterPlusStudentStartTsAndCs = `If you pay at least ${legalPrice}, you will receive the ${productLabel} benefits${subscriptionBasis}. `;
-	const supporterPlusStartTsAndCs = `${supporterPlusStudentStartTsAndCs}If you increase your payments per ${billingPeriodSingular}, these additional amounts will be separate ${billingPeriodPlural} voluntary financial contributions to the Guardian. `;
-	const supporterPlusEndCopy = `You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a ${productLabel} subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current ${billingPeriodPlural} payment period. To cancel, go to `;
-	const supporterPlusEndTsAndCs = (
+
+	const accountAndTermsLCopyAndLinks = (
 		<>
-			{supporterPlusEndCopy}
-			{ManageMyAccountLink}
-			{` or see our `}
+			To cancel, go to {ManageMyAccountLink} or see our{' '}
 			{termsLink('Terms', supporterPlusTermsLink)}
-			{'. '}
 		</>
 	);
 	const supporterPlusTsAndCs: JSX.Element = (
 		<>
-			{supporterPlusStartTsAndCs}
+			If you pay at least {legalPrice}, you will receive the {productLabel}{' '}
+			benefits {subscriptionBasis}. If you increase your payments per{' '}
+			{billingPeriodSingular}, these additional amounts will be separate{' '}
+			{billingPeriodPlural} voluntary financial contributions to the Guardian.
 			The {productLabel} subscription and any contributions will auto-renew each{' '}
 			{billingPeriodSingular}. You will be charged the subscription and
 			contribution amounts using your chosen payment method at each renewal
-			unless you cancel. {supporterPlusEndTsAndCs}
+			unless you cancel. You can cancel your subscription or change your
+			contributions at any time before your next renewal date. If you cancel
+			within 14 days of taking out a {productLabel} subscription, you’ll receive
+			a full refund (including of any contributions) and your subscription and
+			any contribution will stop immediately. Cancellation of your subscription
+			(which will also cancel any contribution) or cancellation of your
+			contribution made after 14 days will take effect at the end of your
+			current {billingPeriodPlural} payment period.{' '}
+			{accountAndTermsLCopyAndLinks}.
 		</>
 	);
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			{supporterPlusStudentStartTsAndCs}
-			{supporterPlusEndTsAndCs}
+			You may cancel your All-access digital subscription within 14 days of
+			taking out the subscription. If you do, you'll receive a full refund and
+			your subscription will stop immediately. {accountAndTermsLCopyAndLinks}.
+			This subscription does not auto-renew.
 		</>
 	);
 

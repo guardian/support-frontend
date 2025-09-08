@@ -227,10 +227,11 @@ export const getPlans = (
 				fulfilmentOption,
 				productOption,
 			);
-			const label =
-				productOption === 'Everyday' || productOption === 'EverydayPlus'
-					? 'Best deal'
-					: '';
+
+			const showLabel = isPaperProductTest
+				? productOption === 'Sixday' || productOption === 'SixdayPlus'
+				: productOption === 'Everyday' || productOption === 'EverydayPlus';
+
 			const productLabel = getProductLabel(productOption);
 
 			return {
@@ -251,7 +252,7 @@ export const getPlans = (
 				),
 				planData: getPlanData(productOption, fulfilmentOption),
 				offerCopy: getOfferText(priceAfterPromosApplied, promotion),
-				label,
+				showLabel,
 				productLabel,
 				unavailableOutsideLondon: getUnavailableOutsideLondon(
 					fulfilmentOption,
