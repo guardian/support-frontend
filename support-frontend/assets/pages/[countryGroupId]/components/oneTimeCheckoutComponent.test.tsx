@@ -51,12 +51,12 @@ const mockSelectedAmountsVariant = {
 describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 	// Note: The parseCustomAmounts function is thoroughly tested in its own test file
 	// These tests focus on how the component integrates custom amounts from URL parameters
-	
+
 	beforeEach(() => {
 		jest.clearAllMocks();
 		mockLocation.search = '';
 
-		(mockGetAmountsTestVariant).mockReturnValue({
+		mockGetAmountsTestVariant.mockReturnValue({
 			selectedAmountsVariant: mockSelectedAmountsVariant,
 			amountsParticipation: undefined,
 		});
@@ -188,7 +188,8 @@ describe('OneTimeCheckoutComponent - Custom Amounts URL Processing', () => {
 		}
 
 		const { amountsCardData } = mockSelectedAmountsVariant;
-		const { amounts, defaultAmount } = customAmountsData ?? amountsCardData['ONE_OFF'];
+		const { amounts, defaultAmount } =
+			customAmountsData ?? amountsCardData['ONE_OFF'];
 
 		// Verify that custom amounts override the fallback amounts
 		expect(amounts).toEqual([15, 30, 75]);
