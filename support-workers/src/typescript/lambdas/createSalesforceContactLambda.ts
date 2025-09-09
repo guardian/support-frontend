@@ -26,7 +26,7 @@ export const handler = async (
 	state: WrappedState<CreateSalesforceContactState>,
 ) => {
 	try {
-		console.info(`Input is ${JSON.stringify(state)}`);
+		console.info(`Input ais ${JSON.stringify(state)}`);
 		const createSalesforceContactState = wrapperSchemaForState(
 			createSalesforceContactStateSchema,
 		).parse(state).state;
