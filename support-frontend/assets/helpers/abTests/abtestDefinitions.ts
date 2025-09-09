@@ -141,7 +141,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false, // until we need to switch it on
+		isActive: true, // until we need to switch it on
 		referrerControlled: false, // requires a URL param to trigger
 		seed: 7, // needs to be different to other tests
 		targetPage: pageUrlRegexes.contributions.oneTimeCheckoutOnly,
