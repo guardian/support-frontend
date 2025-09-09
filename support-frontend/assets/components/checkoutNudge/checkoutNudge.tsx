@@ -209,10 +209,7 @@ const imageOverride = css`
 export function CheckoutNudgeThankYou({
 	abTestVariant,
 }: CheckoutNudgeThankYouProps) {
-	const getNudgeHeadline =
-		abTestVariant === 'v1'
-			? 'Thank you for choosing to support us monthly'
-			: 'Thank you for choosing to support us monthly';
+	const getNudgeHeadline = 'Thank you for choosing to support us monthly';
 
 	const getNudgeCopy =
 		abTestVariant === 'v1'
