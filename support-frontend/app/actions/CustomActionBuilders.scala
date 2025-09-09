@@ -110,7 +110,7 @@ class CustomActionBuilders(
     }
 
     def apply(requestHeader: RequestHeader): Accumulator[ByteString, Result] = {
-      val isTestUser = testUsersService.isTestUser(requestHeader)
+      lazy val isTestUser = testUsersService.isTestUser(requestHeader)
       val accumulator = chainedAction.apply(requestHeader)
       val loggedAccumulator = accumulator.through(Flow.fromFunction { (byteString: ByteString) =>
         logger.info("incoming POST: " + byteString.utf8String)
