@@ -290,16 +290,7 @@ export class SupportWorkers extends GuStack {
       "CreateZuoraSubscriptionChoice"
     )
       .when(
-        Condition.and(
-          Condition.stringEquals(
-            "$.state.productInformation.product",
-            "SupporterPlus"
-          ),
-          Condition.stringEquals(
-            "$.state.productInformation.ratePlan",
-            "OneYearStudent"
-          )
-        ),
+        Condition.isNull("$.state"), // We don't want to use the TS lambda yet
         createZuoraSubscriptionTS.next(parallelSteps)
       )
       .otherwise(createZuoraSubscriptionScala.next(parallelSteps));
