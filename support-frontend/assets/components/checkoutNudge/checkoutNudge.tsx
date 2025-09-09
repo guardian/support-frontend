@@ -111,8 +111,8 @@ export function CheckoutNudge({
 
 	const getNudgeCopy =
 		abTestVariant === 'v1'
-			? 'Regular, reliable support powers Guardian journalism in perpetuity. Please make a difference and support us monthly today. Cancel anytime.'
-			: "Yes! We're grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.";
+			? 'The reliability of recurring support powers our journalism in perpetuity. Could you make a small monthly contribution instead? Cancel anytime.'
+			: 'Yes! We’re grateful for any amount you can spare, but supporting us on a monthly basis helps to power Guardian journalism in perpetuity. Cancel anytime.';
 
 	return (
 		<Box cssOverrides={nudgeBoxOverrides}>
