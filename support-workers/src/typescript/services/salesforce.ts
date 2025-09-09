@@ -171,17 +171,13 @@ export const createContactRecordRequest = (
 		Phone: user.telephoneNumber,
 	};
 
-	if (giftRecipient) {
+	if (giftRecipient ?? !user.deliveryAddress) {
 		// If there is a gift recipient then we don't want to update the
 		// delivery address. This is because the user may already have another
 		// non-gift delivery product which must still be delivered to their
 		// original delivery address.
 		return contact;
 	}
-	if (!user.deliveryAddress) {
-		return contact;
-	}
-
 	const billingAddressFields = {
 		OtherStreet: getAddressLine(user.billingAddress),
 		OtherCity: user.billingAddress.city,
