@@ -133,6 +133,10 @@ const termsAndConditions = css`
 	p {
 		margin-top: ${space[1]}px;
 	}
+	& div:nth-child(2) {
+		margin-top: ${space[3]}px;
+		${textSans14};
+	}
 `;
 
 export type ContributionsOrderSummaryProps = {
@@ -153,6 +157,7 @@ export type ContributionsOrderSummaryProps = {
 	tsAndCsTier3?: React.ReactNode;
 	abParticipations?: Participations;
 	studentDiscount?: StudentDiscount;
+	isPaperProductTest?: boolean;
 };
 
 export function ContributionsOrderSummary({
@@ -172,6 +177,7 @@ export function ContributionsOrderSummary({
 	enableCheckList,
 	abParticipations,
 	studentDiscount,
+	isPaperProductTest = false,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 	const isSundayOnlyNewspaperSubscription = isSundayOnlyNewspaperSub(
@@ -264,13 +270,15 @@ export function ContributionsOrderSummary({
 						{startDate}
 					</>
 				)}
-				{isSundayOnlyNewspaperSubscription && showCheckList && (
-					<div css={orderSummarySundayDetails}>
-						{productKey === 'HomeDelivery'
-							? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
-							: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
-					</div>
-				)}
+				{isSundayOnlyNewspaperSubscription &&
+					showCheckList &&
+					!isPaperProductTest && (
+						<div css={orderSummarySundayDetails}>
+							{productKey === 'HomeDelivery'
+								? 'Print edition, delivered every Sunday. All Observer readers also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'
+								: 'Print edition every Sunday. All readers can also gain free access to the Observer digital newsletters and thought-provoking podcasts, and book tickets to Observer events.'}
+						</div>
+					)}
 			</div>
 
 			<hr css={hrCss} />

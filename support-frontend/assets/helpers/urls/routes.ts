@@ -108,14 +108,30 @@ function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
 	promoCode?: Option<string>,
+	abTestName?: string,
 ) {
 	const url = `${getOrigin()}/uk/checkout`;
-	return addQueryParamsToURL(url, {
-		promoCode,
-		product:
-			fulfilmentOption === 'Collection' ? 'SubscriptionCard' : fulfilmentOption,
-		ratePlan: productOptions,
-	});
+
+	const params = abTestName
+		? {
+				[abTestName]: 'true',
+				promoCode,
+				product:
+					fulfilmentOption === 'Collection'
+						? 'SubscriptionCard'
+						: fulfilmentOption,
+				ratePlan: productOptions,
+		  }
+		: {
+				promoCode,
+				product:
+					fulfilmentOption === 'Collection'
+						? 'SubscriptionCard'
+						: fulfilmentOption,
+				ratePlan: productOptions,
+		  };
+
+	return addQueryParamsToURL(url, params);
 }
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.

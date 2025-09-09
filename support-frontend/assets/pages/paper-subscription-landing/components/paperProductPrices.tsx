@@ -1,4 +1,5 @@
 import type { PaperFulfilmentOptions } from '@modules/product/fulfilmentOptions';
+import { ActivePaperProductNoTestTypes } from 'helpers/productCatalogToProductOption';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getPlans } from '../helpers/getPlans';
 import { PaperPrices } from './content/paperPrices';
@@ -9,18 +10,25 @@ export type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	isPaperProductTest: boolean;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
+	isPaperProductTest,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(tab, productPrices);
+	const products = getPlans(
+		tab,
+		productPrices,
+		ActivePaperProductNoTestTypes,
+		isPaperProductTest,
+	);
 
 	return (
 		<PaperPrices

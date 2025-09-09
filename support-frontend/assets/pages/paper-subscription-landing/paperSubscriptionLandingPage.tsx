@@ -24,7 +24,7 @@ import NewspaperHero from './components/NewspaperHero';
 import NewspaperProductTabs from './components/NewspaperProductTabs';
 import PaperProductPrices from './components/paperProductPrices';
 import PaperTabs from './components/paperTabs';
-import { displayPaperProductTabs } from './helpers/displayPaperProductTabs';
+import { inPaperProductTest } from './helpers/inPaperProductTest';
 import { getPaperItems, getPaperPlusItems } from './helpers/PaperHeroCopy';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
@@ -47,6 +47,8 @@ const tabsTabletSpacing = css`
 
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
+
+const isPaperProductTest = inPaperProductTest();
 
 function PaperLandingPage({
 	productPrices,
@@ -76,21 +78,22 @@ function PaperLandingPage({
 		window.history.replaceState({}, '', `#${newTab}`);
 	}
 
-	const showPaperProductTabs = displayPaperProductTabs();
-
 	return (
 		<Page
 			id={pageQaId}
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
-			{showPaperProductTabs ? (
+			{isPaperProductTest ? (
 				<>
 					<NewspaperHero
 						promotionCopy={sanitisedPromoCopy}
 						paperHeroItems={getPaperPlusItems(productPrices)}
 					/>
-					<NewspaperProductTabs productPrices={productPrices} />
+					<NewspaperProductTabs
+						productPrices={productPrices}
+						isPaperProductTest={isPaperProductTest}
+					/>
 				</>
 			) : (
 				<>
@@ -116,6 +119,7 @@ function PaperLandingPage({
 								productPrices={productPrices}
 								tab={selectedTab}
 								setTabAction={handleSetTabAction}
+								isPaperProductTest={isPaperProductTest}
 							/>
 						</CentredContainer>
 					</FullWidthContainer>

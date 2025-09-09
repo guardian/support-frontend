@@ -5,6 +5,7 @@ import {
 } from 'helpers/productCatalog';
 import { type GeoId } from 'pages/geoIdConfig';
 import type { StudentDiscount } from '../helpers/discountDetails';
+import { StudentBrandAwareness } from './StudentBrandAwareness';
 import StudentHeader from './StudentHeader';
 import { StudentLandingPage } from './StudentLandingPage';
 
@@ -31,11 +32,20 @@ export function StudentLandingPageGlobal({
 					ratePlanKey={ratePlanKey}
 					landingPageVariant={landingPageVariant}
 					studentDiscount={studentDiscount}
-					headingCopy={`No owner. No agenda. No more than ${studentDiscount.discountPriceWithCurrency} a year for students`}
+					headingCopy={
+						<>
+							<p>No owner. No agenda.</p>
+							<p>
+								No more than {studentDiscount.discountPriceWithCurrency} a year
+								for students
+							</p>
+						</>
+					}
 					subheadingCopy="Now more than ever, independent journalism matters. Get fact-based reporting you can trust and unlimited access to the Guardian apps &mdash; without breaking your budget."
 					includeThreeTierLink={true}
 				/>
 			}
+			brandAwareness={<StudentBrandAwareness />}
 		/>
 	);
 }

@@ -12,12 +12,19 @@ import type {
 	ActiveProductKey,
 	ActiveRatePlanKey,
 } from 'helpers/productCatalog';
+import type { ActivePaperProductOptions } from 'helpers/productCatalogToProductOption';
 import {
 	getBillingPeriodNoun,
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { formatUserDate } from 'helpers/utilities/dateConversions';
+import {
+	isPaperPlusSub,
+	isSundayOnlyNewspaperSub,
+} from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import { isGuardianWeeklyGiftProduct } from 'pages/supporter-plus-thank-you/components/thankYouHeader/utils/productMatchers';
+import { productDeliveryOrStartDate } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 const containerSummaryTsCs = css`
 	border-radius: ${space[2]}px;
@@ -76,21 +83,27 @@ export function OrderSummaryStartDate({
 export interface OrderSummaryTsAndCsProps {
 	productKey: ActiveProductKey;
 	ratePlanKey: ActiveRatePlanKey;
+	ratePlanDescription?: string;
 	countryGroupId: CountryGroupId;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isPaperProductTest?: boolean;
 }
 export function OrderSummaryTsAndCs({
 	productKey,
 	ratePlanKey,
+	ratePlanDescription,
 	countryGroupId,
 	promotion,
 	thresholdAmount = 0,
+	isPaperProductTest = false,
 }: OrderSummaryTsAndCsProps): JSX.Element | null {
 	const billingPeriod = ratePlanToBillingPeriod(ratePlanKey);
 	const periodNoun = getBillingPeriodNoun(billingPeriod);
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
+	const isPaperPlus = isPaperPlusSub(productKey, ratePlanKey);
+	const isPaperSunday = isSundayOnlyNewspaperSub(productKey, ratePlanKey);
 	const promoMessage = productLegal(
 		countryGroupId,
 		billingPeriod,
@@ -98,6 +111,14 @@ export function OrderSummaryTsAndCs({
 		thresholdAmount,
 		promotion,
 	); // promoMessage expected to be a string like: "£10.49/month for the first 6 months, then £20.99/month"
+	const homeDeliveryDate = productDeliveryOrStartDate(
+		'HomeDelivery',
+		ratePlanKey as ActivePaperProductOptions,
+	);
+	const homeDeliveryStartDate = homeDeliveryDate
+		? formatUserDate(homeDeliveryDate)
+		: '';
+	const rateDescriptor = ratePlanDescription ?? ratePlanKey;
 
 	const tierThreeSupporterPlusTsAndCs = (
 		<div css={containerSummaryTsCs}>
@@ -110,13 +131,20 @@ export function OrderSummaryTsAndCs({
 			)}
 			{productKey === 'SupporterPlus' && (
 				<>
-					{!isStudentOneYearRatePlan && (
-						<p>Auto renews every {periodNoun} until you cancel.</p>
+					{isStudentOneYearRatePlan ? (
+						<p>
+							If you cancel within the first 14 days, you will receive a full
+							refund.
+						</p>
+					) : (
+						<>
+							<p>Auto renews every {periodNoun} until you cancel.</p>
+							<p>
+								Cancel or change your support anytime. If you cancel within the
+								first 14 days, you will receive a full refund.
+							</p>
+						</>
 					)}
-					<p>
-						Cancel or change your support anytime. If you cancel within the
-						first 14 days, you will receive a full refund.
-					</p>
 				</>
 			)}
 			{guardianWeeklyOrTierThreeProduct(productKey) && (
@@ -140,11 +168,49 @@ export function OrderSummaryTsAndCs({
 			</p>
 		</div>
 	);
+	const paperPlusCopy: Partial<Record<ActiveProductKey, JSX.Element>> = {
+		HomeDelivery: (
+			<p>
+				You will receive your first newspaper delivery on{' '}
+				{homeDeliveryStartDate} as part of your {rateDescriptor} subscription.
+			</p>
+		),
+		SubscriptionCard: (
+			<p>
+				Your virtual subscription card barcode will be emailed to you shortly,
+				and activated from tomorrow to pick up the first newspaper edition you
+				are entitled to in your {rateDescriptor} subscription. Your physical
+				subscription card will be delivered to your door in 1-2 weeks.
+			</p>
+		),
+	};
+	const sundayPaperCopy = paperPlusCopy['HomeDelivery'];
+	const paperPlusTsAndCs = (
+		<>
+			<div css={containerSummaryTsCs}>
+				{promotion && <p>You’ll pay {promoMessage}.</p>}
+				<p>Auto renews every {periodNoun} until you cancel. Cancel anytime.</p>
+			</div>
+			<div css={containerSummaryTsCs}>
+				{isPaperSunday && sundayPaperCopy}
+				{isPaperPlus && (
+					<>
+						{paperPlusCopy[productKey]}
+						<p>Your digital benefits will start today.</p>
+					</>
+				)}
+			</div>
+		</>
+	);
 	const orderSummaryTsAndCs: Partial<Record<ActiveProductKey, JSX.Element>> = {
 		SupporterPlus: tierThreeSupporterPlusTsAndCs,
 		TierThree: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyDomestic: tierThreeSupporterPlusTsAndCs,
 		GuardianWeeklyRestOfWorld: tierThreeSupporterPlusTsAndCs,
+		SubscriptionCard: isPaperProductTest
+			? paperPlusTsAndCs
+			: defaultOrderSummaryTsAndCs,
+		HomeDelivery: paperPlusTsAndCs,
 	};
 	return orderSummaryTsAndCs[productKey] ?? defaultOrderSummaryTsAndCs;
 }

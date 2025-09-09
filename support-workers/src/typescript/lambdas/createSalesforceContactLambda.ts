@@ -1,3 +1,4 @@
+import { asRetryError } from '../errors/errorHandler';
 import type { CreateZuoraSubscriptionState } from '../model/createZuoraSubscriptionState';
 import { stageFromEnvironment } from '../model/stage';
 import type {
@@ -13,7 +14,6 @@ import type { SalesforceContactRecord } from '../services/salesforce';
 import { SalesforceService } from '../services/salesforce';
 import { getSalesforceConfig } from '../services/salesforceClient';
 import { user } from '../test/fixtures/salesforceFixtures';
-import { asRetryError } from '../util/errorHandler';
 import { getIfDefined } from '../util/nullAndUndefined';
 
 const stage = stageFromEnvironment();

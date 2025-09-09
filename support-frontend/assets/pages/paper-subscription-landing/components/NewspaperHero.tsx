@@ -4,7 +4,7 @@ import {
 	themeButtonBrandAlt,
 } from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import { PageTitle } from 'components/page/pageTitle';
@@ -39,12 +39,33 @@ export default function NewspaperHero({
 				{roundel && <OfferStrapline copy={roundel} size="small" />}
 				<Hero
 					image={
-						<GridImage
-							gridId="weeklyCampaignHeroImg"
-							srcSizes={[500, 140]}
-							sizes="(max-width: 740px) 100%, 500px"
-							imgType="png"
-							altText="A collection of Guardian Weekly magazines"
+						<GridPicture
+							sources={[
+								{
+									gridId: 'newspapperLandingHeroMobile',
+									srcSizes: [2000, 1000, 500],
+									sizes: '414px',
+									imgType: 'png',
+									media: '(max-width: 739px)',
+								},
+								{
+									gridId: 'newspapperLandingHeroTablet',
+									srcSizes: [1000, 500],
+									sizes: '320px',
+									imgType: 'png',
+									media: '(max-width: 979px)',
+								},
+								{
+									gridId: 'newspapperLandingHeroDesktop',
+									srcSizes: [2000, 1000, 500],
+									sizes: '422px',
+									imgType: 'png',
+									media: '(min-width: 980px)',
+								},
+							]}
+							fallback="newspapperLandingHeroDesktop"
+							fallbackSize={422}
+							altText=""
 						/>
 					}
 					hideRoundelBelow="mobileMedium"

@@ -5,6 +5,7 @@ module.exports = {
 	runner: 'groups',
 	testPathIgnorePatterns: ['/node_modules/', 'target'],
 	transformIgnorePatterns: ['/node_modules/\\.pnpm/(?!@guardian)'],
+	setupFilesAfterEnv: ['<rootDir>/src/typescript/test/test-setup.ts'],
 	moduleNameMapper: {
 		// Modules directory in support-frontend
 		'@modules/(product|internationalisation)/(.*)$':

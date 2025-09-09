@@ -85,6 +85,7 @@ type RatePlanDetails = Record<
 		billingPeriod: RecurringBillingPeriod;
 		label?: string;
 		hideSimilarProductsConsent?: boolean;
+		fixedTerm?: boolean;
 	}
 >;
 
@@ -377,6 +378,10 @@ export const productCatalogDescription: Record<
 			Annual: {
 				billingPeriod: BillingPeriod.Annual,
 			},
+			OneYearStudent: {
+				billingPeriod: BillingPeriod.Annual,
+				fixedTerm: true,
+			},
 		},
 	},
 	GuardianWeeklyRestOfWorld: {
@@ -426,7 +431,7 @@ export const productCatalogDescription: Record<
 		},
 	},
 	SubscriptionCard: {
-		label: 'Subscription card',
+		label: 'Collect in store with a subscription card',
 		thankyouMessage: paperThankyouMessage,
 		landingPagePath: '/subscribe/paper#Collection',
 		benefits: [],

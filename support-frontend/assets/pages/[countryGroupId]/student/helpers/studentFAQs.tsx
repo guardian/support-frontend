@@ -11,6 +11,7 @@ const supporterPlusBodyAccess: JSX.Element = (
 		logging into your Guardian account.
 	</p>
 );
+
 const supporterPlusBodyManage: JSX.Element = (
 	<p>
 		To manage your subscription, go to Manage my account, and for further
@@ -18,30 +19,24 @@ const supporterPlusBodyManage: JSX.Element = (
 		<a href={supporterPlusTermsLink}>Terms & Conditions</a>
 	</p>
 );
+
 const supporterPlusBodyContact: JSX.Element = (
 	<p>
 		For any queries, including subscription-related queries, visit our{' '}
 		<a href={helpCentreUrl}>Help centre</a>
 	</p>
 );
-const otherSupporterPlusFAQ: FAQItem[] = [
+
+const otherSupporterPlusFAQ: (regionName: string) => FAQItem[] = (
+	regionName,
+) => [
 	{
 		title: 'Who is eligible for this discount?',
 		body: (
 			<p>
-				Current students at [university/college] who register and verify through
-				Student Beans, are eligible for this discount.
-			</p>
-		),
-	},
-	{
-		title: 'What is included in my All-access subscription?',
-		body: (
-			<p>
-				Your All-access digital subscription entitles you to all the benefits
-				listed above, including: unlimited access to the Guardian news app and
-				Guardian Feast app, ad-free reading on all your devices, exclusive
-				newsletter for supporters and far fewer asks for support.
+				You must be 16+ and a verified fulltime student in {regionName}. You
+				will need a valid Student Beans account to complete the verification and
+				access this offer.
 			</p>
 		),
 	},
@@ -58,7 +53,8 @@ const otherSupporterPlusFAQ: FAQItem[] = [
 		body: supporterPlusBodyContact,
 	},
 ];
-const auSupporterPlusFAQ: FAQItem[] = [
+
+const auSupporterPlusFAQ: (regionName: string) => FAQItem[] = () => [
 	{
 		title: 'Who is eligible for this discount?',
 		body: (
@@ -68,12 +64,12 @@ const auSupporterPlusFAQ: FAQItem[] = [
 				University of Technology Sydney (UTS). Redemption of the offer is
 				conditional upon registration using a valid and active UTS email
 				address. Your email address may be subjected to an internal verification
-				process to confirm your eligibility as a UTS student – you may refer to
-				the Guardian’s <a href={privacyLink}>privacy policy</a> which explains
-				how personal information is handled by the Guardian. The Guardian
-				reserves the right to cancel, suspend, or revoke any subscription
-				claimed through this offer if it is reasonably suspected or determined
-				that the subscriber does not meet the eligibility criteria.
+				process to confirm your eligibility as a UTS student &mdash; you may
+				refer to the Guardian&apos;s <a href={privacyLink}>privacy policy</a>{' '}
+				which explains how personal information is handled by the Guardian. The
+				Guardian reserves the right to cancel, suspend, or revoke any
+				subscription claimed through this offer if it is reasonably suspected or
+				determined that the subscriber does not meet the eligibility criteria.
 			</p>
 		),
 	},
@@ -104,14 +100,39 @@ const auSupporterPlusFAQ: FAQItem[] = [
 		body: supporterPlusBodyContact,
 	},
 ];
-const studentFAQs: Partial<Record<CountryGroupId, FAQItem[]>> = {
-	GBPCountries: otherSupporterPlusFAQ,
-	UnitedStates: otherSupporterPlusFAQ,
-	Canada: otherSupporterPlusFAQ,
-	AUDCountries: auSupporterPlusFAQ,
+
+interface StudentFAQsConfig {
+	getCopy: (regionName: string) => FAQItem[];
+	regionName: string;
+}
+
+const studentFAQsConfig: Partial<Record<CountryGroupId, StudentFAQsConfig>> = {
+	GBPCountries: {
+		getCopy: otherSupporterPlusFAQ,
+		regionName: 'the UK',
+	},
+	UnitedStates: {
+		getCopy: otherSupporterPlusFAQ,
+		regionName: 'the USA',
+	},
+	Canada: {
+		getCopy: otherSupporterPlusFAQ,
+		regionName: 'Canada',
+	},
+	AUDCountries: {
+		getCopy: auSupporterPlusFAQ,
+		// Not actually used
+		regionName: 'Australia',
+	},
 };
 
 export function getStudentFAQs(geoId: GeoId): FAQItem[] | undefined {
 	const { countryGroupId } = getGeoIdConfig(geoId);
-	return studentFAQs[countryGroupId];
+	const faqConfig = studentFAQsConfig[countryGroupId];
+
+	if (faqConfig) {
+		return faqConfig.getCopy(faqConfig.regionName);
+	}
+
+	return undefined;
 }

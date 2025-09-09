@@ -3,7 +3,6 @@ import { space } from '@guardian/source/foundations';
 import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { IsoCountry } from '@modules/internationalisation/country';
 import { BillingPeriod } from '@modules/product/billingPeriod';
-import type { PaperProductOptions } from '@modules/product/productOptions';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import {
@@ -25,13 +24,12 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
-import { displayPaperProductTabs } from 'pages/paper-subscription-landing/helpers/displayPaperProductTabs';
-import { getPaperRatePlanBenefits } from 'pages/paper-subscription-landing/planData';
 import type { LandingPageVariant } from '../../../helpers/globalsAndSwitches/landingPageSettings';
 import { formatUserDate } from '../../../helpers/utilities/dateConversions';
 import {
 	getBenefitsChecklistFromLandingPageTool,
 	getBenefitsChecklistFromProductDescription,
+	getPaperPlusDigitalBenefits,
 } from '../checkout/helpers/benefitsChecklist';
 import type { StudentDiscount } from '../student/helpers/discountDetails';
 import { BackButton } from './backButton';
@@ -51,6 +49,7 @@ type CheckoutSummaryProps = {
 	weeklyDeliveryDate: Date;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	isPaperProductTest: boolean;
 };
 
 export default function CheckoutSummary({
@@ -67,17 +66,10 @@ export default function CheckoutSummary({
 	weeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	isPaperProductTest,
 }: CheckoutSummaryProps) {
 	const urlParams = new URLSearchParams(window.location.search);
 	const showBackButton = urlParams.get('backButton') !== 'false';
-
-	const isPaper = [
-		'HomeDelivery',
-		'NationalDelivery',
-		'SubscriptionCard',
-	].includes(productKey);
-	const showPaperProductTabs = isPaper && displayPaperProductTabs();
-
 	const productCatalog = appConfig.productCatalog;
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 
@@ -123,11 +115,8 @@ export default function CheckoutSummary({
 		return <div>Invalid Amount {originalAmount}</div>;
 	}
 
-	const paperPlusDigitalBenefits = showPaperProductTabs
-		? getPaperRatePlanBenefits(ratePlanKey as PaperProductOptions)
-		: undefined;
 	const benefitsCheckListData =
-		paperPlusDigitalBenefits ??
+		getPaperPlusDigitalBenefits(isPaperProductTest, ratePlanKey, productKey) ??
 		getBenefitsChecklistFromLandingPageTool(productKey, landingPageSettings) ??
 		getBenefitsChecklistFromProductDescription(
 			productDescription,
@@ -176,9 +165,11 @@ export default function CheckoutSummary({
 						<OrderSummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							countryGroupId={countryGroupId}
 							thresholdAmount={thresholdAmount}
 							promotion={promotion}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					}
 					headerButton={
@@ -191,6 +182,7 @@ export default function CheckoutSummary({
 					}
 					abParticipations={abParticipations}
 					studentDiscount={studentDiscount}
+					isPaperProductTest={isPaperProductTest}
 				/>
 			</BoxContents>
 		</Box>

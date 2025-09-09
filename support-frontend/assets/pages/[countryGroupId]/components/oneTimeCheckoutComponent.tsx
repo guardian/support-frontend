@@ -75,7 +75,10 @@ import {
 } from 'helpers/tracking/quantumMetric';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { roundToDecimalPlaces } from 'helpers/utilities/utilities';
+import {
+	parseCustomAmounts,
+	roundToDecimalPlaces,
+} from 'helpers/utilities/utilities';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { ContributionCheckoutFinePrint } from 'pages/supporter-plus-landing/components/contributionCheckoutFinePrint';
@@ -265,9 +268,20 @@ export function OneTimeCheckoutComponent({
 		settings,
 	);
 
+	let customAmountsData;
+	const customAmountsParam = urlSearchParams.get('amounts');
+	if (customAmountsParam) {
+		const amounts = parseCustomAmounts(customAmountsParam);
+		customAmountsData = {
+			amounts,
+			defaultAmount: amounts[1] ?? 0,
+			hideChooseYourAmount: false,
+		};
+	}
+
 	const { amountsCardData } = selectedAmountsVariant;
 	const { amounts, defaultAmount, hideChooseYourAmount } =
-		amountsCardData['ONE_OFF'];
+		customAmountsData ?? amountsCardData['ONE_OFF'];
 
 	const { preSelectedPriceCard, preSelectedOtherAmount } = getPreSelectedAmount(
 		preSelectedAmountParam,
@@ -628,12 +642,14 @@ export function OneTimeCheckoutComponent({
 									maxAmount={maxAmount}
 									selectedAmount={selectedPriceCard}
 									otherAmount={otherAmount}
-									onBlur={(event) => {
+									onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
 										event.target.checkValidity(); // loose focus, onInvalid check fired
 									}}
-									onOtherAmountChange={setOtherAmount}
+									onOtherAmountChange={
+										setOtherAmount as (value: string) => void
+									}
 									errors={[otherAmountError ?? '']}
-									onInvalid={(event) => {
+									onInvalid={(event: React.FormEvent<HTMLInputElement>) => {
 										validate(
 											event,
 											setOtherAmountError,

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans12 } from '@guardian/source/foundations';
+import { neutral, space, textSans12 } from '@guardian/source/foundations';
 import type { CountryGroupId } from '@modules/internationalisation/countryGroup';
 import { StripeDisclaimer } from 'components/stripe/stripeDisclaimer';
 import {
@@ -26,6 +26,7 @@ import {
 	ratePlanToBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
+import { helpCentreUrl } from 'helpers/urls/externalLinks';
 import { isSundayOnlyNewspaperSub } from 'pages/[countryGroupId]/helpers/isSundayOnlyNewspaperSub';
 import type { StudentDiscount } from 'pages/[countryGroupId]/student/helpers/discountDetails';
 import { FinePrint } from './finePrint';
@@ -126,6 +127,7 @@ export interface PaymentTsAndCsProps {
 	studentDiscount?: StudentDiscount;
 	promotion?: Promotion;
 	thresholdAmount?: number;
+	isPaperProductTest?: boolean;
 }
 export function PaymentTsAndCs({
 	productKey,
@@ -134,6 +136,7 @@ export function PaymentTsAndCs({
 	studentDiscount,
 	promotion,
 	thresholdAmount = 0,
+	isPaperProductTest = false,
 }: PaymentTsAndCsProps): JSX.Element {
 	// Display for AUS Students who are on a subscription basis
 	const isStudentOneYearRatePlan = ratePlanKey === 'OneYearStudent';
@@ -141,19 +144,21 @@ export function PaymentTsAndCs({
 	const billingPeriodSingular = getBillingPeriodNoun(billingPeriod);
 	const billingPeriodPlural =
 		getBillingPeriodTitle(billingPeriod).toLowerCase();
-	const isSundayOnlynewsletterSubscription = isSundayOnlyNewspaperSub(
+	const isSundayOnlyNewsletterSubscription = isSundayOnlyNewspaperSub(
 		productKey,
 		ratePlanKey,
 	);
-	if (isSundayOnlynewsletterSubscription) {
+
+	if (isSundayOnlyNewsletterSubscription) {
 		return (
 			<div css={container}>
-				The Observer is owned by Tortoise Media. By proceeding, you agree to
-				Tortoise Media’s {termsLink('Terms & Conditions', observerLinks.TERMS)}.
-				We will share your contact and subscription details with our fulfilment
-				partners to provide you with your subscription card. To find out more
-				about what personal data Tortoise Media will collect and how it will be
-				used, please visit Tortoise Media’s{' '}
+				{isPaperProductTest ? 'The Observer is owned by Tortoise Media. ' : ''}
+				By proceeding, you agree to Tortoise Media’s{' '}
+				{termsLink('Terms & Conditions', observerLinks.TERMS)}. We will share
+				your contact and subscription details with our fulfilment partners to
+				provide you with your subscription card. To find out more about what
+				personal data Tortoise Media will collect and how it will be used,
+				please visit Tortoise Media’s{' '}
 				{termsLink('Privacy Policy', observerLinks.PRIVACY)}.
 			</div>
 		);
@@ -169,8 +174,39 @@ export function PaymentTsAndCs({
 				promotion,
 		  );
 
-	const paperHomeDeliveryTsAndCs = `We will share your contact and subscription details with our fulfilment partners.`;
-	const paperNationalDeliverySubscriptionTsAndCs = `We will share your contact and subscription details with our fulfilment partners to provide you with your subscription card.`;
+	const paperProductProductTsAndCs = (
+		<div
+			css={css`
+				margin-bottom: ${space[1]}px;
+			`}
+		>
+			You can cancel your subscription at any time before your next renewal
+			date. Cancellation will take effect at the end of your current payment
+			period. To cancel, use the contact details listed on our{' '}
+			{termsLink('Help Centre', helpCentreUrl)}.
+		</div>
+	);
+	const paperHomeDeliveryTsAndCs = (
+		<>
+			{isPaperProductTest && paperProductProductTsAndCs}
+			<div>
+				We will share your contact and subscription details with our fulfilment
+				partners.
+			</div>
+		</>
+	);
+	const paperNationalDeliveryTsAndCs = (
+		<div>
+			We will share your contact and subscription details with our fulfilment
+			partners to provide you with your subscription card.
+		</div>
+	);
+	const paperSubscriptionCardTsAndCs = (
+		<>
+			{isPaperProductTest && paperProductProductTsAndCs}
+			{paperNationalDeliveryTsAndCs}
+		</>
+	);
 	const guardianWeeklyPromo = (
 		<div>
 			Offer subject to availability. Guardian News and Media Ltd ("GNM")
@@ -182,33 +218,41 @@ export function PaymentTsAndCs({
 	);
 	const productLabel = productCatalogDescription[productKey].label;
 	const subscriptionBasis = !isStudentOneYearRatePlan
-		? ' on a subscription basis'
+		? 'on a subscription basis'
 		: '';
-	const supporterPlusStudentStartTsAndCs = `If you pay at least ${legalPrice}, you will receive the ${productLabel} benefits${subscriptionBasis}. `;
-	const supporterPlusStartTsAndCs = `${supporterPlusStudentStartTsAndCs}If you increase your payments per ${billingPeriodSingular}, these additional amounts will be separate ${billingPeriodPlural} voluntary financial contributions to the Guardian. `;
-	const supporterPlusEndCopy = `You can cancel your subscription or change your contributions at any time before your next renewal date. If you cancel within 14 days of taking out a ${productLabel} subscription, you’ll receive a full refund (including of any contributions) and your subscription and any contribution will stop immediately. Cancellation of your subscription (which will also cancel any contribution) or cancellation of your contribution made after 14 days will take effect at the end of your current ${billingPeriodPlural} payment period. To cancel, go to `;
-	const supporterPlusEndTsAndCs = (
+
+	const accountAndTermsLCopyAndLinks = (
 		<>
-			{supporterPlusEndCopy}
-			{ManageMyAccountLink}
-			{` or see our `}
+			To cancel, go to {ManageMyAccountLink} or see our{' '}
 			{termsLink('Terms', supporterPlusTermsLink)}
-			{'. '}
 		</>
 	);
 	const supporterPlusTsAndCs: JSX.Element = (
 		<>
-			{supporterPlusStartTsAndCs}
+			If you pay at least {legalPrice}, you will receive the {productLabel}{' '}
+			benefits {subscriptionBasis}. If you increase your payments per{' '}
+			{billingPeriodSingular}, these additional amounts will be separate{' '}
+			{billingPeriodPlural} voluntary financial contributions to the Guardian.
 			The {productLabel} subscription and any contributions will auto-renew each{' '}
 			{billingPeriodSingular}. You will be charged the subscription and
 			contribution amounts using your chosen payment method at each renewal
-			unless you cancel. {supporterPlusEndTsAndCs}
+			unless you cancel. You can cancel your subscription or change your
+			contributions at any time before your next renewal date. If you cancel
+			within 14 days of taking out a {productLabel} subscription, you’ll receive
+			a full refund (including of any contributions) and your subscription and
+			any contribution will stop immediately. Cancellation of your subscription
+			(which will also cancel any contribution) or cancellation of your
+			contribution made after 14 days will take effect at the end of your
+			current {billingPeriodPlural} payment period.{' '}
+			{accountAndTermsLCopyAndLinks}.
 		</>
 	);
 	const studentSupporterPlusTsAndCs: JSX.Element = (
 		<>
-			{supporterPlusStudentStartTsAndCs}
-			{supporterPlusEndTsAndCs}
+			You may cancel your All-access digital subscription within 14 days of
+			taking out the subscription. If you do, you'll receive a full refund and
+			your subscription will stop immediately. {accountAndTermsLCopyAndLinks}.
+			This subscription does not auto-renew.
 		</>
 	);
 
@@ -270,9 +314,9 @@ export function PaymentTsAndCs({
 				</p>
 			</div>
 		),
-		HomeDelivery: <div>{paperHomeDeliveryTsAndCs}</div>,
-		NationalDelivery: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
-		SubscriptionCard: <div>{paperNationalDeliverySubscriptionTsAndCs}</div>,
+		HomeDelivery: paperHomeDeliveryTsAndCs,
+		SubscriptionCard: paperSubscriptionCardTsAndCs,
+		NationalDelivery: paperNationalDeliveryTsAndCs,
 		GuardianWeeklyDomestic: <> {promotion && guardianWeeklyPromo}</>,
 		GuardianWeeklyRestOfWorld: <> {promotion && guardianWeeklyPromo}</>,
 	};

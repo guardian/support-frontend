@@ -10,7 +10,15 @@ exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With 
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for GuardianAdLite With ratePlanKey Monthly renders correctly 1`] = `"The Guardian Ad-Lite subscription will auto-renew each month. You will be charged the subscription amount using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for HomeDelivery With ratePlanKey SixdayPlus renders correctly 1`] = `"The Six Day Plus subscription will auto renew each month. You will be charged the subscription amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for HomeDelivery With ratePlanKey Sunday renders correctly 1`] = `"The Observer subscription will auto renew each month. You will be charged the subscription amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for OneTimeContribution With ratePlanKey OneTime renders correctly 1`] = `""`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SubscriptionCard With ratePlanKey Sunday renders correctly 1`] = `"The Observer subscription will auto renew each month. You will be charged the subscription amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
+
+exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SubscriptionCard With ratePlanKey WeekendPlus renders correctly 1`] = `"The Weekend Plus subscription will auto renew each month. You will be charged the subscription amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 
 exports[`Summary Ts&Cs Snapshot comparison summaryTs&Cs for SupporterPlus With ratePlanKey Annual renders correctly 1`] = `"The All-access digital subscription and any contribution will auto-renew each year. You will be charged the subscription and contribution amounts using your chosen payment method at each renewal, at the rate then in effect, unless you cancel."`;
 

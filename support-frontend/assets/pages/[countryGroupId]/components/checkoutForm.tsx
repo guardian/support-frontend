@@ -31,6 +31,7 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import type { Participations } from 'helpers/abTests/models';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import {
 	DirectDebit,
@@ -50,6 +51,7 @@ import {
 	productCatalogDescriptionNewBenefits,
 	showSimilarProductsConsentForRatePlan,
 } from 'helpers/productCatalog';
+import { getBillingPeriodNoun } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import type { AddressFormFieldError } from 'helpers/redux/checkout/address/state';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -133,6 +135,7 @@ type CheckoutFormProps = {
 	setWeeklyDeliveryDate: (value: Date) => void;
 	thresholdAmount: number;
 	studentDiscount?: StudentDiscount;
+	isPaperProductTest: boolean;
 };
 
 const getPaymentMethods = (
@@ -186,6 +189,7 @@ export default function CheckoutForm({
 	setWeeklyDeliveryDate,
 	thresholdAmount,
 	studentDiscount,
+	isPaperProductTest,
 }: CheckoutFormProps) {
 	const csrf: CsrfState = appConfig.csrf;
 	const user = appConfig.user;
@@ -656,6 +660,16 @@ export default function CheckoutForm({
 		setBillingPostcode: setBillingPostcode,
 	};
 
+	const billingPreposition = productDescription.ratePlans[ratePlanKey]
+		?.fixedTerm
+		? 'for a'
+		: 'per';
+
+	const buttonText = `Pay ${simpleFormatAmount(
+		currency,
+		finalAmount,
+	)} ${billingPreposition} ${getBillingPeriodNoun(billingPeriod)}`;
+
 	return (
 		<>
 			<form
@@ -1093,8 +1107,10 @@ export default function CheckoutForm({
 						<SummaryTsAndCs
 							productKey={productKey}
 							ratePlanKey={ratePlanKey}
+							ratePlanDescription={ratePlanDescription.label}
 							currency={currencyKey}
 							amount={originalAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 						<div
 							css={css`
@@ -1102,6 +1118,7 @@ export default function CheckoutForm({
 							`}
 						>
 							<SubmitButton
+								buttonText={buttonText}
 								paymentMethod={paymentMethod}
 								payPalLoaded={payPalLoaded}
 								payPalBAID={payPalBAID}
@@ -1112,7 +1129,6 @@ export default function CheckoutForm({
 								currencyKey={currencyKey}
 								billingPeriod={billingPeriod}
 								csrf={csrf.token ?? ''}
-								currency={currency}
 							/>
 						</div>
 						{errorMessage && (
@@ -1133,6 +1149,7 @@ export default function CheckoutForm({
 							studentDiscount={studentDiscount}
 							promotion={promotion}
 							thresholdAmount={thresholdAmount}
+							isPaperProductTest={isPaperProductTest}
 						/>
 					</BoxContents>
 				</Box>
